@@ -942,4 +942,27 @@ public class ERXEOControlUtilities {
         }
         return a;
     }    
+
+    
+    /**
+     * Creates an OR qualifier of EOKeyValueQualifiers for every keypath in the given array of keys.
+     * This is useful when trying to find a string in a set of attributes.
+     * @param keys
+     * @param selector
+     * @param value
+     * @return
+     * @author ak
+     */
+    public static EOQualifier qualifierMatchingAnyKey(NSArray keys, NSSelector selector, Object value) {
+        NSMutableArray qualifiers = new NSMutableArray();
+        EOQualifier result = null;
+        if(keys.count() > 0) {
+            for (Enumeration i = keys.objectEnumerator(); i.hasMoreElements();) {
+                String key = (String) i.nextElement();
+                qualifiers.addObject(new EOKeyValueQualifier(key, selector, value));
+            }
+            result = new EOOrQualifier(qualifiers);
+        }
+        return result;
+    }
 }
