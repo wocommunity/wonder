@@ -102,8 +102,14 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         return null;
     }
 
+    /** @deprecated use primaryKeyFromRequest(EOEditingContext ec, String entityName) */
     public Number primaryKeyFromRequest() {
         return context().request().numericFormValueForKey(primaryKeyKey, new NSNumberFormatter("#"));
+    }
+
+    public NSDictionary primaryKeyFromRequest(EOEditingContext ec, String entityName) {
+        String pkString = context().request().stringFormValueForKey(primaryKeyKey);
+        return ERXEOControlUtilities.primaryKeyDictionaryForString(ec, entityName, pkString);
     }
 
     public WOComponent previousPageFromRequest() {
@@ -127,7 +133,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             if(indexOfDot > 0) {
                 String entityName = keyPath.substring(0, indexOfDot);
                 String relationshipPath = keyPath.substring(indexOfDot+1, keyPath.length());
-                EOEnterpriseObject eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
+                EOEnterpriseObject eo = EOUtilities.objectWithPrimaryKey(ec, entityName, primaryKeyFromRequest(ec, entityName));
                 EOArrayDataSource ds = new EOArrayDataSource(cd, ec);
                 ds.setArray((NSArray)eo.valueForKeyPath(relationshipPath));
                 return ds;
@@ -136,9 +142,68 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         return null;
     }
 
+    protected void prepareEditPage(D2WContext context, EditPageInterface epi, String entityName) {
+        EOEditingContext ec = newEditingContext();
+        EOEnterpriseObject eo = null;
+
+        ec.lock();
+        try {
+            if(context.dynamicPage().startsWith(createPrefix) || primaryKeyFromRequest(ec, entityName) == null) {
+                eo = EOUtilities.createAndInsertInstance(ec,entityName);
+            } else {
+                eo = EOUtilities.objectWithPrimaryKey(ec, entityName, primaryKeyFromRequest(ec, entityName));
+            }
+        } finally {
+            ec.unlock();
+        }
+        epi.setObject(eo);
+        epi.setNextPage(previousPageFromRequest());
+    }
+
+    protected void prepareInspectPage(D2WContext context, InspectPageInterface ipi, String entityName) {
+        EOEditingContext ec = session().defaultEditingContext();
+        EOEnterpriseObject eo = null;
+
+        ec.lock();
+        try {
+            eo = EOUtilities.objectWithPrimaryKey(ec, entityName, primaryKeyFromRequest(ec, entityName));
+        } finally {
+            ec.unlock();
+        }
+        ipi.setObject(eo);
+        ipi.setNextPage(previousPageFromRequest());
+    }
+
+    protected void prepareQueryPage(D2WContext context, QueryPageInterface qpi, String entityName) {
+        EOEditingContext ec = session().defaultEditingContext();
+        EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
+        if(qpi instanceof ERD2WQueryPageWithFetchSpecification) {
+            if(fs != null)
+                ((ERD2WQueryPageWithFetchSpecification)qpi).setFetchSpecification(fs);
+        }
+    }
+
+    protected void prepareListPage(D2WContext context, ListPageInterface lpi, String entityName) {
+        EOEditingContext ec = session().defaultEditingContext();
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        EODataSource ds = relationshipArrayFromRequest(ec, entity.classDescriptionForInstances());
+        if(ds == null) {
+            ds = new EODatabaseDataSource(ec, entityName);
+            EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
+            if(fs == null) {
+                fs = new EOFetchSpecification(entityName, null, null);
+            }
+            int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 200);
+            fs.setFetchLimit(fetchLimit);
+            ((EODatabaseDataSource)ds).setFetchSpecification(fs);
+        }
+        lpi.setDataSource(ds);
+        lpi.setNextPage(previousPageFromRequest());
+    }
+
     public WOActionResults dynamicPageForActionNamed(String anActionName) {
-        ERD2WModel.erDefaultModel().checkRules();
         WOComponent newPage = null;
+
         try {
             newPage = D2W.factory().pageForConfigurationNamed(anActionName, session());
         } catch (IllegalStateException ex) {
@@ -147,8 +212,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             return null;
         }
 
-        String entityName = null;
-        String taskName = null;
         D2WContext context = null; 
         if(newPage instanceof D2WPage) {
             context = ((D2WPage)newPage).d2wContext();
@@ -157,58 +220,19 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             context.setDynamicPage(anActionName);
         }
         EOEntity entity = (EOEntity)context.entity();
-        taskName = (String)context.task();
         
         if(entity != null) {
-            entityName = ((EOEntity)context.entity()).name();
+            String entityName = entity.name();
+            String taskName = (String)context.task();
 
             if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
-                EditPageInterface epi=(EditPageInterface)newPage;
-                EOEditingContext ec = newEditingContext();
-                EOEnterpriseObject eo = null;
-
-                ec.lock();
-                try {
-                    if(anActionName.startsWith(createPrefix) || primaryKeyFromRequest() == null) {
-                        eo = EOUtilities.createAndInsertInstance(ec,entityName);
-                    } else {
-                        eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
-                    }
-                } finally {
-                    ec.unlock();
-                }
-                epi.setObject(eo);
-                epi.setNextPage(previousPageFromRequest());
+                prepareEditPage(context, (EditPageInterface)newPage, entityName);
             } else if(newPage instanceof InspectPageInterface) {
-                InspectPageInterface ipi=(InspectPageInterface)newPage;
-                EOEditingContext ec = session().defaultEditingContext();
-                EOEnterpriseObject eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
-                ipi.setObject(eo);
-                ipi.setNextPage(previousPageFromRequest());
+                prepareInspectPage(context, (InspectPageInterface)newPage, entityName);
             } else if(newPage instanceof QueryPageInterface) {
-                QueryPageInterface qpi=(QueryPageInterface)newPage;
-                EOEditingContext ec = session().defaultEditingContext();
-                EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
-                if(qpi instanceof ERD2WQueryPageWithFetchSpecification) {
-                    if(fs != null)
-                        ((ERD2WQueryPageWithFetchSpecification)qpi).setFetchSpecification(fs);
-                }
+                prepareQueryPage(context, (QueryPageInterface)newPage, entityName);
             } else if(newPage instanceof ListPageInterface) {
-                ListPageInterface lpi=(ListPageInterface)newPage;
-                EOEditingContext ec = session().defaultEditingContext();
-                EODataSource ds = relationshipArrayFromRequest(ec, entity.classDescriptionForInstances());
-                if(ds == null) {
-                    ds = new EODatabaseDataSource(ec, entityName);
-                    EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
-                    if(fs == null) {
-                        fs = new EOFetchSpecification(entityName, null, null);
-                    }
-                    int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 200);
-                    fs.setFetchLimit(fetchLimit);
-                    ((EODatabaseDataSource)ds).setFetchSpecification(fs);
-                }
-                lpi.setDataSource(ds);
-                lpi.setNextPage(previousPageFromRequest());
+                prepareListPage(context, (ListPageInterface)newPage, entityName);
             }
         }
         return (WOActionResults)newPage;
