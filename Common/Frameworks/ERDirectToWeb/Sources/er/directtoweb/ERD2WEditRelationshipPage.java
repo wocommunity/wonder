@@ -43,7 +43,7 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     }
     
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
-        EOEditingContext ec = ERXExtensions.newEditingContext(eo.editingContext(), false); // no validation;
+        EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false); // no validation;
         setEditingContext(ec);
         EOEnterpriseObject localEO = EOUtilities.localInstanceOfObject(ec, eo);
         setObject(localEO);
