@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import er.extensions.*;
-import org.apache.log4j.*;
 
 public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
 
@@ -26,20 +25,22 @@ public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
     
     // FIXME not thread safe..
     private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();
-    private static class _Touch {
-        public void touch(NSNotification n) {
+    public static class Observer {
+        public void updateTimestampForEditingContext(NSNotification n) {
             NSTimestamp now=new NSTimestamp();
-            if (log.isDebugEnabled()) log.debug("TimeStamp for "+n.object()+": now");
-            _datesPerEcID.setObjectForKey(ERXConstant.integerForInt(System.identityHashCode(n.object())), now);
+            if (log.isDebugEnabled())  log.debug("Timestamp for "+n.object()+": "+now);
+            _datesPerEcID.setObjectForKey(now, ERXConstant.integerForInt(System.identityHashCode(n.object())));
         }
     }
     
     static {
         NSNotificationCenter center = NSNotificationCenter.defaultCenter();
-        center.addObserver(new _Touch(),
-                           new NSSelector("touch",  ERXConstant.NotificationClassArray),
-                           ERXExtensions.objectsWillChangeInEditingContext,
-                           null);
+        Observer observer = new Observer();
+        ERXRetainer.retain(observer);
+        center.addObserver(observer,
+                new NSSelector("updateTimestampForEditingContext", ERXConstant.NotificationClassArray),
+                ERXExtensions.objectsWillChangeInEditingContext,
+                null);
     }        
 
 
