@@ -3,3 +3,5 @@
 # this file will ensure that CVS doesn't complain about this fact
 
 dist
+*.pbxuser
+.DS_Store
