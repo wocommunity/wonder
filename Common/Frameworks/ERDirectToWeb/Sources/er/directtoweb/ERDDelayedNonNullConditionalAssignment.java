@@ -9,7 +9,7 @@ package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 /**
  * The delayed non-null conditional is a way to provide a 
@@ -53,7 +53,7 @@ import org.apache.log4j.Category;
 public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment {
 
     /** logging support */
-    public final static Category cat = Category.getInstance("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -121,7 +121,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
         keyPath = (String)conditionAssignment.valueForKey("nonNullKeyPath");
         resultKey = c.valueForKeyPath(keyPath) == null ? "falseValue" : "trueValue";
         result = conditionAssignment.objectForKey(resultKey);
-        if (cat.isDebugEnabled()) cat.debug("ResultKey:  " + resultKey + " = " + result);
+        if (log.isDebugEnabled()) log.debug("ResultKey:  " + resultKey + " = " + result);
         return result;
     }
 }

@@ -13,13 +13,12 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 public class ERDEditList extends ERDCustomEditComponent {
 
     public ERDEditList(WOContext context) { super(context); }
 
-    public final static Category cat = Category.getInstance("er.directtoweb.components.EditList");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.EditList");
     
     public String choices;
     public String choiceDisplayKey;
@@ -39,7 +38,7 @@ public class ERDEditList extends ERDCustomEditComponent {
             EOEditingContext objectContext = object().editingContext();
             NSMutableArray nonSortedLocalList=new NSMutableArray();
             if (choices == null)
-                cat.warn("Choices was null for the list.  For now this means that an empty list will appear.");
+                log.warn("Choices was null for the list.  For now this means that an empty list will appear.");
             // FIXME: Might want to just fetch all of the eos if a choice isn't specified.
             NSArray nonLocallist = choices == null ? ERXConstant.EmptyArray : (NSArray)valueForKeyPath(choices);
             if (nonLocallist!=null) {
@@ -74,38 +73,38 @@ public class ERDEditList extends ERDCustomEditComponent {
             subObject = object();
             subKey = key;
         }
-        if (cat.isDebugEnabled()) {
-            cat.debug("Original Array: "+existingListArray);
-            cat.debug("subObject: "+ subObject);
-            cat.debug("subKey: "+ subKey);
+        if (log.isDebugEnabled()) {
+            log.debug("Original Array: "+existingListArray);
+            log.debug("subObject: "+ subObject);
+            log.debug("subKey: "+ subKey);
         }
         
         for (Enumeration e= existingListArray.objectEnumerator(); e.hasMoreElements();){
             EOEnterpriseObject anItem = (EOEnterpriseObject)e.nextElement();
             if(!selections().containsObject(anItem)){                
                 subObject.removeObjectFromBothSidesOfRelationshipWithKey(anItem, subKey);
-                if (cat.isDebugEnabled())
-                    cat.debug("removing: "+ anItem);
+                if (log.isDebugEnabled())
+                    log.debug("removing: "+ anItem);
             }
         }
         for (Enumeration e=selections().objectEnumerator(); e.hasMoreElements();){
             EOEnterpriseObject anItem = (EOEnterpriseObject)e.nextElement();
             if(!existingListArray.containsObject(anItem)){
                 subObject.addObjectToBothSidesOfRelationshipWithKey(anItem, subKey);
-                if (cat.isDebugEnabled())
-                    cat.debug("adding: "+ anItem);
+                if (log.isDebugEnabled())
+                    log.debug("adding: "+ anItem);
             }
         }
 
         // we save directly if the object is not new
         if (subObject.editingContext().hasChanges() && !ERXExtensions.isNewObject(subObject)) {
             try {
-                if (cat.isDebugEnabled())
-                    cat.debug("saving changes..");
+                if (log.isDebugEnabled())
+                    log.debug("saving changes..");
                 subObject.validateForSave();
                 subObject.editingContext().saveChanges();
-                if (cat.isDebugEnabled())
-                    cat.debug("changes saved.");
+                if (log.isDebugEnabled())
+                    log.debug("changes saved.");
             } catch (NSValidation.ValidationException e) {
                 errorMessage = " Could not save your changes: "+e.getMessage()+" ";
             }

@@ -12,7 +12,7 @@ import er.extensions.*;
  * You must populate your DB via the populate.sql script (you might need to adapt it)
  */
 public class ERCMailState extends _ERCMailState {
-    static final ERXLogger log = ERXLogger.getLogger(ERCMailState.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERCMailState.class);
 
     public static ERCMailState EXCEPTION_STATE;
     public static ERCMailState READY_TO_BE_SENT_STATE;

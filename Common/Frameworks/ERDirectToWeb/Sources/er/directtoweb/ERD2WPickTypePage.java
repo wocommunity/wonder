@@ -11,7 +11,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
 import er.extensions.*;
 
 // The pick interface is nice in that it doesn't require passing back an EO as the SelectPageInterface requires.
@@ -26,8 +25,9 @@ import er.extensions.*;
 public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageInterface {
 
     public ERD2WPickTypePage(WOContext context) {super(context);}
-    //////////////////////////////////////////  log4j category  //////////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.directtoweb.templates.ERD2WPickTypePageTemplate");
+    
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WPickTypePageTemplate");
 
     public boolean selectionManditory() { return ERXUtilities.booleanValue(d2wContext().valueForKey("selectionManditory")); }
 
@@ -68,7 +68,7 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
             } else if (d2wContext().valueForKey("choiceKeyPath") != null) {
                 _choices = (NSArray)valueForKeyPath((String)d2wContext().valueForKey("choiceKeyPath"));
             } else {
-                cat.error("Unable to create choices list for pageConfiguration: " +
+                log.error("Unable to create choices list for pageConfiguration: " +
                           d2wContext().valueForKey("pageConfiguration") + " context: " + d2wContext());
                 _choices = ERXConstant.EmptyArray;
             }

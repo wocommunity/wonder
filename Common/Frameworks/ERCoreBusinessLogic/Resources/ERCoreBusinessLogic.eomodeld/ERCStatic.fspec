@@ -7,7 +7,7 @@
             class = EOKeyValueQualifier; 
             key = key; 
             selectorName = "isEqualTo:"; 
-            value = {"_key" = key; class = EOQualifierVariable; }; 
+            value = {_key = key; class = EOQualifierVariable; }; 
         }; 
         refreshesRefetchedObjects = YES; 
         requiresAllQualifierBindingVariables = YES; 

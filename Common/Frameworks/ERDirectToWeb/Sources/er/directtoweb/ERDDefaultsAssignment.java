@@ -11,13 +11,13 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 // now that we use reflection to fire methods, there's no reason to have a lot a assignment classes
 public class ERDDefaultsAssignment extends ERDAssignment {
 
     /** logging support */
-    public final static Category cat = Category.getInstance("er.directtoweb.ERDDefaultsAssignment");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.ERDDefaultsAssignment");
 
     /** holds the array of keys this assignmnet depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("smartAttribute");

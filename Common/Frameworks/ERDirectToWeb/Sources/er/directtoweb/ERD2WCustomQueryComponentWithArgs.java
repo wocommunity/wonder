@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXExceptionHolder;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated
@@ -21,8 +21,9 @@ public class ERD2WCustomQueryComponentWithArgs extends ERDCustomQueryComponent i
     public ERD2WCustomQueryComponentWithArgs(WOContext context) {
         super(context);
     }
-    //////////////////////////////////  log4j category  ////////////////////////////////
-    public final static Category cat = Category.getInstance(ERD2WCustomQueryComponentWithArgs.class);
+    
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WCustomQueryComponentWithArgs.class);
     
 /* FIXME -- super class has Dictionary as return type
     private String _extraBindings;

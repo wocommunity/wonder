@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class ERCPreference extends _ERCPreference {
-    static final ERXLogger log = ERXLogger.getLogger(ERCPreference.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERCPreference.class);
 
     public ERCPreference() {
         super();

@@ -13,9 +13,9 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.lang.reflect.*;
 import java.util.*;
-import org.apache.log4j.Category;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXLogger;
 
 /**
  * Abstact super class of most assignments found in 
@@ -29,7 +29,7 @@ import er.extensions.ERXLocalizer;
 public abstract class ERDAssignment extends Assignment implements ERDComputingAssignmentInterface {
 
     /** logging supprt */
-    public final static Category cat = Category.getInstance("er.directtoweb.rules.ERDAssignment");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDAssignment");
 
     /** Cached context class array */
     // MOVEME: ERDConstants
@@ -148,12 +148,12 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
             Method m = getClass().getMethod(keyForMethodLookup(c), D2WContextClassArray);
             result = m.invoke(this, new Object[] { c });
         } catch (InvocationTargetException e) {
-            cat.error("InvocationTargetException occurred in ERAssignment: " + e.toString() 
+            log.error("InvocationTargetException occurred in ERAssignment: " + e.toString() 
             + " keyForMethodLookup(): " + keyForMethodLookup(c) + " target exception: " 
             + e.getTargetException()+ " assignment was " + this + "\n\n" + "Target exception backtrace: "
             + ERXUtilities.stackTrace(e.getTargetException()));
         } catch (Exception e) {
-            cat.error("Exception occurred in ERDAssignment of class: " + this.getClass().getName() 
+            log.error("Exception occurred in ERDAssignment of class: " + this.getClass().getName() 
             + ": " + e.toString() + " keyForMethodLookup(): " + keyForMethodLookup(c) + " assignment was " + this);
         }
         return result;

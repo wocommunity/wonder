@@ -13,11 +13,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
-    public static final Category cat = Category.getInstance("er.directtoweb.templates.ERWizardCreationPageTemplate");
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERWizardCreationPageTemplate");
 
     // Notification titles
     // FIXME: This is silly now that we have validationKeys.  Once all referenecs are removed will delete.

@@ -15,7 +15,7 @@ import er.extensions.*;
 public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging supprt */
-    static final ERXLogger log = ERXLogger.getLogger(ERDLocalizedAssignment.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDLocalizedAssignment.class);
 
     /** holds the dependent keys of the assignment */
     protected static final NSArray _DEPENDENT_KEYS=new NSArray("propertyKey");

@@ -20,7 +20,7 @@ public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
     public abstract EOEnterpriseObject logEntryType();
     public EOEnterpriseObject insertionLogEntry=null;
 
-    public static Category cat=Category.getInstance(ERCStampedEnterpriseObject.class);
+    public static ERXLogger log = ERXLogger.getERXLogger(ERCStampedEnterpriseObject.class);
 
 
     
@@ -29,7 +29,7 @@ public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
     private static class _Touch {
         public void touch(NSNotification n) {
             NSTimestamp now=new NSTimestamp();
-            if (cat.isDebugEnabled()) cat.debug("TimeStamp for "+n.object()+": now");
+            if (log.isDebugEnabled()) log.debug("TimeStamp for "+n.object()+": now");
             _datesPerEcID.setObjectForKey(ERXConstant.integerForInt(System.identityHashCode(n.object())), now);
         }
     }

@@ -19,7 +19,7 @@ import er.extensions.*;
 public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getLogger(ERDDefaultsEmbeddedAssignment.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultsEmbeddedAssignment.class);
 
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey"});

@@ -13,7 +13,6 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.appserver.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 import java.util.*;
 
 /**
@@ -29,14 +28,14 @@ import java.util.*;
  */
 public class ERDirectToWeb {
 
-    //////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.ERDirectToWeb");
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.ERDirectToWeb");
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
-    public final static Category debugCat = Category.getInstance("er.directtoweb.ERD2WDebugEnabled");
-    public final static Category componentNameCat = Category.getInstance("er.directtoweb.ERD2WDebugEnabled.componentName");
-    public final static Category propertyKeyCat = Category.getInstance("er.directtoweb.ERD2WDebugEnabled.propertyKey");
+    public final static ERXLogger debugLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled");
+    public final static ERXLogger componentNameLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
+    public final static ERXLogger propertyKeyLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
     // Notification Observer
     public static class Observer {
         public void didFinishedLaunchingApp(NSNotification n) {
@@ -61,7 +60,7 @@ public class ERDirectToWeb {
     static {
         // called implicitely because ERDirectToWeb is the principal class of the framework
         if (!_isInitialized) {
-            if (cat.isDebugEnabled()) cat.debug("Initializing framework: ERDirectToWeb");
+            if (log.isDebugEnabled()) log.debug("Initializing framework: ERDirectToWeb");
             Class c=ERD2WModel.class;        // force initialization
                                              // Configures the system for trace rule firing.
             D2W.setFactory(new ERD2WFactory());
@@ -91,7 +90,7 @@ public class ERDirectToWeb {
     public static boolean d2wDebuggingEnabled(WOSession s) {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDEBUGGING_ENABLED_KEY,
-                                                                  debugCat.isDebugEnabled());
+                                                                  debugLog.isDebugEnabled());
     }
 
     public static void setD2wComponentNameDebuggingEnabled(WOSession s, boolean enabled) {
@@ -100,7 +99,7 @@ public class ERDirectToWeb {
     public static boolean d2wComponentNameDebuggingEnabled(WOSession s) {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_COMPONENTNAMES_KEY,
-                                                                  componentNameCat.isDebugEnabled());
+                                                                  componentNameLog.isDebugEnabled());
     }
 
     public static void setD2wPropertyKeyDebuggingEnabled(WOSession s, boolean enabled) {
@@ -109,7 +108,7 @@ public class ERDirectToWeb {
     public static boolean d2wPropertyKeyDebuggingEnabled(WOSession s) {
         return ERXExtensions.booleanFlagOnSessionForKeyWithDefault(s,
                                                                   D2WDISPLAY_PROPERTYKEYS_KEY,
-                                                                  propertyKeyCat.isDebugEnabled());
+                                                                  propertyKeyLog.isDebugEnabled());
     }
     
     public static String resolveUnit(String userInfoUnitString,
@@ -145,7 +144,7 @@ public class ERDirectToWeb {
         String lastKey=null;
         String result=null;
         if (object == null || key == null) {
-            cat.warn("UserInfoUnit: Attempting to relsolve a unit for object: " + object + " key: " + key);
+            log.warn("UserInfoUnit: Attempting to relsolve a unit for object: " + object + " key: " + key);
         } else if (key.indexOf(".")==-1) {
             String entityName=object.entityName();
             entity=EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -280,11 +279,11 @@ public class ERDirectToWeb {
     }
 
     public static void warmUpRuleCache() {
-        cat.debug("Preparing DirectToWeb Data Structures");
+        log.debug("Preparing DirectToWeb Data Structures");
         ERD2WModel.erDefaultModel().prepareDataStructures();
     }
 
-    public static Category trace;
+    public static ERXLogger trace;
 
     // This enables us to turn trace rule firing on or off at will.
 
@@ -299,7 +298,7 @@ public class ERDirectToWeb {
     public static void configureTraceRuleFiringRapidTurnAround() {
         if (!_initializedTraceRuleFiring) {
             // otherwise not properly initialized
-            trace = Category.getInstance("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
+            trace = ERXLogger.getERXLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE

@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class ERCStatic extends _ERCStatic {
-    static final ERXLogger log = ERXLogger.getLogger(ERCStatic.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERCStatic.class);
 
     public String toString() {
         return entityName()+": "+key()+"="+value();

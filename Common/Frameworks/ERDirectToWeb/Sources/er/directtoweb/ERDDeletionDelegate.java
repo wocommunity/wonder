@@ -10,13 +10,12 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
 import er.extensions.*;
 
 public class ERDDeletionDelegate implements NextPageDelegate {
 
-    /////////////////////////////////////////////  log4j category  ///////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.delegates.ERDDeletionDelegate");
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.delegates.ERDDeletionDelegate");
 
     private EOEditingContext _ec;
     private EOEnterpriseObject _object;
@@ -25,7 +24,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
 
     // Can be overridden in subclasses to provide different followPages.
     protected WOComponent followPage(WOComponent sender) {
-        cat.debug("In FollowPage");
+        log.debug("In FollowPage");
         return _followPage;
     }
     
@@ -60,7 +59,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                     }
                     ((ERXValidationException)e).setContext(context);
                 }
-                cat.info("Validation Exception: "+ e + e.getMessage());
+                log.info("Validation Exception: "+ e + e.getMessage());
                 editingContext.revert();
                 String errorMessage = " Could not save your changes: "+e.getMessage()+" ";
                 ErrorPageInterface epf=D2W.factory().errorPage(sender.session());

@@ -26,7 +26,7 @@
 			refType = 2;
 		};
 		F542000302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditYearsMonths.wo;
@@ -42,7 +42,7 @@
 			refType = 2;
 		};
 		F542000902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEmptyListMessage.wo;
@@ -58,7 +58,7 @@
 			refType = 2;
 		};
 		F542000F02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEmptyPageWrapper.wo;
@@ -74,7 +74,7 @@
 			refType = 2;
 		};
 		F542001502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDFilterDisplayGroupButton.wo;
@@ -90,7 +90,7 @@
 			refType = 2;
 		};
 		F542001B02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDInspect.wo;
@@ -106,7 +106,7 @@
 			refType = 2;
 		};
 		F542002102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDLinkToViewList.wo;
@@ -122,7 +122,7 @@
 			refType = 2;
 		};
 		F542002702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDList.wo;
@@ -138,7 +138,7 @@
 			refType = 2;
 		};
 		F542002D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDListOrganizer.wo;
@@ -154,7 +154,7 @@
 			refType = 2;
 		};
 		F542003302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDListPicker.wo;
@@ -170,7 +170,7 @@
 			refType = 2;
 		};
 		F542003902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDMassModifyButton.wo;
@@ -186,7 +186,7 @@
 			refType = 2;
 		};
 		F542003F02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDPrinterButton.wo;
@@ -202,7 +202,7 @@
 			refType = 2;
 		};
 		F542004502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDPrinterFriendlyWrapper.wo;
@@ -218,7 +218,7 @@
 			refType = 2;
 		};
 		F542004B02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQueryDateRangeJavascript.wo;
@@ -234,7 +234,7 @@
 			refType = 2;
 		};
 		F542005102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQuestionPage.wo;
@@ -250,7 +250,7 @@
 			refType = 2;
 		};
 		F542005702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDRecoverableErrorPage.wo;
@@ -266,7 +266,7 @@
 			refType = 2;
 		};
 		F542005D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDSectionImage.wo;
@@ -282,7 +282,7 @@
 			refType = 2;
 		};
 		F542006302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDSectionText.wo;
@@ -298,7 +298,7 @@
 			refType = 2;
 		};
 		F542006902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDTabImage.wo;
@@ -314,7 +314,7 @@
 			refType = 2;
 		};
 		F542006F02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDTabText.wo;
@@ -330,7 +330,7 @@
 			refType = 2;
 		};
 		F542007502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDTrashcan.wo;
@@ -346,7 +346,7 @@
 			refType = 2;
 		};
 		F542007B02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDXMLPageWrapper.wo;
@@ -362,7 +362,7 @@
 			refType = 2;
 		};
 		F542008102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXD2WInspect.wo;
@@ -378,7 +378,7 @@
 			refType = 2;
 		};
 		F542008702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXD2WList.wo;
@@ -394,7 +394,7 @@
 			refType = 2;
 		};
 		F542008D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXD2WPick.wo;
@@ -3657,7 +3657,7 @@
 			refType = 2;
 		};
 		F542FDCD02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCompactInspectPageTemplate.wo;
@@ -3673,7 +3673,7 @@
 			refType = 2;
 		};
 		F542FDD302C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCompactListPageTemplate.wo;
@@ -3689,7 +3689,7 @@
 			refType = 2;
 		};
 		F542FDD902C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WConfirmPageTemplate.wo;
@@ -3705,7 +3705,7 @@
 			refType = 2;
 		};
 		F542FDDF02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCSVGroupingListPageTemplate.wo;
@@ -3721,7 +3721,7 @@
 			refType = 2;
 		};
 		F542FDE502C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCSVListPageTemplate.wo;
@@ -3737,7 +3737,7 @@
 			refType = 2;
 		};
 		F542FDEB02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomComponentWithArgs.wo;
@@ -3753,7 +3753,7 @@
 			refType = 2;
 		};
 		F542FDF102C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomDisplayBoolean.wo;
@@ -3769,7 +3769,7 @@
 			refType = 2;
 		};
 		F542FDF702C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomEditBoolean.wo;
@@ -3785,7 +3785,7 @@
 			refType = 2;
 		};
 		F542FDFD02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayAddress.wo;
@@ -3801,7 +3801,7 @@
 			refType = 2;
 		};
 		F542FE0302C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayConstant.wo;
@@ -3817,7 +3817,7 @@
 			refType = 2;
 		};
 		F542FE0902C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayDateOrNull.wo;
@@ -3833,7 +3833,7 @@
 			refType = 2;
 		};
 		F542FE0F02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayHTML.wo;
@@ -3849,7 +3849,7 @@
 			refType = 2;
 		};
 		F542FE1502C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayImage.wo;
@@ -3865,7 +3865,7 @@
 			refType = 2;
 		};
 		F542FE1B02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayImageWithUrl.wo;
@@ -3881,7 +3881,7 @@
 			refType = 2;
 		};
 		F542FE2102C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayList.wo;
@@ -3897,7 +3897,7 @@
 			refType = 2;
 		};
 		F542FE2702C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayNumber.wo;
@@ -3913,7 +3913,7 @@
 			refType = 2;
 		};
 		F542FE2D02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayNumberWithUnit.wo;
@@ -3929,7 +3929,7 @@
 			refType = 2;
 		};
 		F542FE3302C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayPassword.wo;
@@ -3945,7 +3945,7 @@
 			refType = 2;
 		};
 		F542FE3902C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayString.wo;
@@ -3961,7 +3961,7 @@
 			refType = 2;
 		};
 		F542FE3F02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayStringWithLineBreaks.wo;
@@ -3977,7 +3977,7 @@
 			refType = 2;
 		};
 		F542FE4502C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayTextFromHTML.wo;
@@ -3993,7 +3993,7 @@
 			refType = 2;
 		};
 		F542FE4B02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToManyCustom.wo;
@@ -4009,7 +4009,7 @@
 			refType = 2;
 		};
 		F542FE5102C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToManyList.wo;
@@ -4025,7 +4025,7 @@
 			refType = 2;
 		};
 		F542FE5702C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToManyTable.wo;
@@ -4041,7 +4041,7 @@
 			refType = 2;
 		};
 		F542FE5D02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToOne.wo;
@@ -4057,7 +4057,7 @@
 			refType = 2;
 		};
 		F542FE6302C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayURL.wo;
@@ -4073,7 +4073,7 @@
 			refType = 2;
 		};
 		F542FE6902C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayYesNo.wo;
@@ -4089,7 +4089,7 @@
 			refType = 2;
 		};
 		F542FE6F02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditableListTemplate.wo;
@@ -4105,7 +4105,7 @@
 			refType = 2;
 		};
 		F542FE7502C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditAllowRestrict.wo;
@@ -4121,7 +4121,7 @@
 			refType = 2;
 		};
 		F542FE7B02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditDateJavascript.wo;
@@ -4137,7 +4137,7 @@
 			refType = 2;
 		};
 		F542FE8102C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditLargeString.wo;
@@ -4153,7 +4153,7 @@
 			refType = 2;
 		};
 		F542FE8702C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditNumber.wo;
@@ -4169,7 +4169,7 @@
 			refType = 2;
 		};
 		F542FE8D02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditNumberOrDefault.wo;
@@ -4185,7 +4185,7 @@
 			refType = 2;
 		};
 		F542FE9302C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditNumberWithUnit.wo;
@@ -4201,7 +4201,7 @@
 			refType = 2;
 		};
 		F542FE9902C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditOrDefault.wo;
@@ -4217,7 +4217,7 @@
 			refType = 2;
 		};
 		F542FE9F02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditPercentage.wo;
@@ -4233,7 +4233,7 @@
 			refType = 2;
 		};
 		F542FEA402C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditString.wo;
@@ -4249,7 +4249,7 @@
 			refType = 2;
 		};
 		F542FEAA02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditToManyRelationship.wo;
@@ -4265,7 +4265,7 @@
 			refType = 2;
 		};
 		F542FEB002C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditToOneRelationship.wo;
@@ -4281,7 +4281,7 @@
 			refType = 2;
 		};
 		F542FEB602C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditURL.wo;
@@ -4297,7 +4297,7 @@
 			refType = 2;
 		};
 		F542FEBC02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditYesNo.wo;
@@ -4313,7 +4313,7 @@
 			refType = 2;
 		};
 		F542FEC202C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WGroupingListPageTemplate.wo;
@@ -4329,7 +4329,7 @@
 			refType = 2;
 		};
 		F542FEC802C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WGroupingListXMLPageTemplate.wo;
@@ -4345,7 +4345,7 @@
 			refType = 2;
 		};
 		F542FECE02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WGroupingPrinterFriendlyListPageTemplate.wo;
@@ -4361,7 +4361,7 @@
 			refType = 2;
 		};
 		F542FED402C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WInspect.wo;
@@ -4377,7 +4377,7 @@
 			refType = 2;
 		};
 		F542FEDA02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WInspectPageTemplate.wo;
@@ -4393,7 +4393,7 @@
 			refType = 2;
 		};
 		F542FEE002C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WKeyMapper.wo;
@@ -4409,7 +4409,7 @@
 			refType = 2;
 		};
 		F542FEE602C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WList.wo;
@@ -4425,7 +4425,7 @@
 			refType = 2;
 		};
 		F542FEEC02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WListComparePageTemplate.wo;
@@ -4441,7 +4441,7 @@
 			refType = 2;
 		};
 		F542FEF202C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WListPageTemplate.wo;
@@ -4457,7 +4457,7 @@
 			refType = 2;
 		};
 		F542FEF802C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WListXMLPageTemplate.wo;
@@ -4473,7 +4473,7 @@
 			refType = 2;
 		};
 		F542FEFE02C466C501000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WMessagePageTemplate.wo;
@@ -4489,7 +4489,7 @@
 			refType = 2;
 		};
 		F542FF0402C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPick.wo;
@@ -4505,7 +4505,7 @@
 			refType = 2;
 		};
 		F542FF0D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickFromEntities.wo;
@@ -4521,7 +4521,7 @@
 			refType = 2;
 		};
 		F542FF1302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickFromList.wo;
@@ -4537,7 +4537,7 @@
 			refType = 2;
 		};
 		F542FF1902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickListPageTemplate.wo;
@@ -4553,7 +4553,7 @@
 			refType = 2;
 		};
 		F542FF1F02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickTypePageTemplate.wo;
@@ -4569,7 +4569,7 @@
 			refType = 2;
 		};
 		F542FF2502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPopUp.wo;
@@ -4585,7 +4585,7 @@
 			refType = 2;
 		};
 		F542FF2B02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPrinterFriendlyInspectPageTemplate.wo;
@@ -4601,7 +4601,7 @@
 			refType = 2;
 		};
 		F542FF3102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPrinterFriendlyListTemplate.wo;
@@ -4617,7 +4617,7 @@
 			refType = 2;
 		};
 		F542FF3702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPropertyName.wo;
@@ -4633,7 +4633,7 @@
 			refType = 2;
 		};
 		F542FF3D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryNonNull.wo;
@@ -4649,7 +4649,7 @@
 			refType = 2;
 		};
 		F542FF4302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryPageTemplate.wo;
@@ -4665,7 +4665,7 @@
 			refType = 2;
 		};
 		F542FF4902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryPageWithFetchSpecification.wo;
@@ -4681,7 +4681,7 @@
 			refType = 2;
 		};
 		F542FF4F02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryPageWithFetchSpecificationTemplate.wo;
@@ -4697,7 +4697,7 @@
 			refType = 2;
 		};
 		F542FF5502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryToOneRelationship.wo;
@@ -4713,7 +4713,7 @@
 			refType = 2;
 		};
 		F542FF5B02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WStatelessCustomComponentWithArgs.wo;
@@ -4729,7 +4729,7 @@
 			refType = 2;
 		};
 		F542FF6102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WSwitchComponent.wo;
@@ -4745,7 +4745,7 @@
 			refType = 2;
 		};
 		F542FF6702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WTabInspectPageTemplate.wo;
@@ -4761,7 +4761,7 @@
 			refType = 2;
 		};
 		F542FF6D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WTwoLevelEditToOneRelationship.wo;
@@ -4777,7 +4777,7 @@
 			refType = 2;
 		};
 		F542FF7302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WWizardCreationPageTemplate.wo;
@@ -4793,7 +4793,7 @@
 			refType = 2;
 		};
 		F542FF7902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WXMLDisplayNumber.wo;
@@ -4809,7 +4809,7 @@
 			refType = 2;
 		};
 		F542FF7F02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WXMLDisplayString.wo;
@@ -4825,7 +4825,7 @@
 			refType = 2;
 		};
 		F542FF8502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WXMLDisplayToMany.wo;
@@ -4841,7 +4841,7 @@
 			refType = 2;
 		};
 		F542FF8B02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDConfirmMessage.wo;
@@ -4857,7 +4857,7 @@
 			refType = 2;
 		};
 		F542FF9102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDCustomQueryComponentWithArgs.wo;
@@ -4873,7 +4873,7 @@
 			refType = 2;
 		};
 		F542FF9702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDebuggingHelp.wo;
@@ -4889,7 +4889,7 @@
 			refType = 2;
 		};
 		F542FF9D02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultCustomComponent.wo;
@@ -4905,7 +4905,7 @@
 			refType = 2;
 		};
 		F542FFA302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultSectionComponent.wo;
@@ -4921,7 +4921,7 @@
 			refType = 2;
 		};
 		F542FFA902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultSectionComponentCSV.wo;
@@ -4937,7 +4937,7 @@
 			refType = 2;
 		};
 		F542FFAF02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultSectionComponentPrinterFriendly.wo;
@@ -4953,7 +4953,7 @@
 			refType = 2;
 		};
 		F542FFB502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDHTMLComponent.wo;
@@ -4969,7 +4969,7 @@
 			refType = 2;
 		};
 		F542FFBB02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDisplayImageIfExists.wo;
@@ -4985,7 +4985,7 @@
 			refType = 2;
 		};
 		F542FFC102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDisplayMailTo.wo;
@@ -5001,7 +5001,7 @@
 			refType = 2;
 		};
 		F542FFC702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDisplayYearsMonths.wo;
@@ -5017,7 +5017,7 @@
 			refType = 2;
 		};
 		F542FFCD02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditButton.wo;
@@ -5033,7 +5033,7 @@
 			refType = 2;
 		};
 		F542FFD302C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditDateJavascript.wo;
@@ -5049,7 +5049,7 @@
 			refType = 2;
 		};
 		F542FFD902C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditDatePopup.wo;
@@ -5065,7 +5065,7 @@
 			refType = 2;
 		};
 		F542FFDF02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditDatePopupOrNull.wo;
@@ -5081,7 +5081,7 @@
 			refType = 2;
 		};
 		F542FFE502C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditList.wo;
@@ -5097,7 +5097,7 @@
 			refType = 2;
 		};
 		F542FFEB02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditListButton.wo;
@@ -5113,7 +5113,7 @@
 			refType = 2;
 		};
 		F542FFF102C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditOwnedRelationship.wo;
@@ -5129,7 +5129,7 @@
 			refType = 2;
 		};
 		F542FFF702C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditPasswordConfirm.wo;
@@ -5145,7 +5145,7 @@
 			refType = 2;
 		};
 		F542FFFD02C466C601000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditStringWithChoices.wo;
@@ -6857,8 +6857,8 @@
 			productName = ERDirectToWeb;
 			productReference = F5A1454A01FF7F8801A80106;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -6930,8 +6930,8 @@
 			productName = "Application Server";
 			productReference = F5A1454B01FF7F8801A80106;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -6973,6 +6973,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1455101FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7226,6 +7227,7 @@
 				F639B99F02EF369F0FCF0E72,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1463201FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7426,6 +7428,7 @@
 				F6A30E2D02F8BFCB0FCF0E72,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146DC01FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7444,6 +7447,7 @@
 				F518015002022C9D01A80106,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146DD01FF7F8801A80106 = {
 			fileRef = F5A1453C01FF7F8801A80106;
@@ -7510,6 +7514,7 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146EA01FF7F8801A80106 = {
 			isa = PBXTargetDependency;
@@ -7543,8 +7548,8 @@
 			productName = "Web Server";
 			productReference = F5A1454C01FF7F8801A80106;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -7578,6 +7583,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146ED01FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7589,12 +7595,14 @@
 				F542047F02C4674D01000102,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146F201FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146F301FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7611,6 +7619,7 @@
 				F5A146FF01FF7F8801A80106,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A146F401FF7F8801A80106 = {
 			fileRef = F5A1453C01FF7F8801A80106;
@@ -7677,36 +7686,42 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1470101FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1470201FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1470301FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1470401FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1470501FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A1470601FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7717,6 +7732,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
 		};
@@ -7729,6 +7745,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
@@ -7818,7 +7835,7 @@
 			refType = 4;
 		};
 		F639B95902EF33C70FCF0E72 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDebugFlags.wo;
@@ -7864,7 +7881,7 @@
 			};
 		};
 		F6DC3ABC02E4A5520FCF0E72 = {
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			generatedFileNames = (
@@ -7872,6 +7889,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = ". \"${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh\"";
 		};

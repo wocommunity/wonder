@@ -11,13 +11,13 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 public class ERDFilterDisplayGroupButton extends WOComponent {
 
     public ERDFilterDisplayGroupButton(WOContext context) { super(context); }
 
-    public static final Category cat = Category.getInstance("er.directtoweb.components.ERDFilterDisplayGroupButton");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDFilterDisplayGroupButton");
 
     public boolean isStateless() { return true; }
     public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
@@ -40,11 +40,11 @@ public class ERDFilterDisplayGroupButton extends WOComponent {
                 if (eds instanceof EODatabaseDataSource) {
                     EODatabaseDataSource dbds=(EODatabaseDataSource)eds;
                     EOQualifier q=dbds.auxiliaryQualifier();
-                    cat.debug("Setting qualifier to "+q);
+                    log.debug("Setting qualifier to "+q);
                     _displayGroup.setQualifier(q);
                     _displayGroup.updateDisplayedObjects();
                 } else {
-                    cat.warn("Data source of unknown type: "+eds.getClass().getName());
+                    log.warn("Data source of unknown type: "+eds.getClass().getName());
                 }
             }
             return _nextPage;

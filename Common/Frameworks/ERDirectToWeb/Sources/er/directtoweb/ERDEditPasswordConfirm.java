@@ -10,10 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.*;
-import org.apache.log4j.*;
 
 public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
-    public static final Category cat = Category.getInstance(ERDEditPasswordConfirm.class);
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDEditPasswordConfirm.class);
     
     public ERDEditPasswordConfirm(WOContext context) { super(context); }
 
@@ -21,8 +22,8 @@ public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
     public String passwordConfirm;
 
     public void fail(String errorCode) {
-        if(cat.isDebugEnabled())
-            cat.debug("fail:<object:" + object() + "; key:" + key() + ";  password: " + password + "; code:" + errorCode + ";>");
+        if(log.isDebugEnabled())
+            log.debug("fail:<object:" + object() + "; key:" + key() + ";  password: " + password + "; code:" + errorCode + ";>");
         validationFailedWithException(ERXValidationFactory.defaultFactory().createException(object(), key(), password, errorCode), password, key());
     }
     

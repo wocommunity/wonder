@@ -13,7 +13,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
@@ -25,16 +24,16 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
         super(c);
     }
 
-    //////////////////////////////////////////  log4j category  /////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.directtoweb.templates.ERD2WTabInspectPage");
-    public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERD2WTabInspectPage");
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WTabInspectPage");
+    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WTabInspectPage");
 
 
     public String switchTabActionName() { return isEditing() ? "switchTabAction" : null; }
     public boolean switchTabAction() {
         boolean switchTab = true;
         if (shouldSaveChangesForTab()) {
-            if (validationCat.isDebugEnabled()) validationCat.debug("ERTabInspectPage calling tryToSaveChanges");
+            if (validationLog.isDebugEnabled()) validationLog.debug("ERTabInspectPage calling tryToSaveChanges");
             switchTab = tryToSaveChanges(true);
         }
         if (switchTab && errorMessages.count()==0 && object().editingContext().hasChanges() && shouldNotSwitchIfHasChanges()) {
@@ -66,7 +65,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
         _currentTab = value;
         if (value != null && value.name != null && !value.name.equals("")) {
             d2wContext().takeValueForKey(value.name, "tabKey");
-            if (cat.isDebugEnabled()) cat.debug("Setting tabKey: " + value.name);
+            if (log.isDebugEnabled()) log.debug("Setting tabKey: " + value.name);
         }
     }
 
@@ -165,7 +164,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
                 setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(currentIndex + 1));
             }
             else
-                cat.warn("Attempting to move to next tab when current index is: " + currentIndex + " and tab count: " +
+                log.warn("Attempting to move to next tab when current index is: " + currentIndex + " and tab count: " +
                          tabSectionsContents().count());
         }
         return null;
@@ -177,7 +176,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
             if (tabSectionsContents().count() >= currentIndex && currentIndex > 0)
                 setCurrentTab((ERD2WContainer)tabSectionsContents().objectAtIndex(currentIndex - 1));
             else
-                cat.warn("Attempting to move to previous tab when current index is: " + currentIndex + " and tab count: " +
+                log.warn("Attempting to move to previous tab when current index is: " + currentIndex + " and tab count: " +
                          tabSectionsContents().count());
         }
         return null;

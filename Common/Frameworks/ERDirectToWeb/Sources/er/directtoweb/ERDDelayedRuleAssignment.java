@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 /**
  * DelayedRuleAssignment expects an array of rules as its value. The rules are
@@ -25,8 +25,8 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
         return new ERDDelayedRuleAssignment(eokeyvalueunarchiver);
     }
     
-    ////////////////////////////////////  log4j category  ///////////////////////////////////
-    public final static Category cat = Category.getInstance(ERDDelayedRuleAssignment.class);
+    /** Logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedRuleAssignment.class);
 
     public ERDDelayedRuleAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRuleAssignment(String key, Object value) { super(key,value); }
@@ -46,17 +46,17 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
         while (ruleEnumerator.hasMoreElements()) {
             rule = (Rule)ruleEnumerator.nextElement();
             EOQualifierEvaluation eval = rule.lhs();
-            cat.debug("Qualifier eval: \n" + eval);
+            log.debug("Qualifier eval: \n" + eval);
             if (eval.evaluateWithObject(c)) {
                 result = ((Assignment)rule.rhs()).value();
-                cat.debug("RHS value: " +  result);
+                log.debug("RHS value: " +  result);
                 break;
             }
-            cat.debug("    object.expansionRSF:" +
+            log.debug("    object.expansionRSF:" +
                                c.valueForKey("object") +
                                c.valueForKeyPath("object.expansionRSF"));
             if (c.valueForKeyPath("object.expansionRSF") == null)
-                cat.debug("It is null");
+                log.debug("It is null");
         }
         return result;
     }

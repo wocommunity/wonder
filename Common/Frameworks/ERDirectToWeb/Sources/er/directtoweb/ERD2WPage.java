@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 import org.apache.log4j.NDC;
 
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
@@ -21,9 +20,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         super(c);
     }    
     
-    ///////////////////////////////////////  log4j category  ///////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERD2WPage.class);
-    public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERD2WPage");
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WPage.class);
+    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WPage");
 
     public NSMutableDictionary errorMessages() { return errorMessages; }
     public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
@@ -62,7 +61,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             _localContext=newValue;
         }
         super.setLocalContext(newValue);
-        cat.debug("SetLocalContext "+newValue);
+        log.debug("SetLocalContext "+newValue);
         // This way
         d2wContext().takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
     }
@@ -79,8 +78,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // Used to hold a cleaned-up validation key and message.
     private NSMutableDictionary _temp = new NSMutableDictionary();
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
-        if (validationCat.isDebugEnabled())
-            validationCat.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
+        if (validationLog.isDebugEnabled())
+            validationLog.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
         if (shouldCollectValidationExceptions()) {
             if (e instanceof ERXValidationException) {
                 ERXValidationException erv = (ERXValidationException)e;
@@ -121,7 +120,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         String descriptionForResponse = (String)d2wContext().valueForKey("pageConfiguration");
         /*
         if (descriptionForResponse == null)
-            cat.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
+            log.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
          */
         return descriptionForResponse != null ? descriptionForResponse : super.descriptionForResponse(aResponse, aContext);
     }

@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
-import org.apache.log4j.Category;
 import er.extensions.*;
 
 /**
@@ -32,7 +31,7 @@ import er.extensions.*;
 public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface  {
 
     /** logging support */
-    public final static Category cat = Category.getInstance("er.directtoweb.rules.DelayedConditionalAssignment");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.DelayedConditionalAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -75,11 +74,11 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
             String qualFormat =
                 (String)conditionAssignment.objectForKey("qualifierFormat");
             NSArray args = (NSArray)conditionAssignment.objectForKey("args");
-            if (cat.isDebugEnabled()) cat.debug("parsing "+qualFormat);
+            if (log.isDebugEnabled()) log.debug("parsing "+qualFormat);
             EOQualifier qualifier =
                 EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
-            if (cat.isDebugEnabled())
-                cat.debug("Qualifier keys: " + qualifier.allQualifierKeys());
+            if (log.isDebugEnabled())
+                log.debug("Qualifier keys: " + qualifier.allQualifierKeys());
             _dependentKeys=qualifier.allQualifierKeys().allObjects();
         }
         return _dependentKeys;
@@ -95,23 +94,23 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSArray args = (NSArray)conditionAssignment.objectForKey("args");
-        if (cat.isDebugEnabled()) {
-            cat.debug("Entity: " + c.entity().name());
-            cat.debug("Object " + c.valueForKey("object"));
+        if (log.isDebugEnabled()) {
+            log.debug("Entity: " + c.entity().name());
+            log.debug("Object " + c.valueForKey("object"));
         }
         EOQualifier qualifier = 
            EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
-        if (cat.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             System.err.println("Qualifier keys: " + qualifier.allQualifierKeys());
         }
-        if (cat.isDebugEnabled())
-            cat.debug("DelayedConditonalQualifier: " + qualifier);
+        if (log.isDebugEnabled())
+            log.debug("DelayedConditonalQualifier: " + qualifier);
         if (qualifier.evaluateWithObject(c)) {
             result = conditionAssignment.objectForKey("trueValue");
-            cat.debug("trueValue = " + result);
+            log.debug("trueValue = " + result);
         } else {
             result = conditionAssignment.objectForKey("falseValue");
-            cat.debug("falseValue = " + result);
+            log.debug("falseValue = " + result);
         }
         return result;
     }
