@@ -5,6 +5,9 @@
 <target name="reporting">
 <ant antFile="Build/build/generic.xml" target="DynaReporting.all" />
 </target>
+<target name="excel">
+<ant antFile="Build/build/generic.xml" target="excelgeneration.all" />
+</target>
 <target name="core">
 <ant antFile="Build/build/generic.xml" target="frameworks.all" />
 </target>
