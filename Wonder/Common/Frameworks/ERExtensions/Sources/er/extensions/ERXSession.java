@@ -522,7 +522,7 @@ public class ERXSession extends WOSession implements Serializable {
 //            NSNotificationCenter.defaultCenter().removeObserver(_observer);
 //        if (_browser != null) 
 //            ERXBrowserFactory.factory().releaseBrowser(_browser);
-        log.info("will terminate, sessionId is "+sessionID());
+        log.debug("will terminate, sessionId is "+sessionID());
         super.terminate();
     }
 
