@@ -21,7 +21,7 @@
                 ); 
             }; 
             rhs = {
-                class = "com.webobjects.directtoweb.BooleanAssignment"; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = allowCollapsing; 
                 value = false; 
             }; 
@@ -105,6 +105,15 @@
                 class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = branchChoices; 
                 value = (); 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = browserSize; 
+                value = 5; 
             }; 
         }, 
         {
@@ -498,6 +507,32 @@
                 class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WXMLDisplayString; 
+            }; 
+        }, 
+        {
+            author = 100; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "*Flag"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = componentName; 
+                value = ERD2WEditFlag; 
             }; 
         }, 
         {
@@ -3922,26 +3957,6 @@
             }; 
         }, 
         {
-            author = 50; 
-            class = "com.webobjects.directtoweb.Rule"; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOOrQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = message; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = "er.directtoweb.ERDKeyValueAssignment"; 
-                keyPath = pageName; 
-                value = templateNameForMessagePage; 
-            }; 
-        }, 
-        {
             author = 51; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
@@ -4010,6 +4025,26 @@
                 class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForQueryPage; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = message; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
+                keyPath = pageName; 
+                value = templateNameForMessagePage; 
             }; 
         }, 
         {
