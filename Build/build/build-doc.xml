@@ -113,7 +113,7 @@
     <!-- ========================================== -->
     <target name="api" depends="prepare">
         <!-- copy README's -->
-        <copy todir="${dist}/">
+        <copy todir="${dist}/" flatten="true">
             <fileset dir="${basedir}">
                 <include name="*.txt"/>
                 <include name="**/LICENSE*"/>

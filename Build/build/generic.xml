@@ -1036,6 +1036,15 @@ There are many ways to use this script:
             <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
+    <target name="ERWorkerChannel.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERWorkerChannel" />
+            <param name="project.dir" value="Common/Frameworks/ERWorkerChannel" />
+
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
     <target name="PostgresqlPlugIn.all">
         <antcall target="global.framework" >
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
@@ -1046,7 +1055,7 @@ There are many ways to use this script:
     
 
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all" />
+    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all" />
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
     <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
@@ -1198,6 +1207,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="PostgresqlPlugIn" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="ERWorkerChannel" />
         </antcall>
      </target>
 
@@ -1393,6 +1405,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="PostgresqlPlugIn" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="ERWorkerChannel" />
         </antcall>
     </target>
 
