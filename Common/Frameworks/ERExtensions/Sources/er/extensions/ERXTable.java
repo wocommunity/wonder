@@ -63,7 +63,9 @@ public class ERXTable extends WOTable {
     protected String header;
     /** caches the value from the binding goingVertical */
     protected Boolean _goingVertically;
-    
+	 protected Boolean _showIndex;
+	 protected int index = 0;
+	 
     /**
      * Public constructor
      * @param context the context
@@ -85,6 +87,7 @@ public class ERXTable extends WOTable {
     protected void _resetInternalCaches() {
         super._resetInternalCaches();
         _goingVertically = null;
+		  _showIndex = null;
     }
 
     /**
@@ -111,7 +114,7 @@ public class ERXTable extends WOTable {
      */
     public void pushItem() {
         NSArray aList = list();
-        int index;
+        //int index;
         if (goingVertically()) {
             int c=aList.count() % maxColumns();
             index = currentRow+rowCount()*currentCol;
@@ -138,4 +141,24 @@ public class ERXTable extends WOTable {
      * @return if the component has the binding headerImages.
      */
     public boolean hasHeaders() { return hasBinding("headerImages"); }
+
+	 /**
+		 * Conditional to determine if the index should be shown
+     * @return if the index should be shown from the bindings
+     */
+    public boolean showIndex() {
+		 if (_showIndex == null) {
+			 _showIndex=ERXUtilities.booleanValue(valueForBinding("showIndex")) ?
+			 Boolean.TRUE : Boolean.FALSE;
+		 }
+		 return _showIndex.booleanValue();
+	 }
+
+	 	 /**
+		 * Returns a displayable value for the index starting from 1 instead of 0.
+		  * @return a displayable value for the index starting from 1 instead of 0.
+		  */
+	 public int displayInt(){
+		 return index+1;
+	 }
 }
