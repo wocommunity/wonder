@@ -103,8 +103,11 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @return logger for the given class and subtopic
      */
     //ENHANCEME: We could do something more useful here...
+    public static ERXLogger getERXLogger(Class clazz, String subTopic) {
+        return (ERXLogger)getERXLogger(clazz.getName() + (subTopic != null && subTopic.length() > 0 ? "."+ subTopic : null));
+    }
     public static ERXLogger getLogger(Class clazz, String subTopic) {
-        return (ERXLogger)getLogger(clazz.getName() + (subTopic != null && subTopic.length() > 0 ? "."+ subTopic : null));
+        return getERXLogger(clazz, subTopic);
     }
     
     /**
@@ -114,5 +117,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public ERXLogger(String name) {
         super(name);
+    }
+
+    /**
+     * Dumps an Throwable's Stack trace on the appender if debugging is enabled.
+     * @param throwable throwable to dump
+     */
+    public void debugStackTrace(Throwable throwable) {
+        if(isDebugEnabled())
+            throwable.printStackTrace();
     }
 }
