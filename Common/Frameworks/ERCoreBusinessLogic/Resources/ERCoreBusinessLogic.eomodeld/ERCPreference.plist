@@ -1,17 +1,17 @@
 {
     attributes = (
         {columnName = ID; name = id; prototypeName = id; }, 
-        {columnName = KEY_; name = key; prototypeName = varchar100; }, 
-        {allowsNull = Y; columnName = USER_ID; name = userID; prototypeName = id; }, 
+        {columnName = "KEY_"; name = key; prototypeName = varchar100; }, 
+        {allowsNull = Y; columnName = "USER_ID"; name = userID; prototypeName = id; }, 
         {
             allowsNull = Y; 
-            columnName = VALUE_; 
+            columnName = "VALUE_"; 
             name = value; 
             prototypeName = varcharLarge; 
         }
     ); 
     attributesUsedForLocking = (id, key, userID); 
-    className = er.corebusinesslogic.ERCPreference; 
+    className = "er.corebusinesslogic.ERCPreference"; 
     classProperties = (key, value, userID); 
     externalName = ERCPREFER; 
     name = ERCPreference; 
