@@ -220,15 +220,15 @@
     <target name="Validity.application.all">
         <antcall target="Validity.application" >
             <param name="project.principal.class" value="" />
-            <param name="project.name" value="Validity" />
-            <param name="project.dir" value="${wonder.root}/Validity/Frameworks/Validity" />
+            <param name="project.name" value="ValidityModeler" />
+            <param name="project.dir" value="${wonder.root}/Validity/Applications/ValidityModeler" />
         </antcall>
     </target>
     <target name="Validity.application.clean">
         <antcall target="clean" >
             <param name="project.principal.class" value="" />
-            <param name="project.name" value="Validity" />
-            <param name="project.dir" value="${wonder.root}/Validity/Frameworks/Validity" />
+            <param name="project.name" value="ValidityModeler" />
+            <param name="project.dir" value="${wonder.root}/Validity/Applications/ValidityModeler" />
         </antcall>
     </target>
 
