@@ -208,7 +208,6 @@ public class ERCMailDelivery {
                                                  String componentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-		 ERCMailMessage result = null;
         WOComponent component = ERXApplication.instantiatePage(componentName);
         if (component == null) {
             log.warn("Created null component for name \"" + componentName + "\"");
