@@ -87,6 +87,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     protected String defaultChildKey;
     protected String selectedParentId;
     protected String selectedChildId;
+    protected String parentsChildrenId;
     
     protected String elementID;
     
@@ -97,10 +98,12 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     protected void updateVarNames() {
         String elementID = context().elementID();
         elementID = ERXStringUtilities.replaceStringByStringInString(".", "_", elementID);
+        elementID = "foo";
         parentSelectName = "parent_" + elementID;
         childSelectName = "child_" + elementID;
         selectedParentId = "selected_parent_" + elementID;
         selectedChildId = "selected_child_" + elementID;
+        parentsChildrenId = "parents_children_" + elementID;
     }
 
     public void appendToResponse(WOResponse response, WOContext context) {
@@ -236,7 +239,13 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         } else {
             returnString.append("<input type=\"hidden\" name=\""+selectedChildId+"\" value=\"\">\n");
         }
-        returnString.append("<script>setSelectToArrayOfEntities(window.document.forms[0]." + childSelectName + ",allChildren(),childPopUpStringForAll)</script>\n");
+        String children = "allChildren("+parentsChildrenId+")";
+        if(selectedParent() != null) {
+            children = "getParentEntityForId(" + selectedParent().hashCode() + ").children()";
+        }
+        returnString.append("<script language=\"JavaScript\">\nsetSelectToArrayOfEntities(window.document." 
+                + formName() + "." + childSelectName + "," 
+                + children +",childPopUpStringForAll)\n</script>\n");
         return returnString.toString();
     }
 
@@ -251,7 +260,9 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         </select>
      */
     public String parentPopUpString() {
-        String onChangeString = "parentSwapped(window.document.forms[0]." + parentSelectName + ".options[selectedIndex].value,window.document.forms[0]." + childSelectName +"," + selectedParentId + "," + selectedChildId +");";
+        String onChangeString = "parentSwapped("+parentsChildrenId+",window.document." + formName() 
+        	+ "." + parentSelectName + ".options[selectedIndex].value,window.document."+ formName()
+        	+ "." + childSelectName +"," + selectedParentId + "," + selectedChildId +");";
         StringBuffer returnString = selectHeader(parentSelectName, onChangeString, selectedParent(), parentPopUpStringForAll());
 
         // write out each of the values for the options tags. be sure to set the selected tag if necessary
@@ -272,6 +283,16 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return returnString.toString();
     }
 
+    public String formName() {
+        String result;
+        if(context() instanceof ERXMutableUserInfoHolderInterface) {
+            result = (String)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().valueForKey("formName");
+        } else {
+            result = "forms[0]";
+        }
+        return result;
+    }
+    
     /**
      * @returns the string to create the pop-up with the initial child values something like:
      <select name="children_select">
@@ -281,7 +302,11 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
      </select>
      */
     public String childPopUpString() {
-        String onChangeString = "childSwapped(window.document.forms[0]." + childSelectName + ".options[selectedIndex].value,"+selectedChildId+");";
+        String onChangeString = "childSwapped("+parentsChildrenId + ","
+        +"window.document." + formName() + "." + childSelectName + ".options[selectedIndex].value,"
+        +parentSelectName+","
+        +selectedParentId+","
+        +selectedChildId+");";
         StringBuffer returnString = selectHeader(childSelectName, onChangeString, selectedChild(), childPopUpStringForAll());
 
         String prePendText = null;
@@ -396,12 +421,12 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
 
         StringBuffer returnString = new StringBuffer(1000);
-        returnString.append("var parentschildren = new Array(");
+        returnString.append("var "+parentsChildrenId+" = new Array(");
 
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
             Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
-            returnString.append("new Entity(");
+            returnString.append("\n\tnew Entity(");
             returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aParent, parentDisplayValueName()) + "\",");
             returnString.append(" \"" + aParent.hashCode() + "\",");
 
@@ -415,7 +440,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
             for (int j=0;j<jCount;j++) {
                 Object aChild = (Object)childrenOfAParent.objectAtIndex(j);
-                returnString.append(" new Entity(");
+                returnString.append("\n\t\t new Entity(");
                 returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
                 returnString.append(" \"" + aChild.hashCode() + "\","); // value text of pop-up
                 returnString.append(" null,");
