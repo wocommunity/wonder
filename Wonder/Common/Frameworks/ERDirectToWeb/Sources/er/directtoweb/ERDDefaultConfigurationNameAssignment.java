@@ -60,20 +60,23 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
 
     /**
      * Calculates the entity name for a given context. If
-     * the property is a relastionship (meaning that destinationEntity is set)
-     * then this entity is used and prefixed with "Embedded"
+     * the property is a relationship (meaning that destinationEntity is set)
+     * then this entity is used
      * @param c a D2W context
      * @return the current entity name for that context.
      */
     // MOVEME: ERD2WContextUtilities?
     protected String entityNameForContext(D2WContext c) {
         EOEntity entity = (EOEntity)c.valueForKey("destinationEntity");
+        String entityName;
         if(entity != null) {
-            return "Embedded" + entity.name();
+            entityName = entity.name();
         } else if(c.valueForKey("object") != null) {
-            return ((EOEnterpriseObject)c.valueForKey("object")).entityName();
+            entityName = ((EOEnterpriseObject)c.valueForKey("object")).entityName();
+        } else {
+            entityName = c.entity().name();
         }
-        return c.entity().name();
+        return entityName;
     }
 
     /**
@@ -108,16 +111,27 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
     public Object createConfigurationName(D2WContext c) {
         return "Create" +  entityNameForContext(c); 
     }
- 
+
     /**
-     * Generates a default edit page configuration
+        * Generates a default edit page configuration
      * based on the current entity name. Default format
      * is 'Edit' + entity name.
      * @param c current D2W context
      * @return default edit page configuration name
-     */       
+     */
     public Object editConfigurationName(D2WContext c) {
-        return "Edit" + entityNameForContext(c); 
+        return "Edit" + entityNameForContext(c);
+    }
+
+    /**
+     * Generates a default embedded edit page configuration
+     * based on the current entity name. Default format
+     * is 'Edit' + entity name.
+     * @param c current D2W context
+     * @return default edit page configuration name
+     */
+    public Object editEmbeddedConfigurationName(D2WContext c) {
+        return "EditEmbedded" + entityNameForContext(c);
     }
 
     /**
@@ -126,11 +140,22 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
      * is 'Inspect' + entity name.
      * @param c current D2W context
      * @return default inspect page configuration name
-     */        
+     */
     public Object inspectConfigurationName(D2WContext c) {
-        return "Inspect" + entityNameForContext(c); 
+        return "Inspect" + entityNameForContext(c);
     }
-    
+
+    /**
+     * Generates a default inspect page configuration
+     * based on the current entity name. Default format
+     * is 'InspectEmbedded' + entity name.
+     * @param c current D2W context
+     * @return default inspect page configuration name
+     */
+    public Object inspectEmbeddedConfigurationName(D2WContext c) {
+        return "InspectEmbedded" + entityNameForContext(c);
+    }
+
     /**
      * Generates a default list page configuration
      * based on the current entity name. Default format
@@ -140,6 +165,17 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
      */
     public Object listConfigurationName(D2WContext c) {
         return "List" +  entityNameForContext(c); 
+    }
+
+    /**
+     * Generates a default list page configuration
+     * based on the current entity name. Default format
+     * is 'ListEmbedded' + entity name.
+     * @param c current D2W context
+     * @return default list page configuration name
+     */
+    public Object listEmbeddedConfigurationName(D2WContext c) {
+        return "ListEmbedded" +  entityNameForContext(c);
     }
 
     /**
