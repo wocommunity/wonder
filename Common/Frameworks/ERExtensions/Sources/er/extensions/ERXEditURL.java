@@ -21,9 +21,11 @@ public class ERXEditURL extends WOComponent {
     public boolean isStateless() { return true; }
     public final static String DEFAULT="http://www.";
 
-    public String value() {
-        String result=(String)valueForBinding("value");
-        if (result==null || result.length()==0)
+    public Object value() {
+        Object result=(Object)valueForBinding("value");
+        if(result instanceof URL)
+            result = result.toString();
+        if (result==null || ((String)result).length()==0)
             result=DEFAULT;
         return result;
     }
