@@ -92,14 +92,4 @@ public class ERMailer {
             }
         }        
     }
-
-    /**
-     * Gets the default X-Mailer header to use for
-     * sending mails. Pulls the value out of the
-     * property: er.javamail.mailer.XMailerHeader
-     * @return default X-Mailer header
-     */
-    public String defaultXMailerHeader() {
-        return System.getProperty("er.javamail.mailer.XMailerHeader");
-    }
 }
