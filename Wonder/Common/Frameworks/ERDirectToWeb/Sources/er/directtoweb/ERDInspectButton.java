@@ -33,7 +33,6 @@ public class ERDInspectButton extends ERDActionButton {
     		return (WOComponent)epi;
     	} finally {
     		context.unlock();
-    		context.dispose();
     	}
     }
 
