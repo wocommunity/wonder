@@ -84,6 +84,9 @@ public class ERDDelayedSwitchAssignment extends ERDDelayedAssignment implements 
                 break;
             }            
         }
+        if(result == null){
+            result = switchDictionary.valueForKey("defaultValueForAssignement");
+        }
         return result;
     }
 }
