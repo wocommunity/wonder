@@ -156,6 +156,33 @@ public class ERCMailDelivery {
             message = component.generateResponse().contentString();
         }
         return composeEmail(from, to, cc, bcc, title, message, ec);
+    }
+
+    /**
+     * Composes a mail message from a given component.
+     *
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param componentName name of the component to render
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+    public ERCMailMessage composeComponentEmail (String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 String componentName,
+                                                 NSDictionary bindings,
+                                                 EOEditingContext ec) {
+        WOContext context = new WOContext(new WORequest(null, null, null, null, null, null));
+        WOComponent component = WOApplication.application().pageWithName(componentName, context);
+        EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
+        return composeComponentEmail(from, to, cc, bcc, title, component, ec);
     }    
 }
 
