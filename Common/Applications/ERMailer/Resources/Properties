@@ -1,6 +1,6 @@
 
 ## We want to use the mail facility
-ERCUseMailFacility = true
+er.corebusinesslogic.ERCUseMailFacility = true
 
 er.mailer.ERBatchMailerDaemonFrequency = 0
 
