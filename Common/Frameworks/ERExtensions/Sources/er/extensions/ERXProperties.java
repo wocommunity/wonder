@@ -234,6 +234,33 @@ public class ERXProperties {
     }
 
     /**
+     * Cover method for returning a BigDecimal for a
+     * given system property. This method uses the
+     * method <code>bigDecimalValueWithDefault</code> from
+     * {@link ERXValueUtilities}.
+     * @param s system property
+     * @return bigDecimal value of the string in the
+     *		system properties.  Scale is controlled by the string, ie "4.400" will have a scale of 3.
+     */
+    public static BigDecimal bigDecimalForKey(String s) {
+	return bigDecimalForKeyWithDefault(s,null);
+    }
+
+    /**
+     * Cover method for returning a BigDecimal for a
+     * given system property or a default value. This method uses the
+     * method <code>bigDecimalValueWithDefault</code> from
+     * {@link ERXValueUtilities}.
+     * @param s system property
+     * @param defaultValue default value
+     * @return BigDecimal value of the string in the
+     *		system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
+     */
+    public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
+	return ERXValueUtilities.bigDecimalValueWithDefault(System.getProperty(s), defaultValue);
+    }
+
+    /**
      * Cover method for returning an int for a
      * given system property with a default value.
      * @param s system property
