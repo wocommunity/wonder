@@ -305,6 +305,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     server_rec *s = r->server;
     conn_rec *c = r->connection;
     table *hdrs = r->headers_in;
+    table *penv = r->subprocess_env;
     char *port;
     const char *rem_logname;
 
@@ -322,6 +323,7 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
      *	some we can copy blindly
      */
     ap_table_do(copyTableEntries, (void *)req, hdrs, NULL);
+    ap_table_do(copyTableEntries, (void *)req, penv, NULL);
 
 #ifdef APACHE_SECURITY_ENABLED
     /******client cert support***** */
