@@ -59,7 +59,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
      *  @return String
      */
     public String payPalUrlParams() { // this should probably have much more robust error handling
-	DecimalFormat dollarFormatter = new DecimalFormat("##0.00");
+	DecimalFormat currencyFormatter = new DecimalFormat("##0.00");
 	
 	StringBuffer sb = new StringBuffer();
 	sb.append("&business=" + URLEncoder.encode(payPalBusinessName) ); // required!!!
@@ -76,8 +76,11 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
 	    sb.append("&custom=" + URLEncoder.encode(custom) );
 	}
 	if (amount != null) {
-	  sb.append("&amount=" + dollarFormatter.format(Double.valueOf(amount)) );  
+	  sb.append("&amount=" + currencyFormatter.format(Double.valueOf(amount)) );  
 	}
+        if (currencyCode != null) {
+            sb.append("&currency_code=" + URLEncoder.encode(currencyCode) );
+        }
 	if (collectShippingAddress != null) {
 	    sb.append("&no_shipping=" + (collectShippingAddress.booleanValue() ? "0" : "1") );
 	}

@@ -88,8 +88,6 @@ public class PayPalAction extends WODirectAction {
 		    //should check previous txn_id's to be sure this isn't a duplicate notification
 
 		    NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.ValidPayPalPaymentReceivedNotification, ppIPNRequest);
-
-			// try to revive session if sessionID is still alive?
 		    
 		} else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("pending")) {
 		    // status pending
