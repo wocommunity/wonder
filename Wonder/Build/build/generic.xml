@@ -296,6 +296,9 @@ There are three ways to use this script:
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
+            <lib dir="${project.dir}/Libraries">
+                <include name="**/*.jar" />
+            </lib>
             <resources dir="${project.dir}/Components">
                 <include name="**.api" />
                 <include name="**/*.wo/**" />
