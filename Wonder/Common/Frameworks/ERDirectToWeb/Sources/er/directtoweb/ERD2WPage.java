@@ -174,8 +174,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         try {
             super.appendToResponse(r,c);
         } catch(Exception ex) {
-            log.warn("Error in D2WPage: propertyKey=" + propertyKey() + ", componentName=" + d2wContext().valueForKey("componentName") + ", customComponent=" +  d2wContext().valueForKey("customComponentName"), ex);
-            throw new NSForwardException(ex, "Error generating page");
+            ERDirectToWeb.reportException(ex, d2wContext());
         } finally {
             NDC.pop();
         }

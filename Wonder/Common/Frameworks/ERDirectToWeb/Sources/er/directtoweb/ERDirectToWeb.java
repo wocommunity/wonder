@@ -303,6 +303,21 @@ public class ERDirectToWeb {
         return (WOComponent)epi;
     }
 
+    public static void reportException(Exception ex, D2WContext d2wContext) {
+        if(d2wContext != null) {
+            log.error("Exception <"+ex+">: "+
+                      "pageConfiguration <" + d2wContext.valueForKeyPath("pageConfiguration") + ">, "+
+                      "propertyKey <" + d2wContext.propertyKey() + ">, "+
+                      "entityName <" + d2wContext.valueForKeyPath("entity.name") + ">, "+
+                      "displayPropertyKeys <" +d2wContext.valueForKeyPath("displayPropertyKeys")+ ">, "+
+                      "componentName <" + d2wContext().valueForKey("componentName") + ">, "+
+                      "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">", ex);
+        } else {
+            log.error("Exception <"+ex+">: with NULL d2wContext", ex);
+        }
+        if(ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", true))
+            throw new NSForwardException(ex);
+    }
     
     public static String displayNameForPropertyKey(String key, String entityName, String language) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
