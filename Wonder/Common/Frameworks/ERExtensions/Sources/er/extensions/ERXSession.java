@@ -245,7 +245,7 @@ public class ERXSession extends WOSession {
             if (userAgent!=null) {
                 if (userAgent.indexOf("OmniWeb")!=-1) {
                     isOmniweb=true;
-                    _browser ="iCab";
+                    _browser ="OmniWeb";
                 } else if (userAgent.indexOf("iCab")!=-1) {
                     isICab=true;
                     _browser ="iCab";
