@@ -68,10 +68,9 @@ Image1: WOImage {
 	border = 0;
 }
 
-Message: ERXLocalizedString {
+Message: WOString {
+	value = message;
 	escapeHTML = false;
-	object = d2wContext;
-	templateString = message;
 }
 
 OKButton: ERXSingleButton {
