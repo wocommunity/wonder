@@ -11,6 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
+import er.extensions.*;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
 /**
@@ -25,6 +26,8 @@ import com.webobjects.eocontrol.*;
  */
 
 public class ERXD2WList extends D2WList {
+    ERXLogger log = ERXLogger.getERXLogger(ERXD2WList.class);
+    
     protected EOArrayDataSource _dataSource = null;
 
     public ERXD2WList(WOContext context) {
