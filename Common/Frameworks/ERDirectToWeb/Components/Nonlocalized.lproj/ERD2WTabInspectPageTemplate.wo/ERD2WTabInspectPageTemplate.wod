@@ -50,6 +50,10 @@ ERTable1: ERXTable {
 	border = 0;
 }
 
+ERXTab: ERXTabPanel {
+	tabs = tabSectionsContents;
+}
+
 EditImage: WOImage {
 	alt = "Edits this object";
 	border = "0";
@@ -180,3 +184,10 @@ SwitchComponent3: WOSwitchComponent {
 	d2wContext = d2wContext;
 }
 
+TabPanel: ERXTabPanel {
+	WOComponentName = tabComponentName;
+	tabs = tabSectionsContents;
+	selectedTab = currentTab;
+	tabNameKey = "displayName";
+	submitActionName = switchTabActionName;
+}
