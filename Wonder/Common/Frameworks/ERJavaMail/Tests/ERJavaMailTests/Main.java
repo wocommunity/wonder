@@ -16,7 +16,8 @@ import java.util.*;
 public class Main extends WOComponent {
 
     // Accented email
-    public static String EMAIL = "Frédéric Dupond <test@domain.com>";
+    public static String EMAIL = "test@domain.com";
+    public static String EMAIL_PERSO = "Frédéric Dupond";
     public String content = "Ceci est le contenu du mail, il n'y a rien de particulier, juste un texte avec des accents:\n\né è ä à ù ï î ô ö ç É È Ä À Ï Î Ô Ö";
 
     public Main(WOContext context) {
@@ -42,9 +43,9 @@ public class Main extends WOComponent {
             mail.newMail();
             mail.setTextContent (content);
             mail.addAttachment (textAttachment);
-            mail.setFromAddress (EMAIL);
+            mail.setFromAddress (EMAIL, EMAIL_PERSO);
             mail.setReplyToAddress (EMAIL);
-            mail.setToAddress (EMAIL);
+            mail.setToAddress (this.adminEmail ());
             mail.setSubject ("Les résultats sont arrivés !");
 			mail.sendMail ();
 		} catch (Exception e) {
