@@ -2,19 +2,23 @@ package er.extensions;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 
 /**
  * @author david teran
  *
- * enhanced version which allows the user to set refreshesRefetchedObjects
+ * enhanced version which allows the user to 
+ * 1) set refreshesRefetchedObjects
+ * 2) set prefetchingRelationshipKeyPaths
+ * 
  * which modifies the datasource's fetchSpecification
  * 
  */
 public class ERXDatabaseDataSource extends EODatabaseDataSource {
 
     public boolean _refreshRefetchedObjects;
-
+    public NSArray _prefetchingRelationshipKeyPaths;
     
     /**
      * @see com.webobjects.eoaccess.EODatabaseDataSource  
@@ -44,6 +48,13 @@ public class ERXDatabaseDataSource extends EODatabaseDataSource {
    public boolean refreshesRefetchedObjects() {
        return _refreshRefetchedObjects;
    }
+   public NSArray prefetchingRelationshipKeyPaths() {
+       return _prefetchingRelationshipKeyPaths;
+   }
+   public void setPrefetchingRelationshipKeyPaths(NSArray relationshipKeyPaths) {
+       _prefetchingRelationshipKeyPaths = relationshipKeyPaths;
+   }
+   
    
     /** Enhanced version which uses the refreshesRefetchedObjects value
      * @see ERXDatabaseDataSource.setRefreshedRefetchedObjects
@@ -51,6 +62,7 @@ public class ERXDatabaseDataSource extends EODatabaseDataSource {
     public EOFetchSpecification fetchSpecificationForFetch() {
         EOFetchSpecification spec = super.fetchSpecificationForFetch();
         spec.setRefreshesRefetchedObjects(refreshesRefetchedObjects());
+        spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
         return spec;
     }
     
@@ -62,6 +74,7 @@ public class ERXDatabaseDataSource extends EODatabaseDataSource {
     public EOFetchSpecification fetchSpecification() {
         EOFetchSpecification spec = super.fetchSpecification();
         spec.setRefreshesRefetchedObjects(refreshesRefetchedObjects());
+        spec.setPrefetchingRelationshipKeyPaths(_prefetchingRelationshipKeyPaths);
         return spec;
     }
 }
