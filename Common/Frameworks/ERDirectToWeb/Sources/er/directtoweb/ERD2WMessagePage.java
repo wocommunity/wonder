@@ -130,7 +130,7 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
     public boolean showExplanationComponent() {
     	// AK: this is needed because RuleEditor won't save NULL keys anymore
     	String name = (String)d2wContext().valueForKey("explanationComponentName");
-    	boolean result = name != null && !"".equals(name);
+    	boolean result = name != null && name.length() > 0;
     	// CHECKME: AK could be extended to check if object() or dataSource() are bound...
     	return result;
     }
