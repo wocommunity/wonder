@@ -228,5 +228,5 @@ SubmitButton5: WOSubmitButton {
 
 ToManyForm: WOForm {
 	multipleSubmit = true;
-	name = "EditForm";
+	name = "RelationshipForm";
 }
