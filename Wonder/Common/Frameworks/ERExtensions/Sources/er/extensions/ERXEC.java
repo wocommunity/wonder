@@ -12,7 +12,7 @@ import com.webobjects.eocontrol.*;
 /**
  * Factory for creating editing contexts.
  */
-public class ERXEC {
+public class ERXEC extends EOEditingContext {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEC.class);
@@ -34,6 +34,31 @@ public class ERXEC {
         public EOEditingContext _newEditingContext(boolean validationEnabled);
         public EOEditingContext _newEditingContext(EOObjectStore objectStore);
         public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled);
+    }
+
+    /** default constructor */
+    public ERXEC() {
+        super();
+    }
+    /** alternative constructor */
+    public ERXEC(EOObjectStore os) {
+        super(os);
+    }
+    
+    private int lockCount = 0;
+    public void lock() {
+        super.lock();
+        lockCount++;
+    }
+    public void unlock() {
+        super.unlock();
+        lockCount--;
+    }
+    public void saveChanges() {
+        if (lockCount == 0) {
+            log.warn("called saveChanges without a lock");
+        }
+        super.saveChanges();
     }
 
     public static class DefaultFactory implements Factory {
@@ -151,7 +176,11 @@ public class ERXEC {
         public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled) {
             EOEditingContext ec = _createEditingContext(objectStore);
             int levelsOfUndo = ERXValueUtilities.intValueWithDefault(System.getProperty("WODefaultUndoStackLimit"), 10);
-            ec.undoManager().setLevelsOfUndo(levelsOfUndo < 0 ? 10 : levelsOfUndo);
+            if (levelsOfUndo == 0) {
+                ec.setUndoManager(null);
+            } else {
+                ec.undoManager().setLevelsOfUndo(levelsOfUndo < 0 ? 10 : levelsOfUndo);
+            }
             setDefaultDelegateOnEditingContext(ec, validationEnabled);
             NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
             return ec;
