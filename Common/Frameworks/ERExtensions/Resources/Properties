@@ -108,9 +108,9 @@ er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
 er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
 
 # if set to true then all database operations are serialized to disk
-er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk=
+#er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk=
 # files are written to the directory specified in the following directory
-er.extensions.ERXDatabaseContextDelegate.transactionFileLocation=/tmp/wonder/transactionLogs/@@ApplicationName@@_@@WOPort@@
+#er.extensions.ERXDatabaseContextDelegate.transactionFileLocation=/tmp/wonder/transactionLogs/@@ApplicationName@@_@@WOPort@@
 
 
 #########################################################################
@@ -174,6 +174,19 @@ dbMinConnectionsGLOBAL=1
 # debug level for the Connection Pooling, 0 - 3
 #dbDebugLevelGLOBAL=1
 
+# if enabled all connections used by the broker are used
+# every er.extensions.ERXJDBCConnectionBroker.connectionPingInterval seconds
+# this is very useful if a firewall between the appserver and the database
+# kill sockets after a certain time of inactivity and the app is not used 
+# a lot.
+#er.extensions.ERXJDBCConnectionBroker.connectionPingEnabled=false
+#er.extensions.ERXJDBCConnectionBroker.connectionPingInterval=300
+#er.extensions.ERXJDBCConnectionBroker.connectionPingSQL=select 'i am alive' from dual;
+
+# if enabled then eof uses a pool of java.sql.Connections instead of
+# one connection for every adaptor. Useful if one uses one multiple
+# EOF stacks with the same connection dictionary
+#er.extensions.ERXJDBCConnectionBroker.poolModelConnections=false
 
 #########################################################################
 # ERXLongPrimaryKeyFactory 
