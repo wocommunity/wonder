@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXValidationException.java created by max on Wed 21-Mar-2001 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -15,7 +13,8 @@ import org.apache.log4j.Category;
 
 public class ERXValidationException extends NSValidation.ValidationException implements NSKeyValueCoding {
 
-    public static final Category cat = Category.getInstance("er.validation.ERXValidationException");
+    /** logging support */
+    public static final Category cat = Category.getInstance(ERXValidationException.class);
 
     // Validation Exception Types
     public static final String NullPropertyException = "NullPropertyException";
@@ -26,126 +25,144 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public static final String ObjectsRemovalException = "ObjectsRemovalException";
     public static final String CustomMethodException = "CustomMethodException";
 
-    // Additional Validation Keys
-    public static final String ValidationTypeUserInfoKey = "ValidationTypeUserInfoKey";
-    public static final String ValidatedValueUserInfoKey = "ValidatedValueUserInfoKey";
-    public static final String ValidatedMethodUserInfoKey = "ValidatedMethodUserInfoKey";
-    public static final String TargetLanguageUserInfoKey = "TargetLanguageUserInfoKey";
-
-    public ERXValidationException(String type, NSDictionary userInfo) {
-        super(type, userInfo);
+    /**
+     * Default constructor.
+     * @param type of the exception
+     * @param object that is throwing the exception
+     * @param key property key that failed validation
+     */
+    public ERXValidationException(String type, Object object, String key) {
+        super(type, object, key);
         setType(type);
     }
-    
-    public ERXValidationException(EOEnterpriseObject object, String method) {
-        super(CustomMethodException);
-        customExceptionForMethod(object, method);
-    }
 
-    public ERXValidationException(EOEnterpriseObject object, String property, Object value, String type) {
-        super(type);
-        exceptionForObject(object, property, value, type);
+    public ERXValidationException(String type, Object object, String key, Object value) {
+        this(type, object, key);
+        setValue(value);
     }    
 
-    protected String _message;
+    /** caches the validation message */
+    protected String message;
+    /** holds the method if one is provided */
+    protected String method;
+    /** holds the type of the exception */
+    protected String type;
+    /** holds the value that failed validation */
+    protected Object value;
+    /** holds the target language if provided */
+    protected String targetLanguage;
+    /** caches any set additionalExceptions */
+    protected NSArray additionalExceptions;
+    /** holds a reference to the context of the ecxception */
+    protected volatile NSKeyValueCoding _context;
+
+    /**
+     * Gets the message for this exception.
+     * @return the correctly formatted validation exception.
+     */
     public String getMessage() {
-        return ERXValidationFactory.defaultFactory().messageForException(this);
-    }
-    
-    public void customExceptionForMethod(EOEnterpriseObject object, String method) {
-        setEoObject(object);
-        setMethod(method);
-        setType(CustomMethodException);
+        if (message == null)
+            message = ERXValidationFactory.defaultFactory().messageForException(this);
+        return message;
     }
 
-    public void exceptionForObject(EOEnterpriseObject object, String property, Object value, String type) {
-        if (object != null)
-            setEoObject(object);
-        if (property != null)
-            setPropertyKey(property);
-        setValue((value != null ? value : NSKeyValueCoding.NullValue));
-        setType(type);
+    /**
+     * Implementation of key value implementation.
+     * Uses the default implementation.
+     * @param key to look up
+     * @return result of the lookup on the object
+     */
+    public Object valueForKey(String key) {
+        return com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
     }
 
+    /**
+     * Implementation of the key value implementation
+     * Uses the default implementation.
+     * @param obj value to be set on this exception
+     * @param key to be set
+     */
+    public void takeValueForKey(Object obj, String key) {
+        com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, obj, key);
+    }
+
+    /**
+     * Convience method to determine if this exception
+     * was a custom thrown exception instead of a model
+     * thrown exception. A custom exception would be
+     * an exception that you throw in your validateFoo
+     * method if a particular constraint is not valid.
+     * @return if this exception is a custom thrown exception.
+     */
     public boolean isCustomMethodException() { return type() == CustomMethodException; }
 
-    //FIXME: (ak) this is probably a stupid way to work around super.userInfo() returning NSDictionary, but it should work for now...please someone check if userInfo is really required to be mutable
-    protected NSMutableDictionary _mutableUserInfo;
-    protected NSMutableDictionary _userInfo() {
-        if(_mutableUserInfo == null) {
-            Object info = super.userInfo();
-            if(info == null) {
-                _mutableUserInfo = new NSMutableDictionary();
-            } else if(info.getClass() == NSDictionary.class) {
-                _mutableUserInfo = new NSMutableDictionary((NSDictionary)info);
-            } else if(info instanceof NSMutableDictionary) {
-                _mutableUserInfo = (NSMutableDictionary)info;
-            }
-        }
-        return _mutableUserInfo;
-    }
+    /**
+     * 
+     */
+    public String method() { return method; }
     
-    // Done to make template parsing easier.
-    public Object valueForKey(String key) {
-        Object value = null;
-        if (key.equals("object"))
-            value = object();
-        else if (key.equals("propertyKey"))
-            value = propertyKey();
-        else if (key.equals("method"))
-            value = method();
-        else if (key.equals("type"))
-            value = type();
-        else if (key.equals("value"))
-            value = value();
-        else if (key.equals("message"))
-            value = getMessage();
-        return value != null ? value : objectForKey(key);
-    }
-
-    public void takeValueForKey(Object value, String key) { setObjectForKey(value, key); }
-    
-    public Object objectForKey( String aKey ) {
-        Object obj = _userInfo().objectForKey( aKey );
-        if(obj == null && _context != null && _context != this)
-            obj = _context.valueForKey(aKey);
-        return obj;
-    }
-    public void setObjectForKey( Object anObject, String aKey ) { _userInfo().setObjectForKey( anObject, aKey ); }
-
-    public String method() { return (String) objectForKey( ValidatedMethodUserInfoKey ); }
-    public void setMethod(String aMethod) { setObjectForKey(aMethod, ValidatedMethodUserInfoKey ); }
+    public void setMethod(String aMethod) { method = aMethod; }
     
     public EOEnterpriseObject eoObject() { return (EOEnterpriseObject)object(); }
-    public void setEoObject( EOEnterpriseObject anObject ) { setObjectForKey( anObject, ValidatedObjectUserInfoKey ); }
     
     public String propertyKey() { return key(); }
-    public void setPropertyKey( String aProperty ) { setObjectForKey( aProperty, ValidatedKeyUserInfoKey ); }
 
-    public String type() { return (String) objectForKey( ValidationTypeUserInfoKey ); }
-    public void setType(String aType) { setObjectForKey(aType, ValidationTypeUserInfoKey ); }
-    
-    public Object value() { return objectForKey( ValidatedValueUserInfoKey ); }
-    public void setValue(Object aValue) { setObjectForKey(aValue, ValidatedValueUserInfoKey); }
+    public String type() { return type; }
+    public void setType(String aType) { type = aType; }
 
-    public String targetLanguage() { return (String)objectForKey( TargetLanguageUserInfoKey ); }
-    public void setTargetLanguage(String aValue) { setObjectForKey(aValue, TargetLanguageUserInfoKey); }
+    public Object value() { return value; }
+    public void setValue(Object aValue) { value = aValue; }
 
-    public NSMutableArray additionalExceptionsMutable() { return (NSMutableArray) objectForKey(AdditionalExceptionsKey); }
+    public String targetLanguage() { return targetLanguage; }
+    public void setTargetLanguage(String aValue) {  targetLanguage = aValue; }
 
-    private volatile Object _delegate;
-    public Object delegate() { return _delegate != null ? _delegate : ERXValidationFactory.defaultDelegate(); }
-    public void setDelegate(Object obj) { _delegate = obj; }
+    protected volatile Object delegate;
+    public Object delegate() { return delegate != null ? delegate : ERXValidationFactory.defaultDelegate(); }
+    public void setDelegate(Object obj) { delegate = obj; }
 
-    private volatile NSKeyValueCoding _context;
     public NSKeyValueCoding context() {
-        if(_context == null) {
+        if (_context == null)
             _context = ERXValidationFactory.defaultFactory().contextForException(this);
-        }
         return _context;
     }
     public void setContext(NSKeyValueCoding obj) { _context = obj; }
 
-    public String toString() { return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "+ propertyKey() + "; type: " + type() +"; userinfo: "+ _userInfo() +">";}
+    public void setAdditionalExceptions(NSArray exceptions) {
+        additionalExceptions = exceptions;
+    }
+
+    public NSArray additionalExceptions() {
+        if (additionalExceptions == null) {
+            additionalExceptions = super.additionalExceptions();
+        }
+        return additionalExceptions;
+    }
+
+    public String displayNameForProperty() {
+        return propertyKey() != null ? localizedDisplayNameForKey(propertyKey()) : null;
+    }
+
+    public String displayNameForEntity() {
+        return eoObject() != null ? localizedDisplayNameForKey(eoObject().entityName()) : null;
+    }
+    
+    protected String localizedDisplayNameForKey(String key) {
+        String displayName = key;
+        if (eoObject() != null) {
+            displayName = eoObject().classDescription().displayNameForKey(key);
+        }
+        ERXLocalizer localizer = null;
+        if (targetLanguage() != null) {
+            localizer = ERXLocalizer.localizerForLanguage(targetLanguage());
+        } else if (ERXLocalizer.currentLocalizer() != null) {
+            localizer = ERXLocalizer.currentLocalizer();
+        }
+        if (localizer != null) {
+            displayName = localizer.localizedStringForKey(displayName);
+        }
+        return displayName;
+    }
+    
+    public String toString() { return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "+ propertyKey() + "; type: " + type() + ">";}
 
 }
