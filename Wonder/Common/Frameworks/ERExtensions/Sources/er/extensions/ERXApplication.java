@@ -619,9 +619,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      */
     public WOResponse dispatchRequest(WORequest request) {
         WOResponse response = null;
-        if (requestHandlingLog.isDebugEnabled()) {
-            requestHandlingLog.debug("Dispatching request: " + request);
-        }
         try {
             if(useComponentActionRedirection()) {
                 ERXComponentActionRedirector redirector = ERXComponentActionRedirector.redirectorForRequest(request);
