@@ -1,9 +1,3 @@
-//
-// ERD2WQueryDateRange.java: Class file for WO Component 'ERD2WQueryDateRange'
-// Project ERDirectToWeb
-//
-// Created by bposokho on Thu Jan 16 2003
-//
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -13,12 +7,12 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
-public class ERD2WQueryDateRange extends WOComponent {
+public class ERD2WQueryDateRange extends D2WQueryDateRange {
 
     public ERD2WQueryDateRange(WOContext context) {
         super(context);
     }
-
+/*
     protected static final NSTimestampFormatter DATE_FORMAT =
     new NSTimestampFormatter("%m/%d/%Y");
     protected static final NSTimestampFormatter DATE_FORMAT_YEAR_TWO_DIGITS =
@@ -105,5 +99,5 @@ public class ERD2WQueryDateRange extends WOComponent {
         }
 
         return date;
-    }
+    }*/
 }
