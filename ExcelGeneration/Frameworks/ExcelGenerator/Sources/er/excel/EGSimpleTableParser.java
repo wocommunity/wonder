@@ -103,6 +103,9 @@ public class EGSimpleTableParser {
     	
 		if(attributes.getNamedItem(key) != null) {
 			result = attributes.getNamedItem(key).getNodeValue();
+                    if (result == null || result.length() == 0) {
+                        result = defaultValue;
+                    }
 		}    
 		return result;
 	}
