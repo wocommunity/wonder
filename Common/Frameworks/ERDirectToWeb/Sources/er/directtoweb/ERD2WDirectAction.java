@@ -195,6 +195,8 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             }
             int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 200);
             fs.setFetchLimit(fetchLimit);
+            boolean refresh = ERXValueUtilities.booleanValueWithDefault(context.valueForKey("refreshRefetchedObjects"), false);
+            fs.setRefreshesRefetchedObjects(refresh);
             ((EODatabaseDataSource)ds).setFetchSpecification(fs);
         }
         lpi.setDataSource(ds);
