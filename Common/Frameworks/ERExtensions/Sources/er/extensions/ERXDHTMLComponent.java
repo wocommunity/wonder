@@ -42,10 +42,7 @@ public class ERXDHTMLComponent extends ERXStatelessComponent {
     private static String _dhtmlJavaScriptUrl;
     public String dhtmlJavaScriptUrl() {
         if (_dhtmlJavaScriptUrl==null) {
-            _dhtmlJavaScriptUrl= application().resourceManager().urlForResourceNamed("dhtml.js",
-                                                                                     "ERExtensions",
-                                                                                     null,
-                                                                                     context().request());
+            _dhtmlJavaScriptUrl= application().resourceManager().urlForResourceNamed("dhtml.js", "ERExtensions", null, context().request());
         }
         return _dhtmlJavaScriptUrl;
     }
