@@ -1010,7 +1010,9 @@
 		};
 		4198EB910526E4660048E379 = {
 			children = (
+				440E90E507C26AE60078A7AF,
 				41D89E8D06245AFD0014C7B2,
+				44CF064F07C4D3EE000D10E7,
 				41E307C4056E1C8B0060148F,
 				F6E7969B02C877AF01AD0D07,
 				41D89E6106243AD00014C7B2,
@@ -1065,6 +1067,7 @@
 				F6E7969502C877AF01AD0D07,
 				94AA72FC03D3504C00CF0E7D,
 				9409EBF6047BFEA300CF0E7D,
+				44CF050807C4B502000D10E7,
 			);
 			isa = PBXGroup;
 			name = "Text, URL & HTML";
@@ -1074,10 +1077,11 @@
 		};
 		4198EC9D0526E9D10048E379 = {
 			children = (
+				F54206E502C467E001000102,
+				440E909407C26A1C0078A7AF,
 				F6E7963702C877AF01AD0D07,
 				F6E7968F02C877AF01AD0D07,
 				F6E7969102C877AF01AD0D07,
-				F54206E502C467E001000102,
 				F6E7969902C877AF01AD0D07,
 				F6E7966C02C877AF01AD0D07,
 			);
@@ -1748,6 +1752,433 @@
 //412
 //413
 //414
+//440
+//441
+//442
+//443
+//444
+		440E904807C2643F0078A7AF = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = Italian;
+			path = Resources/Italian.lproj/ValidationTemplate.strings;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E904907C2644E0078A7AF = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = Italian;
+			path = Resources/Italian.lproj/Localizable.strings;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E905C07C268E20078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WQueryAnyField.api;
+			path = Components/ERD2WQueryAnyField.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E905D07C268E20078A7AF = {
+			fileRef = 440E905C07C268E20078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E905E07C268FA0078A7AF = {
+			children = (
+				440E905F07C268FA0078A7AF,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryAnyField.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E905F07C268FA0078A7AF = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryAnyField.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E906407C268FA0078A7AF = {
+			fileRef = 440E905E07C268FA0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E906507C269030078A7AF = {
+			children = (
+				440E908C07C2698F0078A7AF,
+				440E905C07C268E20078A7AF,
+				440E905E07C268FA0078A7AF,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryAnyField;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E908C07C2698F0078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WQueryAnyField.java;
+			path = er/directtoweb/ERD2WQueryAnyField.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E908D07C2698F0078A7AF = {
+			fileRef = 440E908C07C2698F0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E909407C26A1C0078A7AF = {
+			children = (
+				440E909E07C26A5B0078A7AF,
+				440E909707C26A480078A7AF,
+				440E909507C26A300078A7AF,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryNumberRange;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E909507C26A300078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WQueryNumberRange.api;
+			path = Components/ERD2WQueryNumberRange.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E909607C26A300078A7AF = {
+			fileRef = 440E909507C26A300078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E909707C26A480078A7AF = {
+			children = (
+				440E909807C26A480078A7AF,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryNumberRange.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E909807C26A480078A7AF = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryNumberRange.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E909D07C26A480078A7AF = {
+			fileRef = 440E909707C26A480078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E909E07C26A5B0078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WQueryNumberRange.java;
+			path = er/directtoweb/ERD2WQueryNumberRange.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E909F07C26A5B0078A7AF = {
+			fileRef = 440E909E07C26A5B0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E90E507C26AE60078A7AF = {
+			children = (
+				440E90EF07C26B200078A7AF,
+				440E90E807C26B0D0078A7AF,
+				440E90E607C26AF80078A7AF,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryToManyField;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E90E607C26AF80078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WQueryToManyField.api;
+			path = Components/ERD2WQueryToManyField.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E90E707C26AF80078A7AF = {
+			fileRef = 440E90E607C26AF80078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E90E807C26B0D0078A7AF = {
+			children = (
+				440E90E907C26B0D0078A7AF,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryToManyField.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E90E907C26B0D0078A7AF = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryToManyField.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E90EE07C26B0D0078A7AF = {
+			fileRef = 440E90E807C26B0D0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E90EF07C26B200078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WQueryToManyField.java;
+			path = er/directtoweb/ERD2WQueryToManyField.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E90F007C26B200078A7AF = {
+			fileRef = 440E90EF07C26B200078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E910707C26D110078A7AF = {
+			children = (
+				440E911107C26D4E0078A7AF,
+				440E910A07C26D3A0078A7AF,
+				440E910807C26D240078A7AF,
+			);
+			isa = PBXGroup;
+			name = ERDAnyField;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E910807C26D240078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERDAnyField.api;
+			path = Components/ERDAnyField.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E910907C26D240078A7AF = {
+			fileRef = 440E910807C26D240078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E910A07C26D3A0078A7AF = {
+			children = (
+				440E910B07C26D3A0078A7AF,
+			);
+			isa = PBXVariantGroup;
+			name = ERDAnyField.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E910B07C26D3A0078A7AF = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDAnyField.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		440E911007C26D3A0078A7AF = {
+			fileRef = 440E910A07C26D3A0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		440E911107C26D4E0078A7AF = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERDAnyField.java;
+			path = er/directtoweb/ERDAnyField.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		440E911207C26D4E0078A7AF = {
+			fileRef = 440E911107C26D4E0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44CF04DF07C4B4FB000D10E7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WQueryStringWithChoices.api;
+			path = Components/ERD2WQueryStringWithChoices.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		44CF04E007C4B4FB000D10E7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WQueryStringWithChoices.java;
+			path = er/directtoweb/ERD2WQueryStringWithChoices.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF050507C4B4FB000D10E7 = {
+			fileRef = 44CF04DF07C4B4FB000D10E7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44CF050607C4B4FB000D10E7 = {
+			fileRef = 44CF04E007C4B4FB000D10E7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44CF050807C4B502000D10E7 = {
+			children = (
+				44CF05BF07C4B69A000D10E7,
+				44CF04DF07C4B4FB000D10E7,
+				44CF04E007C4B4FB000D10E7,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryStringWithChoices.api;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF05BF07C4B69A000D10E7 = {
+			children = (
+				44CF05C007C4B69A000D10E7,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryStringWithChoices.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF05C007C4B69A000D10E7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryStringWithChoices.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		44CF05C607C4B69A000D10E7 = {
+			fileRef = 44CF05BF07C4B69A000D10E7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44CF064F07C4D3EE000D10E7 = {
+			children = (
+				44CF065507C4D438000D10E7,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryToOneField;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF065507C4D438000D10E7 = {
+			children = (
+				44CF067B07C4D599000D10E7,
+				44CF067907C4D583000D10E7,
+				44CF067707C4D574000D10E7,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryToOneField;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF067707C4D574000D10E7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WQueryToOneField.java;
+			path = er/directtoweb/ERD2WQueryToOneField.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF067807C4D574000D10E7 = {
+			fileRef = 44CF067707C4D574000D10E7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44CF067907C4D583000D10E7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WQueryToOneField.api;
+			path = Components/ERD2WQueryToOneField.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		44CF067A07C4D583000D10E7 = {
+			fileRef = 44CF067907C4D583000D10E7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44CF067B07C4D599000D10E7 = {
+			children = (
+				44CF067C07C4D599000D10E7,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryToOneField.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44CF067C07C4D599000D10E7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryToOneField.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		44CF068107C4D599000D10E7 = {
+			fileRef = 44CF067B07C4D599000D10E7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//440
+//441
+//442
+//443
+//444
 //500
 //501
 //502
@@ -3585,6 +4016,7 @@
 				F542047202C4672F01000102,
 				9D2E0C6F032FFE0A10CF0CA3,
 				41249354050482A000000102,
+				440E904807C2643F0078A7AF,
 			);
 			isa = PBXVariantGroup;
 			name = ValidationTemplate.strings;
@@ -3608,6 +4040,7 @@
 				F542047302C4672F01000102,
 				9D2E0C70032FFE2310CF0CA3,
 				412493530504829200000102,
+				440E904907C2644E0078A7AF,
 			);
 			isa = PBXVariantGroup;
 			name = Localizable.strings;
@@ -10252,6 +10685,7 @@
 				German,
 				Nonlocalized,
 				Norwegian,
+				Italian,
 			);
 			mainGroup = F5A143A001FF7F8801A80106;
 			productRefGroup = F5A1454901FF7F8801A80106;
@@ -10920,6 +11354,18 @@
 				41D89E6B06243AD00014C7B2,
 				41D89E9606245AFD0014C7B2,
 				41D89E9706245AFD0014C7B2,
+				440E905D07C268E20078A7AF,
+				440E906407C268FA0078A7AF,
+				440E909607C26A300078A7AF,
+				440E909D07C26A480078A7AF,
+				440E90E707C26AF80078A7AF,
+				440E90EE07C26B0D0078A7AF,
+				440E910907C26D240078A7AF,
+				440E911007C26D3A0078A7AF,
+				44CF050507C4B4FB000D10E7,
+				44CF05C607C4B69A000D10E7,
+				44CF067A07C4D583000D10E7,
+				44CF068107C4D599000D10E7,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11167,6 +11613,12 @@
 				41C5F51D05D9066F00F59489,
 				41D89E6C06243AD00014C7B2,
 				41D89E9806245AFD0014C7B2,
+				440E908D07C2698F0078A7AF,
+				440E909F07C26A5B0078A7AF,
+				440E90F007C26B200078A7AF,
+				440E911207C26D4E0078A7AF,
+				44CF050607C4B4FB000D10E7,
+				44CF067807C4D574000D10E7,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -12741,6 +13193,8 @@
 		};
 		F6E7967D02C877AF01AD0D07 = {
 			children = (
+				440E910707C26D110078A7AF,
+				440E906507C269030078A7AF,
 				F6E7966602C877AF01AD0D07,
 				F6E7966E02C877AF01AD0D07,
 				F6E7966B02C877AF01AD0D07,
