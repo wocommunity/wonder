@@ -14,8 +14,22 @@ import com.webobjects.eoaccess.*;
  * Exactly the same as {@link ERXDefaultEditingContextDelegate},
  * except validation has been disabled.
  */
+// ENHANCEME: This functionality could be folded into the super class with a 
 public class ERXECNoValidationDelegate extends ERXDefaultEditingContextDelegate {
 
+    //	===========================================================================
+    //	Instance Constructor(s)
+    //	---------------------------------------------------------------------------
+
+    /**
+     * Constructor needed for Serialable interface
+     */
+    public ERXECNoValidationDelegate() {}    
+
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------    
+    
     /**
      * Validation is disabled.
      * @param anEditingContext an editing context

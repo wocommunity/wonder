@@ -29,17 +29,65 @@ import java.util.*;
  */
 public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate {
 
+    //	===========================================================================
+    //	Class Constant(s)
+    //	---------------------------------------------------------------------------    
+    
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXDefaultEditingContextDelegate.class);
+    
     /** logging support for modified objects */
     public static final ERXLogger logMod = ERXLogger.getERXLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
+
+    //	===========================================================================
+    //	Class Method(s)
+    //	---------------------------------------------------------------------------    
+
+    /**
+     * Returns a string of a verbose look a the given
+     * enterprise object. Also includes the primary key.
+     * @param eo enterprise object to create the debug string
+     * 		for.
+     * @return verbose description of the object.
+     */
+    // MOVEME: If this is usedful then it might be worth putting in EOGenericRecordClazz or ERXEOFUtilities
+    private static String toDebugString(EOEnterpriseObject eo) {
+        String result=null;
+        if (eo!=null) {
+            if (eo instanceof ERXGenericRecord) {
+                ERXGenericRecord rec = (ERXGenericRecord)eo;
+                result="PKey: " + rec.primaryKey() + " - " + rec.toLongString();
+            } else {
+                result="Pkey: "+EOUtilities.primaryKeyForObject(eo.editingContext(),eo)+" - "+eo;
+            }
+        }
+        return result;
+    }    
+    
+    //	===========================================================================
+    //	Instance Constructor(s)
+    //	---------------------------------------------------------------------------
+
+    /**
+     * Constructor needed for Serialable interface
+     */
+    public ERXDefaultEditingContextDelegate() {}
+    
+    //	===========================================================================
+    //	Instance Variable(s)
+    //	---------------------------------------------------------------------------
 
     /**
      * flag that can tell if the editing context is in
      * the middle of a will save changes call.
      */
     // FIXME inherently single threaded
-    private boolean _isInWillSaveChanges=false;
+    private boolean _isInWillSaveChanges=false;    
+    
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------
+    
     /**
      * Can tell if the delegate is in the middle of a
      * call to will save changes.
@@ -136,26 +184,6 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
         }
     }
 
-    /**
-     * Returns a string of a verbose look a the given
-     * enterprise object. Also includes the primary key.
-     * @param eo enterprise object to create the debug string
-     * 		for.
-     * @return verbose description of the object.
-     */
-    // MOVEME: If this is usedful then it might be worth putting in EOGenericRecordClazz or ERXEOFUtilities
-    private static String toDebugString(EOEnterpriseObject eo) {
-        String result=null;
-        if (eo!=null) {
-            if (eo instanceof ERXGenericRecord) {
-                ERXGenericRecord rec = (ERXGenericRecord)eo;
-                result="PKey: " + rec.primaryKey() + " - " + rec.toLongString();
-            } else {
-                result="Pkey: "+EOUtilities.primaryKeyForObject(eo.editingContext(),eo)+" - "+eo;
-            }
-        }
-        return result;
-    }
     /**
      * When invalidating an object their local
      * cache is flushed by calling the method: <code>
