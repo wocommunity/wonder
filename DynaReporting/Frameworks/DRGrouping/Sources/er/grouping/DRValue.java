@@ -7,6 +7,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
+import ognl.webobjects.*;
 
 /* DRValue.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
@@ -116,8 +117,12 @@ public class DRValue extends Object  {
         if (_isTotal) {
             return _totalValue;
         }
-        if(_record == null || _record.rawRecord() == null || (_attribute.keyPath().indexOf("~") == 0))
+        if(_record == null || _record.rawRecord() == null)
             return null;
+        if(_attribute.keyPath().indexOf("~") == 0) {
+            String code = _attribute.keyPath().substring(1);
+            return WOOgnl.factory().getValue(code, this);
+        }
         return _record.rawRecord().valueForKeyPath(_attribute.keyPath());
     }
 
