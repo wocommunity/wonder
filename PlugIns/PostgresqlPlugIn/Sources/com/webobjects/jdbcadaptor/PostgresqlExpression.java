@@ -134,8 +134,10 @@ public class PostgresqlExpression extends JDBCExpression {
             ? relationshipKey
             : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
         r = rightEntity.anyRelationshipNamed( relationshipKey );
-        if( r == null ) 
+        // fix from Michael MŸller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+        if( r == null || r.destinationEntity() != leftEntity ) {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
+        }
         String rightTable = rightEntity.externalName();
         String leftTable = leftEntity.externalName();
         
