@@ -27,8 +27,16 @@ public class ERDEditButton extends ERDActionButton {
     protected EOEnterpriseObject localInstanceOfObject() {
         return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
     }
-    
-    // Assuming that object() is the eo
+
+    public boolean isEditable() {
+        boolean result = ERXValueUtilities.booleanValue(d2wContext().valueForKey("isEntityEditable"));
+        Object o = object();
+        if (o instanceof ERXGuardedObjectInterface) {
+            result = result && ((ERXGuardedObjectInterface)o).canUpdate();
+        }
+        return result;
+    }
+
     public WOComponent editObjectAction() {
         EOEnterpriseObject localObject = localInstanceOfObject();
         String configuration = (String)valueForBinding("editConfigurationNameForEntity");
