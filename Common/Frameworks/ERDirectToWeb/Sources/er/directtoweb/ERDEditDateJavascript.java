@@ -37,8 +37,6 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
         }
         super.appendToResponse(r,c);
     }
-    public String propertyKey() { return (String)valueForBinding("propertyKey"); }
-    public String displayNameForProperty() { return (String)valueForBinding("displayNameForProperty"); }
     public Object value() {return dateString;}
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
