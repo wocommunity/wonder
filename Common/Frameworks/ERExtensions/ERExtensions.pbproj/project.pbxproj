@@ -20,6 +20,28 @@
 //662
 //663
 //664
+		669CC7790236A4B800CD2933 = {
+			isa = PBXFileReference;
+			path = GettingStarted;
+			refType = 4;
+		};
+		669CC77A0236A4B800CD2933 = {
+			fileRef = 669CC7790236A4B800CD2933;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		669CC77B0236A5C100CD2933 = {
+			isa = PBXFileReference;
+			path = ToDo;
+			refType = 4;
+		};
+		669CC77C0236A5C200CD2933 = {
+			fileRef = 669CC77B0236A5C100CD2933;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		66F39BFC021A471800CD2933 = {
 			fileRef = F57EA60E01FF59BF019E57DA;
 			isa = PBXBuildFile;
@@ -1125,6 +1147,8 @@
 				F57EA68701FF59BF019E57DA,
 				F57EA64701FF59BF019E57DA,
 				F57EA6C901FF59BF019E57DA,
+				669CC7790236A4B800CD2933,
+				669CC77B0236A5C100CD2933,
 			);
 			isa = PBXGroup;
 			name = ERExtensions;
@@ -3202,6 +3226,8 @@
 		F57EA84901FF59C0019E57DA = {
 			buildActionMask = 2147483647;
 			files = (
+				669CC77A0236A4B800CD2933,
+				669CC77C0236A5C200CD2933,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";

@@ -5,6 +5,38 @@
 	};
 	objectVersion = 34;
 	objects = {
+		669CC77D0236A5CE00CD2933 = {
+			isa = PBXFileReference;
+			path = ToDo;
+			refType = 4;
+		};
+		669CC77E0236A5CE00CD2933 = {
+			isa = PBXFileReference;
+			path = GettingStarted;
+			refType = 4;
+		};
+		669CC77F0236A5CE00CD2933 = {
+			fileRef = 669CC77D0236A5CE00CD2933;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		669CC7800236A5CE00CD2933 = {
+			fileRef = 669CC77E0236A5CE00CD2933;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//660
+//661
+//662
+//663
+//664
+//F50
+//F51
+//F52
+//F53
+//F54
 		F518014F02022C9C01A80106 = {
 			isa = PBXFrameworkReference;
 			path = ERExtensions.framework;
@@ -1057,6 +1089,8 @@
 				F5A144BD01FF7F8801A80106,
 				F5A1444B01FF7F8801A80106,
 				F5A1452D01FF7F8801A80106,
+				669CC77D0236A5CE00CD2933,
+				669CC77E0236A5CE00CD2933,
 			);
 			isa = PBXGroup;
 			name = ERDirectToWeb;
@@ -4838,6 +4872,8 @@
 		F5A1470201FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
+				669CC77F0236A5CE00CD2933,
+				669CC7800236A5CE00CD2933,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
