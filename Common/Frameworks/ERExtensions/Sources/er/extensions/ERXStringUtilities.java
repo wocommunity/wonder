@@ -99,8 +99,7 @@ public class ERXStringUtilities extends Object {
      * @param b second string
      * @return the distance between the two strings
      */
-    // MOVEME: ERXStringUtilities
-    public static double distance( String a, String b){
+    public static double distance(String a, String b) {
         int n = a.length();
         int m = b.length();
         int c[][] = new int[n+1][m+1];
