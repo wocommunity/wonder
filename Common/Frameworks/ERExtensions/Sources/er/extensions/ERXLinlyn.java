@@ -144,11 +144,28 @@ public class ERXLinlyn {
             ftpLogin(user, pass);
         } catch(IOException ioe) {ioe.printStackTrace();}
     }
-    
+
+    public String[] listFiles(String dir) throws IOException {
+        ftpSetTransferType(false);
+        dsock = ftpGetDataSock();
+        InputStream is = dsock.getInputStream();
+        ftpSendCmd("LIST "+dir);
+
+        String contents = getAsString(is);
+        if (log.isDebugEnabled()) { log.debug(contents); }
+        String[] files = contents.split("\n");
+        return files;
+    }
+
     public String download(String dir, String file)
         throws IOException { return download(dir, file, true); }
 
     public String download(String dir, String file, boolean asc)
+        throws IOException {
+        return download(dir, file, asc, false);
+    }
+
+    public String download(String dir, String file, boolean asc, boolean keepAlive)
         throws IOException {
         ftpSetDir(dir);
         ftpSetTransferType(asc);
@@ -157,7 +174,9 @@ public class ERXLinlyn {
         ftpSendCmd("RETR "+file);
         
         String contents = getAsString(is);
-        ftpLogout();
+        if (!keepAlive) {
+            ftpLogout();
+        }
         return contents;
     }
 
