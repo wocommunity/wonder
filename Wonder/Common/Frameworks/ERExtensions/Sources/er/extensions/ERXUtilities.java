@@ -533,23 +533,13 @@ public class ERXUtilities {
         NSMutableArray frameworkNames = new NSMutableArray();
         for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
             NSBundle bundle = (NSBundle)e.nextElement();
-            String frameworkName = nameFromFrameworkBundle(bundle);
-            if (frameworkName != null)
-                frameworkNames.addObject(frameworkName);
+            if (bundle.name() != null)
+                frameworkNames.addObject(bundle.name());
             else
                 cat.warn("Null framework name for bundle: " + bundle);
         }
         return frameworkNames;
     }
-
-
-    public static String nameFromFrameworkBundle(NSBundle nsbundle) {
-        String s = nsbundle.bundlePath();
-        return !s.endsWith(".framework") ? null :
-            s.substring(s.lastIndexOf(File.separator) + 1, s.lastIndexOf("."));
-    }
-    
-
     
     /**
      * Performs a basic intersection between two arrays.
