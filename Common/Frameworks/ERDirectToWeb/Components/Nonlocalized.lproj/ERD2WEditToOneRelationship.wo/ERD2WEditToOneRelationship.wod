@@ -10,7 +10,6 @@ EditToOneRelationship: ERXToOneRelationship {
         sourceObject = object;
         uiStyle = d2wContext.toOneUIStyle;
 	noSelectionString = d2wContext.noSelectionString;
-	WODebug = NO;
 	popupName = d2wContext.popupName;
 }
 
