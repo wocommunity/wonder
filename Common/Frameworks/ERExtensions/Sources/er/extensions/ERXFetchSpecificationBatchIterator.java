@@ -161,11 +161,11 @@ public class ERXFetchSpecificationBatchIterator {
      */
     public NSArray nextBatch() {
         if (editingContext() == null)
-            throw new RuntimeException("ERXPrimaryKeyBatchIterator: Calling nextBatch with a null editing context!");
+            throw new RuntimeException("ERXFetchSpecificationBatchIterator: Calling nextBatch with a null editing context!");
         
         EOEntity entity = EOUtilities.entityNamed(editingContext(), fetchSpecification.entityName());
         if (entity.primaryKeyAttributes().count() > 1)
-            throw new RuntimeException("ERXPrimaryKeyBatchIterator: Currently only single primary key entities are supported.");
+            throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
 
         String primaryKeyAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
 
@@ -215,7 +215,7 @@ public class ERXFetchSpecificationBatchIterator {
             EOEntity entity = EOUtilities.entityNamed(editingContext(), fetchSpecification.entityName());
             
             if (entity.primaryKeyAttributes().count() > 1)
-                throw new RuntimeException("ERXPrimaryKeyBatchIterator: Currently only single primary key entities are supported.");
+                throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
             
             EOFetchSpecification pkFetchSpec = ERXEOControlUtilities.primaryKeyFetchSpecificationForEntity(editingContext(),
                                                                                                       fetchSpecification.entityName(),
