@@ -118,6 +118,10 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         ERCStatic.staticClazz().takeStaticStoredValueForKey(editingContext, value, key);
     }
 
+    public static void takeStaticStoredValueForKey(String value, String key) {
+        ERCStatic.staticClazz().takeStaticStoredValueForKey(value, key);
+    }    
+
     public static void invalidateStaticValueForKeyCache() {
         ERCStatic.staticClazz().invalidateCache();
     }
