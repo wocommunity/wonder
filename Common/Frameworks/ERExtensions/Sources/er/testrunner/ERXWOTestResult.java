@@ -64,7 +64,7 @@ public class ERXWOTestResult extends WOComponent {
     /////////////////////////////////////
     public String currentErrorStackTrace() {
         ByteArrayOutputStream byos = new ByteArrayOutputStream();
-        currentError.thrownException().printStackTrace(new PrintStream(byos));
+        currentErrorThrownException().printStackTrace(new PrintStream(byos));
         return byos.toString();
     }
     public String currentErrorTestName() {
@@ -80,12 +80,17 @@ public class ERXWOTestResult extends WOComponent {
         return ((Object)currentError.failedTest()).getClass().getName();
     }
     public String currentErrorExceptionMessage() {
-        return currentError.thrownException().getMessage();
+        return currentErrorThrownException().getMessage();
     }
     public int index() {
         return currentErrorIndex + 1;
     }
-
+    public Throwable currentErrorThrownException() {
+        if(currentError.thrownException() instanceof NSForwardException) {
+            return ((NSForwardException)currentError.thrownException()).originalException();
+        }
+        return currentError.thrownException();
+    }
     // external factory methods
     public static WOComponent reportFromBatchTestInterface(ERXBatchTestInterface bti) {
         ERXWOTestResult report = (ERXWOTestResult)WOApplication.application().pageWithName("ERXWOTestResult", new WOContext(new WORequest(null,null,null,null,null,null)));
