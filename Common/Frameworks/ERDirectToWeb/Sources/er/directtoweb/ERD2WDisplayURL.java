@@ -18,4 +18,11 @@ public class ERD2WDisplayURL extends D2WDisplayString {
 
     public ERD2WDisplayURL(WOContext context) { super(context); }
 
+    public String href() {
+        String href = objectPropertyValue() != null ? objectPropertyValue().toString() : null;
+        if(href.indexOf("://") < 0) {
+            href = "http://" + href;
+        }
+        return href;
+    }
 }
