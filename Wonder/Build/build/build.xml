@@ -48,7 +48,7 @@
     <!-- ==================================================== -->
     <!-- Main "build-all" target.                             -->
     <!-- ==================================================== -->
-    <target name="all" depends="prepare,frameworks,doc"/>
+    <target name="all" depends="prepare,common,doc"/>
     
     
     <!-- ==================================================== -->
@@ -59,9 +59,9 @@
     </target>
     
     <!-- ==================================================== -->
-    <!-- Build Wonder Frameworks.                             -->
+    <!-- Build Wonder Common.                             -->
     <!-- ==================================================== -->
-    <target name="frameworks">
- 		<ant antfile="Build/build/build-fr.xml"/>
+    <target name="common">
+ 		<ant antfile="Build/build/common.xml"/>
     </target>
 </project>
