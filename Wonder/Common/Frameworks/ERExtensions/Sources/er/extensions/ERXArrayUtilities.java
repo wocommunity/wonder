@@ -343,6 +343,26 @@ public class ERXArrayUtilities extends Object {
         }
         return result;
     }
+    
+    /**
+     * Creates an array that has all of the objects of the parameter array
+     * without the first object.
+     * @param array the array to use to create the result
+     * @return an array containing all objects but the first of the
+     *         parameter array.  if null is passed, null is returned.
+     *         if the parameter array is empty, an empty array is returned.
+     */
+    public static NSArray arrayByRemovingFirstObject(NSArray array) {
+        NSArray result = null;
+        
+        if ( array != null ) {
+            final int count = array.count();
+            
+            result = count > 1 ? array.subarrayWithRange(new NSRange(1, count-1)) : NSArray.EmptyArray;
+        }
+        
+        return result;
+    }
 
     /**
      * Adds all of the non-duplicate elements from the second
