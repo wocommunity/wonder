@@ -150,7 +150,7 @@ public class ERXExtensions {
 
             try {
                 ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
             }
@@ -1024,26 +1024,6 @@ public class ERXExtensions {
         return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(a,q);
     }
 
-    /**
-     * Removes an array of keys from a dictionary and
-     * returns the result.
-     * @param d dictionary to be pruned
-     * @param a array of keys to be pruned
-     * @return pruned dictionary
-     */
-    // MOVEME: ERXDictionaryUtilities
-    public static NSDictionary dictionaryByRemovingFromDictionaryKeysInArray(NSDictionary d, NSArray a) {
-        NSMutableDictionary result=new NSMutableDictionary();
-        if (d!=null && a!=null) {
-            for (Enumeration e=d.allKeys().objectEnumerator();e.hasMoreElements();) {
-                String key=(String)e.nextElement();
-                if (!a.containsObject(key))
-                    result.setObjectForKey(d.objectForKey(key),key);
-            }
-        }
-        return result;
-    }
-
     /** holds the array of hex values */
     private static final char hex[] = {
         '0', '1', '2', '3', '4', '5', '6', '7',
@@ -1055,8 +1035,6 @@ public class ERXExtensions {
      * @param data array of bytes
      * @return hex representation of the byte array
      */
-    // CHECKME: Anyone know the reason why this has final in the method
-    //		signature?
     // MOVEME: ERXStringUtilities
     public static String byteArrayToHexString (final byte data[]) {
         int len = data.length;
@@ -1072,12 +1050,10 @@ public class ERXExtensions {
 
 
     /**
-        * Converts a hex string into an array of bytes
+     * Converts a hex string into an array of bytes
      * @param s string
      * @return byte array
      */
-    // CHECKME: Anyone know the reason why this has final in the method
-    //		signature?
     // MOVEME: ERXStringUtilities
     public static byte[] hexStringToByteArray(String s) {
         byte[] result=null;
@@ -1095,9 +1071,6 @@ public class ERXExtensions {
         }
         return result;
     }
-
-
-
     
     /**
      * Returns the byte array for a given file.
@@ -1211,65 +1184,6 @@ public class ERXExtensions {
         }
         return result;
     }
-
-    // DELETEME: Not sure exactly what to do with this one, tempted just to delete it
-    //		to get rid of the D2W dependency. Could instead use the class description's
-    //		basic name beautifier and have that be localized.
-    /*
-    public static String displayNameForPropertyKey(String key, String entityName) {
-        D2WContext context = d2wContext();
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        context.setEntity(entity);
-        // grosse but efficient hack -- force the computation of pageConfiguration
-        // so that caching works correctly -- saves us from having to add entity as a significant key
-        // Not needed anymore.
-        //context.valueForKey("pageConfiguration");
-        context.setPropertyKey(key);
-        return context.displayNameForProperty();
-    }
-     */
-    // DELETEME: No real value add
-    /*
-    public static Object configurationForKey(String key) {
-        return System.getProperty(key) != null ?
-        System.getProperty(key) : ERXExtensions.d2wContextValueForKey(key);
-    }*/
-
-    /*
-    private static D2WContext _d2wContext;
-    public static D2WContext d2wContext() {
-        if (_d2wContext == null)
-            _d2wContext = new D2WContext();
-        return _d2wContext;
-    }*/
-    /*
-    public static Object d2wContextValueForKey(String key) {
-        return key != null ? d2wContext().valueForKey(key) : null;
-    }*/
-
-    // DELETEME: Shouldn't have this dependency.
-    /*
-    public static Object d2wContextValueForKey(String key, String entityName) {
-        D2WContext context = d2wContext();
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        context.setEntity(entity);
-        // grosse but efficient hack -- force the computation of pageConfiguration
-        // so that caching works correctly -- saves us from having to add entity as a significant key
-        //System.out.println("pageConfig="+context.valueForKey("pageConfiguration"));
-        return context.valueForKey(key);
-    }*/
-
-    // DELETEME: This is silly.
-    /*
-    public static String createConfigurationForEntityNamed(String entityName) {
-        D2WContext context = d2wContext();
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        context.setEntity(entity);
-        // grosse but efficient hack -- force the computation of pageConfiguration
-        // so that caching works correctly -- saves us from having to add entity as a significant key
-        context.valueForKey("pageConfiguration");
-        return (String)context.valueForKey("createConfigurationNameForEntity");
-    } */
 
     /**
      * For a given enterprise object and key path, will return what
