@@ -17,9 +17,13 @@ import er.extensions.*;
  * 
  */
 
-public class ERD2WQueryPage extends D2WQueryPage {
+public class ERD2WQueryPage extends D2WQueryPage implements ERXComponentActionRedirector.Restorable  {
 
     public ERD2WQueryPage(WOContext context) { super(context); }
+
+    public String urlForCurrentState() {
+        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
+    }
 
     // debug helpers
     public boolean d2wComponentNameDebuggingEnabled() {

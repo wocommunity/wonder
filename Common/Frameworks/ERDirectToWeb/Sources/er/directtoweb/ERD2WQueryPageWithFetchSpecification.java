@@ -5,6 +5,7 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
+import er.extensions.*;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
@@ -18,10 +19,14 @@ import java.util.*;
  * 
  */
 
-public class ERD2WQueryPageWithFetchSpecification extends D2WQueryPage {
+public class ERD2WQueryPageWithFetchSpecification extends D2WQueryPage implements ERXComponentActionRedirector.Restorable  {
 
     public ERD2WQueryPageWithFetchSpecification(WOContext context) {
         super(context);
+    }
+
+    public String urlForCurrentState() {
+        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
     private EOFetchSpecification _fetchSpecification;
