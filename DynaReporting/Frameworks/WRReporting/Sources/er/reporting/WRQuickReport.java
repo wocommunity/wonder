@@ -47,7 +47,9 @@ public class WRQuickReport extends WOComponent  {
         if(_model == notification.object() && !dontSyncModel()) {
             DRReportModel model = _model;
             reset();
-            model.initWithRawRecords(objects(), criteriaArray(), attributeArray());
+            if(model != null) {
+                model.initWithRawRecords(objects(), criteriaArray(), attributeArray());
+            }
             log.info("Model was re-set.");
             //reset();
         }
