@@ -11,7 +11,7 @@ public class ERXJDBCUtilities {
 	public static ERXLogger log =
 		ERXLogger.getERXLogger(ERXJDBCUtilities.class);
 	public static NSTimestampFormatter TIMESTAMP_FORMATTER =
-		new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
+		new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
 
 	/**
 	 * @param t
@@ -19,8 +19,7 @@ public class ERXJDBCUtilities {
 	 */
 	public static String jdbcTimestamp(NSTimestamp t) {
 		StringBuffer b = new StringBuffer();
-		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append(
-			".000'");
+		b.append("TIMESTAMP '").append(TIMESTAMP_FORMATTER.format(t)).append("'");
 		return b.toString();
 	}
 
