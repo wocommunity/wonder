@@ -150,6 +150,13 @@ public class ERXLogger extends org.apache.log4j.Logger {
                 BasicConfigurator.configure();
                 Logger.getRootLogger().setLevel(Level.INFO);
             }
+
+            if(ERXProperties.webObjectsVersionIs522OrHigher()) {
+                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+            }
+            
             _isFirstTimeConfig = false;
         }
         PropertyConfigurator.configure(properties);
@@ -166,11 +173,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
         //PropertyPrinter printer = new PropertyPrinter(new PrintWriter(System.out));
         //printer.print(new PrintWriter(System.out));
 
-        if(ERXProperties.webObjectsVersionIs522OrHigher()) {
-            NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-            NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-            NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-        }
+
     }
 
     /**
