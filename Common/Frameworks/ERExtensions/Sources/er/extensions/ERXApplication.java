@@ -328,8 +328,14 @@ public abstract class ERXApplication extends WOApplication {
     public WOResponse handleException(Exception exception, WOContext context) {
         NSDictionary extraInfo=extraInformationForExceptionInContext(exception, context);
         log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
+        if( exception instanceof NSForwardException ) {
+            if( ((NSForwardException) exception).originalException() instanceof Error ) {
+                log.error("Ran out of memory, killing this instance");
+                Runtime.getRuntime().exit( 1 );
+            }
+        }
         return super.handleException(exception, context);
-    }    
+    }
 
     /** 
      * Logs the warning message if the main method was not called 
