@@ -57,9 +57,9 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {868, 155}}";
-							BuildTranscriptFrame = "{{0, 164}, {868, 151}}";
-							Frame = "{{0, 0}, {866, 313}}";
+							BuildMessageFrame = "{{0, 0}, {948, 155}}";
+							BuildTranscriptFrame = "{{0, 164}, {948, 151}}";
+							Frame = "{{0, 0}, {946, 313}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {866, 277}}";
