@@ -90,7 +90,7 @@ public class ERXWOString extends WODynamicElement {
     				try {
     					valueInComponent = format.format(valueInComponent);
     				} catch(IllegalArgumentException ex) {
-    					log.info("Exception while formatting", ex);
+    					log.debug("Exception while formatting", ex);
     					valueInComponent = null;
     				}
     			} else {
