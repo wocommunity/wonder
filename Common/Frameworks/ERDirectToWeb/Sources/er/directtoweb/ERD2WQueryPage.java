@@ -138,10 +138,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
     
     public WOComponent queryAction() {
         WOComponent nextPage = null;
-        if(nextPageDelegate() == null) {
-            if(ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
-                setShowResults(true);
-            } else {
+        if(ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
+            setShowResults(true);
+        } else {
+            if(nextPageDelegate() == null) {
                 String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
                 ListPageInterface listpageinterface = null;
                 if(listConfigurationName!=null){
@@ -152,10 +152,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
                 listpageinterface.setDataSource(queryDataSource());
                 listpageinterface.setNextPage(context().page());
                 nextPage = (WOComponent) listpageinterface;
+            } else {
+                NextPageDelegate nextpagedelegate = this.nextPageDelegate();
+                nextPage = nextpagedelegate.nextPage(this);
             }
-        } else {
-            NextPageDelegate nextpagedelegate = this.nextPageDelegate();
-            nextPage = nextpagedelegate.nextPage(this);
         }
         return nextPage;
     }
