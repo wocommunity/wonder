@@ -578,8 +578,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 */
 	
     public Format localizedDateFormatForKey(String formatString) {
-    	formatString = formatString == null ? "%Y/%m/%d" : formatString;
-		Format result = (Format)_dateFormatters.get(formatString);
+        String localizedFormatString = localizedStringForKey(formatString);
+        formatString = formatString == null 
+            ? ERXTimestampFormatter.DEFAULT_PATTERN 
+            : localizedFormatString == null 
+                ? formatString 
+                : localizedFormatString;
+        Format result = (Format)_dateFormatters.get(formatString);
 		if(result == null) {
 			// HACK ak
 			// we need to sync on the localizer and hold our breath that no one else relies on Locale.getDefault()
@@ -587,7 +592,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			synchronized(ERXLocalizer.class) {
 				Locale old = Locale.getDefault();
 				Locale.setDefault(locale());
-				NSTimestampFormatter formatter = new NSTimestampFormatter(formatString);
+				NSTimestampFormatter formatter = new NSTimestampFormatter(localizedFormatString);
 				result = formatter;
 				_dateFormatters.put(formatString, result);
 				Locale.setDefault(old);
