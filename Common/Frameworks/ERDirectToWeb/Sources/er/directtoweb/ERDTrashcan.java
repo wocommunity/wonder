@@ -32,8 +32,8 @@ public class ERDTrashcan extends ERDCustomEditComponent {
                                                                                                       session());
         nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(), dataSource(), context().page()));
         nextPage.setCancelDelegate(new ERDPageDelegate(context().page()));
-
-        nextPage.setMessage("<B>Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+"</B>:<br> "+object().userPresentableDescription());
+        String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObjectOtherObject("ERDTrashcan.confirmDeletionMessage", d2wContext(), object());
+        nextPage.setMessage(message);
         ((D2WPage)nextPage).setObject(object());
         return (WOComponent) nextPage;
     }

@@ -36,7 +36,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
             entityForReportName = (String)valueForBinding("entityNameForReport");
             _availableElements =
                 ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
-                                                              entityForReportName, ((ERXSession)session()).language());
+                                                              entityForReportName, ERXLocalizer.localizerForSession(session()).language());
             if(cat.isDebugEnabled()) cat.debug("availableElements = "+_availableElements);
         }
         return _availableElements;

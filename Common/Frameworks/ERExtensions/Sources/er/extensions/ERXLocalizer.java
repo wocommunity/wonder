@@ -190,6 +190,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
 
+    public static NSDictionary fakeSessionForLanguage(String language) {
+        ERXLocalizer localizer = localizerForLanguage(language);
+        return new NSDictionary(new Object[] {localizer,language}, new Object[] {"localizer", "language"} );
+    }
+
+    public static NSDictionary fakeSessionForSession(Object session) {
+        ERXLocalizer localizer = localizerForSession(session);
+        return new NSDictionary(new Object[] {localizer,localizer.language()}, new Object[] {"localizer", "language"} );
+    }
+
     public static ERXLocalizer localizerForSession(Object session) {
         if(session instanceof ERXSession) return ((ERXSession)session).localizer();
         if(session instanceof WOSession) return localizerForLanguages(((WOSession)session).languages());
@@ -245,6 +255,48 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
     }
 
+    private String _plurify(String s, int howMany) {
+        String result=s;
+        if (s!=null && howMany!=1) {
+            if (s.endsWith("y"))
+                result=s.substring(0,s.length()-1)+"ies";
+            else if (s.endsWith("s") && ! s.endsWith("ss")) {
+                // we assume it's already plural. There are a few words this will break this heuristic
+                // e.g. gas --> gases
+                // but otherwise for Documents we get Documentses..
+            } else if (s.endsWith("s") || s.endsWith("ch") || s.endsWith("sh") || s.endsWith("x"))
+                result+="es";
+            else
+                result+= "s";
+        }
+        return result;
+    }
+
+    private String _singularify(String value) {
+        String result = value;
+        if (value!=null) {
+            if (value.endsWith("ies"))
+                result = value.substring(0,value.length()-3)+"y";
+            else if (value.endsWith("hes"))
+                result = value.substring(0,value.length()-2);
+            else if (!value.endsWith("ss") && (value.endsWith("s") || value.endsWith("ses")))
+                result = value.substring(0,value.length()-1);
+        }
+        return result;
+    }
+    
+    // name is already localized!
+    // subclasses can override for more sensible behaviour
+    public String plurifiedStringWithTemplateForKey(String key, String name, int count, Object helper) {
+        NSDictionary dict = new NSDictionary( new Object[] {plurifiedString(name, count), new Integer(count)},
+                                              new Object[] {"pluralString", "pluralCount"});
+        return localizedTemplateStringForKeyWithObjectOtherObject(key, dict, helper);
+    }
+
+    public String plurifiedString(String name, int count) {
+        return _plurify(name, count);
+    }
+    
     public String toString() {return "<ERXLocalizer "+language+">";}
 
 

@@ -23,7 +23,7 @@ public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment imp
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
     public Object cancelMessage(D2WContext c) {
-        Object value = localizedTemplateStringForKeyInContext("Are you sure you want to stop creating this Object", c);
+        Object value = localizedTemplateStringForKeyInContext("ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage", c);
         return value;
     }
 }

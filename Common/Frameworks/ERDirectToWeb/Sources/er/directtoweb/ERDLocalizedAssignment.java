@@ -42,7 +42,7 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
         return localizedValueForKeyWithDefaultInContext((String)value(), c);
     }
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return (ERXLocalizer) c.valueForKeyPath("session.localizer");
+        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
     }
     
     public Object fire(D2WContext c) {
