@@ -538,7 +538,7 @@ function show_calendar() {
 		p_format: Date format (mm/dd/yyyy, dd/mm/yy, ...)
 		p_item	: Return Item.
 	*/
-	gSelected = null;
+            gSelected = null;
 	p_item = arguments[0];
 	indexOfPoint = p_item.indexOf(".");
 	formName = p_item.substring(0, indexOfPoint);
@@ -546,6 +546,9 @@ function show_calendar() {
 	elementName  = p_item.substring(indexOfPoint+1, p_item.length);
 	element = form.elements[elementName];
 	selectedDate  = element.value;
+        if(selectedDate.length==0){
+            selectedDate = new Date();
+        }
 	temporaryDate = new Date(selectedDate);
 	if(!isNaN(temporaryDate)){
 		selectedYear = temporaryDate.getYear();
