@@ -389,6 +389,25 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Sorts a given array with a set of keys according to the given selector.
+     * @param array array to be sorted.
+     * @param keys sort keys
+     * @param selector sort order selector to use, if null, then sort will be ascending.
+     * @return sorted array.
+     */
+    public static NSArray sortedArraySortedWithKeys(NSArray array, NSArray keys, NSSelector selector) {
+        if (keys.count() < 2)
+            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector);
+        
+        NSMutableArray order = new NSMutableArray(keys.count());
+        for (Enumeration keyEnumerator = keys.objectEnumerator(); keyEnumerator.hasMoreElements();) {
+            String key = (String)keyEnumerator.nextElement();
+            order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareAscending : selector));
+        }
+        return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, order);
+    }    
+
+    /**
      * Define an {@link NSArray$Operator} for the key <b>sort</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
@@ -416,7 +435,13 @@ public class ERXArrayUtilities extends Object {
 	    synchronized (array) {
 		if (array.count() < 2)
 		    return array;
-		return sortedArraySortedWithKey(array, keypath, selector);
+                if (keypath != null && keypath.indexOf(",") != -1) {
+                    return sortedArraySortedWithKeys(array,
+                                                     NSArray.componentsSeparatedByString(keypath, ","),
+                                                     selector);                                        
+                } else {
+                    return sortedArraySortedWithKey(array, keypath, selector);                    
+                }
 	    }
 	}
     }
