@@ -95,7 +95,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         }
         super.sleep();
     }
-
+    
     public EOEditingContext editingContext() {
         return _editingContext;
     }
@@ -226,13 +226,13 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 }
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
-            if(isSortedRelationship()){
+            if (isSortedRelationship()) {
                 //Now need to reindex the joins if the relationship is sorted
                 int i = 0;
                 for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
                     e.hasMoreElements();){
                     EOEnterpriseObject object = (EOEnterpriseObject)e.nextElement();
-                    object.takeValueForKey(new Integer(i), indexKey());
+                    object.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
                     i++;
                 }
             }
@@ -387,7 +387,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public EOEntity destinationEntity() {
         return destinationRelationship().destinationEntity();
     }
-    
     
     public String indexKey() {
         return (String)d2wContext().valueForKey("indexKey");
