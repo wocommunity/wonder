@@ -18,6 +18,10 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
     public ERDLocalizedAssignment (EOKeyValueUnarchiver u) { super(u); }
     public ERDLocalizedAssignment (String key, Object value) { super(key,value); }
 
+    public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        return new ERDLocalizedAssignment (eokeyvalueunarchiver);
+    }
+
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "propertyKey"});
     public NSArray dependentKeys(String keyPath) {
         return _DEPENDENT_KEYS;
