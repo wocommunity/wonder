@@ -102,7 +102,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
             if (possibleEntities.count() == 1) {
                 result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
             } else if (possibleEntities.count() > 1) {
-                ERXArrayUtilities.sortedArraySortedWithKey(possibleEntities, "length");
+                ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
                 if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
                     log.warn("Found multiple entities of the same length for configuration: " + name
                              + " possible entities: " + possibleEntities);
