@@ -122,7 +122,7 @@
                    author="true"
                    version="true"
                    use="true"
-                   verbose="true"
+                   verbose="false"
                    windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
