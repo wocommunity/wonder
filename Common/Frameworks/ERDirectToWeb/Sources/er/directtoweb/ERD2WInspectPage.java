@@ -116,17 +116,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
     public void setObject(EOEnterpriseObject eoenterpriseobject) {
         EOEditingContext eoeditingcontext = eoenterpriseobject == null ? null : eoenterpriseobject.editingContext();
-
-        //BUGFIX dt 12 dec. 2003
-        //using a shared editingcontext with concurrent request handling may leed to a deadlock!
-        if (eoeditingcontext != null && WOApplication.application().allowsConcurrentRequestHandling()) {
-            try {
-                eoeditingcontext.lock();
-                eoeditingcontext.setSharedEditingContext(null);
-            } finally {
-                eoeditingcontext.unlock();
-            }
-        }
         super.setObject(eoenterpriseobject);
     }
     
