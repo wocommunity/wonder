@@ -5,6 +5,22 @@
 	};
 	objectVersion = 38;
 	objects = {
+		F524E65603AADF3901AD0D0B = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "ognl-2.3.2.jar";
+			path = "Libraries/ognl-2.3.2.jar";
+			refType = 4;
+		};
+		F524E65703AADF3901AD0D0B = {
+			fileRef = F524E65603AADF3901AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
 		F5274010017CADD2014387C8 = {
 			buildStyles = (
 				F527406D017CADD2014387C8,
@@ -60,7 +76,7 @@
 				F527402D017CADD2014387C8,
 				F527402F017CADD2014387C8,
 				F5274030017CADD2014387C8,
-				F69DF37802C8600901AD0D07,
+				F524E65603AADF3901AD0D0B,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -264,6 +280,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)WOOgnl";
@@ -358,7 +375,7 @@
 				F527404D017CADD2014387C8,
 				F527404F017CADD2014387C8,
 				F5274050017CADD2014387C8,
-				F69DF37902C8600A01AD0D07,
+				F524E65703AADF3901AD0D0B,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,6 +466,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)WOOgnl";
@@ -675,6 +693,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -821,32 +841,6 @@
 			isa = PBXFileReference;
 			path = LICENSE.NPL;
 			refType = 4;
-		};
-//F50
-//F51
-//F52
-//F53
-//F54
-//F60
-//F61
-//F62
-//F63
-//F64
-		F69DF37802C8600901AD0D07 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "ognl-2.1.2.jar";
-			path = "Libraries/ognl-2.1.2.jar";
-			refType = 2;
-		};
-		F69DF37902C8600A01AD0D07 = {
-			fileRef = F69DF37802C8600901AD0D07;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
 		};
 	};
 	rootObject = F5274010017CADD2014387C8;
