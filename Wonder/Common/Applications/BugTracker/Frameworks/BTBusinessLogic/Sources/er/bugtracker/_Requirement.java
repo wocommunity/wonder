@@ -10,7 +10,7 @@ import er.extensions.*;
 import java.util.*;
 import java.math.BigDecimal;
 
-public abstract class _Requirement extends er.bugtracker.Bug {
+public abstract class _Requirement extends Bug {
 
     public _Requirement() {
         super();
@@ -61,47 +61,47 @@ public abstract class _Requirement extends er.bugtracker.Bug {
     }
 
 
-    public er.bugtracker.Difficulty difficulty() {
-        return (er.bugtracker.Difficulty)storedValueForKey("difficulty");
+    public Difficulty difficulty() {
+        return (Difficulty)storedValueForKey("difficulty");
     }
 
-    public void setDifficulty(er.bugtracker.Difficulty aValue) {
+    public void setDifficulty(Difficulty aValue) {
         takeStoredValueForKey(aValue, "difficulty");
     }
-    public void addToBothSidesOfDifficulty(er.bugtracker.Difficulty object) {
+    public void addToBothSidesOfDifficulty(Difficulty object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "difficulty");
     }
-    public void removeFromBothSidesOfDifficulty(er.bugtracker.Difficulty object) {
+    public void removeFromBothSidesOfDifficulty(Difficulty object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "difficulty");
     }
 
 
-    public er.bugtracker.RequirementSubType requirementSubType() {
-        return (er.bugtracker.RequirementSubType)storedValueForKey("requirementSubType");
+    public RequirementSubType requirementSubType() {
+        return (RequirementSubType)storedValueForKey("requirementSubType");
     }
 
-    public void setRequirementSubType(er.bugtracker.RequirementSubType aValue) {
+    public void setRequirementSubType(RequirementSubType aValue) {
         takeStoredValueForKey(aValue, "requirementSubType");
     }
-    public void addToBothSidesOfRequirementSubType(er.bugtracker.RequirementSubType object) {
+    public void addToBothSidesOfRequirementSubType(RequirementSubType object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "requirementSubType");
     }
-    public void removeFromBothSidesOfRequirementSubType(er.bugtracker.RequirementSubType object) {
+    public void removeFromBothSidesOfRequirementSubType(RequirementSubType object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "requirementSubType");
     }
 
 
-    public er.bugtracker.RequirementType requirementType() {
-        return (er.bugtracker.RequirementType)storedValueForKey("requirementType");
+    public RequirementType requirementType() {
+        return (RequirementType)storedValueForKey("requirementType");
     }
 
-    public void setRequirementType(er.bugtracker.RequirementType aValue) {
+    public void setRequirementType(RequirementType aValue) {
         takeStoredValueForKey(aValue, "requirementType");
     }
-    public void addToBothSidesOfRequirementType(er.bugtracker.RequirementType object) {
+    public void addToBothSidesOfRequirementType(RequirementType object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "requirementType");
     }
-    public void removeFromBothSidesOfRequirementType(er.bugtracker.RequirementType object) {
+    public void removeFromBothSidesOfRequirementType(RequirementType object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "requirementType");
     }
 
