@@ -3,7 +3,7 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
 import er.extensions.ERXLogger;
-import er.extensions.ERXLongResponse.Task;
+import er.extensions.ERXLongResponseTask;
 
 /**
  * Displays progress by using a ERXLongResponse.Task. Very useful for sending mail and the like.
@@ -20,7 +20,7 @@ public class ERD2WProgressPage extends ERD2WPage {
     private static final ERXLogger log = ERXLogger.getLogger(ERD2WProgressPage.class,"components");
 
     /** holds the task */
-    protected Task _longResponseTask;
+    protected ERXLongResponseTask _longResponseTask;
     
     /**
      * Public constructor
@@ -30,11 +30,11 @@ public class ERD2WProgressPage extends ERD2WPage {
         super(context);
     }
 
-    public Task longResponseTask() {
+    public ERXLongResponseTask longResponseTask() {
         return _longResponseTask;
     }
     
-    public void setLongResponseTask(Task longResponseTask) {
+    public void setLongResponseTask(ERXLongResponseTask longResponseTask) {
         _longResponseTask = longResponseTask;
     }
 }
