@@ -51,24 +51,32 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         super.appendAttributesToResponse(response, context);
     }
 
-	public void appendToResponse(WOResponse response, WOContext context) {
-		boolean inForm = context.isInForm ();
-		context.setInForm(true);
+    public void appendToResponse(WOResponse response, WOContext context) {
+        boolean inForm = context.isInForm();
+        
+        context.setInForm(true);
+        if (context != null && response != null) {
 
-		if (context != null && response != null) {
+            String elementName = elementName();
+            boolean shouldAppendFormTags = !inForm  && (elementName != null);
 
-			String elementName = elementName();
-			boolean shouldAppendFormTags = !inForm  && (elementName != null);
+            if (shouldAppendFormTags)
+                _appendOpenTagToResponse(response, context);
+            else
+                log.warn("This FORM is embedded inside another FORM. Omitting Tags.");
 
-			if (shouldAppendFormTags)
-				_appendOpenTagToResponse(response, context);
+            this.appendChildrenToResponse(response, context);
 
-			this.appendChildrenToResponse(response, context);
-
-			if (shouldAppendFormTags)
-				_appendCloseTagToResponse(response, context);
-		}
-
-		context.setInForm(false);
-	}
+            if (shouldAppendFormTags)
+                _appendCloseTagToResponse(response, context);
+        }
+        context.setInForm(false);
+        
+        if(context instanceof ERXMutableUserInfoHolderInterface) {
+            NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
+            
+            ui.removeObjectForKey("formName");
+            ui.removeObjectForKey("enctype");
+        }
+    }
 }
