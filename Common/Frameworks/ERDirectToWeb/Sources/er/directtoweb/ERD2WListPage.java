@@ -132,6 +132,11 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
+    protected void setSortOrderingsOnDisplayGroup(NSArray sortOrderings, WODisplayGroup dg) {
+        sortOrderings = sortOrderings!=null ? sortOrderings : NSArray.EmptyArray;
+        dg.setSortOrderings(sortOrderings);
+    }
+    
     public static WOComponent printerFriendlyVersion(D2WContext d2wContext, WOSession session, EODataSource dataSource, WODisplayGroup displayGroup) {
         ListPageInterface result=(ListPageInterface)ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext,session);
         result.setDataSource(dataSource);
@@ -261,7 +266,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     public void setDataSource(EODataSource eodatasource) {
         NSArray sortOrderings=sortOrderings();
         displayGroup().setDataSource(eodatasource);
-        displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
+        setSortOrderingsOnDisplayGroup(sortOrderings, displayGroup());
         displayGroup().fetch();
     }
     
@@ -277,7 +282,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                         ((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
                 }
                 NSArray sortOrderings=sortOrderings();
-                dg.setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
+                setSortOrderingsOnDisplayGroup(sortOrderings, dg);
                 dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
                 dg.fetch();
                 dg.updateDisplayedObjects();
