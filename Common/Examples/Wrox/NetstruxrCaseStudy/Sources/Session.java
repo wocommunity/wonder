@@ -9,7 +9,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import er.wrox.User;
 import er.extensions.ERXSession;
 import er.extensions.ERXUtilities;
@@ -17,8 +17,8 @@ import er.extensions.ERXCrypto;
 
 public class Session extends ERXSession {
 
-    /////////////////////////////////// log4j category ///////////////////////////////////
-    public static final Category cat = Category.getInstance("wrox.application.Session");
+    /* logging support */
+    public static final Logger log = Logger.getLogger("wrox.application.Session");
 
     public Session() {
         setStoresIDsInCookies(true);
@@ -56,13 +56,13 @@ public class Session extends ERXSession {
                 User user = (User)potentialUsers.lastObject();
                 if (user.password().equals(ERXCrypto.shaEncode(password))) {
                     setUser(user);
-                    cat.info("Login: " + user.fullName());
+                    log.info("Login: " + user.fullName());
                 }
             }
             if (user() == null) {
                 errorMessage = "Sorry, we could not find your account!<BR>Please note that usernames and passwords are case sensitive.";
                 if (potentialUsers.count() > 1)
-                    cat.warn("Found multiple Users for the username: " + username + " found users: " + potentialUsers);                
+                    log.warn("Found multiple Users for the username: " + username + " found users: " + potentialUsers);                
             }
         } else {
             errorMessage = "Please specify <b>both</b> fields!";
