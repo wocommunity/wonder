@@ -10,34 +10,20 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import com.webobjects.woextensions.*;
 
-/*
-
- An HTML based Tab Panel
-
- Bindings:
-
- - tabs: a list of objects representing the tabs
- - tabNameKey: a string containing a key to apply to tabs to get the title of the tab
- - selectedTab: contains the selected tab
- - submitActionName: if this binding is non null, tabs will contain a submit button instead of a regular hyperlink and the action
-   pointed to by the binding will be called
- - bgcolor: color to use for the selected tab and the body of the panel
- - nonSelectedBgColor: color to use for the non-selected tabs
-
- 
- */
 /**
  * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.<br />
  * 
- * @binding tabs
- * @binding tabNameKey
- * @binding selectedTab
- * @binding nonSelectedBgColor
- * @binding bgcolor
- * @binding submitActionName
+ * @binding tabs a list of objects representing the tabs
+ * @binding tabNameKey a string containing a key to apply to tabs to get the title of the tab
+ * @binding selectedTab contains the selected tab
+ * @binding bgcolor color to use for the selected tab and the body of the panel
+ * @binding nonSelectedBgColor color to use for the non-selected tabs
+ * @binding tabClass CSS class to use for the selected tab
+ * @binding nonSelectedTabClass CSS class to use for the unselected tabs
+ * @binding submitActionName if this binding is non null, tabs will contain a submit button instead of a regular hyperlink and the action
  * @binding textColor
  * @binding borderColor
- * @binding useFormSubmit" defaults="Boolean
+ * @binding useFormSubmit true, if the form shoud be submitted before switching, allows denial of switches
  */
 
 public class ERXTabPanel extends WOTabPanel  {
@@ -70,7 +56,7 @@ public class ERXTabPanel extends WOTabPanel  {
             if (hasBinding("tabClass")) {
                 _tabClass = (String)valueForBinding("tabClass");
             } else {
-                _tabClass = "";
+                _tabClass = "tab";
             }
 
         }
@@ -84,7 +70,7 @@ public class ERXTabPanel extends WOTabPanel  {
             if (hasBinding("nonSelectedTabClass")) {
                 _nonSelectedTabClass = (String)valueForBinding("nonSelectedTabClass");
             } else {
-                _nonSelectedTabClass = "";
+                _nonSelectedTabClass = "nonSelectedTab";
             }
 
         }
@@ -105,7 +91,7 @@ public class ERXTabPanel extends WOTabPanel  {
 
     public Object submitString() {
         String formName = ERXWOForm.formName(context(), "EditForm");
-        return "document."+formName+".submit(); return false;";
+        return "document."+formName+".action=this.href; document."+formName+".submit(); return false;";
     }
 
     public Object currentTabNameWithoutSpaces() {
