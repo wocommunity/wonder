@@ -42,8 +42,22 @@ Conditional1: WOConditional {
 	negate = true;
 }
 
+Conditional10: WOConditional {
+	condition = session.browser.isIE;
+	negate = true;
+}
+
+Conditional11: WOConditional {
+	condition = session.browser.isIE;
+}
+
+Conditional12: WOConditional {
+	condition = session.browser.isIE;
+}
+
 Conditional2: WOConditional {
-	condition = false;
+	condition = session.browser.isIE;
+	negate = true;
 }
 
 Conditional3: WOConditional {
@@ -251,6 +265,11 @@ SubmitButton4: WOSubmitButton {
 SubmitButton5: WOSubmitButton {
 	action = deleteAction;
 	value = "Delete";
+}
+
+SubmitButton6: WOSubmitButton {
+	action = cancelAction;
+	value = "Cancel";
 }
 
 SubmitChanges: WOImageButton {
