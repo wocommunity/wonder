@@ -216,11 +216,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
      * @return localized string for the given key
      */
     public Object valueForKey(String key) {
-        return localizedStringForKey(key);
+        return localizedValueForKey(key);
     }
     
     public Object valueForKeyPath(String key) {
-        Object result = valueForKey(key);
+        Object result = localizedValueForKey(key);
         if(result == null) {
             int indexOfDot = key.indexOf(".");
             if(indexOfDot > 0) {
