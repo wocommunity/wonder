@@ -21,26 +21,25 @@ public class PlistResources extends Object implements NSKeyValueCoding {
 
     protected NSDictionary dictionary;
 
-    public static PlistResources plistResources(String plistName) {
+    public static PlistResources plistResources(String plistName) throws Exception {
         if (resources == null) {
             resources = new PlistResources(plistName);
         }
         return resources;
     }
 
-    public PlistResources(String plistName) {
+    public NSDictionary dictionary() {
+        return dictionary;
+    }
+
+    public PlistResources(String plistName) throws Exception {
         super();
         // get the path to the file named settings.plist
         String path = WOApplication.application().resourceManager().pathForResourceNamed(plistName,null,null);
         File file = new File( path);
 
-        // read the file into a dictionary (hash table) using the NSPropertyListSerialization class
-        try {
+        // read the file into a dictionary (hash table) using the NSPropertyListSerialization clas
             dictionary = (NSDictionary) NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     // load settings from a text file
