@@ -55,9 +55,17 @@ write
 or (more lengthy)
   throw ERXValidationFactory.defaultFactory().createException(eo, key, value, "somecode");
 
-  
 and in a Validations.strings add
 
   somecode = "Something went wrong";
 
 Translations of the standard exception to German and Japanese are provided in ERD2W. For the moment, you should include ERD2W but we are working on removing that requirement.
+
+* Compiler Proxy
+
+There is a rapid-turnaround extension provided that allows you to make changes to your code of your components and then see them immediately in your browser. See Resources/CompilerProxy.html for more details.
+
+* Localization
+
+Localisation is made as simple as possible. If you want to contribute, create a localized version of Validation.strings and Localizable.string for another language. As for localizing your own D2W apps, please see the code for ERXLocalizer at the moment.
+
