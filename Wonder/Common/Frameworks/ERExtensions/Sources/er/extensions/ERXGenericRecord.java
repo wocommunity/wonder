@@ -458,9 +458,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             ((EOEnterpriseObject)eo).editingContext()!=editingContext() &&
             !(editingContext() instanceof EOSharedEditingContext) &&
             !(((EOEnterpriseObject)eo).editingContext() instanceof EOSharedEditingContext)) {
-            if (((EOEnterpriseObject)eo).editingContext()==null || editingContext()==null)
-                throw new RuntimeException("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+" and "+eo);
-            throw new RuntimeException("******** Attempted to link to EOs through "+key+" in different editing contexts: "+this+" and "+eo);
+            if (((EOEnterpriseObject)eo).editingContext()==null || editingContext()==null) {
+                cat.warn("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
+                // editingContext().insertObject(((EOEnterpriseObject)eo));
+                // throw new RuntimeException("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
+            } else {
+                throw new RuntimeException("******** Attempted to link to EOs through "+key+" in different editing contexts: "+this+" and "+eo);
+            }
         }
         super.addObjectToBothSidesOfRelationshipWithKey(eo,key);
     }
@@ -542,10 +546,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public boolean parentObjectStoreIsObjectStoreCoordinator() { return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator; }
 
     public String toString() {
-        String pk = primaryKey();
-        pk = (pk == null) ? "null pk" : pk;
+        String pk = "null pk";
+        try {
+            primaryKey();
+            pk = (pk == null) ? "null pk" : pk;
+        } catch(NullPointerException ex) {
+            cat.warn(ex);
+        }
         return "<" + getClass().getName() + " "+ pk + ">";
-    }
+    }/* */
     public String description() { return toString(); }
     public String toLongString() { return super.toString(); }
 
