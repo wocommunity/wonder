@@ -22,6 +22,7 @@
 		<binding name="goingVertically" defaults="Boolean"/>
 		<binding name="headerImages"/>
 		<binding name="headerRowBackgroundColor"/>
+		<binding name="otherTagString"/>
 
 		<validation message="&apos;list&apos; is a required binding">
 			<unbound name="list"/>
