@@ -29,7 +29,7 @@
     "ERD2WQueryToOneField.where" = where; 
     "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
     "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
-    "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of @tabSectionsContents.count@@"; 
+    "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of @@tabSectionsContents.count@@"; 
     "ERDDatePopup.monthList" = (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec); 
     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Are you sure you want to stop creating this @@displayNameForEntity@@?</B><br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your @@displayNameForEntity@@."; 
     "ERDDisplayImageIfExists.message" = "No Picture Available"; 
