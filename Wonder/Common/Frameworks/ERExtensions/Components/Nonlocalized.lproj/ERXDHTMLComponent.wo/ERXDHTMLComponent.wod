@@ -19,6 +19,12 @@ FormName: WOString {
 	value = ^formName;
 }
 
+Generic1: WOGenericContainer {
+	elementName = "script";
+	language = "JavaScript1.2";
+	src = dhtmlJavaScriptUrl;
+}
+
 Image1: WOImage {
 	filename = "format_bold.gif";
 	framework = "ERExtensions";
@@ -54,10 +60,6 @@ Image6: WOImage {
 	framework = "ERExtensions";
 	width = 0;
 	height = 0;
-}
-
-JavaScript1: WOJavaScript {
-	scriptFile = "dhtml.js";
 }
 
 Rows: WOString {
