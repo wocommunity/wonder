@@ -1,0 +1,23 @@
+WOAnalysis Tool v0.9
+====================
+
+Current version of scripts scripts supports the following log format :
+  LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %D \"%{x-webobjects-customenv}e\" %{cookie}n" combined
+
+x-webobjects-customenv format is :
+  <AppName>;<SessionId>;ComponentName>;[<arg>=<val>;]*
+
+Example:
+  Store;YVJNJDA;org.pm.store.ReceiptPage;customer=foo@bar.com;qty=1;payment=cc;
+
+Notes:
+  - There is an older version 0.8.1 available.
+
+
+In case of questions / problems, please contact:
+  jacek@power.com.pl 
+  wojtek@power.com.pl
+
+
+
+
