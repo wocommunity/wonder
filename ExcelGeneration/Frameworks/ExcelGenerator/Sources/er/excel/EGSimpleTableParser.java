@@ -60,7 +60,7 @@ import er.extensions.ERXNumberFormatter;
  * and matches the <code>cellStyle</code> and <code>cellFormat</code> definition.
  * 
  * A client would use this class like: 
- * EGSimpleTableParser parser = EGSimpleTableParser(new ByteArrayInputStream(someContentString));
+ * EGSimpleTableParser parser = new EGSimpleTableParser(new ByteArrayInputStream(someContentString));
  * NSData result = parser.data();
  * 
  * @author ak
