@@ -30,6 +30,11 @@ public class ERDRecoverableErrorPage extends WOComponent implements ErrorPageInt
     public void setMessage(String message) { _message=message; }
     public String message() {return _message; }
     
-    public String formattedMessage() { return Services.breakDown(_message,60); }
+    public String formattedMessage() {
+        //return Services.breakDown(_message,60);
+        return WOMessage.stringByEscapingHTMLString(message());
+    }
+
+
 }
 
