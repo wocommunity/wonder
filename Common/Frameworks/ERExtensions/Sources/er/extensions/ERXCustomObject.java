@@ -743,7 +743,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
 
     public boolean isNewObject() {
-        return ERXExtensions.isNewObject(this);
+        return ERXEOControlUtilities.isNewObject(this);
     }
     
     
