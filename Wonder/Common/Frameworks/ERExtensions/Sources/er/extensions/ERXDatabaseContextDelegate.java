@@ -16,7 +16,7 @@ import com.webobjects.foundation.*;
  * This delegate implements several methods from the formal interface
  * {@link com.webobjects.eoaccess.EODatabaseContext.Delegate EODatabaseContext.Delegate}. 
  * Of special note this class adds the ability
- * for enterpiseobjects to generate their own primary keys, correctly throws an
+ * for enterpriseobjects to generate their own primary keys, correctly throws an
  * exception when a toOne relationship object is not found in the database and adds
  * debugging abilities to tracking down when faults are fired.
  */
@@ -146,7 +146,7 @@ public class ERXDatabaseContextDelegate {
                                                 EOFetchSpecification fs,
                                                 EODatabaseChannel channel) {
         if (dbLog.isDebugEnabled()) {
-            dbLog.debug("databaseContextDidSelectObjects " + fs + " at: " + ERXUtilities.stackTrace());
+            dbLog.debug("databaseContextDidSelectObjects " + fs, new Exception());
         }
     }
 
@@ -154,7 +154,9 @@ public class ERXDatabaseContextDelegate {
         Delegate method. Will switch the connection to read write.
      **/
     public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt,NSArray adaptorOps,EOAdaptorChannel adChannel) {
-        log.debug("databaseContextWillPerformAdaptorOperations.. Setting it to ReadWrite");
+        if(log.isDebugEnabled()) {
+            log.debug("databaseContextWillPerformAdaptorOperations.. Setting it to ReadWrite");
+        }
         if (adaptorOps.count() != 0) {
             setReadWriteForConnectionInDatabaseContext(true, dbCtxt);
         }
@@ -165,7 +167,9 @@ public class ERXDatabaseContextDelegate {
         Delegate method. Will switch the connection to read only.
      **/
     public boolean databaseContextShouldFetchObjectFault(EODatabaseContext dbCtxt, Object obj) {
-        log.debug("databaseContextShouldFetchObjectFault.. Setting it to ReadOnly");
+        if(log.isDebugEnabled()) {
+            log.debug("databaseContextShouldFetchObjectFault.. Setting it to ReadOnly");
+        }
         setReadWriteForConnectionInDatabaseContext(false, dbCtxt);
         return true;
     }
@@ -174,7 +178,9 @@ public class ERXDatabaseContextDelegate {
         Delegate method. Will switch the connection to read only.
      **/
     public  boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
-        log.debug("databaseContextShouldFetchArrayFault.. Setting it to ReadOnly");
+        if(log.isDebugEnabled()) {
+            log.debug("databaseContextShouldFetchArrayFault.. Setting it to ReadOnly");
+        }
         setReadWriteForConnectionInDatabaseContext(false, eodatabasecontext);
         return true;
     }
@@ -182,10 +188,11 @@ public class ERXDatabaseContextDelegate {
     /**
         Delegate method. Will switch the connection to read only.
      **/
-    public  NSArray databaseContextShouldFetchObjects(EODatabaseContext eodatabasecontext, EOFetchSpecification
-                                                      eofetchspecification, EOEditingContext eoeditingcontext) {
-        log.debug("databaseContextShouldFetchObjects.. Setting it to ReadOnly");
-        setReadWriteForConnectionInDatabaseContext(false, eodatabasecontext);
+    public  NSArray databaseContextShouldFetchObjects(EODatabaseContext dbc, EOFetchSpecification fs, EOEditingContext ec) {
+        if(log.isDebugEnabled()) {
+            log.debug("databaseContextShouldFetchObjects.. Setting it to ReadOnly");
+        }
+        setReadWriteForConnectionInDatabaseContext(false, dbc);
         return null;
     }
 
@@ -199,7 +206,9 @@ public class ERXDatabaseContextDelegate {
      **/
     public void setReadWriteForConnectionInDatabaseContext(boolean isReadWrite, EODatabaseContext dbc) {
         if (_readOnlySessionProperties().length() > 0 && _readWriteSessionProperties().length() > 0) {
-            log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
+            if(log.isDebugEnabled()) {
+                log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
+            }
             try {
 
                 Connection connection = _getConnection(dbc);
@@ -210,7 +219,7 @@ public class ERXDatabaseContextDelegate {
                         _configureReadOnly(connection);
                     }
                 } else {
-                    log.warn("Cannot change readoonly/readwrite level since the connection for the editing context is null!!");
+                    log.warn("Cannot change readoonly/readwrite level since the connection for the database context is null!!");
                 }
 
             } catch (java.sql.SQLException e) {
@@ -225,10 +234,11 @@ public class ERXDatabaseContextDelegate {
 
     
     public void _configureReadWrite(Connection aConnection) throws SQLException {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("Setting the JDBC connection "+aConnection+" to read / write, current state:"+
                       " isReadOnly="+aConnection.isReadOnly()+
                       ", isolation level="+aConnection.getTransactionIsolation());
+        }
         aConnection.commit();
         aConnection.createStatement().executeUpdate(_readWriteSessionProperties());
         aConnection.commit();

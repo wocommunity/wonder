@@ -43,7 +43,8 @@ public class ERXAdaptorChannelDelegate {
         if(log.isDebugEnabled()) {
             long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;
             if(millisecondsNeeded > _maxMilliseconds) {
-                log.debug("Expression took " + millisecondsNeeded + " ms : " + expression);
+                String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
+                log.debug("\"" + entityName  + "\" expression took " + millisecondsNeeded + " ms: " + expression);
             }
         }
     }
