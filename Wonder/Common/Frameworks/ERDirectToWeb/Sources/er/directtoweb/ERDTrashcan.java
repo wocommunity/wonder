@@ -35,10 +35,9 @@ public class ERDTrashcan extends ERDCustomEditComponent {
     }
 
     public EODataSource dataSource() { return (EODataSource)valueForBinding("dataSource"); }
-    public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
 
     public WOComponent deleteObjectAction() {
-        ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed((String)d2wContext().valueForKey("confirmDeleteConfigurationName"), session());
+        ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed((String)valueForBinding("confirmDeleteConfigurationName"), session());
         nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(), dataSource(), context().page()));
         nextPage.setCancelDelegate(new ERDPageDelegate(context().page()));
         String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObjectOtherObject("ERDTrashcan.confirmDeletionMessage", d2wContext(), object());

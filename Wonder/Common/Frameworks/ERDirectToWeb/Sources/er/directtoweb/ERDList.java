@@ -63,11 +63,11 @@ public class ERDList extends ERDCustomEditComponent {
 
     // FIXME: This sucks.
     public boolean isTargetXML(){
-        String listPageConfiguration = (String)valueForBinding("embeddedPageConfiguration");
+        String listPageConfiguration = stringValueForBinding("embeddedPageConfiguration");
         return listPageConfiguration != null && listPageConfiguration.indexOf("XML") > -1;
     }
 
     public boolean erD2WListOmitCenterTag() {
-        return hasBinding("erD2WListOmitCenterTag") ? booleanForBinding("erD2WListOmitCenterTag") : false;
+        return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
 }

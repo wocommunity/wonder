@@ -46,7 +46,7 @@ public class ERDEditPassword extends ERDCustomEditComponent {
     protected Boolean _passwordConfirmationValidates;
     public boolean passwordConfirmationValidates() {
         if(_passwordConfirmationValidates == null) {
-            _passwordConfirmationValidates = ERXValueUtilities.booleanValue(valueForBinding("passwordConfirmationValidates")) ? Boolean.TRUE : Boolean.FALSE;
+            _passwordConfirmationValidates = booleanValueForBinding("passwordConfirmationValidates") ? Boolean.TRUE : Boolean.FALSE;
         }
         return _passwordConfirmationValidates.booleanValue();
     }

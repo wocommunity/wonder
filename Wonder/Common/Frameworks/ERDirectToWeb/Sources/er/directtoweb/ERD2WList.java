@@ -59,7 +59,7 @@ public class ERD2WList extends ERDCustomEditComponent {
     }
 
     public boolean erD2WListOmitCenterTag() {
-        return hasBinding("erD2WListOmitCenterTag") ? booleanForBinding("erD2WListOmitCenterTag") : false;
+        return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
     
 }
