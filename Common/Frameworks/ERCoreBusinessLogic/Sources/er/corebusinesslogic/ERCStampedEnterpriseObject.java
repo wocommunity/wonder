@@ -20,9 +20,10 @@ public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
     
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
-        setCreated(new NSTimestamp());
+        NSTimestamp now = new NSTimestamp();
+        setCreated(now);
         // Shouldn't use touch() here as it can be overridden in subclasses.
-        setLastModified(new NSTimestamp());
+        setLastModified(now);
         if (relationshipNameForLogEntry()!=null && logEntryType() != null) {
             insertionLogEntry=ERCoreBusinessLogic.createLogEntryLinkedToEO(logEntryType(),
                                                                    null,
