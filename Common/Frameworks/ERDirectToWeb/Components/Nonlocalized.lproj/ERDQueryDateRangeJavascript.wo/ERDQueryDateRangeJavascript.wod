@@ -1,4 +1,28 @@
-JavaScript1: WOJavaScript {
+Hyperlink1: WOHyperlink {
+	href = minHREF;
+	onmouseout = "window.status='';return true;";
+	onmouseover = "window.status='Date Picker';return true;";
+}
+
+Hyperlink2: WOHyperlink {
+	href = maxHREF;
+	onmouseout = "window.status='';return true;";
+	onmouseover = "window.status='Date Picker';return true;";
+}
+
+Image1: WOImage {
+	border = 0;
+	filename = "calendar.gif";
+	framework = "ERExtensions";
+}
+
+Image2: WOImage {
+	border = 0;
+	filename = "calendar.gif";
+	framework = "ERExtensions";
+}
+
+JavaScript2: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
 }
 
@@ -6,9 +30,6 @@ String1: WOString {
 	value = minName;
 }
 
-String2: WOString {
-	value = datePickerJavaScriptUrl;
-}
 String3: WOString {
 	value = maxName;
 }

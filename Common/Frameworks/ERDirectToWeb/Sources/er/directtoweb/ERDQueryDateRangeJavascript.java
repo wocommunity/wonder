@@ -120,9 +120,15 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         if (_minName==null) _minName="min"+propertyKey();
         return _minName;
     }
+    public String minHREF() {
+        return "javascript:show_calendar('QueryForm." + minName() + "')"; 
+    }
     private String _maxName;
     public String maxName() {
         if (_maxName==null) _maxName="max"+propertyKey();
         return _maxName;
+    }
+    public String maxHREF() {
+        return "javascript:show_calendar('QueryForm." + maxName() + "')";
     }
 }
