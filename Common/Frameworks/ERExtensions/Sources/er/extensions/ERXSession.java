@@ -12,6 +12,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import org.apache.log4j.Category;
 import java.util.Enumeration;
+import java.io.*; 
 
 /**
  * The ERXSession aguments the regular WOSession object
@@ -42,20 +43,30 @@ public class ERXSession extends WOSession {
     public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
     
     /** holds a reference to the current localizer used for this session */
-    private ERXLocalizer localizer;
+    transient private ERXLocalizer _localizer;
+
+    /** 
+     * special varialble to hold language name only for when 
+     * session object gets serialized. 
+     * Do not use this value to get the language name;  
+     * use {@link #language} method instead.
+     */ 
+    private String _serializableLanguageName; 
 
     /** holds a reference to the current message encoding used for this session */
-    private ERXMessageEncoding messageEncoding;
+    private ERXMessageEncoding _messageEncoding;
 
     /** holds a reference to the current browser used for this session */
-    private ERXBrowser browser;
+    transient private ERXBrowser _browser;
 
     /** flag for if java script is enabled, defaults to true */
     protected boolean _javaScriptEnabled=true; // most people have JS by now
     /** flag to indicate if java script has been set */
     protected boolean _javaScriptInitialized=false;
 
-    /** holds a debugging store for a given session. */
+    /** 
+     * holds a debugging store for a given session. 
+     */
     protected NSMutableDictionary _debuggingStore;
 
     /**
@@ -67,10 +78,10 @@ public class ERXSession extends WOSession {
      * @return the current localizer for this session
      */
     public ERXLocalizer localizer() {
-        if (localizer == null) {
-            localizer = ERXLocalizer.localizerForLanguages(languages());
+        if (_localizer == null) {
+            _localizer = ERXLocalizer.localizerForLanguages(languages());
         }
-        return localizer;
+        return _localizer;
     }
 
     /**
@@ -80,9 +91,12 @@ public class ERXSession extends WOSession {
      *		for.
      */
     public void setLanguage(String language) {
-        localizer = ERXLocalizer.localizerForLanguage(language);
-        ERXLocalizer.setCurrentLocalizer(localizer);
-        messageEncoding = new ERXMessageEncoding(localizer.language());
+        ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguage(language);
+        if (! newLocalizer.equals(_localizer)) {
+            _localizer = newLocalizer;
+            ERXLocalizer.setCurrentLocalizer(_localizer);
+            _messageEncoding = new ERXMessageEncoding(_localizer.language());
+        }
     }
 
     /**
@@ -104,9 +118,9 @@ public class ERXSession extends WOSession {
      * @return message encoding object
      */
     public ERXMessageEncoding messageEncoding() { 
-        if (messageEncoding == null) 
-            messageEncoding = new ERXMessageEncoding(language());
-        return messageEncoding; 
+        if (_messageEncoding == null) 
+            _messageEncoding = new ERXMessageEncoding(language());
+        return _messageEncoding; 
     }
 
     /**
@@ -119,15 +133,15 @@ public class ERXSession extends WOSession {
      * @return browser object
      */
     public ERXBrowser browser() { 
-        if (browser == null  &&  context() != null) {
+        if (_browser == null  &&  context() != null) {
             WORequest request = context().request();
             if (request != null) {
                 ERXBrowserFactory browserFactory = ERXBrowserFactory.factory();
-                browser = browserFactory.browserMatchingRequest(request);
-                browserFactory.retainBrowser(browser);
+                _browser = browserFactory.browserMatchingRequest(request);
+                browserFactory.retainBrowser(_browser);
             }
         }
-        return browser; 
+        return _browser; 
     }
 
     /**
@@ -153,6 +167,10 @@ public class ERXSession extends WOSession {
     // FIXME: This check should move to the session constructor
     //		also should use the ec factory methods to just
     //		create and set the editing context.
+    // (tatsuya) But if this is moved to the constructor, 
+    //           will loose the ability to setDefaultEditingContext 
+    //           since it throws exception after  
+    //           super.dafaultEditingContext() is invoked. 
     public EOEditingContext defaultEditingContext() {
         EOEditingContext ec = super.defaultEditingContext();
         if (ec.delegate() == null)
@@ -341,9 +359,42 @@ public class ERXSession extends WOSession {
         // WOFIX: 5.1.2
         // work around a bug in WO 5.1.2 where the sessions EC will keep a lock on the SEC
         defaultEditingContext().setSharedEditingContext(null);
-        if (browser != null) 
-            ERXBrowserFactory.factory().releaseBrowser(browser);
+        if (_browser != null) 
+            ERXBrowserFactory.factory().releaseBrowser(_browser);
         super.terminate();
     }
 
+    /*
+     * Serialization support - enables to use a variety of session store 
+     */ 
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        if (_localizer != null) 
+            _serializableLanguageName = language();
+        stream.defaultWriteObject();
+    }
+
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        if (_serializableLanguageName != null) 
+            setLanguage(_serializableLanguageName);
+        cat.debug("Session has been deserialized: " + toString());
+    }
+
+    public String toString() {
+        String superString = super.toString();
+        String thisString = 
+                " localizer=" 
+                + (_localizer == null ? "null" : _localizer.toString())
+                + " messageEncoding=" 
+                + (_messageEncoding == null ? "null" : _messageEncoding.toString())
+                + " browser=" 
+                + (_browser == null ? "null" : _browser.toString());
+
+        int lastIndex = superString.lastIndexOf(">");
+        if (lastIndex > 0)   // ignores if ">" is the first char (lastIndex == 0)
+            return superString.substring(0, lastIndex - 1) + thisString + ">";
+        else 
+            return superString + thisString;
+    }
+    
 }
