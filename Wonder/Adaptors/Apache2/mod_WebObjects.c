@@ -26,6 +26,7 @@
  *
  *	WebObjects server adaptor Apache 2 API module.
  *			Based on mod_example.c  Apache version 2.
+ *	This port to Apache2 by Travis Cripps May, 2003 (tcrippsatmacdotcom)
  *
  *	This adaptor forwards WebObjects requests to the WebObjects application
  *	server from within the Apache server.
@@ -56,7 +57,6 @@
 #include "errors.h"
 #include "httperrors.h"
 
-#include "apache_security.h"
 
 #if	defined(WIN32)
 #include <sys/types.h>
@@ -258,13 +258,13 @@ int WebObjects_translate(request_rec *r) {
     // get the module configuration (this is the structure created by WebObjects_create_config())
     wc = ap_get_module_config(r->server->module_config, &WebObjects_module);
 
-    /* WOLog(WO_DBG,"<WebObjects Apache Module> new translate: %s",r->uri); */
+    WOLog(WO_DBG,"<WebObjects Apache Module> new translate: %s",r->uri);
     if (strncmp(wc->WebObjects_alias, r->uri, strlen(wc->WebObjects_alias)) == 0) {
 
         url = WOURLComponents_Initializer;
         urlerr = WOParseApplicationName(&url, r->uri);
         if (urlerr != WOURLOK && !((urlerr == WOURLInvalidApplicationName) && ac_authorizeAppListing(&url))) {
-            /* WOLog(WO_DBG,"<WebObjects Apache Module> translate - DECLINED: %s",r->uri); */
+            WOLog(WO_DBG,"<WebObjects Apache Module> translate - DECLINED: %s",r->uri);
             return DECLINED;
         }
         if (!adaptorEnabled)
@@ -278,9 +278,13 @@ int WebObjects_translate(request_rec *r) {
          *	we'll take it - mark our handler...
          */
         r->handler = (char *)apr_pstrdup(r->pool, WEBOBJECTS);
+	r->filename = (char *)apr_pstrdup(r->pool, r->uri);
+	
         return OK;
     }
-    /* WOLog(WO_DBG,"<WebObjects Apache Module> translate - DECLINED: %s",r->uri); */
+    
+    WOLog(WO_DBG,"<WebObjects Apache Module> translate - DECLINED: %s",r->uri);
+    
     return DECLINED;
 }
 
@@ -402,28 +406,23 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     port = (char *)WOMALLOC(32);
     if (port)
     {
-        ap_snprintf(port, 32, "%d", ntohs(c->remote_addr->port)); // was remote_addr.sin_port -- TC
+        ap_snprintf(port, 32, "%d", ntohs(c->remote_addr->sa.sin.sin_port));
         req_addHeader(req, "REMOTE_PORT", port, STR_FREEVALUE);
     }
 
-    /* it looks like Apache2 has changed where a bunch of these things are stored...
-    if (c->user != NULL)
-        req_addHeader(req, "REMOTE_USER", c->user, 0);
-    if (c->ap_auth_type != NULL)
-        req_addHeader(req, "AUTH_TYPE", c->ap_auth_type, 0);
-    rem_logname = (char *)ap_get_remote_logname(r);
-    if (rem_logname != NULL)
-        req_addHeader(req, "REMOTE_IDENT", rem_logname, 0);
-    */
 
-    /* it looks like Apache2 has changed where a bunch of these things are stored... */
-    if (r->user != NULL)
-        req_addHeader(req, "REMOTE_USER", r->user, 0);
-    if (r->ap_auth_type != NULL)
-        req_addHeader(req, "AUTH_TYPE", r->ap_auth_type, 0);
+    if (r->user != NULL) {
+	req_addHeader(req, "REMOTE_USER", r->user, 0);
+    }
+
+    if (r->ap_auth_type != NULL) {
+	req_addHeader(req, "AUTH_TYPE", r->ap_auth_type, 0);
+    }
+        
     rem_logname = (char *)ap_get_remote_logname(r);
-    if (rem_logname != NULL)
-        req_addHeader(req, "REMOTE_IDENT", rem_logname, 0);
+    if (rem_logname != NULL) {
+	req_addHeader(req, "REMOTE_IDENT", rem_logname, 0);
+    }
 
     /*
      *	Apache custom responses.  If we have redirected, add special headers
@@ -478,16 +477,13 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
     if ( (!r->header_only) && (resp->content_valid) ) {
         while (resp->content_read < resp->content_length)
         {
-	    /* Do we need to do something here to stream with Apache2? */
-            //ap_soft_timeout("sending WebObjects response", r); //this is not available in Apache2
             ap_rwrite(resp->content, resp->content_valid, r);
-            //ap_kill_timeout(r); //this is not available in Apache2
             resp_getResponseContent(resp, 1);
         }
-        //ap_soft_timeout("sending WebObjects response", r);
+
         ap_rwrite(resp->content, resp->content_valid, r);
-        //ap_kill_timeout(r);
     }
+    
     return;
 }
 
@@ -517,22 +513,22 @@ static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int
     int len_read, total_len_read = 0;
     char *data = (char *)dataBuffer;
 
-    /* Should these be soft or hard timeouts ?
-	-- It doesn't matter, as they arent available in Apache2 --TC
-    */
     while ((len_remaining > 0 && mustFill) || (total_len_read == 0)) {
-        //ap_soft_timeout("reading WebObjects input", r);
         len_read = ap_get_client_block(r, data, len_remaining);
-        //ap_kill_timeout(r);
+
         if (len_read <= 0) {
             return -1;
         }
+	
         total_len_read += len_read;
         data += len_read;
         len_remaining -= len_read;
     }
-    if (total_len_read == 0)
-        WOLog(WO_WARN,"readContentData(): returning zero bytes of content data");
+
+    if (total_len_read == 0) {
+	WOLog(WO_WARN,"readContentData(): returning zero bytes of content data");
+    }
+        
     return total_len_read;
 }
 
@@ -553,11 +549,17 @@ static int WebObjects_handler (request_rec *r)
     const char *docroot;
     WOURLError urlerr;
 
+    /* 	We have to do a check here to see if our handler should process the request.
+	The WebObjects_translate phase should  have marked the request to be handled
+	by WebObjects if it matched the Adaptor's WebObjects alias.
+	Is this the best way to do this?  Can another module override our r->handler setting?
+    */
+    if (NULL == r->handler || strcmp(r->handler, WEBOBJECTS) != 0) {
+	return DECLINED;
+    }
+
     _webobjects_server = r->server;
-
-    // Get the module configuration
-    conf = ap_get_module_config(r->server->module_config, &WebObjects_module);
-
+    
 
     WOLog(WO_INFO,"<WebObjects Apache Module> new request: %s", r->uri);
     if (!adaptorEnabled)
@@ -605,7 +607,7 @@ static int WebObjects_handler (request_rec *r)
     reqerr = req_validateMethod(req);
     if (reqerr) {
         req_free(req);
-        return die(r,reqerr, HTTP_BAD_REQUEST);
+        return die(r, reqerr, HTTP_BAD_REQUEST);
     }
 
     /*
@@ -644,9 +646,9 @@ static int WebObjects_handler (request_rec *r)
      *
      *	note that handleRequest free()'s the 'req' for us
      */
-    //ap_soft_timeout("messaging WebObjects application", r);
+
     resp = tr_handleRequest(req, r->uri, &wc, r->protocol, docroot);
-    //ap_kill_timeout(r);
+
     if (resp != NULL) {
         sendResponse(r, resp);
         resp_free(resp);
@@ -808,9 +810,9 @@ static void *WebObjects_create_config(apr_pool_t *p, server_rec *s)
 static void WebObjects_register_hooks (apr_pool_t *p)
 {
     ap_hook_post_config(WebObjects_post_config, NULL, NULL, APR_HOOK_MIDDLE);
-    ap_hook_child_init(WebObjects_child_init, NULL, NULL, APR_HOOK_MIDDLE);
+    ap_hook_child_init(WebObjects_child_init, NULL, NULL, APR_HOOK_FIRST);
     ap_hook_translate_name(WebObjects_translate, NULL, NULL, APR_HOOK_MIDDLE);
-    ap_hook_handler(WebObjects_handler, NULL, NULL, APR_HOOK_FIRST);
+    ap_hook_handler(WebObjects_handler, NULL, NULL, APR_HOOK_MIDDLE);
 }
 
 
@@ -822,11 +824,11 @@ static void WebObjects_register_hooks (apr_pool_t *p)
  */
 module AP_MODULE_DECLARE_DATA WebObjects_module =
 {
-    STANDARD20_MODULE_STUFF, // standard stuff; no need to mess with this.
-    NULL, // create per-directory configuration structures - we do not.
-    NULL, // merge per-directory - no need to merge if we are not creating anything.
-    WebObjects_create_config, // create per-server configuration structures.
-    NULL, // merge per-server.
-    WebObjects_cmds, // configuration directive handlers
-    WebObjects_register_hooks, // request handlers
+    STANDARD20_MODULE_STUFF, 	// standard stuff; no need to mess with this.
+    NULL, 			// create per-directory configuration structures - we do not.
+    NULL, 			// merge per-directory - no need to merge if we are not creating anything.
+    WebObjects_create_config, 	// create per-server configuration structures.
+    NULL, 			// merge per-server.
+    WebObjects_cmds, 		// configuration directive handlers
+    WebObjects_register_hooks, 	// request handlers
 };
