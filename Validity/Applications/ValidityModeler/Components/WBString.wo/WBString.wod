@@ -1,0 +1,18 @@
+Generic4: WOGenericContainer {
+	elementName = "FONT";
+	face = ^face;
+	size = ^size;
+	color = ^color;
+}
+
+Generic5: WOGenericContainer {
+	elementName = ^style;
+}
+
+String4: WOString {
+	valueWhenEmpty = ^valueWhenEmpty;
+	value = ^value;
+	escapeHTML = ^escapeHTML;
+	formatter = ^formatter;
+}
+
