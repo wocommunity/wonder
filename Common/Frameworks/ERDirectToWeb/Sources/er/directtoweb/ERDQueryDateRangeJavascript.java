@@ -28,7 +28,11 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     protected String key;
 
-    public String propertyKey() { return key; }
+    public String propertyKey() {
+        if(key == null)
+            key = (String)valueForBinding("propertyKey");
+        return key;
+    }
 
     private String stringForDate(NSTimestamp d) {
         String result=null;
@@ -96,21 +100,22 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     public void setMinValue(String min) {
         _minValue=min;
-        displayGroup().queryMin().takeValueForKey(dateForString(min), propertyKey());
+        NSTimestamp minDate = dateForString(min);
+        if(minDate != null)
+            displayGroup().queryMin().takeValueForKey(minDate, propertyKey());
     }
 
     public void setMaxValue(String max) {
         _maxValue=max;
-        displayGroup().queryMax().takeValueForKey(dateForString(max), propertyKey());
+        NSTimestamp maxDate = dateForString(max);
+        if(maxDate != null)
+            displayGroup().queryMax().takeValueForKey(maxDate, propertyKey());
     }
 
     private static String _datePickerJavaScriptUrl;
     public String datePickerJavaScriptUrl() {
         if (_datePickerJavaScriptUrl==null) {
-            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js",
-                                                                                          "ERExtensions",
-                                                                                          null,
-                                                                                          context().request());
+            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js", "ERExtensions", null, context().request());
         }
         return _datePickerJavaScriptUrl;
     }
