@@ -688,7 +688,7 @@ public class ERXEOAccessUtilities {
         }
         return couldClose;
     }
-
+    
     /**
      * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
      * @param entity
@@ -713,5 +713,18 @@ public class ERXEOAccessUtilities {
         }
         return entity;
     }
-}
 
+    /** Returns the EOEntity for the provided EOEnterpriseObject if one exists
+     * 
+     * @param eo the EOEnterpriseObject
+     * @return the EOEntity from the EOEnterpriseObject
+     */
+    public static EOEntity entityForEo(EOEnterpriseObject eo) {
+        EOClassDescription classDesc = eo.classDescription();
+        
+        if (classDesc instanceof EOEntityClassDescription)
+            return ((EOEntityClassDescription)classDesc).entity();
+        return null;
+    }
+
+}
