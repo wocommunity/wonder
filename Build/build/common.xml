@@ -96,7 +96,9 @@
                 <include name="**/*.css" />
             </wsresources>
         </woframework>
-
+        <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
+            <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
+        </exec>
         <delete dir="${build.temp.dir}" />
 
         <echo message="-------------------------------------" />
@@ -160,7 +162,9 @@
                 <include name="Library/Frameworks/Mysql*.framework"/>
             </frameworks>
         </woapplication>
-
+        <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
+            <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
+        </exec>
         <delete dir="${build.temp.dir}" />
 
         <echo message="-------------------------------------" />
@@ -241,12 +245,22 @@
     </target>
     
     <!-- ERJars -->
+    <!-- (ak) ERJars is handled separately because it needs to copy the compiler proxy files first -->
     <target name="ERJars.all">
-        <antcall target="framework" >
-            <param name="project.principal.class" value="" />
-            <param name="project.name" value="ERJars" />
-            <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJars" />
-        </antcall>
+        <property name="project.principal.class" value="" />
+        <property name="project.name" value="ERJars" />
+        <property name="project.dir" value="${wonder.root}/Common/Frameworks/ERJars" />
+        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+            <!--classpath refid="project.class.path" /-->
+        </taskdef>
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="" jarName="${project.name}">
+            <lib dir="${project.dir}/Libraries">
+                <include name="**/*.jar" />
+            </lib>
+            <resources dir="${project.dir}/Resources">
+                <include name="**/*.sh" />
+            </resources>
+        </woframework>
     </target>
     <target name="ERJars.clean">
         <antcall target="clean" >
