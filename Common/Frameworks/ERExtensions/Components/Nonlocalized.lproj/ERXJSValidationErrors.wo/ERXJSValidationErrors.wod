@@ -1,0 +1,7 @@
+Body1: WOBody {
+	onLoad = callback;
+}
+
+String1: WOString {
+	value = errors;
+}
