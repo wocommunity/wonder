@@ -51,6 +51,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 			log.debug ("Initializing Framework.");
 
 		String adminEmail = ERXProperties.stringForKey ("er.javamail.adminEmail");
+		if ((adminEmail == null) || (adminEmail.length () == 0))
+			throw new RuntimeException ("ERJavaMail: the property er.javamail.adminEmail is not specified!");
 		this.setAdminEmail (adminEmail);
 
 		boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
@@ -66,7 +68,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 		// Finish intialization
 		String smtpHost = ERXProperties.stringForKey ("er.javamail.smtpHost");
 		if ((smtpHost == null) || (smtpHost.length () == 0))
-			throw new RuntimeException ("You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
+			throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
 		Properties props = new Properties ();
         props.put ("mail.smtp.host", smtpHost);
 		this.setDefaultProperties (props);
@@ -104,7 +106,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	
     /** email address when centralizeMails == true <BR>
         Needed when debugging application so that mails are always sent to only one destination */
-    protected String _adminEmail = "camille@odaiko.com";
+    protected String _adminEmail;
 	public String adminEmail () {
 		return _adminEmail;
 	}
