@@ -205,6 +205,7 @@ public class ERMailUtils extends Object {
      */
     public static InternetAddress [] convertNSArrayToInternetAddresses (NSArray addrs)
         throws AddressException {
+            if( addrs == null ) return new InternetAddress[0];
         InternetAddress [] addrArray = new InternetAddress [addrs.count ()];
 
         Enumeration en = addrs.objectEnumerator ();
@@ -228,6 +229,7 @@ public class ERMailUtils extends Object {
      */
     public static NSArray convertInternetAddressesToNSArray (Address [] addressesArray)
         throws AddressException {
+            if( addressesArray == null) return NSArray.EmptyArray;
         NSMutableArray addresses = new NSMutableArray (addressesArray.length);
 
         for (int i = 0 ; i < addressesArray.length ; i++) {
