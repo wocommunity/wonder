@@ -453,7 +453,7 @@ public class ERXConfigurationManager {
             String osName=System.getProperty("os.name").toLowerCase();
             if (osName.indexOf("windows")!=-1) _operatingSystem=WindowsOperatingSystem;
             else if (osName.indexOf("solaris")!=-1) _operatingSystem=SolarisOperatingSystem;
-            else if (osName.indexOf("macos")!=-1) _operatingSystem=MacOSXOperatingSystem;
+            else if (osName.indexOf("macos")!=-1 || osName.indexOf("mac os")!=-1) _operatingSystem=MacOSXOperatingSystem;
             else _operatingSystem=UnknownOperatingSystem;
         }
         return _operatingSystem;
