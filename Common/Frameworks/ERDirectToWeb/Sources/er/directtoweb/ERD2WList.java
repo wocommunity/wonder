@@ -16,7 +16,7 @@ import er.extensions.*;
 public class ERD2WList extends ERDCustomEditComponent {
 
     /* logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDList.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WList.class);
 
     /** caches the list */
     protected NSArray list;
