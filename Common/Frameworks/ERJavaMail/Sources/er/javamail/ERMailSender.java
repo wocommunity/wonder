@@ -194,6 +194,8 @@ public class ERMailSender extends Thread {
                 log.error ("An unexpected error occured while sending message: " + message
                            + " mime message: " + aMessage + " sending to: " +  aMessage.getAllRecipients ()
                            + " transport: " + transport, t);
+                // Need to let someone know that something very, very bad happened
+                throw new NSForwardException(t);
             } finally {
                 stats.incrementMailCount ();
                 if (exception != null)
