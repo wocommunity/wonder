@@ -25,7 +25,7 @@ public class ERXSession extends WOSession {
     public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
     public static final String SessionWillSleepNotification = "SessionWillSleepNotification";
     public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
-    
+
     private static NSMutableDictionary _classAdditions = new NSMutableDictionary();
     public static NSDictionary sessionAdditions() { return _classAdditions; }
     public static void registerSessionAddition(ERXSessionAdditionInterface addition) {
@@ -35,7 +35,7 @@ public class ERXSession extends WOSession {
     public ERXSessionAdditionInterface additionForName(String name) {
         return (ERXSessionAdditionInterface)_classAdditions.objectForKey(name);
     }
-    
+
     // Useful for registering a session addition for multiple names.
     public static void registerSessionAdditionForName(ERXSessionAdditionInterface addition, String name) {
         if (addition != null && name != null) {
@@ -47,30 +47,32 @@ public class ERXSession extends WOSession {
             cat.debug("Registered session addition: " + addition + " for name: " + name);
         } else {
             cat.error("Attempting to register null session addition or under null name");
-        }        
+        }
     }
-    
+
+    public static class Observer {
+        public void sessionWillAwake(NSNotification n) {
+            ERXSession.sessionWillAwake((ERXSession)n.object());
+        }
+        public void sessionWillSleep(NSNotification n) {
+            ERXSession.sessionWillSleep((ERXSession)n.object());
+        }
+    }
+
     private static boolean registered = false;
     public static void registerNotifications() {
         if (!registered) {
-                Object observer=new Object() {
-                    public void sessionWillAwake(NSNotification n) {
-                        ERXSession.sessionWillAwake((ERXSession)n.object());
-                    }
-                    public void sessionWillSleep(NSNotification n) {
-                        ERXSession.sessionWillSleep((ERXSession)n.object());
-                    }
-                };
-                ERXRetainer.retain(observer); // has to be retained on the objC side!!
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("sessionWillAwake", ERXConstant.NotificationClassArray),
-                                                                 ERXSession.SessionWillAwakeNotification,
-                                                                 null);
+            Observer observer = new Observer();
+            ERXRetainer.retain(observer); // has to be retained on the objC side!!
+            NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                             new NSSelector("sessionWillAwake", ERXConstant.NotificationClassArray),
+                                                             ERXSession.SessionWillAwakeNotification,
+                                                             null);
 
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("sessionWillSleep", ERXConstant.NotificationClassArray),
-                                                                 ERXSession.SessionWillSleepNotification,
-                                                                 null);
+            NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                             new NSSelector("sessionWillSleep", ERXConstant.NotificationClassArray),
+                                                             ERXSession.SessionWillSleepNotification,
+                                                             null);
         }
     }
 
@@ -94,7 +96,7 @@ public class ERXSession extends WOSession {
 
     // Used to bind up things in the UI, ie session.additions.someAddition.foo might return a WOComponent.
     public NSDictionary additions() { return _classAdditions; }
-    
+
     private boolean _javaScriptEnabled=true; // most people have JS by now
     private boolean _javaScriptInitialized=false;
     private String _browser;
@@ -110,7 +112,7 @@ public class ERXSession extends WOSession {
     protected boolean isVersion3;
     protected String platform;
     protected String version;
-    
+
     protected ERXNavigation _navigation;
 
     // FIXME this dictionary can be used for debugging -- e.g. put repetitions in components
@@ -126,7 +128,7 @@ public class ERXSession extends WOSession {
     }
 
     // Instance Methods
-    
+
     public ERXSession() {
         // Setting the default editing context delegate
         ERXExtensions.setDefaultDelegate(defaultEditingContext());
@@ -137,7 +139,7 @@ public class ERXSession extends WOSession {
     public boolean javaScriptEnabled() {
         return _javaScriptEnabled;
     }
-    
+
     public void setJavaScriptEnabled(boolean newValue) {
         _javaScriptEnabled=newValue;
         _javaScriptInitialized=true;
@@ -154,13 +156,13 @@ public class ERXSession extends WOSession {
     }
 
     public boolean browserSupportsIFrames() { return browserIsIE(); }
-    
+
     public void awake() {
         // FIXME: this probably ought to be replaced for deployment
         // by a few well chosen entry points
         // too early in ExtendedSession.ExtendedSession
         super.awake();
-	ERXExtensions.setSession(this);
+        ERXExtensions.setSession(this);
         NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
         WORequest request=context()!=null ? context().request() : null;
         if (_browser==null && request!=null) {
@@ -210,7 +212,7 @@ public class ERXSession extends WOSession {
                 }
             }
             if (_browser==null) _browser="Unknown";
-            if (cat.isDebugEnabled()) cat.debug("Browser="+_browser+" platform="+platform+" Version="+version);            
+            if (cat.isDebugEnabled()) cat.debug("Browser="+_browser+" platform="+platform+" Version="+version);
         }
         if (request!=null && cat.isDebugEnabled()) cat.debug("Form values "+request.formValues());
         if (request!=null && request.formValueForKey("javaScript")!=null) {
@@ -227,7 +229,7 @@ public class ERXSession extends WOSession {
             }
         }
     }
-    
+
     // Subclasses override this method to provide their own navigation abilities
     public ERXNavigation createNavigation() { return new ERXNavigation(); }
     public ERXNavigation erxNavigation() { return _navigation; }
@@ -239,17 +241,17 @@ public class ERXSession extends WOSession {
     public void sleep() {
         NSNotificationCenter.defaultCenter().postNotification(SessionWillSleepNotification, this);
         super.sleep();
-	ERXExtensions.setSession(null);
+        ERXExtensions.setSession(null);
     }
 
     /*
-     * Backtrack detection - Pulled from David Neuman's wonderful security framework. 
+     * Backtrack detection - Pulled from David Neuman's wonderful security framework.
      */
 
     public boolean didBackTrack = false;
     public boolean lastActionWasDA = false;
     /**
-     * Utility method that gets the context ID string
+        * Utility method that gets the context ID string
      * from the passed in request
      */
     public String requestsContextID(WORequest aRequest){
@@ -264,7 +266,7 @@ public class ERXSession extends WOSession {
     }
 
     /**
-     * Method inspects the passed in request to see if
+        * Method inspects the passed in request to see if
      * the user backtracked. If the context ID for the request is 2 clicks
      * less than the context ID for the current WOContext, we know
      * the backtracked.
@@ -291,7 +293,7 @@ public class ERXSession extends WOSession {
     }
 
     /**
-     * Overrides the ComponentAction handler to set the didBackTrack
+        * Overrides the ComponentAction handler to set the didBackTrack
      * flag
      */
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext){

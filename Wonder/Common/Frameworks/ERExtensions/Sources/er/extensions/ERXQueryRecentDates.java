@@ -33,15 +33,24 @@ public class ERXQueryRecentDates extends WOComponent {
         "3 months",
         "6 months"
     };
-    private final static Integer[] indices={ERXConstant.ZeroInteger, ERXConstant.OneInteger, ERXConstant.TwoInteger, ERXConstant.integerForInt(3), ERXConstant.integerForInt(4), ERXConstant.integerForInt(5), ERXConstant.integerForInt(6) };
-    final NSArray indexes=new NSArray(indices);
-    Integer dateItem;
+    private final static Integer[] indices={
+        ERXConstant.ZeroInteger,
+        ERXConstant.OneInteger,
+        ERXConstant.TwoInteger,
+        ERXConstant.integerForInt(3),
+        ERXConstant.integerForInt(4),
+        ERXConstant.integerForInt(5),
+        ERXConstant.integerForInt(6) };
+    private static NSArray indexes=new NSArray(indices);
+
+    public NSArray indexes() { return indexes; }
+    public Integer dateItem;
 
     public String displayString() {
         return daysAgoString[dateItem.intValue()];
     }
 
-    Object date() {
+    public Object date() {
         int found=0;
         NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMin().valueForKey(key);
         if (dateFromQueryMin!=null) {
@@ -66,7 +75,7 @@ public class ERXQueryRecentDates extends WOComponent {
         return indexes.objectAtIndex(found);
     }
 
-    void setDate(Integer dateIndex) {
+    public void setDate(Integer dateIndex) {
         NSTimestamp now=new NSTimestamp();
         int howManyDaysAgo=dateIndex!=null ? daysAgoArray[dateIndex.intValue()] : 0;
         if(howManyDaysAgo==0)
