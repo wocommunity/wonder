@@ -5311,6 +5311,24 @@
         {
             author = 5; 
             class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useTabImages; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useTabSectionImages; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
