@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 
 <project name="generic" default="all" basedir="../..">
-
     <target name="usage" depends="global.properties">
 	<echo>
 
-There are three ways to use this script:
+There are many ways to use this script:
 
 1) from the command line to build the whole of WONDER
 		all    	--> create in ${build.root}
@@ -15,9 +14,7 @@ There are three ways to use this script:
 
 2) to have clickable targets in PBX for specific parts of WONDER, for example
         ant -emacs -f ~/Wonder/Build/build/generic.xml \
-            -Dproject.name=ERExtensions \
-            -Dproject.type=framework \
-            generic.$ACTION
+            ERExtensions.$ACTION
 
 3) to build your own projects that have the same layout as a wonder project
         ant -emacs -f ~/Wonder/Build/build/generic.xml  \
@@ -40,13 +37,24 @@ There are three ways to use this script:
 		-Duse.additional.framework.[1-7]=SomePattern[1-7]\* \
 		generic.MODE
 
-	Leave out any option you don't want. Valid entries MODEs are:
+    or shorter:
+    
+        ant -emacs -f ~/Wonder/Build/build/generic.xml  \
+		-propertyfile=build.properties
+                generic.MODE
+    
+    where "build.properties" is a file with the options above in
+    java-property format. 
+
+    Leave out any option you don't want. Valid entries MODEs are:
+
 		all    	--> create in ${build.root}
 		install --> copy to ${wo.localroot}
 		web     --> copy to ${wo.server.root}
 		clean   --> remove .classes, .framework or .woa
 
-	For MODE "install", "clean" and "web" it is sufficient to call:
+    For MODE "install", "clean" and "web" it is sufficient to call:
+
         ant -emacs -f ~/Wonder/Build/build/generic.xml  \
 		-Dproject.type=application \
 		-Dproject.name=SomeProject \
