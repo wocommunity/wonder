@@ -4,8 +4,11 @@
 ./Sources/er/extensions/EOGenericRecordClazz.java:er.extensions
 ./Sources/er/extensions/ERXApplication.java:er.extensions
 ./Sources/er/extensions/ERXArrayUtilities.java:er.extensions
+./Sources/er/extensions/ERXBasicBrowser.java:er.extensions
 ./Sources/er/extensions/ERXBatchNavigationBar.java:er.extensions
 ./Sources/er/extensions/ERXBatchNavigationBarInForm.java:er.extensions
+./Sources/er/extensions/ERXBrowser.java:er.extensions
+./Sources/er/extensions/ERXBrowserFactory.java:er.extensions
 ./Sources/er/extensions/ERXCheckboxMatrix.java:er.extensions
 ./Sources/er/extensions/ERXCloneableThreadLocal.java:er.extensions
 ./Sources/er/extensions/ERXCollapsibleComponentContent.java:er.extensions
@@ -78,6 +81,7 @@
 ./Sources/er/extensions/ERXMessageEncoding.java:er.extensions
 ./Sources/er/extensions/ERXModelGroup.java:er.extensions
 ./Sources/er/extensions/ERXMultiKey.java:er.extensions
+./Sources/er/extensions/ERXMutableInteger.java:er.extensions
 ./Sources/er/extensions/ERXMutableUserInfoHolderInterface.java:er.extensions
 ./Sources/er/extensions/ERXNavigation.java:er.extensions
 ./Sources/er/extensions/ERXNonNullConditional.java:er.extensions
@@ -99,8 +103,6 @@
 ./Sources/er/extensions/ERXRequest.java:er.extensions
 ./Sources/er/extensions/ERXRetainer.java:er.extensions
 ./Sources/er/extensions/ERXSession.java:er.extensions
-./Sources/er/extensions/ERXSessionAddition.java:er.extensions
-./Sources/er/extensions/ERXSessionAdditionInterface.java:er.extensions
 ./Sources/er/extensions/ERXSharedEOLoader.java:er.extensions
 ./Sources/er/extensions/ERXSimpleHTMLFormatter.java:er.extensions
 ./Sources/er/extensions/ERXSimpleTemplateParser.java:er.extensions

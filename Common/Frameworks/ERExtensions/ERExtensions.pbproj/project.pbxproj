@@ -420,6 +420,10 @@
 				F69DF14002C76B3F01AD0D07,
 				F57D5EAE02E538B901000102,
 				9DFF48B502E7404E10CF0CA3,
+				F64DCF6502EF3A4001257492,
+				F64DCF6602EF3A4001257492,
+				F64DCF6702EF3A4001257492,
+				F64DCF6802EF3A4001257492,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -5763,6 +5767,54 @@
 //F62
 //F63
 //F64
+		F64DCF6102EF3A4001257492 = {
+			isa = PBXFileReference;
+			name = ERXBrowserFactory.java;
+			path = er/extensions/ERXBrowserFactory.java;
+			refType = 4;
+		};
+		F64DCF6202EF3A4001257492 = {
+			isa = PBXFileReference;
+			name = ERXBrowser.java;
+			path = er/extensions/ERXBrowser.java;
+			refType = 4;
+		};
+		F64DCF6302EF3A4001257492 = {
+			isa = PBXFileReference;
+			name = ERXMutableInteger.java;
+			path = er/extensions/ERXMutableInteger.java;
+			refType = 4;
+		};
+		F64DCF6402EF3A4001257492 = {
+			isa = PBXFileReference;
+			name = ERXBasicBrowser.java;
+			path = er/extensions/ERXBasicBrowser.java;
+			refType = 4;
+		};
+		F64DCF6502EF3A4001257492 = {
+			fileRef = F64DCF6102EF3A4001257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F64DCF6602EF3A4001257492 = {
+			fileRef = F64DCF6202EF3A4001257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F64DCF6702EF3A4001257492 = {
+			fileRef = F64DCF6302EF3A4001257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F64DCF6802EF3A4001257492 = {
+			fileRef = F64DCF6402EF3A4001257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F69DF13F02C76B3F01AD0D07 = {
 			isa = PBXFileReference;
 			name = ERXModelGroup.java;
@@ -5900,6 +5952,7 @@
 				F59C57B302C4565701000102,
 				F59C57B502C4565701000102,
 				F59C57C102C4565701000102,
+				F64DCF6302EF3A4001257492,
 				F59C57D002C4565701000102,
 				F59C57D802C4565701000102,
 				F59C57DD02C4565701000102,
@@ -6458,6 +6511,9 @@
 		F6E798CD02C8799401AD0D07 = {
 			children = (
 				F59C577802C4565601000102,
+				F64DCF6402EF3A4001257492,
+				F64DCF6202EF3A4001257492,
+				F64DCF6102EF3A4001257492,
 				F59C578902C4565701000102,
 				F59C57C002C4565701000102,
 				F59C57C202C4565701000102,
