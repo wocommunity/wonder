@@ -132,7 +132,7 @@ public class ERXSimpleTemplateParser {
      * delimeter with the values found in object and otherObject.
      * It first looks for a value in object, and then in otherObject
      * if the key is not found in object. Therefore, otherObject is
-     * a good place to store default values while other object is a
+     * a good place to store default values while object is a
      * good place to override default values. 
      * <p>
      * When the value is not found in both object and otherObject, 
@@ -182,18 +182,26 @@ public class ERXSimpleTemplateParser {
                     obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element); 
                     // For just in case the above doesn't throw an exception when the 
                     // key is not defined. (NSDictionary doesn't seem to throw the exception.)
-                    if (obj == null  &&  otherObject != null)
+                    if (obj == null  &&  otherObject != null) {
                         throw new NSKeyValueCoding.UnknownKeyException("The key is not defined in the object.", null, element);
-               } catch (Throwable t) {
-                    try {
-                        if (otherObject != null) {
-                            obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(otherObject, element);
-                        } else {
-                            throw new RuntimeException("Could not find a value for \"" + element + "\" of a template in either the object or extra data: " + t.getMessage());
-                        }
-                    } catch (Throwable t1) {
-                        throw new RuntimeException("An exception occured while parsing element, " + element + ", of template, " + template + ": " + t1.getMessage());
                     }
+                } catch (NSKeyValueCoding.UnknownKeyException t) {
+                    if (otherObject != null) {
+                    	try {
+                    		obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(otherObject, element);
+                    	} catch (NSKeyValueCoding.UnknownKeyException t1) {
+                    		if (log.isDebugEnabled()) {
+                    			log.debug("Could not find a value for \"" + element + "\" of template, \"" + template + "\" in either the object or extra data: " + t1.getMessage());
+                    		}
+                    		obj = null;
+                    	} catch (Throwable t1) {
+                    		throw new NSForwardException(t, "An exception occured while parsing element, " + element + ", of template, \"" + template + "\": " + t1.getMessage());
+                    	}
+                    } else {
+                    	obj = null;
+                    }
+                } catch (Throwable t) {
+                    throw new NSForwardException(t, "An exception occured while parsing element, " + element + ", of template, \"" + template + "\": " + t.getMessage());
                 }
                 buffer.append(obj == null ? _undefinedKeyLabel : obj.toString());                
                 deriveElement = false;

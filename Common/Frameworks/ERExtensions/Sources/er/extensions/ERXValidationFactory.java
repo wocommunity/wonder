@@ -368,9 +368,21 @@ public class ERXValidationFactory {
             message = ((ExceptionDelegateInterface)erv.delegate()).messageForException(erv);
         }
         if (message == null) {
-            message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(templateForException(erv),
-                                                                                       templateDelimiter(),
-                                                                                       erv);
+        	Object context = erv.context();
+        	// AK: as the exception doesn«t have a very special idea in how the message should get 
+        	// formatted when gets displayed, we ask the context *first* before asking the exception.
+        	if(context == erv || context == null) {
+        		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
+        				templateForException(erv),
+						templateDelimiter(),
+						erv);
+        	} else {
+        		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
+        				templateForException(erv), 
+						templateDelimiter(),
+						context,
+						erv);
+        	}
         }
         return message;
     }
