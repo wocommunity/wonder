@@ -1,5 +1,5 @@
 <WEBOBJECT NAME=TextArea></WEBOBJECT>
-<script language="JavaScript1.2"><WEBOBJECT NAME=Conditional1>
+<WEBOBJECT NAME=Conditional1><script language="JavaScript1.2">
 var DECMD_BOLD =                      5000;
 var DECMD_COPY =                      5002;
 var DECMD_CUT =                       5003;
@@ -198,7 +198,7 @@ function dhtmlGetPos(obj)
 function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 {
 	if((navigator.appName.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Explorer") >= 0) 
-		&& navigator.appVersion.indexOf("Mac") == -1 || 1)
+		&& navigator.appVersion.indexOf("Mac") == -1)
  	{
 	 	var dhtmlName = varName + "_dhtml";
 	 	var inform = dhtmlGetFormByName(formName);
@@ -254,6 +254,8 @@ function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 		inform.onSubmit = inform.onsubmit = new Function("{dhtmlSubmit(this);};");
 	}
 }
-</WEBOBJECT>
-dhtmlCreate("<WEBOBJECT NAME=FormName/>","<WEBOBJECT NAME=VarName/>","<WEBOBJECT NAME=BaseUrl/>",1);
+</script><div style="position:absolute;visibility:none;">
+<webobject name=Image1/><webobject name=Image2/><webobject name=Image3/><webobject name=Image4/><webobject name=Image5/><webobject name=Image6/>
+</div></WEBOBJECT>
+<script language="JavaScript1.2">dhtmlCreate("<WEBOBJECT NAME=FormName/>","<WEBOBJECT NAME=VarName/>","<WEBOBJECT NAME=BaseUrl/>",1);
 </script>
