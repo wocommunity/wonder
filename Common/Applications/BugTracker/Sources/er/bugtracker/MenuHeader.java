@@ -48,7 +48,7 @@ public class MenuHeader extends WOComponent {
     }
 
     public boolean isEntityReadOnly(EOEntity e) {
-        return _entityContext.valueForKey("readOnly")==D2WModel.One || e.isReadOnly() || D2WUtils.readOnlyEntityNames(_entityContext).containsObject(e.name());
+        return ERXValueUtilities.booleanValue(_entityContext.valueForKey("readOnly")) || e.isReadOnly() || D2WUtils.readOnlyEntityNames(_entityContext).containsObject(e.name());
       }
     
     public WOComponent findEntityAction() {
@@ -67,35 +67,36 @@ public class MenuHeader extends WOComponent {
             nextPage=(WOComponent)api;
         } else {
             EOEditingContext peerContext=ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
-            EOEnterpriseObject aNewEO=(EOEnterpriseObject)aClassDesc.createInstanceWithEditingContext(peerContext, null);
-            peerContext.insertObject(aNewEO);
+            peerContext.lock();
             try {
+                EOEnterpriseObject aNewEO=(EOEnterpriseObject)aClassDesc.createInstanceWithEditingContext(peerContext, null);
+                peerContext.insertObject(aNewEO);
                 if (_manipulatedEntityName.equals("TestItem")) {
                     epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewTestItem",session());
 
-                    EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(),
-                                                                                   ((Session)session()).getUser());
-                    aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"owner");                    
-                    }else if (_manipulatedEntityName.equals("Bug")) {
-                        epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewBug",session());
-                        EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(),
-                                                                                       ((Session)session()).getUser());
-                        aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"originator");
-                    }else if (_manipulatedEntityName.equals("Requirement")) {
-                            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewRequirement",session());
-                            EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(),
-                                                                                           ((Session)session()).getUser());
-                            aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"originator"); }
-                    else
+                    EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(), ((Session)session()).getUser());
+                    aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"owner");
+                } else if (_manipulatedEntityName.equals("Bug")) {
+                    epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewBug",session());
+                    EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(), ((Session)session()).getUser());
+                    aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"originator");
+                } else if (_manipulatedEntityName.equals("Requirement")) {
+                    epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewRequirement",session());
+                    EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(), ((Session)session()).getUser());
+                    aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"originator");
+                } else {
                     epi=D2W.factory().editPageForEntityNamed(_manipulatedEntityName, session());
-                    epi.setObject(aNewEO);
-                    epi.setNextPage(context().page());
-                    nextPage=(WOComponent)epi;
+                }
+                epi.setObject(aNewEO);
+                epi.setNextPage(context().page());
+                nextPage=(WOComponent)epi;
             } catch (IllegalArgumentException e) {
                 ErrorPageInterface epf=D2W.factory().errorPage(session());
                 epf.setMessage(e.toString());
                 epf.setNextPage(context().page());
                 nextPage=(WOComponent)epf;
+            } finally {
+                peerContext.unlock();
             }
         }
         return nextPage;
@@ -178,9 +179,7 @@ public class MenuHeader extends WOComponent {
         WODisplayGroup dg=(WODisplayGroup)((WOComponent)qpi).valueForKey("displayGroup");
         Release defaultRelease = Release.clazz.defaultRelease(sender.session().defaultEditingContext());
         if (defaultRelease!=null) dg.queryMatch().setObjectForKey(defaultRelease,"targetRelease");
-        dg.setQualifier(new EOKeyValueQualifier("state",
-                                                EOQualifier.QualifierOperatorEqual,
-                                                State.ANALYZE)); // picked up in ERQueryPage
+        dg.setQualifier(new EOKeyValueQualifier("state", EOQualifier.QualifierOperatorEqual, State.ANALYZE)); // picked up in ERQueryPage
 
         qpi.setNextPageDelegate(new NextPageDelegate() {
             public WOComponent nextPage(WOComponent senders) {

@@ -11,11 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import er.directtoweb.*;
 import java.util.*;
 import er.extensions.*;
 
-public class DirectAction extends ERXDirectAction {
+public class DirectAction extends ERD2WDirectAction {
 
     public DirectAction(WORequest aRequest) {
         super(aRequest);
@@ -24,17 +24,22 @@ public class DirectAction extends ERXDirectAction {
     private static EOEditingContext _pingEditingContext;
     protected static EOEditingContext pingEditingContext() {
         if (_pingEditingContext == null)
-            _pingEditingContext = ERXExtensions.newEditingContext();
+            _pingEditingContext = ERXEC.newEditingContext();
         return _pingEditingContext;
     }
     public WOComponent pingAction() {
         WOComponent result = null;
+        EOEditingContext ec = pingEditingContext();
+        ec.lock();
         try{
-            EOUtilities.rawRowsForSQL(pingEditingContext(),
+            EOUtilities.rawRowsForSQL(ec,
                                       "bug",
                                       "select count(*) from PRIORITY");
             result=pageWithName("ERXSuccess");
-        } catch(Exception e) {}
+        } catch(Exception e) {
+        } finally {
+            ec.unlock();
+        }
         return result;
     }
 
@@ -48,6 +53,7 @@ public class DirectAction extends ERXDirectAction {
             String clearPrimaryKey = ERXCrypto.blowfishDecode(encryptedPrimaryKey);
             if (clearPrimaryKey!=null) {
                 clearPrimaryKey = clearPrimaryKey.trim();
+                ec.lock();
                 try{
                     Integer clearPrimaryKeyInt = new Integer(clearPrimaryKey);
                     NSDictionary dictionary = new NSDictionary(clearPrimaryKeyInt, new String("id"));
@@ -56,6 +62,8 @@ public class DirectAction extends ERXDirectAction {
                                                                     dictionary);
                 } catch(NumberFormatException NFe){
                     //WOApplication.application().logString(NFe.toString());
+                } finally {
+                    ec.unlock();
                 }
             }
         }
@@ -81,9 +89,10 @@ public class DirectAction extends ERXDirectAction {
             if ((numberFromRequest == null) || (numberFromRequest.equals(""))) {
                 result = errorPage("Invalid Request", session);
             } else {
+                EOEditingContext ec = session.defaultEditingContext();
+                ec.lock();
                 try {
                     Integer bugId = new Integer(numberFromRequest);
-                    EOEditingContext ec = session.defaultEditingContext();
                     NSArray bugs = EOUtilities.objectsMatchingKeyAndValue(ec, "Bug", "bugid", bugId);
                     EOEnterpriseObject bug = bugs.count() > 0 ? (EOEnterpriseObject)bugs.objectAtIndex(0) : null;
                     if (bug == null) {
@@ -98,6 +107,8 @@ public class DirectAction extends ERXDirectAction {
                     result = errorPage("Invalid Request", session);
                 } catch (Exception e) {
                     result = errorPage("Bug Not Found", session);
+                } finally {
+                    ec.unlock();
                 }
             }
             if (result == null) {
@@ -113,7 +124,7 @@ public class DirectAction extends ERXDirectAction {
 
     private WOComponent entranceTemplate(ERXUtilities.Callback successComponent) {
         WOComponent result=null;
-        People u= userFromRequest(request(),session().defaultEditingContext());
+        People u = userFromRequest(request(),session().defaultEditingContext());
         if (u!=null) {
             ((Session)session()).setUser(u);
             return (WOComponent)successComponent.invoke(session());
@@ -151,16 +162,21 @@ public class DirectAction extends ERXDirectAction {
         return redirectPage;
     }
 
+    //CHECKME: this doesn't make sense? Where is "BugsToTransfert" and what is it?
     public WOComponent transfertDescriptionAction(){
-        EOEditingContext ec = ERXExtensions.newEditingContext();
-        NSArray bugs = EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug",
-                                                                            "BugsToTransfert", null);
-        for(Enumeration e = bugs.objectEnumerator(); e.hasMoreElements();){
-            Bug bug = (Bug)e.nextElement();
-            System.out.println("bug = "+bug.valueForKey("subject"));
-            String description = (String)bug.valueForKey("textDescription");
-            bug.takeValueForKey(description, "textDescription");
-            ec.saveChanges();
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            NSArray bugs = EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug", "BugsToTransfert", null);
+            for(Enumeration e = bugs.objectEnumerator(); e.hasMoreElements();){
+                Bug bug = (Bug)e.nextElement();
+                System.out.println("bug = "+bug.valueForKey("subject"));
+                String description = (String)bug.valueForKey("textDescription");
+                bug.takeValueForKey(description, "textDescription");
+                ec.saveChanges();
+            }
+        } finally {
+            ec.unlock();
         }
         return null;
     }
