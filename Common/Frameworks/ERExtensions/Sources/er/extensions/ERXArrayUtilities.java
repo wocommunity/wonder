@@ -473,7 +473,11 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            return flatten(array);
+            array = flatten(array);
+            if(keypath != null && keypath.length() > 0) {
+                array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+            }
+            return array;
         }
     }
 
@@ -560,7 +564,11 @@ public class ERXArrayUtilities extends Object {
          */
         public Object compute(NSArray array, String keypath) {
 	    synchronized (array) {
-		return arrayWithoutDuplicates(array);
+                array = arrayWithoutDuplicates(array);
+                if(keypath != null && keypath.length() > 0) {
+                    array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+                }
+                return array;
 	    }
         }
     }
