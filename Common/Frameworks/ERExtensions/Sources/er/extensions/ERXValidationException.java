@@ -20,6 +20,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     // Validation Exception Types
     public static final String NullPropertyException = "NullPropertyException";
     public static final String InvalidNumberException = "InvalidNumberException";
+    public static final String MandatoryToOneRelationshipException = "MandatoryToOneRelationshipException";
     public static final String MandatoryRelationshipException = "MandatoryRelationshipException";
     public static final String ObjectRemovalException = "ObjectRemovalException";
     public static final String ObjectsRemovalException = "ObjectsRemovalException";

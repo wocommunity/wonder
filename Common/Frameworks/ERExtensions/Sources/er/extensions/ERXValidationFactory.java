@@ -59,6 +59,7 @@ public class ERXValidationFactory {
         Object keys[] = {				// MESSAGE LIST:
             "to be null", 				// "The 'xxxxx' property is not allowed to be NULL"
             "Invalid Number", 				// "Invalid Number"
+            "must have a", 				// "The owner property of Bug must have a People assigned "
             "must have at least one",			// "The exercises property of ERPCompanyRole must have at least one ERPExercise"
             "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
             "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
@@ -67,6 +68,7 @@ public class ERXValidationFactory {
         Object objects[] = {
             ERXValidationException.NullPropertyException,
             ERXValidationException.InvalidNumberException,
+            ERXValidationException.MandatoryToOneRelationshipException,
             ERXValidationException.MandatoryRelationshipException,
             ERXValidationException.ObjectRemovalException,
             ERXValidationException.ObjectsRemovalException,
