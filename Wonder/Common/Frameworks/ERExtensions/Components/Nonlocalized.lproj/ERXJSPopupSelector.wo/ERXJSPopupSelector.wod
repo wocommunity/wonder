@@ -6,7 +6,7 @@ HasItem: ERXNonNullConditional {
 }
 
 Hyperlink1: WOHyperlink {
-	href = "";
+	href = "#";
 	onclick = onClickString;
 }
 
