@@ -26,7 +26,6 @@ import er.extensions.*;
  * @binding key
  * @binding numberOfColumns
  * @binding object
- * @binding showEditButton" defaults="Boolean
  */
 
 public class ERDEditListButton extends ERDCustomEditComponent {
