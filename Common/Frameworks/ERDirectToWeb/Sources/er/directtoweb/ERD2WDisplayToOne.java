@@ -8,10 +8,13 @@ package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+
+import er.extensions.ERXValueUtilities;
 
 /**
  * Same as original except allows display of noSelectionString if relationship is null.<br />
- * 
+ * Also, links are disabled if no object exists.
  */
 
 public class ERD2WDisplayToOne extends D2WDisplayToOne {
@@ -21,5 +24,9 @@ public class ERD2WDisplayToOne extends D2WDisplayToOne {
     public Object toOneDescription() {
         Object description = super.toOneDescription();
         return description != null ? description : d2wContext().valueForKey("noSelectionString");
+    }
+    
+    public boolean isDisabled() {
+        return objectPropertyValue() == null || ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("disabled"), false);
     }
 }
