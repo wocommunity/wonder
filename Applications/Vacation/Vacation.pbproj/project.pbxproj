@@ -674,20 +674,8 @@
 			path = Resources/Properties;
 			refType = 4;
 		};
-		412B651D041D30E200000103 = {
-			isa = PBXFileReference;
-			name = Vacation.eomodeld;
-			path = Resources/Vacation.eomodeld;
-			refType = 4;
-		};
 		412B651E041D30E200000103 = {
 			fileRef = 412B651C041D30E200000103;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		412B651F041D30E200000103 = {
-			fileRef = 412B651D041D30E200000103;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -810,6 +798,18 @@
 //D72
 //D73
 //D74
+		D7BE005C0427247800000164 = {
+			isa = PBXFileReference;
+			name = Vacation.eomodeld;
+			path = Resources/Vacation.eomodeld;
+			refType = 4;
+		};
+		D7BE005D0427247800000164 = {
+			fileRef = D7BE005C0427247800000164;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		D7FECE940425403600A31932 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -818,6 +818,18 @@
 		};
 		D7FECE950425403600A31932 = {
 			fileRef = D7FECE940425403600A31932;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D7FECF360425438100A31932 = {
+			isa = PBXFrameworkReference;
+			name = UWComponents.framework;
+			path = /Library/Frameworks/UWComponents.framework;
+			refType = 0;
+		};
+		D7FECF370425438100A31932 = {
+			fileRef = D7FECF360425438100A31932;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -832,17 +844,6 @@
 //F52
 //F53
 //F54
-		F574892202B8F24B01A318C2 = {
-			isa = PBXFrameworkReference;
-			path = UWComponents.framework;
-			refType = 3;
-		};
-		F574892302B8F24B01A318C2 = {
-			fileRef = F574892202B8F24B01A318C2;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5D2077502B17BE101A318C2 = {
 			children = (
 				412B6455041D30A500000103,
@@ -1092,13 +1093,13 @@
 				412B6453041D30A200000103,
 				412B6454041D30A200000103,
 				412B651E041D30E200000103,
-				412B651F041D30E200000103,
 				412B6526041D30FA00000103,
 				412B6527041D30FA00000103,
 				412B6528041D30FA00000103,
 				412B6529041D30FA00000103,
 				412B652A041D30FA00000103,
 				412B652B041D30FA00000103,
+				D7BE005D0427247800000164,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1146,7 +1147,7 @@
 				F5D2083E02B17BE101A318C2,
 				F5D2084102B17BE101A318C2,
 				F5D2084402B17BE101A318C2,
-				F574892302B8F24B01A318C2,
+				D7FECF370425438100A31932,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1417,7 +1418,7 @@
 		F5D2080F02B17BE101A318C2 = {
 			children = (
 				412B651C041D30E200000103,
-				412B651D041D30E200000103,
+				D7BE005C0427247800000164,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -1445,7 +1446,7 @@
 				F5D2083D02B17BE101A318C2,
 				F5D2084002B17BE101A318C2,
 				F5D2084302B17BE101A318C2,
-				F574892202B8F24B01A318C2,
+				D7FECF360425438100A31932,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
