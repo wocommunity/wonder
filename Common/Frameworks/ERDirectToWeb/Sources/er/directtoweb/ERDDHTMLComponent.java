@@ -27,12 +27,14 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
     }
 
     public void reset() {
+        super.reset();
         varName = null;
     }
     
     public String varName()  {
 	if(varName == null) {
 	    varName = ERXExtensions.replaceStringByStringInString("-", "_", "dhtml-" + context().elementID().hashCode() + "-" + key());
+	    varName = ERXExtensions.replaceStringByStringInString(".", "_", varName);
 	    cat.debug(varName);
 	}
 	return varName;

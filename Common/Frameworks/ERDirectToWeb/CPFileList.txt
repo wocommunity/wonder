@@ -1,6 +1,3 @@
-./D2WPick.java:er.directtoweb
-./DelayedComputingKeyValueAssignment.java:er.directtoweb
-./ERDLocalizedAssignment.java:er.directtoweb
 ./ERD2WCalendarPage.java:er.directtoweb
 ./ERD2WCompactInspectPageTemplate.java:er.directtoweb
 ./ERD2WCompactListPageTemplate.java:er.directtoweb
@@ -47,6 +44,7 @@
 ./ERD2WGroupingListPageTemplate.java:er.directtoweb
 ./ERD2WGroupingListXMLPageTemplate.java:er.directtoweb
 ./ERD2WGroupingPrinterFriendlyListPageTemplate.java:er.directtoweb
+./ERD2WInspect.java:er.directtoweb
 ./ERD2WInspectPage.java:er.directtoweb
 ./ERD2WInspectPageTemplate.java:er.directtoweb
 ./ERD2WKeyMapper.java:er.directtoweb
@@ -110,6 +108,7 @@
 ./ERDDelayedNonNullConditionalAssignment.java:er.directtoweb
 ./ERDDelayedRuleAssignment.java:er.directtoweb
 ./ERDDeletionDelegate.java:er.directtoweb
+./ERDDHTMLComponent.java:er.directtoweb
 ./ERDDisplayImageIfExists.java:er.directtoweb
 ./ERDDisplayMailTo.java:er.directtoweb
 ./ERDDisplayNumberWithUnit.java:er.directtoweb
@@ -140,6 +139,9 @@
 ./ERDList.java:er.directtoweb
 ./ERDListOrganizer.java:er.directtoweb
 ./ERDListPicker.java:er.directtoweb
+./ERDLocalizableAssignmentInterface.java:er.directtoweb
+./ERDLocalizedAssignment.java:er.directtoweb
+./ERDLocalizedMessageAssignment.java:er.directtoweb
 ./ERDMassModifyButton.java:er.directtoweb
 ./ERDMessagePageInterface.java:er.directtoweb
 ./ERDNullQualifier.java:er.directtoweb
@@ -167,9 +169,5 @@
 ./ERDUnitResolverAssignment.java:er.directtoweb
 ./ERDUserInfoInterface.java:er.directtoweb
 ./ERDXMLPageWrapper.java:er.directtoweb
-./ERXD2WInspect.java:er.directtoweb
-./ERXD2WList.java:er.directtoweb
-./ERXD2WPick.java:er.directtoweb
-./KeyValueCodingProtectedAccessor.java:er.directtoweb
 ./ERD2WDisplayNumber.java:
 ./ERD2WEditNumberOrDefault.java:

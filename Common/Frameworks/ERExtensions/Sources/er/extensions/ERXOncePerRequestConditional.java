@@ -57,10 +57,13 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	int count = 0;
 	String key = keyName();
 
-	cat.debug(currentStage + "," + contextID);
+        if(cat.isDebugEnabled())
+            cat.debug("stage:" + stage + ", currentStage:" + currentStage + ", context:" + contextID + ", lastID:" + lastID);
 
 	
-	if(stage != currentStage || lastID != contextID) {
+	if(stage != currentStage || !lastID.equals(contextID)) {
+            if(cat.isDebugEnabled())
+                cat.debug("did reset");
 	    if(displayCountDict != null)
 		displayCountDict.removeAllObjects();
 	    stage = currentStage;
@@ -94,7 +97,8 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 
     public boolean displayContent() {
 	int showCount = displayCountForKey(keyName());
-	cat.debug("displayContent - showCount: " + showCount + " stage:" + stage);
+        if(cat.isDebugEnabled())
+            cat.debug("displayContent - showCount: " + showCount + " stage:" + stage);
 	return showCount == 0;
     }
 }

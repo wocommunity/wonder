@@ -1863,6 +1863,7 @@
 				F57EA6DD01FF59C0019E57DA,
 				F57EA6D301FF59C0019E57DA,
 				F57EA6DF01FF59C0019E57DA,
+				F615AD2C026EF43601F77686,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -2819,6 +2820,7 @@
 				F645C8C7024789B301AD0D07,
 				F645C8C8024789B301AD0D07,
 				F645C8C9024789B301AD0D07,
+				F615AD2D026EF43601F77686,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -4464,6 +4466,17 @@
 		};
 		F61422F80253628801AD0D07 = {
 			fileRef = F61422F70253628701AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD2C026EF43601F77686 = {
+			isa = PBXFileReference;
+			path = dhtml.js;
+			refType = 4;
+		};
+		F615AD2D026EF43601F77686 = {
+			fileRef = F615AD2C026EF43601F77686;
 			isa = PBXBuildFile;
 			settings = {
 			};
