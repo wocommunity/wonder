@@ -48,8 +48,8 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden to support milliseconds to work with Postgres
      */
     public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-        String type = eoattribute.valueType();
-        if ("NSTimestamp".equals(type)) {
+        String type = columnTypeStringForAttribute(eoattribute);
+        if ("timestamp".equals(type)) {
             return false;
         } else {
             return true;
