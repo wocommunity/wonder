@@ -220,11 +220,11 @@ public class ERXExtensions {
             // This allows enabling from the log4j system.
             adaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
             sharedEOadaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
-            if (adaptorLogger.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
-                NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+            if (adaptorLogger.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess)) {
+                NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
                 NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
             }
-            adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) ? Boolean.TRUE : Boolean.FALSE;
+            adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) ? Boolean.TRUE : Boolean.FALSE;
                                           // Allows rapid turn-around of adaptor debugging.
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("configureAdaptorContext", ERXConstant.NotificationClassArray),
@@ -249,12 +249,12 @@ public class ERXExtensions {
         }
         if (targetState != null) {
             // We set the default, so all future adaptor contexts are either enabled or disabled.
-            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) != targetState.booleanValue())
+            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue())
                 if (targetState.booleanValue()) {
-                    NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+                    NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
                     NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
                 } else {
-                    NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+                    NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
                     NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
                 }
             if (targetState.booleanValue()) {
