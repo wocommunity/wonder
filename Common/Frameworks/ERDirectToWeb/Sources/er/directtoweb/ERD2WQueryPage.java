@@ -114,6 +114,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
         return ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("fetchLimit"), 0);
     }
 
+    public NSArray prefetchingRelationshipKeyPaths(){
+        return ERXValueUtilities.arrayValue(d2wContext().valueForKey("prefetchingRelationshipKeyPaths"));
+    }
+
     // add the ability to AND the existing qualifier from the DG
     public EOQualifier qualifier() {
         EOQualifier q=displayGroup.qualifier();
@@ -148,7 +152,11 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
                 } else {
                     listpageinterface = D2W.factory().listPageForEntityNamed(entity().name(), session());
                 }
-                listpageinterface.setDataSource(queryDataSource());
+                NSArray results = queryDataSource().fetchObjects();
+                EOArrayDataSource ads = new EOArrayDataSource(entity().classDescriptionForInstances(),
+                                                              queryDataSource().editingContext());
+                ads.setArray(results);
+                listpageinterface.setDataSource(ads);
                 listpageinterface.setNextPage(context().page());
                 nextPage = (WOComponent) listpageinterface;
             }
@@ -198,6 +206,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
         int limit = fetchLimit();
         if (limit != 0)
             fs.setFetchLimit(limit);
+        NSArray prefetchingRelationshipKeyPaths = prefetchingRelationshipKeyPaths();
+        if(prefetchingRelationshipKeyPaths!=null && prefetchingRelationshipKeyPaths().count()>0){
+            fs.setPrefetchingRelationshipKeyPaths(prefetchingRelationshipKeyPaths);
+        }
         return ds;
     }
 
