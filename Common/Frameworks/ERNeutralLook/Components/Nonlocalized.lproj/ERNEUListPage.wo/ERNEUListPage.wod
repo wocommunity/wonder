@@ -19,12 +19,6 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-AttributeSorter: WOSortOrder {
-	displayGroup = displayGroup;
-	displayKey = d2wContext.displayNameForProperty;
-	key = d2wContext.propertyKey;
-}
-
 BackButton: WOHyperlink {
 	action = backAction;
 }
@@ -260,6 +254,13 @@ ShowCancel: WOConditional {
 
 ShowCancel2: WOConditional {
 	condition = showCancel;
+}
+
+SortOrder: ERXSortOrder {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
 }
 
 SwitchComponent1: WOSwitchComponent {
