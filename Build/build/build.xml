@@ -127,6 +127,13 @@
     </target>
 
     <!-- ==================================================== -->
+    <!-- Build Wonder Frameworks.                             -->
+    <!-- ==================================================== -->
+    <target name="frameworks" depends="init">
+        <ant antfile="Build/build/common.xml" target="frameworks.all" />
+    </target>
+
+    <!-- ==================================================== -->
     <!-- Build Wonder sub projects.                           -->
     <!-- ==================================================== -->
     <target name="subprojects" depends="init">
