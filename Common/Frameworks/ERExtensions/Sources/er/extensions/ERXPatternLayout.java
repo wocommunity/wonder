@@ -16,6 +16,8 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * The ERXPatternLayout adds two additional (and needed) layout options. The
@@ -24,6 +26,17 @@ import com.webobjects.foundation.NSMutableArray;
  * name of the WOApplication will be logged as part of the log event.
  * Finally by specifing an '#' char the current port number on which the  
  * primary adaptor listens to will be logged as part of the log event. 
+ * 
+ * <pre>
+ * WebObjects Applicaion Info Patterns
+ * Example: %W{n[i:p s]} -- MyApp[9300:2001 28] 
+ * 
+ * n: application name
+ * i: pid (process ID, provided through Java system property "com.webobjects.pid") 
+ * p: primary adaptor's port number
+ * s: active session count
+ * </pre>
+ * 
  */
 // ENHANCEME: Need access to ERXThreadStorage, also need more WO stuff, could opt for a WO char
 //	      and then specify all of the things to log as formatting info for that converter.
@@ -92,6 +105,10 @@ class ERXPatternParser extends PatternParser {
                 addConverter(new StackTracePatternConverter(formattingInfo));
                 currentLiteral.setLength(0);
                 break;
+            case 'W':
+                addConverter(new AppInfoPatternConverter(formattingInfo, extractOption()));
+                currentLiteral.setLength(0);
+                break;
             default: 
                 super.finalizeConverter(c);            
                 break;
@@ -139,6 +156,8 @@ class ERXPatternParser extends PatternParser {
     /**
      * The application name pattern converter is useful for logging
      * the current application name in log statements.
+     * 
+     * @deprecated 
      */
     private class AppNamePatternConverter extends PatternConverter {
         /** holds a reference to the app name */
@@ -148,7 +167,7 @@ class ERXPatternParser extends PatternParser {
          * Default package level constructor
          * @param formattingInfo current pattern formatting information
          */
-        AppNamePatternConverter (FormattingInfo formattingInfo) {
+        AppNamePatternConverter(FormattingInfo formattingInfo) {
             super(formattingInfo);
         }
 
@@ -171,6 +190,8 @@ class ERXPatternParser extends PatternParser {
     /**
      * The adaptor port number pattern converter is useful for logging
      * the current primary adaptor port in log statements.
+     *
+     * @deprecated 
      */
     private class AdaptorPortNumberConverter extends PatternConverter {
         /** holds a reference to the primary adaptor port */
@@ -211,4 +232,94 @@ class ERXPatternParser extends PatternParser {
             return _portNumber != null ? _portNumber : "N/A";
         }
     }
+
+    /**
+     * The <code>AppInfoPatternConverter</code> is useful for logging
+     * various info about the WebObjects applicaiton instance. 
+     * See {@link ERXPatternLayout} for example/supported partterns. 
+     */
+    private class AppInfoPatternConverter extends PatternConverter {
+
+        /** Template parser to format logging events */
+        private ERXSimpleTemplateParser _templateParser;
+
+        /** Template used by _templateParser */
+        private String _template;
+        
+        /** 
+         * Flag to indicate if the constant values are set. 
+         * The constant values are the part of application info that 
+         * shouldn't change during the application's life span. 
+         */
+        private boolean _isConstantsInitialized = false;
+        
+        /** Holds the values for the application info. Used by the template parser */ 
+        private NSMutableDictionary _appInfo;
+        
+        /** 
+         * Holds the default labels for the values. 
+         * Note that the template parser will put "-" for undefined 
+         * values by defauilt. 
+         */
+        private final NSDictionary _defaultLabels = 
+            ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object[] {"@sessionCount@", "sessionCount"});
+        
+        /**
+         * Default package level constructor
+         * 
+         * @param  formattingInfo current pattern formatting information
+         * @param  format  string for the logging event format 
+         */
+        // FIXME: Work in progress - fixed template; format parameter will be ignored for now. 
+        AppInfoPatternConverter(FormattingInfo formattingInfo, String format) {
+            super(formattingInfo);
+            _templateParser = new ERXSimpleTemplateParser("-");
+            // This will prevent the convert method to get into an infinite loop 
+            // when debug level logging is enabled for the perser. 
+            _templateParser.isLoggingDisabled = true;
+            _appInfo = new NSMutableDictionary();
+            // work in progress; this is the fixed template.
+            _template = "@appName@[@pid@:@portNumber@ @sessionCount@]";
+        }
+        
+        /**
+         * Returns ...
+         * <p> 
+         * 
+         * ... has not been created yet then "-" is logged.
+         * 
+         * @param event a given logging event
+         * @return the current application name
+         */
+        public String convert(LoggingEvent event) {
+            WOApplication app = WOApplication.application();
+            if (app != null) {
+                
+                if (! _isConstantsInitialized) {
+                    String pid = System.getProperty("com.webobjects.pid");
+                    if (pid != null)
+                        _appInfo.setObjectForKey(pid, "pid");
+
+                    String appName = app.name();
+                    if (appName != null) 
+                        _appInfo.setObjectForKey(appName, "appName");
+
+                    // WO 5.1.x -- Apple Ref# 2260519
+                    NSArray adaptors = app.adaptors();
+                    if (adaptors != null  &&  adaptors.count() > 0) {
+                        WOAdaptor primaryAdaptor = (WOAdaptor)adaptors.objectAtIndex(0);
+                        String portNumber = String.valueOf(primaryAdaptor.port()); 
+                        if (portNumber != null) 
+                            _appInfo.setObjectForKey(portNumber, "portNumber");
+                    }
+                    _template = _templateParser.parseTemplateWithObject(_template, "@", _appInfo, _defaultLabels);
+                    _isConstantsInitialized = true;
+                }
+                
+                _appInfo.setObjectForKey(String.valueOf(app.activeSessionsCount()), "sessionCount");
+            }
+            return _templateParser.parseTemplateWithObject(_template, "@", _appInfo);
+        }
+    }
+
 }
