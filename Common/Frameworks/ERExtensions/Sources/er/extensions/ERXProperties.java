@@ -26,8 +26,8 @@ import com.webobjects.appserver._private.WOProjectBundle;
  * the System property as a Boolean object.
  */
 public class ERXProperties {
-    private static final boolean RetainDefaultsEnabled =
-            "true".equals(System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false"));
+    private static Boolean RetainDefaultsEnabled;
+    private static String UndefinedMarker = "-undefined-";
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
 
@@ -35,9 +35,18 @@ public class ERXProperties {
     private static String _webObjectsVersion;
     
     /** WebObjects version number as double */ 
-    private static double _webObjectsVersionDouble; 
+    private static double _webObjectsVersionDouble;
 
-    /** 
+    private static boolean retainDefaultsEnabled() {
+        if (RetainDefaultsEnabled == null) {
+            final String propertyValue = System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
+            final boolean isEnabled = "true".equals(propertyValue);
+            RetainDefaultsEnabled = Boolean.valueOf(isEnabled);
+        }
+        return RetainDefaultsEnabled.booleanValue();
+    }
+
+    /**
      * Puts handy properties such as <code>com.webobjects.version</code> 
      * into the system properties. This method is called when 
      * the framework is initialized  
@@ -215,7 +224,7 @@ public class ERXProperties {
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
         final String propertyValue = System.getProperty(s);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             setArrayForKey(array == null ? NSArray.EmptyArray : array, s);
         }
         return array;
@@ -247,7 +256,7 @@ public class ERXProperties {
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
         String propertyValue = System.getProperty(s);
         final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Boolean.toString(booleanValue);
             System.setProperty(s, propertyValue);
         }
@@ -276,7 +285,7 @@ public class ERXProperties {
     public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
         final String propertyValue = System.getProperty(s);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, s);
         }
         return dictionary;
@@ -328,7 +337,7 @@ public class ERXProperties {
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
         String propertyValue = System.getProperty(s);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = bigDecimal.toString();
             System.setProperty(s, propertyValue);
         }
@@ -345,7 +354,7 @@ public class ERXProperties {
     public static int intForKeyWithDefault(final String s, final int defaultValue) {
         String propertyValue = System.getProperty(s);
         final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Integer.toString(intValue);
             System.setProperty(s, propertyValue);
         }
@@ -362,7 +371,7 @@ public class ERXProperties {
     public static long longForKeyWithDefault(final String s, final long defaultValue) {
         String propertyValue = System.getProperty(s);
         final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Long.toString(longValue);
             System.setProperty(s, propertyValue);
         }
@@ -390,10 +399,10 @@ public class ERXProperties {
     public static String stringForKeyWithDefault(final String s, final String defaultValue) {
         final String propertyValue = System.getProperty(s);
         final String stringValue = propertyValue == null ? defaultValue : propertyValue;
-        if (RetainDefaultsEnabled && propertyValue == null) {
-            System.setProperty(s, stringValue == null ? "" : stringValue);
+        if (retainDefaultsEnabled() && propertyValue == null) {
+            System.setProperty(s, stringValue == null ? UndefinedMarker : stringValue);
         }
-        return stringValue;
+        return stringValue == UndefinedMarker ? null : stringValue;
     }
 
     /**
