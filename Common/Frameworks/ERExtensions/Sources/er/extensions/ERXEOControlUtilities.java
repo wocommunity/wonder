@@ -115,6 +115,44 @@ public class ERXEOControlUtilities {
         return eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext()) ?
         EOUtilities.localInstanceOfObject(ec, eo) : eo;
     }
+    
+    /**
+     * Determines if two EOs are equal by comparing their EOGlobalIDs.  This does not require
+     * the two EOs to be in the same EOEditingContext and will be safe when either is or both are
+     * null.  This does not test the two EOs for content equality.
+     * @param firstEO first EO to compare
+     * @param secondEO second EO to compare
+     * @return true if firstEO and secondEO correspond to the same object or if both are null.  false otherwise.
+     */
+    public static boolean eoEquals(EOEnterpriseObject firstEO, EOEnterpriseObject secondEO) {
+        boolean result;
+        
+        if (firstEO != null && secondEO != null) {
+            final EOEditingContext firstContext = firstEO.editingContext();
+            final EOEditingContext secondContext = secondEO.editingContext();
+            
+            if (firstContext != null && secondContext != null) {
+                final EOGlobalID firstGID = firstContext.globalIDForObject(firstEO);
+                final EOGlobalID secondGID = secondContext.globalIDForObject(secondEO);
+                
+                result = firstGID.equals(secondGID);
+            }
+            else if (firstContext == null && secondContext == null) {
+                result = firstEO.equals(secondEO);
+            }
+            else {
+                result = false;
+            }
+        }
+        else if (firstEO != null || secondEO != null) {
+            result = false;
+        }
+        else {  // both are null
+            result = true;
+        }
+        
+        return result;        
+    }
 
     /**
      * Creates an enterprise object for the given entity
