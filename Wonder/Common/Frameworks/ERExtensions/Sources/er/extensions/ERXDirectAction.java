@@ -30,8 +30,7 @@ public class ERXDirectAction extends WODirectAction {
         // FIXME: password protection?
         WOComponent result=null;
         if (!WOApplication.application().isCachingEnabled() ||
-            !ERXExtensions.safeEquals(request().formValueForKey("pw"),
-                                     NSProperties.stringForKey("ERXLog4jPassword")))
+            !ERXExtensions.safeEquals(request().formValueForKey("pw"), System.getProperty("ERXLog4jPassword")))
             result=pageWithName("ERXLog4JConfiguration");
         return result;
     }

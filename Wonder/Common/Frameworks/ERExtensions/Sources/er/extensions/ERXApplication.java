@@ -90,7 +90,7 @@ public abstract class ERXApplication extends WOApplication {
     private boolean _nameSuffixLookedUp=false;
     public String nameSuffix() {
         if (!_nameSuffixLookedUp) {
-            _nameSuffix=NSProperties.stringForKey("ERApplicationNameSuffix");
+            _nameSuffix=System.getProperty("ERApplicationNameSuffix");
             _nameSuffix=_nameSuffix==null ? "" : _nameSuffix;
             _nameSuffixLookedUp=true;
         }
@@ -100,7 +100,7 @@ public abstract class ERXApplication extends WOApplication {
     private String _userDefaultName;
     public String name() {
         if (_userDefaultName==null) {
-            _userDefaultName=NSProperties.stringForKey("ERApplicationName");
+            _userDefaultName=System.getProperty("ERApplicationName");
             if (_userDefaultName==null) _userDefaultName=super.name();
             if (_userDefaultName!=null) {
                 String suffix=nameSuffix();
