@@ -4,8 +4,8 @@
 
 		<binding name="parentEntitiesList"/>
 		<binding name="parentToChildrenRelationshipName"/>
-		<binding name="selectedParent"/>
-		<binding name="selectedChild"/>
+		<binding name="parentSelection"/>
+		<binding name="childrenSelection"/>
 		<binding name="parentDisplayValueName"/>
 		<binding name="parentLabel"/>
 		<binding name="defaultChildKey"/>
@@ -14,21 +14,27 @@
 		<binding name="childLabel"/>
 		<binding name="childPopUpStringForAll"/>
 		<binding name="parentPopUpStringForAll"/>
+		<binding name="size"/>
+		<binding name="multiple" defaults="Boolean"/>
 
 		<validation message="&apos;parentEntitiesList&apos; is a required binding">
 			<unbound name="parentEntitiesList"/>
 		</validation>
 
-		<validation message="&apos;selectedParent&apos; must be bound to a settable value">
-			<unsettable name="selectedParent"/>
+		<validation message="&apos;parentSelection&apos; must be bound to a settable value">
+			<unsettable name="parentSelection"/>
 		</validation>
 
-		<validation message="&apos;selectedChild&apos; must be bound to a settable value">
-			<unsettable name="selectedChild"/>
+		<validation message="&apos;childrenSelection&apos; must be bound to a settable value">
+			<unsettable name="childrenSelection"/>
 		</validation>
 
 		<validation message="&apos;parentToChildrenRelationshipName&apos; is a required binding">
 			<unbound name="parentToChildrenRelationshipName"/>
+		</validation>
+
+		<validation message="&apos;parentLabel&apos; is a required binding">
+			<unbound name="parentLabel"/>
 		</validation>
 	</wo>
 </wodefinitions>

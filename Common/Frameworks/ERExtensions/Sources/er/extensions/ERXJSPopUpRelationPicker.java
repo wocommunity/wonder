@@ -9,6 +9,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.Enumeration;
+import java.util.Iterator;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -19,7 +22,8 @@ import com.webobjects.foundation.*;
  * This WOComponent displays two pop-up buttons. One pop-up displays a list of what can be thought of as parent entities. 
  * The second pop-up displays a list of what can be thought of as children entities. When a user selects an entity in 
  * the parent list, the child list is instantly modified to reflect the children entities available to the user 
- * through that parent. This is done through client-side Javascript.
+ * through that parent. This is done through client-side Javascript. Also handles to-many selections both on the 
+ * parent and the children.<br />
  * For example:
 <pre><code>
 parent1(child1,child2,child3)
@@ -28,16 +32,18 @@ parent3(child2,child5)
 </code></pre>
  * When the user selects parent1, its appropriate children are displayed in the second popup. 
  * If the user selects child2 in the children pop-up this is the value that is returned to the 
- * user through the selectedChild variable.
- * For the display of the parent popup, if we aren't passed in a selectedParent, then we default to 
- * parentPopUpStringForAll. If we aren't given that either, then we default to the last parent in the array.
- * For the display of the child popup, if we aren't passed in a selectedChild, then we default to childPopUpStringForAll. 
- * If we aren't given that either, then we default to the last child in the array.
+ * user through the childrenSelection variable. This is either an NSArray if <code>multiple</code> is true
+ * or the single selected object.
+ * For the display of the parent popup, if we aren't passed in a parentSelection, then we default to 
+ * parentPopUpStringForAll. If we aren't given that either, then we default to the first parent in the array.
+ * For the display of the child popup, if we aren't passed in a childrenSelection, then we default to childPopUpStringForAll. 
+ * If we aren't given that either, then we default to the first child in the array.
  * 
+ * @binding multiple boolean the defines if there can multiple parents and children selected.
  * @binding parentEntitiesList array of the parent objects that appear in the first pop-up.
  * @binding parentToChildrenRelationshipName name of the relationship from the parent to its possible children. This is used to fill the values that appear in the children popup.
- * @binding selectedParent currently selected parent in the parent pop-up. This can be null, but will return the user-selected parent.
- * @binding selectedChild set to null. Returns the user-selected child.
+ * @binding parentSelection currently selected parent(s) in the parent pop-up. This can be null, but will return the user-selected parent.
+ * @binding childrenSelection returns the user-selected child(ren).
  * @binding parentDisplayValueName keypath of the parent displayed in the parent pop-up
  * @binding parentLabel value displayed in the table interface for the parent popup.
  * @binding childLabel value displayed in the table interface for the child popup.
@@ -59,57 +65,51 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXJSPopUpRelationPicker.class);
     public final static ERXLogger jsLog = ERXLogger.getERXLogger("er.extensions.ERXJSPopUpRelationPicker.script");
 
-    protected String childDisplayValueName;
-    protected String parentDisplayValueName;
+    protected Integer _size;
+    protected String _childDisplayValueName;
+    protected String _parentDisplayValueName;
 
-    protected NSArray parentEntitiesList;
-    protected String parentToChildrenRelationshipName;
+    protected NSArray _parentEntitiesList;
+    protected String _parentToChildrenRelationshipName;
 
-    protected Object selectedParent;
-    protected Object selectedChild;
+    protected NSArray _parentSelection;
+    protected NSArray _childrenSelection;
 
-    protected String parentPopUpStringForAll; // for example, '-- all --' or '-- none --'. sets selectedParent to null. All children displayed for all parents if picked.
-    protected String childPopUpStringForAll; // for example, '-- all --' or '-- none --'. sets selectedChild to null
+    protected String _parentPopUpStringForAll; // for example, '-- all --' or '-- none --'. sets selectedParent to null. All children displayed for all parents if picked.
+    protected String _childPopUpStringForAll; // for example, '-- all --' or '-- none --'. sets selectedChild to null
 
+    protected String _parentLabel;
+    protected String _childLabel;
+    protected String _childrenSortKey;
+    protected String _defaultChildKey;
+    protected Boolean _multiple;
+    
     protected String parentSelectName;
     protected String childSelectName;
+    protected String pickerName;
 
-    protected String parentLabel;
-    protected String childLabel;
-    protected String childrenSortKey;
-    protected String defaultChildKey;
-    protected String selectedParentId;
-    protected String selectedChildId;
-    protected String parentsChildrenId;
+    protected String objectsArrayName;
     
     protected String elementID;
-    protected Integer size;
     private static final int NOT_FOUND = -1;
     
     public void awake() {
         super.awake();
+        updateVarNames();
     }
 
     protected void updateVarNames() {
         String elementID = context().elementID();
         elementID = ERXStringUtilities.replaceStringByStringInString(".", "_", elementID);
-        //elementID = "foo";
+        elementID = "foo";
+        pickerName = "picker_"+ elementID;
         parentSelectName = "parent_" + elementID;
         childSelectName = "child_" + elementID;
-        selectedParentId = "selected_parent_" + elementID;
-        selectedChildId = "selected_child_" + elementID;
-        parentsChildrenId = "parents_children_" + elementID;
+        objectsArrayName = "parents_children_" + elementID;
     }
 
-    public void appendToResponse(WOResponse response, WOContext context) {
-        updateVarNames();
-        super.appendToResponse(response, context);
-    }
-    
-    protected int offsetForID(String id, String defaultString) {
-        if(!(id == null || id.trim().length() == 0 
-                || "null".equals(id) 
-                || (defaultString != id && defaultString.equals(id)))) {
+    protected int offsetForID(String id) {
+        if(!(id == null || id.trim().length() == 0 || "WONoSelectionString".equals(id))) {
             try {
                 return Integer.parseInt(id);
             } catch (Exception e) {
@@ -120,7 +120,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
     
     protected Object parentFromID(String id) {
-        int offset = offsetForID(id, parentPopUpStringForAll());
+        int offset = offsetForID(id);
         if(offset != NOT_FOUND) {
             return parentEntitiesList().objectAtIndex(offset);
         }
@@ -138,10 +138,10 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         if(id != null) {
             NSArray ids = NSArray.componentsSeparatedByString(id, "|");
             if(ids.count() == 2) {
-                if(parent != null) {
+                if(parent == null) {
                     parent = parentFromID((String)ids.objectAtIndex(0));
                 }
-                int offset = offsetForID((String)ids.objectAtIndex(1), childPopUpStringForAll());
+                int offset = offsetForID((String)ids.objectAtIndex(1));
                 if(offset != NOT_FOUND && parent != null) {
                     return sortedChildren(parent).objectAtIndex(offset);
                 }
@@ -158,41 +158,62 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             if(offset != NOT_FOUND) {
                 return idForParent(parent) + "|" + offset;
             }
+        } else {
+            for (Enumeration parents = parentEntitiesList().objectEnumerator(); parents.hasMoreElements();) {
+                Object aParent = (Object) parents.nextElement();
+                int offset = sortedChildren(aParent).indexOfObject(child);
+                if(offset != NOT_FOUND) {
+                    return idForParent(aParent) + "|" + offset;
+                }
+           }
         }
         return null;
     }
     
    
     public void takeValuesFromRequest(WORequest request, WOContext context) {
-        // get the form values for selected_parent_id and selected_child_id and use these to set the 
-        // selectedParent and selectedChild values
-        // takeValues always returns a String, but sometimes it's an empty string if no value is set on the form element.
-        // the values returned correspond to the hashCode's of the objects, not the entityId's. 
-        // This allows us to use this class with objects that don't inherit from NSObject.
-        updateVarNames();
-
-
-        String parentID = request.stringFormValueForKey(selectedParentId);
-        String childID = request.stringFormValueForKey(selectedChildId);
-        
-        Object parent = parentFromID(parentID);
-        setSelectedParent(parent);
-        
-        Object child = childFromID(parent, childID);
-        setSelectedChild(child);
-
-        if (log.isDebugEnabled()) {
-            log.debug("selected_parent_id: " + parentID);
-            log.debug("selectedParent: " + selectedParent());
-            
-            log.debug("selected_child_id: " + childID);
-            log.debug("selectedChild: " + selectedChild());
+        NSMutableArray parents = new NSMutableArray();
+        NSArray parentFormValues = request.formValuesForKey(parentSelectName);
+        if(parentFormValues.containsObject("WONoSelectionString")) {
+            setSelectedParents(null);
+        } else {
+            for (Enumeration ids = parentFormValues.objectEnumerator(); ids.hasMoreElements();) {
+                Object parent = parentFromID((String) ids.nextElement());
+                if(parent != null) {
+                    parents.addObject(parent);
+                }
+            }
+            setSelectedParents(parents);
+        }
+ 
+        NSArray childFormValues = request.formValuesForKey(childSelectName);
+        if(childFormValues.containsObject("WONoSelectionString")) {
+            NSArray children = (NSArray)parentSelection().valueForKeyPath(parentToChildrenRelationshipName());
+            if(parentFormValues.containsObject("WONoSelectionString")) {
+                setChildrenSelection(null);
+            } else {
+                if(!multiple()) {
+                    setChildrenSelection(null);
+                } else {
+                    setChildrenSelection(ERXArrayUtilities.flatten(children));
+                }
+            }
+        } else {
+            NSMutableArray children = new NSMutableArray();
+            for (Enumeration ids = childFormValues.objectEnumerator(); ids.hasMoreElements();) {
+                Object child = childFromID(null, (String) ids.nextElement());
+                if(child != null) {
+                    children.addObject(child);
+                }
+            }
+            setChildrenSelection(children);
         }
         super.takeValuesFromRequest(request, context);
     }
 
     protected NSArray unsortedChildren(Object parent) {
-        return (NSArray)NSKeyValueCoding.Utility.valueForKey(parent, parentToChildrenRelationshipName());
+        return (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parent, parentToChildrenRelationshipName() 
+                + ((parent instanceof NSArray) ? ".@flatten" : ""));
     }
     
     protected NSArray sortedChildren(Object parent) {
@@ -210,87 +231,42 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         returnString.append("\n");
 
         // This Javascript string builds an array of Entity objects on the browser end.
-        returnString.append("" + parentschildrenArrayCreationString() + "\n");
-        if (parentPopUpStringForAll() != null) {
-            returnString.append("var parentPopUpStringForAll = \"" + parentPopUpStringForAll() + "\";\n");
-        } else {
-            returnString.append("var parentPopUpStringForAll = null;\n");
-        }
-        if (childPopUpStringForAll() != null) {
-            returnString.append("var childPopUpStringForAll = \"" + childPopUpStringForAll() + "\";\n");
-        } else {
-            returnString.append("var childPopUpStringForAll = null;\n");
-        }
-        returnString.append("\n");
-
-
+        returnString.append("" + objectArrayCreationString() + "\n");
         if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker jsString  returnString is " + returnString);
         return returnString.toString();
     }
 
-    
-
-    /**
-     * @return
-     */
-    private String hiddenField(String name, Object value) {
-        return "<input type=\"hidden\" name=\""+name+"\"" + (value == null ? ""  : " value=\"" + value) + "\" />\n";
-    }
-    
-   /*
-     Should look something like:
-     <input type=hidden name=selected_parent_id value=>
-     <input type=hidden name=selected_child_id value=>
-     */
     public String hiddenFormElementStrings() {
         StringBuffer returnString;
 
         returnString = new StringBuffer(500);
-        Object parentID = idForParent(selectedParent());
-        Object childID = idForChild(selectedParent(), selectedChild());
-        
-        returnString.append(hiddenField(selectedParentId, parentID));
-        returnString.append(hiddenField(selectedChildId, childID));
-
-        String children = "allChildren("+parentsChildrenId+")";
-        if(selectedParent() != null) {
-            children = "getParentEntityForId(" + parentsChildrenId + ",'" + parentID + "').children";
-        }
-        returnString.append("<script language=\"JavaScript\">\nsetSelectToArrayOfEntities("
-               +"window.document." + formName() + "." + childSelectName + "," 
-               + children +",childPopUpStringForAll)\n</script>\n");
+        returnString.append("\n<script language=\"JavaScript\">");
+        returnString.append("\nvar " + pickerName +" = new ERXJSPopupRelationshipPicker("
+        + objectsArrayName + ","
+        + "window.document." + formName() + "." + parentSelectName + "," 
+        + (parentPopUpStringForAll() != null ? "\"" + parentPopUpStringForAll().replace('\n',' ') + "\"" : "null") + ","
+        + "window.document." + formName() + "." + childSelectName + "," 
+        + (childPopUpStringForAll() != null ? "\"" + childPopUpStringForAll() + "\"" : "null")
+        +");\n</script>");
+        log.debug(returnString);
         return returnString.toString();
     }
 
-
-
-    /**
-     * @returns the string to create the pop-up with the initial parent values something like:
-        <select name="parent_select" onChange="parentSwapped(window.document.the_form.parent_select.options[selectedIndex].value);">
-        <option selected value=1>dogs
-        <option value=2>fish
-        <option value=3>birds
-        </select>
-     */
     public String parentPopUpString() {
-        String onChangeString = "parentSwapped("+parentsChildrenId+",window.document." + formName() 
-        	+ "." + parentSelectName + ".options[selectedIndex].value,window.document."+ formName()
-        	+ "." + childSelectName +"," + selectedParentId + "," + selectedChildId +");";
-        StringBuffer returnString = selectHeader(parentSelectName, onChangeString, selectedParent(), parentPopUpStringForAll());
+        StringBuffer returnString = selectHeader(parentSelectName, pickerName + ".parentChanged();");
 
-        // write out each of the values for the options tags. be sure to set the selected tag if necessary
-        if (selectedParent()==null && parentPopUpStringForAll()==null)
-            setSelectedParent(parentEntitiesList().objectAtIndex(0));
+        if (parentSelection().count() == 0 && parentPopUpStringForAll()==null)
+            setSelectedParents(new NSArray(parentEntitiesList().objectAtIndex(0)));
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
             Object aEntity = (Object)parentEntitiesList().objectAtIndex(i);
             returnString.append("\t<option ");
-            if (aEntity.equals(selectedParent())) {
+            if (isSelectedParent(aEntity)) {
                 returnString.append("selected=\"selected\" ");
             }
             returnString.append("value=\"" + idForParent(aEntity) + "\">");
             returnString.append(NSKeyValueCoding.Utility.valueForKey(aEntity, parentDisplayValueName()));
-            returnString.append("\n");
+            returnString.append("</option>\n");
         }
         returnString.append("</select>\n");
         return returnString.toString();
@@ -309,34 +285,25 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
      </select>
      */
     public String childPopUpString() {
-        String onChangeString = "childSwapped("+parentsChildrenId + ","
-        +"window.document." + formName() + "." + childSelectName + ".options[selectedIndex].value,"
-        +"window.document." + formName() + "." + parentSelectName+","
-        +selectedParentId+","
-        +selectedChildId+");";
-        StringBuffer returnString = selectHeader(childSelectName, onChangeString, selectedChild(), childPopUpStringForAll());
+        StringBuffer returnString = selectHeader(childSelectName, pickerName + ".childChanged();");
 
         String prePendText = null;
-        if (selectedParent() != null) {
-            if (selectedChild()==null && defaultChildKey()!=null)
-                setSelectedChild(NSKeyValueCoding.Utility.valueForKey(selectedParent(), defaultChildKey()));
-            appendChildPopupStringWithParent(returnString, selectedParent());
+        if (parentSelection().count() != 0) {
+            if (childrenSelection().count() == 0 && defaultChildKey() != null)
+                setChildrenSelection((NSArray)NSKeyValueCoding.Utility.valueForKey(parentSelection(), defaultChildKey() + ".@flatten"));
+            appendChildPopupStringWithParent(returnString, parentSelection());
         } else {
             // nothing is selected in the parent, so set the children array to all possible child values
             // run through all parents, getting each child. However, if we don't have a parentPopUpStringForAll then we only do it for the last parent.
             if (parentPopUpStringForAll() != null) {
-                int iCount = parentEntitiesList().count();
-                for (int i=0;i<iCount;i++) {
-                    Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
-                    appendChildPopupStringWithParent(returnString, aParent);
-                }
+                appendChildPopupStringWithParent(returnString, parentEntitiesList());
             } else {
                 // only do the last parent because we don't have a selected parent AND we don't have the possibility 
                 // of setting the parent to 'All'
                 Object aParent = parentEntitiesList().objectAtIndex(0);
-                setSelectedChild(defaultChildKey()!=null ?
-                    NSKeyValueCoding.Utility.valueForKey(aParent, defaultChildKey()) : null);
-                appendChildPopupStringWithParent(returnString, aParent);
+                setChildrenSelection(defaultChildKey()!=null ?
+                        (NSArray)NSKeyValueCoding.Utility.valueForKey(parentSelection(), defaultChildKey() + ".@flatten") : NSArray.EmptyArray);
+                appendChildPopupStringWithParent(returnString, new NSArray(aParent));
             }
         }
 
@@ -345,64 +312,44 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return returnString.toString();
     }
     
-    private void appendChildPopupStringWithParent(StringBuffer returnString, Object aParent) {
-        NSArray children = sortedChildren(aParent);
+    private void appendChildPopupStringWithParent(StringBuffer returnString, NSArray aParents) {
+        NSArray children = sortedChildren(aParents);
         // write out each of the values for the options tags. be sure to set the selected tag if necessary
         int iCount = children.count();
         for (int i=0;i<iCount;i++) {
             Object aChild = children.objectAtIndex(i);
             returnString.append("\t<option ");
-            if (((i == iCount-1) && (selectedChild() == null) && (childPopUpStringForAll() == null)) 
-                    || (aChild.equals(selectedChild()))) {
+            if (((i == iCount-1) && (childrenSelection().count() == 0) && (childPopUpStringForAll() == null)) 
+                    || (isSelectedChild(aChild))) {
                 returnString.append("selected=\"selected\" ");
             }
-            returnString.append("value=\"" + idForChild(aParent, aChild) + "\">");
+            returnString.append("value=\"" + idForChild(null, aChild) + "\">");
             returnString.append(NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()));
-            returnString.append("\n");
+            returnString.append("</option>\n");
         }
     }
 
-    protected StringBuffer selectHeader(String nm, String oc, Object selectedEntity, String additionalPopupText) {
+    protected StringBuffer selectHeader(String nm, String onChange) {
         StringBuffer returnString;
-        int i, iCount;
-        Object aEntity;
-
+        
         returnString = new StringBuffer(1000);
         returnString.append("<select name=\"" + nm + "\"" + " size=\"" + size() + "\"");
-        if (oc != null) {
-            returnString.append(" onChange=\"" + oc + "\"");
+        if (onChange != null) {
+            returnString.append(" onChange=\"" + onChange + "\"");
+        }
+        if (multiple()) {
+            returnString.append(" multiple=\"multiple\"");
         }
         returnString.append(">\n");
-
-        // if we have to write out an additional option tag, do so at the beginning of the pop-up. Set this to the default selected if nothing else is selected.
-        // for parents, if we aren't passed in a selectedParent, then we default to parentPopUpStringForAll. If we aren't given that either, then we default to the last parent in the array.
-        // for children, if we aren't passed in a selectedChild, then we default to childPopUpStringForAll. If we aren't given that either, then we default to the last child in the array.
-        if (log.isDebugEnabled()) log.debug("nm is " + nm + " and selectedEntity is " + selectedEntity);
-        if (selectedEntity == null) {
-            if (log.isDebugEnabled()) log.debug("selectedEntity == null");
-            // we don't have a selected entity in the list. If we have an additionalPopup set it to that.
-            if (additionalPopupText != null) {
-                if (log.isDebugEnabled()) log.debug("selectedEntity == null and additionalPopupText != null");
-                returnString.append("\t<option selected>" + additionalPopupText + "\n");
-            }
-        } else {
-            // we have a selected entity in the list
-            if (log.isDebugEnabled()) log.debug("selectedEntity != null");
-            if (additionalPopupText != null) {
-                if (log.isDebugEnabled()) log.debug("selectedEntity != null and additionalPopupText != null");
-                returnString.append("\t<option>" + additionalPopupText + "\n");
-            }
-        }
-        if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker selectHeader  returnString is " + returnString);
         return returnString;
     }
     
-    public String parentschildrenArrayCreationString() {
+    public String objectArrayCreationString() {
         // here's an example of the string this method should return:
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
 
         StringBuffer returnString = new StringBuffer(1000);
-        returnString.append("var "+parentsChildrenId+" = new Array(");
+        returnString.append("var "+objectsArrayName+" = new Array(");
 
         int iCount = parentEntitiesList().count();
         for (int i=0;i<iCount;i++) {
@@ -425,7 +372,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
                 returnString.append(" \"" + idForChild(aParent, aChild) + "\","); // value text of pop-up
                 returnString.append(" null,");
-                if (aChild.equals(selectedChild())) {
+                if (isSelectedChild(aChild)) {
                     returnString.append(" true");
                 } else {
                     returnString.append(" false");
@@ -439,13 +386,13 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 if (aChild==defaultChild) defaultChildIndex=j;
             }
             returnString.append("),");
-            if (aParent.equals(selectedParent())) {
+            if (isSelectedParent(aParent)) {
                 returnString.append(" true");
             } else {
                 returnString.append(" false");
             }
             returnString.append(", ");
-            returnString.append(defaultChild!=null ? "\""+defaultChildIndex+"\"" : "0");
+            returnString.append(defaultChild!=null ? "\""+defaultChildIndex+"\"" : "-1");
             returnString.append(")");
 
 
@@ -458,117 +405,168 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return returnString.toString();
     }
 
-    public NSArray parentEntitiesList() {
-        if(parentEntitiesList == null) {
-            parentEntitiesList = (NSArray)valueForBinding("parentEntitiesList");
-        }
-        return parentEntitiesList;
-    }
-    public Object selectedParent() {
-        if(selectedParent == null) {
-            selectedParent = valueForBinding("selectedParent");
-        }
-        return selectedParent;
-    }
-    public void setSelectedParent(Object newSelectedParent) {
-        selectedParent = newSelectedParent;
-        setValueForBinding(selectedParent, "selectedParent");
+    /**
+     * @param aParent
+     * @return
+     */
+    private boolean isSelectedParent(Object aParent) {
+        return parentSelection().containsObject(aParent);
     }
 
-    public Object selectedChild() {
-        if(selectedChild == null) {
-            selectedChild = valueForBinding("selectedChild");
-        }
-        return selectedChild;
+    /**
+     * @param aChild
+     * @return
+     */
+    private boolean isSelectedChild(Object aChild) {
+        return childrenSelection().containsObject(aChild);
     }
-    public void setSelectedChild(Object newSelectedChild) {
-        selectedChild = newSelectedChild;
-        setValueForBinding(selectedChild, "selectedChild");
+
+    public NSArray parentEntitiesList() {
+        if(_parentEntitiesList == null) {
+            _parentEntitiesList = (NSArray)valueForBinding("parentEntitiesList");
+        }
+        return _parentEntitiesList;
+    }
+    public NSArray parentSelection() {
+        if(_parentSelection == null) {
+            if(multiple()) {
+                _parentSelection = (NSArray)valueForBinding("parentSelection");
+            } else {
+                Object parent = valueForBinding("parentSelection");
+                if(parent != null) {
+                    _parentSelection = new NSArray(parent);
+                }
+            }
+            if(_parentSelection == null) {
+                _parentSelection = NSArray.EmptyArray;                   
+            } 
+        }
+        return _parentSelection;
+    }
+    public void setSelectedParents(NSArray value) {
+        if(!multiple() && canSetValueForBinding("parentSelection")) {
+            setValueForBinding(value == null ? null : value.lastObject(), "parentSelection");
+        } else if(multiple() && canSetValueForBinding("parentSelection")) {
+            setValueForBinding(value, "parentSelection");
+        }
+        _parentSelection = value;
+    }
+
+    public NSArray childrenSelection() {
+        if(_childrenSelection == null) {
+            if(multiple()) {
+                _childrenSelection = (NSArray)valueForBinding("childrenSelection");
+            } else {
+                Object child = valueForBinding("childrenSelection");
+                if(child != null) {
+                    _childrenSelection = new NSArray(child);
+                }
+            }
+            if(_childrenSelection == null) {
+                _childrenSelection = NSArray.EmptyArray;                   
+            } 
+       }
+        return _childrenSelection;
+    }
+    public void setChildrenSelection(NSArray value) {
+        if(!multiple() && canSetValueForBinding("childrenSelection")) {
+            setValueForBinding(value == null ?  null: value.lastObject(), "childrenSelection");
+        } else if(multiple() && canSetValueForBinding("childrenSelection")) {
+            setValueForBinding(value, "childrenSelection");
+        }
+        _childrenSelection = value;
     }
 
     public String defaultChildKey() {
-        if(defaultChildKey == null) {
-            defaultChildKey = (String)valueForBinding("defaultChildKey");
+        if(_defaultChildKey == null) {
+            _defaultChildKey = (String)valueForBinding("defaultChildKey");
         }
-        return defaultChildKey;
+        return _defaultChildKey;
     }
     public String childrenSortKey() {
-        if(childrenSortKey == null) {
-            childrenSortKey = (String)valueForBinding("childrenSortKey");
+        if(_childrenSortKey == null) {
+            _childrenSortKey = (String)valueForBinding("childrenSortKey");
         }
-        return childrenSortKey;
+        return _childrenSortKey;
     }
 
     public String childLabel() {
-        if(childLabel == null) {
-            childLabel = (String)valueForBinding("childLabel");
-            if(childLabel == null)
-                childLabel = "Types";
+        if(_childLabel == null) {
+            _childLabel = (String)valueForBinding("childLabel");
+            if(_childLabel == null)
+                _childLabel = "Types";
         }
-        return childLabel;
+        return _childLabel;
     }
 
     public String parentLabel() {
-        if(parentLabel == null) {
-            parentLabel = (String)valueForBinding("parentLabel");
-            if(parentLabel == null)
-                parentLabel = "Categories";
+        if(_parentLabel == null) {
+            _parentLabel = (String)valueForBinding("parentLabel");
+            if(_parentLabel == null)
+                _parentLabel = "Categories";
         }
-        return parentLabel;
+        return _parentLabel;
     }
 
     public String childDisplayValueName() {
-        if(childPopUpStringForAll == null) {
-            childDisplayValueName = (String)valueForBinding("childDisplayValueName");
+        if(_childDisplayValueName == null) {
+            _childDisplayValueName = (String)valueForBinding("childDisplayValueName");
         }
-        return childDisplayValueName;
+        return _childDisplayValueName;
     }
     public String parentDisplayValueName() {
-        if(parentDisplayValueName == null) {
-            parentDisplayValueName = (String)valueForBinding("parentDisplayValueName");
+        if(_parentDisplayValueName == null) {
+            _parentDisplayValueName = (String)valueForBinding("parentDisplayValueName");
         }
-        return parentDisplayValueName;
+        return _parentDisplayValueName;
     }
     public String parentToChildrenRelationshipName() {
-        if(parentToChildrenRelationshipName == null) {
-            parentToChildrenRelationshipName = (String)valueForBinding("parentToChildrenRelationshipName");
+        if(_parentToChildrenRelationshipName == null) {
+            _parentToChildrenRelationshipName = (String)valueForBinding("parentToChildrenRelationshipName");
         }
-        return parentToChildrenRelationshipName;
+        return _parentToChildrenRelationshipName;
     }
     public String parentPopUpStringForAll() {
-        if(parentPopUpStringForAll == null) {
-            parentPopUpStringForAll = (String)valueForBinding("parentPopUpStringForAll");
+        if(_parentPopUpStringForAll == null) {
+            _parentPopUpStringForAll = (String)valueForBinding("parentPopUpStringForAll");
         }
-        return parentPopUpStringForAll;
+        return _parentPopUpStringForAll;
     }
     public String childPopUpStringForAll() {
-        if(childPopUpStringForAll == null) {
-            childPopUpStringForAll = (String)valueForBinding("childPopUpStringForAll");
+        if(_childPopUpStringForAll == null) {
+            _childPopUpStringForAll = (String)valueForBinding("childPopUpStringForAll");
         }
-        return childPopUpStringForAll;
+        return _childPopUpStringForAll;
     }
     public int size() {
-        if(size == null) {
-            size = new Integer(intValueForBinding("size", 1));
+        if(_size == null) {
+            _size = new Integer(intValueForBinding("size", multiple() ? 5 : 1));
         }
-        return size.intValue();
+        return _size.intValue();
+    }
+    public boolean multiple() {
+        if(_multiple == null) {
+            _multiple = booleanValueForBinding("multiple") ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _multiple.booleanValue();
     }
     
     public void reset() {
         super.reset();
-        selectedChild = null;
-        selectedParent = null;
-        parentEntitiesList = null;
-        childLabel = null;
-        parentLabel = null;
-        defaultChildKey = null;
-        childrenSortKey = null;
+        _childrenSelection = null;
+        _parentSelection = null;
+        _parentEntitiesList = null;
+        _childLabel = null;
+        _parentLabel = null;
+        _defaultChildKey = null;
+        _childrenSortKey = null;
+        _multiple = null;
 
-        childDisplayValueName = null;
-        parentDisplayValueName = null;
-        parentToChildrenRelationshipName = null;
-        parentPopUpStringForAll = null;
-        childPopUpStringForAll = null;
-        size = null;
+        _childDisplayValueName = null;
+        _parentDisplayValueName = null;
+        _parentToChildrenRelationshipName = null;
+        _parentPopUpStringForAll = null;
+        _childPopUpStringForAll = null;
+        _size = null;
     }
 }

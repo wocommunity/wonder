@@ -30,4 +30,5 @@
     "ERDInspect.select" = "Select...";
     "ERDInspect.clear" = "Clear";
     "ERDList.create" = "Add";
+    "ERDQueryTwoLevelRelationship.all" = "- all -";
 }

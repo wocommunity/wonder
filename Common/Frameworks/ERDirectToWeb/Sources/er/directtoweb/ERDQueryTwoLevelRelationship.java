@@ -9,17 +9,21 @@ import er.extensions.*;
 /**
  * Create queries that consist of a drilldown.
  * Example: consider a Person working in a department, a Department belongs to a Company.
- * You'd query a Person by setting
- * @binding key = "whatever"
- * @binding destinationEntityName = "Company" 			, The entity in the first popup
- * @binding secondaryKey = "departments" 			, Company.departments
- * @binding primaryQueryKey = "department.company" 		, query Person.department.company (unused of ommited or null)
- * @binding secondaryQueryKey = "department" 			, query Person.department
- * @binding keyWhenRelationship = "companyName"			, Display key for Company
- * @binding secondaryKeyWhenRelationship = "departmentName"	, Display key for Dept
- * @binding displayNameForEntity = "Company"			, Label for Company
- * @binding displayNameForSecondaryEntity = "Departments"	, Label for Dept
- * @binding restrictedChoiceKey = "session.user.visibleCompanies", Restriction for the main entity
+ * You'd query for Persons by setting
+ * key = "whatever"                         , not used
+ * multiple = true                          , we want to select many departments
+ * size = 5                                 , we want to select many departments
+ * destinationEntityName = "Company" 		 , The entity in the first popup
+ * secondaryKey = "departments" 			     , Company.departments
+ * primaryQueryKey = "department.company" 	 , query Person.department.company (unused of ommited or null)
+ * secondaryQueryKey = "department" 			 , query Person.department
+ * keyWhenRelationship = "companyName"		 , Display key for Company
+ * secondaryKeyWhenRelationship = "departmentName"	, Display key for Dept
+ * displayNameForEntity = "Company"			, Label for Company
+ * displayNameForSecondaryEntity = "Departments"	, Label for Dept
+ * restrictedChoiceKey = "session.user.visibleCompanies", Restriction for the main entity, if unset
+ *           all objects of destinationEntityName are used
+ * displayGroup = display group the query is in
  * @created ak on Fri Nov 21 2003
  * @project ERDirectToWeb
  */
@@ -51,12 +55,21 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
     public Object secondaryDisplayGroupQueryMatchValue() {
         return key() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(secondaryQueryKey()) : null;
     }
+    
+    public boolean multiple() {
+        return booleanValueForBinding("multiple");
+    }
+    
     public void setSecondaryDisplayGroupQueryMatchValue (Object newValue) {
         if (secondaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null ) {
             if(newValue != null) {
                 displayGroup().queryMatch().setObjectForKey(newValue,secondaryQueryKey());
             } else {
                 displayGroup().queryMatch().removeObjectForKey(secondaryQueryKey());
+            }
+            if(multiple()) {
+                displayGroup().queryOperator().setObjectForKey(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, 
+                        secondaryQueryKey());
             }
         }
     }
@@ -70,23 +83,28 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
             } else {
                 displayGroup().queryMatch().removeObjectForKey(primaryQueryKey());
             }
+            if(multiple()) {
+                displayGroup().queryOperator().setObjectForKey(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, 
+                        primaryQueryKey());
+            }
         }
     }
     
-    public Object restrictedChoiceList() {
+    public Object theList() {
         String restrictedChoiceKey=(String)valueForBinding("restrictedChoiceKey");
         if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 )
             return valueForKeyPath(restrictedChoiceKey);
-        String fetchSpecName=(String)valueForBinding("restrictingFetchSpecification");
-        if(fetchSpecName != null &&  fetchSpecName.length()>0) {
-            EOEditingContext ec = ERXEC.newEditingContext();
-            ec.lock();
-            try {
-            	return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, (String)valueForBinding("destinationEntityName"),fetchSpecName,null);
-            } finally {
-            	ec.unlock();
+        EOEditingContext ec = ERXEC.newEditingContext();
+        String destinationEntityName = (String)valueForBinding("destinationEntityName");
+        ec.lock();
+        try {
+            String restrictingFetchSpecification=(String)valueForBinding("restrictingFetchSpecification");
+            if(restrictingFetchSpecification != null &&  restrictingFetchSpecification.length()>0) {
+                return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, destinationEntityName, restrictingFetchSpecification,null);
             }
+            return EOUtilities.objectsForEntityNamed(ec, destinationEntityName);
+        } finally {
+            ec.unlock();
         }
-        return null;
     }
 }
