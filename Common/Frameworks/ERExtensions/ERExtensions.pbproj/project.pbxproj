@@ -1075,6 +1075,17 @@
 			settings = {
 			};
 		};
+		F5177FBF0266EB2801000102 = {
+			isa = PBXFileReference;
+			path = EOGenericRecordClazz.java;
+			refType = 4;
+		};
+		F5177FC00266EB2801000102 = {
+			fileRef = F5177FBF0266EB2801000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F558841A025B832201000102 = {
 			isa = PBXFileReference;
 			path = ERXLogger.java;
@@ -1793,10 +1804,10 @@
 				F6F4D1AC0251EB4D01AD0D07,
 				F6F4D1AD0251EB4D01AD0D07,
 				F50E5AFA020A03D201A80106,
-				F57EA68B01FF59BF019E57DA,
+				F641B2FB026AF07C014E589E,
 				F57EA6AF01FF59BF019E57DA,
 				F57EA6C101FF59BF019E57DA,
-				F597C1870263763401000102,
+				F641B2FC026AF07C014E589E,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -1804,7 +1815,8 @@
 		};
 		F57EA68B01FF59BF019E57DA = {
 			isa = PBXFileReference;
-			path = ValidationTemplate.strings;
+			name = ValidationTemplate.strings;
+			path = English.lproj/ValidationTemplate.strings;
 			refType = 4;
 		};
 		F57EA6AF01FF59BF019E57DA = {
@@ -2296,7 +2308,7 @@
 				F57EA71C01FF59C0019E57DA,
 				F57EA72F01FF59C0019E57DA,
 				F57EA73A01FF59C0019E57DA,
-				F57EA74801FF59C0019E57DA,
+				F641B2FD026AF07C014E589E,
 				F57EA76C01FF59C0019E57DA,
 				F57EA77E01FF59C0019E57DA,
 				F587FFAA020631FF01A801D4,
@@ -2427,7 +2439,7 @@
 				F61422E70253618901AD0D07,
 				F61422F20253620001AD0D07,
 				F61422F30253620001AD0D07,
-				F597C1880263763401000102,
+				F641B2FE026AF07D014E589E,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -2446,12 +2458,6 @@
 		};
 		F57EA73A01FF59C0019E57DA = {
 			fileRef = F57EA67C01FF59BF019E57DA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F57EA74801FF59C0019E57DA = {
-			fileRef = F57EA68B01FF59BF019E57DA;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -2612,6 +2618,7 @@
 				F558841B025B832301000102,
 				F5BE99C30262584501000102,
 				F5BE99C40262584501000102,
+				F5177FC00266EB2801000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -3677,14 +3684,9 @@
 		};
 		F597C1870263763401000102 = {
 			isa = PBXFileReference;
-			path = Localizable.strings;
+			name = English;
+			path = English.lproj/Localizable.strings;
 			refType = 4;
-		};
-		F597C1880263763401000102 = {
-			fileRef = F597C1870263763401000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F5A3C5C20219A7D701A801D4 = {
 			isa = PBXFileReference;
@@ -4474,6 +4476,42 @@
 			settings = {
 			};
 		};
+		F641B2FB026AF07C014E589E = {
+			children = (
+				F57EA68B01FF59BF019E57DA,
+				F641B2FF026AF091014E589E,
+			);
+			isa = PBXVariantGroup;
+			name = ValidationTemplate.strings;
+			refType = 4;
+		};
+		F641B2FC026AF07C014E589E = {
+			children = (
+				F597C1870263763401000102,
+				F6A85F97026AF1530146FA97,
+			);
+			isa = PBXVariantGroup;
+			name = Localizable.strings;
+			refType = 4;
+		};
+		F641B2FD026AF07C014E589E = {
+			fileRef = F641B2FB026AF07C014E589E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F641B2FE026AF07D014E589E = {
+			fileRef = F641B2FC026AF07C014E589E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F641B2FF026AF091014E589E = {
+			isa = PBXFileReference;
+			name = German;
+			path = German.lproj/ValidationTemplate.strings;
+			refType = 4;
+		};
 		F645C8720247899001AD0D07 = {
 			children = (
 				F57EA64001FF59BF019E57DA,
@@ -4550,6 +4588,7 @@
 				F57EA60A01FF59BF019E57DA,
 				F57EA61901FF59BF019E57DA,
 				F57EA61A01FF59BF019E57DA,
+				F5177FBF0266EB2801000102,
 			);
 			isa = PBXGroup;
 			name = "EOF Additions";
@@ -5453,6 +5492,12 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F6A85F97026AF1530146FA97 = {
+			isa = PBXFileReference;
+			name = German;
+			path = German.lproj/Localizable.strings;
+			refType = 4;
 		};
 		F6F4D1AA0251D9F501AD0D07 = {
 			isa = PBXFileReference;
