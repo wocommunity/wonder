@@ -70,11 +70,11 @@
     
 
     <target name="clean" depends="init">
-        <ant antfile="Build/build/common.xml" target="${ant.project.name}.clean" />
+        <ant antfile="Build/build/generic.xml" target="${ant.project.name}.clean" />
     </target>
 
     <target name="install" depends="init">
-        <ant antfile="Build/build/common.xml" target="install" />
+        <ant antfile="Build/build/generic.xml" target="${ant.project.name}install" />
     </target>
 
     <target name="usage" depends="init">
@@ -82,6 +82,6 @@
     </target>
 
     <target name="all" depends="init">
-        <ant antfile="Build/build/common.xml" target="${ant.project.name}.all" />
+        <ant antfile="Build/build/generic.xml" target="${ant.project.name}.all" />
     </target>
 </project>
