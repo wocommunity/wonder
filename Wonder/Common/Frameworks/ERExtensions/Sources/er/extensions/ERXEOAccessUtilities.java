@@ -58,12 +58,67 @@ public class ERXEOAccessUtilities {
     //		sql in a non-blocking fashion.
     public static void evaluateSQLWithEntityNamed(EOEditingContext ec, String entityName, String exp) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        evaluateSQLWithEntity(ec, entity, exp);
+    }
+
+    /**
+    * Utility method used to execute arbitrary SQL. This
+     * has the advantage over the
+     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
+     * <code>rawRowsForSQL</code> in that it can be used with
+     * other statements besides just SELECT without throwing
+     * exceptions.
+     * @param ec editing context that determines which model group
+     *		and database context to use.
+     * @param entity an entity in the model connected
+     *		to the database you wish to execute SQL against
+     * @param exp SQL expression
+     */
+    // ENHANCEME: Should support the use of bindings
+    // ENHANCEME: Could also support the option of using a seperate EOF stack so as to execute
+    //		sql in a non-blocking fashion.
+    public static void evaluateSQLWithEntity(EOEditingContext ec, EOEntity  entity, String exp) {
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
         if (!adaptorChannel.isOpen())
             adaptorChannel.openChannel();
         EOSQLExpressionFactory factory=adaptorChannel.adaptorContext().adaptor().expressionFactory();
         adaptorChannel.evaluateExpression(factory.expressionForString(exp));
+    }
+
+    /** creates the SQL which is used by the provides EOFetchSpecification. The EOEditingContext is needed
+    * because it -could- be possible to have multiple EOF stacks, each having its own EOModelGroup and
+    * each EOModel in this group could connect to different databases, Oracle, FrontBase, ...
+    *
+     * @param spec the EOFetchSpecification in question
+     * @param ec the EOEditingContext
+     *
+     * @return the SQL which the EOFetchSpecification would use
+     */
+    public static String sqlForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
+        EOModel model = modelForFetchSpecificationAndEditingContext(spec, ec);
+        EOEntity entity = model.entityNamed(spec.entityName());
+        EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
+        EODatabase db = new EODatabase(adaptor);
+        EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
+
+        //NSArray attributes = spec.rawRowKeyPaths();
+        NSArray attributesFromEntity = entity.attributesToFetch();
+
+        EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributesFromEntity, false, spec, entity);
+        sqlExpr.setUseBindVariables(false);
+        String sql = sqlExpr.statement();
+
+        return sql;
+    }
+
+    public static EOModel modelForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
+        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator)ec.rootObjectStore();
+        EOModelGroup modelGroup = (EOModelGroup)osc.userInfo().objectForKey("EOModelGroup");
+        EOEntity entity = modelGroup.entityNamed(spec.entityName());
+        EOModel model = entity.model();
+
+        return model;
     }
 
     /**
