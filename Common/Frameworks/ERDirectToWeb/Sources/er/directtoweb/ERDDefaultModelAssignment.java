@@ -135,7 +135,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
         if (rawObject!=null && rawObject instanceof EOEnterpriseObject && propertyKey!=null) {
             EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
             EOEnterpriseObject lastEO=object;
-            if (lastEO!=null && propertyKey.indexOf(".")!=-1) {
+            if (lastEO!=null && propertyKey.indexOf(".")!=-1 && propertyKey.indexOf("@") == 0) {
                 String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
                 Object rawLastEO=object.valueForKeyPath(partialKeyPath);
                 lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
@@ -179,7 +179,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
             if (rawObject!=null && rawObject instanceof EOEnterpriseObject) {
                 EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
                 EOEnterpriseObject lastEO=object;
-                if (propertyKey.indexOf(".")!=-1) {
+                if (propertyKey.indexOf(".")!=-1 && propertyKey.indexOf("@") == 0) {
                     String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
                     Object rawLastEO=object.valueForKeyPath(partialKeyPath);
                     lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
