@@ -1,0 +1,16 @@
+
+# ERCoreBusinessLogic Framework Properties
+
+# These properties are pushed into the Java system properties for 
+# applications linking against to this framework
+# You can override them from the application's Properties file or 
+# command-line arguments.
+# Remove the leading '#' to uncomment a property
+
+#########################################################################
+# Common Settings
+#########################################################################
+
+# ERCMailState class
+#ERCUseMailFacility = 
+
