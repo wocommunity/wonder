@@ -1,48 +1,3 @@
-AttributeRepetition: WORepetition {
-	_unroll = true;
-	item = d2wContext.propertyKey;
-	list = currentSectionKeys;
-}
-
-AttributeValue1: WOSwitchComponent { 
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = d2wContext;
-	object = object;
-}
-
-AttributeValue2: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = d2wContext;
-	object = object;
-}
-
-Border: ERXTableWithBorder {
-	bgcolor = d2wContext.backgroundColorForTable;
-	renderBorder = d2wContext.renderBorder;
-	border = d2wContext.border;
-	color = "#ee00ee";
-}
-
-Conditional1: WOConditional {
-	condition = isEmbedded;
-	negate = false;
-}
-
-Conditional4: WOConditional {
-	condition = d2wContext.useMatrixLayout;
-}
-
-ERTable1: ERXTable {
-	goingVertically = d2wContext.matrixLayoutVertical;
-	item = d2wContext.propertyKey;
-	list = currentSectionKeys;
-	maxColumns = d2wContext.maxColumns;
-}
-
 EditForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
 	multipleSubmit = true;
@@ -57,23 +12,15 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 }
 
-HasSectionName: ERXNonZeroConditional {
-	condition = currentSection.name.length;
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContext;
+	object = object;
 }
 
-IsEditingConditional2: WOConditional {
+IsEditingConditional: WOConditional {
 	_unroll = true;
 	condition = isEditing;
-}
-
-NotUsingMatrixLayout: WOConditional {
-	condition = d2wContext.useMatrixLayout;
-	negate = true;
-}
-
-Sections: WORepetition {
-    list=sectionsContents;
-    item=currentSection;
 }
 
 SubmitChanges: WOImageButton {
@@ -83,20 +30,5 @@ SubmitChanges: WOImageButton {
 	filename = saveButtonFileName;
 	framework = "JavaDirectToWeb";
 	name = "Saves your changes";
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent2: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
-}
-
-SwitchComponent3: WOSwitchComponent {
-	WOComponentName = d2wContext.sectionComponentName;
-	d2wContext = d2wContext;
 }
 

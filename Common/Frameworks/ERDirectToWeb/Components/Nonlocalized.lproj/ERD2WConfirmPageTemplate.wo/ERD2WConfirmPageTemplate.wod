@@ -34,6 +34,16 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 }
 
+ExclamationImage: WOImage {
+	alt = "!";
+	border = "0";
+	filename = "exclamation.gif";
+	framework = "JavaWOExtensions";
+	height = "32";
+	name = "!";
+	width = "32";
+}
+
 Form2: WOForm {
 	multipleSubmit = true;
 }
