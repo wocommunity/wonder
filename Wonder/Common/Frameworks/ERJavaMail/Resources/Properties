@@ -19,3 +19,6 @@ er.javamail.debugEnabled = false
 
 # * Time to wait when mail sender queue is overflowed
 er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
+
+# Used to set a default X-Mailer
+#er.javamail.mailer.XMailerHeader = 
