@@ -63,9 +63,14 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     private EOEnterpriseObject preferenceRecordForKey(String key) {
         EOEnterpriseObject result=null;
         if (key!=null) {
+            if (log.isDebugEnabled())
+                log.debug("Preference value for Key = "+key);
             for (Enumeration e=preferences().objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject pref=(EOEnterpriseObject)e.nextElement();
                 String prefKey=(String)pref.valueForKey("key");
+                if (log.isDebugEnabled()){
+                    log.debug("prefKey = "+prefKey);
+                }
                 if (prefKey!=null && prefKey.equals(key)) {
                     result=pref;
                     break;
