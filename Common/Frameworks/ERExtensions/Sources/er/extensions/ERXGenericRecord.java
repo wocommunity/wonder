@@ -350,7 +350,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	    }
 	    if(!_raiseOnMissingEditingContextDelegate) {
 		log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
-		ERXExtensions.setDefaultDelegate(editingContext);
+		ERXEC.factory().setDefaultDelegateOnEditingContext(editingContext);
 		return true;
 	    } else {
 		throw new RuntimeException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
