@@ -33,8 +33,14 @@ public class PostgresqlExpression extends JDBCExpression {
 
     private int _fetchLimit;
     
+    /**
+     * Overridden to remove the rtrim usage. The original implementation
+     * will remove every trailing space from character based column which 
+     * should not be OK for Postgres
+     */
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
+        super._rtrimFunctionName = null;
     }
 
     
@@ -42,8 +48,8 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden to support milliseconds to work with Postgres
      */
     public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-        String type = columnTypeStringForAttribute(eoattribute);
-        if ("timestamp".equals(type)) {
+        String type = eoattribute.valueType();
+        if ("NSTimestamp".equals(type)) {
             return false;
         } else {
             return true;
