@@ -7,7 +7,6 @@
 package er.extensions;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.foundation.*;
 import java.util.*;
 import java.math.*;
 import java.io.File;
@@ -16,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import com.webobjects.appserver._private.WOProjectBundle;
+import com.webobjects.foundation.*;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -30,6 +30,7 @@ public class ERXProperties {
     private static String UndefinedMarker = "-undefined-";
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
+    private static final Map AppSpecificPropertyNames = new HashMap(128);
 
     /** WebObjects version number as string */
     private static String _webObjectsVersion;
@@ -214,6 +215,35 @@ public class ERXProperties {
     }
 
     /**
+     * Converts the standard propertyName into one with a .<AppName> on the end, iff the property is defined with
+     * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
+     * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
+     * @param propertyName
+     * @return
+     */
+    private static String getApplicationSpecificPropertyName(final String propertyName) {
+        synchronized(AppSpecificPropertyNames) {
+            String appSpecificPropertyName = (String)AppSpecificPropertyNames.get(propertyName);
+            if (appSpecificPropertyName == null) {
+                final WOApplication application = WOApplication.application();
+                if (application != null) {
+                    final String appName = application.name();
+                    appSpecificPropertyName = propertyName + "." + appName;
+                }
+                else {
+                    appSpecificPropertyName = propertyName;
+                }
+                final String propertyValue = System.getProperty(appSpecificPropertyName);
+                if (propertyValue == null) {
+                    appSpecificPropertyName = propertyName;
+                }
+                AppSpecificPropertyNames.put(propertyName, appSpecificPropertyName);
+            }
+            return appSpecificPropertyName;
+        }
+    }
+
+    /**
      * Cover method for returning an NSArray for a
      * given system property and set a default value if not given.
      * @param s system property
@@ -222,10 +252,11 @@ public class ERXProperties {
      *      the system properties or default value
      */
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
-        final String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        final String propertyValue = System.getProperty(propertyName);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
-            setArrayForKey(array == null ? NSArray.EmptyArray : array, s);
+            setArrayForKey(array == null ? NSArray.EmptyArray : array, propertyName);
         }
         return array;
     }
@@ -254,11 +285,12 @@ public class ERXProperties {
      *      system properties.
      */
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Boolean.toString(booleanValue);
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return booleanValue;
     }
@@ -283,10 +315,11 @@ public class ERXProperties {
      *      the system properties
      */
     public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
-        final String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        final String propertyValue = System.getProperty(propertyName);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
-            setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, s);
+            setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, propertyName);
         }
         return dictionary;
     }
@@ -335,11 +368,12 @@ public class ERXProperties {
      *      system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
      */
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = bigDecimal.toString();
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return bigDecimal;
     }
@@ -352,11 +386,12 @@ public class ERXProperties {
      * @return int value of the system property or the default value
      */    
     public static int intForKeyWithDefault(final String s, final int defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Integer.toString(intValue);
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return intValue;
     }
@@ -369,11 +404,12 @@ public class ERXProperties {
      * @return long value of the system property or the default value
      */    
     public static long longForKeyWithDefault(final String s, final long defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Long.toString(longValue);
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return longValue;
     }
@@ -397,10 +433,11 @@ public class ERXProperties {
      * @return string value of the system propery or null
      */
     public static String stringForKeyWithDefault(final String s, final String defaultValue) {
-        final String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        final String propertyValue = System.getProperty(propertyName);
         final String stringValue = propertyValue == null ? defaultValue : propertyValue;
         if (retainDefaultsEnabled() && propertyValue == null) {
-            System.setProperty(s, stringValue == null ? UndefinedMarker : stringValue);
+            System.setProperty(propertyName, stringValue == null ? UndefinedMarker : stringValue);
         }
         return stringValue == UndefinedMarker ? null : stringValue;
     }
