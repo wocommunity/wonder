@@ -30,4 +30,11 @@ public class ERXMutableDictionary extends NSMutableDictionary {
     public NSData toBlob() throws Exception {
         return toBlob(this);
     }
+
+    public ERXMutableDictionary(NSDictionary d) {
+        super(d);
+    }
+    public ERXMutableDictionary() {
+        super();
+    }
 }
