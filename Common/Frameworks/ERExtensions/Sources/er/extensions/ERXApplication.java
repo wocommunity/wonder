@@ -24,7 +24,7 @@ import java.io.*;
  *  and more context information when handling exceptions.
  */
 
-public abstract class ERXApplication extends WOApplication {
+public abstract class ERXApplication extends WOApplication implements ERXGracefulShutdown.GracefulApplication {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);
@@ -595,6 +595,15 @@ public abstract class ERXApplication extends WOApplication {
         return context;
     }
 
+    /**
+     * Override to perform any last minute cleanup before the application terminates.
+     * See {@class er.extensions.ERXGracefulShutdown ERXGracefulShutdown} for where
+     * this is called if signal handling is enabled. Default implementation calls
+     * terminate.
+     */
+    public void gracefulTerminate() {
+        terminate();
+    }    
     
     /** 
      * Logs the warning message if the main method was not called 
