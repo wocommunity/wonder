@@ -45,10 +45,11 @@ TODO: chaining of Localizers
 */
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
-    static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
-    static final ERXLogger createdKeysLog = ERXLogger.getLogger(ERXLocalizer.class, "createdKeys");
+    protected static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
+    protected static final ERXLogger createdKeysLog = ERXLogger.getLogger(ERXLocalizer.class, "createdKeys");
     private static boolean isLocalizationEnabled = false;
     private static boolean isInitialized = false;
+    
     public static final String LocalizationDidResetNotification = "LocalizationDidReset";
     
     public static class Observer {
@@ -77,7 +78,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     static NSArray frameworkSearchPath;
     static NSArray availableLanguages;
     static String defaultLanguage;
-
     
     static NSMutableDictionary localizers = new NSMutableDictionary();
     
@@ -85,17 +85,23 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     private NSMutableDictionary createdKeys;
     private String NOT_FOUND = "**NOT_FOUND**";
 
+    /**
+     * Resets the localizer cache. If WOCaching is
+     * enabled then after being reinitialize all of
+     * the localizers will be reloaded.
+     */
     public static void resetCache() {
         initialize();
-        if(WOApplication.application().isCachingEnabled()) {
+        if (WOApplication.application().isCachingEnabled()) {
             Enumeration e = localizers.objectEnumerator();
-            while(e.hasMoreElements()) {
+            while (e.hasMoreElements()) {
                 ((ERXLocalizer)e.nextElement()).load();
             }
         } else {
             localizers = new NSMutableDictionary();
         }
     }
+    
     public static ERXLocalizer localizerForLanguages(NSArray languages) {
         if(languages == null || languages.count() == 0) return localizerForLanguage(defaultLanguage());
         ERXLocalizer l = null;
@@ -114,6 +120,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
     
     private static NSArray _languagesWithoutPluralForm = new NSArray(new Object [] {"Japanese"});
+    
     public static ERXLocalizer localizerForLanguage(String language) {
         ERXLocalizer l = null;
         l = (ERXLocalizer)localizers.objectForKey(language);
@@ -121,14 +128,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             if(availableLanguages().containsObject(language)) {
                 if (_languagesWithoutPluralForm.containsObject(language))
                     l = createLocalizerForLanguage(language, false);
-                    //l = new ERXNonPluralFormLocalizer(language);
                 else
                     l = createLocalizerForLanguage(language, true);
-                    //l = new ERXLocalizer(language);
             } else {
                 l = (ERXLocalizer)localizers.objectForKey(defaultLanguage());
                 if(l == null) {
-                    //l = new ERXLocalizer(defaultLanguage());
                     if (_languagesWithoutPluralForm.containsObject(defaultLanguage()))
                         l = createLocalizerForLanguage(defaultLanguage(), false);
                     else
@@ -141,6 +145,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return l;
     }
 
+    /**
+     * Creates a localizer for a given language and with an
+     * indication if the language supports plural forms. To provide
+     * your own subclass of an ERXLocalizer you can set the system
+     * property <code>er.extensions.ERXLocalizer.pluralFormClassName</code>
+     * or <code>er.extensions.ERXLocalizer.nonPluralFormClassName</code>.
+     * @param language name to construct the localizer for
+     * @param pluralForm denotes if the language supports the plural form
+     * @return a localizer for the given language
+     */
     protected static ERXLocalizer createLocalizerForLanguage(String language, boolean pluralForm) {
         ERXLocalizer localizer = null;
         String className = null;
@@ -172,10 +186,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public static void setLocalizerForLanguage(ERXLocalizer l, String language) {
         localizers.setObjectForKey(l, language);
     }
-    
+
+    /**
+     * Cover method that calls <code>localizedStringForKey</code>.
+     * @param key to resolve a localized varient of
+     * @return localized string for the given key
+     */
     public Object valueForKey(String key) {
         return localizedStringForKey(key);
     }
+    
     public Object valueForKeyPath(String key) {
         Object result = valueForKey(key);
         if(result == null) {
@@ -245,23 +265,43 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
 
+    // CHECKME: Don't think that we need these any more now that we can have access to
+    //	        the current localizer via thread storage
     public static NSDictionary fakeSessionForLanguage(String language) {
         ERXLocalizer localizer = localizerForLanguage(language);
         return new NSDictionary(new Object[] {localizer,language}, new Object[] {"localizer", "language"} );
     }
 
+    // CHECKME: Don't think that we need these any more now that we can have access to
+    //	        the current localizer via thread storage
     public static NSDictionary fakeSessionForSession(Object session) {
         ERXLocalizer localizer = localizerForSession(session);
         return new NSDictionary(new Object[] {localizer,localizer.language()}, new Object[] {"localizer", "language"} );
     }
 
+    /**
+     * Returns the current localizer for the current thread.
+     * Note that the localizer for a given session is pushed
+     * onto the thread when a session awakes and is nulled out
+     * when a session sleeps.
+     * @return the current localizer that has been pushed into
+     * 		thread storage.
+     */
     public static ERXLocalizer currentLocalizer() {
         return (ERXLocalizer)ERXThreadStorage.valueForKey("localizer");
     }
+
+    /**
+     * Sets a localizer for the current thread. This is accomplished
+     * by using the object {@link ERXThreadStorage}
+     * @param currentLocalizer to set in thread storage for the current
+     *		thread.
+     */
     public static void setCurrentLocalizer(ERXLocalizer currentLocalizer) {
         ERXThreadStorage.takeValueForKey(currentLocalizer, "localizer");
     }
 
+    
     public static ERXLocalizer localizerForSession(Object session) {
         if(session instanceof ERXSession) return ((ERXSession)session).localizer();
         if(session instanceof WOSession) return localizerForLanguages(((WOSession)session).languages());
@@ -277,8 +317,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizerForLanguage(defaultLanguage());
     }
     
-    public String language() {return language;}
-    public NSDictionary createdKeys() {return createdKeys;}
+    public String language() { return language; }
+    public NSDictionary createdKeys() { return createdKeys; }
 
     public Object localizedValueForKeyWithDefault(String key) {
         Object result = localizedValueForKey(key);
@@ -363,11 +403,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return _plurify(name, count);
     }
     
-    public String toString() {return "<ERXLocalizer "+language+">";}
-
+    public String toString() { return "<ERXLocalizer "+language+">"; }
 
     public static String defaultLanguage() {
-        if(defaultLanguage == null) {
+        if (defaultLanguage == null) {
             defaultLanguage = System.getProperty("er.extensions.ERXLocalizer.defaultLanguage");
             if(defaultLanguage == null) {
                 defaultLanguage = "English";
