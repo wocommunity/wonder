@@ -12,5 +12,12 @@ import com.webobjects.directtoweb.D2WList;
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
 public class ERXD2WList extends D2WList {
 
-    public ERXD2WList(WOContext context) { super(context); }
+    public ERXD2WList(WOContext context) {
+        super(context);
+    }
+
+    /**
+     * Calling super is a bad thing in 5.2 when used as an embedded list.
+     */
+    public void awake() {}
 }
