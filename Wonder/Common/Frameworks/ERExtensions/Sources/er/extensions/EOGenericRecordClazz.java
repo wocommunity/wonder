@@ -327,7 +327,6 @@ public class EOGenericRecordClazz extends Object {
         }
         if(entity().isAbstractEntity()) {
             NSArray restrict = (NSArray)entity().subEntities().valueForKeyPath("restrictingQualifier.allQualifierKeys.allObjects.@flatten.@unique");
-            log.info("restricting keys: " + restrict);
             keys.addObjectsFromArray(restrict);
         }
         fs.setRawRowKeyPaths(keys);
