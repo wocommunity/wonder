@@ -497,6 +497,8 @@
 				414045F60521B01000000102,
 				4198E3C9052634260048E379,
 				50EB03AA055EBAD2007F93C2,
+				50EB03AD055ED28E007F93C2,
+				50EB03AE055ED28E007F93C2,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1658,6 +1660,8 @@
 				F698E7CE030C6F6B01257492,
 				50EB03A9055EBAD2007F93C2,
 				F59C57C002C4565701000102,
+				50EB03AB055ED28E007F93C2,
+				50EB03AC055ED28E007F93C2,
 				F54C4C5B02C4E2A001000102,
 				F59C57D902C4565701000102,
 				F59C57E102C4565701000102,
@@ -1924,6 +1928,32 @@
 		};
 		50EB03AA055EBAD2007F93C2 = {
 			fileRef = 50EB03A9055EBAD2007F93C2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50EB03AB055ED28E007F93C2 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXPathDirectAction.java;
+			path = er/extensions/ERXPathDirectAction.java;
+			refType = 4;
+		};
+		50EB03AC055ED28E007F93C2 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXPathDirectActionRequestHandler.java;
+			path = er/extensions/ERXPathDirectActionRequestHandler.java;
+			refType = 4;
+		};
+		50EB03AD055ED28E007F93C2 = {
+			fileRef = 50EB03AB055ED28E007F93C2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50EB03AE055ED28E007F93C2 = {
+			fileRef = 50EB03AC055ED28E007F93C2;
 			isa = PBXBuildFile;
 			settings = {
 			};
