@@ -129,6 +129,8 @@
 				F7C7CAFF02EF1E87014AF50A,
 				F7C7CB0002EF1E87014AF50A,
 				F7C7CB0102EF1E87014AF50A,
+				F689B35102F870250FCF0E72,
+				F689B35302F870440FCF0E72,
 			);
 			isa = PBXResourcesBuildPhase;
 		};
@@ -142,6 +144,7 @@
 				9D2B3D5102EE256410CF0CA3,
 				F7C7CB0202EF1E87014AF50A,
 				F7C7CB0302EF1E87014AF50A,
+				F689B35502F870510FCF0E72,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -623,6 +626,7 @@
 				9D2B3D4702EE256310CF0CA3,
 				F7C7CAF402EF1E87014AF50A,
 				F7C7CAF902EF1E87014AF50A,
+				F689B35602F870540FCF0E72,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -860,6 +864,62 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F689B34B02F870250FCF0E72 = {
+			children = (
+				F689B34C02F870250FCF0E72,
+			);
+			isa = PBXVariantGroup;
+			name = ERNEUErrorPage.wo;
+			path = "";
+			refType = 4;
+		};
+		F689B34C02F870250FCF0E72 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERNEUErrorPage.wo;
+			refType = 4;
+		};
+		F689B35102F870250FCF0E72 = {
+			fileRef = F689B34B02F870250FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F689B35202F870440FCF0E72 = {
+			isa = PBXFileReference;
+			name = ERNEUErrorPage.api;
+			path = Resources/ERNEUErrorPage.api;
+			refType = 4;
+		};
+		F689B35302F870440FCF0E72 = {
+			fileRef = F689B35202F870440FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F689B35402F870510FCF0E72 = {
+			isa = PBXFileReference;
+			name = ERNEUErrorPage.java;
+			path = Sources/er/neutral/ERNEUErrorPage.java;
+			refType = 4;
+		};
+		F689B35502F870510FCF0E72 = {
+			fileRef = F689B35402F870510FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F689B35602F870540FCF0E72 = {
+			children = (
+				F689B34B02F870250FCF0E72,
+				F689B35202F870440FCF0E72,
+				F689B35402F870510FCF0E72,
+			);
+			isa = PBXGroup;
+			name = ERNEUErrorPage;
+			refType = 4;
 		};
 		F6EBF38B02DF4EFF0FCF0E72 = {
 			children = (
