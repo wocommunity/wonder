@@ -10,11 +10,9 @@
         <path id="project.class.path">
             <fileset dir="${build.root}">
                 <include name="ER*.framework/Resources/Java/*.jar" />
-            </fileset>
-            <fileset dir="${build.root}">
                 <include name="BT*.framework/Resources/Java/*.jar" />
             </fileset>
-            <fileset dir="${wo.system.root}">
+            <fileset dir="${wo.woroot}/Library/Frameworks">
                 <include name="Java**/Resources/Java/*.jar" />
                 <exclude name="JavaWOExtensions.framework"/>
             </fileset>
@@ -26,7 +24,7 @@
         <echo message="Valid target-commands" />
         <echo message="---------------------" />
         <echo message="  all       --> create framework in ${build.root} " />
-        <echo message="  install   --> copy framework to ${wo.local.root} " />
+        <echo message="  install   --> copy framework to ${wo.localroot} " />
         <echo message="  web       --> copy framework to ${wo.server.root} " />
         <echo message="  clean     --> remove .classes and .framework" />
         <echo message="  allclean  --> remove .classes and .framework and installed framework" />
@@ -104,7 +102,7 @@
         <echo message="-------------------------------------" />
     </target>
 
-    <target name="application" depends="properties,compile" description="Default compile target">
+    <target name="application" depends="properties, compile" description="Default compile target">
         <mkdir dir="${build.temp.dir}" />
         <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
             <fileset dir="${project.dir}/WebServerResources" />
@@ -113,7 +111,7 @@
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
         </taskdef>
-        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
@@ -137,24 +135,26 @@
             <frameworks root="${build.root}">
                 <include name="JavaWO*.framework"/>
                 <include name="ER*.framework"/>
+                <include name="BT*.framework"/>
                 <exclude name="ERNeutralLook.framework"/>
                 <exclude name="ERJavaMail.framework"/>
                 <exclude name="ERChangeNotificationJMS.framework"/>
                 <exclude name="WOPayPal.framework"/>
                 <exclude name="Validity.framework"/>
-                <include name="BT*.framework"/>
             </frameworks>
-            <frameworks root="${wo.local.root}">
-                <include name="Mysql*.framework"/>
+            <frameworks root="wo.woroot">
+                <include name="Library/Frameworks/JavaJDBCAdaptor.framework" />
+                <include name="Library/Frameworks/JavaXML.framework"/>
+                <include name="Library/Frameworks/JavaEOControl.framework" />
+                <include name="Library/Frameworks/JavaWebObjects.framework" />
+                <include name="Library/Frameworks/JavaDirectToWeb.framework" />
+                <include name="Library/Frameworks/JavaEOProject.framework" />
+                <include name="Library/Frameworks/JavaEOAccess.framework" />
+                <include name="Library/Frameworks/JavaFoundation.framework" />
+                <include name="Library/Frameworks/JavaDTWGeneration.framework" />
             </frameworks>
-            <frameworks root="${wo.system.root}">
-                <include name="Java*.framework"/>
-                <exclude name="Java*Cocoa.framework"/>
-                <exclude name="JavaOpen*.framework"/>
-                <exclude name="JavaWOExtensions.framework"/>
-                <exclude name="JavaEOGeneration*.framework"/>
-                <exclude name="JavaEOInterface.framework"/>
-                <exclude name="JavaEODistribution.framework"/>
+            <frameworks root="wo.localroot">
+                <include name="Library/Frameworks/Mysql*.framework"/>
             </frameworks>
         </woapplication>
 
@@ -174,7 +174,7 @@
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
         </taskdef>
-        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
@@ -195,13 +195,17 @@
                 <include name="**/*.js" />
                 <include name="**/*.css" />
             </wsresources>
-            <frameworks root="${wo.system.root}">
-                <include name="Java*.framework"/>
-                <exclude name="Java*Cocoa.framework"/>
-                <exclude name="JavaOpen*.framework"/>
-                <exclude name="JavaEOGeneration*.framework"/>
-                <exclude name="JavaEOInterface.framework"/>
-                <exclude name="JavaEODistribution.framework"/>
+            <frameworks root="wo.woroot">
+                <include name="Library/Frameworks/JavaFoundation.framework" />
+                <include name="Library/Frameworks/JavaEOControl.framework" />
+                <include name="Library/Frameworks/JavaEOAccess.framework" />
+                <include name="Library/Frameworks/JavaWebObjects.framework" />
+                <include name="Library/Frameworks/JavaWOExtensions.framework" />
+                <include name="Library/Frameworks/JavaXML.framework" />
+                <include name="Library/Frameworks/JavaJDBCAdaptor.framework" />
+                <include name="Library/Frameworks/JavaDirectToWeb.framework" />
+                <include name="Library/Frameworks/JavaDTWGeneration.framework" />
+                <include name="Library/Frameworks/JavaEOProject.framework" />
             </frameworks>
         </woapplication>
 
@@ -213,7 +217,7 @@
     </target>
 
     <target name="install" depends="all">
-        <copy todir="${wo.local.root}/${framework.name}">
+        <copy todir="${wo.localroot}/${framework.name}">
             <fileset dir="${build.framework.dir}" />
         </copy>
     </target>
