@@ -3,12 +3,29 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
+		4125674106F82C8600EB9DF2 = {
+			containerPortal = F5C403A702022B0501A801D4;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5C4040B02022B0501A801D4;
+			remoteInfo = "Web Server";
+		};
+		4125674206F82C8600EB9DF2 = {
+			containerPortal = F5C403A702022B0501A801D4;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5C403E002022B0501A801D4;
+			remoteInfo = "Application Server";
+		};
 		416649FE04476AAB00000102 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = file;
 			path = ERPrototypes.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		416649FF04476AAB00000102 = {
 			fileRef = 416649FE04476AAB00000102;
@@ -35,9 +52,6 @@
 			name = Ant;
 			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
-			settingsToExpand = 6;
-			settingsToPassInEnvironment = 287;
-			settingsToPassOnCommandLine = 280;
 		};
 //410
 //411
@@ -56,6 +70,7 @@
 			isa = PBXGroup;
 			path = javamail;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		503362DA05EE9D1900039CB0 = {
 			children = (
@@ -65,18 +80,23 @@
 			isa = PBXGroup;
 			path = mailer;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		503362DB05EE9D3600039CB0 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailer.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		503362DC05EE9D3600039CB0 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailerTimerTask.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		503362DD05EE9D3600039CB0 = {
 			fileRef = 503362DB05EE9D3600039CB0;
@@ -91,9 +111,12 @@
 			};
 		};
 		503362DF05EE9EB100039CB0 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = file;
 			path = ERJavaMail.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		503362E005EE9EB100039CB0 = {
 			fileRef = 503362DF05EE9EB100039CB0;
@@ -114,8 +137,10 @@
 		F533017C037B1A6501CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCLogEntryInterface.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F533017D037B1A6501CF0E76 = {
 			fileRef = F533017C037B1A6501CF0E76;
@@ -124,25 +149,37 @@
 			};
 		};
 		F55597E602832F8C01000104 = {
+			explicitFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			path = ERCoreBusinessLogic.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F55597E702832F8C01000104 = {
+			explicitFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERCoreBusinessLogic.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F55597E802832F8C01000104 = {
+			explicitFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERCoreBusinessLogic.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F55598E70283348A01000104 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F55598E80283348A01000104 = {
 			fileRef = F55598E70283348A01000104;
@@ -157,6 +194,8 @@
 			};
 		};
 		F5C403A702022B0501A801D4 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				F5C4042502022B0501A801D4,
 				F5C4042602022B0501A801D4,
@@ -193,6 +232,7 @@
 			isa = PBXGroup;
 			name = ERCoreBusinessLogic;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5C403BA02022B0501A801D4 = {
 			children = (
@@ -201,6 +241,7 @@
 			isa = PBXGroup;
 			name = "Web Components";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5C403BC02022B0501A801D4 = {
 			children = (
@@ -213,6 +254,7 @@
 			isa = PBXGroup;
 			name = Resources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5C403CB02022B0501A801D4 = {
 			children = (
@@ -235,66 +277,97 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5C403CC02022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403CD02022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaDirectToWeb.framework;
 			path = /System/Library/Frameworks/JavaDirectToWeb.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403CE02022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D102022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D202022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D402022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D502022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOProject.framework;
 			path = /System/Library/Frameworks/JavaEOProject.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D602022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D702022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403D802022B0501A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaDTWGeneration.framework;
 			path = /System/Library/Frameworks/JavaDTWGeneration.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5C403DA02022B0501A801D4 = {
 			children = (
@@ -305,6 +378,7 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5C403DE02022B0501A801D4 = {
 			buildPhases = (
@@ -317,7 +391,7 @@
 				F5C4042402022B0501A801D4,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
@@ -403,6 +477,7 @@
 		F5C403DF02022B0501A801D4 = {
 			isa = PBXTargetDependency;
 			target = F5C403E002022B0501A801D4;
+			targetProxy = 4125674206F82C8600EB9DF2;
 		};
 		F5C403E002022B0501A801D4 = {
 			buildPhases = (
@@ -616,6 +691,7 @@
 		F5C4040A02022B0501A801D4 = {
 			isa = PBXTargetDependency;
 			target = F5C4040B02022B0501A801D4;
+			targetProxy = 4125674106F82C8600EB9DF2;
 		};
 		F5C4040B02022B0501A801D4 = {
 			buildPhases = (
@@ -891,9 +967,12 @@
 			name = WebServer;
 		};
 		F5C4042902022BDC01A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = file;
 			path = ERJars.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5C4042B02022BDD01A801D4 = {
 			fileRef = F5C4042902022BDC01A801D4;
@@ -908,9 +987,12 @@
 			};
 		};
 		F5C4042E02022C8601A801D4 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = file;
 			path = ERExtensions.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5C4042F02022C8601A801D4 = {
 			fileRef = F5C4042E02022C8601A801D4;
@@ -932,13 +1014,17 @@
 			name = ERCMailableExceptionPage.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD883C02C4D54F01000102 = {
+			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
 			isa = PBXFolderReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERCMailableExceptionPage.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885102C4D54F01000102 = {
 			fileRef = F5DD883B02C4D54F01000102;
@@ -949,9 +1035,11 @@
 		F5DD885202C4D55901000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERCMailableExceptionPage.api;
 			path = Components/ERCMailableExceptionPage.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885302C4D55901000102 = {
 			fileRef = F5DD885202C4D55901000102;
@@ -967,13 +1055,16 @@
 			name = Validation.strings;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885502C4D56E01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = Resources/English.lproj/Validation.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885602C4D56E01000102 = {
 			fileRef = F5DD885402C4D56E01000102;
@@ -984,22 +1075,28 @@
 		F5DD885702C4D57F01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.d2wmodel;
 			name = d2w.d2wmodel;
 			path = Resources/d2w.d2wmodel;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885802C4D57F01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			name = CustomInfo.plist;
 			path = Resources/CustomInfo.plist;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885902C4D57F01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = ERCoreBusinessLogic.eomodeld;
 			path = Resources/ERCoreBusinessLogic.eomodeld;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885A02C4D57F01000102 = {
 			fileRef = F5DD885702C4D57F01000102;
@@ -1026,6 +1123,7 @@
 			isa = PBXGroup;
 			path = Sources;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD885E02C4D59001000102 = {
 			children = (
@@ -1035,6 +1133,7 @@
 			isa = PBXGroup;
 			path = er;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD885F02C4D59001000102 = {
 			children = (
@@ -1062,121 +1161,160 @@
 			isa = PBXGroup;
 			path = corebusinesslogic;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886002C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = _ERCLogEntry.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886102C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = _ERCMailMessage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886202C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = _ERCMailState.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886302C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = _ERCMessageAttachment.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886402C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = _ERCPreference.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886502C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = _ERCStatic.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886702C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCLogEntry.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886802C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERCMailableExceptionPage.java;
 			path = Sources/er/corebusinesslogic/ERCMailableExceptionPage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886902C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCMailDelivery.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886A02C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCMailMessage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886B02C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCMailState.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886C02C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCMessageAttachment.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886D02C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCoreBusinessLogic.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886E02C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCoreUserInterface.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD886F02C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCoreUserPreferences.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD887002C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCPreference.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD887202C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCStampedEnterpriseObject.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD887302C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCStatic.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD887402C4D59001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCUserPreferencesAssignment.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DD887502C4D59001000102 = {
 			fileRef = F5DD886002C4D59001000102;
@@ -1294,9 +1432,11 @@
 		};
 		F5DD888B02C4D5AC01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = populate.sql;
 			path = Support/populate.sql;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DD888C02C4D5B001000102 = {
 			children = (
@@ -1306,12 +1446,15 @@
 			isa = PBXGroup;
 			name = "Support Files";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3724F036F43E501CF0E76 = {
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = "schema-oracle.sql";
 			path = "Support/schema-oracle.sql";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E37250036F43E501CF0E76 = {
 			fileRef = F5E3724F036F43E501CF0E76;
@@ -1328,8 +1471,10 @@
 		F5F37BCF036E0CE601CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCMailMessageAppender.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5F37BD0036E0CE601CF0E76 = {
 			fileRef = F5F37BCF036E0CE601CF0E76;
@@ -1346,6 +1491,7 @@
 			isa = PBXGroup;
 			name = ERCMailableExceptionPage;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //F50
 //F51
@@ -1360,9 +1506,11 @@
 		F6B782BC034552CD01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = Properties;
 			path = Resources/Properties;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6B782BD034552CD01257492 = {
 			fileRef = F6B782BC034552CD01257492;
