@@ -435,9 +435,50 @@ public abstract class ERXApplication extends WOApplication {
         }
     }
 
+    /** use the redirect feature */ 
+    protected Boolean useComponentActionRedirection; 
+
     /**
-     * Simple hook to null out the thread local storage so
-     * we don't hold a reference to the context object.
+     * Set the <code>er.extensions.ERXComponentActionRedirector.enabled=true</code>
+     * property to actually the redirect feature.
+     * @return flag if to use the redirect feature
+     */
+    public boolean useComponentActionRedirection() {
+        if(useComponentActionRedirection == null) {
+            useComponentActionRedirection = ERXProperties.booleanForKey("er.extensions.ERXComponentActionRedirector.enabled") ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return useComponentActionRedirection.booleanValue();
+    }
+
+    /**
+     * Overridden to allow for redirected responses.
+     * @param request object
+     * @param context object
+     */
+    public WOActionResults invokeAction(WORequest request, WOContext context) {
+        WOActionResults results = super.invokeAction(request, context);
+        if(useComponentActionRedirection())
+            ERXComponentActionRedirector.createRedirector(results);
+        return results;
+    }
+
+    /**
+     * Overridden to allow for redirected responses.
+     * @param response object
+     * @param context object
+     */
+    public void appendToResponse(WOResponse response, WOContext context) {
+        super.appendToResponse(response, context);
+        if(useComponentActionRedirection()) {
+            ERXComponentActionRedirector redirector = ERXComponentActionRedirector.currentRedirector();
+            if(redirector != null) {
+                redirector.setOriginalResponse(response);
+            }
+        }
+    }
+
+    /**
+     * Overridden to allow for redirected responses and null the thread local storage.
      * @param request object
      * @return response
      */
@@ -447,17 +488,30 @@ public abstract class ERXApplication extends WOApplication {
             requestHandlingLog.debug("Dispatching request: " + request);
         }
         try {
-            response = super.dispatchRequest(request);
+            if(useComponentActionRedirection()) {
+                ERXComponentActionRedirector redirector = ERXComponentActionRedirector.redirectorForRequest(request);
+                if(redirector == null) {
+                    response = super.dispatchRequest(request);
+                    redirector = ERXComponentActionRedirector.currentRedirector();
+                    if(redirector != null) {
+                        response = redirector.redirectionResponse();
+                    }
+                } else {
+                    response = redirector.originalResponse();
+                }
+            } else {
+                response = super.dispatchRequest(request);
+            }
         } finally {
             // We always want to get rid of the wocontext key.
             ERXThreadStorage.removeValueForKey("wocontext");
         }
         if (requestHandlingLog.isDebugEnabled()) {
-
             requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
-        }        
+        }
         return response;
     }
+    
 
     /**
      * When a context is created we push it into thread local storage.
