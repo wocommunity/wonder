@@ -4,23 +4,40 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXNavigation.java created by max on Thu 27-Jul-2000 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.Enumeration;
 import org.apache.log4j.Category;
 
+/**
+ * The reason that this model group is needed is because the
+ * regular EOModelGroup will fail to load a model if it has
+ * an entity name conflict. While normally this could be considered
+ * a 'good thing' in the case of EOPrototypes multiple EOModels
+ * might all need there own prototype entities (in fact EOM requires it).
+ * This model group subclass will only print warning messages when
+ * duplicate entity names are found.
+ */
 public class ERXModelGroup extends EOModelGroup {
+
+    /** logging support */
     static ERXLogger log  = ERXLogger.getLogger(ERXModelGroup.class);
-    
+
+    /**
+     * Default public constructor
+     */
     public ERXModelGroup() {
     }
 
+    /**
+     * The only reason this method is needed is so our model group
+     * subclass is used. Other than that it does the exact same thing
+     * as EOModelGroup's implementation.
+     * @return ERXModelGroup for all of the loaded bundles
+     */
     public static EOModelGroup modelGroupForLoadedBundles() {
         EOModelGroup eomodelgroup = new ERXModelGroup();
         NSArray nsarray = NSBundle.frameworkBundles();
@@ -51,6 +68,14 @@ public class ERXModelGroup extends EOModelGroup {
         return eomodelgroup;
     }
 
+    /**
+     * This implementation will load models that have
+     * entity name conflicts, removing the offending
+     * entity. The reason this is needed is because
+     * multiple models might have JDBC prototype entities
+     * which would cause problems for the model group.
+     * @param eomodel model to be added
+     */
     public void addModel(EOModel eomodel) {
         Enumeration enumeration = _modelsByName.objectEnumerator();
         String name = eomodel.name();
