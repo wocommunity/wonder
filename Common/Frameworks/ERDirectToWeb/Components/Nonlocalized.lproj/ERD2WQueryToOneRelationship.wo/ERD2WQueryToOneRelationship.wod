@@ -10,5 +10,6 @@ ToOneRelationship: ERXToOneRelationship {
 	uiStyle = d2wContext.toOneUIStyle;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 	destinationEntityName = d2wContext.destinationEntityName;
+        isMandatory = d2wContext.isMandatory;
 }
 
