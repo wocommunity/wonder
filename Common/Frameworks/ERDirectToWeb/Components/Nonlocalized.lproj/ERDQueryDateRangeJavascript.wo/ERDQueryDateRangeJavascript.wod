@@ -1,3 +1,15 @@
+Image1: WOImage {
+	border = 0;
+	filename = "calendar.gif";
+	framework = "ERExtensions";
+}
+
+Image2: WOImage {
+	border = 0;
+	filename = "calendar.gif";
+	framework = "ERExtensions";
+}
+
 JavaScript1: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
 }
