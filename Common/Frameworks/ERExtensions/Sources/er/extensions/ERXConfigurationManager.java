@@ -150,7 +150,7 @@ public class ERXConfigurationManager {
 
     /**
      * Initializes the configuration manager. 
-     * The framework principal {@link ERXExtensions} calles 
+     * The framework principal {@link ERXExtensions} calls 
      * this method when the ERExtensions framework is loaded. 
      */
     public void initialize() {
@@ -283,19 +283,32 @@ public class ERXConfigurationManager {
         log.debug("Reinserted the command line arguments to the system properties.");
     }
 
+    /**
+     * Called when a model is loaded. This will reset the connection
+     * dictionary and insert the correct EOPrototypes if those are used
+     * @param n notification posted when a model is loaded. The object is
+     * 		the model.
+     */
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());
     }
     
-    /* reset the connection dictionary to the specified values that are in the defaults.
-	This method will look for defaults in the form 
-		<MODELNAME>.DBServer
-		<MODELNAME>.DBUser
-		<MODELNAME>.DBPassword
-		<MODELNAME>.URL (for JDBC)        
-        if the serverName and username both exists, we overwrite the connection dict
-           (password is optional). Otherwise we fall back to what's in the model.
-    */
+    /**
+     * Resets the connection dictionary to the specified values that are in the defaults.
+     * This method will look for defaults in the form 
+     * 		<MODELNAME>.DBServer
+     * 		<MODELNAME>.DBUser
+     * 		<MODELNAME>.DBPassword
+     * 		<MODELNAME>.URL (for JDBC)        
+     *   if the serverName and username both exists, we overwrite the connection dict
+     *      (password is optional). Otherwise we fall back to what's in the model.
+     *
+     * Likewise default values can be specified of the form:
+     * dbConnectUserGLOBAL
+     * dbConnectPasswordGLOBAL
+     * dbConnectURLGLOBAL
+     * @param aModel to be reset
+     */
     public void resetConnectionDictionaryInModel(EOModel aModel)  {
         if(aModel!=null) {
             String aModelName=aModel.name();
