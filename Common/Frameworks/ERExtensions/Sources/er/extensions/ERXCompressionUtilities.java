@@ -30,15 +30,15 @@ public class ERXCompressionUtilities {
     public static byte[] gunzipByteArray(byte[] input) {
         try {
             ByteArrayInputStream bos = new ByteArrayInputStream(input);
-        GZIPInputStream in = new GZIPInputStream(bos);
+            GZIPInputStream in = new GZIPInputStream(bos);
 
-        byte[] uncompressedData = ERXFileUtilities.bytesFromInputStream(in);
-        return uncompressedData;
-    } catch (IOException e) {
-        return null;
+            byte[] uncompressedData = ERXFileUtilities.bytesFromInputStream(in);
+            return uncompressedData;
+        } catch (IOException e) {
+            return null;
+        }
     }
-}
-
+    
     public static String gzipString(String source) {
         try {
             return new String(gzipByteArray(source.getBytes("UTF-8")), "UTF-8");
@@ -50,12 +50,30 @@ public class ERXCompressionUtilities {
     public static String gunzipString(String source) {
         try {
             byte[] b = gunzipByteArray(source.getBytes("UTF-8"));
-        return new String(b, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-        return null;
+            return new String(b, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
-}
 
+    public static String gunzipByteArrayAsString(byte[] input) {
+        try {
+            byte[] b = gunzipByteArray(input);
+
+            return new String(b, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }    
+
+    public static byte[] gzipStringAsByteArray(String source) {
+        try {
+            return gzipByteArray(source.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }
+    
     public static byte[] zipByteArray(byte[] input) {
         try {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
