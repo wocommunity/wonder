@@ -361,6 +361,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return localizerForLanguage(defaultLanguage());
     }
+
+    public static ERXLocalizer localizerForRequest(WORequest request) {
+        return localizerForLanguages(request.browserLanguages());
+    }    
     
     public String language() { return language; }
     public NSDictionary createdKeys() { return createdKeys; }
