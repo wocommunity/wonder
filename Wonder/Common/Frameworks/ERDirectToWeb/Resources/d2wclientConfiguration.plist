@@ -474,7 +474,7 @@
         ERDEditOwnedRelationship = {
             comment = ""; 
             editors = (
-                listConfigurationNameForEntity, 
+                listPageConfiguration, 
                 destinationDisplayKey, 
                 uiStyle, 
                 destinationSortKey, 
@@ -517,37 +517,37 @@
             inspectionInformation = "Used to edit a number as if it where a number of years and a number of months."; 
         }; 
         ERDInspect = {
-            editors = (embeddedPageConfiguration); 
+            editors = (inspectConfigurationName); 
             inspectionInformation = "Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName."; 
             isCustomComponent = yes; 
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
         }; 
         ERD2WInspect = {
-            editors = (inspectPageConfiguration); 
+            editors = (inspectConfigurationName); 
             inspectionInformation = "Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName."; 
             isCustomComponent = yes; 
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
         }; 
         ERDInspectButton = {
             comment = "needs to be more generic, for example having text instead of the inspect button image"; 
-            editors = (inspectConfigurationNameForEntity); 
+            editors = (inspectConfigurationName); 
             inspectionInformation = "Nice inspect button for inspecting a toMany relationship in another page."; 
             isCustomComponent = yes; 
         }; 
         ERDLinkToViewList = {
             comment = "needs to have a settable string for the link"; 
-            editors = (listPageConfigurationName); 
+            editors = (listPageConfiguration); 
             inspectionInformation = "Generic link component used to view a list."; 
             isCustomComponent = yes; 
         };
         ERDList = {
-            editors = (embeddedPageConfiguration, emptyListMessage, emptyListComponentName); 
+            editors = (listPageConfiguration, emptyListMessage, emptyListComponentName); 
             inspectionInformation = "Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship."; 
             isCustomComponent = yes; 
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
         }; 
         ERD2WList = {
-            editors = (embeddedPageConfiguration, emptyListMessage, emptyListComponentName); 
+            editors = (listPageConfiguration, emptyListMessage, emptyListComponentName); 
             inspectionInformation = "Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship."; 
             isCustomComponent = yes; 
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
@@ -843,13 +843,7 @@
             inputSize = 20; 
             title = "List Component"; 
         }; 
-        listConfigurationNameForEntity = {
-            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
-            editingFor = property; 
-            inputSize = 20; 
-            title = "List Configuration"; 
-        }; 
-        listPageConfigurationName = {
+        listPageConfiguration = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
