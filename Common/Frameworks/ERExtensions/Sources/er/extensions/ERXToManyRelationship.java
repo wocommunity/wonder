@@ -70,7 +70,9 @@ public class ERXToManyRelationship extends WOToManyRelationship {
                 if (_source instanceof EOEnterpriseObject) {
                     EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
                                                                                                _localRelationshipKey());
-                    destinationEntity = relationship.destinationEntity();
+                    if(relationship!=null){
+                        destinationEntity = relationship.destinationEntity();
+                    }
                     anEditingContext = ((EOEnterpriseObject)_source).editingContext();
                 }
                 if (destinationEntity == null)
