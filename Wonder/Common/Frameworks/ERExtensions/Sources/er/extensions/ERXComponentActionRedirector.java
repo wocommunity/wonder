@@ -138,7 +138,9 @@ public class ERXComponentActionRedirector {
             }
             sessionRef.setObjectForKey(redirector, redirector.url());
         }
-        log.info("Stored URL: " + redirector.url());
+        if(log.isDebugEnabled()) {
+            log.debug("Stored URL: " + redirector.url());
+        }
     }
 
     /** returns the previously stored redirector for the given request. */
