@@ -71,4 +71,5 @@ SVGObjects		Wonder/SVGObjects
 SAPDB_PlugIns		Wonder/Experimental/SAPDB_PlugIns
 DynaReporting		Wonder/DynaReporting
 
+ExcelGenerator		Wonder/ExcelGeneration/Frameworks/ExcelGenerator
 
