@@ -168,22 +168,23 @@ public class ERD2WContextDictionary {
             NSArray displayPropertyKeys = (NSArray)_context.valueForKey("displayPropertyKeys");
             if(displayPropertyKeys != null && displayPropertyKeys.count() > 0) {
                 NSMutableDictionary componentLevelKeys = new NSMutableDictionary();
-                for(Enumeration e = displayPropertyKeys.objectEnumerator(); e.hasMoreElements(); ) {
-                    Object o = (Object)e.nextElement();
-                    if(o instanceof NSArray) {
-                        for(Enumeration e1 = ((NSArray)o).objectEnumerator(); e1.hasMoreElements(); ) {
-                            String key = (String)e1.nextElement();
-                            componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
-                        }
-                    } else {
-                        String key = (String)o;
-                        componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
-                    }
-                }
+                addPropertyKeys(componentLevelKeys, displayPropertyKeys);
                 _dictionary.setObjectForKey( componentLevelKeys, "componentLevelKeys");
             }
         }
         return _dictionary;
+    }
+
+    protected void addPropertyKeys(NSMutableDictionary componentLevelKeys, NSArray array) {
+        for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ) {
+            Object o = (Object)e.nextElement();
+            if(o instanceof NSArray) {
+                addPropertyKeys(componentLevelKeys, (NSArray)o);
+            } else {
+                String key = (String)o;
+                componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
+            }
+        }
     }
 
     public NSArray rulesForLevel(int level) {
@@ -204,21 +205,35 @@ public class ERD2WContextDictionary {
         }
         NSArray keys = (NSArray)_dictionary.valueForKey("displayPropertyKeys");
         if(keys != null && keys.count() > 0) {
-            for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
-                String key = (String)e.nextElement();
-                Object value = dictionary().valueForKeyPath("componentLevelKeys." + key);
-                EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + _pageConfiguration + "' and propertyKey = '" + key + "'" , null);
-                Assignment a;
-                if("true".equals(value) || "false".equals(value)) {
-                    a = new BooleanAssignment(key, value);
-                } else {
-                    a = new Assignment(key, value);
-                }
-                arr.addObject(new Rule(level, q, a));
-            }
+            addRulesForPropertyKeys(level, arr, keys);
         }
         return arr;
     }
+    
+    protected void addRulesForPropertyKeys(int level, NSMutableArray rules, NSArray keys) {
+        for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
+            Object o = e.nextElement();
+            if(o instanceof NSArray) {
+                addRulesForPropertyKeys(level, rules, (NSArray)keys);
+            } else {
+                String propertyKey = (String)o;
+                NSDictionary values = (NSDictionary)dictionary().valueForKeyPath("componentLevelKeys." + propertyKey);
+                EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + _pageConfiguration + "' and propertyKey = '" + propertyKey + "'" , null);
+                for (Enumeration e1 = values.keyEnumerator(); e1.hasMoreElements();) {
+                    String key = (String)e1.nextElement();
+                    Object value = values.objectForKey(key);
+                    Assignment a;
+                    if("true".equals(value) || "false".equals(value)) {
+                        a = new BooleanAssignment(key, value);
+                    } else {
+                        a = new Assignment(key, value);
+                    }
+                    rules.addObject(new Rule(level, q, a));
+                }
+            }
+        }
+    }
+
     public D2WContext context() {
         return _context;
     }
