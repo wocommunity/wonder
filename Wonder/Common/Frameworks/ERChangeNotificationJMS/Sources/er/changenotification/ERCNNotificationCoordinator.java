@@ -61,13 +61,16 @@ import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
  * # prevents to miss change notifications by temporaly 
  * # network disruptions. 
  * # 
- * # false - suggested for development 
- * # true  - suggested for deployment
+ * # false - suggested for both development and deployment
+ * #
+ * #         Please do *not* set it true, otherwise OpenJMS 0.7.3.1 server 
+ * #         will fail with some databases (PostgreSQL, FrontBase, etc.)
  * # 
  * # If it's set to true, you need properly to shut down the applications 
  * # (e.g. shut down it from JavaMonitor or calling application's 
  * # terminate() method), otherwise JMS provider will try to keep  
  * # all changes even after application is shut down. 
+ * #
  * er.changenotification.jms.durableSubscribers = false
  * 
  * </pre>
