@@ -25,7 +25,7 @@ import java.util.StringTokenizer;
  * end of strings that are shorter than the given length.
  * <br/>
  * Synopsis:<br/>
- * value=<i>aString</i>;length=<i>aNumber</i>;[shouldPadToLength=<i>aBoolean</i>;][suffixWhenTrimmed=<i>aString</i>;]
+ * value=<i>aString</i>;length=<i>aNumber</i>;[shouldPadToLength=<i>aBoolean</i>;][suffixWhenTrimmed=<i>aString</i>;][escapeHTML=<i>aBoolean</i>;]
  *
  * @binding value string that is passed in to display in a fixed
  *		length setting.
@@ -37,6 +37,10 @@ import java.util.StringTokenizer;
  * @binding suffixWhenTrimmed only appended to the end of the string
  *		if characters are trimmed from the end of the string
  *		to be displayed
+ * @binding escapeHTML replace the entities &gt; and &amp; with their
+ * 		escape codes (like WOString does). When this is set to
+ *		true, all HTML text is cleared from the string first to
+ *		prevent half-open tags
  */
 public class ERXFixedLengthString extends ERXStatelessComponent {
 
@@ -119,30 +123,37 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
     /**
      * Returns the value stripped from HTML tags if <b>escapeHTML</b> is false.
      * This makes sense because it is not terribly useful to have half-finished tags in your code.
+     * Note that the "length" of the resulting string is not very exact.
+     * FIXME: we could remove extra whitespace and character entities here
+     * MOVEME: should go to ERXStringUtilities
      * @return value stripped from tags.
      */
+
     public String strippedValue() {
         String value=(String)valueForBinding("value");
-        StringTokenizer tokenizer = new StringTokenizer(value, "<");
-        int token = 0;
+        StringTokenizer tokenizer = new StringTokenizer(value, "<", false);
+        int token = value.charAt(0) == '<' ? 0 : 1;
+        String nextPart = null;
         StringBuffer result = new StringBuffer();
-        String nextPart;
         int l=length();
-        int currentLength = 0;
+        int currentLength = result.length();
         while (tokenizer.hasMoreTokens() && currentLength < l) {
             if(token == 0)
                 nextPart = tokenizer.nextToken(">");
-            else
+            else {
                 nextPart = tokenizer.nextToken("<");
+                if(nextPart.length() > 0  && nextPart.charAt(0) == '>')
+                    nextPart = nextPart.substring(1);
+            }
             if (nextPart != null && token != 0) {
-                result.append(nextPart.substring(1));
-                currentLength += nextPart.length() - 1;
+                result.append(nextPart);
+                currentLength += nextPart.length();
             }
             token = 1 - token;
         }
         return result.toString();
     }
-
+    
     /**
      * Returns the value for the binding: <b>suffixWhenTrimmed</b>
      * only if the string was trimmed.
