@@ -123,21 +123,21 @@
     <!-- Build Wonder Common.                             -->
     <!-- ==================================================== -->
     <target name="common" depends="init">
-        <ant antfile="Build/build/common.xml"/>
+        <ant antfile="Build/build/generic.xml" target="common.all" />
     </target>
 
     <!-- ==================================================== -->
     <!-- Build Wonder Frameworks.                             -->
     <!-- ==================================================== -->
     <target name="frameworks" depends="init">
-        <ant antfile="Build/build/common.xml" target="frameworks.all" />
+        <ant antfile="Build/build/generic.xml" target="frameworks.all" />
     </target>
 
     <!-- ==================================================== -->
     <!-- Build Wonder sub projects.                           -->
     <!-- ==================================================== -->
     <target name="subprojects" depends="init">
-        <ant antfile="Build/build/subprojects.xml"/>
+        <ant antfile="Build/build/generic.xml" target="subprojects.all" />
     </target>
 
     <!-- ==================================================== -->
