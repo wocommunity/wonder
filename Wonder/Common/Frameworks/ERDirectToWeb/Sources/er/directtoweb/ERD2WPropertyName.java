@@ -61,7 +61,7 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
         // avoiding attribute() and relationship() because of lame-ass caching scheme on D2WContext
         String task = (String)d2wContext().valueForKey("task");
         if (task==null || task.equals("edit")) {
-            if (!ERXUtilities.booleanValue(d2wContext().valueForKey("isManditory"))) {
+            if (!ERXUtilities.booleanValue(d2wContext().valueForKey("isMandatory"))) {
                 EOAttribute a=(EOAttribute)d2wContext().valueForKey("smartAttribute");
                 if (a!=null)
                     displayRequiredMarker = !a.allowsNull();
