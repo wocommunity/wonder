@@ -32,8 +32,12 @@ public class ERXGraph extends WOComponent {
         GIFPlot plot = new GIFPlot();
         String path = application().resourceManager().pathForResourceNamed("erDefault.graph", "ERExtensions", null);
         plot.addContentsOfFile(path);
+        if(hasBinding("extraBindings"))
+            plot.addContentsOfDictionary((NSDictionary)valueForBinding("extraBindings"));
         plot.addContentsOfDictionary(plotsDictionary());
         initPlotSettings(plot);
+        if(cat.isDebugEnabled())
+            cat.debug("Plot settings: " +plot.settings());
         plot.generateGraph();
         return plot.imageData();
     }
