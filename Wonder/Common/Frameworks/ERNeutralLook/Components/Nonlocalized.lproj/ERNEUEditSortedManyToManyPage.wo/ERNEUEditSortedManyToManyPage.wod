@@ -1,5 +1,25 @@
+Image2: WOImage {
+	filename = "down.gif";
+	border = 0;
+}
+
+Image1: WOImage {
+	filename = "up.gif";
+	border = 0;
+}
+
+Image3: WOImage {
+	border = 0;
+	filename = "upFast.gif";
+}
+
 AttributeName: WOString {
 	value = displayNameForRelationshipKey;
+}
+
+Image4: WOImage {
+	border = 0;
+	filename = "downFast.gif";
 }
 
 AttributeValue: WOBrowser {
@@ -86,16 +106,6 @@ Hyperlink2: WOHyperlink {
 }
 
 Hyperlink3: WOHyperlink {
-}
-
-Image1: WOImage {
-	filename = "upArrow.gif";
-	border = 0;
-}
-
-Image2: WOImage {
-	filename = "downArrow.gif";
-	border = 0;
 }
 
 InspectComponent: D2WEdit {
@@ -228,5 +238,5 @@ SubmitButton5: WOSubmitButton {
 
 ToManyForm: WOForm {
 	multipleSubmit = true;
-	name = "EditForm";
+	name = "RelationshipForm";
 }
