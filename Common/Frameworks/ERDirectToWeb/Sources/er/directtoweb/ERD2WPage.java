@@ -139,9 +139,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         super.setObject(eo);
     }
     public void setDataSource(EODataSource eodatasource) {
-    	if(eodatasource.editingContext() != null) {
-    		setEditingContext(eodatasource.editingContext());
-    	}
+    	setEditingContext(eodatasource != null ? eodatasource.editingContext() : null);
     	super.setDataSource(eodatasource);
     }
     /** Can be used to get this instance into KVC */
