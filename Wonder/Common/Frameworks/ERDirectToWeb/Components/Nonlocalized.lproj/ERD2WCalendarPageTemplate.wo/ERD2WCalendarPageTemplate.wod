@@ -1,0 +1,65 @@
+BackLink: WOHyperlink {
+	action = backAction;
+}
+
+Banner: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+HideReturnOnSelect: WOConditional {
+	_unroll = true;
+	condition = isSelectingNotTopLevel;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
+MonthView: ERXMonthView {
+	grouper = grouper;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+ReturnButton: WOImage {
+	alt = "Returns to the previous page";
+	border = 0;
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	name = "Returns to the previous page";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
