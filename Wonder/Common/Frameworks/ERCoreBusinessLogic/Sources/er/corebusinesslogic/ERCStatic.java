@@ -125,7 +125,7 @@ public class ERCStatic extends _ERCStatic {
     }
 
     public static ERCStaticClazz staticClazz() {
-        return (ERCStaticClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCStatic");
+        return (ERCStaticClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCStatic");
     }
 
     public String toString() {

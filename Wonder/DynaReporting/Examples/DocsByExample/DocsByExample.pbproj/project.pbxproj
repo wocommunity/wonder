@@ -22,11 +22,11 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F529268403AAC5ED01AD0D0B = {
 			children = (
@@ -130,66 +130,77 @@
 			refType = 4;
 		};
 		F529269003AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = QuickReportTestDoc.api;
 			path = Components/QuickReportTestDoc.api;
 			refType = 4;
 		};
 		F529269103AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupingOnlyDoc.api;
 			path = Components/GroupingOnlyDoc.api;
 			refType = 4;
 		};
 		F529269203AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Intro.api;
 			path = Components/Intro.api;
 			refType = 4;
 		};
 		F529269303AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupByPage.api;
 			path = Components/GroupByPage.api;
 			refType = 4;
 		};
 		F529269403AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupingOnly.api;
 			path = Components/GroupingOnly.api;
 			refType = 4;
 		};
 		F529269503AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.api;
 			path = Components/Main.api;
 			refType = 4;
 		};
 		F529269603AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Menu.api;
 			path = Components/Menu.api;
 			refType = 4;
 		};
 		F529269703AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERPage.api;
 			path = Components/ERPage.api;
 			refType = 4;
 		};
 		F529269803AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = QuickReportTest.api;
 			path = Components/QuickReportTest.api;
 			refType = 4;
 		};
 		F529269903AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupingOptions.api;
 			path = Components/GroupingOptions.api;
 			refType = 4;
 		};
 		F529269A03AAC62001AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupByPageDoc.api;
 			path = Components/GroupByPageDoc.api;
@@ -582,90 +593,105 @@
 			refType = 4;
 		};
 		F529274103AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Application.java;
 			path = er/reporting/examples/Application.java;
 			refType = 4;
 		};
 		F529274203AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DirectAction.java;
 			path = er/reporting/examples/DirectAction.java;
 			refType = 4;
 		};
 		F529274403AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERPage.java;
 			path = er/reporting/examples/ERPage.java;
 			refType = 4;
 		};
 		F529274503AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupByPage.java;
 			path = er/reporting/examples/GroupByPage.java;
 			refType = 4;
 		};
 		F529274603AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupByPageDoc.java;
 			path = er/reporting/examples/GroupByPageDoc.java;
 			refType = 4;
 		};
 		F529274703AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupingOnly.java;
 			path = er/reporting/examples/GroupingOnly.java;
 			refType = 4;
 		};
 		F529274803AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupingOnlyDoc.java;
 			path = er/reporting/examples/GroupingOnlyDoc.java;
 			refType = 4;
 		};
 		F529274903AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GroupingOptions.java;
 			path = er/reporting/examples/GroupingOptions.java;
 			refType = 4;
 		};
 		F529274A03AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Intro.java;
 			path = er/reporting/examples/Intro.java;
 			refType = 4;
 		};
 		F529274B03AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.java;
 			path = er/reporting/examples/Main.java;
 			refType = 4;
 		};
 		F529274C03AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Menu.java;
 			path = er/reporting/examples/Menu.java;
 			refType = 4;
 		};
 		F529274D03AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = QuickReportTest.java;
 			path = er/reporting/examples/QuickReportTest.java;
 			refType = 4;
 		};
 		F529274E03AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = QuickReportTestDoc.java;
 			path = er/reporting/examples/QuickReportTestDoc.java;
 			refType = 4;
 		};
 		F529274F03AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Session.java;
 			path = er/reporting/examples/Session.java;
 			refType = 4;
 		};
 		F529275003AAC65701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Target.java;
 			path = er/reporting/examples/Target.java;
@@ -762,6 +788,7 @@
 			};
 		};
 		F529276203AAC7E101AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = er/reporting/examples/KeyValueCodingProtectedAccessor.java;
@@ -836,6 +863,7 @@
 				F59DCB15016BFCFC013D89A4,
 				F59DCB16016BFCFC013D89A4,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -1041,7 +1069,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59DCAB8016BFCFC013D89A4 = {
 			isa = PBXTargetDependency;
@@ -1114,7 +1141,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59DCABA016BFCFC013D89A4 = {
 			buildActionMask = 2147483647;
@@ -1324,7 +1350,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59DCAF8016BFCFC013D89A4 = {
 			buildActionMask = 2147483647;

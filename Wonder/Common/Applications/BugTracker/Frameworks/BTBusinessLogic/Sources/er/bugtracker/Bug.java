@@ -154,7 +154,7 @@ public class Bug extends _Bug {
         
     }
 
-    public static final BugClazz clazz = (BugClazz)EOGenericRecordClazz.clazzForEntityNamed("Bug");
+    public static final BugClazz clazz = (BugClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Bug");
 }
 
 

@@ -24,5 +24,5 @@ public class Difficulty extends _Difficulty {
         
     }
 
-    public static DifficultyClazz clazz = (DifficultyClazz)EOGenericRecordClazz.clazzForEntityNamed("Difficulty");
+    public static DifficultyClazz clazz = (DifficultyClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Difficulty");
 }

@@ -24,5 +24,5 @@ public class ERCPreference extends _ERCPreference {
         
     }
 
-    public static ERCPreferenceClazz preferenceClazz() { return (ERCPreferenceClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCPreference"); }
+    public static ERCPreferenceClazz preferenceClazz() { return (ERCPreferenceClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCPreference"); }
 }
