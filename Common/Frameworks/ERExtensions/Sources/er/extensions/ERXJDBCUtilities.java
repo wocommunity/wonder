@@ -55,7 +55,7 @@ public class ERXJDBCUtilities {
 		//create two connections with the sourceDict
 		Connection sourceCon = connectionWithDictionary(sourceDict);
 		Connection destCon = connectionWithDictionary(destDict);
-		
+		log.info("will copy model "+m.name());
 		for (Enumeration e = m.entities().objectEnumerator(); e.hasMoreElements();) {
 			EOEntity entity = (EOEntity)e.nextElement();
 			if (entity.parentEntity() == null) {
@@ -104,7 +104,7 @@ public class ERXJDBCUtilities {
 		//build the select statement, this selects -all- rows
 		StringBuffer buf = new StringBuffer();
 		buf.append("select ");
-		buf.append(columns).append(" from \"").append(tableName).append("\";");
+		buf.append(columns).append(" from ").append(tableName).append(";");
 		String sql = buf.toString();
 
 		Statement stmt;
@@ -137,7 +137,7 @@ public class ERXJDBCUtilities {
 		StringBuffer buf1 = new StringBuffer();
 		buf1
 		.append("insert into ")
-		.append("\""+tableName+"\"")
+		.append(""+tableName+"")
 		.append(" (")
 		.append(columns)
 		.append(") values (");
@@ -166,7 +166,7 @@ public class ERXJDBCUtilities {
 			int rowsCount = 0;
 		    while (rows.next()) {
 			    rowsCount++;
-				if (rows.getRow() % 10000 == 0) {
+				if (rows.getRow() % 1000 == 0) {
 					log.info("table "+tableName+", inserted "+rows.getRow()+" rows");
 				}
 				
@@ -243,6 +243,13 @@ public class ERXJDBCUtilities {
 				    File f = (File)e.nextElement();
 				    if (!f.delete()) f.delete();
 				}
+				
+				if (rows.getRow() % 1000 == 0) {
+					log.info("committing at count="+rowsCount); 
+					destCon.commit();
+					log.info("committing done"); 
+				}
+
 			}
 			log.info("table "+tableName+", inserted "+rowsCount+" rows");
 			
@@ -358,7 +365,7 @@ public class ERXJDBCUtilities {
 			String column = att.columnName();
 			if (!ERXStringUtilities.stringIsNullOrEmpty(column)) {
 				if (quoteNames) {
-					columns.addObject("\"" + column + "\"");
+					columns.addObject("" + column + "");
 				} else {
 					columns.addObject(column);
 				}
