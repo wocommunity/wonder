@@ -1,1 +1,4 @@
-{}
+{
+    "Test message for unit test" = "FAIL - app comes before this";
+    "Test message for unit test in framework" = "SUCCESS";
+}
