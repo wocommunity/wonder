@@ -21,12 +21,11 @@ public class ERD2WUtilities {
             context.pageFinalized();
     }
 
-    /*
     public static void resetContextCache(D2WContext context) {
         if (context != null)
             context._localValues.clear();
     }
-     */
+    
     public static boolean assignmentsAreEqual(Assignment a1, Assignment a2) {
         boolean areEqual = false;
         if (a1.getClass().equals(a2.getClass()) && a1.keyPath() != null && a2.keyPath() != null && a1.value() != null && a2.value() != null) {
