@@ -749,16 +749,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @throws NSValidation.ValidationException if the object fails consisntency
      */
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
-
-    // DELETEME: Should remove once all dependency has been removed.
-    public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
-        // Not needed anymore, they fixed the bug!
-    }
-
-    // DELETEME: Should remove once all dependency has been removed.
-    protected void _willFixRelationship(String key, EOEnterpriseObject object) {
-        // Not needed anymore, they fixed the bug!
-    }
     
     // Debugging aids -- turn off during production
     // These methods are used to catch the classic mistake of:
