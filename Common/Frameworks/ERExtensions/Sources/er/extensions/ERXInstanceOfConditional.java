@@ -13,23 +13,46 @@ import com.webobjects.eoaccess.*;
 import java.lang.*;
 import org.apache.log4j.Category;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Basic conditional that given an object and a class name (fully qualified) will evaluate true if the
-// object is an instance of that class.
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Conditional component that tests if an object is an instance of a given
+ * class or interface
+ * <br/>
+ * Synopsis:<br/>
+ * object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]
+ * <br/>
+ * Bindings:<br/>
+ * <b>object</b> object to test
+ * <b>className</b> class or interface name
+ * <b>negate</b><br/> Inverts the sense of the conditional.
+ * <br/>
+ */
 public class ERXInstanceOfConditional extends WOComponent {
 
+    /** Public constructor */
     public ERXInstanceOfConditional(WOContext aContext) {
         super(aContext);
     }
 
-    ////////////////////////////////////////  log4j category  //////////////////////////////////////////
+    /** logging support */
     public final static Category log = Category.getInstance(ERXInstanceOfConditional.class);
-    
+
+    /** component is stateless */
     public boolean isStateless() { return true; }
-    public void reset() { _instanceOf = null; }
-    
+
+    /** resets cached ivars */
+    public void reset() {
+        super.reset();
+        _instanceOf = null;
+    }
+    /** cached value of comparison */
     private Boolean _instanceOf;
+
+    /**
+     * Tests if the bound object is an instance of the class.
+     * Note: If the class is not found a ClassNotFoundException
+     * will be thrown via an NSForwardException.
+     * @return the boolean result of the <code>isInstance</code> test.
+     */
     public boolean instanceOf() {
         if (_instanceOf == null) {
             Class instance = null;
