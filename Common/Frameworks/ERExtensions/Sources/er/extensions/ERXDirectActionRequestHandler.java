@@ -16,6 +16,9 @@ import com.webobjects.appserver._private.WODirectActionRequestHandler;
  */
 public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDirectActionRequestHandler.class);
+    
     public ERXDirectActionRequestHandler() {
         super();
     }
@@ -26,7 +29,45 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
     }
 
     public WOResponse handleRequest(WORequest request) {
-        WOResponse response = super.handleRequest(request);
+        WOResponse response = null;
+        
+        String actionName = null;
+        Class actionClass = null;
+        boolean shouldCacheResult = false;
+        
+        if (ERXWOResponseCache.sharedInstance().isEnabled()) {
+            try {
+                // Caching scheme for 5.2 applications. Will uncomment once we are building 5.2 only ERExtensions
+                //Object[] actionClassAndName = getRequestActionClassAndNameForPath(getRequestHandlerPathForRequest(request));
+                Object[] actionClassAndName = null;
+                if (actionClassAndName != null && actionClassAndName.length == 3) {
+                    actionName = (String)actionClassAndName[1];
+                    actionClass = (Class)actionClassAndName[2];
+                    if (actionClass.isAssignableFrom(ERXWOResponseCache.Cacheable.class)) {
+                        response = ERXWOResponseCache.sharedInstance().cachedResponseForRequest(actionClass,
+                                                                                                actionName,
+                                                                                                request);
+                    }
+                }
+            } catch (Exception e) {
+                log.info("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: " + request + " exception: " + e);
+
+                // Resetting everything to make sure nothing is cached
+                actionName = null;
+                actionClass = null;
+                shouldCacheResult = true;
+            } 
+        }
+        if (response == null)
+            response = super.handleRequest(request);
+
+        if (shouldCacheResult && actionName != null && actionClass != null) {
+            try {
+                ERXWOResponseCache.sharedInstance().cacheResponseForRequest(actionClass, actionName, request, response);
+            } catch (Exception e) {
+                log.error("Caught exception when caching response. Request: " + request + " exception: " + e);
+            }
+        }
         
         ERXMessageEncoding messageEncoding = null;
         
