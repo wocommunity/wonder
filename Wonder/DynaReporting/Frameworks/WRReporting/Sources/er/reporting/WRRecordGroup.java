@@ -32,6 +32,7 @@ public class WRRecordGroup extends WOComponent  {
     NSArray _colors;
     String _reportStyle;
     NSDictionary _totalDict;
+    NSDictionary _coordinates;
 
     public DRRecord record;
     public DRValue value;
@@ -100,6 +101,7 @@ public class WRRecordGroup extends WOComponent  {
         _showAsTable = null;
         _showHeadings = null;
         _reportStyle = null;
+        _coordinates = null;
     }
 
     public void sleep() {
@@ -358,6 +360,13 @@ public class WRRecordGroup extends WOComponent  {
             _totalDict = (NSDictionary)this.valueForBinding("totalDict");
         }
         return _totalDict;
+    }
+
+    public NSDictionary coordinates() {
+        if (_coordinates == null) {
+            _coordinates = (NSDictionary)this.valueForBinding("coordinates");
+        }
+        return _coordinates;
     }
 
     public NSArray colors() {

@@ -14,6 +14,7 @@
 		<binding name="colors"/>
 		<binding name="formatForSingleTotal"/>
 		<binding name="colorForCoords"/>
+		<binding name="coordinates"/>
 
 		<validation message="&apos;model&apos; is a required binding">
 			<unbound name="model"/>
