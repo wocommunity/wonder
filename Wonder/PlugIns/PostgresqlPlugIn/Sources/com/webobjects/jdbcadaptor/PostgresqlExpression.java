@@ -96,7 +96,7 @@ public class PostgresqlExpression extends JDBCExpression {
     public String assembleJoinClause(String leftName,
                                      String rightName,
                                      int semantic) {
-        if (disableOuterJoins == true) {
+        if (disableOuterJoins == true || !useAliases()) {
             return super.assembleJoinClause(leftName, rightName, semantic);
         }
         
