@@ -65,15 +65,6 @@ public class WRRecordGroup extends WOComponent  {
         _totalCount = -1;
     }
 
-    
-    /** Holds the cached dictionary of formatters */
-    static private NSMutableDictionary _formatDict = new NSMutableDictionary();
-
-    /** @return the dictionary of cached formatters */
-    static public NSMutableDictionary formatDict(){
-        return _formatDict;
-    }
-
     /** Component does not synchronize with bindings, and your subclasses should be doing so, too. */
     public final boolean synchronizesVariablesWithBindings() {
         return false;
