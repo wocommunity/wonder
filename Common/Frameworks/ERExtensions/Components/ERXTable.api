@@ -23,6 +23,7 @@
 		<binding name="headerImages"/>
 		<binding name="headerRowBackgroundColor"/>
 		<binding name="otherTagString"/>
+		<binding name="showIndex" defaults="Boolean"/>
 
 		<validation message="&apos;list&apos; is a required binding">
 			<unbound name="list"/>
