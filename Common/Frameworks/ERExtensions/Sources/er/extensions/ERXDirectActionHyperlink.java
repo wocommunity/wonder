@@ -42,9 +42,9 @@ import java.util.*;
  */
 public class ERXDirectActionHyperlink extends ERXStatelessComponent {
 
-	// Class instances -------------------------------------------------
+    // Class instances -------------------------------------------------
 
-        /** Key used to denote an adaptor prefix for a generated url string */
+    /** Key used to denote an adaptor prefix for a generated url string */
     // MOVEME: ERXWOUtilities
     public final static String ADAPTOR_PREFIX_MARKER="**ADAPTOR_PREFIX**";
     /** Key used to denote a suffix for a generated url string */ 
@@ -55,7 +55,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXDirectActionHyperlink.class);
 
 	
-	// Constructor -------------------------------------------------
+    // Constructor -------------------------------------------------
     /**
      * Public constructor
      * @param aContext a context
@@ -65,32 +65,32 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     }
 
 	
-	// Component methods -------------------------------------------------
+    // Component methods -------------------------------------------------
 
-	/**
+    /**
      * Cover method to return the binding: <b>entityNameSeparator</b>
      * The entity name separator is used when constructing URLs with enterprise objects encoded in the url.
-	 * This value default to the value defined in the system property <i>er.extensions.ERXDirectActionHyperlink.EntityNameSeparator</i> which defaults as well to the character '<pre>_</pre>'.
+     * This value default to the value defined in the system property <i>er.extensions.ERXDirectActionHyperlink.EntityNameSeparator</i> which defaults as well to the character '<pre>_</pre>'.
      * @return returns the value for binding: <b>entityNameSeparator</b>
      */
     public String entityNameSeparator() {
-		String separator = (String)this.valueForBinding("entityNameSeparator");
-		if (separator == null)
-                    separator = ERXEOEncodingUtilities.EntityNameSeparator;
-		return separator;
-	}
+        String separator = (String)this.valueForBinding("entityNameSeparator");
+        if (separator == null)
+            separator = ERXEOEncodingUtilities.EntityNameSeparator;
+        return separator;
+    }
 
-   /**
-	 * Cover method to return the boolean value
+    /**
+     * Cover method to return the boolean value
      * of the binding: <b>relative</b>
      * Defaults to <code>true</code>.
      * @return returns if the generated url should be relative or not(absolute).
-	 */
-	public boolean relative() {
+     */
+    public boolean relative() {
         return valueForBooleanBinding("relative", true);
     }
 
-   /**
+    /**
      * Cover method to return the boolean value
      * of the binding: <b>shouldEncryptObjectFormValues</b>
      * Defaults to <code>false</code>. 
@@ -118,7 +118,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     }
 
     /**
-		* Returns all of the objects to be encoded
+     * Returns all of the objects to be encoded
      * in the form values. Collects those bound
      * to both 'objectsForFormValues' and
      * 'objectForFormValue' into a single array.
@@ -138,7 +138,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     }
 
     /**
-		* Retrives a given binding and if it is not null
+     * Retrives a given binding and if it is not null
      * then returns <code>toString</code> called on the
      * bound object.
      * @param binding to be resolved
@@ -152,7 +152,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     }
 
     /**
-		* Generates an href for the given direct action based
+     * Generates an href for the given direct action based
      * on all of the bindings. Currently it generates an
      * absolute url starting with the key: ADAPTOR_PREFIX_MARKER.
      * Before this href can be really useful it needs to
@@ -162,48 +162,48 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
      */
     // FIXME: Lots of stuff to be fixed here.
     public String href() {
-		String directActionName = null;
-		NSDictionary encryptedBindingDict   = null;
-		NSDictionary unencryptedBindingDict = null;
-		NSArray formValuesObjects = null;
+        String directActionName = null;
+        NSDictionary encryptedBindingDict   = null;
+        NSDictionary unencryptedBindingDict = null;
+        NSArray formValuesObjects = null;
 
-		// Compose the direct action name from the bindings
-		// Typically, something like "DirectActionClass/actionMethod".
-		// Keep consistency with directActionName semantics as it is defined in directActionHref static method
-		if(this.hasBinding("actionClass")) {
-			StringBuffer daBuffer = new StringBuffer();
-			daBuffer.append(this.valueForBinding("actionClass"));
-			daBuffer.append('/');
-			daBuffer.append(this.valueForBinding("directActionName"));
-			directActionName = daBuffer.toString();
-		} else {
-			directActionName = (String)this.valueForBinding("directActionName");
-		}
+        // Compose the direct action name from the bindings
+        // Typically, something like "DirectActionClass/actionMethod".
+        // Keep consistency with directActionName semantics as it is defined in directActionHref static method
+        if(this.hasBinding("actionClass")) {
+            StringBuffer daBuffer = new StringBuffer();
+            daBuffer.append(this.valueForBinding("actionClass"));
+            daBuffer.append('/');
+            daBuffer.append(this.valueForBinding("directActionName"));
+            directActionName = daBuffer.toString();
+        } else {
+            directActionName = (String)this.valueForBinding("directActionName");
+        }
 
-		if((directActionName == null) || (directActionName.length() == 0))
-			throw new IllegalArgumentException("ERXDirectActionHyperlink: directActionName must be specified.");
+        if((directActionName == null) || (directActionName.length() == 0))
+            throw new IllegalArgumentException("ERXDirectActionHyperlink: directActionName must be specified.");
 
-		// Get the binding dictionaries
-  // FIXME: Rename binding to encryptedBindingDictionary
+        // Get the binding dictionaries
+        // FIXME: Rename binding to encryptedBindingDictionary
         if(hasBinding("bindingDictionary"))
             encryptedBindingDict = (NSDictionary)valueForBinding("bindingDictionary");
 
         if(hasBinding("unencryptedBindingDictionary"))
             unencryptedBindingDict = (NSDictionary)valueForBinding("unencryptedBindingDictionary");
 
-		// Get the objects to encode
+        // Get the objects to encode
         if(allObjectsForFormValues().count() > 0)
-			formValuesObjects = allObjectsForFormValues();
+            formValuesObjects = allObjectsForFormValues();
 
-		// Compose and return the final url
+        // Compose and return the final url
         return directActionHyperlink(this.context(),
-									 this.shouldEncryptObjectFormValues(), formValuesObjects, entityNameSeparator(),
-									 encryptedBindingDict, unencryptedBindingDict,
-									 this.application().name(), directActionName,
-									 this.relative(), null);
+                this.shouldEncryptObjectFormValues(), formValuesObjects, entityNameSeparator(),
+		encryptedBindingDict, unencryptedBindingDict,
+                this.application().name(), directActionName,
+                this.relative(), null);
     }
 	
-	// Class methods -------------------------------------------------
+    // Class methods -------------------------------------------------
 
     /** Holds the application host url */
     // MOVEME: This stuff might be better served if it was off of ERXApplication
@@ -227,50 +227,50 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
         return _applicationHostUrl;
     }
 
-	public static String directActionHyperlink(WOContext context,
-											 boolean encryptEos, NSArray eos, String entityNameSeparator,
-											 NSDictionary encryptedDict, NSDictionary unencryptedDict,
-											 String appName, String daName,
-											 boolean relative, String suffix) {
-		StringBuffer result = new StringBuffer(ADAPTOR_PREFIX_MARKER);
-		result.append(".woa/wa/");
-		result.append(daName);
-		result.append('?');
+    public static String directActionHyperlink(WOContext context,
+                boolean encryptEos, NSArray eos, String entityNameSeparator,
+                NSDictionary encryptedDict, NSDictionary unencryptedDict,
+                String appName, String daName,
+                boolean relative, String suffix) {
+        StringBuffer result = new StringBuffer(ADAPTOR_PREFIX_MARKER);
+        result.append(".woa/wa/");
+        result.append(daName);
+        result.append('?');
 
-		if(encryptedDict != null) {
-			NSArray allKeys = encryptedDict.allKeys();
-			for(Enumeration e = allKeys.objectEnumerator(); e.hasMoreElements();) {
-				String key =(String)e.nextElement();
-				String value = encryptedDict.objectForKey(key).toString();
-				ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
-				result.append(key);
-				result.append("=");
-				result.append(ERXCrypto.blowfishEncode(value));
-			}
-		}
+        if(encryptedDict != null) {
+            NSArray allKeys = encryptedDict.allKeys();
+            for(Enumeration e = allKeys.objectEnumerator(); e.hasMoreElements();) {
+                String key =(String)e.nextElement();
+                String value = encryptedDict.objectForKey(key).toString();
+                ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
+                result.append(key);
+                result.append("=");
+                result.append(ERXCrypto.blowfishEncode(value));
+            }
+        }
 
         if(unencryptedDict != null) {
-			NSArray allKeys = unencryptedDict.allKeys();
-			for(Enumeration e = allKeys.objectEnumerator(); e.hasMoreElements();) {
-				String key =(String)e.nextElement();
-				String value = unencryptedDict.objectForKey(key).toString();
-				ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
-				result.append(key);
-				result.append("=");
-				result.append(value);
-			}
-		}
+            NSArray allKeys = unencryptedDict.allKeys();
+            for(Enumeration e = allKeys.objectEnumerator(); e.hasMoreElements();) {
+                String key =(String)e.nextElement();
+                String value = unencryptedDict.objectForKey(key).toString();
+                ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
+                result.append(key);
+                result.append("=");
+                result.append(value);
+            }
+        }
 
-		if((eos != null) &&(eos.count() > 0)) {
-			ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
-			result.append(ERXEOEncodingUtilities.encodeEnterpriseObjectsPrimaryKeyForUrl(eos, entityNameSeparator, encryptEos));
-		}
+        if((eos != null) &&(eos.count() > 0)) {
+            ERXStringUtilities.appendSeparatorIfLastNot('&', '?', result);
+            result.append(ERXEOEncodingUtilities.encodeEnterpriseObjectsPrimaryKeyForUrl(eos, entityNameSeparator, encryptEos));
+        }
 
-		if(suffix != null)
-			result.append(SUFFIX_MARKER);
+        if(suffix != null)
+            result.append(SUFFIX_MARKER);
 
-		return completeURLFromString(result.toString(), context, appName, relative, suffix);
-	}
+        return completeURLFromString(result.toString(), context, appName, relative, suffix);
+    }
 	
     /**
      * This method is useful for completing urls that are being generated
