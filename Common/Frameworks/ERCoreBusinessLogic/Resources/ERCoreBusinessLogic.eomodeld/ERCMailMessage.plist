@@ -1,24 +1,50 @@
 {
     attributes = (
-        {columnName = BCC_ADDR; name = bccAddresses; prototypeName = varchar1000; }, 
-        {columnName = CC_ADDR; name = ccAddresses; prototypeName = varchar1000; }, 
-        {columnName = CONTENT_TYPE; name = contentType; prototypeName = varchar255; }, 
-        {columnName = CREATED; name = created; prototypeName = dateTime; }, 
-        {columnName = DATE_SENT; name = dateSent; prototypeName = dateTime; }, 
-        {columnName = FROM_ADDR; name = fromAddress; prototypeName = varchar100; }, 
-        {columnName = ID; name = id; prototypeName = id; }, 
-        {columnName = IS_READ; name = isRead; prototypeName = charFlag; }, 
-        {columnName = LAST_MODIFIED; name = lastModified; prototypeName = dateTime; }, 
-        {columnName = MAIL_STATE_ID; name = mailStateID; prototypeName = osType; }, 
         {
-            columnName = REPLY_TO_ADDR; 
-            name = replyToAddresses; 
+            allowsNull = Y; 
+            columnName = "BCC_ADDR"; 
+            name = bccAddresses; 
             prototypeName = varchar1000; 
         }, 
-        {columnName = TEXT_; name = text; prototypeName = varcharLarge; }, 
-        {columnName = TITLE; name = title; prototypeName = varchar100; }, 
-        {columnName = TO_ADDR; name = toAddresses; prototypeName = varchar1000; }, 
-        {columnName = X_MAILER; name = xMailer; prototypeName = varchar255; }
+        {
+            allowsNull = Y; 
+            columnName = "CC_ADDR"; 
+            name = ccAddresses; 
+            prototypeName = varchar1000; 
+        }, 
+        {columnName = CREATED; name = created; prototypeName = dateTime; }, 
+        {
+            allowsNull = Y; 
+            columnName = "DATE_SENT"; 
+            name = dateSent; 
+            prototypeName = dateTime; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "EXCEPTION_REASON"; 
+            name = exceptionReason; 
+            prototypeName = varchar1000; 
+        }, 
+        {columnName = "FROM_ADDR"; name = fromAddress; prototypeName = varchar255; }, 
+        {columnName = ID; name = id; prototypeName = id; }, 
+        {columnName = "IS_READ"; name = isRead; prototypeName = flag; }, 
+        {columnName = "LAST_MODIFIED"; name = lastModified; prototypeName = dateTime; }, 
+        {columnName = "MAIL_STATE_ID"; name = mailStateID; prototypeName = osType; }, 
+        {
+            allowsNull = Y; 
+            columnName = "REPLY_TO_ADDR"; 
+            name = replyToAddress; 
+            prototypeName = varchar1000; 
+        }, 
+        {columnName = "TEXT_"; name = text; prototypeName = varcharLarge; }, 
+        {columnName = TITLE; name = title; prototypeName = varchar255; }, 
+        {columnName = "TO_ADDR"; name = toAddresses; prototypeName = varchar1000; }, 
+        {
+            allowsNull = Y; 
+            columnName = "X_MAILER"; 
+            name = xMailer; 
+            prototypeName = varchar255; 
+        }
     ); 
     attributesUsedForLocking = (
         id, 
@@ -28,10 +54,10 @@
         bccAddresses, 
         title, 
         xMailer, 
-        contentType, 
-        isRead
+        isRead, 
+        exceptionReason
     ); 
-    className = er.corebusinesslogic.ERCMailMessage; 
+    className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
         state, 
         created, 
@@ -43,13 +69,13 @@
         title, 
         text, 
         dateSent, 
-        replyToAddresses, 
+        replyToAddress, 
         attachments, 
         xMailer, 
-        contentType, 
-        isRead
+        isRead, 
+        exceptionReason
     ); 
-    externalName = ERCMAIL_MESSAG; 
+    externalName = "ERCMAIL_MESSAG"; 
     name = ERCMailMessage; 
     primaryKeyAttributes = (id); 
     relationships = (
