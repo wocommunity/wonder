@@ -141,6 +141,7 @@ public class ERXStringUtilities {
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
     protected static double adjustement = 0.5;
+    private static ERXLogger log = ERXLogger.getERXLogger(ERXStringUtilities.class);
 
     /**
      * Sets the base adjustment used for fuzzy matching
@@ -328,20 +329,9 @@ public class ERXStringUtilities {
      */
     public static String stringWithContentsOfFile(String path) {
         try {
-            InputStream in = new FileInputStream(path);
-            
-            if (null == in)
-                throw new RuntimeException("The file '"+ path + "' can not be opened.");
-            int length = in.available();
-            if (length == 0) {
-                return "";
-            }
-            byte buffer[] = new byte[length];
-            in.read(buffer);
-            in.close();
-            return new String(buffer);
-        } catch(Throwable t) {
-            // log.debug(t.toString());
+            if(path != null)
+                return ERXFileUtilities.stringFromFile(new File(path));
+        } catch (IOException e) {
         }
         return null;
     }
@@ -372,9 +362,19 @@ public class ERXStringUtilities {
      * @return string of the given file specified in the bundle
      */
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
-        if(bundle != null)
-            return stringWithContentsOfFile(bundle.pathForResource(name, extension, null));
-         return stringWithContentsOfFile(ERXFileUtilities.pathForResourceNamed(name + "." + extension, null, null));
+        String path = null;
+        if(bundle != null) {
+            path = bundle.pathForResource(name, extension, null);
+        }
+        if(path == null) {
+            path = ERXFileUtilities.pathForResourceNamed(name + "." + extension, null, null);
+        }
+        if(path != null) {
+            return stringWithContentsOfFile(path);
+        } else {
+            log.warn("Not found: " + name + "." + extension + " in bundle " + bundle.name());
+        }
+        return null;
     }
 
     public static final String firstPropertyKeyInKeyPath(String keyPath) {
