@@ -1,0 +1,9 @@
+Repetition1: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+SubmitButton3: WOSubmitButton {
+	action = performAction;
+	value = branchButtonLabel;
+}
