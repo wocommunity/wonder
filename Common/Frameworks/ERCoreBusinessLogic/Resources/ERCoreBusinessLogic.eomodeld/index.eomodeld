@@ -209,8 +209,6 @@
         username = nobody; 
     }; 
     entities = (
-        {className = EOGenericRecord; name = EOJDBCOraclePrototypes; }, 
-        {className = EOGenericRecord; name = EOPrototypes; }, 
         {className = "er.corebusinesslogic.ERCLogEntry"; name = ERCLogEntry; }, 
         {className = "er.corebusinesslogic.ERCMailMessage"; name = ERCMailMessage; }, 
         {className = "er.corebusinesslogic.ERCMailState"; name = ERCMailState; }, 
@@ -483,7 +481,11 @@
             ADDRESS, 
             "ACL_CONTROL_ALLOWE_USER_J", 
             "ACL_CONTROL", 
-            ERUSER
+            ERUSER, 
+            eoprototypes, 
+            eooracleprototypes, 
+            eooracleprototypes, 
+            eoprototypes
         ); 
     }; 
     userInfo = {
