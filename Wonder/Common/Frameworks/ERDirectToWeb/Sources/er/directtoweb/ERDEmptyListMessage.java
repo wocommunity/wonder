@@ -12,11 +12,12 @@ import er.extensions.ERXStatelessComponent;
 
 /**
  * Default component shown when a D2W list is empty.<br />
- * 
- * @binding d2wContext
  */
 
-public class ERDEmptyListMessage extends ERXStatelessComponent {
+public class ERDEmptyListMessage extends ERDCustomComponent {
 
     public ERDEmptyListMessage(WOContext context) { super(context); }
+
+    public final boolean isStateless() { return true; }
+    public final boolean synchronizesVariablesWithBindings() { return false; }
 }
