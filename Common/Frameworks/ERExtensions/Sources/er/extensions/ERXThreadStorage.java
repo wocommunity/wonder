@@ -17,7 +17,7 @@ import java.util.*;
 public class ERXThreadStorage {
 
     /** Holds the single instance of the thread map. */
-    private static ERXThreadLocalMap threadMap = new ERXThreadLocalMap();
+    private static ERXCloneableThreadLocal threadMap = new ERXCloneableThreadLocal();
     /** Holds the default initialization value of the hash map. */
     private static int DefaultHashMapSize = 10;
 
