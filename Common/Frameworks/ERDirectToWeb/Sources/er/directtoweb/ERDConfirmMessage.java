@@ -6,15 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import java.util.Enumeration;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
-import er.extensions.ERXLogger;
-import er.extensions.ERXConstant;
+import er.extensions.*;
 
-// For now this simply 
 /**
  * Confirming an action template.<br />
  * 
@@ -53,7 +51,7 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
             } else if (object() != null) {
                 _list = new NSArray(object());
             } else if (hasBinding("dataSource")) {
-                _list = er.extensions.ERXExtensions.arrayFromDataSource((EODataSource)valueForBinding("dataSource"));
+                _list = ERXExtensions.arrayFromDataSource((EODataSource)valueForBinding("dataSource"));
             } else {
                 log.warn("ERConfirmMessage being used without the proper bindings");
                 _list = NSArray.EmptyArray;
@@ -90,7 +88,7 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
     }
 
     public boolean confirmMessageIsTextfield() {
-        return booleanForBinding("confirmMessageIsTextfield");
+        return booleanValueForBinding("confirmMessageIsTextfield");
     }
 
     private String _confirmMessageTextfieldSize = null;
@@ -115,12 +113,12 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
         if (list().count() > 0) {
-            if ((message == null || message.equals("")) && booleanForBinding("confirmMessageManditory")) {
+            if ((message == null || message.equals("")) && booleanValueForBinding("confirmMessageManditory")) {
                 validationFailedWithException(new NSValidation.ValidationException(confirmMessageManditoryErrorMessage()), list().objectAtIndex(0),
                                               confirmMessageKey());
             } else if (message != null && !message.equals("")){
                 if (confirmMessageKey() == null)
-                    throw new RuntimeException("You must specify a confirmMessageKey for this pageConfiguration!");
+                    throw new IllegalStateException("You must specify a confirmMessageKey for this pageConfiguration!");
                 if (log.isDebugEnabled())
                     log.debug("Setting message: " + message + " for key: " + confirmMessageKey() + " on eos: " + list());
                 for (Enumeration e = list().objectEnumerator(); e.hasMoreElements();) {

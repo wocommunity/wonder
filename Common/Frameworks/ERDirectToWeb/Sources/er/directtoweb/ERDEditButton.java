@@ -16,8 +16,6 @@ import er.extensions.*;
 /**
  * Nice edit button for editing a toMany relationship in another page.<br />
  * 
- * @binding object
- * @binding d2wContext
  */
 
 public class ERDEditButton extends ERDCustomEditComponent {
@@ -30,9 +28,6 @@ public class ERDEditButton extends ERDCustomEditComponent {
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
 
-    public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
-
-
     protected EOEnterpriseObject localInstanceOfObject() {
         return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
     }
@@ -40,7 +35,7 @@ public class ERDEditButton extends ERDCustomEditComponent {
     // Assuming that object() is the eo
     public WOComponent edit() {
         EOEnterpriseObject localObject = localInstanceOfObject();
-        String configuration = (String)d2wContext().valueForKey("editConfigurationNameForEntity");
+        String configuration = (String)valueForBinding("editConfigurationNameForEntity");
         if(log.isDebugEnabled()){
            log.debug("configuration = "+configuration);
         }

@@ -107,7 +107,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
     }
 
     public String relationshipEntityName() { return entityRelationship().destinationEntity().name(); }
-    public boolean relationshipIsManditory() {return hasBinding("isMandatory") ? booleanForBinding("isMandatory") : entityRelationship().isMandatory(); }
+    public boolean relationshipIsManditory() {return hasBinding("isMandatory") ? booleanValueForBinding("isMandatory") : entityRelationship().isMandatory(); }
 
     public EOEnterpriseObject item;
 

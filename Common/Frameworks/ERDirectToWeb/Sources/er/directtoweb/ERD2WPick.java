@@ -61,7 +61,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
     }
 
     public boolean erD2WListOmitCenterTag() {
-        return hasBinding("erD2WListOmitCenterTag") ? booleanForBinding("erD2WListOmitCenterTag") : false;
+        return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
 
     public D2WContext d2wContext() { return D2WUtils.makeSubContextForDynamicPageNamed((String)valueForBinding("embeddedPageConfiguration"), session()); }
