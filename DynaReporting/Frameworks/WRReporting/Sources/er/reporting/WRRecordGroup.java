@@ -279,21 +279,36 @@ public class WRRecordGroup extends WOComponent  {
     public String singleTotal() {
         if(recordGroup() == null)
             return "";
-        NSArray tots = this.recordGroup().totalList();
+        String totalKey = this.totalToShow();
 
-        if (tots != null && tots.count() > 0) {
-            DRValue v = this.recordGroup().totalForKey(this.totalToShow());
-            if(v != null) {
-                double t = v.total();
-                Number nm = new Double(t);
-                NSNumberFormatter formatter = WRRecordGroup.formatterForFormat("#,###.00");
-                return formatter.format(nm);
+        double doubleValue = 0.0;
+
+        if(totalKey != null) {
+            if(totalKey.indexOf("~") == 0) {
+                doubleValue = DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalKey.substring(1), recordGroup()));
+            } else if(totalKey.indexOf("@") == 0) {
+                doubleValue = DRCriteria.doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
+                if(doubleValue == 0.0 && totalKey.indexOf("@count") == 0) {
+                    return this.noTotalLabel();
+                }
+            } else {
+                NSArray tots = this.recordGroup().totalList();
+
+                if (tots != null && tots.count() > 0) {
+                    DRValue v = this.recordGroup().totalForKey(this.totalToShow());
+                    if(v != null) {
+                        doubleValue = v.total();
+                    } else {
+                        return this.noTotalLabel();
+                    }
+                }
             }
         }
-
-        return this.noTotalLabel();
+        Number nm = new Double(doubleValue);
+        NSNumberFormatter formatter = WRRecordGroup.formatterForFormat((String)valueForBinding("formatForSingleTotal"));
+        return formatter.format(nm);
     }
-
+    
 
     public int nototalsrowspan() {
         return this.model().flatAttributeListTotal().count();

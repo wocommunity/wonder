@@ -80,6 +80,18 @@ hCriteriaList2: WRNestedList {
 }
 
 horzDimensions: WORepetition { list= horzDimensions; item= hGroup;}
+
+keysInH: WOString {
+	value = ^keysInH;
+}
+
+keysInV: WOString {
+	value = ^keysInV;
+}
+
+keysInZ: WOString {
+	value = ^keysInZ;
+}
 numberOfCrits:WORepetition{
 	count = numberOfCrits;
 	//index = depth;
@@ -98,6 +110,7 @@ recordGroupTest:WRRecordGroup{
 	showHeadings= showRecordGroupHeadings;
 	displayType = selectedRecordGroupDisplayType;
 	totalToShow = recordGroupTotalToShow;
+	formatForSingleTotal = recordGroupTotalFormat;
 	showAsTable = showRecordGroupAsTable;
 	colors = colorDict;
 	totalDict = totalDict;
@@ -197,6 +210,10 @@ td:WOGenericContainer{
 }
 totToShow:WOTextField{
 	value = recordGroupTotalToShow;
+}
+
+totToShow2:WOTextField{
+	value = recordGroupTotalFormat;
 }
 vCriteriaList: WRNestedList {
     list = topVertGroupCriteriaList;
