@@ -67,6 +67,8 @@ public class ERXPatcher  {
         // ones from WOExtensions are before us in the classpath
         ERXPatcher.setClassForName(WOToManyRelationship.class, "WOToManyRelationship");
         ERXPatcher.setClassForName(WOToOneRelationship.class, "WOToOneRelationship");
+        
+        ERXPatcher.setClassForName(ERXHyperlink.class, "WOHyperlink");
     }
 
     /** This class holds patches for WebObjects dynamic elements, which have always a closing tag and all
@@ -114,7 +116,20 @@ public class ERXPatcher  {
                 super.appendToResponse(woresponse, wocontext);
                 processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
+            
+            
 
+            /* logs the action name into session's dictionary with a key = ERXActionLogging 
+             */
+            public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
+                WOActionResults result = super.invokeAction(arg0, arg1);
+                if (result != null && _action != null && ERXExtensions.session() != null) {
+                    ERXExtensions.session().setObjectForKey(this.toString(), "ERXActionLogging");
+                }
+                return result;
+            }
+
+            
         }
 
         public static class ResetButton extends WOResetButton {
@@ -234,6 +249,16 @@ public class ERXPatcher  {
                 processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
 
+            /* logs the action name into session's dictionary with a key = ERXActionLogging if log is set to debug. 
+             */
+            public WOActionResults invokeAction(WORequest arg0, WOContext arg1) {
+                WOActionResults result = super.invokeAction(arg0, arg1);
+                if (result != null && ERXExtensions.session() != null) {
+                    ERXExtensions.session().setObjectForKey(this.toString(), "ERXActionLogging");
+                }
+                return result;
+            }
+            
         }
 
         public static class TextField extends WOTextField {
