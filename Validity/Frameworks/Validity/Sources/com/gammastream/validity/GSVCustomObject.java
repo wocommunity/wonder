@@ -16,39 +16,26 @@ import com.webobjects.eoaccess.*;
 public class GSVCustomObject extends EOCustomObject {
 
     public void validateForDelete(){
-    	try{
-            GSVEngine.sharedValidationEngine().validateEOObjectOnDelete(this); 
-        } catch(NSValidation.ValidationException e){
-            throw e;
-        }
+        GSVEngine.sharedValidationEngine().validateEOObjectOnDelete(this); 
+
         super.validateForDelete();
     }
 
     public void validateForInsert(){
-        try{
-            GSVEngine.sharedValidationEngine().validateEOObjectOnInsert(this);
-        } catch(NSValidation.ValidationException e){
-            throw e;
-        }
-
+        GSVEngine.sharedValidationEngine().validateEOObjectOnInsert(this);
+        
         super.validateForInsert();
     }
 
     public void validateForSave(){
-    	try{
-            GSVEngine.sharedValidationEngine().validateEOObjectOnSave(this); 
-        } catch(NSValidation.ValidationException e){
-            throw e;
-        }
+        GSVEngine.sharedValidationEngine().validateEOObjectOnSave(this); 
+
         super.validateForSave();
     }
 
     public void validateForUpdate(){
-    	try{
-            GSVEngine.sharedValidationEngine().validateEOObjectOnUpdate(this); 
-        } catch(NSValidation.ValidationException e){
-            throw e;
-        }
+        GSVEngine.sharedValidationEngine().validateEOObjectOnUpdate(this); 
+
         super.validateForUpdate();
     }
 
