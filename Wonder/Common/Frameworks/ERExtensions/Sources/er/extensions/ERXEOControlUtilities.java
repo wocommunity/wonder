@@ -669,13 +669,12 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Returns the propertylist-encoded string representation of the primary key for
-     * a given object.
+     * Returns the decoded dictionary for an propertylist encoded string representation
+     * of the primary key for a given object.
      * @param eo object to get the primary key for.
      * @return string representation of the primary key of the
      *		object.
      */
-    // FIXME ak doesn't handle dates
     public static NSDictionary primaryKeyDictionaryForString(EOEditingContext ec, String entityName, String string) {
         if(string == null)
             return null;
@@ -693,6 +692,9 @@ public class ERXEOControlUtilities {
                 for(Enumeration e = ((NSArray)rawValue).objectEnumerator(); e.hasMoreElements();) {
                     EOAttribute attribute = (EOAttribute)pks.objectAtIndex(index++);
                     Object value = e.nextElement();
+                    if(attribute.adaptorValueType() == EOAttribute.AdaptorDateType && !(value instanceof NSTimestamp)) {
+                        value = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S %Z").parseObject((String)value);
+                    }
                     value = attribute.validateValue(value);
                     pk.setObjectForKey(value, attribute.name());
                     if(pks.count() == 1) {
