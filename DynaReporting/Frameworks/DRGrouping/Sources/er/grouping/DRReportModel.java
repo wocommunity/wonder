@@ -15,6 +15,9 @@ import sun.misc.*;
 public class DRReportModel extends Object  {
     private static er.extensions.ERXLogger log = er.extensions.ERXLogger.getERXLogger(DRReportModel.class);
 
+    public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";
+    public static final String DRReportModelRebuildNotification = "DRReportModelRebuild";
+
     protected NSMutableArray _vList;
     protected NSMutableArray _hList;
     protected NSMutableArray _zList;
@@ -90,7 +93,7 @@ public class DRReportModel extends Object  {
     }
 
     static public String stringContentsOfFile(String path) {
-        return _NSStringUtilities.stringFromFile(path);
+        return ERXStringUtilities.stringWithContentsOfFile(path);
     }
     
 
@@ -100,10 +103,7 @@ public class DRReportModel extends Object  {
     // attributeList: "AttributeDef"
     //
     static public boolean boolForString(String s) {
-        if ("true".equals(s)) {
-            return true;
-        }
-        return false;
+        return ERXValueUtilities.booleanValue(s);
     }
 
     static public String stringForBool(boolean b) {
@@ -362,18 +362,19 @@ public class DRReportModel extends Object  {
         _groupDict = (NSDictionary)dict.objectForKey("lookup");
         _vList.addObjectsFromArray(_groups);
         this.groupAllRecordGroups();
-        //OWDebug.println(1, "ABOUT TO GET flatListForAttributeList");
+        log.debug("ABOUT TO GET flatListForAttributeList");
         this.flatListForAttributeList();
-        //OWDebug.println(1, "ABOUT TO GET flatListForAttributeListTotals");
+        log.debug("ABOUT TO GET flatListForAttributeListTotals");
         this.flatListForAttributeListTotals();
-        //OWDebug.println(1, "flatAttributeList: "+ _flatAttributeList);
-        //OWDebug.println(1, "flatAttributeListTotal: "+_flatAttributeListTotal);
+        log.debug("flatAttributeList: "+ _flatAttributeList);
+        log.debug("flatAttributeListTotal: "+_flatAttributeListTotal);
         this.buildGrandTotal();
         this.buildOrderings();
         
-        Class arrClass [] = {NSNotification.class};
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("synchModel", arrClass), "DRReportModelUpdate", null);
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("synchModel", arrClass), "DRReportModelRebuild", null);
+        NSSelector synchModelSelector = new NSSelector("synchModel", ERXConstant.NotificationClassArray);
+        
+        NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelUpdateNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelRebuildNotification, null);
         return this;
     }
 
