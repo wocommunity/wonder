@@ -11,26 +11,31 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
+import er.extensions.*;
 
 /**
  * Superclass for most custom query components.<br />
  * 
  */
 
-public class ERDCustomQueryComponent extends ERDCustomEditComponent {
+public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXExceptionHolder {
+
+    /** interface for all the keys used in this pages code */
+    public static interface Keys {
+        public static final String displayGroup = "displayGroup";
+    }
+
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomQueryComponent.class);
 
     public ERDCustomQueryComponent(WOContext context) {
         super(context);
     }
     
-    /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomQueryComponent.class);    
-    
     private WODisplayGroup _displayGroup;
     public WODisplayGroup displayGroup() {
         if (_displayGroup==null && !synchronizesVariablesWithBindings())
-            _displayGroup=(WODisplayGroup)super.valueForBinding("displayGroup");
+            _displayGroup=(WODisplayGroup)super.valueForBinding(Keys.displayGroup);
         return _displayGroup;
     }
     public void setDisplayGroup(WODisplayGroup value) {_displayGroup = value; }
