@@ -227,6 +227,14 @@ public class ERDirectToWeb {
         result.takeValueForKey(fsName, "fetchSpecificationName");
         return (QueryPageInterface)result;
     }
+
+    public static WOComponent errorPageForException(Throwable e, WOSession s) {
+        ErrorPageInterface epi=D2W.factory().errorPage(s);
+        epi.setMessage(e.toString()+" \n\n "+ERXUtilities.stackTrace(e));
+        epi.setNextPage(s.context().page());
+        return (WOComponent)epi;
+    }
+
     
     public static String displayNameForPropertyKey(String key, String entityName, String language) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
