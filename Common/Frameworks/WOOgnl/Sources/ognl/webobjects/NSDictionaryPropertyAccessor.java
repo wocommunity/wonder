@@ -9,13 +9,15 @@
 package ognl.webobjects;
 
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import ognl.*;
+import java.util.Map;
 
 public class NSDictionaryPropertyAccessor implements PropertyAccessor {
 
+    public Object getProperty(Map map, Object target, Object name) throws OgnlException {
+        return getProperty(target, name);
+    }    
+    
     public Object getProperty(Object target, Object name) throws OgnlException {
         Object property = null;
         try {
@@ -35,5 +37,9 @@ public class NSDictionaryPropertyAccessor implements PropertyAccessor {
         } catch (Exception ex) {
             throw new OgnlException(name.toString(), ex);
         }
+    }
+
+    public void setProperty(Map map, Object target, Object name, Object value) throws OgnlException {
+        setProperty(target, name, value);
     }
 }
