@@ -211,7 +211,7 @@ public class ERXBrowserFactory {
             } catch (Exception ex) {
                 log.error("Unable to create even a default browser for class name: " + _DEFAULT_BROWSER_CLASS_NAME
                             + " with exception: " + ex.getMessage()
-                            + "  Will instanciate a brwoser with regular" 
+                            + "  Will instanciate a browser with regular" 
                             + " new " + _DEFAULT_BROWSER_CLASS_NAME + "(...) statement.");
                 browser = new ERXBasicBrowser(browserName, version, mozillaVersion, platform, userInfo);
             }
