@@ -55,11 +55,12 @@ public abstract class ERXApplication extends WOApplication {
      * to be used instead of WOForm, WOFileUpload, WOText.
      */
     public void installPatches() {
+        ERXPatcher.installPatches();
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
         ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
         ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
-        //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+        //ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
         // Fix for 3190479 URI encoding should always be UTF8
         // See http://www.w3.org/International/O-URL-code.html
@@ -473,6 +474,17 @@ public abstract class ERXApplication extends WOApplication {
             ERXThreadStorage.takeValueForKey(context, "wocontext");
         }
         return context;
+    }
+
+    /**
+     * Create response for the current request.
+     * Our subclass fixes some issues with XHTML and XLST.
+     * @param request the request
+     * @return the newly created context
+     */
+    public WOResponse createResponseInContext(WOContext wocontext) {
+        WOResponse woresponse = new ERXWOResponse();
+        return woresponse;
     }
     
     /** 

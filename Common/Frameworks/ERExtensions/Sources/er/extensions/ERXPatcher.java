@@ -1,9 +1,10 @@
 package er.extensions;
 
+import java.util.*;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import java.util.*;
+import er.extensions.*;
 
 /**
  * Wrapper around the WO-private NSUtilities which allows for some Objective-C-Style poseAs.
@@ -40,6 +41,27 @@ public class ERXPatcher  {
     }
 
 
+    public static synchronized void installPatches() {
+
+        ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
+        ERXPatcher.setClassForName(DynamicElementsPatches.ResetButton.class, "WOResetButton");
+        ERXPatcher.setClassForName(DynamicElementsPatches.TextField.class, "WOTextField");
+        ERXPatcher.setClassForName(DynamicElementsPatches.GenericElement.class, "WOGenericElement");
+        ERXPatcher.setClassForName(DynamicElementsPatches.Image.class, "WOImage");
+        ERXPatcher.setClassForName(DynamicElementsPatches.ActiveImage.class, "WOActiveImage");
+        ERXPatcher.setClassForName(DynamicElementsPatches.Text.class, "WOText");
+        ERXPatcher.setClassForName(DynamicElementsPatches.PopUpButton.class, "WOPopUpButton");
+        ERXPatcher.setClassForName(DynamicElementsPatches.Browser.class, "WOBrowser");
+        ERXPatcher.setClassForName(DynamicElementsPatches.CheckBox.class, "WOCheckBox");
+        ERXPatcher.setClassForName(DynamicElementsPatches.CheckBoxList.class, "WOCheckBoxList");
+        ERXPatcher.setClassForName(DynamicElementsPatches.FileUpload.class, "WOFileUpload");
+        ERXPatcher.setClassForName(DynamicElementsPatches.HiddenField.class, "WOHiddenField");
+        ERXPatcher.setClassForName(DynamicElementsPatches.ImageButton.class, "WOImageButton");
+        ERXPatcher.setClassForName(DynamicElementsPatches.PasswordField.class, "WOPasswordField");
+        ERXPatcher.setClassForName(DynamicElementsPatches.RadioButton.class, "WORadioButton");
+        ERXPatcher.setClassForName(DynamicElementsPatches.RadioButtonList.class, "WORadioButtonList");
+    }
+
     /** This class holds patches for WebObjects dynamic elements, which have always a closing tag and all
         * attribute values are enclosed in quotes. The patches are automatically registered if this framework gets
         * loaded by the {@link com.cluster9.webobjects.PrincipalClass}.<br/>
@@ -48,29 +70,9 @@ public class ERXPatcher  {
         * Also <code>WOJavaScript</code> is not replaced, even if it is not XHTML-conform.
         */
     public static class DynamicElementsPatches {
-        public static boolean cleanupXHTML = true;
+        public static boolean cleanupXHTML = false;
         
         private DynamicElementsPatches() {}
-        public static synchronized void installPatches() {
-            
-            ERXPatcher.setClassForName(SubmitButton.class, "WOSubmitButton");
-            ERXPatcher.setClassForName(ResetButton.class, "WOResetButton");
-            ERXPatcher.setClassForName(TextField.class, "WOTextField");
-            ERXPatcher.setClassForName(GenericElement.class, "WOGenericElement");
-            ERXPatcher.setClassForName(Image.class, "WOImage");
-            ERXPatcher.setClassForName(ActiveImage.class, "WOActiveImage");
-            ERXPatcher.setClassForName(Text.class, "WOText");
-            ERXPatcher.setClassForName(PopUpButton.class, "WOPopUpButton");
-            ERXPatcher.setClassForName(Browser.class, "WOBrowser");
-            ERXPatcher.setClassForName(CheckBox.class, "WOCheckBox");
-            ERXPatcher.setClassForName(CheckBoxList.class, "WOCheckBoxList");
-            ERXPatcher.setClassForName(FileUpload.class, "WOFileUpload");
-            ERXPatcher.setClassForName(HiddenField.class, "WOHiddenField");
-            ERXPatcher.setClassForName(ImageButton.class, "WOImageButton");
-            ERXPatcher.setClassForName(PasswordField.class, "WOPasswordField");
-            ERXPatcher.setClassForName(RadioButton.class, "WORadioButton");
-            ERXPatcher.setClassForName(RadioButtonList.class, "WORadioButtonList");
-        }
 
         public static class SubmitButton extends WOSubmitButton {
             public SubmitButton(String aName, NSDictionary associations, WOElement element) {
@@ -78,10 +80,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
 
         }
@@ -92,10 +93,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -105,10 +105,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, null);
             }
         }
 
@@ -118,10 +117,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, null);
             }
         }
 
@@ -131,10 +129,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
 
         }
@@ -145,10 +142,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -158,10 +154,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -171,10 +166,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -184,10 +178,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -197,10 +190,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -210,10 +202,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, null);
             }
         }
 
@@ -223,10 +214,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -236,10 +226,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -249,10 +238,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -262,10 +250,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -275,10 +262,9 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
             }
         }
 
@@ -288,14 +274,26 @@ public class ERXPatcher  {
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-                String pre = woresponse.contentString();
+                int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
-                if(cleanupXHTML)
-                    correctResponse(woresponse, pre.length(), pre);
+                processResponse(this, woresponse, wocontext, offset, null);
             }
         }
 
-        /** Corrects the response of dynamic elements to be XHTML-conform. <code>input</code>- and <code>img</code>-tags
+        /** Fixing up the response for XHTML and adding the element to the array of generated element IDs, so we can use JavaScript later on. If the given element is an input element, it adds a dictionary {type=element.class, name=element.elementID}  to context().userInfo().elementArray() */
+        public static void processResponse(WODynamicElement element, WOResponse response, WOContext context, int priorOffset, String name) {
+            if(cleanupXHTML)
+                correctResponse(response, priorOffset);
+            if(element instanceof WOInput && context instanceof ERXMutableUserInfoHolderInterface) {
+                NSMutableDictionary dict = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
+                NSMutableArray elementArray = (NSMutableArray)dict.objectForKey("elementArray");
+                if(elementArray == null) elementArray = new NSMutableArray(10);
+                elementArray.addObject(new NSDictionary(new Object[] {element.getClass().getName(), name == null ? "NULL" :  name}, new String [] {"type", "name"}));
+                dict.setObjectForKey(elementArray, "elementArray");
+            }
+        }
+
+        /** Corrects the response of dynamic elements to be XHTML-conformant. <code>input</code>- and <code>img</code>-tags
             * will be closed correctly, all attribute values will be quoted and attributes without a value like <code>disabled</code>
             * will get a quoted value. All attribute-values with uncorrectly escaped ampersands (&amp;) will be corrected. E.g.
             * <code>&quot;w&amp;amp;auml;hlen&quot;</code> will become <code>&quot;w&amp;auml;hlen&quot;</code>.<br/>
@@ -312,11 +310,11 @@ public class ERXPatcher  {
             * @param start the offset to start from.
             * @param pre the string which should be inserted at the begin of the response.
             */
-        public static final void correctResponse(WOResponse response, int start, String pre) {
+        public static final void correctResponse(WOResponse response, int start) {
             String string = response.contentString();
             int length = string.length();
             StringBuffer buf = new StringBuffer(length);
-            buf.append(pre);
+            buf.append(string.substring(0, start));
 
             for(int i = start; i < length; i++) {
                 char ch = string.charAt(i);
