@@ -11,19 +11,22 @@ import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.*;
 import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
 /* To find out about how to use this package, read the README.html in the resources folder*/
 /* WARNING: this is experimental and the results might be very confusing if you don«t understand what this class tries to do! */
 
 public class ERXCompilerProxy {
-    static final Category cat = Category.getInstance(ERXCompilerProxy.class.getName());
-    static final Category classLoaderCat = Category.getInstance(ERXCompilerProxy.class.getName()+".loading");
+
+    /* logging support */
+    static final ERXLogger log = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName());
+    static final ERXLogger classLoaderLog = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName()+".loading");
+
     /** Notification you can register to when the Compiler Proxy reloads classes.
      * <br/>
      * The object is an array of classes that did recompiled since the last time the notification was sent.
      */
+
     public static final String CompilerProxyDidCompileClassesNotification = "CompilerProxyDidCompileClasses";
 
     /** 
@@ -91,7 +94,7 @@ public class ERXCompilerProxy {
             mainProject = mainBundle.projectPath();
         }
 	if((new File(mainProject + "/CPFileList.txt")).exists()) {
-	    cat.info("Found open project for app at path " + mainProject);
+	    log.info("Found open project for app at path " + mainProject);
 	    projectPaths.addObject(mainProject);
 	}
 	for(Enumeration e = frameworkNames.objectEnumerator(); e.hasMoreElements();) {
@@ -107,7 +110,7 @@ public class ERXCompilerProxy {
             if(path != null) {
                 File f = new File( path + "/CPFileList.txt");
                 if(f.exists()) {
-                    cat.info("Found open project for framework '" +path+ "' at path " + bundle.projectPath());
+                    log.info("Found open project for framework '" +path+ "' at path " + bundle.projectPath());
                     projectPaths.addObject(bundle.projectPath());
                 }
             }
@@ -143,18 +146,18 @@ public class ERXCompilerProxy {
      */
     public void initialize() {
         if(WOApplication.application().isCachingEnabled()) {
-            cat.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
+            log.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
             _filesToWatch = new NSMutableDictionary();
             return;
         }
 
 	if(!ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXCompilerProxyEnabled"), false)) {
-            cat.info("Rapid-turnaround mode is disabled, set 'er.extensions.ERXCompilerProxyEnabled=true' in your WebObjects.properties to enable it.");
+            log.info("Rapid-turnaround mode is disabled, set 'er.extensions.ERXCompilerProxyEnabled=true' in your WebObjects.properties to enable it.");
             _filesToWatch = new NSMutableDictionary();
             return;
 	}
 	
-        cat.debug("initialize");
+        log.debug("initialize");
 
         _classPath = System.getProperty("java.class.path");
 
@@ -162,12 +165,12 @@ public class ERXCompilerProxy {
 
 	NSArray projectPaths = projectPaths();
         if(projectPaths.count() == 0) {
-            cat.info("No open projects found with a CPFileList.txt");
+            log.info("No open projects found with a CPFileList.txt");
             _filesToWatch = new NSMutableDictionary();
 	    return;
         }
         if(_classPath.indexOf(".woa") < 0) {
-            cat.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment");
+            log.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment");
             return;
         }
         _destinationPath = _classPath.substring(0,_classPath.indexOf(".woa")) + ".woa/Contents/Resources/Java/";
@@ -192,11 +195,11 @@ public class ERXCompilerProxy {
                         if(entry.classFile() != null)
                             classFiles.addObject(entry);
                         if(WOApplication.application().isDebuggingEnabled()) {
-                            cat.debug("fileToWatch:" + entry.classNameWithPackage());
+                            log.debug("fileToWatch:" + entry.classNameWithPackage());
                         }
                     }
                 } catch (Exception ex) {
-                    cat.debug("initializeOnNotification: error parsing " +fileListPath+ " line '" + line +"':"+ ex);
+                    log.debug("initializeOnNotification: error parsing " +fileListPath+ " line '" + line +"':"+ ex);
 		}
 	    }
 	}
@@ -217,10 +220,10 @@ public class ERXCompilerProxy {
      *     ApplicationWillDispatchRequest
      */
     public void checkAndCompileOnNotification(NSNotification theNotification) {
-        //cat.debug("Received ApplicationWillDispatchRequestNotification");
+        //log.debug("Received ApplicationWillDispatchRequestNotification");
         WORequest r = (WORequest)theNotification.object();
         String key = "/" + WOApplication.application().resourceRequestHandlerKey();
-        // cat.info(r.uri() + " - " + key);
+        // log.info(r.uri() + " - " + key);
         if(!(r.uri().indexOf(key) > 0))
             checkAndCompileAllClasses();
     }
@@ -285,7 +288,7 @@ public class ERXCompilerProxy {
                             app.registerRequestHandler(handler, app.directActionRequestHandlerKey());
                             if(directActionIsDefault)
                                 app.setDefaultRequestHandler(handler);
-                            cat.info("WODirectAction loaded: "+ cacheEntry.className());
+                            log.info("WODirectAction loaded: "+ cacheEntry.className());
                         }
                         if(EOEnterpriseObject.class.isAssignableFrom(class_) && !didResetModelGroup) {
                             EOModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
@@ -368,7 +371,7 @@ public class ERXCompilerProxy {
         
         public void didRefresh() {
             _lastModified = _sourceFile.lastModified();
-            cat.info("Did refresh " + _path);
+            log.info("Did refresh " + _path);
         }
 
         public String toString() {
@@ -412,7 +415,7 @@ public class ERXCompilerProxy {
 
 	public boolean compile() throws IllegalArgumentException {
             Process jikesProcess=null;
-            cat.debug("*** compiling:" + commandLine());
+            log.debug("*** compiling:" + commandLine());
 	    try {
                 jikesProcess = Runtime.getRuntime().exec(commandArray());
                 jikesProcess.waitFor();
@@ -428,7 +431,7 @@ public class ERXCompilerProxy {
                     if(_raiseOnError) {
                         throw new RuntimeException("Jikes returned an  error: " + output.toString());
                     } else {
-                        cat.error(output.toString());
+                        log.error(output.toString());
                         jikesProcess.destroy();
                         return false;
                     }
@@ -436,9 +439,9 @@ public class ERXCompilerProxy {
                     // We do nothing here because we except no output from jikes
                 }
             } catch (IOException e) {
-                cat.error("Compiler: IOException: " + e.toString());
+                log.error("Compiler: IOException: " + e.toString());
             } catch (InterruptedException e) {
-                cat.error("Compiler: Interrupted process: " + e.toString());
+                log.error("Compiler: Interrupted process: " + e.toString());
             } finally {
                 if (jikesProcess != null)
                     jikesProcess.destroy();
@@ -475,7 +478,7 @@ public class ERXCompilerProxy {
             String fileName = name.replace('.', File.separatorChar) + ".class";
             File f = new File( _destinationPath + File.separatorChar + fileName);
             if (f.exists() && f.isFile() && f.canRead()) {
-                classLoaderCat.debug("CompilerClassLoader.findClassFile:" + name);
+                classLoaderLog.debug("CompilerClassLoader.findClassFile:" + name);
                 return f;
             }
             return null;
@@ -501,7 +504,7 @@ public class ERXCompilerProxy {
                 in.read(buffer);
                 in.close();
                 newClass = defineClass(name, buffer, 0, buffer.length);
-                classLoaderCat.info("Did load class: " + name);
+                classLoaderLog.info("Did load class: " + name);
             } catch (IOException e) {
                 throw new ClassNotFoundException(e.getMessage());
             }

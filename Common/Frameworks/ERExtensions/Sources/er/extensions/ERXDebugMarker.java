@@ -10,12 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 public class ERXDebugMarker extends WOComponent {
 
-    //////////////////////////////////////  log4j category  /////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXDebugMarker.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDebugMarker.class);
 
     public ERXDebugMarker(WOContext aContext) {
         super(aContext);
@@ -40,7 +39,7 @@ public class ERXDebugMarker extends WOComponent {
     
     public WOComponent debug() {
         WOComponent result=null;
-        //if (cat.isDebugEnabled()) cat.debug("Object = "+object());
+        //if (log.isDebugEnabled()) log.debug("Object = "+object());
         if (object() instanceof EOEditingContext) {
             result=pageWithName("ERXEditingContextInspector");
             result.takeValueForKey(object(),"object");
@@ -49,9 +48,9 @@ public class ERXDebugMarker extends WOComponent {
             if(result != null) {
                 result.takeValueForKey(object(),"object");
             } else if(object() instanceof ERXGenericRecord) {
-                cat.info("Object: " + ((ERXGenericRecord)object()).toLongString());
+                log.info("Object: " + ((ERXGenericRecord)object()).toLongString());
             } else {
-                cat.info("Object: " + object());
+                log.info("Object: " + object());
             }
         }
         return result;

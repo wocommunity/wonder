@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 /**
  * This is more of a legacy object that was used until
@@ -23,7 +22,7 @@ import org.apache.log4j.Category;
 public class ERXValidation {
 
     /** logging support */
-    public static final Category cat = Category.getInstance("er.validation.ERValidation");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.validation.ERValidation");
 
     /** holds the static constant for pushing an incorrect value onto an eo */
     public final static boolean PUSH_INCORRECT_VALUE_ON_EO=true;
@@ -115,8 +114,8 @@ public class ERXValidation {
                                                      ERXLocalizer localizer,
                                                      EOEntity entity,
                                                      boolean pushChanges) {
-        if (cat.isDebugEnabled())
-            cat.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
+        if (log.isDebugEnabled())
+            log.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
         boolean addKeyToErrorMessage=false;
         String key = null;
         String newErrorMessage=e.getMessage();

@@ -27,7 +27,7 @@ import java.util.*;
 import er.extensions.*;
 
 public class ERXTestCase extends TestCase {
-    static ERXLogger log = ERXLogger.getLogger(ERXTestCase.class);
+    static ERXLogger log = ERXLogger.getERXLogger(ERXTestCase.class);
     protected EOEditingContext editingContext = new EOEditingContext();
     protected NSMutableArray persistentRootObjects = new NSMutableArray();
 

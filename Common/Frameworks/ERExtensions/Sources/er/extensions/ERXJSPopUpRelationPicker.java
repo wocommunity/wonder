@@ -12,7 +12,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import org.apache.log4j.Category;
 
 public class ERXJSPopUpRelationPicker extends WOComponent {
 
@@ -20,8 +19,8 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         super(aContext);
     }
 
-    ////////////////////////////////////////////  log4j category  ////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXJSPopUpRelationPicker.class);
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXJSPopUpRelationPicker.class);
 
     /* !!!WARNING!!!
     1. You can only have one of these components per page. This is because the names of the select boxes are static and not dynamic. There can only be one select box on the page with the name parent_select and one with the name children_select. This should be somewhat trivial to fix if we deem it necessary.
@@ -87,8 +86,8 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
 
         parent_id = (String)(request.formValueForKey("selected_parent_id"));
         child_id = (String)(request.formValueForKey("selected_child_id"));
-        if (cat.isDebugEnabled()) cat.debug("selected_parent_id is " + parent_id + " and the class is " + parent_id.getClass());
-        if (cat.isDebugEnabled()) cat.debug("selected_child_id is " + child_id + " and the class is " + child_id.getClass());
+        if (log.isDebugEnabled()) log.debug("selected_parent_id is " + parent_id + " and the class is " + parent_id.getClass());
+        if (log.isDebugEnabled()) log.debug("selected_child_id is " + child_id + " and the class is " + child_id.getClass());
 
         try {
             parentIdToHash = Integer.parseInt(parent_id);
@@ -96,7 +95,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         } catch (Exception e) {
             selectedParent = null;
         }
-        if (cat.isDebugEnabled()) cat.debug("selectedParent is " + ((EOEnterpriseObject)selectedParent).eoShallowDescription());
+        if (log.isDebugEnabled()) log.debug("selectedParent is " + ((EOEnterpriseObject)selectedParent).eoShallowDescription());
 
         try {
             childIdToHash = Integer.parseInt(child_id);
@@ -104,11 +103,11 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         } catch (Exception e) {
             selectedChild = null;
         }
-        if (cat.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             if (selectedChild != null) {
-                cat.debug("selectedChild is " + ((EOEnterpriseObject)selectedChild).eoShallowDescription());
+                log.debug("selectedChild is " + ((EOEnterpriseObject)selectedChild).eoShallowDescription());
             } else {
-                cat.debug("selectedChild is null");
+                log.debug("selectedChild is null");
             }
         }
     }
@@ -268,7 +267,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
                 returnString.append("\t" + "}" + "\n");
                 returnString.append("}" + "\n");
 
-                if (cat.isDebugEnabled()) cat.debug("JSPopUpRelationPicker jsString  returnString is " + returnString);
+                if (log.isDebugEnabled()) log.debug("JSPopUpRelationPicker jsString  returnString is " + returnString);
                 return returnString.toString();
         }
 
@@ -433,7 +432,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         }
 
         returnString.append("</select>\n");
-        if (cat.isDebugEnabled()) cat.debug("JSPopUpRelationPicker childPopUpString  returnString is " + returnString);
+        if (log.isDebugEnabled()) log.debug("JSPopUpRelationPicker childPopUpString  returnString is " + returnString);
         return returnString.toString();
     }
     private StringBuffer selectHeader(String nm, String oc, Object selectedEntity, String additionalPopupText) {
@@ -451,23 +450,23 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         // if we have to write out an additional option tag, do so at the beginning of the pop-up. Set this to the default selected if nothing else is selected.
         // for parents, if we aren't passed in a selectedParent, then we default to parentPopUpStringForAll. If we aren't given that either, then we default to the last parent in the array.
         // for children, if we aren't passed in a selectedChild, then we default to childPopUpStringForAll. If we aren't given that either, then we default to the last child in the array.
-        if (cat.isDebugEnabled()) cat.debug("nm is " + nm + " and selectedEntity is " + selectedEntity);
+        if (log.isDebugEnabled()) log.debug("nm is " + nm + " and selectedEntity is " + selectedEntity);
         if (selectedEntity == null) {
-            if (cat.isDebugEnabled()) cat.debug("selectedEntity == null");
+            if (log.isDebugEnabled()) log.debug("selectedEntity == null");
             // we don't have a selected entity in the list. If we have an additionalPopup set it to that.
             if (additionalPopupText != null) {
-                if (cat.isDebugEnabled()) cat.debug("selectedEntity == null and additionalPopupText != null");
+                if (log.isDebugEnabled()) log.debug("selectedEntity == null and additionalPopupText != null");
                 returnString.append("\t<option selected>" + additionalPopupText + "\n");
             }
         } else {
             // we have a selected entity in the list
-            if (cat.isDebugEnabled()) cat.debug("selectedEntity != null");
+            if (log.isDebugEnabled()) log.debug("selectedEntity != null");
             if (additionalPopupText != null) {
-                if (cat.isDebugEnabled()) cat.debug("selectedEntity != null and additionalPopupText != null");
+                if (log.isDebugEnabled()) log.debug("selectedEntity != null and additionalPopupText != null");
                 returnString.append("\t<option>" + additionalPopupText + "\n");
             }
         }
-        if (cat.isDebugEnabled()) cat.debug("JSPopUpRelationPicker selectHeader  returnString is " + returnString);
+        if (log.isDebugEnabled()) log.debug("JSPopUpRelationPicker selectHeader  returnString is " + returnString);
         return returnString;
     }
     /*    private String popUpString(String nm, String oc, NSArray list, NSObject selectedEntity, String displayValue, String additionalPopupText, String nmPrependText) {
@@ -587,7 +586,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         }
         returnString.append(");");
 
-        if (cat.isDebugEnabled()) cat.debug("JSPopUpRelationPicker parentschildrenArrayCreationString  returnString is " + returnString);
+        if (log.isDebugEnabled()) log.debug("JSPopUpRelationPicker parentschildrenArrayCreationString  returnString is " + returnString);
         return returnString.toString();
     }
 

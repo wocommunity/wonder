@@ -19,7 +19,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getLogger(ERXToOneRelationship.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXToOneRelationship.class);
 
     // ** passed-in (optional)
     protected String _destinationSortKey;

@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 import java.util.*;
 
 /**
@@ -23,7 +22,7 @@ import java.util.*;
 public class ERXProperties {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERXProperties.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
 
     /**
      * Cover method for returning an NSArray for a

@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
 
 /**
  * The reason that this model group is needed is because the
@@ -24,7 +23,7 @@ import org.apache.log4j.Category;
 public class ERXModelGroup extends EOModelGroup {
 
     /** logging support */
-    static ERXLogger log  = ERXLogger.getLogger(ERXModelGroup.class);
+    static ERXLogger log  = ERXLogger.getERXLogger(ERXModelGroup.class);
 
     /**
      * Default public constructor

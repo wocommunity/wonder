@@ -12,7 +12,6 @@ import com.webobjects.eocontrol.*;
 import java.security.*;
 import javax.crypto.*;
 import java.util.*;
-import org.apache.log4j.Category;
 import javax.crypto.spec.*;
 
 /* Compilation problems? READ THIS
@@ -46,7 +45,7 @@ import javax.crypto.spec.*;
 public class ERXCrypto {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXCrypto.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXCrypto.class);
     /** Block size of blowfish encrypted strings */
     public final static int BLOCK_SIZE=8;
     
@@ -81,7 +80,7 @@ public class ERXCrypto {
             cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
             cipher.init(mode, secretKey());
         } catch (Exception e) {
-            cat.error("Caught exception trying to create cipher "+e+" - "+ERXUtilities.stackTrace(e));
+            log.error("Caught exception trying to create cipher "+e+" - "+ERXUtilities.stackTrace(e));
         }
         return cipher;
     }

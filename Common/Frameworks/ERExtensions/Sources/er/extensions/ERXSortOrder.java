@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERSortOrder is an extension of WOSortOrder.  It adds two main abilities to WOSortOrder.
@@ -24,8 +23,8 @@ public class ERXSortOrder extends WOSortOrder {
         super(context);
     }
     
-    ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXSortOrder.class);
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSortOrder.class);
 
     //////////////////////////////////////////////// Notification Hooks //////////////////////////////////////////
     public final static String SortOrderingChanged = "SortOrderingChanged";
@@ -125,7 +124,7 @@ public class ERXSortOrder extends WOSortOrder {
     // FIXME: Should post a notification even if d2wContext isn't bound.
     public WOComponent toggleClicked() {
         super.toggleClicked();
-        if (cat.isDebugEnabled()) cat.debug("toggleClicked "+valueForBinding("d2wContext"));
+        if (log.isDebugEnabled()) log.debug("toggleClicked "+valueForBinding("d2wContext"));
         if (valueForBinding("d2wContext") != null) {
             NSNotificationCenter.defaultCenter().postNotification(SortOrderingChanged,
                                                                   displayGroup().sortOrderings(),

@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
 import java.util.Enumeration;
 import java.io.*; 
 
@@ -28,7 +27,7 @@ import java.io.*;
 public class ERXSession extends WOSession {
 
     /** logging support */
-    public static Category cat = Category.getInstance(ERXSession.class);
+    public static ERXLogger log = ERXLogger.getERXLogger(ERXSession.class);
 
     /** Notification name that is posted after a session wakes up. */
     // DELETEME: Now we can use SessionDidRestoreNotification
@@ -206,11 +205,11 @@ public class ERXSession extends WOSession {
         NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
 
         WORequest request=context()!=null ? context().request() : null;
-        if (request!=null && cat.isDebugEnabled()) cat.debug("Form values "+request.formValues());
+        if (request!=null && log.isDebugEnabled()) log.debug("Form values "+request.formValues());
         // FIXME: Shouldn't be hardcoded form value.
         if (request!=null && request.formValueForKey("javaScript")!=null) {
             String js=(String)request.formValueForKey("javaScript");
-            if (cat.isDebugEnabled()) cat.debug("Received javascript form value "+js);
+            if (log.isDebugEnabled()) log.debug("Received javascript form value "+js);
             setJavaScriptEnabled(js != null  &&  js.equals("1")  
                                     && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) 
                                         ||  browser().isMozilla40Compatible()  
@@ -224,7 +223,7 @@ public class ERXSession extends WOSession {
                 // malformed cookies cause WO 5.1.3 to raise here
             }
             if (js!=null) { // a friend sent us a cookie!
-                if (cat.isDebugEnabled()) cat.debug("Got JAVASCRIPT_ENABLED_COOKIE from a friend "+js);
+                if (log.isDebugEnabled()) log.debug("Got JAVASCRIPT_ENABLED_COOKIE from a friend "+js);
                 setJavaScriptEnabled(js.equals("1") 
                                     && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) 
                                         ||  browser().isMozilla40Compatible()  
@@ -316,7 +315,7 @@ public class ERXSession extends WOSession {
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext){
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack) cat.debug("User backtracking in invokeAction.");
+        if (didBackTrack) log.debug("User backtracking in invokeAction.");
         return super.invokeAction(aRequest, aContext);
     }
 
@@ -332,7 +331,7 @@ public class ERXSession extends WOSession {
     public void takeValuesFromRequest (WORequest aRequest, WOContext aContext){
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack) cat.debug("User backtracking in takeValuesFromRequest.");
+        if (didBackTrack) log.debug("User backtracking in takeValuesFromRequest.");
         messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
         super. takeValuesFromRequest (aRequest, aContext);
     }
@@ -346,7 +345,7 @@ public class ERXSession extends WOSession {
      * @param aContext current context object
      */
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-        if (didBackTrack) cat.debug("User backtracking in appendToResponse.");
+        if (didBackTrack) log.debug("User backtracking in appendToResponse.");
         messageEncoding().setEncodingToResponse(aResponse);
         super.appendToResponse(aResponse, aContext);
     }
@@ -379,8 +378,8 @@ public class ERXSession extends WOSession {
         stream.defaultReadObject();
         if (_serializableLanguageName != null) 
             setLanguage(_serializableLanguageName);
-        if (cat.isDebugEnabled()) 
-            cat.debug("Session has been deserialized: " + toString());
+        if (log.isDebugEnabled()) 
+            log.debug("Session has been deserialized: " + toString());
     }
 
     public String toString() {

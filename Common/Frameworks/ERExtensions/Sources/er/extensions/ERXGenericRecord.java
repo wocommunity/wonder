@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.lang.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 /**
  * This class contains a bunch of extensions to the
@@ -30,23 +29,23 @@ import org.apache.log4j.Category;
 public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface {
 
     /** logging support. Called after an object is successfully inserted */
-    public static final Category tranCatDidInsert = Category.getInstance("er.transaction.eo.did.insert.ERXGenericRecord");
+    public static final ERXLogger tranLogDidInsert = ERXLogger.getERXLogger("er.transaction.eo.did.insert.ERXGenericRecord");
     /** logging support. Called after an object is successfully deleted */
-    public static final Category tranCatDidDelete = Category.getInstance("er.transaction.eo.did.delete.ERXGenericRecord");
+    public static final ERXLogger tranLogDidDelete = ERXLogger.getERXLogger("er.transaction.eo.did.delete.ERXGenericRecord");
     /** logging support. Called after an object is successfully updated */
-    public static final Category tranCatDidUpdate = Category.getInstance("er.transaction.eo.did.update.ERXGenericRecord");
+    public static final ERXLogger tranLogDidUpdate = ERXLogger.getERXLogger("er.transaction.eo.did.update.ERXGenericRecord");
     /** logging support. Called before an object is inserted */
-    public static final Category tranCatWillInsert = Category.getInstance("er.transaction.eo.will.insert.ERXGenericRecord");
+    public static final ERXLogger tranLogWillInsert = ERXLogger.getERXLogger("er.transaction.eo.will.insert.ERXGenericRecord");
     /** logging support. Called before an object is deleted */
-    public static final Category tranCatWillDelete = Category.getInstance("er.transaction.eo.will.delete.ERXGenericRecord");
+    public static final ERXLogger tranLogWillDelete = ERXLogger.getERXLogger("er.transaction.eo.will.delete.ERXGenericRecord");
     /** logging support. Called before an object is updated */
-    public static final Category tranCatWillUpdate = Category.getInstance("er.transaction.eo.will.update.ERXGenericRecord");
+    public static final ERXLogger tranLogWillUpdate = ERXLogger.getERXLogger("er.transaction.eo.will.update.ERXGenericRecord");
     /** logging support for validation information */
-    public static final Category validation = Category.getInstance("er.eo.validation.ERXGenericRecord");
+    public static final ERXLogger validation = ERXLogger.getERXLogger("er.eo.validation.ERXGenericRecord");
     /** logging support for validation exceptions */
-    public static final Category validationException = Category.getInstance("er.eo.validationException.ERXGenericRecord");
+    public static final ERXLogger validationException = ERXLogger.getERXLogger("er.eo.validationException.ERXGenericRecord");
     /** general logging support */
-    public static final Category cat = Category.getInstance("er.eo.ERXGenericRecord");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.eo.ERXGenericRecord");
 
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
     public final static String KEY_MARKER="** KEY_MARKER **";
@@ -92,8 +91,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             // FIXME: This shouldn't be a RuntimeException seeing as these are difficult to catch
             throw new RuntimeException("The ERXGenericRecord "+this+" cannot be deleted.");
         }
-        if (tranCatWillDelete.isDebugEnabled())
-            tranCatWillDelete.debug("Object:" + description());
+        if (tranLogWillDelete.isDebugEnabled())
+            tranLogWillDelete.debug("Object:" + description());
     }
     
     /**
@@ -108,16 +107,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public void willInsert() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
         in the same transaction */
-         if (tranCatWillInsert.isDebugEnabled()) {
+         if (tranLogWillInsert.isDebugEnabled()) {
              /* check that all the to manies have an array */
              for (Enumeration e=toManyRelationshipKeys().objectEnumerator(); e.hasMoreElements();) {
                  String key=(String)e.nextElement();
                  Object o=storedValueForKey(key);
                  if (o==null || !EOFaultHandler.isFault(o) && o instanceof NSKeyValueCoding.Null) {
-                     tranCatWillInsert.error("Found illegal value in to many "+key+" for "+this+": "+o);
+                     tranLogWillInsert.error("Found illegal value in to many "+key+" for "+this+": "+o);
                  }
              }
-             tranCatWillInsert.debug("Object:" + description());
+             tranLogWillInsert.debug("Object:" + description());
          }
          trimSpaces();
     }
@@ -134,17 +133,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public void willUpdate() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
         in the same transaction */
-         if (tranCatWillUpdate.isDebugEnabled()) {
+         if (tranLogWillUpdate.isDebugEnabled()) {
              /* check that all the to manies have an array */
              for (Enumeration e=toManyRelationshipKeys().objectEnumerator(); e.hasMoreElements();) {
                  String key=(String)e.nextElement();
                  Object o=storedValueForKey(key);
                  if (o==null || !EOFaultHandler.isFault(o) && o instanceof NSKeyValueCoding.Null) {
-                     tranCatWillUpdate.error("Found illegal value in to many "+key+" for "+this+": "+o);
+                     tranLogWillUpdate.error("Found illegal value in to many "+key+" for "+this+": "+o);
                  }
              }
-             if (tranCatWillUpdate.isDebugEnabled())
-                 tranCatWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
+             if (tranLogWillUpdate.isDebugEnabled())
+                 tranLogWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
          }
         trimSpaces();
     }
@@ -169,24 +168,24 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		with the object.
      */
     public void didDelete(EOEditingContext ec) {
-        if (tranCatDidDelete.isDebugEnabled())
-            tranCatDidDelete.debug("Object:" + description());
+        if (tranLogDidDelete.isDebugEnabled())
+            tranLogDidDelete.debug("Object:" + description());
     }
     /**
      * Called on the object after is has successfully
      * been updated in the database.
      */
     public void didUpdate() {
-        if (tranCatDidUpdate.isDebugEnabled())
-            tranCatDidUpdate.debug("Object:" + description());
+        if (tranLogDidUpdate.isDebugEnabled())
+            tranLogDidUpdate.debug("Object:" + description());
     }
     /**
      * Called on the object after is has successfully
      * been inserted into the database.
      */
     public void didInsert() {
-        if (tranCatDidInsert.isDebugEnabled())
-            tranCatDidInsert.debug("Object:" + description());
+        if (tranLogDidInsert.isDebugEnabled())
+            tranLogDidInsert.debug("Object:" + description());
     }
 
     /**
@@ -264,12 +263,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		Object parentDelegate=((EOEditingContext)parent).delegate();
 		if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
 		    editingContext.setDelegate(parentDelegate);
-		    cat.info("Found null delegate. Setting to the parent's delegate.");
+		    log.info("Found null delegate. Setting to the parent's delegate.");
 		    return true;
 		}
 	    }
 	    if(!_raiseOnMissingEditingContextDelegate) {
-		cat.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
+		log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
 		ERXExtensions.setDefaultDelegate(editingContext);
 		return true;
 	    } else {
@@ -278,7 +277,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	}
 	if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
 	    if(!_raiseOnMissingEditingContextDelegate) {
-		cat.warn("Found unexpected delegate class: "+delegate.getClass().getName());
+		log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
 		return true;
 	    } else {
 		throw new RuntimeException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
@@ -370,7 +369,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         Object result = rawPrimaryKey();
         if (result == null) {
             NSDictionary pk = primaryKeyDictionary(false);
-            if (cat.isDebugEnabled()) cat.debug("pk: " + pk);
+            if (log.isDebugEnabled()) log.debug("pk: " + pk);
             NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
             if (primaryKeyAttributeNames.count()>1)
                 throw new RuntimeException("rawPrimaryKeyInTransaction does not support compound primary keys");
@@ -603,8 +602,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     // CHECKME: Might be able to tell better by checking EOGlobalIDs
     public boolean isDeletedEO() {
-        if (cat.isDebugEnabled())
-            cat.debug("editingContext() = " + editingContext() + " this object: " + this);
+        if (log.isDebugEnabled())
+            log.debug("editingContext() = " + editingContext() + " this object: " + this);
         return editingContext() != null && editingContext().deletedObjects().containsObject(this);
     }
 
@@ -698,8 +697,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                                       + this + " class: " + getClass() + " pKey: " + primaryKey() + "\n" + e);
             throw e;
         } catch (RuntimeException e) {
-            cat.error("**** During validateValueForKey "+key);
-            cat.error("**** caught "+e);
+            log.error("**** During validateValueForKey "+key);
+            log.error("**** caught "+e);
             throw e;
         }
         return result;

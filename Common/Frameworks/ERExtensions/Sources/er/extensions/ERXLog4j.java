@@ -32,7 +32,7 @@ public class ERXLog4j {
     }
 
     /** logging support */
-    public static Category log;
+    public static Logger log;
 
     //CHECKME: (tatsuya) This will be moved to ERXProperties, ERXPropertyUtilities or ERXConfigurationManager
     protected final static String ERConfigurationPathPropertyName = "ERConfigurationPath";
@@ -126,7 +126,7 @@ public class ERXLog4j {
         String originalConfigFilePath = configurationFilePath(); // Note: This can be null.
         if (!_isInitialized) {
             BasicConfigurator.configure();
-            log = Category.getInstance(ERXLog4j.class.getName());
+            log = Logger.getLogger(ERXLog4j.class.getName());
             _isInitialized = true;
         }
         log.debug("Configure logging requested.");

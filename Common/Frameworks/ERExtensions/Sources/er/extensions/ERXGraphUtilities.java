@@ -12,13 +12,12 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import java.util.*;
 import java.awt.*; //for pie charts
 
 public class ERXGraphUtilities {
 
-    public final static Category cat = Category.getInstance(ERXGraphUtilities.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXGraphUtilities.class);
 
     public static Integer fiftyOne = ERXConstant.integerForInt(51);
     public static Integer oneHundredTwo = ERXConstant.integerForInt(102);
@@ -56,7 +55,7 @@ public class ERXGraphUtilities {
                 for (int i=1;i<=numberDesiredMonths;i++)
                     result.addObject(today.timestampByAddingGregorianUnits(0, (i * -1), 0, 0, 0, 0).toString());
                 _lastNMonthsAsStringsArray = result;
-                cat.debug("*********** result for lastNMonthsAsStringsArray = " + result);
+                log.debug("*********** result for lastNMonthsAsStringsArray = " + result);
             }
             return _lastNMonthsAsStringsArray;
         }
@@ -68,10 +67,10 @@ public class ERXGraphUtilities {
                 NSTimestamp today = new NSTimestamp();
                 for (int i=1;i<=numberDesiredMonths;i++)
                     result.addObject(today.timestampByAddingGregorianUnits(0, (i * -1), 0, 0, 0, 0));
-              //  cat.debug("*********** today = " + today);
-               // cat.debug("*********** numberDesiredMonths = " + numberDesiredMonths);
+              //  log.debug("*********** today = " + today);
+               // log.debug("*********** numberDesiredMonths = " + numberDesiredMonths);
                 _lastNMonthsArray = result;
-                cat.debug("*********** result for lastNMonthsArray = " + result);
+                log.debug("*********** result for lastNMonthsArray = " + result);
             }
             return _lastNMonthsArray;
         }

@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 import java.util.Enumeration;
 
 /**
@@ -21,7 +20,7 @@ import java.util.Enumeration;
 public class ERXSimpleTemplateParser {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERXSimpleTemplateParser.class.getName());
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSimpleTemplateParser.class.getName());
 
     /** holds a reference to the shared instance of the parser */
     private static ERXSimpleTemplateParser _sharedInstance;
@@ -49,7 +48,7 @@ public class ERXSimpleTemplateParser {
         if (delimiter == null)
             delimiter = "@";
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
-        cat.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
+        log.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
         for (Enumeration e = NSArray.componentsSeparatedByString(template, delimiter).objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if (deriveElement) {
@@ -98,20 +97,20 @@ public class ERXSimpleTemplateParser {
             throw new RuntimeException("Attempting to parse null template!");
         if (object == null)
             throw new RuntimeException("Attempting to parse template with null object!");
-        if (cat.isDebugEnabled())
-            cat.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
+        if (log.isDebugEnabled())
+            log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
         if(delimiter == null) delimiter = "@";
-        cat.debug("Template: " + template);
-        cat.debug("Delim: " + delimiter);
-        cat.debug("otherObject: " + otherObject);
+        log.debug("Template: " + template);
+        log.debug("Delim: " + delimiter);
+        log.debug("otherObject: " + otherObject);
         StringBuffer buffer = new StringBuffer();
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
-        cat.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
+        log.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
         for (Enumeration e = NSArray.componentsSeparatedByString(template, delimiter).objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
-            cat.debug("Processing Element: " + element);
+            log.debug("Processing Element: " + element);
             if (deriveElement) {
-                cat.debug("Deriving value ...");
+                log.debug("Deriving value ...");
                 if(element.length() == 0)
                     throw new RuntimeException("\"\" is not a valid keypath");
                 Object obj;
@@ -135,7 +134,7 @@ public class ERXSimpleTemplateParser {
                     buffer.append(element);
                 deriveElement = true;
             }
-            cat.debug("Buffer: " + buffer);
+            log.debug("Buffer: " + buffer);
         }
         return buffer.toString();
     }

@@ -9,13 +9,14 @@ package er.testrunner;
 import com.webobjects.foundation.*;
 import junit.framework.*;
 import junit.runner.*;
-import org.apache.log4j.Category;
 import java.io.PrintStream;
 import java.util.*;
+import er.extensions.*;
 
 public class ERXTestResult extends TestResult {
-    /////////////////////////////////////  log4j category  /////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXTestResult.class);
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXTestResult.class);
 
     protected NSMutableArray _errors;
     protected NSMutableArray _failures;

@@ -13,7 +13,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 // Note: This is a direct port of Kelly Hawks' ObjC SharedEOLoader.  Only enhanced it to use the log4j system.
 //
@@ -42,7 +41,7 @@ import org.apache.log4j.Category;
 // CHECKME: I believe this bug has been fixed, should be removed if this is the case.
 public class ERXSharedEOLoader {
     /////////////////////////////////////////  log4j category  ///////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.extensions.fixes.ERSharedEOLoader");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.extensions.fixes.ERSharedEOLoader");
 
     public static ERXSharedEOLoader _defaultLoader;
     protected static boolean _loadingComplete = false;
@@ -54,7 +53,7 @@ public class ERXSharedEOLoader {
             EODatabaseContext.setSharedObjectLoadingEnabled(false);
             _defaultLoader = new ERXSharedEOLoader();
             ERXRetainer.retain(_defaultLoader); // Needs to be retained on the objC side to recieve notifications.
-            cat.debug("Shared EO loading patch installed.");
+            log.debug("Shared EO loading patch installed.");
         }
     }
 
@@ -67,9 +66,9 @@ public class ERXSharedEOLoader {
             _defaultLoader = null;
         }
         if (_loadingComplete) {
-            cat.debug("the patch has been removed, but after shared EO loading completed; this call had no effect");
+            log.debug("the patch has been removed, but after shared EO loading completed; this call had no effect");
         } else {
-            cat.debug("shared EO loading patch UNINSTALLED.");
+            log.debug("shared EO loading patch UNINSTALLED.");
         }
     }
 
@@ -114,7 +113,7 @@ public class ERXSharedEOLoader {
                     try {
                         EOUtilities.objectsForEntityNamed(dsec, entity.name());
                     } catch (Exception e1) {
-                        cat.error("Exception occurred for entity named: " + entity.name() + " in Model: " + aModel.name() + e1);
+                        log.error("Exception occurred for entity named: " + entity.name() + " in Model: " + aModel.name() + e1);
                         throw new RuntimeException(e.toString());
                     }
                 } else {
@@ -122,7 +121,7 @@ public class ERXSharedEOLoader {
                         String fsn = (String)ee.nextElement();
                         EOFetchSpecification fs = entity.fetchSpecificationNamed(fsn);
                         if (fs != null) {
-                            cat.debug("Loading "+entity.name()+" - "+fsn);
+                            log.debug("Loading "+entity.name()+" - "+fsn);
                             dsec.bindObjectsWithFetchSpecification(fs, fsn);
                         }
                     }                    
@@ -136,7 +135,7 @@ public class ERXSharedEOLoader {
     public void modelWasAddedNotification(NSNotification aNotification) {
         // sometimes a model gets added twice; make sure we store it once.
         if (!_modelList.containsObject(aNotification.object())) {
-            cat.debug("Adding model: " + ((EOModel)aNotification.object()).name());
+            log.debug("Adding model: " + ((EOModel)aNotification.object()).name());
             _modelList.addObject(aNotification.object());
         }
     }
@@ -160,7 +159,7 @@ public class ERXSharedEOLoader {
                                                                  new NSSelector("transactionBeginning", ERXConstant.NotificationClassArray),
                                                                  EOAdaptorContext.AdaptorContextBeginTransactionNotification,
                                                                  null);
-                cat.debug("Beginning loading of shared EOs");
+                log.debug("Beginning loading of shared EOs");
                 NSMutableArray loadedModels = new NSMutableArray();
                 for (Enumeration e = _modelList.objectEnumerator(); e.hasMoreElements();) {
                     currentModel = (EOModel)e.nextElement();
@@ -177,13 +176,13 @@ public class ERXSharedEOLoader {
                 if (_transCount != 0) {
                     // only print this if we loaded something; otherwise
                     // the request for the reg. obj. count with start sharing.
-                    cat.debug("Shared EO loading complete: " + _transCount + " transactions/ " +
+                    log.debug("Shared EO loading complete: " + _transCount + " transactions/ " +
                               EOSharedEditingContext.defaultSharedEditingContext().registeredObjects().count() + " objects.");
                 } else {
-                    cat.debug("Shared EO loading complete: no objects loaded.");
+                    log.debug("Shared EO loading complete: no objects loaded.");
                 }
             } catch (Exception e) {
-                cat.error("Exception occurred with model: " + currentModel.name() + "\n" + e + ERXUtilities.stackTrace());
+                log.error("Exception occurred with model: " + currentModel.name() + "\n" + e + ERXUtilities.stackTrace());
                 // no matter what happens, un-register for notifications.
                 NSNotificationCenter.defaultCenter().removeObserver(this, EOAdaptorContext.AdaptorContextBeginTransactionNotification, null);
                 if (_didChangeDebugSetting) {
@@ -203,8 +202,8 @@ public class ERXSharedEOLoader {
         if (_currentAdaptor.isDebugEnabled() && !ERXExtensions.sharedEOAdaptorCategory.isDebugEnabled()) {
             _didChangeDebugSetting = true;
             _currentAdaptor.setDebugEnabled(false);
-            if (cat.isDebugEnabled())
-                cat.debug("Disabling adaptor debugging while loading shared EOs...");
+            if (log.isDebugEnabled())
+                log.debug("Disabling adaptor debugging while loading shared EOs...");
         } */
         _transCount++;
     }

@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.*;
 import java.util.*;
 import java.io.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Principal class of the ERExtensions framework. This class
@@ -31,15 +31,15 @@ import org.apache.log4j.Category;
 public class ERXExtensions {
 
     /** logging support */
-    private static Category _cat;
+    private static Logger _log;
     /**
      * creates and caches the logging logger
      * @return logging logger
      */
-    public static Category cat() {
-        if (_cat == null)
-            _cat = Category.getInstance(ERXExtensions.class);
-        return _cat;
+    public static Logger log() {
+        if (_log == null)
+            _log = Logger.getLogger(ERXExtensions.class);
+        return _log;
     }
 
     /** holds references to default editing context delegate */
@@ -131,7 +131,7 @@ public class ERXExtensions {
             try {
                 ERXLog4j.configureLogging();
                 ERXConfigurationManager.initializeDefaults();
-                cat().info("Initializing framework: ERXExtensions");
+                log().info("Initializing framework: ERXExtensions");
                 // Initing defaultEditingContext delegates
                 _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
                 _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
@@ -170,9 +170,9 @@ public class ERXExtensions {
     }
 
     /** logging support for the adaptor channel */
-    public static Category adaptorCategory;
+    public static ERXLogger adaptorLogger;
     /** logging support for shared object loading */
-    public static Category sharedEOAdaptorCategory;
+    public static ERXLogger sharedEOadaptorLogger;
     /** flag to indicate if adaptor channel logging is enabled */
     private static Boolean adaptorEnabled;
     /** 
@@ -183,7 +183,7 @@ public class ERXExtensions {
     /**
      * Configures the passed in observer to register a call back 
      * when the configuration file is changed. This allows one to 
-     * change a logger category and have that changed value change
+     * change a logger's setting and have that changed value change
      * the NSLog setting to log the generated SQL. This method is
      * called as part of the framework initialization process.
      * @param observer object to register the call back with.
@@ -191,14 +191,14 @@ public class ERXExtensions {
     // FIXME: This shouldn't be enabled when the application is in production.
     // FIXME: Now that all of the logging has been centralized, we should just be able
     //		to do something like this, but much more generic, i.e. have a mapping
-    //		between category names and NSLog groups, for example com.webobjects.logging.DebugGroupSQLGeneration we should
+    //		between logger names and NSLog groups, for example com.webobjects.logging.DebugGroupSQLGeneration we should
     //		be able to get the last part of the logger name and look up that log group and turn 
     public static void configureAdaptorContextRapidTurnAround(Object observer) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
-            adaptorCategory = Category.getInstance("er.transaction.adaptor.EOAdaptorDebugEnabled");
-            sharedEOAdaptorCategory = Category.getInstance("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
-            if (adaptorCategory.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
+            adaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
+            sharedEOadaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
+            if (adaptorLogger.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
                 NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
             }
@@ -220,9 +220,9 @@ public class ERXExtensions {
      */
     public static void configureAdaptorContext() {
         Boolean targetState = null;
-        if (adaptorCategory.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
+        if (adaptorLogger.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
             targetState = Boolean.TRUE;
-        } else if (!adaptorCategory.isDebugEnabled() && adaptorEnabled.booleanValue()) {
+        } else if (!adaptorLogger.isDebugEnabled() && adaptorEnabled.booleanValue()) {
             targetState = Boolean.FALSE;
         }
         if (targetState != null) {
@@ -236,9 +236,9 @@ public class ERXExtensions {
                     NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
                 }
             if (targetState.booleanValue()) {
-                adaptorCategory.info("Adaptor debug on");
+                adaptorLogger.info("Adaptor debug on");
             } else {
-                adaptorCategory.info("Adaptor debug off");
+                adaptorLogger.info("Adaptor debug off");
             }
             adaptorEnabled = targetState;
         }
@@ -383,12 +383,12 @@ public class ERXExtensions {
             if (a==null) {
                 a=new NSMutableArray();
                 _editingContextsPerSession.setObjectForKey(a,s.sessionID());
-                if (cat().isDebugEnabled()) cat().debug("Creating array for "+s.sessionID());
+                if (log().isDebugEnabled()) log().debug("Creating array for "+s.sessionID());
             }
             a.addObject(ec);
-            if (cat().isDebugEnabled()) cat().debug("Added new ec to array for "+s.sessionID());
-        } else if (cat().isDebugEnabled()) {
-            cat().debug("Editing Context created with null session.");
+            if (log().isDebugEnabled()) log().debug("Added new ec to array for "+s.sessionID());
+        } else if (log().isDebugEnabled()) {
+            log().debug("Editing Context created with null session.");
         }
         return ec;
     }
@@ -402,10 +402,10 @@ public class ERXExtensions {
      */
     public static void sessionDidTimeOut(String sessionID) {
         if (sessionID!=null) {
-            if (cat().isDebugEnabled()) {
+            if (log().isDebugEnabled()) {
                 NSArray a=(NSArray)_editingContextsPerSession.objectForKey(sessionID);
-                cat().debug("Session "+sessionID+" is timing out ");
-                cat().debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
+                log().debug("Session "+sessionID+" is timing out ");
+                log().debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
             }
             // FIXME: Should help things along by calling dispose on all the ecs being held here.
             _editingContextsPerSession.removeObjectForKey(sessionID);
@@ -434,6 +434,7 @@ public class ERXExtensions {
     //		an editing context
     // MOVEME: ERXECFactory
     public static void setDefaultDelegate(EOEditingContext ec, boolean validation) {
+        log().debug("Setting default delegate...");
         if (ec != null) {
             if (validation)
                 ec.setDelegate(ERXExtensions.defaultEditingContextDelegate());
@@ -693,7 +694,7 @@ public class ERXExtensions {
      *		have been collected.
      */
     public static void forceGC(int maxLoop) {
-        if (cat().isDebugEnabled()) cat().debug("Forcing full Garbage Collection");
+        if (log().isDebugEnabled()) log().debug("Forcing full Garbage Collection");
         Runtime runtime = Runtime.getRuntime();
         long isFree = runtime.freeMemory();
         long wasFree;
@@ -749,7 +750,7 @@ public class ERXExtensions {
         if(result!=null && result.count() == 1) {
             return result.lastObject();
         } else if (result!=null && result.count() > 1) {
-            cat().warn("Attempting to get a raw primary key from an object with a compound key: " + eo);
+            log().warn("Attempting to get a raw primary key from an object with a compound key: " + eo);
         }
         return result;
     }
@@ -1169,7 +1170,7 @@ public class ERXExtensions {
                     result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
                 }
             } catch (IOException ioe) {
-                cat().error("ConfigurationManager: Error reading "+filePath);
+                log().error("ConfigurationManager: Error reading "+filePath);
             }
         }
         return result;
@@ -1428,7 +1429,7 @@ public class ERXExtensions {
             fetchAll.setRefreshesRefetchedObjects(true);
             peer.objectsWithFetchSpecification(fetchAll);
         } else {
-            cat().warn("Attempting to refresh a non-shared EO: " + entityName);
+            log().warn("Attempting to refresh a non-shared EO: " + entityName);
         }
     }
 
@@ -1481,7 +1482,7 @@ public class ERXExtensions {
         if (result!=null && s!=null) {
             result += ( result.indexOf("?") == -1 ? "?" : "&" ) + "wosid=" + s.sessionID();
         } else {
-            cat().warn("not adding sid: url="+url+" session="+s);
+            log().warn("not adding sid: url="+url+" session="+s);
         }
         return result;
     }

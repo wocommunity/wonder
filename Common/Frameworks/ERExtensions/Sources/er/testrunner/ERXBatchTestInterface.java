@@ -12,19 +12,19 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import junit.framework.*;
 import junit.runner.*;
-import org.apache.log4j.Category;
 import java.io.PrintStream;
 import java.util.*;
+import er.extensions.*;
 
 public class ERXBatchTestInterface extends Object implements ERXTestListener {
 
-    ///////////////////////////////////////  log4j category  /////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXBatchTestInterface.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchTestInterface.class);
 
     public static final boolean SHOW_EXCEPTIONS=true;
     public static final boolean HIDE_EXCEPTIONS=false;
     
-    private Category _userCat;
+    private ERXLogger _userLog;
 
     protected String _test;
     protected boolean _showExceptions;
@@ -52,16 +52,16 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     }
 
     // ACTION METHOD
-    public void performTest(Category userCategory, boolean showExceptions) {
+    public void performTest(ERXLogger userLogger, boolean showExceptions) {
         _showExceptions = showExceptions;
-        _userCat = userCategory;
+        _userLog = userLogger;
         resetInterface();
         try {
             testResult = start();
             print();
         } catch(Exception e) {
             _errorMessage = e.getMessage();
-            userCat().error("[ERROR] " + e.getMessage());
+            userLog().error("[ERROR] " + e.getMessage());
         }
     }
 
@@ -88,11 +88,11 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
         return testResult;
     }
 
-    private Category userCat() {
-        if (_userCat == null) {
-            return cat;
+    private ERXLogger userLog() {
+        if (_userLog == null) {
+            return log;
         } else {
-            return _userCat;
+            return _userLog;
         }
     }
     
@@ -109,15 +109,15 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     protected void printErrors() {
         if (testResult.errorCount() != 0) {
             if (testResult.errorCount() == 1)
-                userCat().info("There was "+testResult.errorCount()+" error:");
+                userLog().info("There was "+testResult.errorCount()+" error:");
             else
-                userCat().info("There were "+testResult.errorCount()+" errors:");
+                userLog().info("There were "+testResult.errorCount()+" errors:");
 
             int i= 1;
             for (Enumeration e= testResult.errors(); e.hasMoreElements(); i++) {
                 TestFailure failure= (TestFailure)e.nextElement();
-                userCat().info(i + ") " + failure.failedTest());
-                userCat().info(aTestRunner.getFilteredTrace(failure.thrownException()));
+                userLog().info(i + ") " + failure.failedTest());
+                userLog().info(aTestRunner.getFilteredTrace(failure.thrownException()));
             }
         }
     }
@@ -127,14 +127,14 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     protected void printFailures() {
         if (testResult.failureCount() != 0) {
             if (testResult.failureCount() == 1)
-                userCat().info("There was " + testResult.failureCount() + " failure:");
+                userLog().info("There was " + testResult.failureCount() + " failure:");
             else
-                userCat().info("There were " + testResult.failureCount() + " failures:");
+                userLog().info("There were " + testResult.failureCount() + " failures:");
             int i = 1;
             for (Enumeration e= testResult.failures(); e.hasMoreElements(); i++) {
                 TestFailure failure= (TestFailure) e.nextElement();
-                userCat().info(i + ") " + failure.failedTest());
-                userCat().info(aTestRunner.getFilteredTrace(failure.thrownException()));
+                userLog().info(i + ") " + failure.failedTest());
+                userLog().info(aTestRunner.getFilteredTrace(failure.thrownException()));
             }
         }
     }
@@ -143,11 +143,11 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
      */
     protected void printHeader() {
         if (testResult.wasSuccessful()) {
-            userCat().info("OK (" + testResult.runCount() + " tests)");
+            userLog().info("OK (" + testResult.runCount() + " tests)");
 
         } else {
-            userCat().info("FAILURES!!!");
-            userCat().info("Tests run: " + testResult.runCount() +
+            userLog().info("FAILURES!!!");
+            userLog().info("Tests run: " + testResult.runCount() +
                              ", Failures: " + testResult.failureCount() +
                              ", Errors: " + testResult.errorCount());
         }
@@ -178,29 +178,29 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     //////////////////////////////////////
 
     public synchronized void addError(Test test, Throwable t) {
-        userCat().info ("[E] " + test.toString() + " : " + t.getMessage());
+        userLog().info ("[E] " + test.toString() + " : " + t.getMessage());
     }
 
     public synchronized void addFailure(Test test, AssertionFailedError t) {
-        userCat().info ("[F] " + test.toString() + " : " + t.getMessage());
+        userLog().info ("[F] " + test.toString() + " : " + t.getMessage());
     }
 
     public synchronized void startTest(Test test) {
-        userCat().info ("[START] " + test.toString());
+        userLog().info ("[START] " + test.toString());
     }
 
     public void endTest(Test test) {
-        userCat().info ("[END] " + test.toString());
+        userLog().info ("[END] " + test.toString());
     }
 
     //////////////////////////////////////
     // ERTestListener implementation
     //////////////////////////////////////
     public void runFailed(String message) {
-        userCat().info("[RUN FAILED] " + message);
+        userLog().info("[RUN FAILED] " + message);
     }
 
     public void clearStatus() {
-        userCat().info("[CLEAR STATUS]");
+        userLog().info("[CLEAR STATUS]");
     }
 }

@@ -10,7 +10,7 @@ import com.webobjects.eocontrol.*;
  * The request is created via ${link ERXApplication$createRequest()}.
  */
 public  class ERXRequest extends WORequest {
-    static final ERXLogger log = ERXLogger.getLogger(ERXRequest.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERXRequest.class);
     /** Simply call superclass constructor */
     public ERXRequest(String string, String string0, String string1,
                       NSDictionary nsdictionary, NSData nsdata,

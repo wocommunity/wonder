@@ -1,26 +1,26 @@
 B1: WOGenericContainer {
 	elementName = "B";
-	omitTags = categoryIsNotDebug;
+	omitTags = loggerIsNotDebug;
 }
 
 B2: WOGenericContainer {
 	elementName = "B";
-	omitTags = categoryIsNotInfo;
+	omitTags = loggerIsNotInfo;
 }
 
 B3: WOGenericContainer {
 	elementName = "B";
-	omitTags = categoryIsNotWarn;
+	omitTags = loggerIsNotWarn;
 }
 
 B4: WOGenericContainer {
 	elementName = "B";
-	omitTags = categoryIsNotError;
+	omitTags = loggerIsNotError;
 }
 
 B5: WOGenericContainer {
 	elementName = "B";
-	omitTags = categoryIsNotFatal;
+	omitTags = loggerIsNotFatal;
 }
 
 Form1: WOForm {
@@ -43,12 +43,12 @@ Form4: WOForm {
 	multipleSubmit = true;
 }
 
-GenericContainer1: WOGenericContainer {
+GenericContainerTD: WOGenericContainer {
 	bgcolor = bgColor;
 	elementName = "TD";
 }
 
-GenericContainer2: WOGenericContainer {
+GenericContainerTR: WOGenericContainer {
 	bgcolor = bgColor;
 	elementName = "TR";
 }
@@ -59,79 +59,64 @@ Hyperlink1: WOHyperlink {
 	directActionName = "log4j";
 }
 
-RadioButton1: WORadioButton {
-	name = category.name;
-	selection = categoryPriorityValue;
+RadioButtonDebugLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
 	value = debugLevel;
 }
 
-RadioButton2: WORadioButton {
-	name = category.name;
-	selection = categoryPriorityValue;
-	value = infoLevel;
-}
-
-RadioButton3: WORadioButton {
-	name = category.name;
-	selection = categoryPriorityValue;
-	value = warnLevel;
-}
-
-RadioButton4: WORadioButton {
-	name = category.name;
-	selection = categoryPriorityValue;
+RadioButtonErrorLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
 	value = errorLevel;
 }
 
-RadioButton5: WORadioButton {
-	name = category.name;
-	selection = categoryPriorityValue;
+RadioButtonFatalLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
 	value = fatalLevel;
 }
 
-RadioButton6: WORadioButton {
-	name = category.name;
-	selection = categoryPriorityValue;
+RadioButtonInfoLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
+	value = infoLevel;
+}
+
+RadioButtonUnsetLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
 	value = unsetLevel;
 }
 
-Repetition1: WORepetition {
+RadioButtonWarnLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
+	value = warnLevel;
+}
+
+RepetitionIndentLevel: WORepetition {
 	count = indentLevel;
 }
 
-Repetition2: WORepetition {
-	item = category;
-	list = categories;
+RepetitionLoggers: WORepetition {
+	item = logger;
+	list = loggers;
 }
 
 String1: WOString {
 	value = application.name;
 }
 
-String3: WOString {
-	value = category.name;
+StringLoggerLevel: WOString {
+	value = logger.chainedLevel.toString;
 }
 
-String4: WOString {
-	value = category.chainedPriority.toString;
-}
-
-SubmitButton1: WOSubmitButton {
-	action = filter;
-	value = "Filter";
-}
-
-SubmitButton10: WOSubmitButton {
-	action = addCategory;
-	value = "Add";
+StringLoggerName: WOString {
+	value = logger.name;
 }
 
 SubmitButton2: WOSubmitButton {
-	action = update;
-	value = "Update";
-}
-
-SubmitButton3: WOSubmitButton {
 	action = update;
 	value = "Update";
 }
@@ -142,39 +127,54 @@ SubmitButton4: WOSubmitButton {
 }
 
 SubmitButton5: WOSubmitButton {
-	action = showExplicitelySet;
-	value = "Show Explicit Priorities";
+	action = showExplicitlySet;
+	value = "Show Explicit Levels";
 }
 
-SubmitButton6: WOSubmitButton {
-	action = showAll;
-	value = "Show All";
+SubmitButtonAddLogger: WOSubmitButton {
+	action = addLogger;
+	value = "Add";
 }
 
-SubmitButton7: WOSubmitButton {
-	action = showExplicitelySet;
-	value = "Show Explicit Priorities";
-}
-
-SubmitButton8: WOSubmitButton {
-	action = resetFilter;
-	value = "Reset Filter";
-}
-
-SubmitButton9: WOSubmitButton {
+SubmitButtonAddRuleKey: WOSubmitButton {
 	action = addRuleKey;
 	value = "Add";
 }
 
-TextField1: WOTextField {
+SubmitButtonFilter: WOSubmitButton {
+	action = filter;
+	value = "Filter";
+}
+
+SubmitButtonResetFilter: WOSubmitButton {
+	action = resetFilter;
+	value = "Reset Filter";
+}
+
+SubmitButtonShowAll2: WOSubmitButton {
+	action = showAll;
+	value = "Show All";
+}
+
+SubmitButtonShowExplicitLevels2: WOSubmitButton {
+	action = showExplicitlySet;
+	value = "Show Explicit Levels";
+}
+
+SubmitButtonUpdate2: WOSubmitButton {
+	action = update;
+	value = "Update";
+}
+
+TextFieldFilterString: WOTextField {
 	value = filterString;
 }
 
-TextField2: WOTextField {
-	value = categoryName;
+TextFieldLoggerName: WOTextField {
+	value = loggerName;
 }
 
-TextField3: WOTextField {
+TextFieldRuleKey: WOTextField {
 	value = ruleKey;
 }
 

@@ -28,7 +28,7 @@ import com.webobjects.appserver.*;
 public class ERXStyleSheet extends WOComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getLogger(ERXStyleSheet.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXStyleSheet.class);
 
     /** holds the calculated style sheet url */
     private String _styleSheetUrl;
