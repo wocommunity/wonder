@@ -64,7 +64,7 @@ public class ERDirectToWeb {
         public void sortRules(NSNotification n) {
             ERD2WModel model = (ERD2WModel)n.object();
             if(ERD2WModel.erDefaultModel() == model) {
-                URL url = WOApplication.application().resourceManager().pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
+                URL url = ERXFileExtensions.pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
                 model.mergePathURL(url);
             }
         }
