@@ -932,7 +932,7 @@ public class ERXEOControlUtilities {
      * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
      * @return a NSArray of EOEnterpriseObjects
      */
-    public static NSArray faultsForGlobalIDsInEditingContext(NSArray gids, ERXEC ec) {
+    public static NSArray faultsForGlobalIDsInEditingContext(NSArray gids, EOEditingContext ec) {
         NSMutableArray a = new NSMutableArray();
         int c = gids.count();
         for (int i = 0; i < c; i++) {
