@@ -97,6 +97,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
             value = type();
         else if (key.equals("value"))
             value = value();
+        else if (key.equals("message"))
+            value = getMessage();
         return value != null ? value : objectForKey(key);
     }
 
