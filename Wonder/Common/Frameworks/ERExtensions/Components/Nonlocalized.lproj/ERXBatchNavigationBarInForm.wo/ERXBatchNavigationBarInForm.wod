@@ -47,7 +47,7 @@ LeftArrow: WOImageButton {
 //    height = "11";
 //    width = "16";
     framework = "JavaWOExtensions";
-	onClick = "form.target=\"_self\";";
+	onClick = "form.target='_self';";
 }
 
 NavigationTable : WOGenericContainer {
@@ -74,7 +74,7 @@ RightArrow: WOImageButton {
 //    height = "11";
 //    width = "16";
     framework = "JavaWOExtensions";
-	onClick = "form.target=\"_self\";";
+	onClick = "form.target='_self';";
 }
 
 SortComponent: WOSortOrderManyKey {
