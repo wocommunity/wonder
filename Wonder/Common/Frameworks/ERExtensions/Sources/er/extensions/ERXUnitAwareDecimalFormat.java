@@ -39,16 +39,16 @@ import java.io.Serializable;
  */
 public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneable, Serializable {
 
-    /** Predefined size unit; supports: bytes, KB, MB, GB, TB */
+    /** Predefined computer mass unit; supports: bytes, KB, MB, GB, TB */
     public static final String BYTE = "byte";
 
-    /** Predefined length unit; supports: nm, micrometer, mm, cm, m, km */
+    /** Predefined metric length unit; supports: nm, micrometer, mm, cm, m, km */
     public static final String METER = "meter";
 
-    /** Predefined weight unit; supports: mg, g, kg, ton, kiloton */
+    /** Predefined metric weight unit; supports: mg, g, kg, ton, kiloton */
     public static final String GRAM = "gram";
 
-    /** Predefined unit; supports: ps, ns, microsecond, ms, sec, min, hour, day  */
+    /** Predefined time unit; supports: ps, ns, microsecond, ms, sec, min, hour, day  */
     public static final String SECOND = "second";
 
     /** UnitPrefix is an inner class */
@@ -115,12 +115,11 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
             } else if (GRAM.equals(unitName)) {
                 if (_gramPrefixArray == null) 
                     _gramPrefixArray = new NSArray(new Object[] {
-                            new UnitPrefix("mg", "miligram", 1.0d / 1000.0d), 
+                            new UnitPrefix("mg", "milligram", 1.0d / 1000.0d), 
                             new UnitPrefix("g", "gram", 1.0d), 
                             new UnitPrefix("kg", "kilogram", 1000.0d), 
-                            // strictly, ton is not a part of the International System  
-                            new UnitPrefix("ton", "ton ", 1000.0d * 1000.0d),
-                            new UnitPrefix("kiloton", "kiloton", 1000.0d * 1000.0d * 1000.0d) }); 
+                            new UnitPrefix("ton", "metric ton", 1000.0d * 1000.0d),
+                            new UnitPrefix("kiloton", "metric kiloton", 1000.0d * 1000.0d * 1000.0d) }); 
                 unitPrefixArray = _gramPrefixArray;
 
             } else if (SECOND.equals(unitName)) {
