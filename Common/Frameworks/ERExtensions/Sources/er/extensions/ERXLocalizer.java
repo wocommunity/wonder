@@ -45,6 +45,7 @@ TODO: chaining of Localizers
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
+    static final ERXLogger createdKeysLog = ERXLogger.getLogger(ERXLocalizer.class, "createdKeys");
     private static boolean isLocalizationEnabled = false;
     public static final String LocalizationDidResetNotification = "LocalizationDidReset";
     
@@ -221,7 +222,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public Object localizedValueForKeyWithDefault(String key) {
         Object result = localizedValueForKey(key);
         if(result == null) {
-            cat.info("Default key inserted: '"+key+"'/"+language);
+            if(createdKeysLog.isDebugEnabled())
+                createdKeysLog.debug("Default key inserted: '"+key+"'/"+language);
             cache.setObjectForKey(key, key);
             createdKeys.setObjectForKey(key, key);
             result = key;
@@ -234,7 +236,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(result == NOT_FOUND) return null;
         if(result != null) return result;
 
-        cat.warn("Key not found: '"+key+"'/"+language);
+        if(createdKeysLog.isDebugEnabled())
+            cat.debug("Key not found: '"+key+"'/"+language);
         cache.setObjectForKey(NOT_FOUND, key);
         return null;
     }

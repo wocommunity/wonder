@@ -1,7 +1,7 @@
 ERXDHTMLComponent1: ERXDHTMLComponent {
 	formName = "EditForm";
 	varName = varName;
-	value = objectKeyPathValue;
+	value = objectPropertyValue;
 	cols = ^length;
 	rows = ^rows;
 }
