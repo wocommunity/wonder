@@ -64,11 +64,6 @@ mod_WebObjects.o: mod_WebObjects.c ${COMMON_OBJFILES}
 endif
 
 ifeq "LINUX" "$(OS)"
-
-# If Apache is in a nonstandard location, change this
-#APACHEINCLUDEFLAGS = -I/usr/local/apache/include
-APACHEINCLUDEFLAGS = -I/usr/include/apache
-
 CFLAGS = -O2 -Wall -I../Adaptor ${LDAPACHESSLFLAG} $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DEAPI -DFORKING_WEBSERVER -DAPACHE ${OPENSSLINCLUDEFLAGS} ${APACHEINCLUDEFLAGS} ${OPENSSLLIBFLAGS} -L/lib 
 APXSFLAGS = -i
 LDFLAGS += -G -L/lib -lc ${OPENSSLLIBFLAGS}
