@@ -1,9 +1,7 @@
-Congratulations, 
+Simple wrapper around the JFreechart framework, which can be found here:
+ 
+ http://www.jfree.org/jfreechart/
 
-TODO
+JFreechart is a very comprehensive open-source LGPL charting framework. ERPlot is a light wrapper around some of it's features so they can be used inside WOBuilder and webobjects in general.
 
-Have fun and please subscribe to wonder-dics@sourceforge.net.
-
-The Project WONDER Team
-
-http://wonder.sourceforge.net/
+Anjo Krank
