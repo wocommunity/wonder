@@ -8,8 +8,8 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 /**
- * Create queries that consist of a drilldown and allows you to chosse if you want to add the selected state into the query, too.
- * Example: consider a Person working in a department, a Department that belongs to a Company.
+ * Create queries that consist of a drilldown.
+ * Example: consider a Person working in a department, a Department belongs to a Company.
  * You'd query a Person by setting
  * @binding key = "whatever"
  * @binding destinationEntityName = "Company" 			, The entity in the first popup
@@ -53,15 +53,25 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
         return key() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(secondaryQueryKey()) : null;
     }
     public void setSecondaryDisplayGroupQueryMatchValue (Object newValue) {
-        if (secondaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null )
-            displayGroup().queryMatch().setObjectForKey(newValue,secondaryQueryKey());
+        if (secondaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null ) {
+            if(newValue != null) {
+                displayGroup().queryMatch().setObjectForKey(newValue,secondaryQueryKey());
+            } else {
+                displayGroup().queryMatch().removeObjectForKey(secondaryQueryKey());
+            }
+        }
     }
     public Object displayGroupQueryMatchValue() {
         return primaryQueryKey() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(primaryQueryKey()) : null;
     }
     public void setDisplayGroupQueryMatchValue (Object newValue) {
-        if (primaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null )
-            displayGroup().queryMatch().setObjectForKey(newValue,primaryQueryKey());
+        if (primaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null ) {
+            if(newValue != null) {
+                displayGroup().queryMatch().setObjectForKey(newValue,primaryQueryKey());
+            } else {
+                displayGroup().queryMatch().removeObjectForKey(primaryQueryKey());
+            }
+        }
     }
     
     public Object restrictedChoiceList() {
