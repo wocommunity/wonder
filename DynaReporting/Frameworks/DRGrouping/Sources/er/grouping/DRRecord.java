@@ -2,14 +2,8 @@ package er.grouping;
 
 import java.lang.*;
 import java.util.*;
-import java.io.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 
-/* DRRecord.h created by Administrator on Sun 01-Nov-1998 */
-//#import <WebObjects/WebObjects.h>
 public class DRRecord extends Object  {
 
     protected NSKeyValueCodingAdditions _rawRecord;
@@ -22,7 +16,6 @@ public class DRRecord extends Object  {
         drr.initWithRawRecord(rawr, aMod);
         return drr;
     }
-
 
     // compute subtotals for clusters of attributes
     public void populateValueList() {
@@ -42,7 +35,6 @@ public class DRRecord extends Object  {
 
     }
 
-
     public DRValue valueForAttributeRecord(DRAttribute att, DRRecord rec) {
         DRValue vl;
 
@@ -57,7 +49,6 @@ public class DRRecord extends Object  {
 
         return vl;
     }
-
 
     public DRRecord initWithRawRecord(NSKeyValueCodingAdditions rawr, DRReportModel aMod) {
         _rawRecord = rawr;
@@ -84,20 +75,16 @@ public class DRRecord extends Object  {
         return _valueList;
     }
 
-
     public NSArray flatValueList() {
         return _flatValueList;
     }
-
 
     public DRReportModel model() {
         return _model;
     }
 
-
     public NSArray attributeList() {
         return this.model().attributeList();
     }
-
 
 }

@@ -38,7 +38,6 @@ public class DRRecordGroup extends Object  {
         return aVal;
     }
 
-
     private void coordsFromRecGroupDictionary(DRRecordGroup prnt, NSMutableDictionary dict) {
         DRRecordGroup nextParent = prnt.parent();
         DRCriteria crit = prnt.criteria();
@@ -47,7 +46,6 @@ public class DRRecordGroup extends Object  {
             this.coordsFromRecGroupDictionary(nextParent, dict);
         }
     }
-
 
     private NSMutableDictionary buildLookUpCoordinates() {
         NSMutableDictionary dict = new NSMutableDictionary();
@@ -60,7 +58,6 @@ public class DRRecordGroup extends Object  {
         dict.setObjectForKey(_criteria, _criteria.masterCriteria().keyDesc());
         return dict;
     }
-
 
     public DRRecordGroup initWithCriteria(DRCriteria c, DRGroup grp, DRRecordGroup recGrp) {
         _criteria = c;
@@ -80,7 +77,6 @@ public class DRRecordGroup extends Object  {
         }
         return this;
     }
-
 
     public DRRecordGroup() {
         super();
@@ -109,7 +105,6 @@ public class DRRecordGroup extends Object  {
     public DRValue totalForKey(String ky) {
         return (DRValue)_totalsByKey.objectForKey(ky);
     }
-
 
     public NSDictionary totals() {
         // Loop over all DRRecords and ask each 'total-able' key for its value
@@ -163,13 +158,9 @@ public class DRRecordGroup extends Object  {
         return _totals;
     }
 
-
     public NSArray totalList() {
-        //OWDebug.println(1, "entered");
         if (_totalList == null) {
             int cnt = this.totals().allKeys().count();
-            //OWDebug.println(1, "cnt:"+cnt);
-            //OWDebug.println(1, "totals().allKeys():"+totals().allKeys());
             int i;
             NSMutableArray totList = new NSMutableArray();
 
@@ -177,12 +168,10 @@ public class DRRecordGroup extends Object  {
                 totList.addObject(this.totals().objectForKey(new Integer(i)));
             }
             _totalList = new NSArray(totList);
-            //OWDebug.println(1, "_totalList:"+_totalList);
         }
 
         return _totalList;
     }
-
 
     public NSArray sortedRecordList() {
         if (_sortedRecordList == null) {
@@ -195,7 +184,6 @@ public class DRRecordGroup extends Object  {
 
         return _sortedRecordList;
     }
-
 
     public NSArray rawRecordList() {
         if (_rawRecordList == null) {
@@ -215,32 +203,26 @@ public class DRRecordGroup extends Object  {
         return _rawRecordList;
     }
 
-
     public NSMutableArray recordList() {
         // might sort this based on settings in DRAttributes
         return _recordList;
     }
 
-
     public boolean pregroupedListFound() {
         return _pregroupedListFound;
     }
-
 
     public NSDictionary lookUpCoordinates() {
         return _lookUpCoordinates;
     }
 
-
     public NSArray children() {
         return _recordGroupDict.allValues();
     }
 
-
     public DRRecordGroup parent() {
         return _parent;
     }
-
 
     public boolean childrenFromGroupCriteriaList(DRGroup grp) {
         //was sorted
@@ -257,7 +239,6 @@ public class DRRecordGroup extends Object  {
 
         return listFound;
     }
-
 
     public void groupSubRecordGroupGroupLookUpDict(NSArray groupList, NSDictionary groupLookUpDict) {
         int cnt = groupList.count();
@@ -285,7 +266,6 @@ public class DRRecordGroup extends Object  {
 
     }
 
-
     public void groupByInto(NSMutableArray recs, DRMasterCriteria amc, NSMutableDictionary recGrpDict) {
         Enumeration anEnum = recs.objectEnumerator();
         while (anEnum.hasMoreElements()) {
@@ -295,22 +275,18 @@ public class DRRecordGroup extends Object  {
 
     }
 
-
     public String toString() {
         return ""+(super.toString())+"-lc:"+(_lookUpCoordinates)+"-"+(this.recordList().count())+"-"+(_recordGroupDict.toString());
     }
 
-
     public boolean staleTotal() {
         return _staleTotal;
     }
-
 
     public void makeStale() {
         _staleTotal = true;
         _totals.removeAllObjects();
         _totalList = null;
     }
-
 
 }

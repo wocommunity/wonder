@@ -1,14 +1,7 @@
 package er.grouping;
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 
-/* DRAttribute.h created by Administrator on Sun 01-Nov-1998 */
 public class DRAttribute extends Object  {
     protected String _keyPath;
     protected String _format;
@@ -22,6 +15,7 @@ public class DRAttribute extends Object  {
     protected boolean _isPlaceHolderTotal;
     protected boolean _isTotal;
     protected NSArray _emptyArray;
+    private NSMutableArray __attributes = new NSMutableArray();
 
     public void resetDefaults() {
         _shouldTotal = false;
@@ -48,7 +42,6 @@ public class DRAttribute extends Object  {
         return aAtt;
     }
 
-
     static public DRAttribute withKeyPathFormatLabelTotalUserInfo(String ap, String af, String al, boolean at, NSDictionary ui) {
         DRAttribute aAtt = new DRAttribute();
         aAtt.setKeyPath(ap);
@@ -59,7 +52,6 @@ public class DRAttribute extends Object  {
         return aAtt;
     }
 
-
     public DRAttribute() {
         super();
         _userInfo = new NSMutableDictionary();
@@ -67,7 +59,6 @@ public class DRAttribute extends Object  {
         this.resetDefaults();
         return;
     }
-
 
     public String keyPath() {
         return _keyPath;
@@ -82,7 +73,6 @@ public class DRAttribute extends Object  {
     public void setFormat(String aval) {
         _format = aval;
     }
-
 
     public boolean showTotal() {
         return false;
@@ -126,13 +116,10 @@ public class DRAttribute extends Object  {
         _userInfo = aval;
     }
 
-
     public boolean isGroup() {
         return _isGroup;
     }
 
-
-    private NSMutableArray __attributes = new NSMutableArray();
     public NSMutableArray attributes() {
         return __attributes;
     }
@@ -143,17 +130,12 @@ public class DRAttribute extends Object  {
         return _emptyArray;
     }
     public NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
-        //OWDebug.println(1, "entered");
         return _emptyArray;
     }
-
 
     public String toString() {
         return ""+(super.toString())+"-"+(_keyPath);
     }
-
-
-
 
     public void setAttributeGroup(DRAttributeGroup atg) {
         _attributeGroup = atg;
@@ -162,13 +144,10 @@ public class DRAttribute extends Object  {
         return _attributeGroup;
     }
 
-
     public boolean isPlaceHolderTotal() {
         return _isPlaceHolderTotal;
     }
     public void setIsPlaceHolderTotal(boolean aval) {
         _isPlaceHolderTotal = aval;
     }
-
-
 }
