@@ -265,6 +265,7 @@
     entities = (
         {className = EOGenericRecord; name = EOJDBCFrontBasePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCMysqlPrototypes; }, 
+        {className = EOGenericRecord; name = EOJDBCOpenBasePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCOraclePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCPostgresPrototypes; }, 
         {className = EOGenericRecord; name = EOPrototypes; }
