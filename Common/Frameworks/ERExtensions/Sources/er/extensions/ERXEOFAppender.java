@@ -61,9 +61,9 @@ public class ERXEOFAppender extends AppenderSkeleton {
 
     /**
      * Sets the logging entity name.
-     * @param loggingEntity name of the logging entity
+     * @param name name of the logging entity
      */
-    public void setLoggingEntity(String loggingEntity) { loggingEntity = loggingEntity; }
+    public void setLoggingEntity(String name) { loggingEntity = name; }
 
     /**
      * Determines if enough of the EOF stack has been setup
