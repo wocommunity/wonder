@@ -137,9 +137,9 @@ public class ERXMessageEncoding implements Serializable {
             throw createIllegalArgumentException(encoding, "encoding", "availableEncodings()");
 
         String mimeType = response.headerForKey("Content-Type");
-        if(mimeType != null  &&  mimeType.equals("text/html")) {
-            response.setContentEncoding (encoding);  
-            response.setHeader("text/html; charset=" + _encodings().objectForKey(encoding), "Content-Type");
+        if (mimeType != null && (mimeType.equals("text/html") || mimeType.equals("text/xml"))) {
+            response.setContentEncoding (encoding); 
+            response.setHeader(mimeType + "; charset=" + _encodings().objectForKey(encoding), "Content-Type");
         }
     }
 
