@@ -81,11 +81,14 @@ EntityRepetition: WORepetition {
 ErrorDictionaryPanel: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = false;
+	shouldShowNewLineBelow = false;
 }
 
 ErrorDictionaryPanel1: ERXErrorDictionaryPanel {
 	errorMessages = currentErrorDictionary;
 	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 ExclamationImage: WOImage {

@@ -188,6 +188,8 @@ EditLink4: WOHyperlink {
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 HasDisplayNameForProperty: ERXNonZeroConditional {
