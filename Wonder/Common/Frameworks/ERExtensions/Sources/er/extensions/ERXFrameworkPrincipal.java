@@ -11,6 +11,10 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import org.apache.log4j.Category;
+/** Designated starter class for frameworks.
+ * the <code>finishInitialization</code> will be called when the app finishes startup.
+ * To use, subclass it and set the NSPrincipalClass of your framework to the subclass. See the ERXCoreBusinessLogic and BTBusinessLogic frameworks for an example of usage.
+*/
 
 public abstract class ERXFrameworkPrincipal {
     public static final Category cat = Category.getInstance(ERXFrameworkPrincipal.class);
