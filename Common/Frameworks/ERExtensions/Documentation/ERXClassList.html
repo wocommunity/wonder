@@ -8,18 +8,14 @@
 * or # - Indictates that these might not be used any more. 
 <h3>Principal Class</h3>
 <dt>ERXExtensions</dt>
-<dd>Has a boatload of utility methods as well as sets up the framework. 
-Look in the static initialize() method to see what happens when you link
-in this framework.</dd>
+<dd>Has a boatload of utility methods as well as sets up the framework.  Look
+in the static initialize() method to see what happens when you link in this
+framework.</dd>
 <h3>Workarounds/Bugfixes</h3>
-<dt>ERXCheckboxMatrix</dt>
-<dd>Works around a webscript bug.</dd>
-<dt>ERXRadioButtonMatrix</dt>
-<dd>Works around a webscript bug.</dd>
 <dt>ERXSharedEOLoader</dt>
-<dd>Java port of Kelly Hawk's shared EO loader.  Works around a bug with
-shared eos and multiple models.</dd>
-<h3>Qualifiers</h3>
+<dd>Java port of Kelly Hawk's shared EO loader.  Works around a bug with shared
+eos and multiple models.</dd>
+<h3>EOF Qualifiers</h3>
 <dt>ERXEOToManyQualifier</dt>
 <dd>Kickass qualifer ;)  Really nice when you want to find all the eos that
 have say five of the ten eos in their toMany relationship. </dd>
@@ -60,8 +56,8 @@ localitzer for languages that don't have plural forms<br>
 <h3>Log4j Additions</h3>
 <dt>ERXLog4j</dt>
 <dd>Configures and manages the log4j logging system.  Will also configure
-the system for rapid turn around, ie when WOCaching is disabled when the
-conf file changes it will get reloaded.</dd>
+the system for rapid turn around, ie when WOCaching is disabled when the conf
+file changes it will get reloaded.</dd>
 <dt>ERXEOFAppender</dt>
 <dd>log4j Appender used to log events using EOF.</dd>
 <dt>ERXEOFLogEntryInterface</dt>
@@ -121,7 +117,9 @@ as this retains them on the objC side fo things.</dd>
 <dd>ERXCloneableThreadLocal</dd>
 <dd>Used for cloning objects when the thread inherits the thread local</dd>
 <dd>ERXFrameworkPrincipal</dd>
-<dd>Useful for subclasses that need to be the principal class of a framework<br>
+<dd>Useful for subclasses that need to be the principal class of a framework</dd>
+<dd>ERXThreadStorage</dd>
+<dd>Storage on a per thread basis<br>
 </dd>
 <h3>EOF Interfaces</h3>
 <dt>ERXGeneratesPrimaryKeyInterface</dt>
@@ -221,7 +219,7 @@ the condition will evaluate to true.</dd>
 <dt>ERXOncePerRequestConditional</dt>
 <dd>Renders it's embedded content only once during the RR loop. Useful for
 JavaScript code or stylesheets that should be included only once</dd>
-<h3>Javascript WOComponents</h3>
+<h3>Javascript &amp; DHTML WOComponents</h3>
 <dt>ERXJSCookiesConditional</dt>
 <dd>Javascript implementation to check different cookies.</dd>
 <dd>ERXJSAutoClosePage</dd>
@@ -272,28 +270,27 @@ context of that object.*</dd>
 <dt>ERXEmptyComponent</dt>
 <dd>Simple component, useful for WOSwitchComponents that shouldn't show anything.</dd>
 <dt>ERXFakeRelationship</dt>
-<dd>UI and support methods to edit "relations" to objects flattened into
-a text field (e.g. languages = "-de-en-"). Useful when you don't need referential
+<dd>UI and support methods to edit "relations" to objects flattened into a
+text field (e.g. languages = "-de-en-"). Useful when you don't need referential
 integrity but only a quick place to store flags and the like.</dd>
 <dt>ERXGroupingRepetition</dt>
-<dd>Crazy cool repetition that takes a list and a key and will enumerate
-through grouped lists.</dd>
+<dd>Crazy cool repetition that takes a list and a key and will enumerate through
+grouped lists.</dd>
 <dt>ERXGroupingTable</dt>
 <dd>Table implementation of a grouping repetition.</dd>
 <dt>ERXImageTabPanel</dt>
 <dd>Tab panel using images.</dd>
 <dt>ERXListDisplay</dt>
-<dd>Useful for displaying a list of eos.  Ex. a list of person eos could
-be displayed as "Fred, Mark and Max".</dd>
+<dd>Useful for displaying a list of eos.  Ex. a list of person eos could be
+displayed as "Fred, Mark and Max".</dd>
 <dt>ERXMandatoryFieldMarker</dt>
 <dd>Displays a mandatory field marker.  Extended in look frameworks to provide
 custom images.</dd>
 <dt>ERXOptionalForm</dt>
 <dd>Given a binding displays the WOComponentContent in a form.</dd>
 <dt>ERXRepeatingTable</dt>
-<dd>Useful when given a list of n items and you want to display m keys. 
-This will construct a table nxm and push the current indexes up though the
-bindings.</dd>
+<dd>Useful when given a list of n items and you want to display m keys.  This
+will construct a table nxm and push the current indexes up though the bindings.</dd>
 <dt>ERXErrorDictionaryPanel</dt>
 <dd>Useful for displaying a dictionary of caught exception messages.</dd>
 <dt>ERXSingleButton</dt>
@@ -362,7 +359,12 @@ length.</dd>
 <dd>Only useful in that it uses ERXRadioButtonMatrix and ERChackboxMatrix
 components.</dd>
 <dd>ERXLocalizedString</dd>
-<dd>localized string additions<br>
+<dd>localized string additions</dd>
+<dd><dt>ERXCheckboxMatrix</dt>
+  <dd>Works around a webscript bug.</dd>
+  <dt>ERXRadioButtonMatrix</dt>
+  <dd>Works around a webscript bug.</dd>
+  <dt></dt>
 </dd>
 <h3>Backport from WOExtensions</h3>
 <dt>WOSortOrder</dt>
@@ -377,8 +379,10 @@ components.</dd>
 <dd>(Back port from WO 5 WOExtensions)</dd>
 <dt>WOTable</dt>
 <dd>(Back port from WO 5 WOExtensions)</dd>
-<dt>WXOutlineControl</dt>
-<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt><br>
+</dt>
+<dd></dd>
+<br>
 <br>
 </body>
 </html>
