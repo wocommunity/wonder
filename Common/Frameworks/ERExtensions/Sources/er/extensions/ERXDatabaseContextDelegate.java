@@ -244,7 +244,7 @@ public class ERXDatabaseContextDelegate {
                         _configureReadOnly(connection);
                     }
                 } else {
-                    log.warn("Cannot change readoonly/readwrite level since the connection for the database context is null!!");
+                    log.warn("Cannot change read only/read write level since the connection for the database context is null!!");
                 }
 
             } catch (java.sql.SQLException e) {
