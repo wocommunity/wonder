@@ -9,6 +9,8 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
+/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
+
 public abstract class ERXNavigationComponent extends WOComponent {
 
     public ERXNavigationComponent(WOContext context) {

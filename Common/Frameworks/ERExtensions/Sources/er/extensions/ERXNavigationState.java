@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 
 import java.util.Enumeration;
 
+/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationState {
 
     /** logging support */
