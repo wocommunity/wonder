@@ -164,13 +164,28 @@ public class ERXConfigurationManager {
                 userName= userName ==null ? stringForKey("dbConnectUserGLOBAL") : userName;
                 String passwd= stringForKey(aModelName + ".DBPassword");
                 passwd= passwd ==null ? stringForKey("dbConnectPasswordGLOBAL") : passwd;
-                if (url!=null || userName!=null || passwd!=null) {
+                String driver= stringForKey(aModelName + ".DBDriver");
+                driver= driver ==null ? stringForKey("dbConnectDriverGLOBAL") : driver;
+                String jdbcInfo= stringForKey(aModelName + ".DBJDBCInfo");
+                jdbcInfo= jdbcInfo ==null ? stringForKey("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
+                String plugin= stringForKey(aModelName + ".DBPlugin");
+                plugin= plugin ==null ? stringForKey("dbConnectPluginGLOBAL") : plugin;
+                if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
                     NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
                     if (url!=null) newCD.setObjectForKey(url, "URL");
                     if (userName!=null) newCD.setObjectForKey(userName,"username");
                     if (passwd!=null) newCD.setObjectForKey(passwd,"password");
+                    if (driver!=null) newCD.setObjectForKey(driver,"driver");
+                    if (jdbcInfo!=null) {
+                        NSDictionary d=(NSDictionary)NSPropertyListSerialization.propertyListFromString(jdbcInfo);
+                        if (d!=null)
+                            newCD.setObjectForKey(d,"jdbc2Info");
+                        else
+                            newCD.removeObjectForKey("jdbc2Info");
+                    }
+                    if (plugin!=null) newCD.setObjectForKey(plugin,"plugin");                    
                     aModel.setConnectionDictionary(newCD);
-                    if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary "+newCD);
+                    if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary for "+aModel.name()+": "+newCD);
                 }
             }
             // based on an idea from Stefan Apelt <stefan@tetlabors.de>
@@ -194,13 +209,14 @@ public class ERXConfigurationManager {
             String e = stringForKey(aModelName + ".EOPrototypesEntity");
             e = e ==null ? stringForKey("EOPrototypesEntityGLOBAL") : e;
             if(e != null) {
-                EOEntity proto = aModel.entityNamed("EOPrototypes");
                 EOEntity newproto = aModel.entityNamed(e);
                 if (newproto == null) {
                     cat.warn("No prototypes found in model named \"" + aModelName + "\", although the EOPrototypesEntity default was set!");
                 } else {
+                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes from " + e);
                     NSMutableDictionary dict = new NSMutableDictionary();
                     newproto.encodeIntoPropertyList(dict);
+                    EOEntity proto = aModel.entityNamed("EOPrototypes");
                     if(proto != null)
                         aModel.removeEntity(proto);
                     aModel.removeEntity(newproto);
