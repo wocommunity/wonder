@@ -14,21 +14,22 @@ import er.extensions.*;
 
 /**
  * Used for building date queries with javascript.<br />
- * WARNING: the format string used by this app is in plain java format (yyyy/MM/dd) instead of (%Y/%M/%D)
  */
 
 public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
-    public ERDQueryDateRangeJavascript(WOContext context) { super(context); }
-
-    protected static String _datePickerJavaScriptUrl;
-    protected String key;
-    protected NSTimestampFormatter _formatter;
-    protected String _minValue;
-    protected String _maxValue;
-    protected String _minName;
-    protected String formatterString;
-    protected String _maxName;
+	protected static String _datePickerJavaScriptUrl;
+	protected String key;
+	protected NSTimestampFormatter _dateFormatter;
+	protected String _minValue;
+	protected String _maxValue;
+	protected String _minName;
+	protected String _formatter;
+	protected String _maxName;
+	
+	public ERDQueryDateRangeJavascript(WOContext context) { 
+    	super(context); 
+    }
     
     public String propertyKey() {
         if(key == null)
@@ -36,18 +37,18 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return key;
     }
 
-    public NSTimestampFormatter formatter() {
-    	if(_formatter == null) {
-    		_formatter = new NSTimestampFormatter(formatterString());
+    public NSTimestampFormatter dateFormatter() {
+    	if(_dateFormatter == null) {
+    		_dateFormatter = new NSTimestampFormatter(formatter());
     	}
-    	return _formatter;
+    	return _dateFormatter;
     }
     
     protected String stringForDate(NSTimestamp d) {
         String result=null;
         if(d != null) {
             try {
-            	result =  formatter().format(d);
+            	result = dateFormatter().format(d);
             } catch(IllegalArgumentException nsfe) {
             }
         }
@@ -72,7 +73,7 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         NSTimestamp date = null;
         try {
         	if(dateString!=null) {
-        		date = (NSTimestamp)formatter().parseObject(dateString);
+        		date = (NSTimestamp)dateFormatter().parseObject(dateString);
         	}
         } catch (java.text.ParseException nspe) {
             NSValidation.ValidationException v =
@@ -117,24 +118,28 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return _minName;
     }
     public String minHREF() {
-        return "javascript:show_calendar('QueryForm." + minName() + "',null,null,'"+formatterString()+"')"; 
+        return "javascript:show_calendar('QueryForm." + minName() + "',null,null,'"+formatterStringForScript()+"')"; 
     }
-
-    public String formatterString() {
-		if(formatterString == null) {
-			formatterString = (String)valueForBinding("formatter");
-			if(formatterString == null) {
-				formatterString = "MM/dd/yyyy";
-			}
-		}
-		return formatterString;
-	}
 
     public String maxName() {
-        if (_maxName==null) _maxName="max"+hashCode();
-        return _maxName;
+    	if (_maxName==null) _maxName="max"+hashCode();
+    	return _maxName;
     }
     public String maxHREF() {
-        return "javascript:show_calendar('QueryForm." + maxName() + "',null,null,'"+formatterString()+"')";
+    	return "javascript:show_calendar('QueryForm." + maxName() + "',null,null,'"+formatterStringForScript()+"')";
+    }
+    
+    public String formatter() {
+		if(_formatter == null) {
+			_formatter = (String)valueForBinding("formatter");
+			if(_formatter == null || _formatter.length() == 0) {
+				_formatter = "MM/dd/yyyy";
+			}
+		}
+		return _formatter;
+	}
+    
+    public String formatterStringForScript() {
+    	return ERXEditDateJavascript.formatterStringForScript(formatter());
     }
 }

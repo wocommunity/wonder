@@ -179,8 +179,8 @@ Calendar.prototype.format_absolute_data = function(p_day, v_month, v_year) {
 	var vData;
 	var vMonth = 1 + v_month;
 	vMonth = (vMonth.toString().length < 2) ? "0" + vMonth : vMonth;
-	var vMon = Calendar.get_month(v_month).substr(0,3).toUpperCase();
-	var vFMon = Calendar.get_month(v_month).toUpperCase();
+	var vMon = Calendar.get_month(v_month).substr(0,3);
+	var vFMon = Calendar.get_month(v_month);
 	var vY4 = new String(v_year);
 	var vY2 = new String(v_year.substr(2,2));
 	var vDD = (p_day.toString().length < 2) ? "0" + p_day : p_day;
