@@ -136,6 +136,7 @@
 ./Sources/er/extensions/ERXWOContext.java:er.extensions
 ./Sources/er/extensions/ERXWOFileUpload.java:er.extensions
 ./Sources/er/extensions/ERXWOForm.java:er.extensions
+./Sources/er/extensions/ERXWOText.java:er.extensions
 ./Sources/er/extensions/WOCollapsibleComponentContent.java:er.extensions
 ./Sources/er/extensions/WOSortOrder.java:er.extensions
 ./Sources/er/extensions/WOTable.java:er.extensions
