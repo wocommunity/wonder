@@ -213,13 +213,17 @@ public class ERXFileUtilities {
      * @param symbolic determines if a symlink should be created
      * @param allowUnlink determines if the symlink is a hardlink which allows unlinking
      */
-    public static void linkFiles(File source, File destination, boolean symbolic, boolean allowUnlink) throws IOException {
+    public static void linkFiles(File source, File destination,
+                                 boolean symbolic,
+                                 boolean allowUnlink,
+                                 boolean doNotFollowSymbolicLinks) throws IOException {
         if (destination == null || source == null)
             throw new IllegalArgumentException("null source or destination not allowed");
 
         String cmd = "ln "                       +
             (allowUnlink ? "-f " : "")  +
             (symbolic    ? "-s " : "")  +
+            (doNotFollowSymbolicLinks ? "-h " : "") +
             source.getPath() + " "      +
             destination.getPath();
 
