@@ -49,6 +49,7 @@ ListPage: D2WList {
 	dataSource = queryDataSource;
 	entityName = entity;
 	pageConfiguration = d2wContext.listConfigurationName;
+	d2wContext = d2wContext;
 }
 
 MainTable: WOGenericContainer {
@@ -67,6 +68,7 @@ PageWrapper: WOSwitchComponent {
 
 QueryForm: WOForm {
 	action = queryAction;
+	name = "EditForm";
 }
 
 QueryResetButton: WOResetButton {
