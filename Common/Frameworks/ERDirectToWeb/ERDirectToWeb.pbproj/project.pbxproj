@@ -883,6 +883,7 @@
 			children = (
 				41E307C4056E1C8B0060148F,
 				F6E7969B02C877AF01AD0D07,
+				41D89E6106243AD00014C7B2,
 				F6E7968502C877AF01AD0D07,
 				FBD20D3C95A2D86A72DEDD96,
 				F6E7968902C877AF01AD0D07,
@@ -1322,6 +1323,65 @@
 		};
 		41D6409A05C92B2B00BB3C39 = {
 			fileRef = 41D6409705C92B2B00BB3C39;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41D89E6106243AD00014C7B2 = {
+			children = (
+				41D89E6206243AD00014C7B2,
+				41D89E6906243AD00014C7B2,
+				41D89E6306243AD00014C7B2,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryToManyRelationship;
+			path = "";
+			refType = 2;
+		};
+		41D89E6206243AD00014C7B2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WQueryToManyRelationship.api;
+			path = Components/ERD2WQueryToManyRelationship.api;
+			refType = 4;
+		};
+		41D89E6306243AD00014C7B2 = {
+			children = (
+				41D89E6406243AD00014C7B2,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryToManyRelationship.wo;
+			path = "";
+			refType = 4;
+		};
+		41D89E6406243AD00014C7B2 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryToManyRelationship.wo;
+			refType = 4;
+		};
+		41D89E6906243AD00014C7B2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WQueryToManyRelationship.java;
+			path = Sources/er/directtoweb/ERD2WQueryToManyRelationship.java;
+			refType = 4;
+		};
+		41D89E6A06243AD00014C7B2 = {
+			fileRef = 41D89E6206243AD00014C7B2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41D89E6B06243AD00014C7B2 = {
+			fileRef = 41D89E6306243AD00014C7B2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41D89E6C06243AD00014C7B2 = {
+			fileRef = 41D89E6906243AD00014C7B2;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -9475,6 +9535,8 @@
 				41C5E76105D11C6D00F59489,
 				41C5F51B05D9066F00F59489,
 				41C5F51C05D9066F00F59489,
+				41D89E6A06243AD00014C7B2,
+				41D89E6B06243AD00014C7B2,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9720,6 +9782,7 @@
 				41C5E74E05D11B9900F59489,
 				41C5E76205D11C6D00F59489,
 				41C5F51D05D9066F00F59489,
+				41D89E6C06243AD00014C7B2,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
