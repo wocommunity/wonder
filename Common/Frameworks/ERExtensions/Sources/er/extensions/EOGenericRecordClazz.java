@@ -48,9 +48,20 @@ public class EOGenericRecordClazz extends Object {
             _objectCountAttribute.setColumnName("p_objectCountAttribute");
             _objectCountAttribute.setClassName("java.lang.Number");
             _objectCountAttribute.setValueType("i");
-            _objectCountAttribute.setReadFormat("count(*)");
+            _objectCountAttribute.setReadFormat("count(1)");
         }
         return _objectCountAttribute;
+    }
+
+    protected static EOAttribute objectCountUniqueAttribute(EOAttribute foo) {
+        EOAttribute tmp = new EOAttribute();
+
+        tmp.setName("p_objectCountUnique"+foo.name());
+        tmp.setColumnName("p_objectCountUnique"+foo.name());
+        tmp.setClassName("java.lang.Number");
+        tmp.setValueType("i");
+        tmp.setReadFormat("count( unique t0."+foo.columnName()+")");
+        return tmp;
     }
 
     /** caches the entity name */
