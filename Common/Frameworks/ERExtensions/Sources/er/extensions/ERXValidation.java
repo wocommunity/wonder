@@ -14,7 +14,7 @@ import com.webobjects.eoaccess.*;
  * This is more of a legacy object that was used until
  * we had {@link ERXValidationFactory ERXValidationFactory} in place.
  * The only place where this is used is when handling
- * {@link com.webobjects.foundation.NSValidation$ValidationException ValidationExceptions}
+ * {@link com.webobjects.foundation.NSValidation.ValidationException ValidationExceptions}
  * that have not been converted by the ERXValidationFactory. This class is
  * also used to handle formatter exceptions that are thrown number formatters in
  * WOComponents.

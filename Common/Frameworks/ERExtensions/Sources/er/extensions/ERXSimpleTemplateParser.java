@@ -33,7 +33,7 @@ public class ERXSimpleTemplateParser {
      * of the template parser.
      * 
      * @return shared instance of the parser
-     * @see setSharedInstance
+     * @see #setSharedInstance
      */
     public static ERXSimpleTemplateParser sharedInstance() {
         if (_sharedInstance == null) 
@@ -45,7 +45,7 @@ public class ERXSimpleTemplateParser {
      * Sets the shared instance of the template parser.
      * 
      * @param newSharedInstance  the parser object that will be shared
-     * @see sharedInstance
+     * @see #sharedInstance
      */
     public static synchronized void setSharedInstance(ERXSimpleTemplateParser newSharedInstance) {
         _sharedInstance = newSharedInstance;
