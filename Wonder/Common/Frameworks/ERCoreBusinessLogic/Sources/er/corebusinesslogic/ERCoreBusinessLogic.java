@@ -258,7 +258,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     log.error("Unable to log problem due to misconfiguration: recipients: "
                               + emailsForProblemRecipients() + " email domain: " + problemEmailDomain());
                 } else {
-                    ERCMailableExceptionPage standardExceptionPage=(ERCMailableExceptionPage)WOApplication.application().pageWithName("ERCMailableExceptionPage",new WOContext(new WORequest(null, null, null, null, null, null)));
+                    ERCMailableExceptionPage standardExceptionPage=(ERCMailableExceptionPage)WOApplication.application().pageWithName("ERCMailableExceptionPage",new WOContext(new WORequest ("GET", "", "HTTP/1.1", null, null, null)));
                     standardExceptionPage.setException(exception);
                     standardExceptionPage.setActor(actor());
                     standardExceptionPage.setExtraInfo(extraInfo);
