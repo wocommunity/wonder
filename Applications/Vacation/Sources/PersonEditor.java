@@ -43,7 +43,6 @@ public class PersonEditor extends VacationComponent {
     public void setPerson(Person newPerson) {
         
         if (newPerson==null) person = new Person(localContext, application.years());
-        // fetch a new version of the person, because of some context problem I haven't solved yet
         else if (newPerson.editingContext()!=null) {
             person = (Person) EOUtilities.localInstanceOfObject(localContext,newPerson);
         }
