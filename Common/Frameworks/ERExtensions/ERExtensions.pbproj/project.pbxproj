@@ -506,6 +506,9 @@
 				41D6423905CF9CC600BB3C39,
 				416E92DB05E4BD3800F3D01E,
 				41E14A2A05EF5EF100DE10B6,
+				41CFDED305F3D17000523BB7,
+				41CFDED505F3D18300523BB7,
+				41CFDED705F3D22F00523BB7,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1127,7 +1130,6 @@
 			buildRules = (
 			);
 			buildSettings = {
-				ANT_HOME = /usr/local/ant;
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
@@ -1747,6 +1749,8 @@
 				F522D6CC03A0397701CAC43C,
 				F59BE09403A5883C01CF0E76,
 				416E92DA05E4BD3800F3D01E,
+				41CFDED205F3D17000523BB7,
+				41CFDED405F3D18300523BB7,
 				D87D3D387A5018D87997F7DC,
 				F6E798CF02C8799401AD0D07,
 				F6E7989E02C8799401AD0D07,
@@ -1846,6 +1850,45 @@
 		};
 		419E564D0507E29500000104 = {
 			fileRef = 419E56450507E29500000104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41CFDED205F3D17000523BB7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXWOString.java;
+			path = er/extensions/ERXWOString.java;
+			refType = 4;
+		};
+		41CFDED305F3D17000523BB7 = {
+			fileRef = 41CFDED205F3D17000523BB7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41CFDED405F3D18300523BB7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXWOTextField.java;
+			path = er/extensions/ERXWOTextField.java;
+			refType = 4;
+		};
+		41CFDED505F3D18300523BB7 = {
+			fileRef = 41CFDED405F3D18300523BB7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41CFDED605F3D22F00523BB7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXTimestampFormatter.java;
+			path = er/extensions/ERXTimestampFormatter.java;
+			refType = 4;
+		};
+		41CFDED705F3D22F00523BB7 = {
+			fileRef = 41CFDED605F3D22F00523BB7;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7728,6 +7771,7 @@
 				F59C57DE02C4565701000102,
 				F59C57DD02C4565701000102,
 				F59C57C802C4565701000102,
+				41CFDED605F3D22F00523BB7,
 				F6ED0C790361C03B01257492,
 			);
 			isa = PBXGroup;
