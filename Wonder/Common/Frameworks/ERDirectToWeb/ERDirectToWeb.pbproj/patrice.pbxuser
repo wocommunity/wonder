@@ -9,6 +9,7 @@
 		breakpoints = (
 		);
 		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 44843255;
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{1187, 840}";
 				LeftSlideOut = {
@@ -92,6 +93,9 @@
 					TabCount = 5;
 				};
 			};
+			PBXWorkspaceStateSaveDate = 44843255;
+		};
+		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
