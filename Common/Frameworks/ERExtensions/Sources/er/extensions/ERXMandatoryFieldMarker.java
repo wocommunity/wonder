@@ -6,11 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
 
 // Subclasses in look frameworks provide custom images for manditory fields.
 public class ERXMandatoryFieldMarker extends WOComponent {
@@ -21,5 +17,4 @@ public class ERXMandatoryFieldMarker extends WOComponent {
 
     public boolean synchronizesBindingsWithVariables() { return false; }
     public boolean isStateless() { return true; }
-
 }

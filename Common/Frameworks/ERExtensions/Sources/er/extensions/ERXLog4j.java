@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXLog4j.java created by max on Wed 06-Dec-2000 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -74,7 +72,8 @@ public class ERXLog4j {
             if (!WOApplication.application().isCachingEnabled()) {
                 if (cat.isDebugEnabled()) cat.debug("Registering observer for file change.");
                 ERXFileNotificationCenter.defaultCenter().addObserver(new Observer(),
-                                                                new NSSelector("reloadConfigurationFile", ERXConstant.NotificationClassArray),
+                                                                new NSSelector("reloadConfigurationFile",
+                                                                               ERXConstant.NotificationClassArray),
                                                                 configurationFilePath());
             }
             _initializedRapidTurnAround = true;
