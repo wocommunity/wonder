@@ -2,11 +2,11 @@ BatchNumber: WOTextField {
     value = currentBatchIndex;
     numberformat = "0";
     size = 3;
-	onChange = "form.target='_self';";
+	onChange = formTarget;
 }
 
 Conditional1: WOConditional {
-	condition = ^displayGroup.hasMultipleBatches;
+	condition = displayGroup.hasMultipleBatches;
 }
 
 Content: WOComponentContent {
@@ -17,7 +17,7 @@ DGHasQualifier: ERXNonNullConditional {
 }
 
 EntityName3: ERXPluralString {
-	count = ^displayGroup.allObjects.count;
+	count = displayGroup.allObjects.count;
 	value = ^objectName;
 }
 
@@ -35,19 +35,19 @@ Image1: WOImage {
 ItemsPerBatch: WOTextField {
     value = numberOfObjectsPerBatch;
     numberformat = "0";
-    size = 2;
+    size = 3;
     align="center";
-	onChange = "form.target='_self';";
+	onChange = formTarget;
 }
 
 LeftArrow: WOImageButton {
-    action = ^displayGroup.displayPreviousBatch;
+    action = displayGroup.displayPreviousBatch;
     filename = "lft-OSarw.gif";
     border = "0";
 //    height = "11";
 //    width = "16";
     framework = "JavaWOExtensions";
-	onClick = "form.target='_self';";
+	onClick = formTarget;
 }
 
 NavigationTable : WOGenericContainer {
@@ -60,21 +60,21 @@ NavigationTable : WOGenericContainer {
 };
 
 NextBatchLink: WOHyperlink {
-    action = ^displayGroup.displayNextBatch;
+    action = displayGroup.displayNextBatch;
 }
 
 PreviousBatchLink: WOHyperlink {
-    action = ^displayGroup.displayPreviousBatch;
+    action = displayGroup.displayPreviousBatch;
 }
 
 RightArrow: WOImageButton {
-    action = ^displayGroup.displayNextBatch;
+    action = displayGroup.displayNextBatch;
     filename = "rt-OSarw.gif";
     border = "0";
 //    height = "11";
 //    width = "16";
     framework = "JavaWOExtensions";
-	onClick = "form.target='_self';";
+    onClick = formTarget;
 }
 
 SortComponent: WOSortOrderManyKey {
@@ -91,5 +91,5 @@ String1: WOString {
 }
 
 TotalBatches: WOString {
-    value = ^displayGroup.batchCount;
+    value = displayGroup.batchCount;
 }
