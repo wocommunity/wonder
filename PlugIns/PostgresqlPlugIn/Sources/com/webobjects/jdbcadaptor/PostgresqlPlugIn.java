@@ -2,9 +2,12 @@ package com.webobjects.jdbcadaptor;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
+
 /**
  * WO runtime plugin with support for Postgresql.
+ *
  * @author ak
+ * @author giorgio_v
  */
 public class PostgresqlPlugIn extends JDBCPlugIn {
     
@@ -58,49 +61,33 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
      * @return An NSArray of NSDictionary where each dictionary corresponds to a unique  primary key value
      */
     public NSArray newPrimaryKeys (int count, EOEntity entity, JDBCChannel channel) {
-        NSMutableArray results = null;
-        if( entity.primaryKeyAttributes().count() == 1) {
-            EOAttribute attribute = (EOAttribute) entity.primaryKeyAttributes().lastObject();
-            if(attribute.adaptorValueType() == EOAttribute.AdaptorNumberType) {
-                String sequenceName = entity.primaryKeyRootName() + "_SEQ";
-                PostgresqlExpression expression = new PostgresqlExpression(entity);
-                expression.setStatement("SELECT SETVAL( '"+ sequenceName +"', CURRVAL('"+ sequenceName +"') + "+ count +")");
-                results = new NSMutableArray();
-                attribute = ((EOAttribute)entity.primaryKeyAttributes().objectAtIndex(0));
-                try {
-                    channel.evaluateExpression(expression);
-                } catch( Exception seqNotInitializedEx ) {
-                    // Throws an exception if it's the first time we access the sequence in a session
-                    PostgresqlExpression preExp = new PostgresqlExpression(entity);
-                    preExp.setStatement("SELECT NEXTVAL('" + sequenceName + "')");
-                    try {
-                        channel.evaluateExpression(preExp);
-                    } catch( Exception seqAbsentEx ) {
-                        channel.cancelFetch();
-                        EOSynchronizationFactory f = createSynchronizationFactory();
-                        NSArray statements = f.primaryKeySupportStatementsForEntityGroup( new NSArray( entity ) );
-                        int stmCount = statements.count();
-                        for( int i = 0; i < stmCount; i++ ) {
-                            channel.evaluateExpression( (EOSQLExpression) statements.objectAtIndex(i) );
-                        }
-                        channel.evaluateExpression(preExp);
-                    }
-                    channel.cancelFetch();
-                    channel.evaluateExpression(expression);
-                }
-                try {
-                    NSDictionary row = channel.fetchRow();
-                    channel.cancelFetch();
-                    long maxValue = ((Number) row.objectForKey("SETVAL")).longValue();
-                    String attrName = attribute.name();
-                    for( int i = 0; i < count; i++ ) {
-                        results.addObject(new NSDictionary( new Long(maxValue - count + i), attrName));
-                    }            
-                } catch( Exception e ) {
-                    throw new NSForwardException(e, "Couldn't get new primary key for entity: " + entity.name());
-                }
-            }
+        if( isPrimaryKeyGenerationNotSupported( entity ) )
+            return null;
+        NSMutableArray results = new NSMutableArray(count);
+        String sequenceName = sequenceNameForEntity( entity );
+        PostgresqlExpression expression = new PostgresqlExpression(entity);
+        expression.setStatement( "select count(*) from pg_class where relname = '"+ sequenceName.toLowerCase() +"' and relkind = 'S'" );
+        channel.evaluateExpression( expression );
+        NSDictionary row = channel.fetchRow();
+        channel.cancelFetch();
+        if( new Long( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
+            EOSynchronizationFactory f = createSynchronizationFactory();
+            NSArray statements = f.primaryKeySupportStatementsForEntityGroup( new NSArray( entity ) );
+            int stmCount = statements.count();
+            for( int i = 0; i < stmCount; i++ ) {
+                channel.evaluateExpression( (EOSQLExpression) statements.objectAtIndex(i) );
+            }            
         }
+        expression.setStatement
+            ("SELECT SETVAL( '"+ sequenceName +"', NEXTVAL('"+ sequenceName +"') + "+ (count-1) +" )"); //, false
+        channel.evaluateExpression( expression );
+        row = channel.fetchRow();
+        channel.cancelFetch();
+        long maxValue = ((Number) row.objectForKey("SETVAL")).longValue();
+        String attrName = ( (EOAttribute) entity.primaryKeyAttributes().lastObject() ).name();
+        for( int i = 0; i < count; i++ ) {
+            results.addObject(new NSDictionary( new Long(maxValue - count + 1 + i), attrName));
+        }            
         return results;
     }
     
@@ -113,6 +100,18 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
      */
     protected static String sequenceNameForEntity(EOEntity entity) {
         return entity.primaryKeyRootName() + "_SEQ";
+    }
+    
+    /**
+     * Checks whether primary key generation can be supported for <code>entity</code>
+     *
+     * @param entity    the entity to be checked
+     * @return  yes/no
+     */
+    private boolean isPrimaryKeyGenerationNotSupported( EOEntity entity ) {
+        return entity.primaryKeyAttributes().count() > 1 || 
+        ( (EOAttribute) entity.primaryKeyAttributes().lastObject() )
+        .adaptorValueType() != EOAttribute.AdaptorNumberType;
     }
     
 }
