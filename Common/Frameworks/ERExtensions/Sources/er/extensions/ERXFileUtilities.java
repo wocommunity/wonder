@@ -27,7 +27,7 @@ public class ERXFileUtilities {
     public static byte[] bytesFromFile(File f) throws IOException {
         if (f == null)
             throw new IOException("null file");
-        int size = (int) f.length();
+        int size = (int)f.length();
         FileInputStream fis = new FileInputStream(f);
         byte[] data = new byte[size];
         int bytesRead = 0;
@@ -169,40 +169,60 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Creates a symlink for a given file. Note this only works on
-     * civilized OSs which support symbolic linking.
-     * @param file to create the link to
-     * @param symlinkPath file to create the link to
-     * @param deleteSymlinkIfExists controls if the original symlink should be
-     *		deleted if it already exists
-     * @return if the link was successfully created
+     * Deletes a given directory in a recursive fashion.
+     * @param directory to be deleted
+     * @return if the directory deleted successfully
      */
-    public static boolean createSymbolicLink(File file, File symlink, boolean deleteSymlinkIfExists)
-        throws IOException {
-            boolean linkSuccessfullyCreated = false;
-            if (file == null || symlink == null)
-                throw new RuntimeException("Both file and symlink path must be non-null. File: "
-                                           + file + " symlink path: " + symlink);
-            if (!file.exists())
-                throw new RuntimeException("Attempting to link to a file that does not exist: " + file);
-            String shellCommand = "ln -s " + file.getAbsolutePath() + " " + symlink.getAbsolutePath();
-            Process linkProcess = null;
-            try {
-                linkProcess = Runtime.getRuntime().exec(shellCommand);
-                linkProcess.waitFor();
-                if (linkProcess.exitValue() != 0) {
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(linkProcess.getErrorStream()));
-                    log.error("Link process error message: " + buffer.readLine());
-                } else {
-                    linkSuccessfullyCreated = true;
-                }
-            } catch (InterruptedException e) {
-                log.error("Caught InterruptedException when linking: " + file + " to " + symlink, e);
-            } finally {
-                ERXExtensions.freeProcessResources(linkProcess);
+    public static boolean deleteDirectory(File directory) {
+        if (! directory.isDirectory()) return directory.delete();
+
+        String[] fileNames = directory.list();
+        for (int i = 0; i < fileNames.length; i++) {
+            File file = new File(directory, fileNames[i]);
+
+            if (file.isDirectory()) {
+                if (!deleteDirectory(file)) return false;
+            } else {
+                if (!file.delete()) return false;
             }
-            return linkSuccessfullyCreated;
         }
+        return directory.delete();
+    }    
+    
+    /**
+     * Creates a symlink for a given file. Note this only works on
+     * civilized OSs which support symbolic linking.
+     * @param source to create the link to
+     * @param destination file to create the link to
+     * @param symbolic determines if a symlink should be created
+     * @param allowUnlink determines if the symlink is a hardlink which allows unlinking
+     */
+    public static void linkFiles(File source, File destination, boolean symbolic, boolean allowUnlink) throws IOException {
+        if (destination == null || source == null)
+            throw new IllegalArgumentException("null source or destination not allowed");
+
+        String cmd = "ln "                       +
+            (allowUnlink ? "-f " : "")  +
+            (symbolic    ? "-s " : "")  +
+            source.getPath() + " "      +
+            destination.getPath();
+
+        Process task = null;
+        try {
+            task = Runtime.getRuntime().exec(cmd);
+            while (true) {
+                try { task.waitFor(); break; }
+                catch (InterruptedException e) {}
+            }
+            if (task.exitValue() != 0) {
+                BufferedReader err = new BufferedReader(new InputStreamReader(task.getErrorStream()));
+                throw new IOException("Unable to create link: " + err.readLine());
+            }            
+        } finally {
+            ERXExtensions.freeProcessResources(task);
+        }
+    }
+    
 
     /**
         * Copys all of the files in a given directory to another directory.
