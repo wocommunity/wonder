@@ -680,7 +680,7 @@
             rhs = {
                 class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentAvailable; 
-                value = ERDDisplayYearsMonth; 
+                value = ERDDisplayYearsMonths; 
             }; 
         }, 
         {
@@ -1549,7 +1549,7 @@
             rhs = {
                 class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentAvailable; 
-                value = ERDEditDateJavaScript; 
+                value = ERDEditDateJavascript; 
             }; 
         }, 
         {
@@ -1575,7 +1575,7 @@
             rhs = {
                 class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentAvailable; 
-                value = ERDEditDateJavaScriptPopup; 
+                value = ERDEditDatePopup; 
             }; 
         }, 
         {
@@ -1601,7 +1601,7 @@
             rhs = {
                 class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentAvailable; 
-                value = ERDEditDateJavaScriptPopupOrNull; 
+                value = ERDEditDatePopup; 
             }; 
         }, 
         {
