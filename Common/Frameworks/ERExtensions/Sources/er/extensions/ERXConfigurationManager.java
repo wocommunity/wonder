@@ -472,4 +472,18 @@ public class ERXConfigurationManager {
         }
         return _hostName;
     }    
+    
+    /**
+     * Checks if the application is deployed as a servlet.
+     * <p>
+     * The current implementation checks if the application is 
+     * linked against "JavaWOJSPServlet.framework". 
+     * 
+     * @return true if the application is deployed as a servlet
+     */
+    public boolean isDeployedAsServlet() {
+        NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
+        return frameworkNames.containsObject("JavaWOJSPServlet");
+    }
+        
 }
