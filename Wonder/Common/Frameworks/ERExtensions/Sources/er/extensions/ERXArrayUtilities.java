@@ -15,13 +15,13 @@ import java.util.Enumeration;
  */
 public class ERXArrayUtilities extends Object {
     /**
-    * Holds the null grouping key for use when grouping objects
+     * Holds the null grouping key for use when grouping objects
      * based on a key that might return null and nulls are allowed
      */
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
 
     /**
-    * Groups an array of objects by a given key path. The dictionary
+     * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
      * keys values. This means that the object pointed to by the key
      * path must be a cloneable object. For instance using the key path
@@ -90,7 +90,7 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-    * Simple comparision method to see if two array
+     * Simple comparision method to see if two array
      * objects are identical sets.
      * @param a1 first array
      * @param a2 second array
@@ -116,7 +116,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Filters an array using the {@link EOQualifierEvaluation} interface.
+     * Filters an array using the {@link EOQualifierEvaluation} interface.
      * @param a array to be filtered
      * @param q qualifier to do the filtering
      * @return array of filtered results.
@@ -136,7 +136,7 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-    * Filters out duplicates of an array of enterprise objects
+     * Filters out duplicates of an array of enterprise objects
      * based on the value of the given key off of those objects.
      * Note: Current implementation depends on the key returning a
      * cloneable object. Also the order is not preseved from the
@@ -163,7 +163,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Subtracts the contents of one array from another.
+     * Subtracts the contents of one array from another.
      * Note: Current implementation does not preserve order.
      * @param main array to have values removed from it.
      * @param minus array of values to remove from the main array
@@ -177,7 +177,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Creates an array preserving order by adding all of the
+     * Creates an array preserving order by adding all of the
      * non-duplicate values from the second array to the first.
      * @param a1 first array
      * @param a2 second array
@@ -202,7 +202,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Adds all of the non-duplicate elements from the second
+     * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
      * @param a1 mutable array where non-duplicate objects are
      *		added
@@ -216,7 +216,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Recursively flattens an array of arrays into a single
+     * Recursively flattens an array of arrays into a single
      * array of elements.<br/>
      * <br/>
      * For example:<br/>
@@ -354,12 +354,12 @@ public class ERXArrayUtilities extends Object {
         /** public empty constructor */
 	public FetchSpecOperator() {}
 
-        /**
-         * Filters and sorts the given array by the named fetchspecification.
-         * @param array array to be filtered.
-         * @param keypath name of fetch specification.
-         * @return immutable filtered array.
-         */
+    /**
+     * Filters and sorts the given array by the named fetchspecification.
+     * @param array array to be filtered.
+     * @param keypath name of fetch specification.
+     * @return immutable filtered array.
+     */
 	public Object compute(NSArray array, String keypath) {
             if(array.count() == 0) {
                 return array;
@@ -370,7 +370,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Define an {@link NSArray$Operator} for the key <b>flatten</b>.<br/>
+     * Define an {@link NSArray$Operator} for the key <b>flatten</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -417,9 +417,11 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
-    /** Will register new NSArray operators
-    * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
-    * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b> and <b>fetchSpec</b> */
+    /** 
+     * Will register new NSArray operators
+     * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
+     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b> and <b>fetchSpec</b> 
+     */
     public static void initialize() {
         NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
         NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
@@ -433,7 +435,7 @@ public class ERXArrayUtilities extends Object {
 
     
     /**
-    * Filters out all of the duplicate objects in
+     * Filters out all of the duplicate objects in
      * a given array.<br/>
      * Note: The current implementation does not preserve
      * 		the order of elements in the array.
@@ -480,7 +482,7 @@ public class ERXArrayUtilities extends Object {
     }
     
     /**
-     * @depreceated
+     * @deprecated
      */
     public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamedBindings(NSArray array, String fetchSpec, String entity, NSDictionary bindings) {
         return filteredArrayWithEntityFetchSpecification( array, entity, fetchSpec, bindings);
@@ -500,14 +502,14 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * @depreceated
+     * @deprecated
      */
     public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
         return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
 
     /**
-        * shifts a given object in an array one value to the left (index--).
+     * shifts a given object in an array one value to the left (index--).
      *
      * @param array array to be modified.
      * @param object the object that should be moved
@@ -522,7 +524,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-        * shifts a given object in an array one value to the right (index++).
+     * shifts a given object in an array one value to the right (index++).
      *
      * @param array array to be modified.
      * @param object the object that should be moved

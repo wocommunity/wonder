@@ -27,7 +27,7 @@ public class ERXStringUtilities {
     private static NSArray _defaultTargetDisplayLanguages = new NSArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
 
     /**
-        * Java port of the distance algorithm.
+     * Java port of the distance algorithm.
      *
      * The code below comes from the following post on http://mail.python.org
      * Fuzzy string matching
@@ -131,7 +131,7 @@ public class ERXStringUtilities {
     protected static double adjustement = 0.5;
 
     /**
-        * Sets the base adjustment used for fuzzy matching
+     * Sets the base adjustment used for fuzzy matching
      * @param newAdjustment factor to be used.
      */
     // FIXME: Not thread safe.
@@ -141,7 +141,7 @@ public class ERXStringUtilities {
     }
 
     /**
-        * Fuzzy matching is useful for catching user entered typos. For example
+     * Fuzzy matching is useful for catching user entered typos. For example
      * if a user is search for a company named 'Aple' within your application
      * they aren't going to find it. Thus the idea of fuzzy matching, meaning you
      * can define a threshold of 'how close can they be' type of thing.

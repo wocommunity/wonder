@@ -9,13 +9,13 @@ package er.extensions;
 import com.webobjects.eocontrol.*;
 
 /**
-* To be implemented by objects which need to be copied into new objects
-* the replicated relationships need to point towards replicable objects
-*/
+ * To be implemented by objects which need to be copied into new objects
+ * the replicated relationships need to point towards replicable objects
+ */
 public interface ERXReplicableInterface {
 
     /**
-    * returns a new object with the same attributes and replicated replationships
+     * returns a new object with the same attributes and replicated replationships
      */
     public ERXGenericRecord replicate(EOEditingContext ec);
     public void deplicate();
