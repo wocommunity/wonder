@@ -25,7 +25,16 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 
     public Object valueInComponent(WOComponent component) {
         WOAssociation.Event event = _markStartOfEventIfNeeded("valueForKeyPath", keyPath(), component);
-        Object value = WOOgnl.factory().getValue(keyPath(), component);        
+
+        Object value = null;
+	try {
+	    value = WOOgnl.factory().getValue(keyPath(), component);
+	} catch(NullPointerException ex) {
+	    System.err.println("NullPointerException in WOOgnlAssociation with keyPath '" + keyPath() + "'");
+	    // AK@PRNET:DE
+     //FIXME: we should have a default that tell us wether to throw or not
+	    // throw ex;
+	}
         if(event != null)
             EOEventCenter.markEndOfEvent(event);
         if(_debugEnabled)
