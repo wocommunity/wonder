@@ -5,6 +5,294 @@
 	};
 	objectVersion = 38;
 	objects = {
+		4111BB7D05037E5A00000102 = {
+			children = (
+				4111BB7F05037E5A00000102,
+				4111BC620503816A00000102,
+				4111BC4E0503814D00000102,
+				4111BC360503812700000102,
+			);
+			isa = PBXGroup;
+			name = Repetitions;
+			path = "";
+			refType = 2;
+		};
+		4111BB7F05037E5A00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDAttributeRepetition.java;
+			path = Sources/er/directtoweb/ERDAttributeRepetition.java;
+			refType = 4;
+		};
+		4111BB8705037E5A00000102 = {
+			fileRef = 4111BB7F05037E5A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC360503812700000102 = {
+			children = (
+				4111BC370503812700000102,
+				4111BC380503812700000102,
+				4111BC390503812700000102,
+			);
+			isa = PBXGroup;
+			name = ERDListPageRepetition;
+			path = "";
+			refType = 4;
+		};
+		4111BC370503812700000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDListPageRepetition.api;
+			path = Components/ERDListPageRepetition.api;
+			refType = 4;
+		};
+		4111BC380503812700000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDListPageRepetition.java;
+			path = Sources/er/directtoweb/ERDListPageRepetition.java;
+			refType = 4;
+		};
+		4111BC390503812700000102 = {
+			children = (
+				4111BC3A0503812700000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERDListPageRepetition.wo;
+			path = "";
+			refType = 4;
+		};
+		4111BC3A0503812700000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDListPageRepetition.wo;
+			refType = 4;
+		};
+		4111BC3F0503812700000102 = {
+			fileRef = 4111BC370503812700000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC400503812700000102 = {
+			fileRef = 4111BC380503812700000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC410503812700000102 = {
+			fileRef = 4111BC390503812700000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC4E0503814D00000102 = {
+			children = (
+				4111BC4F0503814D00000102,
+				4111BC500503814D00000102,
+				4111BC510503814D00000102,
+			);
+			isa = PBXGroup;
+			name = ERDQueryPageRepetition;
+			path = "";
+			refType = 4;
+		};
+		4111BC4F0503814D00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDQueryPageRepetition.api;
+			path = Components/ERDQueryPageRepetition.api;
+			refType = 4;
+		};
+		4111BC500503814D00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDQueryPageRepetition.java;
+			path = Sources/er/directtoweb/ERDQueryPageRepetition.java;
+			refType = 4;
+		};
+		4111BC510503814D00000102 = {
+			children = (
+				4111BC520503814D00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERDQueryPageRepetition.wo;
+			path = "";
+			refType = 4;
+		};
+		4111BC520503814D00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDQueryPageRepetition.wo;
+			refType = 4;
+		};
+		4111BC570503814D00000102 = {
+			fileRef = 4111BC4F0503814D00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC580503814D00000102 = {
+			fileRef = 4111BC500503814D00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC590503814D00000102 = {
+			fileRef = 4111BC510503814D00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC620503816A00000102 = {
+			children = (
+				4111BC630503816A00000102,
+				4111BC640503816A00000102,
+				4111BC650503816A00000102,
+			);
+			isa = PBXGroup;
+			name = ERDInspectPageRepetition;
+			path = "";
+			refType = 4;
+		};
+		4111BC630503816A00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDInspectPageRepetition.api;
+			path = Components/ERDInspectPageRepetition.api;
+			refType = 4;
+		};
+		4111BC640503816A00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDInspectPageRepetition.java;
+			path = Sources/er/directtoweb/ERDInspectPageRepetition.java;
+			refType = 4;
+		};
+		4111BC650503816A00000102 = {
+			children = (
+				4111BC660503816A00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERDInspectPageRepetition.wo;
+			path = "";
+			refType = 4;
+		};
+		4111BC660503816A00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDInspectPageRepetition.wo;
+			refType = 4;
+		};
+		4111BC6B0503816A00000102 = {
+			fileRef = 4111BC630503816A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC6C0503816A00000102 = {
+			fileRef = 4111BC640503816A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111BC6D0503816A00000102 = {
+			fileRef = 4111BC650503816A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111C1F20503900F00000102 = {
+			children = (
+				4111C1F30503900F00000102,
+				4111C1F40503900F00000102,
+				4111C1F50503900F00000102,
+			);
+			isa = PBXGroup;
+			name = ERDDeleteButton;
+			path = "";
+			refType = 2;
+		};
+		4111C1F30503900F00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDDeleteButton.api;
+			path = Components/ERDDeleteButton.api;
+			refType = 2;
+		};
+		4111C1F40503900F00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDDeleteButton.java;
+			path = Sources/er/directtoweb/ERDDeleteButton.java;
+			refType = 4;
+		};
+		4111C1F50503900F00000102 = {
+			children = (
+				4111C1F60503900F00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERDDeleteButton.wo;
+			path = "";
+			refType = 2;
+		};
+		4111C1F60503900F00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDDeleteButton.wo;
+			refType = 4;
+		};
+		4111C1FB0503900F00000102 = {
+			fileRef = 4111C1F30503900F00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111C1FC0503900F00000102 = {
+			fileRef = 4111C1F40503900F00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111C1FD0503900F00000102 = {
+			fileRef = 4111C1F50503900F00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111C2440503927100000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDActionButton.java;
+			path = er/directtoweb/ERDActionButton.java;
+			refType = 4;
+		};
+		4111C24C0503927100000102 = {
+			fileRef = 4111C2440503927100000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4111C2560503948800000102 = {
+			children = (
+				4111C2440503927100000102,
+				4111C1F20503900F00000102,
+				F6E7967102C877AF01AD0D07,
+				9405BE5403C9FC9600CF0E7D,
+				F6E7964C02C877AF01AD0D07,
+				41B8F3EE0503CAFE00000102,
+			);
+			isa = PBXGroup;
+			name = ActionButtons;
+			path = "";
+			refType = 4;
+		};
 		4119063104EFBC3000A88C3C = {
 			children = (
 				4119063204EFBC3000A88C3C,
@@ -123,6 +411,65 @@
 			settings = {
 			};
 		};
+		412490EA0504123C00000102 = {
+			children = (
+				412490EB0504123C00000102,
+				412490EC0504123C00000102,
+				412490ED0504123C00000102,
+			);
+			isa = PBXGroup;
+			name = ERDBannerComponent;
+			path = "";
+			refType = 2;
+		};
+		412490EB0504123C00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDBannerComponent.api;
+			path = Components/ERDBannerComponent.api;
+			refType = 4;
+		};
+		412490EC0504123C00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDBannerComponent.java;
+			path = Sources/er/directtoweb/ERDBannerComponent.java;
+			refType = 4;
+		};
+		412490ED0504123C00000102 = {
+			children = (
+				412490EE0504123C00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERDBannerComponent.wo;
+			path = "";
+			refType = 4;
+		};
+		412490EE0504123C00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDBannerComponent.wo;
+			refType = 4;
+		};
+		412490F30504123C00000102 = {
+			fileRef = 412490EB0504123C00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		412490F40504123C00000102 = {
+			fileRef = 412490EC0504123C00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		412490F50504123C00000102 = {
+			fileRef = 412490ED0504123C00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		418CC2E8044306F500AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -132,6 +479,150 @@
 		};
 		418CC2E9044306F500AD0D07 = {
 			fileRef = 418CC2E8044306F500AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F3EE0503CAFE00000102 = {
+			children = (
+				41B8F3EF0503CAFE00000102,
+				41B8F3F00503CAFE00000102,
+				41B8F3F10503CAFE00000102,
+			);
+			isa = PBXGroup;
+			name = ERDSelectButton;
+			path = "";
+			refType = 2;
+		};
+		41B8F3EF0503CAFE00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDSelectButton.api;
+			path = Components/ERDSelectButton.api;
+			refType = 4;
+		};
+		41B8F3F00503CAFE00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDSelectButton.java;
+			path = Sources/er/directtoweb/ERDSelectButton.java;
+			refType = 4;
+		};
+		41B8F3F10503CAFE00000102 = {
+			children = (
+				41B8F3F20503CAFE00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERDSelectButton.wo;
+			path = "";
+			refType = 4;
+		};
+		41B8F3F20503CAFE00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDSelectButton.wo;
+			refType = 4;
+		};
+		41B8F3F70503CAFE00000102 = {
+			fileRef = 41B8F3EF0503CAFE00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F3F80503CAFE00000102 = {
+			fileRef = 41B8F3F00503CAFE00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F3F90503CAFE00000102 = {
+			fileRef = 41B8F3F10503CAFE00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F46E0503D9E900000102 = {
+			children = (
+				41B8F46F0503D9E900000102,
+				41B8F4700503D9E900000102,
+				41B8F4710503D9E900000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryEntitiesPageTemplate;
+			path = "";
+			refType = 2;
+		};
+		41B8F46F0503D9E900000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WQueryEntitiesPageTemplate.api;
+			path = Components/ERD2WQueryEntitiesPageTemplate.api;
+			refType = 4;
+		};
+		41B8F4700503D9E900000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WQueryEntitiesPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WQueryEntitiesPageTemplate.java;
+			refType = 4;
+		};
+		41B8F4710503D9E900000102 = {
+			children = (
+				41B8F4720503D9E900000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryEntitiesPageTemplate.wo;
+			path = "";
+			refType = 4;
+		};
+		41B8F4720503D9E900000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryEntitiesPageTemplate.wo;
+			refType = 4;
+		};
+		41B8F4770503D9EA00000102 = {
+			fileRef = 41B8F46F0503D9E900000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F4780503D9EA00000102 = {
+			fileRef = 41B8F4700503D9E900000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F4790503D9EA00000102 = {
+			fileRef = 41B8F4710503D9E900000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F4BC0503E12500000102 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WQueryEntitiesPage.java;
+			path = er/directtoweb/ERD2WQueryEntitiesPage.java;
+			refType = 4;
+		};
+		41B8F4BD0503E12500000102 = {
+			fileRef = 41B8F4BC0503E12500000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41B8F7340503FC3500000102 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDDefaultActionAssignment.java;
+			path = er/directtoweb/ERDDefaultActionAssignment.java;
+			refType = 4;
+		};
+		41B8F7350503FC3500000102 = {
+			fileRef = 41B8F7340503FC3500000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -248,6 +739,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDInspectButton;
+			path = "";
 			refType = 4;
 		};
 		9405BE5503C9FC9600CF0E7D = {
@@ -2006,14 +2498,16 @@
 		F542066202C467DF01000102 = {
 			children = (
 				F5E95221038C5ACB01CF0E76,
+				F6E7966902C877AF01AD0D07,
 				F6E7963602C877AF01AD0D07,
 				F6E7963A02C877AF01AD0D07,
 				F6E7963B02C877AF01AD0D07,
 				F6E7964102C877AF01AD0D07,
 				F6E7964202C877AF01AD0D07,
 				F6E7964302C877AF01AD0D07,
+				4111C2560503948800000102,
+				4111BB7D05037E5A00000102,
 				F6E7965402C877AF01AD0D07,
-				F6E7966902C877AF01AD0D07,
 				F6E7966A02C877AF01AD0D07,
 				F6E7967D02C877AF01AD0D07,
 				F6E796A502C877AF01AD0D07,
@@ -8194,6 +8688,20 @@
 				4119063C04EFBC3000A88C3C,
 				411906A604EFC02A00A88C3C,
 				411906A804EFC02A00A88C3C,
+				4111BC3F0503812700000102,
+				4111BC410503812700000102,
+				4111BC570503814D00000102,
+				4111BC590503814D00000102,
+				4111BC6B0503816A00000102,
+				4111BC6D0503816A00000102,
+				4111C1FB0503900F00000102,
+				4111C1FD0503900F00000102,
+				41B8F3F70503CAFE00000102,
+				41B8F3F90503CAFE00000102,
+				41B8F4770503D9EA00000102,
+				41B8F4790503D9EA00000102,
+				412490F30504123C00000102,
+				412490F50504123C00000102,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8413,6 +8921,17 @@
 				4119063B04EFBC3000A88C3C,
 				411906A704EFC02A00A88C3C,
 				41E12C8E0501CA0A00000102,
+				4111BB8705037E5A00000102,
+				4111BC400503812700000102,
+				4111BC580503814D00000102,
+				4111BC6C0503816A00000102,
+				4111C1FC0503900F00000102,
+				4111C24C0503927100000102,
+				41B8F3F80503CAFE00000102,
+				41B8F4780503D9EA00000102,
+				41B8F4BD0503E12500000102,
+				41B8F7350503FC3500000102,
+				412490F40504123C00000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8880,13 +9399,14 @@
 				F54206A902C467E001000102,
 				F54206AD02C467E001000102,
 				F54206AF02C467E001000102,
+				41B8F4BC0503E12500000102,
 				F54206B602C467E001000102,
 				F54206B802C467E001000102,
 				F54206BD02C467E001000102,
 				F54206C002C467E001000102,
 			);
 			isa = PBXGroup;
-			name = "D2W Pages";
+			name = Pages;
 			refType = 4;
 		};
 		F5E95222038C5BBC01CF0E76 = {
@@ -9070,6 +9590,7 @@
 				F54206C502C467E001000102,
 				F54206C902C467E001000102,
 				F54206D202C467E001000102,
+				41B8F7340503FC3500000102,
 				F54206D402C467E001000102,
 				F54206D502C467E001000102,
 				F54206D602C467E001000102,
@@ -9097,7 +9618,7 @@
 				F686D4E4033285420FCF0E72,
 			);
 			isa = PBXGroup;
-			name = "D2W Assignments";
+			name = Assignments;
 			refType = 4;
 		};
 		F6E7963702C877AF01AD0D07 = {
@@ -9151,7 +9672,7 @@
 				F639B95F02EF33CE0FCF0E72,
 			);
 			isa = PBXGroup;
-			name = "D2W Base Additions";
+			name = "Base Additions";
 			refType = 4;
 		};
 		F6E7963B02C877AF01AD0D07 = {
@@ -9167,7 +9688,7 @@
 				F581683C02E0070601000102,
 			);
 			isa = PBXGroup;
-			name = "D2W Delegates";
+			name = Delegates;
 			refType = 4;
 		};
 		F6E7963C02C877AF01AD0D07 = {
@@ -9230,7 +9751,7 @@
 				F6E7964002C877AF01AD0D07,
 			);
 			isa = PBXGroup;
-			name = "D2W Embedded Components";
+			name = "Embedded Components";
 			refType = 4;
 		};
 		F6E7964202C877AF01AD0D07 = {
@@ -9250,7 +9771,7 @@
 				F542071D02C467E001000102,
 			);
 			isa = PBXGroup;
-			name = "D2W Interfaces";
+			name = Interfaces;
 			refType = 4;
 		};
 		F6E7964302C877AF01AD0D07 = {
@@ -9261,7 +9782,7 @@
 				F57E9BF402E3398401CF0E76,
 			);
 			isa = PBXGroup;
-			name = "D2W Qualifiers";
+			name = Qualifiers;
 			refType = 4;
 		};
 		F6E7964402C877AF01AD0D07 = {
@@ -9352,6 +9873,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDPrinterButton;
+			path = "";
 			refType = 4;
 		};
 		F6E7964D02C877AF01AD0D07 = {
@@ -9427,15 +9949,13 @@
 		F6E7965402C877AF01AD0D07 = {
 			children = (
 				F6E7964402C877AF01AD0D07,
+				412490EA0504123C00000102,
 				F6E7964502C877AF01AD0D07,
 				F6E7964602C877AF01AD0D07,
 				F6E7964702C877AF01AD0D07,
 				F6E7964802C877AF01AD0D07,
-				F6E7967102C877AF01AD0D07,
 				F6E7964902C877AF01AD0D07,
 				F6E7964B02C877AF01AD0D07,
-				9405BE5403C9FC9600CF0E7D,
-				F6E7964C02C877AF01AD0D07,
 				F6E7964E02C877AF01AD0D07,
 				F6E7964F02C877AF01AD0D07,
 				F6E7965002C877AF01AD0D07,
@@ -9446,7 +9966,7 @@
 				F6E7965302C877AF01AD0D07,
 			);
 			isa = PBXGroup;
-			name = "D2W Template Piece Components";
+			name = "Template Piece Components";
 			refType = 4;
 		};
 		F6E7965502C877AF01AD0D07 = {
@@ -9669,6 +10189,7 @@
 				F6E7965F02C877AF01AD0D07,
 				F6E7966002C877AF01AD0D07,
 				F6E7966102C877AF01AD0D07,
+				41B8F46E0503D9E900000102,
 				F6E7966202C877AF01AD0D07,
 				F6E7966302C877AF01AD0D07,
 				F6E7966402C877AF01AD0D07,
@@ -9678,7 +10199,7 @@
 				F6E7966802C877AF01AD0D07,
 			);
 			isa = PBXGroup;
-			name = "D2W Templates";
+			name = "Page Templates";
 			refType = 4;
 		};
 		F6E7966A02C877AF01AD0D07 = {
@@ -9901,7 +10422,7 @@
 				F5E95226038C5C3801CF0E76,
 			);
 			isa = PBXGroup;
-			name = "Property Level Custom WOComponents";
+			name = "Property Level Components";
 			refType = 4;
 		};
 		F6E7967E02C877AF01AD0D07 = {
