@@ -2276,6 +2276,18 @@
 			settings = {
 			};
 		};
+		F58FAD930289731001257492 = {
+			isa = PBXFileReference;
+			name = Japanese;
+			path = Japanese.lproj/ValidationTemplate.strings;
+			refType = 4;
+		};
+		F58FAD940289740901257492 = {
+			isa = PBXFileReference;
+			name = Japanese;
+			path = Japanese.lproj/Localizable.strings;
+			refType = 4;
+		};
 		F597C18B026376E601000102 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
@@ -7096,6 +7108,7 @@
 			children = (
 				F597C18B026376E601000102,
 				F641B2F7026AE126014E589E,
+				F58FAD940289740901257492,
 			);
 			isa = PBXVariantGroup;
 			name = Localizable.strings;
@@ -7118,6 +7131,7 @@
 			children = (
 				F604FCA3025B37CD01AD0D07,
 				F641B2FA026AE203014E589E,
+				F58FAD930289731001257492,
 			);
 			isa = PBXVariantGroup;
 			name = ValidationTemplate.strings;
