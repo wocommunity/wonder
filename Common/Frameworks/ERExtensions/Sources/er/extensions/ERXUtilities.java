@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import com.webobjects.jdbcadaptor.*;
 import java.util.Enumeration;
 import java.util.TimeZone;
 import java.io.*;
