@@ -34,6 +34,9 @@ public class ERXProperties {
 
     /** WebObjects version number as string */
     private static String _webObjectsVersion;
+    
+    /** WebObjects version number as double */ 
+    private static double _webObjectsVersionDouble; 
 
     /** 
      * Puts handy properties such as <code>com.webobjects.version</code> 
@@ -71,15 +74,16 @@ public class ERXProperties {
     }
 
     public static double webObjectsVersionAsDouble() {
-        String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
-        double woVersion = 0.0d;
-        try {
-            woVersion = Double.parseDouble(woVersionString);
-        } catch (NumberFormatException ex) {
-            log.error("An exception occurred while parsing webObjectVersion " + woVersionString 
-                + " as a double value: " + ex.getClass().getName() + " " + ex.getMessage());
+        if (_webObjectsVersionDouble == 0.0d) {
+            String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
+            try {
+                _webObjectsVersionDouble = Double.parseDouble(woVersionString);
+            } catch (NumberFormatException ex) {
+                log.error("An exception occurred while parsing webObjectVersion " + woVersionString 
+                    + " as a double value: " + ex.getClass().getName() + " " + ex.getMessage());
+            }
         }
-        return woVersion;
+        return _webObjectsVersionDouble;
     }
 
     /**
