@@ -6,14 +6,12 @@ RadioButton1: WORadioButton {
 	name = radioBoxGroupName;
 	selection = radioValue;
 	value = date;
-	WODebug = false;
 }
 
 RadioButton2: WORadioButton {
 	name = radioBoxGroupName;
 	selection = radioValue;
 	value = empty;
-	WODebug = false;
 }
 
 TextField1: WOTextField {

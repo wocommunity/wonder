@@ -61,10 +61,10 @@ public class ERDQueryDateRangeJavascript extends WOComponent {
                 if (components.count() == 3) {
                     String monthString = (String)components.objectAtIndex(0);
                     if (monthString.length() == 1)
-                        components.replaceObjectAtIndex(0, "0" + monthString);
+                        components.replaceObjectAtIndex("0" + monthString, 0);
                     String dayString = (String)components.objectAtIndex(1);
                     if (dayString.length() == 1)
-                        components.replaceObjectAtIndex(1, "0" +dayString);
+                        components.replaceObjectAtIndex("0" +dayString, 1);
                     String yearString = (String)components.objectAtIndex(2);
                     //String yearString = dateString.substring(dateString.lastIndexOf("/")+1, dateString.length());
                     String modifiedDateString = components.componentsJoinedByString("/");

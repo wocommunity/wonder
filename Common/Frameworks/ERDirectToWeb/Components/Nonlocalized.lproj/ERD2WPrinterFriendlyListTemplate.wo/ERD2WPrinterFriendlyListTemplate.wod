@@ -27,7 +27,7 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-ERPrinterButton: ERXPrinterButton {
+ERPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	displayGroup = displayGroup;

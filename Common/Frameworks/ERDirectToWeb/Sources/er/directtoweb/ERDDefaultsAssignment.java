@@ -29,7 +29,7 @@ public class ERDDefaultsAssignment extends ERDAssignment {
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "smartAttribute"});
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
     
-    public String keyForMethodLookup(D2WContext c) { return (String)value(c); }
+    public String keyForMethodLookup(D2WContext c) { return (String)value(); }
 
     public int attributeWidthAsInt(D2WContext c) {
         EOAttribute a = (EOAttribute)c.valueForKey("smartAttribute");

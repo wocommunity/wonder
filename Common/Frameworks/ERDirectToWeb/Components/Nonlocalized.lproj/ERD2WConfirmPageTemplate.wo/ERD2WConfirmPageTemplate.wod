@@ -23,7 +23,7 @@ ERConfirmMessage1: ERXConfirmMessage {
 	confirmMessageTextfieldMaxlength = d2wContext.confirmMessageTextfieldMaxlength;
 }
 
-ERD2WDebuggingHelp1: ERD2WDebuggingHelp {
+ERD2WDebuggingHelp1: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

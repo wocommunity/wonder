@@ -21,13 +21,13 @@ String1: WOString {
 	value = listLabel;
 }
 
-SubmitButton1: WOSubmitButton { WODebug=false;
+SubmitButton1: WOSubmitButton {
 	action = cancel;
 	onSubmit = "return false;";
 	value = "Cancel";
 }
 
-SubmitButton2: WOSubmitButton { WODebug=false;
+SubmitButton2: WOSubmitButton {
 	action = submit;
 }
 

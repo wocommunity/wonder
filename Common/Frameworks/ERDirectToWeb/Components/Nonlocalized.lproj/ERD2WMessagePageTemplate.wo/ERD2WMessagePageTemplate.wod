@@ -15,7 +15,7 @@ HasExplanationComponent: ERXNonNullConditional {
 	condition = d2wContext.explanationComponentName;
 }
 
-Help: ERD2WDebuggingHelp {
+Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
