@@ -19,7 +19,7 @@ To be used in components with:
 TODO: FileObserver, Session integration, chaining of Localizers, API to add files and frameworks
 */
 
-public class ERXLocalizer implements NSKeyValueCoding {
+public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
 
     // these will eventually become defaults
@@ -27,6 +27,7 @@ public class ERXLocalizer implements NSKeyValueCoding {
     static NSArray frameworkSearchPath = new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"});
     static NSArray availableLanguages = new NSArray(new Object [] {"English", "German"});
     static String defaultLanguage = "English";
+    static String defaultEncoding = "UTF-16"; // japanese users should fix this...
 
 
     static NSMutableDictionary localizers = new NSMutableDictionary();
@@ -74,7 +75,13 @@ public class ERXLocalizer implements NSKeyValueCoding {
     public Object valueForKey(String key) {
         return localizedStringForKey(key);
     }
+    public Object valueForKeyPath(String key) {
+        return localizedStringForKey(key);
+    }
     public void takeValueForKey(Object value, String key) {
+        cache.setObjectForKey(value, key);
+    }
+    public void takeValueForKeyPath(Object value, String key) {
         cache.setObjectForKey(value, key);
     }
     
@@ -96,10 +103,15 @@ public class ERXLocalizer implements NSKeyValueCoding {
             Enumeration fr = frameworkSearchPath.reverseObjectEnumerator();
             while(fr.hasMoreElements()) {
                 String framework = (String)fr.nextElement();
+                
                 String path = rm.pathForResourceNamed(fileName, framework, languages);
                 if(path != null) {
-                    NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringWithContentsOfFile(path));
-                    cache.addEntriesFromDictionary(dict);
+                    try {
+                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
+                        cache.addEntriesFromDictionary(dict);
+                    } catch(Exception ex) {
+                        cat.warn("Exception loading: " + fileName + " - " + framework + " - " + languages + ":" + ex);
+                    }
                 }
             }
         }
@@ -133,4 +145,7 @@ public class ERXLocalizer implements NSKeyValueCoding {
         String template = localizedStringForKey(key);
         return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
     }
+
+    public String toString() {return "<ERXLocalizer "+language+">";}
+    public String description() {return "<ERXLocalizer "+language+"=" +cache + ";>";}
 }

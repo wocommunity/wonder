@@ -681,7 +681,10 @@ public class ERXExtensions {
     public static String stringFromFile(File f) throws IOException {
         return new String(bytesFromFile(f));
     }
-
+    public static String stringFromFile(File f, String encoding) throws IOException {
+        return new String(bytesFromFile(f), encoding);
+    }
+    
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         long lastModified = 0;
         String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
@@ -705,7 +708,11 @@ public class ERXExtensions {
         if (filePath!=null) {
             File file = new File(filePath);
             try {
-                result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
+                try {
+                    result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
+                } catch (IllegalArgumentException iae) {
+                    result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
+                }
             } catch (IOException ioe) {
                 cat().error("ConfigurationManager: Error reading "+filePath);
             }
