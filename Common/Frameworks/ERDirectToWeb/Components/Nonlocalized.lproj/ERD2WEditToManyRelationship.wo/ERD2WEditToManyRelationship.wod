@@ -22,6 +22,7 @@ EditToManyRelationship: ERXToManyRelationship {
 	size = d2wContext.size;
 	sourceEntityName = d2wContext.entity.name;
 	sourceObject = object;
+        width = d2wContext.itemWidth;
 	uiStyle = d2wContext.toManyUIStyle;
 	possibleChoices = restrictedChoiceList;
 	goingVertically = d2wContext.goingVertically;
