@@ -67,7 +67,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     
     protected NSTimestampFormatter dateFormatter() {
     	if(_dateFormatter == null) {
-    		_dateFormatter = new NSTimestampFormatter(formatter());
+    		_dateFormatter = ERXTimestampFormatter.dateFormatterForPattern(formatter());
     	}
     	return _dateFormatter;
     }
@@ -77,7 +77,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
 			_formatter = (String)valueForBinding("formatter");
 		}
 		if(_formatter == null || _formatter.length() == 0) {
-			_formatter = "%m/%d/%Y";
+			_formatter = ERXTimestampFormatter.DEFAULT_PATTERN;
 		}
 		return _formatter;
 	}
