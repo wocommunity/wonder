@@ -86,7 +86,10 @@ public class ERXLog4JConfiguration extends WOComponent {
     
     public WOComponent filter() { return null; }
     public WOComponent resetFilter() { _filterString=null; return null; }
-    public WOComponent update() { return null; }
+    public WOComponent update() {
+        ERXExtensions.configureAdaptorContext();
+        return null;
+    }
     public WOComponent showAll() { showAll=true; return null; }
     public WOComponent showExplicitlySet() { showAll=false; return null; }
     public WOComponent addLogger() {
