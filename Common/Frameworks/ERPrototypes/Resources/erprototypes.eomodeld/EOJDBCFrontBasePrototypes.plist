@@ -68,6 +68,16 @@
             valueType = i; 
         }, 
         {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = INTEGER; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueFactoryMethodName = valueOf; 
+            valueType = c; 
+        }, 
+        {
             columnName = ""; 
             externalType = INTEGER; 
             name = intNumber; 
@@ -219,7 +229,8 @@
         blob, 
         mutableArray, 
         mutableDictionary, 
-        boolean
+        boolean, 
+        intBoolean
     ); 
     externalName = eofrontbaseprototypes; 
     fetchSpecificationDictionary = {}; 

@@ -68,6 +68,16 @@
             valueType = i; 
         }, 
         {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = NUMBER; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueFactoryMethodName = valueOf; 
+            valueType = c; 
+        }, 
+        {
             columnName = ""; 
             externalType = NUMBER; 
             name = intNumber; 
@@ -197,7 +207,8 @@
         mutableArray, 
         mutableDictionary, 
         blob, 
-        boolean
+        boolean, 
+        intBoolean
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -222,7 +233,8 @@
         mutableArray, 
         mutableDictionary, 
         blob, 
-        boolean
+        boolean, 
+        intBoolean
     ); 
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 
