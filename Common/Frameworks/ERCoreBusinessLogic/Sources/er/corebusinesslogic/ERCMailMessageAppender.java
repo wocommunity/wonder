@@ -13,6 +13,7 @@ import org.apache.log4j.*;
 import org.apache.log4j.spi.*;
 import org.apache.log4j.helpers.LogLog;
 import er.extensions.*;
+import java.util.Enumeration;
 
 /**
  * Basic log4j Mail Message Appender<br>
@@ -69,6 +70,8 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
     /** holds the host name */
     protected String hostName;
 
+    protected String formatAsError;
+    
     /** holds the flag if all the conditions for logging have been checked */
     protected boolean conditionsChecked = false;
     
@@ -256,6 +259,15 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
     public void setDomainName(String domainName) {
         this.domainName = domainName;
     }
+
+    public String formatAsError() {
+        return formatAsError;
+    }
+
+    public void setFormatAsError(String value) {
+        formatAsError = value;
+    }
+    
     
     /**
      * We want the ability to warn if we are going to be
@@ -342,14 +354,50 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
                 title =  event.getLevel().toString() + ": " + WOApplication.application().name() + ": " +
                 event.getRenderedMessage();
             }
-            
-            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
-                                                          toAddressesAsArray(),
-                                                          ccAddressesAsArray(),
-                                                          bccAddressesAsArray(),
-                                                          title,
-                                                          this.layout.format(event),
-                                                          editingContext());
+            ERCMailMessage message = null;
+            if (ERXValueUtilities.booleanValue(formatAsError())) {
+                WOContext currentContext = (WOContext)ERXThreadStorage.valueForKey("wocontext");
+                NSDictionary extraInformation = null;
+                if (currentContext != null)
+                    extraInformation = ERXApplication.erxApplication().extraInformationForExceptionInContext(null, currentContext);
+                
+                ERCMailableExceptionPage standardExceptionPage = (ERCMailableExceptionPage)ERXApplication.instantiatePage("ERCMailableExceptionPage");
+
+                standardExceptionPage.setErrorMessage(title);
+                standardExceptionPage.setActor(ERCoreBusinessLogic.sharedInstance().actor());
+                standardExceptionPage.setExtraInfo(extraInformation);
+
+                NSArray parts = NSArray.componentsSeparatedByString(ERXUtilities.stackTrace(), "\n\t");
+                NSMutableArray subParts = new NSMutableArray();
+                boolean first = true;
+                for (Enumeration e = parts.reverseObjectEnumerator(); e.hasMoreElements();) {
+                    String element = (String)e.nextElement();
+                    if (element.indexOf("org.apache.log4j") != -1)
+                        break;
+                    if (!first)
+                        subParts.insertObjectAtIndex(element, 0);
+                    else
+                        first = false;
+                }                
+
+                standardExceptionPage.setReasonLines(subParts);
+                standardExceptionPage.setFormattedMessage(this.layout.format(event));
+                message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
+                                                              toAddressesAsArray(),
+                                                              toAddressesAsArray(),
+                                                              bccAddressesAsArray(),
+                                                              title,
+                                                              standardExceptionPage.generateResponse().contentString(),
+                                                              editingContext());
+            } else {
+                message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
+                                                                                       toAddressesAsArray(),
+                                                                                       toAddressesAsArray(),
+                                                                                       bccAddressesAsArray(),
+                                                                                       title,
+                                                                                       this.layout.format(event),
+                                                                                       editingContext());                
+            }
             if (getReplyTo() != null) {
                 message.setReplyToAddress(getReplyTo());
             }
