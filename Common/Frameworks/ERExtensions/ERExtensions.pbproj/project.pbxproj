@@ -467,6 +467,7 @@
 				509531170512A4CF00CF0E76,
 				50F5D7F4051B72BE00CF0E76,
 				50F5D7F6051B754B00CF0E76,
+				50EFA7D2055B3B3B000994FB,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1294,6 +1295,19 @@
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXImage.wo;
 			refType = 2;
+		};
+		50EFA7D1055B3B3B000994FB = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXGracefulShutdown.java;
+			path = er/extensions/ERXGracefulShutdown.java;
+			refType = 4;
+		};
+		50EFA7D2055B3B3B000994FB = {
+			fileRef = 50EFA7D1055B3B3B000994FB;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		50F5D7F3051B72BE00CF0E76 = {
 			fileEncoding = 30;
@@ -7474,6 +7488,7 @@
 				F64DCF6102EF3A4001257492,
 				F59C578902C4565701000102,
 				F698E7CE030C6F6B01257492,
+				50EFA7D1055B3B3B000994FB,
 				F59C57C002C4565701000102,
 				F59C57C202C4565701000102,
 				50F5D7F5051B754B00CF0E76,

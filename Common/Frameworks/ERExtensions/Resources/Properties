@@ -8,6 +8,11 @@
 # Remove the leading '#' to uncomment a property
 
 #########################################################################
+# Signal Handling
+#########################################################################
+er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM)
+
+#########################################################################
 # Compiler Proxy
 #########################################################################
 er.extensions.ERXCompilerProxyEnabled = false

@@ -25,7 +25,7 @@ import org.apache.log4j.*;
  *  and more context information when handling exceptions.
  */
 
-public abstract class ERXApplication extends WOApplication {
+public abstract class ERXApplication extends WOApplication implements ERXGracefulShutdown.GracefulApplication {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);
@@ -46,7 +46,7 @@ public abstract class ERXApplication extends WOApplication {
      */
     public static void main(String argv[], Class applicationClass) {
         _wasERXApplicationMainInvoked = true;
-        ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
+        ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);        
         WOApplication.main(argv, applicationClass);
     }
 
@@ -126,7 +126,9 @@ public abstract class ERXApplication extends WOApplication {
                 _sessions = new HashMap();
             }            
         }
-        
+        if (ERXGracefulShutdown.isEnabled()) {
+            ERXGracefulShutdown.installHandler();
+        }
     }
 
     /**
@@ -347,6 +349,13 @@ public abstract class ERXApplication extends WOApplication {
      */
     public String rawName() { return super.name(); }
 
+    /**
+     * Override to perform any last minute cleanup before the application terminates.
+     */
+    public void gracefulTerminate() {
+        terminate();
+    }
+    
     /**
      *  Puts together a dictionary with a bunch of useful information relative to the current state when the exception
      *  occurred. Potentially added information:<br/>
