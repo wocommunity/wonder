@@ -14,26 +14,38 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import java.util.*;
 import java.io.*;
-import java.lang.*;
 import er.extensions.*;
 
-// new caching scheme, plus log4j integration.
+/**
+ * Overhaul of the caching system.
+ */
 public class ERD2WModel extends D2WModel {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WModel.class);
+
+    /** logs rules being decoded */
     public static final ERXLogger ruleDecodeLog = ERXLogger.getERXLogger("er.directtoweb.rules.decode");
 
-    ///////////////////////////////////// Notification Titles /////////////////////////////////
+    /** main category for enabling or disabling tracing of rules */
+    public static final ERXLogger ruleTraceEnabledLog = ERXLogger.getERXLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
+
+    //	===========================================================================
+    //	Notification Title(s)
+    //	---------------------------------------------------------------------------    
+    
     // Register for this notification to have the hook in place to load non-d2wmodel based rules
     public static final String WillSortRules = "WillSortRules";
     public static final String ModelWillReset = "ModelWillReset";
+
+    /** null refernced used to represent null in the caching system */
+    private final static Object NULL_VALUE=new Object();
     
     private Hashtable _cache=new Hashtable(10000);
     private Hashtable _systemCache=new Hashtable(10000);
     private Hashtable _significantKeysPerKey=new Hashtable(500);
 
-        // put here the keys than can either provided as input or computed
+    // put here the keys than can either provided as input or computed
     // FIXME should add API from clients to add to this array
     static NSMutableArray BACKSTOP_KEYS=new NSMutableArray(new Object[] { "pageConfiguration", "entity", "task" });
     static {
@@ -41,6 +53,10 @@ public class ERD2WModel extends D2WModel {
         D2WModel.setDefaultModel(new ERD2WModel(NSArray.EmptyArray));
     }
 
+    /**
+     * Gets the default D2W model cast as an ERD2WModel.
+     * @return the default ERD2Model
+     */
     public static ERD2WModel erDefaultModel() { return (ERD2WModel)D2WModel.defaultModel(); }
 
     private final static EOSortOrdering _prioritySortOrdering=new EOSortOrdering("priority",EOSortOrdering.CompareDescending);
@@ -53,6 +69,11 @@ public class ERD2WModel extends D2WModel {
     }
     private final static NSArray _ruleSortOrderingKeyVector=ruleSortOrderingKeyArray();
 
+    /**
+     * Main constructor. Builds a model for a given
+     * set of rules.
+     * @param rules array of rules
+     */
     protected ERD2WModel(NSArray rules) {
         super(rules);
     }
@@ -64,9 +85,7 @@ public class ERD2WModel extends D2WModel {
         log.debug("posted WillSortRules.");
         // We don't want dynamically loaded rules to cause rapid-turnaround to not work.
         setDirty(false);
-            //uniqueRuleAssignments();
-            //uniqueQualifiers(rules());
-            super.sortRules();
+        super.sortRules();
         log.debug("called super sortRules.");
         /*
          the following sort call was to attempt to make assistant generated files more CVS compatible
@@ -80,13 +99,24 @@ public class ERD2WModel extends D2WModel {
     }
     
     // These are public cover methods for protected methods.
+    // DELETEME: These are no longer needed.
     public NSArray publicRules() { return rules(); }
     public void publicAddRule(Rule rule) { addRule(rule); }
     public void publicAddRules(NSArray rules) { addRules(rules); }
     public void publicRemoveRule(Rule rule) { removeRule(rule); }
-    
-    private final static Object NULL_VALUE=new Object();
 
+    public NSArray rules() {
+        return super.rules();
+    }
+
+    public void addRule(Rule rule) {
+        super.addRule(rule);
+    }
+
+    public void removeRule(Rule rule) {
+        super.removeRule(rule);
+    }
+    
     protected String descriptionForRuleSet(NSArray set) {
         StringBuffer buffer = new StringBuffer();
         for (Enumeration e = set.objectEnumerator(); e.hasMoreElements();)
@@ -104,8 +134,7 @@ public class ERD2WModel extends D2WModel {
     }
 
     protected Hashtable _filePathRuleTraceCache;
-    protected void addRules(NSArray rules) {
-        //uniqueRuleAssignments(rules);
+    public void addRules(NSArray rules) {
         super.addRules(rules);
         if (!WOApplication.application().isCachingEnabled() && currentFile() != null) {
             String path=currentFile().getAbsolutePath();
@@ -118,15 +147,10 @@ public class ERD2WModel extends D2WModel {
                 _filePathRuleTraceCache = new Hashtable();
             for (Enumeration e = rules.objectEnumerator(); e.hasMoreElements();) {
                 _filePathRuleTraceCache.put(e.nextElement(), filePath);
-               // System.out.println("Setting for for filePath: " + filePath);
             }
         }
     }
     
-    protected static ERD2WModel _defaultModel;
-    public static ERD2WModel defaultERModel() { return _defaultModel; }
-
-    public static final ERXLogger ruleTraceEnabledLog = ERXLogger.getERXLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
     protected Object fireRuleForKeyPathInContext(String keyPath, D2WContext context) {
         String[] significantKeys=(String[])_significantKeysPerKey.get(keyPath);
         if (significantKeys==null) return null;
@@ -178,8 +202,6 @@ public class ERD2WModel extends D2WModel {
         if (result != null && result instanceof ERDDelayedAssignment) {
             result=((ERDDelayedAssignment)result).fireNow(context);
         }
-        //Object resultPrint=(result instanceof EOEntity)? ((EOEntity)result).name() : result;
-        //System.out.println("DONE fireRuleForKeyPathInContext "+keyPath+" = "+resultPrint);
         return result;
     }
 
@@ -390,8 +412,8 @@ public class ERD2WModel extends D2WModel {
             }
         }
         super.mergeFile(modelFile);
-        //uniqueRuleAssignments();
         setCurrentFile(null);
+        // CHECKME: Don't think this is needed anymore
         ERXExtensions.forceGC(1);
     }
 
@@ -428,7 +450,8 @@ public class ERD2WModel extends D2WModel {
             //h = null;
             //if (uniquedRules > 0)
             //    ERXExtensions.forceGC(0);
-            if (log.isDebugEnabled()) log.debug("Finished Assignment uniquing, got rid of " + uniquedRules + " duplicate assignment(s)");
+            if (log.isDebugEnabled())
+                log.debug("Finished Assignment uniquing, got rid of " + uniquedRules + " duplicate assignment(s)");
         }
     }
 
