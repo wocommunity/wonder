@@ -43,7 +43,7 @@ public class ERD2WQueryPage extends D2WQueryPage {
 
     public WOComponent queryAction() {
         if(nextPageDelegate() == null) {
-            if(ERXUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
+            if(ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
                 showResults = true;
                 return null;
             }else{
