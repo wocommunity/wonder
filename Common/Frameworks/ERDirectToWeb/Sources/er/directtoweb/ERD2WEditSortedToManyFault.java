@@ -52,7 +52,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
 		 if(showIndex()){
 			 Integer index = (Integer)browserItem.valueForKey(indexKey());
 			 if(index != null){
-				 result = (index.intValue()+1)+". "+result;
+				 result = index.intValue()+". "+result;
 			 }
 		 }
 		 return result;
