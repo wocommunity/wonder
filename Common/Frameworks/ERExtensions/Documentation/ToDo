@@ -1,17 +1,6 @@
 ToDo list:
 
 Things to Remove:
-ERXSuccess - Silly component that just has the string Sucess in it, no real value add.  Was used at NS for our ping action
-    to see if the apps were alive.
-ERXNoHelpAvailable - Another silly component, not sure why this one was put in extensions, simply displays a No Help Available 
-    message
-ERXRenameObjects - Pretty specific component, I don't think it will be used at all by any one.
-ERXLongResponsePage - This was before the days of WO 5 with the java version, not needed now that the java version is in 
-    WOExtensions
-ERXDisplayHTML - Silly component that just has a string in it with escapeHTML set to false, no real value add in my opinion.
-ERXCheckedIfEqual - Just an ERXEqualConditional with a checkbox from the JavaDirectToWeb framework in the conditional, I
-    don't see a value add here.
-ERXAddObjectWithName - Don't even have the WOComponent for this guy. Again pretty specific component that isn't very reusable.
 ERXKeyValueCoding - Not needed now with WO 5. The one extra utility method can be moved to a utility class.
 Either ERXAutoClosePage or ERXJSCloseWindow - These components do the exact same thing. Could rename one of them to:
     ERXJSAutoCloseWindow
