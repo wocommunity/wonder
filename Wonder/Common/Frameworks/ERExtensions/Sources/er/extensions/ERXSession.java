@@ -70,7 +70,10 @@ public class ERXSession extends WOSession {
     public void setLanguage(String language) {
         localizer = ERXLocalizer.localizerForLanguage(language);
     }
-
+    public String language() {
+        return localizer().language();
+    }
+    
     private static boolean registered = false;
     public static void registerNotifications() {
         if (!registered) {
