@@ -1,72 +1,37 @@
-DebugMarker: ERXDebugMarker {
+DebugMarker5: ERXDebugMarker {
 	object = item;
 }
 
-DebugMarker3: ERXDebugMarker {
-	object = item;
+ERXCollapsibleComponent2: ERXCollapsibleComponentContent {
+	openedLabel = labelForKey;
+	closedLabel = labelForKey;
+	condition = showInitially;
 }
 
-DebugMarker4: ERXDebugMarker {
-	object = item;
+Repetition5: WORepetition {
+	item = key;
+	list = keys;
 }
 
-Repetition1: WORepetition {
+Repetition6: WORepetition {
 	item = item;
-	list = object.updatedObjects;
+	list = objectsForKey;
 }
 
-Repetition3: WORepetition {
-	item = item;
-	list = object.deletedObjects;
+String15: WOString {
+	value = item;
 }
 
-Repetition4: WORepetition {
-	item = item;
-	list = object.insertedObjects;
-}
-
-String1: WOString {
-	value = item.description;
-}
-
-String10: WOString {
+String16: WOString {
 	value = item.entityName;
 }
 
-String11: WOString {
-	value = item.entityName;
-}
-
-String2: WOString {
-	value = item.changesFromCommitedSnapshot;
-}
-
-String3: WOString {
-	value = item.description;
+String17: WOString {
+	value = extraInfo;
 }
 
 String4: WOString {
 	value = object;
 	valueWhenEmpty = "<null>";
-}
-
-String5: WOString {
-	value = object.insertedObjects.count;
-}
-
-String6: WOString {
-	value = object.updatedObjects.count;
-}
-
-String7: WOString {
-	value = object.deletedObjects.count;
-}
-
-String8: WOString {
-	value = item.entityName;
-}
-
-String9: WOString {
-	value = item.description;
 }
 
