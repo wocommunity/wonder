@@ -290,6 +290,8 @@ There are three ways to use this script:
     </target>
 
     <target name="global.application" depends="global.properties,global.compile" >
+	<!-- we delete left-overs from the Compiler Proxy here -->
+        <delete dir="${build.root}/${project.name}.woa/Contents/Resources/Java" quiet="true" />
 
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication" />
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false">
