@@ -4,15 +4,13 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.*;
-
-import org.apache.log4j.*;
+import er.extensions.ERXExceptionHolder;
+import org.apache.log4j.Category;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated
@@ -23,9 +21,9 @@ public class ERD2WCustomQueryComponentWithArgs extends ERDCustomQueryComponent i
     public ERD2WCustomQueryComponentWithArgs(WOContext context) {
         super(context);
     }
-    ///////////////////////////  log4j category  ///////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.components.D2WCustomQueryComponentWithArgs");
-    ////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////  log4j category  ////////////////////////////////
+    public final static Category cat = Category.getInstance(ERD2WCustomQueryComponentWithArgs.class);
+    
 /* FIXME -- super class has Dictionary as return type
     private String _extraBindings;
     public String extraBindings() {
