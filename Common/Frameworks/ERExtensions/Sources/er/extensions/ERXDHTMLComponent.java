@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import er.extensions.*;
 
 /** ERXDHTMLComponent covers a textarea with a DHTMLEdit control (IE,PC only)
   * It is pretty cool as it can be used as a replacement for WOText, since it works no matter is JS is enabled or not.
