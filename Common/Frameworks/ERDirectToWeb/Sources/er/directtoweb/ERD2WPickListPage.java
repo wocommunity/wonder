@@ -14,30 +14,38 @@ import com.webobjects.foundation.*;
 import er.extensions.*;
 import java.util.*;
 
+// FIXME: Need a formal protocol for cancel vs. selection.
 public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterface {
 
-    public ERD2WPickListPage(WOContext context) { super(context); }
-    /*
-     FIXME:
-     1/ we are missing a formal protocol for selectedObject
-     2/ this component uses a hidden trick:
-     - clicking on the select button uses next page delegate
-     - the cancel button uses the next page
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPickListPage.class);
 
-     */
-
-    public NSDictionary aBranch;
+    /** holds the selected objects */
     public NSMutableArray selectedObjects = new NSMutableArray();
+    
+    /**
+     * IE sometimes won't submit the form if it only has checkboxes, we
+     * bind this to a WOHiddenField.
+     */
     public String dummy;
 
-    public boolean hasForm() {
-        Object hasForm = d2wContext().valueForKey("hasForm");
-        return hasForm == null ? true : ((Integer)hasForm).intValue() != 0;
-    }
+    /** Caches if we are in single selection mode. */
+    public Boolean _singleSelection;
 
+    /**
+     * Public constructor.
+     * @param context current context
+     */
+    public ERD2WPickListPage(WOContext context) { super(context); }    
+
+    /**
+     * Determines if the cancel button should be shown.
+     * @return if we have a nextPage set
+     */
     public boolean showCancel() { return nextPage()!=null; }
 
     public boolean checked() { return selectedObjects.containsObject(object()); }
+    
     public void setChecked(boolean newChecked) {
         if (newChecked) {
             if (!selectedObjects.containsObject(object()))
@@ -53,17 +61,11 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
         for (Enumeration e=list.objectEnumerator();e.hasMoreElements();) { selectedObjects.addObject(e.nextElement()); }
         return null;
     }
+    
     public WOComponent unselectAll() {
         selectedObjects.removeAllObjects();
         return null;
     }
-
-    public boolean isEntityInspectable() {
-        Integer isEntityInspectable=(Integer)d2wContext().valueForKey("isEntityInspectable");
-        return isEntityReadOnly() && (isEntityInspectable!=null && isEntityInspectable.intValue()!=0);
-    }
-
-    public String branchName() { return (String)aBranch.valueForKey("branchName"); }
 
     public WOComponent printerFriendlyVersion() {
         D2WListPage result=(D2WListPage)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
@@ -74,11 +76,9 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
         return result;
     }
 
-
-    public Boolean _singleSelection;
     public boolean singleSelection() {
         if (_singleSelection==null) {
-            _singleSelection=ERXUtilities.booleanValue(d2wContext().valueForKey("singleSelection")) ? Boolean.TRUE : Boolean.FALSE;
+            _singleSelection = ERXValueUtilities.booleanValue(d2wContext().valueForKey("singleSelection")) ? Boolean.TRUE : Boolean.FALSE;
         }
         return _singleSelection.booleanValue();
     }
@@ -87,4 +87,54 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
         return singleSelection() ? "WORadioButton" : "WOCheckBox";
     }
 
+    //---------------- Branch Delegate Support --------------------//
+    /** holds the chosen branch */
+    protected NSDictionary _branch;
+
+    /**
+        * Cover method for getting the choosen branch.
+     * @return user choosen branch.
+     */
+    public NSDictionary branch() { return _branch; }
+
+    /**
+        * Sets the user choosen branch.
+     * @param branch choosen by user.
+     */
+    public void setBranch(NSDictionary branch) { _branch = branch; }
+
+    /**
+     * Implementation of the {@link ERDBranchDelegate ERDBranchDelegate}.
+     * Gets the user selected branch name.
+     * @return user selected branch name.
+     */
+    // ENHANCEME: Should be localized
+    public String branchName() { return (String)branch().valueForKey("branchName"); }
+
+    /**
+     * Calculates the branch choices for the current
+     * poage. This method is just a cover for calling
+     * the method <code>branchChoicesForContext</code>
+     * on the current {@link ERDBranchDelegate ERDBranchDelegate}.
+     * @return array of branch choices
+     */
+    public NSArray branchChoices() {
+        NSArray branchChoices = null;
+        if (nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface) {
+            branchChoices = ((ERDBranchDelegateInterface)nextPageDelegate()).branchChoicesForContext(d2wContext());
+        } else {
+            log.error("Attempting to call branchChoices on a page with a delegate: " + nextPageDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
+        }
+        return branchChoices;
+    }
+
+    /**
+     * Determines if this message page should display branch choices.
+     * @return if the current delegate supports branch choices.
+     */
+    public boolean hasBranchChoices() {
+        return nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface;
+    }
+    //---------------- End Branch Delegate Support --------------------//
+        
 }
