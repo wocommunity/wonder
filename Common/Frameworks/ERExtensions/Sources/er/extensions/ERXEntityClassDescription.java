@@ -65,7 +65,37 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     private static NSMutableArray _registeredModelNames = new NSMutableArray();
     private static NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
-
+    private static boolean unlockProblematicColumns = ERXUtilities.booleanValue(System.getProperty("er.extensions.ERXClassDescription.unlockProblematicColumns"));
+    
+    static void fixLockingForMysql(Object connectionString, EOEntity eoentity) {
+        String unlockedAttributes = "";
+        if(unlockProblematicColumns && connectionString != null && ((String)connectionString).startsWith("jdbc:mysql")) {
+            NSMutableArray newLockingAttributes = new NSMutableArray();
+            for (Enumeration e1 = eoentity.attributesUsedForLocking().objectEnumerator(); e1.hasMoreElements();) {
+                EOAttribute a = (EOAttribute)e1.nextElement();
+                boolean shouldUnlock = false;
+                if(a.className().indexOf("NSTimestamp") >= 0
+                   || a.externalType().equals("DOUBLE")
+                   || a.externalType().equals("FLOAT")
+                   ) {
+                    shouldUnlock = true;
+                }
+                if(shouldUnlock && eoentity.primaryKeyAttributes().containsObject(a)) {
+                    cat.warn("We would unlock a primary key attribute: " + a.name());
+                    shouldUnlock = false;
+                }
+                if(shouldUnlock)
+                    unlockedAttributes += a.name() +"  ";
+                else
+                    newLockingAttributes.addObject(a);
+            }
+            if(unlockedAttributes.length()> 0)
+                eoentity.setAttributesUsedForLocking(newLockingAttributes);
+        }
+        if(unlockedAttributes.length()> 0)
+            cat.info("The following attributes of " + eoentity.name() + " were unlocked: " + unlockedAttributes);
+    }
+    
     public static void registerDescriptionForEntitiesInModel(EOModel model) {
         if (!_registeredModelNames.containsObject(model.name())) {
             for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
@@ -87,6 +117,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 _entitiesForClass.setObjectForKey(array, eoentity.className());
                 //HACK ALERT: (ak) We work around classDescriptionForNewInstances() of EOEntity being broken here...
                 registerDescriptionForEntity(eoentity);
+                //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
+                fixLockingForMysql(model.connectionDictionary().valueForKey("URL"), eoentity);
             }
             _registeredModelNames.addObject(model.name());
         }
