@@ -164,16 +164,19 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         Object value=null;
         logDebugInfo();
         if (super.hasBinding(binding)) {
-            log.debug("super.hasBinding(binding) == true for binding "+binding);
+        		if (log.isDebugEnabled())
+        			log.debug("super.hasBinding(binding) == true for binding "+binding);
             value = originalValueForBinding(binding);
         } else if(d2wContextFromBindings() != null) {
-            log.debug("has d2wContext == true for binding "+binding);
+    			if (log.isDebugEnabled())
+    				log.debug("has d2wContext == true for binding "+binding);
             value = d2wContextValueForBinding(binding);
         } else {
             value = parentValueForBinding(binding);
         }
         if (value == null && binding != null && extraBindings() != null) {
-            log.debug("inside the extraBindings branch for binding "+binding);
+    			if (log.isDebugEnabled())
+    				log.debug("inside the extraBindings branch for binding "+binding);
             value = extraBindingsValueForBinding(binding);
         }
         if (log.isDebugEnabled()) {
