@@ -415,7 +415,6 @@
             comment = ""; 
             editors = (length, rows); 
             inspectionInformation = "Rich text edit component. Only really works for IE/Win, but displays a TEXT if on another browser."; 
-            isCustomComponent = yes; 
         }; 
         ERDDefaultCustomComponent = {
             editors = (); 
@@ -429,46 +428,36 @@
             comment = "needs to be localized"; 
             editors = (); 
             inspectionInformation = "Displays an image if it exists. (Image *data* is pulled from property value)"; 
-            isCustomComponent = yes; 
         }; 
         ERDDisplayMailTo = {
             comment = ""; 
             editors = (displayKey, showBrackets); 
             inspectionInformation = "A display mailto component with a number of bindings."; 
-            isCustomComponent = yes; 
         }; 
         ERDDisplayYearsMonths = {
             comment = "needs localization"; 
             editors = (); 
             inspectionInformation = "Displays a number as say 5 years 2 months."; 
-            isCustomComponent = yes; 
         }; 
         ERDEditButton = {
             comment = "needs to be more generic, for example having text instead of the edit button image"; 
             editors = (editConfigurationNameForEntity); 
             inspectionInformation = "Nice edit button for editing a toMany relationship in another page."; 
-            isCustomComponent = yes; 
         }; 
         ERDEditDateJavascript = {
             comment = "needs to support generic format/localized"; 
             editors = (); 
             inspectionInformation = "Date picker that uses javascript to pick the date from a little calendar."; 
-            isCustomComponent = yes; 
-            page = yes; 
         }; 
         ERDEditDatePopup = {
             comment = "needs to support generic format/localized"; 
             editors = (); 
             inspectionInformation = "Edits dates with popup lists."; 
-            isCustomComponent = yes; 
-            page = yes; 
         }; 
         ERDEditDatePopupOrNull = {
             comment = "could be folded into ERDEditDatePopup"; 
             editors = (); 
             inspectionInformation = "Edits dates with popup lists and allows the choice to not specify a date."; 
-            isCustomComponent = yes; 
-            page = yes; 
         }; 
         ERDEditListButton = {
             comment = ""; 
@@ -481,7 +470,6 @@
                 numberOfColumns
             ); 
             inspectionInformation = "Used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship"; 
-            isCustomComponent = yes; 
         }; 
         ERDEditOwnedRelationship = {
             comment = ""; 
@@ -502,15 +490,21 @@
                 noSelectionErrorMessage
             ); 
             inspectionInformation = "Useful for editing/creating objects in an owned toOne or toMany relationship.  Even works with relationships to abstract entities."; 
-            isCustomComponent = yes; 
-            page = yes; 
         }; 
-        ERDEditPasswordConfirm = {
+        ERDEditPassword = {
+            comment = ""; 
+            editors = (length,passwordConfirmationValidates); 
+            inspectionInformation = "Used to edit passwords. Can supply a confirmation when you add a ERDEditPassword component on the same page."; 
+        }; 
+        ERDEditPasswordConfirmation = {
+            comment = ""; 
+            editors = (length); 
+            inspectionInformation = "Used to edit passwords. Can supply a confirmation when you add a ERDEditPassword component on the same page."; 
+        }; 
+       ERDEditPasswordConfirm = {
             comment = ""; 
             editors = (); 
             inspectionInformation = "Used to edit passwords where when changed the changed value must be confirmed."; 
-            isCustomComponent = yes; 
-            page = yes; 
         }; 
         ERDEditStringWithChoices = {
             comment = "the component uses a key() + 'Available' of of the object??"; 
@@ -521,7 +515,6 @@
             comment = ""; 
             editors = (); 
             inspectionInformation = "Used to edit a number as if it where a number of years and a number of months."; 
-            isCustomComponent = yes; 
         }; 
         ERDInspect = {
             editors = (embeddedPageConfiguration); 
@@ -574,25 +567,21 @@
             comment = "needs better localization"; 
             editors = (massModificationPageConfiguration); 
             inspectionInformation = "Button used to apply one modification to a bunch of objects."; 
-            isCustomComponent = yes; 
         }; 
         ERDPrinterButton = {
             comment = "does not yet work in a list view"; 
             editors = (useSubmitButton); 
             inspectionInformation = "Nice edit button for editing a toMany relationship in another page."; 
-            isCustomComponent = yes; 
         }; 
         ERDQueryDateRangeJavascript = {
             comment = "this is *not* a d2w component!"; 
             editors = (); 
             inspectionInformation = "Used for building date queries with javascript"; 
-            isCustomComponent = yes; 
         }; 
         ERDTrashcan = {
             comment = "needs to be more generic, for example having text instead of the delete button image"; 
             editors = (confirmDeleteConfigurationName); 
             inspectionInformation = "Delete button with which you can confirm deletes."; 
-            isCustomComponent = yes; 
         }; 
     }; 
     editors = {
@@ -934,6 +923,12 @@
             inspectionInformation = ""; 
             title = "Number of colums"; 
             type = stringEmptyIsNull; 
+        }; 
+        passwordConfirmationValidates = {
+            class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel"; 
+            editingFor = property; 
+            title = "Password Confirmation Validates"; 
+            type = boolean; 
         }; 
         pickButtonLabel = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
