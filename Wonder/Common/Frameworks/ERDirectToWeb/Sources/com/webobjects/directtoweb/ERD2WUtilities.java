@@ -14,7 +14,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.directtoweb.*;
 
-
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
 
@@ -68,5 +67,34 @@ public class ERD2WUtilities {
             areEqual = a1.keyPath().equals(a2.keyPath()) && a1.value().equals(a2.value());
         }
         return areEqual;
+    }
+
+    // This prevents the dreaded KeyValueCoding null object exception, for say key paths: object.entityName
+    // Should just return null instead of throwing.
+    public static Object contextValueForKeyNoInferenceNoException(D2WContext c, String keyPath) {
+        Object result = null;
+        int i = keyPath.indexOf(".");
+        if (i == -1) {
+            result = c.valueForKeyNoInference(keyPath);
+        } else {
+            String first = keyPath.substring(0, i);
+            String second = keyPath.substring(i + 1);
+            result = c.valueForKeyNoInference(first);
+            if (result != null) {
+                // Optimized for two paths deep
+                if (second.indexOf(".") == -1) {
+                    result = NSKeyValueCoding.Utility.valueForKey(result, second);
+                } else {
+                    NSArray parts = NSArray.componentsSeparatedByString(second, ".");
+                    for (int j = 0; j < parts.count(); j++) {
+                        String part = (String)parts.objectAtIndex(j);
+                        result = NSKeyValueCoding.Utility.valueForKey(result, part);
+                        if (result == null)
+                            break;
+                    }
+                }
+            }
+        }
+        return result;
     }
 }
