@@ -5,9 +5,9 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 
 public class Main extends WOComponent  {
-    protected Applicant contact;
-    protected EOEnterpriseObject spouse;
-    protected String accountType;
+    private Applicant contact;
+    private EOEnterpriseObject spouse;
+    public String accountType;
     
     public Main(WOContext context) {
         super(context);
@@ -26,7 +26,11 @@ public class Main extends WOComponent  {
 
         return contact;
     }
-
+    
+    public void setContact(Applicant newContact) {
+        contact = newContact;
+    }
+    
     public EOEnterpriseObject spouse() {
         if (spouse == null) {
             EOEditingContext defaultEditingContext = session().defaultEditingContext();
@@ -37,6 +41,11 @@ public class Main extends WOComponent  {
 
         return spouse;
     }
+
+    public void setSpouse(Applicant newSpouse) {
+        spouse = newSpouse;
+    }
+    
 
     public EOEnterpriseObject account() {
         EOEnterpriseObject account = (EOEnterpriseObject) contact.valueForKey("account");
