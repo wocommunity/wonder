@@ -52,6 +52,10 @@ D2WListExampleJava	ProjectWonder/Examples/Stepwise/D2WListExampleJava
 D2WInspectExampleJava	ProjectWonder/Examples/Stepwise/D2WInspectExampleJava
 
 
+#######################################################################
+# Utilities
+
+PBXTool			ProjectWonder/Utilities/PBXTool
 
 
 
