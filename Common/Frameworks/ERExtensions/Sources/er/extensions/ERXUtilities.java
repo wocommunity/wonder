@@ -89,6 +89,8 @@ public class ERXUtilities {
         if (cat.isDebugEnabled())
             cat.debug("Creating object of type: " + entityName);
         EOClassDescription cd=EOClassDescription.classDescriptionForEntityName(entityName);
+        if (cd==null)
+            throw new RuntimeException("Could not find class description for entity named "+entityName);
         EOEnterpriseObject newEO=cd.createInstanceWithEditingContext(editingContext,null);
         if (objectInfo != null)
             newEO.takeValuesFromDictionary(objectInfo);
