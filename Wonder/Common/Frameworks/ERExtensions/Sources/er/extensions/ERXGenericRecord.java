@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXGenericRecord.java created by patrice on Thu 20-Jul-2000 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -36,255 +34,37 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     public static final Category cat = Category.getInstance("er.eo.ERXGenericRecord");
     public static final Category cloneCat =  Category.getInstance("er.eo.clone.ERXGenericRecord");
-    public static final Category willChangeCat =
-        Category.getInstance("er.eo.willChange.ERXGenericRecord");
+    public static final Category willChangeCat = Category.getInstance("er.eo.willChange.ERXGenericRecord");
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
     public final static String KEY_MARKER="** KEY_MARKER **";
 
-    public static class ERXGenericRecordClazz extends EOGenericRecordClazz {
-        
+    public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
     }
 
-    // This is used to fix a bug in EOF where an object has a to-one to an abstract entity.  If the EO has not been fetch yet an exception
-    // can occur that will manifest itself as '*** -[NSConcreteMutableDictionary setObject:forKey:]: attempt to insert nil key'  This method
-    // works around that bug if called before storedValueForKey.
-
- public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
-     /*
-        if (object!=null) {
-            if (fix.isDebugEnabled())
-                fix.debug("WillFixToOneRelationship key: " + key);
-            EOEntity objectEntity = EOModelGroup.defaultGroup(EOUtilities.entityForObject(), object);
-            EORelationship relationship = objectEntity.relationshipNamed(key);
-            if (!relationship.isToMany() && relationship.destinationEntity().isAbstractEntity()) {
-                EOEditingContext ec = object.editingContext();
-                if (ec!=null) {
-                    EOAttribute attribute = (EOAttribute)relationship.sourceAttributes().objectAtIndex(0);
-                    EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, objectEntity.model().name());
-                    if (context!=null) {
-                        if (context.snapshotForGlobalID(ec.globalIDForObject(object)) != null) {
-                            Object value = (context.snapshotForGlobalID(ec.globalIDForObject(object))).valueForKey(attribute.name());
-                            if (!(value instanceof NSKeyValueCoding.Null)) {
-                                if (fix.isDebugEnabled())
-                                    fix.debug("Not null, value: " + value + "( "+relationship.destinationEntity().name() +")");
-                                Object[] gidValue=new Object[] { value };
-                                EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(relationship.destinationEntity().name(), gidValue);
-                                if (ec.objectForGlobalID(gid) == null || EOFaultHandler.isFault(ec.objectForGlobalID(gid))
-                                    || context.snapshotForGlobalID(gid, ec.fetchTimestamp()) == null) {
-                                    // In cases where the abstract entity is itself in the middle of an inheritance tree, the GID we put together above
-                                    // does not work, and the EO is refetched every time (this was exposed in LandlordResponse.landlordProperty
-                                    // the GID created 
-                                    // we need to walk up the hierarchy to create [GID: Property 1053]
-                                    EOEntity superEntity =relationship.destinationEntity();
-                                    EOKeyGlobalID superGID=null;
-                                    while (superEntity.parentEntity()!=null) {
-                                        superEntity = superEntity.parentEntity();
-                                        gid = EOKeyGlobalID.globalIDWithEntityName(superEntity.name(), gidValue);
-                                        if (ec.objectForGlobalID(gid) != null && !EOFaultHandler.isFault(ec.objectForGlobalID(gid)) &&
-                                            context.snapshotForGlobalID(gid, ec.fetchTimestamp()) != null) {
-                                            superGID=gid;
-                                            break;
-                                        }
-                                    }
-                                    if (superGID ==null) { // we didn't find anything!
-                                        /*                                        
-                                        for (Enumeration e = relationship.destinationEntity().subEntities().objectEnumerator(); e.hasMoreElements();) {
-                                            EOEntity subEntity = (EOEntity)e.nextElement();
-                                            EOKeyValueQualifier primaryKeyQualifier =
-                                                new EOKeyValueQualifier(((EOAttribute)subEntity.primaryKeyAttributes().objectAtIndex(0)).name(),
-                                                                        EOQualifier.QualifierOperatorEqual,
-                                                                        value);
-                                            EOQualifier restrictQualifier = subEntity.restrictingQualifier();
-                                            EOQualifier fetchQualifier = (restrictQualifier != null ?
-                                                                          new EOAndQualifier(new NSArray(new Object[] {primaryKeyQualifier, restrictQualifier})) :
-                                                                          (EOQualifier)primaryKeyQualifier);
-                                            if (fix.isDebugEnabled())
-                                                fix.debug("Trying entity: " + subEntity.name() + " and pk value: " + value + " fetchQualifier: " +
-                                                          fetchQualifier);
-                                            NSArray objects = ec.objectsWithFetchSpecification(new EOFetchSpecification(subEntity.name(), fetchQualifier, null));
-                                            if (objects.count() > 0) {
-                                                if (fix.isDebugEnabled()) {
-                                                    fix.debug("Got eo: " + objects.objectAtIndex(0));
-                                                    fix.debug("GID = "+ec.globalIDForObject((EOEnterpriseObject)objects.objectAtIndex(0)));
-                                                }
-                                                break;
-                                            } else if (fix.isDebugEnabled()) {
-                                                fix.debug("Didn't find anything");
-                                            }
-                                        }
-                                        **
-
-                                        EOEntity e=relationship.destinationEntity();
-                                        EOKeyValueQualifier fetchQualifier =
-                                                new EOKeyValueQualifier(((EOAttribute)e.primaryKeyAttributes().objectAtIndex(0)).name(),
-                                                                        EOQualifier.QualifierOperatorEqual,
-                                                                        value);
-                                        if (fix.isDebugEnabled())
-                                            fix.debug("Trying entity: " + e.name() + " and pk value: " + value + " fetchQualifier: " +
-                                                      fetchQualifier);
-                                        NSArray objects = ec.objectsWithFetchSpecification(new EOFetchSpecification(e.name(), fetchQualifier, null));
-                                        if (objects.count() > 0) {
-                                            if (fix.isDebugEnabled()) {
-                                                fix.debug("Got eo: " + objects.objectAtIndex(0));
-                                                fix.debug("GID = "+ec.globalIDForObject((EOEnterpriseObject)objects.objectAtIndex(0)));
-                                            }
-                                        } else if (fix.isDebugEnabled()) {
-                                            fix.debug("Didn't find anything");
-                                        }
-
-                                    } else if (fix.isDebugEnabled()) {
-                                        fix.debug("Found GID for super entity "+ superGID);
-                                    }
-                                } else if (fix.isDebugEnabled()) {
-                                    fix.debug("Object registered and not fault");
-                                }
-                            } else if (fix.isDebugEnabled()) {
-                                fix.debug("Foreign key is null. Optional ToOne.");
-                            }
-                        } else if (fix.isDebugEnabled()) {
-                            fix.debug("EO is new.  No snapshot in the db context");
-                        }
-                    } else
-                        fix.error("null EODatabaseContext for "+objectEntity.model().name());
-                } else {
-                    fix.error("Null editing context for "+object);
-                }
-            } else {
-                fix.error("Trying to fix a relationship that is not a ToOne or that points to a non-Abstract Entity. Key: " + key + " object" + object);
-            }
-        } else {
-            fix.error("Null object");
-        }
-*/
+    // CHECKME: Should remove once all dependency has been removed.
+    public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
+        // Not needed anymore, they fixed the bug!
     }
-
-
-
-
-                                        
-    // Another work around for the relationship to an abstract.  This one also handles toMany relationships.
-    // This was submitted, although it has not been tested yet.
-
+    
+    // CHECKME: Should remove once all dependency has been removed.
     protected void _willFixRelationship(String key, EOEnterpriseObject object) {
-/*                                        
-        EOEntity objectEntity = EOModelGroup.defaultGroup(EOUtilities.entityForObject(), object);
-        EORelationship relationship = objectEntity.relationshipNamed(key);
-
-        if (relationship.destinationEntity().isAbstractEntity()) {
-            // we potentially need to worry about any type of relationship to an abstract entity
-            EOQualifier qual = null;
-
-            if (!relationship.isToMany()) {
-                // okay we have a  T O - O N E   relationship
-                // this block of code is more or less Max's original code except the qualifier
-                // creation is simplified - letting EOF do the hard work for us.
-                EOEditingContext ec = object.editingContext();
-                EOEntity destinationEntity = relationship.destinationEntity();
-                EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec,objectEntity.model().name());
-                EOGlobalID objectGlobalID = (EOGlobalID)ec.globalIDForObject(object);
-                NSDictionary snapshot;
-                EOAttribute attribute = (EOAttribute)relationship.sourceAttributes().lastObject();
-                if ((snapshot = context.snapshotForGlobalID(objectGlobalID)) != null) {
-                    Object value = snapshot.valueForKey(attribute.name());
-                    if (!(value instanceof NSKeyValueCoding.Null)) {
-                        // we've got a valid relationship - check if we've already fetched it....
-                        EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(destinationEntity.name(), new Object[] {value});
-                        EOEnterpriseObject myObj = ec.objectForGlobalID(gid);
-                        if (myObj == null || EOFaultHandler.isFault(myObj)) {
-                            // okay - we need to fetch the object so build the correct qualifier
-                            NSDictionary myPKDict = destinationEntity.primaryKeyForGlobalID(gid);
-                            qual = destinationEntity.qualifierForPrimaryKey(myPKDict);
-                        }
-                    }
-                }
-            } else {
-                // we have a T O  - M A N Y  relationship - need to treat slightly differently
-                //due to differences with snapshots & fetching.... this is the new code...
-                EOEditingContext ec = object.editingContext();
-                EOEntity destinationEntity = relationship.destinationEntity();
-                EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec,objectEntity.model().name());
-                //cat.debug
-                if (ec == null) {
-                    throw new RuntimeException("Attempting to fix the relationship of an object with no reference to an editing context -- most likely because it was deleted in the current transaction: " + object);
-                }
-                EOGlobalID objectGlobalID = (EOGlobalID)ec.globalIDForObject(object);
-                NSArray snapshot;
-                if ((snapshot = context.snapshotForSourceGlobalID(objectGlobalID,key)) != null) {
-                    if ((snapshot.count() > 0)) {
-                        // we have a snapshot for the rel - now check an arbitrary object to see if we've already fetched
-                        Object myObj = ec.objectForGlobalID((EOKeyGlobalID)snapshot.lastObject());
-                        if (myObj == null || EOFaultHandler.isFault(myObj)) {
-                            // okay - we need to fetch the objects so build the correct qualifier
-                            NSDictionary myDict = objectEntity.primaryKeyForGlobalID((EOKeyGlobalID)objectGlobalID);
-                            qual = relationship.qualifierWithSourceRow(myDict);
-                        }
-                    }
-                }
-            }
-            if (qual != null) {
-                EOEntity destinationEntity = relationship.destinationEntity();
-                EOEditingContext ec = object.editingContext();
-                // right - we've got a qualifier so we need to fetch......
-                NSArray objects = ec.objectsWithFetchSpecification(new EOFetchSpecification(destinationEntity.name(), qual, null));
-            }
-        }
-*/
+        // Not needed anymore, they fixed the bug!
     }
 
-    // Tests if a relationship is a fault. Useful for testing if a toOne abstract relationship key is a fault.
-/*
- public boolean isAbstractRelationshipKeyFault(String relationshipKey) {
-        boolean isFault = false;
-        EOEntity objectEntity = EOModelGroup.defaultGroup(EOUtilities.entityForObject(), this);
-        EORelationship relationship = objectEntity.relationshipNamed(relationshipKey);
-        if (!relationship.isToMany() && relationship.destinationEntity().isAbstractEntity()) {
-            EOEditingContext ec = editingContext();
-            if (ec!=null) {
-                EOAttribute attribute = (EOAttribute)relationship.sourceAttributes().objectAtIndex(0);
-                EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, objectEntity.model().name());
-                if (context!=null) {
-                    if (context.snapshotForGlobalID(ec.globalIDForObject(this)) != null) {
-                        Object value = (context.snapshotForGlobalID(ec.globalIDForObject(this))).valueForKey(attribute.name());
-                        if (!(value instanceof NSKeyValueCoding.Null)) {
-                            if (fix.isDebugEnabled())
-                                fix.debug("Not null, value: " + value + "( "+relationship.destinationEntity().name() +")");
-                            Object[] gidValue=new Object[] { value };
-                            EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(relationship.destinationEntity().name(), gidValue);
-                            if (ec.objectForGlobalID(gid) == null || EOFaultHandler.isFault(ec.objectForGlobalID(gid))
-                                || context.snapshotForGlobalID(gid, ec.fetchTimestamp()) == null) {
-                                // In cases where the abstract entity is itself in the middle of an inheritance tree, the GID we put together above
-                                // does not work, and the EO is refetched every time (this was exposed in LandlordResponse.landlordProperty
-                                // the GID created
-                                // we need to walk up the hierarchy to create [GID: Property 1053]
-                                EOEntity superEntity =relationship.destinationEntity();
-                                EOKeyGlobalID superGID=null;
-                                while (superEntity.parentEntity()!=null) {
-                                    superEntity = superEntity.parentEntity();
-                                    gid = EOKeyGlobalID.globalIDWithEntityName(superEntity.name(), gidValue);
-                                    if (ec.objectForGlobalID(gid) != null && !EOFaultHandler.isFault(ec.objectForGlobalID(gid)) &&
-                                        context.snapshotForGlobalID(gid, ec.fetchTimestamp()) != null) {
-                                        superGID=gid;
-                                        break;
-                                    }
-                                }
-                                if (superGID ==null) { // we didn't find anything!
-                                    isFault = true;
-                                }
-                           }
-                            }
-                        }
-}
-}
-}
-    return isFault;
-    }
-*/
-    //-------------------------------------------------------------------------------------
-    // Basic permission methods.  Overridden by subClasses.
+   /**
+     * Implementation of {@link ERXGuardedObjectInterface}. This is checked
+     * before the object is deleted in the <code>willDelete</code> method
+     * which is in turn called by {@link ERXEditingContextDelegate}. The default
+     * implementation returns <code>true</code>.
+     */
     public boolean canDelete() { return true; }
+    /**
+      * Implementation of {@link ERXGuardedObjectInterface}. This is checked
+      * before the object is deleted in the <code>willUpdate</code> method
+      * which is in turn called by {@link ERXEditingContextDelegate}. The default
+      * implementation returns <code>true</code>.
+      */
     public boolean canUpdate() { return true; }
-
 
     // Used by the delegate to notify objects at the begining of a saveChanges.
     public void willDelete() throws NSValidation.ValidationException {
@@ -294,6 +74,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (tranCatWillDelete.isDebugEnabled())
             tranCatWillDelete.debug("Object:" + description());
     }
+    
     public void willInsert() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
         in the same transaction */
@@ -346,6 +127,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             tranCatDidInsert.debug("Object:" + description());
     }
 
+    /**
+     * Adds a collection of objects to a given relationship by calling
+     * <code>addObjectToBothSidesOfRelationshipWithKey</code> for all
+     * objects in the collection.
+     * @param objects objects to add to both sides of the given relationship
+     * @param key relationship key
+     */
     public void addObjectsToBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
             for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -355,6 +143,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
+    /**
+     * Removes a collection of objects to a given relationship by calling
+     * <code>removeObjectFromBothSidesOfRelationshipWithKey</code> for all
+     * objects in the collection.
+     * @param objects objects to be removed from both sides of the given relationship
+     * @param key relationship key
+     */
     public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
             for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
@@ -472,8 +267,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         super.addObjectToBothSidesOfRelationshipWithKey(eo,key);
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // A couple of Convenience methods
+    /**
+     * Primary key of the object as a String.
+     * @return primary key for the given object as a String
+     */
     public String primaryKey() {
         return ERXExtensions.primaryKeyForObject(this);
     }
@@ -492,7 +289,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         Object rpk=rawPrimaryKeyInTransaction();
         return rpk!=null ? rpk.toString() : null;
     }
-    
+
+    /**
+     * Gives the raw primary key of the object. This could be anything from
+     * an NSData to a BigDecimal.
+     * @return the raw primary key of this object.
+     */
     public Object rawPrimaryKey() { return ERXExtensions.rawPrimaryKeyForObject(this); }
 
     public Object foreignKeyForRelationshipWithKey(String rel) {
@@ -531,6 +333,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public NSDictionary primaryKeyDictionary(boolean inTransaction) {
         if (!inTransaction && _primaryKeyDictionary == null) {
             if (primaryKey() != null) {
+                //FIXME: Should be getting primaryKey name from the entity of the enterprise object.
                 _primaryKeyDictionary = new NSDictionary(primaryKey(), "id");
             } else
                 _primaryKeyDictionary = ERXUtilities.primaryKeyDictionaryForEntity(editingContext(), entityName());
@@ -538,14 +341,33 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return _primaryKeyDictionary;
     }
 
+    /**
+     * Determines what the value of the given key is in the committed
+     * snapshot
+     * @param key to be checked in committed snapshot
+     * @return the committed snapshot value for the given key
+     */
     public Object committedSnapshotValueForKey(String key) {
         return (editingContext().committedSnapshotForObject(this)).objectForKey(key);
     }
 
+    /**
+     * Computes the current set of changes that this object has from the
+     * currently committed snapshot.
+     * @return a dictionary holding the changed values from the currently
+     *         committed snapshot.
+     */
     public NSDictionary changesFromCommittedSnapshot() {
         return changesFromSnapshot(editingContext().committedSnapshotForObject(this));
     }
 
+    /**
+     * Simple method that will return if the parent object store of this object's editing
+     * context is an instance of {@link EOObjectStoreCoordinator}. The reason this is important
+     * is because if this condition evaluates to true then when changes are saved in this
+     * editing context they will be propogated to the database.
+     * @return if the parent object store of this object's editing context is an EOObjectStoreCoordinator.
+     */
     public boolean parentObjectStoreIsObjectStoreCoordinator() { return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator; }
 
     public String toString() {
@@ -594,9 +416,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 // Note that after an eo has been deleted its editingContext will be set to null and as such it can be a bit
 // difficult to distinguish between a new EO and a deleted EO.
     public boolean isDeletedEO() {
-        cat.debug("editingContext() = "+editingContext());
-        cat.debug("deleted objects = "+editingContext().deletedObjects());
-        cat.debug("this = "+this);
+        if (cat.isDebugEnabled())
+            cat.debug("editingContext() = " + editingContext() + " this object: " + this);
         return editingContext() != null && editingContext().deletedObjects().containsObject(this);
     }
 
@@ -631,6 +452,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
+    // FIXME: We should have a better mechanism than this.
     private static D2WContext _validationContext;
     public static Object ruleValueForAttributeAndKey(EOAttribute a, String key) {
         if (_validationContext==null) {
@@ -702,8 +524,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     // batchCheckConsistency won't be called by validateForSave so you can check
     // things here that you only want checked by a batch process
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
-    //public boolean repair_for_1_2(){ return true;   }
 
+    //CHECKME: All this should be deleted. It never really works and if it ever does work it should be moved to ERXEOFUtilities
     /* Used recursively to clone an object graph of ERXGenericRecord objects. If relationships are owned, they are also cloned also.
 
         NOTE This method has not yet been fully implemented. At least one issue remains: what to do when not cloning and the entity of the source is different from that of the destination. There will also be problems when not all objects are of class ERXGenericRecord

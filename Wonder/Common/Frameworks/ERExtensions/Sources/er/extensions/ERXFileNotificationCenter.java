@@ -15,32 +15,50 @@ import org.apache.log4j.Category;
 import java.io.*;
 import java.util.Enumeration;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// This guy is pretty much only used in developement systems.  It provides a nice repository about
-// files and their last modified dates.  So instead of every dynamic spot having to keep track of
-// the files' dates, register and check at the end of every request-response loop, instead you
-// can just add an observer to this center and be notified when the file changes.
-//////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * The file notification center is only used in developement systems. It provides a nice repository about
+ * files and their last modified dates.  So instead of every dynamic spot having to keep track of
+ * the files' dates, register and check at the end of every request-response loop, instead you
+ * can just add an observer to this center and be notified when the file changes. Files' last modification
+ * dates are checked at the end of every request-response loop.<br/>
+ * <br/>
+ * It should be noted that the current version of the file notification center will retain a
+ * reference to each registered observer. This is not ideal and will be corrected in the
+ * future.
+ */
 public class ERXFileNotificationCenter {
 
-    ///////////////////////////////////////  log4j category  /////////////////////////////////////
+    /** Logging support */
     public static final Category cat = Category.getInstance(ERXFileNotificationCenter.class);
 
-    /////////////////////////////////////// Notification Titles //////////////////////////////////
+    /** Contains the name of the notification that is posted when a file changes. */
     public static final String FileDidChange = "FileDidChange";
 
+    /** holds a reference to the default file notification center */
     private static ERXFileNotificationCenter _defaultCenter;
+
+    /**
+     * @return the singleton instance of file notification center
+     */
     public static ERXFileNotificationCenter defaultCenter() {
         if (_defaultCenter == null)
             _defaultCenter = new ERXFileNotificationCenter();
         return _defaultCenter;
     }
 
+    /** collections of observers by file path */
     private NSMutableDictionary _observersByFilePath = new NSMutableDictionary();
+    /** cache for last modified dates of files by file path */
     private NSMutableDictionary _lastModifiedByFilePath = new NSMutableDictionary();
-    // Here we assume that when caching is enabled that we don't want to be checking any files or notifing
-    // anyone of changes.
+    /** flag to tell if caching is enabled, set in the object constructor */
     private boolean cachingEnabled = true;
+    /**
+     * Default constructor. If WOCaching is disabled (we take this to mean we are in developement)
+     * then this object will register for the notification {@link WORequestHandler$DidHandleRequestNotification}
+     * which will enable it to check if files have changed at the end of every request-response
+     * loop. If WOCaching is enabled then this object will not register for anything and will generate
+     * warning messages if observers are registered with caching enabled.
+     */
     public ERXFileNotificationCenter() {
         if (!WOApplication.application().isCachingEnabled()) {
             ERXRetainer.retain(this);
@@ -54,17 +72,35 @@ public class ERXFileNotificationCenter {
         }
     }
 
+    /**
+     * When the file notification center is garbage collected it removes itself
+     * as an observer from the {@link NSNotificationCenter}. Not doing this will cause exceptions.
+     */
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
     }
 
+    /**
+     * Used to register file observers for a particular file.
+     * @param observer object to be notified when a file changes
+     * @param selector selector to be invoked on the observer when
+     *        the file changes.
+     * @param filePath location of the file
+     */
     public void addObserver(Object observer, NSSelector selector, String filePath) {
         if (filePath == null)
             throw new RuntimeException("Attempting to register observer for null filePath.");
         addObserver(observer, selector, new File(filePath));        
     }
 
+    /**
+     * Used to register file observers for a particular file.
+     * @param observer object to be notified when a file changes
+     * @param selector selector to be invoked on the observer when
+     *        the file changes.
+     * @param file file to watch for changes
+     */
     public void addObserver(Object observer, NSSelector selector, File file) {
         if (file == null || !file.exists())
             throw new RuntimeException("Attempting to register a null file. " + (file != null ? " File path: " + file.getAbsolutePath() : null));
@@ -79,7 +115,7 @@ public class ERXFileNotificationCenter {
             cat.debug("Registering Observer for file at path: " + filePath);
         // Register last modified date.
         registerLastModifiedDateForFile(file);
-        // FIXME: This retains the observer.  This is not ideal.  With 5.0 we can use a ReferenceQueue to maintain weak references.
+        // FIXME: This retains the observer.  This is not ideal.  With the 1.3 JDK we can use a ReferenceQueue to maintain weak references.
         NSMutableSet observerSet = (NSMutableSet)_observersByFilePath.objectForKey(filePath);
         if (observerSet == null) {
             observerSet = new NSMutableSet();
@@ -88,11 +124,21 @@ public class ERXFileNotificationCenter {
         observerSet.addObject(new _ObserverSelectorHolder(observer, selector));
     }
 
+    /**
+     * Records the last modified date of the file for future comparison.
+     * @param file file to record the last modified date
+     */
     public void registerLastModifiedDateForFile(File file) {
         if (file != null || !file.exists())
             _lastModifiedByFilePath.setObjectForKey(new Long(file.lastModified()), file.getAbsolutePath());
     }
 
+    /**
+     * Compares the last modified date of the file with the last recorded modification date.
+     * @param file file to compare last modified date.
+     * @return if the file has changed since the last time the <code>lastModified</code> value
+     *         was recorded.
+     */
     public boolean hasFileChanged(File file) {
         if (file == null)
             throw new RuntimeException("Attempting to check if a null file has been changed");
@@ -100,6 +146,11 @@ public class ERXFileNotificationCenter {
         return lastModified == null || file.lastModified() > lastModified.longValue();
     }
 
+    /**
+     * Only used internally. Notifies all of the observers who have been registered for the
+     * given file.
+     * @param file file that has changed
+     */
     protected void fileHasChanged(File file) {
         NSMutableSet observers = (NSMutableSet)_observersByFilePath.objectForKey(file.getAbsolutePath());
         if (observers == null)
@@ -117,7 +168,13 @@ public class ERXFileNotificationCenter {
             registerLastModifiedDateForFile(file);            
         }
     }
-    
+
+    /**
+     * Notified by the NSNotificationCenter at the end of every request-response
+     * loop. It is here that all of the currently watched files are checked to
+     * see if they have any changes.
+     * @param NSNotification notification posted from the NSNotificationCenter.
+     */
     public void checkIfFilesHaveChanged(NSNotification n) {
         if (cat.isDebugEnabled()) cat.debug("Checking if files have changed");
         for (Enumeration e = _lastModifiedByFilePath.keyEnumerator(); e.hasMoreElements();) {
@@ -127,15 +184,27 @@ public class ERXFileNotificationCenter {
             }
         }
     }
-    
+
+    /**
+     * Simple observer-selector holder class.
+     */
     public static class _ObserverSelectorHolder {
+        /** Observing object */
+        // FIXME: Should be a weak reference
         public Object observer;
+        /** Selector to call on observer */
         public NSSelector selector;
+        /** Constructs a holder given an observer and a selector */
         public _ObserverSelectorHolder(Object obs, NSSelector sel) {
             observer = obs;
             selector = sel;            
         }
 
+        /**
+         * Overridden to return true if the object being compared has the same observer-selector pair.
+         * @param osh object to be compared
+         * @return result of comparison
+         */
         public boolean equals(Object osh) {
             return osh != null && osh instanceof _ObserverSelectorHolder && ((_ObserverSelectorHolder)osh).selector.equals(selector) &&
             ((_ObserverSelectorHolder)osh).observer.equals(observer);

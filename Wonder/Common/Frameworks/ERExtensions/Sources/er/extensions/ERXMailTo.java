@@ -9,14 +9,31 @@ package er.extensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+* Component that generates a mailto href of the form: "<a href=mailto:foo@bar.com>foo@bar.com</a>"
+ * <br/>
+ * Synopsis:<br/>
+ * email=<i>anEmail</i>;
+ * <br/>
+ * Bindings:<br/>
+ * <b>email</b> email to generate href
+ * <br/>
+ */
 public class ERXMailTo extends WOComponent {
 
+    /** Default constructor */
     public ERXMailTo(WOContext aContext) {
         super(aContext);
     }
 
+    /** component is stateless */
     public boolean isStateless() { return true; }
 
+    /**
+     * Generates the href link from email binding of the form:
+     * "<a href=mailto:foo@bar.com>".
+     * @return generated href
+     */
     public String href() {
         String result=null;
         String email=(String)valueForBinding("email");

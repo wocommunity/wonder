@@ -12,29 +12,37 @@ import com.webobjects.eoaccess.*;
 import org.apache.log4j.Category;
 import java.util.Enumeration;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// This delegate handles two situations a) allowing EOs to generate their own primary keys and b) working around a
-// 	problem with the Oracle adaptor handling dropped database connections.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * This delegate implements several methods from the formal interface
+ * {@link EODatabaseContext$Delegate}. Of special note this class adds the ability
+ * for enterpiseobjects to generate their own primary keys, correctly throws an
+ * exception when a toOne relationship object is not found in the database and adds
+ * debugging abilities to tracking down when faults are fired.
+ */
 public class ERXDatabaseContextDelegate {
-    ///////////////////////////////////////////////  log4j category  //////////////////////////////////////////////
+
+    /** Basic logging support */
     public final static Category cat = Category.getInstance(ERXDatabaseContextDelegate.class);
+    /** Faulting logging support, logging category: <b>er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace</b> */
     public final static Category dbCat = Category.getInstance("er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace");
 
+    /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate;
+    /** Returns the singleton of the database context delegate */
     public static ERXDatabaseContextDelegate defaultDelegate() {
         if (_defaultDelegate == null) {
             _defaultDelegate = new ERXDatabaseContextDelegate();
-            cat.info("created default delegate");
+            cat.info("Created default delegate");
             ERXRetainer.retain(_defaultDelegate); // Retaining the delegate on the ObjC side.  This might not be necessary.
         }
         return _defaultDelegate;
     }
     
-	// Automatically register this singleton object as a EODatabaseContext delegate 
-	// whenever CooperatingObjectStoreWasAddedNotification posted (see addedObjectStore).  
-	// --kai
-	public void registerCooperatingObjectStoreWasAddedNotification() {
+    // Automatically register this singleton object as a EODatabaseContext delegate 
+    // whenever CooperatingObjectStoreWasAddedNotification posted (see addedObjectStore).  
+    // --kai
+    // CHECKME: I believe this is going to be removed by kai
+    public void registerCooperatingObjectStoreWasAddedNotification() {
         try {
             // Create a selector that can be used to define
             // a callback to our addedObjectStore method
@@ -50,7 +58,8 @@ public class ERXDatabaseContextDelegate {
             e = null;
         }
     }
-
+    
+    // CHECKME: I believe this is going to be removed by kai    
     public void addedObjectStore(NSNotification notification) {
         EOObjectStoreCoordinator coordinator = (EOObjectStoreCoordinator) notification.object();
         NSArray stores=coordinator.cooperatingObjectStores();
@@ -62,20 +71,40 @@ public class ERXDatabaseContextDelegate {
         }
     }
 
-    public NSDictionary databaseContextNewPrimaryKey(EODatabaseContext aDatabaseContext, Object object, EOEntity anEntity) {
+    /**
+     * Provides the ability for new enterprise objects that implement the interface {@link ERXGeneratesPrimaryKeyInterface}
+     * to provide their own primary key dictionary. If the enterprise object implements the above interface then the
+     * method <code>primaryKeyDictionary(true)</code> will be called on the object. If the object returns null then a
+     * primary key will be generated for the object in the usual fashion.
+     * @param databaseContext databasecontext
+     * @param object the new enterprise object
+     * @param entity the entity of the object
+     * @return primary key dictionary to be used or null if a primary key should be generated for the object.
+     */
+    public NSDictionary databaseContextNewPrimaryKey(EODatabaseContext databaseContext, Object object, EOEntity entity) {
         return object instanceof ERXGeneratesPrimaryKeyInterface ? ((ERXGeneratesPrimaryKeyInterface)object).primaryKeyDictionary(true) : null;
     }
-    
-    // This is needed because the OracleEOAdaptor doesn't correctly handle all exceptions of dropped connections.
+
+    /**
+     * Allows custom handling of dropped connection exceptions. This was needed in WebObjects 4.5 because the
+     * OracleEOAdaptor wouldn't correctly handle all exceptions of dropped connections. This may not be needed
+     * now.
+     * @param dbc current database context
+     * @param e throw exception
+     * @return if the exception is one of the bad ones that isn't handled then the method <code>handleDroppedConnection</code>
+     *         is called directly on the database object of the context and <code>false</code> is returned otherwise <code>true</code>.
+     */
+    // CHECKME: Is this still needed now?
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc, Exception e) throws Throwable {
         EOAdaptor adaptor=dbc.adaptorContext().adaptor();
         boolean shouldHandleConnection = false;
         if(e instanceof EOGeneralAdaptorException)
-            cat.info(((EOGeneralAdaptorException)e).userInfo());
+            cat.error(((EOGeneralAdaptorException)e).userInfo());
         else
-            cat.info(e);
+            cat.error(e);
         if (adaptor.isDroppedConnectionException(e))
             shouldHandleConnection = true;
+        // FIXME: Should provide api to extend the list of bad exceptions.
         else if (e.toString().indexOf("ORA-01041")!=-1) {
             // just returning true here does not seem to do the trick. why !?!?
             cat.error("ORA-01041 detecting -- forcing reconnect");
@@ -89,11 +118,17 @@ public class ERXDatabaseContextDelegate {
         return shouldHandleConnection;
     }
 
-    // This is Kelly Hawks' fix for the missing to one relationship. 
-    // Delegate on EODatabaseContext that gets called when a to-one fault cannot find its data in
-    // the database. The object is a cleared fault. We raise here to restore the functionality
-    // that existed prior to WebObjects 4.5.
-    // Whenever a fault fails for a globalID (i.e. the object is NOT found in the database), we may raise.
+    /**
+     * This is Kelly Hawks' fix for the missing to one relationship. 
+     * Delegate on EODatabaseContext that gets called when a to-one fault cannot find its data in
+     * the database. The object that is returned is a cleared fault.
+     * We raise here to restore the functionality that existed prior to WebObjects 4.5.
+     * Whenever a fault fails for a globalID (i.e. the object is NOT found in the database), we raise
+     * an {@link EOObjectNotAvailableException}.
+     * @param context database context
+     * @param object object that is firing the fault for a given to-one relationship
+     * @param gid global id that wasn't found in the database.
+     */
     public boolean databaseContextFailedToFetchObject(EODatabaseContext context, Object object, EOGlobalID gid) {
         if (object!=null) {
             EOEditingContext ec = ((EOEnterpriseObject)object).editingContext();
@@ -107,32 +142,21 @@ public class ERXDatabaseContextDelegate {
                 context.refaultObject((EOEnterpriseObject)object, gid, ec);
             }
         }
-        throw new RuntimeException("NSObjectNotAvailableException No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gid);            
+        throw new EOObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gid);            
     }
     
-    /* Nice debugging adds to track down faulting issues. */
-    /*
-    public boolean databaseContextShouldFetchObjectFault (EODatabaseContext context, Object object) {
-        cat.debug("databaseContextShouldFetchObjectFault, object: " + object.getClass().getName());
-        return true;
-    }
-    public boolean databaseContextShouldFetchArrayFault (EODatabaseContext context, Object object) {
-        cat.debug("databaseContextShouldFetchArrayFault, array: " + object.getClass().getName());
-        return true;
-    }
-    public void databaseContextWillFireObjectFaultForGlobalID (EODatabaseContext context, EOGlobalID globalID, EOFetchSpecification fetchSpec,
-                                                               EOEditingContext ec) {
-        cat.debug("databaseContextWillFireObjectFaultForGlobalID");//, fetchSpec: " + fetchSpec);
-    }
-     
-    public void databaseContextWillFireArrayFaultForGlobalID (EODatabaseContext context, EOGlobalID globalID, EORelationship relationship,
-                                                              EOFetchSpecification fetchSpec, EOEditingContext ec) {
-        //cat.debug("databaseContextWillFireArrayFaultForGlobalID, fetchSpec: " + fetchSpec + " relationship: " + relationship);
-        cat.debug("databaseContextWillFireArrayFaultForGlobalID, entity: " + entityName() + " relationship: " + relationship);
-    }
+    /**
+     * This delegate method is called every time a fault is fired that needs
+     * to go to the database. All we have added is logging statement of the
+     * debug priority. This way during runtime a developer can toggle the
+     * logger priority settting on and off to see what faults are firing. Also
+     * note that when using {@link ERXPatternLayout} one can set the option to
+     * see full backtraces to the calling method. With this option specified
+     * a developer can see exactly which methods are firing faults.
+     * @param dc the databasecontext
+     * @param fs the fetchspecification
+     * @param channel the databasechannel
      */
-
-
     public void databaseContextDidSelectObjects(EODatabaseContext dc,
                                                 EOFetchSpecification fs,
                                                 EODatabaseChannel channel) {
@@ -140,6 +164,4 @@ public class ERXDatabaseContextDelegate {
             dbCat.debug("databaseContextDidSelectObjects "+fs);
         }
     }
-
-    
 }
