@@ -740,7 +740,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
 
     public boolean isNewObject() {
-        return ERXExtensions.isNewObject(this);
+        return ERXEOControlUtilities.isNewObject(this);
     }
     
     

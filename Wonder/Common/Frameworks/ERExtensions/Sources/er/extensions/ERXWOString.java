@@ -1,17 +1,10 @@
 package er.extensions;
 
-import java.math.BigInteger;
 import java.text.Format;
 
-import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WODynamicElement;
-import com.webobjects.appserver.WOElement;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver.*;
+import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
-import com.webobjects.foundation.NSDictionary;
 
 /**
  * Reimplementation of WOString that can resolve localized format strings. This

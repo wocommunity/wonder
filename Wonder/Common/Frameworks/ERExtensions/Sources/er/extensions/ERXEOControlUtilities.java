@@ -8,7 +8,6 @@ package er.extensions;
 
 import java.util.*;
 
-import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -115,7 +114,7 @@ public class ERXEOControlUtilities {
      	
      	if(ec == null) throw new IllegalArgumentException("EO must live in an EC");
      	
-        boolean isNewObject = ERXExtensions.isNewObject(eo);
+        boolean isNewObject = ERXEOControlUtilities.isNewObject(eo);
         
         // Check for old EOF bug and do nothing as we can't localInstance
         // anything here
@@ -889,7 +888,7 @@ public class ERXEOControlUtilities {
             EOKeyValueQualifier q1 = (EOKeyValueQualifier)q;
             if (q1.value() instanceof EOEnterpriseObject) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)q1.value();
-                if (eo.editingContext() != ec && !ERXExtensions.isNewObject(eo)) {
+                if (eo.editingContext() != ec && !ERXEOControlUtilities.isNewObject(eo)) {
                     eo = EOUtilities.localInstanceOfObject(ec, eo);
                     EOKeyValueQualifier qual = new EOKeyValueQualifier(q1.key(), q1.selector(), eo);
                     return qual;
