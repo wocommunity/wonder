@@ -103,6 +103,8 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         NSTimestamp minDate = dateForString(min);
         if(minDate != null)
             displayGroup().queryMin().takeValueForKey(minDate, propertyKey());
+        else
+           displayGroup().queryMin().removeObjectForKey(propertyKey());
     }
 
     public void setMaxValue(String max) {
@@ -110,6 +112,8 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         NSTimestamp maxDate = dateForString(max);
         if(maxDate != null)
             displayGroup().queryMax().takeValueForKey(maxDate, propertyKey());
+        else
+        	displayGroup().queryMax().removeObjectForKey(propertyKey());
     }
 
     private static String _datePickerJavaScriptUrl;
