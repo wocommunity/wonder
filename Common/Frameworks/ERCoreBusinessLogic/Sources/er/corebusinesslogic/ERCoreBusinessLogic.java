@@ -68,22 +68,17 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
     //------------------------------------------------------------------
 
-    // the STATIC table acts as a dictionary
-    private final static EOEditingContext _ec=ERXExtensions.newEditingContext();
     public static String staticStoredValueForKey(String key) {
-        ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(_ec,key);
-        return entry!=null ? entry.value() : null;
+        return ERCStatic.staticClazz().staticStoredValueForKey(key);
     }
     public static int staticStoredIntValueForKey(String key) {
-        int result=-1;
-        String s= staticStoredValueForKey(key);
-        if (s!=null) {
-            try {
-                result=Integer.parseInt(s);
-            } catch (NumberFormatException e) {}
-        }
-        return result;
+        return ERCStatic.staticClazz().staticStoredIntValueForKey(key);
     }
+
+    public static void takeStaticStoredValueForKey(String value, String key, EOEditingContext editingContext) {
+        ERCStatic.staticClazz().takeStaticStoredValueForKey(value, key, editingContext);
+    }
+    
 
     public static void setActor(EOEnterpriseObject actor) {
         if (log.isDebugEnabled())
