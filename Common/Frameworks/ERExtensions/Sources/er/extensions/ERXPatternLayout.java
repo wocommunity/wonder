@@ -21,6 +21,8 @@ import com.webobjects.foundation.NSMutableArray;
  * first is by specifing an '@' character a full backtrace will be logged as part
  * of the log event. The second is by specifing an '$' char the current application
  * name of the WOApplication will be logged as part of the log event.
+ * Finally by specifing an '#' char the current port number on which the  
+ * primary adaptor listens to will be logged as part of the log event. 
  */
 // ENHANCEME: Need access to ERXThreadStorage, also need more WO stuff, could opt for a WO char
 //	      and then specify all of the things to log as formatting info for that converter.
@@ -76,14 +78,22 @@ class ERXPatternParser extends PatternParser {
      * @param c char to add the converter for
      */
     public void finalizeConverter(char c) {
-        if (c == '$') {
-            addConverter(new AppNamePatternConverter(formattingInfo));
-            currentLiteral.setLength(0);
-        } else if (c == '@') {
-            addConverter(new StackTracePatternConverter(formattingInfo));
-            currentLiteral.setLength(0);
-        } else {
-            super.finalizeConverter(c);            
+        switch (c) {
+            case '$': 
+                addConverter(new AppNamePatternConverter(formattingInfo));
+                currentLiteral.setLength(0);
+                break;
+            case '#': 
+                addConverter(new AdaptorPortNumberConverter(formattingInfo));
+                currentLiteral.setLength(0);
+                break;
+            case '@':
+                addConverter(new StackTracePatternConverter(formattingInfo));
+                currentLiteral.setLength(0);
+                break;
+            default: 
+                super.finalizeConverter(c);            
+                break;
         }
     }
 
@@ -154,6 +164,42 @@ class ERXPatternParser extends PatternParser {
                     _appName = WOApplication.application().name();
             }
             return _appName != null ? _appName : "N/A";
+        }
+    }
+    
+    /**
+     * The adaptor port number pattern converter is useful for logging
+     * the current primary adaptor port in log statements.
+     */
+    private class AdaptorPortNumberConverter extends PatternConverter {
+        /** holds a reference to the primary adaptor port */
+        String _portNumber;
+        
+        /**
+         * Default package level constructor
+         * @param formattingInfo current pattern formatting information
+         */
+        AdaptorPortNumberConverter(FormattingInfo formattingInfo) {
+            super(formattingInfo);
+        }
+        
+        /**
+         * Returns the current port number on which the  
+         * primary adaptor listens to. 
+         * This will be the same number specified
+         * by WOPort launch argument.
+         * <p> 
+         * If the application or adapter instance 
+         * has not been created yet then "N/A" is logged.
+         * @param event a given logging event
+         * @return the current application name
+         */
+        public String convert(LoggingEvent event) {
+            if (_portNumber == null) {
+                if (WOApplication.application() != null) 
+                    _portNumber = WOApplication.application().port().toString();
+            }
+            return _portNumber != null ? _portNumber : "N/A";
         }
     }
 }
