@@ -6,6 +6,8 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
+import er.extensions.*;
+
 /**
  * Postgres needs special handling of NSData conversion, special
  * escape char, has a regex query selector and handles JOIN clauses correctly.
@@ -16,7 +18,8 @@ import com.webobjects.foundation.*;
  * @author Arturo Perez: JOIN clauses
  */
 public class PostgresqlExpression extends JDBCExpression {
-
+    public static final ERXLogger log = ERXLogger.getERXLogger(PostgresqlExpression.class);
+    
     static private final String _DEFERRABLE_MODIFIER = " INITIALLY DEFERRED";
 
     static private final boolean enableJoinHandling = Boolean.getBoolean(PostgresqlExpression.class + ".enableJoinHandling");
@@ -48,8 +51,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden to support milliseconds to work with Postgres
      */
     public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-        String type = columnTypeStringForAttribute(eoattribute);
-        if ("timestamp".equals(type)) {
+        if ("T".equals(eoattribute.valueType())) {
             return false;
         } else {
             return true;
@@ -60,8 +62,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden to support milliseconds to work with Postgres
      */
     public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {
-        String type = columnTypeStringForAttribute(eoattribute);
-        if ("timestamp".equals(type)) {
+        if ("T".equals(eoattribute.valueType())) {
             return false;
         } else {
             return true;
@@ -144,7 +145,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * NULL values are excluded from casting.
      * Also contains a bugfix to handle milli seconds in timestamps
      */
-    static NSTimestampFormatter timestampFormatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
+    static NSTimestampFormatter timestampFormatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
 
     public String sqlStringForValue(Object v, String kp) {
         String result = super.sqlStringForValue(v,kp);
@@ -162,11 +163,7 @@ public class PostgresqlExpression extends JDBCExpression {
                 //handel millis seconds, too.
                 if (v instanceof NSTimestamp) {
                     NSTimestamp t = (NSTimestamp)v;
-                    String timestampString = "'"+timestampFormatter.format(t);
-                    Timestamp ts = new Timestamp(t.getTime());
-                    String nanoString = ts.getNanos() + "";
-                    nanoString = nanoString.substring(0, 3);
-                    timestampString += "." + nanoString + "'";
+                    String timestampString = "'"+timestampFormatter.format(t) + "'";
                     result = timestampString;
                 }
                 result = result + "::" + s;
