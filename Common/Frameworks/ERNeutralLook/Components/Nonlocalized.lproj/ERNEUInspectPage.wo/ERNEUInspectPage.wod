@@ -117,7 +117,7 @@ EntityName: WOString {
 	value = d2wContext.displayNameForEntity;
 }
 
-Errors: ERXErrorPanelDictionary {
+Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
 	errorMessages = errorMessages;
