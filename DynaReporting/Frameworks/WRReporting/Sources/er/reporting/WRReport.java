@@ -2,8 +2,11 @@ package er.reporting;
 
 import er.grouping.*;
 import java.lang.*;
+import java.net.URL;
 import java.util.*;
 import java.io.*;
+
+import com.sun.jndi.toolkit.url.UrlUtil;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
@@ -695,7 +698,9 @@ public class WRReport extends WOComponent  {
     }
 
     public String idAttributeTd() {
-        return attrib.keyPath();
+    	String id = attrib.keyPath();
+    	id = ERXStringUtilities.escapeNonXMLChars(id);
+    	return id;
     }
     
     public DRAttribute attrib() {

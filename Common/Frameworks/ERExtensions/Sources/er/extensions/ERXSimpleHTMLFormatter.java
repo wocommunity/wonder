@@ -14,7 +14,7 @@ import java.text.*;
 /**
  * This is a simple class for converting ASCII strings to HTML and vice versa.
  * In the current implementation, all this class does is convert newlines to HTML breaks and
- * tab characters to HTML <spacer> tags.
+ * tab characters to HTML &lt;spacer&gt; tags.
  */
 public class ERXSimpleHTMLFormatter extends java.text.Format {
 
@@ -22,7 +22,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXSimpleHTMLFormatter.class);
 
     /** holds the HTML return string */
-    private final static String HTMLReturn = "<br>";
+    private final static String HTMLReturn = "<br />";
     /** holds the ASCII return string*/
     // FIXME: Should support all the kinds of returns, see ERXStringWithLineBreaks
     private final static String ASCIIReturn = "\n";
@@ -46,8 +46,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
             // FIXME: Should be able to customize
             // FIXME: Should have all framework name references broken out into
             //		a single entry off the principal class.
-            _HTMLTab = "<img src=" + WOApplication.application().resourceManager().urlForResourceNamed("s.gif", "ERExtensions",null,null)
-                + " width=50>";
+            _HTMLTab = "<spacer width=\"50\" />";
         return _HTMLTab;
     }
 
