@@ -180,9 +180,9 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
             epi.setNextPage(context().page());
             if (((er.extensions.ERXGenericRecord)eo).isNewObject())
-                localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext(), false);
+                localContext = ERXEC.newEditingContext(object().editingContext(), false);
             else
-                localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
+                localContext = ERXEC.newEditingContext(object().editingContext().parentObjectStore());
             epi.setObject(EOUtilities.localInstanceOfObject(localContext, eo));
             localContext.hasChanges();
         }
@@ -243,7 +243,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             if (object!=null && !(object.editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator)) {
                 log.warn("Newly created object is in an editing context that will not save to the database");
             }
-            localContext = er.extensions.ERXExtensions.newEditingContext(object.editingContext().parentObjectStore());
+            localContext = ERXEC.newEditingContext(object.editingContext().parentObjectStore());
             if (log.isDebugEnabled()) log.debug("Creating "+entityNameForNewInstances);
             EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
             localContext.insertObject(newEO);
