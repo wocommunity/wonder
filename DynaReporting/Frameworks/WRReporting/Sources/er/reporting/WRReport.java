@@ -685,22 +685,6 @@ public class WRReport extends WOComponent  {
         aGrp = gp;
     }
 
-
-    public boolean shouldTotalCheck() {
-        return aGrp.useGroupTotal();
-    }
-    public void setShouldTotalCheck(boolean v) {
-        if (v) {
-            aGrp.setUseGroupTotal(true);
-        } else {
-            NSArray srtdList = aGrp.sortedCriteriaList();
-            aGrp.setUseGroupTotal(false);
-            _currentZCriteria.setObjectForKey(srtdList.objectAtIndex(0), aGrp.masterCriteria().label());
-        }
-
-    }
-
-
     public NSDictionary totalDict() {
         NSDictionary dict = this.currentCoordinates();
         NSDictionary totalDict = (NSDictionary)dict.objectForKey("isTotal");
