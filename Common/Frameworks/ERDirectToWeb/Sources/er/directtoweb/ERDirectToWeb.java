@@ -318,7 +318,10 @@ public class ERDirectToWeb {
             log.error("Exception <"+ex+">: with NULL d2wContext"/*, ex*/);
         }
         if(ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", true)) {
-        	throw new D2WException(ex, d2wContext);
+            if(!(ex instanceof D2WException)) {
+                ex = new D2WException(ex, d2wContext);
+            }
+            throw (D2WException)ex;
         }
     }
     
