@@ -9,7 +9,6 @@ import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.imagemap.ImageMapUtil;
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 
 import com.webobjects.appserver.WOContext;
@@ -177,9 +176,11 @@ public abstract class ERPChart extends ERXStatelessComponent {
     
     public Dataset dataset() {
         if(_dataset == null) {
-            _dataset = (Dataset)valueForBinding("dataset");
+            if(hasBinding("dataset") && canGetValueForBinding("dataset")) {
+                _dataset = (Dataset)valueForBinding("dataset");
+            }
             if(_dataset == null) {
-                _dataset = (DefaultCategoryDataset) createDataset();
+                _dataset = createDataset();
                 if(canSetValueForBinding("dataset")) {
                     setValueForBinding(_dataset, "dataset");
                 }
@@ -190,7 +191,9 @@ public abstract class ERPChart extends ERXStatelessComponent {
     
     public JFreeChart chart() {
         if(_chart == null) {
-            _chart = (JFreeChart)valueForBinding("chart");
+            if(hasBinding("chart") && canGetValueForBinding("chart")) {
+                _chart = (JFreeChart)valueForBinding("chart");
+            }
             if(_chart == null) {
                 _chart = createChart();
                 if(hasBinding("chart") && canSetValueForBinding("chart")) {
@@ -245,6 +248,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
                     _imageData = new NSData(imageStream.toByteArray());
                 }
             } catch (Exception ex) {
+                log.error(ex, ex);
                 NSForwardException._runtimeExceptionForThrowable(ex);
             }
         }
