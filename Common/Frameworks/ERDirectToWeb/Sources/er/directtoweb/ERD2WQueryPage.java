@@ -152,11 +152,7 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
                 } else {
                     listpageinterface = D2W.factory().listPageForEntityNamed(entity().name(), session());
                 }
-                NSArray results = queryDataSource().fetchObjects();
-                EOArrayDataSource ads = new EOArrayDataSource(entity().classDescriptionForInstances(),
-                                                              queryDataSource().editingContext());
-                ads.setArray(results);
-                listpageinterface.setDataSource(ads);
+                listpageinterface.setDataSource(queryDataSource());
                 listpageinterface.setNextPage(context().page());
                 nextPage = (WOComponent) listpageinterface;
             }
