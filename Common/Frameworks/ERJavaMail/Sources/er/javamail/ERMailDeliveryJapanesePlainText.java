@@ -35,7 +35,7 @@ public class ERMailDeliveryJapanesePlainText extends ERMailDelivery {
     }
 
     /** Pre-processes the mail before it gets sent.
-        @see ERMailDelivery.prepareMail */
+        @see ERMailDelivery#prepareMail */
     // protected DataHandler prepareMail() {
     public DataHandler prepareMail() {
         return new DataHandler(_iso2022jpTextContent, "text/plain; charset=\"ISO-2022-JP\"");

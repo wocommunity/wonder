@@ -31,7 +31,7 @@ public class ERMailDeliveryWOComponentPlainText extends ERMailDelivery {
     }
 
     /** Pre-processes the mail before it gets sent.
-        @see ERMailDelivery.prepareMail */
+        @see ERMailDelivery#prepareMail */
     protected DataHandler prepareMail () {
 		// Generate text
 		NSData data = mailComponent.generateResponse ().content ();
