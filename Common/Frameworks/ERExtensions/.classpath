@@ -4,9 +4,5 @@
     <classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
     <classpathentry kind="lib" path="/Library/Java/Extensions/jce1_2_1.jar"/>
     <classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaFoundation/JavaWOExtensions/JavaPlot/JavaWOJSPServlet/JavaWebObjects/JavaXML/JavaEOAccess/JavaEOControl/JavaEOProject/JavaJDBCAdaptor/ERJars"/>
-    <classpathentry kind="var" path="NEXT_LOCAL_ROOT/Library/Frameworks/ERJars.framework/Resources/Java/junit.jar"/>
-    <classpathentry kind="var" path="NEXT_LOCAL_ROOT/Library/Frameworks/ERJars.framework/Resources/Java/log4j-1.2.8.jar"/>
-    <classpathentry kind="var" path="NEXT_LOCAL_ROOT/Library/Frameworks/ERJars.framework/Resources/Java/NSProjectSearchPath.jar"/>
-    <classpathentry kind="var" path="NEXT_LOCAL_ROOT/Library/Frameworks/JavaWOExtensions.framework/Resources/Java/JavaWOExtensions.jar"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>
