@@ -51,12 +51,12 @@ ColumnLabelRepetition: WORepetition {
 }
 
 ERXNonNullConditional1: WOConditional {
-	condition = d2wContext.branchChoices.count;
+	condition = hasBranchChoices;
 	negate = true;
 }
 
 ERXNonNullConditional2: ERXNonNullConditional {
-	condition = d2wContext.branchChoices;
+	condition = hasBranchChoices;
 }
 
 EmptyMessageComponent: WOSwitchComponent {
@@ -71,6 +71,10 @@ EntityRepetition: WORepetition {
 
 Form1: WOForm {
 	multipleSubmit = true;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
 HiddenField: WOHiddenField {
@@ -151,13 +155,11 @@ NumberOfItems: WOString {
 
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
-	_componentUnroll = true;
-	_unroll = true;
 }
 
 Repetition1: WORepetition {
-	item = aBranch;
-	list = d2wContext.branchChoices;
+	item = branch;
+	list = branchChoices;
 }
 
 ReturnButton2: WOImage {
@@ -188,7 +190,7 @@ SubmitButton2: WOSubmitButton {
 
 SubmitButton3: WOSubmitButton {
 	action = backAction;
-	value = aBranch.displayName;
+	value = branch.branchButtonLabel;
 }
 
 SwitchComponent1: WOSwitchComponent {
