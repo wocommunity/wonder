@@ -376,13 +376,13 @@ public class DRReportModel extends Object  {
         
         NSSelector synchModelSelector = new NSSelector("synchModel", ERXConstant.NotificationClassArray);
         
-        NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelUpdateNotification, null);
-        NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelRebuildNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelUpdateNotification, this);
+        NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelRebuildNotification, this);
         return this;
     }
 
     public void synchModel() {
-        //OWDebug.println(1, "entered");
+        log.info("synchModel()");
         this.computeRecordValuesForRecords(this.records());
         this.makeRecordGroupsStaleTotal();
         this.flatListForAttributeList();
@@ -391,9 +391,8 @@ public class DRReportModel extends Object  {
         this.buildOrderings();
     }
 
-    public void synchModel(NSNotification not) {
-        //OWDebug.println(1, "notification:"+ not);
-        //[self synchModel];
+    public void synchModel(NSNotification notification) {
+        synchModel();
     }
 
     public void groupAllRecordGroups() {
