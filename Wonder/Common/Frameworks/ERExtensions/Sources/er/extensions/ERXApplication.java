@@ -263,6 +263,13 @@ public abstract class ERXApplication extends WOApplication {
                                    String anHTTPVersion,
                                    NSDictionary someHeaders, NSData aContent,
                                    NSDictionary someInfo) {
+
+        // Workaround for #3428067 (Apache Server Side Include module will feed 
+        // "INCLUDED" as the HTTP version, which causes a request object not to be 
+        // created by an excepion.
+        if (anHTTPVersion.startsWith("INCLUDED")) 
+            anHTTPVersion = "HTTP/1.0"; 
+
         WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
         return worequest;
     }
