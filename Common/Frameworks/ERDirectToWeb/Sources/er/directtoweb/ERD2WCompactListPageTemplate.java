@@ -6,15 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-
+import com.webobjects.appserver.WOContext;
 
 public class ERD2WCompactListPageTemplate extends ERD2WListPage {
 
     public ERD2WCompactListPageTemplate(WOContext context) {
         super(context);
     }
-
 }

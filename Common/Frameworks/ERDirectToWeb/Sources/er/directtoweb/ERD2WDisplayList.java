@@ -4,18 +4,15 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import ERDCustomEditComponent;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 public class ERD2WDisplayList extends ERDCustomEditComponent {
 
-    public ERD2WDisplayList(WOContext context) {super(context);}
+    public ERD2WDisplayList(WOContext context) { super(context); }
     
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
@@ -23,5 +20,4 @@ public class ERD2WDisplayList extends ERDCustomEditComponent {
     public NSArray listToDisplay() {
         return (NSArray)(object() instanceof NSArray ? object() : objectKeyPathValue());
     }
-    
 }
