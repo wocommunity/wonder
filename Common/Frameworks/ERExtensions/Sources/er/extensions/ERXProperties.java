@@ -27,8 +27,11 @@ import com.webobjects.appserver._private.WOProjectBundle;
  * like <code>getBoolean</code> off of Boolean which would resolve
  * the System property as a Boolean object.
  */
-public class ERXProperties {
+public class ERXProperties extends Properties {
 
+    /** default string */
+    public static final String DefaultString = "Default";
+    
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
 
@@ -652,4 +655,57 @@ public class ERXProperties {
         return actualPath;
     }
 
+    //	===========================================================================
+    //	Instance Variable(s)
+    //	---------------------------------------------------------------------------
+
+    /** caches the application name that is appended to the key for lookup */
+    protected String applicationNameForAppending;
+
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------
+
+    /**
+     * Caches the application name for appending to the key.
+     * Note that for a period when the application is starting up
+     * application() will be null and name() will be null.
+     * @return application name used for appending, for example ".ERMailer"
+     */
+    protected String applicationNameForAppending() {
+        if (applicationNameForAppending == null) {
+            applicationNameForAppending = WOApplication.application() != null ? WOApplication.application().name() : null;
+            if (applicationNameForAppending != null) {
+                applicationNameForAppending = "." + applicationNameForAppending;
+            }
+        }
+        return applicationNameForAppending;
+    }
+
+    /**
+     * Overriding the default getProperty method to first check:
+     * key.<ApplicationName> before checking for key. If nothing
+     * is found then key.Default is checked.
+     * @param key to check
+     * @return property value
+     */
+    public String getProperty(String key) {
+        String property = null;
+        String application = applicationNameForAppending();
+        if (application != null) {
+            property = super.getProperty(key + application);
+        }
+        if (property == null) {
+            property = super.getProperty(key);
+            if (property == null) {
+                property = super.getProperty(key + DefaultString);
+            }
+            // We go ahead and set the value to increase the lookup the next time the
+            // property is accessed.
+            if (property != null && application != null) {
+                setProperty(key + application, property);
+            }
+        }
+        return property;
+    }
 }
