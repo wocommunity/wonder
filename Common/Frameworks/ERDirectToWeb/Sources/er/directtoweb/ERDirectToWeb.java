@@ -313,7 +313,7 @@ public class ERDirectToWeb {
                       "entityName <" + d2wContext.valueForKeyPath("entity.name") + ">, "+
                       "displayPropertyKeys <" +d2wContext.valueForKeyPath("displayPropertyKeys")+ ">, "+
                       "componentName <" + d2wContext().valueForKey("componentName") + ">, "+
-                      "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">"/*, ex*/);
+                      "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">", ex);
         } else {
             log.error("Exception <"+ex+">: with NULL d2wContext"/*, ex*/);
         }
