@@ -4,19 +4,16 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERQueryPage.java created by patrice on Mon 13-Mar-2000 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
 public class ERD2WQueryPage extends D2WQueryPage {
 
-    public ERD2WQueryPage(WOContext context) {super(context);}
+    public ERD2WQueryPage(WOContext context) { super(context); }
     
     // add the ability to AND the existing qualifier from the DG
     public EOQualifier qualifier() {
@@ -25,11 +22,9 @@ public class ERD2WQueryPage extends D2WQueryPage {
         return q==null ? q2 : (q2==null ? q : new EOAndQualifier(new NSArray(new Object[]{q,q2})));
     }
 
-
     // Used with branching delegates.
     protected NSDictionary branch;
     public String branchName() { return (String)branch.valueForKey("branchName"); }
-
 
     // returning a null query data source if cancel was clicked
     private boolean _wasCancelled;
@@ -46,7 +41,5 @@ public class ERD2WQueryPage extends D2WQueryPage {
 
     public EODataSource queryDataSource() {
         return !_wasCancelled ? super.queryDataSource() : null;
-    }
-
-    
+    }    
 }

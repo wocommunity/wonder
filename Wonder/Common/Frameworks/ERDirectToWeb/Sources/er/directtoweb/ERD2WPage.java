@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERD2WPage.java created by max on Thu 26-Apr-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -20,7 +18,7 @@ import org.apache.log4j.NDC;
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
 
     ///////////////////////////////////////  log4j category  ///////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.templates.ERD2WPage");
+    public final static Category cat = Category.getInstance(ERD2WPage.class);
     public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERD2WPage");
 
     protected NSMutableDictionary errorMessages = new NSMutableDictionary();

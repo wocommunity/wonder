@@ -4,14 +4,12 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-
 import er.extensions.*;
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +20,7 @@ import er.extensions.*;
 /////////////////////////////////////////////////////////////////////////////////
 public class ERDDisplayMailTo extends ERDCustomEditComponent {
 
-     public ERDDisplayMailTo(WOContext context) {super(context);}
+     public ERDDisplayMailTo(WOContext context) { super(context); }
     
     protected String _displayString, _email;
     protected Boolean _showBrackets;
@@ -46,9 +44,9 @@ public class ERDDisplayMailTo extends ERDCustomEditComponent {
     
     public String mailToHref() {
         String mailToHref = null;
-        if(hasBinding("email")){
+        if(hasBinding("email")) {
             mailToHref = "mailto:"+(String)valueForBinding("email");
-        }else if (object() != null && key() != null) {
+        } else if (object() != null && key() != null) {
             mailToHref = "mailto:" + objectKeyPathValue();
         }
         return mailToHref;

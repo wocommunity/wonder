@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -12,16 +11,13 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
-
 public class ERDEditDateJavascript extends ERDCustomEditComponent {
 
-        public ERDEditDateJavascript(WOContext context) {super(context);}
-    
-    protected static final NSTimestampFormatter DATE_FORMAT =
-        new NSTimestampFormatter("%m/%d/%Y") /* JC_WARNING - Removed the ommit natural language flag "<e2>".*/;
-    protected static final NSTimestampFormatter DATE_FORMAT_YEAR_TWO_DIGITS =
-        new NSTimestampFormatter("%m/%d/%y") /* JC_WARNING - Removed the ommit natural language flag "<e2>".*/;
-    protected String dateString;
+    public ERDEditDateJavascript(WOContext context) {super(context);}
+
+    protected static final NSTimestampFormatter DATE_FORMAT = new NSTimestampFormatter("%m/%d/%Y");
+    protected static final NSTimestampFormatter DATE_FORMAT_YEAR_TWO_DIGITS = new NSTimestampFormatter("%m/%d/%y");
+    public String dateString;
 
     public void appendToResponse(WOResponse r, WOContext c){
         if(dateString == null){
@@ -29,16 +25,14 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
             if(date != null)
                 try {
                     dateString = DATE_FORMAT.format(date);
-                } catch(IllegalArgumentException /* JC_WARNING - You may want to use NumberFormatException instead.*/ nsfe){ }
+                } catch(IllegalArgumentException nsfe){ }
         }
         super.appendToResponse(r,c);
     }
     //Made the component stateful so that we can keep eroneous values
     /*public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }*/
-    public String name() {
-        return key()+"_datebox";
-    }
+    public String name() { return key()+"_datebox"; }
 
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
@@ -64,14 +58,14 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
                 }
                 if (!dateIsValid)
                     throw new NSValidation.ValidationException("Please check <B>"+
-                                                     valueForBinding("displayNameForProperty")+"</B>: "+dateString+" is not a valid date");
-                
+                                                               valueForBinding("displayNameForProperty")+"</B>: "+dateString+" is not a valid date");
+
             }
             if (object()!=null) object().validateTakeValueForKeyPath(date, key());
         } catch (java.text.ParseException nspe) {
             NSValidation.ValidationException v =
             new NSValidation.ValidationException("Please check the format of <B>"+
-                                       valueForBinding("displayNameForProperty")+"</B> "+dateString+" is not a valid date");
+                                                 valueForBinding("displayNameForProperty")+"</B> "+dateString+" is not a valid date");
             parent().validationFailedWithException( v, date, key());
         } catch (NSValidation.ValidationException v) {
             parent().validationFailedWithException(v,date,key());
@@ -87,8 +81,7 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
                                                                                           "ERExtensions",
                                                                                           null,
                                                                                           context().request());
-          }
+        }
         return _datePickerJavaScriptUrl;
-      }
-
+    }
 }

@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* DelayedConditionalAssignment.java created by jd on Wed 18-Apr-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -14,7 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 import er.extensions.*;
 
 /**
@@ -60,13 +58,6 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
         }
         return _dependentKeys;
     }
-
-    public Object fire(D2WContext c) {
-        return super.fire(c);
-    }
-
-
-    
 
     /**
      * This method is called whenever the propertyKey is requested,

@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERTabInspectPage.java created by max on Tue 19-Dec-2000 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -15,7 +13,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 
 public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
@@ -24,12 +22,12 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
     public ERD2WTabInspectPage(WOContext c) {
         super(c);
     }
-    
-        //////////////////////////////////////////  log4j category  /////////////////////////////////////////////////
+
+    //////////////////////////////////////////  log4j category  /////////////////////////////////////////////////
     public static final Category cat = Category.getInstance("er.directtoweb.templates.ERD2WTabInspectPage");
     public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERD2WTabInspectPage");
 
-    
+
     public String switchTabActionName() { return isEditing() ? "switchTabAction" : null; }
     public boolean switchTabAction() {
         boolean switchTab = true;
@@ -59,7 +57,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
     protected Integer _tabNumber;
     public Integer tabNumber(){ return _tabNumber;}
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
-    
+
     private ERD2WContainer _currentTab;
     public ERD2WContainer currentTab() { return _currentTab; }
     public void setCurrentTab(ERD2WContainer value) {
@@ -153,7 +151,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
     public boolean shouldShowPreviousButton() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowPreviousButton")); }
     public boolean shouldShowNextButton() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowNextButton")); }
     public boolean useSubmitImages() { return ERXUtilities.booleanValue(d2wContext().valueForKey("useSubmitImages")); }
-    
+
     public WOComponent nextTab() {
         if (switchTabAction()) {
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());

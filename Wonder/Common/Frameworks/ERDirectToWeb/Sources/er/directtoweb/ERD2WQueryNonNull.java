@@ -4,19 +4,16 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 public class ERD2WQueryNonNull extends QueryComponent {
 
-    public ERD2WQueryNonNull(WOContext context) {super(context);}
+    public ERD2WQueryNonNull(WOContext context) { super(context); }
     
     public Object item;
     public int index;
@@ -26,16 +23,12 @@ public class ERD2WQueryNonNull extends QueryComponent {
     private final static Object NO_VALUE=new Object(); 
     private final static Object DONT_CARE_VALUE=new Object(); 
     private final static Object[] _queryNumbers={ DONT_CARE_VALUE, YES_VALUE, NO_VALUE };
-    protected final NSArray queryNumbers=new NSArray(_queryNumbers);
+    protected final static NSArray _queryNumbersArray=new NSArray(_queryNumbers);
 
 
-    public String displayString() {
-        return _queryValues[index];
-    }
-
-    public Object value() {
-        return _queryNumbers[0];
-    }
+    public NSArray queryNumbers() { return _queryNumbersArray; }
+    public String displayString() { return _queryValues[index]; }
+    public Object value() { return _queryNumbers[0]; }
 
     public void setValue(Object newValue) {
         if (newValue==DONT_CARE_VALUE) {
@@ -46,6 +39,4 @@ public class ERD2WQueryNonNull extends QueryComponent {
             displayGroup().queryOperator().takeValueForKey(newValue==YES_VALUE ? "<>" : "=", propertyKey());            
         }
     }
-
-
 }

@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* CustomEditComponent.java created by patrice on Sat 25-Mar-2000 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -14,10 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
-import ERD2WCustomComponentWithArgs;
-import ERD2WStatelessCustomComponentWithArgs;
-import ERD2WCustomQueryComponentWithArgs;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 
 // A VERY USEFUL COMPONENT - has some crusty stuff in it, but look mainly at valueForBinding and hasBinding.
 // 	this guy works in conjunction with D2WCustomComponentWithArgs

@@ -4,17 +4,13 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* DelayedRuleAssignment.java created by jd on Wed 18-Apr-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 
 /**
  * DelayedRuleAssignment expects an array of rules as its value. The rules are
@@ -29,16 +25,11 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
         return new ERDDelayedRuleAssignment(eokeyvalueunarchiver);
     }
     
-    ///////////////////////////  log4j category  ///////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.DelayedRuleAssignment");
-    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////  log4j category  ///////////////////////////////////
+    public final static Category cat = Category.getInstance(ERDDelayedRuleAssignment.class);
 
     public ERDDelayedRuleAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRuleAssignment(String key, Object value) { super(key,value); }
-
-    public Object fire(D2WContext c) {
-        return super.fire(c);
-    }
 
     // FIXME: this assignment should in theory return all the keys in the LHS of the rule
     // as the dependent keys!!
