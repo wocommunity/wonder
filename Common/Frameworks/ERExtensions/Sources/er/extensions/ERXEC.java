@@ -108,7 +108,7 @@ public class ERXEC extends EOEditingContext {
     		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
     		for (int i = ecs.size() - 1; i >= 0; i--) {
     			EOEditingContext ec = (EOEditingContext) ecs.get(i);
-    			log.error("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
+    			log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
     			try {
     				ec.unlock();
     			} catch(IllegalStateException ex) {
