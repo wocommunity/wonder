@@ -149,7 +149,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     }
 
     public int indentLevel() {
-        return ERXExtensions.numberOfOccurrencesOfCharInString('.',logger().getName());
+        return ERXStringUtilities.numberOfOccurrencesOfCharInString('.',logger().getName());
     }
 
 
