@@ -34,7 +34,7 @@ There are many ways to use this script:
 		-Duse.grouping=true \
 		-Duse.reporting=true \
 		-Duse.mysql=true \
-		-Duse.additional.framework.[1-7]=SomePattern[1-7]\* \
+		-Duse.additional.framework.[1-9]=SomePattern[1-9]\* \
 		generic.MODE
 
     or shorter:
@@ -113,7 +113,7 @@ There are many ways to use this script:
             <param name="use.reporting" value="true" />
 
             <!-- set this if you want to use your own built frameworks, or leave out if not -->
-            <!-- You have up to 4 of them and you can use patterns -->
+            <!-- You have up to 9 of them and you can use patterns -->
             <param name="use.additional.framework.1" value="BTBusinessLogic.framework" />
             <param name="use.additional.framework.2" value="SomeOther*" />
             <param name="use.additional.framework.3" value="BT*" />
@@ -139,7 +139,29 @@ There are many ways to use this script:
         <antcall target="generic.all" />
     </target>
     <target name="generic."><!-- the "." is intentional to facilitate running from PBX buttons -->
+        <antcall target="generic.all" >
+            <param name="project.name" value="${project.name}" />
+            <param name="project.dir" value="${project.dir}" />
+            <param name="project.type" value="${project.type}" />
+        </antcall>
+    </target>
+    <target name="known."><!-- the "." is intentional to facilitate running from PBX buttons -->
         <antcall target="${project.name}.all" >
+        </antcall>
+    </target>
+    <target name="known.clean">
+         <antcall target="global.clean.${project.type}" >
+            <param name="project.name" value="${project.name}" />
+        </antcall>
+    </target>
+    <target name="known.install">
+         <antcall target="global.install.${project.type}" >
+            <param name="project.name" value="${project.name}" />
+        </antcall>
+    </target>
+    <target name="known.web">
+         <antcall target="global.web.${project.type}" >
+            <param name="project.name" value="${project.name}" />
         </antcall>
     </target>
     <target name="generic.all">
@@ -288,6 +310,12 @@ There are many ways to use this script:
            </frameworks>
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.7">
                 <include name="${use.additional.framework.7}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.8">
+                <include name="${use.additional.framework.8}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.9">
+                <include name="${use.additional.framework.9}"/>
            </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks"> 
                 <include name="JavaFoundation.framework" />
@@ -464,6 +492,12 @@ There are many ways to use this script:
            </frameworks>
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.7">
                 <include name="${use.additional.framework.7}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.8">
+                <include name="${use.additional.framework.8}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.9">
+                <include name="${use.additional.framework.9}"/>
            </frameworks>
            <frameworks root="${wo.woroot}/Library/Frameworks"> 
                 <include name="JavaFoundation.framework" />
