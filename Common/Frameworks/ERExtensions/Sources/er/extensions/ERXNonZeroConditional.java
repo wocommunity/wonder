@@ -45,6 +45,6 @@ public class ERXNonZeroConditional extends WOComponent {
      //		also could handle the string 0.
     public boolean isNonZero() {
         Object binding=valueForBinding("condition");
-        return binding==null || !binding.equals(ERXConstant.ZeroInteger);
+        return binding!=null && !binding.equals(ERXConstant.ZeroInteger);
     }
 }
