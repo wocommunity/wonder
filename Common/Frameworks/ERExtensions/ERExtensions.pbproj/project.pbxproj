@@ -435,6 +435,7 @@
 				F50C03940354549D014B9BC9,
 				F5E99BB00354DE4F01CF0E76,
 				F56937BD03561CDA01CF0E76,
+				F6ED0C7A0361C03B01257492,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6612,6 +6613,7 @@
 				F59C57DE02C4565701000102,
 				F59C57EC02C4565701000102,
 				F59C57EA02C4565701000102,
+				F6ED0C790361C03B01257492,
 			);
 			isa = PBXGroup;
 			name = Utilities;
@@ -6676,6 +6678,18 @@
 			isa = PBXGroup;
 			name = Workarounds/Bugfixes;
 			refType = 4;
+		};
+		F6ED0C790361C03B01257492 = {
+			isa = PBXFileReference;
+			name = ERXUnitAwareDecimalFormat.java;
+			path = er/extensions/ERXUnitAwareDecimalFormat.java;
+			refType = 4;
+		};
+		F6ED0C7A0361C03B01257492 = {
+			fileRef = F6ED0C790361C03B01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F6FA743C0343CC1A01257492 = {
 			isa = PBXFileReference;
