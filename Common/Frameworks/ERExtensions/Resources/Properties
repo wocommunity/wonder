@@ -38,7 +38,8 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 # Can specify the default message encoding. Defaults to ISO Latin 1
 # Accepted encodings: http://java.sun.com/j2se/1.3/docs/guide/intl/encoding.doc.html
 #er.extensions.ERXApplication.DefaultMessageEncoding=ISO8859_1
-
+er.extensions.ERXMessageEncoding.Enabled=true
+#er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
 #########################################################################
 # Enterprise Object
 #########################################################################
@@ -51,6 +52,12 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 #########################################################################
 ERBlowfishCipherKey = DefaultBlowfishCipherKey
 #er.extensions.ERXBlowfishCipherKey = DefaultBlowfishCipherKey
+
+#########################################################################
+# Browser
+#########################################################################
+#er.extensions.ERXBrowserFactory.FactoryClassName=er.extensions.ERXBrowserFactory
+#er.extensions.ERXBrowserFactory.BrowserClassName=er.extensions.ERXBasicBrowser
 
 #########################################################################
 # Direct Action 
