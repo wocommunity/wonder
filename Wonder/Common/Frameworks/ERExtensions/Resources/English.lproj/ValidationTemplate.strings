@@ -1,15 +1,13 @@
 {
-    "Test validation message for unit test" = "FAIL - ERD comes before this";
-    "Test validation message for unit test in ERX" = "SUCCESS - ERD comes before this";
-    
-    NullPropertyException = "Please provide a <b>@@displayNameForProperty@@</b>.";
+    ExceedsMaximumLengthException = "The value entered for <b>@@displayNameForProperty@@</b> exceeds the length of <b>@@attribute.width@@</b>.";
     InvalidNumberException = "The value is an invalid number.";
-    MandatoryToOneRelationshipException = "A <b>@@displayNameForEntity@@</b> must have a <b>@@displayNameForProperty@@</b>.";
     MandatoryToManyRelationshipException = "A <b>@@displayNameForEntity@@</b> must have a least one <b>@@displayNameForProperty@@</b>.";
+    MandatoryToOneRelationshipException = "A <b>@@displayNameForEntity@@</b> must have a <b>@@displayNameForProperty@@</b>.";
+    NullPropertyException = "Please provide a <b>@@displayNameForProperty@@</b>.";
     ObjectRemovalException = "Cannot delete this <b>@@displayNameForEntity@@</b>. You should first delete the item in its <b>@@displayNameForProperty@@</b>";
     ObjectsRemovalException = "Cannot delete this <b>@@displayNameForEntity@@</b>. You should first delete the items in its <b>@@displayNameForProperty@@</b>.";
-
-    ExceedsMaximumLengthException = "The value entered for <b>@@displayNameForProperty@@</b> exceeds the length of <b>@@attribute.width@@</b>.";
+    "Test validation message for unit test" = "FAIL - ERD comes before this";
+    "Test validation message for unit test in ERX" = "SUCCESS - ERD comes before this";
     ValueConversionException = "The value entered for <b>@@displayNameForProperty@@</b> is not a valid <b>@@attribute.valueClass@@</b>.";
     // User.name.NullPropertyException = "Hi @@displayNameForProperty@@, don't do that!";
     // firstName.NullPropertyException = "Hi @@propertyKey@@, really don't do that!";
