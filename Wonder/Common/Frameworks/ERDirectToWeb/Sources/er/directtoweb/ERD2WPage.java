@@ -72,7 +72,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             validationCat.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
         if (shouldCollectValidationExceptions()) {
             if (e instanceof ERXValidationException)
-                ((ERXValidationException)e).setObjectForKey(d2wContext(), "d2wContext");
+                ((ERXValidationException)e).setContext(d2wContext());
             _temp.removeAllObjects();
             ERXValidation.validationFailedWithException(e,value,keyPath,_temp,propertyKey(),d2wContext().entity(),ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
             errorKeyOrder.addObjectsFromArray(_temp.allKeys());
