@@ -636,8 +636,14 @@ public class ERXStringUtilities {
         String capitalize = null;
         if (value != null && value.length() > 0) {
             StringBuffer buffer = new StringBuffer();
+            boolean first = true;
             for (StringTokenizer tokenizer = new StringTokenizer(value); tokenizer.hasMoreElements();) {
                 String token = tokenizer.nextToken();
+                if (!first) {
+                    buffer.append(' ');
+                } else {
+                    first = false;
+                }
                 buffer.append(capitalize(token));
             }
             capitalize = buffer.toString();
