@@ -56,6 +56,7 @@
 				JAVA_CLASS_SEARCH_PATHS = "";
 				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERChangeNotificationJMS";
@@ -149,12 +150,11 @@
 				017C7B50FFD714AF7F000001,
 				017C7B51FFD714AF7F000001,
 				022D130C0059B6D611CD2978,
-				F606E159032174F201257492,
-				F6593153032178C901257492,
 				F604989B03212E6101257492,
-				F6A1CE5C03A86BF901257492,
-				F6A1CE5603A8691601257492,
-				F6A1CE5A03A86A2601257492,
+				77D32F7404DBF67A00EFBD10,
+				77D32F7A04DBF75000EFBD10,
+				77D32F7C04DBF75B00EFBD10,
+				77D32F7F04DBF76000EFBD10,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -186,6 +186,7 @@
 				GCC_VERSION = 2.x;
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)ERChangeNotificationJMS";
@@ -615,17 +616,16 @@
 		40B5828CFFD5E91B7F000001 = {
 			children = (
 				F604989903212E6101257492,
-				F6A1CE5503A8691601257492,
-				F6A1CE5B03A86BF901257492,
-				F6A1CE5903A86A1D01257492,
+				77D32F7304DBF67A00EFBD10,
+				77D32F7904DBF74F00EFBD10,
+				77D32F7B04DBF75B00EFBD10,
+				77D32F7E04DBF76000EFBD10,
 				022D130B0059B6D511CD2978,
 				40B5828DFFD5E91B7F000001,
 				40B5828EFFD5E91B7F000001,
 				40B5828FFFD5E91B7F000001,
 				40B58291FFD5E91B7F000001,
 				40B58292FFD5E91B7F000001,
-				F606E157032174F201257492,
-				F6593151032178C901257492,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -687,6 +687,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -820,6 +822,70 @@
 			settings = {
 			};
 		};
+		77D32F7304DBF67A00EFBD10 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "exolabcore-0.3.5.jar";
+			path = "Libraries/exolabcore-0.3.5.jar";
+			refType = 4;
+		};
+		77D32F7404DBF67A00EFBD10 = {
+			fileRef = 77D32F7304DBF67A00EFBD10;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+		77D32F7904DBF74F00EFBD10 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = jndi_1.2.1.jar;
+			path = Libraries/jndi_1.2.1.jar;
+			refType = 4;
+		};
+		77D32F7A04DBF75000EFBD10 = {
+			fileRef = 77D32F7904DBF74F00EFBD10;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+		77D32F7B04DBF75B00EFBD10 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "openjms-client-0.7.5.jar";
+			path = "Libraries/openjms-client-0.7.5.jar";
+			refType = 4;
+		};
+		77D32F7C04DBF75B00EFBD10 = {
+			fileRef = 77D32F7B04DBF75B00EFBD10;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+		77D32F7E04DBF76000EFBD10 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "openjms-rmi-0.7.5.jar";
+			path = "Libraries/openjms-rmi-0.7.5.jar";
+			refType = 4;
+		};
+		77D32F7F04DBF76000EFBD10 = {
+			fileRef = 77D32F7E04DBF76000EFBD10;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
 //770
 //771
 //772
@@ -846,82 +912,12 @@
 				);
 			};
 		};
-		F606E157032174F201257492 = {
-			isa = PBXFrameworkReference;
-			path = ERJars.framework;
-			refType = 3;
-		};
-		F606E159032174F201257492 = {
-			fileRef = F606E157032174F201257492;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F6593151032178C901257492 = {
-			isa = PBXFrameworkReference;
-			path = ERExtensions.framework;
-			refType = 3;
-		};
-		F6593153032178C901257492 = {
-			fileRef = F6593151032178C901257492;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F6668DED032A9CC701257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GettingStartedMacOSX.txt;
 			path = Documentation/GettingStartedMacOSX.txt;
 			refType = 4;
-		};
-		F6A1CE5503A8691601257492 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "openjms-0.7.3.1.jar";
-			path = "Libraries/openjms-0.7.3.1.jar";
-			refType = 4;
-		};
-		F6A1CE5603A8691601257492 = {
-			fileRef = F6A1CE5503A8691601257492;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-		F6A1CE5903A86A1D01257492 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = jta_1.0.1.jar;
-			path = Libraries/jta_1.0.1.jar;
-			refType = 4;
-		};
-		F6A1CE5A03A86A2601257492 = {
-			fileRef = F6A1CE5903A86A1D01257492;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-		F6A1CE5B03A86BF901257492 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "exolabcore-0.3.3.jar";
-			path = "Libraries/exolabcore-0.3.3.jar";
-			refType = 4;
-		};
-		F6A1CE5C03A86BF901257492 = {
-			fileRef = F6A1CE5B03A86BF901257492;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
 		};
 		F6B7839B0345539001257492 = {
 			fileEncoding = 30;
