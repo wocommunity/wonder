@@ -138,8 +138,20 @@ public class ERXDirectAction extends WODirectAction {
             r.appendContentString("key cannot be null or empty old System properties:\n"+System.getProperties());
         } else {
             value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
-            System.setProperty(key, value);
-            r.appendContentString("new System properties:\n"+System.getProperties());
+            java.util.Properties p = System.getProperties();
+            p.put(key, value);
+            System.setProperties(p);
+            ERXLogger.configureLogging(System.getProperties());
+            r.appendContentString("<html><body>New System properties:<br>");
+            for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
+                Object k = e.nextElement();
+                if (k.equals(key)) {
+                    r.appendContentString("<b>'"+k+"="+p.get(k)+"'     <= you changed this</b><br>");
+                } else {
+                    r.appendContentString("'"+k+"="+p.get(k)+"'<br>");
+                }
+            }
+            r.appendContentString("</body></html>");
         }
         return r;
     }
