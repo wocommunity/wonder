@@ -20,4 +20,7 @@ public class ERNEUEditSortedManyToManyPage extends ERD2WEditSortedManyToManyPage
         super(context);
     }
 
+    public int browserSize() {
+        return super.browserSize();
+    }
 }
