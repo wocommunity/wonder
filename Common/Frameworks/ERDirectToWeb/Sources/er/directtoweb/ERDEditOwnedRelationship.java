@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -14,7 +13,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:
@@ -32,10 +31,10 @@ import org.apache.log4j.*;
 
 public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
 
-    
+
     ////////////////////////////////////////////  log4j category  //////////////////////////////////////////////
     public final static Category cat = Category.getInstance("er.directtoweb.components.ERDEditOwnedRelationship");
-    
+
     protected EOEditingContext localContext;
 
     public boolean synchronizesVariablesWithBindings() { return false; }
@@ -56,7 +55,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
     public String selectionListKey() { return (String)valueForBinding("selectionListKey"); }
     public String postCreateNextPageDelegateKey() { return (String)valueForBinding("postCreateNextPageDelegateKey"); }
     public String errorMessage() { return hasBinding("noSelectionErrorMessage") ? (String)valueForBinding("noSelectionErrorMessage") : "";}
-    
+
     public NSArray list() {
         // we need to put the list in a peer (for add/delete ops) or in a child if it's a new object
         NSArray initialArray = (NSArray) (selectionListKey()!=null ? object().valueForKeyPath(selectionListKey()) :
@@ -64,8 +63,8 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         NSArray result = null;
         if (initialArray != null) {
             localContext=((ERXGenericRecord)object()).isNewEO() ?
-                ERXExtensions.newEditingContext(object().editingContext(), false) :
-                ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
+            ERXExtensions.newEditingContext(object().editingContext(), false) :
+            ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
             result = EOUtilities.localInstancesOfObjects(localContext, initialArray);
         }
         return result != null ? result : ERXConstant.EmptyArray;
@@ -115,7 +114,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
     public CreateEOWithChoicesDelegate createEODelegate() {
         return new CreateEOWithChoicesDelegate();
     }
-    
+
     public WOComponent add() {
         WOComponent result = null;
         clearValidationFailed();
@@ -124,29 +123,13 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         createEOWithChoices.key=key();
         createEOWithChoices.followPage=context().page();
         createEOWithChoices.preRelationshipKeys=preRelationshipKeys();
-        createEOWithChoices.postRelationshipKeys=postRelationshipKeys();        
+        createEOWithChoices.postRelationshipKeys=postRelationshipKeys();
         createEOWithChoices.postCreateNextPageDelegateKey = postCreateNextPageDelegateKey();
         if (entityNamesForNewInstances() == null || entityNamesForNewInstances().count() == 0) {
             createEOWithChoices.entityNameForNewInstances=relationshipEntityName();
         } else if (entityNamesForNewInstances().count() == 1) {
             createEOWithChoices.entityNameForNewInstances=(String)entityNamesForNewInstances().objectAtIndex(0);
         } else {
-            // FIXME: Explict name here.  Could actually use a D2W Select interface for this.
-            /*
-            result = pageWithName("StringListPicker");
-            result.takeValueForKey(createEOWithChoices, "nextPageDelegate");
-            result.takeValueForKey(context().page(), "cancelPage");
-            result.takeValueForKey(explanationComponentName(), "explanationComponentName");
-            NSMutableDictionary choices = new NSMutableDictionary();
-            for (Enumeration e = entityNamesForNewInstances().objectEnumerator(); e.hasMoreElements();) {
-                String entityName = (String)e.nextElement();
-                String displayNameForEntity = (String)ERDirectToWeb.d2wContextValueForKey("displayNameForEntity", entityName);
-                if (entityName != null && displayNameForEntity != null) {
-                    choices.setObjectForKey(entityName, displayNameForEntity);
-                }
-            }
-            result.takeValueForKey(choices, "choices");
-             */
             String pickTypePageConfiguration = null;
             if (hasBinding("pickTypePageConfiguration"))
                 pickTypePageConfiguration = (String)valueForBinding("pickTypePageConfiguration");
@@ -168,12 +151,12 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         }
         return result != null ? result : createEOWithChoices.nextPage();
     }
-    
+
     public WOComponent edit() {
         EOEnterpriseObject eo = (EOEnterpriseObject)objectKeyPathValue();
         EditPageInterface epi = null;
         if (eo == null) {
-            parent().validationFailedWithException(new NSValidation.ValidationException(errorMessage()),objectPropertyValue(), key());           
+            parent().validationFailedWithException(new NSValidation.ValidationException(errorMessage()),objectPropertyValue(), key());
         } else {
             String editConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("editConfigurationNameForEntity", eo.entityName());
             epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
@@ -183,12 +166,12 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             else
                 localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
             epi.setObject(EOUtilities.localInstanceOfObject(localContext, eo));
-            localContext.hasChanges();            
+            localContext.hasChanges();
         }
         return (WOComponent)epi;
     }
 
-    static class CreateEOWithChoicesDelegate extends Object /* JC_WARNING - Please advise: this could be a subclass of EOCustomObject. If needed, add 'implements NSKeyValueCoding' and implementations for valueForKey & takeValueForKey. */ implements NextPageDelegate {
+    static class CreateEOWithChoicesDelegate extends Object implements NextPageDelegate {
         protected String entityNameForNewInstances;
         protected String currentPageConfiguration;
         protected String postCreateNextPageDelegateKey = null;
@@ -269,7 +252,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
     // This delegate is used to make sure that the object makes it to the database, ie if the user was in a childEC when they
     // hit the edit button or add button, then the change would only be propogated to the session's ec not to the db
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    static class PostSaveDelegate extends Object /* JC_WARNING - Please advise: this could be a subclass of EOCustomObject. If needed, add 'implements NSKeyValueCoding' and implementations for valueForKey & takeValueForKey. */ implements NextPageDelegate {
+    static class PostSaveDelegate extends Object implements NextPageDelegate {
         NSDictionary postRelationshipKeys;
         EOEnterpriseObject object;
         EOEnterpriseObject savedObject;

@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -13,25 +12,25 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
-
 import er.extensions.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 
 public class ERDEditList extends ERDCustomEditComponent {
-public ERDEditList(WOContext context) {super(context);}
-    
-    protected String choices;
-    protected String choiceDisplayKey;
-    protected String choicesSortKey;
-    protected Number numberOfColumns;
-    protected WOComponent nextPage;
-    protected NextPageDelegate nextPageDelegate;
-    // working around checkbox matrix bug
-    protected String dummy;
-    protected String errorMessage;
-    protected EOEnterpriseObject item;
+
+    public ERDEditList(WOContext context) { super(context); }
 
     public final static Category cat = Category.getInstance("er.directtoweb.components.EditList");
+    
+    public String choices;
+    public String choiceDisplayKey;
+    public String choicesSortKey;
+    public Number numberOfColumns;
+    public WOComponent nextPage;
+    public NextPageDelegate nextPageDelegate;
+    // working around checkbox matrix bug
+    public String dummy;
+    public String errorMessage;
+    public EOEnterpriseObject item;
     
     private NSArray _list;
     /** @TypeInfo com.apple.yellow.eocontrol.EOEnterpriseObject */    
@@ -125,7 +124,6 @@ public ERDEditList(WOContext context) {super(context);}
         return nextPage();
     }
     
-    
     public String listLabel(){
         return (String)item.valueForKey(choiceDisplayKey);
     }
@@ -137,5 +135,4 @@ public ERDEditList(WOContext context) {super(context);}
         }
         return _selections;
     }
-    
 }

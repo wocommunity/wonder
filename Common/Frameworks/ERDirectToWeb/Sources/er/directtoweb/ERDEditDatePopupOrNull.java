@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -14,18 +13,18 @@ import com.webobjects.eoaccess.*;
 
 public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 
-            public ERDEditDatePopupOrNull(WOContext context) {super(context);}
-    
+    public ERDEditDatePopupOrNull(WOContext context) { super(context); }
+
     protected static final String empty = "null";
     protected static final String date = "date";
     protected String _radioValue;
 
     public String empty() { return empty; }
     public String date() { return date; }
-    
+
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
-    
+
     public String radioValue(){
         if(_radioValue == null) {
             NSTimestamp dateValue = (NSTimestamp)objectPropertyValue();
@@ -59,7 +58,7 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
             } catch(Exception e) {
                 parent().validationFailedWithException(e,date,key());
             }
-       } else {
+        } else {
             try {
                 object().validateTakeValueForKeyPath(null, key());
             } catch (NSValidation.ValidationException v) {
@@ -67,6 +66,6 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
             } catch(Exception e) {
                 parent().validationFailedWithException(e,null,key());
             }
-        }	
-   }
+        }
+    }
 }

@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -15,11 +14,9 @@ import com.webobjects.directtoweb.*;
 import java.util.*;
 import er.extensions.*;
 
-
 public class ERDMassModifyButton extends WOComponent {
 
-public ERDMassModifyButton(WOContext context) {super(context);}
-
+    public ERDMassModifyButton(WOContext context) { super(context); }
 
     public boolean isStateless() { return true; }
     public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
@@ -51,7 +48,6 @@ public ERDMassModifyButton(WOContext context) {super(context);}
                 message.append("<br><br>Are you sure you want to proceed?");                
                 confirmPage.setMessage(message.toString());    
                 result=(WOComponent)confirmPage;
-                
             }
             return result;
         }
@@ -94,8 +90,6 @@ public ERDMassModifyButton(WOContext context) {super(context);}
     }
 
 
-
-    
     public WOComponent massModify() {
         EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(d2wContext().entity().name());
         EOEditingContext localContext = er.extensions.ERXExtensions.newEditingContext(false); // we will never validate or save this one
@@ -121,9 +115,6 @@ public ERDMassModifyButton(WOContext context) {super(context);}
             String key=(String)e.nextElement();
             newEO.takeValueForKey(null,key); // we don't care much about back relationships..
         }
-
-        
         return result;
     }
-
 }

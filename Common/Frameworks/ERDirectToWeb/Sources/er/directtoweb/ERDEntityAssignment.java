@@ -4,14 +4,11 @@
  * This software is published under the terms of the NetStruxr 
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERDefaultEntityAssignment.java created by max on Wed 05-Sep-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 import er.extensions.ERXUtilities;
@@ -66,37 +63,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
                 cat.debug("Found possible entities: " + possibleEntities + " for pageConfiguration: " + c.valueForKey("pageConfiguration")
                           + " result: " + result);
             return result;
-            /*
-            if (cache != null)
-                result = entityForPageConfiguration(cache, pageConfiguration);
-            if (result == null) {
-                for (Enumeration e = EOModelGroup.defaultGroup().models().objectEnumerator(); e.hasMoreElements();) {
-                    result = entityForPageConfiguration(((EOModel)e.nextElement()).entities(), pageConfiguration);
-                    if (result != null) {
-                        if (cache == null)
-                            cache = new NSMutableArray();
-                        cache.addObject(result);
-                        break;
-                    }
-                }
-            } */
         }
         return result;
     }
-/*
-    public static EOEntity entityForPageConfiguration(NSArray entities, String pageConfiguation) {
-        EOEntity returnEntity = null;
-        for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
-                EOEntity entity = (EOEntity)e.nextElement();
-                if (pageConfiguration.indexof(entity.name()) != -1) {
-                    if (entity.subentities().count() > 0)
-                        returnEntity = entityForPageConfiguration(entity.subentities(), pageConfiguration);
-                    if (returnEntity == null)
-                        returnEntity = entity;
-                    break;
-                }
-        }
-        return returnEntity;
-    }
- */
 }
