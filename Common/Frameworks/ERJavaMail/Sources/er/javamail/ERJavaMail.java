@@ -30,20 +30,20 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
 	// Mail Validation ivars
 	static final String EMAIL_VALIDATION_PATTERN = "^[A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)*[@][A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)+$";
-	Perl5Matcher  _matcher;
+	Perl5Matcher _matcher;
 	Pattern _pattern = null;
 	
 	public void finishInitialization () {
-		this.initializeFrameworkFromSystemProperties ();
 		Perl5Compiler compiler	= new Perl5Compiler ();
-		_matcher	= new Perl5Matcher ();
+		_matcher = new Perl5Matcher ();
 		try {
 			_pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
 		} catch (MalformedPatternException e) {
 			throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
 		}
 
-		log.info ("ERJavaMail: finishInitialization");
+		this.initializeFrameworkFromSystemProperties ();
+		log.info ("ERJavaMail: finished initialization");
 	}
 
 	public void initializeFrameworkFromSystemProperties () {
