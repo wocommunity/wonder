@@ -144,7 +144,6 @@
     10 : (subTask = 'printerFriendly') => disabled = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'edit') => hasForm = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'edit') => shouldValidateBeforeSave = 1 [com.webobjects.directtoweb.BooleanAssignment]
-    10 : (task = 'inspect') => permissionToEdit = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'list') => isEmbeddedInForm = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'list') => readOnly = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'queryAll') => displayPropertyKeys = visibleEntityNames [er.directtoweb.ERDKeyValueAssignment]
@@ -158,6 +157,7 @@
     10 : *true* => createConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => customComponentName = ERDDefaultCustomComponent
     10 : *true* => destinationEntity = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+    10 : *true* => destinationEntityName = destinationEntity.name [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => displayNameForConfirmDeleteConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForCreateConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForDestinationEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
@@ -212,6 +212,8 @@
     11 : (propertyKey = 'dummy') => displayNameForProperty = 
     11 : (task = 'queryAll') => pageName = templateNameForQueryAllPage [er.directtoweb.ERDKeyValueAssignment]
     15 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (propertyIsKeyPath = (java.math.BigDecimal)'1')) => componentName = ERD2WDisplayString
+    15 : (pageConfiguration like 'EditRelationship*') => task = editRelationship
+    15 : (task = 'inspect') => permissionToEdit = 0 [com.webobjects.directtoweb.BooleanAssignment]
     20 : (((task = 'inspect') or (task = 'list') or (task = 'select')) and (smartAttribute.allowsNull = (java.math.BigDecimal)'1') and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentName = ERD2WDisplayDateOrNull
     20 : (((task = 'inspect') or (task = 'list')) and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => formatter = ###,###.##;0;-###,###.##
     20 : (((task = 'list') and (subTask = 'groupPick')) or ((task = 'select') and (subTask = 'group'))) => pageName = ERD2WGroupingPickListPageTemplate
