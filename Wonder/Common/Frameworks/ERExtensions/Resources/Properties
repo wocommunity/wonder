@@ -81,3 +81,15 @@ er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
 # Shared EO loading patching 
 #########################################################################
 er.extensions.ERXSharedEOLoader.PatchSharedEOLoading=false
+
+#########################################################################
+# ERXPatcher 
+#########################################################################
+er.extensions.ERXPatcher.cleanupXHTML=false
+
+
+#########################################################################
+# ERXDatabaseContextDelegate 
+#########################################################################
+er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties
+er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties
