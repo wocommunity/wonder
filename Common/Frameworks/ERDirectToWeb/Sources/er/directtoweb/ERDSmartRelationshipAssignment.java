@@ -95,7 +95,8 @@ public class ERDSmartRelationshipAssignment extends ERDAssignment {
                 result=entity.relationshipNamed(lastKey);
             }
         }
-        if (result==null) {
+        if (result==null && propertyKey!=null) {
+	    // working around D2W bug
             result=c.relationship();
         }
         return result;
