@@ -85,6 +85,12 @@ public class ERD2WModel extends D2WModel {
     protected ERD2WModel(NSArray rules) {
         super(rules);
     }
+    protected ERD2WModel(File file) {
+        super(file);
+    }
+    protected ERD2WModel(EOKeyValueUnarchiver unarchiver) {
+        super(unarchiver);
+    }
     
     protected void sortRules() {
         // This allows other non-d2wmodel file based rules to be loaded.
@@ -386,7 +392,8 @@ public class ERD2WModel extends D2WModel {
             if (log.isDebugEnabled()) log.debug("Rhs key "+key+" <-- " + keys);
             String[] a=new String[keys.size()];
             for (int i=0; i<keys.size();i++) a[i]=(String)keys.elementAt(i);
-            _significantKeysPerKey.put(key,a);
+            if(_significantKeysPerKey != null)
+                _significantKeysPerKey.put(key,a);
         }
     }
 
@@ -418,33 +425,40 @@ public class ERD2WModel extends D2WModel {
     protected File currentFile() { return _currentFile; }
 
     protected void mergePathURL(URL modelURL) {
-        File modelFile = new File(modelURL.getFile()); 
-        if (log.isDebugEnabled()) log.debug("Merging rule file \"" + modelFile.getPath()
-                                            + "\"");
-        setCurrentFile(modelFile);
-        if (ruleDecodeLog.isDebugEnabled()) {
+        if(modelURL != null) {
+
+            File modelFile = new File(modelURL.getFile());
+            if (log.isDebugEnabled()) log.debug("Merging rule file \"" + modelFile.getPath()
+                                                + "\"");
+            setCurrentFile(modelFile);
             try {
                 NSDictionary dic = Services.dictionaryFromFile(modelFile);
-                ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
-                for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
-                    NSDictionary aRule = (NSDictionary)e.nextElement();
-                    NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
-                    EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
-                    try {
-                        addRule((Rule)archiver.decodeObjectForKey("rule"));
-                    } catch (Exception ex) {
-                        ruleDecodeLog.error("Bad rule: " + aRule);
+                if (ruleDecodeLog.isDebugEnabled()) {
+                    ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
+                    for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
+                        NSDictionary aRule = (NSDictionary)e.nextElement();
+                        NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
+                        EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
+                        try {
+                            addRule((Rule)archiver.decodeObjectForKey("rule"));
+                        } catch (Exception ex) {
+                            ruleDecodeLog.error("Bad rule: " + aRule);
+                        }
                     }
+                } else {
+                    ERD2WModel model = new ERD2WModel(new EOKeyValueUnarchiver(dic));
+                    addRules(model.rules());
                 }
             } catch (IOException except) {
                 ruleDecodeLog.error("Could not load rule file: " + except.getMessage());
             }
+            setDirty(false);
         }
-        super.mergePathURL(modelURL);
         setCurrentFile(null);
     }
+
     protected void mergeFile(File modelFile) {
-        super.mergeFile(modelFile);
+        mergePathURL(ERXFileUtilities.URLFromFile(modelFile));
     }
     
     protected Hashtable _uniqueAssignments = new Hashtable();
