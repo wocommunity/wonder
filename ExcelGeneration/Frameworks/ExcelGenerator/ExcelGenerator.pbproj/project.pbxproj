@@ -47,10 +47,12 @@
 				017C7B34FFD7144B7F000001,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Volumes/Home/Roots";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(INSTALL_PREFIX)/Frameworks\"";
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
@@ -426,27 +428,21 @@
 			productRefGroup = 40B58280FFD5E8187F000001;
 			projectDirPath = "";
 			targets = (
-				41E573E90522BAA200000102,
 				40B58282FFD5E8187F000001,
 				017C7B2FFFD7144B7F000001,
 				017C7B36FFD7144B7F000001,
+				41E573E90522BAA200000102,
 			);
 		};
 		40B5827FFFD5E7DB7F000001 = {
 			children = (
+				504845D605F802000088B69A,
 				4153A57B05F75CF000A59891,
-				4153A57005F75CD700A59891,
-				41E14D5805F5F01C00DE10B6,
-				41E14D6305F5F02800DE10B6,
-				41E14D6E05F5F03700DE10B6,
-				41E14D7905F5F04100DE10B6,
 				41E14D9505F5F13900DE10B6,
 				40B58289FFD5E91B7F000001,
 				40B5828AFFD5E91B7F000001,
-				41DC40DF0522BD0200000102,
 				40B58293FFD5E91B7F000001,
 				41C004B80522D44100000102,
-				41E14E4E05F5F5BB00DE10B6,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -486,8 +482,11 @@
 				FRAMEWORK_VERSION = A;
 				INFO_FILE_NAME = Info.plist;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(INSTALL_PREFIX)/Frameworks";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
+				INSTALL_PREFIX = "$(LOCAL_LIBRARY_DIR)";
+				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				PRODUCT_NAME = ExcelGenerator;
 				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
 				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
@@ -602,6 +601,12 @@
 		};
 		40B58289FFD5E91B7F000001 = {
 			children = (
+				4153A57005F75CD700A59891,
+				41E14D5805F5F01C00DE10B6,
+				41E14D6305F5F02800DE10B6,
+				41E14D6E05F5F03700DE10B6,
+				41E14D7905F5F04100DE10B6,
+				41E14E4E05F5F5BB00DE10B6,
 			);
 			isa = PBXGroup;
 			name = Components;
@@ -620,7 +625,6 @@
 			children = (
 				41C004930522D0BE00000102,
 				41C004910522D0BE00000102,
-				41C004B40522D1C500000102,
 				41C004960522D0BE00000102,
 				41C004A40522D12900000102,
 				41C004A50522D12900000102,
@@ -629,6 +633,7 @@
 				40B5828DFFD5E91B7F000001,
 				40B5828EFFD5E91B7F000001,
 				40B5828FFFD5E91B7F000001,
+				41C004B40522D1C500000102,
 				40B58291FFD5E91B7F000001,
 			);
 			isa = PBXGroup;
@@ -713,6 +718,7 @@
 			);
 			isa = PBXGroup;
 			name = EGWrapper;
+			path = "";
 			refType = 4;
 		};
 		4153A57105F75CD700A59891 = {
@@ -783,21 +789,18 @@
 		};
 		41C004910522D0BE00000102 = {
 			isa = PBXFrameworkReference;
-			name = ERExtensions.framework;
-			path = /Library/Frameworks/ERExtensions.framework;
-			refType = 0;
+			path = ERExtensions.framework;
+			refType = 3;
 		};
 		41C004930522D0BE00000102 = {
 			isa = PBXFrameworkReference;
-			name = ERJars.framework;
-			path = /Library/Frameworks/ERJars.framework;
-			refType = 0;
+			path = ERJars.framework;
+			refType = 3;
 		};
 		41C004960522D0BE00000102 = {
 			isa = PBXFrameworkReference;
-			name = SVGObjects.framework;
-			path = /Library/Frameworks/SVGObjects.framework;
-			refType = 0;
+			path = SVGObjects.framework;
+			refType = 3;
 		};
 		41C0049D0522D0BE00000102 = {
 			fileRef = 41C004910522D0BE00000102;
@@ -850,7 +853,7 @@
 		41C004B40522D1C500000102 = {
 			isa = PBXFrameworkReference;
 			name = JavaWOExtensions.framework;
-			path = /Library/Frameworks/JavaWOExtensions.framework;
+			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
 		};
 		41C004B50522D1C500000102 = {
@@ -877,13 +880,6 @@
 			path = Libraries;
 			refType = 4;
 		};
-		41DC40DF0522BD0200000102 = {
-			children = (
-			);
-			isa = PBXGroup;
-			path = WebServerResources;
-			refType = 4;
-		};
 		41DC40E10522BE0800000102 = {
 			isa = PBXFileReference;
 			path = build.properties;
@@ -906,6 +902,7 @@
 			);
 			isa = PBXGroup;
 			name = EGWorkbook;
+			path = "";
 			refType = 4;
 		};
 		41E14D5905F5F01C00DE10B6 = {
@@ -955,6 +952,7 @@
 			);
 			isa = PBXGroup;
 			name = EGSheet;
+			path = "";
 			refType = 4;
 		};
 		41E14D6405F5F02800DE10B6 = {
@@ -1004,6 +1002,7 @@
 			);
 			isa = PBXGroup;
 			name = EGRow;
+			path = "";
 			refType = 4;
 		};
 		41E14D6F05F5F03700DE10B6 = {
@@ -1053,6 +1052,7 @@
 			);
 			isa = PBXGroup;
 			name = EGCell;
+			path = "";
 			refType = 4;
 		};
 		41E14D7A05F5F04100DE10B6 = {
@@ -1135,6 +1135,7 @@
 			);
 			isa = PBXGroup;
 			name = EGComponent;
+			path = "";
 			refType = 4;
 		};
 		41E14E4F05F5F5BB00DE10B6 = {
@@ -1208,6 +1209,23 @@
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
+		};
+//410
+//411
+//412
+//413
+//414
+//500
+//501
+//502
+//503
+//504
+		504845D605F802000088B69A = {
+			children = (
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
