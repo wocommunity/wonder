@@ -124,7 +124,8 @@ public class ERXValidationFactory {
             "must have at least one",			// "The exercises property of ERPCompanyRole must have at least one ERPExercise"
             "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
             "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
-            "exceeds maximum length of"
+            "exceeds maximum length of",
+            "Error encountered converting value of class"
         };
         Object objects[] = {
             ERXValidationException.NullPropertyException,
@@ -133,7 +134,8 @@ public class ERXValidationFactory {
             ERXValidationException.MandatoryToManyRelationshipException,
             ERXValidationException.ObjectRemovalException,
             ERXValidationException.ObjectsRemovalException,
-            ERXValidationException.ExceedsMaximiumLengthException
+            ERXValidationException.ExceedsMaximumLengthException,
+            ERXValidationException.ValueConversionException
         };
         _mappings = new NSDictionary( objects, keys );
     }
@@ -284,6 +286,10 @@ public class ERXValidationFactory {
                         //FIXME: (ak) pattern matching?
                         property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(3));
                     }
+                    if(property == null && message.indexOf("Error encountered converting") == 0) {
+                        //FIXME: (ak) pattern matching?
+                        property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(1));
+                    }
                     erve = createException(eo, property, value, type);
                     break;
                 }
@@ -293,7 +299,7 @@ public class ERXValidationFactory {
             erve = createException(original.eoObject(), original.key(), value, original.type());            
         }
         if (erve == null) {
-            log.error("Unable to convert validation exception: " + eov);
+            log.error("Unable to convert validation exception: " + eov, eov);
         } else {
             NSArray erveAdditionalExceptions = convertAdditionalExceptions(eov);
             if (erveAdditionalExceptions.count() > 0)
