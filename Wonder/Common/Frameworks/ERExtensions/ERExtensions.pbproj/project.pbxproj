@@ -424,6 +424,7 @@
 				F64DCF6702EF3A4001257492,
 				F64DCF6802EF3A4001257492,
 				F698E7CF030C6F6B01257492,
+				F69DE4020313E86B01257492,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -5793,6 +5794,18 @@
 			settings = {
 			};
 		};
+		F69DE4010313E86B01257492 = {
+			isa = PBXFileReference;
+			name = ERXNSPrintWriterLogger.java;
+			path = er/extensions/ERXNSPrintWriterLogger.java;
+			refType = 4;
+		};
+		F69DE4020313E86B01257492 = {
+			fileRef = F69DE4010313E86B01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F69DF13F02C76B3F01AD0D07 = {
 			isa = PBXFileReference;
 			name = ERXModelGroup.java;
@@ -6003,6 +6016,7 @@
 				F6E7989F02C8799401AD0D07,
 				F59C57BA02C4565701000102,
 				F59C57BC02C4565701000102,
+				F69DE4010313E86B01257492,
 				F59C57CD02C4565701000102,
 			);
 			isa = PBXGroup;
