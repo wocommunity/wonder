@@ -13,6 +13,10 @@ import er.extensions.ERXConstant;
 
 public class ERD2WListXMLPage extends ERD2WListPage {
 
+    /**
+     * Public constructor
+     * @param context current context
+     */
     public ERD2WListXMLPage(WOContext context) {super(context);}
 
     protected int indexForOffset;

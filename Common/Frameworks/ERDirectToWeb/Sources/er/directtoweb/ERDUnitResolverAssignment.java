@@ -12,11 +12,30 @@ import com.webobjects.eocontrol.*;
 
 public class ERDUnitResolverAssignment extends ERDDelayedAssignment {
 
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDUnitResolverAssignment(eokeyvalueunarchiver);
     }
     
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDUnitResolverAssignment (EOKeyValueUnarchiver u) { super(u); }
+
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDUnitResolverAssignment (String key, Object value) { super(key,value); }
 
     public Object fireNow(D2WContext c) {

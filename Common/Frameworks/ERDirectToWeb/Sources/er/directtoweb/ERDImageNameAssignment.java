@@ -13,17 +13,46 @@ import org.apache.log4j.Category;
 
 public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
+    /** logging support */
+    public static final Category cat = Category.getInstance("er.directtoweb.rules.ERDImageNameAssignment");
+
+    /** holds the array of keys this assignment depends upon */
+    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "baseImageDirectory", "sectionKey", "tabKey"});
+
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDImageNameAssignment(eokeyvalueunarchiver);
     }
-    
-    ///////////////////////////////////  log4j category  /////////////////////////////////
-    Category cat = Category.getInstance("er.directtoweb.rules.ERDImageNameAssignment");
-    
+        
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDImageNameAssignment (EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDImageNameAssignment (String key, Object value) { super(key,value); }
 
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "baseImageDirectory", "sectionKey", "tabKey"});
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment depends upon the context keys: "baseImageDirectory", "sectionKey",
+     * and "tabKey". This array of keys is used when constructing the 
+     * significant keys for the passed in keyPath.
+     * @param keyPath to compute significant keys for. 
+     * @return array of context keys this assignment depends upon.
+     */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
     public String imageNameForKey(String key, String baseImageDirectory, String prefix) {

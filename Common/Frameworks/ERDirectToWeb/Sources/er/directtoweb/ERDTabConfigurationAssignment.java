@@ -10,13 +10,33 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
+// MOVEME: ERDConfigurationAssignment
 public class ERDTabConfigurationAssignment extends ERDConfigurationAssignment {
 
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDTabConfigurationAssignment(eokeyvalueunarchiver);
     }
     
-    public ERDTabConfigurationAssignment(EOKeyValueUnarchiver u) { super(u); }
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
+     public ERDTabConfigurationAssignment(EOKeyValueUnarchiver u) { super(u); }
+     
+     /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDTabConfigurationAssignment(String key, Object value) { super(key,value); }
 
     public Object inspectConfigurationNameForEntity(D2WContext c) { return "InspectTab" + (c.valueForKey("object") != null ?

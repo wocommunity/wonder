@@ -17,10 +17,14 @@ import er.extensions.*;
 
 public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, EditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface {
 
+    /**
+     * Public constructor
+     * @param context current context
+     */
     public ERD2WInspectPage(WOContext context) { super(context); }
     
-    ////////////////////////////////////////////  log4j category  ///////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.directtoweb.templates.ERInspectPage");
+    /** logging support */
+    public static final Category cat = Category.getInstance("er.directtoweb.templates.ERD2WInspectPage");
     public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERInspectPage");
     
     private boolean _objectWasSaved;

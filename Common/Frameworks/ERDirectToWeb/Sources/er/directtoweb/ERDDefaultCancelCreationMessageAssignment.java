@@ -10,16 +10,46 @@ import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
+// FIXME: Should be renamed ERDDefaultMessageAssignment.
 public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
+    
+    /** holds the array of keys this assignment depends upon */
+    public static final NSArray _DEPENDENT_KEYS=new NSArray("entity.name");
 
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDefaultCancelCreationMessageAssignment(eokeyvalueunarchiver);
     }
     
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */    
     public ERDDefaultCancelCreationMessageAssignment (EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDDefaultCancelCreationMessageAssignment (String key, Object value) { super(key,value); }
 
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"entity.name"});
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment depends upon the context key: "entity.name". This array 
+     * of keys is used when constructing the 
+     * significant keys for the passed in keyPath.
+     * @param keyPath to compute significant keys for. 
+     * @return array of context keys this assignment depends upon.
+     */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
     public Object cancelMessage(D2WContext c) {

@@ -57,9 +57,5 @@ public class ERD2WFactory extends D2W {
         }
         return newPage;
     }    
-
- /*
- */
-
 }
 
