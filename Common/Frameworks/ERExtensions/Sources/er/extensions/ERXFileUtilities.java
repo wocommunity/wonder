@@ -357,10 +357,14 @@ public class ERXFileUtilities {
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
      * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
+     * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter, which restricts the files to be copied
      */
-    // ENHANCEME: Should support recursive directory copying.
-    public static void copyFilesFromDirectory(File srcDirectory, File dstDirectory, boolean deleteOriginals, FileFilter filter)
+    public static void copyFilesFromDirectory(File srcDirectory,
+                                              File dstDirectory,
+                                              boolean deleteOriginals,
+                                              boolean recursiveCopy,
+                                              FileFilter filter)
         throws FileNotFoundException, IOException {
             if (!srcDirectory.exists() || !dstDirectory.exists())
                 throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
@@ -374,8 +378,21 @@ public class ERXFileUtilities {
 
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];
-                    File dstFile =new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
-                    copyFileToFile(srcFile, dstFile, deleteOriginals, true);
+                    File dstFile = new File(dstDirectory, srcFile.getName());
+                    if (srcFile.isDirectory() && recursiveCopy) {
+                        // Create the destination directory
+                        if (deleteOriginals) {
+                            srcFile.renameTo(dstFile);
+                        } else {
+                            dstFile.mkdir();
+                            copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, recursiveCopy, filter);                            
+                        }
+                    } else if (!srcFile.isDirectory()) {
+                        copyFileToFile(srcFile, dstFile, deleteOriginals, true);
+                    } else if (log.isDebugEnabled()) {
+                        log.debug("Source file: " + srcFile + " is a directory inside: "
+                                  + dstDirectory + " and recursive copy is set to false.");
+                    }
                 }
             }
         }
