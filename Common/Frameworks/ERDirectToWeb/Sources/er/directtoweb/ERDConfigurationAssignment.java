@@ -84,6 +84,17 @@ public class ERDConfigurationAssignment extends ERDAssignment {
     }
 
     /**
+        * Generates a default confirm delete page configuration
+     * based on the current entity name. Default format
+     * is 'ConfirmDelete' + entity name.
+     * @param c current D2W context
+     * @return default confirm delete page configuration name
+     */
+    public Object confirmDeleteConfigurationNameForEntity(D2WContext c) {
+        return "ConfirmDelete" + entityNameForContext(c);
+    }
+
+    /**
      * Generates a default create page configuration
      * based on the current entity name. Default format
      * is 'Create' + entity name.
