@@ -1,6 +1,15 @@
 {
-    CouldNotSave = "Could not save your changes: @@message@@"; 
-    CouldNotSavePleaseReapply = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them."; 
+    "Test message for unit test" = "FAIL - app comes before this"; 
+    "Test message for unit test in framework" = SUCCESS; 
+    "ERDEditPasswordConfirm" = {
+        confirmLabel = "Confirm Password"; 
+        confirmNewLabel = "Confirm New Password"; 
+        infoMessage = "<i>Please note: Both login and password are case sensitive. We require passwords to be from 6 to 16 characters with at least one numeric character.</i>"; 
+        newPasswordLabel = "New password"; 
+        passwordLabel = Password; 
+    }; 
+    "CouldNotSave" = "Could not save your changes: @@message@@"; 
+    "CouldNotSavePleaseReapply" = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them."; 
     "ERD2W.cancelCreationMessage" = "<b>Are you sure you want to stop creating this @@displayNameForEntity@@?</b><br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your @@displayNameForEntity@@."; 
     "ERD2W.pickButtonLabel" = Select; 
     "ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time"; 
@@ -20,6 +29,8 @@
     "ERD2WQueryToManyField.where" = where; 
     "ERD2WQueryToOneField.is" = is; 
     "ERD2WQueryToOneField.where" = where; 
+    "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
+    "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
     "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of @tabSectionsContents.count@@"; 
     "ERDDatePopup.monthList" = (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec); 
     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Are you sure you want to stop creating this @@displayNameForEntity@@?</B><br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your @@displayNameForEntity@@."; 
@@ -28,13 +39,6 @@
     "ERDEditDatePopupOrNull.or" = "- or -"; 
     "ERDEditList.saveLabel" = "Save @@pluralCount@@ @@pluralString@@?"; 
     "ERDEditListButton.editButtonName" = "Edit @@displayNameForProperty@@ List"; 
-    ERDEditPasswordConfirm = {
-        confirmLabel = "Confirm Password"; 
-        confirmNewLabel = "Confirm New Password"; 
-        infoMessage = "<i>Please note: Both login and password are case sensitive. We require passwords to be from 6 to 16 characters with at least one numeric character.</i>"; 
-        newPasswordLabel = "New password"; 
-        passwordLabel = Password; 
-    }; 
     "ERDEditStringWithChoices.noSelectionString" = None; 
     "ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>No matching @@displayNameForDestinationEntity@@ records found.</b>"; 
     "ERDEmptyListMessage.emptyListMessage" = "<b>No matching @@displayNameForEntity@@ records found.</b>"; 
@@ -43,8 +47,8 @@
     "ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set."; 
     "ERDInspect.select" = "Select..."; 
     "ERDList.create" = Add; 
+    "ERDQueryDateRangeJavaScript.and" = "und";
+    "ERDQueryDateRangeJavaScript.between" = "zwischen";
     "ERDQueryTwoLevelRelationship.all" = "- all -"; 
     "ERDTrashcan.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b>"; 
-    "Test message for unit test" = "FAIL - app comes before this"; 
-    "Test message for unit test in framework" = SUCCESS; 
 }
