@@ -25,16 +25,16 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
     
     /** Plain text preamble set in top of HTML source so that non-HTML compliant mail readers
         can at least display this message. */
-    private String hiddenPlainTextContent = "";
+    private String _hiddenPlainTextContent = "";
 
     /** True if this the current message has a plain text preamble. */
-    private boolean hasHiddenPlainTextContent = false;
+    private boolean _hasHiddenPlainTextContent = false;
 
     /** Sets the Plain text preamble that will be displayed set in top of HTML source.
         Non-HTML compliant mail readers can at least display this message. */
     public void setHiddenPlainTextContent (String content) {
-        hiddenPlainTextContent = content + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-        hasHiddenPlainTextContent = true;
+        _hiddenPlainTextContent = content + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+        _hasHiddenPlainTextContent = true;
     }
 
     /**
@@ -50,25 +50,16 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
     /** Creates a new mail instance within ERMailDelivery.  Sets hasHiddenPlainTextContent to false. */
     public void newMail () {
         super.newMail ();
-        hasHiddenPlainTextContent = false;
+        _hasHiddenPlainTextContent = false;
         _htmlContent = null;
     }
 
     protected String htmlContent () {
 	String htmlContent = null;
-
-	if (this.component () != null) {
-	    WOContext context = this.component ().context ();
-
-	    // CHECKME:  It's probably not a good idea to do this here
-	    // since the context could also have been generating relative URLs
-	    // unless the context is created from scratch
-	    context._generateCompleteURLs ();
-	    WOMessage response = this.component ().generateResponse ();
-	    htmlContent = response.contentString ();
-	} else {
+	if (this.component () != null)
+	    htmlContent = this.componentContentString ();
+        else
 	    htmlContent = _htmlContent;
-	}
 
 	return htmlContent;
     }
@@ -84,9 +75,9 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 	multipart = new MimeMultipart ("alternative");
 		
 	// set the plain text part
-	if (hasHiddenPlainTextContent) {
+	if (_hasHiddenPlainTextContent) {
 	    textPart = new MimeBodyPart ();
-	    textPart.setText (hiddenPlainTextContent, ERMailDelivery.DefaultCharset);
+	    textPart.setText (_hiddenPlainTextContent);
 	    multipart.addBodyPart (textPart);
 	}
 
@@ -96,7 +87,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 	// Set the content of the html part
 	htmlPart.setContent (this.htmlContent (), "text/html");
 	multipart.addBodyPart (htmlPart);
-	
+
 	// Inline attachements
 	if (this.inlineAttachments ().count () > 0) {
 	    // Create a "related" MimeMultipart

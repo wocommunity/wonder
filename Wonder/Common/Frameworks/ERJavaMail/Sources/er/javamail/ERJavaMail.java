@@ -39,13 +39,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
 		Perl5Compiler compiler	= new Perl5Compiler ();
 		_matcher = new Perl5Matcher ();
-	
+
 		try {
 			_pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
 		} catch (MalformedPatternException e) {
 			throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
 		}
-	
+
 		this.initializeFrameworkFromSystemProperties ();
 		log.info ("ERJavaMail: finished initialization");
     }
@@ -85,11 +85,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         props.put ("mail.smtp.host", smtpHost);
         this.setDefaultProperties (props);
         javax.mail.Session session = javax.mail.Session.getDefaultInstance (this.defaultProperties (), null);
-		this.setDefaultSession (session);
+        this.setDefaultSession (session);
 
-		// Default X-Mailer header
-		this.setDefaultXMailerHeader (System.getProperty ("er.javamail.XMailerHeader"));
-		log.debug ("er.javamail.smtpHost: " + smtpHost);
+        // Default X-Mailer header
+        this.setDefaultXMailerHeader (System.getProperty ("er.javamail.XMailerHeader"));
+        log.debug ("er.javamail.XMailHeader: " + this.defaultXMailerHeader ());
     }
 
 
@@ -114,7 +114,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     public javax.mail.Session defaultSession () {
         return _defaultSession;
     }
-    
+
     /** Return a newly allocated Session object from the given Properties */
     public javax.mail.Session newSession (Properties props) {
         javax.mail.Session session = javax.mail.Session.getInstance (props);
@@ -141,7 +141,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	    _adminEmail = adminEmail;
     }
 
-	
+
     protected boolean _debugEnabled = true;
 
     public boolean debugEnabled () {
@@ -153,24 +153,24 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     }
 
 
-	/** This property sets the default header for the X-Mailer property */
-	protected String _defaultXMailerHeader = null;
+    /** This property sets the default header for the X-Mailer property */
+    protected String _defaultXMailerHeader = null;
 
-	/**
-	 * Gets the default X-Mailer header to use for
+    /**
+     * Gets the default X-Mailer header to use for
      * sending mails. Pulls the value out of the
      * property: er.javamail.XMailerHeader
      * @return default X-Mailer header
      */
-	public String defaultXMailerHeader () {
-		return _defaultXMailerHeader;
-	}
+    public String defaultXMailerHeader () {
+        return _defaultXMailerHeader;
+    }
 
-	public void setDefaultXMailerHeader (String header) {
-		_defaultXMailerHeader = header;
-	}
+    public void setDefaultXMailerHeader (String header) {
+        _defaultXMailerHeader = header;
+    }
 
-	
+
     /** Used to send mail to adminEmail only.  Useful for debugging issues */
     protected boolean _centralize = true;
 
@@ -197,10 +197,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
     // MAIL VALIDATION
     /** Validates an enterprise object's attribute (accessed via key).
-		@param object the object to be validated
-		@param key the attribute's name
-		@param email the email value
-		@return the email if correct */
+        @param object the object to be validated
+        @param key the attribute's name
+        @param email the email value
+        @return the email if correct */
     public String validateEmail (EOEnterpriseObject object, String key, String email) {
         if (email != null) {
             if (!isValidEmail(email))

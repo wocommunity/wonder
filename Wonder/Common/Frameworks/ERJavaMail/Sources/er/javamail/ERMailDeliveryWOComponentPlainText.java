@@ -22,11 +22,9 @@ import javax.mail.internet.*;
 public class ERMailDeliveryWOComponentPlainText extends ERMailDeliveryComponentBased {
     
     /** Pre-processes the mail before it gets sent.
-        @see ERMailDelivery#prepareMail */
-    protected DataHandler prepareMail () throws MessagingException {
-	// Generate text
-	NSData data = this.component ().generateResponse ().content ();
-	String messageContent = new String (data.bytes (0, data.length ()));		
-	return new DataHandler (messageContent, "text/plain");
+    @see ERMailDelivery#prepareMail */
+    protected DataHandler prepareMail () {
+        String messageContent = this.componentContentString ();
+        return new DataHandler (messageContent, "text/plain");
     }
 }
