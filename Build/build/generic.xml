@@ -353,6 +353,9 @@ There are many ways to use this script:
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
+            <sources dir="${project.dir}/Sources">
+                <include name="**/*.java" />
+            </sources>
             <resources dir="${project.dir}/Components">
                 <include name="**.api" />
                 <include name="**/*.wo/**" />
