@@ -11,7 +11,6 @@ import java.net.*;
 import java.util.*;
 import java.util.zip.*;
 
-import com.openbase.jdbc.*;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
