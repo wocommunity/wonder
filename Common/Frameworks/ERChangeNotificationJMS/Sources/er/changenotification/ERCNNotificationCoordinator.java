@@ -41,7 +41,7 @@ import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
  * Properties: <br>
  * Put the following properties into WebObjects.properties file under 
  * your home directory, or into Properties file and register it under 
- * the applications project's Resouces group. 
+ * the applications project's Resources group. 
  * <p>
  * <pre>
  * 
