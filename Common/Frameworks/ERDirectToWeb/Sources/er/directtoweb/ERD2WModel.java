@@ -63,7 +63,7 @@ public class ERD2WModel extends D2WModel {
         cat.debug("posting WillSortRules.");
         NSNotificationCenter.defaultCenter().postNotification(WillSortRules, this);
         cat.debug("posted WillSortRules.");
-        // We don't want dynamicly loaded rules to cause rapid-turnaround to not work.
+        // We don't want dynamically loaded rules to cause rapid-turnaround to not work.
         setDirty(false);
             //uniqueRuleAssignments();
             //uniqueQualifiers(rules());
@@ -109,8 +109,12 @@ public class ERD2WModel extends D2WModel {
         //uniqueRuleAssignments(rules);
         super.addRules(rules);
         if (!WOApplication.application().isCachingEnabled() && currentFile() != null) {
-            NSArray components = NSArray.componentsSeparatedByString(currentFile().getAbsolutePath(), "/");
-            String filePath = components.count() > 1 ? (String)components.objectAtIndex(components.count() - 2) : currentFile().getAbsolutePath();
+            String path=currentFile().getAbsolutePath();
+            NSArray components = NSArray.componentsSeparatedByString(path, "/");
+            int count=components.count();
+            String filePath = count > 2 ?
+                (String)components.objectAtIndex(count-3)+"/"+ (String)components.objectAtIndex(count-2) :
+                path;
             if (_filePathRuleTraceCache == null)
                 _filePathRuleTraceCache = new Hashtable();
             for (Enumeration e = rules.objectEnumerator(); e.hasMoreElements();) {
@@ -364,9 +368,8 @@ public class ERD2WModel extends D2WModel {
     protected File currentFile() { return _currentFile; }
 
     protected void mergeFile(File modelFile) {
-        if(cat.isDebugEnabled()) cat.debug("model file being merged = "+modelFile);
+        if(cat.isDebugEnabled()) cat.debug("Merging rule file: "+modelFile.getPath());
         setCurrentFile(modelFile);
-        // Uncomment this code if rules are not unarchiving correctly
         if(ruleDecodeCat.isDebugEnabled()) {
             try {
                 NSDictionary dic = Services.dictionaryFromFile(modelFile);
@@ -382,7 +385,7 @@ public class ERD2WModel extends D2WModel {
                     }
                 }
             } catch (IOException except) {
-                ruleDecodeCat.error("Bad, bad" + except.getMessage());
+                ruleDecodeCat.error("Could not load rule file: " + except.getMessage());
             }
         }
         super.mergeFile(modelFile);
