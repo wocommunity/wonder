@@ -10,8 +10,6 @@ import er.extensions.*;
 
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.appserver.WOApplication;
 
@@ -45,9 +43,7 @@ public class ERMailSender extends Thread {
     // For thread management
     private boolean threadSuspended = false;
     private int milliSecondsWaitRunLoop = 5000;
-    public static String InvalidEMailNotification = "InvalidMail";
-    public static String InvalidAddresses = "InvalidAddresses";
-    
+
     /**
         * Exception class for alerting about a stack overflow
      */
@@ -157,6 +153,7 @@ public class ERMailSender extends Thread {
     protected void _sendMessageNow (ERMessage message, Transport transport) throws MessagingException {
         boolean debug = log.isDebugEnabled ();
         MimeMessage aMessage  = message.mimeMessage ();
+        Object callbackObject = message.callbackObject ();
         MessagingException exception = null;
 
         if (message.shouldSendMessage()) {
@@ -182,11 +179,14 @@ public class ERMailSender extends Thread {
                                message.allRecipientsAsString() +
                                e.getMessage ());
                 stats.incrementErrorCount ();
-                SendFailedException sfex = (SendFailedException)e;
-                NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray
-                    (sfex.getInvalidAddresses ());
-                this.notifyInvalidEmails (invalidEmails);
-                
+
+                if (callbackObject != null) {
+                    SendFailedException sfex = (SendFailedException)e;
+                    NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray
+                        (sfex.getInvalidAddresses ());
+                    this.notifyInvalidEmails (callbackObject, invalidEmails);
+                }
+
                 exception = e;
             } catch (MessagingException e) {
                 exception = e;
@@ -194,6 +194,8 @@ public class ERMailSender extends Thread {
                 log.error ("An unexpected error occured while sending message: " + message
                            + " mime message: " + aMessage + " sending to: " +  aMessage.getAllRecipients ()
                            + " transport: " + transport, t);
+                // Need to let someone know that something very, very bad happened
+                throw new NSForwardException(t);
             } finally {
                 stats.incrementMailCount ();
                 if (exception != null)
@@ -287,16 +289,26 @@ public class ERMailSender extends Thread {
         }
     }
 
-/** @deprecated */
-protected void notifyInvalidEmails (Object callbackObject, NSArray invalidAddresses) {
-    notifyInvalidEmails( invalidAddresses );
-}
-
     /** Executes the callback method to notify the calling application of
         any invalid emails. */
-    protected void notifyInvalidEmails (NSArray invalidAddresses) {
-        NSNotificationCenter.defaultCenter().postNotification
-            ( InvalidEMailNotification, this, new NSDictionary( invalidAddresses, InvalidAddresses ) );
+    protected void notifyInvalidEmails (Object callbackObject, NSArray invalidEmails) {
+        // FIXME: We need to refactor this to use NSNotificationCenter !!!
+        try {
+            Class c = Class.forName (ERMailDelivery.callBackClassName);
+            Class[] parameterTypes = new Class[] {callbackObject.getClass(), NSArray.class};
+            Method m = c.getMethod (ERMailDelivery.callBackMethodName, parameterTypes);
+            Object[] args = new Object[] {callbackObject, invalidEmails};
+            m.invoke (c.newInstance(), args);
+        } catch (ClassNotFoundException cnfe) {
+            log.error ("ERMailSender. Unable to find class: " + ERMailDelivery.callBackClassName);
+            throw new NSForwardException (cnfe);
+        } catch (NoSuchMethodException nsme) {
+            log.error ("ERMailSender. Unable to find method: " + ERMailDelivery.callBackMethodName);
+            throw new NSForwardException (nsme);
+        } catch (java.lang.Exception e) {
+            log.error ("Exception occured: " + e.getMessage(), e);
+            throw new NSForwardException (e);
+        }
     }
 
     /** This class is about logging mail event for stats purposes.
