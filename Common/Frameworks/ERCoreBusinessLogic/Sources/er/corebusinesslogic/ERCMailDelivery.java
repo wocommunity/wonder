@@ -181,7 +181,8 @@ public class ERCMailDelivery {
                                                  EOEditingContext ec) {
         WOContext context = new WOContext(new WORequest(null, null, null, null, null, null));
         WOComponent component = WOApplication.application().pageWithName(componentName, context);
-        EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
+        if (bindings != null && bindings.count() > 0)
+            EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
         return composeComponentEmail(from, to, cc, bcc, title, component, ec);
     }    
 }
