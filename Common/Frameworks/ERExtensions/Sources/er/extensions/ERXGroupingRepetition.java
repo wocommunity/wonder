@@ -82,8 +82,7 @@ public class ERXGroupingRepetition extends WOComponent {
     public Object sectionItem() { return _sectionItem; }
     public void setSectionItem(Object section) {
         _sectionItem=section;
-        setValueForBinding((_sectionItem!=NULL && (_sectionItem ==null || !_sectionItem.equals(NULL))) ?
-                           _sectionItem : null, "subListSection");
+        setValueForBinding((_sectionItem!=NULL && (_sectionItem ==null || !_sectionItem.equals(NULL))) ? _sectionItem : null, "subListSection");
         setValueForBinding(_itemsPerSection.objectForKey(copiableKeyForSection(_sectionItem)),"subList");
     }
     

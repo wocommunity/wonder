@@ -19,22 +19,18 @@ import com.webobjects.appserver.*;
  * @binding doNotRenderTop" defaults="Boolean
  */
 
-public class ERXTableWithBorder extends WOComponent {
+public class ERXTableWithBorder extends ERXStatelessComponent {
 
     public ERXTableWithBorder(WOContext aContext) {
         super(aContext);
     }
-
-    public boolean synchronizesVariablesWithBindings() { return false; }
-    public boolean isStateless() { return true; }      
-
 
     // renderBorder false can be used to not output a table at all
     // this is useful since NetScape 4.7 and earlier get extremely slow
     // when table nesting gets past a certain level
     
     public boolean renderBorder() {
-        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("renderBorder", this, true);
+        return booleanValueForBinding("renderBorder", true);
     }
 
     public Object border() {

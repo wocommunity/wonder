@@ -16,7 +16,6 @@
 		<binding name="popupName"/>
 		<binding name="size"/>
 		<binding name="maxColumns"/>
-		<binding name="displayGroup"/>
 		<binding name="localizeDisplayKeys" defaults="Boolean"/>
 
 		<validation message="&apos;relationshipKey&apos; is a required binding">
