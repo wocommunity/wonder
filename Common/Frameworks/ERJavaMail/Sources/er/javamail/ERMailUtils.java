@@ -6,22 +6,20 @@
 
 package er.javamail;
 
-import com.webobjects.foundation.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.AddressException;
-import java.util.Enumeration;
+import com.webobjects.foundation.*;
 import er.extensions.ERXLogger;
-import er.extensions.ERXUtilities;
+import java.util.Enumeration;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 
 public class ERMailUtils extends Object {
 
-    static ERXLogger log = ERXLogger.getERXLogger (ERMailUtils.class);
+    private static ERXLogger log = ERXLogger.getERXLogger (ERMailUtils.class);
 
-	
     /** The shared mail deliverer */
     private static ERMailDeliveryHTML _sharedDeliverer;
 
@@ -102,6 +100,9 @@ public class ERMailUtils extends Object {
         Enumeration en = dict.keyEnumerator ();
         while (en.hasMoreElements ()) {
             String key = (String)en.nextElement ();
+
+            if (log.isDebugEnabled ())
+                log.debug ("Setting dictionary value in session");
 
             Object object = dict.objectForKey (key);
             if (object != null)
