@@ -20,21 +20,14 @@ public class NSObjectPropertyAccessor implements PropertyAccessor {
     }
     
     public Object getProperty(Object target, Object name) throws OgnlException {
-        Object property = null;
-        //try {
-            property = NSKeyValueCoding.Utility.valueForKey(target, (String)name);
-        //} catch (Exception e) {
-        //    throw new OgnlException(name.toString(), e);
-        //}
-        return property;
+        return NSKeyValueCoding.Utility.valueForKey(target, (String)name);
     }
 
     public void setProperty(Object target, Object name, Object value ) throws OgnlException {
-        Object property = null;
         try {
-            //if (target implements NSValidation)
-            //    ((NSValidation)target).validateTakeValueForKeyPath(value, (String)name);
-            //else
+            if (target instanceof NSValidation)
+                ((NSValidation)target).validateTakeValueForKeyPath(value, (String)name);
+            else
                 NSKeyValueCoding.Utility.takeValueForKey(target, value, (String)name);
         } catch (Exception e) {
             throw new OgnlException(name.toString(), e);

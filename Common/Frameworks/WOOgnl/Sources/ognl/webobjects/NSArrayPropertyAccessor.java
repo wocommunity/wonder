@@ -56,8 +56,7 @@ public class NSArrayPropertyAccessor extends NSObjectPropertyAccessor {
                 case DynamicSubscript.LAST:     if ( len > 0 )
                     array.replaceObjectAtIndex(value, len-1); return;
                 case DynamicSubscript.ALL:
-                    // Not sure what to do here yet.
-                    //System.arraycopy(target, 0, value, 0, len);
+                    array.setArray( NSPropertyListSerialization.arrayForString( (String) value ) );
                     return;
             }
         }

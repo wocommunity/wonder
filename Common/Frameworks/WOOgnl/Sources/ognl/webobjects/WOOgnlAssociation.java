@@ -25,15 +25,14 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 
     public Object valueInComponent(WOComponent component) {
         WOAssociation.Event event = _markStartOfEventIfNeeded("valueForKeyPath", keyPath(), component);
-
         Object value = null;
 	try {
 	    value = WOOgnl.factory().getValue(keyPath(), component);
-	} catch(NullPointerException ex) {
-	    System.err.println("NullPointerException in WOOgnlAssociation with keyPath '" + keyPath() + "'");
-	    // AK@PRNET:DE
-     //FIXME: we should have a default that tell us whether to throw or not
-	    // throw ex;
+	} catch(Exception e) {
+            boolean shouldThrowException = NSPropertyListSerialization.booleanForString(NSProperties.getProperty("ognl.webobjects.WOAssociation.shouldThrowExceptions"));
+            if(shouldThrowException())
+                throw new RuntimeException( e );
+	    NSLog.err.appendln("Exception invoking valueInComponent on WOOgnlAssociation with keyPath '" + keyPath() + "' "+ e );
 	}
         if(event != null)
             EOEventCenter.markEndOfEvent(event);
@@ -42,10 +41,25 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
         return value;
     }
 
-    // FIXME: Need to implement this one.
-    public void setValue(Object obj, WOComponent wocomponent) {
-        throw new IllegalStateException(toString() + ": Cannot set value to '" + obj.toString() + "' in component '" + wocomponent.toString() + "' because value is not settable.");
+    public void setValue(Object object, WOComponent component) {
+        WOAssociation.Event event = _markStartOfEventIfNeeded("takeValueForKeyPath", keyPath(), component);
+        try {
+            // not sure how to manage validation or whether the current implementation is enough...
+            WOOgnl.factory().setValue(keyPath(), component, object);
+        } catch(Exception e) {
+            if(shouldThrowException())
+                throw new RuntimeException( e );
+            NSLog.err.appendln( "Exception invoking setValue on WOOgnlAssociation: "+ e );
+        }
+	if (event != null)
+	    EOEventCenter.markEndOfEvent(event);
+	if (_debugEnabled)
+	    _logPushValue(object, component);        
     }
 
-    public boolean isValueSettable() { return false; }
+    private boolean shouldThrowException() {
+        return NSPropertyListSerialization.booleanForString
+        ( NSProperties.getProperty( "ognl.webobjects.WOAssociation.shouldThrowExceptions" ) );
+    }
+    
 }

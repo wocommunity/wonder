@@ -13,16 +13,14 @@ import java.util.Enumeration;
 import ognl.ElementsAccessor;
 
 public class NSFoundationElementsAccessor implements ElementsAccessor {
+    private static NSSelector sel = new NSSelector( "objectEnumerator" );
 
-    // FIXME: Should instead use a slightly more dynamic dispatch so that any object that implements
-    //	the method objectEnumerator() can use this elements accessor.
     public Enumeration getElements(Object target) {
-        if (target instanceof NSArray)
-            return ((NSArray)target).objectEnumerator();
-        if (target instanceof NSDictionary)
-            return ((NSDictionary)target).objectEnumerator();
-        if (target instanceof NSSet)
-            return ((NSSet)target).objectEnumerator();
-        throw new RuntimeException("NSFoundationElementsAccessor being used with a non-foundation class: " + target.getClass().getName());
+        try {
+            return (Enumeration) sel.invoke( target );    
+        } catch( Exception e ) {
+            throw new RuntimeException("NSFoundationElementsAccessor being used with a non-foundation class: " + target.getClass().getName());
+        }
     }
+    
 }
