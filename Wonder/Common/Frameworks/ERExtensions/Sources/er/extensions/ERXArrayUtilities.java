@@ -27,22 +27,21 @@ public class ERXArrayUtilities extends Object {
      * path must be a cloneable object. For instance using the key path
      * 'company' would not work because enterprise objects are not
      * cloneable. Instead you might choose to use the key path 'company.name'
-     * of 'company.primaryKey', if your enterprise objects support this
+     * or 'company.primaryKey', if your enterprise objects support this
      * see {@link ERXGenericRecord} if interested.
-     * @param eos array of objects to be grouped
+     * @param objects array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @return a dictionary where the keys are the grouped values and the
      * 		objects are arrays of the objects that have the grouped
      *		characteristic. Note that if the key path returns null
      *		then one of the keys will be the static ivar NULL_GROUPING_KEY
      */
-    // ENHANCEME: Doesn't have to be just eos ...
-    public static NSDictionary arrayGroupedByKeyPath(NSArray eos, String keyPath) {
-        return arrayGroupedByKeyPath(eos,keyPath,true,null);
+    public static NSDictionary arrayGroupedByKeyPath(NSArray objects, String keyPath) {
+        return arrayGroupedByKeyPath(objects,keyPath,true,null);
     }
 
     /**
-        * Groups an array of objects by a given key path. The dictionary
+     * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
      * keys values. This means that the object pointed to by the key
      * path must be a cloneable object. For instance using the key path
@@ -395,7 +394,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-    * Define an {@link NSArray$Operator} for the key <b>flatten</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray$Operator} for the key <b>flatten</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -457,8 +456,7 @@ public class ERXArrayUtilities extends Object {
      * to which the fetch specification is associated.
      * @param bindings bindings dictionary for qualifier variable substitution.
      * @return array filtered and sorted by the named fetch specification.
-     */
-    
+     */    
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec, NSDictionary bindings) {
         EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
         NSArray sortOrderings, result;
