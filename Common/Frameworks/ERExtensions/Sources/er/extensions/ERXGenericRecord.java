@@ -365,7 +365,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				    
     public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
 	Object delegate=editingContext.delegate();
+	
 	if (delegate==null) {
+	    EOObjectStore parent = editingContext.parentObjectStore();
+	    if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
+		Object parentDelegate=((EOEditingContext)parent).delegate();
+		if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
+		    editingContext.setDelegate(parentDelegate);
+		    cat.info("Found null delegate. Setting to the parent's delegate.");
+		    return true;
+		}
+	    }
 	    if(!_raiseOnMissingEditingContextDelegate) {
 		cat.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
 		ERXExtensions.setDefaultDelegate(editingContext);
