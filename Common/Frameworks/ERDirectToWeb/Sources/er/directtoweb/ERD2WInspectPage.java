@@ -118,7 +118,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         }
         super.sleep();
    }
-    
 
     public void setEditingContext(EOEditingContext newEditingContext) {
         if (newEditingContext != _context) {
@@ -136,58 +135,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         EOEditingContext eoeditingcontext = eoenterpriseobject == null ? null : eoenterpriseobject.editingContext();
         setEditingContext(eoeditingcontext);
         super.setObject(eoenterpriseobject);
-    }
-    
-    /*
-
-     We expect d2wContext.sectionsContents to return one of the three following formats:
-     ( ( section1, key1, key2, key4 ), ( section2, key76, key 5, ..) .. )
-     OR with the sections enclosed in "()" - this is most useful with the WebAssistant
-     ( "(section1)", key1, key2, key3, "(section2)", key3, key4, key5... )
-     OR with normal displayPropertyKeys array in fact if sectionContents isn't found then it will look for displayPropertyKeys
-     ( key1, key2, key3, ... )
-     */
-
-    private ERD2WContainer _currentSection;
-    public ERD2WContainer currentSection() { return _currentSection; }
-    public void setCurrentSection(ERD2WContainer value) {
-        _currentSection = value;
-        if (value != null) {
-            d2wContext().takeValueForKey(value.name, "sectionKey");
-            // we can fire rules from the WebAssistant when we push it the -remangled sectionName into the context
-            d2wContext().takeValueForKey( "(" + value.name +")", "propertyKey");
-            if (log.isDebugEnabled())
-                log.debug("Setting sectionKey: " + value.name);
-        }
-    }
-
-    public NSArray currentSectionKeys() {
-        if (log.isDebugEnabled())
-            log.debug("currentSectionKeys()");
-        NSArray keys = (NSArray)d2wContext().valueForKey("alternateKeyInfo");
-        if (log.isDebugEnabled())
-            log.debug("currentSectionKeys (from alternateKeyInfo):" +
-                      keys);
-        keys = keys == null ? (NSArray)this.currentSection().keys : keys;
-        if (log.isDebugEnabled())
-            log.debug("Setting sectionKey and keys: " + _currentSection.name + keys);
-        return keys;
-    }
-
-    private NSMutableArray _sectionsContents;
-
-    public NSArray sectionsContents() {
-        if (_sectionsContents ==null) {
-            NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
-            if (sectionsContentsFromRule==null) {
-                sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
-            }
-            if (sectionsContentsFromRule == null)
-                throw new RuntimeException("Could not find sectionsContents or displayPropertyKeys in "+d2wContext());
-            _sectionsContents = ERDirectToWeb.convertedPropertyKeyArray(sectionsContentsFromRule, '(', ')');
-
-        }
-        return _sectionsContents;
     }
     
     // Useful for validating after all the values have been poked in
@@ -246,12 +193,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         } catch (ERXValidationException ex) {
             String propertyKey = ex.propertyKey();
             ex.setContext(d2wContext());
-            ex.setTargetLanguage((String)session().valueForKeyPath("language"));
+            ex.setTargetLanguage(ERXLocalizer.currentLocalizer().language());
             Object o = ex.object();
             if(o instanceof EOEnterpriseObject) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)o;
-                d2wContext().takeValueForKey( eo.entityName(),"entityName");
-                d2wContext().takeValueForKey( propertyKey,"propertyKey");
+                d2wContext().takeValueForKey(eo.entityName(), "entityName");
+                d2wContext().takeValueForKey(propertyKey, "propertyKey");
             }
             if(propertyKey != null && propertyKey.indexOf(",") > 0) {
                 keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString(propertyKey, ","));
@@ -260,47 +207,47 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         } catch (NSValidation.ValidationException e) {
             log.info(e.getMessage(), e);
             errorMessage = " Could not save your changes: "+e.getMessage()+" ";
-        }catch(EOGeneralAdaptorException e){
-           if(shouldRecoverFromOptimisticLockingFailure()){
-              NSDictionary userInfo = (NSDictionary)e.userInfo();
-              if(!(userInfo == null)) {
-                 String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
-                 if (!(eType == null)) {
-                    if (eType.equals("EOAdaptorOptimisticLockingFailure")) {
-                       //if (log.isDebugEnabled()) log.debug("about to get EOFailedAdaptorOperationKey");
-                       EOAdaptorOperation op = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
-                       EODatabaseOperation dbop = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
-                       //if (log.isDebugEnabled()) log.debug("about to get _changedValues");
-                       if (op != null && dbop != null) {
-                          NSDictionary changedValues =  op.changedValues();
-                          //if (log.isDebugEnabled()) log.debug("about to get _entity: _changedValues"+ changedValues);
-                          NSDictionary snapshot = dbop.dbSnapshot();
-                          if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
-                          EOEntity ent = op.entity();
-                          String entName = ent.name();
-                          if (log.isDebugEnabled()) log.debug("entName"+ entName);
-                          NSArray pkAttribs = ent.primaryKeyAttributes();
-                          EOQualifier qual = ERXTolerantSaver.qualifierWithSnapshotAndPks(pkAttribs, snapshot);
-                          EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
-                          fs.setRefreshesRefetchedObjects(true);
-                          NSArray objs = object().editingContext().objectsWithFetchSpecification(fs);
-                          object().editingContext().revert();
-                          errorMessage = "Could not save your changes. The "+ent.name()+
-                             " has changed in the database before you could save. Your changes have been lost. Please reapply them.";
-                       } else {
-                          log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey. "+e+"\n\n"+e.userInfo());
-                       }
+        } catch(EOGeneralAdaptorException e) {
+            if(shouldRecoverFromOptimisticLockingFailure()){
+                NSDictionary userInfo = (NSDictionary)e.userInfo();
+                if(!(userInfo == null)) {
+                    String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
+                    if (!(eType == null)) {
+                        if (eType.equals("EOAdaptorOptimisticLockingFailure")) {
+                            //if (log.isDebugEnabled()) log.debug("about to get EOFailedAdaptorOperationKey");
+                            EOAdaptorOperation op = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
+                            EODatabaseOperation dbop = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
+                            //if (log.isDebugEnabled()) log.debug("about to get _changedValues");
+                            if (op != null && dbop != null) {
+                                NSDictionary changedValues =  op.changedValues();
+                                //if (log.isDebugEnabled()) log.debug("about to get _entity: _changedValues"+ changedValues);
+                                NSDictionary snapshot = dbop.dbSnapshot();
+                                if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
+                                EOEntity ent = op.entity();
+                                String entName = ent.name();
+                                if (log.isDebugEnabled()) log.debug("entName"+ entName);
+                                NSArray pkAttribs = ent.primaryKeyAttributes();
+                                EOQualifier qual = ERXTolerantSaver.qualifierWithSnapshotAndPks(pkAttribs, snapshot);
+                                EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
+                                fs.setRefreshesRefetchedObjects(true);
+                                NSArray objs = object().editingContext().objectsWithFetchSpecification(fs);
+                                object().editingContext().revert();
+                                errorMessage = "Could not save your changes. The "+ent.name()+
+                                    " has changed in the database before you could save. Your changes have been lost. Please reapply them.";
+                            } else {
+                                log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey. "+e+"\n\n"+e.userInfo());
+                            }
+                        }
                     }
-                 }
-              }
-           }else{
-              throw e;
-           }
+                }
+            } else {
+                throw e;
+            }
         }
-        
+
         return saved;
     }
-
+    
     public WOComponent submitAction() throws Throwable {
         WOComponent returnComponent = null;
         // catch the case where the user hits cancel and then the back button
@@ -312,10 +259,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 try {
                     _objectWasSaved=true;
                     returnComponent = tryToSaveChanges(true) ? nextPage() : null;
-                }catch (NSValidation.ValidationException e) {
-						 log.info(e.getMessage(), e);
-						 errorMessage = " Could not save your changes: "+e.getMessage()+" ";
-					 } finally {
+                } catch (NSValidation.ValidationException e) {
+                    log.info(e.getMessage(), e);
+                    errorMessage = " Could not save your changes: "+e.getMessage()+" ";
+                } finally {
                     _objectWasSaved=false;
                 }
             } else {
@@ -326,7 +273,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         }
         return returnComponent;
     }
-
+    
     public String saveButtonFileName() {
         return object()!=null && object().editingContext()!=null ?
         object().editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator ? "SaveMetalBtn.gif" : "OKMetalBtn.gif" :
@@ -356,6 +303,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }
 */
     public NSTimestamp now() { return new NSTimestamp(); }
-    }
+}
 
 
