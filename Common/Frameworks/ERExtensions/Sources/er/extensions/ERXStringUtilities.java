@@ -388,13 +388,13 @@ public class ERXStringUtilities {
                 nextChar = new Character(originalArray[i+1]);
                 if(Character.isUpperCase(originalArray[i]) &&
                    Character.isLowerCase(originalArray[i+1])) {
-                    finalString.append(tempString);
+                    finalString.append(tempString.toString());
                     if (i>0) finalString.append(' ');
                     tempString = new StringBuffer();
                 }
                 tempString.append(tempChar.toString());
             }
-            finalString.append(tempString);
+            finalString.append(tempString.toString());
             finalString.append(nextChar);
         }
         return finalString.toString();
