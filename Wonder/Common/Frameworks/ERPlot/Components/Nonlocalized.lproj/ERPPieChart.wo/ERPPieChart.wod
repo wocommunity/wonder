@@ -5,6 +5,7 @@ Image: WOImage {
 	otherTagString = otherTagString;
 	height = height;
 	width = width;
+	border = 0;
 }
 
 Map: WOString {

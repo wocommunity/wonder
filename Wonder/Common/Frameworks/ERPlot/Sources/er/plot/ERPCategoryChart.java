@@ -1,17 +1,10 @@
 package er.plot;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-import org.jfree.chart.imagemap.ImageMapUtil;
-import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
-import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -19,7 +12,6 @@ import org.jfree.data.general.Dataset;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
@@ -127,6 +119,7 @@ public class ERPCategoryChart extends ERPChart {
                         (showUrls() ? Boolean.TRUE : Boolean.FALSE )
                 });
             } catch(Throwable t) {
+                log.error(t.getMessage(), t);
                 throw  NSForwardException._runtimeExceptionForThrowable(t);
             }
             _chart = chart;

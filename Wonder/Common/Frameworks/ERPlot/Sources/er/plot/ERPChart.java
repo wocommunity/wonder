@@ -42,7 +42,7 @@ import er.extensions.ERXStatelessComponent;
 public abstract class ERPChart extends ERXStatelessComponent {
     
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERPChart.class, "plot");
+    protected static final ERXLogger log = ERXLogger.getERXLogger(ERPChart.class, "plot");
     protected static final int DEFAULT_SIZE = 400;
 
     protected NSData _imageData;
