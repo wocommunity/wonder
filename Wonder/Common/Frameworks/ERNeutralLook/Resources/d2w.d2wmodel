@@ -44,6 +44,15 @@
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForEditRelationshipPage; 
+                value = er.neutral.ERNEUEditRelationshipPage; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
                 keyPath = templateNameForErrorPage; 
                 value = er.neutral.ERNEUErrorPage; 
             }; 
