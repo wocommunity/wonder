@@ -2,6 +2,9 @@
 # Rename this file to "Properties" (no .txt extension) and add under Resources 
 # group of your main project. 
 
+# The host name that the JMS server is running on
+er.changenotification.jms.serverHostName = localhost
+
 # Entities *not* to synchronize
 # er.changenotification.entitiesNotToSynchronize = (TalentPhoto)
 er.changenotification.entitiesNotToSynchronize = ()
