@@ -375,6 +375,10 @@ public class ERXConfigurationManager {
                 passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
                 String driver= System.getProperty(aModelName + ".DBDriver");
                 driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
+                String serverName= System.getProperty(aModelName + ".DBServer");
+                serverName=serverName==null ? System.getProperty("dbConnectServerGLOBAL") : serverName;
+                String h= System.getProperty(aModelName + ".DBHostName");
+                h = h ==null ? System.getProperty("dbConnectHostNameGLOBAL") : h;
                 String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
                 if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
                     String modelName = jdbcInfo.substring(1, jdbcInfo.length());
@@ -390,6 +394,15 @@ public class ERXConfigurationManager {
                 jdbcInfo= jdbcInfo ==null ? System.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
                 String plugin= System.getProperty(aModelName + ".DBPlugin");
                 plugin= plugin ==null ? System.getProperty("dbConnectPluginGLOBAL") : plugin;
+                
+                // build the URL if we have a Postgresql plugin
+                if ("Postgresql".equals(plugin) 
+                        && ERXStringUtilities.stringIsNullOrEmpty(url) 
+                        && !ERXStringUtilities.stringIsNullOrEmpty(serverName)
+                        && !ERXStringUtilities.stringIsNullOrEmpty(h)) {
+                    url = "jdbc:postgresql://"+h+"/"+serverName+"?autoCommit=false";
+                }
+                
                 if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
                     if (url!=null) newConnectionDictionary.setObjectForKey(url, "URL");
