@@ -547,7 +547,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
                 // We first log just in case the log4j call puts us in a bad state.
                 NSLog.err.appendln("Ran out of memory, killing this instance");
                 log.error("Ran out of memory, killing this instance");
-            } else if (throwable instanceof NoClassDefFoundError) {
+            } else if (throwable instanceof NoClassDefFoundError ||
+                    throwable instanceof AbstractMethodError || 
+                    throwable instanceof InstantiationError ||
+                    throwable instanceof NoSuchFieldError || 
+                    throwable instanceof NoSuchMethodError) {
                 shouldQuit = false;
             } else if (throwable instanceof StackOverflowError) {
                 // hm. could we do something reasonable here?
