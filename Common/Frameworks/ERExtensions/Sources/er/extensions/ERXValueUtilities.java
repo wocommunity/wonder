@@ -14,7 +14,7 @@ import com.webobjects.appserver.*;
 public class ERXValueUtilities {
     /**
      * This method resolves bindings from WOComponents to
-     * boolean values. The added benifit (and this might not
+     * boolean values. The added benefit (and this might not
      * still be the case) is that when <code>false</code> is
      * bound to a binding will pass through null. This makes
      * it difficult to handle the case where a binding should
