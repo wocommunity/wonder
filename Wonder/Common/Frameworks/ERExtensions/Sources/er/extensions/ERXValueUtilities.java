@@ -155,5 +155,70 @@ public class ERXValueUtilities {
         }
         return value;
     }
-    
+
+    /**
+     * Basic utility method for reading NSArray values which works also with Strings.
+     * The current implementation uses {@link #arrayValueWithDefault(Object, NSArray)}
+     * with a default of <code>null</code>.
+     * @param obj object to be evaluated
+     * @return NSArray evaluation of the given object
+     */
+    public static NSArray arrayValue(Object obj) {
+        return arrayValueWithDefault(obj,null);
+    }
+
+    /**
+     * Basic utility method for reading <code>NSArray</code> values
+     * which also works with serialzed NSArrays. The default value is used if
+     * the object is null.
+     * @param obj object to be evaluated
+     * @param def default value if object is null
+     * @return int evaluation of the given object
+     */
+    public static NSArray arrayValueWithDefault(Object obj, NSArray def) {
+        NSArray value = def;
+        if (obj != null) {
+            if (obj instanceof NSArray) {
+                value =(NSArray)obj;
+            } else if(obj instanceof String) {
+                value = (NSArray)NSPropertyListSerialization.propertyListFromString((String)obj);
+            } else {
+                throw new RuntimeException("Not a String or NSArray " + obj);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Basic utility method for reading NSDictionary values which works also with Strings.
+     * The current implementation uses {@link #dictionaryValueWithDefault(Object, NSDictionary)}
+     * with a default of <code>null</code>.
+     * @param obj object to be evaluated
+     * @return NSDictionary evaluation of the given object
+     */
+    public static NSDictionary dictionaryValue(Object obj) {
+        return dictionaryValueWithDefault(obj,null);
+    }
+
+    /**
+     * Basic utility method for reading <code>NSDictionary</code> values
+     * which also works with serialzed NSDictionarys. The default value is used if
+     * the object is null.
+     * @param obj object to be evaluated
+     * @param def default value if object is null
+     * @return int evaluation of the given object
+     */
+    public static NSDictionary dictionaryValueWithDefault(Object obj, NSDictionary def) {
+        NSDictionary value = def;
+        if (obj != null) {
+            if (obj instanceof NSDictionary) {
+                value =(NSDictionary)obj;
+            } else if(obj instanceof String) {
+                value = (NSDictionary)NSPropertyListSerialization.propertyListFromString((String)obj);
+            } else {
+                throw new RuntimeException("Not a String or NSDictionary " + obj);
+            }
+        }
+        return value;
+    }
 }
