@@ -38,6 +38,7 @@ Span: WOGenericContainer {
 	elementName = "span";
 	id = spanId;
 	style = "visibility:hidden; position:absolute;";
+	onClick = hideString;
 }
 
 String1: WOString {
