@@ -356,12 +356,12 @@ public class ERXArrayUtilities extends Object {
      * @return returns an array containing an array of values for
      *         every keypath.
      */
-    public static NSArray valuesForKeyPaths(NSArray array, NSArray paths) {
+    public static NSArray valuesForKeyPaths(Object array, NSArray paths) {
         NSMutableArray result = new NSMutableArray();
 
         Enumeration e = paths.objectEnumerator();
         while(e.hasMoreElements()) {
-            result.addObject((NSArray)array.valueForKeyPath((String)e.nextElement()));
+            result.addObject(NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, (String)e.nextElement()));
         }
         return result;
     }
