@@ -278,7 +278,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 if(path != null) {
                     try {
                         framework = "app".equals(framework) ? null : framework;
-                        log.info("Loading: " + fileName + " - " 
+                        log.debug("Loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
                             + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
@@ -293,7 +293,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                             + languages + ":" + ex);
                     }
                 } else  {
-                    log.info("Unable to create path for resource named: " + fileName 
+                    log.debug("Unable to create path for resource named: " + fileName 
                         + " framework: " + (framework == null ? "app" : framework)
                         + " languages: " + languages);
                 }
