@@ -52,7 +52,11 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
             if(IsContainedInArraySelectorName.equals(qualifier.selector().name())) {
-                return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)qualifier.value());
+                Object value = qualifier.value();
+                if(!(value instanceof NSArray)) {
+                    value = new NSArray(value);
+                }
+                return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)value);
             }
             EOQualifier result = _old.schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
             return result;
