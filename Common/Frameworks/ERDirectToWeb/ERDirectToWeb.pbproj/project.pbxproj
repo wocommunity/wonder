@@ -429,6 +429,7 @@
 		};
 		4111C2560503948800000102 = {
 			children = (
+				41C5E53105D0EFFC00F59489,
 				4111C2440503927100000102,
 				4111C1F20503900F00000102,
 				F6E7967102C877AF01AD0D07,
@@ -1118,6 +1119,65 @@
 		};
 		41B8F7350503FC3500000102 = {
 			fileRef = 41B8F7340503FC3500000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5E53105D0EFFC00F59489 = {
+			children = (
+				41C5E53205D0EFFC00F59489,
+				41C5E53305D0EFFC00F59489,
+				41C5E53905D0EFFC00F59489,
+			);
+			isa = PBXGroup;
+			name = ERDActionBar;
+			path = "";
+			refType = 2;
+		};
+		41C5E53205D0EFFC00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDActionBar.api;
+			path = Components/ERDActionBar.api;
+			refType = 4;
+		};
+		41C5E53305D0EFFC00F59489 = {
+			children = (
+				41C5E53405D0EFFC00F59489,
+			);
+			isa = PBXVariantGroup;
+			name = ERDActionBar.wo;
+			path = "";
+			refType = 4;
+		};
+		41C5E53405D0EFFC00F59489 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDActionBar.wo;
+			refType = 4;
+		};
+		41C5E53905D0EFFC00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDActionBar.java;
+			path = Sources/er/directtoweb/ERDActionBar.java;
+			refType = 4;
+		};
+		41C5E53A05D0EFFC00F59489 = {
+			fileRef = 41C5E53205D0EFFC00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5E53B05D0EFFC00F59489 = {
+			fileRef = 41C5E53305D0EFFC00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5E53C05D0EFFC00F59489 = {
+			fileRef = 41C5E53905D0EFFC00F59489;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -9278,6 +9338,8 @@
 				418C6D7E059700CA00E772A7,
 				4131AAC605AEBF580066ECD8,
 				4131AAC705AEBF580066ECD8,
+				41C5E53A05D0EFFC00F59489,
+				41C5E53B05D0EFFC00F59489,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9519,6 +9581,7 @@
 				418C6D7F059700CA00E772A7,
 				4131AAC805AEBF580066ECD8,
 				41D6409A05C92B2B00BB3C39,
+				41C5E53C05D0EFFC00F59489,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
