@@ -38,7 +38,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
     }
 
 
-    private static D2WContext _context=new D2WContext();
+    private static D2WContext _context=new ERD2WContext();
     public NSArray sortedBrowserList() {
         NSArray result = browserList();
         if (indexKey()!=null)

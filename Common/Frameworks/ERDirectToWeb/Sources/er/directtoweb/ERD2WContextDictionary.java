@@ -47,7 +47,7 @@ public class ERD2WContextDictionary {
     public ERD2WContextDictionary(String pageConfigurationName, NSArray pageKeys, NSArray componentKeys) {
         _pageConfiguration = pageConfigurationName;
 
-        _context = new D2WContext();
+        _context = new ERD2WContext();
         _context.setDynamicPage(_pageConfiguration);
         if(pageKeys == null) {
             _pageLevelKeys = new NSMutableArray(new Object[] {"pageWrapperName", "displayPropertyKeys"});
