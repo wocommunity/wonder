@@ -17,13 +17,26 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
     static final Category cat = Category.getInstance(ERDDHTMLComponent.class);
 
     String varName = null;
-    
+
+    public Object objectKeyPathValue() {
+//        cat.warn("current:" + super.objectKeyPathValue());
+       return super.objectKeyPathValue();
+    }
+    public void setObjectKeyPathValue(Object newValue) {
+        super.setObjectKeyPathValue(newValue);
+//        cat.warn("new:" + newValue + " - "  + object() + " - " + key());
+    }
+
     public ERDDHTMLComponent(WOContext context) {
         super(context);
     }
 
     public boolean isStateless() {
-	return true;
+	return false;
+    }
+
+    public boolean synchronizesVariablesWithBindings() {
+        return false;
     }
 
     public void reset() {

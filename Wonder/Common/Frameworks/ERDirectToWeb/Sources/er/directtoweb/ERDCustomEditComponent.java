@@ -49,6 +49,9 @@ public abstract class ERDCustomEditComponent extends WOComponent {
     public Object objectPropertyValue() {
         return objectKeyPathValue();
     }
+    public void setObjectPropertyValue(Object newValue) {
+        setObjectKeyPathValue(newValue);
+    }
     public Object objectKeyPathValue() {
         return key() != null && object() != null ? object().valueForKeyPath(key()) : null;
     }
