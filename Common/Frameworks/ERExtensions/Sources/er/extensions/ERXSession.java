@@ -390,6 +390,8 @@ public class ERXSession extends WOSession implements Serializable {
         super.sleep();
         ERXLocalizer.setCurrentLocalizer(null);
         ERXExtensions.setSession(null);
+        // reset backtracking
+        _didBacktrack = null;
     }
 
     /*
@@ -401,7 +403,7 @@ public class ERXSession extends WOSession implements Serializable {
      * meaning they hit the back button and then clicked on a
      * link.
      */
-    public boolean didBackTrack = false;
+    protected Boolean _didBacktrack = null;
 
     /** flag to indicate if the last action was a direct action */
     public boolean lastActionWasDA = false;
@@ -429,75 +431,51 @@ public class ERXSession extends WOSession implements Serializable {
      * the user backtracked. If the context ID for the request is 2 clicks
      * less than the context ID for the current WOContext, we know
      * the backtracked.
-     * @param aRequest request to check
-     * @param aContext context to check against request
      * @return if the user has backtracked or not.
      */
-    public boolean didBacktrack(WORequest aRequest, WOContext aContext){
-        boolean didBacktrack = false;
-        int reqCID = Integer.parseInt(requestsContextID(aRequest));
-        int cid = Integer.parseInt(aContext.contextID());
-        int delta = cid - reqCID;
-        if (delta > 2) {
-            didBacktrack = true;
-        } else if (delta > 1) {
-            // Might not have backtracked if their last
-            // action was a direct action. 
-            // ERXDirectActionRequestHandler, which is the framework 
-            // built-in default direct action handler, sets this variable  
-            // to true at the end of its handleRequest method. 
-            if (!lastActionWasDA) {
-                didBacktrack = true;
+    public boolean didBacktrack() {
+        if(_didBacktrack == null) {
+            _didBacktrack = Boolean.FALSE;
+            int reqCID = Integer.parseInt(requestsContextID(context().request()));
+            int cid = Integer.parseInt(context().contextID());
+            int delta = cid - reqCID;
+            if (delta > 2) {
+                _didBacktrack = Boolean.TRUE;
+            } else if (delta > 1) {
+                // Might not have backtracked if their last
+                // action was a direct action.
+                // ERXDirectActionRequestHandler, which is the framework
+                // built-in default direct action handler, sets this variable
+                // to true at the end of its handleRequest method.
+                if (!lastActionWasDA) {
+                    _didBacktrack = Boolean.TRUE;
+                }
             }
+            lastActionWasDA = false;
         }
-        lastActionWasDA = false;
-        return didBacktrack;
+        
+        return _didBacktrack.booleanValue();
     }
 
     /**
-     * Overrides the ComponentAction handler to set the didBackTrack
-     * flag by calling the method <code>didBacktrack</code>. 
-     * @param aRequest current request
-     * @param aContext current context
-     * @return super's implementation of <code>invokeAction</code>
-     */
-    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext){
-        String reqCID = requestsContextID(aRequest);
-        didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack)
-            log.debug("User backtracking in invokeAction.");
-        return super.invokeAction(aRequest, aContext);
-    }
-
-    /**
-     * Overrides the ComponentAction handler to set the didBackTrack
-     * flag by calling the method <code>didBacktrack</code>. 
-     * Also provides automatic encoding support for component action 
+     * Provides automatic encoding support for component action 
      * with <code>messageEncoding</code> object.
      * @param aRequest current request
      * @param aContext current context
      * @return super's implementation of <code>invokeAction</code>
      */
     public void takeValuesFromRequest (WORequest aRequest, WOContext aContext){
-        String reqCID = requestsContextID(aRequest);
-        didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack)
-            log.debug("User backtracking in takeValuesFromRequest.");
         messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
         super. takeValuesFromRequest (aRequest, aContext);
     }
 
     /**
-     * Overridden to display debugging information when a
-     * user backtracks. 
-     * Also provides automatic encoding support for component action 
+     * Provides automatic encoding support for component action 
      * with <code>messageEncoding</code> object.
      * @param aResponse current response object
      * @param aContext current context object
      */
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-        if (didBackTrack)
-            log.debug("User backtracking in appendToResponse.");
         messageEncoding().setEncodingToResponse(aResponse);
         super.appendToResponse(aResponse, aContext);
     }
