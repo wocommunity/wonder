@@ -139,4 +139,5 @@
 ./Sources/er/testrunner/ERXTestRunner.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestInterface.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestResult.java:er.testrunner
-./Sources/WXOutlineControl.java:
+./Sources/er/extensions/ERXBetweenQualifier.java:
+./Sources/er/extensions/ERXInQualifier.java:
