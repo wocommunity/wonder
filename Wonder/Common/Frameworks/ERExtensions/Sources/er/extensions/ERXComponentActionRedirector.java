@@ -69,7 +69,7 @@ So the users browser receives redirection to a "reasonable" URL like "/article/1
  For all of this to work, your application should override the request-response loop like:
  public WOActionResults invokeAction(WORequest request, WOContext context) {
      WOActionResults results = super.invokeAction(request, context);
-     ERXComponentActionRedirector.createRedirectorInContext(context);
+     ERXComponentActionRedirector.createRedirectorInContext(results, context);
      return results;
  }
 
@@ -100,6 +100,11 @@ So the users browser receives redirection to a "reasonable" URL like "/article/1
 @author ak
  */
 public class ERXComponentActionRedirector {
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXComponentActionRedirector.class);
+
+
     public static interface Restorable {
         public String urlForCurrentState();
     }
@@ -118,17 +123,30 @@ public class ERXComponentActionRedirector {
             responses.setObjectForKey(sessionRef, redirector.sessionID());
         }
         sessionRef.setObjectForKey(redirector, redirector.url());
+        log.info("Stored URL: " + redirector.url());
     }
     public static ERXComponentActionRedirector redirectorForRequest(WORequest request) {
-        return (ERXComponentActionRedirector)responses.valueForKeyPath(request.sessionID() + "." + request.uri());
+        ERXComponentActionRedirector redirector = (ERXComponentActionRedirector)responses.valueForKeyPath(request.sessionID() + "." + request.uri());
+        if(redirector != null) {
+            log.info("Retrieved URL: " + redirector.url());
+        } else {
+            log.info("No Redirector for request: " + request.uri());
+        }
+        return redirector;
     }
 
-    public static void createRedirectorInContext(WOContext context) {
+    public static void createRedirector(WOActionResults results) {
         ERXThreadStorage.removeValueForKey("redirector");
-        if(context.request().requestHandlerKey().equals("wo")) {
-            if(context.page() instanceof Restorable) {
-                ERXComponentActionRedirector r = new ERXComponentActionRedirector((Restorable)context.page());
-                ERXComponentActionRedirector.storeRedirector(r);
+        if(results instanceof WOComponent) {
+            WOComponent component = (WOComponent)results;
+            WOContext context = component.context();
+            if(context.request().requestHandlerKey().equals("wo")) {
+                if(component instanceof Restorable) {
+                    ERXComponentActionRedirector r = new ERXComponentActionRedirector((Restorable)component);
+                    ERXComponentActionRedirector.storeRedirector(r);
+                } else {
+                    log.info("Not restorable: " + context.request().uri() + ", " + component);
+                }
             }
         }
     }
