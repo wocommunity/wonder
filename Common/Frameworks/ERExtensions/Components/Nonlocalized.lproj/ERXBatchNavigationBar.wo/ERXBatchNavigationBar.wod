@@ -55,6 +55,13 @@ FontContainer5: WOGenericContainer {
 	elementName = "FONT";
 }
 
+Image1: WOImage {
+	filename = "s.gif";
+	framework = "ERExtensions";
+	height = 1;
+	width = 500;
+}
+
 IsBatchedDisplay: WOConditional {
 	condition = ^displayGroup.hasMultipleBatches;
 }
