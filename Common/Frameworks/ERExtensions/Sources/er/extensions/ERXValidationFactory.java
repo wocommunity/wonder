@@ -305,7 +305,7 @@ public class ERXValidationFactory {
     /**
      * Converts the additional exceptions contained in an Exception to ERXValidationException subclasses.
      * @param ex validation exception
-     * @returns NSArray of converted exceptions
+     * @return NSArray of converted exceptions
      */
     protected NSArray convertAdditionalExceptions(NSValidation.ValidationException ex) {
         NSArray additionalExceptions = ex.additionalExceptions();
@@ -488,7 +488,7 @@ public class ERXValidationFactory {
     /**
      * Get the template for a given key in a given language.
      * Uses {@link ERXLocalizer} to handle the actual lookup.
-     * @returns template for key or null if none is found
+     * @return template for key or null if none is found
      */
     public String templateForKeyPath(String key, String language) {
         return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(key);

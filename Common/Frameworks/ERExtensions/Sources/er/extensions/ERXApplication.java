@@ -85,7 +85,7 @@ public abstract class ERXApplication extends WOApplication {
 
     /**
      * Delegate method for the {@see EOModelGroup} class delegate.
-     * @returns a fixed ERXModelGroup
+     * @return a fixed ERXModelGroup
      */
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
@@ -257,7 +257,7 @@ public abstract class ERXApplication extends WOApplication {
      * @param someHeaders - dictionary whose String keys correspond to header names
      * @param aContent - the HTML content of the receiver
      * @param someInfo - an NSDictionary that can contain any kind of information related to the current response.
-     * @returns a new WORequest object
+     * @return a new WORequest object
      */
     public WORequest createRequest(String aMethod, String aURL,
                                    String anHTTPVersion,

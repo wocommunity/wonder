@@ -40,9 +40,12 @@ public class ERDDeleteButton extends ERDActionButton {
         ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed((String)valueForBinding("confirmDeleteConfigurationName"), session());
         nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(), dataSource(), context().page()));
         nextPage.setCancelDelegate(new ERDPageDelegate(context().page()));
-        String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObjectOtherObject("ERDTrashcan.confirmDeletionMessage", d2wContext(), object());
+        D2WPage d2wPage = ((D2WPage)nextPage);
+        
+        String message = "ERDTrashcan.confirmDeletionMessage";
+
         nextPage.setMessage(message);
-        ((D2WPage)nextPage).setObject(object());
+        d2wPage.setObject(object());
         return (WOComponent) nextPage;
     }
 

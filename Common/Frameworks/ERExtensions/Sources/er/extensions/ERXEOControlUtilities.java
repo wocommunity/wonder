@@ -356,7 +356,7 @@ public class ERXEOControlUtilities {
      * Utility method to generate a new primary key dictionary using
      * the objects class properties. Use it when your PKs are class properties.
      * @param eo object in question
-     * @returns new primary key dictionary or null if one of the properties is
+     * @return new primary key dictionary or null if one of the properties is
      * null or one of the primary key attributes is not a class property.
      */
 
@@ -382,9 +382,9 @@ public class ERXEOControlUtilities {
 
     /**
      * Utility method to generate a new primary key for an object. Calls
-     * {@link newPrimaryKeyForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
-     * {@link newPrimaryKeyDictionaryForEntityNamed(EOEditingContext, String)}
-     * @returns new primary key dictionary or null if a failure occured.
+     * {@link #newPrimaryKeyForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
+     * {@link #newPrimaryKeyDictionaryForEntityNamed(EOEditingContext, String)}
+     * @return new primary key dictionary or null if a failure occured.
      */
 
     public static NSDictionary newPrimaryKeyDictionaryForObject(EOEnterpriseObject eo) {
@@ -408,7 +408,7 @@ public class ERXEOControlUtilities {
      * @param ec editing context
      * @param entityName name of the entity to generate the primary
      *		key dictionary for.
-     * @returns a dictionary containing a new primary key for the given
+     * @return a dictionary containing a new primary key for the given
      *		entity.
      */
     public static NSDictionary newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
@@ -437,7 +437,7 @@ public class ERXEOControlUtilities {
      * Returns the propertylist-encoded string representation of the primary key for
      * a given object.
      * @param eo object to get the primary key for.
-     * @returns string representation of the primary key of the
+     * @return string representation of the primary key of the
      *		object.
      */
     public static String primaryKeyStringForObject(EOEnterpriseObject eo) {
@@ -453,7 +453,7 @@ public class ERXEOControlUtilities {
     /**
      * Returns either the single object the PK consist of or the NSArray of its values if the key is compound.
      * @param eo object to get the primary key for.
-     * @returns single object or NSArray
+     * @return single object or NSArray
      */
     public static Object primaryKeyObjectForObject(EOEnterpriseObject eo) {
         NSArray arr=primaryKeyArrayForObject(eo);
