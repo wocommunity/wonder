@@ -104,7 +104,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B30FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -271,7 +270,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B37FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -447,6 +445,7 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 40B5827FFFD5E7DB7F000001;
 			productRefGroup = 40B58280FFD5E8187F000001;
@@ -502,7 +501,8 @@
 				CURRENT_SYMLINK = "$(VERSIONS_DIR)/Current";
 				FRAMEWORK_VERSION = A;
 				INFO_FILE_NAME = Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(INSTALL_PREFIX)/Frameworks";
+				INSTALL_PREFIX = "$(LOCAL_LIBRARY_DIR)";
 				PRODUCT_NAME = SVGObjects;
 				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
 				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
@@ -569,7 +569,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		40B58283FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -710,30 +709,35 @@
 			refType = 4;
 		};
 		F504CA2600DABD2701000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Todo.readme;
 			path = Documentation/Todo.readme;
 			refType = 4;
 		};
 		F504CA2900DABDCD01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXHyperlink.java;
 			path = Sources/org/svgobjects/WXHyperlink.java;
 			refType = 4;
 		};
 		F504CA2B00DABDEC01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXHyperlink.api;
 			path = Components/WXHyperlink.api;
 			refType = 4;
 		};
 		F504CA2C00DABDF501000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXScript.java;
 			path = Sources/org/svgobjects/WXScript.java;
 			refType = 4;
 		};
 		F5089BDF00DB9FEA01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Version.readme;
 			path = Documentation/Version.readme;
@@ -910,6 +914,7 @@
 			};
 		};
 		F5A320D50389F402010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXScript.api;
 			path = Components/WXScript.api;
@@ -935,6 +940,7 @@
 			};
 		};
 		F5A320DD0389F436010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOImage.api;
 			path = Components/SOImage.api;
@@ -960,6 +966,7 @@
 			};
 		};
 		F5A320E30389F467010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOGroup.api;
 			path = Components/SOGroup.api;
@@ -985,6 +992,7 @@
 			};
 		};
 		F5A320E90389F49F010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOSvg.api;
 			path = Components/SOSvg.api;
@@ -1010,6 +1018,7 @@
 			};
 		};
 		F5A320EF0389F4D4010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOSymbol.api;
 			path = Components/SOSymbol.api;
@@ -1035,6 +1044,7 @@
 			};
 		};
 		F5A320F50389F50A010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOUse.api;
 			path = Components/SOUse.api;
@@ -1060,6 +1070,7 @@
 			};
 		};
 		F5A320FB0389F543010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOFilter.api;
 			path = Components/SOFilter.api;
@@ -1085,6 +1096,7 @@
 			};
 		};
 		F5A321010389F578010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOMarker.api;
 			path = Components/SOMarker.api;
@@ -1110,6 +1122,7 @@
 			};
 		};
 		F5A321070389F5A3010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOPath.api;
 			path = Components/SOPath.api;
@@ -1135,6 +1148,7 @@
 			};
 		};
 		F5A3210D0389F5CE010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOCircle.api;
 			path = Components/SOCircle.api;
@@ -1160,6 +1174,7 @@
 			};
 		};
 		F5A321130389F5F8010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOEllipse.api;
 			path = Components/SOEllipse.api;
@@ -1185,6 +1200,7 @@
 			};
 		};
 		F5A321190389F634010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOLine.api;
 			path = Components/SOLine.api;
@@ -1210,6 +1226,7 @@
 			};
 		};
 		F5A3211F0389F664010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOPolygon.api;
 			path = Components/SOPolygon.api;
@@ -1235,6 +1252,7 @@
 			};
 		};
 		F5A321250389F699010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SORect.api;
 			path = Components/SORect.api;
@@ -1260,6 +1278,7 @@
 			};
 		};
 		F5A3212B0389F6CC010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOPolyline.api;
 			path = Components/SOPolyline.api;
@@ -1285,6 +1304,7 @@
 			};
 		};
 		F5A321310389F704010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOText.api;
 			path = Components/SOText.api;
@@ -1310,6 +1330,7 @@
 			};
 		};
 		F5A321370389F737010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOTextPath.api;
 			path = Components/SOTextPath.api;
@@ -1335,6 +1356,7 @@
 			};
 		};
 		F5A3213D0389F76A010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOTextReference.api;
 			path = Components/SOTextReference.api;
@@ -1360,6 +1382,7 @@
 			};
 		};
 		F5A321430389F79D010E9213 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOTextSpan.api;
 			path = Components/SOTextSpan.api;
@@ -1417,131 +1440,157 @@
 			refType = 4;
 		};
 		F5D4EA8800DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Copyright.html;
 			refType = 4;
 		};
 		F5D4EA8900DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Introduction.html;
 			refType = 4;
 		};
 		F5D4EA8A00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ReleaseNotes.html;
 			refType = 4;
 		};
 		F5D4EA8B00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOCircle.html;
 			refType = 4;
 		};
 		F5D4EA8C00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOEllipse.html;
 			refType = 4;
 		};
 		F5D4EA8D00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOFilter.html;
 			refType = 4;
 		};
 		F5D4EA8E00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOGroup.html;
 			refType = 4;
 		};
 		F5D4EA8F00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOImage.html;
 			refType = 4;
 		};
 		F5D4EA9000DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOLine.html;
 			refType = 4;
 		};
 		F5D4EA9100DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOMarker.html;
 			refType = 4;
 		};
 		F5D4EA9200DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOPath.html;
 			refType = 4;
 		};
 		F5D4EA9300DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOPolygon.html;
 			refType = 4;
 		};
 		F5D4EA9400DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOPolyLine.html;
 			refType = 4;
 		};
 		F5D4EA9500DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SORect.html;
 			refType = 4;
 		};
 		F5D4EA9600DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOSvg.html;
 			refType = 4;
 		};
 		F5D4EA9700DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOSymbol.html;
 			refType = 4;
 		};
 		F5D4EA9800DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOText.html;
 			refType = 4;
 		};
 		F5D4EA9900DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOTextPath.html;
 			refType = 4;
 		};
 		F5D4EA9A00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOTextReference.html;
 			refType = 4;
 		};
 		F5D4EA9B00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOTextSpan.html;
 			refType = 4;
 		};
 		F5D4EA9C00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SOUse.html;
 			refType = 4;
 		};
 		F5D4EA9D00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SVGObjectsTOC.html;
 			refType = 4;
 		};
 		F5D4EA9E00DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = WOSVG.html;
 			refType = 4;
 		};
 		F5D4EAA000DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = WXHyperlink.html;
 			refType = 4;
 		};
 		F5D4EAA100DAB21B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = WXScript.html;
 			refType = 4;
 		};
 		F5D4EABC00DAB28E01000001 = {
+			fileEncoding = 30;
 			indentWidth = 4;
 			isa = PBXFileReference;
 			name = SODynamicElement.java;
@@ -1586,6 +1635,7 @@
 			refType = 4;
 		};
 		F5D4EAC000DAB30801000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOImage.java;
 			path = Sources/org/svgobjects/SOImage.java;
@@ -1602,6 +1652,7 @@
 			refType = 4;
 		};
 		F5D4EAC600DAB39901000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOGroup.java;
 			path = Sources/org/svgobjects/SOGroup.java;
@@ -1619,6 +1670,7 @@
 			refType = 4;
 		};
 		F5D4EACC00DAB3F101000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOSvg.java;
 			path = Sources/org/svgobjects/SOSvg.java;
@@ -1635,6 +1687,7 @@
 			refType = 4;
 		};
 		F5D4EAD200DAB42E01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOSymbol.java;
 			path = Sources/org/svgobjects/SOSymbol.java;
@@ -1651,6 +1704,7 @@
 			refType = 4;
 		};
 		F5D4EAD800DAB48301000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOUse.java;
 			path = Sources/org/svgobjects/SOUse.java;
@@ -1667,6 +1721,7 @@
 			refType = 4;
 		};
 		F5D4EADE00DAB4D501000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOFilter.java;
 			path = Sources/org/svgobjects/SOFilter.java;
@@ -1683,6 +1738,7 @@
 			refType = 4;
 		};
 		F5D4EAE400DAB51401000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOMarker.java;
 			path = Sources/org/svgobjects/SOMarker.java;
@@ -1699,6 +1755,7 @@
 			refType = 4;
 		};
 		F5D4EAEA00DAB55801000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOPath.java;
 			path = Sources/org/svgobjects/SOPath.java;
@@ -1715,6 +1772,7 @@
 			refType = 4;
 		};
 		F5D4EAF000DAB62C01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOCircle.java;
 			path = Sources/org/svgobjects/SOCircle.java;
@@ -1731,6 +1789,7 @@
 			refType = 4;
 		};
 		F5D4EAF600DAB66E01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOEllipse.java;
 			path = Sources/org/svgobjects/SOEllipse.java;
@@ -1747,6 +1806,7 @@
 			refType = 4;
 		};
 		F5D4EAFC00DAB6A601000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOLine.java;
 			path = Sources/org/svgobjects/SOLine.java;
@@ -1763,6 +1823,7 @@
 			refType = 4;
 		};
 		F5D4EB0100DAB6F501000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOPolygon.java;
 			path = Sources/org/svgobjects/SOPolygon.java;
@@ -1779,6 +1840,7 @@
 			refType = 4;
 		};
 		F5D4EB0700DAB73901000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SORect.java;
 			path = Sources/org/svgobjects/SORect.java;
@@ -1795,6 +1857,7 @@
 			refType = 4;
 		};
 		F5D4EB0D00DAB77B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOPolyline.java;
 			path = Sources/org/svgobjects/SOPolyline.java;
@@ -1811,6 +1874,7 @@
 			refType = 4;
 		};
 		F5D4EB1300DAB7CB01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOText.java;
 			path = Sources/org/svgobjects/SOText.java;
@@ -1827,6 +1891,7 @@
 			refType = 4;
 		};
 		F5D4EB1900DAB80A01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOTextPath.java;
 			path = Sources/org/svgobjects/SOTextPath.java;
@@ -1843,6 +1908,7 @@
 			refType = 4;
 		};
 		F5D4EB1F00DAB86501000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOTextReference.java;
 			path = Sources/org/svgobjects/SOTextReference.java;
@@ -1859,6 +1925,7 @@
 			refType = 4;
 		};
 		F5D4EB2500DAB8A201000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SOTextSpan.java;
 			path = Sources/org/svgobjects/SOTextSpan.java;
@@ -1883,12 +1950,14 @@
 			refType = 4;
 		};
 		F5D4EB2C00DAB91B01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSVG.java;
 			path = Sources/org/svgobjects/WOSVG.java;
 			refType = 4;
 		};
 		F5D4EB2E00DAB92E01000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSVG.api;
 			path = Components/WOSVG.api;
