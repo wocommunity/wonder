@@ -530,7 +530,7 @@ public class ERXUtilities {
             set2.addObjectsFromArray(array2);
             intersection = (set1.setByIntersectingSet(set2)).allObjects();
         }
-        return intersection != null ? intersection : ERXConstant.EmptyArray;
+        return intersection != null ? intersection : NSArray.EmptyArray;
     }
 
     /**

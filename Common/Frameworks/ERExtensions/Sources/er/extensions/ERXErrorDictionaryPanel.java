@@ -32,7 +32,7 @@ public class ERXErrorDictionaryPanel extends WOComponent {
     }
 
     public NSArray errorKeys() {
-        return errorKeyOrder != null ? errorKeyOrder : (errorMessages != null ? errorMessages.allKeys() : ERXConstant.EmptyArray);
+        return errorKeyOrder != null ? errorKeyOrder : (errorMessages != null ? errorMessages.allKeys() : NSArray.EmptyArray);
     }
 
     public String errorMessageItem() { return (String)errorMessages.objectForKey(errorKey); }
