@@ -208,10 +208,19 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     public NSArray theList() {
         NSMutableArray aSortedArray;
         NSArray anUnsortedArray;
-        if (_privateList()==null) {
+        if (_privateList()==null ) {
             EODataSource aDataSource = _localDataSource();
             // Need to make sure that the eos are in the right editingContext.
-            anUnsortedArray = ERXUtilities.localInstancesOfObjects(((EOEnterpriseObject)_sourceObject).editingContext(), aDataSource.fetchObjects());
+	    // ak: We get a dictionary as object if we use this in a query,
+	    // so we have to check...
+	    EOEditingContext ec;
+	    
+	    if(_sourceObject instanceof EOEnterpriseObject)
+		ec = ((EOEnterpriseObject)_sourceObject).editingContext();
+	    else
+		ec = session().defaultEditingContext();
+	    
+	    anUnsortedArray = ERXUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
             /* WO5
@@ -232,7 +241,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 ((EOEnterpriseObject)_localSourceObject()).valueForKeyPath(_localRelationshipKey()) != null) {
                 NSMutableArray localArray= new NSMutableArray();
                 EOEnterpriseObject eo;
-                EOEditingContext ec = ((EOEnterpriseObject)_localSourceObject()).editingContext();
+                ec = ((EOEnterpriseObject)_localSourceObject()).editingContext();
                 for (Enumeration e = aSortedArray.objectEnumerator(); e.hasMoreElements();) {
                     eo = (EOEnterpriseObject)e.nextElement();
                     localArray.addObject((ec != eo.editingContext() && ERXUtilities.localInstanceOfObject(ec, eo) != null ?
