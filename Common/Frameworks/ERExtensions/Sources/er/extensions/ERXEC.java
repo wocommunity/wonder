@@ -8,7 +8,6 @@ package er.extensions;
 import java.util.Vector;
 
 import com.webobjects.foundation.*;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.*;
 
 /**
@@ -68,15 +67,29 @@ public class ERXEC extends EOEditingContext {
 	 */
     public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker && ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
     		if(ecs == null) {
     			ecs = new Vector();
+        		ERXThreadStorage.takeValueForKey(ecs, lockedContextsThreadKey());
     		}
     		ecs.add(ec);
-    		ERXThreadStorage.takeValueForKey(ecs, LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    		if(log.isDebugEnabled()) {
+    		    log.debug("After pushing: " + ecs);
+    		}
     	}
     }
     
+    /**
+     * ERXThreadStorage is inherited by newly created threads, and we don't
+     * want to have the child thread's locked ECs unlocked when the parent exits dispatchRequest(),
+     * so we need to append something to the thread key, to distinguish it from
+     * the parent.
+     * @return thread-unique thread-storage key
+     */
+    private static String lockedContextsThreadKey() {
+        return LockedContextsForCurrentThreadKey + ":" + System.identityHashCode(Thread.currentThread());
+    }
+
     /**
      * Pops the given EC from the array of contexts to unlock. The ECs left over
 	 * after the RR-loop will be automagically unlocked.
@@ -84,7 +97,7 @@ public class ERXEC extends EOEditingContext {
      */
     public static void popLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker &&  ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
     		if(ecs != null) {
     			int index = ecs.lastIndexOf(ec);
     			if(index >= 0) {
@@ -92,6 +105,9 @@ public class ERXEC extends EOEditingContext {
     			} else {
     				log.error("Should pop, but ec not found in Vector! " + Thread.currentThread().getName() + ", ec: " + ec + ", ecs:" + ecs);
     			}
+    		}
+       		if(log.isDebugEnabled()) {
+    		    log.debug("After popping: " + ecs);
     		}
     	}
     }
@@ -101,18 +117,20 @@ public class ERXEC extends EOEditingContext {
      * You shouldn't call this yourself, but let the Unlocker handle it for you.
      */
     public static void unlockAllContextsForCurrentThread() {
-    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
-    	ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
-    	log.debug("unlockAllContextsForCurrentThread: " + Thread.currentThread().getName() + ", ecs: " + ecs);
+    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
+    	ERXThreadStorage.removeValueForKey(lockedContextsThreadKey());
     	if(ecs != null && ecs.size() > 0) {
-    		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
+       		if(log.isDebugEnabled()) {
+    		    log.debug("Unlock remaining: " + ecs);
+    		}
+        	// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
     		for (int i = ecs.size() - 1; i >= 0; i--) {
     			EOEditingContext ec = (EOEditingContext) ecs.get(i);
     			log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
     			try {
     				ec.unlock();
     			} catch(IllegalStateException ex) {
-    				log.error("Could not unlock EC!", ex);
+    				log.error("Could not unlock EC: " + ec, ex);
     			}
     		}
     	}
