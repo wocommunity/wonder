@@ -191,6 +191,17 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public static ERXLocalizer localizerForSession(Object session) {
+        if(session instanceof ERXSession) return ((ERXSession)session).localizer();
+        if(session instanceof WOSession) return localizerForLanguages(((WOSession)session).languages());
+        if(session instanceof NSDictionary) {
+            NSDictionary dict = ((NSDictionary)session);
+            Object l = dict.valueForKey("localizer");
+            if(l != null)
+                return (ERXLocalizer)l;
+            Object language = dict.valueForKey("language");
+            if(language != null)
+                return localizerForLanguage((String)language);
+        }
         return ((ERXSession)session).localizer();
     }
     
