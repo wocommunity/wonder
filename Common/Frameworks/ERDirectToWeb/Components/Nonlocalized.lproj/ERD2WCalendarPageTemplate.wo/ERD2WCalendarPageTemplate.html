@@ -1,0 +1,24 @@
+<webobject name=PageWrapper>
+	<webobject name=Help></webobject>
+	<table border=0 align=center>
+		<tr>
+			<td colspan=2><webobject name=Banner></webobject><webobject name=Header></webobject></td>
+		</tr>
+		<webobject name=ListNotEmpty>
+			<tr>
+				<td align=LEFT valign=TOP><WEBOBJECT NAME=ListPageRepetition></WEBOBJECT></td>
+				<td align=RIGHT valign=TOP>
+					<webobject name=MonthView></webobject>
+				</td>
+			</tr>
+		</webobject><webobject name=ListEmpty>
+			<tr>
+				<td colspan=2><webobject name=EmptyMessageComponent></webobject></td>
+			</tr>
+		</webobject><webobject name=HideReturnOnSelect><webobject name=ShowCancel>
+				<tr>
+					<td align=CENTER colspan=2><webobject name=BackLink><webobject name=ReturnButton></webobject></webobject></td>
+				</tr>
+			</webobject></webobject>
+	</table>
+</webobject>
