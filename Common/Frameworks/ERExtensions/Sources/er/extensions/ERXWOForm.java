@@ -20,24 +20,19 @@ import com.webobjects.appserver.*;
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     static final ERXLogger log = ERXLogger.getLogger(ERXWOForm.class);
-    String _formName;
-    NSDictionary _associations;
+    WOAssociation _formName;
     
     public ERXWOForm(String name, NSDictionary associations,
                      WOElement template) {
         super(name, associations, template);
-        _associations = associations;
-        _formName = null;
+        _formName = (WOAssociation) _associations.removeObjectForKey("name");
     }
-    
+
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
-        if(context != null && context instanceof ERXMutableUserInfoHolderInterface && _associations != null) {
-            Object association = _associations.objectForKey("name");
-            if(association != null) {
-                String formName = (String)((WOAssociation)association).valueInComponent(context.component());
-                if(formName != null)
-                    ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().setObjectForKey(formName, "formName");
-            }
+        if(context != null && context instanceof ERXMutableUserInfoHolderInterface && _formName != null) {
+            String formName = (String)_formName.valueInComponent(context.component());
+            if(formName != null)
+                ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().setObjectForKey(formName, "formName");
         }
         super.appendAttributesToResponse(response, context);
     }

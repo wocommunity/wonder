@@ -13,14 +13,14 @@
 			017C7B2FFFD7144B7F000001,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 46611120;
+			PBXPerProjectTemplateStateSaveDate = 46859798;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F54279E202C73D7201D1D37B;
+									bookmark = F6378B7302CB062F01AD0D07;
 									history = (
 										F59C5CBB02C464CB01000102,
 										F59C5CBC02C464CB01000102,
@@ -34,8 +34,6 @@
 										F54C4E8402C502C501000102,
 										F54C4E8602C502C501000102,
 										F5005CEC02C507D101000102,
-										F5005CED02C507D101000102,
-										F5005CEE02C507D101000102,
 										F5005CEF02C507D101000102,
 										F5CCEF1202C52B6601000102,
 										F5CCEF1302C52B6601000102,
@@ -43,7 +41,8 @@
 										F5CCEF1502C52B6601000102,
 										F5CCEF1602C52B6601000102,
 										F54279DF02C73D7201D1D37B,
-										F54279E002C73D7201D1D37B,
+										F6378B7002CB062F01AD0D07,
+										F6378B7102CB062F01AD0D07,
 									);
 									prevStack = (
 										F59C5BBE02C4640401000102,
@@ -64,8 +63,6 @@
 										F54C4E9302C502C501000102,
 										F54C4E9402C502C501000102,
 										F5005CF102C507D101000102,
-										F5005CF202C507D101000102,
-										F5005CF302C507D101000102,
 										F5005CF402C507D101000102,
 										F5CCEF1802C52B6601000102,
 										F5CCEF1902C52B6601000102,
@@ -74,6 +71,7 @@
 										F5CCEF1C02C52B6601000102,
 										F5CCEF1D02C52B6601000102,
 										F54279E102C73D7201D1D37B,
+										F6378B7202CB062F01AD0D07,
 									);
 								};
 								NavCount = 1;
@@ -183,10 +181,12 @@
 						Tab0 = {
 							Frame = "{{0, 0}, {260, 549}}";
 							GroupTreeTableConfiguration = (
+								SCMStatusColumn,
+								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								227,
+								205,
 							);
 						};
 						Tab1 = {
@@ -258,21 +258,15 @@
 					WindowLocation = "{25, 112}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 46611120;
+			PBXWorkspaceStateSaveDate = 46859798;
 		};
 		perUserProjectItems = {
 			F5005CEC02C507D101000102 = F5005CEC02C507D101000102;
-			F5005CED02C507D101000102 = F5005CED02C507D101000102;
-			F5005CEE02C507D101000102 = F5005CEE02C507D101000102;
 			F5005CEF02C507D101000102 = F5005CEF02C507D101000102;
 			F5005CF102C507D101000102 = F5005CF102C507D101000102;
-			F5005CF202C507D101000102 = F5005CF202C507D101000102;
-			F5005CF302C507D101000102 = F5005CF302C507D101000102;
 			F5005CF402C507D101000102 = F5005CF402C507D101000102;
 			F54279DF02C73D7201D1D37B = F54279DF02C73D7201D1D37B;
-			F54279E002C73D7201D1D37B = F54279E002C73D7201D1D37B;
 			F54279E102C73D7201D1D37B = F54279E102C73D7201D1D37B;
-			F54279E202C73D7201D1D37B = F54279E202C73D7201D1D37B;
 			F54C4E7E02C502C501000102 = F54C4E7E02C502C501000102;
 			F54C4E7F02C502C501000102 = F54C4E7F02C502C501000102;
 			F54C4E8002C502C501000102 = F54C4E8002C502C501000102;
@@ -312,6 +306,10 @@
 			F5CCEF1B02C52B6601000102 = F5CCEF1B02C52B6601000102;
 			F5CCEF1C02C52B6601000102 = F5CCEF1C02C52B6601000102;
 			F5CCEF1D02C52B6601000102 = F5CCEF1D02C52B6601000102;
+			F6378B7002CB062F01AD0D07 = F6378B7002CB062F01AD0D07;
+			F6378B7102CB062F01AD0D07 = F6378B7102CB062F01AD0D07;
+			F6378B7202CB062F01AD0D07 = F6378B7202CB062F01AD0D07;
+			F6378B7302CB062F01AD0D07 = F6378B7302CB062F01AD0D07;
 		};
 		projectwideBuildSettings = {
 		};
@@ -330,26 +328,6 @@
 		rType = 0;
 		vrLen = 1192;
 		vrLoc = 1090;
-	};
-	F5005CED02C507D101000102 = {
-		fRef = F5005CF802C507D101000102;
-		isa = PBXTextBookmark;
-		name = "ERXJSOpenWindowHyperlink.html: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 222;
-		vrLoc = 0;
-	};
-	F5005CEE02C507D101000102 = {
-		fRef = F5005CF902C507D101000102;
-		isa = PBXTextBookmark;
-		name = "ERXJSOpenWindowHyperlink.wod: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 594;
-		vrLoc = 0;
 	};
 	F5005CEF02C507D101000102 = {
 		fRef = F59C56F502C455BF01000102;
@@ -371,26 +349,6 @@
 		vrLen = 1192;
 		vrLoc = 1090;
 	};
-	F5005CF202C507D101000102 = {
-		fRef = F5005CF702C507D101000102;
-		isa = PBXTextBookmark;
-		name = "ERXJSOpenWindowHyperlink.html: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 222;
-		vrLoc = 0;
-	};
-	F5005CF302C507D101000102 = {
-		fRef = F5005CF602C507D101000102;
-		isa = PBXTextBookmark;
-		name = "ERXJSOpenWindowHyperlink.wod: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 594;
-		vrLoc = 0;
-	};
 	F5005CF402C507D101000102 = {
 		fRef = F59C56F502C455BF01000102;
 		isa = PBXTextBookmark;
@@ -400,30 +358,6 @@
 		rType = 0;
 		vrLen = 1473;
 		vrLoc = 0;
-	};
-	F5005CF602C507D101000102 = {
-		isa = PBXFileReference;
-		name = ERXJSOpenWindowHyperlink.wod;
-		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.wod;
-		refType = 0;
-	};
-	F5005CF702C507D101000102 = {
-		isa = PBXFileReference;
-		name = ERXJSOpenWindowHyperlink.html;
-		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.html;
-		refType = 0;
-	};
-	F5005CF802C507D101000102 = {
-		isa = PBXFileReference;
-		name = ERXJSOpenWindowHyperlink.html;
-		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.html;
-		refType = 0;
-	};
-	F5005CF902C507D101000102 = {
-		isa = PBXFileReference;
-		name = ERXJSOpenWindowHyperlink.wod;
-		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.wod;
-		refType = 0;
 	};
 	F54279DF02C73D7201D1D37B = {
 		fRef = F59C57B902C4565701000102;
@@ -435,10 +369,6 @@
 		vrLen = 1359;
 		vrLoc = 1025;
 	};
-	F54279E002C73D7201D1D37B = {
-		fRef = F59C57FB02C4565701000102;
-		isa = PBXBookmark;
-	};
 	F54279E102C73D7201D1D37B = {
 		fRef = F59C57B902C4565701000102;
 		isa = PBXTextBookmark;
@@ -448,16 +378,6 @@
 		rType = 0;
 		vrLen = 1359;
 		vrLoc = 1025;
-	};
-	F54279E202C73D7201D1D37B = {
-		fRef = F59C57FB02C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXBatchTestInterface.java: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1031;
-		vrLoc = 0;
 	};
 	F54C4E7E02C502C501000102 = {
 		fRef = F59C57F302C4565701000102;
@@ -871,6 +791,40 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 62;
+		vrLoc = 0;
+	};
+	F6378B7002CB062F01AD0D07 = {
+		fRef = F59C57FB02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXBatchTestInterface.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1031;
+		vrLoc = 0;
+	};
+	F6378B7102CB062F01AD0D07 = {
+		fRef = F69DF13F02C76B3F01AD0D07;
+		isa = PBXBookmark;
+	};
+	F6378B7202CB062F01AD0D07 = {
+		fRef = F59C57FB02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXBatchTestInterface.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1031;
+		vrLoc = 0;
+	};
+	F6378B7302CB062F01AD0D07 = {
+		fRef = F69DF13F02C76B3F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "ERXModelGroup.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1194;
 		vrLoc = 0;
 	};
 }
