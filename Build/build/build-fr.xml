@@ -36,8 +36,8 @@
             <classpath refid="classpath"/>
         </taskdef>
         
-		<woframework name="ERJarsJava" destDir="${dist}/Frameworks">
-			<lib dir="Common/Frameworks/ERJarsJava">
+		<woframework name="ERJars" destDir="${dist}/Frameworks">
+			<lib dir="${basedir}/Common/Frameworks/ERJars/Libraries/">
 				<include name="*.jar"/>
 			</lib>
 		</woframework>
