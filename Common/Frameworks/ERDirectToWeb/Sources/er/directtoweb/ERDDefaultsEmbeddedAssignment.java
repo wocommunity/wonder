@@ -27,7 +27,15 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
         return _DEPENDENT_KEYS;
     }
 
+    public ERXLocalizer localizerForContext(D2WContext c) {
+        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
+    }
 
+    public String defaultEmbeddedEntityDisplayName(D2WContext c) {
+        String value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("embeddedEntityName"));
+        return (String)localizerForContext(c).localizedValueForKeyWithDefault(value);
+    }
+    
     public NSArray defaultEmbeddedDisplayPropertyKeys(D2WContext c) {
         String entityName = (String)c.valueForKey("embeddedEntityName");
         EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
