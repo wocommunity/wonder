@@ -26,6 +26,8 @@ public class ERXDatabaseContextDelegate {
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.FaultFiring</b> */
     public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.FaultFiring");
+    /** Faulting logging support, logging category: <b>er.transaction.adaptor.Exceptions</b> */
+    public final static ERXLogger exLog = ERXLogger.getERXLogger("er.transaction.adaptor.Exceptions");
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate;
@@ -37,6 +39,21 @@ public class ERXDatabaseContextDelegate {
             log.debug("Created default database context delegate");
         }
         return _defaultDelegate;
+    }
+    
+    /**
+     * Provides for a hook to get at the original exceptions from the JDBC driver, as opposed to the cooked
+     * EOGeneralAdaptorException you get from EOF. To see the exceptions, set the logger 
+     * er.transaction.adaptor.Exceptions to debug. 
+     * @param databaseContext
+     * @param throwable
+     * @return
+     */
+    public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
+        if(exLog.isDebugEnabled()) {
+            exLog.debug("JDBC Exception occured: " + throwable, throwable);
+        }
+        return true;
     }
     
     /**
