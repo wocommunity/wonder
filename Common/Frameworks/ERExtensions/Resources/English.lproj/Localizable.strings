@@ -7,11 +7,5 @@
     ERXBatchNavigationBar.show = "Show";
     ERXCheckboxMatrix.deselectAll = "None";
     ERXCheckboxMatrix.selectAll = "All";
-    "Test message for unit test" = "FAIL - app and ERD comes before this";
-    "Test message for unit test in ERX framework" = "SUCCESS - ERX is unique";
-    "Test message for unit test in framework" = "FAIL - ERD comes before this";
-    "Test message for unit test in last framework" = "SUCCESS - not overridden in other frameworks is unique";
-    "unittest" = {"key" = { "path" = { "as" = {"dict"="SUCCESS";};};};};
-    "unittest.key.path.as.string" = "SUCCESS";
     WOToOneRelationship.noneString = "- none -";
 }
