@@ -17,13 +17,15 @@
             <fileset dir="${build.root}/${framework.name}/WebServerResources" />
         </copy>
 
-        <copy todir="${dist}/Documentation/Frameworks/${framework.name}">
+        <mkdir dir="${project.source.dir}/Documentation" />
+        <copy todir="${dist}/Documentation/Frameworks/${framework.name}" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Documentation">
                 <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
-        <copy todir="${dist}/Documentation/Frameworks/${framework.name}/Support">
+        <mkdir dir="${project.source.dir}/Support" />
+        <copy todir="${dist}/Documentation/Frameworks/${framework.name}/Support" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Support">
                 <exclude name="**/CVS/*" />
             </fileset>
@@ -58,12 +60,14 @@
             <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
         </copy>
 
+        <mkdir dir="${project.source.dir}/Documentation" />
         <copy todir="${dist}/Documentation/Applications/${project}" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Documentation">
                 <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
+        <mkdir dir="${project.source.dir}/Support" />
         <copy todir="${dist}/Documentation/Applications/${project}/Support" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Support">
                 <exclude name="**/CVS/*" />
