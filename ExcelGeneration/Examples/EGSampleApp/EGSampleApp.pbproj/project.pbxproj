@@ -357,7 +357,7 @@
 				WEBSERVER_INSTALL_DIR = "$(WEBSERVER_INSTALL_DIR_APPLICATION)";
 				WEBSERVER_RESOURCES_DIR = "$(CONTENTS_DIR)/WebServerResources";
 				WEBSERVER_RESOURCES_JAVA_DIR = "$(WEBSERVER_RESOURCES_DIR)/Java";
-				WOAPPLICATION_CLASS_NAME = ag.kcmedia.Application;
+				WOAPPLICATION_CLASS_NAME = er.excel.Application;
 				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_DIR = "$(INSTALL_PATH_FOR_STYLE)/$(WRAPPER_NAME)";
 				WRAPPER_EXTENSION = woa;
@@ -972,8 +972,9 @@
 		};
 		F55FCB90027354F701000105 = {
 			isa = PBXFrameworkReference;
-			path = JavaWOExtensions.framework;
-			refType = 3;
+			name = JavaWOExtensions.framework;
+			path = /System/Library/Frameworks/JavaWOExtensions.framework;
+			refType = 0;
 		};
 		F55FCB91027354F701000105 = {
 			fileRef = F55FCB90027354F701000105;
