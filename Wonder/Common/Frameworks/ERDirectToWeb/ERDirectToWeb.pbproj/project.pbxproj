@@ -294,7 +294,7 @@
 //9D3
 //9D4
 		9D2E0C6F032FFE0A10CF0CA3 = {
-			fileEncoding = 30;
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = French;
 			path = Resources/French.lproj/ValidationTemplate.strings;
@@ -1658,7 +1658,7 @@
 			refType = 2;
 		};
 		F542046D02C4672F01000102 = {
-			fileEncoding = 30;
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/ValidationTemplate.strings;
@@ -1698,7 +1698,7 @@
 			refType = 2;
 		};
 		F542047202C4672F01000102 = {
-			fileEncoding = 30;
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = Japanese;
 			path = Resources/Japanese.lproj/ValidationTemplate.strings;
