@@ -77,7 +77,7 @@ public abstract class ERD2WListPage extends D2WListPage {
     } 
 
     // this can be overridden by subclasses for which sorting has to be fixed (i.e. Grouping Lists)
-    public boolean userPreferencesCanSpecifySorting() { return true; }
+    public boolean userPreferencesCanSpecifySorting() { return true && !"printerFriendly".equals(d2wContext().valueForKey("subTask")); }
     public NSArray sortOrderings() {
         NSArray sortOrderings=null;
         if (userPreferencesCanSpecifySorting()) {
@@ -269,8 +269,12 @@ public abstract class ERD2WListPage extends D2WListPage {
     public boolean shouldShowSelectAll() {
         return displayGroup().allObjects().count()>10;
     }
-
-
+/*
+// FIXME: This needs to be generalized.
+public String pageTitle() {
+    return "NetStruxr - "+d2wContext().valueForKey("displayNameForEntity")+" List";
+}
+*/
     public void warmUpForDisplay(){
         //default implementation does nothing
     }
