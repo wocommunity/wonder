@@ -96,18 +96,6 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-HideReturnOnSelect1: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-HideReturnOnSelect2: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
 HideReturnOnSelect3: WOConditional {
 	_unroll = true;
 	condition = isSelecting;

@@ -1,3 +1,7 @@
+BackLink: WOHyperlink {
+	action = returnAction;
+}
+
 Banner: WOImage {
 	alt = "Search";
 	border = "0";
@@ -119,6 +123,20 @@ ResourceRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
+}
+
+ReturnButton: WOImage {
+	alt = "Returns to the previous page";
+	border = "0";
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = "31";
+	name = "Returns to the previous page";
+	width = "88";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
 }
 
 SwitchComponent1: WOSwitchComponent {
