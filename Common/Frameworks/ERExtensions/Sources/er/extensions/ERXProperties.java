@@ -70,6 +70,18 @@ public class ERXProperties {
         return _webObjectsVersion;
     }
 
+    public static double webObjectsVersionAsDouble() {
+        String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
+        double woVersion = 0.0d;
+        try {
+            woVersion = Double.parseDouble(woVersionString);
+        } catch (NumberFormatException ex) {
+            log.error("An exception occurred while parsing webObjectVersion " + woVersionString 
+                + " as a double value: " + ex.getClass().getName() + " " + ex.getMessage());
+        }
+        return woVersion;
+    }
+
     /**
      * Cover method for returning an NSArray for a
      * given system property.
