@@ -54,7 +54,8 @@ public abstract class ERXApplication extends WOApplication {
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOForm.class, "WOForm");
-        ERXCompilerProxy.defaultProxy().setClassForName(ERXWOFileUpload.class, "WOFileUpload");
+        //the next line commented out for WO 5.2, which has a correct warning instead of a ClassCastException
+        //ERXCompilerProxy.defaultProxy().setClassForName(ERXWOFileUpload.class, "WOFileUpload");
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOText.class, "WOText");
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
     }
