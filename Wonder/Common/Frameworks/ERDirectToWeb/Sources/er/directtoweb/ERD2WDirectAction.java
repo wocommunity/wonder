@@ -274,7 +274,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             if(newPage == null)
                 newPage = dynamicPageForActionNamed(anActionName);
         } catch(Exception ex) {
-            log.error("Error with action " + anActionName + ":" + ex + ", formValues:" + context().request().formValues(), ex);
+            log.error("Error with action " + anActionName + ":" + ex + ", formValues:" + context().request().formValues());
             newPage = reportException(ex);
         }
         return newPage;
