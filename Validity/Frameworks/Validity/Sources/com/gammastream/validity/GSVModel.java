@@ -38,6 +38,7 @@ public final class GSVModel extends Object implements WOXMLCoding {
     private NSMutableArray _entities = null;
     private String _eomodelPath = null;
     private String _eomodelName = null;
+    private boolean inited = false;
     
     //helper for mapping the GSVModel to an EOModel
     private EOModelGroup _eomodelGroup = null;
@@ -298,16 +299,20 @@ public final class GSVModel extends Object implements WOXMLCoding {
         }
     }
 
-    public void init(EOModel eomodel, EOEnterpriseObject eo) {
-	for (Enumeration e = entities().objectEnumerator(); e.hasMoreElements();) {
-	    GSVEntity entity = (GSVEntity)e.nextElement();
-	    EOEntity eoentity = eomodel.entityNamed(entity.name());
-	    NSLog.debug.appendln("checking gsventity"+entity.name());
-	    if ( eoentity == null) {
-		removeEntity(entity);
-		NSLog.debug.appendln("removed obsolete gsventity"+entity.name());
-	    } else {
-		entity.init(this, eoentity);
+    public void init(EOModel eomodel) {
+	if (!inited) {
+	    inited = true;
+	    for (Enumeration e = entities().immutableClone().objectEnumerator(); e.hasMoreElements();) {
+		GSVEntity entity = (GSVEntity)e.nextElement();
+                String name = entity.name();
+		EOEntity eoentity = eomodel.entityNamed(name);
+		//NSLog.debug.appendln("checking gsventity"+entity.name());
+		if ( eoentity == null) {
+		    removeEntity(entity);
+		    //NSLog.debug.appendln("removed obsolete gsventity"+entity.name());
+		} else {
+		    entity.init(this, eoentity);
+		}
 	    }
 	}
     }
