@@ -31,13 +31,15 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
         ERXMessageEncoding messageEncoding = null;
         
         // This should retrieve the session object belonging to the same 
-        // worker thread that's been calling handleRequest method. 
-        WOSession session = ERXExtensions.session();   // get it from the thread local 
-        if (session != null  &&  session instanceof ERXSession) 
-            messageEncoding = ((ERXSession)session).messageEncoding();
-        else 
+        // worker thread that's been calling the current handleRequest method. 
+        WOSession session = ERXExtensions.session();   // get it from the thread specific storage 
+        if (session != null  &&  session instanceof ERXSession) {
+            ERXSession erxSession = (ERXSession)session;
+            messageEncoding = erxSession.messageEncoding();
+            erxSession.lastActionWasDA = true;
+        } else {
             messageEncoding = new ERXMessageEncoding(request.browserLanguages());
-        
+        }
         messageEncoding.setEncodingToResponse(response);
         return response;
     }
