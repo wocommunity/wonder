@@ -80,6 +80,13 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, "text");
     }
 
+	public String plainText() {
+		return (String)storedValueForKey("plainText");
+	}
+	public void setPlainText(String aValue) {
+		takeStoredValueForKey(aValue, "plainText");
+	}
+
     public NSTimestamp dateSent() {
         return (NSTimestamp)storedValueForKey("dateSent");
     }
