@@ -11,12 +11,20 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
-/** WARNING: this is alpha and untested!
-Use subclasses of EOGenericRecordClazz as inner classes in your EO subclasses to work around the missing class object inheritance of java. They <b>must</b> be named XXX.XXXClazz to work!
-Every subclass of this class will get their own "ClazzObject" instance, so it's OK to store things which might be different in superclasses. That is, the "User"'s implementation can override the "Person"'s and because Person.clazz() will get it's own instance, it will do only "Person" things.
-The methods from EOUtilities are mirrored here so you don't have to import EOAccess in your subclasses, which is not legal for client-side classes. The implementation for a client-side class could then be easily switched to use the server-side EOUtilites implementation.
-*/
-
+/**
+ * WARNING: this is alpha and untested!
+ * Use subclasses of EOGenericRecordClazz as inner classes in your EO subclasses
+ * to work around the missing class object inheritance of java. They <b>must</b>
+ * be named XXX.XXXClazz to work!
+ * Every subclass of this class will get their own "ClazzObject" instance, so it's
+ * OK to store things which might be different in superclasses. That is, the "User"'s
+ * implementation can override the "Person"'s and because Person.clazz() will get
+ * it's own instance, it will do only "Person" things.
+ * The methods from EOUtilities are mirrored here so you don't have to import EOAccess
+ * in your subclasses, which is not legal for client-side classes. The implementation
+ * for a client-side class could then be easily switched to use the server-side EOUtilites
+ * implementation.
+ */
 public class EOGenericRecordClazz extends Object {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getLogger(EOGenericRecordClazz.class);
@@ -134,14 +142,13 @@ public class EOGenericRecordClazz extends Object {
         
         return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity());
     }
-    
+
     /**
-     * Returns all of the objects for the given
-     * entity of the clazz in the given editing
-     * context.
-     * @param ec editing context to fetch into
-     * @return all of the objects corresponding to
-     *		the clazz's entity.
+     * Gets all of the objects for the clazz's entity.
+     * Just a cover method for the {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
+     * method <code>objectsForEntityNamed</code>.
+     * @param ec editingcontext to fetch the objects into
+     * @return array of all the objects for a given entity name.
      */
     public NSArray allObjects(EOEditingContext ec) {
         return EOUtilities.objectsForEntityNamed(ec, entityName());
@@ -294,6 +301,19 @@ public class EOGenericRecordClazz extends Object {
         return objectCountWithQualifier(editingContext, boundFetchSpec.qualifier());
     }
 
+    /**
+     * Constructs a fetch specification that will only fetch the primary
+     * keys for a given qualifier.
+     * @param ec editing context, not used
+     * @param eoqualifier to construct the fetch spec with
+     * @param sortOrderings array of sort orderings to sort the result set
+     *		with.
+     * @param additionalKeys array of additional key paths to construct the
+     *		raw rows key paths to fetch.
+     * @return fetch specification that can be used to fetch primary keys for
+     * 		a given qualifier and sort orderings.
+     */
+    // FIXME: The ec parameter is not needed, nor used.
     public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings, NSArray additionalKeys) {
         String entityName = entityName();
         EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
@@ -306,6 +326,14 @@ public class EOGenericRecordClazz extends Object {
         return fs;
     }
 
+    /**
+     * Fetches an array of primary keys matching a given qualifier
+     * and sorted with a given array of sort orderings.
+     * @param ec editing context to fetch into
+     * @param eoqualifier to restrict matching primary keys
+     * @param sortOrderings array of sort orders to sort result set
+     * @return array of primary keys matching a given qualifier
+     */
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
         String entityName = entityName();
         EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
@@ -313,11 +341,30 @@ public class EOGenericRecordClazz extends Object {
         return nsarray;
     }
 
+    /**
+     * Fetches an array of primary keys matching the values
+     * in a given dictionary.
+     * @param ec editing context to fetch into
+     * @param nsdictionary dictionary of key value pairs to match
+     *		against.
+     * @param sortOrderings array of sort orders to sort the result
+     *		set by.
+     * @return array of primary keys matching the given criteria.
+     */
     public NSArray primaryKeysMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
         String entityName = entityName();
         return primaryKeysMatchingQualifier(ec, EOQualifier.qualifierToMatchAllValues(nsdictionary), sortOrderings);
     }
 
+    /**
+     * Constructs an array of faults for a given array
+     * of primary keys in a given editing context for
+     * the clazz's entity.
+     * @param ec editing context to construct the faults in
+     * @param nsarray array of primary key dictionaries
+     * @return array of faults for an array of primary key
+     *		dictionaries.
+     */
     public NSArray faultsFromRawRows(EOEditingContext ec, NSArray nsarray) {
         String entityName = entityName();
         int count = nsarray.count();
@@ -327,19 +374,43 @@ public class EOGenericRecordClazz extends Object {
         }
         return faults;
     }
-
+    
+    /**
+     * Fetches an array of faults matching a given qualifier.
+     *
+     * @param ec editing context to use to fetch into
+     * @param eoqualifier qualifier to match against
+     * @return array of faults that match the given qualifier
+     */    
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier) {
         String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, null);
         return faultsFromRawRows(ec, nsarray);
     }
 
+    /**
+     * Fetches an array of faults matching a given qualifier
+     * and sorted by an array of sort orderings.
+     *
+     * @param ec editing context to use to fetch into
+     * @param eoqualifier qualifier to match against
+     * @param sortOrderings array of sort orderings to order the faults
+     * @return array of faults that match the given qualifier
+     */
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
         String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }
 
+    /**
+     * Fetches an array of faults for a given set of criteria.
+     *
+     * @param ec editing context to use to fetch into
+     * @param nsdictionary key value criteria to match against
+     * @param sortOrderings array of sort orderings to order the faults
+     * @return array of faults that match the given criteria
+     */
     public NSArray faultsMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
         String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingValues(ec, nsdictionary, sortOrderings);
