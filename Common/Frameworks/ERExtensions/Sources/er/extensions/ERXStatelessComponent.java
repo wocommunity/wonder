@@ -14,7 +14,7 @@ import com.webobjects.appserver.*;
  * of components within the ER frameworks. Adds a number of nice binding resolution
  * methods.
  */
-public abstract class ERXStatelessComponent extends ERXNonSychronizingComponent {
+public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent {
 
     /** Public constructor */
     public ERXStatelessComponent(WOContext context) {
