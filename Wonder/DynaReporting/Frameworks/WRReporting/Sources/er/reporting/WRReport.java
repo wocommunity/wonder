@@ -71,6 +71,12 @@ public class WRReport extends WOComponent  {
         NSNotificationCenter.defaultCenter().addObserver(this, rebuildModelSelector, DRReportModel.DRReportModelRebuildNotification, null);
     }
 
+    public void finalize() throws Throwable {
+        NSNotificationCenter.defaultCenter().removeObserver(this);
+        super.finalize();
+    }
+
+    
     public Boolean booleanValueForBinding(String name) {
         boolean flag = ERXValueUtilities.booleanValue(valueForBinding(name));
         return flag ? Boolean.TRUE : Boolean.FALSE;
@@ -88,8 +94,8 @@ public class WRReport extends WOComponent  {
     }
     public void initializeDimensionArrayFromBindings() {
         if(!_initializedDimensionArrayFromBindings) {
-            _initializedDimensionArrayFromBindings = true;
             if(model() != null) {
+                _initializedDimensionArrayFromBindings = true;
                 initializeDimensionArrayFromBindings("H");
                 initializeDimensionArrayFromBindings("V");
                 initializeDimensionArrayFromBindings("Z");
@@ -120,22 +126,20 @@ public class WRReport extends WOComponent  {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        if(false) {
-            _indexDict.removeAllObjects();
-            _model = null;
-            _colorDict = null;
-        }
+        initializeDimensionArrayFromBindings();
         super.appendToResponse(r, c);
     }
 
 
-    public void rebuildModel(NSNotification not) {
-        _currentZCriteria.removeAllObjects();
-        //_initializedDimensionArrayFromBindings = false;
-        //initializeDimensionArrayFromBindings();
-        log.info("Rebuild model");
+    public void rebuildModel(NSNotification notification) {
+        if(_model == notification.object() || notification.object() == null) {
+            _currentZCriteria.removeAllObjects();
+            _initializedDimensionArrayFromBindings = false;
+            _model = null;
+            log.info("Rebuild model");
+        }
     }
-
+    
 
     public boolean showPresentationControls() {
         if (_showPresentationControls == null) {
