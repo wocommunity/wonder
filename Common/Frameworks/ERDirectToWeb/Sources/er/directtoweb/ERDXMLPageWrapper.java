@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.*;
 
 /**
  * page wrapper in xml.<br />

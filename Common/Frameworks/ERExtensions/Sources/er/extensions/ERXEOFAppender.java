@@ -6,12 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import org.apache.log4j.*;
+import org.apache.log4j.helpers.*;
 import org.apache.log4j.spi.*;
-import org.apache.log4j.helpers.LogLog;
+
+import com.webobjects.eocontrol.*;
 
 /**
  * Basic log4j EOF Appender<br>

@@ -7,8 +7,10 @@
 package er.directtoweb;
 
 import java.lang.reflect.*;
+
 import com.webobjects.foundation.*;
-import er.extensions.ERXLogger;
+
+import er.extensions.*;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 

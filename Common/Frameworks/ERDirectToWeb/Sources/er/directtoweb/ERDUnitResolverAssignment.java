@@ -7,7 +7,6 @@
 package er.directtoweb;
 
 import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 
 /**

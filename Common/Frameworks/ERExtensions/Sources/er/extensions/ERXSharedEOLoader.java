@@ -8,11 +8,11 @@
 /* ERSharedEOLoader.java created by max on Wed 07-Mar-2001 */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import java.util.*;
+
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 // Note: This is a direct port of Kelly Hawks' ObjC SharedEOLoader.  Only enhanced it to use the log4j system.
 //

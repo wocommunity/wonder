@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.Hashtable;
 import java.util.*;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for

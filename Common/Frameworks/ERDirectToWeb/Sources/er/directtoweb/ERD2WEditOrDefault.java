@@ -6,14 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
-import java.util.Enumeration;
-import er.extensions.ERXConstant;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * Generic edit or default value component, uses other components like editNumber or editString.<br />

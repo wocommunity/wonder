@@ -6,11 +6,12 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
 import java.util.*;
+
+import sun.misc.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Graceful shutdown adds signal handling support for gracefully

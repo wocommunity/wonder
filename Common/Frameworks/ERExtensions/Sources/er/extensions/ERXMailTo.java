@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
 * Component that generates a mailto href of the form: "<a href=mailto:foo@bar.com>foo@bar.com</a>"

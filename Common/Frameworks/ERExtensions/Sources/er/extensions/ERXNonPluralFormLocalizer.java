@@ -6,7 +6,6 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
 
 /**
  *  ERXNonPluralFormLocalizer is a subclass of {@link ERXLocalizer}.<br/>

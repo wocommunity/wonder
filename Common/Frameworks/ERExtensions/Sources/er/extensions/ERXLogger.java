@@ -6,13 +6,9 @@
 //
 package er.extensions;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Properties;
+import java.util.*;
+
 import org.apache.log4j.*;
-import org.apache.log4j.config.PropertyGetter;
-import org.apache.log4j.config.PropertyPrinter;
-import org.apache.log4j.spi.*;
 
 /**
  * Custom subclass of Logger. The main reason for this class

@@ -6,9 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 /**

@@ -6,9 +6,9 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.util.*;
 
-import java.util.Enumeration;
+import com.webobjects.foundation.*;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationState {

@@ -1,7 +1,6 @@
 package er.extensions;
 
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.*;
 
 public class ERXFormatterFactory implements NSKeyValueCoding {
 

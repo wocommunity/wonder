@@ -6,13 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import java.util.*;
 
 // FIXME: Need a formal protocol for cancel vs. selection.
 public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface {

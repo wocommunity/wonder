@@ -6,9 +6,8 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.WODirectActionRequestHandler;
+import com.webobjects.appserver._private.*;
 
 /**
  * Improved direct action request handler. Will automatically handle

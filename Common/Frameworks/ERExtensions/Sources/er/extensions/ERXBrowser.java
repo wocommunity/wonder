@@ -6,8 +6,8 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /** 
  * ERXBrowser is an abstract class that defines browser object. 

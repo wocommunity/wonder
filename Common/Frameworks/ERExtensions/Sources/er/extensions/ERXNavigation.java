@@ -8,11 +8,9 @@
 /* ERXNavigation.java created by max on Thu 27-Jul-2000 */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import java.util.*;
+
+import com.webobjects.foundation.*;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 /**

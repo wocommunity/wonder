@@ -7,8 +7,8 @@
 
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /** Transparent replacement for WOForm.
  *  It adds the Forms name to the ERXContext's mutableUserInfo as as "formName" key,

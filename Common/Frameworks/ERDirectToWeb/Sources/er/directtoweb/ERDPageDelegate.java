@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 
 /**
  * Generic little delegate.  Nice when all you really want to do is return a page, but the interface says you have to use a delegate.<br />

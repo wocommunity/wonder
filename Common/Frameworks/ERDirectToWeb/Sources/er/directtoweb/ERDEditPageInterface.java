@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 /**
  * Small improvements to the EditPageInterface.<br />

@@ -6,9 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Conditional component that tests if a given item is contained

@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Useful for displaying a list of eos. Ex. a list of person eos could be displayed as "Fred, Mark and Max".<br />

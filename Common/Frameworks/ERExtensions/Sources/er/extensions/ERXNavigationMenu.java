@@ -6,10 +6,8 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 

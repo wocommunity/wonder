@@ -6,11 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.net.*;
+
+import com.webobjects.appserver.*;
 
 /**
  * Used to edit urls with a default value.<br />
