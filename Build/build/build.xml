@@ -145,8 +145,6 @@
     <!-- ==================================================== -->
     <target name="dist" depends="init, prepare">
         <property name="wonder.development" value="false" />
-        <!-- <antcall target="common" />
-        <antcall target="subprojects" /> -->
 
         <ant antfile="Build/build/generic.xml" target="frameworks.all" />
         <ant antfile="Build/build/generic.xml" target="BTBusinessLogic.all" />
@@ -159,14 +157,27 @@
 
         <ant antfile="Build/build/generic.xml" target="frameworks.all.install" />
 
-        <ant antfile="Build/build/generic.xml" target="all.compile" />
+        <ant antfile="Build/build/generic.xml" target="BugTracker.all" />
+        <ant antfile="Build/build/generic.xml" target="D2WInspectExample.all" />
+        <ant antfile="Build/build/generic.xml" target="D2WListExample.all" />
+        <ant antfile="Build/build/generic.xml" target="DevStudio.all" />
+        <ant antfile="Build/build/generic.xml" target="DocsByExample.all" />
+        <ant antfile="Build/build/generic.xml" target="DRGroupingTest.all" />
+        <ant antfile="Build/build/generic.xml" target="DynaReporter.all" />
+        <ant antfile="Build/build/generic.xml" target="ERMailer.all" />
+        <ant antfile="Build/build/generic.xml" target="NetStruxrCaseStudy.all" />
+        <ant antfile="Build/build/generic.xml" target="SVGObjects.example.all" />
+        <ant antfile="Build/build/generic.xml" target="Validity.application.all" />
+        <ant antfile="Build/build/generic.xml" target="Validity.example.all" />
  
         <antcall target="doc" />
 
-        <ant antfile="Build/build/common-dist.xml" target="dist.prebuilt"/>
-        <ant antfile="Build/build/subprojects-dist.xml"/>
-        <ant antfile="Build/build/common-dist.xml" target="dist.source"/>
-        <ant antfile="Build/build/common-dist.xml" target="dist.prebuilt.zip" />
+        <ant antfile="Build/build/common-dist.xml" target="dist.prebuilt" />
+        <ant antfile="Build/build/subprojects-dist.xml" />
+
+        <ant antfile="Build/build/dist-generic.xml" target="all" />
+        <ant antfile="Build/build/dist-generic.xml" target="dist.source" />
+        <ant antfile="Build/build/dist-generic.xml" target="dist.prebuilt.zip" />
         
     </target>
     
