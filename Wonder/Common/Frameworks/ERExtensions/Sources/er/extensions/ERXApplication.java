@@ -385,7 +385,7 @@ public abstract class ERXApplication extends WOApplication {
      */
     // NOTE: if you use WO 5.1, comment out this method, otherwise it won't compile. 
     public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
-        return handleException(exception, actionInstance.context());
+        return handleException(exception, actionInstance != null ? actionInstance.context() : null);
     }
     
     /**
