@@ -46,6 +46,7 @@ parent3(child2,child5)
  * @binding childDisplayValueName keypath of the child displayed in the child pop-up
  * @binding parentPopUpStringForAll  to display if no parent is chosen ("- all -")
  * @binding childPopUpStringForAll to display if no child is chosen ("- all -")
+ * @binding size number of rows in select boxes
  */
 
 public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
@@ -82,6 +83,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     protected String parentsChildrenId;
     
     protected String elementID;
+    protected Integer size;
     
     public void awake() {
         super.awake();
@@ -374,7 +376,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         Object aEntity;
 
         returnString = new StringBuffer(1000);
-        returnString.append("<select name=\"" + nm + "\"");
+        returnString.append("<select name=\"" + nm + "\"" + " size=\"" + size() + "\"");
         if (oc != null) {
             returnString.append(" onChange=\"" + oc + "\"");
         }
@@ -553,6 +555,12 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         }
         return childPopUpStringForAll;
     }
+    public int size() {
+        if(size == null) {
+            size = new Integer(intValueForBinding("size", 1));
+        }
+        return size.intValue();
+    }
     
     public void reset() {
         super.reset();
@@ -569,5 +577,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         parentToChildrenRelationshipName = null;
         parentPopUpStringForAll = null;
         childPopUpStringForAll = null;
-}
+        size = null;
+    }
 }
