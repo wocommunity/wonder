@@ -1,9 +1,0 @@
-Hyperlink1: WOHyperlink {
-	action = ^action;
-	onClick = confirmMessage;
-}
-
-String1: WOString {
-	value = ^hyperlinkMessage;
-}
-
