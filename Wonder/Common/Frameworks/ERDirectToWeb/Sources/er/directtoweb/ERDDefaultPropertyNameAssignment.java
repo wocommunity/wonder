@@ -14,7 +14,7 @@ import er.extensions.*;
 
 /**
  * Beautify the propertyKey name in a better way.<br />
- * 
+ * @deprecated use ERDDefaultDisplayNameAssignment
  */
 
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
@@ -34,6 +34,7 @@ public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements E
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDDefaultPropertyNameAssignment.class, ERDDefaultDisplayNameAssignment.class);
         return new ERDDefaultPropertyNameAssignment(eokeyvalueunarchiver);
     }
     
