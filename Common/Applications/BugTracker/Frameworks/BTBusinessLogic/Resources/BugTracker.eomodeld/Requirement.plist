@@ -7,91 +7,91 @@
             userInfo = {modificationDate = "2002-05-06 07:34:18 +0200"; }; 
         }, 
         {
-            columnName = COMP_ID; 
-            name = comp_id; 
+            columnName = "COMP_ID"; 
+            name = "comp_id"; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:34:24 +0200"; }; 
         }, 
         {
-            columnName = DATE_MODIFIED; 
+            columnName = "DATE_MODIFIED"; 
             name = dateModified; 
             prototypeName = dateTime; 
             userInfo = {modificationDate = "2002-05-06 07:34:29 +0200"; }; 
         }, 
         {
-            columnName = DATE_SUBMITTED; 
+            columnName = "DATE_SUBMITTED"; 
             name = dateSubmitted; 
             prototypeName = dateTime; 
             userInfo = {modificationDate = "2002-05-06 07:34:44 +0200"; }; 
         }, 
         {
             allowsNull = Y; 
-            columnName = DIFFICULTY_ID; 
+            columnName = "DIFFICULTY_ID"; 
             name = difficultyId; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:37:17 +0200"; }; 
         }, 
         {
-            columnName = FEATURE_REQUEST; 
+            columnName = "FEATURE_REQUEST"; 
             name = featureRequest; 
             prototypeName = intNumber; 
             userInfo = {modificationDate = "2002-05-06 07:35:41 +0200"; }; 
         }, 
         {
-            columnName = ORIGINATOR_ID; 
-            name = originator_id; 
+            columnName = "ORIGINATOR_ID"; 
+            name = "originator_id"; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:35:47 +0200"; }; 
         }, 
         {
-            columnName = PEOPLE_ID; 
-            name = people_id; 
+            columnName = "PEOPLE_ID"; 
+            name = "people_id"; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:35:53 +0200"; }; 
         }, 
         {
-            columnName = PR_ID; 
-            name = pr_id; 
+            columnName = "PR_ID"; 
+            name = "pr_id"; 
             prototypeName = osType; 
             userInfo = {modificationDate = "2002-05-06 07:36:11 +0200"; }; 
         }, 
         {
             allowsNull = Y; 
-            columnName = PREVIOUS_OWNER_ID; 
+            columnName = "PREVIOUS_OWNER_ID"; 
             name = previousOwnerID; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:36:23 +0200"; }; 
         }, 
         {
             allowsNull = Y; 
-            columnName = READ_; 
+            columnName = "READ_"; 
             name = read; 
             prototypeName = charFlag; 
             userInfo = {modificationDate = "2002-05-06 07:36:29 +0200"; }; 
         }, 
         {
-            columnName = RELEASE_ID; 
+            columnName = "RELEASE_ID"; 
             name = releaseID; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:36:36 +0200"; }; 
         }, 
         {
             allowsNull = Y; 
-            columnName = SUB_TYPE_ID; 
+            columnName = "SUB_TYPE_ID"; 
             name = requirementSubTypeId; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:37:24 +0200"; }; 
         }, 
         {
             allowsNull = Y; 
-            columnName = REQ_TYPE_ID; 
+            columnName = "REQ_TYPE_ID"; 
             name = requirementTypeId; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:37:36 +0200"; }; 
         }, 
         {
-            columnName = STATE_ID; 
-            name = state_id; 
+            columnName = "STATE_ID"; 
+            name = "state_id"; 
             prototypeName = osType; 
             userInfo = {modificationDate = "2002-05-06 07:42:33 +0200"; }; 
         }, 
@@ -112,12 +112,12 @@
     attributesUsedForLocking = (
         bugid, 
         subject, 
-        people_id, 
-        state_id, 
-        comp_id, 
-        pr_id, 
+        "people_id", 
+        "state_id", 
+        "comp_id", 
+        "pr_id", 
         read, 
-        originator_id, 
+        "originator_id", 
         featureRequest, 
         releaseID, 
         requirementTypeId, 
@@ -126,7 +126,7 @@
         previousOwnerID, 
         textDescription
     ); 
-    className = er.bugtracker.Requirement; 
+    className = "er.bugtracker.Requirement"; 
     classProperties = (
         subject, 
         priority, 
@@ -149,7 +149,7 @@
     ); 
     externalName = REQUIREMENT; 
     internalInfo = {
-        _clientClassPropertyNames = (
+        "_clientClassPropertyNames" = (
             subject, 
             priority, 
             component, 
@@ -188,7 +188,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = comp_id; sourceAttribute = comp_id; }); 
+            joins = ({destinationAttribute = "comp_id"; sourceAttribute = "comp_id"; }); 
             name = component; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
@@ -205,7 +205,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = originator_id; }); 
+            joins = ({destinationAttribute = id; sourceAttribute = "originator_id"; }); 
             name = originator; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
@@ -213,7 +213,7 @@
             destination = People; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = people_id; }); 
+            joins = ({destinationAttribute = id; sourceAttribute = "people_id"; }); 
             name = owner; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
@@ -230,7 +230,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = oid; sourceAttribute = pr_id; }); 
+            joins = ({destinationAttribute = oid; sourceAttribute = "pr_id"; }); 
             name = priority; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
@@ -276,7 +276,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = oid; sourceAttribute = state_id; }); 
+            joins = ({destinationAttribute = oid; sourceAttribute = "state_id"; }); 
             name = state; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
@@ -289,7 +289,7 @@
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
         {
-            definition = bugTestItems.testItem; 
+            definition = "bugTestItems.testItem"; 
             joinSemantic = EOInnerJoin; 
             name = testItems; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 

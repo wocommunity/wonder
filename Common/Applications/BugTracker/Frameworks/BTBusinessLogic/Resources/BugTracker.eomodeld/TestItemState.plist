@@ -14,7 +14,7 @@
         }, 
         {
             allowsNull = N; 
-            columnName = SORT_ORDER; 
+            columnName = "SORT_ORDER"; 
             name = sortOrder; 
             prototypeName = intNumber; 
             userInfo = {modificationDate = "2002-05-06 07:18:00 +0200"; }; 
@@ -22,9 +22,9 @@
     ); 
     attributesUsedForLocking = (oid, name, sortOrder); 
     cachesObjects = Y; 
-    className = er.bugtracker.TestItemState; 
+    className = "er.bugtracker.TestItemState"; 
     classProperties = (name, sortOrder); 
-    externalName = TEST_ITEM_STATE; 
+    externalName = "TEST_ITEM_STATE"; 
     isReadOnly = Y; 
     name = TestItemState; 
     primaryKeyAttributes = (oid); 
