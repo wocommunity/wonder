@@ -626,14 +626,16 @@ public class ERXEOControlUtilities {
             if (!adaptorChannel.isOpen())
                 adaptorChannel.openChannel();
             NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
-            if(arr != null)
+            if (arr != null) {
                 primaryKey = (NSDictionary)arr.lastObject();
-            else
-                log.warn("Could not get primary key for entity: " + entityName + " exception");
-            dbContext.unlock();
+            } else {
+                log.warn("Could not get primary key array for entity: " + entityName);
+            }
         } catch (Exception e) {
+            log.error("Caught exception when generating primary key for entity: " + entityName, e);
+            throw new NSForwardException(e);
+        } finally {
             dbContext.unlock();
-            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
         }
         return primaryKey;
     }
