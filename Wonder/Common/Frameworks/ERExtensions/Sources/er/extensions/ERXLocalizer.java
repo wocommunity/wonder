@@ -594,9 +594,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		Format result = (Format)_numberFormatters.get(formatString);
 		if(result == null) {
 			synchronized(_numberFormatters) {
-				NSNumberFormatter formatter = new ERXNumberFormatter(formatString);
+				NSNumberFormatter formatter = new ERXNumberFormatter();
 				formatter.setLocale(locale()); 
 				formatter.setLocalizesPattern(true);
+				formatter.setPattern(formatString);
 				result = formatter;
 				_numberFormatters.put(formatString, result);
 			}
