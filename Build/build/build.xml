@@ -16,8 +16,8 @@
     <!-- VARIOUS "build.properties" FILEA ARE LOCAL TO        -->
     <!-- THE DEVELOPER MACHINE AND ALLOW BUILD CUSTOMIZATION. -->                       
     <!-- ==================================================== -->
-    <property file="Build/build/build.properties" />
     <property file="${user.home}/build.properties" />
+    <property file="Build/build/build.properties" />
     <property file="Build/build/default.properties" />
     
     
@@ -32,60 +32,7 @@
     <!-- ==================================================== -->
     <!-- Sets up base properties                              -->
     <!-- ==================================================== -->
-
-    <target name="macosx">
-        <condition property="is-macosx">
-            <and>
-                <os family="mac" />
-                <os family="unix" />
-            </and>
-        </condition>
-    </target>
-
-    <target name="windows">
-        <condition property="is-windows">
-            <os family="windows" />
-        </condition>
-    </target>
-
-    <target name="unix">
-        <condition property="is-unix">
-            <and>
-                <os family="unix" />
-                <not><os family="mac" /></not>
-            </and>
-        </condition>
-    </target>
-
-    <target name="check-macosx" if="is-macosx" depends="macosx">
-        <echo message="is Mac OS X ..." />
-        <property name="next.root" value="/System" />
-        <property name="wo.woroot" value="${next.root}" />
-        <property name="wo.localroot" value="/" />
-        <property name="build.root" value="${user.home}/Roots" />
-    </target>
-
-    <target name="check-windows" if="is-windows" depends="windows">
-        <echo message="is Windows ..." />
-        <property environment="env" />
-        <property name="next.root" value="${env.NEXT_ROOT}" />
-        <property name="wo.woroot" value="${next.root}" />
-        <property name="wo.localroot" value="${next.root}/Local" />
-        <property name="build.root" value="C:/Roots" />
-    </target>
-   
-    <target name="check-unix" if="is-unix" depends="unix">
-        <echo message="is Unix ..." />
-        <property name="next.root" value="/" />
-        <property name="wo.woroot" value="${next.root}" />
-        <property name="wo.localroot" value="${next.root}/Local" />
-        <property name="build.root" value="${user.home}/Roots" />
-    </target>
-
-    <target name="init" depends="check-macosx, check-windows, check-unix" unless="init"
-                description="initialize properties">
-        <property name="wo.system.root" value="${wo.woroot}/Library/Frameworks" />
-        <property name="wo.local.root" value="${wo.localroot}/Library/Frameworks" />
+    <target name="init" description="initialize properties">
         <property name="wonder.root" value="${basedir}" />
     </target>
 
@@ -109,7 +56,7 @@
     <!-- ==================================================== -->
     <!-- Main "build-all" target.                             -->
     <!-- ==================================================== -->
-    <target name="all" depends="init, common, subprojects"/>
+    <target name="all" depends="frameworks, frameworks.install, applications"/>
     
     
     <!-- ==================================================== -->
@@ -120,35 +67,9 @@
     </target>
     
     <!-- ==================================================== -->
-    <!-- Build Wonder Common.                             -->
-    <!-- ==================================================== -->
-    <target name="common" depends="init">
-        <ant antfile="Build/build/generic.xml" target="common.all" />
-    </target>
-
-    <!-- ==================================================== -->
     <!-- Build Wonder Frameworks.                             -->
     <!-- ==================================================== -->
     <target name="frameworks" depends="init">
-        <ant antfile="Build/build/generic.xml" target="frameworks.all" />
-    </target>
-
-    <!-- ==================================================== -->
-    <!-- Build Wonder sub projects.                           -->
-    <!-- ==================================================== -->
-    <target name="subprojects" depends="init">
-        <ant antfile="Build/build/generic.xml" target="subprojects.all" />
-    </target>
-
-    <!-- ==================================================== -->
-    <!-- Create Wonder Destribution.                          -->
-    <!-- ==================================================== -->
-    <target name="dist" depends="init, prepare">
-        <ant antfile="Build/build/generic.xml" target="all.clean" />
-        <antcall target="clean" />
-
-        <property name="wonder.development" value="false" />
-
         <ant antfile="Build/build/generic.xml" target="frameworks.all" />
         <ant antfile="Build/build/generic.xml" target="BTBusinessLogic.all" />
         <ant antfile="Build/build/generic.xml" target="DRGrouping.all" />
@@ -157,8 +78,20 @@
         <ant antfile="Build/build/generic.xml" target="Validity.framework.all" />
         <ant antfile="Build/build/generic.xml" target="WOPayPal.all" />
         <ant antfile="Build/build/generic.xml" target="WRReporting.all" />
+    </target>
 
+    <!-- ==================================================== -->
+    <!-- Install Wonder Frameworks.                           -->
+    <!-- ==================================================== -->
+    <target name="frameworks.install">
         <ant antfile="Build/build/generic.xml" target="frameworks.all.install" />
+    </target>
+
+    <!-- ==================================================== -->
+    <!-- Build Wonder Applications.                           -->
+    <!-- ==================================================== -->
+    <target name="applications" depends="init, frameworks.install">
+        <property name="wonder.development" value="false" />
 
         <ant antfile="Build/build/generic.xml" target="BugTracker.all" />
         <ant antfile="Build/build/generic.xml" target="D2WInspectExample.all" />
@@ -172,12 +105,25 @@
         <ant antfile="Build/build/generic.xml" target="SVGObjects.example.all" />
         <ant antfile="Build/build/generic.xml" target="Validity.application.all" />
         <ant antfile="Build/build/generic.xml" target="Validity.example.all" />
- 
+    </target>
+
+    <!-- ==================================================== -->
+    <!-- Create Wonder Destribution.                          -->
+    <!-- ==================================================== -->
+    <target name="dist" depends="init, prepare">
+        <ant antfile="Build/build/generic.xml" target="all.clean" />
+        <antcall target="clean" />
+
+        <property name="wonder.development" value="false" />
+
+        <antcall target="frameworks" />
+        <antcall target="frameworks.install" />
+        <antcall target="applications" />
+
         <antcall target="doc" />
 
         <ant antfile="Build/build/common-dist.xml" target="dist.prebuilt" />
         <ant antfile="Build/build/subprojects-dist.xml" />
-
         <ant antfile="Build/build/dist-generic.xml" target="all" />
         
     </target>
