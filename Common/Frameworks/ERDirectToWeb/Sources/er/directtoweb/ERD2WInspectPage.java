@@ -122,11 +122,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 
     /*
 
-     We expect d2wContext.sectionsContents to return one of the two following formats:
+     We expect d2wContext.sectionsContents to return one of the three following formats:
      ( ( section1, key1, key2, key4 ), ( section2, key76, key 5, ..) .. )
+     OR with the sections enclosed in "()" - this is most useful with the WebAssistant
+     ( "(section1)", key1, key2, key3, "(section2)", key3, key4, key5... )
      OR with normal displayPropertyKeys array in fact if sectionContents isn't found then it will look for displayPropertyKeys
      ( key1, key2, key3, ... )
-
      */
 
     private ERD2WContainer _currentSection;
@@ -154,35 +155,21 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }
 
     private NSMutableArray _sectionsContents;
+
     public NSArray sectionsContents() {
         if (_sectionsContents ==null) {
-            _sectionsContents = new NSMutableArray();
             NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
             if (sectionsContentsFromRule==null) {
                 sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
             }
             if (sectionsContentsFromRule == null)
                 throw new RuntimeException("Could not find sectionsContents or displayPropertyKeys in "+d2wContext());
-            if (sectionsContentsFromRule.count() > 0 && sectionsContentsFromRule.objectAtIndex(0) instanceof String) {
-                // Format #2
-                ERD2WContainer c=new ERD2WContainer();
-                c.name = "";
-                c.keys = new NSMutableArray(sectionsContentsFromRule);
-                _sectionsContents.addObject(c);
-            } else {
-                for (Enumeration e = sectionsContentsFromRule.objectEnumerator(); e.hasMoreElements();) {
-                    NSArray section = (NSArray)e.nextElement();
-                    ERD2WContainer c=new ERD2WContainer();
-                    c.name = (String)section.objectAtIndex(0);
-                    c.keys = new NSMutableArray(section);
-                    c.keys.removeObjectAtIndex(0);
-                    _sectionsContents.addObject(c);
-                }
-            }
+            _sectionsContents = ERDirectToWeb.convertedPropertyKeyArray(sectionsContentsFromRule, '(', ')');
+
         }
         return _sectionsContents;
     }
-
+    
     // Useful for validating after all the values have been poked in
     // Example:  consider a wizard page or tab page with values X and Y, in the business logic X + Y > 10.
     //	         however the tab page or wizard step is not the last so validateForSave can't help.  In this
