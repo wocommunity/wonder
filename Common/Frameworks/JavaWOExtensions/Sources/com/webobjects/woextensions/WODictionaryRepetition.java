@@ -37,7 +37,12 @@ public class WODictionaryRepetition extends WOComponent {
     public NSDictionary dictionary()  {
         if (_dictionary==null) {
             _dictionary = (NSDictionary)_WOJExtensionsUtil.valueForBindingOrNull("dictionary",this);
-            _keyList = (_dictionary != null) ? _dictionary.allKeys() : null;
+            if (_dictionary == null) {
+                _dictionary = NSDictionary.EmptyDictionary;
+                _keyList = NSArray.EmptyArray;
+            } else {
+                _keyList = _dictionary.allKeys();
+            }
         }
         return _dictionary;
     }

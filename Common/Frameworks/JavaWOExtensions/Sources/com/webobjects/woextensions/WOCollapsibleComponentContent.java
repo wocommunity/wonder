@@ -64,6 +64,10 @@ public class WOCollapsibleComponentContent extends WOComponent
                 setValueForBinding(new Integer(0), "visibility");
             }
         }
+        
+        if (hasSubmitAction()) {
+            performParentAction(submitActionName());
+        }
         return null;
     }
 
