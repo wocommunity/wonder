@@ -34,6 +34,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     protected String errorMessage;
     protected Integer index;
     private NSArray _errorMessagesDictionaries;
+    
     protected NSArray errorMessagesDictionaries(){
         if(_errorMessagesDictionaries == null){
             NSMutableArray result = new NSMutableArray();
@@ -45,10 +46,10 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return _errorMessagesDictionaries;
     }
 
-    public NSMutableDictionary currentErrorDictionary(){
-        return (NSMutableDictionary)errorMessagesDictionaries().objectAtIndex(index.intValue());
+    public NSMutableDictionary currentErrorDictionary() {
+        return ((index==null) ? (NSMutableDictionary) new NSMutableDictionary() : (NSMutableDictionary)errorMessagesDictionaries().objectAtIndex(index.intValue()));
     }
-
+    
     public String dummy;
 
     public boolean showCancel() {
@@ -60,7 +61,6 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     }
 
     public void setObject(EOEnterpriseObject eo) {
-        // for SmartAttributeAssignment
         super.setObject(eo);
         d2wContext().takeValueForKey(eo,"object");
     }
@@ -77,7 +77,9 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     public WOComponent saveAction() {
         WOComponent result = null;
         try {
-            editingContext().saveChanges();
+            if(!isListEmpty()) {
+                editingContext().saveChanges();
+            }
             result = backAction();
         } catch(NSValidation.ValidationException EOVe) {
             errorMessage = EOVe.toString();
@@ -86,20 +88,11 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     }
 
     public WOComponent cancel(){
-        editingContext().revert();
+        clearValidationFailed();
+        if(!isListEmpty()) {
+            editingContext().revert();
+        }
         return backAction();
-    }
-
-    public void validationFailedWithException (Throwable e, Object value, String keyPath) {
-        // Should be cleaned up.
-        er.extensions.ERXValidation.validationFailedWithException(e,
-                                                                  value,
-                                                                  keyPath,
-                                                                  currentErrorDictionary(),
-                                                                  propertyKey(),
-                                                                  ERXLocalizer.localizerForSession(session()),
-                                                                  d2wContext().entity(),
-                                                                  ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
     }
 
     public void clearValidationFailed(){
@@ -110,7 +103,9 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public WOComponent update() {
         try {
-            editingContext().saveChanges();
+            if(!isListEmpty()) {
+                editingContext().saveChanges();
+            }
         } catch(NSValidation.ValidationException EOVe) {
             errorMessage = EOVe.toString();
             editingContext().revert();
@@ -119,14 +114,11 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     }
 
     public void takeValuesFromRequest(WORequest r, WOContext c) {
-        // Need to make sure that we have a clean plate, every time
+        // Need to make sure that we have a clean slate, every time
         clearValidationFailed();
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
-        try {
-            super.takeValuesFromRequest(r, c);
-        } finally {
-            NDC.pop();
-        }
+        _errorMessagesDictionaries = null;
+        index=null;
+        super.takeValuesFromRequest(r, c);
     }
 
     public String saveLabel() {
@@ -136,7 +128,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         if(templateKey == null)
             templateKey = "ERDEditList.saveLabel";
 
-        String saveLabel = ERXLocalizer.localizerForSession(session()).plurifiedStringWithTemplateForKey(templateKey, displayName, count, d2wContext());
+        String saveLabel = ERXLocalizer.currentLocalizer().plurifiedStringWithTemplateForKey(templateKey, displayName, count, d2wContext());
         return saveLabel;
     }
 }
