@@ -15,6 +15,7 @@ import er.extensions.*;
 import java.util.Enumeration;
 
 public abstract class ERD2WDirectAction extends ERXDirectAction {
+    static final ERXLogger log = ERXLogger.getLogger(ERD2WDirectAction.class);
 
     public ERD2WDirectAction(WORequest r) { super(r); }
 
@@ -33,8 +34,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     static final String contextIDKey = "__cid";
     static final String fetchSpecificationKey = "__fs";
     static final String createPrefix = "Create";
-    
-    static final ERXLogger log = ERXLogger.getLogger(ERD2WDirectAction.class);
 
     EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
         String fsName = context().request().stringFormValueForKey(fetchSpecificationKey);
@@ -98,7 +97,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 newPage = D2W.factory().pageForConfigurationNamed(anActionName, session());
                 String entityName = (String)newPage.valueForKeyPath("d2wContext.entity.name");
                 String taskName = (String)newPage.valueForKeyPath("d2wContext.task");
-
+                log.debug(entityName + "-" + taskName);
                 if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
                     EditPageInterface epi=(EditPageInterface)newPage;
                     EOEditingContext ec = ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
@@ -117,7 +116,20 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                     EOEnterpriseObject eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
                     ipi.setObject(eo);
                     ipi.setNextPage(previousPageFromRequest());
-                } else if(newPage instanceof ListPageInterface) {
+                } else if(newPage instanceof QueryPageInterface) {
+                    QueryPageInterface qpi=(QueryPageInterface)newPage;
+                    /*(ak) Use a branch delegate? But from where?
+                    String nextPageConfiguration = (String)newPage.valueForKeyPath("d2wContext.nextPageConfiguration");
+                    if(nextPageConfiguration == null)
+                        nextPageConfiguration = (String)newPage.valueForKeyPath("d2wContext.listConfigurationNameForEntity");
+                    qpi.setNextPageDelegate(new ERDNextPageConfigurationDelegate(nextPageConfiguration));
+                    log.info(nextPageConfiguration);
+                    or use this???
+                     WOComponent previousPage = previousPageFromRequest();
+                    if(previousPage != null)
+                        qpi.setNextPageDelegate(new ERDNextPageDelegate(previousPage));
+                    */
+                 } else if(newPage instanceof ListPageInterface) {
                     ListPageInterface lpi=(ListPageInterface)newPage;
                     EOEditingContext ec = session().defaultEditingContext();
                     EOEntity entity = (EOEntity)newPage.valueForKeyPath("d2wContext.entity");
