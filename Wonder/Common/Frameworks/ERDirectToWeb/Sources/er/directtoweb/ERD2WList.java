@@ -54,8 +54,8 @@ public class ERD2WList extends ERDCustomEditComponent {
 
     // FIXME: This sucks.
     public boolean isTargetXML(){
-        String listPageConfiguration = (String)valueForBinding("embeddedPageConfiguration");
-        return listPageConfiguration != null && listPageConfiguration.indexOf("XML") > -1;
+        String listConfigurationName = (String)valueForBinding("listConfigurationName");
+        return listConfigurationName != null && listConfigurationName.indexOf("XML") > -1;
     }
 
     public boolean erD2WListOmitCenterTag() {
