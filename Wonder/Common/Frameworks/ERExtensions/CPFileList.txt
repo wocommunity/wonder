@@ -98,6 +98,7 @@
 ./Sources/er/extensions/ERXOptionalForm.java:er.extensions
 ./Sources/er/extensions/ERXPatternLayout.java:er.extensions
 ./Sources/er/extensions/ERXPluralString.java:er.extensions
+./Sources/er/extensions/ERXPrimaryKeyBatchIterator.java:er.extensions
 ./Sources/er/extensions/ERXPrimaryKeyListQualifier.java:er.extensions
 ./Sources/er/extensions/ERXProperties.java:er.extensions
 ./Sources/er/extensions/ERXQualifierInSubquery.java:er.extensions

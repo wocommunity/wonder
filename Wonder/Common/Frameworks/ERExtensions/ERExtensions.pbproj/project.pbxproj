@@ -436,6 +436,7 @@
 				F5E99BB00354DE4F01CF0E76,
 				F56937BD03561CDA01CF0E76,
 				F6ED0C7A0361C03B01257492,
+				F5F0454A0364AFE801CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5838,6 +5839,18 @@
 			settings = {
 			};
 		};
+		F5F045490364AFE801CF0E76 = {
+			isa = PBXFileReference;
+			name = ERXPrimaryKeyBatchIterator.java;
+			path = er/extensions/ERXPrimaryKeyBatchIterator.java;
+			refType = 4;
+		};
+		F5F0454A0364AFE801CF0E76 = {
+			fileRef = F5F045490364AFE801CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //F50
 //F51
 //F52
@@ -6022,6 +6035,7 @@
 				F59C57F302C4565701000102,
 				F59C57F402C4565701000102,
 				F5E99BAF0354DE4F01CF0E76,
+				F5F045490364AFE801CF0E76,
 			);
 			isa = PBXGroup;
 			name = "EOF Additions";
