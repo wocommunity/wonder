@@ -153,7 +153,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             if(context.dynamicPage().startsWith(createPrefix) || primaryKeyFromRequest(ec, entityName) == null) {
                 eo = EOUtilities.createAndInsertInstance(ec,entityName);
             } else {
-                eo = EOUtilities.objectWithPrimaryKey(ec, entityName, primaryKeyFromRequest(ec, entityName));
+                eo = ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest(ec, entityName), null);
             }
         } finally {
             ec.unlock();
