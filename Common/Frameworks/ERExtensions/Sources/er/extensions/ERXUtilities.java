@@ -449,4 +449,35 @@ public class ERXUtilities {
             return new NSSet(objs);
         }
     }
+
+
+   /* The qualifiers EOSortOrdering.CompareAscending.. and friends are
+    actually 'special' and processed in a different way when sorting than a selector that would be created
+    by new NSSelector("compareAscending", ObjectClassArray). This method eases the pain on creating
+    those selectors from a string */
+
+    private final static NSDictionary _selectorsByKey=new NSDictionary(new NSSelector [] {
+        EOSortOrdering.CompareAscending,
+        EOSortOrdering.CompareCaseInsensitiveAscending,
+        EOSortOrdering.CompareCaseInsensitiveDescending,
+        EOSortOrdering.CompareDescending,        
+    },
+    new String [] {
+        "compareAscending",
+        "compareCaseInsensitiveAscending",
+        "compareCaseInsensitiveDescending",
+        "compareDescending",
+    });
+                                                                       
+    public static NSSelector sortSelectorWithKey(String key) {
+        NSSelector result=null;
+        if (key!=null) {
+            result=(NSSelector)_selectorsByKey.objectForKey(key);
+            if (result==null) result=new NSSelector(key, ERXConstant.ObjectClassArray);
+        }
+        return result;
+    }
+
+
+
 }
