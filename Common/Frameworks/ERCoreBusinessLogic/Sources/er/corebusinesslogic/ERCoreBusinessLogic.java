@@ -287,7 +287,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                                                                   null,
                                                                   null,
                                                                   WOApplication.application().name() + ": " + shortExceptionName
-                                                                  + ": " + exception.getMessage(),
+                                                                  + ": " + exceptionForTitle.getMessage(),
                                                                   standardExceptionPage.generateResponse().contentString(),
                                                                   ec);
                     ec.saveChanges();
