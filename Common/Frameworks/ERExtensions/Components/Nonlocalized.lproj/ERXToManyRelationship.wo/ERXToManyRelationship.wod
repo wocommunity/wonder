@@ -15,6 +15,7 @@ CheckboxMatrix: ERXCheckboxMatrix {
 	selections = selections;
 	goingVertically = ^goingVertically;
 	shouldShowSelectAllButtons = ^shouldShowSelectAllButtons;
+	cellVAlign = "top";
 }
 
 IsBrowserConditional: WOConditional {
