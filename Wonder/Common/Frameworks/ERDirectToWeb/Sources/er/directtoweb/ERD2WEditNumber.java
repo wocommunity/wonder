@@ -36,11 +36,10 @@ public class ERD2WEditNumber extends D2WEditNumber {
         return super.attribute() != null ? super.attribute() : (EOAttribute)d2wContext().valueForKey("smartAttribute");
     }
     
-    private ERXNumberFormatter _numberFormatter;
+    private NSNumberFormatter _numberFormatter;
     protected java.text.Format numberFormatter() {
         if (_numberFormatter == null) {
-            _numberFormatter = ERXNumberFormatter.sharedInstance();
-            _numberFormatter.setPattern(formatter());
+            _numberFormatter = ERXNumberFormatter.numberFormatterForPattern(formatter());
         }
         return (java.text.Format)_numberFormatter;
     }
