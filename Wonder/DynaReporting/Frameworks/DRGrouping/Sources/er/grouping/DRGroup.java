@@ -2,6 +2,7 @@ package er.grouping;
 
 import java.util.*;
 import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
 
 public class DRGroup extends Object  {
 
