@@ -1214,7 +1214,7 @@
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = "relationship.entity.userInfo.isSortedJoinEntity"; 
+                        key = "relationship.destinationEntity.userInfo.isSortedJoinEntity"; 
                         selectorName = "isEqualTo"; 
                         value = true; 
                     }, 
