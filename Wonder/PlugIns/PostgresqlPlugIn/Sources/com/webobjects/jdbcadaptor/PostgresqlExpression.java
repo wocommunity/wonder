@@ -205,7 +205,7 @@ public class PostgresqlExpression extends JDBCExpression {
                                                         String orderByClause,
                                                         String lockClause) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT ");
+        sb.append(selectString);
         sb.append(columnList);
         sb.append(" FROM ");
         
