@@ -10,7 +10,7 @@ import com.webobjects.eocontrol.*;
 
 /**
  * A concrete event recording handler object. This is useful for setting up custom event recording.
- * This recoridng handler will record everything.
+ * This recording handler will record everything.
  */
 public class ERXEventRecordingDefaultHandler implements EOEventCenter.EventRecordingHandler {
 
