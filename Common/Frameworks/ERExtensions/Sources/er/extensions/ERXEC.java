@@ -89,6 +89,8 @@ public class ERXEC extends EOEditingContext {
     			int index = ecs.lastIndexOf(ec);
     			if(index >= 0) {
     				ecs.remove(index);
+    			} else {
+    				log.error("Should pop, but ec not found in Vector! " + Thread.currentThread().getName() + ", ec: " + ec + ", ecs:" + ecs);
     			}
     		}
     	}
@@ -100,14 +102,18 @@ public class ERXEC extends EOEditingContext {
      */
     public static void unlockAllContextsForCurrentThread() {
     	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
-    	log.info("unlockAllContextsForCurrentThread: " + Thread.currentThread().getName() + ", ecs: " + ecs);
+    	ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey);
+    	log.debug("unlockAllContextsForCurrentThread: " + Thread.currentThread().getName() + ", ecs: " + ecs);
     	if(ecs != null && ecs.size() > 0) {
-    		ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey);
     		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
     		for (int i = ecs.size() - 1; i >= 0; i--) {
     			EOEditingContext ec = (EOEditingContext) ecs.get(i);
     			log.error("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
-    			ec.unlock();
+    			try {
+    				ec.unlock();
+    			} catch(IllegalStateException ex) {
+    				log.error("Could not unlock EC!", ex);
+    			}
     		}
     	}
     }
@@ -192,7 +198,8 @@ public class ERXEC extends EOEditingContext {
      * locked editing contexts in this thread.
      */
     public void unlock() {
-        super.unlock();
+    	popLockedContextForCurrentThread(this);
+    	super.unlock();
         if (!autoLocked && lockLogger.isDebugEnabled()) {
             if(lockTrace.isDebugEnabled()) {
                 lockLogger.debug("unlocked "+this, new Exception());
@@ -201,7 +208,6 @@ public class ERXEC extends EOEditingContext {
             }
         }
         lockCount--;
-        popLockedContextForCurrentThread(this);
     }
 
     /**
