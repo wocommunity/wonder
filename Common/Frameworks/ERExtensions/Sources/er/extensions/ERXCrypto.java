@@ -53,16 +53,19 @@ public class ERXCrypto {
     
     /**
      * Generates a secret key from the System property
-     * <b>ERBlowfishCipherKey</b>. This secret key is
+     * <b>er.extensions.ERXBlowfishCipherKey</b>. This secret key is
      * used when generating the blowfish cipher.
      * @return a secret key for the blowfish cipher
      */
     private static SecretKey secretKey() throws NoSuchAlgorithmException {
-        // FIXME: Should prefix the key as 'er.extensions.ERXBlowfishCipherKey'
-        String blowfishKey = System.getProperty("ERBlowfishCipherKey");
+        String blowfishKey = System.getProperty("er.extensions.ERXBlowfishCipherKey");
         if (blowfishKey == null) {
-            NSLog.err.appendln("WARNING: ERBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
-            blowfishKey = "DefaultBlowfishCipherKey";
+            log.warn("er.extensions.ERXBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
+            blowfishKey = System.getProperty("ERBlowfishCipherKey");
+            if(blowfishKey == null ) 
+                blowfishKey = "DefaultCipherKey";
+            else
+                log.warn("ERBlowfishCipherKey is deprecated, please use er.extensions.ERXBlowfishCipherKey");
         }
         return new SecretKeySpec(blowfishKey.getBytes(), "Blowfish");
     }
@@ -82,7 +85,7 @@ public class ERXCrypto {
             cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
             cipher.init(mode, secretKey());
         } catch (Exception e) {
-            log.error("Caught exception trying to create cipher "+e+" - "+ERXUtilities.stackTrace(e));
+            log.error("Caught exception trying to create cipher "+e);
         }
         return cipher;
     }
@@ -114,17 +117,11 @@ public class ERXCrypto {
         return _decryptCipher;
     }
 
-    // DELETEME: Duplicate ivar in ERXExtensions
-    private final static String hexDigits = "0123456789abcdef";
-    // DELETEME: Duplicate method in ERXExtensions
+    /**
+     * @deprecated use <code>ERXStringUtilities.byteArrayToHexString</code> instead.
+     */
     public static String bytesToString(byte[] bytes) {
-        StringBuffer result=new StringBuffer();
-        int length=bytes.length;
-        for (int i=0; i<length; i++) {
-            result.append( hexDigits.charAt( ( bytes [i] >>> 4 ) & 0xf ) );
-            result.append( hexDigits.charAt( bytes [i] & 0xf ) );
-        }
-        return result.toString();
+        return ERXStringUtilities.byteArrayToHexString(bytes);
     }
 
     /**
@@ -139,15 +136,19 @@ public class ERXCrypto {
      * @return hashed form of the given string
      */
     public static String shaEncode(String string) {
-        byte[] buf=string.getBytes();
+        if( string == null )
+            return string;
+        byte[] buf = string.getBytes();
         MessageDigest md;
         try {
             md= MessageDigest.getInstance("SHA");
         } catch (NoSuchAlgorithmException e) {
+            log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
             throw new NSForwardException(e);
         }
         md.update(buf);
-        return bytesToString(md.digest());
+        return ERXStringUtilities.byteArrayToHexString(md.digest());
+//        return bytesToString(md.digest());
     }
     
     /**
@@ -165,6 +166,8 @@ public class ERXCrypto {
      * @return encrypted string
      */
     public static String blowfishEncode(String s) {
+        if( s == null )
+            return s;
         StringBuffer result=new StringBuffer();
         int pos=0,length=s.length();
         byte[] bytesToEncrypt=new byte[BLOCK_SIZE];
@@ -178,17 +181,16 @@ public class ERXCrypto {
             if (k<BLOCK_SIZE) {
                 for (int l=k; l<BLOCK_SIZE; l++) bytesToEncrypt[l]=0;
             }
+            
             try {
                 encryptedBytes=encryptCipher().doFinal(bytesToEncrypt);
-                byte[] redec=decryptCipher().doFinal(encryptedBytes);
             } catch (Exception e) {
-                System.out.println("Caught "+e+" - "+ERXUtilities.stackTrace(e));
+                log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
                 throw new NSForwardException(e);
             }
             for (k=0; k<BLOCK_SIZE; k++) {
-                result.append( hexDigits.charAt( ( encryptedBytes [k] >>> 4 ) & 0xf ) );
-                result.append( hexDigits.charAt( encryptedBytes[k] & 0xf )
-                               );
+                result.append( ERXStringUtilities.HEX_CHARS[( encryptedBytes [k] >>> 4 ) & 0xf]);
+                result.append( ERXStringUtilities.HEX_CHARS[encryptedBytes[k] & 0xf]);
             }
             pos+=BLOCK_SIZE;
         }
@@ -206,6 +208,8 @@ public class ERXCrypto {
      * @return decode clear text string
      */
     public static String blowfishDecode(String s) {
+        if( s == null )
+            return null;
         int length=s.length();
         if (length%16!=0) {
             return null;
@@ -225,24 +229,29 @@ public class ERXCrypto {
                 try {
                     clearText=decryptCipher().doFinal(encryptedBytes);
                 } catch (Exception e) {
+                    log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
                     throw new NSForwardException(e);
                 }
-                for (int k=0; k<BLOCK_SIZE;k++)
-                    result.append((char)clearText[k]);
+                for (int k=0; k<BLOCK_SIZE;k++) {
+                    if( clearText[k] != 0 )
+                        result.append((char)clearText[k]);
+                }
                 i=0;
             }
         }
-
+        
         if (i!=0) {
             for (int j=i;j<BLOCK_SIZE;i++) encryptedBytes[j]=0;
             try {
                 clearText=decryptCipher().doFinal(encryptedBytes);
             } catch (Exception e) {
+                log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
                 throw new NSForwardException(e);
             }        
-            for (int k=0; k<BLOCK_SIZE;k++) result.append((char)clearText[k]);
+            for (int k=0; k<BLOCK_SIZE;k++) {
+                    result.append((char)clearText[k]);
+            }
         }
-
         return result.toString();
     }
 
@@ -283,8 +292,13 @@ public class ERXCrypto {
     public static String secretKeyPath(){
         if(_secretKeyPath == null){
             String fn = "SecretKey.ser";
-            WOResourceManager rm = ((WOApplication)WOApplication.application()).resourceManager();
-            _secretKeyPath = (String)rm.pathForResourceNamed( fn, secretKeyPathFramework(), null );
+            //ENHANCEME: we should avoid calling the WOApplication.application() if not strictly required (giorgio_v)
+            try {
+                WOResourceManager rm = ((WOApplication)WOApplication.application()).resourceManager();
+                _secretKeyPath = (String)rm.pathForResourceNamed( fn, secretKeyPathFramework(), null );
+            } catch( NullPointerException e ) {
+                log.error( "Caught exception trying to read the secret key file "+e+" - "+ERXUtilities.stackTrace(e) );
+            }
             if(_secretKeyPath == null) _secretKeyPath = fn;
         }
         return _secretKeyPath;
@@ -310,9 +324,9 @@ public class ERXCrypto {
             md.update(v.getBytes());
             String hashedPassword = new String(md.digest());
             sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
-            base64HashedPassword = enc.encode(hashedPassword.getBytes());
+                base64HashedPassword = enc.encode(hashedPassword.getBytes());
         }catch(java.security.NoSuchAlgorithmException e){
-            System.out.println("Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+            log.error("Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         }
         return base64HashedPassword;
     }
@@ -336,17 +350,17 @@ public class ERXCrypto {
     private static Key _secretKey = null;
     public static Key secretKey(File skFile){
         if(_secretKey == null){
-            System.out.println("About to try to recover key");
+            log.info("About to try to recover key");
             try{
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(skFile));
                 try{
                     _secretKey = (Key)in.readObject();
                 }catch(ClassNotFoundException e){
-                    System.out.println("Couldn't get class being decoded from file");
+                    log.error("Couldn't get class being decoded from file");
                 }
                 in.close();
             }catch(FileNotFoundException e){
-                System.out.println("Couldn't recover Secret key file");
+                log.error("Couldn't recover Secret key file");
                 try{
                     KeyGenerator gen = KeyGenerator.getInstance("DES");
                     gen.init(new SecureRandom());
@@ -355,14 +369,14 @@ public class ERXCrypto {
                     out.writeObject(_secretKey);
                     out.close();
                 }catch(java.security.NoSuchAlgorithmException noSuchE){
-                    System.out.println("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+                    log.error("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
                 }catch(FileNotFoundException outputFileNotFoundE){
-                    System.out.println("e:"+outputFileNotFoundE);
+                    log.error("e:"+outputFileNotFoundE);
                 }catch(IOException ioe){
-                    System.out.println("e:"+ioe);
+                    log.error("e:"+ioe);
                 }
             }catch(IOException e){
-                System.out.println("e:"+e);
+                log.error("e:"+e);
             }
         }
         return _secretKey;
@@ -386,6 +400,8 @@ public class ERXCrypto {
      * that don't support extended character sets.
      */
     public static String base64EncryptedString(String v, Key sKey){
+        if( v == null )
+            return v;
         String encBase64String = null;
         try{
             Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
@@ -396,17 +412,17 @@ public class ERXCrypto {
             sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
             encBase64String = enc.encode(raw);
         }catch(java.security.NoSuchAlgorithmException e){
-            System.out.println("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+            log.error("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         }catch(javax.crypto.NoSuchPaddingException e){
-            System.out.println("e:"+e);
+            log.error("e:"+e);
         }catch(java.security.InvalidKeyException e){
-            System.out.println("e:"+e);
+            log.error("e:"+e);
         }catch(java.io.UnsupportedEncodingException e){
-            System.out.println("e:"+e);
+            log.error("e:"+e);
         }catch(javax.crypto.IllegalBlockSizeException e){
-            System.out.println("e:"+e);
+            log.error("e:"+e);
         }catch(javax.crypto.BadPaddingException e){
-            System.out.println("e:"+e);
+            log.error("e:"+e);
         }
         return encBase64String;
     }
@@ -425,6 +441,8 @@ public class ERXCrypto {
      * passed in secret key.
      */
     public static String decryptedBase64String(String v, Key sKey){
+        if( v == null )
+            return v;
         String decString = null;
         try{
             Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
@@ -435,21 +453,21 @@ public class ERXCrypto {
             stringBytes = ERXCompressionUtilities.inflateByteArray(stringBytes);
             decString = new String(stringBytes, "UTF8");
         }catch(java.security.NoSuchAlgorithmException e){
-            System.out.println("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+            log.error("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         }catch(javax.crypto.NoSuchPaddingException e){
-            System.out.println("String="+v+"\ne:");
+            log.error("String="+v+"\ne:");
             e.printStackTrace();
         }catch(java.io.IOException e){
-            System.out.println("String="+v+"\ne:");
+            log.error("String="+v+"\ne:");
             e.printStackTrace();
         }catch(javax.crypto.IllegalBlockSizeException e){
-            System.out.println("String="+v+"\ne:");
+            log.error("String="+v+"\ne:");
             e.printStackTrace();
         }catch(javax.crypto.BadPaddingException e){
-            System.out.println("String="+v+"\ne:");
+            log.error("String="+v+"\ne:");
             e.printStackTrace();
         }catch(java.security.InvalidKeyException e){
-            System.out.println("String="+v+"\ne:");
+            log.error("String="+v+"\ne:");
             e.printStackTrace();
         }
         return decString;
