@@ -26,6 +26,8 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	
     public ERXOncePerRequestConditional(WOContext context) {
         super(context);
+	if(application().isConcurrentRequestHandlingEnabled())
+	    cat.warn("This Component is not multi-threading safe!");
     }
 
     public int displayCountForKey(String key) {
