@@ -271,14 +271,14 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     standardExceptionPage.setExtraInfo(extraInfo);
 
                     EOEditingContext ec = ERXExtensions.newEditingContext();
-                    String exceptionName = exception.getClass().getName();
+                    String shortExceptionName = ERXStringUtilities.lastPropertyKeyInKeyPath(exception.getClass().getName());
                     String hostName = ERXConfigurationManager.defaultManager().hostName();
 
                     ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
                                                                   emailsForProblemRecipients(),
                                                                   null,
                                                                   null,
-                                                                  WOApplication.application().name() + ": " + exceptionName
+                                                                  WOApplication.application().name() + ": " + shortExceptionName
                                                                   + ": " + exception.getMessage(),
                                                                   standardExceptionPage.generateResponse().contentString(),
                                                                   ec);
