@@ -1361,35 +1361,11 @@
 				F6E7967D02C877AF01AD0D07,
 				F6E796A502C877AF01AD0D07,
 				F6E796A702C877AF01AD0D07,
-				F542066302C467DF01000102,
 				F542066702C467DF01000102,
 			);
 			isa = PBXGroup;
 			path = Sources;
 			refType = 2;
-		};
-		F542066302C467DF01000102 = {
-			children = (
-				F542066402C467DF01000102,
-			);
-			isa = PBXGroup;
-			path = com;
-			refType = 4;
-		};
-		F542066402C467DF01000102 = {
-			children = (
-				F542066502C467DF01000102,
-			);
-			isa = PBXGroup;
-			path = webobjects;
-			refType = 4;
-		};
-		F542066502C467DF01000102 = {
-			children = (
-			);
-			isa = PBXGroup;
-			path = directtoweb;
-			refType = 4;
 		};
 		F542066602C467DF01000102 = {
 			isa = PBXFileReference;

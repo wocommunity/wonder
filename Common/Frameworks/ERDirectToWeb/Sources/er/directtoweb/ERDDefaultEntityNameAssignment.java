@@ -61,7 +61,7 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
 
     // Default names
     public Object displayNameForEntity(D2WContext c) {
-        String value = ERD2WUtilities.displayNameForKey((String)c.valueForKeyPath("entity.name"));
+        String value = ERXStringUtilities.displayNameForKey((String)c.valueForKeyPath("entity.name"));
         return localizedValueForKeyWithDefaultInContext(value, c);
     }
 
