@@ -9,6 +9,7 @@ package er.directtoweb;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import er.extensions.*;
 
 /**
  * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />
@@ -23,6 +24,11 @@ public class ERD2WDisplayList extends ERDCustomEditComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public NSArray listToDisplay() {
-        return (NSArray)(object() instanceof NSArray ? object() : objectKeyPathValue());
+        NSArray objects = (NSArray)(object() instanceof NSArray ? object() : objectKeyPathValue());
+        String sortKey = (String)valueForBinding("sortKey");
+        if(sortKey != null) {
+            objects = ERXArrayUtilities.sortedArraySortedWithKey(objects, sortKey);
+        }
+        return objects;
     }
 }
