@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+	<TITLE>Introduction to SVGObjects</TITLE>
+</HEAD>
+
+<BODY bgcolor=#ffffff>
+
+<h1><FONT COLOR=\"#000066\">SVGObjects Specification</FONT></h1>
+<br><br>
+
+<h2>Introduction</h2>
+<p>The dynamic elements and components in the SVGObjects Framework fall into 3 categories: </p>
+<ul><li>HTML components
+    <p>There is only one element in this category - WOSVG.
+    This element is used along with other WebObjects components
+    in HTML pages and components.
+    </p>
+</li>
+<li>XML components
+    <p>These are generic XML components.
+    They can also be used in XML documents other than SVG.
+    (For example: they may be used
+    to construct XHTML pages for a WebObjects application.)
+    </p>
+</li>
+<li>SVG components 
+    <p>These are dynamic components that generate SVG specific content.
+    </p>
+</li>
+</ul>
+
+<br><h2>WXGenericElement</h2>
+<p>SVG documents can be <i>marked up</i> in WebObjects using <b>WOGenericContainer</b> and <b>WOGenericElement</b>. But when using WOGenericElement remember to set <b>otherTagString</b> to "<code>/</code>".</p>
+<p>For convenience, WXGenericElement has been provided. This component is virtually identical to WOGenericElement with the exception of closing its tags with a backslash. e.g: a WXGenericElement with elementName = "hr" will be rendered as <code>&lt;hr/&gt;</code> instead of <code>&lt;hr&gt;</code>. </p>
+
+<br><h2>The Style Attribute</h2>
+<p>All of the SVG elements have an optional attribute: <b>style</b>. <br>
+Style attributes such as <i>fill, stroke, stroke-width, etc..</i> can be set as an alternative to constructing complex <b>style</b> strings, by prefixing the style attributes with &quot;<code>$</code>&quot; (for <code>$</code>tyle). e.g:
+<pre>	"$fill" = "blue";</pre>
+
+Will produce a style string like: 
+<pre>	&lt;text style="fill:blue;"&gt;&lt;/text&gt;</pre>
+
+</p>
+
+<br>
+<a href="SVGObjectsTOC.html">[Table of Contents]</a> 
+
+</BODY>
+</HTML>
