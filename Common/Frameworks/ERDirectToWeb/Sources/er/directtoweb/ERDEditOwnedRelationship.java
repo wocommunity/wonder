@@ -240,15 +240,13 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         }
 
         public EOEnterpriseObject createEO() {
-            EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entityNameForNewInstances);
             // The relationship will be set in the PostSaveDelegate if object is a new eo, ie ok to use a peer context.
             if (object!=null && !(object.editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator)) {
                 log.warn("Newly created object is in an editing context that will not save to the database");
             }
             localContext = ERXEC.newEditingContext(object.editingContext().parentObjectStore());
             if (log.isDebugEnabled()) log.debug("Creating "+entityNameForNewInstances);
-            EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
-            localContext.insertObject(newEO);
+            EOEnterpriseObject newEO = ERXEOControlUtilities.createAndInsertObject(localContext, entityNameForNewInstances);
             // If the object already exists, then hookup the relationship, if not do it after the object is saved.
             if (!((er.extensions.ERXGenericRecord)object).isNewObject()) {
                 EOEnterpriseObject localEO = EOUtilities.localInstanceOfObject(localContext, object);
