@@ -43,18 +43,13 @@ public class ERDPrinterButton extends ERDCustomEditComponent {
         return result;
     }
 
-        public WOComponent editPrinterFriendlyVersion() {
+    public WOComponent editPrinterFriendlyVersion() {
         WOComponent result=ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
-
+    
     public WOComponent listPrinterFriendlyVersion() {
-        D2WListPage result=(D2WListPage)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
-        result.setDataSource(dataSource());
-        result.displayGroup().setSortOrderings(displayGroup().sortOrderings());
-        result.displayGroup().setNumberOfObjectsPerBatch(displayGroup().allObjects().count());
-        result.displayGroup().updateDisplayedObjects();
-        return result;
+        return ERD2WListPage.printerFriendlyVersion(d2wContext(), session(), dataSource(), displayGroup());
     }
 }
