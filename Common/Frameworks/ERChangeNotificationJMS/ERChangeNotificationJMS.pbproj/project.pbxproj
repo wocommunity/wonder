@@ -119,6 +119,7 @@
 		017C7B31FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				F6B7839C0345539001257492,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,6 +600,7 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
+				F6B7839B0345539001257492,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -755,6 +757,18 @@
 			name = GettingStartedMacOSX.txt;
 			path = Documentation/GettingStartedMacOSX.txt;
 			refType = 4;
+		};
+		F6B7839B0345539001257492 = {
+			isa = PBXFileReference;
+			name = Properties;
+			path = Resources/Properties;
+			refType = 4;
+		};
+		F6B7839C0345539001257492 = {
+			fileRef = F6B7839B0345539001257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F6DCA9FA032A475D01257492 = {
 			includeInIndex = 1;
