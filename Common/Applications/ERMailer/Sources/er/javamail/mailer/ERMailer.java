@@ -78,40 +78,45 @@ public class ERMailer {
             log.info("Sending " + mailMessages.count() + " mail message(s).");
             for (Enumeration messageEnumerator = mailMessages.objectEnumerator(); messageEnumerator.hasMoreElements();) {
                 ERCMailMessage mailMessage = (ERCMailMessage)messageEnumerator.nextElement();
-                ERMailDelivery delivery = createMailDeliveryForMailMessage(mailMessage);
 
                 if (log.isDebugEnabled())
                     log.debug("Sending mail message: " + mailMessage);
 
-                if (delivery != null) {
-                    try {
+                try {
+                    ERMailDelivery delivery = createMailDeliveryForMailMessage(mailMessage);
+
+                    if (delivery != null) {
                         mailMessage.setState(ERCMailState.PROCESSING_STATE);
                         mailMessage.editingContext().saveChanges(); // This will throw if optimistic locking occurs
                         delivery.sendMail(true);
                         mailMessage.setState(ERCMailState.SENT_STATE);
                         mailMessage.setDateSent(new NSTimestamp());
-                    } catch (EOGeneralAdaptorException ge) {
-                        log.warn("Caught general adaptor exception, reverting context : " + ge);
-                        mailMessage.editingContext().revert();
-                    } catch (NSForwardException e) {
-                        log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.originalException()));
-                        log.warn("Message trying to send: " + mailMessage + " pk: " + mailMessage.rawPrimaryKey());
-                        // ENHANCEME: Need to implement a waiting state to retry sending mails.
-                        mailMessage.setState(ERCMailState.EXCEPTION_STATE);
-                        mailMessage.setExceptionReason(e.originalException().getMessage());
-                        // Report the mailing error
-                        ERCoreBusinessLogic.sharedInstance().reportException(e.originalException(),
-                                                                             new NSDictionary(mailMessage.snapshot(),
-                                                                                              "Mail Message Snapshot"));
-                    } finally {
-                        // The editingcontext will not have any changes if an optimistic error occurred
-                        if (mailMessage.editingContext().hasChanges()) {
-                            try {
-                                mailMessage.editingContext().saveChanges();
-                            } catch (RuntimeException runtime) {
-                                log.error("RuntimeException during save changes!", runtime);
-                                throw runtime;
-                            }
+                    } else {
+                        log.warn("Unable to create mail delivery for mail message: " + mailMessage);
+                    }
+                } catch (EOGeneralAdaptorException ge) {
+                    log.warn("Caught general adaptor exception, reverting context : " + ge);
+                    mailMessage.editingContext().revert();
+                } catch (Throwable e) {
+                    if (e instanceof NSForwardException)
+                        e = ((NSForwardException)e).originalException();
+                    log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e));
+                    log.warn("Message trying to send: " + mailMessage + " pk: " + mailMessage.rawPrimaryKey());
+                    // ENHANCEME: Need to implement a waiting state to retry sending mails.
+                    mailMessage.setState(ERCMailState.EXCEPTION_STATE);
+                    mailMessage.setExceptionReason(e.getMessage());
+                    // Report the mailing error
+                    ERCoreBusinessLogic.sharedInstance().reportException(e,
+                                                                         new NSDictionary(mailMessage.snapshot(),
+                                                                                          "Mail Message Snapshot"));
+                } finally {
+                    // The editingcontext will not have any changes if an optimistic error occurred
+                    if (mailMessage.editingContext().hasChanges()) {
+                        try {
+                            mailMessage.editingContext().saveChanges();
+                        } catch (RuntimeException runtime) {
+                            log.error("RuntimeException during save changes!", runtime);
+                            throw runtime;
                         }
                     }
                 }
