@@ -40,6 +40,7 @@ On: WOConditional {
 
 RemoteCall: ERXJSRemoteCall {
 	name = "validateValueForKeyInEntity";
+	actionClass = "ERXJSInputValidator$Action";
 	parameters = "(_vvalue,_vkey,_ventityName)";
 }
 
