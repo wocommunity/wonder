@@ -391,6 +391,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @param eoentity to be check
          */
         public void checkForeignKeys(EOEntity eoentity) {
+            NSArray primaryKeys = eoentity.primaryKeyAttributes();
             for(Enumeration relationships = eoentity.relationships().objectEnumerator(); relationships.hasMoreElements(); ) {
                 EORelationship relationship = (EORelationship)relationships.nextElement();
                 if(!relationship.isToMany()) {
@@ -404,7 +405,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     } else {
                         for(Enumeration attributes = relationship.sourceAttributes().objectEnumerator(); attributes.hasMoreElements(); ) {
                             EOAttribute attribute = (EOAttribute)attributes.nextElement();
-                            if(!attribute.allowsNull()) {
+                            if(!attribute.allowsNull() && !primaryKeys.containsObject(attribute)) {
                                 handleOptionalRelationshipError(eoentity, relationship, attribute);
                             }
                         }
