@@ -22,12 +22,14 @@ public class ERDRecoverableErrorPage extends WOComponent implements ErrorPageInt
         return _wrapperName!=null ? _wrapperName : ((ERXSession)session()).wrapperPageName();
     }
     
-    private WOComponent _nextPage;
+    protected WOComponent _nextPage;
     public void setNextPage(WOComponent page) { _nextPage=page; }
     public WOComponent nextPageClicked() { return _nextPage; }
    
-    private String _message;
+    protected String _message;
     public void setMessage(String message) { _message=message; }
+    public String message() {return _message; }
+    
     public String formattedMessage() { return Services.breakDown(_message,60); }
 }
 
