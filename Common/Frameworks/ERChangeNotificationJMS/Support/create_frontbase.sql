@@ -58,8 +58,8 @@ drop table consumers;
 create table consumers (
   name                 varchar(50) not null,
   destinationId        longint not null,
-  consumerId           longint not NULL,
-  created              longint NOT NULL
+  consumerId           longint not null,
+  created              longint not null
 );
 create unique index consumers_pk on consumers(name, destinationId);
 
