@@ -95,6 +95,11 @@ ExclamationImage: WOImage {
 	width = "32";
 }
 
+FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
 FontContainer: WOGenericContainer {
 	color = d2wContext.textColor;
 	elementName = "font";
@@ -189,13 +194,13 @@ ListTableRow: WOGenericContainer {
 }
 
 NavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
        	 d2wContext = d2wContext;
-	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
 NumberOfItems: WOString {
