@@ -13,39 +13,33 @@
 			017C7B2FFFD7144B7F000001,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 48191447;
+			PBXPerProjectTemplateStateSaveDate = 49161629;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F6EBF73402DF55240FCF0E72;
+									bookmark = F6C1435B02EE25930FCF0E72;
 									history = (
 										F6EBF72302DF55240FCF0E72,
-										F6EBF72402DF55240FCF0E72,
 										F6EBF72502DF55240FCF0E72,
 										F6EBF72602DF55240FCF0E72,
 										F6EBF72702DF55240FCF0E72,
-										F6EBF72802DF55240FCF0E72,
-										F6EBF72902DF55240FCF0E72,
 										F6EBF72A02DF55240FCF0E72,
-										F6EBF72B02DF55240FCF0E72,
+										F65884B302DF71B70FCF0E72,
 									);
 									prevStack = (
 										F6EBF72C02DF55240FCF0E72,
-										F6EBF72D02DF55240FCF0E72,
 										F6EBF72E02DF55240FCF0E72,
 										F6EBF72F02DF55240FCF0E72,
 										F6EBF73002DF55240FCF0E72,
-										F6EBF73102DF55240FCF0E72,
-										F6EBF73202DF55240FCF0E72,
 										F6EBF73302DF55240FCF0E72,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {572, 525}}";
+									Frame = "{{0, 0}, {572, 398}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -86,10 +80,11 @@
 						Collapsed = NO;
 						Frame = "{{0, 23}, {856, 549}}";
 						Split0 = {
+							ActiveTab = 2;
 							Collapsed = NO;
 							Frame = "{{284, 0}, {572, 549}}";
 							Split0 = {
-								Frame = "{{0, 24}, {572, 525}}";
+								Frame = "{{0, 151}, {572, 398}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -221,30 +216,24 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{259, 367}";
+					WindowLocation = "{318, 366}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 48191447;
+			PBXWorkspaceStateSaveDate = 49161629;
 		};
 		perUserProjectItems = {
+			F65884B302DF71B70FCF0E72 = F65884B302DF71B70FCF0E72;
+			F6C1435B02EE25930FCF0E72 = F6C1435B02EE25930FCF0E72;
 			F6EBF72302DF55240FCF0E72 = F6EBF72302DF55240FCF0E72;
-			F6EBF72402DF55240FCF0E72 = F6EBF72402DF55240FCF0E72;
 			F6EBF72502DF55240FCF0E72 = F6EBF72502DF55240FCF0E72;
 			F6EBF72602DF55240FCF0E72 = F6EBF72602DF55240FCF0E72;
 			F6EBF72702DF55240FCF0E72 = F6EBF72702DF55240FCF0E72;
-			F6EBF72802DF55240FCF0E72 = F6EBF72802DF55240FCF0E72;
-			F6EBF72902DF55240FCF0E72 = F6EBF72902DF55240FCF0E72;
 			F6EBF72A02DF55240FCF0E72 = F6EBF72A02DF55240FCF0E72;
-			F6EBF72B02DF55240FCF0E72 = F6EBF72B02DF55240FCF0E72;
 			F6EBF72C02DF55240FCF0E72 = F6EBF72C02DF55240FCF0E72;
-			F6EBF72D02DF55240FCF0E72 = F6EBF72D02DF55240FCF0E72;
 			F6EBF72E02DF55240FCF0E72 = F6EBF72E02DF55240FCF0E72;
 			F6EBF72F02DF55240FCF0E72 = F6EBF72F02DF55240FCF0E72;
 			F6EBF73002DF55240FCF0E72 = F6EBF73002DF55240FCF0E72;
-			F6EBF73102DF55240FCF0E72 = F6EBF73102DF55240FCF0E72;
-			F6EBF73202DF55240FCF0E72 = F6EBF73202DF55240FCF0E72;
 			F6EBF73302DF55240FCF0E72 = F6EBF73302DF55240FCF0E72;
-			F6EBF73402DF55240FCF0E72 = F6EBF73402DF55240FCF0E72;
 		};
 		projectwideBuildSettings = {
 		};
@@ -254,13 +243,33 @@
 	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
 	};
-	F6EBF5EF02DF4FE70FCF0E72 = {
+	F65884B302DF71B70FCF0E72 = {
+		fRef = F65884B502DF71B70FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.html: 1";
+		rLen = 0;
+		rLoc = 28;
+		rType = 0;
+		vrLen = 1497;
+		vrLoc = 519;
+	};
+	F65884B502DF71B70FCF0E72 = {
 		isa = PBXFileReference;
-		name = d2w.d2wmodel;
-		path = /Users/patrice/Developer/Wonder/ERNeutralLook/d2w.d2wmodel;
+		name = ERNEUInspectPage.html;
+		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
 		refType = 0;
 	};
-	F6EBF70002DF51480FCF0E72 = {
+	F6C1435B02EE25930FCF0E72 = {
+		fRef = F6C1435C02EE25930FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.html: 1";
+		rLen = 0;
+		rLoc = 28;
+		rType = 0;
+		vrLen = 1497;
+		vrLoc = 519;
+	};
+	F6C1435C02EE25930FCF0E72 = {
 		isa = PBXFileReference;
 		name = ERNEUInspectPage.html;
 		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
@@ -274,16 +283,6 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 124;
-		vrLoc = 0;
-	};
-	F6EBF72402DF55240FCF0E72 = {
-		fRef = F6EBF5EF02DF4FE70FCF0E72;
-		isa = PBXTextBookmark;
-		name = "d2w.d2wmodel: 27";
-		rLen = 0;
-		rLoc = 894;
-		rType = 0;
-		vrLen = 946;
 		vrLoc = 0;
 	};
 	F6EBF72502DF55240FCF0E72 = {
@@ -316,14 +315,6 @@
 		vrLen = 513;
 		vrLoc = 0;
 	};
-	F6EBF72802DF55240FCF0E72 = {
-		isa = PBXTargetBookmark;
-		trg = 40B58282FFD5E8187F000001;
-	};
-	F6EBF72902DF55240FCF0E72 = {
-		isa = PBXTargetBookmark;
-		trg = 017C7B2FFFD7144B7F000001;
-	};
 	F6EBF72A02DF55240FCF0E72 = {
 		fRef = F6EBF73502DF55240FCF0E72;
 		isa = PBXTextBookmark;
@@ -334,10 +325,6 @@
 		vrLen = 1199;
 		vrLoc = 0;
 	};
-	F6EBF72B02DF55240FCF0E72 = {
-		fRef = F6EBF70002DF51480FCF0E72;
-		isa = PBXBookmark;
-	};
 	F6EBF72C02DF55240FCF0E72 = {
 		fRef = F6EBF5E602DF4F960FCF0E72;
 		isa = PBXTextBookmark;
@@ -346,16 +333,6 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 124;
-		vrLoc = 0;
-	};
-	F6EBF72D02DF55240FCF0E72 = {
-		fRef = F6EBF5EF02DF4FE70FCF0E72;
-		isa = PBXTextBookmark;
-		name = "d2w.d2wmodel: 27";
-		rLen = 0;
-		rLoc = 894;
-		rType = 0;
-		vrLen = 946;
 		vrLoc = 0;
 	};
 	F6EBF72E02DF55240FCF0E72 = {
@@ -388,14 +365,6 @@
 		vrLen = 513;
 		vrLoc = 0;
 	};
-	F6EBF73102DF55240FCF0E72 = {
-		isa = PBXTargetBookmark;
-		trg = 40B58282FFD5E8187F000001;
-	};
-	F6EBF73202DF55240FCF0E72 = {
-		isa = PBXTargetBookmark;
-		trg = 017C7B2FFFD7144B7F000001;
-	};
 	F6EBF73302DF55240FCF0E72 = {
 		fRef = F6EBF73602DF55240FCF0E72;
 		isa = PBXTextBookmark;
@@ -405,16 +374,6 @@
 		rType = 0;
 		vrLen = 1199;
 		vrLoc = 0;
-	};
-	F6EBF73402DF55240FCF0E72 = {
-		fRef = F6EBF73702DF55240FCF0E72;
-		isa = PBXTextBookmark;
-		name = "ERNEUInspectPage.html: 1";
-		rLen = 0;
-		rLoc = 28;
-		rType = 0;
-		vrLen = 1931;
-		vrLoc = 548;
 	};
 	F6EBF73502DF55240FCF0E72 = {
 		isa = PBXFileReference;
@@ -426,12 +385,6 @@
 		isa = PBXFileReference;
 		name = ERNEUQueryPage.html;
 		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUQueryPage.wo/ERNEUQueryPage.html;
-		refType = 0;
-	};
-	F6EBF73702DF55240FCF0E72 = {
-		isa = PBXFileReference;
-		name = ERNEUInspectPage.html;
-		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
 		refType = 0;
 	};
 }
