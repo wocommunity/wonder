@@ -1234,6 +1234,7 @@
 				F5A1442E01FF7F8801A80106,
 				F5A1442F01FF7F8801A80106,
 				F5A1443001FF7F8801A80106,
+				F5A49CE6021F1D2C01A801D4,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -2612,7 +2613,7 @@
 				F5A1454601FF7F8801A80106,
 			);
 			isa = PBXGroup;
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			path = "";
 			refType = 4;
 		};
@@ -3538,6 +3539,7 @@
 				F5D9B6AD02078A2001A80106,
 				F55234160209D68D01A80106,
 				F5CDF6DC0214ADD8015AB589,
+				F5A49CE7021F1D2C01A801D4,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -4929,6 +4931,17 @@
 			};
 			isa = PBXBuildStyle;
 			name = WebServer;
+		};
+		F5A49CE6021F1D2C01A801D4 = {
+			isa = PBXFileReference;
+			path = KeyValueCodingProtectedAccessor.java;
+			refType = 4;
+		};
+		F5A49CE7021F1D2C01A801D4 = {
+			fileRef = F5A49CE6021F1D2C01A801D4;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5A9FF090201F7A401A80106 = {
 			isa = PBXFrameworkReference;
