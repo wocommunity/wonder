@@ -132,7 +132,11 @@ public class ERXValidation {
                 // the exception is coming from EREnterpriseObject
                 // WE PUSH THE WRONG VALUE INTO THE EO ANYWAY!
                 if (pushChanges)  {
-                    ((EOEnterpriseObject)eo).takeValueForKeyPath(value, key);
+                    try {
+                        ((EOEnterpriseObject)eo).takeValueForKeyPath(value, key);
+                    } catch(Exception ex) {
+                        log.error("Can't push value to key '" + key + "': " + value, ex);
+                    }
                 }
                 entity = EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),(EOEnterpriseObject)eo);
             } else {
