@@ -478,5 +478,14 @@ public class ERXStringUtilities {
             begin = end+oldLength;
         }
         return convertedString.toString();
-    }    
+    }
+
+    /**
+        * Removes the spaces in a given String
+     * @return string removing all spaces in it.
+     */
+    public static String escapeSpace(String aString){
+        NSArray parts = NSArray.componentsSeparatedByString(aString," ");
+        return parts.componentsJoinedByString("");
+    }
 }
