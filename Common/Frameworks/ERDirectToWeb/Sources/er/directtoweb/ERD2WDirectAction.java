@@ -35,7 +35,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     static final String fetchSpecificationKey = "__fs";
     static final String createPrefix = "Create";
 
-    EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
+    public EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
         String fsName = context().request().stringFormValueForKey(fetchSpecificationKey);
         if(fsName != null) {
             EOFetchSpecification fs = EOFetchSpecification.fetchSpecificationNamed(fsName, entityName);
@@ -57,22 +57,22 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         return null;
     }
 
-    Number primaryKeyFromRequest() {
+    public Number primaryKeyFromRequest() {
         return context().request().numericFormValueForKey(primaryKeyKey, new NSNumberFormatter("#"));
     }
 
-    WOComponent previousPageFromRequest() {
+    public WOComponent previousPageFromRequest() {
         String cid = context().request().stringFormValueForKey(contextIDKey);
         if(cid == null) return context().page();
         WOComponent comp = session().restorePageForContextID(cid);
         return comp;
     }
 
-    String keyPathFromRequest() {
+    public String keyPathFromRequest() {
         return context().request().stringFormValueForKey(keyPathKey);
     }
 
-    EOArrayDataSource relationshipArrayFromRequest(EOEditingContext ec, EOClassDescription cd) {
+    public EOArrayDataSource relationshipArrayFromRequest(EOEditingContext ec, EOClassDescription cd) {
         String keyPath = context().request().stringFormValueForKey(keyPathKey);
         if(keyPath != null) {
             int indexOfDot = keyPath.indexOf(".");
