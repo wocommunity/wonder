@@ -47,6 +47,6 @@ public class ERXListContainsItemConditional extends WOComponent {
     public boolean listContainsItem() {
         NSArray list=(NSArray)valueForBinding("list");
         Object item=valueForBinding("item");
-        return item != null && list.containsObject(item);
+        return item != null && list != null && list.containsObject(item);
     }
 }
