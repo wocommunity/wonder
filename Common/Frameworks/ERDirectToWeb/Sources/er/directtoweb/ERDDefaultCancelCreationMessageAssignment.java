@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
-public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment {
+public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDefaultCancelCreationMessageAssignment(eokeyvalueunarchiver);
@@ -23,6 +23,7 @@ public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment {
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
     public Object cancelMessage(D2WContext c) {
-        return "<B>Are you sure you want to stop creating this "+c.valueForKey("displayNameForEntity")+"?</B> <br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your "+c.valueForKey("displayNameForEntity")+".";
+        Object value = localizedTemplateStringForKeyInContext("Are you sure you want to stop creating this Object", c);
+        return value;
     }
 }

@@ -11,7 +11,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import org.apache.log4j.Category;
 
-public class ERDImageNameAssignment extends ERDAssignment {
+public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDImageNameAssignment(eokeyvalueunarchiver);

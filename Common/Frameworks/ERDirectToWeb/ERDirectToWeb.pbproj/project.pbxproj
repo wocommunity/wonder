@@ -74,6 +74,7 @@
 				F5A1442501FF7F8801A80106,
 				F5A1442A01FF7F8801A80106,
 				F5A1444501FF7F8801A80106,
+				F5890970026CA6D701000105,
 			);
 			isa = PBXGroup;
 			name = "D2W Assignments";
@@ -2272,6 +2273,17 @@
 			isa = PBXBuildStyle;
 			name = BuildStyle;
 		};
+		F5890970026CA6D701000105 = {
+			isa = PBXFileReference;
+			path = ERDLocalizableAssignmentInterface.java;
+			refType = 4;
+		};
+		F5890971026CA6D801000105 = {
+			fileRef = F5890970026CA6D701000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F597C18B026376E601000102 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
@@ -4446,6 +4458,7 @@
 				F5A49CE7021F1D2C01A801D4,
 				F6970DF1024A570501AD0D07,
 				F61422E102535F7801AD0D07,
+				F5890971026CA6D801000105,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;

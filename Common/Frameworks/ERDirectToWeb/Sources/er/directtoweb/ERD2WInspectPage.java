@@ -237,8 +237,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             if (e instanceof ERXValidationException) {
                 ERXValidationException ex = (ERXValidationException)e;
                 ex.setContext(d2wContext());
-                ex.setTargetLanguage((String)session().valueForKeyPath("localizer.language"));
-                cat.info("Target language:" + session().valueForKeyPath("localizer.language"));
+                ex.setTargetLanguage((String)session().valueForKeyPath("language"));
+                cat.info("Target language:" + session().valueForKeyPath("language"));
                 Object o = ex.object();
                 if(o instanceof EOEnterpriseObject) {
                     EOEnterpriseObject eo = (EOEnterpriseObject)o;

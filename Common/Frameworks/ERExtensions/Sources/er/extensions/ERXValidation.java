@@ -64,6 +64,7 @@ public class ERXValidation {
         String newErrorMessage=e.getMessage();
         // Need to reset the context for each validation exception.
         propertyNameContext.setEntity(null);
+        
         if (e instanceof NSValidation.ValidationException && ((NSValidation.ValidationException)e).key() != null
             && ((NSValidation.ValidationException)e).object() != null) {
             NSValidation.ValidationException nve = (NSValidation.ValidationException)e;
@@ -97,6 +98,10 @@ public class ERXValidation {
         // Leveraging the power of D2WContext to generate great looking error messages.
         if (propertyNameContext.entity() != null && key != null) {
             propertyNameContext.setPropertyKey(key);
+            //FIXME: (ak) this is just until I can rethink the whole message processing
+            ERXLocalizer l = ERXLocalizer.localizerForLanguage(((ERXValidationException)e).targetLanguage());
+            NSMutableDictionary fakeSession = new NSMutableDictionary(l, "localizer");
+            propertyNameContext.takeValueForKey( fakeSession, "session");
             errorMessages.setObjectForKey(newErrorMessage, propertyNameContext.displayNameForProperty());
         } else {
             errorMessages.setObjectForKey(newErrorMessage, key);

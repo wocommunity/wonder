@@ -123,7 +123,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizedStringForKey(key);
     }
     public Object valueForKeyPath(String key) {
-        if("localizerLanguage".equals(key)) return localizerLanguage();
         Object result = valueForKey(key);
         if(result == null) {
             int indexOfDot = key.indexOf(".");
@@ -131,7 +130,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 String firstComponent = key.substring(0, indexOfDot);
                 String otherComponents = key.substring(indexOfDot+1, key.length());
                 result = cache.objectForKey(firstComponent);
-                cat.info("Trying " + firstComponent + " . " + otherComponents);
+                if(cat.isDebugEnabled())
+                    cat.debug("Trying " + firstComponent + " . " + otherComponents);
                 if(result != null) {
                     result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
                     if(result != null) {
@@ -196,7 +196,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return result;
     }
-    public String localizerLanguage() {return language;}
+    public String language() {return language;}
     
     public String localizedStringForKey(String key) {
         String result = (String)cache.objectForKey(key);
