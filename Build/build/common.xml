@@ -126,6 +126,7 @@
 			</wsresources>
 			<frameworks root="${build.root}">
 				<include name="ER*.framework"/>
+				<exclude name="ERNeutralLook.framework"/>
 				<include name="BT*.framework"/>
 			</frameworks>
 			<frameworks root="${wo.local.root}">
