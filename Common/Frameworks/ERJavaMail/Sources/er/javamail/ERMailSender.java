@@ -156,47 +156,51 @@ public class ERMailSender extends Thread {
         Object callbackObject = message.callbackObject ();
         MessagingException exception = null;
 
-        // Send the message
-        try {
-            if (debug) log.debug ("Sending a message ... " + aMessage);
-            transport.sendMessage (aMessage, aMessage.getAllRecipients ());
-            if (debug) log.debug ("Done.");
-            stats.updateMemoryUsage ();
+        if (message.shouldSendMessage()) {
+            // Send the message
+            try {
+                if (debug) log.debug ("Sending a message ... " + aMessage);
+                transport.sendMessage (aMessage, aMessage.getAllRecipients ());
+                if (debug) log.debug ("Done.");
+                stats.updateMemoryUsage ();
 
-            if (debug) {
-                String allRecipientsString = null;
-                try {
-                    allRecipientsString = message.allRecipientsAsString();
-                } catch (MessagingException ex) {
-                    allRecipientsString = "(not available)";
+                if (debug) {
+                    String allRecipientsString = null;
+                    try {
+                        allRecipientsString = message.allRecipientsAsString();
+                    } catch (MessagingException ex) {
+                        allRecipientsString = "(not available)";
+                    }
+                    log.debug ("(" + stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
                 }
-                log.debug ("(" + stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
-            }
-        } catch (SendFailedException e) {
-            if (debug)
-                log.debug ("Failed to send message: \n" +
-                           message.allRecipientsAsString() +
-                           e.getMessage ());
-            stats.incrementErrorCount ();
+            } catch (SendFailedException e) {
+                if (debug)
+                    log.debug ("Failed to send message: \n" +
+                               message.allRecipientsAsString() +
+                               e.getMessage ());
+                stats.incrementErrorCount ();
 
-            if (callbackObject != null) {
-                SendFailedException sfex = (SendFailedException)e;
-                NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray
-                    ((InternetAddress [])sfex.getInvalidAddresses ());
-                this.notifyInvalidEmails (callbackObject, invalidEmails);
-            }
+                if (callbackObject != null) {
+                    SendFailedException sfex = (SendFailedException)e;
+                    NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray
+                        ((InternetAddress [])sfex.getInvalidAddresses ());
+                    this.notifyInvalidEmails (callbackObject, invalidEmails);
+                }
 
-            exception = e;
-        } catch (MessagingException e) {
-            exception = e;
-        } catch (Throwable t) {
-            log.error ("An unexpected error occured while sending message: " + message
-                       + " mime message: " + aMessage + " sending to: " +  aMessage.getAllRecipients ()
-                       + " transport: " + transport, t);
-        } finally {
-            stats.incrementMailCount ();
-            if (exception != null)
-                throw exception;
+                exception = e;
+            } catch (MessagingException e) {
+                exception = e;
+            } catch (Throwable t) {
+                log.error ("An unexpected error occured while sending message: " + message
+                           + " mime message: " + aMessage + " sending to: " +  aMessage.getAllRecipients ()
+                           + " transport: " + transport, t);
+            } finally {
+                stats.incrementMailCount ();
+                if (exception != null)
+                    throw exception;
+            }
+        } else if (log.isDebugEnabled()) {
+            log.debug("Message has instructed me not to send it, not sending message: " + message);
         }
     }
 
