@@ -87,7 +87,8 @@ public class ERD2WUtilities {
     *
     * @return
     */
-    public static EOEnterpriseObject localInstanceFromObjectWithD2WContext(EOEnterpriseObject eo, D2WContext d2wContext) {
+    public static EOEnterpriseObject localInstanceFromObjectWithD2WContext(EOEnterpriseObject eo,
+                                                                           D2WContext d2wContext) {
         EOEditingContext ec = eo.editingContext();
         if(ec == null) throw new IllegalStateException("EC can't be null in localinstance");
         EOEnterpriseObject localObject = eo;
