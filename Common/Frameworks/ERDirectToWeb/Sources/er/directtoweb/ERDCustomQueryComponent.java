@@ -54,9 +54,9 @@ public class ERDCustomQueryComponent extends ERDCustomEditComponent {
     public D2WContext localContext() { return d2wContext();}
     public D2WContext d2wContext() {
         if (!synchronizesVariablesWithBindings()) {
-            _d2wContext = (D2WContext)valueForBinding("localContext");
+            _d2wContext = (D2WContext)super.valueForBinding("localContext");
             if(_d2wContext == null) {
-                _d2wContext = (D2WContext)valueForBinding("d2wContext");
+                _d2wContext = (D2WContext)super.valueForBinding("d2wContext");
             }
         }
         return _d2wContext;

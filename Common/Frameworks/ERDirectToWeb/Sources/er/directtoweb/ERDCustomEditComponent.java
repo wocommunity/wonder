@@ -159,9 +159,9 @@ public abstract class ERDCustomEditComponent extends WOComponent {
     }
     public D2WContext d2wContext() {
         if (d2wContext == null && !synchronizesVariablesWithBindings()) {
-            d2wContext = (D2WContext)valueForBinding("localContext");
+            d2wContext = (D2WContext)super.valueForBinding("localContext");
             if(d2wContext == null) {
-                d2wContext = (D2WContext)valueForBinding("d2wContext");
+                d2wContext = (D2WContext)super.valueForBinding("d2wContext");
             }
         }
         return d2wContext;
