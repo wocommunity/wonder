@@ -657,18 +657,20 @@ public class ERXArrayUtilities extends Object {
 	    return;
 	}
 	initialized = true;
-        NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
-        NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
-        NSArray.setOperatorForKey("sortDesc", new SortOperator(EOSortOrdering.CompareDescending));
-        NSArray.setOperatorForKey("sortInsensitiveAsc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveAscending));
-        NSArray.setOperatorForKey("sortInsensitiveDesc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveDescending));
-        NSArray.setOperatorForKey("flatten", new FlattenOperator());
-        NSArray.setOperatorForKey("fetchSpec", new FetchSpecOperator());
-        NSArray.setOperatorForKey("unique", new UniqueOperator());
-	NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
-	NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
-        NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
-        NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
+        if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayUtilities.ShouldRegisterOperators", true)) {
+            NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
+            NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
+            NSArray.setOperatorForKey("sortDesc", new SortOperator(EOSortOrdering.CompareDescending));
+            NSArray.setOperatorForKey("sortInsensitiveAsc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveAscending));
+            NSArray.setOperatorForKey("sortInsensitiveDesc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveDescending));
+            NSArray.setOperatorForKey("flatten", new FlattenOperator());
+            NSArray.setOperatorForKey("fetchSpec", new FetchSpecOperator());
+            NSArray.setOperatorForKey("unique", new UniqueOperator());
+            NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
+            NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
+            NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
+            NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
+        }
     }
 
     
