@@ -44,7 +44,11 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public EOEnterpriseObject browserItem;
     public NSArray browserSelections;
     public String sortedObjects;
+    public int awakesMinusSleeps = 0;
 
+    public static boolean shouldLockEditingContext(){
+        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERD2WEditSortedManyToManyPage.shouldLockEditingContext", true);
+    }
 
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
         setEditingContext(ERXExtensions.newEditingContext(eo.editingContext(), false)); // a non-validating context
@@ -73,13 +77,20 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     public void awake() {
         super.awake();
+        awakesMinusSleeps++;
         if (editingContext() != null) {
-            editingContext().lock();
+            if(log.isDebugEnabled()){
+                log.debug("awakesMinusSleeps:"+awakesMinusSleeps);
+            }
+            if(shouldLockEditingContext()){
+                editingContext().lock();
+            }
         }
     }
 
     public void sleep() {
-        if (editingContext() != null) {
+        awakesMinusSleeps--;
+        if (editingContext() != null && shouldLockEditingContext()) {
            editingContext().unlock();
         }
         super.sleep();
@@ -90,12 +101,15 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     protected void setEditingContext(EOEditingContext newEditingContext) {
+        if(log.isDebugEnabled()){
+            log.debug(ERXUtilities.stackTrace());
+        }
         if (newEditingContext != editingContext()) {
-            if (editingContext() != null) {
+            if (editingContext() != null && shouldLockEditingContext()) {
                 editingContext().unlock();
             }
             _editingContext = newEditingContext;
-            if (editingContext() != null) {
+            if (editingContext() != null && shouldLockEditingContext()) {
                 editingContext().lock();
             }
         }
