@@ -9,6 +9,7 @@ package er.javamail;
 import java.util.Enumeration;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeUtility;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOSession;
@@ -17,7 +18,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import er.extensions.ERXApplication;
 import er.extensions.ERXLogger;
-
 
 /**
  * <code>ERMailUtils</code> contains various utility method related
@@ -183,8 +183,20 @@ public class ERMailUtils extends Object {
         }
     }
 
+    public static String encodeString (String string, String charset) {
+        String encodedString = null;
+
+        try {
+            encodedString = MimeUtility.encodeText (string, charset, !charset.equals (ERMailDelivery.DefaultCharset) ? "B" : null);
+        } catch (Exception e) {
+            encodedString = string;
+        }
+
+        return encodedString;
+    }
+    
     /**
-     * Private method that converts NSArray of String emails to
+     * Method that converts NSArray of String emails to
      * InternetAddress [].
      * @param addrs a <code>NSArray</code> value
      * @return an <code>InternetAddress[]</code> value
@@ -204,7 +216,7 @@ public class ERMailUtils extends Object {
     }
 
     /**
-     * Private method that converts NSArray of String emails to
+     * Method that converts NSArray of String emails to
      * InternetAddress [].
      * @param addressesArray an <code>InternetAddress[]</code> value
      * @return a <code>NSArray</code> value
@@ -216,7 +228,8 @@ public class ERMailUtils extends Object {
 
         for (int i = 0 ; i < addressesArray.length ; i++) {
             InternetAddress anAddress = (InternetAddress) addressesArray[i];
-            addresses.addObject (anAddress.toUnicodeString ());
+            String emailAddress = anAddress.toUnicodeString ();
+            addresses.addObject (emailAddress);
         }
 
         return addresses;
