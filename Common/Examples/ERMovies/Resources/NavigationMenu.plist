@@ -42,11 +42,11 @@
 	},
         {
 		name = "Actor Networking";
-                action = "session.findAnActor";
+                directActionName = "QueryTalent";
 
 		height = 19;
 		width = 130;
-	},
+	}
         
         
 )
