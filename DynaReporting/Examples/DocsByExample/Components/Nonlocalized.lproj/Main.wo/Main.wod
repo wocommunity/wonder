@@ -1,0 +1,2 @@
+Frame1: WOFrame { pageName = "Menu"; }
+Frame2: WOFrame { name = "content"; pageName = "Intro"; }
