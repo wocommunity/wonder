@@ -508,4 +508,34 @@ public class ERXArrayUtilities extends Object {
     public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
         return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
+
+    /**
+        * shifts a given object in an array one value to the left (index--).
+     *
+     * @param array array to be modified.
+     * @param object the object that should be moved
+     */
+    public static void shiftObjectLeft(NSMutableArray array, Object object) {
+        int index = array.indexOfObject(object);
+        if (index == -1) return;
+        if (index > 0) {
+            array.insertObjectAtIndex(object, index -1);
+            array.removeObjectAtIndex(index + 1);
+        }
+    }
+
+    /**
+        * shifts a given object in an array one value to the right (index++).
+     *
+     * @param array array to be modified.
+     * @param object the object that should be moved
+     */
+    public static void shiftObjectRight(NSMutableArray array, Object object) {
+        int index = array.indexOfObject(object);
+        if (index == -1) return;
+        if (index < array.count() - 1) {
+            array.insertObjectAtIndex(object, index + 2);
+            array.removeObjectAtIndex(index);
+        }
+    }
 }
