@@ -15,7 +15,8 @@ public class DRAttributeGroup extends DRAttribute  {
         return attributeGroup;
     }
 
-    public DRAttributeGroup() {
+    public void resetDefaults() {
+        super.resetDefaults();
         _attributes = new NSMutableArray();
         _flatAttributes = new NSMutableArray();
         _isGroup = true;
