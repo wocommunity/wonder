@@ -40,13 +40,19 @@ public class ERXDebugMarker extends WOComponent {
     
     public WOComponent debug() {
         WOComponent result=null;
-        if (cat.isDebugEnabled()) cat.debug("Object = "+object());
+        //if (cat.isDebugEnabled()) cat.debug("Object = "+object());
         if (object() instanceof EOEditingContext) {
             result=pageWithName("ERXEditingContextInspector");
             result.takeValueForKey(object(),"object");
         } else if (object() instanceof EOEnterpriseObject) {
             result=debugPageForObject((EOEnterpriseObject)object(),session());
-            result.takeValueForKey(object(),"object");
+            if(result != null) {
+                result.takeValueForKey(object(),"object");
+            } else if(object() instanceof ERXGenericRecord) {
+                cat.info("Object: " + ((ERXGenericRecord)object()).toLongString());
+            } else {
+                cat.info("Object: " + object());
+            }
         }
         return result;
     }
