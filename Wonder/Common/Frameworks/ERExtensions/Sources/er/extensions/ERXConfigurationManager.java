@@ -349,7 +349,7 @@ public class ERXConfigurationManager {
                     }
                 } else {
                     // by default we take <modelName>.db in the directory we found the model
-                    path=aModel.path();
+                    path=aModel.pathURL().getFile();
                     path=NSPathUtilities.stringByDeletingLastPathComponent(path);
                     path=NSPathUtilities.stringByAppendingPathComponent(path,aModel.name()+".db");                    
                 }
