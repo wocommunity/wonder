@@ -257,6 +257,17 @@ public class ERXExtensions {
     public static ERXEditingContextDelegate defaultEditingContextDelegate() { return _defaultEditingContextDelegate; }
 
     /**
+     * Sets the default editing context delegate to be
+     * used for editing context creation.
+     * @param delegate to be set on every created editing
+     *		context by default.
+     */
+     // ENHANCEME: Shouldn't require the editing context delegate to be a subclass of ours.
+    public static void setDefaultEditingContextDelegate(ERXEditingContextDelegate delegate) {
+        _defaultEditingContextDelegate = delegate;
+    }
+
+    /**
      * Default delegate that does not perform validation.
      * Not performing validation can be a good thing when
      * using nested editing contexts as sometimes you only
@@ -266,7 +277,18 @@ public class ERXExtensions {
     // MOVEME: ERXECFactory
     public static ERXECNoValidationDelegate defaultECNoValidationDelegate() { return _defaultECNoValidationDelegate; }
 
-    // DELETEME: Not a real notification, don't think it is being used.
+    /**
+     * Sets the default editing context delegate to be
+     * used for editing context creation that does not
+     * allow validation.
+     * @param delegate to be set on every created editing
+     *		context that doesn't allow validation.
+     */
+     // ENHANCEME: Shouldn't require the editing context delegate to be a subclass of ours.
+    public static void setDefaultECNoValidationDelegate(ERXECNoValidationDelegate delegate) {
+        _defaultECNoValidationDelegate = delegate;
+    }
+
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
 
     /**
