@@ -28,6 +28,6 @@ public class ERXAnyField extends WOAnyField {
 
 
     public String itemName() {
-        return ERXStringUtilities.displayNameForKey(selectedKeyItem);
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(ERXStringUtilities.displayNameForKey(selectedKeyItem));
     }
 }
