@@ -146,6 +146,7 @@
 		};
 		414653DC04266A0A00AD0D0B = {
 			children = (
+				417EBFCD04347FFF00AD0D07,
 				414653DA04266A0400AD0D0B,
 				414653D3042669F800AD0D0B,
 			);
@@ -284,6 +285,19 @@
 			name = "Editor Components";
 			path = WebServerResources;
 			refType = 4;
+		};
+		417EBFCD04347FFF00AD0D07 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = WRLayoutEditor.java;
+			path = er/reporting/WRLayoutEditor.java;
+			refType = 4;
+		};
+		417EBFCE04347FFF00AD0D07 = {
+			fileRef = 417EBFCD04347FFF00AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 //410
 //411
@@ -1586,6 +1600,7 @@
 				F529276703AAC84701AD0D0B,
 				4146541F04266BE900AD0D0B,
 				4146544B04266C0400AD0D0B,
+				417EBFCE04347FFF00AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
