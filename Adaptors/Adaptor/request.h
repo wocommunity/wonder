@@ -47,6 +47,7 @@ typedef int (*req_getMoreContentCallback)(void *handle, void *buffer, int buffer
  */
 typedef struct _HTTPRequest {
 	RequestMethod	method;		/* get/put/post/... */
+	const char *method_str;			/* the http request (includes CRLF) */
 	char *request_str;			/* the http request (includes CRLF) */
 	void *headers;				/* (strtbl *) but you don't need to know */
 	void *api_handle;			/* api specific pointer */
