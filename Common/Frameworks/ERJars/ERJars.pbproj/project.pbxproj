@@ -122,7 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6685560A01E84B5800CD2930,
-				6685560B01E84B5800CD2930,
+				504840DE040C01DE00CF0E76,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -397,8 +397,8 @@
 				WEBSERVER_RESOURCES_SYMLINK = "$(WEBSERVER_WRAPPER_DIR)/WebServerResources";
 				WEBSERVER_VERSIONS_DIR = "$(WEBSERVER_WRAPPER_DIR)/Versions";
 				WEBSERVER_WRAPPER_DIR = "$(WRAPPER_DIR)";
+				WO_TEMPLATE_MAJOR_VERSION = 5;
 				WO_TEMPLATE_MINOR_VERSION = 2;
-				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_DIR = "$(INSTALL_PATH_FOR_STYLE)/$(WRAPPER_NAME)";
 				WRAPPER_EXTENSION = framework;
 				WRAPPER_NAME = "$(PRODUCT_NAME).$(WRAPPER_EXTENSION)";
@@ -519,7 +519,7 @@
 		40B5828CFFD5E91B7F000001 = {
 			children = (
 				6685560801E84B5700CD2930,
-				6685560901E84B5700CD2930,
+				504840DD040C01DE00CF0E76,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -563,6 +563,32 @@
 //402
 //403
 //404
+//500
+//501
+//502
+//503
+//504
+		504840DD040C01DE00CF0E76 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "log4j-1.2.8.jar";
+			path = "Libraries/log4j-1.2.8.jar";
+			refType = 4;
+		};
+		504840DE040C01DE00CF0E76 = {
+			fileRef = 504840DD040C01DE00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+//500
+//501
+//502
+//503
+//504
 //660
 //661
 //662
@@ -574,23 +600,8 @@
 			path = Libraries/junit.jar;
 			refType = 2;
 		};
-		6685560901E84B5700CD2930 = {
-			isa = PBXFileReference;
-			name = log4j.jar;
-			path = Libraries/log4j.jar;
-			refType = 2;
-		};
 		6685560A01E84B5800CD2930 = {
 			fileRef = 6685560801E84B5700CD2930;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-		6685560B01E84B5800CD2930 = {
-			fileRef = 6685560901E84B5700CD2930;
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
