@@ -9,6 +9,7 @@ package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERD2WCustomDisplayBoolean extends D2WDisplayBoolean {
 
@@ -24,11 +25,12 @@ public class ERD2WCustomDisplayBoolean extends D2WDisplayBoolean {
          return _choicesNames;
      }
 
-     public String yesName(){
-         return (String)choicesNames().objectAtIndex(0);
-     }
-
-     public String noName(){
-         return (String)choicesNames().objectAtIndex(1);
-     }
+    public Object displayString() {
+        Object o = objectPropertyValue();
+        if(o == null && choicesNames().count() > 2)
+            return choicesNames().objectAtIndex(2);
+        if(ERXValueUtilities.booleanValue(o))
+            return choicesNames().objectAtIndex(0);
+        return choicesNames().objectAtIndex(1);
+    }
 }
