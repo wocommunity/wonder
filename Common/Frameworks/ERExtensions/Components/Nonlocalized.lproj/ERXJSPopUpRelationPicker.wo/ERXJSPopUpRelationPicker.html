@@ -15,6 +15,11 @@ function getParentEntityForId(parent_id) {
 	}
 	return null;
 }
+function compareEntities(a, b) {
+	if(a.name < b.name) return -1;
+	if( a.name == b.name) return 0;
+	return 1;
+}
 function allChildren() {
 	var allChildren = new Array();
 	for (loop=0; loop < parentschildren.length; loop++) {
@@ -22,8 +27,9 @@ function allChildren() {
 			allChildren = allChildren.concat(parentschildren[loop].children);
 		}
 	}
-	return allChildren;
+	return allChildren.sort(compareEntities);
 }
+
 function parentSwapped(new_parent_id,children_select,selected_parent,selected_child) {
 	var parent_entity = getParentEntityForId(new_parent_id);
 	selected_parent.value = new_parent_id;
