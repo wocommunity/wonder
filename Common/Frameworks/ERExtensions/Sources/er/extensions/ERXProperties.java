@@ -50,9 +50,9 @@ public class ERXProperties {
 
     /** 
      * Returns the version string of the application.  
-     * It checkes <code>CFBundleShortVersionString</code> property 
+     * It checks <code>CFBundleShortVersionString</code> property 
      * in the <code>info.plist</code> resource and returns 
-     * a trimed version of the value. 
+     * a trimmed version of the value. 
      * 
      * @return version number as string; can be a null-string when 
      * 			the applicaiton doesn't have the value of 
@@ -70,9 +70,9 @@ public class ERXProperties {
 
     /** 
      * Returns the version string of the given framework.
-     * It checkes <code>CFBundleShortVersionString</code> property 
+     * It checks <code>CFBundleShortVersionString</code> property 
      * in the <code>info.plist</code> resource and returns 
-     * a trimed version of the value. 
+     * a trimmed version of the value. 
      * 
      * @param  frameworkName name
      * @return version number as string; can be null-string when 
