@@ -428,7 +428,7 @@ public class WOToManyRelationship extends WOComponent {
     }
 
     public Object theCurrentValue() {
-        Object currentValue = NSKeyValueCoding.Utility.valueForKey(theCurrentItem , _localDestinationDisplayKey());
+        Object currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theCurrentItem , _localDestinationDisplayKey());
         if(localizeDisplayKeys()) {
             String stringValue;
             if(!(currentValue instanceof String))
