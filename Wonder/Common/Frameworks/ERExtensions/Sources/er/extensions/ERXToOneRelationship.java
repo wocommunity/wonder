@@ -212,7 +212,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             EODataSource aDataSource = _localDataSource();
             // Need to make sure that the eos are in the right editingContext.
 	    // ak: We get a dictionary as object if we use this in a query,
-	    // so we have to check...
+	    // so we have to check....
 	    EOEditingContext ec;
 	    
 	    if(_sourceObject instanceof EOEnterpriseObject)
