@@ -599,9 +599,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	  * @return a fresh instance of an EO fetched from the DB and placed in the editing context argument
 	  */
 	 public ERXGenericRecord refetchObjectFromDBinEditingContext(EOEditingContext ec){
-		 EOEntity entity = EOUtilities.entityNamed(ec, "MZAccount");
+		 EOEntity entity = EOUtilities.entityNamed(ec, entityName());
 		 EOQualifier qual = entity.qualifierForPrimaryKey(primaryKeyDictionary(false));
-		 EOFetchSpecification fetchSpec = new EOFetchSpecification("MZAccount", qual, null);
+		 EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName(), qual, null);
 		 fetchSpec.setRefreshesRefetchedObjects(true);
 		 NSArray results = ec.objectsWithFetchSpecification(fetchSpec);
 		 ERXGenericRecord freshObject = null;
