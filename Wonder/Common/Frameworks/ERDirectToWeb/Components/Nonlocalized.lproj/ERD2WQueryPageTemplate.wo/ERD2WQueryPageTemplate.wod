@@ -1,12 +1,28 @@
+BackLink: WOHyperlink {
+	action = returnAction;
+}
+
 Banner: WOImage {
+	alt = "Search";
 	border = "0";
 	filename = "SearchMetalBan.gif";
 	framework = "JavaDirectToWeb";
+	height = "32";
+	name = "Search";
+	width = "550";
 }
 
 BannerConditional: WOConditional {
 	_unroll = true;
 	condition = showBanner;
+}
+
+Conditional1: WOConditional {
+	condition = d2wContext.showListInSamePage;
+}
+
+Conditional2: WOConditional {
+	condition = showResults;
 }
 
 EntityName: WOString {
@@ -29,22 +45,34 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
+ListPage: D2WList {
+	dataSource = queryDataSource;
+	entityName = entity;
+	pageConfiguration = d2wContext.listConfigurationName;
+	d2wContext = d2wContext;
+}
+
 MainTable: WOGenericContainer {
 	_unroll = true;
-	border = 0;
-	cellpadding = 5;
-	cellspacing = 5;
-	elementName = "Table";
+	border = "0";
+	cellpadding = "5";
+	cellspacing = "5";
+	elementName = "table";
 }
 
 PageWrapper: WOSwitchComponent {
-	WOComponentName = d2wContext.pageWrapperName;
+	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
 }
 
 QueryForm: WOForm {
 	action = queryAction;
+	name = "EditForm";
 }
 
 QueryResetButton: WOResetButton {
@@ -58,15 +86,17 @@ QuerySubmitButton: WOActiveImage {
 	border = "0";
 	filename = "SearchDBMetalBtn.gif";
 	framework = "JavaDirectToWeb";
+	height = "31";
 	name = "Find objects matching the query";
+	width = "88";
 }
 
 QueryTable: WOGenericContainer {
 	_unroll = true;
-	border = 0;
-	cellpadding = 0;
-	cellspacing = 5;
-	elementName = "Table";
+	border = "0";
+	cellpadding = "0";
+	cellspacing = "5";
+	elementName = "table";
 }
 
 QueryTableHeaderRow: WOGenericContainer {
@@ -89,14 +119,28 @@ ResourceInputRepresentation: WOSwitchComponent {
 	localContext = localContext;
 }
 
-ResourceLabel: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForProperty;
-}
-
 ResourceRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
+}
+
+ReturnButton: WOImage {
+	alt = "Returns to the previous page";
+	border = "0";
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = "31";
+	name = "Returns to the previous page";
+	width = "88";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
