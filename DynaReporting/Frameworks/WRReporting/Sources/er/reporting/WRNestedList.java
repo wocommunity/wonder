@@ -8,31 +8,78 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import webobjectsexamples.wocomponentelements.*;
 
-/* WRNestedList.h created by Administrator on Sun 29-Nov-1998 */
-public class WRNestedList extends WXNestedList  {
+public class WRNestedList extends WOComponent  {
 
     public WRNestedList(WOContext aContext)  {
         super(aContext);
     }
 
+    /**
+     * Override of method for synchronization of local instance variables with
+     * bindings (pushing and pulling values from the bindings).  Here we turn
+     * OFF synchronization.
+     */
 
-/*
+    public boolean synchronizesVariablesWithBindings() {
+        return false;
+    }
+    
+    /**
+     * Method to push the current level (always 1) into the parent;  this always
+     * happens at the top/beginning of a list (to let the parent know we are in
+     * the list
+     */
 
-    public int currentLevel() {
-        // ** this required by Key Value Coding
+    public void pushLevel()  {
+        setValueForBinding( new Integer(1) , "level" );
+    }
+
+    /**
+     * Method to push the current level (always 0) into the parent;  this always
+     * happens at the bottom/end of a list (to let the parent know we are done with
+     * the list
+     */
+
+    public void  popLevel()  {
+        setValueForBinding( new Integer(0) , "level" );
     }
 
 
-    public void setCurrentLevel(int aChildLevel) {
-        // ** Whatever the child passes, we add 1.  By the time this gets
-        // ** to the root, it reflects the number of levels in between.
-        this.setValueForBinding(new Integer(aChildLevel+1), "level");
+    /**
+     * Method to return the current level.  This method always returns null and is
+     * basically a no-op, but it is required by Key-Value coding (since we have a
+     * setCurrentLevel method).
+     */
+
+    public Number currentLevel() {
+        return null;
     }
-*/
 
+    /**
+     * Method to set the current level (based on the child level).  Whatever the
+     * child passes in, we add one (to represent another level deep in the order).
+     * By the time the value get to the root, it reflects the total number of levels
+     * between the top and bottom.
+     */
 
+    public void setCurrentLevel(Number aChildLevel)  {
+        setValueForBinding(new Integer(aChildLevel.intValue() + 1) , "level");
+    }
+
+    /**
+     * Method to return the tag name for the list.  If the 'isOrdered' binding is
+     * present, the list is an ORDERED-LIST (<OL>), otherwise the list is an
+     * UNORDERED LIST (<UL>).  This information populates the elementName of the
+     * generic element for the list.
+     */
+
+    public String listTagName()  {
+        if ( valueForBinding( "isOrdered" ) != null ) {
+            return "ol";
+        }
+        return "ul";
+    }
 
     public boolean notSublistConditional() {
         return !this.hasBinding("showParentContent");
