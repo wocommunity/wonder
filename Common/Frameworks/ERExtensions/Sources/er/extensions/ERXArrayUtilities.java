@@ -580,6 +580,28 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Batches an NSArray into sub-arrays of the given size.
+     * @param array array to batch
+     * @param batchSize number of items in each batch
+     * @return NSArray of NSArrays, each with at most batchSize items
+     */
+     public static NSArray batchedArrayWithSize(NSArray array, int batchSize) {
+        if(array == null || array.count() == 0)
+            return NSArray.EmptyArray;
+
+        NSMutableArray batchedArray = new NSMutableArray();
+        int count = array.count();
+
+        for(int i = 0; i < count; i+=batchSize) {
+            int length = batchSize;
+            if(i + length > count)
+                length = count - i;
+            batchedArray.addObject(array.subarrayWithRange(new NSRange(i, length)));
+        }
+        return batchedArray;
+    }
+
+    /**
      * Filters a given array with a named fetch specification and bindings.
      *
      * @param array array to be filtered.
