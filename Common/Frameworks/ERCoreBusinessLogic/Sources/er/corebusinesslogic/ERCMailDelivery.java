@@ -13,16 +13,35 @@ import com.webobjects.appserver.*;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * Utility class used for sending mails via the
+ * ERCMailMessage database tables. Actual emails
+ * are then sent using the ERMailer application.
+ */
 public class ERCMailDelivery {
 
-    ///////////////////////////////////////////////////// Static Methods //////////////////////////////////////////////////////////
+    /** holds a reference to the shared instance */
     protected static ERCMailDelivery _sharedInstance;
+
+    /**
+     * Gets the shared instance used to create
+     * ERCMailMessages.
+     * @return shared instance used to create
+     *		mail messages.
+     */
     public static ERCMailDelivery sharedInstance() {
         if (_sharedInstance == null)
             _sharedInstance = new ERCMailDelivery();
         return _sharedInstance;
     }
 
+    /**
+     * Utilitiy method used to break an array of email addresses
+     * down into a comma separated list. Performs a bit of search
+     * and replace to clean up the email addresses a bit.
+     * @param a array of email addresses
+     * @return comma separated and cleaned up list of email addresses
+     */
     public static String commaSeparatedListFromArray(NSArray a) {
         StringBuffer result=new StringBuffer();
         if (a!=null) {
@@ -45,8 +64,19 @@ public class ERCMailDelivery {
         return result.toString();
     }
 
-    ///////////////////////////////////////////////////// Instance Methods ////////////////////////////////////////////////////////
-
+    /**
+     * Composes a mail message.
+     *
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param message text of the message
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */    
     public ERCMailMessage composeEmail(String from,
                                      NSArray to,
                                      NSArray cc,
@@ -65,6 +95,20 @@ public class ERCMailDelivery {
         return mailMessage;
     }
 
+    /**
+     * Composes a mail message with attachments.
+     *
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param message text of the message
+     * @param filePaths array of file paths to attach
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */    
     public ERCMailMessage composeEmailWithAttachments (String from,
                                      NSArray to,
                                      NSArray cc,
@@ -74,10 +118,9 @@ public class ERCMailDelivery {
                                      NSArray filePaths,
                                      EOEditingContext ec) {
         ERCMailMessage mailMessage = this.composeEmail(from, to, cc, bcc, title, message, ec);
-        Enumeration enm = filePaths.objectEnumerator();
-
-        while(enm.hasMoreElements()) {
-            String filePath = (String)enm.nextElement();
+        
+        for (Enumeration filePathEnumerator = filePaths.objectEnumerator(); filePathEnumerator.hasMoreElements();) {
+            String filePath = (String)filePathEnumerator.nextElement();
             ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
             attachment.setFilePath(filePath);
             mailMessage.addToBothSidesOfAttachments(attachment);
@@ -85,6 +128,19 @@ public class ERCMailDelivery {
         return mailMessage;
     }
 
+    /**
+     * Composes a mail message from a given component.
+     *
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param component to render to get the message
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
     public ERCMailMessage composeComponentEmail (String from,
                                                  NSArray to,
                                                  NSArray cc,
@@ -92,13 +148,14 @@ public class ERCMailDelivery {
                                                  String title,
                                                  WOComponent component,
                                                  EOEditingContext ec) {
-        String message=null;
-        if (component!=null) {
-            NSData d=component.generateResponse().content();
-            message=new String(d.bytes(0, d.length())); // FIXME inefficient?
+        String message = null;
+        if (component != null) {
+            WOContext context = component.context();
+            // Emails should generate complete urls
+            context._generateCompleteURLs ();
+            message = component.generateResponse().contentString();
         }
         return composeEmail(from, to, cc, bcc, title, message, ec);
-    }
-    
+    }    
 }
 
