@@ -13,7 +13,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import java.util.*;
 
-public class ERD2WEditableListPage extends ERD2WListPageTemplate implements ERXExceptionHolder{
+public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder {
 
     public ERD2WEditableListPage(WOContext context) {super(context);}
 
