@@ -17,7 +17,8 @@ import java.util.Enumeration;
  * 
  * @binding errorMessages
  * @binding extraErrorMessage
- * @binding shouldShowNewLineAbove" defaults="Boolean
+ * @binding shouldShowNewLineAbove
+ * @binding shouldShowNewLineBelow
  * @binding errorKeyOrder
  */
 
@@ -32,7 +33,6 @@ public class ERXErrorDictionaryPanel extends WOComponent {
     public String errorKey;
     //protected String errorMessageItem;
     public String extraErrorMessage;
-
     public boolean shouldShowNewLineAbove;
     public boolean shouldShowNewLineBelow;
     
