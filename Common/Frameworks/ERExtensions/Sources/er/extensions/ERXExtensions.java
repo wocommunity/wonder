@@ -18,16 +18,21 @@ import org.apache.log4j.Category;
 
 public class ERXExtensions {
 
-    ////////////////////////////////////////////////  log4j category  //////////////////////////////////////////
+    /** logging support */
     private static Category _cat;
+    /**
+     * creates and caches the logging logger
+     * @return logging logger
+     */
     public static Category cat() {
         if (_cat == null)
             _cat = Category.getInstance(ERXExtensions.class);
         return _cat;
     }
 
-    // EditngContextDelegate methods
+    /** holds references to default editing context delegate */
     private static ERXEditingContextDelegate _defaultEditingContextDelegate;
+    /** holds references to default editing context delegate without validation */
     private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
 
     public static class Observer {
@@ -67,19 +72,18 @@ public class ERXExtensions {
             // Initing defaultEditingContext delegates
             _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
             _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
-            // has to be retained on the objC side
+            // CHECKME: This shouldn't be needed now with WO 5
             ERXRetainer.retain(_defaultEditingContextDelegate);
             ERXRetainer.retain(_defaultECNoValidationDelegate);
 
-            // Super-screwy error caused by da bridge, app hangs when attempting to init the objc side of
-            // SimpleHTMLFormatter used in one of our eos.  Very, very strange.  This works around the issue
             Observer observer = new Observer();
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
+            ERXRetainer.retain(observer); // has to be retained
             ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
             EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
             ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
 	    ERXEntityClassDescription.registerDescription();
+            // CHECKME: I think this bug is fixed
             // This patches shared eo loading so cross model relationships to shared eos work.
             //ERXSharedEOLoader.patchSharedEOLoading();
             NSNotificationCenter.defaultCenter().addObserver(observer,
@@ -133,7 +137,6 @@ public class ERXExtensions {
             targetState = Boolean.FALSE;
         }
         if (targetState != null) {
-            EOEditingContext ec = newEditingContext();
             // We set the default, so all future adaptor contexts are either enabled or disabled.
             if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) != targetState.booleanValue())
                 if (targetState.booleanValue()) {
@@ -143,7 +146,6 @@ public class ERXExtensions {
                     NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
                     NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
                 }
-                ec.hasChanges();
             if (targetState.booleanValue()) {
                 adaptorCategory.info("Adaptor debug on");
             } else {
@@ -171,10 +173,13 @@ public class ERXExtensions {
     }
 
     public static void evaluateSQLWithEntityNamed(String entityName, String exp, EOEditingContext ec) {
+        // FIXME: Should be getting the model group from the ec
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-        EOSQLExpressionFactory factory=EOAdaptor.adaptorWithModel(entity.model()).expressionFactory();
+        if (!adaptorChannel.isOpen())
+            adaptorChannel.openChannel();
+        EOSQLExpressionFactory factory=adaptorChannel.adaptorContext().adaptor().expressionFactory();
         adaptorChannel.evaluateExpression(factory.expressionForString(exp));
     }
 
@@ -223,6 +228,7 @@ public class ERXExtensions {
         }
     }
 
+    // DELETEME: This is duplicated in ERXUtilities
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
         EOArrayDataSource dataSource = null;
         if (array != null && array.count() > 0) {
@@ -233,6 +239,7 @@ public class ERXExtensions {
         return dataSource;
     }
 
+    // DELETEME: This is duplicated in ERXUtilities
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
         WODisplayGroup dg = new WODisplayGroup();
         dg.setDataSource(dataSource);
@@ -240,12 +247,29 @@ public class ERXExtensions {
         return dg.allObjects();
     }
 
+    /**
+     * Creates a detail data source for a given enterprise
+     * object and a relationship key. These types of datasources
+     * can be very handy when you are displaying a list of objects
+     * a la D2W style and then some objects are added or removed
+     * from the relationship. If an array datasource were used
+     * then the list would not reflect the changes made, however
+     * the detail data source will reflect changes made to the
+     * relationship.<br/>
+     * Note: the relationship key does not have to be an eo
+     * relationship, instead it just has to return an array of
+     * enterprise objects.
+     * @param object that has the relationship
+     * @param key relationship key
+     * @return detail data source for the given object-key pair.
+     */
     public static EODetailDataSource dataSourceForObjectAndKey(EOEnterpriseObject object, String key) {
         EODetailDataSource eodetaildatasource = new EODetailDataSource(EOClassDescription.classDescriptionForEntityName(object.entityName()), key);
         eodetaildatasource.qualifyWithRelationshipKey(key, object);
         return eodetaildatasource;
     }
 
+    // FIXME: Localization
     public static String friendlyEOArrayDisplayForKey(NSArray list, String attribute, String nullArrayDisplay) {
         String result=null;
         int count = list!=null ? list.count() : 0;
@@ -277,26 +301,75 @@ public class ERXExtensions {
         return ERXSimpleHTMLFormatter.replaceStringByStringInString(old,newString,s);
     }
 
+    /**
+     * Simple utility method that will return the
+     * string "" if the string passed in is null
+     * otherwise it will return the passed in
+     * string.
+     * @param s string to test
+     * @return "" if the string is null else the string
+     */
+    // MOVEME: ERXStringUtilities
     public static String emptyStringForNull(String s) {
         return s==null ? "" : s;
     }
-
+    
+    /**
+     * Simple utility method that will return the
+     * string "" if the object passed in is null
+     * otherwise it will return the passed in
+     * object with toString called on it.
+     * @param o object to test
+     * @return "" if the object is null else <code>toString</code>
+     *		on the object.
+     */
+    // MOVEME: ERXStringUtilities
     public static String emptyStringForNull(Object o) {
         return o==null ? ""  : emptyStringForNull(o.toString());
     }
 
+    /**
+     * Simple utility method that will return null
+     * if the string passed in is equal to ""
+     * otherwise it will return the passed in
+     * string.
+     * @param s string to test
+     * @return null if the string is "" else the string.
+     */
+    // MOVEME: ERXStringUtilities
     public static String nullForEmptyString(String s) {
         return s==null ? null : (s.length()==0 ? null : s);
     }
 
+    /**
+     * Simple utility method that will return null
+     * if the <code>toString</code> method off of
+     * the object is equal to "" otherwise it will
+     * return the passed in object with toString
+     * called on it.
+     * @param o object to test
+     * @return null if the object's <code>toString</code>
+     *		is equal to "" or the value of
+     *		<code>toString</code>on the object.
+     */
+    // MOVEME: ERXStringUtilities
     public static String nullForEmptyString(Object o) {
         return o==null ? null : nullForEmptyString(o.toString());
     }
 
+    /**
+     * Simple test if the string is either null or
+     * equal to "".
+     * @param s string to test
+     * @return result of the above test
+     */
     public static boolean stringIsNullOrEmpty(String s) {
         return ((s == null) || (s.length() == 0));
     }
 
+    /**
+     * 
+     */
     public static int numberOfOccurrencesOfCharInString(char c, String s) {
         int result=0;
         if (s!=null) {
@@ -306,6 +379,13 @@ public class ERXExtensions {
         return result;
     }
 
+    /**
+     * String multiplication.
+     * @param n the number of times to concatinate a given string
+     * @param s string to be multipled
+     * @return multiplied string
+     */
+    // MOVEME: ERXStringUtilities
     public static String stringWithNtimesString(int n, String s) {
         StringBuffer sb=new StringBuffer();
         for (int i=0; i<n; i++) sb.append(s);
@@ -339,79 +419,6 @@ public class ERXExtensions {
         return replaceStringByStringInString("&nbsp;"," ",result.toString());
     }
 
-    //---------------------------------------------------------------------------
-
-    /* not needed anymore
-        public static void adjustAllModels() {
-            // called from ERBusinessLogic
-            for (Enumeration e=EOModelGroup.defaultGroup().models().objectEnumerator(); e.hasMoreElements();) {
-                adjustModel((EOModel)e.nextElement());
-            }
-            for (Enumeration e=EOModelGroup.globalModelGroup().models().objectEnumerator(); e.hasMoreElements();) {
-                adjustModel((EOModel)e.nextElement());
-            }
-        }
-    */
-
-    private static Object _delegate;
-    public static void adjustModel(EOModel model) {
-        ERXConfigurationManager.defaultManager().resetConnectionDictionaryInModel(model);
-
-        // Forcing reconnect on ORA-01041, which is what we get every day when we take the DB offline
-        // to back it up. I am sure there's a better way to backup the DB, but this'll do for now.
-        if (model.adaptorName().indexOf("Oracle")!=-1) {
-            EODatabaseContext dbc=EOUtilities.databaseContextForModelNamed(newEditingContext(), model.name());
-            if (_delegate==null) {
-                _delegate=(new Object() {
-                    public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc2, Exception e) throws Throwable
-                {
-                    EOAdaptor adaptor=dbc2.adaptorContext().adaptor();
-                    if (adaptor.isDroppedConnectionException(e))
-                        return true;
-                    else if (e.toString().indexOf("ORA-01041")!=-1) {
-                        // just returning true here does not seem to do the trick. why !?!?
-                        NSLog.err.appendln("ORA-01041 detecting -- forcing reconnect");
-                        dbc2.database().handleDroppedConnection();
-                        return false;
-                    } else if (e.toString().indexOf("EOGeneralAdaptorException")!=-1 &&
-                               e.toString().indexOf("method failed to update row in database")!=-1) {
-                        // on optimistic locking failures -- commit suicide
-                        WOApplication.application().refuseNewSessions(true);
-                        return false;
-                    } else
-                        throw e;
-                }
-
-                    /*
-                     public void databaseContextWillFireObjectFaultForGlobalID(EODatabaseContext context,
-                                                                               EOGlobalID gid,
-                                                                               EOFetchSpecification fs,
-                                                                               EOEditingContext ec) {}
-
-
-
-                     public void databaseContextWillFireArrayFaultForGlobalID (EODatabaseContext dbc2,
-                                                                               EOGlobalID gid,
-                                                                               EORelationship r,
-                                                                               EOFetchSpecification fs,
-                                                                               EOEditingContext ec) {
-                         NSArray prefetchKeyPaths=(NSArray)(r.userInfo()!=null ? r.userInfo().objectForKey("prefetchingRelationshipKeyPaths") : null);
-                         if (prefetchKeyPaths!=null) {
-                             fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
-                         }
-                     }
-                     */
-
-                });
-                ERXRetainer.retain(_delegate); // delegate HAVE to be retained from the objC side
-            }
-            // to avoid msg sent to freed objects problems
-            dbc.setDelegate(_delegate);
-        }
-    }
-
-    //--------------------------------------------------------------------------------------
-
     public static void forceGC(int maxLoop) {
         if (cat().isDebugEnabled()) cat().debug("Forcing full Garbage Collection");
         Runtime runtime = Runtime.getRuntime();
@@ -426,8 +433,6 @@ public class ERXExtensions {
         } while (isFree > wasFree && (maxLoop<=0 || i<maxLoop) );
         runtime.runFinalization();
     }
-    //--------------------------------------------------------------------------------------
-    // Convenience Methods
 
     public static boolean isNewObject(EOEnterpriseObject eo) {
         return eo.editingContext()==null || eo.editingContext().insertedObjects().containsObject(eo);
@@ -474,6 +479,13 @@ public class ERXExtensions {
         return result;
     }
 
+    /**
+     * Capitalizes the given string.
+     * @param s string to capitalize
+     * @return capitalized sting if the first char is a
+     *		lowercase character.
+     */
+    // MOVEME: ERXStringUtilities
     public static String capitalize(String s) {
         String result=s;
         if (s!=null && s.length()>0) {
@@ -484,14 +496,45 @@ public class ERXExtensions {
         return result;
     }
 
+    /**
+     * Plurifies a given string for a given language.
+     * See {@link ERXLocalizer} for more information.
+     * @param s string to plurify
+     * @param howMany number of its
+     * @param language target language
+     * @return plurified string
+     */
+    // MOVEME: ERXStringUtilities
     public static String plurify(String s, int howMany, String language) {
         return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
     }
 
+    /**
+     * A safe comparison method that first checks to see
+     * if either of the objects are null before comparing
+     * them with the <code>equals</code> method.<br/>
+     * <br/>
+     * Note that if both objects are null then they will
+     * be considered equal.
+     * @param v1 first object
+     * @param v2 second object
+     * @return true if they are equal, false if not
+     */
     public static boolean safeEquals(Object v1, Object v2) {
         return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
     }
 
+    /**
+     * A safe different comparison method that first checks to see
+     * if either of the objects are null before comparing
+     * them with the <code>equals</code> method.<br/>
+     * <br/>
+     * Note that if both objects are null then they will
+     * be considered equal.
+     * @param v1 first object
+     * @param v2 second object
+     * @return treu if they are not equal, false if they are
+     */
     public static boolean safeDifferent(Object v1, Object v2) {
         return
         v1==v2 ? false :
@@ -500,6 +543,14 @@ public class ERXExtensions {
         !v1.equals(v2);
     }
 
+    /**
+     * Tests if a given string object can be parsed into
+     * an integer.
+     * @param s string to be parsed
+     * @return if the string can be parsed into an int
+     */
+    // FIXME: Should return false if the object is null.
+    // MOVEME: ERXStringUtilities
     public static boolean stringIsParseableInteger(String s) {
         try {
             int x = Integer.parseInt(s);
@@ -509,6 +560,9 @@ public class ERXExtensions {
         }
     }
 
+    /**
+     *
+     */
     public static int intFromParseableIntegerString(String s) {
         try {
             int x = Integer.parseInt(s);
@@ -517,12 +571,15 @@ public class ERXExtensions {
             return 0;
         }
     }
+
+    // DELETEME: Already have this method in this class: replaceStringByStringInString
+    //		 plus this is the wrong implementation.
     public static String substituteStringByStringInString(String s1, String s2, String s) {
         NSArray a=NSArray.componentsSeparatedByString(s,s1);
         return a!=null ? a.componentsJoinedByString(s2) : s;
     }
 
-    // FIXME:  Depricated use singleton method instead.
+    // FIXME:  Depricated use singleton method accessor
     public static ERXSimpleHTMLFormatter htmlFormatter() { return ERXSimpleHTMLFormatter.formatter(); }
 
     public static void addObjectToBothSidesOfPotentialRelationshipFromObjectWithKeyPath(EOEnterpriseObject to,
@@ -554,6 +611,26 @@ public class ERXExtensions {
         }
     }
 
+    /**
+     * Recursively flattens an array of arrays into a single
+     * array of elements.<br/>
+     * <br/>
+     * For example:<br/>
+     * <code>NSArray foos;</code> //Assume exists<br/>
+     * <code>NSArray bars = (NSArray)foos.valueForKey("toBars");</code>
+     * In this case if <code>foos</code> contained five elements
+     * then the array <code>bars</code> will contain five arrays
+     * each corresponding to what <code>aFoo.toBars</code> would
+     * return. To have the entire collection of <code>bars</code>
+     * in one single arra you would call:
+     * <code>NSArray allBars = flatten(bars)</code>
+     * @param array to be flattened
+     * @return an array containing all of the elements from
+     *		all of the arrays contained within the array
+     *		passed in.
+     */
+    // ENHANCEME: Should add option to filter duplicates
+    // MOVEME: ERXArrayUtilities
     public static NSArray flatten(NSArray array) {
         NSMutableArray newArray=null;
         for (int i=0; i<array.count(); i++) {
@@ -582,7 +659,10 @@ public class ERXExtensions {
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos, String keyPath) {
         return eosInArrayGroupedByKeyPath(eos,keyPath,true,null);
     }
-    public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos, String keyPath, boolean includeNulls, String extraKeyPathForValues) {
+    public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos,
+                                                          String keyPath,
+                                                          boolean includeNulls,
+                                                          String extraKeyPathForValues) {
         NSMutableDictionary result=new NSMutableDictionary();
         for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
             EOEnterpriseObject eo=(EOEnterpriseObject)e.nextElement();
@@ -605,6 +685,14 @@ public class ERXExtensions {
         return result;
     }
 
+    /**
+     * Simple comparision method to see if two array
+     * objects are identical sets.
+     * @param a1 first array
+     * @param a2 second array
+     * @return result of comparison
+     */
+    // MOVEME: ERXArrayUtilities
     public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
         boolean result=false;
         for (Enumeration e=a1.objectEnumerator();e.hasMoreElements();) {
@@ -624,6 +712,14 @@ public class ERXExtensions {
         return result;
     }
 
+    /**
+     * Filters an array using the {@link EOQualifierEvaluation} interface.
+     * @param a array to be filtered
+     * @param q qualifier to do the filtering
+     * @return array of filtered results.
+     */
+    // CHECKME: Is this a value add? EOQualifier has filteredArrayWithQualifier
+    // MOVEME: ERXArrayUtilities
     public static NSArray filteredArrayWithQualifierEvaluation(NSArray a, EOQualifierEvaluation q) {
         NSMutableArray result=null;
         if (a!=null) {
@@ -636,6 +732,14 @@ public class ERXExtensions {
         return result;
     }
 
+    /**
+     * Removes an array of keys from a dictionary and
+     * returns the result.
+     * @param d dictionary to be pruned
+     * @param a array of keys to be pruned
+     * @return pruned dictionary
+     */
+    // MOVEME: ERXDictionaryUtilities
     public static NSDictionary dictionaryByRemovingFromDictionaryKeysInArray(NSDictionary d, NSArray a) {
         NSMutableDictionary result=new NSMutableDictionary();
         if (d!=null && a!=null) {
@@ -648,12 +752,20 @@ public class ERXExtensions {
         return result;
     }
 
-
+    /** holds the array of hex values */
     private static final char hex[] = {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
 
+    /**
+     * Converts an array of bytes to a hex string
+     * @param data array of bytes
+     * @return hex representation of the byte array
+     */
+    // CHECKME: Anyone know the reason why this has final in the method
+    //		signature?
+    // MOVEME: ERXStringUtilities
     public static String byteArrayToHexString (final byte data[]) {
         int len = data.length;
         char hexchars[] = new char[2 * len];
@@ -820,6 +932,7 @@ public class ERXExtensions {
         return aSet.allObjects();
     }
 
+    // FIXME: Broken implementation, relies on 
     public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
         NSMutableDictionary dico = new NSMutableDictionary();
         for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements(); ){
@@ -832,6 +945,9 @@ public class ERXExtensions {
         return dico.allValues();
     }
 
+    // FIXME: This has the side effect of removing any duplicate elements from
+    //		the main array as well as not preserving the order of the array
+    // MOVEME: ERXArrayUtilities
     public static NSArray arrayMinusArray(NSArray main, NSArray minus){
         NSSet result = ERXUtilities.setFromArray(main);
         return result.setBySubtractingSet(ERXUtilities.setFromArray(minus)).allObjects();
@@ -1135,9 +1251,6 @@ I guess that ought to cover it...
         s.setObjectForKey(newValue ? Boolean.TRUE : Boolean.FALSE, key);
     }
     public static boolean booleanFlagOnSessionForKeyWithDefault(WOSession s, String key, boolean defaultValue) {
-        //if (s.objectForKey(key) == null)
-        //    s.setObjectForKey(defaultValue ? Boolean.TRUE : Boolean.FALSE, key);
-        //return ((Boolean)s.objectForKey(key)).booleanValue();
         return s.objectForKey(key) != null ? ERXUtilities.booleanValue(s.objectForKey(key)) : defaultValue;
     }
 
