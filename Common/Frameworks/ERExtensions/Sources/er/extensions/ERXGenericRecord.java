@@ -592,6 +592,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator;
     }
 
+	 /**
+		 * Method that will make sure to fetch an eo from the Database and place it in the editingContext provided
+	  * as an argument
+	  * @param the editing context in which the result will be placed
+	  * @return a fresh instance of an EO fetched from the DB and placed in the editing context argument
+	  */
+	 public ERXGenericRecord refetchObjectFromDBinEditingContext(EOEditingContext ec){
+		 EOEntity entity = EOUtilities.entityNamed(ec, "MZAccount");
+		 EOQualifier qual = entity.qualifierForPrimaryKey(primaryKeyDictionary(false));
+		 EOFetchSpecification fetchSpec = new EOFetchSpecification("MZAccount", qual, null);
+		 fetchSpec.setRefreshesRefetchedObjects(true);
+		 NSArray results = ec.objectsWithFetchSpecification(fetchSpec);
+		 ERXGenericRecord freshObject = null;
+		 if(results.count()>0){
+			 freshObject = (ERXGenericRecord)results.objectAtIndex(0);
+		 }
+		 return freshObject;
+	 }
+
     /**
      * Overrides the EOGenericRecord's implementation to
      * provide a slightly less verbose output. A typical
