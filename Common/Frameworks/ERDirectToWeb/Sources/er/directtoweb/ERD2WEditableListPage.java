@@ -64,10 +64,6 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         d2wContext().takeValueForKey(eo,"object");
     }
 
-    public EOEditingContext editingContext() {
-        return displayGroup().dataSource().editingContext();
-    }
-
     public WOComponent backAction() {
         return super.backAction();
     }
