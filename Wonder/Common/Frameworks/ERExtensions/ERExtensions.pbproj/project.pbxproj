@@ -430,6 +430,7 @@
 				F64DCF6802EF3A4001257492,
 				F698E7CF030C6F6B01257492,
 				F69DE4020313E86B01257492,
+				F5E3B46903480557016A5D3F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5746,6 +5747,18 @@
 			settings = {
 			};
 		};
+		F5E3B46803480557016A5D3F = {
+			isa = PBXFileReference;
+			name = ERXBetweenQualifier.java;
+			path = er/extensions/ERXBetweenQualifier.java;
+			refType = 4;
+		};
+		F5E3B46903480557016A5D3F = {
+			fileRef = F5E3B46803480557016A5D3F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //F50
 //F51
 //F52
@@ -6495,6 +6508,7 @@
 		};
 		F6E798CB02C8799401AD0D07 = {
 			children = (
+				F5E3B46803480557016A5D3F,
 				F59C579502C4565701000102,
 				F57D5EAD02E538B901000102,
 				F59C57CF02C4565701000102,
