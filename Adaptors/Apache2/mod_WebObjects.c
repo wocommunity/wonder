@@ -74,9 +74,15 @@
 #include <http_protocol.h>
 #include <string.h>
 
+
 #include <apr.h>
-#include <apr_strings.h>
 #include <ap_compat.h>
+#include <apr_strings.h>
+#include <apr_tables.h>
+
+#ifdef APACHE_SECURITY_ENABLED
+#include <mod_ssl.h>
+#endif
 
 
 #define WEBOBJECTSALIAS 			"/cgi-bin/" WEBOBJECTS
@@ -322,57 +328,54 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
 #ifdef APACHE_SECURITY_ENABLED
     /******client cert support***** */
     /* note: look at apache_ssl.c from the Apache-SSL.org source for examples on getting more info about the cert's and ssl state which could be used here  */
-
-/* uncomment this section when we can figure out how to access the ssl with apache2 */
 	
-//     // this is how we do it for mod_ssl
-//     ssl = ap_ctx_get(r->connection->client->ctx , "ssl");
-// 
-//     // and this is how we do it for apache-ssl
-//     //ssl = r->connection->client->ssl
-// 
-//     if (ssl) {
-//         WOLog(WO_DBG,"we have ssl");
-//         xs = 0;
-//         xs = SSL_get_peer_certificate(ssl);
-//         if (xs) {
-//             WOLog(WO_DBG,"we have a client side cert");
-//             hdrValue = 0;
-//             hdrValue = X509_NAME_oneline(X509_get_subject_name(xs), NULL, 0);
-//             req_addHeader(req, "SSL_CLIENT_CERT_CN", hdrValue, 0);
-// 
-//             hdrValue = SSL_get_version(ssl);
-// 
-//             req_addHeader(req, "SSL_PROTOCOL_VERSION", hdrValue, 0);
-// 
-             /* We have to load the SSL related information the hard way because the ssl module might not have been invoked yet if it's loading order is not dead last in the module loading order, or at least after this module.  In either case the env vars won't have the SSL entries for us to pick up. Doing it this way ensures client cert support will work regardless */
-// 
-//             /* the cert length */
-//             n=i2d_X509(xs, NULL);
-// 
-//             // make sure its a valid length <1 is probably not valid either
-//             if(n < 1)
-//                 WOLog(WO_ERR, "invalid certificate length: %d ", n);
-//             else{
-// 
-                 /* alloc space for the reformed cert. Using this api call, the allocated memory should be freed by Apache. */
-//                 d=t=apr_pcalloc(r->pool, n);
-// 
-//                 // reform the cert structure into a byte array
-//                 i2d_X509(xs, &d);
-//                 // alloc space for the base64 encoded form
-//                 d=apr_pcalloc(r->pool, (n*4)/3+2+2+1);
-//                 // convert to base64
-//                 uuencoden(d,t,n);
-//                 //WOLog(WO_DBG, "This is what I got: %s\n", d);
-//     
-// 
-//                 req_addHeader(req, "SSL_CLIENT_CERT", d, 0);
-//             }
-//         }
-//     }
+    // this is how we do it for mod_ssl
+    ssl = ((SSLConnRec *)myConnConfig(c))->ssl;
 
- // end uncomment this section when we can figure out how to access the ssl with apache2
+    // and this is how we do it for apache-ssl
+    //ssl = r->connection->client->ssl
+
+    if (ssl) {
+        WOLog(WO_DBG,"we have ssl");
+        xs = 0;
+        xs = SSL_get_peer_certificate(ssl);
+        if (xs) {
+            WOLog(WO_DBG,"we have a client side cert");
+            hdrValue = 0;
+            hdrValue = X509_NAME_oneline(X509_get_subject_name(xs), NULL, 0);
+            req_addHeader(req, "SSL_CLIENT_CERT_CN", hdrValue, 0);
+
+            hdrValue = SSL_get_version(ssl);
+
+            req_addHeader(req, "SSL_PROTOCOL_VERSION", hdrValue, 0);
+
+             /* We have to load the SSL related information the hard way because the ssl module might not have been invoked yet if it's loading order is not dead last in the module loading order, or at least after this module.  In either case the env vars won't have the SSL entries for us to pick up. Doing it this way ensures client cert support will work regardless */
+
+            /* the cert length */
+            n=i2d_X509(xs, NULL);
+
+            // make sure its a valid length <1 is probably not valid either
+            if(n < 1)
+                WOLog(WO_ERR, "invalid certificate length: %d ", n);
+            else{
+
+                 /* alloc space for the reformed cert. Using this api call, the allocated memory should be freed by Apache. */
+                d=t=apr_pcalloc(r->pool, n);
+
+                // reform the cert structure into a byte array
+                i2d_X509(xs, &d);
+                // alloc space for the base64 encoded form
+                d=apr_pcalloc(r->pool, (n*4)/3+2+2+1);
+                // convert to base64
+                uuencoden(d,t,n);
+                //WOLog(WO_DBG, "This is what I got: %s\n", d);
+    
+
+                req_addHeader(req, "SSL_CLIENT_CERT", d, 0);
+            }
+        }
+    }
+
     /* *****client cert support******* */
 #endif /* APACHE_SECURITY_ENABLED */
 
