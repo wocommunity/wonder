@@ -7,10 +7,15 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
+import er.extensions.*;
 
 public class ERD2WCompactInspectPageTemplate extends ERD2WInspectPage {
 
     public ERD2WCompactInspectPageTemplate(WOContext context) {
         super(context);
+    }
+
+    public boolean isEmbedded() {
+        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
     }
 }
