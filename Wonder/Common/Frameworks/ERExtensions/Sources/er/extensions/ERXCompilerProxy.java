@@ -32,7 +32,7 @@ public class ERXCompilerProxy {
     String _className;
     String _destinationPath;
 
-    static ERXCompilerProxy defaultProxy() {
+    public static ERXCompilerProxy defaultProxy() {
         if(_defaultProxy == null)
             _defaultProxy = new ERXCompilerProxy();
         return _defaultProxy;
@@ -69,6 +69,10 @@ public class ERXCompilerProxy {
 	    }
 	}
 	return projectPaths;
+    }
+
+    public Class classForName(String className) {
+        return com.webobjects.foundation._NSUtilities.classWithName(className);
     }
 
     public void initialize() {

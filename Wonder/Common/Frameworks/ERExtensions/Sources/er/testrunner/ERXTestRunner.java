@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import junit.framework.*;
 import junit.runner.*;
 import org.apache.log4j.Category;
+import er.extensions.*;
 
 public class ERXTestRunner extends BaseTestRunner {
 
@@ -58,5 +59,10 @@ public class ERXTestRunner extends BaseTestRunner {
 	}
         protected void clearStatus() {
             externalListener.clearStatus();
+        }
+
+        /** Get the freshest loaded class. Uses the CompilerProxy to get it. */
+        public Test getTest(String testClass) {
+            return new TestSuite(ERXCompilerProxy.defaultProxy().classForName(testClass));
         }
 }
