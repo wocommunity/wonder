@@ -569,7 +569,7 @@ public class ERXUtilities {
      * @return array of all entities for a given model group.
      */
     public static NSArray entitiesForModelGroup(EOModelGroup group) {
-        return ERXExtensions.flatten((NSArray)group.models().valueForKey("entities"));
+        return ERXArrayUtilities.flatten((NSArray)group.models().valueForKey("entities"));
     }
 
     /** entity name cache */
