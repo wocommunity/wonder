@@ -13,10 +13,18 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXConstant;
+import er.extensions.ERXLogger;
 
 public class ERD2WPropertyName extends D2WStatelessComponent {
-
+    ERXLogger cat = ERXLogger.getLogger(ERD2WPropertyName.class);
+    
     public ERD2WPropertyName(WOContext context) { super(context); }
+
+    // public boolean isStateless() {return false;}
+    public boolean hasNoErrors() {
+        String keyPath = "errorMessages." + d2wContext().valueForKey("displayNameForProperty");
+        return d2wContext().valueForKeyPath(keyPath) == null;
+    }
 
     public boolean d2wComponentNameDebuggingEnabled() {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
