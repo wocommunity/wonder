@@ -23,6 +23,9 @@ public class ERCMailDelivery {
     /** holds a reference to the shared instance */
     protected static ERCMailDelivery _sharedInstance;
 
+    /** logging supprt */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailDelivery.class);
+
     /**
      * Gets the shared instance used to create
      * ERCMailMessages.
@@ -95,16 +98,22 @@ public class ERCMailDelivery {
                                      String message,
                                      EOEditingContext ec) {
         ERCMailMessage mailMessage = null;
-        if(usesMail()){
+
+        if (log.isDebugEnabled()) {
+            log.debug("Sending email title \"" + title + "\" from \"" + from + "\" to \"" + to + "\" cc \""
+                      + cc + "\" bcc \"" + bcc + "\"");
+            log.debug("Email message: " + message);
+        }
+        if (usesMail()) {
             mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
-            String safeTitle=title!=null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
+            String safeTitle = title != null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
             mailMessage.setTitle(safeTitle);
             mailMessage.setFromAddress(from);
             mailMessage.setToAddresses(commaSeparatedListFromArray(to));
             mailMessage.setCcAddresses(commaSeparatedListFromArray(cc));
             mailMessage.setBccAddresses(commaSeparatedListFromArray(bcc));
             mailMessage.setText(message);
-        }else{
+        } else {
             throw new RuntimeException("The application doesn't use the ERCUseMailFacility."+
                                        "You can either set er.corebusinesslogic.ERCUseMailFacility in your properties or better check for that property before trying to compose the email");
         }
@@ -166,7 +175,10 @@ public class ERCMailDelivery {
                                                  WOComponent component,
                                                  EOEditingContext ec) {
         String message = null;
-        if (component != null) {
+        if (component == null) {
+            throw new IllegalStateException("Attempting to send a component email with a null component! From: "
+                                            + title + " title: " + title);
+        } else {
             WOContext context = component.context();
             // Emails should generate complete urls
             context._generateCompleteURLs ();
@@ -202,4 +214,3 @@ public class ERCMailDelivery {
         return composeComponentEmail(from, to, cc, bcc, title, component, ec);
     }    
 }
-
