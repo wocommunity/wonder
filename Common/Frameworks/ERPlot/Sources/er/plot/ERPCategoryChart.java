@@ -1,13 +1,19 @@
 package er.plot;
 
-import java.util.*;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 
-import org.jfree.data.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.Dataset;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * Class for Chart Component ERPCategoryChart.
@@ -18,14 +24,17 @@ import er.extensions.*;
  * @project ERPlot
  */
 
-public abstract class ERPCategoryChart extends ERPChart {
+public class ERPCategoryChart extends ERPChart {
 
-    /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERPCategoryChart.class,"plot");
-	
+    public static final NSArray SUPPORTED_TYPES = new NSArray(new Object[]{
+            "BarChart", "StackedBarChart", "BarChart3D", "StackedBarChart3D", "AreaChart", 
+            "StackedAreaChart", "LineChart", "WaterfallChart"
+    });
+    
     protected String _categoryKey;
     protected String _yName;
     protected String _xName;
+    protected PlotOrientation _orientation;
     
     public ERPCategoryChart(WOContext context) {
         super(context);
@@ -59,6 +68,14 @@ public abstract class ERPCategoryChart extends ERPChart {
         return _yName;
     }
     
+    public PlotOrientation orientation() {
+        if(_orientation == null) {
+            _orientation = ("horizontal".equals(stringValueForBinding("orientation", "vertical")) ? 
+                    PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL);
+        }
+        return _orientation;
+    }
+    
     public Dataset dataset() {
         if(_dataset == null) {
             _dataset = super.dataset();
@@ -79,5 +96,33 @@ public abstract class ERPCategoryChart extends ERPChart {
             }
         }
         return _dataset;
+    }
+    
+    protected NSArray supportedTypes() {
+        return SUPPORTED_TYPES;
+    }
+    
+    public JFreeChart chart() {
+        if(_chart == null) {
+            JFreeChart chart = null;
+            CategoryDataset dataset = (CategoryDataset)dataset();
+            String name = stringValueForBinding("name", "");
+            Class clazz = ChartFactory.class;
+            try {
+                Method method = clazz.getDeclaredMethod("create" + chartType(), new Class[] {
+                    String.class, String.class, String.class, CategoryDataset.class, PlotOrientation.class, 
+                    boolean.class, boolean.class, boolean.class
+                });
+                chart = (JFreeChart) method.invoke(clazz, new Object[] {name, xName(), yName(), dataset(), orientation(), 
+                        (showLegends() ? Boolean.TRUE : Boolean.FALSE),
+                        (showToolTips() ? Boolean.TRUE : Boolean.FALSE),
+                        (showUrls() ? Boolean.TRUE : Boolean.FALSE )
+                });
+            } catch(Throwable t) {
+                throw  NSForwardException._runtimeExceptionForThrowable(t);
+            }
+            _chart = chart;
+        }
+        return _chart;
     }
 }

@@ -1,0 +1,5 @@
+Image1: WOImage {
+	data = imageData;
+	mimeType = imageType;
+	key = imageKey;
+}
