@@ -21,6 +21,8 @@ import com.webobjects.eoaccess.*;
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
+    private static final int DefaultPadToSize =
+            ERXProperties.intForKeyWithDefault("er.extensions.ERXInQualifier.DefaultPadToSize", 8);
 
     /** register SQL generation support for the qualifier */
     static {
@@ -31,11 +33,51 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
     * Constructs an in qualifer for a given
      * attribute name and an array of values.
      * @param key attribute name
-     * @param eos array of values
+     * @param values array of values
      */
     public ERXInQualifier(String key, NSArray values) {
-        super(key, EOQualifier.QualifierOperatorEqual, values);
+        this(key, values, DefaultPadToSize);
     }
+
+    /**
+    * Constructs an in qualifer for a given
+     * attribute name and an array of values.
+     * @param key attribute name
+     * @param values array of values
+     * @param padToSize the size which is expected to be reasonable for this qualifier.  If the NSArray values
+     * has more than one element, the padToSize is used to round up the number of elements and pad with nulls.
+     * Doing this reduces the number of unique queries which result from having an arbitrary number of values.
+     * For example, if the padToSize is 8, then we'll either have 1, or 8, or 16, or... bind variables as
+     * compared to 1..., 2..., 3..., 4..., or ....16
+     */
+    public ERXInQualifier(String key, NSArray values, final int padToSize) {
+        super(key, EOQualifier.QualifierOperatorEqual, paddedValues(values, padToSize));
+    }
+
+    /**
+     * @param values  see ERXInQualifier
+     * @param padToSize see ERXInQualifier
+     * @return an NSArray with a count that is an even multiple of padToSize and padded with the last element of the
+     * values array.
+     */
+    private static NSArray paddedValues(NSArray values, final int padToSize) {
+        final int count = values.count();
+        if (count > 1) {
+            final int paddedSize = ((count / padToSize) + 1) * padToSize;
+            final NSMutableArray paddedValues = new NSMutableArray(values);
+            int padCount = paddedSize - count;
+            // We pad with the last element repeated padCount times.  Do not pad with null
+            // as that might extend the set inadvertantly.
+            Object padElement = values.lastObject();
+            while (padCount > 0) {
+                paddedValues.addObject(padElement);
+                padCount--;
+            }
+            values = paddedValues;
+        }
+        return values;
+    }
+
 
     /**
     * String representation of the in
@@ -52,7 +94,6 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
 
     /** Tests if the given object's key is in the supplied values */ 
     public boolean evaluateWithObject(Object object) {
-        boolean result = false;
         Object value = null;
         if(object instanceof EOEnterpriseObject) {
             EOEnterpriseObject eo = (EOEnterpriseObject)object;
@@ -100,7 +141,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
          */
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             ERXInQualifier inqualifier = (ERXInQualifier)eoqualifier;
-            String result = null;
+            String result;
             if (inqualifier.value() instanceof NSArray) {
                 result = ERXEOAccessUtilities.sqlWhereClauseStringForKey(e, inqualifier.key(),  (NSArray)inqualifier.value());
             } else {
