@@ -23,6 +23,7 @@
     id object;
     NSEnumerator *enumerator = [[PBXAppleScriptMenuPlugin availableItems] objectEnumerator];
 
+    NSLog( @"menuForEvent");
     // First, remove all previous menus
     while (object = [enumerator nextObject]) {
 	if([object menu] != nil) {
