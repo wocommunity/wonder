@@ -383,6 +383,7 @@ public class ERXCompilerProxy {
 	    NSArray allFiles = NSArray.componentsSeparatedByString(fileList, "\n");
 	    for(Enumeration sourceFiles = allFiles.objectEnumerator(); sourceFiles.hasMoreElements();) {
 		String line = (String)sourceFiles.nextElement();
+                line = line.trim();
 		String packageName = "";
 		String sourceName = "";
                 try {
