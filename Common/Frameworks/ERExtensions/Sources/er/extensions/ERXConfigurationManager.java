@@ -384,6 +384,21 @@ public class ERXConfigurationManager {
                 String h= ERXSystem.getProperty(aModelName + ".DBHostName");
                 h = h ==null ? ERXSystem.getProperty("dbConnectHostNameGLOBAL") : h;
                 String jdbcInfo= ERXSystem.getProperty(aModelName + ".DBJDBCInfo");
+                
+                // additional information used for ERXJDBCConnectionBroker
+                String minConnections = ERXSystem.getProperty(aModelName + ".DBMinConnections");
+                minConnections = minConnections == null ? ERXSystem.getProperty("dbMinConnectionsGLOBAL") : minConnections;
+                String maxConnections = ERXSystem.getProperty(aModelName + ".DBMaxConnections");
+                maxConnections = maxConnections == null ? ERXSystem.getProperty("dbMaxConnectionsGLOBAL") : maxConnections;
+                String logPath = ERXSystem.getProperty(aModelName + ".DBLogPath");
+                logPath = logPath == null ? ERXSystem.getProperty("dbLogPathGLOBAL") : logPath;
+                String connectionRecycle = ERXSystem.getProperty(aModelName + ".DBConnectionRecycle");
+                connectionRecycle = connectionRecycle == null ? ERXSystem.getProperty("dbConnectionRecycleGLOBAL") : connectionRecycle;
+                String maxCheckout = ERXSystem.getProperty(aModelName + ".DBMaxCheckout");
+                maxCheckout = maxCheckout == null ? ERXSystem.getProperty("dbMaxCheckoutGLOBAL") : maxCheckout;
+                String debugLevel = ERXSystem.getProperty(aModelName + ".DBDebugLevel");
+                debugLevel = debugLevel == null ? ERXSystem.getProperty("dbDebugLevelGLOBAL") : debugLevel;
+                
                 if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
                     String modelName = jdbcInfo.substring(1, jdbcInfo.length());
                     EOModel modelForCopy = aModel.modelGroup().modelNamed(modelName);
@@ -394,7 +409,7 @@ public class ERXConfigurationManager {
                         jdbcInfo = null;
                     }
                 }
-                
+
                 jdbcInfo= jdbcInfo ==null ? ERXSystem.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
                 String plugin= ERXSystem.getProperty(aModelName + ".DBPlugin");
                 plugin= plugin ==null ? ERXSystem.getProperty("dbConnectPluginGLOBAL") : plugin;
@@ -404,7 +419,7 @@ public class ERXConfigurationManager {
                         && ERXStringUtilities.stringIsNullOrEmpty(url) 
                         && !ERXStringUtilities.stringIsNullOrEmpty(serverName)
                         && !ERXStringUtilities.stringIsNullOrEmpty(h)) {
-                    url = "jdbc:postgresql://"+h+"/"+serverName+"?autoCommit=false";
+                    url = "jdbc:postgresql://"+h+"/"+serverName;
                 }
                 
                 if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
@@ -422,7 +437,16 @@ public class ERXConfigurationManager {
                         else
                             newConnectionDictionary.removeObjectForKey("jdbc2Info");
                     }
-                    if (plugin!=null) newConnectionDictionary.setObjectForKey(plugin,"plugin");                    
+                    if (plugin!=null) newConnectionDictionary.setObjectForKey(plugin,"plugin");    
+                    
+                    // set the information for ERXJDBCConnectionBroker
+                    newConnectionDictionary.setObjectForKey(minConnections, "minConnections");
+                    newConnectionDictionary.setObjectForKey(maxConnections, "maxConnections");
+                    newConnectionDictionary.setObjectForKey(logPath, "logPath");
+                    newConnectionDictionary.setObjectForKey(connectionRecycle, "connectionRecycle");
+                    newConnectionDictionary.setObjectForKey(maxCheckout, "maxCheckout");
+                    newConnectionDictionary.setObjectForKey(debugLevel, "debugLevel");
+                    
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             }
