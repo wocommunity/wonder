@@ -57,6 +57,15 @@ public class ERXDirectAction extends WODirectAction {
         return result;
     }
 
+
+    /** This action is used to validate attributes of eos.
+     *
+     * @return the error page containing localized error messages if there where any errors.
+     */
+    public WOActionResults validateValueForKeyInEntityAction() {
+        return pageWithName("ERXJSValidationErrors");
+    }
+
     /**
      * Action used for changing logging settings at runtime. This method is only active
      * when WOCachingEnabled is disabled (we take this to mean that the application is
