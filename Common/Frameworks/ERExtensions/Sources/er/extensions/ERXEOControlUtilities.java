@@ -910,5 +910,36 @@ public class ERXEOControlUtilities {
         } 
         return q;
         
+    }
+
+    /** returns a NSArray containing EOGlobalIDs from the provided eos.
+     * @param eos, the NSArray of EOEnterpriseObjects
+     * @return a NSArray of EOGlobalIDs
+     */
+    public static NSArray globalIDsForObjects(NSArray eos) {
+        NSMutableArray ids = new NSMutableArray(eos.count());
+        for (int i = 0; i < ids.count(); i++) {
+            EOEnterpriseObject eo = (EOEnterpriseObject)eos.objectAtIndex(i);
+            EOEditingContext ec = eo.editingContext();
+            EOGlobalID gid = ec.globalIDForObject(eo);
+            ids.addObject(gid);
+        }
+        return ids;
+    }
+
+    /** returns a NSArray containing EOEnterpriseObjects (actually faults...) for the provided EOGlobalIDs.
+     * @param gids the EOGlobalIDs
+     * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
+     * @return a NSArray of EOEnterpriseObjects
+     */
+    public static NSArray faultsForGlobalIDsInEditingContext(NSArray gids, ERXEC ec) {
+        NSMutableArray a = new NSMutableArray();
+        int c = gids.count();
+        for (int i = 0; i < c; i++) {
+            EOGlobalID gid = (EOGlobalID)gids.objectAtIndex(i);
+            EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+            a.addObject(eo);
+        }
+        return a;
     }    
 }
