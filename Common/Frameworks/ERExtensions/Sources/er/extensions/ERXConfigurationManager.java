@@ -451,4 +451,23 @@ public class ERXConfigurationManager {
         }
         return documentRoot;
     }
+
+    /** holds the host name */
+    protected String _hostName;
+
+    /**
+     * Gets the default host name for the current local host.
+     * @return host name or UnknownHost if the host is unknown.
+     */
+    public String hostName() {
+        if (_hostName == null) {
+            try {
+                _hostName = java.net.InetAddress.getLocalHost().getHostName();
+            } catch (java.net.UnknownHostException ehe) {
+                log.warn("Caught unknown host exception: " + ehe.getMessage());
+                _hostName = "UnknownHost";
+            }
+        }
+        return _hostName;
+    }    
 }
