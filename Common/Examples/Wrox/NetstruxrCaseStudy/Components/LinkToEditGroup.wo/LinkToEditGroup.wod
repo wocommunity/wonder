@@ -1,0 +1,8 @@
+Hyperlink1: WOHyperlink {
+	action = editGroup;
+}
+
+String1: WOString {
+	value = group.name;
+}
+
