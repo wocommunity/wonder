@@ -9,13 +9,21 @@ package er.directtoweb;
 import java.util.*;
 
 import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
 
+/**
+ * Allows the selection of one or more objects from a set of EOs. Can also be used directly as a 
+ * EditRelationshipPage for editing to-one and to-many relationships.
+ */
 // FIXME: Need a formal protocol for cancel vs. selection.
-public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface {
+public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface, EditRelationshipPageInterface {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPickListPage.class);
@@ -31,6 +39,10 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
 
     /** Caches if we are in single selection mode. */
     public Boolean _singleSelection;
+
+    /** These are set when we are in edit-relationship mode. */
+    public EOEnterpriseObject _masterObject;
+    public String _relationshipKey;
 
     /**
      * Public constructor.
@@ -48,7 +60,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
      * @return if we have a nextPage set
      */
     public boolean showCancel() {
-        return nextPage() != null;
+        return (!(nextPageDelegate() instanceof ERDBranchDelegate)) && nextPage() != null;
     }
 
     public boolean checked() {
@@ -61,9 +73,6 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         } else
             selectedObjects.removeObject(object());
     }
-
-    //public WOComponent cancelPage()
-    //public void setCancelPage(WOComponent cp);
 
     public NSArray selectedObjects() {
         return selectedObjects;
@@ -85,8 +94,22 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         _cancelPage = cp;
     }
 
-    // FIXME: Not sure if this makes sense to
+    public WOComponent backAction() {
+        if(_masterObject != null) {
+            EOEditingContext ec = _masterObject.editingContext();
+            ec.lock();
+            try {
+                _masterObject.takeValueForKey(singleSelection() ? selectedObjects.lastObject() : selectedObjects, _relationshipKey);
+                ec.saveChanges();
+            } finally {
+                ec.unlock();
+            }
+        }
+        return super.backAction();
+    }
+
     public void setChoices(NSArray choices) {
+        displayGroup().setObjectArray(choices);
     }
 
     public WOComponent selectAll() {
@@ -114,4 +137,28 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     public String selectionWidgetName() {
         return singleSelection() ? "WORadioButton" : "WOCheckBox";
     }
+    
+    public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipName) {
+        EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false);
+        setEditingContext(ec);
+        
+        _masterObject = EOUtilities.localInstanceOfObject(ec, eo);
+        _relationshipKey = relationshipName;
+        
+        _singleSelection = _masterObject.classDescription().toManyRelationshipKeys().containsObject(_relationshipKey) ? Boolean.FALSE : Boolean.TRUE; 
+        
+        EODataSource ds = new EODatabaseDataSource(ec, d2wContext().entity().name());
+        setDataSource(ds);
+        
+        Object relationshipValue = _masterObject.valueForKey(relationshipName);
+        NSArray objects;
+        if(relationshipValue instanceof NSArray) {
+            objects = (NSArray)relationshipValue;
+        } else if(relationshipValue != null) {
+            objects = new NSArray(relationshipValue);
+        } else {
+            objects = NSArray.EmptyArray;
+        }
+        setSelectedObjects((NSArray)objects);
+     }
 }
