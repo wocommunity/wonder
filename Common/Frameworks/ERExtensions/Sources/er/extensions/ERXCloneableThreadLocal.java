@@ -32,9 +32,11 @@ public class ERXCloneableThreadLocal extends InheritableThreadLocal {
     protected Object childValue(Object parentValue) {
         Object child = null;
         if (parentValue != null) {
-            if (!(parentValue instanceof Cloneable))
-                throw new IllegalStateException("Using a ERXThreadLocalMap with an object: " 
-                + parentValue.toString() + " that does not implement the Map interface ");
+            if (!(parentValue instanceof Cloneable)) {
+                throw new IllegalStateException("Using a ERXCloneableThreadLocal with an object: " 
+                    + parentValue.getClass() + " " + parentValue.toString() 
+                    + " that does not implement the Cloneable interface ");
+            }
             // This is very lame. clone() is a protected method off of object and the Cloneable
             // interface doesn't specify any methods.
             try {
@@ -47,7 +49,8 @@ public class ERXCloneableThreadLocal extends InheritableThreadLocal {
                 log.error("No clone method for the class: " + parentValue.getClass() + " very strange.");
             } catch (IllegalAccessException iae) {
                 log.error("Clone method has protected or private access for the object: "
-                        + parentValue + " exception: " + iae.getMessage());
+                        + parentValue.getClass() + " " + parentValue.toString() 
+                        + " exception: " + iae.getMessage());
             }
         }            
         return child;
