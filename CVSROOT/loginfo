@@ -25,7 +25,7 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
  
-CVSROOT $CVSROOT/CVSROOT/syncmail %{sVv} patrice@mac.com maxmuller@mac.com bbum@codefab.com
+CVSROOT $CVSROOT/CVSROOT/syncmail %{sVv} wonder-cvs@lists.sourceforge.net
 
 DEFAULT $CVSROOT/CVSROOT/syncmail %{sVv} wonder-cvs@lists.sourceforge.net
 

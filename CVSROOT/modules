@@ -29,39 +29,37 @@
 #######################################################################
 #  Generic WO5 extensions
 
-ERExtensionsJava	ProjectWonder/Frameworks/ERExtensionsJava
-ERDirectToWebJava	ProjectWonder/Frameworks/ERDirectToWebJava
-ERJarsJava		ProjectWonder/Frameworks/ERJarsJava
-ERCoreBusinessLogicJava ProjectWonder/Frameworks/ERCoreBusinessLogicJava
-ERNeutralLook		ProjectWonder/Frameworks/ERNeutralLook
+ERExtensions		Wonder/Common/Frameworks/ERExtensions
+ERDirectToWeb		Wonder/Common/Frameworks/ERDirectToWeb
+ERJars			Wonder/Common/Frameworks/ERJars
+ERCoreBusinessLogic 	Wonder/Common/Frameworks/ERCoreBusinessLogic
 
 #######################################################################
 # BugTracker
 
-BTBusinessLogicJava	ProjectWonder/Frameworks/BTBusinessLogicJava
-BugTrackerJava		ProjectWonder/Applications/BugTrackerJava
+BugTracker		Wonder/Common/Applications/BugTracker
 
 #######################################################################
 # Examples
 
-Wrox			ProjectWonder/Examples/Wrox
-NetStruxrCaseStudy	ProjectWonder/Examples/Wrox/NetStruxrCaseStudy
-ERMiniUglyLook		ProjectWonder/Examples/Wrox/ERMiniUglyLook
+Wrox			Wonder/Common/Examples/Wrox
+NetStruxrCaseStudy	Wonder/Common/Examples/Wrox/Applications/NetStruxrCaseStudy
+ERMiniUglyLook		Wonder/Common/Examples/Wrox/Applications/ERMiniUglyLook
 
-Stepwise		ProjectWonder/Examples/Stepwise
-D2WListExampleJava	ProjectWonder/Examples/Stepwise/D2WListExampleJava
-D2WInspectExampleJava	ProjectWonder/Examples/Stepwise/D2WInspectExampleJava
+Stepwise		Wonder/Common/Examples/Stepwise
+D2WListExample		Wonder/Common/Examples/Stepwise/D2WListExample
+D2WInspectExample	Wonder/Common/Examples/Stepwise/D2WInspectExample
 
 
 #######################################################################
 # Utilities
 
-PBXTool			ProjectWonder/Utilities/PBXTool
-ERXGenerator			ProjectWonder/Utilities/ERXGenerator
+PBXTool			Wonder/Utilities/PBXTool
+PBXAppleScriptMenuPlugin Wonder/Utilities/PBXAppleScriptMenuPlugin 
 
 #######################################################################
-# Contributions
+# Base
 
-PayPal			ProjectWonder/Contributions/PayPal
-Validity		ProjectWonder/Contributions/Validity
-
+PayPal			Wonder/PayPal
+Validity		Wonder/Validity
+Common			Wonder/Common
