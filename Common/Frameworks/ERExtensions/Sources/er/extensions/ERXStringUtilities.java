@@ -612,6 +612,25 @@ public class ERXStringUtilities {
         return s==null ? "" : s;
     }
 
+    public static String escapeNonXMLChars(String str) {
+        if (str == null) return null;
+
+        StringBuffer result = new StringBuffer(str.length());
+        for (int i = 0; i < str.length(); i++) {
+        	char c = str.charAt(i);
+        	switch(c) {
+        		case '<': result.append("&lt;"); break;
+        		case '>': result.append("&gt;"); break;
+        		case '&': result.append("&amp;"); break;
+        		case '"': result.append("&quot;"); break;
+        		default:
+        			result.append(c);
+        	}
+        }
+        
+        return result.toString();
+    }
+
     public static String escapeNonBasicLatinChars(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 
