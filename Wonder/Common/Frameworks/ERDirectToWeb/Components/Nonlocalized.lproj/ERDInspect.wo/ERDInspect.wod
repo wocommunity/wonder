@@ -8,6 +8,7 @@ Inspect: ERXD2WInspect {
 	entityName = ^destinationEntity.name;
 //	displayKeys = ^embeddedDisplayPropertyKeys;
 	object = objectKeyPathValue;
+	settings = settings;
 }
 
 NonNull: ERXNonNullConditional {

@@ -8,6 +8,7 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.<br />
@@ -18,8 +19,19 @@ public class ERDInspect extends ERDCustomEditComponent {
     public ERDInspect(WOContext context) {
         super(context);
     }
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
+    
+    public boolean synchronizesVariablesWithBindings() { 
+        return false; 
+    }
+    
+    public NSDictionary settings() {
+        String pc = d2wContext().dynamicPage();
+        if(pc != null) {
+            return new NSDictionary(pc, "parentPageConfiguration");
+        }
+        return null;
+    }
+    
     public WOComponent editRelationshipAction() {
         String editRelationshipConfigurationName = (String)valueForBinding("editRelationshipConfigurationName");
         EditRelationshipPageInterface epi = (EditRelationshipPageInterface)D2W.factory().pageForConfigurationNamed(editRelationshipConfigurationName, session());
@@ -27,6 +39,7 @@ public class ERDInspect extends ERDCustomEditComponent {
         epi.setNextPage(context().page());
         return (WOComponent)epi;
     }
+    
     public WOComponent clearAction() {
         object().removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject)object().valueForKey(key()), key());
         return context().page();
