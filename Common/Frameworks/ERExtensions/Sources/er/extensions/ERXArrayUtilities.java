@@ -601,4 +601,21 @@ public class ERXArrayUtilities extends Object {
         }
         return intersectingElements != null ? intersectingElements : NSArray.EmptyArray;
     }
+
+    /**
+     * Reverses the elements of an array
+     * @param array to be reversed
+     * @return reverse ordered array
+     */
+    public static NSArray reverse(NSArray array) {
+        NSArray reverse = null;
+        if (array != null && array.count() > 0) {
+            NSMutableArray reverseTemp = new NSMutableArray(array.count());
+            for (Enumeration reverseEnumerator = array.reverseObjectEnumerator(); reverseEnumerator.hasMoreElements();) {
+                reverseTemp.addObject(reverseEnumerator.nextElement());
+            }
+            reverse = reverseTemp.immutableClone();
+        }
+        return reverse != null ? reverse : NSArray.EmptyArray;
+    }
 }
