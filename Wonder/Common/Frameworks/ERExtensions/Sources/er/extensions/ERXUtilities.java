@@ -225,7 +225,9 @@ public class ERXUtilities {
                 String s = (String)obj;
                 if(s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false"))
                     flag = false;
-                else
+		else if(s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true"))
+                    flag = true;
+		else
                     try {
                         if (Integer.parseInt(s) == 0)
                             flag = false;
