@@ -225,6 +225,25 @@ public class ERXFileUtilities {
     }
 
     /**
+        * Returns a path containing an optional root with a directory hierarchy based on the current time
+     * @param rootPath Root of the path before the above the date directories
+     * @return the path based on time.
+     */
+    public static String datePathWithRoot(String rootPath){
+        Calendar defaultCalendar = Calendar.getInstance();
+        defaultCalendar.setTime(new Date());
+        int year = defaultCalendar.get(Calendar.YEAR);
+        int month = defaultCalendar.get(Calendar.MONTH) + 1;
+        int day = defaultCalendar.get(Calendar.DAY_OF_MONTH);
+        int hour = defaultCalendar.get(Calendar.HOUR_OF_DAY);
+        String datePath = rootPath+"/y" + year
+            + ((month > 9) ? "/m" : "/m0") + month
+            + ((day > 9) ? "/d" : "/d0") + day
+            + ((hour > 9) ? "/h" : "/h0") + hour;
+        return datePath;
+    }
+
+    /**
      * Determines the path URL of the specified Resource. This is done
      * to get a single entry point due to the deprecation of pathForResourceNamed.
      * In a later version this will call out to the resource managers new methods directly.
