@@ -45,6 +45,7 @@ public class ERD2WQueryPage extends D2WQueryPage {
         if(nextPageDelegate() == null) {
             if(ERXUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
                 showResults = true;
+                return null;
             }else{
                 String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
                 if(listConfigurationName!=null){
