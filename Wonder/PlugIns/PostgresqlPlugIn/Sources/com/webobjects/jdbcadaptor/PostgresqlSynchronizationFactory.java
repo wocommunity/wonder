@@ -12,6 +12,47 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         super(adaptor);
     }
 
+    
+    public NSArray _foreignKeyConstraintStatementsForEntityGroup(NSArray group) {
+	if (group == null)
+	    return NSArray.EmptyArray;
+	NSMutableArray result = new NSMutableArray();
+	NSMutableSet generatedStatements = new NSMutableSet();
+	int i = 0;
+	for (int groupCount = group.count(); i < groupCount; i++) {
+	    EOEntity currentEntity = (EOEntity) group.objectAtIndex(i);
+	    if (currentEntity.externalName() != null) {
+		NSArray relationships = currentEntity.relationships();
+		    int relCount = relationships.count();
+		    for(int j = 0; j < relCount; j++) {
+			EORelationship currentRelationship
+                        = ((EORelationship)
+                           relationships.objectAtIndex(j));
+			EOEntity destinationEntity
+			    = currentRelationship.destinationEntity();
+			if (_shouldGenerateForeignKeyConstraints(currentRelationship)) {
+                            NSArray statements = foreignKeyConstraintStatementsForRelationship(currentRelationship);
+                            if(!generatedStatements.containsObject(statements.valueForKey("statement"))) {
+                                result.addObjectsFromArray(statements);
+                                generatedStatements.addObject(statements.valueForKey("statement"));
+                            } 
+			}
+		    }
+	    }
+	}
+	return result;
+    }
+    
+    protected boolean _shouldGenerateForeignKeyConstraints(EORelationship rel) {
+        EOEntity destinationEntity = rel.destinationEntity();
+        return !rel.isFlattened()
+            && destinationEntity.externalName() != null
+            && rel.entity().model() == destinationEntity.model()
+            && (destinationEntity.subEntities() == null
+                || destinationEntity.subEntities().count() == 0
+                || destinationEntity.subEntities().containsObject(rel.entity()));          
+    }
+    
     /**
      * <code>PostgresqlExpression</code> factory method.
      *
@@ -24,7 +65,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         result.setStatement( statement );
         return result;
     }
-    
+        
     /**
      * Generates the PostgreSQL-specific SQL statements to drop the primary key support.
      *
