@@ -11,7 +11,17 @@
 
 #define PATCH_SELECTOR @selector(AS_handleMenu:)
 
-@interface PBXTextViewPoser : NSTextView {
+@interface PBXTextView:NSTextView
+{
+    float _highlightStartY;
+    float _highlightHeight;
+    char _observingHighlightColorChangedNotification;
+    NSColor *_highlightBaseColor;
+    unsigned int _modifierFlagsAtLastSingleMouseDown;
+}
+@end
+
+@interface PBXTextViewPoser : PBXTextView {
 
 }
 
