@@ -1,24 +1,79 @@
 // !$*UTF8*$!
 {
-	F57EA5C001FF59BF019E57DA = {
-		activeBuildStyle = F57EA84F01FF59C0019E57DA;
-		activeTarget = F57EA70101FF59C0019E57DA;
+	017C7B2FFFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	017C7B36FFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	40B5827EFFD5E7DB7F000001 = {
+		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
+		activeTarget = 40B58282FFD5E8187F000001;
 		addToTargets = (
-			F57EA70301FF59C0019E57DA,
-		);
-		breakpoints = (
+			017C7B2FFFD7144B7F000001,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 44883744;
+			PBXPerProjectTemplateStateSaveDate = 46611120;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F649054F02ACD9C201AD0D07;
+									bookmark = F54279E202C73D7201D1D37B;
 									history = (
-										F649054E02ACD9C201AD0D07,
+										F59C5CBB02C464CB01000102,
+										F59C5CBC02C464CB01000102,
+										F59C5CBD02C464CB01000102,
+										F54C4E7E02C502C501000102,
+										F54C4E7F02C502C501000102,
+										F54C4E8002C502C501000102,
+										F54C4E8102C502C501000102,
+										F54C4E8202C502C501000102,
+										F54C4E8302C502C501000102,
+										F54C4E8402C502C501000102,
+										F54C4E8602C502C501000102,
+										F5005CEC02C507D101000102,
+										F5005CED02C507D101000102,
+										F5005CEE02C507D101000102,
+										F5005CEF02C507D101000102,
+										F5CCEF1202C52B6601000102,
+										F5CCEF1302C52B6601000102,
+										F5CCEF1402C52B6601000102,
+										F5CCEF1502C52B6601000102,
+										F5CCEF1602C52B6601000102,
+										F54279DF02C73D7201D1D37B,
+										F54279E002C73D7201D1D37B,
+									);
+									prevStack = (
+										F59C5BBE02C4640401000102,
+										F59C5CBF02C464CB01000102,
+										F59C5CC002C464CB01000102,
+										F59C5CC102C464CB01000102,
+										F54C4E8802C502C501000102,
+										F54C4E8902C502C501000102,
+										F54C4E8A02C502C501000102,
+										F54C4E8B02C502C501000102,
+										F54C4E8C02C502C501000102,
+										F54C4E8D02C502C501000102,
+										F54C4E8E02C502C501000102,
+										F54C4E8F02C502C501000102,
+										F54C4E9002C502C501000102,
+										F54C4E9102C502C501000102,
+										F54C4E9202C502C501000102,
+										F54C4E9302C502C501000102,
+										F54C4E9402C502C501000102,
+										F5005CF102C507D101000102,
+										F5005CF202C507D101000102,
+										F5005CF302C507D101000102,
+										F5005CF402C507D101000102,
+										F5CCEF1802C52B6601000102,
+										F5CCEF1902C52B6601000102,
+										F5CCEF1A02C52B6601000102,
+										F5CCEF1B02C52B6601000102,
+										F5CCEF1C02C52B6601000102,
+										F5CCEF1D02C52B6601000102,
+										F54279E102C73D7201D1D37B,
 									);
 								};
 								NavCount = 1;
@@ -114,8 +169,8 @@
 								};
 							};
 							Tab2 = {
-								BuildMessageFrame = "{{0, 0}, {574, 120}}";
-								BuildTranscriptFrame = "{{0, 129}, {574, 0}}";
+								BuildMessageFrame = "{{0, 0}, {574, 23}}";
+								BuildTranscriptFrame = "{{0, 32}, {574, 97}}";
 								Frame = "{{0, 0}, {572, 127}}";
 							};
 							Tab3 = {
@@ -128,12 +183,10 @@
 						Tab0 = {
 							Frame = "{{0, 0}, {260, 549}}";
 							GroupTreeTableConfiguration = (
-								SCMStatusColumn,
-								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								205,
+								227,
 							);
 						};
 						Tab1 = {
@@ -202,41 +255,622 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{28, 343}";
+					WindowLocation = "{25, 112}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 44883744;
+			PBXWorkspaceStateSaveDate = 46611120;
 		};
 		perUserProjectItems = {
-			F649054E02ACD9C201AD0D07 = F649054E02ACD9C201AD0D07;
-			F649054F02ACD9C201AD0D07 = F649054F02ACD9C201AD0D07;
+			F5005CEC02C507D101000102 = F5005CEC02C507D101000102;
+			F5005CED02C507D101000102 = F5005CED02C507D101000102;
+			F5005CEE02C507D101000102 = F5005CEE02C507D101000102;
+			F5005CEF02C507D101000102 = F5005CEF02C507D101000102;
+			F5005CF102C507D101000102 = F5005CF102C507D101000102;
+			F5005CF202C507D101000102 = F5005CF202C507D101000102;
+			F5005CF302C507D101000102 = F5005CF302C507D101000102;
+			F5005CF402C507D101000102 = F5005CF402C507D101000102;
+			F54279DF02C73D7201D1D37B = F54279DF02C73D7201D1D37B;
+			F54279E002C73D7201D1D37B = F54279E002C73D7201D1D37B;
+			F54279E102C73D7201D1D37B = F54279E102C73D7201D1D37B;
+			F54279E202C73D7201D1D37B = F54279E202C73D7201D1D37B;
+			F54C4E7E02C502C501000102 = F54C4E7E02C502C501000102;
+			F54C4E7F02C502C501000102 = F54C4E7F02C502C501000102;
+			F54C4E8002C502C501000102 = F54C4E8002C502C501000102;
+			F54C4E8102C502C501000102 = F54C4E8102C502C501000102;
+			F54C4E8202C502C501000102 = F54C4E8202C502C501000102;
+			F54C4E8302C502C501000102 = F54C4E8302C502C501000102;
+			F54C4E8402C502C501000102 = F54C4E8402C502C501000102;
+			F54C4E8602C502C501000102 = F54C4E8602C502C501000102;
+			F54C4E8802C502C501000102 = F54C4E8802C502C501000102;
+			F54C4E8902C502C501000102 = F54C4E8902C502C501000102;
+			F54C4E8A02C502C501000102 = F54C4E8A02C502C501000102;
+			F54C4E8B02C502C501000102 = F54C4E8B02C502C501000102;
+			F54C4E8C02C502C501000102 = F54C4E8C02C502C501000102;
+			F54C4E8D02C502C501000102 = F54C4E8D02C502C501000102;
+			F54C4E8E02C502C501000102 = F54C4E8E02C502C501000102;
+			F54C4E8F02C502C501000102 = F54C4E8F02C502C501000102;
+			F54C4E9002C502C501000102 = F54C4E9002C502C501000102;
+			F54C4E9102C502C501000102 = F54C4E9102C502C501000102;
+			F54C4E9202C502C501000102 = F54C4E9202C502C501000102;
+			F54C4E9302C502C501000102 = F54C4E9302C502C501000102;
+			F54C4E9402C502C501000102 = F54C4E9402C502C501000102;
+			F59C5BBE02C4640401000102 = F59C5BBE02C4640401000102;
+			F59C5CBB02C464CB01000102 = F59C5CBB02C464CB01000102;
+			F59C5CBC02C464CB01000102 = F59C5CBC02C464CB01000102;
+			F59C5CBD02C464CB01000102 = F59C5CBD02C464CB01000102;
+			F59C5CBF02C464CB01000102 = F59C5CBF02C464CB01000102;
+			F59C5CC002C464CB01000102 = F59C5CC002C464CB01000102;
+			F59C5CC102C464CB01000102 = F59C5CC102C464CB01000102;
+			F5CCEF1202C52B6601000102 = F5CCEF1202C52B6601000102;
+			F5CCEF1302C52B6601000102 = F5CCEF1302C52B6601000102;
+			F5CCEF1402C52B6601000102 = F5CCEF1402C52B6601000102;
+			F5CCEF1502C52B6601000102 = F5CCEF1502C52B6601000102;
+			F5CCEF1602C52B6601000102 = F5CCEF1602C52B6601000102;
+			F5CCEF1802C52B6601000102 = F5CCEF1802C52B6601000102;
+			F5CCEF1902C52B6601000102 = F5CCEF1902C52B6601000102;
+			F5CCEF1A02C52B6601000102 = F5CCEF1A02C52B6601000102;
+			F5CCEF1B02C52B6601000102 = F5CCEF1B02C52B6601000102;
+			F5CCEF1C02C52B6601000102 = F5CCEF1C02C52B6601000102;
+			F5CCEF1D02C52B6601000102 = F5CCEF1D02C52B6601000102;
 		};
 		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
-	F57EA70101FF59C0019E57DA = {
+	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
 	};
-	F57EA70301FF59C0019E57DA = {
-		activeExec = 0;
+	F5005CEC02C507D101000102 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: ERXApplication";
+		rLen = 0;
+		rLoc = 1707;
+		rType = 0;
+		vrLen = 1192;
+		vrLoc = 1090;
 	};
-	F57EA81C01FF59C0019E57DA = {
-		activeExec = 0;
+	F5005CED02C507D101000102 = {
+		fRef = F5005CF802C507D101000102;
+		isa = PBXTextBookmark;
+		name = "ERXJSOpenWindowHyperlink.html: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 222;
+		vrLoc = 0;
 	};
-	F649054E02ACD9C201AD0D07 = {
-		fRef = F76729CD0284598901A8010C;
+	F5005CEE02C507D101000102 = {
+		fRef = F5005CF902C507D101000102;
+		isa = PBXTextBookmark;
+		name = "ERXJSOpenWindowHyperlink.wod: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 594;
+		vrLoc = 0;
+	};
+	F5005CEF02C507D101000102 = {
+		fRef = F59C56F502C455BF01000102;
+		isa = PBXTextBookmark;
+		name = "InstallCompilerProxySupport.sh: 8";
+		rLen = 74;
+		rLoc = 375;
+		rType = 0;
+		vrLen = 1473;
+		vrLoc = 0;
+	};
+	F5005CF102C507D101000102 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: ERXApplication";
+		rLen = 0;
+		rLoc = 1707;
+		rType = 0;
+		vrLen = 1192;
+		vrLoc = 1090;
+	};
+	F5005CF202C507D101000102 = {
+		fRef = F5005CF702C507D101000102;
+		isa = PBXTextBookmark;
+		name = "ERXJSOpenWindowHyperlink.html: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 222;
+		vrLoc = 0;
+	};
+	F5005CF302C507D101000102 = {
+		fRef = F5005CF602C507D101000102;
+		isa = PBXTextBookmark;
+		name = "ERXJSOpenWindowHyperlink.wod: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 594;
+		vrLoc = 0;
+	};
+	F5005CF402C507D101000102 = {
+		fRef = F59C56F502C455BF01000102;
+		isa = PBXTextBookmark;
+		name = "InstallCompilerProxySupport.sh: 8";
+		rLen = 74;
+		rLoc = 375;
+		rType = 0;
+		vrLen = 1473;
+		vrLoc = 0;
+	};
+	F5005CF602C507D101000102 = {
+		isa = PBXFileReference;
+		name = ERXJSOpenWindowHyperlink.wod;
+		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.wod;
+		refType = 0;
+	};
+	F5005CF702C507D101000102 = {
+		isa = PBXFileReference;
+		name = ERXJSOpenWindowHyperlink.html;
+		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.html;
+		refType = 0;
+	};
+	F5005CF802C507D101000102 = {
+		isa = PBXFileReference;
+		name = ERXJSOpenWindowHyperlink.html;
+		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.html;
+		refType = 0;
+	};
+	F5005CF902C507D101000102 = {
+		isa = PBXFileReference;
+		name = ERXJSOpenWindowHyperlink.wod;
+		path = /Volumes/Scratch/test/Common/Frameworks/ERExtensions/Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo/ERXJSOpenWindowHyperlink.wod;
+		refType = 0;
+	};
+	F54279DF02C73D7201D1D37B = {
+		fRef = F59C57B902C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXLocalizer.java: frameworkSearchPath";
+		rLen = 0;
+		rLoc = 15976;
+		rType = 0;
+		vrLen = 1359;
+		vrLoc = 1025;
+	};
+	F54279E002C73D7201D1D37B = {
+		fRef = F59C57FB02C4565701000102;
 		isa = PBXBookmark;
 	};
-	F649054F02ACD9C201AD0D07 = {
-		fRef = F76729CD0284598901A8010C;
+	F54279E102C73D7201D1D37B = {
+		fRef = F59C57B902C4565701000102;
 		isa = PBXTextBookmark;
-		name = "ERXThreadStorage.java: 11";
+		name = "ERXLocalizer.java: frameworkSearchPath";
 		rLen = 0;
-		rLoc = 327;
+		rLoc = 15976;
 		rType = 0;
-		vrLen = 1150;
+		vrLen = 1359;
+		vrLoc = 1025;
+	};
+	F54279E202C73D7201D1D37B = {
+		fRef = F59C57FB02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXBatchTestInterface.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1031;
+		vrLoc = 0;
+	};
+	F54C4E7E02C502C501000102 = {
+		fRef = F59C57F302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidationException.java: 29";
+		rLen = 0;
+		rLoc = 1377;
+		rType = 0;
+		vrLen = 1381;
+		vrLoc = 891;
+	};
+	F54C4E7F02C502C501000102 = {
+		fRef = F59C57F402C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidationFactory.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1169;
+		vrLoc = 0;
+	};
+	F54C4E8002C502C501000102 = {
+		fRef = F54C4C5702C4E24A01000102;
+		isa = PBXTextBookmark;
+		name = "ERXWOContext.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 801;
+		vrLoc = 0;
+	};
+	F54C4E8102C502C501000102 = {
+		fRef = F54C4C5B02C4E2A001000102;
+		isa = PBXTextBookmark;
+		name = "ERXRequest.java: 25";
+		rLen = 0;
+		rLoc = 1022;
+		rType = 0;
+		vrLen = 1424;
+		vrLoc = 823;
+	};
+	F54C4E8202C502C501000102 = {
+		fRef = F59C578002C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXCompilerProxy.java: 393";
+		rLen = 0;
+		rLoc = 15775;
+		rType = 0;
+		vrLen = 1087;
+		vrLoc = 0;
+	};
+	F54C4E8302C502C501000102 = {
+		fRef = F54C4E9A02C502C601000102;
+		isa = PBXTextBookmark;
+		name = "ERXCompilerProxy.java: 86";
+		rLen = 154;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 1202;
+		vrLoc = 2750;
+	};
+	F54C4E8402C502C501000102 = {
+		fRef = F54C4E9B02C502C601000102;
+		isa = PBXTextBookmark;
+		name = "ERXLocalizer.java: 1";
+		rLen = 16329;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1024;
+		vrLoc = 0;
+	};
+	F54C4E8602C502C501000102 = {
+		fRef = F54C4C5802C4E24A01000102;
+		isa = PBXTextBookmark;
+		name = "ERXWOForm.java: appendAttributesToResponse";
+		rLen = 0;
+		rLoc = 1224;
+		rType = 0;
+		vrLen = 1324;
+		vrLoc = 771;
+	};
+	F54C4E8802C502C501000102 = {
+		fRef = F59C57F302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidationException.java: 29";
+		rLen = 0;
+		rLoc = 1377;
+		rType = 0;
+		vrLen = 1381;
+		vrLoc = 891;
+	};
+	F54C4E8902C502C501000102 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: 240";
+		rLen = 0;
+		rLoc = 10989;
+		rType = 0;
+		vrLen = 1271;
+		vrLoc = 1005;
+	};
+	F54C4E8A02C502C501000102 = {
+		fRef = F59C57F402C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidationFactory.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1169;
+		vrLoc = 0;
+	};
+	F54C4E8B02C502C501000102 = {
+		fRef = F54C4C5702C4E24A01000102;
+		isa = PBXTextBookmark;
+		name = "ERXWOContext.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 801;
+		vrLoc = 0;
+	};
+	F54C4E8C02C502C501000102 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: ERXApplication";
+		rLen = 0;
+		rLoc = 1793;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 1005;
+	};
+	F54C4E8D02C502C501000102 = {
+		fRef = F54C4C5B02C4E2A001000102;
+		isa = PBXTextBookmark;
+		name = "ERXRequest.java: 25";
+		rLen = 0;
+		rLoc = 1022;
+		rType = 0;
+		vrLen = 1424;
+		vrLoc = 823;
+	};
+	F54C4E8E02C502C501000102 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: ERXApplication";
+		rLen = 86;
+		rLoc = 1697;
+		rType = 0;
+		vrLen = 1204;
+		vrLoc = 1090;
+	};
+	F54C4E8F02C502C501000102 = {
+		fRef = F59C578002C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXCompilerProxy.java: 393";
+		rLen = 0;
+		rLoc = 15775;
+		rType = 0;
+		vrLen = 1087;
+		vrLoc = 0;
+	};
+	F54C4E9002C502C501000102 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: ERXApplication";
+		rLen = 86;
+		rLoc = 1697;
+		rType = 0;
+		vrLen = 1204;
+		vrLoc = 1090;
+	};
+	F54C4E9102C502C501000102 = {
+		fRef = F54C4E9802C502C601000102;
+		isa = PBXTextBookmark;
+		name = "ERXCompilerProxy.java: 86";
+		rLen = 154;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 1202;
+		vrLoc = 2750;
+	};
+	F54C4E9202C502C501000102 = {
+		fRef = F54C4E9902C502C601000102;
+		isa = PBXTextBookmark;
+		name = "ERXLocalizer.java: 1";
+		rLen = 16329;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1024;
+		vrLoc = 0;
+	};
+	F54C4E9302C502C501000102 = {
+		fRef = F59C57B902C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXLocalizer.java: 394";
+		rLen = 0;
+		rLoc = 16321;
+		rType = 0;
+		vrLen = 1024;
+		vrLoc = 0;
+	};
+	F54C4E9402C502C501000102 = {
+		fRef = F54C4C5802C4E24A01000102;
+		isa = PBXTextBookmark;
+		name = "ERXWOForm.java: appendAttributesToResponse";
+		rLen = 0;
+		rLoc = 1224;
+		rType = 0;
+		vrLen = 1324;
+		vrLoc = 771;
+	};
+	F54C4E9802C502C601000102 = {
+		isa = PBXFileReference;
+		name = ERXCompilerProxy.java;
+		path = /Volumes/Home/Jobs/Sources/ProjectWonder/Frameworks/ERExtensionsJava/ERXCompilerProxy.java;
+		refType = 0;
+	};
+	F54C4E9902C502C601000102 = {
+		isa = PBXFileReference;
+		name = ERXLocalizer.java;
+		path = /Volumes/Home/Jobs/Sources/ProjectWonder/Frameworks/ERExtensionsJava/ERXLocalizer.java;
+		refType = 0;
+	};
+	F54C4E9A02C502C601000102 = {
+		isa = PBXFileReference;
+		name = ERXCompilerProxy.java;
+		path = /Volumes/Home/Jobs/Sources/ProjectWonder/Frameworks/ERExtensionsJava/ERXCompilerProxy.java;
+		refType = 0;
+	};
+	F54C4E9B02C502C601000102 = {
+		isa = PBXFileReference;
+		name = ERXLocalizer.java;
+		path = /Volumes/Home/Jobs/Sources/ProjectWonder/Frameworks/ERExtensionsJava/ERXLocalizer.java;
+		refType = 0;
+	};
+	F59C5BBE02C4640401000102 = {
+		fRef = F59C577702C4565601000102;
+		isa = PBXTextBookmark;
+		name = "EOGenericRecordClazz.java: 21";
+		rLen = 89;
+		rLoc = 1111;
+		rType = 0;
+		vrLen = 1237;
+		vrLoc = 0;
+	};
+	F59C5CBB02C464CB01000102 = {
+		fRef = F59C579302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEOFAppender.java: 58";
+		rLen = 35;
+		rLoc = 2618;
+		rType = 0;
+		vrLen = 1093;
+		vrLoc = 2037;
+	};
+	F59C5CBC02C464CB01000102 = {
+		fRef = F59C577702C4565601000102;
+		isa = PBXTextBookmark;
+		name = "EOGenericRecordClazz.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1237;
+		vrLoc = 0;
+	};
+	F59C5CBD02C464CB01000102 = {
+		fRef = F59C57FC02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXTestCase.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1685;
+		vrLoc = 0;
+	};
+	F59C5CBF02C464CB01000102 = {
+		fRef = F59C579302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEOFAppender.java: 58";
+		rLen = 35;
+		rLoc = 2618;
+		rType = 0;
+		vrLen = 1093;
+		vrLoc = 2037;
+	};
+	F59C5CC002C464CB01000102 = {
+		fRef = F59C577702C4565601000102;
+		isa = PBXTextBookmark;
+		name = "EOGenericRecordClazz.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1237;
+		vrLoc = 0;
+	};
+	F59C5CC102C464CB01000102 = {
+		fRef = F59C57FC02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXTestCase.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1685;
+		vrLoc = 0;
+	};
+	F5CCEF1202C52B6601000102 = {
+		fRef = F59C579E02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXFrameworkPrincipal.java: setUpFrameworkPrincipalClass";
+		rLen = 0;
+		rLoc = 1106;
+		rType = 0;
+		vrLen = 1027;
+		vrLoc = 0;
+	};
+	F5CCEF1302C52B6601000102 = {
+		fRef = F59C57EF02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXToOneRelationship.java: theList";
+		rLen = 0;
+		rLoc = 12056;
+		rType = 0;
+		vrLen = 1197;
+		vrLoc = 11204;
+	};
+	F5CCEF1402C52B6601000102 = {
+		fRef = F59C56FD02C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "Japanese: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 53;
+		vrLoc = 0;
+	};
+	F5CCEF1502C52B6601000102 = {
+		fRef = F59C570002C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "English: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 518;
+		vrLoc = 0;
+	};
+	F5CCEF1602C52B6601000102 = {
+		fRef = F59C56FF02C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "German: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 62;
+		vrLoc = 0;
+	};
+	F5CCEF1802C52B6601000102 = {
+		fRef = F59C579E02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXFrameworkPrincipal.java: setUpFrameworkPrincipalClass";
+		rLen = 0;
+		rLoc = 1106;
+		rType = 0;
+		vrLen = 1027;
+		vrLoc = 0;
+	};
+	F5CCEF1902C52B6601000102 = {
+		fRef = F59C57EF02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXToOneRelationship.java: theList";
+		rLen = 0;
+		rLoc = 12056;
+		rType = 0;
+		vrLen = 1197;
+		vrLoc = 11204;
+	};
+	F5CCEF1A02C52B6601000102 = {
+		fRef = F59C56FD02C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "Japanese: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 53;
+		vrLoc = 0;
+	};
+	F5CCEF1B02C52B6601000102 = {
+		fRef = F59C56FF02C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "German: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 62;
+		vrLoc = 0;
+	};
+	F5CCEF1C02C52B6601000102 = {
+		fRef = F59C570002C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "English: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 518;
+		vrLoc = 0;
+	};
+	F5CCEF1D02C52B6601000102 = {
+		fRef = F59C56FF02C455DB01000102;
+		isa = PBXTextBookmark;
+		name = "German: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 62;
 		vrLoc = 0;
 	};
 }

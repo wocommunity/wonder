@@ -38,7 +38,7 @@ These defaults can be set (listed with their current defaults):
 er.extensions.ERXLocalizer.defaultLanguage=English
 er.extensions.ERXLocalizer.fileNamesToWatch=Localizable.strings,ValidationTemplate.strings
 er.extensions.ERXLocalizer.availableLanguages=English,German
-er.extensions.ERXLocalizer.frameworkSearchPath=app,ERDirectToWeb,ERExtensions
+er.extensions.ERXLocalizer.frameworkSearchPath=app,ERDirectToWebJava,ERExtensionsJava
 
 TODO: chaining of Localizers
 */
@@ -124,7 +124,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                     l = new ERXLocalizer(language);
             } else {
                 l = (ERXLocalizer)localizers.objectForKey(defaultLanguage());
-            }
+                if(l == null) {
+                    l = new ERXLocalizer(defaultLanguage());
+                    localizers.setObjectForKey(l, defaultLanguage());
+                }
+           }
             localizers.setObjectForKey(l, language);
         }
         return l;
@@ -194,7 +198,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                         monitoredFiles.addObject(path);
                     }
                     try {
-                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
+                        framework = "app".equals(framework) ? null : framework;
+                        cat.debug("Loading: " + fileName + " - " + framework + " - " + languages + WOApplication.application().resourceManager().pathForResourceNamed(fileName, framework, languages));
+                       NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                         cache.addEntriesFromDictionary(dict);
                     } catch(Exception ex) {
                         cat.warn("Exception loading: " + fileName + " - " + framework + " - " + languages + ":" + ex);
@@ -356,7 +362,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public static NSArray availableLanguages() {
         if(availableLanguages == null) {
             String availableLanguagesString = System.getProperty("er.extensions.ERXLocalizer.availableLanguages");
-            if(availableLanguages == null) {
+            if(availableLanguagesString == null) {
                 availableLanguages = new NSArray(new Object [] {"English", "German", "Japanese"});
             } else {
                 availableLanguages = NSArray.componentsSeparatedByString(availableLanguagesString, ",");
@@ -372,7 +378,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public static NSArray frameworkSearchPath() {
         if(frameworkSearchPath == null) {
             String frameworkSearchPathString = System.getProperty("er.extensions.ERXLocalizer.frameworkSearchPath");
-            if(frameworkSearchPath == null) {
+            if(frameworkSearchPathString == null) {
                 frameworkSearchPath = new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"});
             } else {
                 frameworkSearchPath = NSArray.componentsSeparatedByString(frameworkSearchPathString, ",");

@@ -96,14 +96,19 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
     public NSArray defaultEmbeddedDisplayPropertyKeys(D2WContext c) {
         String entityName = (String)c.valueForKey("embeddedEntityName");
-        // FIXME: Should try for the 'object' in the context and use the
-        //		model group from the object's ec.
-        EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
-        NSMutableArray classProperties = e.classPropertyNames().mutableClone();
-        NSArray relationships = (NSArray)e.relationships().valueForKey("name");
-        classProperties.removeObjectsInArray(relationships);
-        log.info(classProperties);
-        return classProperties.immutableClone();
+    
+        if(entityName != null) {
+            // FIXME: Should try for the 'object' in the context and use the
+            //		model group from the object's ec.
+            EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
+            log.warn("embeddedEntityName = " + entityName);
+            NSMutableArray classProperties = e.classPropertyNames().mutableClone();
+            NSArray relationships = (NSArray)e.relationships().valueForKey("name");
+            classProperties.removeObjectsInArray(relationships);
+            return classProperties.immutableClone();
+        }
+        
+        return new NSArray();
     }
     
     /**

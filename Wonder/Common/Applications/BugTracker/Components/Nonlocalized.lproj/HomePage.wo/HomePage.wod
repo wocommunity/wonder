@@ -1,0 +1,103 @@
+CollapsibleComponentContent: WOCollapsibleComponentContent {
+	closedLabel = headForAll;
+	openedLabel = "All bugs assigned to you";
+}
+
+CollapsibleComponentContent1: WOCollapsibleComponentContent {
+	closedLabel = headForNew;
+	openedLabel = "Unread bugs";
+}
+
+CollapsibleComponentContent2: WOCollapsibleComponentContent {
+	closedLabel = headForRequirements;
+	openedLabel = "List of Requirements assigned to you";
+}
+
+CollapsibleComponentContent3: WOCollapsibleComponentContent {
+	closedLabel = headForTestItems;
+	openedLabel = "All Test Items assigned to you";
+}
+
+CollapsibleComponentContent4: WOCollapsibleComponentContent {
+	closedLabel = headForTotalRequirements;
+	openedLabel = "List of Requirements assigned to you";
+}
+
+Conditional1: WOConditional {
+	condition = totalBugs;
+}
+
+Conditional2: WOConditional {
+	condition = totalBugs;
+	negate = true;
+}
+
+Conditional3: WOConditional {
+	condition = newBugs;
+}
+
+Conditional4: WOConditional {
+	condition = newBugs;
+	negate = true;
+}
+
+Conditional5: WOConditional {
+	condition = totalRequirements;
+}
+
+Conditional6: WOConditional {
+	condition = totalRequirements;
+	negate = true;
+}
+
+D2WList1: D2WList {
+	list = totalNewBugs;
+	entityName = "Bug";
+	pageConfiguration = "ListMyBugs";
+}
+
+D2WList2: D2WList {
+	list = totalTestItems;
+	entityName = "TestItem";
+}
+
+D2WList3: D2WList {
+	list = totalAllMyRequirements;
+	entityName = "Requirement";
+}
+
+D2WList4: D2WList {
+	list = totalAllRequirements;
+	entityName = "Requirement";
+}
+
+List1: D2WList {
+	list = totalMyBugs;
+	entityName = "Bug";
+	pageConfiguration = "ListMyBugs";
+}
+
+NonZeroConditional1: ERXNonZeroConditional {
+	condition = testItemsCount;
+}
+
+NonZeroConditional2: ERXNonZeroConditional {
+	condition = testItemsCount;
+	negate = true;
+}
+
+NonZeroConditional3: ERXNonZeroConditional {
+	condition = requirementsCount;
+}
+
+NonZeroConditional4: ERXNonZeroConditional {
+	condition = requirementsCount;
+	negate = true;
+}
+
+PageWrapper: PageWrapper {
+}
+
+String3: WOString {
+	value = session.getUser.name;
+}

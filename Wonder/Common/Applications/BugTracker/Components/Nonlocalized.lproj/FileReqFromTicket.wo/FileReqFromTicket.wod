@@ -1,0 +1,4 @@
+Hyperlink1: WOHyperlink {
+	action = fileRequirement;
+}
+

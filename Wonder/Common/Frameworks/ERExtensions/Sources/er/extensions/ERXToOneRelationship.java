@@ -251,7 +251,8 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             }
 
             if (!_localIsMandatory()) {
-                aSortedArray.insertObjectAtIndex(noSelectionString(), 0);
+                if(noSelectionString() != null)
+                    aSortedArray.insertObjectAtIndex(noSelectionString(), 0);
             }
             set_privateList(aSortedArray);
         }

@@ -1,0 +1,15 @@
+GenericContainer1: WOGenericContainer {
+	elementName = "B";
+	omitTags = userIsNotEngineering;
+}
+
+Self: WOGenericContainer {
+	color = "FF0000";
+	elementName = "font";
+	omitTags = userIsNotSelf;
+}
+
+String1: WOString {
+	value = user.name;
+}
+

@@ -5,15 +5,15 @@
 # 3) Choose "Project/New Build Phase/New Shell Script Build Phase" from the Menu 
 #    and drag the build phase right before the "Frameworks & Libraries"
 # 4) Insert the code 
-#       sh /Library/Frameworks/CompilerProxy.framework/Resources/InstallCompilerProxySupport.sh
+#       sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh
 # NOTE: I'm not sure about the real workings of the build process in the new Project Builder.
 #       All I can say is that this works for me...
 
 . "${BUILD_FILES_DIR}/DefineFileLocations.sh"
 
 echo "Compiler Proxy: Creating CPFileList.txt"
-find . -name '*.java' | xargs egrep -H '^package(.*);' |sed -e 's/package //' |sed -e 's/;//' > CPFileList.txt
-find . -name '*.java' | xargs egrep -L '^package(.*);' |sed -e 's/$/:/' >> CPFileList.txt
+find . Sources -name '*.java' | xargs egrep -H '^package(.*);' |sed -e 's/package //' |sed -e 's/;//' > CPFileList.txt
+find . Sources -name '*.java' | xargs egrep -L '^package(.*);' |sed -e 's/$/:/' >> CPFileList.txt
 
 if [ -f "${RESOURCES_JAVA_DIR}" ]
 then

@@ -1,0 +1,16 @@
+BugIsRead: D2WDisplayBoolean {
+	localContext = localContext;
+	object = object;
+}
+
+OwnsBug: ERXEqualConditional {
+	value1 = session.user;
+	value2 = object.owner;
+}
+
+OwnsBug2: ERXEqualConditional {
+	value1 = session.user;
+	value2 = object.owner;
+	negated = YES;
+}
+
