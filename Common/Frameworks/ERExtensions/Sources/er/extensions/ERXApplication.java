@@ -476,16 +476,6 @@ public abstract class ERXApplication extends WOApplication {
         return context;
     }
 
-    /**
-     * Create response for the current request.
-     * Our subclass fixes some issues with XHTML and XLST.
-     * @param request the request
-     * @return the newly created context
-     */
-    public WOResponse createResponseInContext(WOContext wocontext) {
-        WOResponse woresponse = new ERXWOResponse();
-        return woresponse;
-    }
     
     /** 
      * Logs the warning message if the main method was not called 
