@@ -258,7 +258,7 @@ public class ERXEOAccessUtilities {
                         index = sql.indexOf("SELECT");
                     }
                     index += 6;
-                    sql += sql.substring(0, index) 
+                    sql = sql.substring(0, index) 
                         + " TOP(" + start + ", " + (end-start) + ")" 
                         + sql.substring(index + 1, sql.length());
                 } else if (lowerCaseURL.indexOf("openbase") != -1) {
