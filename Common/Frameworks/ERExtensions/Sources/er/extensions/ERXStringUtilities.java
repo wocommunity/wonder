@@ -610,5 +610,38 @@ public class ERXStringUtilities {
         }
         return version;
     }
-    
+
+    /**
+     * Capitalizes a given string.
+     * @param value to be capitalized
+     * @return capitalized string
+     */
+    public static String capitalize(String value) {
+        String capital = null;
+        if (value != null && value.length() > 0) {
+            StringBuffer buffer = new StringBuffer(value);
+
+            buffer.setCharAt(0, Character.toUpperCase(value.charAt(0)));
+            capital = buffer.toString();            
+        }
+        return capital != null ? capital : value;
+    }
+
+    /**
+     * Capitalizes all the strings in a given string.
+     * @param value to be capitalized
+     * @return capitalized string
+     */    
+    public static String capitalizeAllWords(String value) {
+        String capitalize = null;
+        if (value != null && value.length() > 0) {
+            StringBuffer buffer = new StringBuffer();
+            for (StringTokenizer tokenizer = new StringTokenizer(value); tokenizer.hasMoreElements();) {
+                String token = tokenizer.nextToken();
+                buffer.append(capitalize(token));
+            }
+            capitalize = buffer.toString();
+        }
+        return capitalize != null ? capitalize : value;
+    }
 }
