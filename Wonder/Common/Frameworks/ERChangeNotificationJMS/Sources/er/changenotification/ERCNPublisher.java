@@ -73,11 +73,14 @@ public class ERCNPublisher {
         ERCNSnapshot snapshot = new ERCNSnapshot(notification);
 
         if (snapshot.shouldPostChange()) {
-            int deliveryMode = DeliveryMode.PERSISTENT;
+            final int deliveryMode = DeliveryMode.PERSISTENT;
+            final int priority = 4; // 0:Low -- 9:High  
+            // set TTL to 63 minutes; little longer than the default  
+            // value of ec.defaultFetchTimestampLag()
+            final long timeToLive = 63 * 60 * 1000; 
             try {
                 ObjectMessage message = _topicSession().createObjectMessage(snapshot);
-                int priority = 4; // 0:Low -- 9:High  
-                _topicPublisher().publish(_coordinator.topic(), message, deliveryMode, priority, 0);
+                _topicPublisher().publish(_coordinator.topic(), message, deliveryMode, priority, timeToLive);
                 if (log.isDebugEnabled())
                     log.debug("Posted a message with snapshot: " + snapshot);
             } catch (JMSException ex) {
