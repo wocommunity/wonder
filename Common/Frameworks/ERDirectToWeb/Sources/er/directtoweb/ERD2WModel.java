@@ -132,7 +132,8 @@ public class ERD2WModel extends D2WModel {
         ERXMultiKey k=new ERXMultiKey((short)(s+1));
         Object[] lhsKeys=k.keys();
         for (short i=0; i<s; i++) {
-            lhsKeys[i]=context.valueForKeyPathNoInference(significantKeys[i]);
+            //lhsKeys[i]=context.valueForKeyPathNoInference(significantKeys[i]);
+            lhsKeys[i]=ERD2WUtilities.contextValueForKeyNoInferenceNoException(context, significantKeys[i]);
         }
         lhsKeys[s]=keyPath;
         Object result=_cache.get(k);
