@@ -70,7 +70,7 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
         if(!task().isDone()) {
             String modifiedDynamicUrl = aContext.urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), null, null);
 
-            String header = "" +_refreshInterval+ ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
+            String header = "" +refreshInterval()+ ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
 
             aResponse.setHeader(header, "Refresh");
         } else if(task().isDone() && !_doneAndRefreshed) {
