@@ -32,7 +32,7 @@ foreach $file (@files) {
             print OUT "package er.directtoweb;\n";
             print OUT "import com.webobjects.appserver.WOContext;\n";
             print OUT "public class $newClass extends $class {\n";
-            print OUT "\t$newClass(WOContext c) {\n";
+            print OUT "\tpublic $newClass(WOContext c) {\n";
             print OUT "\t\tsuper(c);\n";
             print OUT "\t\}\n}\n";
             close OUT;
