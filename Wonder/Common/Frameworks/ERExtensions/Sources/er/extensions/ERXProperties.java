@@ -282,6 +282,7 @@ public class ERXProperties {
      * @param string to be set in the System properties
      * @param key to be used to get the value
      */
+    // DELETEME: Really not needed anymore
     public static void setStringForKey(String string, String key) {
         System.setProperty(key, string);
     }
@@ -307,6 +308,7 @@ public class ERXProperties {
      * @return properties object with the values from the file
      *      specified.
      */
+    // FIXME: This shouldn't eat the exception
     public static Properties propertiesFromPath(String path) {
         Properties prop = new Properties();
 
@@ -325,13 +327,28 @@ public class ERXProperties {
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
             prop.load(in);
             in.close();
-            log.info("Loaded configuration file at path: "+ path);
+            log.debug("Loaded configuration file at path: "+ path);
         } catch (IOException e) {
-            log.error("Unable to initialize properties from file " + path + "\nError :" + e);
+            log.error("Unable to initialize properties from file \"" + path + "\"", e);
         }
         return prop;
     }
 
+    /**
+     * Gets the properties for a given file.
+     * @param properties file
+     * @return properties from the given file
+     */
+    public static Properties propertiesFromFile(File file) throws IOException {
+        if (file == null)
+            throw new IllegalStateException("Attempting to get properties for a null file!");
+        Properties prop = new Properties();
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+        prop.load(in);
+        in.close();
+        return prop;
+    }
+    
     /**
      * Sets and returns properties object with the values from 
      * the given command line arguments string array. 
@@ -467,6 +484,25 @@ public class ERXProperties {
                 }
             }
         }
+
+        /* **** Optional properties files **** */
+        if (optionalConfigurationFiles() != null &&
+            optionalConfigurationFiles().count() > 0) {
+            for (Enumeration configEnumerator = optionalConfigurationFiles().objectEnumerator();
+                 configEnumerator.hasMoreElements();) {
+                String configFile = (String)configEnumerator.nextElement();
+                File file = new File(configFile);
+                if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
+                    try {
+                        aPropertiesPath = file.getCanonicalPath();
+                        projectsInfo.addObject("Optional Configuration:    " + aPropertiesPath);
+                        propertiesPaths.addObject(aPropertiesPath);
+                    } catch (java.io.IOException ex) {
+                        ;
+                    }                    
+                }
+            }
+        }
         
         /* *** Report the result *** */ 
         if (reportLoggingEnabled  &&  projectsInfo.count() > 0) {
@@ -509,6 +545,15 @@ public class ERXProperties {
         return path;
     }
 
+    /**
+     * Gets an array of optionally defined configuration
+     * files. 
+     * @return array of configuration file names (absolute paths)
+     */
+    public static NSArray optionalConfigurationFiles() {
+        return arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles");
+    }
+    
     /**
      * Returns actual full path to the given file system path  
      * that could contain symbolic links. For example: 
