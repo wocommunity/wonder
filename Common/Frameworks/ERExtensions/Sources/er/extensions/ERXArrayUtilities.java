@@ -1149,4 +1149,16 @@ public class ERXArrayUtilities extends Object {
         }
         return aa.toString();
     }
+
+    /** removes all occurencies of NSKeyValueCoding.Null from the end of the array
+     * @param array the array from which the values should be removed
+     * @return a new NSArray which does not have NSKeyValueCoding.Null instances at the end
+     */
+    public static NSArray removeNullValuesFromEnd(NSArray array) {
+        NSMutableArray a = array.mutableClone();
+        while (a.lastObject() instanceof NSKeyValueCoding.Null) {
+            a.removeLastObject();
+        }
+        return a;
+    }
 }
