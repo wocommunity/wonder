@@ -150,6 +150,8 @@ public class ERXEC {
          */        
         public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled) {
             EOEditingContext ec = new EOEditingContext(objectStore);
+            int levelsOfUndo = ERXValueUtilities.intValueWithDefault(System.getProperty("WODefaultUndoStackLimit"), 10);
+            ec.undoManager().setLevelsOfUndo(levelsOfUndo < 0 ? 10 : levelsOfUndo);
             setDefaultDelegateOnEditingContext(ec, validationEnabled);
             NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
             return ec;
