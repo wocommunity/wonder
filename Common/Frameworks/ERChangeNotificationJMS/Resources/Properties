@@ -11,6 +11,9 @@
 # Common Settings
 #########################################################################
 
+# The host name that the JMS server is running on
+er.changenotification.jms.serverHostName = localhost
+
 # Entities *not* to synchronize
 # er.changenotification.entitiesNotToSynchronize = (TalentPhoto)
 er.changenotification.entitiesNotToSynchronize = ()
@@ -24,7 +27,7 @@ er.changenotification.changeTypesToTrack = (inserted, updated, deleted)
 #
 er.changenotification.jms.topicName = business logic group 1
 
-# whether or not the JMS subscriber is durable; 
+# Whether or not the JMS subscriber is durable; 
 # prevents to miss change notifications by temporaly 
 # network disruptions. 
 # 

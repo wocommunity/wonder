@@ -45,11 +45,14 @@ import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
  * <p>
  * <pre>
  * 
- * # entities *not* to synchronize
+ * # The host name that the JMS server is running on
+ * er.changenotification.jms.serverHostName = localhost
+ * 
+ * # Entities *not* to synchronize
  * #er.changenotification.entitiesNotToSynchronize = (TalentPhoto)
  * er.changenotification.entitiesNotToSynchronize = ()
  * 
- * # change types to track; Can contain inserted, updated and deleted. 
+ * # Change types to track; Can contain inserted, updated and deleted. 
  * er.changenotification.changeTypesToTrack = (inserted, updated, deleted)
  * 
  * # JMS topic name (Destination object) to pass the notifications. 
@@ -57,7 +60,7 @@ import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
  * # configuration file. 
  * er.changenotification.jms.topicName = business logic group 1
  * 
- * # whether or not the JMS subscriber is durable; 
+ * # Whether or not the JMS subscriber is durable; 
  * # prevents to miss change notifications by temporaly 
  * # network disruptions. 
  * # 
@@ -160,18 +163,21 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         log.info("Initializing ERChangeNotification Framework");
 
         setEntitiesNotToSynchronize((NSArray)NSPropertyListSerialization.propertyListFromString(
-                                        System.getProperty("er.changenotification.entitiesNotToSynchronize")));
+                System.getProperty("er.changenotification.entitiesNotToSynchronize")));
         setChageTypesToTrack((NSArray)NSPropertyListSerialization.propertyListFromString(
-                                        System.getProperty("er.changenotification.changeTypesToTrack")));
+                System.getProperty("er.changenotification.changeTypesToTrack")));
         _topicName = System.getProperty("er.changenotification.jms.topicName");
         _isSubscriberDurable = "true".equals(System.getProperty("er.changenotification.jms.durableSubscribers"));
+        
+        String host = System.getProperty("er.changenotification.jms.serverHostName");
+        if (host == null  ||  host.length() == 0) 
+            host = "localhost";
         
         // Uses OpenJMS embedded JNDI server to locate the TopicConnectionFactory 
         // and Destination objects. Of course, you can use your own JNDI servers 
         // if you want. 
         // Set RMI as the protocol. Note that OpenJMS also supports TCP, HTTP and SSL 
         // protocols as well. 
-        String host = "localhost";
         String port = "1099";
         String jndiName = "JndiServer";
         String protocol = "rmi";
