@@ -8,8 +8,6 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.lang.*;
 import org.apache.log4j.Category;
 
@@ -19,12 +17,10 @@ import org.apache.log4j.Category;
  * <br/>
  * Synopsis:<br/>
  * object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]
- * <br/>
- * Bindings:<br/>
- * <b>object</b> object to test
- * <b>className</b> class or interface name
- * <b>negate</b><br/> Inverts the sense of the conditional.
- * <br/>
+ * 
+ * @binding object object to test
+ * @binding className class or interface name
+ * @binding negate Inverts the sense of the conditional.
  */
 public class ERXInstanceOfConditional extends WOComponent {
 
