@@ -330,4 +330,7 @@ public class DRMasterCriteria extends Object  {
         return _keyDesc;
     }
 
+    public String toString() {
+        return "<DRMasterCriteria label: \"" + label() + "\"; subCriterias: " + subCriteriaList() + " >";
+    }
 }

@@ -124,4 +124,8 @@ public class DRAttributeGroup extends DRAttribute  {
         }
         return _flatAttributesTotal;
     }
+
+    public String toString() {
+        return "<DRAttributeGroup keyPath:\"" + keyPath() + "\"; label:\"" + label() + "\"; attributes: " + attributes() + "; >";
+    }
 }

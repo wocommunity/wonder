@@ -167,5 +167,7 @@ public class DRGroup extends Object  {
         }
         return _keyDesc;
     }
-
+    public String toString() {
+        return "<DRGroup masterCriteria: " + masterCriteria() + "; >";
+    }
 }
