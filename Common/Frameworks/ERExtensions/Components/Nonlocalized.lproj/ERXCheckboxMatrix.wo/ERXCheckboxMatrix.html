@@ -2,16 +2,18 @@
     <webobject name=CheckBoxRepetition>
     <table border="0" cellpadding="0" cellspacing="0"><tr><td valign="top" align="center"><webobject name=CheckBox></webobject></td><WEBOBJECT NAME=GenericContainer1><webobject name=Content></webobject></WEBOBJECT></tr></table>
     </webobject>
-<WEBOBJECT NAME=Conditional1><br/><input type="submit" value="Select All" name="SelectAll" onclick="checkAll(this.form, true)"> <input type="submit" value="Deselect All" name="DeselectAll" onclick="checkAll(this.form, false)"><SCRIPT TYPE=text/javascript>function checkAll(form, shouldCheck) {
+<WEBOBJECT NAME=Conditional1>
+<webobject name=GenericElement1></webobject> 
+<webobject name=GenericElement2></webobject><webobject name="OnlyOnce"><SCRIPT TYPE=text/javascript>function checkAll(form, name, shouldCheck) {
     var elements = form.elements;
     var i = elements.length;
     while  (i-- >= 0) {
         var element = elements[i];
         if (element.type.toLowerCase() == "checkbox") {
-            if (element.checked != shouldCheck) {
+            if (element.name == name && element.checked != shouldCheck) {
                 element.checked=shouldCheck;
             }
         }
     }
 }
-</SCRIPT></WEBOBJECT></WEBOBJECT></webobject>
+</SCRIPT></webobject></WEBOBJECT></WEBOBJECT></webobject>

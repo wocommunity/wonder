@@ -35,7 +35,7 @@ import java.lang.reflect.*;
  * @binding tableOtherTagString
  */
 
-public class ERXCheckboxMatrix extends WOComponent {
+public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXCheckboxMatrix.class);
 
@@ -58,6 +58,18 @@ public class ERXCheckboxMatrix extends WOComponent {
         invalidateCaches();
     }
 
+    public String onClick(boolean onOff) {
+        return "checkAll(this.form, '" + wrapperElementID + "'," + (onOff ? "true" : "false") + ")";
+    }
+
+    public String selectOnClick() {
+        return onClick(true);
+    }
+
+    public String deselectOnClick() {
+        return onClick(false);
+    }
+    
     public Object currentItem() {
         setValueForBinding(currentItem, "item");
         return currentItem;
