@@ -141,13 +141,20 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipName) {
         EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext(), false);
         setEditingContext(ec);
-        
         _masterObject = EOUtilities.localInstanceOfObject(ec, eo);
         _relationshipKey = relationshipName;
+        setObject(_masterObject);
         
         _singleSelection = _masterObject.classDescription().toManyRelationshipKeys().containsObject(_relationshipKey) ? Boolean.FALSE : Boolean.TRUE; 
         
-        EODataSource ds = new EODatabaseDataSource(ec, d2wContext().entity().name());
+        EODataSource ds;
+        String restrictedChoiceKey = (String)d2wContext().valueForKeyPath("restrictedChoiceKey");
+        if(restrictedChoiceKey != null && restrictedChoiceKey.length() > 0) {
+            Object choices = d2wContext().valueForKeyPath(restrictedChoiceKey);
+            ds = ERXEOControlUtilities.dataSourceForArray((NSArray)choices);
+        } else {
+            ds = new EODatabaseDataSource(ec, d2wContext().entity().name(), (String)d2wContext().valueForKeyPath("restrictingFetchSpecification"));
+        }
         setDataSource(ds);
         
         Object relationshipValue = _masterObject.valueForKey(relationshipName);
