@@ -455,7 +455,45 @@ public class ERXEOAccessUtilities {
         }
         return result;
     }
-
+    /**
+     * Utility method to generate a new primary key dictionary using
+     * the adaptor for a given entity. This is can be handy if you
+     * need to have a primary key for an object before it is saved to
+     * the database. This method uses the same method that EOF uses
+     * by default for generating primary keys. See
+     * {@link ERXGeneratesPrimaryKeyInterface} for more information
+     * about using a newly created dictionary as the primary key for
+     * an enterprise object.
+     * @param ec editing context
+     * @param entityName name of the entity to generate the primary
+     *		key dictionary for.
+     * @return a dictionary containing a new primary key for the given
+     *		entity.
+     */
+    public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
+        // FIXME: Should use the modelgroup for the root object store of the
+        //	  editing context.
+        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        NSDictionary primaryKey = null;
+        try {
+            dbContext.lock();
+            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
+            if (!adaptorChannel.isOpen())
+                adaptorChannel.openChannel();
+            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+            if(arr != null)
+                primaryKey = (NSDictionary)arr.lastObject();
+            else
+                log.warn("Could not get primary key for entity: " + entityName + " exception");
+            dbContext.unlock();
+        } catch (Exception e) {
+            dbContext.unlock();
+            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
+        }
+        return primaryKey;
+    }
+    
     /**
      * Creates an array containing all of the primary
      * keys of the given objects.

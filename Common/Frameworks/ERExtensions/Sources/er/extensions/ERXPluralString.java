@@ -64,7 +64,7 @@ public class ERXPluralString extends WOComponent {
 */
     
     public boolean showNumber() {
-        return hasBinding("showNumber") ? ERXUtilities.booleanValue(valueForBinding("showNumber")) : true;
+        return hasBinding("showNumber") ? ERXValueUtilities.booleanValue(valueForBinding("showNumber")) : true;
         //boolean result=true;
         //Integer showNumber=(Integer);
         //if (showNumber!=null && showNumber.intValue()==0)

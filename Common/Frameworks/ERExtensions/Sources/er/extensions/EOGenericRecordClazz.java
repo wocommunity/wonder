@@ -135,7 +135,7 @@ public class EOGenericRecordClazz extends Object {
      * @return newly created and inserted object
      */
     public EOEnterpriseObject createAndInsertObject(EOEditingContext ec) {
-        EOEnterpriseObject eo = ERXUtilities.createEO(entityName(), ec);
+        EOEnterpriseObject eo = ERXEOControlUtilities.createAndInsertObject(ec,entityName());
         return eo;
     }
 

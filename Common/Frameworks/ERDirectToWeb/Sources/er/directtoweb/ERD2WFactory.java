@@ -97,7 +97,7 @@ public class ERD2WFactory extends D2W {
         EOEnterpriseObject eo;
         try {
 	    ec.lock();
-            eo = ERXUtilities.createEO(entity.name(), ec);
+            eo = ERXEOControlUtilities.createAndInsertObject(ec, entity.name());
         } finally {
             ec.unlock();
         }

@@ -7,8 +7,7 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXSession;
+import er.extensions.*;
 
 /**
  * Little help component useful for debugging.<br />
@@ -24,7 +23,7 @@ public class ERDDebuggingHelp extends WOComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
     
     public boolean showHelp() {
-        return ERDirectToWeb.d2wDebuggingEnabled(session()) || ERXUtilities.booleanValue(valueForBinding("condition"));
+        return ERDirectToWeb.d2wDebuggingEnabled(session()) || ERXValueUtilities.booleanValue(valueForBinding("condition"));
     }
     public boolean d2wComponentNameDebuggingEnabled() {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());

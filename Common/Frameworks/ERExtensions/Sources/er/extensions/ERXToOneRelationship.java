@@ -149,7 +149,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         NSMutableDictionary _dictionary = (isDictionary) ? (NSMutableDictionary)aSourceObject : null;
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
         EOEnterpriseObject localEO = !isDictionary && anEO != null ?
-            ERXUtilities.localInstanceOfObject(_eo.editingContext(), (EOEnterpriseObject)anEO) : null;
+            ERXEOControlUtilities.localInstanceOfObject(_eo.editingContext(), (EOEnterpriseObject)anEO) : null;
         // Need to handle the keyPath situation.
         if (_eo != null && masterKey.indexOf(".") != -1) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(masterKey);
@@ -249,7 +249,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 	    else
 		ec = session().defaultEditingContext();
 	    
-	    anUnsortedArray = ERXUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
+	    anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
             /* WO5
@@ -273,8 +273,8 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 ec = ((EOEnterpriseObject)_localSourceObject()).editingContext();
                 for (Enumeration e = aSortedArray.objectEnumerator(); e.hasMoreElements();) {
                     eo = (EOEnterpriseObject)e.nextElement();
-                    localArray.addObject((ec != eo.editingContext() && ERXUtilities.localInstanceOfObject(ec, eo) != null ?
-                                          ERXUtilities.localInstanceOfObject(ec, eo) : eo));
+                    localArray.addObject((ec != eo.editingContext() && ERXEOControlUtilities.localInstanceOfObject(ec, eo) != null ?
+                                          ERXEOControlUtilities.localInstanceOfObject(ec, eo) : eo));
                 }
                 aSortedArray=localArray;
             }

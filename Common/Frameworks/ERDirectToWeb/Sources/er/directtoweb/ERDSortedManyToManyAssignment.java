@@ -99,7 +99,7 @@ public class ERDSortedManyToManyAssignment extends ERDAssignment {
             for (Enumeration e = entity.relationships().objectEnumerator(); e.hasMoreElements();) {
                 EORelationship relationship = (EORelationship)e.nextElement();
                 if (relationship.userInfo() != null
-                    && ERXUtilities.booleanValue(relationship.userInfo().objectForKey(SortedJoinRelationshipUserInfoKey))) {
+                    && ERXValueUtilities.booleanValue(relationship.userInfo().objectForKey(SortedJoinRelationshipUserInfoKey))) {
                     relationshipCache.addObject(relationship);
                 }
             }

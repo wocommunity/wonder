@@ -317,7 +317,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>
      */
     // MOVEME: Need to have a central repository of all of these keys and what they mean
-    static boolean _raiseOnMissingEditingContextDelegate = 	ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
+    static boolean _raiseOnMissingEditingContextDelegate = 	ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
     /**
      * By default, and this should change in the future, all editing contexts that
      * are created and use ERXGenericRecords or subclasses need to have a delegate
@@ -567,7 +567,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return an EO in the same editing context as the caller.
      */
     public EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo) {
-        return ERXUtilities.localInstanceOfObject(editingContext(), eo);
+        return ERXEOControlUtilities.localInstanceOfObject(editingContext(), eo);
     }
 
     /**
@@ -575,7 +575,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return  array of EOs in the same editing context as the caller.
      */
     public NSArray localInstancesOf(NSArray eos) {
-        return ERXUtilities.localInstancesOfObjects(editingContext(), eos);
+        return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
     }
 
     /**

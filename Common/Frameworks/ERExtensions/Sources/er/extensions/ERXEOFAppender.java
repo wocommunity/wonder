@@ -153,8 +153,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
     protected void subAppend(LoggingEvent event) {
         // Create Log Entry for event.
         if (editingContext() != null) {
-            ERXEOFLogEntryInterface logEntry = (ERXEOFLogEntryInterface)ERXUtilities.createEO(getLoggingEntity(),
-                                                                                              editingContext());
+            ERXEOFLogEntryInterface logEntry = (ERXEOFLogEntryInterface)ERXEOControlUtilities.createAndInsertObject(editingContext(), getLoggingEntity());
             // Note that layout is not required and can be null.
             logEntry.intializeWithLoggingEvent(event, layout);
             if (getBufferSize() == -1 || currentBufferSize == getBufferSize()) {
