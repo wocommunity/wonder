@@ -19,72 +19,84 @@
 			shellScript = "sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
 		};
 		F529266203AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRAttributeEditing.java;
 			path = er/reporting/DRAttributeEditing.java;
 			refType = 4;
 		};
 		F529266303AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRMasterCriteriaEditing.java;
 			path = er/reporting/DRMasterCriteriaEditing.java;
 			refType = 4;
 		};
 		F529266403AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeEditor.java;
 			path = er/reporting/WRAttributeEditor.java;
 			refType = 4;
 		};
 		F529266503AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeGroup.java;
 			path = er/reporting/WRAttributeGroup.java;
 			refType = 4;
 		};
 		F529266603AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeListEditor.java;
 			path = er/reporting/WRAttributeListEditor.java;
 			refType = 4;
 		};
 		F529266703AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRMasterCriteriaEditor.java;
 			path = er/reporting/WRMasterCriteriaEditor.java;
 			refType = 4;
 		};
 		F529266803AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRNavigationControl.java;
 			path = er/reporting/WRNavigationControl.java;
 			refType = 4;
 		};
 		F529266903AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRNestedList.java;
 			path = er/reporting/WRNestedList.java;
 			refType = 4;
 		};
 		F529266A03AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRQuickReport.java;
 			path = er/reporting/WRQuickReport.java;
 			refType = 4;
 		};
 		F529266B03AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRRecordGroup.java;
 			path = er/reporting/WRRecordGroup.java;
 			refType = 4;
 		};
 		F529266C03AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRReport.java;
 			path = er/reporting/WRReport.java;
 			refType = 4;
 		};
 		F529266D03AABF4901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRReportEditor.java;
 			path = er/reporting/WRReportEditor.java;
@@ -179,13 +191,14 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F529276603AAC84701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = er/reporting/KeyValueCodingProtectedAccessor.java;
@@ -543,60 +556,70 @@
 			refType = 4;
 		};
 		F55C0D5003AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeEditor.api;
 			path = Components/WRAttributeEditor.api;
 			refType = 2;
 		};
 		F55C0D5103AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeGroup.api;
 			path = Components/WRAttributeGroup.api;
 			refType = 2;
 		};
 		F55C0D5203AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeListEditor.api;
 			path = Components/WRAttributeListEditor.api;
 			refType = 2;
 		};
 		F55C0D5303AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRMasterCriteriaEditor.api;
 			path = Components/WRMasterCriteriaEditor.api;
 			refType = 2;
 		};
 		F55C0D5403AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRNavigationControl.api;
 			path = Components/WRNavigationControl.api;
 			refType = 2;
 		};
 		F55C0D5503AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRNestedList.api;
 			path = Components/WRNestedList.api;
 			refType = 2;
 		};
 		F55C0D5603AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRQuickReport.api;
 			path = Components/WRQuickReport.api;
 			refType = 2;
 		};
 		F55C0D5703AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRRecordGroup.api;
 			path = Components/WRRecordGroup.api;
 			refType = 2;
 		};
 		F55C0D5803AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRReport.api;
 			path = Components/WRReport.api;
 			refType = 2;
 		};
 		F55C0D5903AAB8DD01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRReportEditor.api;
 			path = Components/WRReportEditor.api;
@@ -975,7 +998,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5DF67B7016B792C01000105 = {
 			buildPhases = (
@@ -1041,7 +1063,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5DF67B8016B792C01000105 = {
 			buildPhases = (
@@ -1100,7 +1121,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5DF67B9016B792C01000105 = {
 			buildStyles = (
@@ -1110,6 +1130,7 @@
 				F5DF684F016B792C01000105,
 				F5DF6850016B792C01000105,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
