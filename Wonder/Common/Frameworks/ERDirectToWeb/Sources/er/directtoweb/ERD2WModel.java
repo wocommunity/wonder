@@ -39,7 +39,7 @@ public class ERD2WModel extends D2WModel {
     public static final String ModelWillReset = "ModelWillReset";
 
     /** null refernced used to represent null in the caching system */
-    private final static Object NULL_VALUE=new Object();
+    private final static Object NULL_VALUE="<NULL>";
     
     private Hashtable _cache=new Hashtable(10000);
     private Hashtable _systemCache=new Hashtable(10000);
@@ -206,6 +206,20 @@ public class ERD2WModel extends D2WModel {
         return result;
     }
 
+    /** Means to get at the cache. You shouldn't use this unless you know what you are doing. */
+    public Hashtable cache() {
+        synchronized(this) {
+            return _cache;
+        }
+    }
+
+    /** Means to set the cache. You shouldn't use this unless you know what you are doing. */
+    public void setCache(Hashtable value) {
+        synchronized(this) {
+            _cache = value;
+        }
+    }
+    
     public NSArray canidateRuleSetForRHSInContext(String rhs, D2WContext context) {
         NSMutableSet canidateSet = new NSMutableSet();
         for (Enumeration e = rules().objectEnumerator(); e.hasMoreElements();) {
@@ -274,7 +288,7 @@ public class ERD2WModel extends D2WModel {
         dependendKeysPerKey.put(D2WModel.PropertyKeyPortionInModelKey,v.clone());
 
         // then enumerate through all the rules; h 
-        for (Enumeration e=publicRules().objectEnumerator(); e.hasMoreElements();) {
+        for (Enumeration e=rules().objectEnumerator(); e.hasMoreElements();) {
             Rule r=(Rule)e.nextElement();
             String rhsKey=r.rhs().keyPath();
             Vector dependendantKeys=(Vector)dependendKeysPerKey.get(rhsKey);
@@ -318,7 +332,7 @@ public class ERD2WModel extends D2WModel {
                 addKeyToVector("propertyKey", dependendantKeys);
             }
             if(localizationEnabled && r.rhs() instanceof ERDLocalizableAssignmentInterface) {
-                addKeyToVector("session.localizer", dependendantKeys);
+                addKeyToVector("session.localizer.language", dependendantKeys);
             }
             c.keys=new NSMutableArray();
         }
