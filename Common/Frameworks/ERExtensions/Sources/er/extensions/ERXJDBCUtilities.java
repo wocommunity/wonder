@@ -58,9 +58,13 @@ public class ERXJDBCUtilities {
 		
 		for (Enumeration e = m.entities().objectEnumerator(); e.hasMoreElements();) {
 			EOEntity entity = (EOEntity)e.nextElement();
-			log.info("will copy table "+entity.externalName());
-			copyTableDefinedByEntityAndConnectionToDatabaseWithConnection(entity, sourceCon, destCon, false);
-			
+			if (entity.parentEntity() == null) {
+			    log.info("will copy table "+entity.externalName());
+			    copyTableDefinedByEntityAndConnectionToDatabaseWithConnection(entity, sourceCon, destCon, false);
+			} else {
+			    log.info("will not copy entity "+entity.name());
+			    
+			}
 		}
 		try {
 			log.info("committing...");
@@ -82,18 +86,25 @@ public class ERXJDBCUtilities {
 	 * dependencies
 	 */
 	public static void copyTableDefinedByEntityAndConnectionToDatabaseWithConnection(EOEntity entity, Connection sourceCon, Connection destCon, boolean commitAtEnd) {
-		EOAttribute[] attributes = attributesArray(entity.attributes());
+	    boolean destinationIsPostgres;
+        try {
+            destinationIsPostgres = destCon.getMetaData().getDatabaseProductName().toLowerCase().indexOf("postgres") != -1;
+        } catch (SQLException e4) {
+            log.error("could not get product name from destination database", e4);
+            return;
+        }
+        EOAttribute[] attributes = attributesArray(entity.attributes());
 		String tableName = entity.externalName();
 		String[] columnNames = columnsFromAttributes(attributes, true);
 		String[] columnNamesWithoutQuotes = columnsFromAttributes(attributes, false);
 		String columns =
 			columnsFromAttributesAsArray(attributes, true).componentsJoinedByString(
 			", ");
-
+		
 		//build the select statement, this selects -all- rows
 		StringBuffer buf = new StringBuffer();
 		buf.append("select ");
-		buf.append(columns).append(" from ").append(tableName).append(";");
+		buf.append(columns).append(" from \"").append(tableName).append("\";");
 		String sql = buf.toString();
 
 		Statement stmt;
@@ -101,6 +112,7 @@ public class ERXJDBCUtilities {
 			stmt = sourceCon.createStatement();
 		} catch (SQLException e) {
 			log.error("could not create statement for source database", e);
+			log.error("skipping table "+tableName);
 			return;
 		}
 		ResultSet rows = null;
@@ -109,16 +121,23 @@ public class ERXJDBCUtilities {
 			rows = stmt.executeQuery(sql);
 		} catch (SQLException e1) {
 			log.error("could not execute select " + sql, e1);
+			log.error("skipping table "+tableName);
 			return;
 		}
 
 		//transfer the data
 		//build the insert sql
 		//the sql looks like 'insert into TABLE (COLUMNS) values (VALUES);
+		//HACKALERT: this works fine for me...
+		if (destinationIsPostgres) {
+		    tableName = tableName.toUpperCase();
+		    columns = columns.toUpperCase();
+		}
+		
 		StringBuffer buf1 = new StringBuffer();
 		buf1
 		.append("insert into ")
-		.append(tableName)
+		.append("\""+tableName+"\"")
 		.append(" (")
 		.append(columns)
 		.append(") values (");
@@ -138,16 +157,17 @@ public class ERXJDBCUtilities {
 			log.error(
 					"could not create prepared statement for SQL " + insertSql,
 					e3);
+			log.error("skipping table "+tableName);
 			return;
 		}
 		
 		try {
-			boolean destinationIsPostgres = destCon.getMetaData().getDatabaseProductName().toLowerCase().indexOf("postgres") != -1;
-			
 			//transfer each row by first setting the values
-			while (rows.next()) {
-				if (rows.getRow() % 100 == 0) {
-					log.info("inserting row "+rows.getRow());
+			int rowsCount = 0;
+		    while (rows.next()) {
+			    rowsCount++;
+				if (rows.getRow() % 10000 == 0) {
+					log.info("table "+tableName+", inserted "+rows.getRow()+" rows");
 				}
 				
 				//call upps.setInt, upps.setBinaryStream, ...
@@ -155,7 +175,7 @@ public class ERXJDBCUtilities {
 					//first we need to get the type
 					String columnName = columnNamesWithoutQuotes[i];
 					//HACKALERT: this works for me!
-					if (destinationIsPostgres) columnName = columnName.toLowerCase();
+					if (destinationIsPostgres) columnName = columnName.toUpperCase();
 					
 					Object o = rows.getObject(columnName);
 					if (log.isDebugEnabled()) {
@@ -186,6 +206,8 @@ public class ERXJDBCUtilities {
 				upps.executeUpdate();
 				upps.clearParameters();
 			}
+			log.info("table "+tableName+", inserted "+rowsCount+" rows");
+			
 			if (commitAtEnd) {
 				destCon.commit();
 			}
