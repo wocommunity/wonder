@@ -220,7 +220,7 @@ public class ERXEC extends EOEditingContext {
     	super.unlock();
         if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
             if(lockTrace.isDebugEnabled()) {
-                lockLogger.debug("unlocked "+this, new Exception());
+                lockLogger.debug("unlocked "+this+" "+ ERXUtilities.stackTrace());
             } else {
                 lockLogger.debug("unlocked "+this);
             }
