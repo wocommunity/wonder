@@ -70,7 +70,7 @@ public abstract class ERMailDelivery {
     public static String callBackClassName = null;
     public static String callBackMethodName = null;
 
-    public static String DefaultCharset = "ISO-8859-1";
+    public static String DefaultCharset = System.getProperty ("er.javamail.defaultEncoding");
     public String _charset = DefaultCharset;
 
     /** callbackObject to refer to in the calling program */
@@ -158,16 +158,51 @@ public abstract class ERMailDelivery {
         this._inlineAttachments ().removeObject (attachment);
     }
 
+    protected InternetAddress internetAddressWithEmailAndPersonal (String email, String personal) throws AddressException {
+        InternetAddress address = null;
+
+        if (personal != null) {
+            address = new InternetAddress ();
+            address.setAddress (email);
+
+            try {
+                address.setPersonal (personal, this.charset ());
+            } catch (java.io.UnsupportedEncodingException ex) {
+                // set the string anyway.
+                try {
+                    address.setPersonal (personal);
+                } catch (Exception e) {
+                    // give up ...
+                }
+            }
+        } else {
+            address = new InternetAddress (email);
+        }
+
+        return address;
+    }
+
     /** Sets the from address for the current message instance */
     public void setFromAddress (String fromAddress) throws MessagingException, AddressException {
         this.mimeMessage ().setFrom (new InternetAddress (fromAddress));
     }
 
-    /** Sets the reply-to address for the current message instance */
-    public void setReplyToAddress (String replyToAddress) throws MessagingException, AddressException {
-        this.mimeMessage ().setReplyTo  (new InternetAddress [] {
-			new InternetAddress (replyToAddress)
-		});
+    /** Sets the from address for the current message instance using an email and the personal name. */
+    public void setFromAddress (String fromAddress, String personalName) throws MessagingException, AddressException {
+        InternetAddress address =
+        this.internetAddressWithEmailAndPersonal (fromAddress, personalName);
+        this.mimeMessage ().setFrom (address);
+    }
+
+    public void setToAddress (String toAddress) throws MessagingException, AddressException {
+        this.setToAddresses (new NSArray (toAddress));
+    }
+
+    /** Sets the to address for the current message instance using an email and the personal name. */
+    public void setToAddress (String toAddress, String personalName) throws MessagingException, AddressException {
+        InternetAddress address =
+        this.internetAddressWithEmailAndPersonal (toAddress, personalName);
+        setInternetAddresses (new NSArray (address), Message.RecipientType.TO);
     }
 
     /** Sets the to-addresses array for the current message instance */
@@ -175,8 +210,11 @@ public abstract class ERMailDelivery {
         setAddresses (toAddresses, Message.RecipientType.TO, true);
     }
 
-    public void setToAddress (String toAddress) throws MessagingException, AddressException {
-        this.setToAddresses (new NSArray (toAddress));
+    /** Sets the reply-to address for the current message instance */
+    public void setReplyToAddress (String replyToAddress) throws MessagingException, AddressException {
+        this.mimeMessage ().setReplyTo  (new InternetAddress [] {
+			new InternetAddress (replyToAddress)
+		});
     }
 
     /** Sets the cc-addresses array for the current message instance */
@@ -199,13 +237,7 @@ public abstract class ERMailDelivery {
 
     /** Sets the subject for the current message instance */
     public void setSubject (String subject) throws MessagingException {
-        String encoded = null;
-        try {
-            encoded = MimeUtility.encodeText (subject, charset(), !charset().equals(DefaultCharset) ? "B" : null);
-        } catch (Exception e) {
-            encoded = subject;
-        }
-        this.mimeMessage ().setSubject (encoded);
+        this.mimeMessage ().setSubject (ERMailUtils.encodeString (subject, this.charset ()));
     }
 
     /**
@@ -331,8 +363,9 @@ public abstract class ERMailDelivery {
         // If the xMailer property has not been set, check if one has been provided
         // in the System properties
         if ((this.xMailerHeader () == null) &&
-            (ERJavaMail.sharedInstance ().defaultXMailerHeader () != null))
+            (ERJavaMail.sharedInstance ().defaultXMailerHeader () != null)) {
             this.setXMailerHeader (ERJavaMail.sharedInstance ().defaultXMailerHeader ());
+        }
 
         this.mimeMessage ().setSentDate (new Date ());
         this.mimeMessage ().saveChanges ();
@@ -344,7 +377,26 @@ public abstract class ERMailDelivery {
         setAddresses (addressesArray, type, false);
     }
 
-    
+    /**
+     * Sets addresses using an NSArray of InternetAddress objects.
+     * This method, unlike 'setAddresses' does not have the ability to
+     * filter black & white list.
+     */
+    public void setInternetAddresses (NSArray addresses,
+                                      Message.RecipientType type) throws MessagingException {
+        if ((type == null) || (addresses == null) || (addresses.count () == 0)) {
+            // don't do anything.
+            return;
+        }
+
+        InternetAddress [] internetAddresses = new InternetAddress [addresses.count ()];
+        for (int i=0 ; i<addresses.count () ; i++) {
+            internetAddresses [i] = (InternetAddress) addresses.objectAtIndex (i);
+        }
+
+        this.mimeMessage ().setRecipients (type, internetAddresses);
+    }
+
     /**
      * Sets addresses regarding their recipient type in the current message.
      * Has the option to filter the address list based on the white and black
@@ -356,17 +408,19 @@ public abstract class ERMailDelivery {
         throws MessagingException, AddressException {
             InternetAddress [] addresses = null;
 
-            if (filterAddresses)
+            if (filterAddresses) {
                 addressesArray = ERJavaMail.sharedInstance().filterEmailAddresses(addressesArray);
-            
-            if (!ERJavaMail.sharedInstance ().centralize ())
+            }
+
+            if (!ERJavaMail.sharedInstance ().centralize ()) {
                 addresses = ERMailUtils.convertNSArrayToInternetAddresses (addressesArray);
-            else
+            } else {
                 addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
+            }
 
             this.mimeMessage ().setRecipients (type, addresses);
         }
-    
+
     /**
      * Abstract method called by subclasses for doing pre-processing before sending the mail.
      * @return the multipart used to put in the mail.
