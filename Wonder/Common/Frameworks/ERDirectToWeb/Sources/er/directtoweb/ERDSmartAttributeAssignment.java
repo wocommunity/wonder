@@ -30,28 +30,26 @@ An entity A has a relationship b to an entity B, which has a subentity B1. B1 ha
     public ERDSmartAttributeAssignment(String key, Object value) { super(key,value); }
 
     public Object smartAttribute(D2WContext c) {
-        EOAttribute result=c.attribute();
-        if (result==null) {
-            String propertyKey=c.propertyKey();
-            if (propertyKey!=null) {
-                Object rawObject=c.valueForKey("object");
-                if (rawObject instanceof EOEnterpriseObject) {
-                    EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
-                    if (object!=null) {
-                        EOEnterpriseObject lastEO=object;
-                        if (lastEO!=null && propertyKey.indexOf(".")!=-1) {
-                            String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
-                            Object rawLastEO=object.valueForKeyPath(partialKeyPath);
-                            lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
-                        }
-                        if (lastEO!=null) {
-                            EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
-                            String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(propertyKey);
-                            result=entity.attributeNamed(lastKey);
-                        }
-                    }
-                }
+        EOAttribute result=null;
+        String propertyKey=c.propertyKey();
+        Object rawObject=c.valueForKey("object");
+        if (rawObject!=null && rawObject instanceof EOEnterpriseObject && propertyKey!=null) {
+            EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
+            EOEnterpriseObject lastEO=object;
+            if (lastEO!=null && propertyKey.indexOf(".")!=-1) {
+                String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
+                Object rawLastEO=object.valueForKeyPath(partialKeyPath);
+                lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
             }
+            if (lastEO!=null) {
+                EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
+                String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(propertyKey);
+                result=entity.attributeNamed(lastKey);
+            }
+        }
+        if (result==null) {
+            // default to the basic attribute if the above didnt' work
+            result=c.attribute(); 
         }
         return result;
     }    

@@ -34,30 +34,24 @@ An entity A has a relationship b to an entity B, which has a subentity B1. B1 ha
 
     public Object smartRelationship(D2WContext c) {
         Object result = null;
-        if (c.valueForKey("object") instanceof EOEnterpriseObject) {
-            result= c.relationship();
-            if (result==null) {
-                Object rawObject=c.valueForKey("object");
-                if (rawObject instanceof EOEnterpriseObject) {
-                    EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
-                    if (object!=null) {
-                        String propertyKey=c.propertyKey();
-                        if (propertyKey != null) {
-                            EOEnterpriseObject lastEO=object;
-                            if (propertyKey.indexOf(".")!=-1) {
-                                String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
-                                Object rawLastEO=object.valueForKeyPath(partialKeyPath);
-                                lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
-                            }
-                            if (lastEO!=null) {
-                                EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
-                                String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(propertyKey);
-                                result=entity.relationshipNamed(lastKey);
-                            }
-                        }
-                    }
-                }
-            }            
+        Object rawObject=c.valueForKey("object");
+        String propertyKey=c.propertyKey();
+        if (rawObject!=null && rawObject instanceof EOEnterpriseObject && propertyKey != null) {
+            EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
+            EOEnterpriseObject lastEO=object;
+            if (propertyKey.indexOf(".")!=-1) {
+                String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
+                Object rawLastEO=object.valueForKeyPath(partialKeyPath);
+                lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
+            }
+            if (lastEO!=null) {
+                EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
+                String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(propertyKey);
+                result=entity.relationshipNamed(lastKey);
+            }
+        }
+        if (result==null) {
+            result=c.relationship();
         }
         return result;
     }
