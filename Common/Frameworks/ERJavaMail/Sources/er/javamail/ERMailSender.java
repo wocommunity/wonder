@@ -1,8 +1,8 @@
 /*
  $Id$
- 
+
  ERMailSender.java - Camille Troillard - tuscland@mac.com
-*/
+ */
 
 package er.javamail;
 
@@ -15,13 +15,13 @@ import java.util.Vector;
 import java.lang.reflect.*;
 
 /** This class is used to send mails in a threaded way.<BR>
-    This is needed in WebObjects because if sending 20 mails takes 40 seconds,
-    then the user must wait 40 seconds before attempting to use the application.
-    @author Camille Troillard <tuscland@mac.com> */
+This is needed in WebObjects because if sending 20 mails takes 40 seconds,
+then the user must wait 40 seconds before attempting to use the application.
+@author Camille Troillard <tuscland@mac.com> */
 public class ERMailSender extends Thread {
 
-	static ERXLogger log = ERXLogger.getERXLogger (ERMailSender.class);
-	
+    static ERXLogger log = ERXLogger.getERXLogger (ERMailSender.class);
+
     private static ERMailSender _sharedMailSender;
 
     private Stats stats;
@@ -32,14 +32,41 @@ public class ERMailSender extends Thread {
     private boolean threadSuspended = false;
     private int milliSecondsWaitRunLoop = 5000;
 
-	public static class Exception extends java.lang.Exception {
-		public Exception () { super (); }
-	}
+    public static class Exception extends java.lang.Exception {
+        public Exception () { super (); }
+    }
 
-	public static class SizeOverflowException extends ERMailSender.Exception {
-		public SizeOverflowException () { super (); }
-	}
-	
+    public static class SizeOverflowException extends ERMailSender.Exception {
+        public SizeOverflowException () { super (); }
+    }
+
+    /**
+     * Exception class for forwarding javax.mail exceptions.
+     */
+    public static class ForwardException extends ERMailSender.Exception {
+
+        /** holds the forwarded exception */
+        protected java.lang.Exception forwardException;
+
+        /**
+         * Public constructor for a forwarded
+         * exception.
+         * @param e forwared exception
+         */
+        public ForwardException (java.lang.Exception e) {
+            super ();
+            forwardException = e;
+        }
+
+        /**
+         * Gets the forwarded exception.
+         * @return forwarded exception.
+         */
+        public java.lang.Exception forwardException () {
+            return forwardException;
+        }
+    }
+    
     private ERMailSender () {
         super ("ERMailSender");
         this.setPriority (Thread.MIN_PRIORITY);
@@ -51,8 +78,8 @@ public class ERMailSender extends Thread {
 
     /** @return the shared instance of the singleton ERMailSender object */
     public static ERMailSender sharedMailSender () {
-		if (_sharedMailSender == null)
-			_sharedMailSender = new ERMailSender ();
+        if (_sharedMailSender == null)
+            _sharedMailSender = new ERMailSender ();
         return _sharedMailSender;
     }
 
@@ -60,14 +87,14 @@ public class ERMailSender extends Thread {
     public Stats stats () {
         return stats;
     }
-    
+
     /** Puts a JavaMail MimeMessage in the message queue and sends it ASAP. */
     public void sendMessage (ERMessage message) throws ERMailSender.Exception {
-		try {
-			messages.push (message);
-		} catch (ERQueue.SizeOverflowException e) {
-			throw new ERMailSender.SizeOverflowException ();
-		}
+        try {
+            messages.push (message);
+        } catch (ERQueue.SizeOverflowException e) {
+            throw new ERMailSender.SizeOverflowException ();
+        }
 
         threadSuspended = false;
 
@@ -78,13 +105,44 @@ public class ERMailSender extends Thread {
         }
     }
 
+    /**
+     * Sends a message with the option to block until the message is sent.
+     * If blocking is specified then this method will forward on any exceptions
+     * using a {@link ForwardException}. If non-blocking is specified then
+     * the message is pushed into a queue to be sent immediately.
+     * @param message to be sent
+     * @param shouldBlock flag to indicate if this method should block until the message
+     *		is sent or if the message should be put into a queue.
+     */
+    public void sendMessage (ERMessage message, boolean shouldBlock) throws ERMailSender.Exception {
+        if (!shouldBlock) {
+            sendMessage(message);
+        } else {
+            try {
+                Transport transport = ERJavaMail.sharedInstance ().defaultSession ().getTransport ("smtp");
+                if (!transport.isConnected())
+                    transport.connect();
+
+                MimeMessage mimeMessage = message.mimeMessage();
+
+                // Send the message
+                transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+            } catch (java.lang.Exception e) {
+                if (log.isDebugEnabled ())
+                    log.debug ("Caught exception when sending mail in a non-blocking manner: "
+                              + ERXUtilities.stackTrace (e));
+                throw new ERMailSender.ForwardException (e);
+            }
+        }
+    }
+    
     /** Don't call this method, this is the thread run loop
         and is automatically called. */
     public void run () {
         Address[] invalidEmails = null;
         Vector invalidEmailsVector = new Vector();
         while (true) {
-            try {                
+            try {
                 if (threadSuspended) {
                     synchronized (this) {
                         while (threadSuspended)
@@ -97,27 +155,27 @@ public class ERMailSender extends Thread {
             Object callbackObject = null;
 
             // If there are still messages pending ...
-			Session session = null;
-			Transport transport = null;
-			if (!messages.empty ()) {
-				session = ERJavaMail.sharedInstance ().newSession ();
-				try {
-					transport = session.getTransport ("smtp");
-					transport.connect ();
-				} catch (java.lang.Exception e) {
-					// FIXME: handle this exception
-					e.printStackTrace ();
-				}
-			}
+            Session session = null;
+            Transport transport = null;
+            if (!messages.empty ()) {
+                session = ERJavaMail.sharedInstance ().newSession ();
+                try {
+                    transport = session.getTransport ("smtp");
+                    transport.connect ();
+                } catch (java.lang.Exception e) {
+                    // FIXME: handle this exception
+                    e.printStackTrace ();
+                }
+            }
 
             while (!messages.empty ()) {
                 ERMessage message = (ERMessage)messages.pop();
                 MimeMessage aMessage = message.mimeMessage();
                 callbackObject = message.callbackObject();
 
-				// Send the message
-				try {
-					transport.sendMessage (aMessage, aMessage.getAllRecipients());
+                // Send the message
+                try {
+                    transport.sendMessage (aMessage, aMessage.getAllRecipients());
                 } catch (java.lang.Exception e) {
                     stats.incrementErrorCount ();
                     if (e instanceof javax.mail.SendFailedException) {
@@ -128,7 +186,7 @@ public class ERMailSender extends Thread {
                                 invalidEmailsVector.addElement(invalidEmails[i] + "");
                             }
                         }
-                        
+
                     }
 
                     e.printStackTrace ();
@@ -137,53 +195,53 @@ public class ERMailSender extends Thread {
                 }
             }
 
-			if (transport != null) {
-				try {
-					transport.close ();
-				} catch (java.lang.Exception e) {
-					e.printStackTrace ();
-					// FIXME: handle this exception
-				}
-			}
+            if (transport != null) {
+                try {
+                    transport.close ();
+                } catch (java.lang.Exception e) {
+                    e.printStackTrace ();
+                    // FIXME: handle this exception
+                }
+            }
 
             /** Execute the callback method to notify the calling application of
-               any invalid emails. anObject is an object that comes from the calling
-               application. It's a way to relate any status conditions in ERJavaMail
-               with the calling application. For example, if you have your own "Message"
-               class, you can pass it along with the list of e-mails to send to
-               ERJavaMail. If an error occurs, you can set an error state on your
-               own Message object. Or if the e-mails are succcessfully sent, you can
-               update your Message object with a success state. */
-            
+                any invalid emails. anObject is an object that comes from the calling
+                application. It's a way to relate any status conditions in ERJavaMail
+                with the calling application. For example, if you have your own "Message"
+                class, you can pass it along with the list of e-mails to send to
+                ERJavaMail. If an error occurs, you can set an error state on your
+                own Message object. Or if the e-mails are succcessfully sent, you can
+                update your Message object with a success state. */
+
             if (callbackObject != null) {
                 try {
-                    Class c = Class.forName (ERMailDelivery.callBackClassName);  
+                    Class c = Class.forName (ERMailDelivery.callBackClassName);
                     Class[] parameterTypes = new Class[] {callbackObject.getClass(), invalidEmailsVector.getClass()};
                     Method m = c.getMethod (ERMailDelivery.callBackMethodName, parameterTypes);
                     Object[] args = new Object[] {callbackObject, invalidEmailsVector};
                     m.invoke(c.newInstance(), args);
                 } catch (ClassNotFoundException cnfe) {
                     log.error ("ERMailSender. Unable to find class: " + ERMailDelivery.callBackClassName);
-					throw new NSForwardException (cnfe);
+                    throw new NSForwardException (cnfe);
                 } catch (NoSuchMethodException nsme) {
                     log.error ("ERMailSender. Unable to find method: " + ERMailDelivery.callBackMethodName);
-					throw new NSForwardException (nsme);
+                    throw new NSForwardException (nsme);
                 } catch (IllegalAccessException iae) {
                     log.error ("ERMailSender. IllegalAccessException: " + iae.getMessage());
-					throw new NSForwardException (iae);
+                    throw new NSForwardException (iae);
                 } catch (InvocationTargetException ite) {
                     log.error ("ERMailSender. InvocationTargetException: " + ite.getMessage());
-					throw new NSForwardException (ite);
+                    throw new NSForwardException (ite);
                 } catch (InstantiationException ie) {
                     log.error ("ERMailSender. InstantiationException: " + ie.getMessage());
-					throw new NSForwardException (ie);
+                    throw new NSForwardException (ie);
                 }
-            }        
+            }
 
             threadSuspended = true;
         }
     }
-    
+
     /** This class is about logging mail event for stats purposes.
         More stats to come in the future. */
     public class Stats {
