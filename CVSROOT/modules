@@ -34,6 +34,7 @@ ERDirectToWeb		Wonder/Common/Frameworks/ERDirectToWeb
 ERJars			Wonder/Common/Frameworks/ERJars
 ERCoreBusinessLogic 	Wonder/Common/Frameworks/ERCoreBusinessLogic
 ERNeutralLook		Wonder/Common/Frameworks/ERNeutralLook
+ERJavaMail		Wonder/Common/Frameworks/ERJavaMail
 ERMailer		Wonder/Common/Applications/ERMailer
 
 #######################################################################
