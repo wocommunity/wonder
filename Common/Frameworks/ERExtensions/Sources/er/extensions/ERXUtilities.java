@@ -178,8 +178,10 @@ public class ERXUtilities {
 
     /**
      * Provides the same functionality as the equivalent method
-     * in {@link EOUtilities} except it will use the localInstanceOfObject
+     * in {@link com.webobjects.eoaccess.EOUtilities EOUtilities} 
+     * except it will use the localInstanceOfObject
      * method from this utilities class which has a few enhancements.
+     *
      * @param ec editing context to pull local object copies
      * @param eos array of enterprise objects
      * @return an array of copies of local objects
@@ -368,7 +370,8 @@ public class ERXUtilities {
      * This is protected utility method from JavaWOExtensions.
      * All it does is sort a mutable array using a single key.
      * The sort is performed using the selector:
-     * {@link EOSortOrdering.CompareCaseInsensitiveAscending}
+     * {@link com.webobjects.eocontrol.EOSortOrdering#CompareCaseInsensitiveAscending 
+     * EOSortOrdering.CompareCaseInsensitiveAscending}
      * Note: if you want to return a new array of sorted eos
      * you can use 'sort' {@link NSArray.Operator} found in
      * {@link ERXArrayUtilities}. 

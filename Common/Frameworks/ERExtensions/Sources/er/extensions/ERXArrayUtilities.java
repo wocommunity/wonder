@@ -451,9 +451,11 @@ public class ERXArrayUtilities extends Object {
 
     /**
      * Filters a given array with a named fetch specification and bindings.
+     *
      * @param array array to be filtered.
      * @param fetchSpec name of the {@link EOFetchSpecification}.
-     * @param entity name of the {@link EOEntity} to which the fetch specification is associated.
+     * @param entity name of the {@link com.webobjects.eoaccess.EOEntity EOEntity} 
+     * to which the fetch specification is associated.
      * @param bindings bindings dictionary for qualifier variable substitution.
      * @return array filtered and sorted by the named fetch specification.
      */
@@ -489,9 +491,11 @@ public class ERXArrayUtilities extends Object {
 
     /**
      * Filters a given array with a named fetch specification.
+     *
      * @param array array to be filtered.
      * @param fetchSpec name of the {@link EOFetchSpecification}.
-     * @param entity name of the {@link EOEntity} to which the fetch specification is associated.
+     * @param entity name of the {@link com.webobjects.eoaccess.EOEntity EOEntity} 
+     * to which the fetch specification is associated.
      * @return array filtered and sorted by the named fetch specification.
      */
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String fetchSpec, String entity) {

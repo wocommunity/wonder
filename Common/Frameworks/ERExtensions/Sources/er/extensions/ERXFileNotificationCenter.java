@@ -53,7 +53,9 @@ public class ERXFileNotificationCenter {
     private boolean cachingEnabled = true;
     /**
      * Default constructor. If WOCaching is disabled (we take this to mean we are in developement)
-     * then this object will register for the notification {@link WORequestHandler$DidHandleRequestNotification}
+     * then this object will register for the notification 
+     * {@link com.webobjects.appserver.WORequestHandler#DidHandleRequestNotification 
+     * WORequestHandler.DidHandleRequestNotification}
      * which will enable it to check if files have changed at the end of every request-response
      * loop. If WOCaching is enabled then this object will not register for anything and will generate
      * warning messages if observers are registered with caching enabled.
@@ -73,7 +75,9 @@ public class ERXFileNotificationCenter {
 
     /**
      * When the file notification center is garbage collected it removes itself
-     * as an observer from the {@link NSNotificationCenter}. Not doing this will cause exceptions.
+     * as an observer from the 
+     * {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}. 
+     * Not doing this will cause exceptions.
      */
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
