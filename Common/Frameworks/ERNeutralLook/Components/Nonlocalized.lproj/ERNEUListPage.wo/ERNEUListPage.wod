@@ -1,3 +1,7 @@
+AreThereBackgroundColors: ERXNonNullConditional {
+	condition = d2wContext.referenceRelationshipForBackgroupColor;
+}
+
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
@@ -92,6 +96,11 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
+Generic1: WOGenericContainer {
+	BGCOLOR = referenceEO.backgroundColor;
+	elementName = "td";
+}
+
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
@@ -172,6 +181,7 @@ ListTableHeaderRow: WOGenericContainer {
 ListTableRow: WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
+	BGCOLOR = colorForRow;
 }
 
 NavBar: ERXBatchNavigationBar {
@@ -191,6 +201,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+Repetition1: WORepetition {
+	item = referenceEO;
+	list = referenceEOs;
 }
 
 ReturnButton: WOImage {
@@ -240,6 +255,10 @@ SortOrder: ERXSortOrder {
 	displayGroup = displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
+}
+
+String1: WOString {
+	value = referenceEO.name;
 }
 
 SwitchComponent1: WOSwitchComponent {
