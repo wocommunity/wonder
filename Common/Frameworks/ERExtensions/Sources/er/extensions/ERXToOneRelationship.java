@@ -71,7 +71,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 Object _source = _localSourceObject();
                 EOEditingContext anEditingContext = null;
 
-                if (_source instanceof EOEnterpriseObject) {
+                if (_localSourceObjectIsEO()) {
                     anEditingContext = ((EOEnterpriseObject)_source).editingContext();
                 }
                 if (anEditingContext == null) {
@@ -84,7 +84,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                     if (anEntity == null) {
                         throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
                     }
-                    if (_source instanceof EOEnterpriseObject) {
+                    if (_localSourceObjectIsEO()) {
                         EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
                                                                                                     _localRelationshipKey());
                         destinationEntity = relationship != null ? relationship.destinationEntity() : null;
@@ -124,7 +124,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 
     protected Object _localRelativeSourceObject() {
         Object relativeSourceObject = null;
-        if (_localSourceObject() instanceof EOEnterpriseObject && hasKeyPath()) {
+        if (_localSourceObjectIsEO() && hasKeyPath()) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(_localRelationshipKey());
             relativeSourceObject = ((EOEnterpriseObject)_localSourceObject()).valueForKeyPath(partialKeyPath);
         }
@@ -135,27 +135,36 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         return hasKeyPath() ? ERXStringUtilities.lastPropertyKeyInKeyPath(_localRelationshipKey()) : _localRelationshipKey();
     }
 
-    protected boolean hasKeyPath() { return _localRelationshipKey().indexOf(".") != -1; }
+    protected boolean hasKeyPath() { 
+    	return _localSourceObjectIsEO() ? _localRelationshipKey().indexOf(".") != -1 : false; 
+    }
 
-    /*
-     *  -updateSourceObject does the real work here updating
-     * the relationship (or setting the keys for a query).
-     */
+    /**
+	 * @return
+	 */
+	protected boolean _localSourceObjectIsEO() {
+		return _localSourceObject() instanceof EOEnterpriseObject;
+	}
+	
+	/*
+	 *  -updateSourceObject does the real work here updating
+	 * the relationship (or setting the keys for a query).
+	 */
 
-    public void updateSourceObject(Object anEO) {
+	public void updateSourceObject(Object anEO) {
         String masterKey = _localRelationshipKey();
         Object aSourceObject = _localSourceObject();
-        boolean isDictionary = (aSourceObject instanceof NSMutableDictionary);
+        boolean isDictionary = !_localSourceObjectIsEO();
         NSMutableDictionary _dictionary = (isDictionary) ? (NSMutableDictionary)aSourceObject : null;
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
         EOEnterpriseObject localEO = !isDictionary && anEO != null ?
             ERXEOControlUtilities.localInstanceOfObject(_eo.editingContext(), (EOEnterpriseObject)anEO) : null;
         // Need to handle the keyPath situation.
-        if (_eo != null && masterKey.indexOf(".") != -1) {
+        if (_eo != null && masterKey.indexOf(".") != -1 && !isDictionary) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(masterKey);
             _eo = (EOEnterpriseObject)_eo.valueForKeyPath(partialKeyPath);
             masterKey = ERXStringUtilities.lastPropertyKeyInKeyPath(masterKey);
-        }
+         }
         if (anEO!=null) {
             if (isDictionary) {
                 _dictionary.setObjectForKey(anEO, masterKey);
@@ -177,7 +186,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         // we want to pass the validation here for the case where we are creating a new object
         // and are given isMandatory=0 on a mandatory relationship to force users to pick one..
         super.takeValuesFromRequest(r, c);
-        if (_localRelativeSourceObject() instanceof EOEnterpriseObject) {
+        if (_localSourceObjectIsEO()) {
             EOEnterpriseObject localObject = (EOEnterpriseObject)_localRelativeSourceObject();
             Object value = localObject.valueForKey(_localRelativeRelationshipKey());
             try {
@@ -200,7 +209,6 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 
     public void setSelection(Object anEO) {
         Object aValue = null;
-
         // deal with array when ui is browser
         if ((anEO!=null) && (anEO instanceof NSArray)) {
             NSArray anEOArray = (NSArray)anEO;
@@ -225,7 +233,8 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 
     public Object selection() {
         if (_privateSelection()==null) {
-            set_privateSelection(NSKeyValueCoding.Utility.valueForKey(_localRelativeSourceObject(), _localRelativeRelationshipKey()));
+        	set_privateSelection(NSKeyValueCoding.Utility.valueForKey(_localRelativeSourceObject(), _localRelativeRelationshipKey()));
+            
         }
         // deal with isMandatory
         if ((_privateSelection()==null) && !_localIsMandatory()) {
@@ -244,7 +253,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 	    // so we have to check....
 	    EOEditingContext ec;
 	    
-	    if(_sourceObject instanceof EOEnterpriseObject && ((EOEnterpriseObject)_sourceObject).editingContext() != null)
+	    if(_localSourceObjectIsEO() && ((EOEnterpriseObject)_sourceObject).editingContext() != null)
 		ec = ((EOEnterpriseObject)_sourceObject).editingContext();
 	    else
 		ec = session().defaultEditingContext();
@@ -259,7 +268,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             // otherwise the popup selection will be wrong (will default to the first element)
             // this happens for ex on a wizard page with a popup. Select sth in the popup, but leave a mandatory field blank
             // click next --> the page comes back with the error, but the popup lost the selection you made
-            if (_localSourceObject() instanceof EOEnterpriseObject &&
+            if (_localSourceObjectIsEO() &&
                 ((EOEnterpriseObject)_localSourceObject()).valueForKeyPath(_localRelationshipKey()) != null) {
                 NSMutableArray localArray= new NSMutableArray();
                 EOEnterpriseObject eo;
@@ -275,7 +284,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             // dt: we also must ensure that the value on the EO is in this list. This may not be the case if
             // one just created a new relationship in a childEc. Therefore we also must set _privateList to null
             // in awake, caching cannot work here
-            if (_localSourceObject() instanceof EOEnterpriseObject) {
+            if (_localSourceObjectIsEO()) {
                 EOEnterpriseObject lso = (EOEnterpriseObject)_localSourceObject();
                 EOEnterpriseObject relObject = (EOEnterpriseObject)lso.valueForKeyPath(_localRelationshipKey());
                 if (relObject != null) {
