@@ -14,17 +14,23 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
 /**
- * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say states and depending on which state is picked the second popup might reflect all of the cities of that state.<br />
-This WOComponent displays two pop-up buttons. One pop-up displays a list of what can be thought of as parent entities. The second pop-up displays a list of what can be thought of as children entities. When a user selects an entity in the parent list, the child list is instantly modified to reflect the children entities available to the user through that parent. This is done through client-side Javascript.
+ * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say 
+ * states and depending on which state is picked the second popup might reflect all of the cities of that state.<br />
+ * This WOComponent displays two pop-up buttons. One pop-up displays a list of what can be thought of as parent entities. 
+ * The second pop-up displays a list of what can be thought of as children entities. When a user selects an entity in 
+ * the parent list, the child list is instantly modified to reflect the children entities available to the user 
+ * through that parent. This is done through client-side Javascript.
+ * For example,
 
-For example,
 parent1(child1,child2,child3)
 parent2(child4,child5)
 parent3(child2,child5)
 
-When the user selects parent1, its appropriate children are displayed in the second popup. If the user selects child2 in the children pop-up this is the value that is returned to the user through the selectedChild variable.
+ * When the user selects parent1, its appropriate children are displayed in the second popup. 
+ * If the user selects child2 in the children pop-up this is the value that is returned to the 
+ * user through the selectedChild variable.
+ * Users should set:
 
-Users should set:
 parentEntitiesList - This is an array of the parent objects that appear in the first pop-up.
 parentToChildrenRelationshipName - the name of the relationship from the parent to its possible children. This is used to fill the values that appear in the children popup.
 selectedParent - the currently selected parent in the parent pop-up. This can be null, but will return the user-selected parent.
@@ -34,8 +40,10 @@ childDisplayValueName - the name of the variable displayed in the child pop-up.
 parentLabel - the value displayed in the table interface for the parent popup.
 relationLabel - the value displayed in the table interface for the child popup.
 
-For the display of the parent popup, if we aren't passed in a selectedParent, then we default to parentPopUpStringForAll. If we aren't given that either, then we default to the last parent in the array.
-For the display of the child popup, if we aren't passed in a selectedChild, then we default to childPopUpStringForAll. If we aren't given that either, then we default to the last child in the array.
+ * For the display of the parent popup, if we aren't passed in a selectedParent, then we default to 
+ * parentPopUpStringForAll. If we aren't given that either, then we default to the last parent in the array.
+ * For the display of the child popup, if we aren't passed in a selectedChild, then we default to childPopUpStringForAll. 
+ * If we aren't given that either, then we default to the last child in the array.
  * @binding parentEntitiesList
  * @binding parentToChildrenRelationshipName
  * @binding selectedParent
