@@ -6,138 +6,216 @@
 
 package er.javamail;
 
-
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import er.extensions.ERXLogger;
 import java.util.Enumeration;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import er.extensions.ERXApplication;
+import er.extensions.ERXLogger;
 
+
+/**
+ * <code>ERMailUtils</code> contains various utility method related
+ * to mail sending.
+ *
+ * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
+ * @version $Id$
+ */
 public class ERMailUtils extends Object {
 
+    /** The class logger. */
     private static ERXLogger log = ERXLogger.getERXLogger (ERMailUtils.class);
 
     /** The shared mail deliverer */
-    private static ERMailDeliveryHTML _sharedDeliverer;
+    private static ERMailDeliveryHTML sharedDeliverer;
 
+    /**
+     * Accessor to the shared instance of a ERMailDeliveryHTML.
+     *
+     * @return the <code>ERMailDeliveryHTML</code> singleton
+     */
     public static ERMailDeliveryHTML sharedDeliverer () {
-	if (_sharedDeliverer == null)
-	    _sharedDeliverer = new ERMailDeliveryHTML ();
-	return _sharedDeliverer;
+        if (sharedDeliverer == null) {
+            sharedDeliverer = new ERMailDeliveryHTML ();
+        }
+
+        return sharedDeliverer;
     }
 
-    /** Used to instanciate a WOComponent when no context is available,
-     * typically ouside of a session.  An optional argument
-     * sessionDictionary can be provided in order to set objects/keys
-     * in the newly create session of the component.
+    /**
+     *  Augmented version of the method found in {@link ERXApplication}.
+     *  Used to instantiate a WOComponent, typically outside of a session.
      *
-     * @param pageName - The name of the WOComponent that must be instanciated.
+     * @param pageName The name of the WOComponent that must be
+     * instantiated.
+     * @param sessionDict can be provided in order to set objects/keys
+     *  in the newly created session of the component.  This is useful
+     *  when one want to preserve state when sending a mail.
+     * @return a newly instantiated <code>WOComponent</code>.
      */
-    public static WOComponent instanciatePage (String pageName, NSDictionary sessionDictionary) {
-        // Create a context from a fake request
-        WOContext context = new WOContext
-	    (new WORequest ("GET", "", "HTTP/1.1", null, null, null));
-        WOComponent component = WOApplication.application ().pageWithName (pageName, context);
-        if (sessionDictionary != null)
-            setDictionaryValuesInSession (sessionDictionary, component.session ());
+    public static WOComponent instantiatePage (String pageName,
+                                               NSDictionary sessionDict) { 
+        WOComponent component = ERXApplication.instantiatePage  (pageName);
+        if (sessionDict != null) {
+            setDictionaryValuesInSession (sessionDict, component.session ());
+        }
+
         return component;
     }
 
     /** Use this method to send an HTML mail.
      *
-     * @param pageName - The name of the WOComponent that must be instanciated.
-     * @param alternatePageName - The name of the WOComponent that represents
-     *	for the text that must be displayed when an alternate plain text version
-     * of the mail needs to be provided.
-     */
+     * @param delivery the <code>ERMailDeliveryHTML</code> used to
+     * send the mail.
+     * @param pageName The name of the WOComponent that must be
+     * instantiated.
+     * @param alternatePageName The name of the WOComponent that
+     * represents for the text that must be displayed when an
+     * alternate plain text version of the mail needs to be provided.
+     * @param emailFrom the email address the mail is sent from
+     * @param emailTo the email address the mail is sent to
+     * @param emailReplyTo the email address where the mail must be
+     * replied-to.
+     * @param subject the subject of the mail */
     public static void sendHTMLMail (ERMailDeliveryHTML delivery,
-				     String pageName,  String alternatePageName,
-				     String emailFrom, String emailTo,
-				     String emailReplyTo, String subject) {
-	WOComponent mailPage = (WOComponent)ERMailUtils.instanciatePage (pageName, 
-                                                                         delivery.sessionDictionary ());
+                                     String pageName,  String alternatePageName,
+                                     String emailFrom, String emailTo,
+                                     String emailReplyTo, String subject) {
+        WOComponent mailPage = (WOComponent) ERMailUtils.instantiatePage
+            (pageName, delivery.sessionDictionary ());
 
         delivery.newMail ();
         delivery.setComponent (mailPage);
 
-	if (alternatePageName != null) {
-	    String alternateString = null;
-	    WOComponent alternateMailTemplate =
-                (WOComponent)ERMailUtils.instanciatePage (alternatePageName,
-                                                          delivery.sessionDictionary ());
-            alternateString = alternateMailTemplate.generateResponse ().contentString ();
+        if (alternatePageName != null) {
+            String alternateString = null;
+            WOComponent alternateMailTemplate =
+                (WOComponent) ERMailUtils.instantiatePage
+                (alternatePageName, delivery.sessionDictionary ());
+
+            alternateString = 
+                alternateMailTemplate.generateResponse ().contentString ();
 
             if (alternateString != null) {
-		delivery.setHiddenPlainTextContent (alternateString);
-		alternateMailTemplate.session ().terminate ();
-	    }
-	}
+                delivery.setHiddenPlainTextContent (alternateString);
+                alternateMailTemplate.session ().terminate ();
+            }
+        }
 
-	try {
-	    delivery.setFromAddress    (emailFrom);
-	    delivery.setToAddress      (emailTo);
-	    delivery.setReplyToAddress (emailReplyTo);
-	    delivery.setSubject ((subject == null) ? "" : subject);
-	    delivery.sendMail ();
-	} catch (javax.mail.MessagingException e) {
-	    // we must handle this exception correctly because the mail cannot be sent
-	    log.warn ("While trying to sendMail: ", e);
-	} finally {
-	    // We need to force the termination of the sessions because there is some
-            // sort of circular reference between the context and the session when it is
-            // instanciated from a newly created WOContext.
-	    mailPage.session ().terminate ();
-	}
+        try {
+            delivery.setFromAddress    (emailFrom);
+            delivery.setToAddress      (emailTo);
+            delivery.setReplyToAddress (emailReplyTo);
+            delivery.setSubject ((subject == null) ? "" : subject);
+            delivery.sendMail ();
+        } catch (javax.mail.MessagingException e) {
+            // we must handle this exception correctly because the
+            // mail cannot be sent
+            log.warn ("While trying to sendMail: ", e);
+        } finally {
+            // We need to force the termination of the sessions
+            // because there is some sort of circular reference
+            // between the context and the session when it is
+            // instantiated from a newly created WOContext.
+            mailPage.session ().terminate ();
+        }
     }
 
-    public static void setDictionaryValuesInSession (NSDictionary dict, WOSession session) {
-        if ((dict == null) || (session == null))
+    /**
+     * Use this method to send an HTML mail, but default mail
+     * delivery. 
+     * 
+     * @param pageName The name of the WOComponent that must be
+     * instantiated.
+     * @param alternatePageName The name of the WOComponent that
+     * represents for the text that must be displayed when an
+     * alternate plain text version of the mail needs to be provided.
+     * @param emailFrom the email address the mail is sent from
+     * @param emailTo the email address the mail is sent to
+     * @param emailReplyTo the email address where the mail must be
+     * replied-to.
+     * @param subject the subject of the mail
+     */
+    public static void sendHTMLMail (String pageName,  String alternatePageName,
+                                     String emailFrom, String emailTo,
+                                     String emailReplyTo, String subject) {
+        sendHTMLMail (sharedDeliverer (), pageName, alternatePageName,
+                      emailFrom, emailTo, emailReplyTo, subject);
+    }
+
+    /**
+     * This method sets the values found in a dictionary into the
+     * session's state dictionary.  This method is useful when one
+     * want to transfer current session's state into a newly created
+     * session (for example when sending a mail whose page has been
+     * instantiated with {@link ERMailUtils.instantiatePage} or
+     * {@link ERXApplication.instantiatePage}.)
+     *
+     * @param dict a <code>NSDictionary</code> value containing the
+     * values we want to set in the session parameter.
+     * @param session a <code>WOSession</code> value that will
+     * receive the values contained in the dict parameter.
+     */
+    public static void setDictionaryValuesInSession (NSDictionary dict,
+                                                     WOSession session) {
+        if ((dict == null) || (session == null)) {
             return;
+        }
 
         Enumeration en = dict.keyEnumerator ();
         while (en.hasMoreElements ()) {
-            String key = (String)en.nextElement ();
-
-            if (log.isDebugEnabled ())
-                log.debug ("Setting dictionary value in session");
-
+            String key = (String) en.nextElement ();
             Object object = dict.objectForKey (key);
-            if (object != null)
+            if (object != null) {
+                if (log.isDebugEnabled ()) {
+                    log.debug ("Setting in session dict value '" +
+                               object.toString () +
+                               "' for key '" + key + "'");
+                }
+
                 session.setObjectForKey (object, key);
+            }
         }
     }
 
-    public static void sendHTMLMail (String pageName,  String alternatePageName,
-				     String emailFrom, String emailTo,
-				     String emailReplyTo, String subject) {
-	sendHTMLMail (sharedDeliverer (), pageName, alternatePageName,
-		      emailFrom, emailTo, emailReplyTo, subject);
-    }
+    /**
+     * Private method that converts NSArray of String emails to
+     * InternetAddress [].
+     * @param addrs a <code>NSArray</code> value
+     * @return an <code>InternetAddress[]</code> value
+     * @exception AddressException if an error occurs
+     */
+    public static InternetAddress [] convertNSArrayToInternetAddresses (NSArray addrs)
+        throws AddressException {
+        InternetAddress [] addrArray = new InternetAddress [addrs.count ()];
 
-    /** Private method that converts NSArray of String emails to InternetAddress []. */
-    public static InternetAddress [] convertNSArrayToInternetAddresses (NSArray addressesArray)
-	throws AddressException {
-        InternetAddress [] addresses = new InternetAddress [addressesArray.count ()];
-
-        Enumeration en = addressesArray.objectEnumerator ();
-        for (int i=0 ; en.hasMoreElements () ; i++) {
-            String anAddress = (String)en.nextElement ();
-            addresses [i] = new InternetAddress (anAddress);
+        Enumeration en = addrs.objectEnumerator ();
+        for (int i = 0 ; en.hasMoreElements () ; i++) {
+            String anAddress = (String) en.nextElement ();
+            addrArray [i] = new InternetAddress (anAddress);
         }
 
-        return addresses;
+        return addrArray;
     }
 
-    /** Private method that converts NSArray of String emails to InternetAddress []. */
+    /**
+     * Private method that converts NSArray of String emails to
+     * InternetAddress [].
+     * @param addressesArray an <code>InternetAddress[]</code> value
+     * @return a <code>NSArray</code> value
+     * @exception AddressException if an error occurs
+     */
     public static NSArray convertInternetAddressesToNSArray (InternetAddress [] addressesArray)
-	throws AddressException {
-	NSMutableArray addresses = new NSMutableArray (addressesArray.length);
+        throws AddressException {
+        NSMutableArray addresses = new NSMutableArray (addressesArray.length);
 
-        for (int i=0 ; i<addressesArray.length ; i++) {
-            InternetAddress anAddress = (InternetAddress)addressesArray[i];
+        for (int i = 0 ; i < addressesArray.length ; i++) {
+            InternetAddress anAddress = (InternetAddress) addressesArray[i];
             addresses.addObject (anAddress.toUnicodeString ());
         }
 
