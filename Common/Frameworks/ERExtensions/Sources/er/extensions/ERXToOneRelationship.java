@@ -247,7 +247,25 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 }
                 aSortedArray=localArray;
             }
+            
+            // dt: we also must ensure that the value on the EO is in this list. This may not be the case if
+            // one just created a new relationship in a childEc. Therefore we also must set _privateList to null
+            // in awake, caching cannot work here
+            if (_localSourceObject() instanceof EOEnterpriseObject) {
+                EOEnterpriseObject lso = (EOEnterpriseObject)_localSourceObject();
+                EOEnterpriseObject relObject = (EOEnterpriseObject)lso.valueForKeyPath(_localRelationshipKey());
+                if (relObject != null) {
 
+                    if (!aSortedArray.containsObject(relObject)) {
+                        aSortedArray.addObject(relObject);
+                        log.info("adding missing relationship object to list "+relObject);
+                        if (_localSortKey()!=null && _localSortKey().length() > 0) {
+                            ERXUtilities.sortEOsUsingSingleKey(aSortedArray, _localSortKey());
+                        }
+                    }
+                }
+            }
+            
             if (!_localIsMandatory()) {
                 if(noSelectionString() != null)
                     aSortedArray.insertObjectAtIndex(noSelectionString(), 0);
@@ -262,5 +280,11 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             return theCurrentItem;
         }
         return super.theCurrentValue();
+    }
+
+    public void awake() {
+        super.awake();
+        // dt: see theList() method for an explanation
+        set_privateList(null);
     }
 }
