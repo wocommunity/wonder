@@ -9,6 +9,7 @@ package er.extensions;
 import java.util.*;
 
 import org.apache.log4j.*;
+import com.webobjects.foundation.*;
 
 /**
  * Custom subclass of Logger. The main reason for this class
@@ -143,6 +144,11 @@ public class ERXLogger extends org.apache.log4j.Logger {
             if (!ERXProperties.webObjectsVersionIs522OrHigher()) {
                 BasicConfigurator.configure();
                 Logger.getRootLogger().setLevel(Level.INFO);                
+		if(ERXProperties.webObjectsVersionIs522OrHigher()) {
+		    NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+		    NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+		    NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+		}
             }
             _isFirstTimeConfig = false;
         }
