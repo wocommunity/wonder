@@ -12,7 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXExtensions;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class Home extends WOComponent {
 

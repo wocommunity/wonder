@@ -14,12 +14,12 @@ import er.extensions.ERXUtilities;
 import er.directtoweb.ERDObjectWasCreatedDelegate;
 import er.extensions.ERXExtensions;
 import er.directtoweb.ERDPageNameDelegate;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class DirectAction extends WODirectAction {
 
-    //////////////////////////////////////// log4j category ////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.application.DirectAction");
+    /* logging support */
+    public static final Logger log = Logger.getLogger("er.application.DirectAction");
     
     public DirectAction(WORequest aRequest) { super(aRequest); }
 
@@ -32,7 +32,7 @@ public class DirectAction extends WODirectAction {
         String username = (String)request().formValueForKey("username");
         String password = (String)request().formValueForKey("password");
         String errorMessage = ((Session)session()).loginUser(username, password);
-        cat.debug("Attempt to log in with username: " + username + " error message: " + errorMessage);
+        log.debug("Attempt to log in with username: " + username + " error message: " + errorMessage);
         // Login logic - if the user is logged into the system then errorMessage will be null.
         if (errorMessage != null) {
             // Error happened, prompt user for correct information.
@@ -46,11 +46,11 @@ public class DirectAction extends WODirectAction {
             result=p;
         } else if (raction != null && raction.length() > 0) {
             // Has a redirect.  Redirecting to the action.
-            cat.debug("Login Ok, has raction: " + raction);
+            log.debug("Login Ok, has raction: " + raction);
             result = redirectToActionWithQueryString(session().context(), raction, null, rbindings);
         } else {
             // No redirect just take them to their home page.
-            cat.debug("Login Ok");            
+            log.debug("Login Ok");            
             result = pageWithName("Home");
         }
         return result;
@@ -91,7 +91,7 @@ public class DirectAction extends WODirectAction {
             url += (url.indexOf("?") == -1 ? "?" : "&") + queryString;
         }
         page.setUrl(url);
-        cat.debug("Set url to: " + url);
+        log.debug("Set url to: " + url);
         return page;
     }
 
