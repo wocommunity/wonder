@@ -1,7 +1,4 @@
-./ERXLinkRandomizer.java:
-./ERXNoHelpAvailableHelp.java:
-./ERXSuccess.java:
-./WXOutlineControl.java:
+./EOGenericRecordClazz.java:er.extensions
 ./ERXAddObjectWithName.java:er.extensions
 ./ERXApplication.java:er.extensions
 ./ERXArrayUtilities.java:er.extensions
@@ -64,6 +61,7 @@
 ./ERXJSTwoLevelEditToOneRelationship.java:er.extensions
 ./ERXKeyValueCoding.java:er.extensions
 ./ERXKeyValuePair.java:er.extensions
+./ERXLinkRandomizer.java:er.extensions
 ./ERXLinlyn.java:er.extensions
 ./ERXListContainsItemConditional.java:er.extensions
 ./ERXListDisplay.java:er.extensions
@@ -78,6 +76,7 @@
 ./ERXMultiKey.java:er.extensions
 ./ERXNavigation.java:er.extensions
 ./ERXNextPageDelegate.java:er.extensions
+./ERXNoHelpAvailableHelp.java:er.extensions
 ./ERXNonNullConditional.java:er.extensions
 ./ERXNonZeroConditional.java:er.extensions
 ./ERXNumberFormatter.java:er.extensions
@@ -114,9 +113,11 @@
 ./ERXStringUtilities.java:er.extensions
 ./ERXStringWithLineBreaks.java:er.extensions
 ./ERXStyleSheet.java:er.extensions
+./ERXSuccess.java:er.extensions
 ./ERXTable.java:er.extensions
 ./ERXTableWithBorder.java:er.extensions
 ./ERXTabPanel.java:er.extensions
+./ERXTestCase.java:er.testrunner
 ./ERXTestListener.java:er.testrunner
 ./ERXTestResult.java:er.testrunner
 ./ERXTestRunner.java:er.testrunner
@@ -132,8 +133,12 @@
 ./ERXValidationFactory.java:er.extensions
 ./ERXWOTestInterface.java:er.testrunner
 ./ERXWOTestResult.java:er.testrunner
+./KeyValueCodingProtectedAccessor.java:er.extensions
+./KVC/eoaccess/KeyValueCodingProtectedAccessor.java:com.webobjects.eoaccess
+./KVC/eocontrol/KeyValueCodingProtectedAccessor.java:com.webobjects.eocontrol
 ./WOCollapsibleComponentContent.java:er.extensions
 ./WOSortOrder.java:er.extensions
 ./WOTable.java:er.extensions
 ./WOToManyRelationship.java:er.extensions
 ./WOToOneRelationship.java:er.extensions
+./WXOutlineControl.java:

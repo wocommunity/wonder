@@ -1,6 +1,9 @@
+./D2WPick.java:er.directtoweb
+./ERDNextPageConfigurationDelegate.java:er.directtoweb
 ./ERD2WCalendarPage.java:er.directtoweb
 ./ERD2WCompactInspectPageTemplate.java:er.directtoweb
 ./ERD2WCompactListPageTemplate.java:er.directtoweb
+./ERD2WConfirmPage.java:er.directtoweb
 ./ERD2WConfirmPageTemplate.java:er.directtoweb
 ./ERD2WContainer.java:er.directtoweb
 ./ERD2WCSVGroupingListPageTemplate.java:er.directtoweb
@@ -9,6 +12,7 @@
 ./ERD2WCustomDisplayBoolean.java:er.directtoweb
 ./ERD2WCustomEditBoolean.java:er.directtoweb
 ./ERD2WCustomQueryComponentWithArgs.java:er.directtoweb
+./ERD2WDirectAction.java:er.directtoweb
 ./ERD2WDisplayAddress.java:er.directtoweb
 ./ERD2WDisplayConstant.java:er.directtoweb
 ./ERD2WDisplayDateOrNull.java:er.directtoweb
@@ -27,6 +31,7 @@
 ./ERD2WDisplayToOne.java:er.directtoweb
 ./ERD2WDisplayURL.java:er.directtoweb
 ./ERD2WDisplayYesNo.java:er.directtoweb
+./ERD2WEditableListPage.java:er.directtoweb
 ./ERD2WEditableListTemplate.java:er.directtoweb
 ./ERD2WEditAllowRestrict.java:er.directtoweb
 ./ERD2WEditDateJavascript.java:er.directtoweb
@@ -41,6 +46,7 @@
 ./ERD2WEditURL.java:er.directtoweb
 ./ERD2WEditYesNo.java:er.directtoweb
 ./ERD2WFactory.java:er.directtoweb
+./ERD2WGroupingListPage.java:er.directtoweb
 ./ERD2WGroupingListPageTemplate.java:er.directtoweb
 ./ERD2WGroupingListXMLPageTemplate.java:er.directtoweb
 ./ERD2WGroupingPrinterFriendlyListPageTemplate.java:er.directtoweb
@@ -48,9 +54,11 @@
 ./ERD2WInspectPage.java:er.directtoweb
 ./ERD2WInspectPageTemplate.java:er.directtoweb
 ./ERD2WKeyMapper.java:er.directtoweb
+./ERD2WListComparePage.java:er.directtoweb
 ./ERD2WListComparePageTemplate.java:er.directtoweb
 ./ERD2WListPage.java:er.directtoweb
 ./ERD2WListPageTemplate.java:er.directtoweb
+./ERD2WListXMLPage.java:er.directtoweb
 ./ERD2WListXMLPageTemplate.java:er.directtoweb
 ./ERD2WMessagePage.java:er.directtoweb
 ./ERD2WMessagePageTemplate.java:er.directtoweb
@@ -59,7 +67,9 @@
 ./ERD2WPick.java:er.directtoweb
 ./ERD2WPickFromEntities.java:er.directtoweb
 ./ERD2WPickFromList.java:er.directtoweb
+./ERD2WPickListPage.java:er.directtoweb
 ./ERD2WPickListPageTemplate.java:er.directtoweb
+./ERD2WPickTypePage.java:er.directtoweb
 ./ERD2WPickTypePageTemplate.java:er.directtoweb
 ./ERD2WPopUp.java:er.directtoweb
 ./ERD2WPrinterFriendlyInspectPageTemplate.java:er.directtoweb
@@ -69,6 +79,7 @@
 ./ERD2WQueryPage.java:er.directtoweb
 ./ERD2WQueryPageTemplate.java:er.directtoweb
 ./ERD2WQueryPageWithFetchSpecification.java:er.directtoweb
+./ERD2WQueryPageWithFetchSpecificationTemplate.java:er.directtoweb
 ./ERD2WQueryToOneRelationship.java:er.directtoweb
 ./ERD2WStatelessCustomComponentWithArgs.java:er.directtoweb
 ./ERD2WSwitchComponent.java:er.directtoweb
@@ -76,6 +87,7 @@
 ./ERD2WTabInspectPageTemplate.java:er.directtoweb
 ./ERD2WTwoLevelEditToOneRelationship.java:er.directtoweb
 ./ERD2WUtilities.java:com.webobjects.directtoweb
+./ERD2WWizardCreationPage.java:er.directtoweb
 ./ERD2WWizardCreationPageTemplate.java:er.directtoweb
 ./ERD2WXMLDisplayNumber.java:er.directtoweb
 ./ERD2WXMLDisplayString.java:er.directtoweb
@@ -101,6 +113,7 @@
 ./ERDDefaultSectionComponent.java:er.directtoweb
 ./ERDDefaultSectionComponentCSV.java:er.directtoweb
 ./ERDDefaultSectionComponentPrinterFriendly.java:er.directtoweb
+./ERDDefaultsEmbeddedAssignment.java:er.directtoweb
 ./ERDDelayedAssignment.java:er.directtoweb
 ./ERDDelayedBooleanAssignment.java:er.directtoweb
 ./ERDDelayedConditionalAssignment.java:er.directtoweb
@@ -169,5 +182,9 @@
 ./ERDUnitResolverAssignment.java:er.directtoweb
 ./ERDUserInfoInterface.java:er.directtoweb
 ./ERDXMLPageWrapper.java:er.directtoweb
+./ERXD2WInspect.java:er.directtoweb
+./ERXD2WList.java:er.directtoweb
+./ERXD2WPick.java:er.directtoweb
+./KeyValueCodingProtectedAccessor.java:er.directtoweb
 ./ERD2WDisplayNumber.java:
 ./ERD2WEditNumberOrDefault.java:
