@@ -36,7 +36,6 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
         return localizerForContext(c).valueForKeyPath((String)value());
     }
     public Object displayNameForProperty(D2WContext c) {
-        log.info("fire.displayNameForProperty:" + "--" + "- " + value() + " - " + c);
         String value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("propertyKey"));
         return localizedValueForKeyWithDefaultInContext(value, c);
     }
@@ -46,7 +45,6 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
     }
     
     public Object fire(D2WContext c) {
-        System.out.println("fire.fire:" + keyPath() + "- " + value() + " - " + c);
         return localizerForContext(c).valueForKeyPath((String)value());
     }
 }
