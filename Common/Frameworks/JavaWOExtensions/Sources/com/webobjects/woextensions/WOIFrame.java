@@ -62,19 +62,21 @@ public class WOIFrame extends WOComponent
         if (hasBinding("src")) {
             return (String)_WOJExtensionsUtil.valueForBindingOrNull("src",this);
         }
-        if (hasBinding("pageName") || hasBinding("value")) {
+        if (hasBinding("pageName") || hasBinding("value") || hasBinding("actionName")) {
             return context().componentActionURL();
         }
         return "ERROR_URL_NOT_FOUND";
     }
 
-    public WOElement getFrameContent()  {
+    public WOElement frameContent()  {
         WOElement aContentElement = null;
         if (hasBinding("pageName")) {
             String  aPageName = (String)_WOJExtensionsUtil.valueForBindingOrNull("pageName",this);
             aContentElement = pageWithName(aPageName);
-        } else {
+        } else if(hasBinding("value")) {
             aContentElement = (WOElement)_WOJExtensionsUtil.valueForBindingOrNull("value",this);
+        } else if(hasBinding("actionName")) {
+            aContentElement = (WOElement)parent().valueForBinding((String)valueForBinding("actionName"));
         }
         return aContentElement;
     }
