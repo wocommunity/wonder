@@ -281,7 +281,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         public void classDescriptionNeededForEntityName(NSNotification n) {
             log.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
-            EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get the entity
+            EOEntity e = ERXEOAccessUtilities.entityNamed(null,name);
             if(e == null) log.error("Entity " + name + " not found in the default model group!");
             registerDescriptionForEntity(e);
         }
@@ -616,23 +616,27 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
     }
 
+    /**
+     * Overridden to perform a check if the entity is still in a model group.
+     * This can happen if you remove the entity, clone it to change things and re-add it afterwards.
+     */
     public EOEntity entity() {
         checkEntity();
         return super.entity();
     }
 
-    public void checkEntity() {
+    protected void checkEntity() {
         if(_entity.model() == null) {
             try {
 
-                EOEntity registeredEntity = EOModelGroup.defaultGroup().entityNamed(_entity.name());
+                EOEntity registeredEntity = ERXEOAccessUtilities.entityNamed(null,_entity.name());
 
                 if(registeredEntity != null) {
                     _entity = registeredEntity;
                 } else {
                     EOModel model = _entity.model();
                     if(model == null) {
-                        model = (EOModel)EOModelGroup.defaultGroup().models().lastObject();
+                        model = (EOModel)ERXEOAccessUtilities.modelGroup(null).models().lastObject();
                     }
                     model.addEntity(_entity);
                     log.warn("Added <" + _entity.name() + "> to default model group.");
@@ -937,11 +941,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     }
                     if(o != null) {
                         if(o instanceof EOEnterpriseObject) {
-                            ERXUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey((EOEnterpriseObject)o, eo, key);
+                            ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey((EOEnterpriseObject)o, eo, key);
                         } else if(o instanceof NSArray) {
                             NSArray newObjects = (NSArray)o;
                             for(Enumeration e = newObjects.objectEnumerator(); e.hasMoreElements();) {
-                                ERXUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey((EOEnterpriseObject)e.nextElement(), eo, key);
+                                ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey((EOEnterpriseObject)e.nextElement(), eo, key);
                             }
                         } else {
                             defaultLog.warn("setValueInObject: Object is neither an EO nor an array");

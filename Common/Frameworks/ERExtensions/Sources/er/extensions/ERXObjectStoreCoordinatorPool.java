@@ -228,7 +228,7 @@ public void sessionDidCreate(NSNotification n) {
             Enumeration entitiesEnumerator = entityNames.objectEnumerator();
             while (entitiesEnumerator.hasMoreElements()) {
                 String entityName = (String)entitiesEnumerator.nextElement();
-                EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+                EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
 
                 NSArray snapshots = (NSArray)updatedEntDict.objectForKey(entityName);
 
@@ -336,7 +336,7 @@ public void sessionDidCreate(NSNotification n) {
         }
 
         private static synchronized EODatabaseContext databaseContextForEntityNamed(String entityName, ObjectStoreCoordinator osc) {
-            String modelName = EOModelGroup.defaultGroup().entityNamed(entityName).model().name();
+            String modelName = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model().name();
             Hashtable h = osc.databaseContextsForModels();
             EODatabaseContext dbc = (EODatabaseContext)h.get(modelName);
             return dbc;

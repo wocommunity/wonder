@@ -856,7 +856,7 @@ public class ERXExtensions {
      *		to add the objects to.
      */
     // MOVEME: ERXEOFUtilities
-    // FIXME: Bad model group, should ensure local instances of objects
+    // FIXME: Should ensure local instances of objects
     public static void addObjectToBothSidesOfPotentialRelationshipFromObjectWithKeyPath(EOEnterpriseObject to,
                                                                                         EOEnterpriseObject from,
                                                                                         String keyPath) {
@@ -867,7 +867,7 @@ public class ERXExtensions {
                 keyPath=ERXStringUtilities.lastPropertyKeyInKeyPath(keyPath);
             }
             //if the key is not a keyPath we can check if the key is actually a relationship
-            EOEntity e=EOModelGroup.defaultGroup().entityNamed(from.entityName());
+            EOEntity e=ERXEOAccessUtilities.entityNamed(from.editingContext(), from.entityName());
             EORelationship r=e.relationshipNamed(keyPath);
             if (r!=null) //if the key correspond to a relationship
                 from.addObjectToBothSidesOfRelationshipWithKey(to, keyPath);
@@ -1078,8 +1078,6 @@ public class ERXExtensions {
      * @param key path off of the object
      * @return unit information stored in the userInfo dictionary
      */
-    // FIXME: Shouldn't be using the defaultModel group, should be getting it
-    //		from the rootObjectStoreCoordintator
     // ENHANCEME: Should be more generic for resolving any key off of the userInfo
     //		dictionary.
     // ENHANCEME: Should also support defaulting to the same attribute in the parent entity
@@ -1092,13 +1090,13 @@ public class ERXExtensions {
         String result=null;
         if (key.indexOf(".")==-1) {
             String entityName=object.entityName();
-            entity=EOModelGroup.defaultGroup().entityNamed(entityName);
+            entity=ERXEOAccessUtilities.entityNamed(object.editingContext(), entityName);
             lastKey=key;
         } else {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(key);
             EOEnterpriseObject objectForPropertyDisplayed=(EOEnterpriseObject)object.valueForKeyPath(partialKeyPath);
             if (objectForPropertyDisplayed!=null) {
-                entity=EOModelGroup.defaultGroup().entityNamed(objectForPropertyDisplayed.entityName());
+                entity=ERXEOAccessUtilities.entityNamed(object.editingContext(), objectForPropertyDisplayed.entityName());
                 lastKey=ERXStringUtilities.lastPropertyKeyInKeyPath(key);
             }
         }
@@ -1236,7 +1234,7 @@ public class ERXExtensions {
     public static void refreshSharedObjectsWithName(String entityName) {
         EOEditingContext peer = ERXExtensions.newEditingContext();
         peer.setSharedEditingContext(null);
-        EOFetchSpecification fetchAll = EOModelGroup.defaultGroup().entityNamed(entityName).fetchSpecificationNamed("FetchAll");
+        EOFetchSpecification fetchAll = ERXEOAccessUtilities.entityNamed(peer, entityName).fetchSpecificationNamed("FetchAll");
         if (fetchAll != null) {
             // Need to refault all the shared EOs first.
             for (Enumeration e = EOUtilities.objectsForEntityNamed(peer, entityName).objectEnumerator(); e.hasMoreElements();) {
