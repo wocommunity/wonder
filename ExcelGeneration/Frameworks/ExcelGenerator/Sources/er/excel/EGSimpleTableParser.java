@@ -240,7 +240,7 @@ public class EGSimpleTableParser {
     	takeNumberValueForKey(sheetDict, "defaultRowHeight", sheet, null);
     	takeNumberValueForKey(sheetDict, "defaultRowHeightInPoints", sheet, null);
     	
-    	log.info("Sheet: " + _workbook.getNumberOfSheets());
+    	if (log.isDebugEnabled()) log.debug("Sheet: " + _workbook.getNumberOfSheets());
     	
     	int rowNum = 0;
     	for (int j = 0; j < rowNodes.getLength(); j++) {
