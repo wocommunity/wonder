@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import org.apache.log4j.Category;
+import java.util.Enumeration;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This delegate handles two situations a) allowing EOs to generate their own primary keys and b) working around a
