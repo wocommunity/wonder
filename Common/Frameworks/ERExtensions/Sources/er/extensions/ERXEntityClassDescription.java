@@ -33,7 +33,7 @@ import java.lang.reflect.*;
  * This is an example:<code><pre>
  {
      // these keys are evaluated on validateForSave, they don't correspond to properties
-     additionalValidationKeys = (mailAndPass);
+     additionalValidationKeys = ("validateEmailPassword");
 
      // This dictionary holds the keys to use for validating properties
      validateForKey =
@@ -46,7 +46,10 @@ import java.lang.reflect.*;
               // this is the message code into ValidationStrings.plist
               //    User.email.wrongLength = "The mail does not have the right size (5 to 50)";
               message = "wrongLength";
-
+              
+              // skip this rule if the value is null
+              ignoreIfNull = true;
+              
               // if there is a qualifier key, then a dictionary containing "object" and "value" is evaluated and an exception is thrown if the evaluation returns false
               qualifier = "(value.length >= 5) AND (value.length < 50)";
           },
@@ -59,7 +62,8 @@ import java.lang.reflect.*;
               // an example is:
               // public class SampleTest implements EOQualifierEvaluation {
               //	int minLength, maxLength;
-              //	public SampleTest(Object dict) {
+              //	public SampleTest(Object param) {
+              //		NSDictionary dict = (NSDictionary)param;
               //		minLength = ERXValueUtilities.intValue(dict.objectForKey("minLength"));
               //		maxLength = ERXValueUtilities.intValue(dict.objectForKey("maxLength"));
               //	}
@@ -78,10 +82,16 @@ import java.lang.reflect.*;
           );
 
          // This key does not correspond to any property, it get's evaluated in D2WApps where you have a multi-step page and need to do validation before validateForSave
-         mailAndPass =
+         "validateEmailPassword" =
              (
               {
-                  message = "stupidTest";
+                  message = "stupidTestWithEmailAndPassword";
+
+                  // means to get D2W to highlight the fields involved instead of only displaying the message
+                  // For this to work, your corresponding localized String should be
+                  //   User.email,password.stupidTestWithEmailAndPassword = "Stupid test failed";
+                  keyPaths = "email,password";
+                  
                   qualifier = "(object.email.length >= object.password.length)";
               }
               );
@@ -92,7 +102,10 @@ import java.lang.reflect.*;
      validateForSave =
          (
           {
-              message = "validateForSave.cantBeBoth";
+              message = "cantBeBoth";
+
+              keyPaths = "isEditor,isAdmin";
+
               qualifier = "(object.isEditor = 'Y' and object.isAdmin = 'Y')";
           }
           );
@@ -107,6 +120,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEntityClassDescription.class);
+
+    /** validation logging support */
+    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.validation.ERXEntityClassDescription");
 
     /** Holds validation info from the entities user info dictionary */
     protected NSDictionary _validationInfo;
@@ -577,6 +593,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             }
             _validationQualiferCache.setObjectForKey(q, cacheKey);
         }
+        if(values.value() == null && "true".equals(info.objectForKey("ignoreIfNull")))
+           return true;
         if(q != null)
             return q.evaluateWithObject(values);
         return true;
@@ -590,8 +608,15 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 int i = 0;
                 for(Enumeration e = qualifiers.objectEnumerator(); e.hasMoreElements();) {
                     NSDictionary info = (NSDictionary)e.nextElement();
+                    if(validationLog.isDebugEnabled())
+                        validationLog.debug("Validate " + validationTypeString +"."+ property +" with <"+ value + "> on " + object + "\nRule: " + info);
                     if(!validateObjectValueDictWithInfo(values, info, validationTypeString+property+i)) {
-                        throw ERXValidationFactory.defaultFactory().createException(object, property, value, (String)info.objectForKey("message"));
+                        String message = (String)info.objectForKey("message");
+                        String keyPaths = (String)info.objectForKey("keyPaths");
+                        property = keyPaths == null ? property : keyPaths;
+                        if(validationLog.isDebugEnabled())
+                            validationLog.info("Validation failed " + validationTypeString +"."+ property +" with <"+ value + "> on " + object);
+                        throw ERXValidationFactory.defaultFactory().createException(object, property, value,message);
                     }
                     i = i+1;
                 }
