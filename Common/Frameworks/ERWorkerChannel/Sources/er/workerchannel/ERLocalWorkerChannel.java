@@ -8,7 +8,7 @@ package er.workerchannel;
 
 import er.extensions.ERXLogger;
 
-public class ERLocalWorkerChannel extends ERWorkerChannel {
+public class ERLocalWorkerChannel implements ERWorkerChannel {
 
     public static final ERXLogger log = ERXLogger.getERXLogger(ERLocalWorkerChannel.class);
 
