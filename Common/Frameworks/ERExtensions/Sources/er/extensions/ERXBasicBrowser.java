@@ -88,8 +88,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean _isLinux;
     private final boolean _isUnknownPlatform;
 
-    // non-public but default-access browser; prevents direct instantiation from outside the package
-    ERXBasicBrowser(String browserName, String version, String mozillaVersion, 
+    public ERXBasicBrowser(String browserName, String version, String mozillaVersion, 
                                                         String platform, NSDictionary userInfo) {
         if (userInfo instanceof NSMutableDictionary)
             userInfo = new NSDictionary(userInfo);
