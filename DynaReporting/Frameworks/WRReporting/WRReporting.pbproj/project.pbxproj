@@ -598,73 +598,87 @@
 				F55C0D3303AAB8BC01AD0D0B,
 			);
 			isa = PBXGroup;
+			name = "Web Server Resources";
 			path = WebServerResources;
 			refType = 2;
 		};
 		F55C0D2703AAB8BB01AD0D0B = {
 			isa = PBXFileReference;
-			path = 1pixel.gif;
-			refType = 4;
+			name = 1pixel.gif;
+			path = WebServerResources/1pixel.gif;
+			refType = 2;
 		};
 		F55C0D2803AAB8BB01AD0D0B = {
 			isa = PBXFileReference;
-			path = 1pixel_666666.gif;
-			refType = 4;
+			name = 1pixel_666666.gif;
+			path = WebServerResources/1pixel_666666.gif;
+			refType = 2;
 		};
 		F55C0D2903AAB8BB01AD0D0B = {
 			isa = PBXFileReference;
-			path = cc1_addbutton_v2.gif;
-			refType = 4;
+			name = cc1_addbutton_v2.gif;
+			path = WebServerResources/cc1_addbutton_v2.gif;
+			refType = 2;
 		};
 		F55C0D2A03AAB8BB01AD0D0B = {
 			isa = PBXFileReference;
-			path = cc1_deletebutton.gif;
-			refType = 4;
+			name = cc1_deletebutton.gif;
+			path = WebServerResources/cc1_deletebutton.gif;
+			refType = 2;
 		};
 		F55C0D2B03AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = cc1_infobutton.gif;
-			refType = 4;
+			name = cc1_infobutton.gif;
+			path = WebServerResources/cc1_infobutton.gif;
+			refType = 2;
 		};
 		F55C0D2C03AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = down.gif;
-			refType = 4;
+			name = down.gif;
+			path = WebServerResources/down.gif;
+			refType = 2;
 		};
 		F55C0D2D03AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = folder.gif;
-			refType = 4;
+			name = folder.gif;
+			path = WebServerResources/folder.gif;
+			refType = 2;
 		};
 		F55C0D2E03AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = folders.gif;
-			refType = 4;
+			name = folders.gif;
+			path = WebServerResources/folders.gif;
+			refType = 2;
 		};
 		F55C0D2F03AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = "lft-OSarw.gif";
-			refType = 4;
+			name = "lft-OSarw.gif";
+			path = "WebServerResources/lft-OSarw.gif";
+			refType = 2;
 		};
 		F55C0D3003AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = NextPage.gif;
-			refType = 4;
+			name = NextPage.gif;
+			path = WebServerResources/NextPage.gif;
+			refType = 2;
 		};
 		F55C0D3103AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = PreviousPage.gif;
-			refType = 4;
+			name = PreviousPage.gif;
+			path = WebServerResources/PreviousPage.gif;
+			refType = 2;
 		};
 		F55C0D3203AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = "rt-OSarw.gif";
-			refType = 4;
+			name = "rt-OSarw.gif";
+			path = "WebServerResources/rt-OSarw.gif";
+			refType = 2;
 		};
 		F55C0D3303AAB8BC01AD0D0B = {
 			isa = PBXFileReference;
-			path = up.gif;
-			refType = 4;
+			name = up.gif;
+			path = WebServerResources/up.gif;
+			refType = 2;
 		};
 		F55C0D3403AAB8BC01AD0D0B = {
 			fileRef = F55C0D2703AAB8BB01AD0D0B;
