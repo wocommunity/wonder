@@ -35,6 +35,15 @@
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
+                keyPath = nonSelectedTabBgColor; 
+                value = "#999999"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
                 keyPath = templateNameForInspectPage; 
                 value = er.neutral.ERNEUInspectPage; 
             }; 
@@ -64,6 +73,42 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = templateNameForQueryPage; 
                 value = er.neutral.ERNEUQueryPage; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForTabInspectPage; 
+                value = ERNEUTabInspectPage; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForWizardCreationPage; 
+                value = ERNEUWizardCreationPage; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useTabImages; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useTabSectionImages; 
+                value = false; 
             }; 
         }
     ); 
