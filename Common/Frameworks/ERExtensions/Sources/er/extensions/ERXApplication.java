@@ -671,7 +671,9 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 	                    response.setHeader("" + compressedData.length, "content-length");
 	
 	                    response.setHeader("gzip", "content-encoding");
-	                    log.debug("before: "+input.length+", after "+compressedData.length+", time: "+(System.currentTimeMillis() - start));
+	                    if (log.isDebugEnabled()) {
+	                        log.debug("before: "+input.length+", after "+compressedData.length+", time: "+(System.currentTimeMillis() - start));
+	                    }
 	                }
 	            }
 	        }
