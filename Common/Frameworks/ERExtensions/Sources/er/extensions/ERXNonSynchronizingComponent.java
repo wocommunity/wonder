@@ -7,6 +7,7 @@
 package er.extensions;
 
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Abstract non-synchronizing component used as the super class for a number
@@ -15,6 +16,16 @@ import com.webobjects.appserver.*;
  */
 public abstract class ERXNonSynchronizingComponent extends WOComponent {
 
+    public NSMutableDictionary _dynamicBindings = null;
+    
+    public NSMutableDictionary dynamicBindings() {
+        if (_dynamicBindings == null) {
+            _dynamicBindings = new NSMutableDictionary();
+        }
+        return _dynamicBindings;
+    }
+    
+    
     /** Public constructor */
     public ERXNonSynchronizingComponent(WOContext context) {
         super(context);
@@ -149,3 +160,4 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
         return ERXLocalizer.currentLocalizer();
     }
 }
+
