@@ -12,8 +12,7 @@ public class Application extends WOApplication {
 
     private Configuration config;
     private String configPath;
-    public String fontList = "Arial,Helvetica";
-    
+
     public static void main(String argv[]) {
         WOApplication.main(argv, Application.class);
     }
@@ -47,4 +46,9 @@ public class Application extends WOApplication {
     public Configuration config(){
         return config;
     }
+    
+    public String fontList() {
+        return config.fontList();
+    }
+    
 }
