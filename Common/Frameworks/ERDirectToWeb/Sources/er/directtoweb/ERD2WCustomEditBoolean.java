@@ -9,7 +9,9 @@ package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERD2WCustomEditBoolean extends D2WEditBoolean {
 
@@ -24,10 +26,15 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
         _choicesNames = null;
     }
 
-    public Number yesNoBoolean() {
-        return (Number)object().valueForKey(propertyKey());
+    public Object yesNoBoolean() {
+        Object value = object().valueForKey(propertyKey());
+        if(null == value)
+            value = nullValue();
+        return value;
     }
-    public void setYesNoBoolean(Number newYesNoBoolean) {
+    public void setYesNoBoolean(Object newYesNoBoolean) {
+        if(nullValue().equals(newYesNoBoolean))
+            newYesNoBoolean = null;
         object().validateTakeValueForKeyPath(newYesNoBoolean, propertyKey());
     }
     public String radioBoxGroupName(){
@@ -48,8 +55,24 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
         return (String)choicesNames().objectAtIndex(1);
     }
 
+    public String unsetName(){
+        return (String)choicesNames().objectAtIndex(2);
+    }
+
+    public Object nullValue(){
+        return "ERXUnsetBooleanValue";
+    }
+
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         parent().validationFailedWithException(theException, theValue, theKeyPath);
+    }
+
+    public Object validateTakeValueForKeyPath(Object object, String string) {
+        if(nullValue().equals(object)) {
+            object().validateTakeValueForKeyPath(null, propertyKey());
+            return null;
+        }
+        return super.validateTakeValueForKeyPath(object, string);
     }
 
     public void takeValuesFromRequest(WORequest r, WOContext c) {
@@ -59,5 +82,9 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
         } catch (NSValidation.ValidationException e) {
             validationFailedWithException(e, objectPropertyValue(), propertyKey());
         }
+    }
+
+    public boolean allowsNull() {
+        return choicesNames().count() > 2;
     }
 }
