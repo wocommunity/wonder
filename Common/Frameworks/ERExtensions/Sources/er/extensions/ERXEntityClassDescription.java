@@ -233,6 +233,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                             String path = modelPath + File.separator + entity.name() + ".plist";
                             ERXFileNotificationCenter.defaultCenter().addObserver(cd, new NSSelector("modelFileDidChange", ERXConstant.NotificationClassArray), path);
                         }
+                    } else {
+                        defaultLog.warn("Entity classDescription is not ERXEntityClassDescription: " + entity.name());
                     }
                 }
             }
@@ -902,16 +904,19 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             }
         }
     }
-    
+
     public void setDefaultValuesInObject(EOEnterpriseObject eo,  EOEditingContext ec) {
         defaultLog.debug("About to set values in EO");
+        if(_initialDefaultValues == null) {
+            readDefaultValues();
+        }
         for( Enumeration e = _initialDefaultValues.keyEnumerator(); e.hasMoreElements();) {
             String key = (String)e.nextElement();
             defaultLog.debug("About to set <"+key+"> in EO");
             ((Default)_initialDefaultValues.objectForKey(key)).setValueInObject(eo);
         }
     }
-    
+
     public void awakeObjectFromInsertion(EOEnterpriseObject eo, EOEditingContext ec) {
         super.awakeObjectFromInsertion(eo, ec);
         setDefaultValuesInObject(eo, ec);
