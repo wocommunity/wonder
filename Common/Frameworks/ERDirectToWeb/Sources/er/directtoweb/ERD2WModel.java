@@ -181,7 +181,7 @@ public class ERD2WModel extends D2WModel {
                 ruleFireLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".fire");
                 if (ruleFireLog.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+                    //NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
                     resetTraceRuleFiring = true;
                 }
                 if (ruleCandidatesLog.isDebugEnabled()) {
