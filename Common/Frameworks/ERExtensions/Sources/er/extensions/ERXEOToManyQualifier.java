@@ -192,19 +192,18 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
         return result.toString();
     }
 
-    public String description() {
-        return _toManyKey+" contains "+_elements;
-    }
+    /**
+     * Description of the qualfier.
+     * @return description of the key and which elements it
+     *		should contain.
+     */
     public String toString() {
-        return description();
+        return _toManyKey+" contains "+_elements;
     }
 
     /**
-     * EOF seems to be wanting to clone qualifiers when
-     * the are inside an and-or qualifier without this
-     * method, ERXToManyQualifier is cloned into an
-     * EOSQLQualifier and the generated SQL is incorrect..
-     * @return clone of the qualifier 
+     * Implementation of the Cloneable interface.
+     * @return clone of the qualifier.
      */
     public Object clone() {
         return new ERXEOToManyQualifier(_entity, _toManyKey, _elements, _minCount);
