@@ -78,7 +78,7 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
     }
 
     public String showString() {
-        return "var style=document.getElementById('"+spanId()+"').style; style.left=ERD2WFlyOverCustomComponent_getPos(document.getElementById('"+linkId()+"')); style.visibility='visible';";
+        return "var style=document.getElementById('"+spanId()+"').style; style.visibility='visible';";
     }
     public String hideString() {
         return "var style=document.getElementById('"+spanId()+"').style; style.visibility='hidden';";
