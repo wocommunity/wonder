@@ -61,27 +61,31 @@ import java.util.*;
  * <p>
  * <code>ERXBrowserFactory.factory().{@link #setBrowserClassName 
  * setBrowserClassName("NameOfTheSubClassOfERXBrowser")}</code>
- */ 
-
-// This implementation is tested with the following browsers (or "user-agent" strings)
-// Please ask the guy (tatsuyak@mac.com) for WOUnitTest test cases. 
-//
-// Mac OS X 
-// ----------------------------------------------------------------------------------
-// iCab 2.8.1       Mozilla/4.5 (compatible; iCab 2.8.1; Macintosh; I; PPC)
-// IE 5.21          Mozilla/4.0 (compatible; MSIE 5.21; Mac_PowerPC)
-// Netscape 7.0b1   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
-// Netscape 6.2.3   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
-// OmniWeb 4.1-v422 Mozilla/4.5 (compatible; OmniWeb/4.1-v422; Mac_PowerPC)
-// Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
-//
-// Windows 2000
-// ----------------------------------------------------------------------------------
-// IE 6.0           Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)
-// IE 5.5           Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
-// Netscape 6.2.3   Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
-// Netscape 4.79    Mozilla/4.79 [en] (Windows NT 5.0; U)
-// Opera 6.04       Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]
+ *
+ * <p>
+ * <pre>
+ * This implementation is tested with the following browsers (or "user-agent" strings)
+ * Please ask the guy (tatsuyak@mac.com) for WOUnitTest test cases. 
+ * 
+ * Mac OS X 
+ * ----------------------------------------------------------------------------------
+ * iCab 2.8.1       Mozilla/4.5 (compatible; iCab 2.8.1; Macintosh; I; PPC)
+ * IE 5.21          Mozilla/4.0 (compatible; MSIE 5.21; Mac_PowerPC)
+ * Netscape 7.0b1   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
+ * Netscape 6.2.3   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
+ * OmniWeb 4.1-v422 Mozilla/4.5 (compatible; OmniWeb/4.1-v422; Mac_PowerPC)
+ * Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
+ * 
+ * Windows 2000
+ * ----------------------------------------------------------------------------------
+ * IE 6.0           Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)
+ * IE 5.5           Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+ * Netscape 6.2.3   Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
+ * Netscape 4.79    Mozilla/4.79 [en] (Windows NT 5.0; U)
+ * Opera 6.04       Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]
+ *
+ * </pre>
+ */
 
 public class ERXBrowserFactory {
 
