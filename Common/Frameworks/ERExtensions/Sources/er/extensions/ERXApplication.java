@@ -603,6 +603,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * @param context object
      */
     public void appendToResponse(WOResponse response, WOContext context) {
+        if (context != null && context.request() != null) {
+            if (ERXApplication.requestHandlingLog.isInfoEnabled()) {
+                ERXApplication.requestHandlingLog.info(context.request());
+            }
+        }
         super.appendToResponse(response, context);
         if(useComponentActionRedirection()) {
             ERXComponentActionRedirector redirector = ERXComponentActionRedirector.currentRedirector();
