@@ -46,8 +46,6 @@ public class ERD2WPick extends ERDCustomEditComponent {
     public NSArray list() { return (NSArray)objectKeyPathValue(); }
 
     public String entityName() { return list().count() > 0 ? ((EOEnterpriseObject)list().objectAtIndex(0)).entityName() : null; }
-
-    public String embeddedPageConfiguration() { return (String)valueForBinding("embeddedPageConfiguration"); }
     
     public ERDBranchDelegateInterface branchDelegate() {
         ERDBranchDelegateInterface branchDelegate = (ERDBranchDelegateInterface)valueForBinding("branchDelegate");
@@ -64,7 +62,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
 
-    public D2WContext d2wContext() { return D2WUtils.makeSubContextForDynamicPageNamed((String)valueForBinding("embeddedPageConfiguration"), session()); }
+    public D2WContext d2wContext() { return D2WUtils.makeSubContextForDynamicPageNamed((String)valueForBinding("listConfigurationName"), session()); }
     public void setD2wContext(Object value) { }
 
     public NextPageDelegate actionPageDelegate() { return _D2WPickActionDelegate.instance; }
