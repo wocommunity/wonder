@@ -930,12 +930,14 @@
 		};
 		9DF7E71103AE8C4210CF0E7D = {
 			isa = PBXFileReference;
-			path = downArrow.gif;
+			name = downArrow.gif;
+			path = WebServerResources/downArrow.gif;
 			refType = 4;
 		};
 		9DF7E71203AE8C4210CF0E7D = {
 			isa = PBXFileReference;
-			path = upArrow.gif;
+			name = upArrow.gif;
+			path = WebServerResources/upArrow.gif;
 			refType = 4;
 		};
 		9DF7E71503AE8C5110CF0E7D = {
