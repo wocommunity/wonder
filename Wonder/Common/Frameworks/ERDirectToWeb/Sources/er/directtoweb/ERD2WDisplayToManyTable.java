@@ -23,7 +23,7 @@ public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
 
     public WOComponent inspectAction() {
         if(item!=null){
-            D2WContext newContext=new D2WContext(session());
+            D2WContext newContext=new ERD2WContext(session());
             newContext.takeValueForKey(item, "object");
             EOEntity entity = EOModelGroup.defaultGroup().entityNamed(item.entityName());
             newContext.takeValueForKey(entity, "entity");
