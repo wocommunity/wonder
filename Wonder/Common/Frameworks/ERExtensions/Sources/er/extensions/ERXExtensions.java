@@ -1367,7 +1367,7 @@ public class ERXExtensions {
     public static boolean booleanFlagOnSessionForKeyWithDefault(WOSession s,
                                                                 String key,
                                                                 boolean defaultValue) {
-        return s.objectForKey(key) != null ? ERXUtilities.booleanValue(s.objectForKey(key)) : defaultValue;
+        return s.objectForKey(key) != null ? ERXValueUtilities.booleanValue(s.objectForKey(key)) : defaultValue;
     }
 
     /**

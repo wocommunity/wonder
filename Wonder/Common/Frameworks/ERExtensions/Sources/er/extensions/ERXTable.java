@@ -99,7 +99,7 @@ public class ERXTable extends WOTable {
      */
     public boolean goingVertically() {
         if (_goingVertically == null) {
-            _goingVertically=ERXUtilities.booleanValue(valueForBinding("goingVertically")) ?
+            _goingVertically=ERXValueUtilities.booleanValue(valueForBinding("goingVertically")) ?
             Boolean.TRUE : Boolean.FALSE;
         }
         return _goingVertically.booleanValue();
@@ -148,7 +148,7 @@ public class ERXTable extends WOTable {
      */
     public boolean showIndex() {
 		 if (_showIndex == null) {
-			 _showIndex=ERXUtilities.booleanValue(valueForBinding("showIndex")) ?
+			 _showIndex=ERXValueUtilities.booleanValue(valueForBinding("showIndex")) ?
 			 Boolean.TRUE : Boolean.FALSE;
 		 }
 		 return _showIndex.booleanValue();

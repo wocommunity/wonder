@@ -7,31 +7,10 @@
 package er.extensions;
 
 import com.webobjects.foundation.NSArray;
-
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EODatabaseContext;
-import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOUtilities;
-
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOSharedEditingContext;
-
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSPropertyListSerialization;
-
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.util.*;
 /**
  * Collection of EOF utility method centered around
  * EOControl.
@@ -40,7 +19,133 @@ public class ERXEOControlUtilities {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOControlUtilities.class);
-    
+
+
+    /**
+     * Provides the same functionality as the equivalent method
+     * in {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
+     * except it will use the localInstanceOfObject
+     * method from this utilities class which has a few enhancements.
+     *
+     * @param ec editing context to pull local object copies
+     * @param eos array of enterprise objects
+     * @return an array of copies of local objects
+     */
+    public static NSArray localInstancesOfObjects(EOEditingContext ec, NSArray eos) {
+        if (eos == null)
+            throw new RuntimeException("ERXUtilites: localInstancesOfObjects: Array is null");
+        if (ec == null)
+            throw new RuntimeException("ERXUtilites: localInstancesOfObjects: EditingContext is null");
+        NSMutableArray localEos = new NSMutableArray();
+        for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
+            localEos.addObject(localInstanceOfObject(ec, (EOEnterpriseObject)e.nextElement()));
+        }
+        return localEos;
+    }
+
+    /**
+     * This has one advantage over the standard EOUtilites
+     * method of first checking if the editingcontexts are
+     * equal before creating a fault for the object in the
+     * editing context.
+     * @param ec editing context to get a local instance of the object in
+     * @param eo object to get a local copy of
+     * @return enterprise object local to the passed in editing contex
+     */
+    public static EOEnterpriseObject localInstanceOfObject(EOEditingContext ec, EOEnterpriseObject eo) {
+        return eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext()) ?
+        EOUtilities.localInstanceOfObject(ec, eo) : eo;
+    }
+
+    /**
+     * Creates an enterprise object for the given entity
+     * name by first looking up the class description
+     * of the entity to create the enterprise object.
+     * The object is then inserted into the editing context
+     * and returned.
+     * @param editingContext editingContext to insert the created object into
+     * @param entityName name of the entity to be created.
+     * @return created and inserted enterprise object
+     */
+    public static EOEnterpriseObject createAndInsertObject(EOEditingContext editingContext, String entityName) {
+        return createAndInsertObject(editingContext,entityName,null);
+    }
+
+    /**
+     * Creates an enterprise object for the given entity
+     * name by first looking up the class description
+     * of the entity to create the enterprise object.
+     * The object is then inserted into the editing context
+     * and returned.
+     * @param editingContext editingContext to insert the created object into
+     * @param entityName name of the entity to be created.
+     * @param objectInfo dictionary of values pushed onto the object
+     *		before being inserted into the editing context.
+     * @return created and inserted enterprise object
+     */
+    public static EOEnterpriseObject createAndInsertObject(EOEditingContext editingContext, String entityName, NSDictionary objectInfo) {
+        if (log.isDebugEnabled())
+            log.debug("Creating object of type: " + entityName);
+        EOClassDescription cd=EOClassDescription.classDescriptionForEntityName(entityName);
+        if (cd==null)
+            throw new RuntimeException("Could not find class description for entity named "+entityName);
+        EOEnterpriseObject newEO=cd.createInstanceWithEditingContext(editingContext,null);
+        if (objectInfo != null)
+            newEO.takeValuesFromDictionary(objectInfo);
+        editingContext.insertObject(newEO);
+        return newEO;
+    }
+
+    /**
+     * Creates an object using the utility method <code>createEO</code>
+     * from this utility class. After creating the enterprise object it
+     * is added to the relationship of the enterprise object passed in.
+     * For instance:<br/>
+     * <code>createAndAddObjectToRelationship(ec, foo, "toBars", "Bar", dictValues);</code><br/>
+     * <br/>
+     * will create an instance of Bar, set all of the key-value pairs
+     * from the dictValues dictionary, insert it into an editing context
+     * and then add it to both sides of the realtionship "toBars" off of
+     * the enterprise object foo.
+     *
+     * @param editingContext editing context to create the object in
+     * @param source enterprise object to whose relationship the newly created
+     *		object will be added.
+     * @param relationshipName relationship name of the enterprise object
+     *		that is passed in to which the newly created eo should be
+     *		added.
+     * @param destinationEntityName name of the entity of the object to be created.
+     * @param objectInfo dictionary of values to be set on the newly created
+     *		object before it is inserted into the editing context.
+     * @return the newly created enterprise object
+     */
+    public static EOEnterpriseObject createAndAddObjectToRelationship(EOEditingContext editingContext,  EOEnterpriseObject source, String relationshipName, String destinationEntityName, NSDictionary objectInfo) {
+        
+        EOEnterpriseObject newEO=createAndInsertObject(editingContext, destinationEntityName, objectInfo);
+        EOEnterpriseObject eoBis = editingContext!=source.editingContext() ?
+            EOUtilities.localInstanceOfObject(editingContext,source) : source;
+        eoBis.addObjectToBothSidesOfRelationshipWithKey(newEO, relationshipName);
+        return newEO;
+    }
+
+    /**
+     * Adds an object to another objects relationship. Has
+     * the advantage of ensuring that the added object is
+     * in the same editing context as the reference object.
+     * @param addedObject object to be added to the relationship
+     * @param referenceObject object that has the relationship
+     * @param key relationship key
+     */
+    public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject, EOEnterpriseObject referenceObject, String key) {
+        EOEditingContext referenceEc = referenceObject.editingContext();
+        EOEditingContext ec = addedObject.editingContext();
+        EOEnterpriseObject copy = addedObject;
+        if (referenceEc != ec) {
+            copy = EOUtilities.localInstanceOfObject(referenceEc, addedObject);
+        }
+        referenceObject.addObjectToBothSidesOfRelationshipWithKey(copy, key);
+    }
+
     /**
      * Turns a given enterprise object back into a fault.
      * @param eo enterprise object to refault
@@ -331,6 +436,18 @@ public class ERXEOControlUtilities {
             log.warn("Unable to find any shared objects for the entity named: " + entityName);
         }
         return sharedEos != null ? sharedEos : NSArray.EmptyArray;
+    }
+
+    /**
+     * Fetches a shared enterprise object for a given fetch
+     * specification from the default shared editing context.
+     * @param fetchSpec name of the fetch specification on the
+     *		shared object.
+     * @param entityName name of the shared entity
+     * @return the shared enterprise object fetch by the fetch spec named.
+     */
+    public static EOEnterpriseObject sharedObjectWithFetchSpec(String fetchSpec, String entityName) {
+        return EOUtilities.objectWithFetchSpecificationAndBindings(EOSharedEditingContext.defaultSharedEditingContext(), entityName, fetchSpec, null);
     }
 
     /**

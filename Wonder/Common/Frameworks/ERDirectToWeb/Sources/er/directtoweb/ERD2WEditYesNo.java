@@ -24,7 +24,7 @@ public class ERD2WEditYesNo extends D2WEditBoolean {
 
     public Integer yesNoBoolean() {
         Object bool = object().valueForKeyPath(propertyKey());
-        bool = new Integer(ERXUtilities.booleanValue(bool) ? 1 : 0);
+        bool = new Integer(ERXValueUtilities.booleanValue(bool) ? 1 : 0);
         return (Integer)bool;
     }
     

@@ -156,7 +156,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         if (_privateList()==null) {
             EODataSource aDataSource = _localDataSource();
             // Need to make sure that the eos are in the right editingContext.
-            anUnsortedArray = ERXUtilities.localInstancesOfObjects(((EOEnterpriseObject)sourceObject()).editingContext(), aDataSource.fetchObjects());
+            anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(((EOEnterpriseObject)sourceObject()).editingContext(), aDataSource.fetchObjects());
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
             /* WO5
@@ -180,8 +180,8 @@ public class ERXToManyRelationship extends WOToManyRelationship {
                 EOEditingContext ec = ((EOEnterpriseObject)_localSourceObject()).editingContext();
                 for (Enumeration e = aSortedArray.objectEnumerator(); e.hasMoreElements();) {
                     eo = (EOEnterpriseObject)e.nextElement();
-                    localArray.addObject((ec != eo.editingContext() && ERXUtilities.localInstanceOfObject(ec, eo) != null ?
-                                          ERXUtilities.localInstanceOfObject(ec, eo) : eo));
+                    localArray.addObject((ec != eo.editingContext() && ERXEOControlUtilities.localInstanceOfObject(ec, eo) != null ?
+                                          ERXEOControlUtilities.localInstanceOfObject(ec, eo) : eo));
                 }
                 aSortedArray=localArray;
             }
@@ -213,7 +213,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         boolean isDictionary = (aSourceObject instanceof NSMutableDictionary);
         NSMutableDictionary _dictionary = (isDictionary) ? (NSMutableDictionary)aSourceObject : null;
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
-        newValues = ERXUtilities.localInstancesOfObjects(_eo.editingContext(), newValues);
+        newValues = ERXEOControlUtilities.localInstancesOfObjects(_eo.editingContext(), newValues);
         // Need to handle the keyPath situation.
         if (_eo != null && masterKey.indexOf(".") != -1) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(masterKey);

@@ -39,7 +39,7 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
 
     // determines wether this component will output its own form or not
     public boolean useForm() {
-        boolean result=hasBinding("doNotUseForm") ? !ERXUtilities.booleanValue(valueForBinding("doNotUseForm")) : true;
+        boolean result=hasBinding("doNotUseForm") ? !ERXValueUtilities.booleanValue(valueForBinding("doNotUseForm")) : true;
         // however, if the form does not have to be submitted AND javascript is enabled, no need for a form
         if (result && !shouldSubmitForm() &&
             ((ERXSession)session()).javaScriptEnabled() &&
@@ -55,7 +55,7 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
     // determines wether the form this component is in (wether it was output by this component or not
     // has to be submitted or can be bypassed
     public boolean shouldSubmitForm() {
-        return hasBinding("shouldSubmitForm") ? ERXUtilities.booleanValue(valueForBinding("shouldSubmitForm")) : false;
+        return hasBinding("shouldSubmitForm") ? ERXValueUtilities.booleanValue(valueForBinding("shouldSubmitForm")) : false;
     }
 
     public boolean useSubmitButton() {

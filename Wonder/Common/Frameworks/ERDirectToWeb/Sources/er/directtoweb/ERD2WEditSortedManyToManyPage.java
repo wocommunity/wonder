@@ -186,9 +186,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         EOUtilities.localInstanceOfObject(editingContext(),_eoToAddToRelationship) : null;
 
         if (_localEoToAddToRelationship != null) {
-            // we create a join EO
-            EOEnterpriseObject joinEO=ERXUtilities.createEO(entity().name(),
-                                                             editingContext());
+            // we create a join
+            EOEnterpriseObject joinEO=ERXEOControlUtilities.createAndInsertObject(editingContext(), entity().name());
 
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
             if(isSortedRelationship()){
@@ -320,8 +319,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             throw new IllegalStateException("You cannot create new instances of " + entity().name() + "; it is read-only.");
         } else {
             _state = NEW;
-            EOEnterpriseObject eo = ERXUtilities.createEO(destinationEntity().name(),
-                                                          editingContext());
+            EOEnterpriseObject eo = ERXEOControlUtilities.createAndInsertObject( editingContext(), destinationEntity().name());
             EditPageInterface epi = D2W.factory().editPageForEntityNamed(destinationEntity().name(),
                                                                          session());
             epi.setObject(eo);
