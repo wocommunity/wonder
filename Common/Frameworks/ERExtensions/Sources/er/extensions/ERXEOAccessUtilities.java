@@ -33,7 +33,7 @@ public class ERXEOAccessUtilities {
         if(string != null) {
             String lowerCaseName = string.toLowerCase();
             if (entityNames == null) {
-                EOModelGroup group = (ec == null) ? EOModelGroup.defaultGroup() : EOUtilities.modelGroup(ec);
+                EOModelGroup group = modelGroup(ec);
                 entityNames = (NSArray)ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
             }
             NSMutableArray possibleEntities = new NSMutableArray();
@@ -65,18 +65,16 @@ public class ERXEOAccessUtilities {
      * @return if the entity is a shared entity
      */
     public static boolean entityWithNamedIsShared(EOEditingContext ec, String entityName) {
-        if (ec == null)
-            throw new IllegalStateException("Editing context argument is null for method: entityWithNamedIsShared");
         if (entityName == null)
             throw new IllegalStateException("Entity name argument is null for method: entityWithNamedIsShared");
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        EOEntity entity = entityNamed(ec, entityName);
         return entity.sharedObjectFetchSpecificationNames().count() > 0;
     }
     
     /**
     * Convenience method to get the next unique ID from a sequence.
      * @param ec editing context
-     * @param modelNamed name of the model which connects to the database
+     * @param modelName name of the model which connects to the database
      *			that has the sequence in it
      * @param sequenceName name of the sequence
      * @return next value in the sequence
@@ -84,12 +82,12 @@ public class ERXEOAccessUtilities {
     // ENHANCEME: Need a non-oracle specific way of doing this. Should poke around at
     //		the adaptor level and see if we can't find something better.
     public static Number getNextValFromSequenceNamed(EOEditingContext ec,
-                                                     String modelNamed,
+                                                     String modelName,
                                                      String sequenceName) {
         String sqlString = "select "+sequenceName+".nextVal from dual";
-        NSArray array = EOUtilities.rawRowsForSQL(ec, modelNamed, sqlString);
+        NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString);
         if (array.count() == 0) {
-            throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName + " in model: " + modelNamed);            
+            throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName + " in model: " + modelName);            
         }
         NSDictionary dictionary = (NSDictionary)array.objectAtIndex(0);
         NSArray valuesArray = dictionary.allValues();
@@ -142,19 +140,28 @@ public class ERXEOAccessUtilities {
         adaptorChannel.evaluateExpression(factory.expressionForString(exp));
     }
 
-    /** creates the SQL which is used by the provides EOFetchSpecification. The EOEditingContext is needed
-    * because it -could- be possible to have multiple EOF stacks, each having its own EOModelGroup and
-    * each EOModel in this group could connect to different databases, Oracle, FrontBase, ...
-    *
-     * @param spec the EOFetchSpecification in question
+    /**
+     * Creates the SQL which is used by the provides EOFetchSpecification.
+     *
      * @param ec the EOEditingContext
+     * @param spec the EOFetchSpecification in question
      *
      * @return the SQL which the EOFetchSpecification would use
      */
-    public static String sqlForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
-       return sqlExpressionForFetchSpecificationAndEditingContext(spec,ec,0,-1).statement();
+    public static String sqlForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
+       return sqlExpressionForFetchSpecification(ec,spec,0,-1).statement();
     }
 
+    /**
+     * Returns the raw rows for the given EOSQLExpression.
+     *
+     * @param ec the EOEditingContext
+     * @param spec the EOFetchSpecification in question
+     * @param modelName the name of the model in question
+     * @param expression the EOSQLExpression in question
+     *
+     * @return array of dictionaries
+     */
     public static NSArray rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
         EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
         dbc.lock();
@@ -181,21 +188,19 @@ public class ERXEOAccessUtilities {
     }
 
     
-    /** creates the SQL which is used by the provides EOFetchSpecification. The EOEditingContext is needed
-    * because it -could- be possible to have multiple EOF stacks, each having its own EOModelGroup and
-    * each EOModel in this group could connect to different databases, Oracle, FrontBase, ...
-    *
-    * @param spec the EOFetchSpecification in question
-    * @param ec the EOEditingContext
-    * @param start start of rows to fetch
-    * @param end end of rows to fetch (-1 if not used)
-
-    *
-    * @return the SQL which the EOFetchSpecification would use
-    */
-    public static EOSQLExpression sqlExpressionForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec, long start, long end) {
-        EOModel model = modelForFetchSpecificationAndEditingContext(spec, ec);
-        EOEntity entity = model.entityNamed(spec.entityName());
+    /**
+     * Creates the SQL which is used by the provided EOFetchSpecification, limited by the given range.
+     *
+     * @param ec the EOEditingContext
+     * @param spec the EOFetchSpecification in question
+     * @param start start of rows to fetch
+     * @param end end of rows to fetch (-1 if not used)
+     *
+     * @return the EOSQLExpression which the EOFetchSpecification would use
+     */
+    public static EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        EOModel model = entity.model();
         EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
         EODatabase db = new EODatabase(adaptor);
         EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
@@ -231,10 +236,18 @@ public class ERXEOAccessUtilities {
         return sqlExpr;
     }
 
-    public static int rowCountForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
+    /**
+     * Returns the number of rows the supplied EOFetchSpecification would return.
+     *
+     * @param ec the EOEditingContext
+     * @param spec the EOFetchSpecification in question
+     * @return the number of rows
+     */
+    public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
         int rowCount = -1;
-        EOModel model = ERXEOAccessUtilities.modelForFetchSpecificationAndEditingContext(spec, ec);
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, 0, -1);
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        EOModel model = entity.model();
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, 0, -1);
         String statement = sql.statement();
         int index = statement.toLowerCase().indexOf(" from ");
         statement = "select count(*) " + statement.substring(index, statement.length());
@@ -266,13 +279,38 @@ public class ERXEOAccessUtilities {
     }
     
 
-    public static EOModel modelForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
-        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator)ec.rootObjectStore();
-        EOModelGroup modelGroup = (EOModelGroup)osc.userInfo().objectForKey("EOModelGroup");
-        EOEntity entity = modelGroup.entityNamed(spec.entityName());
-        EOModel model = entity.model();
+    /**
+     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * If ec is null, it will try to get at the session via thread storage and use
+     * its defaultEditingContext. This is here now so we can remove the delgate in
+     * ERXApplication.
+     * @param ec editing context used to locate the model group (can be null)
+     */
+    
+    public static EOModelGroup modelGroup(EOEditingContext ec) {
+        if(ec == null) {
+            ERXSession s = ERXExtensions.session();
+            if(s != null) {
+                ec = s.defaultEditingContext();
+            }
+        }
+        EOModelGroup group;
+        if(ec == null) {
+            group = EOModelGroup.defaultGroup();
+        } else {
+            group = EOModelGroup.modelGroupForObjectStoreCoordinator((EOObjectStoreCoordinator)ec.rootObjectStore());
+        }
+        return group;
+    }
 
-        return model;
+    /**
+     * Similar to the helper in EUUtilities, but allows for null editingContext.
+     * @param ec editing context used to locate the model group (can be null)
+     * @param entityName entity name
+     */
+     public static EOEntity entityNamed(EOEditingContext ec, String entityName) {
+        EOModelGroup modelGroup = modelGroup(ec);
+        return modelGroup.entityNamed(entityName);
     }
 
     /**
@@ -288,8 +326,6 @@ public class ERXEOAccessUtilities {
                                                        String function,
                                                        String attributeName,
                                                        String entityName) {
-        if (ec == null)
-            throw new IllegalStateException("EditingContext is null. Required to know which model group to use.");
         if (function == null)
             throw new IllegalStateException("Function is null.");
         if (attributeName == null)
@@ -297,7 +333,7 @@ public class ERXEOAccessUtilities {
         if (entityName == null)
             throw new IllegalStateException("Entity name is null.");
         
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
 
         if (entity == null)
             throw new IllegalStateException("Unable find entity named: " + entityName);
@@ -343,7 +379,7 @@ public class ERXEOAccessUtilities {
         EOAdaptorContext ac = dc.adaptorContext();
         //ak: stupid trick to get around having to link to JDBCAdaptor
         EOSynchronizationFactory sf = (EOSynchronizationFactory)NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac, "adaptor.plugIn.createSynchronizationFactory");
-        EOModel m = EOModelGroup.defaultGroup().modelNamed(modelName);
+        EOModel m = modelGroup(null).modelNamed(modelName);
         Enumeration e = m.entities().objectEnumerator();
         entities = entities == null ? new NSMutableArray() : entities;
 
@@ -471,9 +507,7 @@ public class ERXEOAccessUtilities {
      *		entity.
      */
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
-        // FIXME: Should use the modelgroup for the root object store of the
-        //	  editing context.
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         NSDictionary primaryKey = null;
         try {

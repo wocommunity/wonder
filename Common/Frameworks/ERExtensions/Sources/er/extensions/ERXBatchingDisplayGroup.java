@@ -75,7 +75,7 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         if(_rowCount == -1) {
             EOFetchSpecification spec = databaseDataSource().fetchSpecificationForFetch();
             EOEditingContext ec = databaseDataSource().editingContext();
-            _rowCount = ERXEOAccessUtilities.rowCountForFetchSpecificationAndEditingContext(spec, ec);
+            _rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
             setObjectArray(new FakeArray(_rowCount));
         }
         return _rowCount;

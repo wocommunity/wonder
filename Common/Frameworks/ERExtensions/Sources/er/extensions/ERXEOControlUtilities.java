@@ -159,6 +159,20 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Clears snapshot the relaationship of a given enterprise so it will be read again when next accessed.
+     * @param eo enterprise object
+     * @param relationshipName relationship name
+     */
+    public static void clearSnapshotForRelationshipNamed(EOEnterpriseObject eo, String relationshipName) {
+        EOEditingContext ec = eo.editingContext();
+        EOModel model = EOUtilities.entityForObject(ec, eo).model();
+        EOGlobalID gid = ec.globalIDForObject(eo);
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        EODatabase database = dbc.database();
+        database.recordSnapshotForSourceGlobalID(null, gid, relationshipName);
+    }
+
+    /**
      * Constructs a fetch specification that will only fetch the primary
      * keys for a given qualifier.
      * @param ec editing context, only used to determine the entity
@@ -176,8 +190,7 @@ public class ERXEOControlUtilities {
                                                                       EOQualifier eoqualifier,
                                                                       NSArray sortOrderings,
                                                                       NSArray additionalKeys) {
-        EOModelGroup group = EOModelGroup.modelGroupForObjectStoreCoordinator((EOObjectStoreCoordinator)ec.rootObjectStore());
-        EOEntity entity = group.entityNamed(entityName);
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
         fs.setFetchesRawRows(true);
         NSMutableArray keys = new NSMutableArray(entity.primaryKeyAttributeNames());
@@ -255,7 +268,7 @@ public class ERXEOControlUtilities {
      * @return objects in the given range
      */
     public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, start, end);
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
         NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
         spec.setHints(hints);
 
@@ -546,7 +559,7 @@ public class ERXEOControlUtilities {
      *		entity.
      */
     public static NSDictionary newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         NSDictionary primaryKey = null;
         try {
@@ -575,7 +588,17 @@ public class ERXEOControlUtilities {
      *		object.
      */
     public static String primaryKeyStringForObject(EOEnterpriseObject eo) {
-        Object pk=primaryKeyObjectForObject(eo);
+        return _stringForPrimaryKey(primaryKeyObjectForObject(eo));
+    }
+
+    /**
+     * Returns the propertylist-encoded string representation of the primary key for
+     * a given object. Made public only for ERXGenericRecord.
+     * @param pk the primary key
+     * @return string representation of the primary key.
+     */
+    // FIXME ak this PK creation is too byzantine
+    public static String _stringForPrimaryKey(Object pk) {
         if(pk == null)
             return null;
         if(pk instanceof String || pk instanceof Number) {
@@ -584,6 +607,49 @@ public class ERXEOControlUtilities {
         return NSPropertyListSerialization.stringFromPropertyList(pk);
     }
 
+    /**
+     * Returns the propertylist-encoded string representation of the primary key for
+     * a given object.
+     * @param eo object to get the primary key for.
+     * @return string representation of the primary key of the
+     *		object.
+     */
+    // FIXME ak doesn't handle dates
+    public static NSDictionary primaryKeyDictionaryForString(EOEditingContext ec, String entityName, String string) {
+        if(string == null)
+            return null;
+        if(string.trim().length()==0) {
+            return NSDictionary.EmptyDictionary;
+        }
+        
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        NSArray pks = entity.primaryKeyAttributes();
+        NSMutableDictionary pk = new NSMutableDictionary();
+        try {
+            Object rawValue = NSPropertyListSerialization.propertyListFromString(string);
+            if(rawValue instanceof NSArray) {
+                int index = 0;
+                for(Enumeration e = ((NSArray)rawValue).objectEnumerator(); e.hasMoreElements();) {
+                    EOAttribute attribute = (EOAttribute)pks.objectAtIndex(index++);
+                    Object value = e.nextElement();
+                    value = attribute.validateValue(value);
+                    pk.setObjectForKey(value, attribute.name());
+                    if(pks.count() == 1) {
+                        break;
+                    }
+                }
+            } else {
+                EOAttribute attribute = (EOAttribute)pks.objectAtIndex(0);
+                Object value = rawValue;
+                value = attribute.validateValue(value);
+                pk.setObjectForKey(value, attribute.name());
+            }
+            return pk;
+        } catch (Exception ex) {
+            throw new NSForwardException(ex, "Error while parsing primary key: " + string);
+        }
+    }
+    
     /**
      * Returns either the single object the PK consist of or the NSArray of its values if the key is compound.
      * @param eo object to get the primary key for.
@@ -596,7 +662,7 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Gives the primary key array for a given enterprise
+        * Gives the primary key array for a given enterprise
      * object. This has the advantage of not firing the
      * fault of the object, unlike the method in
      * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
