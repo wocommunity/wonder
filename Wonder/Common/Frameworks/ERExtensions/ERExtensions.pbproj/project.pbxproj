@@ -843,13 +843,6 @@
 //F52
 //F53
 //F54
-		F50E5AFA020A03D201A80106 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "API files";
-			refType = 4;
-		};
 		F51619660207537001A801D4 = {
 			isa = PBXFolderReference;
 			path = ERXTableWithBorder.wo;
@@ -1805,9 +1798,7 @@
 			children = (
 				F6F4D1AC0251EB4D01AD0D07,
 				F6F4D1AD0251EB4D01AD0D07,
-				F50E5AFA020A03D201A80106,
 				F641B2FB026AF07C014E589E,
-				F57EA6AF01FF59BF019E57DA,
 				F57EA6C101FF59BF019E57DA,
 				F641B2FC026AF07C014E589E,
 			);
@@ -1820,11 +1811,6 @@
 			isa = PBXFileReference;
 			name = ValidationTemplate.strings;
 			path = English.lproj/ValidationTemplate.strings;
-			refType = 4;
-		};
-		F57EA6AF01FF59BF019E57DA = {
-			isa = PBXFileReference;
-			path = d2wclientConfiguration.plist;
 			refType = 4;
 		};
 		F57EA6C101FF59BF019E57DA = {
@@ -2169,7 +2155,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string></string>
+	<string>ERExtensions</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIconFile</key>
@@ -2289,7 +2275,6 @@
 				F57EA72F01FF59C0019E57DA,
 				F57EA73A01FF59C0019E57DA,
 				F641B2FD026AF07C014E589E,
-				F57EA76C01FF59C0019E57DA,
 				F57EA77E01FF59C0019E57DA,
 				F587FFAA020631FF01A801D4,
 				F587FFAB020631FF01A801D4,
@@ -2438,12 +2423,6 @@
 		};
 		F57EA73A01FF59C0019E57DA = {
 			fileRef = F57EA67C01FF59BF019E57DA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F57EA76C01FF59C0019E57DA = {
-			fileRef = F57EA6AF01FF59BF019E57DA;
 			isa = PBXBuildFile;
 			settings = {
 			};
