@@ -30,7 +30,7 @@ public class ERXTimestampUtilities extends Object {
         return value;
     }
 
-    class ERXTimestamp {
+    static class ERXTimestamp {
         NSTimestamp ts;
 
         ERXTimestamp(NSTimestamp value) {
@@ -82,7 +82,7 @@ public class ERXTimestampUtilities extends Object {
     }
 
     static ERXTimestamp getInstance(NSTimestamp ts) {
-        return getInstance(ts);
+        return new ERXTimestamp(ts);
     }
 
     public static NSTimestamp unixDate(Number helpedNSNumber) {
