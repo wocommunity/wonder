@@ -29,13 +29,13 @@ public class ERXDirectAction extends WODirectAction {
     public WOComponent testAction() {
         // FIXME: password protection?
         WOComponent result=null;
-        if (!WOApplication.application().isCachingEnabled() ||
-            !ERXExtensions.safeEquals(request().formValueForKey("pw"), System.getProperty("ERXLog4jPassword"))) {
+        if (WOApplication.application().isCachingEnabled() ||
+            !ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXJUnitPassword"))) {
             
             result=pageWithName("ERXWOTestInterface");
-            String whichTest = context().request().stringFormValueForKey("case");
-            if(whichTest != null) {
-                result.takeValueForKey(whichTest, "theTest");
+            String testCase = request().stringFormValueForKey("case");
+            if(testCase != null) {
+                result.takeValueForKey(testCase, "theTest");
             }
         }
              
@@ -46,7 +46,7 @@ public class ERXDirectAction extends WODirectAction {
         // FIXME: password protection?
         WOComponent result=null;
         if (!WOApplication.application().isCachingEnabled() ||
-            !ERXExtensions.safeEquals(request().formValueForKey("pw"), System.getProperty("ERXLog4jPassword")))
+            !ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXLog4jPassword")))
             result=pageWithName("ERXLog4JConfiguration");
         return result;
     }
