@@ -324,8 +324,10 @@ public class ERXFileUtilities {
         * on the file it is NOT deleted unless force delete is true
         * @param forceDelete if true then missing write rights are ignored and the file is deleted.
   */
-public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)  throws FileNotFoundException, IOException {
+public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)
+        throws FileNotFoundException, IOException {
         if (srcFile.exists() && srcFile.isFile()) {
+            Throwable thrownException=null;
             File  parent = dstFile.getParentFile();
             parent.mkdirs();
             FileInputStream in = new FileInputStream(srcFile);
@@ -341,19 +343,29 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
 
                 if (deleteOriginals && (srcFile.canWrite() || forceDelete))
                     srcFile.delete();
+            } catch (Throwable t) {
+                thrownException=t;
             } finally {
                 if (out != null)
                     try {
                         out.close();
-                    } catch (IOException io) {}
+                    } catch (IOException io) {
+                        if (thrownException==null) thrownException=io;
+                    }
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (IOException io) {}
+                    } catch (IOException io) {
+                        if (thrownException==null) thrownException=io;
+                    }
                 }
             }
+            if (thrownException!=null) {
+                if (thrownException instanceof IOException) throw (IOException)thrownException;
+                else if (thrownException instanceof Error) throw (Error)thrownException;
+                else throw (RuntimeException)thrownException;
+            }            
         }
-        
     }
 
 
