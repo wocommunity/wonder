@@ -1,8 +1,19 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Postgres needs special handling of NSData conversion, special
@@ -49,8 +60,23 @@ public class PostgresqlExpression extends JDBCExpression {
     
     static private final char _SQL_ESCAPE_CHAR = '|';
     
-    private static final NSTimestampFormatter _TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
-
+    /**
+     * Overridden to scale timestamp values to the scale that JDBC Timestamp supports (milliseconds).
+     */
+    public NSMutableDictionary bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
+        NSMutableDictionary result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
+        if(obj instanceof NSTimestamp) {
+            NSTimestamp ts = (NSTimestamp)obj;
+            int nanos = ts.getNanos();
+            int trunctuatedNanos = ((nanos/1000000)*1000000);
+            if(trunctuatedNanos != nanos) {
+                long millis = ts.getTime();
+                ts = new NSTimestamp(millis, trunctuatedNanos);
+                result.setObjectForKey(ts, "BindVariableValue");
+            }
+        }
+        return result;
+    }
     
     /**
      * Overridden to remove the rtrim usage. The original implementation
@@ -341,19 +367,6 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     
-    /** 
-     * Overridden to support milliseconds to work with Postgres
-     *
-     * @param eoattribute   the attribute
-     */
-    public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {
-        if ("T".equals(eoattribute.valueType())) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    
     /**
      * Overrides the parent implementation to add an <code>INITIALLY DEFERRED</code> to the generated statement.
      * Useful you want to generate the schema-building SQL from a pure java environment.
@@ -380,20 +393,6 @@ public class PostgresqlExpression extends JDBCExpression {
             _fetchLimit = eofetchspecification.fetchLimit();
         }
         super.prepareSelectExpressionWithAttributes(nsarray, flag, eofetchspecification);
-    }
-    
-    /**
-     * Overridden to support milliseconds to work with Postgres
-     *
-     * @param eoattribute   the attribute
-     * @return  yes/no
-     */
-    public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-        if ("T".equals(eoattribute.valueType())) {
-            return false;
-        } else {
-            return true;
-        }
     }
     
     /**
@@ -441,11 +440,13 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     /**
-     * Overrides the parent implementation to add typecasts after the value, i.e. '2'::char,
+     * Overrides the parent implementation to:
+     * <ul>
+     * <li>add typecasts after the value, i.e. '2'::char,
      * which is required with certain PostgreSQL versions (<=7.4.x) for the correct query processing, 
      * particularly with index usage. 
-     * Also contains a bugfix to handle milli seconds in timestamps
-     * NULL values are excluded from casting. 
+     * </ul>
+     * NULL values are excluded from casting. <br/>
      * You can set the System default <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting</code>
      * to true to disable both fixes (the former you might want to disable when PG says it can't cast a certain value and
      * the second when you have values with a greater resolution already in the DB).
@@ -460,16 +461,12 @@ public class PostgresqlExpression extends JDBCExpression {
         int lastDotIdx = kp.lastIndexOf(".");
         if (lastDotIdx == -1) {
             attribute = entity().attributeNamed(kp);
-        }
-        else {
+        } else {
             EOEntity kpEntity = entityForKeyPath(kp);
             attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
         }
-        if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
+        if(attribute != null && v != null && v != NSKeyValueCoding.NullValue && true) {
             String s = columnTypeStringForAttribute(attribute);
-            if( v instanceof NSTimestamp ) {
-                return "'"+_TIMESTAMP_FORMATTER.format((NSTimestamp)v) + "'::"+ s;
-            }
             return super.sqlStringForValue(v,kp) + "::" + s;
         } 
         
