@@ -16,4 +16,8 @@ public class Home extends WOComponent {
         super(context);
     }
 
+    public String email () {
+        return Main.EMAIL;
+    }
+    
 }

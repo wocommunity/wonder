@@ -110,12 +110,12 @@
 		};
 		017C60B1FFD2F2BB7F000001 = {
 			isa = PBXBundleReference;
-			path = "_WO$(SERVER_UNIQUIFIER)OdaikoJavaMailTests.tmp";
+			path = "_WO$(SERVER_UNIQUIFIER)ERJavaMailTests.tmp";
 			refType = 3;
 		};
 		017C60B2FFD2F2BB7F000001 = {
 			isa = PBXBundleReference;
-			path = "_WO$(CLIENT_UNIQUIFIER)OdaikoJavaMailTests.tmp";
+			path = "_WO$(CLIENT_UNIQUIFIER)ERJavaMailTests.tmp";
 			refType = 3;
 		};
 		017C60B4FFD2F2BB7F000001 = {
@@ -135,7 +135,7 @@
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
 				OTHER_JAVA_CLASS_PATH = "";
-				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)OdaikoJavaMailTests";
+				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERJavaMailTests";
 				SERVER_UNIQUIFIER = Server;
 				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_EXTENSION = tmp;
@@ -154,7 +154,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>_WO$(SERVER_UNIQUIFIER)OdaikoJavaMailTests</string>
+	<string>_WO$(SERVER_UNIQUIFIER)ERJavaMailTests</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIconFile</key>
@@ -177,7 +177,7 @@
 	<string>YES</string>
 	<key>NSJavaPath</key>
 	<array>
-		<string>_WO$(SERVER_UNIQUIFIER)OdaikoJavaMailTests.jar</string>
+		<string>_WO$(SERVER_UNIQUIFIER)ERJavaMailTests.jar</string>
 	</array>
 	<key>NSJavaRoot</key>
 	<string>Contents/Resources/Java</string>
@@ -253,7 +253,7 @@
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
 				OTHER_JAVA_CLASS_PATH = "";
-				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)OdaikoJavaMailTests";
+				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)ERJavaMailTests";
 				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_EXTENSION = tmp;
 			};
@@ -270,7 +270,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>_WO$(CLIENT_UNIQUIFIER)OdaikoJavaMailTests</string>
+	<string>_WO$(CLIENT_UNIQUIFIER)ERJavaMailTests</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIconFile</key>
@@ -331,7 +331,7 @@
 		};
 		017C60FFFFD43DA37F000001 = {
 			isa = PBXApplicationReference;
-			path = OdaikoJavaMailTests.woa;
+			path = ERJavaMailTests.woa;
 			refType = 3;
 		};
 		017C6100FFD43DA37F000001 = {
@@ -363,7 +363,7 @@
 				JAVA_VM = java;
 				JDB_OPTIONS = "";
 				JVM_OPTIONS = "";
-				PRODUCT_NAME = OdaikoJavaMailTests;
+				PRODUCT_NAME = ERJavaMailTests;
 				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
 				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
 				SERVER_UNIQUIFIER = Server;
@@ -383,7 +383,7 @@
 				017C6102FFD43DA37F000001,
 			);
 			isa = PBXApplicationTarget;
-			name = OdaikoJavaMailTests;
+			name = ERJavaMailTests;
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/WebObjects/Applications";
 			productName = NewWrapper;
 			productReference = 017C60FFFFD43DA37F000001;
@@ -394,7 +394,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>OdaikoJavaMailTests</string>
+	<string>ERJavaMailTests</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIconFile</key>
@@ -414,15 +414,15 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>NSExecutable</key>
-	<string>OdaikoJavaMailTests</string>
+	<string>ERJavaMailTests</string>
 	<key>NSJavaNeeded</key>
 	<true/>
 	<key>NSJavaPath</key>
 	<array>
-		<string>OdaikoJavaMailTests.jar</string>
+		<string>ERJavaMailTests.jar</string>
 	</array>
 	<key>NSJavaPathClient</key>
-	<string>OdaikoJavaMailTests.jar</string>
+	<string>ERJavaMailTests.jar</string>
 	<key>NSJavaRoot</key>
 	<string>Contents/Resources/Java</string>
 	<key>NSJavaRootClient</key>
