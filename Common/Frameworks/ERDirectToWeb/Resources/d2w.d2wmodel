@@ -802,6 +802,38 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.className; 
+                        selectorName = "isEqualTo"; 
+                        value = java.lang.String; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.width; 
+                        selectorName = "isGreaterThanOrEqualTo"; 
+                        value = {class = java.lang.Number; value = 110; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WEditLargeString; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                         key = smartAttribute.userInfo.erPrototype; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
@@ -872,38 +904,6 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
                 value = ERD2WEditYesNo; 
-            }; 
-        }, 
-        {
-            author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = edit; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.className; 
-                        selectorName = "isEqualTo"; 
-                        value = java.lang.String; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.width; 
-                        selectorName = "isGreaterThanOrEqualTo"; 
-                        value = {class = java.lang.Number; value = 110; }; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
-                keyPath = componentName; 
-                value = ERD2WEditLargeString; 
             }; 
         }, 
         {
@@ -1707,7 +1707,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = customComponentName; 
-                value = ERD2WDefaultCustomComponent; 
+                value = ERDDefaultCustomComponent; 
             }; 
         }, 
         {
@@ -2013,7 +2013,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "##.###;0;-"; 
+                value = "##.###;0;-##.###"; 
             }; 
         }, 
         {
@@ -2039,7 +2039,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "##.###;0;-"; 
+                value = "##.###;0;-##.###"; 
             }; 
         }, 
         {
@@ -2065,7 +2065,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "###,###.##;0;-"; 
+                value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
@@ -2080,7 +2080,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "###,###.##;0;-"; 
+                value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
@@ -2095,7 +2095,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "######;0;-"; 
+                value = "######;0;-######"; 
             }; 
         }, 
         {
@@ -2110,7 +2110,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "###,###.##;0;-"; 
+                value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
@@ -2184,7 +2184,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "###,###.##;0;-"; 
+                value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
@@ -2221,7 +2221,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = formatter; 
-                value = "###,##0.##;0;-"; 
+                value = "###,##0.##;0;-###,###.##"; 
             }; 
         }, 
         {
@@ -3033,19 +3033,19 @@
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                                 key = existingPageName; 
                                 selectorName = "isLike"; 
-                                value = "ERTabInspectPageTemplate*"; 
+                                value = "ERD2WTabInspectPageTemplate*"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                                 key = existingPageName; 
                                 selectorName = "isLike"; 
-                                value = "ERInspectPageTemplateImpact*"; 
+                                value = "ERD2WInspectPageTemplateImpact*"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                                 key = existingPageName; 
                                 selectorName = "isLike"; 
-                                value = "ERWizardCreationPageTemplate*"; 
+                                value = "ERD2WWizardCreationPageTemplate*"; 
                             }
                         ); 
                     }
@@ -3819,7 +3819,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageWrapperName; 
-                value = ERPrinterFriendlyWrapper; 
+                value = ERDPrinterFriendlyWrapper; 
             }; 
         }, 
         {
@@ -4035,7 +4035,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = sectionComponentName; 
-                value = ERDSectionText;
+                value = ERDSectionText; 
             }; 
         }, 
         {
