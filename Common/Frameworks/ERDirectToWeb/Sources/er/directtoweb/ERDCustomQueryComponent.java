@@ -28,6 +28,7 @@ public class ERDCustomQueryComponent extends ERDCustomEditComponent {
             _displayGroup=(WODisplayGroup)super.valueForBinding("displayGroup");
         return _displayGroup;
     }
+    public void setDisplayGroup(WODisplayGroup value) {_displayGroup = value; }
 
     public Object displayGroupQueryMatchValue() {
         return key() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(key()) : null;
@@ -35,5 +36,29 @@ public class ERDCustomQueryComponent extends ERDCustomEditComponent {
     public void setDisplayGroupQueryMatchValue (Object newValue) {
         if (key() != null && displayGroup () != null && displayGroup().queryMatch()!=null )
             displayGroup().queryMatch().setObjectForKey(newValue,key());
-    }    
+    }
+
+    public void reset() {
+        super.reset();
+        _displayGroup = null;
+        _d2wContext = null;
+    }
+
+    protected D2WContext _d2wContext;
+    public void setD2WContext(D2WContext value) {
+        _d2wContext = value;
+    }
+    public void setLocalContext(D2WContext value) {
+        _d2wContext = value;
+    }
+    public D2WContext localContext() { return d2wContext();}
+    public D2WContext d2wContext() {
+        if (!synchronizesVariablesWithBindings()) {
+            _d2wContext = (D2WContext)valueForBinding("localContext");
+            if(_d2wContext == null) {
+                _d2wContext = (D2WContext)valueForBinding("d2wContext");
+            }
+        }
+        return _d2wContext;
+    }
 }
