@@ -140,6 +140,8 @@
 				F5ED7AE30340E46B01CF0E76,
 				9DC907910351F7AD10CF0E7D,
 				9DC9079A0351F85B10CF0E7D,
+				F550BFB703B2535801CCC668,
+				F550BFBA03B253CD01CCC668,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,6 +160,7 @@
 				F61767B0031FE9D10FCF0E72,
 				F5ED7ADC0340E2F201CF0E76,
 				9DC907930351F7AD10CF0E7D,
+				F550BFF203B27AE601CCC668,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,6 +657,7 @@
 				F61767B3031FE9F40FCF0E72,
 				F5ED7AD20340E2F201CF0E76,
 				9DC907890351F7AD10CF0E7D,
+				F550BFAB03B2535801CCC668,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -885,7 +889,7 @@
 		9DC9078A0351F7AD10CF0E7D = {
 			isa = PBXFileReference;
 			name = ERNEUPickListPage.api;
-			path = Resources/ERNEUPickListPage.api;
+			path = Components/ERNEUPickListPage.api;
 			refType = 4;
 		};
 		9DC907900351F7AD10CF0E7D = {
@@ -962,6 +966,62 @@
 //F52
 //F53
 //F54
+		F550BFAB03B2535801CCC668 = {
+			children = (
+				F550BFAE03B2535801CCC668,
+				F550BFB903B253CD01CCC668,
+				F550BFF103B27AE601CCC668,
+			);
+			isa = PBXGroup;
+			name = ERNEUGroupingListPage;
+			refType = 4;
+		};
+		F550BFAE03B2535801CCC668 = {
+			children = (
+				F550BFAF03B2535801CCC668,
+			);
+			isa = PBXVariantGroup;
+			name = ERNEUGroupingListPage.wo;
+			path = "";
+			refType = 4;
+		};
+		F550BFAF03B2535801CCC668 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERNEUGroupingListPage.wo;
+			refType = 4;
+		};
+		F550BFB703B2535801CCC668 = {
+			fileRef = F550BFAE03B2535801CCC668;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F550BFB903B253CD01CCC668 = {
+			isa = PBXFileReference;
+			name = ERNEUGroupingListPage.api;
+			path = Components/ERNEUGroupingListPage.api;
+			refType = 4;
+		};
+		F550BFBA03B253CD01CCC668 = {
+			fileRef = F550BFB903B253CD01CCC668;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F550BFF103B27AE601CCC668 = {
+			isa = PBXFileReference;
+			name = ERNEUGroupingListPage.java;
+			path = Sources/er/neutral/ERNEUGroupingListPage.java;
+			refType = 4;
+		};
+		F550BFF203B27AE601CCC668 = {
+			fileRef = F550BFF103B27AE601CCC668;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5ED7AD20340E2F201CF0E76 = {
 			children = (
 				F5ED7AD30340E2F201CF0E76,
@@ -975,7 +1035,7 @@
 		F5ED7AD30340E2F201CF0E76 = {
 			isa = PBXFileReference;
 			name = ERNEUMessagePage.api;
-			path = Resources/ERNEUMessagePage.api;
+			path = Components/ERNEUMessagePage.api;
 			refType = 4;
 		};
 		F5ED7AD90340E2F201CF0E76 = {
@@ -1043,7 +1103,7 @@
 		F61767B1031FE9F10FCF0E72 = {
 			isa = PBXFileReference;
 			name = ERNEUEditSortedManyToManyPage.api;
-			path = Resources/ERNEUEditSortedManyToManyPage.api;
+			path = Components/ERNEUEditSortedManyToManyPage.api;
 			refType = 4;
 		};
 		F61767B2031FE9F10FCF0E72 = {
@@ -1121,7 +1181,7 @@
 		F689B35202F870440FCF0E72 = {
 			isa = PBXFileReference;
 			name = ERNEUErrorPage.api;
-			path = Resources/ERNEUErrorPage.api;
+			path = Components/ERNEUErrorPage.api;
 			refType = 4;
 		};
 		F689B35302F870440FCF0E72 = {
