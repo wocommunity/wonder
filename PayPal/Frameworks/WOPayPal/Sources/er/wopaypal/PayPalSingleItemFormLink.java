@@ -74,7 +74,9 @@ public class PayPalSingleItemFormLink extends PayPalSingleItemLinkBase {
 		    boundValues.addObject( new NSDictionary(new Object[] {custom, "custom"}, new Object[] {"value", "key"}) );
 		} else if (key.equals("amount")) {
 		    boundValues.addObject( new NSDictionary(new Object[] {dollarFormatter.format(Double.valueOf(amount)),"amount"}, new Object[] {"value", "key"}) );
-		} else if (key.equals("collectShippingAddress")) {
+                } else if (key.equals("currencyCode")) {
+                    boundValues.addObject( new NSDictionary(new Object[] {currencyCode, "currency_code"}, new Object[] {"value", "key"}) );
+                } else if (key.equals("collectShippingAddress")) {
 		    boundValues.addObject( new NSDictionary(new Object[] {(collectShippingAddress.booleanValue() ? "0" : "1"), "no_shipping"}, new Object[] {"value", "key"}) );
 		} else if (key.equals("allowCustomerNote")) {
 		    boundValues.addObject( new NSDictionary(new Object[] {(allowCustomerNote.booleanValue() ? "0" : "1"), "no_note"}, new Object[] {"value", "key"}) );
