@@ -135,12 +135,16 @@ public class ERXLinlyn {
 
     // constructor needs servername, username and passwd
     public ERXLinlyn(String server, String user, String pass) {
-        try { 
-            ftpConnect(server);
+        this(server, DEFAULT_CNTRL_PORT, user, pass);
+    }
+
+    public ERXLinlyn(String server, int portNum, String user, String pass) {
+        try {
+            ftpConnect(server, portNum);
             ftpLogin(user, pass);
         } catch(IOException ioe) {ioe.printStackTrace();}
     }
-
+    
     public String download(String dir, String file)
         throws IOException { return download(dir, file, true); }
 
@@ -172,10 +176,15 @@ public class ERXLinlyn {
     }
 
 
-    public void upload(String dir, String file, String what)
-        throws IOException { upload(dir, file, what, true); }
+    public void upload(String dir, String file, String what) throws IOException {
+        upload(dir, file, what, true);
+    }
 
     public void upload(String dir, String file, byte[] bytes) throws IOException {
+        upload(dir, file, bytes, false);
+    }
+
+    public void upload(String dir, String file, byte[] bytes, boolean keepAlive) throws IOException {
         ftpSetDir(dir);
         ftpSetTransferType(false);
         dsock = ftpGetDataSock();
@@ -185,21 +194,28 @@ public class ERXLinlyn {
         dos.write(bytes);
         dos.flush();
         dos.close();
-        ftpLogout();
+        if (!keepAlive) {
+            ftpLogout();
+        }
+    }
+    
+    public void upload(String dir, String file, String what, boolean asc) throws IOException {
+        upload(dir, file, what, asc, false);
     }
 
-    public void upload(String dir, String file, String what, boolean asc)
-        throws IOException {
+    public void upload(String dir, String file, String what, boolean asc, boolean keepAlive) throws IOException {
         ftpSetDir(dir);
         ftpSetTransferType(asc);
         dsock = ftpGetDataSock();
         OutputStream os = dsock.getOutputStream();
         DataOutputStream dos = new DataOutputStream(os);
         ftpSendCmd("STOR "+file);
-        dos.writeBytes(what);    
+        dos.writeBytes(what);
         dos.flush();
         dos.close();
-        ftpLogout();
+        if (!keepAlive) {
+            ftpLogout();
+        }
     }
 
     ///////////////// private fields ////////////////////
@@ -235,18 +251,18 @@ public class ERXLinlyn {
         return String.copyValueOf(buf, 0, offset);
     }
 
-    private void ftpConnect(String server)
+    private void ftpConnect(String server, int portNum)
         throws IOException {
         // Set up socket, control streams, connect to ftp server
-        // Open socket to server control port 21
-        csock = new Socket(server, CNTRL_PORT);
+        // Open socket to server control port (default is 21)
+        csock = new Socket(server, portNum);
         // Open control streams
         InputStream cis = csock.getInputStream();
         dcis =  new BufferedReader(new InputStreamReader(cis));
         OutputStream cos = csock.getOutputStream();
         pos = new PrintWriter(cos, true); // set auto flush true.
-        // See if server is alive or dead... 
-           String numerals = responseHandler(null); 
+        // See if server is alive or dead...
+        String numerals = responseHandler(null); 
         if(numerals.substring(0,3).equals("220")) // ftp server alive
             ; // System.out.println("Connected to ftp server");
         else System.err.println("Error connecting to ftp server.");
@@ -445,7 +461,7 @@ public class ERXLinlyn {
     }
 
 
-    private static final int CNTRL_PORT = 21;
+    private static final int DEFAULT_CNTRL_PORT = 21;
     private Socket csock = null;
     private Socket dsock = null;
     private BufferedReader dcis;
