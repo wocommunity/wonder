@@ -132,6 +132,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface, DTW
         return ds;
     }
 
+    public void setQueryDataSource(EODataSource datasource) {
+        setDataSource(datasource);
+    }
+    
     public String fetchSpecOptions() {
         String fetchSpecOptions
         = ("_queryDataSource.fetchSpecification().setIsDeep(" + isDeep()
