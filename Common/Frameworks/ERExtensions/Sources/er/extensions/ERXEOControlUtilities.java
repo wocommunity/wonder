@@ -169,22 +169,39 @@ public class ERXEOControlUtilities {
      * @return number of matching objects
      */
     public static Number objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-        
-        NSArray results = null;
-
         EOAttribute attribute = EOGenericRecordClazz.objectCountAttribute();
-        
+        return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,attribute);
+    }
+
+    /**
+     * Returns the number of unique objects matching the given
+     * qualifier for a given entity name. Implementation
+     * wise this method will generate the correct sql to only
+     * perform a count, i.e. all of the objects wouldn't be
+     * pulled into memory.
+     * @param ec editing context to use for the count qualification
+     * @param entityName name of the entity to fetch
+     * @param qualifier to find the matching objects
+     * @return number of matching objects
+     * @attributeName name of attribute in same entity to consider in order to determine uniqueness
+     */
+    public static Number objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        EOAttribute attribute = entity.attributeNamed(attributeName);
+        EOAttribute att2 = EOGenericRecordClazz.objectCountUniqueAttribute(attribute);
+        return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,att2);
+    }
+
+    private static Number _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
+        NSArray results = null;
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
+        EOFetchSpecification fs = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
         synchronized (entity) {
             entity.addAttribute(attribute);
-
             fs.setFetchesRawRows(true);
             fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-
             results = ec.objectsWithFetchSpecification(fs);
-
             entity.removeAttribute(attribute);
         }
         if ((results != null) && (results.count() == 1)) {
