@@ -1,0 +1,40 @@
+BaseUrl: WOResourceURL {
+	filename = "gfx";
+}
+
+BaseUrl2: WOString {
+	value = ^baseUrl;
+}
+
+Cols: WOString {
+	value = ^cols;
+}
+
+Conditional1: ERXOncePerRequestConditional {
+	keyName = "dhtmlJavaScript";
+}
+
+FormName: WOString {
+	value = ^formName;
+}
+
+Rows: WOString {
+	value = ^rows;
+}
+
+TextArea: WOText {
+	escapeHTML = false;
+	cols = ^cols;
+	rows = ^rows;
+	name = varName;
+	value = ^value;
+}
+
+Value: WOString {
+	escapeHTML = true;
+	value = ^value;
+}
+
+VarName: WOString {
+	value = varName;
+}
