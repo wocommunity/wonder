@@ -197,7 +197,7 @@ public class ERD2WModel extends D2WModel {
     }
 
 
-    static class _LhsKeysCallback extends er.extensions.ERXQualifierTraversalCallback {
+    static class _LhsKeysCallback extends ERDQualifierTraversalCallback {
         public NSMutableArray keys=new NSMutableArray();
         public boolean traverseKeyValueQualifier (EOKeyValueQualifier q) {
             if (!keys.containsObject(q.key()))
@@ -256,7 +256,7 @@ public class ERD2WModel extends D2WModel {
                 dependendantKeys=new Vector();
                 dependendKeysPerKey.put(rhsKey,dependendantKeys);
             }
-            er.extensions.ERXQualifierTraversal.traverseQualifier(r.lhs(),c);
+            ERDQualifierTraversal.traverseQualifier(r.lhs(),c);
             for (Enumeration e2=c.keys.objectEnumerator(); e2.hasMoreElements(); ) {
                 String k=(String)e2.nextElement();
                 addKeyToVector(k,dependendantKeys);
