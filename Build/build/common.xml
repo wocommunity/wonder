@@ -8,9 +8,12 @@
         <property name="build.temp.dir" value="${build.root}/tmp$" />
 
         <path id="project.class.path">
-            <fileset dir="${build.root}">
+	    <fileset dir="${build.root}">
                 <include name="ER*.framework/Resources/Java/*.jar" />
                 <include name="BT*.framework/Resources/Java/*.jar" />
+            </fileset>
+            <fileset dir="Build/lib">
+                <include name="woproject.jar" />
             </fileset>
             <fileset dir="${wo.woroot}/Library/Frameworks">
                 <include name="Java**/Resources/Java/*.jar" />
