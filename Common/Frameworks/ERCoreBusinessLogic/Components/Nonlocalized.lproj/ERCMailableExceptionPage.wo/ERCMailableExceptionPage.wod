@@ -11,9 +11,12 @@ Conditional2: ERXNonNullConditional {
 	condition = formattedMessage;
 }
 
-ExceptionNameString: WOString {
-    value = shortErrorMessage;
-    escapeHTML = false;
+ERXStringWithLineBreaks1: ERXStringWithLineBreaks {
+	value = shortErrorMessage;
+}
+
+ERXStringWithLineBreaks2: ERXStringWithLineBreaks {
+	value = formattedMessage;
 }
 ExtraInfoRowRepetition: WODictionaryRepetition {
     dictionary = extraInfo;
@@ -50,10 +53,6 @@ String3: WOString {
 
 String4: WOString {
 	value = hostName;
-}
-
-String5: WOString {
-	value = formattedMessage;
 }
 
 UserInfoKeyString2: WOString {
