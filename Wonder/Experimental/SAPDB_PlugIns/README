@@ -12,9 +12,8 @@ WARNING !!!!
     
     SapDB JDBC driver required: 7.4.00.04c (earlier versions had bug that prevented NSTImestamp values from working properly)
 
-		Things that surely DO NOT work:
-		- BLOB values
-    
+    TODO:
+		- schema synchronization
 
 Please refer to: 
 
