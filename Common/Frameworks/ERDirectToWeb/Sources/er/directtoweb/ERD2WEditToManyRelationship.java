@@ -49,11 +49,9 @@ public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
     public boolean shouldShowSelectAllButtons() {
         boolean result = false;
         if (canGetValueForBinding("shouldShowSelectAllButtons")) {
-            result = ((Integer)valueForBinding("shouldShowSelectAllButtons")).intValue() != 0;
+            result = ERXValueUtilities.booleanValue(valueForBinding("shouldShowSelectAllButtons"));
         } else {
-            Integer tmp = (Integer)d2wContext().valueForKey("shouldShowSelectAllButtons");
-            if (tmp != null)
-                result = tmp.intValue() != 0;
+            result = ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSelectAllButtons"));
         }
         return result;
     }
