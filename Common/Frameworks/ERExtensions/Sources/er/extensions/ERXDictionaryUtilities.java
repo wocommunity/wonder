@@ -11,7 +11,18 @@ import com.webobjects.eocontrol.*;
 import java.util.Enumeration;
 import java.lang.*;
 
+/**
+ * Collection of {@link NSDictionary} utilities.
+ */
 public class ERXDictionaryUtilities extends Object {
+
+    /**
+     * Creates an immutable dictionary containing all of the keys and
+     * objects from two dictionaries.
+     * @param dict1 the first dictionary
+     * @param dict2 the second dictionary
+     * @return immutbale dictionary containing the union of the two dictionaries.
+     */
     public static NSDictionary dictionaryWithDictionaryAndDictionary(NSDictionary dict1, NSDictionary dict2) {
         if(dict1 == null || dict1.allKeys().count() == 0) 
             return dict2;
@@ -22,11 +33,24 @@ public class ERXDictionaryUtilities extends Object {
         result.addEntriesFromDictionary(dict1);
         return new NSDictionary(result);
     }
-
+    
+    /**
+     * Creates an NSDictionary from a resource associated with a given bundle
+     * that is in property list format.<br/>
+     * @param name name of the file or resource.
+     * @param bundle NSBundle to which the resource belongs.
+     * @return NSDictionary de-serialized from the property list.
+     */
     public static NSDictionary dictionaryFromPropertyList(String name, NSBundle bundle) {
         return (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(name, "plist", bundle));
     }
-    
+
+    /**
+     * Creates a dictionary from a list of alternating objects and keys
+     * starting with an object.
+     * @param objectsAndKeys alternating list of objects and keys
+     * @return NSDictionary containing all of the object-key pairs.
+     */
     public static NSDictionary dictionaryWithObjectsAndKeys(Object[] objectsAndKeys) {
         NSMutableDictionary result = new NSMutableDictionary();
         Object object;
