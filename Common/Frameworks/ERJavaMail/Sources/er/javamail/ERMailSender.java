@@ -16,6 +16,7 @@ import com.webobjects.appserver.WOApplication;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 /** This class is used to send mails in a threaded way.<BR> This is
 needed in WebObjects because if sending 20 mails takes 40 seconds,
@@ -159,7 +160,14 @@ public class ERMailSender extends Thread {
         if (message.shouldSendMessage()) {
             // Send the message
             try {
-                if (debug) log.debug ("Sending a message ... " + aMessage);
+		if (debug) {
+		    log.debug ("Sending a message ... " + aMessage);
+		    Enumeration enum = aMessage.getAllHeaderLines();
+		    while(enum.hasMoreElements()) {
+			String header = (String)enum.nextElement();
+			log.debug(header);
+		    }
+		}
                 transport.sendMessage (aMessage, aMessage.getAllRecipients ());
                 if (debug) log.debug ("Done.");
                 stats.updateMemoryUsage ();
