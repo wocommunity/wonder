@@ -12,6 +12,7 @@
 #########################################################################
 
 # ERD2WModel class
-#ERExtraD2WModelFile = 
-
+# ERExtraD2WModelFile = 
+# patch rules to allow for better formatting and correct evaluation
+# er.directoweb.ERXD2WModel.patchRules=true
 
