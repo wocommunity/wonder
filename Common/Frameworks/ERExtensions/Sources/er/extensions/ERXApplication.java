@@ -636,8 +636,8 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             }
             WOContext context = (WOContext)ERXThreadStorage.valueForKey("wocontext");
             if (context != null && context.request() != null) {
-                if (ERXApplication.requestHandlingLog.isInfoEnabled()) {
-                    ERXApplication.requestHandlingLog.info(context.request());
+                if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
+                    ERXApplication.requestHandlingLog.debug(context.request());
                 }
             }
         } finally {
