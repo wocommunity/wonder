@@ -461,19 +461,22 @@ public class ERXSession extends WOSession implements Serializable {
     public boolean didBacktrack() {
         if(_didBacktrack == null) {
             _didBacktrack = Boolean.FALSE;
-            int reqCID = Integer.parseInt(requestsContextID(context().request()));
-            int cid = Integer.parseInt(context().contextID());
-            int delta = cid - reqCID;
-            if (delta > 2) {
-                _didBacktrack = Boolean.TRUE;
-            } else if (delta > 1) {
-                // Might not have backtracked if their last
-                // action was a direct action.
-                // ERXDirectActionRequestHandler, which is the framework
-                // built-in default direct action handler, sets this variable
-                // to true at the end of its handleRequest method.
-                if (!lastActionWasDA) {
+            //If the current request is a direct action, no way the user could have backtracked.
+            if(!context().request().requestHandlerKey().equals(WOApplication.application().directActionRequestHandlerKey())){
+                int reqCID = Integer.parseInt(requestsContextID(context().request()));
+                int cid = Integer.parseInt(context().contextID());
+                int delta = cid - reqCID;
+                if (delta > 2) {
                     _didBacktrack = Boolean.TRUE;
+                } else if (delta > 1) {
+                    // Might not have backtracked if their last
+                    // action was a direct action.
+                    // ERXDirectActionRequestHandler, which is the framework
+                    // built-in default direct action handler, sets this variable
+                    // to true at the end of its handleRequest method.
+                    if (!lastActionWasDA) {
+                        _didBacktrack = Boolean.TRUE;
+                    }
                 }
             }
             lastActionWasDA = false;
