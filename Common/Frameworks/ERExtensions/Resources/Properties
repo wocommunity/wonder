@@ -57,4 +57,7 @@ ERBlowfishCipherKey = DefaultBlowfishCipherKey
 # Don't change this
 log4j.loggerFactory = er.extensions.ERXLogger$Factory
 
-
+#########################################################################
+# Navigation 
+#########################################################################
+er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist

@@ -278,6 +278,10 @@
 				F59C576A02C4562A01000102,
 				F59C576B02C4562A01000102,
 				F6FA743D0343CC1A01257492,
+				F5E3A83103708BCC013FACDE,
+				F5E3A83803708BED013FACDE,
+				F5E3A83C03708C27013FACDE,
+				F5E3A84303708C4D013FACDE,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -440,6 +444,12 @@
 				F692713F0365AD3301257492,
 				F5283C580365C94301CF0E76,
 				F592A40C036D480201AD0D07,
+				F5E3A815037085C2013FACDE,
+				F5E3A817037086C0013FACDE,
+				F5E3A81903708848013FACDE,
+				F5E3A82403708A21013FACDE,
+				F5E3A83A03708C13013FACDE,
+				F5E3A84503708E6E013FACDE,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5842,6 +5852,180 @@
 			settingsToPassOnCommandLine = 280;
 			shouldUseHeadermap = 0;
 		};
+		F5E3A81303707FA4013FACDE = {
+			children = (
+				F5E3A816037086C0013FACDE,
+				F5E3A81803708848013FACDE,
+				F5E3A814037085C2013FACDE,
+				F5E3A84403708E6E013FACDE,
+				F5E3A81A03708A21013FACDE,
+				F5E3A82503708A32013FACDE,
+			);
+			isa = PBXGroup;
+			name = Navigation;
+			path = "";
+			refType = 4;
+		};
+		F5E3A814037085C2013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationManager.java;
+			path = er/extensions/ERXNavigationManager.java;
+			refType = 4;
+		};
+		F5E3A815037085C2013FACDE = {
+			fileRef = F5E3A814037085C2013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A816037086C0013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationComponent.java;
+			path = er/extensions/ERXNavigationComponent.java;
+			refType = 4;
+		};
+		F5E3A817037086C0013FACDE = {
+			fileRef = F5E3A816037086C0013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A81803708848013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationItem.java;
+			path = er/extensions/ERXNavigationItem.java;
+			refType = 4;
+		};
+		F5E3A81903708848013FACDE = {
+			fileRef = F5E3A81803708848013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A81A03708A21013FACDE = {
+			children = (
+				F5E3A82103708A21013FACDE,
+				F5E3A83203708BED013FACDE,
+				F5E3A83003708BCC013FACDE,
+			);
+			isa = PBXGroup;
+			name = ERXNavigationMenuItem;
+			refType = 4;
+		};
+		F5E3A82103708A21013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationMenuItem.java;
+			path = er/extensions/ERXNavigationMenuItem.java;
+			refType = 4;
+		};
+		F5E3A82403708A21013FACDE = {
+			fileRef = F5E3A82103708A21013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A82503708A32013FACDE = {
+			children = (
+				F5E3A83903708C13013FACDE,
+				F5E3A83D03708C4D013FACDE,
+				F5E3A83B03708C27013FACDE,
+			);
+			isa = PBXGroup;
+			name = ERXNavigationMenu;
+			refType = 4;
+		};
+		F5E3A83003708BCC013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationMenuItem.api;
+			path = Components/ERXNavigationMenuItem.api;
+			refType = 2;
+		};
+		F5E3A83103708BCC013FACDE = {
+			fileRef = F5E3A83003708BCC013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A83203708BED013FACDE = {
+			children = (
+				F5E3A83303708BED013FACDE,
+			);
+			isa = PBXVariantGroup;
+			name = ERXNavigationMenuItem.wo;
+			path = "";
+			refType = 4;
+		};
+		F5E3A83303708BED013FACDE = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXNavigationMenuItem.wo;
+			refType = 2;
+		};
+		F5E3A83803708BED013FACDE = {
+			fileRef = F5E3A83203708BED013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A83903708C13013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationMenu.java;
+			path = er/extensions/ERXNavigationMenu.java;
+			refType = 4;
+		};
+		F5E3A83A03708C13013FACDE = {
+			fileRef = F5E3A83903708C13013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A83B03708C27013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationMenu.api;
+			path = ../Components/ERXNavigationMenu.api;
+			refType = 4;
+		};
+		F5E3A83C03708C27013FACDE = {
+			fileRef = F5E3A83B03708C27013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A83D03708C4D013FACDE = {
+			children = (
+				F5E3A83E03708C4D013FACDE,
+			);
+			isa = PBXVariantGroup;
+			name = ERXNavigationMenu.wo;
+			path = "";
+			refType = 4;
+		};
+		F5E3A83E03708C4D013FACDE = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXNavigationMenu.wo;
+			refType = 2;
+		};
+		F5E3A84303708C4D013FACDE = {
+			fileRef = F5E3A83D03708C4D013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E3A84403708E6E013FACDE = {
+			isa = PBXFileReference;
+			name = ERXNavigationState.java;
+			path = er/extensions/ERXNavigationState.java;
+			refType = 4;
+		};
+		F5E3A84503708E6E013FACDE = {
+			fileRef = F5E3A84403708E6E013FACDE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5E3B46803480557016A5D3F = {
 			isa = PBXFileReference;
 			name = ERXBetweenQualifier.java;
@@ -6691,6 +6875,7 @@
 				F54C4C5802C4E24A01000102,
 				F50C03910354549D014B9BC9,
 				F531D2EC03658BC001AD0D07,
+				F5E3A81303707FA4013FACDE,
 			);
 			isa = PBXGroup;
 			name = "WOF Additions";
