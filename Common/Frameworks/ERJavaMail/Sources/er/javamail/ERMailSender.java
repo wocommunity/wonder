@@ -53,6 +53,9 @@ public class ERMailSender extends Thread {
 
         if (WOApplication.application ().isDebuggingEnabled ())
             milliSecondsWaitRunLoop = 2000;
+        
+        if (log.isDebugEnabled())
+            log.debug("ERMailSender initialized (JVM heap size: " + stats.formattedUsedMemory() + ")");
     }
 
     /** @return the shared instance of the singleton ERMailSender object */
@@ -296,6 +299,7 @@ public class ERMailSender extends Thread {
             _decimalFormatter = new ERXUnitAwareDecimalFormat (ERXUnitAwareDecimalFormat.BYTE);
             _decimalFormatter.setMaximumFractionDigits (2);
             _runtime = Runtime.getRuntime ();
+            updateMemoryUsage();
         }
 
         /** Resets statistics information */ 
