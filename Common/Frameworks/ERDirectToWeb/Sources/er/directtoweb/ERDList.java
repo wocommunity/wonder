@@ -17,12 +17,11 @@ public class ERDList extends ERDCustomEditComponent {
     /* logging support */
     static final ERXLogger log = ERXLogger.getERXLogger(ERDList.class);
     
-    NSArray list;
+    protected NSArray list;
 
     public ERDList(WOContext context) { super(context); }
 
     public boolean synchronizesVariablesWithBindings() { return false; }
-
 
     public void reset() {
         list = null;
@@ -32,9 +31,9 @@ public class ERDList extends ERDCustomEditComponent {
     // we will get asked quite a lot of times, so caching is in order
     
     public NSArray list() {
-        if(list == null) {
+        if (list == null) {
             try {
-                if(hasBinding("list")) {
+                if (hasBinding("list")) {
                     list = (NSArray)valueForBinding("list");
                 } else {
                     list = (NSArray)objectKeyPathValue();
@@ -43,8 +42,9 @@ public class ERDList extends ERDCustomEditComponent {
                 // (ak) This happens quite often when you haven't set up all display keys...
                 // the statement makes this more easy to debug
                 log.error(ex + " while getting " + key() + " of " + object());
-                list = new NSArray();
             }
+            if (list == null)
+                list = NSArray.EmptyArray;
         }
         return list;
     }
