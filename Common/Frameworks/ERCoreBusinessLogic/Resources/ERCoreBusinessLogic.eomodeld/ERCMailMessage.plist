@@ -30,6 +30,7 @@
         {columnName = "IS_READ"; name = isRead; prototypeName = flag; }, 
         {columnName = "LAST_MODIFIED"; name = lastModified; prototypeName = dateTime; }, 
         {columnName = "MAIL_STATE_ID"; name = mailStateID; prototypeName = osType; }, 
+        {columnName = "PLAIN_TEXT_"; name = plainText; prototypeName = varcharLarge; }, 
         {
             allowsNull = Y; 
             columnName = "REPLY_TO_ADDR"; 
@@ -55,7 +56,8 @@
         title, 
         xMailer, 
         isRead, 
-        exceptionReason
+        exceptionReason, 
+        plainText
     ); 
     className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
@@ -73,7 +75,8 @@
         attachments, 
         xMailer, 
         isRead, 
-        exceptionReason
+        exceptionReason, 
+        plainText
     ); 
     externalName = "ERCMAIL_MESSAG"; 
     name = ERCMailMessage; 
