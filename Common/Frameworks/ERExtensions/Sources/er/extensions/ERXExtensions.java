@@ -35,6 +35,19 @@ public class ERXExtensions {
     /** holds references to default editing context delegate without validation */
     private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
 
+    /**
+     * This public observer is used to perform basic functions in
+     * response to notifications. Specifically it handles
+     * configuring the adapator context so that SQL debugging can
+     * be enabled and disabled on the fly throgh the log4j system.
+     * Handling cleanup issues when sessions timeout, i.e. releasing
+     * all references to editing contexts created for that session.
+     * Handling call all of the <code>did*</code> methods on
+     * {@link ERXGenericRecord} subclasses after an editing context
+     * has been saved. This delegate is also responsible for configuring
+     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * This delegate is configured when this framework is loaded.
+     */
     public static class Observer {
         public void configureAdaptorContext(NSNotification n) {
             ERXExtensions.configureAdaptorContext();
@@ -111,6 +124,7 @@ public class ERXExtensions {
     private static Boolean adaptorEnabled;
 
     private static boolean _isConfigureAdaptorContextRapidTurnAround = false;
+    // FIXME: This shouldn't be enabled when the application is in production.
     public static void configureAdaptorContextRapidTurnAround(Object observer) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
@@ -155,8 +169,25 @@ public class ERXExtensions {
         }
     }
 
-    // Delegate methods
+    // MOVEME: All of these editing context creation methods and delegates should be moved to
+    //		ERXECFactory
+    /**
+     * Returns the default editing context delegate.
+     * This delegate is used by default for all editing
+     * contexts that are created.
+     * @return the default editing context delegate
+     */
+    // MOVEME: ERXECFactory
     public static ERXEditingContextDelegate defaultEditingContextDelegate() { return _defaultEditingContextDelegate; }
+
+    /**
+     * Default delegate that does not perform validation.
+     * Not performing validation can be a good thing when
+     * using nested editing contexts as sometimes you only
+     * want to validation one object, not all the objects.
+     * @returns default delegate that doesn't perform validation
+     */
+    // MOVEME: ERXECFactory
     public static ERXECNoValidationDelegate defaultECNoValidationDelegate() { return _defaultECNoValidationDelegate; }
 
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
@@ -172,6 +203,22 @@ public class ERXExtensions {
         return ERXExtensions.newEditingContext(objectStore, true);
     }
 
+    /**
+     * Utility method used to execute arbitrary SQL. This
+     * has the advantage over the {@link EOUtilities}
+     * <code>rawRowsForSQL</code> in that it can be used with
+     * other statements besides just SELECT without throwing
+     * exceptions.
+     * @param entityName name of an entity in the model connected
+     *		to the database you wish to execute SQL against
+     * @param exp SQL expression
+     * @param ec editing context that determines which model group
+     *		and database context to use.
+     */
+    // FIXME: To conform to naming conventions, should have the ec as the first parameter.
+    //		also should be passing in the model name and not an entityName
+    // ENHANCEME: Should support the use of bindings
+    // MOVEME: ERXEOFUtilities
     public static void evaluateSQLWithEntityNamed(String entityName, String exp, EOEditingContext ec) {
         // FIXME: Should be getting the model group from the ec
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -214,6 +261,7 @@ public class ERXExtensions {
                 cat().debug("Session "+sessionID+" is timing out ");
                 cat().debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
             }
+            // FIXME: Should help things along by calling dispose on all the ecs being held here.
             _editingContextsPerSession.removeObjectForKey(sessionID);
         }
     }
@@ -269,7 +317,23 @@ public class ERXExtensions {
         return eodetaildatasource;
     }
 
-    // FIXME: Localization
+    /**
+     * Displays a list of attributes off of enterprise
+     * objects in a 'friendly' manner. <br/>
+     * <br/>
+     * For example, given an array containing three user
+     * objects and the attribute key "firstName", the
+     * result of calling this method would be the string:
+     * "Max, Anjo and Patrice".
+     * @param list of objects to be displayed in a friendly
+     *		manner
+     * @param attribute key to be called on each object in
+     *		the list
+     * @param nullArrayDisplay string to be returned if the
+     *		list is null or empty
+     * @param friendly display string
+     */
+    // FIXME: Localization, also doesn't have to be eos. if attribute isn't specified should default to toString
     public static String friendlyEOArrayDisplayForKey(NSArray list, String attribute, String nullArrayDisplay) {
         String result=null;
         int count = list!=null ? list.count() : 0;
@@ -296,7 +360,16 @@ public class ERXExtensions {
         return result;
     }
 
-
+    /**
+     * Replaces a given string by another string in a string.
+     * This method is just a cover method for calling the
+     * same method in {@link ERXSimpleHTMLFormatter}.
+     * @param old string to be replaced
+     * @param newString to be inserted
+     * @param s string to have the replacement done on it
+     * @return string after having all of the replacement done.
+     */
+    // MOVEME: ERXStringUtilities
     public static String replaceStringByStringInString(String old, String newString, String s) {
         return ERXSimpleHTMLFormatter.replaceStringByStringInString(old,newString,s);
     }
@@ -363,13 +436,19 @@ public class ERXExtensions {
      * @param s string to test
      * @return result of the above test
      */
+    // MOVEME: ERXStringUtilities
     public static boolean stringIsNullOrEmpty(String s) {
         return ((s == null) || (s.length() == 0));
     }
 
     /**
-     * 
+     * Counts the number fo occurrences of a particular
+     * <code>char</code> in a given string.
+     * @param c char to count in string
+     * @param s string to look for specified char in.
+     * @return number of occurences of a char in the string
      */
+    // MOVEME: ERXStringUtilities
     public static int numberOfOccurrencesOfCharInString(char c, String s) {
         int result=0;
         if (s!=null) {
@@ -434,10 +513,31 @@ public class ERXExtensions {
         runtime.runFinalization();
     }
 
+    /**
+     * Tests if an enterprise object is a new object by
+     * looking to see if it is in the list of inserted
+     * objects for the editing context or if the editing
+     * context is null.<br/>
+     * <br/>
+     * Note: An object that has been deleted will have it's
+     * editing context set to null which means this method
+     * would report true for an object that has been deleted
+     * from the database.
+     * @param eo enterprise object to check
+     * @return true or false depending on if the object is a
+     *		new object.
+     */
+    // ENHANCEME: Should be able to differentuate between a deleted eo and a new eo by looking
+    //		  at the EOGlobalID
+    // MOVEME: ERXEOFUtilities (when we have them)
     public static boolean isNewObject(EOEnterpriseObject eo) {
         return eo.editingContext()==null || eo.editingContext().insertedObjects().containsObject(eo);
     }
 
+    /**
+     * 
+     */
+    // MOVEME: ERXEOFUtilities
     public static String primaryKeyForObject(EOEnterpriseObject eo) {
         Object pk=rawPrimaryKeyForObject(eo);
         return pk!=null ? pk.toString() : null;
@@ -453,7 +553,15 @@ public class ERXExtensions {
         }
         return result;
     }
-    
+
+    /**
+     * Gives the primary key array for a given enterprise
+     * object. This has the advantage of not firing the
+     * fault of the object, unlike the method in {@link EOUtilities}.
+     * @param obj enterprise object to get the primary key array from.
+     * @return array of all the primary key values for the object.
+     */
+    // MOVEME: ERXEOFUtilities
     public static NSArray primaryKeyArrayForObject(EOEnterpriseObject obj) {
         EOEditingContext ec = obj.editingContext();
         if (ec == null) {
@@ -561,8 +669,12 @@ public class ERXExtensions {
     }
 
     /**
-     *
+     * Returns an integer from a parsable string. If the
+     * string can not be parsed then 0 is returned.
+     * @param s string to be parsed.
+     * @return int from the string or 0 if un-parsable.
      */
+    // MOVEME: ERXStringUtilities
     public static int intFromParseableIntegerString(String s) {
         try {
             int x = Integer.parseInt(s);
@@ -579,22 +691,27 @@ public class ERXExtensions {
         return a!=null ? a.componentsJoinedByString(s2) : s;
     }
 
-    // FIXME:  Depricated use singleton method accessor
+    // DELETEME:  Depricated use singleton method accessor
     public static ERXSimpleHTMLFormatter htmlFormatter() { return ERXSimpleHTMLFormatter.formatter(); }
 
+    /**
+     * This method handles 3 different cases
+     *
+     * 1. keyPath is a single key and represents a relationship
+     *		--> addObjectToBothSidesOfRelationshipWithKey
+     * 2. keyPath is a single key and does NOT represents a relationship
+     * 3. keyPath is a real key path: break it up, navigate to the last atom
+     *		--> back to 1. or 2.
+     * @param to enterprise object that is having objects added to it
+     * @param from enterprise object that is providing the objects
+     * @param keyPath that specifies the relationship on the to object
+     *		to add the objects to.
+     */
+    // MOVEME: ERXEOFUtilities
+    // FIXME: Bad model group, should ensure local instances of objects
     public static void addObjectToBothSidesOfPotentialRelationshipFromObjectWithKeyPath(EOEnterpriseObject to,
                                                                                         EOEnterpriseObject from,
                                                                                         String keyPath) {
-
-        /*
-         Handles 3 different cases
-
-         1. keyPath is a single key and represents a relationship --> addObjectToBothSidesOfRelationshipWithKey
-         2. keyPath is a single key and does NOT represents a relationship
-         3. keyPath is a real key path: break it up, navigate to the last atom --> back to 1. or 2.
-
-         */
-
         if (from!=null) {
             if (keyPath.indexOf('.')!=-1) { // we have a key path
                 String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(keyPath);
@@ -655,10 +772,58 @@ public class ERXExtensions {
         return (newArray !=null) ? newArray : array;
     }
 
+    /**
+     * Holds the null grouping key for use when grouping objects
+     * based on a key that might return null and nulls are allowed
+     */  
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
+
+    /**
+     * Groups an array of objects by a given key path. The dictionary
+     * that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'company' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'company.name'
+     * of 'company.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @return a dictionary where the keys are the grouped values and the
+     * 		objects are arrays of the objects that have the grouped
+     *		characteristic. Note that if the key path returns null
+     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    // ENHANCEME: Doesn't have to be just eos ...
+    // MOVEME: ERXDictionaryUtilities or ERXArrayUtilities
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos, String keyPath) {
         return eosInArrayGroupedByKeyPath(eos,keyPath,true,null);
     }
+
+    /**
+     * Groups an array of objects by a given key path. The dictionary
+     * that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'company' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'company.name'
+     * of 'company.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param includeNulls determines if keyPaths that resolve to null
+     *		should be allowed into the group.
+     * @param extraKeyPathForValues allows a selected object to include
+     *		more objects in the group. This is going away in the
+     *		future.
+     * @return a dictionary where the keys are the grouped values and the
+     * 		objects are arrays of the objects that have the grouped
+     *		characteristic. Note that if the key path returns null
+     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    // ENHANCEME: Doesn't have to be just eos ...
+    // MOVEME: ERXDictionaryUtilities or ERXArrayUtilities
+    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos,
                                                           String keyPath,
                                                           boolean includeNulls,
@@ -778,6 +943,13 @@ public class ERXExtensions {
         return new String(hexchars);
     }
 
+    /**
+     * Returns the byte array for a given file.
+     * @param f file to get the bytes from
+     * @throws IOException if things go wrong
+     * @return byte array of the file.
+     */
+    // MOVEME: ERXFileUtilities
     public static byte[] bytesFromFile(File f) throws IOException {
         if (f == null)
             throw new IOException("null file");
@@ -791,13 +963,40 @@ public class ERXExtensions {
         return data;
     }
 
+    /**
+     * Returns a string from the file using the default
+     * encoding.
+     * @param f file to read
+     * @return string representation of that file.
+     */
+    // MOVEME: ERXFileUtilities
     public static String stringFromFile(File f) throws IOException {
         return new String(bytesFromFile(f));
     }
+    /**
+     * Returns a string from the file using the specified
+     * encoding.
+     * @param f file to read
+     * @param encoding to be used, null will use the default
+     * @return string representation of the file.
+     */
+    // MOVEME: ERXFileUtilities    
     public static String stringFromFile(File f, String encoding) throws IOException {
         return new String(bytesFromFile(f), encoding);
     }
-    
+
+    /**
+     * Determines the last modification date for a given file
+     * in a framework. Note that this method will only test for
+     * the global resource not the localized resources.
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *		for the application bundle
+     * @return the <code>lastModified</code> method off of the
+     *		file object
+     */
+    // MOVEME: ERXFileUtilities
+    // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         long lastModified = 0;
         String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
@@ -809,10 +1008,34 @@ public class ERXExtensions {
         return lastModified;
     }
 
+    /**
+     * Reads a file in from the file system and then parses
+     * it as if it were a property list.
+     * @param fileName name of the file
+     * @param aFrameWorkName name of the framework, null or
+     *		'app' for the application bundle.
+     * @return de-serialized object from the plist formatted file
+     *		specified.
+     */
+    // FIXME: Capitalize inFramework
+    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
         return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null);
     }
 
+    /**
+     * Reads a file in from the file system for the given set
+     * of languages and then parses the file as if it were a
+     * property list.
+     * @param fileName name of the file
+     * @param aFrameWorkName name of the framework, null or
+     *		'app' for the application bundle.
+     * @param languageList language list search order
+     * @return de-serialized object from the plist formatted file
+     *		specified.
+     */
+    // FIXME: Not the best way of handling encoding
+    // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileInFramework(String fileName, String aFrameWorkName, NSArray languageList) {
         String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
                                                                                              aFrameWorkName,
@@ -833,6 +1056,9 @@ public class ERXExtensions {
         return result;
     }
 
+    // FIXME: Not sure exactly what to do with this one, tempted just to delete it
+    //		to get rid of the D2W dependency. Could instead use the class description's
+    //		basic name beautifier and have that be localized.
     public static String displayNameForPropertyKey(String key, String entityName) {
         D2WContext context = ((ERXApplication)WOApplication.application()).d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -845,16 +1071,18 @@ public class ERXExtensions {
         return context.displayNameForProperty();
     }
 
-    // For this we check two parameters, first if the value is in the user defaults, if not we ask the rule system to resolve.
+    // DELETEME: No real value add
     public static Object configurationForKey(String key) {
         return System.getProperty(key) != null ?
         System.getProperty(key) : ERXExtensions.d2wContextValueForKey(key);
     }
 
+    // DELETEME: Shouldn't have this depenedency
     public static Object d2wContextValueForKey(String key) {
         return key != null ? ((ERXApplication)WOApplication.application()).d2wContext().valueForKey(key) : null;
     }
 
+    // DELETEME: Shouldn't have this dependency.
     public static Object d2wContextValueForKey(String key, String entityName) {
         D2WContext context = ((ERXApplication)WOApplication.application()).d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -865,6 +1093,7 @@ public class ERXExtensions {
         return context.valueForKey(key);
     }
 
+    // DELETEME: This is silly.
     public static String createConfigurationForEntityNamed(String entityName) {
         D2WContext context = ((ERXApplication)WOApplication.application()).d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -875,7 +1104,33 @@ public class ERXExtensions {
         return (String)context.valueForKey("createConfigurationNameForEntity");
     }
 
-
+    /**
+     * For a given enterprise object and key path, will return what
+     * the key 'unit' returns from the userInfo dictionary of the
+     * last property of the key path's EOAttribute or EORelationship.
+     * The userInfo dictionary can be edited via EOModeler, it is that
+     * open book looking icon when looking at either an attribute or
+     * relationship.<br/>
+     * <br/>
+     * For example if the userInfo dictionary or the attribute 'speed' on the
+     * entity Car contained the key-value pair unit=mph, then this method
+     * would be able to resolve that unit given either of these keypaths:<br/>
+     * <code>userInfoUnit(aCar, "speed");<br/>
+     * userInfoUnit(aDrive, "toCar.speed");</code></br>
+     * Units can be very useful for adding meta information to particular
+     * attributes and relationships in models. The ERDirectToWeb framework
+     * adds support for displaying units.
+     * @param object to resolve the key-path from
+     * @param key path off of the object
+     * @return unit information stored in the userInfo dictionary
+     */
+    // FIXME: Shouldn't be using the defaultModel group, should be getting it
+    //		from the rootObjectStoreCoordintator
+    // ENHANCEME: Should be more generic for resolving any key off of the userInfo
+    //		dictionary.
+    // ENHANCEME: Should also support defaulting to the same attribute in the parent entity
+    //		if it isn't found or possibly defaulting to the entity's userInfo itself
+    // MOVEME: ERXEOFUtilities
     public static String userInfoUnit(EOEnterpriseObject object, String key) {
         // return the unit stored in the userInfo dictionary of the appropriate EOAttribute
         EOEntity entity=null;
@@ -906,7 +1161,24 @@ public class ERXExtensions {
         return result;
     }
 
-
+    /**
+     * Resolves a given user info unit string for a given object.
+     * User info values are stored in an EOAttibute or EORelationship's
+     * userInfo dictionary. See the method <code>userInfoUnit</code> for
+     * a better description of getting values out of the userInfo
+     * dictionary. This method deals with resolving dynamic userInfo
+     * keys. These keys need to start with the '@@' symbol. For instance
+     * if you have the user info value '@unit' off of an attribute for the
+     * entity Movie, then you can either pass in a Movie object or a
+     * different object with a prefix key path to a movie object.<br/>
+     * @param userInfoUnitString string to be resolved, needs to start with
+     *		'@@' this keypath will be evaluated against either the object
+     *		if no prefixKeyPath is specified or the object returned by
+     *		the prefixKeyPath being evaluated against the object passed in.
+     * @param object to resolve either the user info unit or the prefixKeyPath.
+     * @param prefixKeyPath used as a prefix for the unit resolution.
+     * @return the resolved unit from the object.
+     */
     public static String resolveUnit(String userInfoUnitString,
                                      EOEnterpriseObject object,
                                      String prefixKeyPath) {
@@ -926,13 +1198,39 @@ public class ERXExtensions {
         return userInfoUnitString;
     }
 
+    /**
+     * Filters out all of the duplicate objects in
+     * a given array.<br/>
+     * Note: The current implementation does not preserve
+     * 		the order of elements in the array.
+     * @param anArray to be filtered
+     * @return filtered array.
+     */
+    // FIXME: Does not preserve array order
+    // MOVEME: ERXArrayUtilities
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
         NSMutableSet aSet = new NSMutableSet();
         aSet.addObjectsFromArray(anArray);
         return aSet.allObjects();
     }
 
-    // FIXME: Broken implementation, relies on 
+    /**
+     * Filters out duplicates of an array of enterprise objects
+     * based on the value of the given key off of those objects.
+     * Note: Current implementation depends on the key returning a
+     * cloneable object. Also the order is not preseved from the
+     * original array.
+     * @param eos array of enterprise objects
+     * @param key key path to be evaluated off of every enterprise
+     *		object
+     * @return filter array of objects based on the value of a key-path.
+     */
+    // FIXME: Broken implementation, relies on the value returned by the key to be Cloneable
+    //		also doesn't handle the case of the key returning null or an actual keyPath
+    //		and has the last object in the array winning the duplicate tie.
+    // FIXME: Does not preserve order.
+    // ENHANCEME: Doesn't need to be eo specific.
+    // MOVEME: ERXArrayUtilities
     public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
         NSMutableDictionary dico = new NSMutableDictionary();
         for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements(); ){
@@ -953,6 +1251,16 @@ public class ERXExtensions {
         return result.setBySubtractingSet(ERXUtilities.setFromArray(minus)).allObjects();
     }
 
+    /**
+     * Creates an array preserving order by adding all of the
+     * non-duplicate values from the second array to the first.
+     * @param a1 first array
+     * @param a2 second array
+     * @return array containing all of the elements of the first
+     *		array and all of the non-duplicate elements of
+     *		the second array.
+     */
+    // MOVEME: ERXArrayUtilities
     public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
         // FIXME this is n2 -- could be made n lg n
         NSArray result=null;
@@ -968,6 +1276,15 @@ public class ERXExtensions {
         }
         return result;
     }
+
+    /**
+     * Adds all of the non-duplicate elements from the second
+     * array to the mutable array.
+     * @param a1 mutable array where non-duplicate objects are
+     *		added
+     * @param a2 array to be added to a1
+     */
+    // MOVEME: ERXArrayUtilities
     public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
         for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
             Object elt=e.nextElement();
@@ -975,7 +1292,7 @@ public class ERXExtensions {
         }
     }
 
-
+    // DELETEME: duplicate method friendlyEOArrayDisplayForKey
     public static String userPresentableEOArray(NSArray array, String attribute) {
         String userPresentable = "";
         if (array != null && array.count() > 0) {
@@ -990,11 +1307,29 @@ public class ERXExtensions {
         return userPresentable;
     }
 
+    /**
+     * Refreshes all of the objects for an array of entity names.
+     * @param names array of shared entity names
+     */
+    // FIXME: Uses default model group.
+    // MOVEME: ERXEOFUtilities
     public static void refreshSharedObjectsWithNames(NSArray names) {
         for (Enumeration e = names.objectEnumerator(); e.hasMoreElements();)
             refreshSharedObjectsWithName((String)e.nextElement());
     }
 
+    /**
+     * Useful method to refresh all of the shared enterprise objects
+     * for a given shared entity. The current implementation depends
+     * on the shared entity to have a fetch specification named 'FetchAll'
+     * which will be created for you if you check the box that says
+     * 'share all objects'.
+     * @param entityName name of the shared entity
+     */
+    // FIXME: Only works with shared objects that share all of their objects, i.e. has a FetchAll fetch spec
+    //		also only works with the global model group.
+    // CHECKME: Should check that this still works under WO 5
+    // MOVEME: ERXEOFUtilities
     public static void refreshSharedObjectsWithName(String entityName) {
         EOEditingContext peer = ERXExtensions.newEditingContext();
         peer.setSharedEditingContext(null);
@@ -1012,17 +1347,33 @@ public class ERXExtensions {
         }
     }
 
+    /** Holds a reference to the random object */
+    // FIXME: Not a thread safe object, access should be synchronized.
     private static Random _random=new Random();
+
+    /**
+     * This method can be used with Direct Action URLs to make sure
+     * that the browser will reload the page. This is done by
+     * adding the parameter [? | &]r=random_number to the end of the
+     * url.
+     * @param daURL a url to add the randomization to.
+     * @return url with the addition of the randomization key
+     */
+    // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static String randomizeDirectActionURL(String daURL) {
-        // this method can be used with Direct Action URLs, to make sure the will cause the browser
-        // to reload the page..
         int r=_random.nextInt();
         char c=daURL.indexOf('?')==-1 ? '?' : '&';
         return  daURL+c+"r="+r;
     }
+    /**
+     * This method can be used with Direct Action URLs to make sure
+     * that the browser will reload the page. This is done by
+     * adding the parameter [? | &]r=random_number to the end of the
+     * url.
+     * @param daURL a url to add the randomization to.
+     */
+    // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static void addRandomizeDirectActionURL(StringBuffer daURL) {
-        // this method can be used with Direct Action URLs, to make sure the will cause the browser
-        // to reload the page..
         int r=_random.nextInt();
         char c='?';
         for (int i=0; i<daURL.length(); i++) {
@@ -1034,6 +1385,12 @@ public class ERXExtensions {
         daURL.append("r=");
         daURL.append(r);
     }
+    /**
+     * Adds the wosid for a given session to a given url. 
+     * @param url to add wosid form value to.
+     * @return url with the addition of wosid form value
+     */
+    // FIXME: Should check to see if the wosid form value has already been set.
     public static String addWosidFormValue(String url, WOSession s) {
         String result= url;
         if (result!=null && s!=null) {
@@ -1043,9 +1400,8 @@ public class ERXExtensions {
         }
         return result;
     }
-    // -----------------------------------------------------------------------------------------------
-    // Rule cache warming up -- useful for deployment
 
+    // DELETEME: Need a better system
     public static void warmUpRuleCache() {
         if (WOApplication.application() instanceof ERXApplication) {
             ((ERXApplication)WOApplication.application()).resetSignificantKeys();
@@ -1144,21 +1500,13 @@ public class ERXExtensions {
         Magnus L. Hetland mlh@idt.ntnu.no
         27 Aug 1999 15:51:03 +0200
 
-        Previous message: Why do we call python a scripting language?
-        Next message: Fuzzy string matching (snippet candidate?)
-        Messages sorted by: [ date ] [ thread ] [ subject ] [ author ]
-
-        --------------------------------------------------------------------------------
-
         Explanation of the distance algorithm...
-
-        (Got a request for this, and thought I might as well post it...)
 
         The algorithm:
 
         def distance(a,b):
         c = {}
-    n = len(a); m = len(b)
+        n = len(a); m = len(b)
 
         for i in range(0,n+1):
         c[i,0] = i
@@ -1219,8 +1567,6 @@ I guess that ought to cover it...
     Lie          The firefly is still sadder / Than the moaning insect
           Hetland                                       : Minamoto Shigeyuki*/
 
-
-
     public static double distance( String a, String b){
         int n = a.length();
         int m = b.length();
@@ -1247,16 +1593,54 @@ I guess that ought to cover it...
         return c[n][m];
     }
 
-    public static void setBooleanFlagOnSessionForKey(WOSession s, String key, boolean newValue) {
+    /**
+     * Uses the <code>setObjectForKey</code> off of the {@link WOSession}
+     * class to push a Boolean object onto the session for a given key.
+     * Note this is not using key value coding, meaning you don't need
+     * to have a boolean instance variable corresponding to the given
+     * key on your session object. This flag can be retrieved using
+     * the method <code>booleanFlagOnSessionForKeyWithDefault</code>.
+     * @param s session object to have the boolean flag set on
+     * @param key to be used in the session's dictionary
+     * @param newValue boolean value to be set on the session
+     */
+    public static void setBooleanFlagOnSessionForKey(WOSession s,
+                                                     String key,
+                                                     boolean newValue) {
         s.setObjectForKey(newValue ? Boolean.TRUE : Boolean.FALSE, key);
     }
-    public static boolean booleanFlagOnSessionForKeyWithDefault(WOSession s, String key, boolean defaultValue) {
+
+    /**
+     * Retrieves a value from the session's dictionary and evaulates
+     * that object using the method <code>booleanValue</code> off of
+     * {@link ERXUtilities}. If there is not an object corresponding
+     * to the key passed in, then the default value is returned. The
+     * usual way in which boolean values are set on the session object
+     * is by using the method <code>setBooleanFlagOnSessionForKey</code>
+     * in this class.
+     * @param s session object to retrieve the boolean flag from
+     * @param key that the boolean is stored under
+     * @param defaultValue value to be returned if the object in the
+     *		dictionary is null
+     * @return boolean value of the object stored in the session's dictionary
+     *		for the given key.
+     */
+    public static boolean booleanFlagOnSessionForKeyWithDefault(WOSession s,
+                                                                String key,
+                                                                boolean defaultValue) {
         return s.objectForKey(key) != null ? ERXUtilities.booleanValue(s.objectForKey(key)) : defaultValue;
     }
-
+    /** Holds a session-thread name relationship. Better achived using a thread local */
+    private static NSMutableDictionary _sessionsPerThread=new NSMutableDictionary();
+    /**
+     * Sets the current session for this thread. This is called
+     * from {@link ERXSession}'s awake and sleep methods.
+     * @param session that is currently active for this thread.
+     */
+    // FIXME: Should use weak references as well as an InheritableThreadLocal for all of this type
+    //		of stuff.
     // this should be thread-safe
     // even though we don't intend to run with full MT on at this point
-    private static NSMutableDictionary _sessionsPerThread=new NSMutableDictionary();
     public synchronized static void setSession(WOSession session) {
         Object key=Thread.currentThread().getName();
         if (session!=null)
@@ -1265,6 +1649,11 @@ I guess that ought to cover it...
             _sessionsPerThread.removeObjectForKey(key);
     }
 
+    /**
+     * Returns the current session object for this thread.
+     * @return current session object for this thread
+     */
+    // ENHANCEME: Better done using a WeakHashMap and a ThreadLocal
     public synchronized static WOSession session() {
         Object key=Thread.currentThread().getName();
         return (WOSession)_sessionsPerThread.objectForKey(key);
@@ -1273,7 +1662,7 @@ I guess that ought to cover it...
     // -----------------------------------------------------------------------
     // method used by the preferences mechanism from ERDirectToWeb
     // needs to be in here because shared by ERDirectToWeb and ERCoreBusinessLogic
-
+    // FIXME: Needs to find a better home.
     public static String userPreferencesKeyFromContext(String key, NSKeyValueCoding context) {
         StringBuffer result=new StringBuffer(key);
         result.append('.');
@@ -1292,9 +1681,11 @@ I guess that ought to cover it...
         return result.toString();
     }
 
-
-    //-------------------------------------------------------------------------
-
+    /**
+     * Frees all of a resources associated with a given
+     * process and then destroys it.
+     * @param p process to destroy
+     */
     public static void freeProcessResources(Process p) {
         if (p!=null) {
             try {
@@ -1305,6 +1696,4 @@ I guess that ought to cover it...
             } catch (IOException e) {}
         }
     }
-
-    
 }
