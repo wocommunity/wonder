@@ -214,20 +214,32 @@ public class ERXWORepetition extends WODynamicGroup {
         
         int count = _count(context, wocomponent);
         
+        WOActionResults woactionresults = null;
         String indexString = _indexOfChosenItem(worequest, wocontext);
         int index = indexString == null ? 0 : Integer.parseInt(indexString);
-        int start = indexString == null ? 0 : index;
-        int end   = indexString == null ? count : (index + 1);
-        
-        WOActionResults woactionresults = null;
-        
-        for (int i = start; i < end && woactionresults == null; i++) {
-            _prepareForIterationWithIndex(context, i, wocontext, wocomponent);
+        if(indexString != null) {
+            if (_item != null) {
+                Object object = context.objectAtIndex(index);
+                _item._setValueNoValidation(object, wocomponent);
+            }
+            if (_index != null) {
+                Integer integer = ERXConstant.integerForInt(index);
+                _index._setValueNoValidation(integer, wocomponent);
+            }
+            wocontext.appendElementIDComponent(indexString);
             woactionresults = super.invokeAction(worequest, wocontext);
-        }
-        
-        if (count > 0) {
-            _cleanupAfterIteration(count, wocontext, wocomponent);
+            wocontext.deleteLastElementIDComponent();
+        } else {
+            int start = indexString == null ? 0 : index;
+            int end   = indexString == null ? count : (index + 1);
+            
+            for (int i = start; i < end && woactionresults == null; i++) {
+                _prepareForIterationWithIndex(context, i, wocontext, wocomponent);
+                woactionresults = super.invokeAction(worequest, wocontext);
+            }
+            if (count > 0) {
+                _cleanupAfterIteration(count, wocontext, wocomponent);
+            }
         }
         return woactionresults;
     }
