@@ -161,6 +161,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     /** Holds default values */
     protected NSMutableDictionary _initialDefaultValues;
 
+    /** Holds the default factory instance */
+    public static Factory _factory;
+    
     /**
      * This factory inner class is registered as the observer
      * for three notifications: modelWasAdded, classDescriptionNeededForEntity
@@ -524,6 +527,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         
     }
 
+    /** getter for the factory */
+    public static Factory factory() {
+        return _factory;
+    }
+    
     /** 
      * flag to know if the <code>registerDescription</code>
      * method has been called
@@ -543,25 +551,25 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public static void registerDescription() {
         if (!_registered) {
-            Factory observer = null;
+            _factory = null;
             try {
                 String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
                 if (className != null) {
-                    observer = (Factory)Class.forName(className).newInstance();
+                    _factory = (Factory)Class.forName(className).newInstance();
                 }
             } catch(Exception ex) {
                 log.warn("Exception while registering factory, using default: " + ex );
             }
             
-            if(observer == null)
-                observer=new Factory();
-            ERXRetainer.retain(observer);
+            if(_factory == null)
+                _factory=new Factory();
+
             // Need to be able to preempt the model registering descriptions.
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("modelWasAddedNotification", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("compilerProxyDidCompileClasses", new Class[] { NSNotification.class } ), ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("modelWasAddedNotification", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("compilerProxyDidCompileClasses", new Class[] { NSNotification.class } ), ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, null);
             _registered = true;
         }
     }
