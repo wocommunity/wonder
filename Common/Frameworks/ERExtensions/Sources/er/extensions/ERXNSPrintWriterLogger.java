@@ -2,7 +2,9 @@
 // ERXNSPrintWriterLogger.java
 // Project ERExtensions
 //
-// Created by tatsuya on Wed Aug 21 2002
+// Created by Tatsuya Kawano on Wed Aug 21 2002
+// Updated by Masahiro Urakami on Wed Jan 29 2003 
+//   so that it works properly on Windows as well. 
 //
 package er.extensions;
 
