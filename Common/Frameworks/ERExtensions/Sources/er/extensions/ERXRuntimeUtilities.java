@@ -1,9 +1,6 @@
 package er.extensions;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import com.webobjects.foundation.*;
+import java.io.*;
 
 
 public class ERXRuntimeUtilities {

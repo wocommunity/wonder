@@ -7,8 +7,9 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import er.extensions.ERXLogger;
+import com.webobjects.eocontrol.*;
+
+import er.extensions.*;
 
 /**
  * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.<br />

@@ -7,9 +7,10 @@
 package er.directtoweb;
 
 import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import er.extensions.ERXLogger;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * Default way of generating image references for tabs and sections.<br />

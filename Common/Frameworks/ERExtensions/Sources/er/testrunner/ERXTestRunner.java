@@ -6,10 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import java.lang.reflect.*;
-import java.text.NumberFormat;
-import java.util.*;
-import java.io.PrintStream;
 import junit.framework.*;
 import junit.runner.*;
 import er.extensions.*;

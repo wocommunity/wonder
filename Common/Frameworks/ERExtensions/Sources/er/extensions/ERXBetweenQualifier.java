@@ -14,21 +14,9 @@
 //
 package er.extensions;
 
-import com.webobjects.eocontrol.EOQualifierEvaluation;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOClassDescription;
-
-import com.webobjects.eoaccess.EOQualifierSQLGeneration;
-import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOEntity;
-
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSComparator;
-import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
 * The between qualifier allows qualification on an

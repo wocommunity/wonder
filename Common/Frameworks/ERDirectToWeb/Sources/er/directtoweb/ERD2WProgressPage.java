@@ -1,9 +1,8 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
-import er.extensions.ERXLogger;
-import er.extensions.ERXLongResponseTask;
+import er.extensions.*;
 
 /**
  * Displays progress by using a ERXLongResponse.Task. Very useful for sending mail and the like.

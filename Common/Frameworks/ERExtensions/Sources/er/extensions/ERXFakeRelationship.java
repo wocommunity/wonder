@@ -6,11 +6,12 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.<br />

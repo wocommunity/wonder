@@ -6,10 +6,9 @@
 //
 package er.extensions;
 
+import java.util.*;
+
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import java.util.Enumeration;
-import java.lang.*;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSDictionary NSDictionary} utilities.

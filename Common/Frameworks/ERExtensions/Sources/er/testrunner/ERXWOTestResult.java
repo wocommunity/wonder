@@ -6,15 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.io.*;
+
 import junit.framework.*;
-import junit.runner.*;
-import java.io.PrintStream;
-import java.io.ByteArrayOutputStream;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 import com.webobjects.woextensions.*;
+
 import er.extensions.*;
 
 /**

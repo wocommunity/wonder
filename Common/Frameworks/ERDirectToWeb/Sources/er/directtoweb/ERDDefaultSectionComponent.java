@@ -7,8 +7,8 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.foundation.*;
 
 import er.extensions.*;
 

@@ -7,13 +7,15 @@
 package er.directtoweb;
 
 import java.util.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+
+import org.apache.log4j.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import org.apache.log4j.NDC;
 
 /**
 Common superclass for all ERD2W templates (except ERD2WEditRelationshipPage). Has tons of extra functionality:<br />

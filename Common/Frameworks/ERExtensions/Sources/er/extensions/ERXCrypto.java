@@ -6,14 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import java.security.*;
-import javax.crypto.*;
-import java.util.*;
 import java.io.*;
+import java.security.*;
+import java.util.*;
+
+import javax.crypto.*;
 import javax.crypto.spec.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /* Compilation problems? READ THIS
  *

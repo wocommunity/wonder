@@ -1,12 +1,7 @@
 package er.extensions;
 
 import java.io.*;
-import java.util.*;
 import java.util.zip.*;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import er.extensions.*;
 
 public class ERXCompressionUtilities {
 

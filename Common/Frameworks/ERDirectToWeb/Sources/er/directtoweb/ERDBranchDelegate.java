@@ -6,18 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
+import java.lang.reflect.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.foundation.*;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Enumeration;
-
-import er.extensions.ERXDictionaryUtilities;
-import er.extensions.ERXLogger;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXStringUtilities;
+import er.extensions.*;
 
 /**
  * The branch delegate is used in conjunction with the

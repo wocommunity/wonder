@@ -6,10 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import java.util.*;
+import com.webobjects.foundation.*;
 
 /** 
  * Groups items into sections.For example: Employees belong to a department, you want to 

@@ -7,7 +7,6 @@
 package er.testrunner;
 
 import junit.framework.*;
-import junit.runner.*;
 
 /**
  * template listner interface.<br />

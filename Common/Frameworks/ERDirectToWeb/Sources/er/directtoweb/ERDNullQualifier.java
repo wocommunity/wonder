@@ -6,9 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 // FIXME: This may need to subclass EOQualifier now.
 /**

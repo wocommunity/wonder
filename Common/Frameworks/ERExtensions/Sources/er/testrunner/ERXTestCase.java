@@ -18,12 +18,13 @@ Copyright (c) 2001-2002, CodeFab, Inc.
 
 package er.testrunner;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import junit.framework.*;
 import java.util.*;
+
+import junit.framework.*;
+
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 public class ERXTestCase extends TestCase {

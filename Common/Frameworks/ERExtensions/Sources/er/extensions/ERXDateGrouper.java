@@ -1,8 +1,9 @@
 package er.extensions;
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import java.util.*;
+import com.webobjects.foundation.*;
 
 /**
  * Works much the same as a {@link WODisplayGroup}.

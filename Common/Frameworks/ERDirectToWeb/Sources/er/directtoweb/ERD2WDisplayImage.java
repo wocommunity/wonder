@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.D2WDisplayString;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 
 // This component right now is only good for displaying an image via the src tag
 // Other important d2w keys, imageHeight and imageWidth

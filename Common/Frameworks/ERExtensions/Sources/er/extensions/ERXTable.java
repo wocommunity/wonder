@@ -6,10 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Enhanced table component that adds the ability to have the

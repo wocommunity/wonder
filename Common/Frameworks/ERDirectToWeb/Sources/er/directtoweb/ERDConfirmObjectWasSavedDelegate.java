@@ -6,9 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 /**
  * Determines if the user wants the changes saved if so provides a confirm page, if note uses cancel delegate.<br />

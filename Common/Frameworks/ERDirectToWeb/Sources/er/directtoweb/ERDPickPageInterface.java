@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.NextPageDelegate;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 // PickPageInterface - Used for selecting multiple objects from a select page.
 /**

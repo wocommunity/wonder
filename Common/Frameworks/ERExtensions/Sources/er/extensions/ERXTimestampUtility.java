@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import java.util.*;
+
+import com.webobjects.foundation.*;
 
 /**
  * A simle utility for providing deprecated functionality for NSTimestamps<br />

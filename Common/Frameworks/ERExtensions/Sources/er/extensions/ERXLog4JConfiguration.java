@@ -6,12 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
+import org.apache.log4j.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import org.apache.log4j.*;
-import java.util.*;
+import com.webobjects.foundation.*;
 
 /**
  * Configures and manages the log4j logging system. Will also configure the system for rapid turn around, ie when WOCaching is disabled when the conf file changes it will get reloaded.<br />

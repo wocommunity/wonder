@@ -1,11 +1,11 @@
 package er.extensions;
 
+import java.math.*;
+import java.text.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
-import java.math.BigDecimal;
-import java.text.Format;
-import java.text.ParseException;
 
 /**
  * Replacement for WOTextField. Provides for localized formatters. 

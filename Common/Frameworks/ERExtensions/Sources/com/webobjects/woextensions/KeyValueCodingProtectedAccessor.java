@@ -7,6 +7,7 @@
 package com.webobjects.woextensions;
 
 import java.lang.reflect.*;
+
 import com.webobjects.foundation.*;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {

@@ -1,8 +1,6 @@
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
 /** Extended {@link ListPageInterface} so we can get at the displayGroup. */

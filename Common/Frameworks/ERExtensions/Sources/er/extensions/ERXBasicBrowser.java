@@ -7,7 +7,6 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
-import java.util.*;
 
 /**
  * <code>ERXBasicBrowser</code> is a concrete subclass of {@link ERXBrowser}

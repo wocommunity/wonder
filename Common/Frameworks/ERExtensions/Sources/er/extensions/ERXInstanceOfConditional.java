@@ -6,9 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import java.lang.*;
+import com.webobjects.foundation.*;
 
 /**
  * Conditional component that tests if an object is an instance of a given

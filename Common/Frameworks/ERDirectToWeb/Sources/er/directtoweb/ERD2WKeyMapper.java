@@ -6,11 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.foundation.*;
 
 //    This component will remap keys, useful if you want to have the ability to have two sets of keys for a page
 //	Look in the Comparision template for how this component can be used.

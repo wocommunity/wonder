@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.*;
 
 /**
  * Interface implemented by templates to allow stuff and retriving of transient information.<br />

@@ -6,13 +6,15 @@
 //
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import java.util.Enumeration;
 
 /**
  * Cool class to automatically create page configurations from URLs.<br />

@@ -1,9 +1,9 @@
 package er.extensions;
 
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import java.io.*;
+
+import com.webobjects.foundation.*;
 
 /**
 usefull class in to automatically en- and decode an NSMutableDictionary
