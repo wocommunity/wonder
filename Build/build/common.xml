@@ -56,7 +56,12 @@
 	<target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
 		<mkdir dir="${build.classes}" />
 		<javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on" optimize="off" deprecation="on">
-			<classpath refid="project.class.path" />
+			<classpath>
+				<fileset dir="${project.dir}/Libraries">
+					<include name="**/*.jar" />
+				</fileset>
+				<path refid="project.class.path" />
+			</classpath>
 		</javac>
 	</target>
 	<target name="framework" depends="properties,compile" description="Default compile target">
