@@ -110,7 +110,7 @@ char *WA_adaptorName = "Apache";
 /*
  * This module
  */
-module AP_MODULE_DECLARE_DATA WebObjects_module;
+extern module AP_MODULE_DECLARE_DATA WebObjects_module;
 
 /*
  * This modules per-server configuration structure.
@@ -675,7 +675,7 @@ static const command_rec WebObjects_cmds[] =
 {
     // Document Root
     AP_INIT_TAKE1(
-                  "WebObjectsDocumentRoot",
+                  WebObjectsDocRoot,
                   setDocroot,
                   NULL,
                   RSRC_CONF,
@@ -683,42 +683,42 @@ static const command_rec WebObjects_cmds[] =
                   ),
     // Alias
     AP_INIT_TAKE1(
-                  "WebObjectsAlias",
+                  WebObjectsAlias,
                   setScriptAlias,
                   NULL,
                   RSRC_CONF,
                   "WebObjectsAlias <string> -- WebObjects request alias"
                   ),
     AP_INIT_TAKE2(
-                  "WebObjectsConfig",
+                  WebObjectsConfig,
                   setOption2,
-                  WOCNFINTVL,
+                  WOCONFIG "," WOCNFINTVL,
                   RSRC_CONF,
                   "WebObjectsConfig <string> -- WebObjects configuration URI, read interval"
                   ),
     AP_INIT_TAKE1(
-                  "WebObjectsAdminUsername",
+                  WebObjectsAdminUsername,
                   setOption,
                   WOUSERNAME,
                   RSRC_CONF,
                   "WebObjectsAdminUsername <string> -- WOAdaptorInfo username or 'NULL'"
                   ),
     AP_INIT_TAKE1(
-                  "WebObjectsAdminPassword",
+                  WebObjectsAdminPassword,
                   setOption,
                   WOPASSWORD,
                   RSRC_CONF,
                   "WebObjectsAdminPassword <string> -- WOAdaptorInfo password or 'NULL'"
                   ),
     AP_INIT_TAKE2(
-                  "WebObjectsLog",
+                  WebObjectsLog,
                   setOption2,
-                  WOLOGPATH,
+                  WOLOGPATH "," WOLOGLEVEL,
                   RSRC_CONF,
                   "WebObjectsLog <string> -- path for WebObjects log file, log level"
                   ),
     AP_INIT_TAKE1(
-                  "WebObjectsOptions",
+                  WebObjectsOptions,
                   setOption,
                   WOOPTIONS,
                   RSRC_CONF,
