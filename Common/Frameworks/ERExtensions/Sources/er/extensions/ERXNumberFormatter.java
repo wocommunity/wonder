@@ -18,7 +18,10 @@ import java.util.Hashtable;
  * will strip out the characters '%$,' when parsing
  * a string and can scale values by setting a pattern like 
  * <code>(/1024=)0.00 KB</code> which will divide the actual value by 1024 or
- * <code>(*60=)0 seconds</code> which will multiply the actual value by 60.
+ * <code>(*60;4=)0.00</code> which will multiply the actual value by 60. 
+ * When used for parsing, the resulting value will be scaled to a scale of 4. 
+ * So when the real value is 0.0165, the display value will be 0.99 and 
+ * when this is re-entered, the resulting value will again be 0.0165.
  */
 public class ERXNumberFormatter extends NSNumberFormatter {
 
@@ -31,6 +34,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	};
 	
 	private String _ignoredChars = "%$";
+    private Integer _scale;
     private BigDecimal _factor;
 	private String _operator;
 	 
@@ -42,19 +46,38 @@ public class ERXNumberFormatter extends NSNumberFormatter {
          return numberFormatterForPattern(DefaultKey);
     }
 
-    /**
+	/**
+	 * @param object
+	 * @return
+	 */
+	public static Format defaultNumberFormatterForObject(Object object) {
+		Format result = null;
+		if(object != null && !(object instanceof String)) {
+			if((object instanceof Double) || (object instanceof BigDecimal) || (object instanceof Float))
+				result = numberFormatterForPattern("#,##0.00;-(#,##0.00)");
+			else if(object instanceof Number)
+				result = numberFormatterForPattern("0");
+		}
+		return result;
+	}
+
+	/**
      * Returns a shared instance for the specified pattern.
      * @return shared instance of formatter
      */
     public static NSNumberFormatter numberFormatterForPattern(String pattern) {
-    	synchronized(_repository) {
-    		ERXNumberFormatter formatter = (ERXNumberFormatter)_repository.get(pattern);
+    	NSNumberFormatter formatter;
+    	if(ERXLocalizer.isLocalizationEnabled()) {
+    		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
+    		formatter = (NSNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
+    	} else {
+    		formatter = (NSNumberFormatter)_repository.get(pattern);
     		if(formatter == null) {
     			formatter = new ERXNumberFormatter(pattern);
     			_repository.put(pattern, formatter);
     		}
-    		return formatter;
     	}
+    	return formatter;
     }
     
     /**
@@ -62,7 +85,10 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @return shared instance of formatter
      */
     public static void setNumberFormatterForPattern(NSNumberFormatter formatter, String pattern) {
-    	synchronized(_repository) {
+    	if(ERXLocalizer.isLocalizationEnabled()) {
+    		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
+    		localizer.setLocalizedNumberFormatForKey(formatter, pattern);
+    	} else {
     		if(formatter == null) {
     			_repository.remove(pattern);
     		} else {
@@ -96,16 +122,28 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 		_operator = value;
 	}
 	
+	protected void setScale(Integer value) {
+		_scale = value;
+	}
+	
 	/**
 	 * Overridden to search the pattern for operators and factors. The pattern should be
-	 * <code>'(' . operatorChar . factor . '=)' normalFormatterString</code>
+	 * <code>'(' . operatorChar . factor . [';' scale ] . '=)' normalFormatterString</code>
 	 * @see com.webobjects.foundation.NSNumberFormatter#setPattern(java.lang.String)
 	 */
 	public void setPattern(String pattern) {
 		int offset = pattern == null ? -1 : pattern.indexOf("=)");
 		if(offset != -1) {
 			try {
-				setFactor(new BigDecimal(pattern.substring(2, offset)));
+			    String factorString = pattern.substring(2, offset);
+			    int scaleOffset = factorString.indexOf(";");
+			    if(scaleOffset >= 0) {
+			        String scaleString = factorString.substring(scaleOffset+1);
+			        Integer scale = new Integer(scaleString);
+			        setScale(scale);
+			        factorString = factorString.substring(0,scaleOffset);
+			    }
+				setFactor(new BigDecimal(factorString));
 				setOperator(pattern.substring(1, 2));
 				pattern = pattern.substring(offset+2);
 			} catch(NumberFormatException e1) {
@@ -130,7 +168,8 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 		if("*".equals(_operator)) {
 			value = value.multiply(_factor);
 		} else if("/".equals(_operator)) {
-			value = value.divide(_factor, value.scale(), BigDecimal.ROUND_HALF_EVEN);
+		    int scale = _scale == null ? value.scale() : _scale.intValue();
+			value = value.divide(_factor, scale, BigDecimal.ROUND_HALF_EVEN);
 		}
 		return value;
 	}
@@ -142,7 +181,8 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 */
 	protected BigDecimal performParse(BigDecimal value) {
 		if("*".equals(_operator)) {
-			value = value.divide(_factor, value.scale(), BigDecimal.ROUND_HALF_EVEN);
+		    int scale = _scale == null ? value.scale() : _scale.intValue();
+			value = value.divide(_factor, scale, BigDecimal.ROUND_HALF_EVEN);
 		} else if("/".equals(_operator)) {
 			value = value.multiply(_factor);
 		}
@@ -173,7 +213,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
         	} else {
         		newValue = new BigDecimal(((Number)result).doubleValue());
         	}
-        	
         	newValue = performParse(newValue);
         	
         	if(result instanceof BigInteger && !(result instanceof BigDecimal)) {

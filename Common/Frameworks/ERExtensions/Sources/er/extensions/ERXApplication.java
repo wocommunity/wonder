@@ -59,8 +59,19 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         ERXPatcher.installPatches();
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
+        if(contextClassName().equals("WOServletContext")
+           || contextClassName().equals("com.webobjects.appserver.WOServletContext"))
+            setContextClassName("er.extensions.ERXWOServletContext");
         ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
         ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
+        
+        // use our localizing string class
+        // works around #3574558  
+        if(ERXLocalizer.isLocalizationEnabled()) {
+            ERXPatcher.setClassForName(ERXWOString.class, "WOString");
+            ERXPatcher.setClassForName(ERXWOTextField.class, "WOTextField");
+        }
+        
         //ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
         // Fix for 3190479 URI encoding should always be UTF8
@@ -290,10 +301,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     }
 
     /** Used to instanciate a WOComponent when no context is available,
-        * typically ouside of a session
-        *
-        * @param pageName - The name of the WOComponent that must be instanciated.
-        */
+     * typically ouside of a session
+     *
+     * @param pageName - The name of the WOComponent that must be instanciated.
+     * @return created WOComponent with the given name
+     */
     public static WOComponent instantiatePage (String pageName) {
         // Create a context from a fake request
         WORequest fakeRequest = new ERXRequest("GET", "", "HTTP/1.1", null, null, null);

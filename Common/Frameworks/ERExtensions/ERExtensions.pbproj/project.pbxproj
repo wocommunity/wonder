@@ -506,6 +506,12 @@
 				41D6423905CF9CC600BB3C39,
 				416E92DB05E4BD3800F3D01E,
 				41E14A2A05EF5EF100DE10B6,
+				50643C63060BB1DB00C5E0A5,
+				50643C64060BB1DB00C5E0A5,
+				50643C65060BB1DB00C5E0A5,
+				50643C66060BB1DB00C5E0A5,
+				50643C69060BB25100C5E0A5,
+				50643C6A060BB25100C5E0A5,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1754,6 +1760,8 @@
 				F6E798C902C8799401AD0D07,
 				F6E7989102C8799401AD0D07,
 				F6E798D202C8799401AD0D07,
+				50643C67060BB25100C5E0A5,
+				50643C68060BB25100C5E0A5,
 			);
 			isa = PBXGroup;
 			name = WOF;
@@ -2006,6 +2014,84 @@
 		};
 		50287843040960A40043FCB8 = {
 			fileRef = 50287842040960A40043FCB8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50643C5F060BB1DB00C5E0A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXDividingNumberFormatter.java;
+			path = er/extensions/ERXDividingNumberFormatter.java;
+			refType = 4;
+		};
+		50643C60060BB1DB00C5E0A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXFormatterFactory.java;
+			path = er/extensions/ERXFormatterFactory.java;
+			refType = 4;
+		};
+		50643C61060BB1DB00C5E0A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXMultiplyingNumberFormatter.java;
+			path = er/extensions/ERXMultiplyingNumberFormatter.java;
+			refType = 4;
+		};
+		50643C62060BB1DB00C5E0A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXTimestampFormatter.java;
+			path = er/extensions/ERXTimestampFormatter.java;
+			refType = 4;
+		};
+		50643C63060BB1DB00C5E0A5 = {
+			fileRef = 50643C5F060BB1DB00C5E0A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50643C64060BB1DB00C5E0A5 = {
+			fileRef = 50643C60060BB1DB00C5E0A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50643C65060BB1DB00C5E0A5 = {
+			fileRef = 50643C61060BB1DB00C5E0A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50643C66060BB1DB00C5E0A5 = {
+			fileRef = 50643C62060BB1DB00C5E0A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50643C67060BB25100C5E0A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXWOString.java;
+			path = er/extensions/ERXWOString.java;
+			refType = 4;
+		};
+		50643C68060BB25100C5E0A5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXWOTextField.java;
+			path = er/extensions/ERXWOTextField.java;
+			refType = 4;
+		};
+		50643C69060BB25100C5E0A5 = {
+			fileRef = 50643C67060BB25100C5E0A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50643C6A060BB25100C5E0A5 = {
+			fileRef = 50643C68060BB25100C5E0A5;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7729,6 +7815,10 @@
 				F59C57DD02C4565701000102,
 				F59C57C802C4565701000102,
 				F6ED0C790361C03B01257492,
+				50643C5F060BB1DB00C5E0A5,
+				50643C60060BB1DB00C5E0A5,
+				50643C61060BB1DB00C5E0A5,
+				50643C62060BB1DB00C5E0A5,
 			);
 			isa = PBXGroup;
 			name = Foundation;
