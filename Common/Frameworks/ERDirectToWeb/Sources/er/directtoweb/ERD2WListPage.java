@@ -99,7 +99,10 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
     } 
 
     // this can be overridden by subclasses for which sorting has to be fixed (i.e. Grouping Lists)
-    public boolean userPreferencesCanSpecifySorting() { return true && !"printerFriendly".equals(d2wContext().valueForKey("subTask")); }
+    public boolean userPreferencesCanSpecifySorting() {
+        return true && !"printerFriendly".equals(d2wContext().valueForKey("subTask"));
+    }
+
     public NSArray sortOrderings() {
         NSArray sortOrderings=null;
         if (userPreferencesCanSpecifySorting()) {
@@ -140,11 +143,20 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         return null;
     }
 
+    public D2WContext d2wContext() {
+        if(hasBinding("localContext") && super.d2wContext()==null) {
+            setLocalContext((D2WContext)valueForBinding("localContext"));
+        }
+        return super.d2wContext();
+    }
+    
     // make kvc happy
-    public void setD2wContext(D2WContext newValue) {}
+    public void setD2wContext(D2WContext newValue) {
+        log.info("Hu? this should never be called.");
+    }
     
     public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue,d2wContext())) {
+        if (ERXExtensions.safeDifferent(newValue,super.d2wContext())) {
             _hasBeenInitialized=false;
             _batchSize=null;
             // HACK ALERT: this next line is made necessary by the brain-damageness of
@@ -184,15 +196,18 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
         try {
             super.appendToResponse(r,c);
+        } catch(Exception ex) {
+            ERDirectToWeb.reportException(ex, d2wContext());
         } finally {
             NDC.pop();
         }
     }
+
     public void setDataSource(EODataSource eodatasource) {
         try{
             super.setDataSource(eodatasource);
         } catch (Exception ex) {
-            log.info("Exception when setting datasource", ex);
+            log.warn("Exception when setting datasource", ex);
             NSArray sortOrderings=sortOrderings();
             displayGroup().setDataSource(eodatasource);
             displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
