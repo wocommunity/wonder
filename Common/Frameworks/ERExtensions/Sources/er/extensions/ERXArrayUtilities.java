@@ -412,7 +412,7 @@ public class ERXArrayUtilities extends Object {
      */
     public static void sortArrayWithKey(NSMutableArray array, String key, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of eos.", array);
-        ERXAssert.PRE.notNull("Attepting to sort array of eos with null key.", key);
+        ERXAssert.PRE.notNull("Attempting to sort array of eos with null key.", key);
         NSArray order=new NSArray(new Object[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
         EOSortOrdering.sortArrayUsingKeyOrderArray(array, order);
     }
