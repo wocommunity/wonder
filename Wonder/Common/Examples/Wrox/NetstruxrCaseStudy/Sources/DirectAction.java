@@ -9,9 +9,9 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-//import er.wrox.User;
+import er.wrox.*;
 import er.extensions.ERXUtilities;
-import er.extensions.ERXObjectWasCreatedDelegate;
+import er.directtoweb.ERDObjectWasCreatedDelegate;
 import er.extensions.ERXExtensions;
 import er.directtoweb.ERDPageNameDelegate;
 import org.apache.log4j.Category;
@@ -61,7 +61,7 @@ public class DirectAction extends WODirectAction {
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed("EditSignUpUser", session());
         er.wrox.User user = (er.wrox.User)ERXUtilities.createEO("User", peer);
         epi.setObject(user);
-        epi.setNextPageDelegate(new ERXObjectWasCreatedDelegate(user,
+        epi.setNextPageDelegate(new ERDObjectWasCreatedDelegate(user,
                                                              new SignUpHomePageDelegate(user),
                                                              new ERDPageNameDelegate("LoginPage")));
         return (WOComponent)epi;
