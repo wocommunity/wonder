@@ -13,7 +13,7 @@ import java.util.Enumeration;
 
 /**
  * Very simple template parser.  For example if you have the delimiter:
- * @, then a possible template might look like: "Hello, @name@.  How are
+ * @@, then a possible template might look like: "Hello, @@name@@.  How are
  * you feeling today?",  In this case the object will get asked for the
  * value name. This works with key-paths as well.
  */
@@ -92,7 +92,7 @@ public class ERXSimpleTemplateParser {
     public NSArray keysInTemplate(String template, String delimiter) {
         NSMutableSet keys = new NSMutableSet();
         if (delimiter == null)
-            delimiter = "@";
+            delimiter = "@@";
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
         if (! isLoggingDisabled  &&  log.isDebugEnabled()) 
@@ -151,7 +151,7 @@ public class ERXSimpleTemplateParser {
             throw new RuntimeException("Attempting to parse null template!");
         if (object == null)
             throw new RuntimeException("Attempting to parse template with null object!");
-        if(delimiter == null) delimiter = "@";
+        if(delimiter == null) delimiter = "@@";
         if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
             log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
             log.debug("Template: " + template);
