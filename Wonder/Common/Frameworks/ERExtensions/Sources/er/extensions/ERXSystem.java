@@ -6,6 +6,8 @@
  */
 package er.extensions;
 
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -66,5 +68,28 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
      */
     public void takeValueForKeyPath(Object arg0, String arg1) {
         throw new RuntimeException("not implemented");
+    }
+
+    /**
+     * @return
+     */
+    public static Properties getProperties() {
+        Properties ori = System.getProperties();
+        Properties converted = new Properties();
+        for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
+            String key = (String) e.nextElement();
+            String value = getProperty(key);
+            converted.put(key, value);
+        }
+        return converted;
+    }
+
+    public static void updateProperties() {
+        Properties ori = System.getProperties();
+        for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
+            String key = (String) e.nextElement();
+            String value = getProperty(key);
+            ori.put(key, value);
+        }
     }
 }
