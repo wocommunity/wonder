@@ -159,9 +159,7 @@ There are three ways to use this script:
             <param name="project.name" value="${project.name}" />
         </antcall>
     </target>
-
-
-    <target name="global.environment">
+   <target name="global.environment">
         <property file="Build/build/build.properties" />
         <property file="${user.home}/build.properties" />
         <property file="Build/build/default.properties" />
@@ -197,6 +195,11 @@ There are three ways to use this script:
     </target>
 
     <target name="global.prepare" depends="global.properties">
+	<path id="ant.classpath">
+	    <fileset dir="${user.home}/Wonder/Build/">
+		<include name="lib/*.jar"/>
+	    </fileset>
+	</path>
         <mkdir dir="${project.dir}/Libraries" />
         <mkdir dir="${project.dir}/Sources" />
         <mkdir dir="${project.dir}/Resources" />
@@ -207,7 +210,9 @@ There are three ways to use this script:
     </target>
 
     <target name="global.compile" depends="global.prepare">
-         <taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile" />
+         <taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile">
+            <classpath refid="ant.classpath"/>
+        </taskdef>
         <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on">
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
@@ -291,9 +296,11 @@ There are three ways to use this script:
     </target>
 
     <target name="global.framework" depends="global.properties,global.compile">
-
         <mkdir dir="${build.framework.dir}" />
-        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework" />
+        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+            <classpath refid="ant.classpath"/>
+        </taskdef>
+
         <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
@@ -338,7 +345,10 @@ There are three ways to use this script:
 	<!-- we delete left-overs from the Compiler Proxy here -->
         <delete dir="${build.root}/${project.name}.woa/Contents/Resources/Java" quiet="true" />
 
-        <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication" />
+        <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
+            <classpath refid="ant.classpath"/>
+        </taskdef>
+
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
@@ -357,6 +367,7 @@ There are three ways to use this script:
                 <include name="**/*.d2wmodel" />
                 <include name="**/Properties" />
                 <include name="**/*.strings" />
+                <include name="**/*.djava" />
                 <include name="**/*.sh" />
                 <include name="**/*.defaults" /> <!-- SVGObjects specific --> 
             </resources>
@@ -516,9 +527,16 @@ There are three ways to use this script:
     
     <!-- (ak) ERJars is handled separately because it needs to copy the compiler proxy files first -->
     <target name="ERJars.all">
+	<path id="ant.classpath">
+	    <fileset dir="Build/">
+		<include name="lib/*.jar"/>
+	    </fileset>
+	</path>
         <property name="build.root" value="${user.home}/Roots" />
         <property name="project.dir" value="Common/Frameworks/ERJars" />
-        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework" />
+        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+            <classpath refid="ant.classpath"/>
+        </taskdef>
         <woframework name="ERJars" destDir="${build.root}" principalClass="" jarName="ERJars">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
