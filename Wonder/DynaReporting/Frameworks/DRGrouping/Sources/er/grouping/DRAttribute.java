@@ -120,6 +120,9 @@ public class DRAttribute extends Object  {
         return _userInfo;
     }
     public void setUserInfo(NSDictionary aval) {
+        if(aval == null) {
+            aval = new NSMutableDictionary();
+        }
         _userInfo = aval;
     }
 
