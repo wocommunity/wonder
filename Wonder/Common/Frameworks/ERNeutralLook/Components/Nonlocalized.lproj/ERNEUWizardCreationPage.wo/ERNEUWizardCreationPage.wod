@@ -23,7 +23,7 @@ AttributeValue2: WOSwitchComponent { WODebug=false;
 Border: ERXTableWithBorder {
 	color = "#999999";
 	bgcolor = "#CCCCCC";
-	renderBorder = session.browserRenderNestedTablesFast;
+	renderBorder = session.browser.willRenderNestedTablesFast;
 }
 
 CancelButton: WOImage {
