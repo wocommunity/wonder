@@ -159,7 +159,20 @@ public class ERXCompilerProxy {
 
         log.debug("initialize");
 
-        _classPath = System.getProperty("java.class.path");
+	//david teran: fixes a bug with some WebObjects version...
+	_classPath = System.getProperty("com.webobjects.classpath");
+	if ( _classPath != null && _classPath.length() > 0) {
+	    if (System.getProperty("java.class.path") != null && System.getProperty("java.class.path").length() > 0) {
+		System.setProperty("java.class.path", _classPath + ":" + System.getProperty("java.class.path"));
+	    } else {
+		System.setProperty("java.class.path", _classPath);
+	    }
+	    _classPath = System.getProperty("java.class.path");
+	} else {
+	    _classPath = System.getProperty("java.class.path");
+	}
+	//end of fix
+	
         if(_classPath.indexOf("Classes/classes.jar") < 0) {
             // (ak) We need this when we do an Ant build, until WOProject is fixed to include classes.jar
             // This wouldn't work on windows of course, but then again, the rest of this class doesn't, too.
@@ -176,11 +189,20 @@ public class ERXCompilerProxy {
             _filesToWatch = new NSMutableDictionary();
 	    return;
         }
-        if(_classPath.indexOf(".woa") < 0) {
-            log.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment");
-            return;
+        if(_classPath.indexOf(".woa") == -1) {
+            log.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment, will try to get it via NSBundle.");
+	    log.info("java.class.path="+_classPath);
         }
-        _destinationPath = _classPath.substring(0,_classPath.indexOf(".woa")) + ".woa/Contents/Resources/Java/";
+
+	NSBundle b = NSBundle.mainBundle();
+	String path = b.resourcePath();
+	if (path.indexOf(".woa") == -1) {
+            log.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment.");
+	    log.info("mainBundle.resourcePath="+path);
+	}
+	//_classPath = path;
+	//_destinationPath = _classPath.substring(0,_classPath.indexOf(".woa")) + ".woa/Contents/Resources/Java/";
+	_destinationPath = path.substring(0, path.indexOf(".woa")) + ".woa/Contents/Resources/Java/";
 	_filesToWatch = new NSMutableDictionary();
 	for(Enumeration e = projectPaths.objectEnumerator(); e.hasMoreElements();) {
 	    String sourcePath = (String)e.nextElement();
@@ -254,6 +276,7 @@ public class ERXCompilerProxy {
             Compiler compiler = new Compiler(filesToCompile.objects(), _destinationPath);
             if(compiler.compile()) {
                 e = filesToCompile.objectEnumerator();
+		log.debug("after compile: classFiles="+classFiles);
                 while(e.hasMoreElements()) {
                     cacheEntry = (CacheEntry)e.nextElement();
                     classFiles.addObject(cacheEntry);
@@ -261,6 +284,7 @@ public class ERXCompilerProxy {
                 boolean didReset = false;
                 boolean didResetModelGroup = false;
                 CompilerClassLoader cl = null;
+		log.debug("classFiles="+classFiles);
                 e = classFiles.objectEnumerator();
                 while(e.hasMoreElements()) {
                     cacheEntry = (CacheEntry)e.nextElement();
@@ -449,7 +473,9 @@ public class ERXCompilerProxy {
 
 	public boolean compile() throws IllegalArgumentException {
             Process jikesProcess=null;
-            log.debug("*** compiling:" + commandLine());
+	    for (int i = 0; i < commandArray().length; i++) {
+		log.debug("*** compiling:" + commandArray()[i]);
+	    }
 	    try {
                 jikesProcess = Runtime.getRuntime().exec(commandArray());
                 jikesProcess.waitFor();
@@ -512,9 +538,10 @@ public class ERXCompilerProxy {
             String fileName = name.replace('.', File.separatorChar) + ".class";
             File f = new File( _destinationPath + File.separatorChar + fileName);
             if (f.exists() && f.isFile() && f.canRead()) {
-                classLoaderLog.debug("CompilerClassLoader.findClassFile:" + name);
+                classLoaderLog.debug("CompilerClassLoader.findClassFile:" + name + " found");
                 return f;
             }
+	    classLoaderLog.debug("CompilerClassLoader.findClassFile:" + _destinationPath + File.separatorChar + fileName + " NOT found");
             return null;
         }
 
@@ -523,32 +550,79 @@ public class ERXCompilerProxy {
 	 * @exception ClassNotFoundException 
 	 */
         protected Class findClass(String name) throws ClassNotFoundException {
-            File classFile = findClassFile(name);
-            if (classFile == null) {
-                throw new ClassNotFoundException(name);
-            }
-            Class newClass;
-            try {
-                FileInputStream in = new FileInputStream(classFile);
-                int length = in.available();
-                if (length == 0) {
-                    throw new ClassNotFoundException(name);
-                }
-                byte buffer[] = new byte[length];
-                in.read(buffer);
-                in.close();
-                newClass = defineClass(name, buffer, 0, buffer.length);
-                classLoaderLog.info("Did load class: " + name);
-            } catch (IOException e) {
-                throw new ClassNotFoundException(e.getMessage());
-            }
-            return newClass;
-        }
-
+	    //fix by david teran, cluster9
+	    //this checks if the name from the class is one of the files that were
+	    //compiled. if not, then this findClass method will fail, we must use the
+	    //normal class loader to find the class.
+	    boolean contains = false;
+	    Enumeration e = classFiles.objectEnumerator();
+	    while (e.hasMoreElements()) {
+		CacheEntry ce = (CacheEntry)e.nextElement();
+		if (ce.classNameWithPackage().equals(name)) {
+		    contains = true;
+		    break;
+		}
+	    }
+	    
+	    if (contains) {
+		byte buffer[] = null;
+		Class newClass;
+		File classFile = findClassFile(name);
+		if (classFile == null) {
+		    throw new ClassNotFoundException(name);
+		}
+		try {
+		    FileInputStream in = new FileInputStream(classFile);
+		    int length = in.available();
+		    if (length == 0) {
+			throw new ClassNotFoundException(name);
+		    }
+		    buffer = new byte[length];
+		    in.read(buffer);
+		    in.close();
+		} catch (IOException iox) {
+		    classLoaderLog.debug(iox);
+		    throw new ClassNotFoundException(iox.getMessage());
+		}
+		try {
+		    newClass = defineClass(name, buffer, 0, buffer.length);
+		    classLoaderLog.info("Did load class: " + name);
+		} catch (Throwable t) {
+		    classLoaderLog.debug(t);
+		    throw new RuntimeException(t.getMessage());
+		}
+		return newClass;
+	    } else {
+		//this class is a class that must be accessable with the normal classloader
+		//it cannot be found in the filesystem because it was not compiled by CP
+		Class clazz = Class.forName(name);
+		if (clazz != null) {
+		    return clazz;
+		} else {
+		    throw new IllegalStateException("could not get class "+name+" with classForName method!");
+		}
+	    }
+	}
 	/** @param name 
 	 */
         public URL getResource(String name) {
             return ClassLoader.getSystemResource(name);
         }
+    }
+
+    private static URL[] mangleClasspathForClassLoader(String s) {
+	String s1 = File.pathSeparatorChar != ';' ? "file://" : "file:///";
+	NSArray paths = NSArray.componentsSeparatedByString(_classPath, ":");
+	URL aurl[] = new URL[paths.count()];
+	for(int i = 0; i < paths.count(); i++) {
+	    try {
+		aurl[i] = new URL(s1 + paths.objectAtIndex(i).toString());
+	    }
+	    catch(Throwable throwable) {
+		throw new RuntimeException("Error creating URL " + throwable);
+	    }
+	}
+
+	return aurl;
     }
 }
