@@ -444,7 +444,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     _setClassDescriptionOnEntity(entity, cd);
                 }
             } else {
-                log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException());
+                log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException("Dummy"));
             }
         }
         

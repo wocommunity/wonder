@@ -629,7 +629,7 @@ public class ERXFileUtilities {
             java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");
             return md5.digest(bytesFromFile(file));
         } catch (java.security.NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new NSForwardException(e);
         }
     }
 
