@@ -333,6 +333,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         ERXThreadStorage.takeValueForKey(currentLocalizer, "localizer");
     }
 
+    /**
+     * Gets the localizer for the default language.
+     * @return localizer for the default language.
+     */
+    public static ERXLocalizer defaultLocalizer() {
+        return localizerForLanguage(defaultLanguage());
+    }
     
     public static ERXLocalizer localizerForSession(Object session) {
         if(session instanceof ERXSession) return ((ERXSession)session).localizer();
