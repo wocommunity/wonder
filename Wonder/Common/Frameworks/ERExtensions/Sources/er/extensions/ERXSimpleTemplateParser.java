@@ -38,6 +38,25 @@ public class ERXSimpleTemplateParser {
                                        null);
     }
 
+    public NSArray keysInTemplate(String template, String delimiter) {
+        NSMutableSet keys = new NSMutableSet();
+        if(delimiter == null) delimiter = "@";
+        boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
+        cat.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
+        for (Enumeration e = NSArray.componentsSeparatedByString(template, delimiter).objectEnumerator(); e.hasMoreElements();) {
+            String element = (String)e.nextElement();
+            if (deriveElement) {
+                if(element.length() == 0)
+                    throw new RuntimeException("\"\" is not a valid keypath");
+                keys.addObject(element);
+                deriveElement = false;
+            } else {
+                deriveElement = true;
+            }
+        }
+        return keys.allObjects();
+    }
+    
     /* This method replaces the keys enclosed between the delimeter with the values found in object and otherObject. It first looks for a value in object, and then in otherObject if the key is not found in object. Therefore, otherObject is a good place to store default values while other object is a good place to override default values. */
     public String parseTemplateWithObject(String template, String delimiter, Object object, Object otherObject) {
         if (template == null)
