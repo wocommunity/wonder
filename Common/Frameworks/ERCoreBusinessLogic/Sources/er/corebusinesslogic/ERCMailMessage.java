@@ -206,6 +206,12 @@ public class ERCMailMessage extends _ERCMailMessage {
         return value;
     }
 
+    /**
+     * Simple test if an attachment has any attachments.
+     * @return if the the message has any attachments
+     */
+    public boolean hasAttachments() { return attachments().count() > 0; }
+
     // Validation Methods
     public Object validateFromAddress(String newValue) {
         return validateEmptyStringForKey(newValue, "fromAddress");

@@ -122,6 +122,7 @@
             joins = ({destinationAttribute = mailMessageId; sourceAttribute = id; }); 
             name = attachments; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+	    deleteRule = EODeleteRuleCascade; 
         }, 
         {
             destination = ERCMailState; 

@@ -16,6 +16,7 @@ import er.javamail.*;
 import er.corebusinesslogic.*;
 
 import java.util.Enumeration;
+import java.io.File;
 import javax.mail.*;
 
 /**
@@ -175,7 +176,7 @@ public class ERMailer {
      * @param message mail message
      * @return a mail delevery object
      */
-    // ENHANCEME: Not handling double byte (Japanese) language or file attachments.
+    // ENHANCEME: Not handling double byte (Japanese) language
     public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) throws MessagingException {
         ERMailDeliveryHTML mail = new ERMailDeliveryHTML();
 
@@ -201,6 +202,14 @@ public class ERMailer {
         
         if (message.plainText() != null)
             mail.setHiddenPlainTextContent(message.plainText());
+
+        if (message.hasAttachments()) {
+            for (Enumeration attachmentEnumerator = message.attachments().objectEnumerator();
+                 attachmentEnumerator.hasMoreElements();) {
+                File fileAttachment = ((ERCMessageAttachment)attachmentEnumerator.nextElement()).file();
+                mail.addAttachment(new ERMailFileAttachment(fileAttachment.getName(), null, fileAttachment));
+            }
+        }
         return mail;
     }
 

@@ -6,6 +6,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
+import java.io.*;
 
 public class ERCMessageAttachment extends _ERCMessageAttachment {
     static final ERXLogger log = ERXLogger.getERXLogger(ERCMessageAttachment.class);
@@ -17,7 +18,10 @@ public class ERCMessageAttachment extends _ERCMessageAttachment {
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
     }
-    
+
+    public File file() {
+        return new File(filePath());
+    }
     
     // Class methods go here
     
