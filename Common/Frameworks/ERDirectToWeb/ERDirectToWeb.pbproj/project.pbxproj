@@ -18,6 +18,19 @@
 			settings = {
 			};
 		};
+		41F217BC046EE09200000103 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WContextDictionary.java;
+			path = er/directtoweb/ERD2WContextDictionary.java;
+			refType = 4;
+		};
+		41F217BD046EE09200000103 = {
+			fileRef = 41F217BC046EE09200000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //410
 //411
 //412
@@ -8199,6 +8212,7 @@
 				94AA730503D3504C00CF0E7D,
 				9419C8CB03D8D09800CF0E7D,
 				418CC2E9044306F500AD0D07,
+				41F217BD046EE09200000103,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8921,6 +8935,7 @@
 			children = (
 				F542066902C467DF01000102,
 				F542066F02C467DF01000102,
+				41F217BC046EE09200000103,
 				F542067602C467DF01000102,
 				F542069702C467DF01000102,
 				418CC2E8044306F500AD0D07,
