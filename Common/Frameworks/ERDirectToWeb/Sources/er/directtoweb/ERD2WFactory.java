@@ -22,6 +22,9 @@ import er.extensions.*;
 
 public class ERD2WFactory extends D2W {
 
+    /** logging support */
+    protected static final ERXLogger log = ERXLogger.getERXLogger(ERD2WFactory.class);
+
     /**
      * Gets the D2W facotry cast as an ERD2WFactory objects.
      * @return the singleton factory
@@ -99,8 +102,7 @@ public class ERD2WFactory extends D2W {
 
     public EditPageInterface editPageForNewObjectWithEntityNamed(String entityName, WOSession session) {
         EditPageInterface epi = editPageForEntityNamed(entityName, session);
-        EOEditingContext peerContext = ERXExtensions.newEditingContext(session.defaultEditingContext()
-								       .parentObjectStore());
+        EOEditingContext peerContext = ERXExtensions.newEditingContext(session.defaultEditingContext().parentObjectStore());
 	EOEnterpriseObject newObject = _newObjectWithEntityNamed(entityName, peerContext);
 	epi.setObject(newObject);
 	peerContext.hasChanges();
@@ -133,7 +135,79 @@ public class ERD2WFactory extends D2W {
             ((D2WComponent)newPage).setLocalContext(newContext);
         }
         return newPage;
-    }    
+    }
 
+    /**
+     * Gets the <code>pageConfiguration</code> from the current page.
+     */
+    // FIXME ak Actually, we don't need to be static
+    public static String pageConfigurationFromPage(WOComponent page) {
+        String pageConfiguration = null;
+        if(page instanceof D2WPage) {
+            if(((D2WPage)page).d2wContext() != null) {
+                pageConfiguration = ((D2WPage)page).d2wContext().dynamicPage();
+            }
+        }
+        if(pageConfiguration == null) {
+            String task = ERD2WFactory.taskFromPage(page);
+            String entityName = ERD2WFactory.entityNameFromPage(page);
+            if(task != null) {
+                task = ERXStringUtilities.capitalize(task);
+            } else {
+                task = "";
+            }
+            if(entityName != null) {
+                entityName = ERXStringUtilities.capitalize(entityName);
+            } else {
+                entityName = "";
+            }
+            pageConfiguration = task + entityName;
+        }
+        return pageConfiguration;
+    }
+
+    /**
+     * Gets the task from the current page. Currently we have this class
+     * because the corresponding method in D2W is protected. But it will be enhanced to
+     * take the ERD2W interfaces into account.
+     */
+
+    // FIXME ak Actually, we don't need to be static
+    // FIXME ak We need to take the ERD2W interfaces into account
+    public static String taskFromPage(WOComponent page) {
+        if(page == null)
+            return null;
+        if(page instanceof D2WPage)
+            return ((D2WPage)page).task();
+        if(page instanceof EditRelationshipPageInterface)
+            return "editRelationship";
+        if(page instanceof QueryPageInterface)
+            return "query";
+        if(page instanceof ListPageInterface)
+            return "list";
+        if(page instanceof EditPageInterface)
+            return "edit";
+        if(page instanceof InspectPageInterface)
+            return "inspect";
+        if(page instanceof SelectPageInterface)
+            return "select";
+        return "";
+    }
+
+    /**
+     * Gets the entity name from the current page. Not that this does not
+     * go up the component tree, but rather calls<code>entityName()</code>
+     * and tries the "super" implementation if that fails.
+     */
+    // FIXME ak Actually, we don't need to be static
+    public static String entityNameFromPage(WOComponent page) {
+        if(page instanceof D2WPage) {
+            try {
+                return ((D2WPage)page).entityName();
+            } catch(Exception ex) {
+                log.warn("Page " + page.getClass().getName() + " does not return an entityName(), please implement the method entityName() correctly");
+            }
+        }
+        return D2W.entityNameFromPage(page);
+    }
 }
-
