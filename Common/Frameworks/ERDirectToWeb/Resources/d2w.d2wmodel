@@ -2037,6 +2037,15 @@
             }; 
         }, 
         {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er.directtoweb.ERDEntityAssignment; 
+                keyPath = entity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
