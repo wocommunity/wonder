@@ -28,7 +28,7 @@ public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
             newContext.takeValueForKey(item, "object");
             EOEntity entity = EOModelGroup.defaultGroup().entityNamed(item.entityName());
             newContext.takeValueForKey(entity, "entity");
-            String inspectConfigurationName = (String)newContext.valueForKey("inspectConfigurationNameForEntity");
+            String inspectConfigurationName = (String)newContext.valueForKey("inspectConfigurationName");
             if(inspectConfigurationName!=null && item!=null){
                 InspectPageInterface inspectPage=(InspectPageInterface)D2W.factory().pageForConfigurationNamed(inspectConfigurationName,
                                                                                                                session());
