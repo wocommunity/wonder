@@ -16,6 +16,12 @@ import er.extensions.*;
  * This assignment calculates default values for
  * embedded page configurations.
  */
+// CHECKME ak I'm not sure that this is a value add anymore
+// A better way to create embedded page configurations is to create a rule like:
+//   propertyKey = "studios" => listPageConfiguration = "ListEmbeddedStudios"
+//   propertyKey = "studios" => componentName = "ERDList"
+//   pageConfiguration = "ListEmbeddedStudios" => displayPropertyKeys = (name, @sum.movies.revenue)
+
 public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
 
     /** logging support */
@@ -34,6 +40,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
      // ENHANCEME: Only need one of these per value()
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDDefaultsEmbeddedAssignment.class, ERDDefaultConfigurationNameAssignment.class);
         return new ERDDefaultsEmbeddedAssignment (eokeyvalueunarchiver);
     }
 
@@ -83,7 +90,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
     public String defaultEmbeddedEntityDisplayName(D2WContext c) {
         String value = ERXStringUtilities.displayNameForKey((String)c.valueForKey("embeddedEntityName"));
-        return (String)localizerForContext(c).localizedValueForKeyWithDefault(value);
+        return (String)ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault(value);
     }
     
     /**
