@@ -154,7 +154,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         } else { // setting to "nil"
             if (isDictionary) {
                 _dictionary.removeObjectForKey(masterKey);
-            } else if (_eo.valueForKey(masterKey) == null) {
+            } else if (_eo.valueForKey(masterKey) != null) {
                 // WO5FIXME
                 //|| _eo.valueForKey(masterKey) != EONullValue.nullValue()) {
                 _eo.removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject )_eo.valueForKey(masterKey), masterKey);
