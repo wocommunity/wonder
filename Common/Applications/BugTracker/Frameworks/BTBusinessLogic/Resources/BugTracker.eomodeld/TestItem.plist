@@ -8,7 +8,7 @@
             userInfo = {modificationDate = "2002-05-06 07:19:07 +0200"; }; 
         }, 
         {
-            columnName = MODULE_ID; 
+            columnName = "MODULE_ID"; 
             name = componentID; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:19:15 +0200"; }; 
@@ -20,7 +20,7 @@
             userInfo = {modificationDate = "2002-05-06 07:19:34 +0200"; }; 
         }, 
         {
-            columnName = DATE_CREATED; 
+            columnName = "DATE_CREATED"; 
             name = dateCreated; 
             prototypeName = dateTime; 
             userInfo = {modificationDate = "2002-05-06 07:19:40 +0200"; }; 
@@ -32,14 +32,14 @@
             userInfo = {modificationDate = "2002-05-06 07:19:46 +0200"; }; 
         }, 
         {
-            columnName = STATE_ID; 
+            columnName = "STATE_ID"; 
             name = stateID; 
             prototypeName = osType; 
             userInfo = {modificationDate = "2002-05-06 07:41:56 +0200"; }; 
         }, 
         {
             allowsNull = Y; 
-            columnName = TESTED_BY_ID; 
+            columnName = "TESTED_BY_ID"; 
             name = testedByID; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:19:57 +0200"; }; 
@@ -59,7 +59,7 @@
         }
     ); 
     attributesUsedForLocking = (id, controlled, testedByID, stateID, componentID, title); 
-    className = er.bugtracker.TestItem; 
+    className = "er.bugtracker.TestItem"; 
     classProperties = (
         controlled, 
         textDescription, 
@@ -73,9 +73,9 @@
         requirements, 
         bugs
     ); 
-    externalName = TEST_ITEM; 
+    externalName = "TEST_ITEM"; 
     internalInfo = {
-        _clientClassPropertyNames = (
+        "_clientClassPropertyNames" = (
             controlled, 
             textDescription, 
             dateCreated, 
@@ -103,7 +103,7 @@
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
         {
-            definition = bugTestItems.bug; 
+            definition = "bugTestItems.bug"; 
             joinSemantic = EOInnerJoin; 
             name = bugs; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
@@ -113,7 +113,7 @@
             isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = comp_id; sourceAttribute = componentID; }); 
+            joins = ({destinationAttribute = "comp_id"; sourceAttribute = componentID; }); 
             name = component; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
@@ -137,7 +137,7 @@
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
         }, 
         {
-            definition = requirementTestItems.requirement; 
+            definition = "requirementTestItems.requirement"; 
             joinSemantic = EOInnerJoin; 
             name = requirements; 
             userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 

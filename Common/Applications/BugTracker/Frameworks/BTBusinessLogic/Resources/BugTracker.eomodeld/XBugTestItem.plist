@@ -1,7 +1,7 @@
 {
     attributes = (
         {
-            columnName = BUG_ID; 
+            columnName = "BUG_ID"; 
             name = bugid; 
             prototypeName = id; 
             userInfo = {modificationDate = "2002-05-06 07:18:31 +0200"; }; 
@@ -15,9 +15,9 @@
     ); 
     attributesUsedForLocking = (bugid, id); 
     className = EOGenericRecord; 
-    externalName = BUG_TEST_ITEM; 
+    externalName = "BUG_TEST_ITEM"; 
     fetchSpecificationDictionary = {}; 
-    internalInfo = {_clientClassPropertyNames = (bugid); }; 
+    internalInfo = {"_clientClassPropertyNames" = (bugid); }; 
     name = XBugTestItem; 
     primaryKeyAttributes = (bugid, id); 
     relationships = (
