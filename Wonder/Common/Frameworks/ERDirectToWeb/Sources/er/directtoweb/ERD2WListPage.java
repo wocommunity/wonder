@@ -192,24 +192,24 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     
     private boolean _hasBeenInitialized=false;
 
-    private Integer _batchSize = null;
+    private Number _batchSize = null;
     
     public int numberOfObjectsPerBatch() {
         if (_batchSize == null) {
             NSKeyValueCoding userPreferences=(NSKeyValueCoding)d2wContext().valueForKey("userPreferences");
+            int batchSize = ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("defaultBatchSize"), 0);
             if (userPreferences!=null) {
                 String key=ERXExtensions.userPreferencesKeyFromContext("batchSize", d2wContext());
                 // batchSize prefs are expected in the form vfk batchSize.<pageConfigName>
-                Number batchSizePref = (Number)userPreferences.valueForKey(key);
-                if (log.isDebugEnabled()) log.debug("batchSize User Prefererence: " + batchSizePref);
-                if (batchSizePref!=null) _batchSize = ERXConstant.integerForInt(batchSizePref.intValue());
-            }
-            if (_batchSize == null) {
+                Object batchSizePref = userPreferences.valueForKey(key);
                 if (log.isDebugEnabled()) {
-                    log.debug("No userPrefs...  Using default values: batchSize = " + d2wContext().valueForKey("defaultBatchSize"));
+                    log.debug("batchSize User Prefererence: " + batchSizePref);
                 }
-                _batchSize = ERXConstant.integerForString((String)d2wContext().valueForKey("defaultBatchSize"));
+                if (batchSizePref!=null) {
+                    batchSize = ERXValueUtilities.intValueWithDefault(batchSizePref, batchSize);
+                }
             }
+            _batchSize = ERXConstant.integerForInt(batchSize);
         }
         return _batchSize.intValue();
     } 
