@@ -24,6 +24,7 @@ public class ERXDatabaseContextDelegate {
     public static ERXDatabaseContextDelegate defaultDelegate() {
         if (_defaultDelegate == null) {
             _defaultDelegate = new ERXDatabaseContextDelegate();
+            cat.info("created default delegate");
             ERXRetainer.retain(_defaultDelegate); // Retaining the delegate on the ObjC side.  This might not be necessary.
         }
         return _defaultDelegate;
@@ -37,6 +38,10 @@ public class ERXDatabaseContextDelegate {
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbc, Exception e) throws Throwable {
         EOAdaptor adaptor=dbc.adaptorContext().adaptor();
         boolean shouldHandleConnection = false;
+        if(e instanceof EOGeneralAdaptorException)
+            cat.info(((EOGeneralAdaptorException)e).userInfo());
+        else
+            cat.info(e);
         if (adaptor.isDroppedConnectionException(e))
             shouldHandleConnection = true;
         else if (e.toString().indexOf("ORA-01041")!=-1) {
@@ -44,8 +49,11 @@ public class ERXDatabaseContextDelegate {
             cat.error("ORA-01041 detecting -- forcing reconnect");
             dbc.database().handleDroppedConnection();
             shouldHandleConnection = false;
-        } else
+        } else {
+            if(e instanceof EOGeneralAdaptorException)
+                cat.info(((EOGeneralAdaptorException)e).userInfo());
             throw e;
+        }
         return shouldHandleConnection;
     }
 

@@ -8,6 +8,7 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.woextensions.*;
 
 public class ERXCollapsibleComponentContent extends WOCollapsibleComponentContent {
 
