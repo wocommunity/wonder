@@ -17,6 +17,9 @@ er.javamail.debugEnabled = false
 # * SMTP outbound host
 #er.javamail.smtpHost = smtp.domain.com
 
+# * Number of messages that the sender queue can hold at a time
+er.javamail.senderQueue.size = 50
+
 # * Time to wait when mail sender queue is overflowed
 er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
 
