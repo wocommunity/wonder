@@ -2001,22 +2001,10 @@
 		};
 		F57EA6E201FF59C0019E57DA = {
 			children = (
-				F57EA6E301FF59C0019E57DA,
 				F57EA6E801FF59C0019E57DA,
-				F57EA6E501FF59C0019E57DA,
 			);
 			isa = PBXGroup;
 			name = "Other Sources";
-			refType = 4;
-		};
-		F57EA6E301FF59C0019E57DA = {
-			isa = PBXFileReference;
-			path = CustomInfo.plist;
-			refType = 4;
-		};
-		F57EA6E501FF59C0019E57DA = {
-			isa = PBXFileReference;
-			path = java.template;
 			refType = 4;
 		};
 		F57EA6E801FF59C0019E57DA = {
