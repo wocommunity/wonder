@@ -126,6 +126,8 @@
 				7756D31603ADA8E100257492,
 				7756D31703ADA8E100257492,
 				7756D31903ADA8E100257492,
+				775A5C7203BFA3F200257492,
+				775A5C7403BFA8F500257492,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -606,11 +608,13 @@
 		40B58288FFD5E82B7F000001 = {
 			children = (
 				7756D30D03ADA8E100257492,
+				775A5C7303BFA8F500257492,
 				7756D30C03ADA8E100257492,
 				7756D31003ADA8E100257492,
 				7756D30A03ADA8E100257492,
 				7756D30903ADA8E100257492,
 				7756D30E03ADA8E100257492,
+				775A5C7103BFA3F200257492,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -829,6 +833,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". \"${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh\"";
+		};
+		775A5C7103BFA3F200257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERWorkerChannelException.java;
+			path = Sources/er/workerchannel/ERWorkerChannelException.java;
+			refType = 4;
+		};
+		775A5C7203BFA3F200257492 = {
+			fileRef = 775A5C7103BFA3F200257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		775A5C7303BFA8F500257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERLocalWorkerChannel.java;
+			path = Sources/er/workerchannel/ERLocalWorkerChannel.java;
+			refType = 4;
+		};
+		775A5C7403BFA8F500257492 = {
+			fileRef = 775A5C7303BFA8F500257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
