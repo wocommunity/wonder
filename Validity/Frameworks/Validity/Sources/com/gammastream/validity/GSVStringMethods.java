@@ -72,7 +72,7 @@ public class GSVStringMethods {
     
     /**
      *	One of the many 'mutators' which never fail, unless of course, an exception is thrown.
-     *	<br>A mutator simply modifies (or mutates) the attribute is some way.
+     *	<br>A mutator simply modifies (or mutates) the attribute in some way.
      *	<br>In this case, it converts the <code>String</code> to all upper case characters.
      *
      *	@param	object		The object whose attribute is being validated.
@@ -159,6 +159,48 @@ public class GSVStringMethods {
             }
         }
         return false;
+    }
+
+    /**
+        *	Determines whether the specified string is of a specified length. (i.e. 'x' characters long)
+     *	<br>
+     *	<br>The required key-value pairs include:
+     *	<br>"minLength" = A number representing the number of characters one is interested.
+     *	<br>
+     *
+     *	@param	object		The object whose attribute is being validated.
+     *	@param	attribute 	The attribute being validated.
+     *	@param	key 		The key used to access the attribute.
+     *	@param	params 		The param dictionary which must contain the above mentioned key-value pairs.
+     *
+     *	@return	<code>true</code> if the comparison succeeds; otherwise, <code>false</code>
+     */
+    public final static boolean minLength(Object object, Object attribute, String key, NSDictionary params) {
+        NSMutableDictionary mparams = params.mutableClone();
+        mparams.setObjectForKey(">", "Operator");
+        mparams.setObjectForKey(params.objectForKey("minLength"), "RightOperand");
+        return length(object, attribute, key, mparams);
+    }
+
+    /**
+        *	Determines whether the specified string is of a specified length. (i.e. 'x' characters long)
+     *	<br>
+     *	<br>The required key-value pairs include:
+     *	<br>"maxLength" = A number representing the number of characters one is interested.
+     *	<br>
+     *
+     *	@param	object		The object whose attribute is being validated.
+     *	@param	attribute 	The attribute being validated.
+     *	@param	key 		The key used to access the attribute.
+     *	@param	params 		The param dictionary which must contain the above mentioned key-value pairs.
+     *
+     *	@return	<code>true</code> if the comparison succeeds; otherwise, <code>false</code>
+     */
+    public final static boolean maxLength(Object object, Object attribute, String key, NSDictionary params) {
+        NSMutableDictionary mparams = params.mutableClone();
+        mparams.setObjectForKey("<", "Operator");
+        mparams.setObjectForKey(params.objectForKey("maxLength"), "RightOperand");
+        return length(object, attribute, key, mparams);
     }
 
 
@@ -319,8 +361,8 @@ public class GSVStringMethods {
     }
 
     /**
-     *	Verifies the attribute is a valid url. (Proper Syntax)
-     *	<br>The validator will verify, 'http', 'ftp', 'mailto', 'telnet', and 'file' urls.
+	*	Verifies the attribute is a valid url. (Proper Syntax)
+     *	<br>The validator will only verify 'http' urls.
      *	<br>
      *
      *	@param	object		The object whose attribute is being validated.
@@ -342,11 +384,12 @@ public class GSVStringMethods {
                 NSLog.err.appendln(mue.getMessage());
             }
         }
+
         return false;
     }
-    
+
     /**
-     *	Verifies the attribute is a valid email address. (Proper Syntax)
+	*	Verifies the attribute is a valid email address. (Proper Syntax)
      *
      *	@param	object		The object whose attribute is being validated.
      *	@param	attribute 	The attribute being validated.
@@ -368,8 +411,7 @@ public class GSVStringMethods {
                 NSLog.err.appendln(ae.getMessage());
             }
         }
+
         return false;
     }
-
-    
 }
