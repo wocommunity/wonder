@@ -213,6 +213,9 @@ public  class ERXRequest extends WORequest {
             
             host = headerForKey("remote_user");
             if (host != null) return host;
+            
+            host = headerForKey("x-webobjects-remote-addr");
+            if (host != null) return host;
         }
         return "UNKNOWN";
     }
