@@ -75,7 +75,10 @@ public class WOToOneRelationship extends ERXArrayChooser {
 
     public Object selection() {
         if (_selection == null) {
-            setSelection(NSKeyValueCoding.Utility.valueForKey(realSourceObject(), realRelationshipKey()));
+            Object object = realSourceObject();
+            String key = realRelationshipKey();
+            Object selection = NSKeyValueCoding.Utility.valueForKey(object,key);
+            setSelection(selection);
         }
         // deal with isMandatory
         if ((_selection==null) && !isMandatory()) {
