@@ -11,12 +11,16 @@ import er.extensions.*;
 
 public class ERCMailMessage extends _ERCMailMessage {
 
+    //	===========================================================================
+    //	Class variable(s)
+    //	---------------------------------------------------------------------------
+        
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailMessage.class);
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";
-    
+
     /**
      * Clazz object used to hold all clazz related methods.
      */
@@ -33,8 +37,17 @@ public class ERCMailMessage extends _ERCMailMessage {
         }
     }
 
-    public static ERCMailMessageClazz mailMessageClazz() { return (ERCMailMessageClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCMailMessage"); }
+    //	===========================================================================
+    //	Class method(s)
+    //	---------------------------------------------------------------------------
 
+    /**
+     * Gets the singleton clazz object for this Class.
+     * @return sigleton clazz object
+     */
+    public static ERCMailMessageClazz mailMessageClazz() {
+        return (ERCMailMessageClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCMailMessage");
+    }
 
     /**
      * Public constructor.
