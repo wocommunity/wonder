@@ -9,12 +9,13 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.Enumeration;
+import java.io.Serializable;
 
 /**
  * Holds encoding related settings and methods for {@link WOMessage} 
  * and its subclasses {@link WORequest} and {@link WOResponse}. 
  */
- public class ERXMessageEncoding {
+public class ERXMessageEncoding implements Serializable {
 
     private String _encoding; 
     public String encoding() { return _encoding; }
