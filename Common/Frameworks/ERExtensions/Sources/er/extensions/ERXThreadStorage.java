@@ -84,8 +84,7 @@ public class ERXThreadStorage {
     private static Map storageMap(boolean create) {
         Map map = (Map)threadMap.get();
         if (map == null && create) {
-            // CHECKME: Does this need to be synchronized?
-            map = Collections.synchronizedMap(new HashMap(DefaultHashMapSize));
+            map = new HashMap(DefaultHashMapSize);
             threadMap.set(map);
         }
         return map;
