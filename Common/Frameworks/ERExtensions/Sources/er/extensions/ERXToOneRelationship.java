@@ -49,7 +49,14 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     public String destinationSortKey() { return _destinationSortKey; }
     public void setDestinationSortKey(String aValue) { _destinationSortKey = aValue; }
 
-    public String noSelectionString() { return _noSelectionString != null ? _noSelectionString : noneString(); }
+    public String noSelectionString() {
+        if (_noSelectionString == null && hasBinding("noSelectionString")) {
+            _noSelectionString = (String)valueForBinding("noSelectionString");
+            if (_noSelectionString == null)
+                _noSelectionString = noneString();
+        }
+        return _noSelectionString != null ? _noSelectionString : noneString();
+    }
     public void setNoSelectionString(String aValue) { _noSelectionString = aValue; }
 
     protected void _invalidateCaches() {
