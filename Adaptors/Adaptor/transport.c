@@ -96,6 +96,17 @@ static void tr_clearConnectionPoolCallback(ShmemArray *array, unsigned int eleme
    wolist_dealloc(connectionPool);
 }
 
+WOConnection *tr_wrap_net_fd(net_fd s)
+{
+   WOConnection *c;
+   c = WOCALLOC(sizeof(WOConnection), 1);
+   if (c)
+   {
+      c->fd = s;
+   }
+   return c;
+}
+
 /*
  *	connection pool support:
  */
@@ -209,13 +220,16 @@ void tr_close(WOConnection *c, WOInstanceHandle instHandle, int poolConnection) 
       if (!poolConnection || transport->reset_connection(c->fd))
       {
          transport->close_connection(c->fd);
-         if (ac_lockInstance(instHandle))
+         if (instHandle != AC_INVALID_HANDLE)
          {
-            connectionPool = (list *)ac_localInstanceData(instHandle, connectionPoolKey);
-            wolist_removeAt(connectionPool, wolist_indexOf(connectionPool,c));
-            ac_unlockInstance(instHandle);
+            if (ac_lockInstance(instHandle))
+            {
+               connectionPool = (list *)ac_localInstanceData(instHandle, connectionPoolKey);
+               wolist_removeAt(connectionPool, wolist_indexOf(connectionPool,c));
+               ac_unlockInstance(instHandle);
+            }
+            WOLog(WO_INFO,"Dumping pooled connection to %s(%d)",c->host, c->port);
          }
-         WOLog(WO_INFO,"Dumping pooled connection to %s(%d)",c->host, c->port);
          WOFREE(c);
       } else
          c->inUse = 0;

@@ -319,10 +319,14 @@ HTTPResponse *tr_handleRequest(HTTPRequest *req, const char *url, WOURLComponent
          WOLog(WO_INFO,"Sending request to instance number %s, port %d", app.instance, app.port);
          resp = _runRequest(&app, appHandle, instHandle, req);
 
+         /* Cannot retry if we have read some streamed content data because we cannot unwind the byte stream. */
+         if (req->haveReadStreamedData)
+            retries = 0;
+         
          if (resp) {
             if (resp->status == 302) /* redirected */
             {
-               if (st_valueFor(resp->headers, "x-webobjects-refusing-redirection"))
+               if (!req->haveReadStreamedData && st_valueFor(resp->headers, "x-webobjects-refusing-redirection"))
                {
                   /* redirected because instance is refusing new sessions */
                   resp_free(resp);
@@ -331,20 +335,23 @@ HTTPResponse *tr_handleRequest(HTTPRequest *req, const char *url, WOURLComponent
                }
             }
          } else {
-            connectionAttempts++;
-            /* Mark this instance as unresponsive */
-            WOLog(WO_INFO,"Marking instance %s dead", app.instance);
-            if (app.scheduler->instanceDidNotRespond)
+            if (app.error != err_read)
             {
-               inst = ac_lockInstance(instHandle);
-               if (inst)
+               connectionAttempts++;
+               /* Mark this instance as unresponsive */
+               WOLog(WO_INFO,"Marking instance %s dead", app.instance);
+               if (app.scheduler->instanceDidNotRespond)
                {
-                  app.scheduler->instanceDidNotRespond(inst);
-                  ac_unlockInstance(instHandle);
+                  inst = ac_lockInstance(instHandle);
+                  if (inst)
+                  {
+                     app.scheduler->instanceDidNotRespond(inst);
+                     ac_unlockInstance(instHandle);
+                  }
                }
+               WOLog(WO_DBG, "connectionAttempts = %d, retries = %d", connectionAttempts, retries);
+               ac_readConfiguration();
             }
-            WOLog(WO_DBG, "connectionAttempts = %d, retries = %d", connectionAttempts, retries);
-            ac_readConfiguration();
          }
          if (resp == NULL && connectionAttempts <= retries) {
             /* appHandle is still valid because we have not decremented pendingResponses on the instance */
@@ -529,8 +536,13 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
        */
       if (app->scheduler->beginTransaction)
          app->scheduler->beginTransaction(app, instHandle);
+
+      /* Make sure that we're the only connection header, and we're explicit about the setting */
+      req_removeHeader(req,CONNECTION);
       if (c->isPooled) {
          req_addHeader(req,CONNECTION,HTTP_KEEP_ALIVE,0);
+      } else {
+	 req_addHeader(req,CONNECTION,HTTP_CLOSE,0);
       }
 
       WOLog(WO_INFO,"%s:%s on %s(%d) connected [pooled: %s]", app->name, app->instance, app->host, app->port, c->isPooled ? "Yes" : "No");
@@ -540,7 +552,7 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
        */
       send_status = req_sendRequest(req, c->fd);
       if (send_status != 0) {
-          if ((send_status == TR_RESET) && (retryRequest == 0))  {
+         if ((send_status == TR_RESET) && (retryRequest == 0) && !req->haveReadStreamedData)  {
               /* If we get here the connection was reset. This means the instance has either quit or crashed. */
               /* Bump the generation number so all pooled connections to this instance will be invalidated. */
               /* Then retry the request with a new connection. If the instance is not running the retry will */
@@ -554,11 +566,17 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
               }
               retryRequest++;
               WOLog(WO_INFO, "retrying request due to connection reset");
+
+              /* Must close connection before continuing */
+              tr_close(c, instHandle, 0);
               continue;
           } else {
               WOLog(WO_ERR,"Failed to send request");
               tr_close(c, instHandle, 0);          /* close app connection */
-              app->error = err_send;
+              if (send_status == -1)
+                 app->error = err_read;
+              else
+                 app->error = err_send;
               return NULL;
           }
       }
@@ -572,9 +590,16 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
       /*
        *	now wait for the response...
        */
-      resp = resp_getResponseHeaders(c->fd);
+      resp = resp_getResponseHeaders(c, instHandle);
+      /* go ahead and read the first chunk of response data */
       if (resp && req->method != HTTP_HEAD_METHOD)
-         resp = resp_getResponseContent(resp, c->fd);
+      {
+         if (resp_getResponseContent(resp, 1) == -1)
+         {
+            resp_free(resp);
+            resp = NULL;
+         }
+      }
 
       /* Validate the ID */
       if (idString && resp)
@@ -653,7 +678,14 @@ static HTTPResponse *_runRequest(WOAppReq *app, WOAppHandle woappHandle, WOInsta
          } else
          app->error = err_response;
       }
-      tr_close(c, instHandle, keepConnection);
+      if (resp && resp->content_read < resp->content_length)
+      {
+         resp->keepConnection = keepConnection;
+         resp->instHandle = instHandle;
+         resp->flags |= RESP_CLOSE_CONNECTION;
+      } else {
+         tr_close(c, instHandle, keepConnection);
+      }
    } while (retryRequest == 1);
 
    return resp;
@@ -666,6 +698,7 @@ static const char * const _errors[] = {
    "Can't connect to application instance",
    NO_RESPONSE,
    INV_RESPONSE,
+   "Failed to read content data (timed out or broken connection)",
    NULL
 };
 
@@ -697,8 +730,10 @@ static HTTPResponse *_errorResponse(WOAppReq *app, WOURLComponents *wc, HTTPRequ
 
    if (resp)
    {
-      st_add(resp->headers, "Cache-Control", "no-cache", 0);
+      st_add(resp->headers, "Cache-Control", "no-cache, private, no-store, must-revalidate, max-age=0", 0);
       st_add(resp->headers, "Expires", "Thu, 01 Jan 1970 00:00:00 GMT", 0);
+      st_add(resp->headers, "date", "Thu, 01 Jan 1970 00:00:00 GMT", 0);
+      st_add(resp->headers, "pragma", "no-cache", 0);
    }
    return resp;
 }

@@ -96,10 +96,10 @@ WOURLError WOParseApplicationName(WOURLComponents *wc, const char *url) {
     *	just validate the prefix gunk....
     */
     if (extension != NULL) {
-        if (version && ((extension - (version+1) < 1) || ( !isdigit(*(extension-1)) )))
+       if (version && ((extension - (version+1) < 1) || ( !isdigit((int)*(extension-1)) )))
             return WOURLInvalidWebObjectsVersion;
     } else if (version != NULL) {
-        if ((end - (version+1) < 1) || ( !isdigit(*(end-1)) ))
+       if ((end - (version+1) < 1) || ( !isdigit((int)*(end-1)) ))
             return WOURLInvalidWebObjectsVersion;
     } else if ((end - s) > 1 )
         return WOURLInvalidPrefix;

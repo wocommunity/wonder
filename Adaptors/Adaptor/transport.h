@@ -83,9 +83,9 @@ struct _wotransport;
  */
 typedef enum {
    TR_OK = 0,  /* connection is ok; no error has occurred */
-   TR_RESET,   /* connection was reset by peer, or broken pipe error (instance has shut down or crashed) */
-   TR_TIMEOUT, /* a timeout occurred on the connection */
-   TR_ERROR    /* some other error has occurred on the connection */
+   TR_RESET = 1,   /* connection was reset by peer, or broken pipe error (instance has shut down or crashed) */
+   TR_TIMEOUT = 2, /* a timeout occurred on the connection */
+   TR_ERROR = 3,   /* some other error has occurred on the connection */
 } TR_STATUS;
 
 /*
@@ -181,6 +181,13 @@ extern wotransport_t transport;
 
 
 int tr_init(strtbl *dict);
+
+
+/* Returns a WOConnection which wraps the given net_fd. */
+/* This function exists solely to bridge between appcfg.c which uses net_fd, */
+/* and response.c which uses WOConnection *. */
+WOConnection *tr_wrap_net_fd(net_fd s);
+
 
 /*
  * Return a connection to the instance, which may be from the connection pool

@@ -134,7 +134,7 @@ void WOParseSizedURL_40(WOURLComponents *components, const char *string, unsigne
     /* Now check if this is really an instance number
      * For that we will check that all characters are digits in c[3], or c[3] == "-1"
      */
-    for (s = c[3]->start; s < c[3]->length + c[3]->start && (isdigit(*s) || ((s == c[3]->start) && (*s == '-'))); s++);
+    for (s = c[3]->start; s < c[3]->length + c[3]->start && (isdigit((int)*s) || ((s == c[3]->start) && (*s == '-'))); s++);
 
     if (s != c[3]->length + c[3]->start) {
         /* This field is not just digits. This field has to be the request handler key */

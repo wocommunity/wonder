@@ -241,6 +241,11 @@ int WOShmem_init(const char *file, unsigned int memsize)
    WOShmem_fd = open(file, O_RDWR|O_CREAT, 0600);
    if (WOShmem_fd > 0)
    {
+#ifdef APACHE
+      /* unlink the file so when Apache exits the file is removed */
+      /* The mmap should still be in effect */
+      unlink(file);
+#endif
       WOShmem_size = ensure_file_size(WOShmem_fd, memsize);
       if (WOShmem_size != -1)
       {
@@ -262,6 +267,7 @@ int WOShmem_init(const char *file, unsigned int memsize)
       WOShmem_fd = -1;
    if (errMsg)
       WA_freeErrorDescription(errMsg);
+
    WOShmem_mutex = WA_createLock("WOShmem_lock");
    return WOShmem_fd == -1;
 }

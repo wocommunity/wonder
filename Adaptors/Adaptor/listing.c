@@ -39,14 +39,18 @@ and limitations under the License.
 #include <stdio.h>	/* sprintf() */
 #include <stdlib.h>
 
+#ifdef SOLARIS
+#include <alloca.h>
+#endif
+
 #define	AUTH_CONTENT	\
 "<HTML><HEAD><TITLE>404 Resource not found.</TITLE></HEAD><BODY><H1>Resource not found.</H1> The server could not find the resource you requested.<P></BODY></HTML>"
 
 static HTTPResponse *createAuthorizationFailedResponse() {
    HTTPResponse *resp;
-   resp = resp_new("HTTP/1.0 403 Authorization Required");
+   resp = resp_new("HTTP/1.0 403 Authorization Required", AC_INVALID_HANDLE, NULL);
    st_add(resp->headers, "Content-Type", "text/html", 0);
-   resp->content_length = sizeof(AUTH_CONTENT);
+   resp->content_length = resp->content_valid = resp->content_read = sizeof(AUTH_CONTENT);
    resp->content = AUTH_CONTENT;
    resp->flags |= RESP_DONT_FREE_CONTENT;
    return resp;
@@ -81,7 +85,7 @@ HTTPResponse *WOAdaptorInfo(HTTPRequest *req, WOURLComponents *wc) {
       return resp;
    }
 
-   resp = resp_new("HTTP/1.0 200 OK Apple");
+   resp = resp_new("HTTP/1.0 200 OK Apple", AC_INVALID_HANDLE, NULL);
    st_add(resp->headers, "Content-Type", "text/html", 0);
 
    adaptor_url = (char *)alloca(wc->prefix.length + 1);
@@ -111,6 +115,8 @@ HTTPResponse *WOAdaptorInfo(HTTPRequest *req, WOURLComponents *wc) {
    str_appendLiteral(content, "</BODY></HTML>");
 
    resp->content_length = content->length;
+   resp->content_valid = content->length;
+   resp->content_read = content->length;
    resp->content = content->text;
    resp->flags |= RESP_DONT_FREE_CONTENT;
    resp_addStringToResponse(resp, content);

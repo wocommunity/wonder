@@ -200,7 +200,7 @@ WOURLError WOCheckURL(WOURLComponents *components) {
                 return e[i];
             } else if (i >= 5 && i <= 8 && c[i]->start[j] == '/') {
                 return e[i];
-            } else if (i == 7 && !isdigit(c[i]->start[j])) {
+            } else if (i == 7 && !isdigit((int)(c[i]->start[j]))) {
                 return e[i];
             }
         }
