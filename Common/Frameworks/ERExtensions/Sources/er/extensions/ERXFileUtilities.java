@@ -510,9 +510,11 @@ public class ERXFileUtilities {
     public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)
         throws FileNotFoundException, IOException {
             if (srcFile.exists() && srcFile.isFile()) {
+            		boolean copied = false;
                 if (deleteOriginals && (!forceDelete || srcFile.canWrite())) {
-                    srcFile.renameTo(dstFile);
-                } else {
+                    copied = srcFile.renameTo(dstFile);
+                } 
+                if(!copied) {
                     Throwable thrownException=null;
                     File  parent = dstFile.getParentFile();
                     parent.mkdirs();
