@@ -14,6 +14,8 @@
 		<binding name="showUrls"/>
 		<binding name="showLegend"/>
 		<binding name="showToolTips"/>
+		<binding name="chart"/>
+		<binding name="configuration"/>
 
 		<validation message="Either items, nameKey, categoryKey and valueKey or dataset must be bound">
 			<or>
