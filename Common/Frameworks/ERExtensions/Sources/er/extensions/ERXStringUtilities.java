@@ -341,7 +341,7 @@ public class ERXStringUtilities {
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
         if(bundle != null)
             return stringWithContentsOfFile(bundle.pathForResource(name, extension, null));
-         return stringWithContentsOfFile(WOApplication.application().resourceManager().pathForResourceNamed(name +"." + extension, null, null));
+         return stringWithContentsOfFile(ERXFileUtilities.pathForResourceNamed(name +"." + extension, null, null));
     }
 
     public static final String lastPropertyKeyInKeyPath(String keyPath) {
