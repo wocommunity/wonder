@@ -23,16 +23,16 @@ public class ERXDirectAction extends WODirectAction {
     public ERXDirectAction(WORequest r) { super(r); }
 
     public WOComponent testAction() {
-        // FIXME: password protection?
         WOComponent result=null;
-        if (WOApplication.application().isCachingEnabled() ||
-            !ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXJUnitPassword"))) {
+        if (!WOApplication.application().isCachingEnabled() ||
+            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXJUnitPassword"))) {
             
             result=pageWithName("ERXWOTestInterface");
             String testCase = request().stringFormValueForKey("case");
             if(testCase != null) {
                 result.takeValueForKey(testCase, "theTest");
-                // (ak:we wish...)return (WOComponent)result.valueForKey("performTest");
+                // (ak:I wish we could return a direct test result...)
+                // return (WOComponent)result.valueForKey("performTest");
             }
         }
              
@@ -40,10 +40,9 @@ public class ERXDirectAction extends WODirectAction {
     }
     
     public WOComponent log4jAction() {
-        // FIXME: password protection?
         WOComponent result=null;
-        if (WOApplication.application().isCachingEnabled() ||
-            !ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXLog4JPassword")))
+        if (!WOApplication.application().isCachingEnabled() ||
+            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXLog4JPassword")))
             result=pageWithName("ERXLog4JConfiguration");
         return result;
     }
