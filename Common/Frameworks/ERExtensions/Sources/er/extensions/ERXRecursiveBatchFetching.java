@@ -86,9 +86,9 @@ public class ERXRecursiveBatchFetching {
             if (sourceObjects == null || sourceObjects.count() < 1) return;
 
             NSDictionary objectsByEntity = splitObjectsByEntity(sourceObjects);
-            Enumeration enum = objectsByEntity.allValues().objectEnumerator();
-            while (enum.hasMoreElements()) {
-                NSArray homogeniousObjects = (NSArray) enum.nextElement();
+            Enumeration e = objectsByEntity.allValues().objectEnumerator();
+            while (e.hasMoreElements()) {
+                NSArray homogeniousObjects = (NSArray) e.nextElement();
                 traverseForHomogeniousObjects(homogeniousObjects);
             }
         }
@@ -134,9 +134,9 @@ public class ERXRecursiveBatchFetching {
 
             NSMutableArray keyPathObjects = new NSMutableArray();
 
-            Enumeration enum = subPathsKeyedByTopLevel.keyEnumerator();
-            while (enum.hasMoreElements()) {
-                String path = (String) enum.nextElement();
+            Enumeration e = subPathsKeyedByTopLevel.keyEnumerator();
+            while (e.hasMoreElements()) {
+                String path = (String) e.nextElement();
                 NSArray subPaths = (NSArray) subPathsKeyedByTopLevel.valueForKey(path);
 
                 KeyPath kp = new KeyPath(path, KeyPath.parseKeyPathStrings(subPaths));
@@ -173,9 +173,9 @@ public class ERXRecursiveBatchFetching {
         private static NSDictionary subPathsKeyedByTopLevel(NSArray keypathStrings) {
             NSMutableDictionary subPathsKeyedByTopLevel = new NSMutableDictionary();
 
-            Enumeration enum = keypathStrings.objectEnumerator();
-            while (enum.hasMoreElements()) {
-                String keypath = (String) enum.nextElement();
+            Enumeration e = keypathStrings.objectEnumerator();
+            while (e.hasMoreElements()) {
+                String keypath = (String) e.nextElement();
 
                 String path = KeyPath.directPathFromKeyPath(keypath);
 
@@ -198,9 +198,9 @@ public class ERXRecursiveBatchFetching {
 
             NSMutableArray destinationObjects = new NSMutableArray();
 
-            Enumeration enum = sourceObjects.objectEnumerator();
-            while (enum.hasMoreElements()) {
-                EOEnterpriseObject nextEO = (EOEnterpriseObject) enum.nextElement();
+            Enumeration e = sourceObjects.objectEnumerator();
+            while (e.hasMoreElements()) {
+                EOEnterpriseObject nextEO = (EOEnterpriseObject) e.nextElement();
 
                 if (relationship.isToMany()) {
                     destinationObjects.addObjectsFromArray((NSArray) nextEO.valueForKey(path));
@@ -240,9 +240,9 @@ public class ERXRecursiveBatchFetching {
         private NSDictionary splitObjectsByEntity(NSArray objects) {
             NSMutableDictionary objectsByEntityName = new NSMutableDictionary();
 
-            Enumeration enum = objects.objectEnumerator();
-            while (enum.hasMoreElements()) {
-                EOEnterpriseObject eo = (EOEnterpriseObject) enum.nextElement();
+            Enumeration e = objects.objectEnumerator();
+            while (e.hasMoreElements()) {
+                EOEnterpriseObject eo = (EOEnterpriseObject) e.nextElement();
                 NSMutableArray objectsForEntity = (NSMutableArray) objectsByEntityName.valueForKey(eo.entityName());
                 if (objectsForEntity == null) {
                     objectsForEntity = new NSMutableArray();
