@@ -140,6 +140,7 @@
 				412B6591041D325700000103,
 				412B6592041D325700000103,
 				D7FECEA70425411B00A31932,
+				D777C38004570F4C00000064,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +154,7 @@
 				017C7B50FFD714AF7F000001,
 				017C7B51FFD714AF7F000001,
 				022D130C0059B6D611CD2978,
+				D777C38C04571CD900000064,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -635,6 +637,7 @@
 				40B5828FFFD5E91B7F000001,
 				40B58291FFD5E91B7F000001,
 				40B58292FFD5E91B7F000001,
+				D777C38B04571CD900000064,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -901,6 +904,7 @@
 				412B6588041D325700000103,
 				412B6589041D325700000103,
 				412B658A041D325700000103,
+				D777C37F04570F4C00000064,
 			);
 			isa = PBXGroup;
 			name = Sources;
@@ -994,6 +998,31 @@
 //D72
 //D73
 //D74
+		D777C37F04570F4C00000064 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = UWJavaMail.java;
+			path = Sources/UWJavaMail.java;
+			refType = 4;
+		};
+		D777C38004570F4C00000064 = {
+			fileRef = D777C37F04570F4C00000064;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D777C38B04571CD900000064 = {
+			isa = PBXFrameworkReference;
+			name = ERJars.framework;
+			path = /Library/Frameworks/ERJars.framework;
+			refType = 0;
+		};
+		D777C38C04571CD900000064 = {
+			fileRef = D777C38B04571CD900000064;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		D7FECEA60425411B00A31932 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;

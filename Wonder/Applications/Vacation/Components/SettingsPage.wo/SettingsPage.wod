@@ -1,9 +1,17 @@
-Form1: WOForm {
-	multipleSubmit = true;
+Template: Template {
 }
 
 String2: WOString {
 	value = message;
+}
+
+Form1: WOForm {
+	multipleSubmit = true;
+}
+
+TextField1: WOTextField {
+	dateformat = application.settings.fullCalendarDateFormat;
+	value = setting.archiveDate;
 }
 
 SubmitButton1: WOSubmitButton {
@@ -11,22 +19,14 @@ SubmitButton1: WOSubmitButton {
 	value = "Change Start of Year";
 }
 
-SubmitButton3: WOSubmitButton {
-	action = createNewYear;
-	value = "Add New Year";
-}
-
-Template: Template {
-}
-
-TextField1: WOTextField {
-	dateformat = application.settings.shortCalendarDateFormat;
-	value = setting.archiveDate;
-}
-
 TextField2: WOTextField {
 	maxlength = 4;
 	size = 4;
 	value = newYear;
+}
+
+SubmitButton3: WOSubmitButton {
+	action = createNewYear;
+	value = "Add New Year";
 }
 
