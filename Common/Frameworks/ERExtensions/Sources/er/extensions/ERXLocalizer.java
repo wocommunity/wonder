@@ -127,7 +127,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         ERXLocalizer l = null;
         Enumeration e = languages.objectEnumerator();
         while(e.hasMoreElements()) {
-            String language = (String)e.nextElement();
+            Object o = e.nextElement();
+            String language = (String)o;
             l = (ERXLocalizer)localizers.objectForKey(language);
             if(l != null) {
                 return l;
@@ -226,10 +227,17 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 if(log.isDebugEnabled())
                     log.debug("Trying " + firstComponent + " . " + otherComponents);
                 if(result != null) {
-                    result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
-                    if(result != null) {
-                        cache.setObjectForKey(result, key);
-                    } else {
+                    try {
+                        result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
+                        if(result != null) {
+                            cache.setObjectForKey(result, key);
+                        } else {
+                            cache.setObjectForKey(NOT_FOUND, key);
+                        }
+                    } catch (NSKeyValueCoding.UnknownKeyException e) {
+                        if (log.isDebugEnabled()) {
+                            log.debug(e.getMessage());
+                        }
                         cache.setObjectForKey(NOT_FOUND, key);
                     }
                 }
