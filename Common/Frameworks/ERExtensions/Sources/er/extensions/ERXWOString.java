@@ -94,7 +94,9 @@ public class ERXWOString extends WODynamicElement {
     					valueInComponent = null;
     				}
     			} else {
-    	    		log.warn("no formatter found!");
+    				if(valueInComponent != null) {
+    					log.debug("no formatter found!" + valueInComponent);
+    				}
     			}
     		}
     	} else {

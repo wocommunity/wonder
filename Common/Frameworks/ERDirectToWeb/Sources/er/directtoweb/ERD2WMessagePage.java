@@ -12,7 +12,7 @@ import er.extensions.*;
 
 /**
  * Superclass for all message pages.<br />
- * If the key <code>explanationComponent</code> resolves to non-empty, then
+ * If the key <code>explanationComponentName</code> resolves to non-empty, then
  * this component will get shown in the page and wired up with a 
  * <code>object</code>, <code>dataSource</code> and <code>pageConfiguration</code> binding.
  */
@@ -129,7 +129,7 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
     
     public boolean showExplanationComponent() {
     	// AK: this is needed because RuleEditor won't save NULL keys anymore
-    	String name = (String)d2wContext().valueForKey("explanationComponent");
+    	String name = (String)d2wContext().valueForKey("explanationComponentName");
     	boolean result = name != null && !"".equals(name);
     	// CHECKME: AK could be extended to check if object() or dataSource() are bound...
     	return result;
