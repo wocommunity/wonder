@@ -542,6 +542,38 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
     }
 
+    public EOEntity entity() {
+        checkEntity();
+        return super.entity();
+    }
+
+    public void checkEntity() {
+        if(_entity.model() == null) {
+            try {
+
+                EOEntity registeredEntity = EOModelGroup.defaultGroup().entityNamed(_entity.name());
+
+                if(registeredEntity != null) {
+                    _entity = registeredEntity;
+                } else {
+                    EOModel model = _entity.model();
+                    if(model == null) {
+                        model = (EOModel)EOModelGroup.defaultGroup().models().lastObject();
+                    }
+                    model.addEntity(_entity);
+                    log.warn("Added <" + _entity.name() + "> to default model group.");
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException("Model or modelgroup for <" + _entity.name() + "> is null: " + entity().model(), ex);
+            }
+        }
+    }
+    
+    public EOEnterpriseObject createInstanceWithEditingContext(EOEditingContext ec, EOGlobalID gid) {
+        checkEntity();
+        return super.createInstanceWithEditingContext(ec, gid);
+    }
+    
     /**
      * This method is called when an object is
      * about to be updated. If any validation
