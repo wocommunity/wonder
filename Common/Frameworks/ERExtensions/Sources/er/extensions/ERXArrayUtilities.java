@@ -535,4 +535,46 @@ public class ERXArrayUtilities extends Object {
             array.removeObjectAtIndex(index);
         }
     }
+
+    /**
+     * Function to determine if an array contains any of
+     * the elements of another array.
+     * @param array to test if it contains any of the objects
+     * @param objects array of objects to test if the first array
+     *		contains any of
+     * @return if the first array contains any elements from the second
+     *		array
+     */
+    public static boolean arrayContainsAnyObjectFromArray(NSArray array, NSArray objects) {
+        boolean arrayContainsAnyObject = false;
+        if (array != null && objects != null && array.count() > 0 && objects.count() > 0) {
+            for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+                if (array.containsObject(e.nextElement())) {
+                    arrayContainsAnyObject = true; break;
+                }
+            }
+        }
+        return arrayContainsAnyObject;
+    }
+
+    /**
+     * Function to determine if an array contains all of
+     * the elements of another array.
+     * @param array to test if it contains all of the objects of another array
+     * @param objects array of objects to test if the first array
+     *		contains all of
+     * @return if the first array contains all of the elements from the second
+     *		array
+     */
+    public static boolean arrayContainsArray(NSArray array, NSArray objects) {
+        boolean arrayContainsAllObjects = true;
+        if (array != null && objects != null && array.count() > 0 && objects.count() > 0) {
+            for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+                if (!array.containsObject(e.nextElement())) {
+                    arrayContainsAllObjects = false; break;
+                }
+            }
+        }
+        return arrayContainsAllObjects;        
+    }
 }
