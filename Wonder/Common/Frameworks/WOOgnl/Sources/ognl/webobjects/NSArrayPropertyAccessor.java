@@ -20,8 +20,9 @@ public class NSArrayPropertyAccessor extends NSObjectPropertyAccessor {
         if ( name instanceof String )
             return super.getProperty(target, name);
         NSArray array = (NSArray)target;
-        if ( name instanceof Number )
+        if ( name instanceof Number ) {
             return array.objectAtIndex(((Number)name).intValue());
+        }
         if ( name instanceof DynamicSubscript ) {
             int len = array.count();
             switch (((DynamicSubscript)name).getFlag()) {
