@@ -5,8 +5,7 @@
 	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaWOJSPServlet/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.4.2 (MacOS X Default)"/>
 	<classpathentry kind="src" path="/ERJars"/>
-	<classpathentry kind="lib" path="Libraries/jfreechart-0.9.13.jar"/>
-	<classpathentry kind="lib" path="Libraries/jcommon-0.8.8.jar"/>
-	<classpathentry kind="lib" path="Libraries/gnujaxp.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jfreechart-0.9.21.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/jcommon-0.9.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
