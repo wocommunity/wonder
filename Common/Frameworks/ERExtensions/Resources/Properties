@@ -64,7 +64,7 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 
 ## This tells ERXWOString/ERXWOText to use localized 
 ## formatters. 
-# er.extensions.ERXArrayChooser.useLocalizeFormatters = true
+# er.extensions.ERXLocalizer.useLocalizeFormatters = true
 
 ## Allows you to override the locale for a language
 # er.extensions.ERXLocalizer.German.locale = de
