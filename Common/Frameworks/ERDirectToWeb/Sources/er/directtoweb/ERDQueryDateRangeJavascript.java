@@ -126,7 +126,7 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     private String _minName;
     public String minName() {
-        if (_minName==null) _minName="min"+propertyKey();
+        if (_minName==null) _minName="min"+hashCode();
         return _minName;
     }
     public String minHREF() {
@@ -134,7 +134,7 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
     }
     private String _maxName;
     public String maxName() {
-        if (_maxName==null) _maxName="max"+propertyKey();
+        if (_maxName==null) _maxName="max"+hashCode();
         return _maxName;
     }
     public String maxHREF() {
