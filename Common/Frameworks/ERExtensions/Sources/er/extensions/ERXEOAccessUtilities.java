@@ -355,7 +355,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-    * Tries to recover from a {@see EOGeneralAdaptorException}. 
+    * Tries to recover from a {@link EOGeneralAdaptorException}. 
     *
     * @param exception the exception as recieved from saveChanges()
     * @param editingContext editing context that created the error

@@ -7,7 +7,7 @@ import com.webobjects.eocontrol.*;
 /** Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle
  * #2957558 ("de-at" is converted to "German" instead of "German_Austria").
- * The request is created via ${link ERXApplication$createRequest()}.
+* The request is created via {@link ERXApplication#createRequest()}.
  */
 public  class ERXRequest extends WORequest {
 
@@ -40,9 +40,9 @@ public  class ERXRequest extends WORequest {
     protected ERXBrowser _browser;
     
     /** Returns a cooked version of the languages the user has set in his Browser.
-     * Adds "Nonlocalized" and {link ERXLocalizer$defaultLanguage()} if not
+     * Adds "Nonlocalized" and {@link ERXLocalizer#defaultLanguage()} if not
      * already present.
-     * @returns cooked version of user's languages
+     * @return cooked version of user's languages
      */
     public NSArray browserLanguages() {
         if (_browserLanguages == null) {
@@ -112,7 +112,7 @@ public  class ERXRequest extends WORequest {
     
     /** Translates ("de", "en-us;q=0.33", "en", "en-gb;q=0.66") to ("de", "en_gb", "en-us", "en").
      * @param languages NSArray of Strings
-        * @returns sorted NSArray of normalized Strings
+        * @return sorted NSArray of normalized Strings
         */
     private final static NSComparator COMPARE_Qs=new _LanguageComparator();
     protected NSArray fixAbbreviationArray(NSArray languages) {

@@ -76,7 +76,7 @@ public class ERXEC {
          * Not performing validation can be a good thing when
          * using nested editing contexts as sometimes you only
          * want to validation one object, not all the objects.
-         * @returns default delegate that doesn't perform validation
+         * @return default delegate that doesn't perform validation
          */
         public Object defaultNoValidationDelegate() { return defaultNoValidationDelegate; }
 

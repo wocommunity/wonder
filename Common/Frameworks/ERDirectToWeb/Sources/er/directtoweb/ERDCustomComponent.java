@@ -15,7 +15,7 @@ import er.extensions.*;
 
 /**
  * Base class of many custom components.<br />
- * Has alot of nifty features including resolving bindings against the rule system and inherits all the value pulling methods from {@see ERXNonSychronizingComponent}.
+ * Has alot of nifty features including resolving bindings against the rule system and inherits all the value pulling methods from {@link ERXNonSychronizingComponent}.
  * Subclasses should be able to run standalone without a D2W context. This is achieved by pulling values first from the bindings, then from the d2wContext and finally from an "extraBindings" binding.
  */
 
@@ -37,7 +37,7 @@ public abstract class ERDCustomComponent extends ERXNonSychronizingComponent imp
         super(context);
     }
 
-    /** Holds the {@see D2WContext}. */
+    /** Holds the {@link D2WContext}. */
     private D2WContext d2wContext;
 
     /** Holds the property key. */
@@ -50,22 +50,22 @@ public abstract class ERDCustomComponent extends ERXNonSychronizingComponent imp
     protected static Integer TRUE = ERXConstant.OneInteger;
     protected static Integer FALSE = ERXConstant.ZeroInteger;
 
-    /** Sets the {@see D2WContext}. Applies when used inside a D2WCustomComponent.*/
+    /** Sets the {@link D2WContext}. Applies when used inside a D2WCustomComponent.*/
     public void setLocalContext(D2WContext value) {
         setD2wContext(value);
     }
 
-    /** Sets the {@see D2WContext}. Applies when used inside a property key repetition.*/
+    /** Sets the {@link D2WContext}. Applies when used inside a property key repetition.*/
     public void setD2wContext(D2WContext value) {
         d2wContext = value;
     }
 
-    /** The active {@see D2WContext}. Simply calls to {@see d2wContext()}*/
+    /** The active {@link D2WContext}. Simply calls to {@link #d2wContext()}*/
     public D2WContext localContext() {
         return d2wContext();
     }
 
-    /** The active {@see D2WContext}.*/
+    /** The active {@link D2WContext}.*/
     public D2WContext d2wContext() {
         return d2wContextFromBindings();
     }
@@ -86,7 +86,7 @@ public abstract class ERDCustomComponent extends ERXNonSychronizingComponent imp
         parent().validationFailedWithException(e,value,keyPath);
     }
 
-    /** Implementation of the {@see ERXExceptionHolder} interface. Clears exceptions in the parent if possible.*/
+    /** Implementation of the {@link ERXExceptionHolder} interface. Clears exceptions in the parent if possible.*/
     public void clearValidationFailed() {
         // Since this component can be used stand alone, we might not necessarily
         // have an exception holder as our parent --> testing
@@ -145,7 +145,7 @@ public abstract class ERDCustomComponent extends ERXNonSychronizingComponent imp
         return super.valueForBinding(binding);
     }
 
-    /** Utility to pull the value from the {@see D2WContext}. */
+    /** Utility to pull the value from the {@link D2WContext}. */
     protected Object d2wContextValueForBinding(String binding) {
         return d2wContextFromBindings().valueForKey(binding);
     }
