@@ -5,6 +5,296 @@
 	};
 	objectVersion = 38;
 	objects = {
+		414651E004265D8500AD0D0B = {
+			children = (
+				F529266403AABF4901AD0D0B,
+				F55C0D5003AAB8DD01AD0D0B,
+				F55C0D6403AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRAttributeEditor;
+			path = "";
+			refType = 4;
+		};
+		414651FF04265D8B00AD0D0B = {
+			children = (
+				F529266503AABF4901AD0D0B,
+				F55C0D5103AAB8DD01AD0D0B,
+				F55C0D6B03AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRAttributeGroup;
+			refType = 4;
+		};
+		4146521E04265D9200AD0D0B = {
+			children = (
+				F529266603AABF4901AD0D0B,
+				F55C0D5203AAB8DD01AD0D0B,
+				F55C0D7203AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRAttributeListEditor;
+			path = "";
+			refType = 4;
+		};
+		4146523D04265D9800AD0D0B = {
+			children = (
+				F529266703AABF4901AD0D0B,
+				F55C0D5303AAB8DD01AD0D0B,
+				F55C0D7903AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRMasterCriteriaEditor;
+			path = "";
+			refType = 4;
+		};
+		4146525C04265D9F00AD0D0B = {
+			children = (
+				F529266803AABF4901AD0D0B,
+				F55C0D5403AAB8DD01AD0D0B,
+				F55C0D8003AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRNavigationControl;
+			refType = 4;
+		};
+		4146527604265DA500AD0D0B = {
+			children = (
+				F529266903AABF4901AD0D0B,
+				F55C0D5503AAB8DD01AD0D0B,
+				F55C0D8603AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRNestedList;
+			refType = 4;
+		};
+		4146529504265DB400AD0D0B = {
+			children = (
+				F529266A03AABF4901AD0D0B,
+				F55C0D5603AAB8DD01AD0D0B,
+				F55C0D8D03AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRQuickReport;
+			refType = 4;
+		};
+		414652AF04265DBF00AD0D0B = {
+			children = (
+				F529266B03AABF4901AD0D0B,
+				F55C0D5703AAB8DD01AD0D0B,
+				F55C0D9303AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRRecordGroup;
+			refType = 4;
+		};
+		414652CE04265DC500AD0D0B = {
+			children = (
+				F529266C03AABF4901AD0D0B,
+				F55C0D5803AAB8DD01AD0D0B,
+				F55C0D9A03AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRReport;
+			refType = 4;
+		};
+		414652ED04265DCA00AD0D0B = {
+			children = (
+				F529266D03AABF4901AD0D0B,
+				F55C0D5903AAB8DD01AD0D0B,
+				F55C0DA103AAB8EA01AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRReportEditor;
+			path = "";
+			refType = 4;
+		};
+		414653D3042669F800AD0D0B = {
+			children = (
+				414653D4042669F800AD0D0B,
+			);
+			isa = PBXVariantGroup;
+			name = WRLayoutEditor.wo;
+			path = "";
+			refType = 4;
+		};
+		414653D4042669F800AD0D0B = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/WRLayoutEditor.wo;
+			refType = 2;
+		};
+		414653D9042669F800AD0D0B = {
+			fileRef = 414653D3042669F800AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		414653DA04266A0400AD0D0B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = WRLayoutEditor.api;
+			path = Components/WRLayoutEditor.api;
+			refType = 2;
+		};
+		414653DB04266A0400AD0D0B = {
+			fileRef = 414653DA04266A0400AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		414653DC04266A0A00AD0D0B = {
+			children = (
+				414653DA04266A0400AD0D0B,
+				414653D3042669F800AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRLayoutEditor;
+			path = Sources;
+			refType = 2;
+		};
+		4146541504266BE900AD0D0B = {
+			children = (
+				4146541604266BE900AD0D0B,
+				4146541704266BE900AD0D0B,
+				4146541804266BE900AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRVerticalRowsLayout;
+			path = "";
+			refType = 2;
+		};
+		4146541604266BE900AD0D0B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = WRVerticalRowsLayout.api;
+			path = Components/WRVerticalRowsLayout.api;
+			refType = 4;
+		};
+		4146541704266BE900AD0D0B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = WRVerticalRowsLayout.java;
+			path = Sources/er/reporting/WRVerticalRowsLayout.java;
+			refType = 4;
+		};
+		4146541804266BE900AD0D0B = {
+			children = (
+				4146541904266BE900AD0D0B,
+			);
+			isa = PBXVariantGroup;
+			name = WRVerticalRowsLayout.wo;
+			path = "";
+			refType = 4;
+		};
+		4146541904266BE900AD0D0B = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/WRVerticalRowsLayout.wo;
+			refType = 4;
+		};
+		4146541E04266BE900AD0D0B = {
+			fileRef = 4146541604266BE900AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4146541F04266BE900AD0D0B = {
+			fileRef = 4146541704266BE900AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4146542004266BE900AD0D0B = {
+			fileRef = 4146541804266BE900AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4146544104266C0400AD0D0B = {
+			children = (
+				4146544204266C0400AD0D0B,
+				4146544304266C0400AD0D0B,
+				4146544404266C0400AD0D0B,
+			);
+			isa = PBXGroup;
+			name = WRNestedCellsLayout;
+			path = "";
+			refType = 2;
+		};
+		4146544204266C0400AD0D0B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = WRNestedCellsLayout.api;
+			path = Components/WRNestedCellsLayout.api;
+			refType = 4;
+		};
+		4146544304266C0400AD0D0B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = WRNestedCellsLayout.java;
+			path = Sources/er/reporting/WRNestedCellsLayout.java;
+			refType = 4;
+		};
+		4146544404266C0400AD0D0B = {
+			children = (
+				4146544504266C0400AD0D0B,
+			);
+			isa = PBXVariantGroup;
+			name = WRNestedCellsLayout.wo;
+			path = "";
+			refType = 4;
+		};
+		4146544504266C0400AD0D0B = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/WRNestedCellsLayout.wo;
+			refType = 4;
+		};
+		4146544A04266C0400AD0D0B = {
+			fileRef = 4146544204266C0400AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4146544B04266C0400AD0D0B = {
+			fileRef = 4146544304266C0400AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4146544C04266C0400AD0D0B = {
+			fileRef = 4146544404266C0400AD0D0B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41667BBD04268C5C00AD0D0B = {
+			children = (
+				414651E004265D8500AD0D0B,
+				4146521E04265D9200AD0D0B,
+				4146523D04265D9800AD0D0B,
+				414653DC04266A0A00AD0D0B,
+				414652ED04265DCA00AD0D0B,
+			);
+			isa = PBXGroup;
+			name = "Editor Components";
+			path = WebServerResources;
+			refType = 4;
+		};
+//410
+//411
+//412
+//413
+//414
+//F50
+//F51
+//F52
+//F53
+//F54
 		F50686A403A7E586013CE650 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -36,71 +326,71 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeEditor.java;
-			path = er/reporting/WRAttributeEditor.java;
-			refType = 4;
+			path = Sources/er/reporting/WRAttributeEditor.java;
+			refType = 2;
 		};
 		F529266503AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeGroup.java;
-			path = er/reporting/WRAttributeGroup.java;
-			refType = 4;
+			path = Sources/er/reporting/WRAttributeGroup.java;
+			refType = 2;
 		};
 		F529266603AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRAttributeListEditor.java;
-			path = er/reporting/WRAttributeListEditor.java;
-			refType = 4;
+			path = Sources/er/reporting/WRAttributeListEditor.java;
+			refType = 2;
 		};
 		F529266703AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRMasterCriteriaEditor.java;
-			path = er/reporting/WRMasterCriteriaEditor.java;
-			refType = 4;
+			path = Sources/er/reporting/WRMasterCriteriaEditor.java;
+			refType = 2;
 		};
 		F529266803AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRNavigationControl.java;
-			path = er/reporting/WRNavigationControl.java;
-			refType = 4;
+			path = Sources/er/reporting/WRNavigationControl.java;
+			refType = 2;
 		};
 		F529266903AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRNestedList.java;
-			path = er/reporting/WRNestedList.java;
-			refType = 4;
+			path = Sources/er/reporting/WRNestedList.java;
+			refType = 2;
 		};
 		F529266A03AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRQuickReport.java;
-			path = er/reporting/WRQuickReport.java;
-			refType = 4;
+			path = Sources/er/reporting/WRQuickReport.java;
+			refType = 2;
 		};
 		F529266B03AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRRecordGroup.java;
-			path = er/reporting/WRRecordGroup.java;
-			refType = 4;
+			path = Sources/er/reporting/WRRecordGroup.java;
+			refType = 2;
 		};
 		F529266C03AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRReport.java;
-			path = er/reporting/WRReport.java;
-			refType = 4;
+			path = Sources/er/reporting/WRReport.java;
+			refType = 2;
 		};
 		F529266D03AABF4901AD0D0B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WRReportEditor.java;
-			path = er/reporting/WRReportEditor.java;
-			refType = 4;
+			path = Sources/er/reporting/WRReportEditor.java;
+			refType = 2;
 		};
 		F529266E03AABF4901AD0D0B = {
 			fileRef = F529266203AABF4901AD0D0B;
@@ -271,18 +561,9 @@
 				F529276603AAC84701AD0D0B,
 				F529266203AABF4901AD0D0B,
 				F529266303AABF4901AD0D0B,
-				F529266403AABF4901AD0D0B,
-				F529266503AABF4901AD0D0B,
-				F529266603AABF4901AD0D0B,
-				F529266703AABF4901AD0D0B,
-				F529266803AABF4901AD0D0B,
-				F529266903AABF4901AD0D0B,
-				F529266A03AABF4901AD0D0B,
-				F529266B03AABF4901AD0D0B,
-				F529266C03AABF4901AD0D0B,
-				F529266D03AABF4901AD0D0B,
 			);
 			isa = PBXGroup;
+			name = "Interface & Utils";
 			path = Sources;
 			refType = 2;
 		};
@@ -529,29 +810,17 @@
 		};
 		F55C0D4F03AAB8C801AD0D0B = {
 			children = (
-				F55C0D6403AAB8EA01AD0D0B,
-				F55C0D6B03AAB8EA01AD0D0B,
-				F55C0D7203AAB8EA01AD0D0B,
-				F55C0D7903AAB8EA01AD0D0B,
-				F55C0D8003AAB8EA01AD0D0B,
-				F55C0D8603AAB8EA01AD0D0B,
-				F55C0D8D03AAB8EA01AD0D0B,
-				F55C0D9303AAB8EA01AD0D0B,
-				F55C0D9A03AAB8EA01AD0D0B,
-				F55C0DA103AAB8EA01AD0D0B,
-				F55C0D5003AAB8DD01AD0D0B,
-				F55C0D5103AAB8DD01AD0D0B,
-				F55C0D5203AAB8DD01AD0D0B,
-				F55C0D5303AAB8DD01AD0D0B,
-				F55C0D5403AAB8DD01AD0D0B,
-				F55C0D5503AAB8DD01AD0D0B,
-				F55C0D5603AAB8DD01AD0D0B,
-				F55C0D5703AAB8DD01AD0D0B,
-				F55C0D5803AAB8DD01AD0D0B,
-				F55C0D5903AAB8DD01AD0D0B,
+				4146544104266C0400AD0D0B,
+				4146541504266BE900AD0D0B,
+				4146525C04265D9F00AD0D0B,
+				414651FF04265D8B00AD0D0B,
+				4146527604265DA500AD0D0B,
+				4146529504265DB400AD0D0B,
+				414652AF04265DBF00AD0D0B,
+				414652CE04265DC500AD0D0B,
 			);
 			isa = PBXGroup;
-			name = Components;
+			name = "Display Components";
 			path = WebServerResources;
 			refType = 4;
 		};
@@ -1151,8 +1420,9 @@
 		};
 		F5DF67BA016B792C01000105 = {
 			children = (
-				F55C0D4F03AAB8C801AD0D0B,
 				F55C0D0803AAB89701AD0D0B,
+				41667BBD04268C5C00AD0D0B,
+				F55C0D4F03AAB8C801AD0D0B,
 				F55C0D2603AAB8BB01AD0D0B,
 				F5DF67F1016B792C01000105,
 				F5DF67FB016B792C01000105,
@@ -1288,6 +1558,12 @@
 				F55C0DDF03AAB8EA01AD0D0B,
 				F55C0DE003AAB8EA01AD0D0B,
 				F55C0DE103AAB8EA01AD0D0B,
+				414653D9042669F800AD0D0B,
+				414653DB04266A0400AD0D0B,
+				4146541E04266BE900AD0D0B,
+				4146542004266BE900AD0D0B,
+				4146544A04266C0400AD0D0B,
+				4146544C04266C0400AD0D0B,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1308,6 +1584,8 @@
 				F529267803AABF4901AD0D0B,
 				F529267903AABF4901AD0D0B,
 				F529276703AAC84701AD0D0B,
+				4146541F04266BE900AD0D0B,
+				4146544B04266C0400AD0D0B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
