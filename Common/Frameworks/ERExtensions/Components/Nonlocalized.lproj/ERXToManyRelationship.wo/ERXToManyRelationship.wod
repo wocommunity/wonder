@@ -11,6 +11,7 @@ CheckboxMatrix: ERXCheckboxMatrix {
 	item = theCurrentItem;
 	list = theList;
 	maxColumns = ^maxColumns;
+	width = ^width;
 	selections = selections;
 	goingVertically = ^goingVertically;
 	shouldShowSelectAllButtons = ^shouldShowSelectAllButtons;

@@ -10,6 +10,7 @@
 		<binding name="goingVertically" defaults="Boolean"/>
 		<binding name="contentCellOtherTagString"/>
 		<binding name="sortKey"/>
+		<binding name="width"/>
 
 		<validation message="&apos;list&apos; is a required binding">
 			<unbound name="list"/>

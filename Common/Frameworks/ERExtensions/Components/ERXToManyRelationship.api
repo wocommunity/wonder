@@ -14,6 +14,7 @@
 		<binding name="possibleChoices"/>
 		<binding name="maxColumns"/>
 		<binding name="size"/>
+		<binding name="width"/>
 		<binding name="destinationSortKey"/>
 		<binding name="goingVertically"/>
 		<binding name="localizeDisplayKeys" defaults="Boolean"/>
