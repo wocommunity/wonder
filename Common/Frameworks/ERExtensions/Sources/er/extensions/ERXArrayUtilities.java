@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import java.util.*;
+import java.io.*;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
@@ -20,6 +21,8 @@ public class ERXArrayUtilities extends Object {
      */
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
 
+    private static boolean initialized = false;
+    
     /**
      * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
@@ -381,9 +384,11 @@ public class ERXArrayUtilities extends Object {
          * @return immutable sorted array.
          */
 	public Object compute(NSArray array, String keypath) {
-            if (array.count() < 2)
-                return array;
-	    return sortedArraySortedWithKey(array, keypath, selector);
+	    synchronized (array) {
+		if (array.count() < 2)
+		    return array;
+		return sortedArraySortedWithKey(array, keypath, selector);
+	    }
 	}
     }
 
@@ -409,12 +414,14 @@ public class ERXArrayUtilities extends Object {
      * @return immutable filtered array.
      */
 	public Object compute(NSArray array, String keypath) {
-            if(array.count() == 0) {
-                return array;
-            }
-            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            return filteredArrayWithEntityFetchSpecification(array, eo.entityName(), keypath, null);
-        }
+	    synchronized(array) {
+		if(array.count() == 0) {
+		    return array;
+		}
+		EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
+		return filteredArrayWithFetchSpecificationNamedEntityNamed(array, keypath, eo.entityName());
+	    }
+	}
     }
 
     /**
@@ -442,6 +449,68 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+	* Define an {@link NSArray$Operator} for the key <b>isEmpty</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@isEmpty");</code><br/>
+     * <br/>
+     * 
+     */
+    static class IsEmptyOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public IsEmptyOperator() {}
+
+        /**
+        * returns true if the given array is empty, usefull for WOHyperlink disabled binding.
+         * @param array array to be checked.
+         * @param keypath name of fetch specification.
+         * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
+         */
+        public Object compute(NSArray array, String keypath) {
+	    synchronized (array) {
+		return array.count() == 0 ? Boolean.TRUE : Boolean.FALSE;
+	    }
+        }
+    }
+
+
+    /**
+	* Define an {@link NSArray$Operator} for the key <b>subarrayWithRange</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@subarrayWithRange.3-20");</code><br/>
+     * <br/>
+     *
+     */
+    static class SubarrayWithRangeOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public SubarrayWithRangeOperator() {}
+
+        /**
+        * returns true if the given array is empty, usefull for WOHyperlink disabled binding.
+         * @param array array to be checked.
+         * @param keypath name of fetch specification.
+         * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
+         */
+        public Object compute(NSArray array, String keypath) {
+	    synchronized (array) {
+		int i1 = keypath.indexOf(".");
+		int i2 = keypath.indexOf("-");
+		if ( i1 == -1 || i2 == -1 ) {
+		    throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
+		}
+		int start = Integer.parseInt(keypath.substring(i1, i2));
+		int length = Integer.parseInt(keypath.substring(i2, keypath.length()));
+		return array.subarrayWithRange(new NSRange(start, length));
+	    }
+        }
+    }
+
+    
+
+    /**
      * Define an {@link com.webobjects.foundation.NSArray$Operator} for the key <b>flatten</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
@@ -461,7 +530,9 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            return arrayWithoutDuplicates(array);
+	    synchronized (array) {
+		return arrayWithoutDuplicates(array);
+	    }
         }
     }
 
@@ -471,6 +542,10 @@ public class ERXArrayUtilities extends Object {
      * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b> and <b>fetchSpec</b> 
      */
     public static void initialize() {
+	if (initialized) {
+	    return;
+	}
+	initialized = true;
         NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
         NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
         NSArray.setOperatorForKey("sortDesc", new SortOperator(EOSortOrdering.CompareDescending));
@@ -479,6 +554,8 @@ public class ERXArrayUtilities extends Object {
         NSArray.setOperatorForKey("flatten", new FlattenOperator());
         NSArray.setOperatorForKey("fetchSpec", new FetchSpecOperator());
         NSArray.setOperatorForKey("unique", new UniqueOperator());
+	NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
+	NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
     }
 
     
@@ -560,7 +637,6 @@ public class ERXArrayUtilities extends Object {
     public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
         return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
-
     /**
      * shifts a given object in an array one value to the left (index--).
      *
@@ -629,6 +705,8 @@ public class ERXArrayUtilities extends Object {
                     arrayContainsAllObjects = false; break;
                 }
             }
+        } else if (array == null || array.count() == 0) {
+            return false;
         }
         return arrayContainsAllObjects;        
     }
