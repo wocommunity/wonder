@@ -220,7 +220,8 @@ public class ERXConfigurationManager {
      */
     public synchronized void updateSystemProperties(NSNotification n) {
         _updateSystemPropertiesFromMonitoredProperties((File)n.object(), _monitoredProperties);
-        _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
+        if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) 
+            _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
         ERXLogger.configureLogging(System.getProperties());
         
         NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
