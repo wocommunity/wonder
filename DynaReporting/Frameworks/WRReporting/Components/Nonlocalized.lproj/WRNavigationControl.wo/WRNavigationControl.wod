@@ -1,0 +1,52 @@
+Conditional1: WOConditional {
+	condition = ^showNavigation;
+}
+
+HmoveV:WOImageButton{ border=0; filename="lft-OSarw.gif"; action = left;}
+
+HmoveZ:WOImageButton{ border=0; filename="rt-OSarw.gif"; action = right;}
+
+String1: WOString {
+	value = ^listName;
+}
+
+String2: WOString {
+	value = leftLabel;
+}
+
+String3: WOString {
+	value = rightLabel;
+}
+
+criteriaLabelZ:WOString{
+	value= currentZCriteriaLabel;
+	escapeHTML = false;
+}
+
+dimHName:WOString {value= group.masterCriteria.label;}
+
+hDown:WOImageButton{border=0; filename="down.gif";action = down;}
+
+hUp:WOImageButton{border=0; filename="up.gif";action = up;}
+
+hlist: WORepetition { list=list; item=group;}
+
+nextZ:WOImageButton{border=0; 
+	filename="NextPage.gif";
+	action = nextZ;
+}
+
+prevZ:WOImageButton{border=0; 
+	filename="PreviousPage.gif";
+	action = prevZ;
+}
+
+showZDimensions:WOConditional{
+	condition = showZDimensions;
+}
+
+zDimensions: WORepetition { list= model.zList; item= zGroup;}
+
+zGrpLabel:WOString{
+	value = zGroup.masterCriteria.label;
+}
