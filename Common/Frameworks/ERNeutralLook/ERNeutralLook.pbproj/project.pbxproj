@@ -136,6 +136,8 @@
 				F689B35302F870440FCF0E72,
 				F61767B2031FE9F10FCF0E72,
 				F63B71D4031FEB010FCF0E72,
+				F5ED7ADA0340E2F201CF0E76,
+				F5ED7AE30340E46B01CF0E76,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,6 +154,7 @@
 				F7C7CB0302EF1E87014AF50A,
 				F689B35502F870510FCF0E72,
 				F61767B0031FE9D10FCF0E72,
+				F5ED7ADC0340E2F201CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,14 +345,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
-		01D74EAB00210AE911CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Interfaces;
-			path = "";
-			refType = 4;
-		};
 //010
 //011
 //012
@@ -484,7 +479,6 @@
 				40B58289FFD5E91B7F000001,
 				40B5828AFFD5E91B7F000001,
 				04B9D382FFD85E7B11CD2B8D,
-				01D74EAB00210AE911CD2B8D,
 				40B5828CFFD5E91B7F000001,
 				40B58293FFD5E91B7F000001,
 				40B58280FFD5E8187F000001,
@@ -651,6 +645,7 @@
 				F7C7CAF902EF1E87014AF50A,
 				F689B35602F870540FCF0E72,
 				F61767B3031FE9F40FCF0E72,
+				F5ED7AD20340E2F201CF0E76,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -872,6 +867,72 @@
 //9D2
 //9D3
 //9D4
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5ED7AD20340E2F201CF0E76 = {
+			children = (
+				F5ED7AD30340E2F201CF0E76,
+				F5ED7AD90340E2F201CF0E76,
+				F5ED7ADD0340E46B01CF0E76,
+			);
+			isa = PBXGroup;
+			name = ERNEUMessagePage;
+			refType = 4;
+		};
+		F5ED7AD30340E2F201CF0E76 = {
+			isa = PBXFileReference;
+			name = ERNEUMessagePage.api;
+			path = Resources/ERNEUMessagePage.api;
+			refType = 4;
+		};
+		F5ED7AD90340E2F201CF0E76 = {
+			isa = PBXFileReference;
+			name = ERNEUMessagePage.java;
+			path = Sources/er/neutral/ERNEUMessagePage.java;
+			refType = 4;
+		};
+		F5ED7ADA0340E2F201CF0E76 = {
+			fileRef = F5ED7AD30340E2F201CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5ED7ADC0340E2F201CF0E76 = {
+			fileRef = F5ED7AD90340E2F201CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5ED7ADD0340E46B01CF0E76 = {
+			children = (
+				F5ED7ADE0340E46B01CF0E76,
+			);
+			isa = PBXVariantGroup;
+			name = ERNEUMessagePage.wo;
+			path = "";
+			refType = 4;
+		};
+		F5ED7ADE0340E46B01CF0E76 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERNEUMessagePage.wo;
+			refType = 4;
+		};
+		F5ED7AE30340E46B01CF0E76 = {
+			fileRef = F5ED7ADD0340E46B01CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
 //F60
 //F61
 //F62

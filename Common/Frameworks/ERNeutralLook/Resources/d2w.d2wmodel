@@ -68,6 +68,15 @@
             class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
                 class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = templateNameForMessagePage; 
+                value = "er.neutral.ERNEUMessagePage"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForErrorPage; 
                 value = "er.neutral.ERNEUErrorPage"; 
             }; 
