@@ -13,6 +13,12 @@ GenericContainer1: WOGenericContainer {
 	elementName = "TABLE";
 }
 
+GenericContainer2: WOGenericContainer {
+	color = "red";
+	elementName = "FONT";
+	omitTags = hasNoErrors;
+}
+
 NotRequired: WOConditional {
     condition=displayRequiredMarker;
     negate=true;
