@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 
+/**
+ * Query component for null or non-null.<br />
+ * 
+ */
+
 public class ERD2WQueryNonNull extends QueryComponent {
 
     public ERD2WQueryNonNull(WOContext context) { super(context); }

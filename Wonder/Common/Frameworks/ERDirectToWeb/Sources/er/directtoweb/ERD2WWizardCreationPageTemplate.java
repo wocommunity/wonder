@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * A wizard inspect/edit template.<br />
+ * 
+ */
+
 public class ERD2WWizardCreationPageTemplate extends ERD2WWizardCreationPage {
 
     public ERD2WWizardCreationPageTemplate(WOContext context) {

@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import java.math.*;
 import er.extensions.ERXConstant;
 
+/**
+ * Used to edit a number as if it where a number of years and a number of months.<br />
+ * 
+ */
+
 public class ERDEditYearsMonths extends ERDCustomEditComponent {
 
     public ERDEditYearsMonths(WOContext context) { super(context); }

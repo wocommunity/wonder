@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
 // FIXME: This can be replaced by D2WCustomEditBoolean
+/**
+ * Edits a boolean with the string Allow/Restrict.  Should use ERD2WCustomEditBoolean instead.<br />
+ * 
+ */
+
 public class ERD2WEditAllowRestrict extends ERD2WEditYesNo {
 
     public ERD2WEditAllowRestrict(WOContext context) { super(context); }    

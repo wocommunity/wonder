@@ -12,6 +12,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
 // Simple class that extends the ObjectSaveDelegate to provide a confirm page before saving.
+/**
+ * Extends ObjectSaverDelegate to provide a confirm page.<br />
+ * 
+ */
+
 public class ERDConfirmObjectDelegate implements NextPageDelegate {
 
     protected String _confirmPageName;

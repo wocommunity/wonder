@@ -17,6 +17,12 @@ import er.extensions.ERXLogger;
 
 // FIXME: This should be re-written as a Dynamic element.
 // the right way to go is probably to use EOSwitchComponent
+/**
+ * Rewrite of D2WSwitchComponent to not cache the D2WContext.  Useful for nesting configurations.<br />
+ * 
+ * @binding shouldResetCache" defaults="YES/NO
+ */
+
 public class ERD2WSwitchComponent extends D2WSwitchComponent  {
 
     /** logging support */

@@ -7,6 +7,11 @@
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Basicly a list page flipped vertical.  Useful for comparing from a left to right fashion.<br />
+ * 
+ */
+
 public class ERD2WListComparePageTemplate extends ERD2WListComparePage {
 
     public ERD2WListComparePageTemplate(WOContext context) {super(context);}

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
+/**
+ * Displays a url, where the object-key pair refer to a url<br />
+ * 
+ */
+
 public class ERD2WDisplayImageWithUrl extends D2WDisplayString {
 
     public ERD2WDisplayImageWithUrl(WOContext context) { super(context); }

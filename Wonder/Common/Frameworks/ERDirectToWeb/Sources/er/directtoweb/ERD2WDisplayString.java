@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.directtoweb.D2WDisplayString;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Full blown dislay string with all the bells and whistles.<br />
+ * 
+ */
+
 public class ERD2WDisplayString extends D2WDisplayString {
 
     public ERD2WDisplayString(WOContext context) {

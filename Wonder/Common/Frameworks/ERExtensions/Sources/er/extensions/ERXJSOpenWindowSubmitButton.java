@@ -10,6 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
 // Will open a new window. 
+/**
+ * Submit button to open a new window with an action.<br />
+ * 
+ */
+
 public class ERXJSOpenWindowSubmitButton extends ERXJSOpenWindowHyperlink {
 
     public ERXJSOpenWindowSubmitButton(WOContext context) {

@@ -28,6 +28,11 @@ package er.extensions;
 
 import com.webobjects.appserver.*;
 
+/**
+ * (Back port from WO 5 WOExtensions)<br />
+ * 
+ */
+
 public class WOCollapsibleComponentContent extends WOComponent {
 
     private boolean _isVisible;

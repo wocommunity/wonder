@@ -11,6 +11,11 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 
+/**
+ * Cleaned up some of the formatting on the original toMany table.<br />
+ * 
+ */
+
 public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
 
     public ERD2WDisplayToManyTable(WOContext context) {

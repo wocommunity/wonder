@@ -10,6 +10,13 @@ import com.webobjects.appserver.*;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXSession;
 
+/**
+ * Little help component useful for debugging.<br />
+ * 
+ * @binding d2wContext
+ * @binding condition" defaults="Boolean
+ */
+
 public class ERDDebuggingHelp extends WOComponent {
 
     public ERDDebuggingHelp(WOContext context) { super(context); }

@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import org.apache.log4j.*;
 import java.util.*;
 
+/**
+ * Configures and manages the log4j logging system. Will also configure the system for rapid turn around, ie when WOCaching is disabled when the conf file changes it will get reloaded.<br />
+ * 
+ */
+
 public class ERXLog4JConfiguration extends WOComponent {
 
     public ERXLog4JConfiguration(WOContext aContext) {

@@ -14,6 +14,13 @@ import com.webobjects.directtoweb.*;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * Button used to apply one modification to a bunch of objects.<br />
+ * 
+ * @binding d2wContext
+ * @binding list
+ */
+
 public class ERDMassModifyButton extends WOComponent {
 
     public ERDMassModifyButton(WOContext context) { super(context); }

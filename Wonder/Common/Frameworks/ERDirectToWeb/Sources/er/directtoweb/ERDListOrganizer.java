@@ -15,6 +15,11 @@ import com.webobjects.directtoweb.*;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.<br />
+ * 
+ */
+
 public class ERDListOrganizer extends ERDCustomEditComponent {
 
     public ERDListOrganizer(WOContext context) { super(context); }

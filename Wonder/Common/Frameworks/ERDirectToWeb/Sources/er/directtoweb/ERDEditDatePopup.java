@@ -16,6 +16,16 @@ import com.webobjects.eocontrol.*;
 //	yearRangeTop - specifies the upper limit for year to be displayed.
 //	yearRangeBottom - specifies the lower limit for year to be displayed
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Edits dates with popup lists.<br />
+ * 
+ * @binding yearRangeBottom
+ * @binding yearRangeTop
+ * @binding extraBindings
+ * @binding object
+ * @binding key
+ */
+
 public class ERDEditDatePopup extends ERDEditDatePopupCommon {
 
     public ERDEditDatePopup(WOContext context) { super(context); }

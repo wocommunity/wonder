@@ -11,6 +11,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
 // MOVEME: ERDConfigurationAssignment
+/**
+ * Generated pageConfigurations that will use the tab inspect tempaltes.<br />
+ * 
+ */
+
 public class ERDTabConfigurationAssignment extends ERDConfigurationAssignment {
 
     /**

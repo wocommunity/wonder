@@ -7,6 +7,22 @@
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * List page for editing all items in the list.<br />
+ * 
+ * @binding backAction
+ * @binding dataSource
+ * @binding defaultSortKey
+ * @binding isEntityInspectable
+ * @binding isEntityReadOnly
+ * @binding isListEmpty
+ * @binding isSelecting
+ * @binding listSize
+ * @binding nextPage
+ * @binding object
+ * @binding showCancel
+ */
+
 public class ERD2WEditableListTemplate extends ERD2WEditableListPage {
 
     public ERD2WEditableListTemplate(WOContext context) {super(context);}

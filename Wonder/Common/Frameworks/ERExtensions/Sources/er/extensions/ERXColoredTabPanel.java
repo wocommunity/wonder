@@ -8,6 +8,18 @@ package er.extensions;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Tab panel with color backgrounds.<br />
+ * 
+ * @binding tabs
+ * @binding selectedTab
+ * @binding tabNameKey
+ * @binding nonSelectedBgColor
+ * @binding bgcolor
+ * @binding submitActionName
+ * @binding textColor
+ */
+
 public class ERXColoredTabPanel extends ERXTabPanel  {
 
     public ERXColoredTabPanel(WOContext context) {

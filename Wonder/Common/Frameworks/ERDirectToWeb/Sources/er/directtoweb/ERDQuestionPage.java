@@ -10,6 +10,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 
+/**
+ * Similiar to the message page, except this one has the choice Yes or No.<br />
+ * 
+ */
+
 public class ERDQuestionPage extends WOComponent implements ConfirmPageInterface {
 
     public ERDQuestionPage(WOContext context) { super(context); }

@@ -7,6 +7,11 @@
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * A basic list but adding the ability to choose an arbitrary number of eos.  Useful for say picking which things you are interested in.<br />
+ * 
+ */
+
 public class ERD2WPickListPageTemplate extends ERD2WPickListPage {
 
      public ERD2WPickListPageTemplate(WOContext context) { super(context); }    

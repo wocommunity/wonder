@@ -6,6 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+/**
+ * Used to identify tab edit pages, not requiring common superclass.<br />
+ * 
+ */
+
 public interface ERDTabEditPageInterface extends ERDEditPageInterface {
 
     public Integer tabNumber();

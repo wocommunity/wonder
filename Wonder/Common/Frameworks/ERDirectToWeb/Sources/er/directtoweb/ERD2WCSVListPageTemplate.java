@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Standard list in CSV format.<br />
+ * 
+ */
+
 public class ERD2WCSVListPageTemplate extends ERD2WListPage {
     
     public ERD2WCSVListPageTemplate(WOContext context) { super(context); }

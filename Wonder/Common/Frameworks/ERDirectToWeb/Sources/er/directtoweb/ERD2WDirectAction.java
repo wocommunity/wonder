@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.Enumeration;
 
+/**
+ * Cool class to automatically create page configurations from URLs.<br />
+ * 
+ */
+
 public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     /** logging support */

@@ -11,6 +11,16 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.<br />
+ * 
+ * @binding list
+ * @binding listComponentName
+ * @binding pickComponentName
+ * @binding object
+ * @binding key
+ */
+
 public class ERDListPicker extends ERDCustomEditComponent {
 
     public ERDListPicker(WOContext context) { super(context); }

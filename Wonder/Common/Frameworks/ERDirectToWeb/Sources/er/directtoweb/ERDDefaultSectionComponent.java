@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
+/**
+ * Displays section name as a string.<br />
+ * 
+ */
+
 public class ERDDefaultSectionComponent extends WOComponent {
 
    public ERDDefaultSectionComponent(WOContext context) {super(context);}

@@ -12,6 +12,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Superclass for all query pages.<br />
+ * 
+ */
+
 public class ERD2WQueryPage extends D2WQueryPage {
 
     public ERD2WQueryPage(WOContext context) { super(context); }

@@ -15,6 +15,11 @@ import er.extensions.ERXLogger;
 import er.extensions.ERXConstant;
 
 // For now this simply 
+/**
+ * Confirming an action template.<br />
+ * 
+ */
+
 public class ERDConfirmMessage extends ERDCustomEditComponent {
 
     public ERDConfirmMessage(WOContext context) { super(context); }

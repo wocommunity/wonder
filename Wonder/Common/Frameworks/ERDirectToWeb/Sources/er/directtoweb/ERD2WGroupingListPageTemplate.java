@@ -10,6 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
+/**
+ * Displays a groups of objects grouped by a key.<br />
+ * 
+ */
+
 public class ERD2WGroupingListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingListPageTemplate(WOContext context) { super(context); }

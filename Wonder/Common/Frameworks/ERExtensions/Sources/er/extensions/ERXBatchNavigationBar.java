@@ -15,6 +15,19 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Better navigation bar<br />
+ * 
+ * @binding d2wContext
+ * @binding displayGroup
+ * @binding width
+ * @binding objectName
+ * @binding border
+ * @binding bgcolor
+ * @binding textColor
+ * @binding sortKeyList
+ */
+
 public class ERXBatchNavigationBar extends WOComponent {
 
     /** logging support */

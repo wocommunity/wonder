@@ -14,6 +14,11 @@ import com.webobjects.eoaccess.*;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * Description forthcoming.<br />
+ * 
+ */
+
 public class ERDEditList extends ERDCustomEditComponent {
 
     public ERDEditList(WOContext context) { super(context); }

@@ -14,6 +14,27 @@ import java.util.*;
 import java.lang.reflect.*;
 
 // ported from WebScript - Corrected nil context problem.
+/**
+ * Works around a webscript bug.<br />
+ * 
+ * @binding list
+ * @binding item
+ * @binding selections
+ * @binding maxColumns
+ * @binding goingVertically" defaults="Boolean
+ * @binding contentCellOtherTagString
+ * @binding sortKey
+ * @binding width
+ * @binding cellAlign
+ * @binding cellVAlign
+ * @binding cellpadding
+ * @binding cellspacing
+ * @binding cellWidth
+ * @binding relationshipName
+ * @binding relationshipOwner
+ * @binding tableOtherTagString
+ */
+
 public class ERXCheckboxMatrix extends WOComponent {
 
     private static final Integer DEFAULT_PADDING = new Integer(0);

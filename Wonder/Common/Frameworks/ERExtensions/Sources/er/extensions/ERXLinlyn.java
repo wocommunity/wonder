@@ -120,6 +120,11 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+/**
+ * Can upload and download files from ftp servers<br />
+ * 
+ */
+
 public class ERXLinlyn {
 
     /** logging support */

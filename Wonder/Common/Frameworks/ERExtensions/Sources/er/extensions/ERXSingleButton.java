@@ -9,6 +9,18 @@ package er.extensions;
 import com.webobjects.appserver.*;
 
 // A Submit button that can be used stand alone.
+/**
+ * A stand alone submit button to be used as an action button.<br />
+ * 
+ * @binding action
+ * @binding value
+ * @binding doNotUseForm" defaults="Boolean
+ * @binding actionClass
+ * @binding directActionName
+ * @binding target
+ * @binding shouldSubmitForm" defaults="Boolean
+ */
+
 public class ERXSingleButton extends WOComponent {
 
     public ERXSingleButton(WOContext aContext) {

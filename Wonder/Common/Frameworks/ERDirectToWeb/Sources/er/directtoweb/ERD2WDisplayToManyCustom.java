@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Allows custom components to be used to display the eos from a toMany.<br />
+ * 
+ */
+
 public class ERD2WDisplayToManyCustom extends ERD2WDisplayToManyTable {
 
      public ERD2WDisplayToManyCustom(WOContext context) { super(context); }

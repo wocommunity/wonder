@@ -10,6 +10,13 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
 
 // Stateless confirm panel
+/**
+ * Stateless implementation of JSConfirmPanel.*<br />
+ * 
+ * @binding hyperlinkMessage
+ * @binding action
+ */
+
 public class ERXJSConfirmPanel extends WOComponent {
 
     public ERXJSConfirmPanel(WOContext aContext) {

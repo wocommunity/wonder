@@ -13,6 +13,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.*;
 
+/**
+ * Superclass of all calendar list pages.<br />
+ * 
+ */
+
 public class ERD2WCalendarPage extends ERD2WListPage {
     
     private final static String dateSortKeyKey="dateSortKey";

@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
+/**
+ * Same as original but used ERToOneRelationship.<br />
+ * 
+ */
+
 public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
     static final ERXLogger log = ERXLogger.getERXLogger(ERD2WQueryToOneRelationship.class);
 

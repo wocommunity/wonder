@@ -13,6 +13,16 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * A better trashcan.  Used the gaurded object interface to determine if the object can be deleted.<br />
+ * 
+ * @binding object
+ * @binding dataSource
+ * @binding d2wContext
+ * @binding trashcanExplanation
+ * @binding noTrashcanExplanation
+ */
+
 public class ERDTrashcan extends ERDCustomEditComponent {
 
     public ERDTrashcan(WOContext context) { super(context); }

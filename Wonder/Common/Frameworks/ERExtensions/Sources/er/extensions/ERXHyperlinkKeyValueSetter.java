@@ -8,6 +8,14 @@ package er.extensions;
 
 import com.webobjects.appserver.*;
 
+/**
+ * Sets a key value when the hyperlink is clicked.<br />
+ * 
+ * @binding value
+ * @binding binding
+ * @binding string
+ */
+
 public class ERXHyperlinkKeyValueSetter extends WOComponent {
 
     public ERXHyperlinkKeyValueSetter(WOContext aContext) {

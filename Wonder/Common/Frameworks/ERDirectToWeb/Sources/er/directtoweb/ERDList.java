@@ -12,6 +12,16 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
+/**
+ * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.<br />
+ * 
+ * @binding object
+ * @binding key
+ * @binding emptyListMessage
+ * @binding listPageConfiguration
+ * @binding list
+ */
+
 public class ERDList extends ERDCustomEditComponent {
 
     /* logging support */

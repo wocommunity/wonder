@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import org.apache.log4j.NDC;
 
+/**
+ * Common superclass for all ERD2W templates.<br />
+ * 
+ */
+
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
 
     /** logging support */

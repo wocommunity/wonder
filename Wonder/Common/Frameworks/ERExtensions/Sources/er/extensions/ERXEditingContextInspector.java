@@ -11,6 +11,12 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Inspects an eo's editing context.*<br />
+ * 
+ * @binding object
+ */
+
 public class ERXEditingContextInspector extends WOComponent {
 
     public ERXEditingContextInspector(WOContext aContext) {

@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import er.extensions.*;
 
+/**
+ * Beautify the propertyKey name in a better way.<br />
+ * 
+ */
+
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */

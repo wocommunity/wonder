@@ -9,6 +9,11 @@ package er.testrunner;
 import junit.framework.*;
 import junit.runner.*;
 
+/**
+ * template listner interface.<br />
+ * 
+ */
+
 public interface ERXTestListener extends TestListener {
 
     // template methods called by BaseTestRunner.  ERTestRunner will forward these to its external listener

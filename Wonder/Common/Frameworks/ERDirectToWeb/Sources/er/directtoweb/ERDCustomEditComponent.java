@@ -15,6 +15,11 @@ import er.extensions.*;
 
 // A VERY USEFUL COMPONENT - has some crusty stuff in it, but look mainly at valueForBinding and hasBinding.
 // 	this guy works in conjunction with D2WCustomComponentWithArgs
+/**
+ * Superclass for most of the custom components.  Has alot of nifty features including resolving bindings against the rule system.<br />
+ * 
+ */
+
 public abstract class ERDCustomEditComponent extends WOComponent {
 
     /** logging support */

@@ -13,6 +13,11 @@ import java.io.PrintStream;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * extensions to hold multiple errors and failures.<br />
+ * 
+ */
+
 public class ERXTestResult extends TestResult {
 
     /** logging support */

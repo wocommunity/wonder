@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Grouping list in CSV format.<br />
+ * 
+ */
+
 public class ERD2WCSVGroupingListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WCSVGroupingListPageTemplate(WOContext context) { super(context); }

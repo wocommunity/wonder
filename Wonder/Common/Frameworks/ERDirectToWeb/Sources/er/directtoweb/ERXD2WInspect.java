@@ -10,6 +10,16 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WInspect;
 
 // Only difference between this component and D2WInspect is that this one uses ERD2WSwitchComponent
+/**
+ * Uses a the ERD2WSwitchComponent so that this component won't cache the d2w context.  Useful for reusing of pages.<br />
+ * 
+ * @binding action
+ * @binding displayKeys
+ * @binding object
+ * @binding pageConfiguration
+ * @binding entityName
+ */
+
 public class ERXD2WInspect extends D2WInspect {
 
     public ERXD2WInspect(WOContext context) { super(context); }

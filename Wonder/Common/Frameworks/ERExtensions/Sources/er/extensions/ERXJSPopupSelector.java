@@ -11,6 +11,16 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Nice guy for performing actions when a popup item is selected.<br />
+ * 
+ * @binding string
+ * @binding list
+ * @binding selectsItem
+ * @binding popupName
+ * @binding doNotAddOneToComputedIndex" defaults="Boolean
+ */
+
 public class ERXJSPopupSelector extends WOComponent {
 
     /** logging support */

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditLargeString;
 
+/**
+ * Works around an issue in WOText where a null value is transformed into "". This is not what WOTextField does.<br />
+ * 
+ */
+
 public class ERD2WEditLargeString extends D2WEditLargeString {
 
     public ERD2WEditLargeString(WOContext context) { super(context); }

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayToManyTable;
 
+/**
+ * Improved toMany display compononent, uses ERListDisplay.<br />
+ * 
+ */
+
 public class ERD2WDisplayToManyList extends D2WDisplayToManyTable {
 
     public ERD2WDisplayToManyList(WOContext context) { super(context); }

@@ -12,6 +12,17 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 
+/**
+ * Handles the switching of the current task to print, which uses the print templates.<br />
+ * 
+ * @binding d2wContext
+ * @binding dataSource
+ * @binding displayGroup
+ * @binding task
+ * @binding useSubmitButton" defaults="Boolean
+ * @binding doNotUseForm" defaults="Boolean
+ */
+
 public class ERDPrinterButton extends ERDCustomEditComponent {
 
     public ERDPrinterButton(WOContext context) { super(context); }

@@ -11,6 +11,11 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
 // FIXME: Should be renamed ERDDefaultMessageAssignment.
+/**
+ * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.<br />
+ * 
+ */
+
 public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
     
     /** holds the array of keys this assignment depends upon */

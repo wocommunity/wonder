@@ -19,6 +19,11 @@ import com.webobjects.foundation.*;
  **  - Complete terms: <http://www.amug.org/~glguerin/sw/index.html>
  */
 
+/**
+ * Useful for extracting files from binhexed files, ie when a Mac user uploads a file.<br />
+ * 
+ */
+
 public class ERXMacBinarySwissArmyKnife {
 
     /////////////////////////////////////////  log4j category  //////////////////////////////////////

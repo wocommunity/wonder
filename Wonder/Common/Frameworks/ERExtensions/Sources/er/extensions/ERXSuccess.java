@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * "Success" string<br />
+ * 
+ */
+
 public class ERXSuccess extends WOComponent {
 
     public ERXSuccess(WOContext context) {

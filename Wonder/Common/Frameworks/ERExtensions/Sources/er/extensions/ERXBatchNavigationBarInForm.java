@@ -10,6 +10,19 @@ package er.extensions;
 // Removes forms from WOComponent
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Better navigation bar without a form.<br />
+ * 
+ * @binding d2wContext
+ * @binding objectName
+ * @binding width
+ * @binding displayGroup
+ * @binding textColor
+ * @binding bgcolor
+ * @binding sortKeyList
+ * @binding border
+ */
+
 public class ERXBatchNavigationBarInForm extends ERXBatchNavigationBar {
     
     public ERXBatchNavigationBarInForm(WOContext context) {

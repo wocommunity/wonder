@@ -15,6 +15,11 @@ import java.util.*;
 // Optimized toMany qualifier, much, much better SQL than the Apple provided qualifier.
 
 // FIXME: Should rename ERXToManyQualifier
+/**
+ * Kickass qualifer ;) Really nice when you want to find all the eos that have say five of the ten eos in their toMany relationship.<br />
+ * 
+ */
+
 public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
 
     /** logging support */
