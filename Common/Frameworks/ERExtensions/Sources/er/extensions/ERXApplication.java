@@ -563,7 +563,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             } else {
                 // We first log just in case the log4j call puts us in a bad state.
                 NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.");
-                log.error("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.");
+                log.error("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.", throwable);
             }
             if(shouldQuit)
                 Runtime.getRuntime().exit(1);
@@ -646,6 +646,33 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         if (requestHandlingLog.isDebugEnabled()) {
             requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
         }
+
+        	if (responseCompressionEnabled()) {
+	        String ct = response.headerForKey("content-type");
+	
+	        if ((ct != null) && (ct.indexOf("text/") != -1)) {
+	            String accept = request.headerForKey("accept-encoding");
+	
+	            if ((accept != null) && (accept.toLowerCase().indexOf("gzip") != -1)) {
+	                NSData ori = response.content();
+	                byte[] input = ori.bytes();
+	
+	                long start = System.currentTimeMillis();
+	
+	                byte[] compressedData = ERXCompressionUtilities.gzipByteArray(input);
+	                if (compressedData == null) {
+	                    //something went wrong
+	                } else {
+	                    response.setContent(new NSData(compressedData));
+	
+	                    response.setHeader("" + compressedData.length, "content-length");
+	
+	                    response.setHeader("gzip", "content-encoding");
+	                    log.debug("before: "+input.length+", after "+compressedData.length+", time: "+(System.currentTimeMillis() - start));
+	                }
+	            }
+	        }
+        	}
         return response;
     }
     
@@ -812,6 +839,14 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     
     public ERXFormatterFactory formatterFactory() {
         return formatterProvider;
+    }
+    
+    public short _responseCompressionEnabled = -1;
+    public boolean responseCompressionEnabled() {
+        if (_responseCompressionEnabled == -1) {
+            _responseCompressionEnabled = "true".equals(System.getProperty("er.extensions.ERXApplication.responseDownloadEnabled")) ? (short)1 : (short)0;
+        }
+        return _responseCompressionEnabled == 1;
     }
 }
 
