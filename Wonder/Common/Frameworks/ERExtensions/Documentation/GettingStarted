@@ -1,9 +1,26 @@
+* PBX Setup
+
+- Create a directory "Roots" in your home directory.
+  (This is only a suggestion for the location, it could be another directory)
+
+- In PBX, go to Preferences>Building
+  Check "Seperate location for build products" and enter "~/Roots"
+  Check "Put intermediate build files with build products"
+
+- In *your own* applications and frameworks, select the top node of the project tree
+   - Choose Project>Show Info menu
+   - Check "Place build product at default location"
+   - Check "Place intermediate files with build products"
+
+- Do not change these settings! 
+
+- For deployment, there will be a script that fixes the paths in your start script. 
+  For now, you should copy the relevant directories manually and edit your startup script to reflect the location of the copied frameworks.
 
 
 * Log4j initialization
 
 To get Log4j going, you will need something akin to the following in your WebObjects.properties (in your home directory under 5.1)
-
 
 log4j.rootCategory=DEBUG, A1
 log4j.appender.A1=org.apache.log4j.ConsoleAppender
@@ -18,9 +35,8 @@ using ERCrypto's methods will require a little bit of setup with JDK 1.3
 
 this class requires that you have JCE (javax.crypto and the sun provider) installed
 JCE is standard in the 1.4 JDK
-for 1.3 you can find it at http://java.sun.com/products/jce/index-121.html
-All,
-you will have to put the 4 JCE jars in your extensions directory
+For 1.3 you can find it at http://java.sun.com/products/jce/index-121.html
+All, you will have to put the 4 JCE jars in your extensions directory
 (/Library/Java/Home/lib/ext on X) for ERExtensionsJava to build..
 And edit /Library/Java/Home/lib/security/java.security, add the following line
 security.provider.4=com.sun.crypto.provider.SunJCE
