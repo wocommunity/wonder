@@ -143,9 +143,13 @@
     <!-- ==================================================== -->
     <!-- Create Wonder Destribution.                          -->
     <!-- ==================================================== -->
-    <target name="dist" depends="init, prepare, common, subprojects, doc">
+    <target name="dist" depends="init, prepare">
+        <property name="wonder.development" value="false" />
+        <antcall target="common" />
+        <antcall target="subprojects" />
+        <antcall target="doc" />
         <ant antfile="Build/build/common-dist.xml"/>
         <ant antfile="Build/build/subprojects-dist.xml"/>
     </target>
-
+    
 </project>
