@@ -2,6 +2,7 @@ package er.grouping;
 
 import java.lang.*;
 import java.util.*;
+import java.text.*;
 import com.webobjects.foundation.*;
 import er.extensions.*;
 
@@ -491,7 +492,7 @@ public class DRSubMasterCriteria extends Object  {
 
         if (_useTimeFormat) {
             NSTimestamp ts = DRValueConverter.converter().timestampForValue(aVal);
-            NSTimestampFormatter formatter = DRCriteria.formatterForFormat(_format);
+            Format formatter = DRCriteria.formatterForFormat(_format);
             try {
                 s = formatter.format(ts);
             } catch(Exception ex) {
