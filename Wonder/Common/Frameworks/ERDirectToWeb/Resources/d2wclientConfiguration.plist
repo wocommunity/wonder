@@ -530,7 +530,7 @@
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
         }; 
         ERD2WInspect = {
-            editors = (embeddedPageConfiguration); 
+            editors = (inspectPageConfiguration); 
             inspectionInformation = "Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName."; 
             isCustomComponent = yes; 
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
