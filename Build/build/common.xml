@@ -60,10 +60,6 @@
     </target>
 
     <target name="framework" depends="properties,compile" description="Default compile target">
-        <mkdir dir="${build.temp.dir}" />
-        <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
-            <fileset dir="${project.dir}/WebServerResources" />
-        </copy>
 
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
@@ -89,7 +85,7 @@
                 <include name="**/*.sh" />
                 <include name="**/mime.types" /> <!-- ERJavaMail specific --> 
             </resources>
-            <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
+            <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.js" />
@@ -99,18 +95,13 @@
         <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
             <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
         </exec>
-        <delete dir="${build.temp.dir}" />
-
+ 
         <echo message="-------------------------------------" />
         <echo message="${project.name}.framework" />
         <echo message="-------------------------------------" />
     </target>
 
     <target name="application" depends="properties, compile" description="Default compile target">
-        <mkdir dir="${build.temp.dir}" />
-        <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
-            <fileset dir="${project.dir}/WebServerResources" />
-        </copy>
 
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
@@ -131,7 +122,7 @@
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
-            <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
+            <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.js" />
@@ -165,7 +156,6 @@
         <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
             <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
         </exec>
-        <delete dir="${build.temp.dir}" />
 
         <echo message="-------------------------------------" />
         <echo message="${project.name}.woa" />
@@ -173,11 +163,6 @@
     </target>
 
     <target name="stepwiseApplication" depends="properties, compile" description="Default compile target">
-        <mkdir dir="${build.temp.dir}" />
-        <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
-            <fileset dir="${project.dir}/WebServerResources" />
-        </copy>
-
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
         </taskdef>
@@ -197,7 +182,7 @@
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
-            <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
+            <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.js" />
@@ -216,8 +201,6 @@
                 <include name="Library/Frameworks/JavaEOProject.framework" />
             </frameworks>
         </woapplication>
-
-        <delete dir="${build.temp.dir}" />
 
     <echo message="-------------------------------------" />
     <echo message="${project.name}.woa" />
