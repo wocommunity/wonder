@@ -160,7 +160,7 @@ public class ERXConfigurationManager {
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
                 String url= stringForKey(aModelName + ".URL");
-                url = url ==null ? stringForKey("urlGLOBAL") : url;
+                url = url ==null ? stringForKey("dbConnectURLGLOBAL") : url;
                 if (url!=null) {
                     NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
                     newCD.setObjectForKey(url, "URL");
