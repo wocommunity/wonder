@@ -708,6 +708,11 @@ public class ERXUtilities {
         return parts.componentsJoinedByString("");
     }
 
+    public static String escapeSpace(String aString){
+        NSArray parts = NSArray.componentsSeparatedByString(aString," ");
+        return parts.componentsJoinedByString("");
+    }
+
     /**
      * Simply utility method to create a concreate
      * set object from an array
