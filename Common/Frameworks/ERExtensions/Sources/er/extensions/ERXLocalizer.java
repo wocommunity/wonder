@@ -112,12 +112,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizerForLanguage((String)languages.objectAtIndex(0));
     }
     
+    private static NSArray _languagesWithoutPluralForm = new NSArray(new Object [] {"Japanese"});
     public static ERXLocalizer localizerForLanguage(String language) {
         ERXLocalizer l = null;
         l = (ERXLocalizer)localizers.objectForKey(language);
         if(l == null) {
             if(availableLanguages().containsObject(language)) {
-                l = new ERXLocalizer(language);
+                if (_languagesWithoutPluralForm.containsObject(language)) 
+                    l = new ERXNonPluralFormLocalizer(language);
+                else 
+                    l = new ERXLocalizer(language);
             } else {
                 l = (ERXLocalizer)localizers.objectForKey(defaultLanguage());
             }
