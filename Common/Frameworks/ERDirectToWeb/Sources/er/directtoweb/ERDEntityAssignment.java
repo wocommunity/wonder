@@ -11,11 +11,9 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
-import java.util.Enumeration;
 
 /**
- * A little smarter than the average assignment.  This entity assignment will take the current
- * pageConfiguration (or whatever the key in valu is) and try to find an entityName that matches.
+ * @deprecated use a ERDKeyValueAssignment to a ERDDefaultModelAssigmentwith key entityForPageConfiguration instead
  */
 public class ERDEntityAssignment extends Assignment implements ERDComputingAssignmentInterface {
 
@@ -23,7 +21,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new Object[] {"pageConfiguration", "controllerName"});
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDefaultEntityAssignment");
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDEntityAssignment.class, "assignments,rules");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -35,6 +33,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
      */
     // ENHANCEME: Could maintain a weak reference of all the values().
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDEntityAssignment.class, ERDDefaultModelAssignment.class);
         return new ERDEntityAssignment(eokeyvalueunarchiver);
     }
     
@@ -61,82 +60,32 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
      */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
-    // a fake entity that can be used for tasks such as error/confirm..
-    private EOEntity _dummyEntity;
-    public EOEntity dummyEntity() {
-        if (_dummyEntity==null) {
-            _dummyEntity=new EOEntity();
-            _dummyEntity.setName("*all*");
-        }
-        return _dummyEntity;
-    }
-
-    protected boolean isTaskWithoutEntity(String task) {
-        return ("queryAll".equals(task) || "confirm".equals(task) || "error".equals(task));
-    }
-    
-    protected Object entityForKey(D2WContext c, String key) {
-        Object result = null;
-        if(key != null) {
-            result = entityForName((String)c.valueForKey(key));
-        }
-        if(result == null && isTaskWithoutEntity(c.task())) {
-            result = dummyEntity();
-        }
-        return result;
-    }
-    
-    protected Object entityForName(String name) {
-        Object result = null;
-        if(name != null) {
-            String lowerCaseName = name.toLowerCase();
-            if (entityNames == null) {
-                entityNames = (NSArray)((NSArray)ERXUtilities.entitiesForModelGroup(EOModelGroup.defaultGroup()).valueForKey("name")).valueForKey("toLowerCase");
-            }
-            NSMutableArray possibleEntities = new NSMutableArray();
-            for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
-                String lowercaseEntityName = (String)e.nextElement();
-                if (lowerCaseName.indexOf(lowercaseEntityName) != -1)
-                    possibleEntities.addObject(lowercaseEntityName);
-            }
-            if (possibleEntities.count() == 1) {
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
-            } else if (possibleEntities.count() > 1) {
-                ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
-                if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
-                    log.warn("Found multiple entities of the same length for configuration: " + name
-                             + " possible entities: " + possibleEntities);
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
-            }
-            if (log.isDebugEnabled())
-                log.debug("Found possible entities: " + possibleEntities + " for configuration: " + name
-                          + " result: " + result);
-        }
-        return result;
-    }
-
-    public Object entityForControllerName(D2WContext c) {
-        return entityForKey(c, "controllerName");
-    }
-
-    public Object entityForPageConfiguration(D2WContext c) {
-        return entityForKey(c, "pageConfiguration");
-    }
-    
-    protected NSArray entityNames = null;
     public Object fire(D2WContext c) {
         Object result = null;
+        Object value = value();
+        EOEditingContext ec = (EOEditingContext)c.valueForKey("session.defaultEditingContext");
+
+        log.info("fire with value: " + value);
+        if(log.isDebugEnabled()) {
+            log.debug("fire with value: " + value);
+        }
         // is it an entity name?
-        if (value() != null && value() instanceof String && ((String)value()).length() > 0) {
-            result = ERXUtilities.caseInsensitiveEntityNamed(((String)value()).toLowerCase());
+        if(value instanceof String) {
+            result = ERXEOAccessUtilities.entityMatchingString(ec, (String)value);
         }
-        // maybe it is a key? get the entity name from there.
-        if(result == null && value() != null && value() instanceof String) {
-            result = entityForName((String)value());
+
+        // probably a keypath?
+        if((value instanceof String) && ((String)value).length() > 0) {
+            result = ERXEOAccessUtilities.entityMatchingString(ec, (String)c.valueForKey((String)value));
         }
-        // try the pageConfiguration, if that does not match, give up
+
+        // try the controllerName, then the pageConfiguration, if that does not match, give up
         if(result == null) {
-            result = entityForKey(c, "pageConfiguration");
+            result = c.valueForKey("entityForControllerName");
+        }
+        
+        if(result == null) {
+            result = c.valueForKey("entityForPageConfiguration");
         }
         return result;
     }
