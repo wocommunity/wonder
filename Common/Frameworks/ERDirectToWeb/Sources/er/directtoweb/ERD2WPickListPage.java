@@ -15,13 +15,13 @@ import er.extensions.*;
 import java.util.*;
 
 // FIXME: Need a formal protocol for cancel vs. selection.
-public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterface {
+public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterface, ERDPickPageInterface {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPickListPage.class);
 
     /** holds the selected objects */
-    public NSMutableArray selectedObjects = new NSMutableArray();
+    protected NSMutableArray selectedObjects = new NSMutableArray();
     
     /**
      * IE sometimes won't submit the form if it only has checkboxes, we
@@ -54,6 +54,24 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
             selectedObjects.removeObject(object());
     }
 
+    //public WOComponent cancelPage() 
+    //public void setCancelPage(WOComponent cp);
+
+    public NSArray selectedObjects() {
+        return selectedObjects;
+    }
+    public void setSelectedObjects(NSArray selectedObjects) {
+        this.selectedObjects = selectedObjects.mutableClone();
+    }
+
+    // FIXME: Not using cancel page at the moment. Only matters if not using a branch delegate.
+    private WOComponent _cancelPage;
+    public WOComponent cancelPage() { return _cancelPage; }
+    public void setCancelPage(WOComponent cp) { _cancelPage = cp; }    
+    
+    // FIXME: Not sure if this makes sense to 
+    public void setChoices(NSArray choices) {}
+    
     public WOComponent selectAll() {
         selectedObjects.removeAllObjects();
         NSArray list=displayGroup().qualifier()==null ? displayGroup().allObjects() :
