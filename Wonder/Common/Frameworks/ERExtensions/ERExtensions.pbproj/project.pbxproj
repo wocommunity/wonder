@@ -1777,6 +1777,8 @@
 		};
 		F57EA68701FF59BF019E57DA = {
 			children = (
+				F6F4D1AC0251EB4D01AD0D07,
+				F6F4D1AD0251EB4D01AD0D07,
 				F50E5AFA020A03D201A80106,
 				F57EA68B01FF59BF019E57DA,
 				F57EA6AF01FF59BF019E57DA,
@@ -1803,6 +1805,7 @@
 		};
 		F57EA6C901FF59BF019E57DA = {
 			children = (
+				F6280FA1024F8F8B01AD0D07,
 				F645C8C4024789B301AD0D07,
 				F645C8C5024789B301AD0D07,
 				F645C8C6024789B301AD0D07,
@@ -2405,6 +2408,9 @@
 				F645C8D302478A2901AD0D07,
 				F645C8D402478A2901AD0D07,
 				F645C8D7024791E801AD0D07,
+				F6280FA2024F8F8B01AD0D07,
+				F6F4D1AE0251EB4D01AD0D07,
+				F6F4D1AF0251EB4D01AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -2580,6 +2586,7 @@
 				F57890BF0221E1F901A801D4,
 				F645C8CF02478A0901AD0D07,
 				F645C8D502478A2901AD0D07,
+				F6F4D1AB0251D9F501AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -4267,6 +4274,17 @@
 //F62
 //F63
 //F64
+		F6280FA1024F8F8B01AD0D07 = {
+			isa = PBXFileReference;
+			path = calendar.gif;
+			refType = 4;
+		};
+		F6280FA2024F8F8B01AD0D07 = {
+			fileRef = F6280FA1024F8F8B01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F645C8720247899001AD0D07 = {
 			children = (
 				F57EA64001FF59BF019E57DA,
@@ -5028,6 +5046,7 @@
 		};
 		F645C8B70247899001AD0D07 = {
 			children = (
+				F6F4D1AA0251D9F501AD0D07,
 				F57EA5C701FF59BF019E57DA,
 				6503BD8E02076D1300A801E6,
 				F57EA61301FF59BF019E57DA,
@@ -5236,6 +5255,39 @@
 		};
 		F645C8D7024791E801AD0D07 = {
 			fileRef = F645C8C4024789B301AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6F4D1AA0251D9F501AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXCompilerProxy.java;
+			refType = 4;
+		};
+		F6F4D1AB0251D9F501AD0D07 = {
+			fileRef = F6F4D1AA0251D9F501AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6F4D1AC0251EB4D01AD0D07 = {
+			isa = PBXExecutableFileReference;
+			path = InstallCompilerProxySupport.sh;
+			refType = 4;
+		};
+		F6F4D1AD0251EB4D01AD0D07 = {
+			isa = PBXFileReference;
+			path = CompilerProxy.html;
+			refType = 4;
+		};
+		F6F4D1AE0251EB4D01AD0D07 = {
+			fileRef = F6F4D1AC0251EB4D01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6F4D1AF0251EB4D01AD0D07 = {
+			fileRef = F6F4D1AD0251EB4D01AD0D07;
 			isa = PBXBuildFile;
 			settings = {
 			};

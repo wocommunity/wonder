@@ -8,15 +8,15 @@
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{1178, 906}";
+				ContentSize = "{1067, 648}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {1178, 883}}";
+					Frame = "{{0, 23}, {1067, 625}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{372, 0}, {806, 883}}";
+						Frame = "{{372, 0}, {695, 625}}";
 						Split0 = {
-							Frame = "{{0, 302}, {806, 581}}";
+							Frame = "{{0, 304}, {695, 321}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -52,35 +52,35 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {808, 0}}";
-							BuildTranscriptFrame = "{{0, 9}, {808, 271}}";
-							Frame = "{{0, 0}, {806, 278}}";
+							BuildMessageFrame = "{{0, 0}, {697, 0}}";
+							BuildTranscriptFrame = "{{0, 9}, {697, 273}}";
+							Frame = "{{0, 0}, {695, 280}}";
 						};
 						Tab3 = {
-							Frame = "{{0, 0}, {806, 295}}";
+							Frame = "{{0, 0}, {695, 295}}";
 						};
 						TabCount = 4;
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {348, 883}}";
+						Frame = "{{0, 0}, {348, 625}}";
 					};
 					Tab1 = {
-						ClassesFrame = "{{0, 0}, {202, 56}}";
-						Frame = "{{0, 0}, {200, 100}}";
-						MembersFrame = "{{0, 65}, {202, 35}}";
-						OptionsSetName = "Hierarchy, all classes";
+						ClassesFrame = "{{0, 0}, {282, 379}}";
+						Frame = "{{0, 0}, {280, 625}}";
+						MembersFrame = "{{0, 388}, {282, 237}}";
+						OptionsSetName = "Hierarchy, project classes";
 					};
 					Tab2 = {
 						Frame = "{{0, 0}, {200, 604}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 883}}";
+						Frame = "{{0, 0}, {200, 625}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 420}}";
+							Frame = "{{0, 0}, {200, 296}}";
 						};
 						Split1 = {
-							Frame = "{{0, 429}, {200, 454}}";
+							Frame = "{{0, 305}, {200, 320}}";
 						};
 						SplitCount = 2;
 					};
