@@ -6,68 +6,100 @@
  */
 package com.webobjects.directtoweb;
 
-import sun.misc.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
 
 
 /**
- * @author david
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ * @author david caching
+ * @author ak factory, thread safety
  */
 public class ERD2WContext extends D2WContext {
 
-    public static NSMutableDictionary customAttributes = new NSMutableDictionary();
-    public static NSMutableDictionary customNullAttributes = new NSMutableDictionary();
+    private static Map customAttributes = new HashMap();
+    private static final Object NOT_FOUND = new Object();
+    
+    static {
+        if(WOApplication.application().isConcurrentRequestHandlingEnabled()) {
+            customAttributes = Collections.synchronizedMap(customAttributes);
+        }
+    }
     
     /**
-     * 
+     * Factory to create D2WContext's. You can provide your own subclass and
+     * set it via {@link #setFactory(Factory)}. The static methods newContext(...)
+     * should be used throughout ERD2W.
+     * @author ak
      */
+    public static class Factory {
+        public D2WContext newContext() {
+            return new ERD2WContext();
+        }
+        public D2WContext newContext(WOSession session) {
+            return new ERD2WContext(session);
+        }
+        public D2WContext newContext(D2WContext context) {
+            return new ERD2WContext(context);
+        }
+    }
+    
+    private static Factory _factory = new Factory();
+    
+    public static D2WContext newContext() {
+        return _factory.newContext();
+    }
+    public static D2WContext newContext(WOSession session) {
+        return _factory.newContext(session);
+    }
+    public static D2WContext newContext(D2WContext context) {
+        return _factory.newContext(context);
+    }
+   
+    public static void setFactory(Factory factory) {
+        _factory = factory;
+    }
+    
     public ERD2WContext() {
         super();
     }
 
-    /**
-     * @param arg0
-     */
-    public ERD2WContext(WOSession arg0) {
-        super(arg0);
+    public ERD2WContext(WOSession session) {
+        super(session);
+    }
+
+    public ERD2WContext(D2WContext session) {
+        super(session);
     }
 
     /**
-     * @param arg0
+     * Overridden so that custom attributes are cached as a performance
+     * optimization.
      */
-    public ERD2WContext(D2WContext arg0) {
-        super(arg0);
-    }
-
     EOAttribute customAttribute(String s, EOEntity eoentity) {
-        Perf p = Perf.getPerf();
-        double freq = p.highResFrequency();
-        double s2 = p.highResCounter();
         String s1 = eoentity.name() + "." + s;
-        EOAttribute eoattribute = (EOAttribute) customAttributes.objectForKey(s1);
-        if (eoattribute == null && customNullAttributes.objectForKey(s1) == null) {
+        Object o = customAttributes.get(s1);
+        if(o == NOT_FOUND) {
+            return null;
+        } 
+        EOAttribute eoattribute = (EOAttribute)o;
+        if (eoattribute == null) {
             Class class1 = D2WUtils.dataTypeForCustomKeyAndEntity(s, eoentity);
             if (class1 != null) {
                 eoattribute = new EOAttribute();
                 eoattribute.setName(s);
                 eoattribute.setClassName(class1.getName());
-                customAttributes.setObjectForKey(eoattribute, s1);
+                customAttributes.put(s1, eoattribute);
             } else {
                 // this should be cached, too
                 // can save up to 100 millis and more for complex pages
-                customNullAttributes.setObjectForKey(s1, s1);
+                customAttributes.put(s1, NOT_FOUND);
             }
         }
-        double e = p.highResCounter();
-        System.out.println(""+((e - s2)*1000.0/freq));
         return eoattribute;
     }
-
-    
 }

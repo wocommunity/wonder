@@ -40,7 +40,7 @@ public class ERD2WFactory extends D2W {
 
     public D2WContext privateContext(WOSession s) {
         if (_privateContext == null) {
-            _privateContext = new ERD2WContext(s);
+            _privateContext = ERD2WContext.newContext(s);
         }
         _privateContext.takeValueForKey(s, "session");
         return _privateContext;
@@ -60,7 +60,7 @@ public class ERD2WFactory extends D2W {
     }
 
     public WOComponent defaultPage(WOSession wosession) {
-        D2WContext d2wcontext = new ERD2WContext(wosession);
+        D2WContext d2wcontext = ERD2WContext.newContext(wosession);
         return pageWithContextTaskEntity(d2wcontext, d2wcontext.startupTask(), d2wcontext.startupEntityName(), wosession.context());
     }
 
@@ -96,7 +96,7 @@ public class ERD2WFactory extends D2W {
 
     public WOComponent pageForConfigurationNamed(String name, WOSession s) {
         myCheckRules();
-        D2WContext d2wcontext = new ERD2WContext(s.context().session());
+        D2WContext d2wcontext = ERD2WContext.newContext(s.context().session());
         d2wcontext.setDynamicPage(name);
         if (d2wcontext.task() == null || d2wcontext.entity() == null) {
             throw new IllegalStateException("Couldn't find the dynamic page named " + s + " in your DirectToWeb model.");
@@ -147,7 +147,7 @@ public class ERD2WFactory extends D2W {
 
     public WOComponent pageForTaskAndEntityNamed(String task, String entityName, WOSession session) {
         myCheckRules();
-        D2WContext newContext = new ERD2WContext(session);
+        D2WContext newContext = ERD2WContext.newContext(session);
         newContext.setTask(task);
         EOEntity newEntity = _entityNamed(entityName, session);
         if (newEntity != null) newContext.setEntity(newEntity);
@@ -163,7 +163,7 @@ public class ERD2WFactory extends D2W {
 
     public WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
         myCheckRules();
-        D2WContext newContext = new ERD2WContext(session);
+        D2WContext newContext = ERD2WContext.newContext(session);
         String newTask = context.task().equals("edit") ? "inspect" : context.task();
         newContext.takeValueForKey(newTask, "task");
         // not using subTask directly here because the cache mechanism relies on
@@ -183,7 +183,7 @@ public class ERD2WFactory extends D2W {
 
     public WOComponent csvExportPageForD2WContext(D2WContext context, WOSession session) {
         myCheckRules();
-        D2WContext newContext = new ERD2WContext(session);
+        D2WContext newContext = ERD2WContext.newContext(session);
         newContext.takeValueForKey(context.task(), "task");
         // not using subTask directly here because the cache mechanism relies on
         // being able to compute wether this key
@@ -201,7 +201,7 @@ public class ERD2WFactory extends D2W {
 
     public WOComponent pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session) {
         myCheckRules();
-        D2WContext newContext = new ERD2WContext(session);
+        D2WContext newContext = ERD2WContext.newContext(session);
         newContext.setTask(task);
         newContext.setEntity(_entityNamed(entityName, session));
         newContext.takeValueForKey(subtask, "subTask");

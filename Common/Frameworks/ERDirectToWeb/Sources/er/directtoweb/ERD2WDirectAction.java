@@ -224,7 +224,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         if(newPage instanceof D2WPage) {
             context = ((D2WPage)newPage).d2wContext();
         } else {
-            context = new ERD2WContext(session());
+            context = ERD2WContext.newContext(session());
             context.setDynamicPage(anActionName);
         }
         EOEntity entity = (EOEntity)context.entity();

@@ -112,7 +112,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     }
 
     public static D2WContext makeSubContextForTaskAndEntity(String s, EOEntity eoentity, WOSession wosession) {
-        D2WContext d2wcontext = new ERD2WContext(wosession);
+        D2WContext d2wcontext = ERD2WContext.newContext(wosession);
         d2wcontext.setTask(s);
         d2wcontext.setEntity(eoentity);
         d2wcontext.takeValueForKey(D2WModel.One, "frame");
@@ -120,7 +120,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     }
 
     public static D2WContext makeSubContextForDynamicPageNamed(String s, WOSession wosession) {
-        D2WContext d2wcontext = new ERD2WContext(wosession);
+        D2WContext d2wcontext = ERD2WContext.newContext(wosession);
         d2wcontext.setDynamicPage(s);
         d2wcontext.takeValueForKey(D2WModel.One, "frame");
         return d2wcontext;
