@@ -317,14 +317,17 @@ public class ERXStringUtilities {
      * Calculates an Integer for a given string. The
      * only advantage that this method has is to not
      * throw a number format exception if the string
-     * is not correctly formatted.
+     * is not correctly formatted.  This method makes
+     * use of the ERXConstant.integerForString caching
+     * logic.
      * @param s string to caclulate an Integer from
      * @return parsed Integer from the string or null
      *		if the string is not correctly formed.
+     * @see ERXConstant#integerForString(String)
      */
     public static Integer integerWithString(String s) {
         try {
-            return new Integer(Integer.parseInt(s));
+            return ERXConstant.integerForString(s);
         } catch (Exception e) {
         }
         return null;
