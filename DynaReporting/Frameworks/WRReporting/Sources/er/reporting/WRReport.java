@@ -20,13 +20,13 @@ public class WRReport extends WOComponent  {
 
     // iterators...
     public DRGroup aGrp, hGroup, vGroup, zGroup;
-    protected String areportStyle;
-    protected int currentIndex, currentIndexV;
-    protected int currentLevelV, currentLevel;
-    protected int vheadingCount;
+    public String areportStyle;
+    public int currentIndex, currentIndexV;
+    public int currentLevelV, currentLevel;
+    public int vheadingCount;
     public int depth;
-    protected String dispType;
-    protected DRAttribute attrib;
+    public String dispType;
+    public DRAttribute attrib;
 
     protected DRCriteria _topCriteriaV, _topCriteria;
     protected int _vheadingIndex;
@@ -40,16 +40,17 @@ public class WRReport extends WOComponent  {
     protected String _selectedRecordGroupDisplayType;
     protected String _recordGroupTotalToShow;
     protected String _recordGroupTotalFormat;
-    protected String _showRecordGroupAsTable;
-    protected String _showRecordGroupHeadings;
-    protected String _showPresentationControls;
-    protected String _showEditing;
+    protected Boolean _showRecordGroupAsTable;
+    protected Boolean _showRecordGroupHeadings;
+    protected Boolean _showPresentationControls;
+    protected Boolean _showEditing;
+    protected String _componentName;
 
-    protected String _showNavigation;
+    protected Boolean _showNavigation;
     protected NSArray _colorDict;
     //String _baseColor, _maxColor;
     //NSMutableDictionary _currCritDictCache;
-    protected String _showCustomReportStyle;
+    protected Boolean _showCustomReportStyle;
     boolean _initializedDimensionArrayFromBindings;
 
     public WRReport(WOContext c) {
@@ -67,14 +68,18 @@ public class WRReport extends WOComponent  {
         Class arrClass [] = {NSNotification.class};
         NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("rebuildModel", arrClass), "DRReportModelRebuild", null);
     }
-    
+
+    public Boolean booleanValueForBinding(String name) {
+        boolean flag = ERXValueUtilities.booleanValue(valueForBinding(name));
+        return flag ? Boolean.TRUE : Boolean.FALSE;
+    }
+
     public NSArray recordGroupDisplayTypes(){
         return _recordGroupDisplayTypes;
     }
     public NSArray reportStyles(){
         return _reportStyles;
     }
-
 
     public boolean synchronizesVariablesWithBindings() {
         return false;
@@ -84,6 +89,7 @@ public class WRReport extends WOComponent  {
         _vheadingIndex = 0;
         _indexDict.removeAllObjects();
         _colorDict = null;
+        _showPresentationControls = null;
         //[_currentZCriteria removeAllObjects];
         if(!_initializedDimensionArrayFromBindings) {
             initializeDimensionArrayFromBindings("H");
@@ -111,16 +117,15 @@ public class WRReport extends WOComponent  {
 
     public boolean showPresentationControls() {
         if (_showPresentationControls == null) {
-            Object v = (Object)this.valueForBinding("showPresentationControls");
-            if (ERXValueUtilities.booleanValue(v)) {
-                _showPresentationControls = "true";
-            }else {
-                _showPresentationControls = "false";
-            }
+            _showPresentationControls = booleanValueForBinding("showPresentationControls");
         }
-        return _showPresentationControls.equals("true");
+        return _showPresentationControls.booleanValue();
     }
-
+    
+    public void setShowPresentationControls(boolean v) {
+        _showPresentationControls = v ? Boolean.TRUE : Boolean.FALSE;
+    }
+    
 
     public String selectedRecordGroupDisplayType() {
         if (_selectedRecordGroupDisplayType == null) {
@@ -151,10 +156,11 @@ public class WRReport extends WOComponent  {
 
 
     public boolean showVerticalRows() {
-        if (this.selectedReportStyle().equals("VERTICAL_ROWS") && !this.showRGAsTable() && this.selectedRecordGroupDisplayType().equals("TABLE")) {
+        if (this.selectedReportStyle().equals("VERTICAL_ROWS")
+            && !this.showRecordGroupAsTable()
+            && this.selectedRecordGroupDisplayType().equals("TABLE")) {
             return true;
         }
-
         return false;
     }
 
@@ -183,129 +189,77 @@ public class WRReport extends WOComponent  {
     public void setRecordGroupTotalFormat(String v) {
         _recordGroupTotalFormat = v;
     }
-    
 
-    public boolean showRGHeadings() {
-        if (this.showRecordGroupHeadings().equals("true")) {
-            return true;
-        }
-        return false;
-    }
-    public void setShowRGHeadings(boolean v) {
-        if (v) {
-            _showRecordGroupHeadings = "true";
-        } else {
-            _showRecordGroupHeadings = "false";
-        }
+    public boolean showDefaultReportStyle() {
+        return showCustomReportStyle();
     }
 
-
-    public boolean showRGAsTable() {
-        if (this.showRecordGroupAsTable().equals("true")) {
-            return true;
-        }
-        return false;
-    }
-    public void setShowRGAsTable(boolean v) {
-        if (v) {
-            _showRecordGroupAsTable = "true";
-        } else {
-            _showRecordGroupAsTable = "false";
-        }
-    }
-
-
-    public String showCustomReportStyle() {
+    public boolean showCustomReportStyle() {
         if (_showCustomReportStyle == null) {
-            if (!this.hasBinding("showCustomReportStyle")) {
-                _showCustomReportStyle = "false";
-            } else {
-                Object v = (Object)this.valueForBinding("showCustomReportStyle");
-                if (ERXValueUtilities.booleanValue(v)) {
-                    _showCustomReportStyle = "true";
-                }else {
-                    _showCustomReportStyle = "false";
-                }
-            }
+            _showCustomReportStyle = booleanValueForBinding("showCustomReportStyle");
         }
-        return _showCustomReportStyle;
+        return _showCustomReportStyle.booleanValue();
+    }
+    
+    public void setShowCustomReportStyle(boolean v) {
+        _showCustomReportStyle = v ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
-    public void setShowCustomReportStyle(String v) {
-        _showCustomReportStyle = v;
-    }
-
-
-
-    public boolean showDefaultReportStyleBool() {
-        if ("true".equals(showCustomReportStyle())) {
-            return true;
-        }
-        return false;
-    }
-
-
-    public void setShowDefaultReportStyleBool(boolean v) {
-        if (v) {
-            this.setShowCustomReportStyle("true");
-        } else {
-            this.setShowCustomReportStyle("false");
-        }
-    }
-
-
-    public String showRecordGroupHeadings() {
+    public boolean showRecordGroupHeadings() {
         if (_showRecordGroupHeadings == null) {
             if (!this.hasBinding("showRecordGroupHeadings")) {
-                _showRecordGroupHeadings = "true";
+                _showRecordGroupHeadings = Boolean.TRUE;
             } else {
-                Object v = (Object)this.valueForBinding("showRecordGroupHeadings");
-                if (ERXValueUtilities.booleanValue(v)) {
-                    _showRecordGroupHeadings = "true";
-                }else {
-                    _showRecordGroupHeadings = "false";
-                }
-
+                _showRecordGroupHeadings = booleanValueForBinding("showRecordGroupHeadings");
             }
         }
-        return _showRecordGroupHeadings;
+        return _showRecordGroupHeadings.booleanValue();
     }
-    public void setShowRecordGroupHeadings(String v) {
-        _showRecordGroupHeadings = v;
+    
+    public void setShowRecordGroupHeadings(boolean v) {
+        _showRecordGroupHeadings = v ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
-    public String showRecordGroupAsTable() {
+    public boolean showRecordGroupAsTable() {
         if (_showRecordGroupAsTable == null) {
-            if (this.hasBinding("showRecordGroupAsTable")) {
-                _showRecordGroupAsTable = "false";
+            if (!this.hasBinding("showRecordGroupAsTable")) {
+                _showRecordGroupAsTable = Boolean.FALSE;
             } else {
-                Object v = (Object)this.valueForBinding("showRecordGroupAsTable");
-                if (ERXValueUtilities.booleanValue(v)) {
-                    _showRecordGroupAsTable = "true";
-                }else {
-                    _showRecordGroupAsTable = "false";
-                }
+                _showRecordGroupAsTable = booleanValueForBinding("showRecordGroupAsTable");
             }
         }
-        return _showRecordGroupAsTable;
+        return _showRecordGroupAsTable.booleanValue();
     }
-    public void setShowRecordGroupAsTable(String v) {
-        _showRecordGroupAsTable = v;
+    
+    public void setShowRecordGroupAsTable(boolean v) {
+        _showRecordGroupAsTable = v ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
     public boolean showTotalsOnlyAsCells() {
-        if (this.selectedRecordGroupDisplayType().equals("TOTALS") && !this.showRGAsTable()) {
+        if (this.selectedRecordGroupDisplayType().equals("TOTALS")
+            && !this.showRecordGroupAsTable()) {
             return true;
         }
         return false;
     }
 
+    public String componentName() {
+        if(_componentName == null) {
+            _componentName = selectedRecordGroupDisplayType();
+            if(recordGroupDisplayTypes().containsObject(_componentName)) {
+                _componentName = "WRRecordGroup";
+            }
+        }
+        return _componentName;
+    }
 
     public boolean showAsCells() {
-        if (!this.showRGAsTable() && !this.selectedRecordGroupDisplayType().equals("SINGLE_TOTAL") && !this.selectedRecordGroupDisplayType().equals("TABLE")) {
+        if (!this.showRecordGroupAsTable()
+            && !this.selectedRecordGroupDisplayType().equals("SINGLE_TOTAL")
+            && !this.selectedRecordGroupDisplayType().equals("TABLE")) {
             return true;
         }
         return false;
@@ -313,40 +267,20 @@ public class WRReport extends WOComponent  {
 
     public boolean showEditing() {
         if(_showEditing == null){
-            Object v = (Object)this.valueForBinding("showEditing");
-            if (ERXValueUtilities.booleanValue(v)) {
-                _showEditing = "true";
-            }else {
-                _showEditing = "false";
-            }
+            _showEditing = booleanValueForBinding("showEditing");
         }
-        if(_showEditing.equals("true")) return true;
-        return false;
+        return _showNavigation.booleanValue();
     }
-
 
     public boolean showNavigation() {
         if (_showNavigation ==null) {
-            Object v = (Object)this.valueForBinding("showNavigation");
-            if (ERXValueUtilities.booleanValue(v)) {
-                _showNavigation = "true";
-            }else {
-                _showNavigation = "false";
-            }
+            _showNavigation = booleanValueForBinding("showNavigation");
         }
-
-        if (_showNavigation.equals("true")) {
-            return true;
-        }
-
-        return false;
+        return _showNavigation.booleanValue();
     }
+    
     public void setShowNavigation(boolean v) {
-        if (v) {
-            _showNavigation = "true";
-        } else {
-            _showNavigation = "false";
-        }
+        _showNavigation = v ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -420,7 +354,7 @@ public class WRReport extends WOComponent  {
 
 
     public int colSpanForHorzList() {
-        return this.model().spanForVListIndexAsCellsShowHeadingShowTotals(false, currentLevel-1, this.showAsCells(), this.showRGHeadings(), this.selectedRecordGroupDisplayType().equals("TOTALS"));
+        return this.model().spanForVListIndexAsCellsShowHeadingShowTotals(false, currentLevel-1, this.showAsCells(), this.showRecordGroupHeadings(), this.selectedRecordGroupDisplayType().equals("TOTALS"));
     }
 
 
@@ -592,7 +526,7 @@ public class WRReport extends WOComponent  {
 
 
     public int vertRowSpan() {
-        return this.model().spanForVListIndexAsCellsShowHeadingShowTotals(true, vheadingIndex(), !this.showRGAsTable(), this.showRGHeadings(), this.selectedRecordGroupDisplayType().equals("TOTALS"));
+        return this.model().spanForVListIndexAsCellsShowHeadingShowTotals(true, vheadingIndex(), !this.showRecordGroupAsTable(), this.showRecordGroupHeadings(), this.selectedRecordGroupDisplayType().equals("TOTALS"));
     }
 
 
@@ -603,7 +537,7 @@ public class WRReport extends WOComponent  {
         if (oldCount == null) {
             oldCnt = 0;
         } else {
-            int span = this.model().spanForVListIndexAsCellsShowHeadingShowTotals(true, vheadingIndex(), !this.showRGAsTable(), this.showRGHeadings(), this.selectedRecordGroupDisplayType().equals("TOTALS"));
+            int span = this.model().spanForVListIndexAsCellsShowHeadingShowTotals(true, vheadingIndex(), !this.showRecordGroupAsTable(), this.showRecordGroupHeadings(), this.selectedRecordGroupDisplayType().equals("TOTALS"));
             oldCnt = oldCount.intValue();
             oldCnt++;
 
@@ -631,7 +565,7 @@ public class WRReport extends WOComponent  {
     }
 
     public WOComponent regenReport() {
-        _initializedDimensionArrayFromBindings = false;
+        //_initializedDimensionArrayFromBindings = false;
         return null;
     }
 
@@ -652,7 +586,7 @@ public class WRReport extends WOComponent  {
 
 
     public boolean showHeadersForAsCells() {
-        if (this.showRGHeadings() && this.showTotalsOnlyAsCells()) {
+        if (this.showRecordGroupHeadings() && this.showTotalsOnlyAsCells()) {
             return true;
         }
 
