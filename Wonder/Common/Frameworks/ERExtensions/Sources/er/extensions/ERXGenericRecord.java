@@ -381,7 +381,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		ERXExtensions.setDefaultDelegate(editingContext);
 		return true;
 	    } else {
-		throw new RuntimeException("Found null delegate");
+		throw new RuntimeException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
 	    }
 	}
 	if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
@@ -389,7 +389,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		cat.warn("Found unexpected delegate class: "+delegate.getClass().getName());
 		return true;
 	    } else {
-		throw new RuntimeException("Found unexpected delegate class");
+		throw new RuntimeException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
 	    }
 	}
 	return false;
@@ -397,19 +397,19 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
     public void awakeFromClientUpdate(EOEditingContext editingContext) {
 	if(_checkEditingContextDelegate(editingContext)) {
-	    willUpdate();
+	    // willUpdate();
 	}
 	super.awakeFromClientUpdate(editingContext);
     }
     public void awakeFromInsertion(EOEditingContext editingContext) {
 	if(_checkEditingContextDelegate(editingContext)) {
-	    willInsert();
+	    // willInsert();
 	}
 	super.awakeFromInsertion(editingContext);
     }
     public void awakeFromFetch(EOEditingContext editingContext) {
 	if(_checkEditingContextDelegate(editingContext)) {
-	    willUpdate();
+	    // willUpdate();
 	}
 	super.awakeFromFetch(editingContext);
     }
