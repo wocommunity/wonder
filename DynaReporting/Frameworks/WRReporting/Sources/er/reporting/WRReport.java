@@ -50,6 +50,7 @@ public class WRReport extends WOComponent  {
     //String _baseColor, _maxColor;
     //NSMutableDictionary _currCritDictCache;
     protected String _showCustomReportStyle;
+    boolean _initializedDimensionArrayFromBindings;
 
     public WRReport(WOContext c) {
         super(c);
@@ -59,6 +60,7 @@ public class WRReport extends WOComponent  {
         //_baseColor = "d0cfbd";
         //_maxColor = "ffec00";
         _colorDict = null;
+        _initializedDimensionArrayFromBindings = false;
         _recordGroupDisplayTypes = new NSArray(new Object[]{"SINGLE_TOTAL" , "TABLE" , "TOTALS"});
         _reportStyles = new NSArray(new Object[]{"VERTICAL_ROWS" , "NESTED_CELLS"});
         
@@ -83,6 +85,12 @@ public class WRReport extends WOComponent  {
         _indexDict.removeAllObjects();
         _colorDict = null;
         //[_currentZCriteria removeAllObjects];
+        if(!_initializedDimensionArrayFromBindings) {
+            initializeDimensionArrayFromBindings("H");
+            initializeDimensionArrayFromBindings("V");
+            initializeDimensionArrayFromBindings("Z");
+            _initializedDimensionArrayFromBindings = true;
+        }
     }
 
 
@@ -97,6 +105,7 @@ public class WRReport extends WOComponent  {
 
     public void rebuildModel(NSNotification not) {
         _currentZCriteria.removeAllObjects();
+        _initializedDimensionArrayFromBindings = false;
     }
 
 
@@ -344,9 +353,6 @@ public class WRReport extends WOComponent  {
     public DRReportModel model() {
         if (_model == null) {
             _model = (DRReportModel)this.valueForBinding("model");
-            initializeDimensionArrayFromBindings("H");
-            initializeDimensionArrayFromBindings("V");
-            initializeDimensionArrayFromBindings("Z");
         }
         return _model;
     }
@@ -625,6 +631,7 @@ public class WRReport extends WOComponent  {
     }
 
     public WOComponent regenReport() {
+        _initializedDimensionArrayFromBindings = false;
         return null;
     }
 
