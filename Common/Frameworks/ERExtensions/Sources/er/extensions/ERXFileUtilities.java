@@ -195,7 +195,7 @@ public class ERXFileUtilities {
                     result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
                 }
             } catch (IOException ioe) {
-                log.error("ConfigurationManager: Error reading "+filePath);
+                log.error("ConfigurationManager: Error reading file <"+filePath+">");
             }
         }
         return result;
