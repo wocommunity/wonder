@@ -8,6 +8,21 @@ package er.extensions;
 
 import com.webobjects.foundation.NSDictionary;
 
+/**
+ * Enterprise objects that need to generate their own primary keys
+ * should implement this interface. This interface works in conjunction
+ * with the {@link ERXDatabaseContextDelegate}.<br/>
+ * <br/>
+ * Note that {@link ERXGenericRecord} implements a default implementation
+ * of this interface.
+ */
 public interface ERXGeneratesPrimaryKeyInterface {
+
+    /**
+     * This method is called by the ERXDatabaseContextDelegate when
+     * in the middle of a transaction. This is signaled by passing in
+     * the boolean <code>true</code> into the method. If the object
+     * returns <code>null</code> then a new primary key is generated.
+     */
     public NSDictionary primaryKeyDictionary(boolean inTransaction);
 }

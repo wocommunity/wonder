@@ -28,8 +28,8 @@ public abstract class ERXApplication extends WOApplication {
     /** logging support */
     public static final ERXLogger cat = ERXLogger.getLogger(ERXApplication.class);
 
-    // FIXME: Should correct all references to WORequestHandler.DidHandleRequestNotification and then delete this ivar. 
-    public static final String WORequestHandlerDidHandleRequestNotification = "WORequestHandlerDidHandleRequestNotification";
+    // FIXME: Should correct all references to WORequestHandler.DidHandleRequestNotification and then delete this ivar.
+    public static final String WORequestHandlerDidHandleRequestNotification = WORequestHandler.DidHandleRequestNotification;
 
     /**
      * The ERXApplication singleton.
