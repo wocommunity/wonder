@@ -4,13 +4,12 @@
 //
 // Created by bposokho on Thu Sep 19 2002
 //
-
+package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
 import er.extensions.*; 
 
 public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
