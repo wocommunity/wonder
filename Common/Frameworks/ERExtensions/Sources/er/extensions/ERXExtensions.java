@@ -721,7 +721,7 @@ public class ERXExtensions {
      * @return true or false depending on if the object is a
      *		new object.
      */
-    // ENHANCEME: Should be able to differentuate between a deleted eo and a new eo by looking
+    // ENHANCEME: Should be able to differentiate between a deleted eo and a new eo by looking
     //		  at the EOGlobalID
     // MOVEME: ERXEOFUtilities (when we have them)
     public static boolean isNewObject(EOEnterpriseObject eo) {
