@@ -112,6 +112,10 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
 HideReturnOnSelect1: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
@@ -230,11 +234,6 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-PropertyName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForProperty;
-}
-
 ReturnButton: WOImage {
 	alt = "Returns to the previous page";
 	border = "0";
@@ -275,5 +274,10 @@ ShowCancel: WOConditional {
 
 ShowCancel2: WOConditional {
 	condition = showCancel;
+}
+
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
