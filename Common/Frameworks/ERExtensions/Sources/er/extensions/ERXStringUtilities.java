@@ -332,6 +332,7 @@ public class ERXStringUtilities {
             if(path != null)
                 return ERXFileUtilities.stringFromFile(new File(path));
         } catch (IOException e) {
+        	log.error(e, e);
         }
         return null;
     }
