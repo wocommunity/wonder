@@ -10,41 +10,46 @@ import com.webobjects.foundation.*;
 import java.util.*;
 
 /**
- * ERXBasicBrowser is a concrete subclass of ERXBrowser that 
- * defines browser object. A browser object represents the web 
- * browser that the current request-response loop is dealing 
+ * <code>ERXBasicBrowser</code> is a concrete subclass 
+ * of {@link ERXBrowser} that defines browser object. 
+ * A browser object represents the web browser that the 
+ * current request-response cycle is dealing 
  * with. It holds the information retrieved from HTTP request's 
- * "user-agent" header, and such information includes web 
- * browser's name, version, Mozilla compatible version and 
- * platform (OS). Also, a browser object can answer boolean 
- * questions such as <code>isIE</code>, <code>isOmniWeb</code>, 
- * <code>isVersion5</code> and <code>isMozilla40Compatible</code>, 
- * and even more specific questions like <code>isIFrameSupported</code> 
- * and <code>willRenderNestedTablesFast</code>. <br>
- * 
- * ERXBasicBrowser is immutable and shared by different sessions and
- * direct actions. 
- * The shared instances are managed by ERXBrowserFactory which 
- * is also responsible to parse "user-agent" header in a WORequest 
- * object and to get an appropriate browser object. <br>
- * 
- * You can extends ERXBasicBrowser or its abstract parent ERXBrowser 
- * to implement more specific questions for your application. 
- * One good example will be to have a question <code>isSupportedBrowser</code> 
- * that checks if the client is using one of the supported 
- * browsers for your application. <br>
- * 
- * ERXSession holds a browser object that represent the web 
- * browser for that session and <code>browser</code> method 
- * returns the object. 
- * 
- * To access ERXBasicBrowser's boolean questions from WOConditionals 
- * on a web component, set the key path like "session.brower.isIFrameSupported" 
- * to their condition bindings. <br>
- * 
- * ERXDirectAction also holds a browser object for the current request. 
- * Use its <code>browser</code> method to access the object from a 
- * session-less direct action. <br>
+ * <code>"user-agent"</code> header, and such information 
+ * includes web browser's name, version, Mozilla compatible 
+ * version and platform (OS). Also, a browser object can 
+ * answer boolean questions such as {@link #isIE}, {@link #isOmniWeb}, 
+ * {@link #isVersion5} and {@link #isMozilla40Compatible}, 
+ * and even more specific questions like {@link #isIFrameSupported} 
+ * and {@link #willRenderNestedTablesFast}. 
+ * <p>
+ * <code>ERXBasicBrowser</code> is immutable and shared 
+ * by different sessions and direct actions. 
+ * The shared instances are managed by {@link ERXBrowserFactory} 
+ * which is also responsible to parse <code>"user-agent"</code> 
+ * header in a {@link com.webobjects.appserver.WORequest WORequest}
+ * object and to get an appropriate browser object. 
+ * <p>
+ * You can extends <code>ERXBasicBrowser</code> or its abstract 
+ * parent <code>ERXBrowser</code> to implement more specific 
+ * questions for your application. 
+ * One potencial example will be to have a question 
+ * <code>isSupportedBrowser</code> that checks if the client 
+ * is using one of the supported browsers for your application. 
+ * <p>
+ * {@link ERXSession} holds a browser object that represent 
+ * the web browser for that session and {@link ERXSession#browser browser()} 
+ * method returns the object. 
+ * <p>
+ * To access <code>ERXBasicBrowser</code>'s boolean questions 
+ * from <code>WOConditionals</code> on a web component, set the 
+ * key path like <code>"session.brower.isNetscape"</code> 
+ * to their condition bindings. 
+ * <p>
+ * {@link ERXDirectAction} also holds a browser object for 
+ * the current request. Use its {@link ERXDirectAction#browser browser()} 
+ * method to access the object from a session-less direct 
+ * action. 
  */ 
 public class ERXBasicBrowser extends ERXBrowser {
 
@@ -141,28 +146,12 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isUnknownPlatform	= _platform.equals(UNKNOWN_PLATFORM);
     }
 
-    /**
-     * Browser name string
-     * @return what type of browser
-     */
     public String browserName() { return _browserName; }
 
-    /**
-     * Version string
-     * @return what version of browser
-     */
     public String version() { return _version; }
 
-    /**
-     * MozillaVersion string
-     * @return what Mozilla version equivement to the browser's version
-     */
     public String mozillaVersion() { return _mozillaVersion; }
 
-    /**
-     * Platform string
-     * @return what platform that the browser is running on
-     */
     public String platform() { return _platform; }
 
     /**
@@ -171,48 +160,20 @@ public class ERXBasicBrowser extends ERXBrowser {
      */
     public String cpu() { return _cpu; }
 
-    /**
-     * UserInfo dictionary
-     * @return userInfo dictionary
-     */
     public NSDictionary userInfo() { return _userInfo; }
 
     public boolean isUnknownBrowser() { return _isUnknownBrowser; }
 
-    /**
-     * Browser is iCab?
-     * @return true if browser is iCab.
-     */
     public boolean isICab() { return _isICab; }
 
-    /**
-     * Browser is Internet Explorer?
-     * @return true if browser is IE.
-     */
     public boolean isIE() { return _isIE; }
 
-    /**
-     * Browser is Netscape?
-     * @return true if browser is Netscape.
-     */
     public boolean isNetscape() { return _isNetscape;  }
 
-    /**
-     * Browser is not Netscape?
-     * @return true if browser is not Netscape.
-     */
     public boolean isNotNetscape() { return ! _isNetscape; }
 
-    /**
-     * Browser is OmniWeb?
-     * @return true if browser is OmniWeb.
-     */
     public boolean isOmniWeb() { return _isOmniWeb; }
 
-    /**
-     * Browser is Opera?
-     * @return true if browser is Opera.
-     */
     public boolean isOpera() { return _isOpera; }
 
 

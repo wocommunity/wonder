@@ -87,31 +87,31 @@ public class ERXLog4j {
 
     /**
      * Sets up the logging system from the configuration file 
-     * specified by <code>ERConfigurationPath</code> launch argument, or 
-     * if it is not specified, sets up from the default 
-     * configuration file which is <code>WebObjects.properties</code> under 
-     * user's home directory. If none of these files actually 
+     * specified by <code>ERConfigurationPath</code> launch 
+     * argument, or if it is not specified, sets up from the 
+     * default configuration file which is <code>WebObjects.properties</code> 
+     * under user's home directory. If none of these files actually 
      * exist on the file system, the logging system will be 
-     * configured by Log4j's built-in configurator called 
-     * {@link org.apache.log4j.BasicConfigurator#configure() 
-     * BasicConfigurator.configure()}. 
+     * configured by Log4j's built-in configurator method called 
+     * {@link org.apache.log4j.BasicConfigurator#configure BasicConfigurator.configure}. 
      * <p>
      * This method should be called as early as possible, and 
-     * <code>ERExtensions</code> framework handles all this initialization 
-     * process. You will not have to call this method from your 
-     * application codes. 
+     * <code>ERExtensions</code> framework handles all this 
+     * initialization process. You will not have to call this 
+     * method from your application codes. 
      * <p>
      * The framework principal class {@link ERXExtensions} will 
      * call this method twice during the initialization process: <br> 
-     * - At the very beginning of loading ERExtensions framework <br>
+     * - At the very beginning of loading the <code>ERExtensions 
+     *   framework</code> <br>
      * - Right after the application class posts 
-     * {@link com.webobjects.WOApplication#ApplicationDidFinishLaunching 
-     * ApplicationDidFinishLaunching} notification 
+     *   {@link com.webobjects.appserver.WOApplication#ApplicationDidFinishLaunchingNotification 
+     *   ApplicationDidFinishLaunchingNotification}. 
      * <p>
      * The second stage is necessary to reconfigure the logging 
-     * system when <code>ERConfigurationPath</code> is specified as a launch 
-     * argument since the argument will not be accessible at the 
-     * first stage. 
+     * system when <code>ERConfigurationPath</code> is specified 
+     * as a launch argument since the argument will not be 
+     * accessible at the first stage. 
      * <p>
      * Calling this method multiple times will have no effect 
      * unless the configuration file path (not the file 
