@@ -150,6 +150,10 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         }
         return dataSource();
     }
+    
+    protected boolean _localSourceObjectIsEO() {
+        return _localSourceObject() instanceof EOEnterpriseObject;
+    }
 
     public NSArray theList() {
         NSMutableArray aSortedArray;
@@ -157,7 +161,13 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         if (_privateList()==null) {
             EODataSource aDataSource = _localDataSource();
             // Need to make sure that the eos are in the right editingContext.
-            anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(((EOEnterpriseObject)sourceObject()).editingContext(), aDataSource.fetchObjects());
+            EOEditingContext ec;
+            
+            if(_localSourceObjectIsEO() && ((EOEnterpriseObject)_sourceObject).editingContext() != null)
+                ec = ((EOEnterpriseObject)_sourceObject).editingContext();
+            else
+                ec = session().defaultEditingContext();
+            anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
 
@@ -171,7 +181,6 @@ public class ERXToManyRelationship extends WOToManyRelationship {
                 ((EOEnterpriseObject)_localSourceObject()).valueForKeyPath(_localRelationshipKey()) != null) {
                 NSMutableArray localArray= new NSMutableArray();
                 EOEnterpriseObject eo;
-                EOEditingContext ec = ((EOEnterpriseObject)_localSourceObject()).editingContext();
                 for (Enumeration e = aSortedArray.objectEnumerator(); e.hasMoreElements();) {
                     eo = (EOEnterpriseObject)e.nextElement();
                     localArray.addObject((ec != eo.editingContext() && ERXEOControlUtilities.localInstanceOfObject(ec, eo) != null ?
@@ -207,20 +216,29 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         boolean isDictionary = (aSourceObject instanceof NSMutableDictionary);
         NSMutableDictionary _dictionary = (isDictionary) ? (NSMutableDictionary)aSourceObject : null;
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
-        newValues = ERXEOControlUtilities.localInstancesOfObjects(_eo.editingContext(), newValues);
+        EOEditingContext ec;
+        if(_localSourceObjectIsEO() && _eo.editingContext() != null)
+            ec = _eo.editingContext();
+        else
+            ec = session().defaultEditingContext();
+        newValues = ERXEOControlUtilities.localInstancesOfObjects(ec, newValues);
         // Need to handle the keyPath situation.
         if (_eo != null && masterKey.indexOf(".") != -1) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(masterKey);
             _eo = (EOEnterpriseObject)_eo.valueForKeyPath(partialKeyPath);
             masterKey = ERXStringUtilities.lastPropertyKeyInKeyPath(masterKey);
         }
-        NSArray currentValues = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(_eo, masterKey);
+        NSArray currentValues = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(aSourceObject, masterKey);
         NSMutableArray mutableCurrentValues;
         if(currentValues instanceof NSMutableArray) {
             mutableCurrentValues = (NSMutableArray)currentValues;
         } else {
-            mutableCurrentValues = currentValues.mutableClone();
-            NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(_eo, mutableCurrentValues, masterKey);
+            if(currentValues != null) {
+                mutableCurrentValues = currentValues.mutableClone();
+            } else {
+                mutableCurrentValues = new NSMutableArray();
+            }
+            NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(aSourceObject, mutableCurrentValues, masterKey);
         }
         int count = mutableCurrentValues.count();
         EOEnterpriseObject o;
