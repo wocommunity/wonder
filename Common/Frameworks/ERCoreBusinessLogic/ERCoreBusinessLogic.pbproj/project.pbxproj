@@ -20,9 +20,8 @@
 			remoteInfo = "Application Server";
 		};
 		416649FE04476AAB00000102 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = file;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERPrototypes.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -111,9 +110,8 @@
 			};
 		};
 		503362DF05EE9EB100039CB0 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = file;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJavaMail.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -150,31 +148,27 @@
 		};
 		F55597E602832F8C01000104 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = ERCoreBusinessLogic.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F55597E702832F8C01000104 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERCoreBusinessLogic.tmp";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F55597E802832F8C01000104 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERCoreBusinessLogic.tmp";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F55598E70283348A01000104 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
@@ -280,8 +274,7 @@
 			sourceTree = "<group>";
 		};
 		F5C403CC02022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
@@ -289,8 +282,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403CD02022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaDirectToWeb.framework;
 			path = /System/Library/Frameworks/JavaDirectToWeb.framework;
@@ -298,8 +290,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403CE02022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
@@ -307,8 +298,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D102022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
@@ -316,8 +306,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D202022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
@@ -325,8 +314,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D402022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
@@ -334,8 +322,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D502022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOProject.framework;
 			path = /System/Library/Frameworks/JavaEOProject.framework;
@@ -343,8 +330,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D602022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
@@ -352,8 +338,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D702022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
@@ -361,8 +346,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5C403D802022B0501A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaDTWGeneration.framework;
 			path = /System/Library/Frameworks/JavaDTWGeneration.framework;
@@ -915,8 +899,6 @@
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
 		F5C4042502022B0501A801D4 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -932,8 +914,6 @@
 			name = Development;
 		};
 		F5C4042602022B0501A801D4 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
@@ -948,8 +928,6 @@
 			name = Deployment;
 		};
 		F5C4042702022B0501A801D4 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
@@ -967,9 +945,8 @@
 			name = WebServer;
 		};
 		F5C4042902022BDC01A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = file;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -987,9 +964,8 @@
 			};
 		};
 		F5C4042E02022C8601A801D4 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = file;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERExtensions.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -1017,9 +993,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F5DD883C02C4D54F01000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERCMailableExceptionPage.wo;

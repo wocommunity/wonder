@@ -3,14 +3,40 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
+		41F97BAA072E917E002EAE0B = {
+			containerPortal = F5274010017CADD2014387C8;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5274053017CADD2014387C8;
+			remoteInfo = "Web Server";
+		};
+		41F97BAB072E917E002EAE0B = {
+			containerPortal = F5274010017CADD2014387C8;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5274038017CADD2014387C8;
+			remoteInfo = "Application Server";
+		};
+//410
+//411
+//412
+//413
+//414
+//F50
+//F51
+//F52
+//F53
+//F54
 		F524E65603AADF3901AD0D0B = {
 			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
 			name = "ognl-2.3.2.jar";
 			path = "Libraries/ognl-2.3.2.jar";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F524E65703AADF3901AD0D0B = {
 			fileRef = F524E65603AADF3901AD0D0B;
@@ -22,6 +48,8 @@
 			};
 		};
 		F5274010017CADD2014387C8 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				F527406D017CADD2014387C8,
 				F527406E017CADD2014387C8,
@@ -48,6 +76,7 @@
 			isa = PBXGroup;
 			name = WOOgnl;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5274012017CADD2014387C8 = {
 			children = (
@@ -64,6 +93,7 @@
 			isa = PBXGroup;
 			name = Classes;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5274025017CADD2014387C8 = {
 			children = (
@@ -82,66 +112,87 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5274026017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOProject.framework;
 			path = /System/Library/Frameworks/JavaEOProject.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5274027017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5274028017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5274029017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F527402A017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F527402B017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaDirectToWeb.framework;
 			path = /System/Library/Frameworks/JavaDirectToWeb.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F527402C017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F527402D017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F527402F017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaDTWGeneration.framework;
 			path = /System/Library/Frameworks/JavaDTWGeneration.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5274030017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5274032017CADD2014387C8 = {
 			children = (
@@ -152,21 +203,28 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5274033017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = WOOgnl.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5274034017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)WOOgnl.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5274035017CADD2014387C8 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)WOOgnl.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5274036017CADD2014387C8 = {
 			buildPhases = (
@@ -179,7 +237,7 @@
 				F527406A017CADD2014387C8,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
@@ -266,6 +324,7 @@
 		F5274037017CADD2014387C8 = {
 			isa = PBXTargetDependency;
 			target = F5274038017CADD2014387C8;
+			targetProxy = 41F97BAB072E917E002EAE0B;
 		};
 		F5274038017CADD2014387C8 = {
 			buildPhases = (
@@ -450,6 +509,7 @@
 		F5274052017CADD2014387C8 = {
 			isa = PBXTargetDependency;
 			target = F5274053017CADD2014387C8;
+			targetProxy = 41F97BAA072E917E002EAE0B;
 		};
 		F5274053017CADD2014387C8 = {
 			buildPhases = (
@@ -653,11 +713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
@@ -666,44 +722,41 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
 		F527406D017CADD2014387C8 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		F527406E017CADD2014387C8 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
 		};
 		F527406F017CADD2014387C8 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
@@ -723,65 +776,83 @@
 		F54F865102C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = D2WOgnlAssignment.java;
 			path = Sources/ognl/webobjects/D2WOgnlAssignment.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865202C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOOgnlHTMLTemplateParser.java;
 			path = Sources/ognl/webobjects/WOOgnlHTMLTemplateParser.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865302C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = NSArrayPropertyAccessor.java;
 			path = Sources/ognl/webobjects/NSArrayPropertyAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865402C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = NSFoundationElementsAccessor.java;
 			path = Sources/ognl/webobjects/NSFoundationElementsAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865502C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = NSObjectPropertyAccessor.java;
 			path = Sources/ognl/webobjects/NSObjectPropertyAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865602C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = NSClassResolver.java;
 			path = Sources/ognl/webobjects/NSClassResolver.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865702C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = NSDictionaryPropertyAccessor.java;
 			path = Sources/ognl/webobjects/NSDictionaryPropertyAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865802C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOOgnl.java;
 			path = Sources/ognl/webobjects/WOOgnl.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865902C7AFA901E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOOgnlAssociation.java;
 			path = Sources/ognl/webobjects/WOOgnlAssociation.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F865A02C7AFA901E168BF = {
 			fileRef = F54F865102C7AFA901E168BF;
@@ -844,12 +915,15 @@
 			isa = PBXGroup;
 			path = Documentation;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54F866B02C7AFE401E168BF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			path = LICENSE.NPL;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 	};
 	rootObject = F5274010017CADD2014387C8;
