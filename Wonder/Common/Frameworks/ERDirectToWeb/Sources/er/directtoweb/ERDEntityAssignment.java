@@ -14,14 +14,14 @@ import er.extensions.ERXUtilities;
 import er.extensions.ERXLogger;
 import java.util.Enumeration;
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// A little smarter than the average assignment.  This entity assignment will take the current
-// pageConfiguration and try to find an entityName that matches.
-//////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * A little smarter than the average assignment.  This entity assignment will take the current
+ * pageConfiguration (or whatever the key in valu is) and try to find an entityName that matches.
+ */
 public class ERDEntityAssignment extends Assignment implements ERDComputingAssignmentInterface {
 
     /** holds the array of keys this assignment depends upon */
-    public static final NSArray _DEPENDENT_KEYS=new NSArray("pageConfiguration");
+    public static final NSArray _DEPENDENT_KEYS=new NSArray(new Object[] {"pageConfiguration", "controllerName"});
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDefaultEntityAssignment");
@@ -62,36 +62,59 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
      */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 
+    protected Object entityForName(String name) {
+        Object result = null;
+        if(name == null) return null;
+        String lowerCaseName = name.toLowerCase();
+        if (entityNames == null) {
+            entityNames = (NSArray)((NSArray)ERXUtilities.entitiesForModelGroup(EOModelGroup.defaultGroup()).valueForKey("name")).valueForKey("toLowerCase");
+        }
+        NSMutableArray possibleEntities = new NSMutableArray();
+        for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
+            String lowercaseEntityName = (String)e.nextElement();
+            if (lowerCaseName.indexOf(lowercaseEntityName) != -1)
+                possibleEntities.addObject(lowercaseEntityName);
+        }
+        if (possibleEntities.count() == 1) {
+            result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
+        } else if (possibleEntities.count() > 1) {
+            ERXUtilities.sortEOsUsingSingleKey(possibleEntities, "length");
+            if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
+                log.warn("Found multiple entities of the same length for configuration: " + name
+                         + " possible entities: " + possibleEntities);
+            result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
+        }
+        if (log.isDebugEnabled())
+            log.debug("Found possible entities: " + possibleEntities + " for configuration: " + name
+                      + " result: " + result);
+        return result;
+    }
+
+    public Object entityForControllerName(D2WContext c) {
+        return entityForName((String)c.valueForKey("controllerName"));
+    }
+
+    public Object entityForPageConfiguration(D2WContext c) {
+        return entityForName((String)c.valueForKey("pageConfiguration"));
+    }
+    
     protected NSArray entityNames = null;
     public Object fire(D2WContext c) {
         Object result = null;
+        // is it an entity name?
         if (value() != null && value() instanceof String && ((String)value()).length() > 0) {
             result = ERXUtilities.caseInsensitiveEntityNamed(((String)value()).toLowerCase());
         }
-        if (result == null && c.valueForKey("pageConfiguration") != null) {
-            String lowerCasePageConfiguration = ((String)c.valueForKey("pageConfiguration")).toLowerCase();
-            if (entityNames == null) {
-                entityNames = (NSArray)((NSArray)ERXUtilities.entitiesForModelGroup(EOModelGroup.defaultGroup()).valueForKey("name")).valueForKey("toLowerCase");
+        // maybe it is a key? get the entity name from there.
+        if(result == null && value() != null && value() instanceof String) {
+            result = entityForName((String)c.valueForKey((String)value()));
+        }
+        // try the pageConfiguration, if that does not match, give up
+        if(result == null) {
+            String name = (String)c.valueForKey("pageConfiguration");
+            if (result == null && name != null) {
+                result = entityForName(name);
             }
-            NSMutableArray possibleEntities = new NSMutableArray();
-            for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
-                String lowercaseEntityName = (String)e.nextElement();
-                if (lowerCasePageConfiguration.indexOf(lowercaseEntityName) != -1)
-                    possibleEntities.addObject(lowercaseEntityName);
-            }
-            if (possibleEntities.count() == 1) {
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
-            } else if (possibleEntities.count() > 1) {
-                ERXUtilities.sortEOsUsingSingleKey(possibleEntities, "length");
-                if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
-                    log.warn("Found multiple entities of the same length for pageConfiguration: " + c.valueForKey("pageConfiguration")
-                             + " possible entities: " + possibleEntities);
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
-            }
-            if (log.isDebugEnabled())
-                log.debug("Found possible entities: " + possibleEntities + " for pageConfiguration: " + c.valueForKey("pageConfiguration")
-                          + " result: " + result);
-            return result;
         }
         return result;
     }
