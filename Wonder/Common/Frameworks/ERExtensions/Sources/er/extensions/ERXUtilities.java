@@ -270,7 +270,7 @@ public class ERXUtilities {
     
     // This will return a list of all the framework names loaded into the application.
     public static NSArray allFrameworkNames() {
-        NSMutableSet frameworkNames = new NSMutableSet();
+        NSMutableArray frameworkNames = new NSMutableArray();
         for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
             NSBundle bundle = (NSBundle)e.nextElement();
             String frameworkName = D2WModel.nameFromFrameworkBundle(bundle);
@@ -279,7 +279,8 @@ public class ERXUtilities {
             else
                 cat.warn("Null framework name for bundle: " + bundle);
         }
-        return frameworkNames.allObjects();
+        cat.info(frameworkNames);
+        return frameworkNames;
     }
 
     public static NSArray intersectingElements(NSArray array1, NSArray array2) {
