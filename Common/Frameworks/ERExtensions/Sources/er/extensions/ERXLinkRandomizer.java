@@ -9,8 +9,23 @@ package er.extensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * This simple stateless component adds a javascript function
+ * 'RandomizeLink' that will either add a dummy=0 or
+ * change the previous value of a dummy=<some number>
+ * parameter of a hyperlink. This can be very useful
+ * for making sure that the browser does not cache the return
+ * value of a dynamic link.
+ */
+//FIXME: Should make the parameter 'dummy' configurable
+//FIXME: Should rename ERXJSLinkRandomizer
+//ENHANCEME: Might want to wrap this component in an only once per request conditional
 public class ERXLinkRandomizer extends ERXStatelessComponent {
 
+    /**
+     * Public constructor
+     * @param context the context
+     */
     public ERXLinkRandomizer(WOContext context) {
         super(context);
     }

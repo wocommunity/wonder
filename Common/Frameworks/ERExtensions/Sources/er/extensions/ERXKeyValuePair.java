@@ -6,18 +6,47 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+/**
+ * Very simple class used for hold key-value
+ * pairs.
+ */
+// ENHANCEME: Should implement NSKeyValueCoding
+// FIXME: Should implement equals
 public class ERXKeyValuePair {
 
+    /**
+     * Public constructor
+     * @param newKey key
+     * @param newValue value
+     */
     public ERXKeyValuePair(Object newKey, Object newValue){
         _key = newKey;
         _value = newValue;
     }
 
+    /** holds the key */
     protected Object _key;
-    public void setKey(Object newKey){ _key = newKey; }
-    public Object key(){ return _key; }
-
+    /** holds the value */
     protected Object _value;
-    public void setValue(Object value){ _value = value; }
-    public Object value(){ return _value; }
+
+    /**
+     * Sets the key.
+     * @param newKey new key value
+     */
+    public void setKey(Object newKey){ _key = newKey; }
+    /**
+     * returns the key
+     * @return da key 
+     */
+    public Object key(){ return _key; }
+    /**
+     * Sets the value
+     * @param value new value
+     */
+    public void setValue(Object value) { _value = value; }
+    /**
+     * returns the value
+     * @return da value
+     */
+    public Object value() { return _value; }
 }
