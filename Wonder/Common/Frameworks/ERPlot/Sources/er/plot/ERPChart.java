@@ -1,5 +1,6 @@
 package er.plot;
 import java.io.ByteArrayOutputStream;
+import java.util.Enumeration;
 
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -8,12 +9,15 @@ import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.imagemap.ImageMapUtil;
 import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 import org.jfree.chart.imagemap.URLTagFragmentGenerator;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 import er.extensions.ERXAssert;
 import er.extensions.ERXLogger;
@@ -31,12 +35,14 @@ import er.extensions.ERXStatelessComponent;
  * @binding height the height of the chart (400 pixel if not specified)
  * @binding dataset Dataset to use. If this is given, then items, nameKey, valueKey and categoryKey are not considered.
  * @binding items array of values to display the chart for
- * @binding nameKey the key for the name (must return String)
+ * @binding nameKey the key for the name (must return Comparable)
  * @binding valueKey the key for the value (must return Number)
  * @binding showLegends true, if legends should be shown
  * @binding showToolTips true, if tool tips should be shown
  * @binding showLegends true, if legends should be shown
- * 
+ * @binding chart Chart to use instead of the created one. If this binding is setable, then it will be set to the actually used chart
+ * @binding configuration NSDictionary that will be applied to the chart via key-value-coding prior to rendering. Contains 
+ *      entries like <code>antiAlias=true</code> or <code>categoryPlot.dataAreaRatio = 0.8</code>.
  * @author ak
  */
 public abstract class ERPChart extends ERXStatelessComponent {
@@ -60,6 +66,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
     protected int _height = 0;
     protected Dataset _dataset;
     protected JFreeChart _chart;
+    protected NSDictionary _configuration;
 
     /**
      * Public constructor
@@ -77,6 +84,22 @@ public abstract class ERPChart extends ERXStatelessComponent {
         return _items;
     }
 
+    public String nameKey() {
+        if(_nameKey == null) {
+            _nameKey = (String)valueForBinding("nameKey");
+            ERXAssert.DURING.notNull("nameKey", _nameKey);
+        }
+        return _nameKey;
+    }
+
+    public String valueKey() {
+        if(_valueKey == null) {
+            _valueKey = (String)valueForBinding("valueKey");
+            ERXAssert.DURING.notNull("valueKey", _valueKey);
+        }
+        return _valueKey;
+    }
+
     public int width() {
         if(_width == 0) {
             _width = intValueForBinding("width", DEFAULT_SIZE);
@@ -89,14 +112,6 @@ public abstract class ERPChart extends ERXStatelessComponent {
             _height = intValueForBinding("height", DEFAULT_SIZE);
         }
         return _height;
-    }
-
-    public String nameKey() {
-        if(_nameKey == null) {
-            _nameKey = (String)valueForBinding("nameKey");
-            ERXAssert.DURING.notNull("nameKey", _nameKey);
-        }
-        return _nameKey;
     }
 
     public String chartType() {
@@ -128,12 +143,14 @@ public abstract class ERPChart extends ERXStatelessComponent {
         return booleanValueForBinding("showToolTips", true);
     }
 
-    public String valueKey() {
-        if(_valueKey == null) {
-            _valueKey = (String)valueForBinding("valueKey");
-            ERXAssert.DURING.notNull("valueKey", _valueKey);
+    public NSDictionary configuration() {
+        if(_configuration == null) {
+            _configuration = (NSDictionary)valueForBinding("configuration");
+            if(_configuration == null) {
+                _configuration = NSDictionary.EmptyDictionary;
+            }
         }
-        return _valueKey;
+        return _configuration;
     }
 
     public void reset() {
@@ -150,17 +167,44 @@ public abstract class ERPChart extends ERXStatelessComponent {
         _height = 0;
         _dataset = null;
         _chart = null;
+        _configuration = null;
     }
 
-    public abstract JFreeChart chart();
+    protected abstract JFreeChart createChart();
+    protected abstract Dataset createDataset();
     protected abstract NSArray supportedTypes();
 
     
     public Dataset dataset() {
         if(_dataset == null) {
             _dataset = (Dataset)valueForBinding("dataset");
+            if(_dataset == null) {
+                _dataset = (DefaultCategoryDataset) createDataset();
+                if(canSetValueForBinding("dataset")) {
+                    setValueForBinding(_dataset, "dataset");
+                }
+            }
         }
         return _dataset;
+    }
+    
+    public JFreeChart chart() {
+        if(_chart == null) {
+            _chart = (JFreeChart)valueForBinding("chart");
+            if(_chart == null) {
+                _chart = createChart();
+                log.info(bindingKeys());
+                if(hasBinding("chart") && canSetValueForBinding("chart")) {
+                    setValueForBinding(_chart, "chart");
+                }
+                for (Enumeration keys = configuration().keyEnumerator(); keys.hasMoreElements();) {
+                    String keypath = (String) keys.nextElement();
+                    Object value = configuration().objectForKey(keypath);
+                    NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(_chart, value, keypath);
+                }
+            }
+        }
+        return _chart;
     }
     
     public NSData imageData() {
