@@ -44,6 +44,25 @@ public class ERPPieChart extends ERPChart {
     public static final NSArray SUPPORTED_TYPES = new NSArray(new Object[] {"PieChart", "PieChart3D"});
         
     /**
+     * Utility class to accomodate for accumulating data (the superclass can only replace values, 
+     * so it will always yield the latest one.)
+     * @author ak
+     */
+    public static class AccumulatingPieDataset extends DefaultPieDataset {
+        
+        /**
+         * Overridden so it adds the value to the current value for the key instead of replacing it.
+         */
+        public void setValue(Comparable key, Number value) {
+            Number oldValue = getValue(key);
+            if(oldValue != null) {
+                value = new Double(value.doubleValue() + oldValue.doubleValue());
+            }
+            super.setValue(key, value);
+        }
+    }
+    
+    /**
      * Public constructor
      * @param context the context
      */
@@ -68,8 +87,8 @@ public class ERPPieChart extends ERPChart {
     }
 
     protected Dataset createDataset() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
+        AccumulatingPieDataset dataset = new AccumulatingPieDataset();
+         for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
             Object item = items.nextElement();
             Comparable name = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
             Number value = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, valueKey());
