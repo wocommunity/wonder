@@ -1,6 +1,12 @@
-Custom1: WOCollapsibleComponentContent { closedLabel = "Explode Layout"; openedLabel = "Collapse Layout";	condition = true;
+Custom1: WOCollapsibleComponentContent { 
+	closedLabel = "Explode Layout"; 
+	openedLabel = "Collapse Layout";	
+	condition = true;
 }
-Custom2: WOCollapsibleComponentContent { closedLabel = "Explode Navigation"; openedLabel = "Collapse Navigation";}
+Custom2: WOCollapsibleComponentContent { 
+	closedLabel = "Explode Navigation"; 
+	openedLabel = "Collapse Navigation";
+}
 
 WRLayoutEditor1: WRLayoutEditor {
 	model = model;
@@ -17,32 +23,35 @@ WRLayoutEditor1: WRLayoutEditor {
 	keysInV = ^keysInV;
 	keysInZ = ^keysInZ;
 }
-attribHeading:WRAttributeGroup{
+attribHeading: WRAttributeGroup{
 	model=model;
 	bgcolor = "ffffff";
 }
 
-attribLabel:WOString{
+attribLabel: WOString{
 	value= attribLabel;
 }
-attribs:WORepetition{
+attribs: WORepetition{
 	list = attributeListAtDepth;
 	item = attrib;
 }
 
-attribsGroup:WRAttributeGroup{
+attribsGroup: WRAttributeGroup{
 	model = model;
 	totalsOnly = false;
 	groups = model.vList;
 	bgcolor = "dedede";
 }
-colSpanTd:WOGenericContainer{
+colSpanTd: WOGenericContainer{
 	elementName = "TD";
 	bgcolor = bgcolorColSpanTd;
 	colspan = horzColSpan;
 }
-collapseVertList: WOCollapsibleComponentContent { closedLabel = "Explode Vertical List"; openedLabel = "Collapse Vertical List";}
-criteriaLabel:WOString{
+collapseVertList: WOCollapsibleComponentContent { 
+	closedLabel = "Explode Vertical List"; 
+	openedLabel = "Collapse Vertical List";
+}
+criteriaLabel: WOString {
 	value = topCriteria.label;
 	escapeHTML = false;
 }
@@ -53,19 +62,19 @@ depthList:WORepetition{
 	count = depthCount;
 	index = depth;
 }
-dontshowDefaultReportStyle:WOConditional{
+dontshowDefaultReportStyle: WOConditional{
 	condition= showDefaultReportStyle;
 }
-dontshowVerticalRows:WOConditional{
+dontshowVerticalRows: WOConditional{
 	condition= showVerticalRows;
 	negate=true;
 }
 
-editForm:WOForm{
+editForm: WOForm{
 	multipleSubmit=true;
 }
-groupDepth:WORepetition{
-	count= vheadingIndex;
+groupDepth: WORepetition{
+	count = vheadingIndex;
 }
 
 hCriteriaList: WRNestedList {
@@ -102,31 +111,32 @@ recordGroupTest:WOSwitchComponent {
 	totalToShow = recordGroupTotalToShow;
 	formatForSingleTotal = recordGroupTotalFormat;
 	showAsTable = showRecordGroupAsTable;
+	colorForCoords = colorForCoords;
 	colors = colorDict;
 	totalDict = totalDict;
 	reportStyle = selectedReportStyle;
 }
-rowSpanTd:WOGenericContainer{
+rowSpanTd: WOGenericContainer{
 	elementName = "TD";
 	rowspan = vertRowSpan;
 	bgcolor = bgcolorRowSpanTd;
 }
-rowSpanTd2:WOGenericContainer{
+rowSpanTd2: WOGenericContainer{
 	elementName = "TD";
 	bgcolor = bgcolorRowSpanTd;
 }
-rowSpanTd2Span:WOGenericContainer{
+rowSpanTd2Span: WOGenericContainer{
 	elementName = "TD";
 	bgcolor = bgcolorRowSpanTd;
 	colspan= depthCountAllAttribs;
 }
 
 
-showDefaultReportStyle:WOConditional{
+showDefaultReportStyle: WOConditional{
 	condition= showDefaultReportStyle;
 	negate=true;
 }
-showEditing:WOConditional{
+showEditing: WOConditional{
 	condition = showEditing;
 }
 
@@ -136,13 +146,13 @@ showEditing:WOConditional{
 showHeadersForAsCells: WOConditional{
 	condition = showHeadersForAsCells;
 }
-showIndentCell:WOConditional{
+showIndentCell: WOConditional{
 	condition= showIndentCell;
 }
-showNoColNoRow:WOConditional{
+showNoColNoRow: WOConditional{
 	condition= showNoColNoRow;
 }
-showPresentationControls :WOConditional{
+showPresentationControls: WOConditional{
 	condition = showPresentationControls;
 }
 showSingleCol:WOConditional{
@@ -152,6 +162,10 @@ showSingleCol:WOConditional{
 
 showSingleRow:WOConditional{
 	condition= showSingleRow;
+}
+
+showTopCrits: WOConditional {
+	condition = showTopCriteriaLabel;
 }
 //vIndentCriteriaLabel2:WOString{
 //	value = vIndentCriteriaLabel;
