@@ -21,13 +21,17 @@ import com.webobjects.appserver.WOContext;
  */
 public class ERXEqualConditional extends WOComponent {
 
-    /** Public constructor */
+    /** 
+     * Public constructor
+     * @param aContext current WOContext
+     */
     public ERXEqualConditional(WOContext aContext) {
         super(aContext);
     }
 
     /** component is stateless */
     public boolean isStateless() { return true; }
+    
     /** component does not synchronize it's variables */
     public boolean synchronizesVariablesWithBindings() { return false; }
 

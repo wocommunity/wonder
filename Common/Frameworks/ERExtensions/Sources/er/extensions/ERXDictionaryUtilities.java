@@ -12,7 +12,7 @@ import java.util.Enumeration;
 import java.lang.*;
 
 /**
- * Collection of {@link NSDictionary} utilities.
+ * Collection of {@link com.webobjects.foundation.NSDictionary NSDictionary} utilities.
  */
 public class ERXDictionaryUtilities extends Object {
 
