@@ -4,6 +4,7 @@ Conditional1: WOConditional {
 
 Conditional2: WOConditional {
 	condition = displayRequiredMarker;
+	negate = true;
 }
 
 GenericContainer1: WOGenericContainer {
@@ -25,6 +26,10 @@ NotRequired: WOConditional {
 }
 PropertyName: WOString {
     value=displayNameForProperty;
+}
+
+String1: WOString {
+	value = d2wContext.propertyKey;
 }
 
 String2: WOString {
