@@ -1,0 +1,7 @@
+SVGAnimate: WOXMLNode {
+	elementName = "animate";
+	dur = "11.3s";
+	values = coloursString;
+	attributeName = "lightColor";
+	repeatDur = "indefinite";
+}
