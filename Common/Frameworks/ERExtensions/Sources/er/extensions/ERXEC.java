@@ -49,6 +49,18 @@ public class ERXEC extends EOEditingContext {
         return "true".equals(System.getProperty("er.extensions.ERXEC.defaultAutomaticLockUnlock"));
     }
     
+    public void deleteObjects(NSArray objects) {
+    	for (int i = objects.count(); i-- > 0;) {
+    		Object o = objects.objectAtIndex(i);
+    		if (o instanceof EOEnterpriseObject) {
+    			EOEnterpriseObject eo = (EOEnterpriseObject)o;
+    			if (eo.editingContext() != null) {
+    				eo.editingContext().deleteObject(eo);
+    			}
+    		}
+    	}
+    }
+
     public boolean automaticLockUnlock() {
         if (!automaticLockUnlockSet) {
             automaticLockUnlock = defaultAutomaticLockUnlock();
