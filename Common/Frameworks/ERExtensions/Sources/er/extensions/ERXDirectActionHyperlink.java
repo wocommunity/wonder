@@ -23,9 +23,10 @@ public class ERXDirectActionHyperlink extends WOComponent {
     public final static String ADAPTOR_PREFIX_MARKER="**ADAPTOR_PREFIX**";
     public final static String SUFFIX_MARKER="**SUFFIX**";
 
+    /** logging support */
     public static final Category cat = Category.getInstance(ERXDirectActionHyperlink.class);
 
-    
+    // DELETEME: Not needed
     protected String oneTime;
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
@@ -124,7 +125,8 @@ public class ERXDirectActionHyperlink extends WOComponent {
                 boolean isEncrypted = key.indexOf(separator + "E") != -1;
                 String entityName = key.substring(0, key.indexOf(separator));
                 cat.debug("Decoding entity named: " + entityName);
-                // FIXME: This needs to be made case insensitive.
+                // FIXME: This needs to be made case insensitive and should be getting the
+                //        model group from the ec
                 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
                 if (entity != null) {
                     if (entity.primaryKeyAttributes().count() == 1) {
@@ -156,7 +158,6 @@ public class ERXDirectActionHyperlink extends WOComponent {
         }
         return encoded;
     }
-
     
     public NSArray allObjectsForFormValues() {
         NSMutableArray objects = null;
@@ -178,11 +179,13 @@ public class ERXDirectActionHyperlink extends WOComponent {
     public String href() {
         StringBuffer result=new StringBuffer(ADAPTOR_PREFIX_MARKER);
         result.append(".woa/wa/");
+        // FIXME: Should make actionClass optional
         result.append(valueForBinding("actionClass"));
-        result.append('/'); // target=_top;
+        result.append('/');
         result.append(valueForBinding("directActionName"));
-        result.append('?'); // target=_top;
-        if(hasBinding("bindingDictionary")) {
+        result.append('?'); 
+        // FIXME: Rename binding to encryptedBindingDictionary
+        if (hasBinding("bindingDictionary")) {
             NSDictionary bdgs = (NSDictionary)valueForBinding("bindingDictionary");
             if (bdgs != null) {
                 NSArray allKeys = bdgs.allKeys();
@@ -212,6 +215,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
                 }
             }
         }
+        // FIXME: Ditch this
         if(hasBinding("id")){
             String v= stringForBinding ("id");
             if (v!=null && v.length()>0) {
@@ -222,6 +226,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
             } else
                 cat.error("Invalid id specified "+v);
         }
+        // FIXME: Ditch this
         if (hasBinding("id2")) { // We should have a better way of passing args than id and id2!!
             //result.append('&'); // target=_top;
             String v= stringForBinding ("id2");
@@ -232,17 +237,20 @@ public class ERXDirectActionHyperlink extends WOComponent {
                 result.append(eId2);
             } else cat.error("Invalid id2 "+v);
         }
+        // FIXME: Ditch this
         if (hasBinding("c") && canGetValueForBinding("c")) {
             appendSeparatorIfLastNot('&', '?', result);
             result.append("c=");
             String eCode = ERXCrypto.blowfishEncode((valueForBinding("c")).toString());
             result.append(eCode);
         }
+        // FIXME: Ditch this
         if (hasBinding("loginMessageName") && canGetValueForBinding("loginMessageName")){
             appendSeparatorIfLastNot('&', '?', result);
             result.append("loginMessageName=");
             result.append(valueForBinding("loginMessageName"));
         }
+        // FIMXE: Bad, need to get rid of this oneTime stuff.
         //If the OneTime is turned on, then add code and dateCreated keyValue pairs in the href.
         if( hasBinding("oneTime") && ((Integer)valueForBinding("oneTime")).intValue()==1){
             EOEditingContext ec = ERXExtensions.newEditingContext();
