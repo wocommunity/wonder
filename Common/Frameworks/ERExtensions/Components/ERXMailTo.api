@@ -3,6 +3,8 @@
 	<wo class="ERXMailTo" wocomponentcontent="true">
 
 		<binding name="email"/>
+		<binding name="class"/>
+		<binding name="style"/>
 		<binding name="useContent" defaults="Boolean"/>
 
 		<validation message="&apos;email&apos; is a required binding">
