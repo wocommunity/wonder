@@ -13,6 +13,7 @@ import com.webobjects.directtoweb.*;
 /**
  * Relationship sort assignment that works with the new caching 
  * scheme. Should only ever need one of these assignments.
+ * @deprecated use ERDDefaultModelAssignment
  */
 public class ERDRelationshipSortAssignment extends ERDAssignment {
 
@@ -29,6 +30,7 @@ public class ERDRelationshipSortAssignment extends ERDAssignment {
      */
     // CHECKME: Pretty sure we only need one of these ever created.
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDRelationshipSortAssignment.class, ERDDefaultModelAssignment.class);
         return new ERDRelationshipSortAssignment(eokeyvalueunarchiver);
     }
 
