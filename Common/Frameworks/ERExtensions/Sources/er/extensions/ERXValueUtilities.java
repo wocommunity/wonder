@@ -118,7 +118,7 @@ public class ERXValueUtilities {
 
     /**
      * Basic utility method for reading int values. The current
-     * implementation uses {@link intValueWithDefault(Object,int)}
+     * implementation uses {@link #intValueWithDefault(Object, int)}
      * with a default of <code>0</code>.
      * @param obj object to be evaluated
      * @return boolean evaluation of the given object
