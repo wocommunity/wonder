@@ -38,6 +38,14 @@ public class ERXBatchNavigationBar extends WOComponent {
         _displayGroup = null;
     }
     
+    public void appendToResponse(WOResponse response, WOContext context) {
+        if (displayGroup() != null  &&  displayGroup().hasMultipleBatches() == false) {
+            if (currentBatchIndex() != 0) 
+                setCurrentBatchIndex(ERXConstant.ZeroInteger);
+        }
+        super.appendToResponse(response, context);
+    }
+    
     private WODisplayGroup _displayGroup;
     public WODisplayGroup displayGroup() {
         if (_displayGroup == null) {
