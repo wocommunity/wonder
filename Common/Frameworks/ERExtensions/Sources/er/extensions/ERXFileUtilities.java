@@ -677,12 +677,13 @@ public class ERXFileUtilities {
      * exist then the array is empty.
      */
     public static NSArray arrayByAddingFilesInDirectory(File directory, boolean recursive) {
+        ERXFile erxDirectory = new ERXFile(directory.getAbsolutePath());
         NSMutableArray files = new NSMutableArray();
-        if (!directory.exists()) {
+        if (!erxDirectory.exists()) {
             return files;
         }
 
-        File[] fileList = directory.listFiles();
+        File[] fileList = erxDirectory.listFiles();
         if (fileList == null) {
             return files;
         }
@@ -988,6 +989,18 @@ public class ERXFileUtilities {
             return "";
         } else {
             return name.substring(index + 1);
+        }
+    }
+
+    /** Deletes all files in filesToDelete
+     *  uses the methdo deleteDirectory
+     * 
+     * @param filesToDelete
+     */
+    public static void deleteFiles(NSMutableArray filesToDelete) {
+        for (int i = filesToDelete.count(); i-- > 0;) {
+            File currentFile = (File) filesToDelete.objectAtIndex(i);
+            deleteDirectory(currentFile);
         }
     }
     
