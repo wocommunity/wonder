@@ -828,7 +828,7 @@ There are many ways to use this script:
     
     <target name="WOPayPal.all">
         <antcall target="global.framework" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.wopaypal.WOPayPal" />
             <param name="project.name" value="WOPayPal" />
             <param name="project.dir" value="PayPal/Frameworks/WOPayPal" />
         </antcall>
