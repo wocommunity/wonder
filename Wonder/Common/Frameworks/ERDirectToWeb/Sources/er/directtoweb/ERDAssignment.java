@@ -69,7 +69,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * context if localization is enabled. This implementation
      * calls <code>localizedStringForKeyWithDefault</code> on the
      * localizer for the given context. This method belongs to 
-     * {@link ERDLocaizableInterface}.
+     * {@link ERDLocalizableInterface}.
      * @param key to be looked up on the context
      * @parant c current context
      * @return localized version of the given key returning the key 
