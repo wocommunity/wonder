@@ -10,7 +10,7 @@ import org.jfree.data.general.PieDataset;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 /**
  * PieChart.
@@ -41,9 +41,9 @@ public class ERPPieChart extends ERPChart {
                 DefaultPieDataset dataset = new DefaultPieDataset();
                 for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
                     Object item = items.nextElement();
-                    String name = (String)NSKeyValueCoding.Utility.valueForKey(item, nameKey());
-                    Number value = (Number)NSKeyValueCoding.Utility.valueForKey(item, valueKey());
-                    dataset.setValue(name, value.intValue());
+                    Comparable name = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
+                    Number value = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, valueKey());
+                    dataset.setValue(name, value);
                 }
                 _dataset = dataset;
             }

@@ -1,10 +1,17 @@
 package er.plot;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.imagemap.ImageMapUtil;
+import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
+import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -12,8 +19,9 @@ import org.jfree.data.general.Dataset;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 /**
  * Class for Chart Component ERPCategoryChart.
@@ -84,13 +92,13 @@ public class ERPCategoryChart extends ERPChart {
                 
                 for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
                     Object item = items.nextElement();
-                    String name = (String)NSKeyValueCoding.Utility.valueForKey(item, nameKey());
-                    Number value = (Number)NSKeyValueCoding.Utility.valueForKey(item, valueKey());
-                    String category = null;
+                    Comparable name = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, nameKey());
+                    Number value = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, valueKey());
+                    Comparable category = null;
                     if(categoryKey() != null) {
-                        category = (String)NSKeyValueCoding.Utility.valueForKey(item, categoryKey());
+                        category = (Comparable)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, categoryKey());
                     }
-                    dataset.setValue(value.intValue(), name, category);
+                    dataset.setValue(value, name, category);
                 }
                 _dataset = dataset;
             }
