@@ -392,11 +392,7 @@ public class ERDirectToWeb {
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE
-            if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
-                NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-                NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
-                trace.info("Rule tracing on");
-            }
+            configureTraceRuleFiring();
             Object observer=new _Observer();
             ERXRetainer.retain(observer); // has to be retained on the objC side!!
             NSNotificationCenter.defaultCenter().addObserver(observer,
@@ -410,12 +406,15 @@ public class ERDirectToWeb {
     
     // This is the actual method that turns trace rule firign on and off.
     public static void configureTraceRuleFiring() {
+        //AK: we can trace firing much more fine-grained than the default engine
+        // and also enabling the debug level NSLog spews out a ton of ridiculous 
+        // info about images and the like, so we leave the NSLog alone...
         if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
-            NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-            NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+            //NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
+            //NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
             trace.info("Rule tracing on");
         } else if (!trace.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
-            NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
+            //NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
             trace.info("Rule tracing off");
         }
     }
