@@ -5,10 +5,10 @@ AttributeName: WOString {
 AttributeValue: WOBrowser {
 	displayString = browserStringForItem;
 	item = browserItem;
-	list = relationshipDisplayGroup.allObjects;
-	multiple = true;
+	list = relationshipDisplayGroup.displayedObjects;
+	multiple = false;
 	selections = browserSelections;
-	size = 4;
+	size = d2wContext.browserSize;
 }
 
 Banner: WOImage {
@@ -19,6 +19,10 @@ Banner: WOImage {
 	height = "34";
 	name = "Currently...";
 	width = "550";
+}
+
+DisplayArrows: WOConditional {
+	condition = isSortedRelationship;
 }
 
 DisplayList: WOConditional {
@@ -42,6 +46,10 @@ HeaderRow: WOGenericContainer {
 	_unroll = true;
 	bgcolor = backgroundColorForHeaderRow;
 	elementName = "tr";
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
 InspectComponent: D2WEdit {
@@ -141,5 +149,16 @@ ReturnLink: WOHyperlink {
 	action = returnAction;
 }
 
+SubmitButton1: WOSubmitButton {
+	action = moveObjectUp;
+	value = "UP";
+}
+
+SubmitButton2: WOSubmitButton {
+	action = moveObjectDown;
+	value = "Down";
+}
+
 ToManyForm: WOForm {
+	multipleSubmit = true;
 }
