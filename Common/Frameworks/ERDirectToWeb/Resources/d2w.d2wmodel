@@ -1982,21 +1982,6 @@
             rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = formEncoding; }; 
         }, 
         {
-            author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.className; 
-                selectorName = "isEqualTo"; 
-                value = com.webobjects.foundation.NSTimestamp; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
-                keyPath = formatter; 
-                value = "%b %d,%Y"; 
-            }; 
-        }, 
-        {
             author = 30; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
@@ -2234,6 +2219,21 @@
             author = 20; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.className; 
+                selectorName = "isEqualTo"; 
+                value = com.webobjects.foundation.NSTimestamp; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "%b %d,%Y"; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
@@ -2253,7 +2253,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = groupingComponentName; 
-                value = DefaultSectionComponentCSV; 
+                value = ERDDefaultSectionComponentCSV; 
             }; 
         }, 
         {
@@ -2279,7 +2279,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = groupingComponentName; 
-                value = DefaultSectionComponent; 
+                value = ERDDefaultSectionComponent; 
             }; 
         }, 
         {
@@ -2305,7 +2305,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = groupingComponentName; 
-                value = DefaultSectionComponentPrinterFriendly; 
+                value = ERDDefaultSectionComponentPrinterFriendly; 
             }; 
         }, 
         {
