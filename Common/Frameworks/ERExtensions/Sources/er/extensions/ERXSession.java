@@ -235,12 +235,11 @@ public class ERXSession extends WOSession {
      * meaning they hit the back button and then clicked on a
      * link.
      */
-     public boolean didBackTrack = false;
+    public boolean didBackTrack = false;
+
     /** flag to indicate if the last action was a direct action */
-    // FIXME: Need to be setting this in ERXDirectAction or maybe we can be smart and set it when the
-    //		direct action handler picks it up so that everything won't have to subclass one
-    //		direct action class
     public boolean lastActionWasDA = false;
+
     /**
      * Utility method that gets the context ID string
      * from the passed in request.
@@ -273,15 +272,15 @@ public class ERXSession extends WOSession {
         int reqCID = Integer.parseInt(requestsContextID(aRequest));
         int cid = Integer.parseInt(aContext.contextID());
         int delta = cid - reqCID;
-        if(delta > 2){
+        if (delta > 2) {
             didBacktrack = true;
-        }else if(delta > 1){
+        } else if (delta > 1) {
             // Might not have backtracked if their last
-            // action was a direct action. I don't know the best way
-            // to deal with this, but one way would include
-            // overriding performActionNamed() on your WODirectActions
-            // indicating the last request was a DirectAction
-            if(!lastActionWasDA){
+            // action was a direct action. 
+            // ERXDirectActionRequestHandler, which is the framework 
+            // built-in default direct action handler, sets this variable  
+            // to true at the end of its handleRequest method. 
+            if (!lastActionWasDA) {
                 didBacktrack = true;
             }
         }
@@ -347,29 +346,4 @@ public class ERXSession extends WOSession {
         super.terminate();
     }
 
-    //// Below this point is all the stuff to be deleted ///////
-
-    // DELETEME: don't need navigation
-    public ERXSession() {
-        // Setting the default editing context delegate
-        _navigation = createNavigation();
-        _navigation.setIsDisabled(false);
-    }
-
-    // DELETEME: Should be removed
-    public ERXNavigation createNavigation() { return new ERXNavigation(); }
-    // DELETEME: Should be removed
-    public ERXNavigation erxNavigation() { return _navigation; }
-    // DELETEME: Should be removed
-    protected boolean _hideHelp=false;
-    // DELETEME: Should be removed
-    public boolean hideHelp() { return _hideHelp; }
-    // DELETEME: Should be removed
-    public void setHideHelp(boolean newValue) { _hideHelp=newValue; }
-    
-    // DELETEME: Should remove.
-    public String wrapperPageName() { return "PageWrapper"; }
-
-    // DELETEME: Need to get rid of navigation refs
-    protected ERXNavigation _navigation;
 }
