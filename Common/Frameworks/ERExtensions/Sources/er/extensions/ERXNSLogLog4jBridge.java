@@ -57,6 +57,14 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
         }
     }
 
+    public void setAllowedDebugLevel(int debugLevel) {
+        super.setAllowedDebugLevel(debugLevel);
+
+        if (type == DEBUG) {
+            log.setLevel(debugLevel != NSLog.DebugLevelOff ? Level.DEBUG : Level.INFO);
+        }
+    }
+
     public void appendln() {
         appendln(""); // Assuming people will always put "%n" at the end of the layout pattern.  
     }
