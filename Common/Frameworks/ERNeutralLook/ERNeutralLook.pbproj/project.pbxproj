@@ -633,6 +633,7 @@
 		40B58284FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				41058882063E5B5B00F9B88A,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -778,6 +779,12 @@
 //412
 //413
 //414
+		41058882063E5B5B00F9B88A = {
+			fileRef = F65884B002DF5E010FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41B8F4BE0503E56800000102 = {
 			buildArgumentsString = "-emacs -Dproject.name=\"ERNeutralLook\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml generic.$ACTION";
 			buildPhases = (
