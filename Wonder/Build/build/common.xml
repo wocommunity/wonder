@@ -124,6 +124,10 @@
                 <include name="JavaWO*.framework"/>
                 <include name="ER*.framework"/>
                 <exclude name="ERNeutralLook.framework"/>
+                <exclude name="ERJavaMail.framework"/>
+                <exclude name="ERChangeNotificationJMS.framework"/>
+                <exclude name="WOPayPal.framework"/>
+                <exclude name="Validity.framework"/>
                 <include name="BT*.framework"/>
             </frameworks>
             <frameworks root="${wo.local.root}">
