@@ -177,11 +177,9 @@ public class ERXFetchSpecificationBatchIterator {
             NSRange range = new NSRange(currentObjectFetchCount, length);
             NSArray primaryKeysToFetch = primaryKeys.subarrayWithRange(range);
 
-            log.info("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
+            log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
-            //EOFetchSpecification fetchSpec = (EOFetchSpecification)fetchSpecification.clone();
-            //fetchSpec.setQualifier(qual);
             EOFetchSpecification fetchSpec = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
             if (fetchSpecification.prefetchingRelationshipKeyPaths() != null)
                 fetchSpec.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
