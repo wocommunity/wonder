@@ -4,4 +4,6 @@ Image1: WOImage {
 	mimeType = ^mimeType;
 	src = src;
 	width = ^width;
+        border = ^border;
+        onfocus = ^onfocus;
 }
