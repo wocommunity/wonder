@@ -7,7 +7,7 @@ import com.webobjects.eocontrol.*;
 /** Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle
  * #2957558 ("de-at" is converted to "German" instead of "German_Austria").
-* The request is created via {@link ERXApplication#createRequest()}.
+ * The request is created via {@link ERXApplication#createRequest(String,String,String, NSDictionary,NSData,NSDictionary)}.
  */
 public  class ERXRequest extends WORequest {
 
