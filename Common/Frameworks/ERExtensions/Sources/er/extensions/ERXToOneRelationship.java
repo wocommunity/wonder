@@ -272,10 +272,9 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 		ec = session().defaultEditingContext();
 	    ec.lock();
 	    try {
-	    anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
+	    	anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
 
-            aSortedArray = new NSMutableArray(anUnsortedArray);
-            ERXArrayUtilities.sortedArraySortedWithKeys(aSortedArray, _localSortKeys(), null);
+            aSortedArray = ERXArrayUtilities.sortedArraySortedWithKeys(anUnsortedArray, _localSortKeys(), null).mutableClone();
 
             // if there is a value on the EO, then we need to make sure that the list's EOs are in the same EC
             // otherwise the popup selection will be wrong (will default to the first element)
