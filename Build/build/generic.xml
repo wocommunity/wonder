@@ -1015,6 +1015,13 @@ There are many ways to use this script:
             <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
+    <target name="PostgresqlPlugIn.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
+            <param name="project.name" value="PostgresqlPlugIn" />
+            <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
+        </antcall>
+    </target>
     
 
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
@@ -1039,7 +1046,8 @@ There are many ways to use this script:
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
 
-    <target name="subprojects.all" depends="WOPayPal.all, Validity.all, SVGObjects.all, DynaReporting.all, ExcelGeneration.all" />
+    <target name="PlugIns.all" depends="PostgresqlPlugIn.all" />
+    <target name="subprojects.all" depends="WOPayPal.all, Validity.all, SVGObjects.all, DynaReporting.all, ExcelGeneration.all, PlugIns.all" />
 
     <target name="experimental.all" depends="DevStudio.all" />
 
@@ -1160,6 +1168,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.clean.application" >
             <param name="project.name" value="EGSampleApp" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="PostgresqlPlugIn" />
         </antcall>
      </target>
 
@@ -1340,6 +1351,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="ExcelGenerator" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="PostgresqlPlugIn" />
         </antcall>
     </target>
 

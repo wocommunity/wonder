@@ -42,7 +42,7 @@ wo.dir.system=/System
 
 or
 
- ant compile; sudo ant install web
+ ant clean compile; sudo ant install
 
 at the top-level folder. 
 
