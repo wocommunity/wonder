@@ -102,5 +102,5 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 #########################################################################
 # ERXDatabaseContextDelegate 
 #########################################################################
-er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties
-er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties
+er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
+er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=

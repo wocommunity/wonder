@@ -24,6 +24,5 @@ public class ERXEditingContextInspector extends WOComponent {
     }
 
     public EOEditingContext object;
-    protected EOEnterpriseObject item;
-
+    public EOEnterpriseObject item;
 }

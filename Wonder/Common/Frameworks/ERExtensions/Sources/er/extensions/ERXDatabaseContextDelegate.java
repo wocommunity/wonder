@@ -231,7 +231,7 @@ public class ERXDatabaseContextDelegate {
     private String _readOnlySessionProperties;
     public String _readOnlySessionProperties() {
         if (_readOnlySessionProperties == null) {
-            _readOnlySessionProperties = System.getProperty("er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties");
+            _readOnlySessionProperties = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties","");
         }
         return _readOnlySessionProperties;
     }
@@ -239,7 +239,7 @@ public class ERXDatabaseContextDelegate {
     private String _readWriteSessionProperties;
     public String _readWriteSessionProperties() {
         if (_readWriteSessionProperties == null) {
-            _readWriteSessionProperties = System.getProperty("er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties");
+            _readWriteSessionProperties = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties","");
         }
         return _readWriteSessionProperties;
     }
