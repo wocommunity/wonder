@@ -30,12 +30,12 @@ public class ERXDatabaseContextDelegate {
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate;
+    
     /** Returns the singleton of the database context delegate */
     public static ERXDatabaseContextDelegate defaultDelegate() {
         if (_defaultDelegate == null) {
             _defaultDelegate = new ERXDatabaseContextDelegate();
-            log.info("Created default delegate");
-            //ERXRetainer.retain(_defaultDelegate); // Retaining the delegate on the ObjC side.  This might not be necessary.
+            log.debug("Created default database context delegate");
         }
         return _defaultDelegate;
     }
@@ -130,7 +130,7 @@ public class ERXDatabaseContextDelegate {
                                                 EOFetchSpecification fs,
                                                 EODatabaseChannel channel) {
         if (dbLog.isDebugEnabled()) {
-            dbLog.debug("databaseContextDidSelectObjects "+fs);
+            dbLog.debug("databaseContextDidSelectObjects " + fs + " \n" + ERXUtilities.stackTrace());
         }
     }
 
