@@ -24,6 +24,9 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
     /** component does not synchronize variables */    
     public boolean synchronizesVariablesWithBindings() { return false; }
 
+    /** component is not stateless */    
+    public boolean isStateless() { return false; }
+
     /**
      * Resolves a given binding as a int value. Useful for image sizes and the like.
      * @param binding binding to be resolved as a int value.
