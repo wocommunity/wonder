@@ -74,6 +74,62 @@
 			settings = {
 			};
 		};
+		9D86289B034E504C10CF0E7D = {
+			children = (
+				9D86289C034E504C10CF0E7D,
+				9D8628A2034E504C10CF0E7D,
+				9D8628AA034E51C110CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditFlag;
+			refType = 4;
+		};
+		9D86289C034E504C10CF0E7D = {
+			isa = PBXFileReference;
+			name = ERD2WEditFlag.api;
+			path = Components/ERD2WEditFlag.api;
+			refType = 2;
+		};
+		9D8628A2034E504C10CF0E7D = {
+			isa = PBXFileReference;
+			name = ERD2WEditFlag.java;
+			path = er/directtoweb/ERD2WEditFlag.java;
+			refType = 4;
+		};
+		9D8628A3034E504C10CF0E7D = {
+			fileRef = 9D86289C034E504C10CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9D8628A5034E504C10CF0E7D = {
+			fileRef = 9D8628A2034E504C10CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9D8628AA034E51C110CF0E7D = {
+			children = (
+				9D8628AB034E51C110CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WEditFlag.wo;
+			path = "";
+			refType = 4;
+		};
+		9D8628AB034E51C110CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WEditFlag.wo;
+			refType = 2;
+		};
+		9D8628B0034E51C110CF0E7D = {
+			fileRef = 9D8628AA034E51C110CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //9D0
 //9D1
 //9D2
@@ -7313,6 +7369,8 @@
 				9D5BC633033AB0C210CF0E7D,
 				9D5BC641033AB19910CF0E7D,
 				F6B782B80345524F01257492,
+				9D8628A3034E504C10CF0E7D,
+				9D8628B0034E51C110CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7517,6 +7575,7 @@
 				F6B41516032D7E020FCF0E72,
 				F686D4E5033285420FCF0E72,
 				9D5BC635033AB0C210CF0E7D,
+				9D8628A5034E504C10CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9284,6 +9343,7 @@
 				FBDED2DCDB37203D1C182CFC,
 				F6E796A302C877AF01AD0D07,
 				F6E796A402C877AF01AD0D07,
+				9D86289B034E504C10CF0E7D,
 			);
 			isa = PBXGroup;
 			name = "Property Level D2WComponents";
