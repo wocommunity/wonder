@@ -11,6 +11,7 @@ import com.webobjects.foundation.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.*;
+import java.util.Hashtable;
 
 /**
  * An extension to the number formatter. It
@@ -21,22 +22,55 @@ import java.text.*;
  */
 public class ERXNumberFormatter extends NSNumberFormatter {
 
-    /** holds a reference to the shared instance */
-    protected static ERXNumberFormatter _sharedInstance;
-    private String _ignoredChars = "%$,";
+	/** holds a reference to the repository */
+	private static Hashtable _repository = new Hashtable();
+	protected static final String DefaultKey = "ERXNumberFormatter.DefaultKey";
+	
+	static {
+		_repository.put(DefaultKey, new ERXNumberFormatter());
+	};
+	
+	private String _ignoredChars = "%$,";
     private BigDecimal _factor;
 	private String _operator;
-    
+	 
     /**
-     * Returns the shared instance
+     * Returns the default shared instance
      * @return shared instance
      */
-    public static ERXNumberFormatter sharedInstance() {
-        if (_sharedInstance == null)
-            _sharedInstance = new ERXNumberFormatter();
-        return _sharedInstance;
+    public static NSNumberFormatter sharedInstance() {
+         return numberFormatterForPattern(DefaultKey);
     }
 
+    /**
+     * Returns a shared instance for the specified pattern.
+     * @return shared instance of formatter
+     */
+    public static NSNumberFormatter numberFormatterForPattern(String pattern) {
+    	synchronized(_repository) {
+    		ERXNumberFormatter formatter = (ERXNumberFormatter)_repository.get(pattern);
+    		if(formatter == null) {
+    			formatter = new ERXNumberFormatter(pattern);
+    			_repository.put(pattern, formatter);
+    		}
+    		return formatter;
+    	}
+    }
+    
+    /**
+     * Sets a shared instance for the specified pattern.
+     * @return shared instance of formatter
+     */
+    public static void setNumberFormatterForPattern(NSNumberFormatter formatter, String pattern) {
+    	synchronized(_repository) {
+    		if(formatter == null) {
+    			_repository.remove(pattern);
+    		} else {
+    			_repository.put(pattern, formatter);
+    		}
+    	}
+    }
+    
     /**
      * Public constructor
      */

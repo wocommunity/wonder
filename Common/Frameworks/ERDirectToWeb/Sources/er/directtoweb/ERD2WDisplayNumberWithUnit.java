@@ -25,6 +25,6 @@ public class ERD2WDisplayNumberWithUnit extends D2WDisplayNumber {
     }
 
     public Format numberFormatter() {
-        return new ERXNumberFormatter(formatter());
+        return ERXNumberFormatter.numberFormatterForPattern(formatter());
     }
 }
