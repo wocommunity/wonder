@@ -32,7 +32,7 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
         if (result && !shouldSubmitForm() &&
             ((ERXSession)session()).javaScriptEnabled() &&
             !((ERXSession)session()).browser().isNetscape() &&
-            !((ERXSession)session()).browser().isOmniweb())
+            !((ERXSession)session()).browser().isOmniWeb())
             result=false;
         return result;
     }

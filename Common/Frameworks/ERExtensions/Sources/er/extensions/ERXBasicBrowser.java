@@ -61,7 +61,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean _isICab;
     private final boolean _isIE;
     private final boolean _isNetscape;
-    private final boolean _isOmniweb;
+    private final boolean _isOmniWeb;
     private final boolean _isOpera;
     private final boolean _isUnknownBrowser;
 
@@ -106,7 +106,7 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isICab			= _browserName.equals(ICAB);
         _isIE			= _browserName.equals(IE);
         _isNetscape		= _browserName.equals(NETSCAPE);
-        _isOmniweb		= _browserName.equals(OMNIWEB);
+        _isOmniWeb		= _browserName.equals(OMNIWEB);
         _isOpera		= _browserName.equals(OPERA);
         _isUnknownBrowser	= _browserName.equals(UNKNOWN_BROWSER);
 
@@ -204,10 +204,10 @@ public class ERXBasicBrowser extends ERXBrowser {
     public boolean isNotNetscape() { return ! _isNetscape; }
 
     /**
-     * Browser is Omniweb?
-     * @return true if browser is Omniweb.
+     * Browser is OmniWeb?
+     * @return true if browser is OmniWeb.
      */
-    public boolean isOmniweb() { return _isOmniweb; }
+    public boolean isOmniWeb() { return _isOmniWeb; }
 
     /**
      * Browser is Opera?
