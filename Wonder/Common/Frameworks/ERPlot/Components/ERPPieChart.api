@@ -8,17 +8,17 @@
 		<binding name="type"/>
 		<binding name="nameKey"/>
 		<binding name="valueKey"/>
+		<binding name="dataset"/>
 
-		<validation message="&apos;nameKey&apos; is a required binding">
-			<unbound name="nameKey"/>
-		</validation>
-
-		<validation message="&apos;valueKey&apos; is a required binding">
-			<unbound name="valueKey"/>
-		</validation>
-
-		<validation message="&apos;items&apos; is a required binding">
-			<unbound name="items"/>
+		<validation message="Either items, nameKey and valueKey or dataset must be bound">
+			<or>
+				<and>
+					<unbound name="items"/>
+					<unbound name="nameKey"/>
+						<unbound name="valueKey"/>
+				</and>
+						<unbound name="dataset"/>
+			</or>
 		</validation>
 	</wo>
 </wodefinitions>
