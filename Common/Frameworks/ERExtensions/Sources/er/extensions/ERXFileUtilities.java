@@ -263,7 +263,7 @@ public class ERXFileUtilities {
         if (destination == null || source == null)
             throw new IllegalArgumentException("null source or destination not allowed");
 
-        String[] cmd = new String[5];
+        String[] cmd = new String[6];
 
         int i = 0;
         cmd[i++] = "ln";
