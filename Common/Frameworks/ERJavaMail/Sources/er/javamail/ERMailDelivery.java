@@ -16,6 +16,7 @@ import er.extensions.ERXLogger;
 import er.extensions.ERXUtilities;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -48,7 +49,7 @@ try {
 */
 public abstract class ERMailDelivery {
 
-    static ERXLogger log = ERXLogger.getERXLogger (ERMailDelivery.class);
+    private static ERXLogger log = ERXLogger.getERXLogger (ERMailDelivery.class);
 
     /** JavaMail session */
     private javax.mail.Session _session;
@@ -69,7 +70,8 @@ public abstract class ERMailDelivery {
     public static String callBackClassName = null;
     public static String callBackMethodName = null;
 
-    public static String DefaultCharset = "iso-8859-1";
+    public static String DefaultCharset = "ISO-8859-1";
+    public String _charset = DefaultCharset;
 
     /** callbackObject to refer to in the calling program */
     public Object _callbackObject = null;
@@ -80,6 +82,14 @@ public abstract class ERMailDelivery {
         callBackMethodName = methodName;
     }
 
+    public String charset () {
+        return _charset;
+    }
+
+    public void setCharset (String charset) {
+        _charset = charset;
+    }
+    
     protected javax.mail.Session session () {
         return _session;
     }
@@ -191,7 +201,7 @@ public abstract class ERMailDelivery {
     public void setSubject (String subject) throws MessagingException {
         String encoded = null;
         try {
-            encoded = MimeUtility.encodeText (subject, DefaultCharset, null);
+            encoded = MimeUtility.encodeText (subject, charset(), !charset().equals(DefaultCharset) ? "B" : null);
         } catch (Exception e) {
             encoded = subject;
         }
@@ -199,7 +209,7 @@ public abstract class ERMailDelivery {
     }
 
     /**
-	 * Sets the X-Mailer header for the message. Useful for tracking
+     * Sets the X-Mailer header for the message. Useful for tracking
      * which mailers are sending messages.
      * @param xMailer value to set
      */
@@ -208,17 +218,17 @@ public abstract class ERMailDelivery {
     }
 
     /**
-	 * Gets the X-Mailer header set on the
+     * Gets the X-Mailer header set on the
      * MimeMessage.
      * @return X-Mailer header if it is set
      */
     public String xMailerHeader() throws MessagingException {
         String[] headers = this.mimeMessage ().getHeader ("X-Mailer");
-        return headers.length > 0 ? headers[0] : null;
+        return headers != null && headers.length > 0 ? headers[0] : null;
     }
 
     /**
-	 * Builds an ERMessage for the current MimeMessage.
+     * Builds an ERMessage for the current MimeMessage.
      * @return ERMessage for the current MimeMessage.
      */
     protected ERMessage buildMessage () {
@@ -229,116 +239,120 @@ public abstract class ERMailDelivery {
     }
 
     /**
-	 * Sends the mail immediately.  The message is put in a FIFO queue managed
+     * Sends the mail immediately.  The message is put in a FIFO queue managed
      * by a static threaded inner class
      */
     public void sendMail () {
         try {
             sendMail (false);
-        } catch (ERMailSender.ForwardException e) {
-            log.warn ("Sending mail in a non-blocking manner and a forward exception was thrown: "
-                      + ERXUtilities.stackTrace (e));
+        } catch (NSForwardException e) {
+            log.warn ("Sending mail in a non-blocking manner and a forward exception was thrown.", e);
         }
     }
 
     /**
-	 * Method used to construct a MimeMessage and then send
+     * Method used to construct a MimeMessage and then send
      * it.  This method can be specified to block until the
      * message is sent or to add the message to a queue and have
      * a callback object handle any exceptions that happen.
      * If sending is blocking then any exception thrown will be
-     * wrapped in a general {@link ERMailSender.ForwardException ForwardException}.
+     * wrapped in a general {@link NSForwardException}.
      * @param shouldBlock boolean to indicate if the message should be
      *		added to a queue or sent directly.
      */
-    public void sendMail (boolean shouldBlock) throws ERMailSender.ForwardException {
-		try {
-			// add the current message to the message stack
-			boolean mailAccepted = false;
+    public void sendMail (boolean shouldBlock) {
+        try {
+            this.finishMessagePreparation ();
+            ERMailSender sender = ERMailSender.sharedMailSender ();
+            ERMessage message    = this.buildMessage ();
 
-			this.finishMessagePreparation ();
-
-            while (!mailAccepted) {
-				this.mimeMessage ().setSentDate (new Date ());
-
-                try {
-					ERMailSender.sharedMailSender ().sendMessage (this.buildMessage (), shouldBlock);
-					mailAccepted = true;
-				} catch (ERMailSender.SizeOverflowException e) {
-                    // The mail sender is overflowed, we need to wait
+            if (shouldBlock)
+                sender.sendMessageNow (message);
+            else {
+                // add the current message to the message stack
+                boolean mailAccepted = false;
+                while (!mailAccepted) {
                     try {
-                        // Ask the current thread to stop computing for a little while
-                        Thread.currentThread ().sleep (ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
-                    } catch (InterruptedException ie) {
-                        log.warn ("Caught InterruptedException in ERMailDelivery:");
-                        log.warn (ERXUtilities.stackTrace (ie));
+                        sender.sendMessageDeffered (message);
+                        mailAccepted = true;                       
+                    } catch (ERMailSender.SizeOverflowException e) {
+                        // The mail sender is overflowed, we need to wait
+                        try {
+                            // Ask the current thread to stop
+                            // computing for a little while.
+                            // Here, we make the assumption that
+                            // the current thread is the one that
+                            // feeds the ERMailSender.
+                            Thread.currentThread ().sleep
+                                (ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
+                        } catch (InterruptedException ie) {
+                            log.warn ("Caught InterruptedException.", ie);
+                        }
                     }
-                } catch (ERMailSender.Exception e) {
-					log.warn ("ERMailSender.Exception exception caught, re-throwing exception.");
-					throw new ERMailSender.ForwardException (e);
-				}
-			}
-		} catch (MessagingException e) {
-			log.warn ("MessagingException exception caught, re-throwing exception.");
-			throw new ERMailSender.ForwardException (e);
-		} finally {
-			this.setMimeMessage (null);
-		}
+                }
+            }
+        } catch (MessagingException e) {
+            log.warn ("MessagingException exception caught, re-throwing exception.", e);
+            throw new NSForwardException (e);
+        } finally {
+            this.setMimeMessage (null);
+        }
     }
 
     protected void finishMessagePreparation () throws MessagingException {
-		DataHandler messageDataHandler = messageDataHandler = this.prepareMail ();
+        DataHandler messageDataHandler = messageDataHandler = this.prepareMail ();
 
-		// Add all the attachements to the javamail message
-		if (this.attachments ().count () > 0) {
-			// Create a Multipart that will hold the prepared multipart and the attachments
-			MimeMultipart multipart = new MimeMultipart ();
+        // Add all the attachements to the javamail message
+        if (this.attachments ().count () > 0) {
+            // Create a Multipart that will hold the prepared multipart and the attachments
+            MimeMultipart multipart = new MimeMultipart ();
 
-			// Create the main body part
-			BodyPart mainBodyPart = new MimeBodyPart ();
-			mainBodyPart.setDataHandler (messageDataHandler);
+            // Create the main body part
+            BodyPart mainBodyPart = new MimeBodyPart ();
+            mainBodyPart.setDataHandler (messageDataHandler);
 
-			// add the main body part to the content of the message
-			multipart.addBodyPart (mainBodyPart);
+            // add the main body part to the content of the message
+            multipart.addBodyPart (mainBodyPart);
 
-			// add each attachments to the former multipart
-			Enumeration en = this.attachments ().objectEnumerator ();
-			while (en.hasMoreElements ()) {
-				ERMailAttachment attachment = (ERMailAttachment)en.nextElement ();
-				BodyPart bp = attachment.getBodyPart ();
-				bp.setDisposition (Part.ATTACHMENT);
-				multipart.addBodyPart (bp);
-			}
+            // add each attachments to the former multipart
+            Enumeration en = this.attachments ().objectEnumerator ();
+            while (en.hasMoreElements ()) {
+                ERMailAttachment attachment = (ERMailAttachment)en.nextElement ();
+                BodyPart bp = attachment.getBodyPart ();
+                bp.setDisposition (Part.ATTACHMENT);
+                multipart.addBodyPart (bp);
+            }
 
-			this.mimeMessage ().setContent (multipart);
-		} else {
-			this.mimeMessage ().setDataHandler (messageDataHandler);
-		}
+            this.mimeMessage ().setContent (multipart);
+        } else {
+            this.mimeMessage ().setDataHandler (messageDataHandler);
+        }
 
-		// If the xMailer property has not been set, check if one has been provided
-		// in the System properties
-		if ((this.xMailerHeader () == null) &&
-	        (ERJavaMail.sharedInstance ().defaultXMailerHeader () != null))
-			this.setXMailerHeader (ERJavaMail.sharedInstance ().defaultXMailerHeader ());
-			
-		this.mimeMessage ().saveChanges ();
+        // If the xMailer property has not been set, check if one has been provided
+        // in the System properties
+        if ((this.xMailerHeader () == null) &&
+            (ERJavaMail.sharedInstance ().defaultXMailerHeader () != null))
+            this.setXMailerHeader (ERJavaMail.sharedInstance ().defaultXMailerHeader ());
+
+        this.mimeMessage ().setSentDate (new Date ());
+        this.mimeMessage ().saveChanges ();
     }
 
     /** Sets addresses regarding their recipient type in current message */
     private void setAddresses (NSArray addressesArray, Message.RecipientType type)
         throws MessagingException, AddressException {
-			InternetAddress [] addresses = null;
+            InternetAddress [] addresses = null;
 
-			if (!ERJavaMail.sharedInstance ().centralize ())
-				addresses = ERMailUtils.convertNSArrayToInternetAddresses (addressesArray);
-			else
-				addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
+            if (!ERJavaMail.sharedInstance ().centralize ())
+                addresses = ERMailUtils.convertNSArrayToInternetAddresses (addressesArray);
+            else
+                addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
 
-			this.mimeMessage ().setRecipients (type, addresses);
-		}
-
+            this.mimeMessage ().setRecipients (type, addresses);
+        }
+    
     /**
-	 * Abstract method called by subclasses for doing pre-processing before sending the mail.
+     * Abstract method called by subclasses for doing pre-processing before sending the mail.
      * @return the multipart used to put in the mail.
      */
     protected abstract DataHandler prepareMail () throws MessagingException;
