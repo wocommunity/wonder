@@ -171,7 +171,7 @@ public class ERXExtensions {
                                                                  null);
                 NSNotificationCenter.defaultCenter().addObserver(observer,
                                                                  new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
-                                                                 WOApplication.ApplicationDidFinishLaunchingNotification,
+                                                                 WOApplication.ApplicationWillFinishLaunchingNotification,
                                                                  null);
                 NSNotificationCenter.defaultCenter().addObserver(observer,
                                                                  new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
