@@ -4,7 +4,7 @@ AttributeRepetition: WORepetition {
 	list = currentSection.keys;
 }
 
-AttributeValue1: WOSwitchComponent { WODebug=false;
+AttributeValue1: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
@@ -12,7 +12,7 @@ AttributeValue1: WOSwitchComponent { WODebug=false;
 	object = object;
 }
 
-AttributeValue2: WOSwitchComponent { WODebug=false;
+AttributeValue2: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
 	_unroll = true;
