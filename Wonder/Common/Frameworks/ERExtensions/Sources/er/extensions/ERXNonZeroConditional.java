@@ -18,7 +18,7 @@ public class ERXNonZeroConditional extends WOComponent {
     public boolean synchronizesBindingsWithVariables() { return false; }
     public boolean isStateless() { return true; }
     
-    protected boolean isNonZero() {
+    public boolean isNonZero() {
         Object binding=valueForBinding("condition");
         return binding==null || !binding.equals(ERXConstant.ZeroInteger);
     }
