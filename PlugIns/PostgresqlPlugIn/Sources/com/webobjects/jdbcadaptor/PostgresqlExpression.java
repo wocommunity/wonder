@@ -455,7 +455,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return  the SQL operator string
      */
     public String sqlStringForSelector(NSSelector selector, Object value){
-        if(CaseInsensitiveRegexOperator.name().equals( selector.name() ) || RegexOperator.equals( selector.name() ) ) {
+        if(CaseInsensitiveRegexOperator.name().equals( selector.name() ) || RegexOperator.name().equals( selector.name() ) ) {
             return selector.name();
         }
         return super.sqlStringForSelector(selector, value);
