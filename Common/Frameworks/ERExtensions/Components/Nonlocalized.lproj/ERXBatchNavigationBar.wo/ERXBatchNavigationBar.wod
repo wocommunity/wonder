@@ -22,7 +22,7 @@ DGHasQualifier: ERXNonNullConditional {
 }
 
 EntityName3: ERXPluralString {
-	count = ^displayGroup.allObjects.count;
+	count = objectCount;
 	value = ^objectName;
 }
 
