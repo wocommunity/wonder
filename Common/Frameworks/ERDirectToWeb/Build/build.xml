@@ -1,12 +1,12 @@
 <project name="ERDirectToWeb" default="all" basedir="..">
     <property name="project.principal.class" value="er.directtoweb.ERDirectToWeb" />
 
-    <!-- dont touch from here on -->
+    <!-- dont touch from here on 
     <property name="project.name" value="${ant.project.name}" />
-    <property name="project.dir" value="${basedir}" />
+    <property name="project.dir" value="${basedir}" /> -->
 
     <target name="clean">
-        <ant antfile="../../../Build/build/common.xml" target="clean" />
+        <ant antfile="../../../Build/build/common.xml" target="ERDirectToWeb.clean" />
     </target>
 
     <target name="install">
@@ -18,6 +18,6 @@
     </target>
 
     <target name="all">
-        <ant antfile="../../../Build/build/common.xml" />
+        <ant antfile="../../../Build/build/common.xml" target="ERDirectToWeb.all" />
     </target>
 </project>
