@@ -10,8 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERDEditDateJavascript extends ERDCustomEditComponent {
+    static final ERXLogger log = ERXLogger.getLogger(ERDEditDateJavascript.class);
 
     public ERDEditDateJavascript(WOContext context) {super(context);}
 
@@ -33,7 +36,9 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     /*public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }*/
     public String name() { return key()+"_datebox"; }
-
+    public String propertyKey() { return (String)valueForBinding("propertyKey"); }
+    public String displayNameForProperty() { return (String)valueForBinding("displayNameForProperty"); }
+    public Object value() {return dateString;}
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
         NSTimestamp date = null;
@@ -56,20 +61,24 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
                     String reformattedDate=formatter.format(date);
                     dateIsValid = reformattedDate.equals(modifiedDateString);
                 }
-                if (!dateIsValid)
-                    throw new NSValidation.ValidationException("Please check <B>"+
-                                                               valueForBinding("displayNameForProperty")+"</B>: "+dateString+" is not a valid date");
+                if (!dateIsValid) {
+                    String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObject("InvalidDateFormatException", this);
+                    log.debug(message);
+                    throw new NSValidation.ValidationException(message);
+                }
 
             }
             if (object()!=null) object().validateTakeValueForKeyPath(date, key());
         } catch (java.text.ParseException nspe) {
-            NSValidation.ValidationException v =
-            new NSValidation.ValidationException("Please check the format of <B>"+
-                                                 valueForBinding("displayNameForProperty")+"</B> "+dateString+" is not a valid date");
+            String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObject("InvalidDateFormatException", this);
+            log.debug("java.text.ParseException:" + message);
+            NSValidation.ValidationException v = new NSValidation.ValidationException(message);
             parent().validationFailedWithException( v, date, key());
         } catch (NSValidation.ValidationException v) {
+            log.debug("NSValidation.ValidationException:" + v);
             parent().validationFailedWithException(v,date,key());
         } catch(Exception e) {
+            log.debug("Exception:" + e);
             parent().validationFailedWithException(e,date,key());
         }
     }

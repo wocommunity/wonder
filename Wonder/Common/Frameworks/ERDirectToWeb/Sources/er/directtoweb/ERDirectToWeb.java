@@ -213,7 +213,7 @@ public class ERDirectToWeb {
         return (QueryPageInterface)result;
     }
     
-    public static String displayNameForPropertyKey(String key, String entityName) {
+    public static String displayNameForPropertyKey(String key, String entityName, String language) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
@@ -303,12 +303,11 @@ public class ERDirectToWeb {
         }
     }
 
-    public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName){
+    public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName, String language){
         NSMutableArray result = new NSMutableArray();
         for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ){
             String key = (String)e.nextElement();
-            result.addObject(new ERXKeyValuePair(key,
-                                                ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
+            result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName, language)));
         }
         return (NSArray)result;
     }

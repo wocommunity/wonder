@@ -32,11 +32,16 @@ public class ERDEditListButton extends ERDCustomEditComponent {
     public String displayStringForItem() {
         return item!=null && item.valueForKey(choiceDisplayKey())!= null ? item.valueForKey(choiceDisplayKey()).toString() : "";
     }
-    
+
     private String _editButtonName;
     public String editButtonName(){
         if (_editButtonName == null) {
-            _editButtonName = valueForBinding("editButtonName") != null ? (String)valueForBinding("editButtonName") : "Edit "+(String)valueForBinding("displayNameForProperty")+ " List";
+            Object editButtonName = valueForBinding("editButtonName");
+            if(editButtonName == null) {
+                editButtonName = ((ERXSession)session()).localizer().localizedTemplateStringForKeyWithObject("Edit @displayNameForProperty@ List", this);
+            } else {
+                _editButtonName = (String)editButtonName;
+            }
         }
         return _editButtonName;
     }
