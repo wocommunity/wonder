@@ -500,6 +500,7 @@
 				50EB03AE055ED28E007F93C2,
 				4105E4A605C7C933003BA93B,
 				4105E4A805C7CBA9003BA93B,
+				4105EC4505C81354003BA93B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1178,6 +1179,19 @@
 			settings = {
 			};
 		};
+		4105EC4405C81354003BA93B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXHyperlink.java;
+			path = er/extensions/ERXHyperlink.java;
+			refType = 4;
+		};
+		4105EC4505C81354003BA93B = {
+			fileRef = 4105EC4405C81354003BA93B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		413B78DE04AB575F00000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1694,6 +1708,7 @@
 				F59C57D902C4565701000102,
 				F59C57E102C4565701000102,
 				41FF21AF0461C69F00000102,
+				4105EC4405C81354003BA93B,
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
 				F50C03910354549D014B9BC9,

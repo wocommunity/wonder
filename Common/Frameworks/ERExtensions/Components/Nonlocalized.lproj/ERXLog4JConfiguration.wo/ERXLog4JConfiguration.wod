@@ -59,6 +59,11 @@ Hyperlink1: WOHyperlink {
 	directActionName = "log4j";
 }
 
+ShowLoggerString: WOCollapsibleComponentContent {
+	openedLabel = "Hide Properties String";
+	closedLabel = "Show Properties String";
+}
+
 RadioButtonDebugLevel: WORadioButton {
 	name = logger.name;
 	selection = loggerLevelValue;
@@ -93,10 +98,6 @@ RadioButtonWarnLevel: WORadioButton {
 	name = logger.name;
 	selection = loggerLevelValue;
 	value = warnLevel;
-}
-
-RepetitionIndentLevel: WORepetition {
-	count = indentLevel;
 }
 
 RepetitionLoggers: WORepetition {
@@ -164,6 +165,10 @@ SubmitButtonShowExplicitLevels2: WOSubmitButton {
 SubmitButtonUpdate2: WOSubmitButton {
 	action = update;
 	value = "Update";
+}
+
+LoggerString: WOString {
+	value = loggerPropertiesString;
 }
 
 TextFieldFilterString: WOTextField {
