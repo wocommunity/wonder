@@ -96,7 +96,7 @@ public class ERDSmartAttributeAssignment extends ERDAssignment {
         }
         if (result==null) {
             // default to the basic attribute if the above didnt' work
-            result=c.attribute(); 
+            if (propertyKey!=null) result=c.attribute(); 
         }
         return result;
     }    
