@@ -8,6 +8,7 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 
 /**
  * Collection of EOAccess related utilities.
