@@ -1,5 +1,6 @@
 BaseUrl: WOResourceURL {
-	filename = "gfx";
+	filename = "s.gif";
+	framework = "ERExtensions";
 }
 
 BaseUrl2: WOString {

@@ -4,6 +4,7 @@
 //
 // Created by ak on Tue Mar 19 2002
 //
+package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
@@ -17,7 +18,8 @@ import org.apache.log4j.Category;
   */
 public class ERXDHTMLComponent extends ERXStatelessComponent {
     static final Category cat = Category.getInstance(ERXDHTMLComponent.class);
-
+    NSMutableArray arr = new NSMutableArray();
+    
     public ERXDHTMLComponent(WOContext context) {
         super(context);
     }
