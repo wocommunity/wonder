@@ -138,7 +138,7 @@
                 <include name="**/*.js" />
                 <include name="**/*.css" />
             </wsresources>
-            <frameworks root="wo.woroot">
+            <frameworks root="${wo.woroot}">
                 <include name="Library/Frameworks/JavaFoundation.framework" />
                 <include name="Library/Frameworks/JavaEOControl.framework" />
                 <include name="Library/Frameworks/JavaEOAccess.framework" />
