@@ -109,7 +109,6 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(INSTALL_PREFIX)/Frameworks\"";
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
-				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;
@@ -171,8 +170,6 @@
 				F5283C780366156C01CF0E76,
 				F5283C790366156C01CF0E76,
 				F5283C7B0366156C01CF0E76,
-				F5283C9B0366226301CF0E76,
-				F5283C9D036623E001CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,6 +195,7 @@
 		017C60D4FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				506CBCB305EFCF8300C3A3F8,
 				085A02CA00150D1D11CD2B8D,
 				085A02CB00150D1D11CD2B8D,
 				085A02CC00150D1D11CD2B8D,
@@ -644,6 +642,7 @@
 				F5283C6703660EC601CF0E76,
 				F5283C6803660EC601CF0E76,
 				F5283C6903660EC601CF0E76,
+				506CBCB205EFCF8300C3A3F8,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -814,8 +813,19 @@
 //502
 //503
 //504
+		506CBCB205EFCF8300C3A3F8 = {
+			isa = PBXFrameworkReference;
+			path = ERPrototypes.framework;
+			refType = 3;
+		};
+		506CBCB305EFCF8300C3A3F8 = {
+			fileRef = 506CBCB205EFCF8300C3A3F8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		50EDF204040DC43200CF0E76 = {
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			generatedFileNames = (
@@ -823,7 +833,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "echo ${JAVAC_FRAMEWORK_JARS} > ${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}-javac_framework_jars";
 		};
@@ -933,7 +943,6 @@
 				F5283C740366156C01CF0E76,
 				F5283C750366156C01CF0E76,
 				F5283C770366156C01CF0E76,
-				F5283CB303664A6C01CF0E76,
 				013357D6FF5DD68111CD2B9D,
 			);
 			isa = PBXGroup;
@@ -1004,41 +1013,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F5283C9A0366226301CF0E76 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = ERMailerTimerTask.java;
-			path = Sources/er/javamail/mailer/ERMailerTimerTask.java;
-			refType = 4;
-		};
-		F5283C9B0366226301CF0E76 = {
-			fileRef = F5283C9A0366226301CF0E76;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5283C9C036623E001CF0E76 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = ERMailer.java;
-			path = Sources/er/javamail/mailer/ERMailer.java;
-			refType = 4;
-		};
-		F5283C9D036623E001CF0E76 = {
-			fileRef = F5283C9C036623E001CF0E76;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5283CB303664A6C01CF0E76 = {
-			children = (
-				F5283C9C036623E001CF0E76,
-				F5283C9A0366226301CF0E76,
-			);
-			isa = PBXGroup;
-			name = Mailer;
-			refType = 4;
 		};
 	};
 	rootObject = 013357CCFF5DD5F011CD2B9D;
