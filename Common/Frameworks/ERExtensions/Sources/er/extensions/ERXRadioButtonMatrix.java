@@ -26,10 +26,14 @@ public class ERXRadioButtonMatrix extends WOComponent {
 
     public void reset() { invalidateCaches(); }
 
+    public Object currentItem() { return currentItem; } 
     public void setCurrentItem(Object aValue) {
         currentItem = aValue;
         setValueForBinding(aValue, "item");
     }
+
+    public Number index() { return index; } 
+    public void setIndex(Number newIndex) { index = newIndex; }
 
     public Object selection() {
         if (_selection == null) {
