@@ -47,6 +47,17 @@ import com.webobjects.foundation.*;
 //	      and then specify all of the things to log as formatting info for that converter.
 public class ERXPatternLayout extends PatternLayout {
 
+
+    /**
+    *
+     *  Used to update the layout pattern at runtime from the log4j configuration page
+     *
+     */
+    private static ERXPatternLayout _instance;
+    public static ERXPatternLayout instance() {
+        return _instance;
+    }
+
     /**
      * Default constructor. Uses the default conversion
      * pattern.
@@ -62,6 +73,7 @@ public class ERXPatternLayout extends PatternLayout {
      */
     public ERXPatternLayout(String pattern) {
         super(pattern);
+        _instance=this; // log4j will create one of these at runtime, and instance() will be used to find it from the log4j config page
     }
 
     /**

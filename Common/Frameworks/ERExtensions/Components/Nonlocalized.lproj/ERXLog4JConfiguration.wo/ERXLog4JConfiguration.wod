@@ -3,14 +3,28 @@ B1: WOGenericContainer {
 	omitTags = loggerIsNotDebug;
 }
 
+Form7: WOForm {
+	multipleSubmit = true;
+}
+
 B2: WOGenericContainer {
 	elementName = "B";
 	omitTags = loggerIsNotInfo;
 }
 
+TextFieldFilterString2: WOTextField {
+	value = conversionPattern;
+	size = 70;
+}
+
 B3: WOGenericContainer {
 	elementName = "B";
 	omitTags = loggerIsNotWarn;
+}
+
+SubmitButtonFilter2: WOSubmitButton {
+	action = updateConversionPattern;
+	value = "Update";
 }
 
 B4: WOGenericContainer {

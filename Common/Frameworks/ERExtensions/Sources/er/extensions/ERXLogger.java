@@ -158,6 +158,8 @@ public class ERXLogger extends org.apache.log4j.Logger {
             }
             
             _isFirstTimeConfig = false;
+        } else {
+            LogManager.resetConfiguration();
         }
         PropertyConfigurator.configure(properties);
         

@@ -169,5 +169,15 @@ public class ERXLog4JConfiguration extends WOComponent {
         return ERXStringUtilities.numberOfOccurrencesOfCharInString('.',logger().getName());
     }
 
+    //* this assumes you use ERXPatternLayout
+    public String conversionPattern() {
+        return ERXPatternLayout.instance().getConversionPattern();
+    }
+
+    public void setConversionPattern(String newPattern) {
+        ERXPatternLayout.instance().setConversionPattern(newPattern);
+    }
+    
+    public WOComponent updateConversionPattern() { return null; }
 
 }
