@@ -44,6 +44,7 @@ public abstract class ERXApplication extends WOApplication {
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOForm.class, "WOForm");
         ERXModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+        registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
 
         Long timestampLag=Long.getLong("EOEditingContextDefaultFetchTimestampLag");
         if (timestampLag!=null)
