@@ -12,4 +12,5 @@ WOTable: ERXTable {
         list = list;
         maxColumns = d2wContext.numCols;
 	showIndex = d2wContext.showIndex;
+        goingVertically = d2wContext.goingVertically;
 }
