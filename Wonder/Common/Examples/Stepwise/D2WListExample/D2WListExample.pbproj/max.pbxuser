@@ -1,17 +1,17 @@
 // !$*UTF8*$!
 {
-	F57EA4ED01FF427F019E57DA = {
-		activeBuildStyle = F57EA5BC01FF427F019E57DA;
-		activeExecutable = F57EA5BF01FF44D3019E57DA;
-		activeTarget = F57EA54601FF427F019E57DA;
+	013357CCFF5DD5F011CD2B9D = {
+		activeBuildStyle = 01A3BF6FFFB0C37D11CD2B9D;
+		activeExecutable = C6E4231E007BED7904000001;
+		activeTarget = 017C6100FFD43DA37F000001;
 		addToTargets = (
-			F57EA5B001FF427F019E57DA,
+			017C60B4FFD2F2BB7F000001,
 		);
 		executables = (
-			F57EA5BF01FF44D3019E57DA,
+			C6E4231E007BED7904000001,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 49567024;
+			PBXPerProjectTemplateStateSaveDate = 50041535;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
@@ -19,7 +19,7 @@
 							Split0 = {
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {572, 398}}";
+									Frame = "{{0, 0}, {572, 525}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -60,11 +60,10 @@
 						Collapsed = NO;
 						Frame = "{{0, 23}, {856, 549}}";
 						Split0 = {
-							ActiveTab = 2;
 							Collapsed = NO;
 							Frame = "{{284, 0}, {572, 549}}";
 							Split0 = {
-								Frame = "{{0, 151}, {572, 398}}";
+								Frame = "{{0, 24}, {572, 525}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -124,12 +123,10 @@
 						Tab0 = {
 							Frame = "{{0, 0}, {260, 549}}";
 							GroupTreeTableConfiguration = (
-								SCMStatusColumn,
-								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								205,
+								227,
 							);
 						};
 						Tab1 = {
@@ -198,48 +195,39 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{5, 112}";
+					WindowLocation = "{107, 82}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 49567024;
+			PBXWorkspaceStateSaveDate = 50041535;
 		};
 		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
-	F57EA54601FF427F019E57DA = {
+	017C60B4FFD2F2BB7F000001 = {
+		activeExec = 0;
+	};
+	017C60D6FFD2F2BB7F000001 = {
+		activeExec = 0;
+	};
+	017C6100FFD43DA37F000001 = {
 		activeExec = 0;
 		executables = (
-			F57EA5BF01FF44D3019E57DA,
+			C6E4231E007BED7904000001,
 		);
 	};
-	F57EA54801FF427F019E57DA = {
-		activeExec = 0;
-	};
-	F57EA58001FF427F019E57DA = {
-		activeExec = 0;
-	};
-	F57EA5A801FF427F019E57DA = {
-		activeExec = 0;
-	};
-	F57EA5B001FF427F019E57DA = {
-		activeExec = 0;
-	};
-	F57EA5B601FF427F019E57DA = {
-		activeExec = 0;
-	};
-	F57EA5BF01FF44D3019E57DA = {
+	C6E4231E007BED7904000001 = {
 		activeArgIndex = 2147483647;
 		argumentStrings = (
 		);
-		debuggerPlugin = GDBDebugging;
+		debuggerPlugin = JavaDebugging;
 		dylibVariantSuffix = "";
 		enableDebugStr = 1;
 		environmentEntries = (
 		);
 		isa = PBXExecutable;
-		name = D2WListExampleJava;
+		name = D2WListExample;
 		shlibInfoDictList = (
 		);
 		sourceDirectories = (
