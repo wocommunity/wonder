@@ -10,6 +10,7 @@ import er.extensions.*;
 
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.appserver.WOApplication;
 
 import javax.mail.*;
@@ -68,8 +69,22 @@ public class ERMailSender extends Thread {
 	being delivered. */
     public void sendMessageDeffered (ERMessage message) throws ERMailSender.SizeOverflowException {
         try {
-	    log.debug ("Adding a message in the queue");
+            String allRecipientsString = null;
+            if (log.isDebugEnabled ()) {
+                try {
+                    allRecipientsString = message.allRecipientsAsString ();
+                } catch (MessagingException ex) {
+                    allRecipientsString = "(not available)";
+                }
+                //log.debug ("Adding a message in the queue: \n" + allRecipientsString);
+            }
+            
             messages.push (message);
+            stats.updateMemoryUsage ();
+            
+            if (log.isDebugEnabled ())
+                log.debug ("(" + stats.formattedUsedMemory () + ") Added the message in the queue: "
+                                + allRecipientsString);
         } catch (ERQueue.SizeOverflowException e) {
             throw new ERMailSender.SizeOverflowException ();
         }
@@ -133,10 +148,21 @@ public class ERMailSender extends Thread {
 	    boolean debug = log.isDebugEnabled ();
 	    if (debug) log.debug ("Sending a message ...");
 	    transport.sendMessage (aMessage, aMessage.getAllRecipients ());
-	    if (debug) log.debug ("Message sent.");
+            stats.updateMemoryUsage ();
+            
+	    if (debug) {
+                String allRecipientsString = null;
+                try {
+                    allRecipientsString = message.allRecipientsAsString();
+                } catch (MessagingException ex) {
+                    allRecipientsString = "(not available)";
+                }            
+                log.debug ("(" + stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
+            }
 	} catch (SendFailedException e) {	
 	    if (log.isDebugEnabled ())
-		log.debug ("Failed to send message: " + e.getMessage ());
+		log.debug ("Failed to send message: \n" + message.allRecipientsAsString() 
+                                + e.getMessage ());
 	    stats.incrementErrorCount ();
 
 	    if (callbackObject != null) {
@@ -256,8 +282,29 @@ public class ERMailSender extends Thread {
     /** This class is about logging mail event for stats purposes.
         More stats to come in the future. */
     public class Stats {
+        private NSTimestamp lastResetTime = new NSTimestamp();
         private int errorCount = 0;
         private int mailCount  = 0;
+        private double _peakMemoryUsage = 0.0d;
+        private Runtime _runtime;
+        private ERXUnitAwareDecimalFormat _decimalFormatter;
+    
+        public Stats() {
+            _decimalFormatter = new ERXUnitAwareDecimalFormat (ERXUnitAwareDecimalFormat.BYTE);
+            _decimalFormatter.setMaximumFractionDigits (2);
+            _runtime = Runtime.getRuntime ();
+        }
+
+        /** Resets statistics information */ 
+        public synchronized void reset () {
+            String savedStatsString = this.toString ();
+            errorCount = 0;
+            mailCount = 0;
+            _peakMemoryUsage = 0.0d;
+            lastResetTime = new NSTimestamp ();
+            if (log.isDebugEnabled()) 
+                log.debug(savedStatsString + " has been reset to initial value.");
+        }
 
         /** @return the count of error that were encountered during mail seonding process */
         public synchronized int errorCount () {
@@ -284,13 +331,45 @@ public class ERMailSender extends Thread {
 	private void incrementMailCount () {
 	    mailCount++;
 	}
+
+        /** @return the timestamp that respresents when the stats object was reset. */ 
+        public NSTimestamp lastResetTime () {
+            return lastResetTime;
+        }
+
+        private void updateMemoryUsage () {
+            long currentMemoryUsed = usedMemory ();
+            if (currentMemoryUsed > _peakMemoryUsage) 
+                _peakMemoryUsage = currentMemoryUsed;
+        }
+            
+        public long usedMemory () { 
+            long totalMemory = _runtime.totalMemory ();
+            long freeMemory  = _runtime.freeMemory ();
+            long usedMemory  = totalMemory - freeMemory;
+            return usedMemory;
+        }
         
+        public String formattedUsedMemory () {
+            return _decimalFormatter.format(usedMemory ());
+        }
+
+        public double peakMemoryUsage () {
+            return _peakMemoryUsage;
+        }
+
+        public String formattedPeakMemoryUsage () {
+            return _decimalFormatter.format(_peakMemoryUsage);
+        }
+
         /** @return a string representation of the Stats object. */
-        public String toString() {
+        public String toString () {
             return "<" + getClass ().getName () 
-                + " mailCount: " + mailCount ()
+                + " lastResetTime: " + lastResetTime () 
+                + ", mailCount: " + mailCount ()
                 + ", errorCount: " + errorCount ()
                 + ", currentQueueSize: " + currentQueueSize ()
+                + ", peakMemoryUsage: " + formattedPeakMemoryUsage () 
                 + ">";
         }
     }
