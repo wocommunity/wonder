@@ -63,7 +63,7 @@
 				F69DF37802C8600901AD0D07,
 			);
 			isa = PBXGroup;
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			refType = 4;
 		};
 		F5274026017CADD2014387C8 = {
@@ -797,7 +797,6 @@
 				F54F866B02C7AFE401E168BF,
 			);
 			isa = PBXGroup;
-			name = Documentation;
 			path = Documentation;
 			refType = 2;
 		};
@@ -819,8 +818,8 @@
 		F69DF37802C8600901AD0D07 = {
 			includeInIndex = 1;
 			isa = PBXZipArchiveReference;
-			name = "ognl-2.0.1.jar";
-			path = "Libraries/ognl-2.0.1.jar";
+			name = "ognl-2.1.2.jar";
+			path = "Libraries/ognl-2.1.2.jar";
 			refType = 2;
 		};
 		F69DF37902C8600A01AD0D07 = {
