@@ -10,6 +10,10 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.*;
 
+/**
+ * The response cache is a way to cache WOResponse
+ * objects for a given set of cache keys.
+ */
 public class ERXWOResponseCache {
 
     /**
@@ -20,7 +24,7 @@ public class ERXWOResponseCache {
     /**
      * Gets the shared instance
      * @return the shared instance
-     */
+     */ 
     public static ERXWOResponseCache sharedInstance() {
         if (sharedInstance == null) {
             sharedInstance = new ERXWOResponseCache();
