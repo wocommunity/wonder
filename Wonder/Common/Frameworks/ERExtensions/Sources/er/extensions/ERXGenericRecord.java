@@ -371,8 +371,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (result == null) {
             NSDictionary pk = primaryKeyDictionary(false);
             if (cat.isDebugEnabled()) cat.debug("pk: " + pk);
-            // FIXME: What the heck is this?!?!
-            result = ERXExtensions.rawPrimaryKeyFromPrimaryKeyAndEO(pk, this);
+            NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
+            if (primaryKeyAttributeNames.count()>1)
+                throw new RuntimeException("rawPrimaryKeyInTransaction does not support compound primary keys");
+            result=pk.objectForKey(primaryKeyAttributeNames.lastObject());
         }
         return result;
     }
@@ -411,6 +413,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return d != null && d.count()>0 ? d.allValues().objectAtIndex(0) : null;
     }
 
+
+    public NSArray primaryKeyAttributeNames() {
+        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName());
+        return entity.primaryKeyAttributeNames();
+    }
+
+    
     /** caches the primary key dictionary for the given object */
     private NSDictionary _primaryKeyDictionary;
 
@@ -436,11 +445,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     // FIXME: This should work for compound pks as well, ie don't try to gen a new pk
     //		if they have a compound pk.
+    // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
     public NSDictionary primaryKeyDictionary(boolean inTransaction) {
         if (!inTransaction && _primaryKeyDictionary == null) {
-            if (primaryKey() != null) {
+            if (rawPrimaryKey() != null) {
+                NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
+                if (primaryKeyAttributeNames.count()>1)
+                    throw new RuntimeException("primaryKeyDictionary does not support compound primary keys");
                 //FIXME: Should be getting primaryKey name from the entity of the enterprise object.
-                _primaryKeyDictionary = new NSDictionary(primaryKey(), "id");
+                _primaryKeyDictionary = new NSDictionary(rawPrimaryKey(), primaryKeyAttributeNames.lastObject());
             } else
                 _primaryKeyDictionary = ERXUtilities.primaryKeyDictionaryForEntity(editingContext(), entityName());
         }
