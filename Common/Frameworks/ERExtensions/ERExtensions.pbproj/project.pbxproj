@@ -523,6 +523,13 @@
 				4147F4FE060F30A500EE490C,
 				4188B867061D98B6006A7425,
 				418AE2D70654B96E00AF73BB,
+				44BF54FD076A11EE007EDBCB,
+				44BF54FE076A11EE007EDBCB,
+				44BF5500076A11EE007EDBCB,
+				44BF5501076A11EE007EDBCB,
+				44BF5502076A11EE007EDBCB,
+				44BF5503076A11EE007EDBCB,
+				44BF5504076A11EE007EDBCB,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1883,6 +1890,8 @@
 		};
 		419935740528DD360081353A = {
 			children = (
+				44BF54F9076A11EE007EDBCB,
+				44BF54F6076A11EE007EDBCB,
 				4105E4A505C7C933003BA93B,
 				50287842040960A40043FCB8,
 				F59C579202C4565701000102,
@@ -1906,6 +1915,9 @@
 		};
 		419935750528DDCB0081353A = {
 			children = (
+				44BF54FC076A11EE007EDBCB,
+				44BF54FA076A11EE007EDBCB,
+				44BF54F5076A11EE007EDBCB,
 				F59C577802C4565601000102,
 				F64DCF6402EF3A4001257492,
 				637DFBC504A0B26800A83704,
@@ -2231,6 +2243,112 @@
 //442
 //443
 //444
+		44BF54F5076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXArrayChooser.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54F6076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXDatabaseDataSource.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54F7076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXFile.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54F8076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXItalianLocalizer.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54F9076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXObjectStoreCoordinator.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54FA076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXRecursiveBatchFetching.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54FB076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXSystem.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54FC076A11EE007EDBCB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ERXWORepetition.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44BF54FD076A11EE007EDBCB = {
+			fileRef = 44BF54F5076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44BF54FE076A11EE007EDBCB = {
+			fileRef = 44BF54F6076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44BF5500076A11EE007EDBCB = {
+			fileRef = 44BF54F8076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44BF5501076A11EE007EDBCB = {
+			fileRef = 44BF54F9076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44BF5502076A11EE007EDBCB = {
+			fileRef = 44BF54FA076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44BF5503076A11EE007EDBCB = {
+			fileRef = 44BF54FB076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44BF5504076A11EE007EDBCB = {
+			fileRef = 44BF54FC076A11EE007EDBCB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		44DC82B50708215C0087F83A = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
@@ -8914,6 +9032,9 @@
 		};
 		F6E7989A02C8799401AD0D07 = {
 			children = (
+				44BF54F7076A11EE007EDBCB,
+				44BF54F8076A11EE007EDBCB,
+				44BF54FB076A11EE007EDBCB,
 				4150A86E050324B700000102,
 				F59C577D02C4565601000102,
 				F59C578002C4565601000102,
