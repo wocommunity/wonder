@@ -1,10 +1,10 @@
-HaveValue: NonNullConditional {
+HaveValue: ERXNonNullConditional {
 	condition = objectPropertyValue;
 }
 
-HaveValue2: NonNullConditional {
+HaveValue2: ERXNonNullConditional {
 	condition = objectPropertyValue;
-	negate = YES;
+	negate = true;
 }
 
 String1: WOString {
