@@ -25,7 +25,7 @@ public class Bug extends _Bug {
     }
 
     public void markReadBy(People reader) {
-        if (owner().equals(localInstanceOf(reader)) && !isReadAsBoolean()) {
+        if (owner() != null && owner().equals(localInstanceOf(reader)) && !isReadAsBoolean()) {
             setReadAsBoolean(true);
             editingContext().saveChanges();
         }
