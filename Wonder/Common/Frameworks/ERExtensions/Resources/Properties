@@ -139,3 +139,39 @@ er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
 # ERTimeToDie=180000
 # time in seconds in which to kill the app after starting to refuse new sessions
 # ERTimeToKill=1800
+
+#########################################################################
+# ERXJDBCConnectionBroker 
+#########################################################################
+# the minimum number of JDBC connections to use
+dbMinConnectionsGLOBAL=1
+
+# the maximum number of JDBC connections to use
+# keep in mind that each connection requires an open file
+# this means your UNIX process which is running the JVM from 
+# your application must be able to use a lot of open files. 
+# see ulimit to understand how to change the default settings
+dbMaxConnectionsGLOBAL=5
+
+# path to the logfile for the JDBC connection pooling
+dbLogPathGLOBAL=/tmp/ERXJDBCConnectionBroker_@@name@@_@@WOPort@@.log
+
+# time how long a JDBC connection should be reused
+# value is in days
+dbConnectionRecycleGLOBAL=1.0
+
+# time in seconds how long a request may use a connection
+# in this case a download may not take longer than 3 days
+# value is in seconds
+dbMaxCheckoutGLOBAL=86400
+
+# debug level for the Connection Pooling, 0 - 3
+dbDebugLevelGLOBAL=1
+
+#########################################################################
+# ERXLongPrimaryKeyFactory 
+#########################################################################
+# if set to true the following conventions are mandatory:
+# 1) all entities must have only one PK value whose external type is 
+#    comparable to java.lang.Long, for example int8 with Postgresql
+ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
