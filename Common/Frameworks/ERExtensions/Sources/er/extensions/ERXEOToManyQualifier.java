@@ -19,7 +19,7 @@ public class ERXEOToManyQualifier extends ERXToManyQualifier implements Cloneabl
      public ERXEOToManyQualifier(EOEntity e,
                                 String toManyKey,
                                 NSArray elements) {
-        super(e,toManyKey,elements);
+        super(toManyKey,elements);
     }
 
     /**
