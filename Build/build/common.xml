@@ -2,7 +2,7 @@
 	<!-- don't touch from here on -->
         <property name="build.compiler" value="jikes" />
         <property name="build.compiler.emacs" value="true" />
-        <property name="build.compiler.fulldepend" value="true" />
+        <property name="build.compiler.fulldepend" value="false" />
 
         <property name="wo.system.root" value="/System/Library/Frameworks" />
         <property name="wo.local.root" value="/Library/Frameworks" />
@@ -49,7 +49,6 @@
 		<mkdir dir="${project.dir}/WebServerResources" />
 		<mkdir dir="${build.root}" />
 		<mkdir dir="${build.classes}" />
-		<mkdir dir="${build.framework.dir}" />
 	</target>
 	<target name="checkupdate">
 		<uptodate property="no.changes" targetfile="${build.jar.file}">
@@ -59,14 +58,17 @@
 	<target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
 		<mkdir dir="${build.classes}" />
 		<javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on" optimize="off" deprecation="on">
-            <fileset dir="${project.dir}/Libraries">
-                <include name="**/*.jar" />
-            </fileset>
-			<classpath refid="project.class.path" />
+			<classpath> 
+                <fileset dir="${project.dir}/Libraries">
+                    <include name="**/*.jar" />
+                </fileset>
+                <path refid="project.class.path" />
+			</classpath>
 		</javac>
 	</target>
 
 	<target name="framework" depends="properties,compile" description="Default compile target">
+		<mkdir dir="${build.framework.dir}" />
 		<taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
 			<classpath refid="project.class.path" />
 		</taskdef>
