@@ -1080,12 +1080,6 @@
 			path = ERXLog4JCategory.java;
 			refType = 4;
 		};
-		F5588416025A53D101000102 = {
-			fileRef = F5588414025A532301000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F558841A025B832201000102 = {
 			isa = PBXFileReference;
 			path = ERXLogger.java;
@@ -2617,7 +2611,6 @@
 				F604FC9C0259E8FB01AD0D07,
 				F604FC9D0259E8FB01AD0D07,
 				F604FC9E0259E8FB01AD0D07,
-				F5588416025A53D101000102,
 				F558841B025B832301000102,
 			);
 			isa = PBXSourcesBuildPhase;
