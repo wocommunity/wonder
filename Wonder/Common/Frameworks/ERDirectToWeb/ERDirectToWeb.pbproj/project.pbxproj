@@ -1130,7 +1130,6 @@
 				F54202E802C466E501000102,
 			);
 			isa = PBXGroup;
-			name = Documentation;
 			path = Documentation;
 			refType = 2;
 		};
@@ -1378,7 +1377,6 @@
 				F542066702C467DF01000102,
 			);
 			isa = PBXGroup;
-			name = Sources;
 			path = Sources;
 			refType = 2;
 		};
@@ -5188,6 +5186,66 @@
 			path = Components/Nonlocalized.lproj/ERDEditStringWithChoices.wo;
 			refType = 2;
 		};
+		F57E9BF402E3398401CF0E76 = {
+			isa = PBXFileReference;
+			name = ERDQualifierTraversal.java;
+			path = er/directtoweb/ERDQualifierTraversal.java;
+			refType = 4;
+		};
+		F57E9BF502E3398401CF0E76 = {
+			fileRef = F57E9BF402E3398401CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F581683A02E0070601000102 = {
+			isa = PBXFileReference;
+			name = ERDNextPageDelegate.java;
+			path = er/directtoweb/ERDNextPageDelegate.java;
+			refType = 4;
+		};
+		F581683B02E0070601000102 = {
+			isa = PBXFileReference;
+			name = ERDObjectSaveDelegate.java;
+			path = er/directtoweb/ERDObjectSaveDelegate.java;
+			refType = 4;
+		};
+		F581683C02E0070601000102 = {
+			isa = PBXFileReference;
+			name = ERDObjectWasCreatedDelegate.java;
+			path = er/directtoweb/ERDObjectWasCreatedDelegate.java;
+			refType = 4;
+		};
+		F581683D02E0070601000102 = {
+			fileRef = F581683A02E0070601000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F581683E02E0070601000102 = {
+			fileRef = F581683B02E0070601000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F581683F02E0070601000102 = {
+			fileRef = F581683C02E0070601000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F581684202E1453C01000102 = {
+			isa = PBXFileReference;
+			name = ERDQualifierTraversalCallback.java;
+			path = er/directtoweb/ERDQualifierTraversalCallback.java;
+			refType = 4;
+		};
+		F581684302E1453C01000102 = {
+			fileRef = F581684202E1453C01000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F587AD4D02063F5701A80106 = {
 			buildRules = (
 			);
@@ -7400,6 +7458,11 @@
 				F54207DB02C467E001000102,
 				F54207DC02C467E001000102,
 				F54207DD02C467E001000102,
+				F581683D02E0070601000102,
+				F581683E02E0070601000102,
+				F581683F02E0070601000102,
+				F581684302E1453C01000102,
+				F57E9BF502E3398401CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -7864,6 +7927,9 @@
 				F54206E102C467E001000102,
 				F542070802C467E001000102,
 				F542070902C467E001000102,
+				F581683A02E0070601000102,
+				F581683B02E0070601000102,
+				F581683C02E0070601000102,
 			);
 			isa = PBXGroup;
 			name = "D2W Delegates";
@@ -7950,6 +8016,8 @@
 			children = (
 				F54206FB02C467E001000102,
 				F542070602C467E001000102,
+				F581684202E1453C01000102,
+				F57E9BF402E3398401CF0E76,
 			);
 			isa = PBXGroup;
 			name = "D2W Qualifiers";
