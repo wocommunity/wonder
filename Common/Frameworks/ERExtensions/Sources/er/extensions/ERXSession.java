@@ -173,7 +173,7 @@ public class ERXSession extends WOSession implements Serializable {
 
             _localizer = newLocalizer;
             ERXLocalizer.setCurrentLocalizer(_localizer);
-            _messageEncoding = new ERXMessageEncoding(_localizer.language());
+            _messageEncoding = browser().messageEncodingForLanguage(_localizer.language());
 
             NSMutableArray languageList = new NSMutableArray(_localizer.language());
             if (! languageList.containsObject("Nonlocalized")) 
@@ -204,7 +204,7 @@ public class ERXSession extends WOSession implements Serializable {
 
             _localizer = newLocalizer;
             ERXLocalizer.setCurrentLocalizer(_localizer);
-            _messageEncoding = new ERXMessageEncoding(_localizer.language());
+            _messageEncoding = browser().messageEncodingForLanguage(_localizer.language());
         }
     }
 
@@ -260,7 +260,6 @@ public class ERXSession extends WOSession implements Serializable {
      */
     public ERXMessageEncoding messageEncoding() {
         if (_messageEncoding == null) {
-            //_messageEncoding = new ERXMessageEncoding(language());
             _messageEncoding = browser().messageEncodingForLanguage(language());
         }
         return _messageEncoding; 
@@ -458,7 +457,8 @@ public class ERXSession extends WOSession implements Serializable {
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext){
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack) log.debug("User backtracking in invokeAction.");
+        if (didBackTrack)
+            log.debug("User backtracking in invokeAction.");
         return super.invokeAction(aRequest, aContext);
     }
 
@@ -474,7 +474,8 @@ public class ERXSession extends WOSession implements Serializable {
     public void takeValuesFromRequest (WORequest aRequest, WOContext aContext){
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack) log.debug("User backtracking in takeValuesFromRequest.");
+        if (didBackTrack)
+            log.debug("User backtracking in takeValuesFromRequest.");
         messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
         super. takeValuesFromRequest (aRequest, aContext);
     }
@@ -488,7 +489,8 @@ public class ERXSession extends WOSession implements Serializable {
      * @param aContext current context object
      */
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-        if (didBackTrack) log.debug("User backtracking in appendToResponse.");
+        if (didBackTrack)
+            log.debug("User backtracking in appendToResponse.");
         messageEncoding().setEncodingToResponse(aResponse);
         super.appendToResponse(aResponse, aContext);
     }
@@ -542,6 +544,5 @@ public class ERXSession extends WOSession implements Serializable {
             return superString.substring(0, lastIndex - 1) + thisString + ">";
         else 
             return superString + thisString;
-    }
-    
+    }    
 }
