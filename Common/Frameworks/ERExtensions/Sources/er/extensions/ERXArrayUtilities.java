@@ -476,7 +476,7 @@ public class ERXArrayUtilities extends Object {
         while ( i < count) {
             Object currentObject = array.objectAtIndex(i);
             if(currentObject != NSKeyValueCoding.NullValue) {
-                Object currentValue = NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(currentObject, keyPath);
+                Object currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(currentObject, keyPath);
                 currentValue = (currentValue == NSKeyValueCoding.NullValue ? null : currentValue);
                 if(currentValue == value || (value != null && value.equals(currentValue))) {
                     return i;
