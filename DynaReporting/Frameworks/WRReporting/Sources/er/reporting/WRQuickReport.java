@@ -43,13 +43,18 @@ public class WRQuickReport extends WOComponent  {
     }
 
     public void synchModel(NSNotification notification) {
-        if(_model == notification.object()) {
+        if(_model == notification.object() || notification.object() == null) {
             DRReportModel model = _model;
             reset();
             model.initWithRawRecords(objects(), criteriaArray(), attributeArray());
             log.info("Model was re-set.");
             //reset();
         }
+    }
+
+    public void finalize() throws Throwable {
+        NSNotificationCenter.defaultCenter().removeObserver(this);
+        super.finalize();
     }
 
     public void awake() {
@@ -162,19 +167,22 @@ public class WRQuickReport extends WOComponent  {
     public DRReportModel model() {
         if (_model == null) {
             if(super.hasBinding("model")) {
+                log.info("pulling model from bindings");
                 _model = (DRReportModel)super.valueForBinding("model");
             }
             if(_model == null) {
+                log.info("creating model from definition");
                 _model = DRReportModel.withRawRecordsCriteriaListAttributeList(objects(), criteriaArray(), attributeArray());
             }
             if(super.hasBinding("model")) {
                 if(super.canSetValueForBinding("model")) {
+                    log.info("setValueForBinding model: DRReportModel@" + _model.hashCode());
                     super.setValueForBinding(_model, "model");
                 }
             }
             if(log.isDebugEnabled()) {
-                log.debug( "_model:"+_model.hList());
-                log.debug( "[objs records]: "+(_model.records().count())+" ");
+                log.debug( "model(): DRReportModel@" + _model.hashCode());
+                log.debug( "model().records(): "+_model.records().count());
             }
         }
         return _model;
@@ -211,7 +219,7 @@ public class WRQuickReport extends WOComponent  {
             result = settingsDictionary().objectForKey(name);
         }
         if(log.isDebugEnabled()) {
-            log.info("valueForBinding: "+ name + " : " + result);
+            log.debug("valueForBinding: "+ name + " : " + result);
         }
         return result;
     }
