@@ -30,7 +30,6 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     
     public WOComponent editObjectInRelationship(){
         WOComponent result = null;
-        System.out.println("browserSelections = "+browserSelections);
         if(browserSelections != null && browserSelections.count() == 1)
         {
             EOEnterpriseObject eo = (EOEnterpriseObject)browserSelections.objectAtIndex(0);

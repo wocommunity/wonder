@@ -212,6 +212,11 @@ public abstract class ERD2WListPage extends D2WListPage {
                 displayGroup().fetch();
                 displayGroup().updateDisplayedObjects();
                 _hasBeenInitialized=true;
+            }else{
+               if(dg.allObjects().count() == 0){
+                  displayGroup().fetch();
+                  displayGroup().updateDisplayedObjects();
+               }
             }
             // this will have the side effect of resetting the batch # to sth correct, in case
             // the current index if out of range
