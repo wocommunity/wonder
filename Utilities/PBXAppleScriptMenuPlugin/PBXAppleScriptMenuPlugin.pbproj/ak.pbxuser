@@ -1,0 +1,129 @@
+// !$*UTF8*$!
+{
+	089C1669FE841209C02AAC07 = {
+		activeBuildStyle = 014CEA420018CDE011CA2923;
+		activeTarget = 089C1673FE841209C02AAC07;
+		addToTargets = (
+			089C1673FE841209C02AAC07,
+		);
+		breakpoints = (
+		);
+		perUserDictionary = {
+			PBXWorkspaceConfiguration = {
+				ContentSize = "{1155, 858}";
+				LeftSlideOut = {
+					ActiveTab = 0;
+					Frame = "{{0, 23}, {1155, 835}}";
+					Split0 = {
+						ActiveTab = 2;
+						Frame = "{{278, 0}, {877, 835}}";
+						Split0 = {
+							Frame = "{{0, 131}, {877, 704}}";
+						};
+						SplitCount = 1;
+						Tab0 = {
+							Debugger = {
+								Frame = "{{0, 0}, {877, 208}}";
+								Split0 = {
+									Frame = "{{0, 24}, {877, 184}}";
+									Split0 = {
+										Frame = "{{0, 0}, {429, 184}}";
+									};
+									Split1 = {
+										Frame = "{{438, 0}, {439, 184}}";
+									};
+									SplitCount = 2;
+								};
+								SplitCount = 1;
+								Tab0 = {
+									Frame = "{{0, 0}, {100, 50}}";
+								};
+								Tab1 = {
+									Frame = "{{0, 0}, {100, 50}}";
+								};
+								TabCount = 2;
+							};
+							Frame = "{{0, 0}, {877, 208}}";
+							LauncherConfigVersion = 4;
+						};
+						Tab1 = {
+							Frame = "{{0, 0}, {877, 109}}";
+							LauncherConfigVersion = 3;
+							Runner = {
+								Frame = "{{0, 0}, {877, 109}}";
+							};
+						};
+						Tab2 = {
+							BuildMessageFrame = "{{0, 0}, {879, 0}}";
+							BuildTranscriptFrame = "{{0, 9}, {879, 100}}";
+							Frame = "{{0, 0}, {877, 107}}";
+						};
+						Tab3 = {
+							Frame = "{{0, 0}, {760, 158}}";
+						};
+						TabCount = 4;
+					};
+					SplitCount = 1;
+					Tab0 = {
+						Frame = "{{0, 0}, {254, 835}}";
+					};
+					Tab1 = {
+						ClassesFrame = "{{0, 0}, {202, 56}}";
+						Frame = "{{0, 0}, {200, 100}}";
+						MembersFrame = "{{0, 65}, {202, 35}}";
+						OptionsSetName = "Hierarchy, all classes";
+					};
+					Tab2 = {
+						Frame = "{{0, 0}, {200, 100}}";
+					};
+					Tab3 = {
+						Frame = "{{0, 0}, {200, 835}}";
+						Split0 = {
+							Frame = "{{0, 0}, {200, 400}}";
+						};
+						Split1 = {
+							Frame = "{{0, 409}, {200, 426}}";
+						};
+						SplitCount = 2;
+					};
+					Tab4 = {
+						Frame = "{{0, 0}, {250, 628}}";
+					};
+					TabCount = 5;
+				};
+			};
+		};
+		wantsIndex = 1;
+		wantsSCM = -1;
+	};
+	089C1673FE841209C02AAC07 = {
+		activeExec = 0;
+		customExecs = {
+			macosx = (
+				F526043A024D2FC501000102,
+			);
+		};
+	};
+	F526043A024D2FC501000102 = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = GDBDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		launchableReference = F526043B024D2FC501000102;
+		shlibInfoDictList = (
+		);
+		sourceDirectories = (
+		);
+	};
+	F526043B024D2FC501000102 = {
+		isa = PBXApplicationReference;
+		name = "Project Builder.app";
+		path = "/Developer/Applications/Project Builder.app";
+		refType = 0;
+	};
+}
