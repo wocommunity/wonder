@@ -39,6 +39,16 @@ Conditional9: WOConditional {
 	condition = showExceptions;
 }
 
+ReasonRepetition: WORepetition {
+	item = errorline;
+	list = error.stackTrace;
+}
+
+ReasonRepetition2: WORepetition {
+	item = errorline;
+	list = error.stackTrace;
+}
+
 Repetition1: WORepetition {
 	item = currentError;
 	list = testResult.failuresArray;
@@ -110,11 +120,51 @@ String7: WOString {
 	value = runTime;
 }
 
-String8: WOString {
-	value = currentErrorStackTrace;
+filename:  WOString {
+	value = errorline.fileName;
 }
 
-String9: WOString {
-	value = currentErrorStackTrace;
+filename2:  WOString {
+	value = errorline.fileName;
+}
+
+line: WOString {
+	value = errorline.lineNumber;
+}
+
+line2: WOString {
+	value = errorline.lineNumber;
+}
+
+methodname: WOHyperlink {
+	disabled = errorline.isDisable;
+	directActionName = "openInProjectBuilder";
+        actionClass = "WOProjectBuilderAction";
+        ?methodName = errorline.methodName;
+        ?line = errorline.lineNumber;
+        ?filename = errorline.fileName;
+        ?errorMessage = errorMessage;
+        ?fullClassName = errorline.packageClassPath;
+	string = errorline.methodName;
+}
+
+methodname2: WOHyperlink {
+	disabled = errorline.isDisable;
+	directActionName = "openInProjectBuilder";
+        actionClass = "WOProjectBuilderAction";
+        ?methodName = errorline.methodName;
+        ?line = errorline.lineNumber;
+        ?filename = errorline.fileName;
+        ?errorMessage = errorMessage;
+        ?fullClassName = errorline.packageClassPath;
+	string = errorline.methodName;
+}
+
+packagename: WOString {
+	value = errorline.packageName;
+}
+
+packagename2: WOString {
+	value = errorline.packageName;
 }
 

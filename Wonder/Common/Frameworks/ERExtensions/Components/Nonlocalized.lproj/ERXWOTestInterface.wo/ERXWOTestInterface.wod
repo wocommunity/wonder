@@ -20,6 +20,10 @@ PopUpButton1: WOPopUpButton {
 	selection = theTest;
 }
 
+String1: WOString {
+	value = theTest;
+}
+
 SubmitButton1: WOSubmitButton {
 	action = performTest;
 	value = "Run";
