@@ -2,44 +2,41 @@ package er.grouping;
 
 import java.lang.*;
 import java.util.*;
-import java.io.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
+import er.extensions.*;
 
-/* DRSubMasterCriteria.h created by Administrator on Mon 02-Nov-1998 */
-//#import <WebObjects/WebObjects.h>
+
+/**
+ * Defines the specifics of a {@link DRMasterCriteria}.
+ * How to retrieve the values, how to convert them into
+ * values that can be grouped and how to group them
+ * into a set of ranges, if required.
+ */
+ 
 public class DRSubMasterCriteria extends Object  {
 
-    //
-    // parameters used to extract a value from a Record
-    //
+    /** Logging support */
+    protected static final ERXLogger log = ERXLogger.getERXLogger(DRSubMasterCriteria.class);
+
     protected boolean _useMethod;
 
-    // id _YES, will fire method for key
-    // else will use valueForKey: with key
     protected String _key;
 
-    // either a key used with valueForKeyPath: or
-    // the method name to fired against the record
     protected boolean _useTimeFormat;
 
-    // if _YES will convert dates to strings
-    // and then compare
+    /**
+     * Defines the array of possible groupings. 
+     */
+    protected final static NSArray _possibleUseTypes = new NSArray(new Object[]{"usePredefined" , "useRange" , "usePeriodic", "NONE"});
+
     protected String _format;
 
-    // only used if useTimeFormat is _YES
-    // matches based on string compare to dates formatted
-    // into strings with 'format'
-    //
-    // Parameters used to decide what to compare against
-    // when selecting a record group to place a record in
-    //
     protected boolean _groupEdges;
 
+    
     protected NSArray _rawPossibleValues;
 
+    /** */
     protected NSMutableArray _possibleValues;
 
     protected double _periodicDelta;
@@ -59,22 +56,20 @@ public class DRSubMasterCriteria extends Object  {
     // these two values also serve to set the start point from
     // which deltas are built.
     protected boolean _isPreset;
-    
     protected boolean _isPeriodic;
     protected boolean _mustSearchForLookup;
     protected NSDictionary _presetLookupDict;
     protected NSSelector _selKey;
-    protected NSArray _possibleUseTypes;
     protected  boolean _nonNumberOrDate;
     protected String _label;
 
-
+    static public DRSubMasterCriteria withDefinitionDictionaryPossibleValues(NSDictionary smcdict, NSArray apossibleValues) {
+        return new DRSubMasterCriteria(smcdict, apossibleValues);
+    }
     static public DRSubMasterCriteria withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues(String akey, boolean auseMethod, boolean auseTimeFormat, String aformat, String apossibleValuesUseType, boolean agroupEdges, NSArray apossibleValues) {
-        DRSubMasterCriteria aVal = new DRSubMasterCriteria();
-        aVal.initWithKey(akey, auseMethod, auseTimeFormat, aformat, apossibleValuesUseType, agroupEdges, apossibleValues);
+        DRSubMasterCriteria aVal = new DRSubMasterCriteria(akey, auseMethod, auseTimeFormat, aformat, apossibleValuesUseType, agroupEdges, apossibleValues);
         return aVal;
     }
-
 
     public NSMutableArray possibleRangeValuesFromRawValues(NSArray rawPossVals) {
         int i;
@@ -85,7 +80,7 @@ public class DRSubMasterCriteria extends Object  {
         if (groupEdges()) {
             Object lowVal = "L";
             Object highVal = rawPossVals.objectAtIndex(0);
-            possVals.addObject(this.valDictMaxMin(highVal, lowVal));
+            possVals.addObject(valDictMaxMin(highVal, lowVal));
         }
 
         for (i = 0; i < newCount; i++) {
@@ -94,107 +89,62 @@ public class DRSubMasterCriteria extends Object  {
             Object newPossVal;
             rawPossValLow = rawPossVals.objectAtIndex(i);
             rawPossValHigh = rawPossVals.objectAtIndex(i+1);
-            newPossVal = this.valDictMaxMin(rawPossValHigh, rawPossValLow);
+            newPossVal = valDictMaxMin(rawPossValHigh, rawPossValLow);
             possVals.addObject(newPossVal);
         }
 
         if (groupEdges()) {
             Object lowVal = rawPossVals.lastObject();
             Object highVal = "H";
-            possVals.addObject(this.valDictMaxMin(highVal, lowVal));
+            possVals.addObject(valDictMaxMin(highVal, lowVal));
         }
 
         return possVals;
     }
 
-
-    public DRSubMasterCriteria initWithKey(String akey, boolean auseMethod, boolean auseTimeFormat, String aformat, String apossibleValuesUseType, boolean agroupEdges, NSArray apossibleValues) {
-        //OWDebug.println(1, "akey: "+akey);
-        //OWDebug.println(1, "auseMethod: "+auseMethod);
-        //OWDebug.println(1, "auseTimeFormat: "+auseTimeFormat);
-        //OWDebug.println(1, "aformat: "+aformat);
-        //OWDebug.println(1, "apossibleValuesUseType: "+apossibleValuesUseType);
-        //OWDebug.println(1, "agroupEdges: "+agroupEdges);
-        //OWDebug.println(1, "apossibleValues: "+apossibleValues);
+    /** Contructor that uses a {@link NSDictionary} which defines the properties. */
+    public DRSubMasterCriteria(NSDictionary smcdict, NSArray apossibleValues) {
+        this(
+             (String)smcdict.objectForKey("key"),
+             ERXValueUtilities.booleanValue(smcdict.objectForKey("useMethod")),
+             ERXValueUtilities.booleanValue(smcdict.objectForKey("useTimeFormat")),
+             (String)smcdict.objectForKey("format"),
+             (String)smcdict.objectForKey("possibleValuesUseType"),
+             ERXValueUtilities.booleanValue(smcdict.objectForKey("groupEdges")),
+             apossibleValues);
+    }
+    
+    public DRSubMasterCriteria(String akey, boolean auseMethod, boolean auseTimeFormat, String aformat, String apossibleValuesUseType, boolean agroupEdges, NSArray apossibleValues) {
+        
+        if(log.isDebugEnabled()) {
+            log.debug("akey: "+akey);
+            log.debug("auseMethod: "+auseMethod);
+            log.debug("auseTimeFormat: "+auseTimeFormat);
+            log.debug("aformat: "+aformat);
+            log.debug("apossibleValuesUseType: "+apossibleValuesUseType);
+            log.debug("agroupEdges: "+agroupEdges);
+            log.debug("apossibleValues: "+apossibleValues);
+        }
         _label = null;
-        _useMethod = auseMethod;
-        _useTimeFormat = auseTimeFormat;
-        _groupEdges = agroupEdges;
+        
+        setUseMethod(auseMethod);
+        setUseTimeFormat(auseTimeFormat);
+        setGroupEdges(agroupEdges);
+        setKey(akey);
+        setFormat(aformat);
+        setPossibleValuesUseType(apossibleValuesUseType);
+        setRawPossibleValues(apossibleValues);
 
-        if (akey == null) {
-            _key = "";
-        } else {
-            _key = akey+"";
-        }
-
-        if (_useMethod) {
-            _selKey = new NSSelector(_key);
-        }
-
-        if (_useTimeFormat && aformat != null) {
-            _format = "";
-        } else {
-            _format = aformat+"";
-        }
-
-        if (apossibleValuesUseType != null && !apossibleValuesUseType.equals("usePredefined") && !apossibleValuesUseType.equals("useRange") && !apossibleValuesUseType.equals("usePeriodic")) {
-            // invalid possibleValuesUseType
-            _possibleValuesUseType = null;
-        } else {
-            _possibleValuesUseType = apossibleValuesUseType;
-        }
-        //OWDebug.println(1, "_possibleValuesUseType: "+_possibleValuesUseType);
-
-        if (_possibleValuesUseType != null && apossibleValues == null) {
-            _rawPossibleValues = new NSArray();
-        } else {
-            _rawPossibleValues = new NSArray(apossibleValues);
-
-            if (_rawPossibleValues.count() > 0) {
-                //////NSLog(@"--about to call isKindOfClass");
-                //////NSLog(@"--about to call obj: %@", obj);
-                Object obj = _rawPossibleValues.objectAtIndex(0);
-
-                if (!(obj instanceof String) && !(obj instanceof Number)) {
-                    _nonNumberOrDate = true;
-                }
-
-                //////NSLog(@"--called to call obj: ");
-            }
-
-        }
-
-        _mustSearchForLookup = this.decideIfMustSearchForLookup();
-        _isPreset = this.decideIsPreset();
-        //OWDebug.println(1, "_isPreset: "+_isPreset);
-
-        //if(![self mustSearchForLookup] && [self isPreset]){
-        if (apossibleValuesUseType != null && apossibleValuesUseType.equals("usePeriodic")) {
-            _isPeriodic = true;
-            double v1 = DRCriteria.doubleForValue(_rawPossibleValues.lastObject());
-            double v2 = DRCriteria.doubleForValue(_rawPossibleValues.objectAtIndex(0));
-            //periodicDelta = rawPossibleValues.lastObject().doubleValue()-rawPossibleValues.objectAtIndex(0).doubleValue();
-            _periodicDelta = v1 - v2;
-        } else {
-            _isPeriodic = false;
-        }
-
-        if (this.isPreset() && this.mustSearchForLookup()) {
-            _possibleValues = this.possibleRangeValuesFromRawValues(_rawPossibleValues);
+        if (isPreset() && mustSearchForLookup()) {
+            _possibleValues = possibleRangeValuesFromRawValues(_rawPossibleValues);
         } else {
             _possibleValues = new NSMutableArray(_rawPossibleValues);
         }
-        //OWDebug.println(1, "_possibleValues: "+_possibleValues);
 
-        if (this.isPreset()) {
-            _presetLookupDict = this.buildPresetLookupDict();
+        if (isPreset()) {
+            _presetLookupDict = buildPresetLookupDict();
         }
-        //OWDebug.println(1, "_presetLookupDict: "+_presetLookupDict);
-
-        _possibleUseTypes = new NSArray(new Object[]{"usePredefined" , "useRange" , "usePeriodic"});
-        return this;
     }
-
 
     public String label() {
         if (_label == null) {
@@ -214,7 +164,6 @@ public class DRSubMasterCriteria extends Object  {
         return _label;
     }
 
-
     public NSDictionary buildPresetLookupDict() {
         NSMutableDictionary adict = new NSMutableDictionary();
         Enumeration anEnum = _possibleValues.objectEnumerator();
@@ -228,18 +177,19 @@ public class DRSubMasterCriteria extends Object  {
         return new NSDictionary(adict);
     }
 
-
     public DRSubMasterCriteria() {
         super();
-        _nonNumberOrDate = false;
     }
-
 
     public boolean nonNumberOrDate() {
         return _nonNumberOrDate;
     }
 
-
+    /**
+     * Decides if the extration is by method or instance variable.
+     * If this returns true, then only methods will be used to extract
+     * values from the raw objects, not their instance variables.
+     */
     public boolean useMethod() {
         return _useMethod;
     }
@@ -247,7 +197,12 @@ public class DRSubMasterCriteria extends Object  {
         _useMethod = v;
     }
 
-
+    /**
+     * Decides if the {@link #format()} given is used to convert dates
+     * into strings before comparison or just compare {@link NSTimestamps}.
+     * If you set this, you should also set a valid {@link NSTimestampFormatter}
+     * pattern in {@link format()}.
+     */
     public boolean useTimeFormat() {
         return _useTimeFormat;
     }
@@ -255,7 +210,10 @@ public class DRSubMasterCriteria extends Object  {
         _useTimeFormat = v;
     }
 
-
+    /**
+     * Defines if the values not falling into the {@link #possibleValues()} are also grouped.
+     * If they are, then they fall into a special <b>H</b>igh and <b>L</b>ow bucket.
+     */
     public boolean groupEdges() {
         return _groupEdges;
     }
@@ -263,58 +221,98 @@ public class DRSubMasterCriteria extends Object  {
         _groupEdges = v;
     }
 
-
+    /** The key used for retrieving values from the records by. */
     public String key() {
         return _key;
     }
 
-
     public void setKey(String v) {
         if(v !=null)
-            _key = v+"";
+            _key = v;
         else
             _key = null;
+        if (_useMethod) {
+            _selKey = new NSSelector(_key);
+        }
     }
 
-
+    /**
+     * When {@link useTimeFormat()} is set, then date values
+     * will be converted to a string before a comparison by using this format.
+     * The string can be any valid {@link NSTimestampFormatter} string,
+     * which means that you can also use {@link java.util.DateFormatter}
+     * patterns.
+     */
     public String format() {
         return _format;
     }
 
-
     public void setFormat(String v) {
+        if (_useTimeFormat && v == null) {
+            _format = "";
+            log.error("Can't have empty format when useTimeFormat=true: " + this);
+        }
         if(v != null)
-            _format = v+"";
+            _format = v;
         else
             _format = null;
     }
 
-
+    protected boolean usePeriodic() {
+        return "usePeriodic".equals(_possibleValuesUseType);
+    }
+    protected boolean useRange() {
+        return "useRange".equals(_possibleValuesUseType);
+    }
+    protected boolean usePredefined() {
+        return "usePredefined".equals(_possibleValuesUseType);
+    }
+    
     public String possibleValuesUseType() {
         return _possibleValuesUseType;
     }
     public void setPossibleValuesUseType(String v) {
-        if(v == null){
+        _mustSearchForLookup = false;
+        _isPreset = false;
+        if(v == null) {
             _possibleValuesUseType = null;
-        }else{
-            if (!v.equals("usePredefined") && !v.equals("useRange") && !v.equals("usePeriodic")) {
+        } else {
+            if (!_possibleUseTypes.containsObject(v)) {
                 // invalid possibleValuesUseType
+                log.error("Invalid possibleValuesUseType: " + v + ". Allowed are only: " +_possibleUseTypes+ " " + this);
                 _possibleValuesUseType = null;
             } else {
-                _possibleValuesUseType = v+"";
+                _possibleValuesUseType = v;
+                _mustSearchForLookup = useRange() || usePeriodic();
+                _isPreset = useRange() || usePredefined();
+                _isPeriodic = usePeriodic();
             }
         }
 
     }
 
-
     public NSArray rawPossibleValues() {
         return _rawPossibleValues;
     }
     public void setRawPossibleValues(NSArray arr) {
-        _rawPossibleValues = arr;
-    }
+        if (_possibleValuesUseType != null && (arr == null || arr.count() == 0)) {
+            log.warn("Should use possible values but got none: " + this);
+            _rawPossibleValues = NSArray.EmptyArray;
+        } else {
+            _rawPossibleValues = new NSArray(arr);
 
+            Object obj = _rawPossibleValues.lastObject();
+
+            if (!(obj instanceof String) && !(obj instanceof Number)) {
+                _nonNumberOrDate = true;
+            }
+        }
+        if(isPeriodic()) {
+            double v1 = DRCriteria.doubleForValue(_rawPossibleValues.lastObject());
+            double v2 = DRCriteria.doubleForValue(_rawPossibleValues.objectAtIndex(0));
+            _periodicDelta = v1 - v2;
+        }
+    }
 
     public NSArray possibleValues() {
         return _possibleValues;
@@ -324,22 +322,8 @@ public class DRSubMasterCriteria extends Object  {
         return _isPreset;
     }
 
-
     public boolean isPeriodic() {
         return _isPeriodic;
-    }
-
-
-    public boolean decideIsPreset() {
-        if (_possibleValuesUseType == null) {
-            return false;
-        }
-
-        if (_possibleValuesUseType.equals("useRange") || _possibleValuesUseType.equals("usePredefined")) {
-            return true;
-        }
-
-        return false;
     }
 
 
@@ -347,48 +331,32 @@ public class DRSubMasterCriteria extends Object  {
         return _mustSearchForLookup;
     }
 
-
-    public boolean decideIfMustSearchForLookup() {
-        if (_possibleValuesUseType == null) {
-            return false;
-        }
-
-        if (_possibleValuesUseType.equals("useRange") || _possibleValuesUseType.equals("usePeriodic")) {
-            return true;
-        }
-
-        return false;
-    }
-
-
     public NSDictionary valDictMaxMin(Object highVal, Object lowVal) {
         NSDictionary valDict = new NSDictionary(new Object[]{lowVal, highVal},  new Object[]{"L", "H"});
         return valDict;
     }
 
-
     public NSMutableArray possibleValuesToUse() {
-        if (this.isPreset() && this.mustSearchForLookup()) {
+        if (isPreset() && mustSearchForLookup()) {
             return new NSMutableArray(_rawPossibleValues);
         }
 
         return _possibleValues;
     }
 
-
-    // this method will test inbetween'ness, will create new groups for periodics
+    /** Will test inbetween'ness, will create new groups for periodics */
     public NSDictionary valDictFromSearchForLookup(Object aval) {
         Object lowVal = null;
         Object highVal = null;
-        NSMutableArray possibleValuesToUse = this.possibleValuesToUse();
+        NSMutableArray possibleValuesToUse = possibleValuesToUse();
         Object maxVal = possibleValuesToUse.lastObject();
         Object minVal = possibleValuesToUse.objectAtIndex(0);
         double v = DRCriteria.doubleForValue(aval);
         double maxv = DRCriteria.doubleForValue(maxVal);
         double minv = DRCriteria.doubleForValue(minVal);
 
-        if (!this.isPeriodic()) {
-            if (!this.groupEdges()) {
+        if (!isPeriodic()) {
+            if (!groupEdges()) {
                 if (v > maxv) {
                     return null;
                 }
@@ -401,13 +369,13 @@ public class DRSubMasterCriteria extends Object  {
                 if (v > maxv) {
                     lowVal = maxVal;
                     highVal = "H";
-                    return this.valDictMaxMin(highVal, lowVal);
+                    return valDictMaxMin(highVal, lowVal);
                 }
 
                 if (v <= minv) {
                     lowVal = "L";
                     highVal = minVal;
-                    return this.valDictMaxMin(highVal, lowVal);
+                    return valDictMaxMin(highVal, lowVal);
                 }
 
             }
@@ -415,16 +383,16 @@ public class DRSubMasterCriteria extends Object  {
         } else {
             if (v > maxv) {
                 lowVal = maxVal;
-                highVal = this.newWithDelta(maxVal, _periodicDelta);
+                highVal = newWithDelta(maxVal, _periodicDelta);
                 possibleValuesToUse.addObject(highVal);
-                return this.valDictMaxMin(highVal, lowVal);
+                return valDictMaxMin(highVal, lowVal);
             }
 
             if (v <= minv) {
-                lowVal = this.newWithDelta(minVal, -_periodicDelta);
+                lowVal = newWithDelta(minVal, -_periodicDelta);
                 highVal = minVal;
                 possibleValuesToUse.insertObjectAtIndex(lowVal, 0);
-                return this.valDictMaxMin(highVal, lowVal);
+                return valDictMaxMin(highVal, lowVal);
             }
 
         }
@@ -449,18 +417,22 @@ public class DRSubMasterCriteria extends Object  {
 
         }
 
-        return this.valDictMaxMin(highVal, lowVal);
+        return valDictMaxMin(highVal, lowVal);
     }
 
-
-    public Object newWithDelta(Object val, double delta) {
+    /**
+     * Returns a new value by adding a delta to it.
+     * In case of a {@link NSTimestamp}, the delta will be seconds,
+     * in case of a {@link java.lang.Number Number}, the delta is added as a double.
+     * Otherwise, a conversion to a double is attempted and the delta is added afterwards.
+     */
+    protected Object newWithDelta(Object val, double delta) {
         double v;
 
         if (val instanceof NSTimestamp) {
             NSTimestamp vts = (NSTimestamp)val;
             NSTimestamp nvts = vts.timestampByAddingGregorianUnits(0, 0, 0, 0, 0, (int)delta);
             return nvts;
-            //return vts.dateByAddingTimeInterval(delta);
         } else if (val instanceof Number) {
             v = DRCriteria.doubleForValue(val) + delta;
             return (new Double(v));
@@ -470,17 +442,23 @@ public class DRSubMasterCriteria extends Object  {
         return (new Double(v)).toString();
     }
 
-
+    /**
+     * Returns the value for the given record.
+     * If {@link #useMethod()} is given, the method is called and no further
+     * action is taken if that fails.
+     * Otherwise we use {@link NSKeyValueCoding} which also considers instance
+     * variables.
+     */
     public Object valueForRecord(DRRecord rec) {
         Object aval = null;
 
         if (_useMethod) {
             try{
                 aval = _selKey.invoke(rec.rawRecord());
-            }catch(IllegalAccessException e){
-            }catch(IllegalArgumentException e){
-            }catch(java.lang.reflect.InvocationTargetException e){
-            }catch(NoSuchMethodException e){
+            } catch(IllegalAccessException e) {
+            } catch(IllegalArgumentException e) {
+            } catch(java.lang.reflect.InvocationTargetException e) {
+            } catch(NoSuchMethodException e) {
             }
         } else {
             aval = rec.rawRecord().valueForKeyPath(_key);
@@ -489,33 +467,37 @@ public class DRSubMasterCriteria extends Object  {
         return aval;
     }
 
-
     public Object lookUpValueForRecord(DRRecord rec) {
-        Object aval = this.valueForRecord(rec);
+        Object aval = valueForRecord(rec);
 
-        //OWDebug.println(1, "aval:"+aval);
-        if (this.mustSearchForLookup()) {
-            //OWDebug.println(1, "must search for lookup");
-            aval = this.valDictFromSearchForLookup(aval);
-        } else if (this.isPreset()) {
-            //OWDebug.println(1, "is preset");
+        if (mustSearchForLookup()) {
+            aval = valDictFromSearchForLookup(aval);
+        } else if (isPreset()) {
             //WARNING
             aval = _presetLookupDict.objectForKey(aval);
         }
-        //OWDebug.println(1, "converted value: aval:"+aval);
 
         return aval;
     }
 
-
+    /**
+     * Converts a given object to a grouping value.
+     * If case the value if a {@link NSTimestamp},
+     * {@link #useTimeFormat()} is set and {@link #format()}
+     * is a valid date format, the formatted value will returned.
+     */
     public String lookUpKeyForValue(Object aVal) {
         String s;
 
         if (_useTimeFormat && aVal instanceof NSTimestamp) {
             NSTimestamp ts = (NSTimestamp)aVal;
             NSTimestampFormatter formatter = DRCriteria.formatterForFormat(_format);
-            s = formatter.format(ts);  
-            //s = aVal.descriptionWithCalendarFormat(format);
+            try {
+                s = formatter.format(ts);
+            } catch(Exception ex) {
+                log.error("Error looup " + ex + ", value=" + aVal + ": " + this);
+                s = aVal.toString();
+            }
         } else {
             s = aVal.toString();
         }
@@ -523,17 +505,19 @@ public class DRSubMasterCriteria extends Object  {
         return s;
     }
 
-
+    /** Returns the array of possible use types. */
     public NSArray possibleUseTypes() {
         return _possibleUseTypes;
     }
 
+    /** Holds the description for the {@link key}. */
     private String _keyDesc = null;
-    public String keyDesc(){
-        if(_keyDesc == null){
+
+    /** Returns the description for the {@link key}. */
+    public String keyDesc() {
+        if(_keyDesc == null) {
             _keyDesc = super.toString();
         }
         return _keyDesc;
     }
-
 }
