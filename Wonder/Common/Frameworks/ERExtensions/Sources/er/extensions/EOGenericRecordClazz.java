@@ -29,14 +29,14 @@ public class EOGenericRecordClazz extends Object {
     private static EOGenericRecordClazz classFromEntity(EOEntity entity) {
         EOGenericRecordClazz clazz = null;
         if(entity == null) {
-            if(entity.className().equals("ERXGenericRecord"))
-                clazz = new ERXGenericRecord.ERXGenericRecordClazz();
-            else
-                clazz = new EOGenericRecordClazz();
+            return new EOGenericRecordClazz();
         }
         try {
             String className = entity.className();
-            clazz = (EOGenericRecordClazz)Class.forName(className + "$" + entity.name() + "Clazz").newInstance();
+            if(className.equals("ERXGenericRecord"))
+                clazz = new ERXGenericRecord.ERXGenericRecordClazz();
+            else
+                clazz = (EOGenericRecordClazz)Class.forName(className + "$" + entity.name() + "Clazz").newInstance();
         } catch (InstantiationException ex) {
         } catch (ClassNotFoundException ex) {
         } catch (IllegalAccessException ex) {
