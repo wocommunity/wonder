@@ -35,7 +35,6 @@ public class SAPDBPlugIn extends JDBCPlugIn {
         return "SapDB";
     }
 
-    
     public static class SAPDBExpression extends JDBCExpression {
 
         private static SAPDBExpression _sharedInstance = null;
@@ -205,28 +204,17 @@ public class SAPDBPlugIn extends JDBCPlugIn {
 
         public StringBuffer addCreateClauseForAttribute(EOAttribute attribute) {
                       
-            StringBuffer stringbuffer = new StringBuffer();
-            stringbuffer.append("\"");
-            stringbuffer.append(attribute.columnName());
-            stringbuffer.append("\" ");
-            stringbuffer.append(columnTypeStringForAttribute(attribute));
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("\"");
+            buffer.append(attribute.columnName());
+            buffer.append("\" ");
+            buffer.append(columnTypeStringForAttribute(attribute));
             NSDictionary userInfoDictionary = attribute.userInfo();
             if(userInfoDictionary == null) {
-                stringbuffer.append(attribute.allowsNull() ? "" : " NOT NULL");
-                return stringbuffer;
+                buffer.append(attribute.allowsNull() ? "" : " NOT NULL");
+                return buffer;
             }
-/*            if(userInfoDictionary.valueForKey("Default") != null) {
-                stringbuffer.append(" DEFAULT ");
-                stringbuffer.append(userInfoDictionary.valueForKey("Default"));
-            }
-            if (!attribute.allowsNull()) stringbuffer.append(" NOT NULL");
-            if (userInfoDictionary.valueForKey("Unique") != null && UserInfoDictionary.valueForKey("Unique").equals("true"))
-                stringbuffer.append(" UNIQUE");
-            if (userInfoDictionary.valueForKey("Check") != null) {
-                stringbuffer.append(" CHECK ");
-                stringbuffer.append(userInfoDictionary.valueForKey("Check"));
-            }*/
-            return stringbuffer;
+            return buffer;
         }
         
 
