@@ -57,10 +57,11 @@ public class ERXValidationFactory {
     private static NSDictionary _mappings;
     static {
         Object keys[] = {				// MESSAGE LIST:
-            "to be NULL", 				// "The 'xxxxx' property is not allowed to be NULL"
+            "to be null", 				// "The 'xxxxx' property is not allowed to be NULL"
             "Invalid Number", 				// "Invalid Number"
             "must have at least one",			// "The exercises property of ERPCompanyRole must have at least one ERPExercise"
-            "its children relationship is not empty",	// "Removal of ERPAccount object denied because its children relationship is not empty"
+            "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
+            "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
         };
 
         Object objects[] = {
@@ -68,6 +69,7 @@ public class ERXValidationFactory {
             ERXValidationException.InvalidNumberException,
             ERXValidationException.MandatoryRelationshipException,
             ERXValidationException.ObjectRemovalException,
+            ERXValidationException.ObjectsRemovalException,
         };
         _mappings = new NSDictionary( objects, keys );
     }
@@ -140,9 +142,16 @@ public class ERXValidationFactory {
             for (Enumeration e = _mappings.allKeys().objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
                 String key = (String)e.nextElement();
+                String type = (String)_mappings.objectForKey(key);
                 if (message.lastIndexOf(key) >= 0) {
-                    String property = (String)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
-                    erve = createException(eo, property, value, (String)_mappings.objectForKey(key));
+                    // String property = (String)userInfo.objectForKey(NSValidation.ValidationException.ValidatedKeyUserInfoKey);
+                    cat.debug("UserInfo:" + userInfo);
+                    String property = eov.key();
+                    if(property == null && message.indexOf("Removal") == 0) {
+                        //FIXME: (ak) pattern matching?
+                        property = (String)(NSArray.componentsSeparatedByString(message, "'").objectAtIndex(3));
+                    }
+                    erve = createException(eo, property, value, type);
                     break;
                 }
             }
@@ -191,6 +200,7 @@ public class ERXValidationFactory {
             String property = erv.isCustomMethodException() ? erv.method() : erv.propertyKey();
             String type = erv.type();
             String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : defaultTargetLanguage();
+            cat.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
             ERXMultiKey k = new ERXMultiKey(new NSArray(new Object[] {entityName, property, type, targetLanguage}));
             template = (String)_cache.get(k);
             // Not in the cache.  Simple resolving.

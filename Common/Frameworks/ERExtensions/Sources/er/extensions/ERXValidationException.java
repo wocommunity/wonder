@@ -22,6 +22,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public static final String InvalidNumberException = "InvalidNumberException";
     public static final String MandatoryRelationshipException = "MandatoryRelationshipException";
     public static final String ObjectRemovalException = "ObjectRemovalException";
+    public static final String ObjectsRemovalException = "ObjectsRemovalException";
     public static final String CustomMethodException = "CustomMethodException";
 
     // Additional Validation Keys
@@ -47,10 +48,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 
     protected String _message;
     public String getMessage() {
-        if (_message == null) {
-            _message = ERXValidationFactory.defaultFactory().messageForException(this);
-        }
-        return _message;
+        return ERXValidationFactory.defaultFactory().messageForException(this);
     }
     
     public void customExceptionForMethod(EOEnterpriseObject object, String method) {
@@ -104,7 +102,12 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 
     public void takeValueForKey(Object value, String key) { setObjectForKey(value, key); }
     
-    public Object objectForKey( String aKey ) { return _userInfo().objectForKey( aKey ); }
+    public Object objectForKey( String aKey ) {
+        Object obj = _userInfo().objectForKey( aKey );
+        if(obj == null && _context != null && _context != this)
+            obj = _context.valueForKey(aKey);
+        return obj;
+    }
     public void setObjectForKey( Object anObject, String aKey ) { _userInfo().setObjectForKey( anObject, aKey ); }
 
     public String method() { return (String) objectForKey( ValidatedMethodUserInfoKey ); }
@@ -130,4 +133,16 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     private volatile Object _delegate;
     public Object delegate() { return _delegate != null ? _delegate : ERXValidationFactory.defaultDelegate(); }
     public void setDelegate(Object obj) { _delegate = obj; }
+
+    private volatile NSKeyValueCoding _context;
+    public NSKeyValueCoding context() {
+        if(_context == null) {
+            _context = ERXValidationFactory.defaultFactory().contextForException(this);
+        }
+        return _context;
+    }
+    public void setContext(NSKeyValueCoding obj) { _context = obj; }
+
+    public String toString() { return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "+ propertyKey() + "; type: " + type() +"; userinfo: "+ _userInfo() +">";}
+
 }
