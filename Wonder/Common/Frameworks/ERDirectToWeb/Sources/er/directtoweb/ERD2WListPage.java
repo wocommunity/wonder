@@ -26,7 +26,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
      */
     public ERD2WListPage(WOContext c) {
         super(c);
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("savedChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("editingContextDidSaveChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
     }
 
     /** Override to un-register for stop obsevring notifcations. */
@@ -55,10 +55,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
     /** Called when an {@link EOditingContext} has changed. Sets {@link #_hasToUpdate} which in turn lets the group refetch on the next display. */
     // CHECKME ak is this really needed? I'd think it's kindo of overkill.
-    public void savedChanges(NSNotification nsnotification) {
-        _hasToUpdate = true;
+    public void editingContextDidSaveChanges(NSNotification notif) {
+         _hasToUpdate=true;
     }
-
+    
     /** Checks if the entity is read only, meaning that you can't edit it's objects. */
     public boolean isEntityReadOnly() {
         boolean flag = super.isEntityReadOnly();
