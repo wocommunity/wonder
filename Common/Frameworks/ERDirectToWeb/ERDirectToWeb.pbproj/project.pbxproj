@@ -470,6 +470,77 @@
 			settings = {
 			};
 		};
+		412493530504829200000102 = {
+			isa = PBXFileReference;
+			name = Norwegian;
+			path = Resources/Norwegian.lproj/Localizable.strings;
+			refType = 4;
+		};
+		41249354050482A000000102 = {
+			isa = PBXFileReference;
+			name = Norwegian;
+			path = Resources/Norwegian.lproj/ValidationTemplate.strings;
+			refType = 4;
+		};
+		416008F6050715F400000102 = {
+			children = (
+				416008F7050715F400000102,
+				416008F8050715F400000102,
+				416008F9050715F400000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCalendarPageTemplate;
+			path = "";
+			refType = 2;
+		};
+		416008F7050715F400000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WCalendarPageTemplate.api;
+			path = Components/ERD2WCalendarPageTemplate.api;
+			refType = 4;
+		};
+		416008F8050715F400000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WCalendarPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WCalendarPageTemplate.java;
+			refType = 4;
+		};
+		416008F9050715F400000102 = {
+			children = (
+				416008FA050715F400000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WCalendarPageTemplate.wo;
+			path = "";
+			refType = 4;
+		};
+		416008FA050715F400000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WCalendarPageTemplate.wo;
+			refType = 4;
+		};
+		416008FF050715F400000102 = {
+			fileRef = 416008F7050715F400000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41600900050715F400000102 = {
+			fileRef = 416008F8050715F400000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41600901050715F400000102 = {
+			fileRef = 416008F9050715F400000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		418CC2E8044306F500AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -2333,6 +2404,7 @@
 				F542047002C4672F01000102,
 				F542047202C4672F01000102,
 				9D2E0C6F032FFE0A10CF0CA3,
+				41249354050482A000000102,
 			);
 			isa = PBXVariantGroup;
 			name = ValidationTemplate.strings;
@@ -2352,6 +2424,7 @@
 				F542047102C4672F01000102,
 				F542047302C4672F01000102,
 				9D2E0C70032FFE2310CF0CA3,
+				412493530504829200000102,
 			);
 			isa = PBXVariantGroup;
 			name = Localizable.strings;
@@ -8088,6 +8161,7 @@
 				French,
 				German,
 				Nonlocalized,
+				Norwegian,
 			);
 			mainGroup = F5A143A001FF7F8801A80106;
 			productRefGroup = F5A1454901FF7F8801A80106;
@@ -8702,6 +8776,8 @@
 				41B8F4790503D9EA00000102,
 				412490F30504123C00000102,
 				412490F50504123C00000102,
+				416008FF050715F400000102,
+				41600901050715F400000102,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8932,6 +9008,7 @@
 				41B8F4BD0503E12500000102,
 				41B8F7350503FC3500000102,
 				412490F40504123C00000102,
+				41600900050715F400000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10171,6 +10248,7 @@
 		};
 		F6E7966902C877AF01AD0D07 = {
 			children = (
+				416008F6050715F400000102,
 				F6E7965502C877AF01AD0D07,
 				FBD20CDF52DD9A0EDE795ADE,
 				F6E7965602C877AF01AD0D07,
