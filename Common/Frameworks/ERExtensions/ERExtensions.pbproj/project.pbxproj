@@ -283,6 +283,8 @@
 				F5E3A84303708C4D013FACDE,
 				9419AD2F03D792BD00CF0E7D,
 				9419AD3A03D7938200CF0E7D,
+				509AC52703EB364B00CF0E76,
+				509AC52B03EB36CB00CF0E76,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,6 +457,7 @@
 				500D40B903CDFC7100CF0E76,
 				7752CFA603D67F4D00257492,
 				9419AD3003D792BD00CF0E7D,
+				509AC52803EB364B00CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1117,6 +1120,63 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		509AC51F03EB364B00CF0E76 = {
+			children = (
+				509AC52003EB364B00CF0E76,
+				509AC52103EB364B00CF0E76,
+				509AC52A03EB36CB00CF0E76,
+			);
+			isa = PBXGroup;
+			name = ERXImage;
+			refType = 4;
+		};
+		509AC52003EB364B00CF0E76 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXImage.api;
+			path = Components/ERXImage.api;
+			refType = 2;
+		};
+		509AC52103EB364B00CF0E76 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXImage.java;
+			path = Sources/er/extensions/ERXImage.java;
+			refType = 2;
+		};
+		509AC52703EB364B00CF0E76 = {
+			fileRef = 509AC52003EB364B00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		509AC52803EB364B00CF0E76 = {
+			fileRef = 509AC52103EB364B00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		509AC52A03EB36CB00CF0E76 = {
+			children = (
+				509AC53C03EB36CB00CF0E76,
+			);
+			isa = PBXVariantGroup;
+			name = ERXImage.wo;
+			refType = 4;
+		};
+		509AC52B03EB36CB00CF0E76 = {
+			fileRef = 509AC52A03EB36CB00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		509AC53C03EB36CB00CF0E76 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXImage.wo;
+			refType = 2;
 		};
 //500
 //501
@@ -7164,6 +7224,7 @@
 				F6E798AF02C8799401AD0D07,
 				F6E798B002C8799401AD0D07,
 				F6E798B102C8799401AD0D07,
+				509AC51F03EB364B00CF0E76,
 				F6E798B202C8799401AD0D07,
 				F6E798B302C8799401AD0D07,
 				F6E798B402C8799401AD0D07,

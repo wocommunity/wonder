@@ -167,9 +167,6 @@ public class ERXExtensions {
                 ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
                 ERXEntityClassDescription.registerDescription();
-                // CHECKME: I think this bug is fixed
-                // This patches shared eo loading so cross model relationships to shared eos work.
-                //ERXSharedEOLoader.patchSharedEOLoading();
                 NSNotificationCenter.defaultCenter().addObserver(observer,
                                                                  new NSSelector("didSave", ERXConstant.NotificationClassArray),
                                                                  EOEditingContext.EditingContextDidSaveChangesNotification,
