@@ -74,4 +74,17 @@ public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderI
 
         return new ERD2WExtendedRule(unarchiver);
     }
+
+    public String description() {
+        String prefix = "      ";
+        String authorString = "" + author();
+        String rhsClass = rhs().getClass().getName();
+        return (
+                prefix.substring(0, prefix.length() - ("" + author()).length()) + author() + " : " + 
+                (lhs() == null ? "*true*" : lhs().toString()) +
+                " => " +
+                (rhs() == null ? "<NULL>" : rhs().keyPath() + " = " + rhs().value() +
+                 ( rhsClass.equals("com.webobjects.directtoweb.Assignment") ? "" : " [" + rhsClass + "]")
+                ));
+    }
 }
