@@ -38,7 +38,13 @@
     </target>
     
 	  <target name="prepare">
+		<mkdir dir="${project.dir}/Libraries"/>
+		<mkdir dir="${project.dir}/Sources"/>
+		<mkdir dir="${project.dir}/Resources"/>
+		<mkdir dir="${project.dir}/Components"/>
+		<mkdir dir="${project.dir}/WebServerResources"/>
 		<mkdir dir="${build.root}"/>
+		<mkdir dir="${build.classes}"/>
 		<mkdir dir="${build.framework.dir}"/>
 	  </target>
     
@@ -75,6 +81,7 @@
                 <include name="**/*.plist" />
                 <include name="**/*.d2wmodel" />
                 <include name="**/*.strings" />
+                <include name="**/*.sh" />
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
