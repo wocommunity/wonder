@@ -385,7 +385,13 @@ public class WOToOneRelationship extends WOComponent {
         NSArray anUnsortedArray;
         if (_privateList()==null) {
             EODataSource aDataSource = _localDataSource();
-            anUnsortedArray = aDataSource.fetchObjects();
+            EOEditingContext ec = aDataSource.editingContext();
+            ec.lock();
+            try {
+            	anUnsortedArray = aDataSource.fetchObjects();
+            }  finally {
+            	ec.unlock();
+            }
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
             try {
