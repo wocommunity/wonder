@@ -95,7 +95,6 @@
 ./Sources/er/extensions/ERXPrimaryKeyListQualifier.java:er.extensions
 ./Sources/er/extensions/ERXProperties.java:er.extensions
 ./Sources/er/extensions/ERXQualifierInSubquery.java:er.extensions
-./Sources/er/extensions/ERXQualifierUtilities.java:er.extensions
 ./Sources/er/extensions/ERXQueryRecentDates.java:er.extensions
 ./Sources/er/extensions/ERXRadioButtonMatrix.java:er.extensions
 ./Sources/er/extensions/ERXRepeatingTable.java:er.extensions
