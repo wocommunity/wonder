@@ -51,6 +51,7 @@
 ./Sources/er/extensions/ERXGuardedObjectInterface.java:er.extensions
 ./Sources/er/extensions/ERXHyperlinkKeyValueSetter.java:er.extensions
 ./Sources/er/extensions/ERXImageTabPanel.java:er.extensions
+./Sources/er/extensions/ERXInQualifier.java:er.extensions
 ./Sources/er/extensions/ERXInstanceOfConditional.java:er.extensions
 ./Sources/er/extensions/ERXJSAutoClosePage.java:er.extensions
 ./Sources/er/extensions/ERXJSConfirmPanel.java:er.extensions
@@ -139,5 +140,3 @@
 ./Sources/er/testrunner/ERXTestRunner.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestInterface.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestResult.java:er.testrunner
-./Sources/er/extensions/ERXBetweenQualifier.java:
-./Sources/er/extensions/ERXInQualifier.java:
