@@ -195,10 +195,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                                                                     destinationRelationship().name());
                 object().removeObjectFromBothSidesOfRelationshipWithKey(object,
                                                                       relationshipKey());
-                if(object instanceof ERXGuardedObjectInterface){
-                    ((ERXGuardedObjectInterface)object).delete();
-                }else{
-                    editingContext().deleteObject(object);
+                if(((object instanceof ERXGuardedObjectInterface) && ((ERXGuardedObjectInterface)object).canDelete()) 
+                    || !(object instanceof ERXGuardedObjectInterface)) {
+                     editingContext().deleteObject(object);
                 }
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
@@ -227,10 +226,10 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                                                                   destinationRelationship().name());
             object().removeObjectFromBothSidesOfRelationshipWithKey(object,
                                                                     relationshipKey());
-            if(object instanceof ERXGuardedObjectInterface){
-                ((ERXGuardedObjectInterface)object).delete();
-            }else{
-                editingContext().deleteObject(object);
+                                                                   
+            if(((object instanceof ERXGuardedObjectInterface) && ((ERXGuardedObjectInterface)object).canDelete()) 
+            	|| !(object instanceof ERXGuardedObjectInterface)) {
+                 editingContext().deleteObject(object);
             }
         }
         relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
