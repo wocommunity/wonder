@@ -37,9 +37,9 @@ For sessionless Apps, you must use another method to get at the requested langua
 These defaults can be set (listed with their current defaults):
 
 er.extensions.ERXLocalizer.defaultLanguage=English
-er.extensions.ERXLocalizer.fileNamesToWatch=Localizable.strings,ValidationTemplate.strings
-er.extensions.ERXLocalizer.availableLanguages=English,German
-er.extensions.ERXLocalizer.frameworkSearchPath=app,ERDirectToWebJava,ERExtensionsJava
+er.extensions.ERXLocalizer.fileNamesToWatch=("Localizable.strings","ValidationTemplate.strings")
+er.extensions.ERXLocalizer.availableLanguages=(English,German)
+er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERDirectToWeb,ERExtensions)
 
 TODO: chaining of Localizers
 */
@@ -75,7 +75,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(!isInitialized) {
             observer = new Observer();
             monitoredFiles = new NSMutableArray();
-            isLocalizationEnabled = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLocalizer.isLocalizationEnabled"), true);
+            isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
             if (isLocalizationEnabled) {
                 // To detect ERXLocalizer and its subclasses are recompiled at run-time. 
                 NSNotificationCenter.defaultCenter().addObserver(
@@ -182,13 +182,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         ERXLocalizer localizer = null;
         String className = null;
         if (pluralForm) {
-            className = System.getProperty("er.extensions.ERXLocalizer.pluralFormClassName");
-            if (className == null)
-                className = "er.extensions.ERXLocalizer";
+            className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.pluralFormClassName", "er.extensions.ERXLocalizer");
         } else {
-            className = System.getProperty("er.extensions.ERXLocalizer.nonPluralFormClassName");
-            if (className == null)
-                className = "er.extensions.ERXNonPluralFormLocalizer";            
+            className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.nonPluralFormClassName", "er.extensions.ERXNonPluralFormLocalizer");            
         }
         try {
             Class localizerClass = Class.forName(className);
@@ -443,10 +439,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public static String defaultLanguage() {
         if (defaultLanguage == null) {
-            defaultLanguage = System.getProperty("er.extensions.ERXLocalizer.defaultLanguage");
-            if(defaultLanguage == null) {
-                defaultLanguage = "English";
-            }
+            defaultLanguage = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.defaultLanguage", "English");
         }
         return defaultLanguage;
     }
@@ -457,12 +450,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public static NSArray fileNamesToWatch() {
         if (fileNamesToWatch == null) {
-            String fileNamesToWatchString = System.getProperty("er.extensions.ERXLocalizer.fileNamesToWatch");
-            if(fileNamesToWatchString == null) {
-                fileNamesToWatch = new NSArray(new Object [] {"Localizable.strings", "ValidationTemplate.strings"});
-            } else {
-                fileNamesToWatch = NSArray.componentsSeparatedByString(fileNamesToWatchString, ",");
-            }
+            fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray(new Object [] {"Localizable.strings", "ValidationTemplate.strings"}));
             if (log.isDebugEnabled())
                 log.debug("FileNamesToWatch: " + fileNamesToWatch);
         }
@@ -475,12 +463,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public static NSArray availableLanguages() {
         if(availableLanguages == null) {
-            String availableLanguagesString = System.getProperty("er.extensions.ERXLocalizer.availableLanguages");
-            if(availableLanguagesString == null) {
-                availableLanguages = new NSArray(new Object [] {"English", "German", "Japanese"});
-            } else {
-                availableLanguages = NSArray.componentsSeparatedByString(availableLanguagesString, ",");
-            }
+            availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new Object [] {"English", "German", "Japanese"}));
             if (log.isDebugEnabled())
                 log.debug("AvailableLanguages: " + availableLanguages);
         }
@@ -493,14 +476,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public static NSArray frameworkSearchPath() {
         if (frameworkSearchPath == null) {
-            String frameworkSearchPathString = System.getProperty("er.extensions.ERXLocalizer.frameworkSearchPath");
-            if (frameworkSearchPathString == null) {
-                frameworkSearchPath = new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"});
-            } else {
-                frameworkSearchPath = NSArray.componentsSeparatedByString(frameworkSearchPathString, ",");
-            }
+            frameworkSearchPath = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.frameworkSearchPath", new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"}));
             if (log.isDebugEnabled())
-                log.debug("FrameworkSearchPath: " + frameworkSearchPathString);
+                log.debug("FrameworkSearchPath: " + frameworkSearchPath);
         }
         return frameworkSearchPath;
     }
