@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import java.util.*;
 import java.io.*;
+import java.math.BigDecimal;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
@@ -21,6 +22,7 @@ public class ERXArrayUtilities extends Object {
      */
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
 
+    /** caches if array utilities have been initialized */
     private static boolean initialized = false;
     
     /**
@@ -283,25 +285,52 @@ public class ERXArrayUtilities extends Object {
      * @return an array containing all of the elements from
      *		all of the arrays contained within the array
      *		passed in.
-     */
-    // ENHANCEME: Should add option to filter duplicates
+     */    
     public static NSArray flatten(NSArray array) {
-        NSMutableArray newArray=null;
-        for (int i=0; i<array.count(); i++) {
-            Object element=array.objectAtIndex(i);
+        return flatten(array, false);
+    }
+    
+    /**
+     * Recursively flattens an array of arrays into a single
+     * array of elements.<br/>
+     * <br/>
+     * For example:<br/>
+     * <code>NSArray foos;</code> //Assume exists<br/>
+     * <code>NSArray bars = (NSArray)foos.valueForKey("toBars");</code>
+     * In this case if <code>foos</code> contained five elements
+     * then the array <code>bars</code> will contain five arrays
+     * each corresponding to what <code>aFoo.toBars</code> would
+     * return. To have the entire collection of <code>bars</code>
+     * in one single arra you would call:
+     * <code>NSArray allBars = flatten(bars)</code>
+     * @param array to be flattened
+     * @param filterDuplicates determines if the duplicate values
+     * 		should be filtered
+     * @return an array containing all of the elements from
+     *		all of the arrays contained within the array
+     *		passed in.
+     */
+    public static NSArray flatten(NSArray array, boolean filterDuplicates) {
+        NSMutableArray newArray = null;
+        for (int i=0; i < array.count(); i++) {
+            Object element = array.objectAtIndex(i);
             if (element instanceof NSArray) {
                 if (newArray==null) {
-                    newArray=new NSMutableArray();
-                    for (int j=0; j<i; j++) {
-                        if(array.objectAtIndex(j)!=null){
-                            newArray.addObject(array.objectAtIndex(j));
+                    newArray = new NSMutableArray();
+                    for (int j = 0; j < i; j++) {
+                        if (array.objectAtIndex(j) != null) {
+                            if (!filterDuplicates || !newArray.containsObject(array.objectAtIndex(j))) {
+                                newArray.addObject(array.objectAtIndex(j));                                
+                            }
                         }
                     }
                 }
-                NSArray a=flatten((NSArray)element);
-                for (int j=0; j<a.count();j++) {
-                    if(a.objectAtIndex(j)!=null){
-                        newArray.addObject(a.objectAtIndex(j));
+                NSArray a = flatten((NSArray)element);
+                for (int j = 0; j < a.count(); j++) {
+                    if (a.objectAtIndex(j) != null) {
+                        if (!filterDuplicates || !newArray.containsObject(array.objectAtIndex(j))) {
+                            newArray.addObject(a.objectAtIndex(j));
+                        }
                     }
                 }
             }
@@ -327,12 +356,12 @@ public class ERXArrayUtilities extends Object {
      * @return returns an array containing an array of values for
      *         every keypath.
      */
-    public static NSArray valuesForKeyPaths(NSArray array, NSArray paths) {
+    public static NSArray valuesForKeyPaths(Object array, NSArray paths) {
         NSMutableArray result = new NSMutableArray();
 
         Enumeration e = paths.objectEnumerator();
         while(e.hasMoreElements()) {
-            result.addObject((NSArray)array.valueForKeyPath((String)e.nextElement()));
+            result.addObject(NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, (String)e.nextElement()));
         }
         return result;
     }
@@ -444,7 +473,11 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            return flatten(array);
+            array = flatten(array);
+            if(keypath != null && keypath.length() > 0) {
+                array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+            }
+            return array;
         }
     }
 
@@ -531,8 +564,86 @@ public class ERXArrayUtilities extends Object {
          */
         public Object compute(NSArray array, String keypath) {
 	    synchronized (array) {
-		return arrayWithoutDuplicates(array);
+                array = arrayWithoutDuplicates(array);
+                if(keypath != null && keypath.length() > 0) {
+                    array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+                }
+                return array;
 	    }
+        }
+    }
+
+
+    /**
+     * Define an {@link NSArray$Operator} for the key <b>objectAtIndex</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@objectAtIndex.3.firstName");</code><br/>
+     * <br/>
+     *
+     */
+    static class ObjectAtIndexOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public ObjectAtIndexOperator() {}
+
+        /**
+         * returns the keypath value for n-ths object.
+         * @param array array to be checked.
+         * @param keypath integer value of index (zero based).
+         * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value otherwise.
+         */
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                int end = keypath.indexOf(".");
+                int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
+                Object value = null;
+                if(index < array.count() )
+                    value = array.objectAtIndex(index);
+                if(end != -1 && value != null) {
+                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keypath.substring(end+1));
+                }
+                return value;
+            }
+        }
+    }
+
+    /**
+     * Define an {@link NSArray$Operator} for the key <b>avgNonNull</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@avgNonNull.revenue");</code><br/>
+     * <br/>
+     * which will sum up all values and divide by the number of nun-null entries. 
+     */
+    static class AvgNonNullOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public AvgNonNullOperator() {}
+
+        /**
+         * returns the average value for over all non-null values.
+         * @param array array to be checked.
+         * @param keypath value of average.
+         * @return computed average as double or <code>NULL</code>.
+         */
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                BigDecimal result = new BigDecimal(0L);
+                int count = 0;
+                
+                for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
+                    Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
+                    if(value != null && value != NSKeyValueCoding.NullValue) {
+                        count = count+1;
+                        result = result.add(ERXValueUtilities.bigDecimalValue(value));
+                    }
+                }
+                if(count == 0) {
+                    return null;
+                }
+                return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
+            }
         }
     }
 
@@ -546,16 +657,20 @@ public class ERXArrayUtilities extends Object {
 	    return;
 	}
 	initialized = true;
-        NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
-        NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
-        NSArray.setOperatorForKey("sortDesc", new SortOperator(EOSortOrdering.CompareDescending));
-        NSArray.setOperatorForKey("sortInsensitiveAsc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveAscending));
-        NSArray.setOperatorForKey("sortInsensitiveDesc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveDescending));
-        NSArray.setOperatorForKey("flatten", new FlattenOperator());
-        NSArray.setOperatorForKey("fetchSpec", new FetchSpecOperator());
-        NSArray.setOperatorForKey("unique", new UniqueOperator());
-	NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
-	NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
+        if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayUtilities.ShouldRegisterOperators", true)) {
+            NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
+            NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
+            NSArray.setOperatorForKey("sortDesc", new SortOperator(EOSortOrdering.CompareDescending));
+            NSArray.setOperatorForKey("sortInsensitiveAsc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveAscending));
+            NSArray.setOperatorForKey("sortInsensitiveDesc", new SortOperator(EOSortOrdering.CompareCaseInsensitiveDescending));
+            NSArray.setOperatorForKey("flatten", new FlattenOperator());
+            NSArray.setOperatorForKey("fetchSpec", new FetchSpecOperator());
+            NSArray.setOperatorForKey("unique", new UniqueOperator());
+            NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
+            NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
+            NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
+            NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
+        }
     }
 
     
@@ -577,6 +692,28 @@ public class ERXArrayUtilities extends Object {
             }
         }
         return result;
+    }
+
+    /**
+     * Batches an NSArray into sub-arrays of the given size.
+     * @param array array to batch
+     * @param batchSize number of items in each batch
+     * @return NSArray of NSArrays, each with at most batchSize items
+     */
+     public static NSArray batchedArrayWithSize(NSArray array, int batchSize) {
+        if(array == null || array.count() == 0)
+            return NSArray.EmptyArray;
+
+        NSMutableArray batchedArray = new NSMutableArray();
+        int count = array.count();
+
+        for(int i = 0; i < count; i+=batchSize) {
+            int length = batchSize;
+            if(i + length > count)
+                length = count - i;
+            batchedArray.addObject(array.subarrayWithRange(new NSRange(i, length)));
+        }
+        return batchedArray;
     }
 
     /**

@@ -29,7 +29,8 @@ import org.apache.log4j.Logger;
  * for creating editing contexts with the default delegates set.
  */
 public class ERXExtensions {
-
+    public static Observer observer;
+    
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
     
@@ -102,7 +103,6 @@ public class ERXExtensions {
             ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
-            ERXArrayUtilities.initialize();
         }
 
         /**
@@ -140,13 +140,15 @@ public class ERXExtensions {
                 // This will load any optional configuration files, 
                 ERXConfigurationManager.defaultManager().initialize();
                 ERXLogger.configureLogging(System.getProperties());
-                
-                log().info("Initializing framework: ERXExtensions");
+
+                log().debug("Initializing framework: ERXExtensions");
 
                 NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
                 NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
 
+                ERXArrayUtilities.initialize();
+                
                 // False by default
                 if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
                     ERXSharedEOLoader.patchSharedEOLoading();
@@ -156,8 +158,7 @@ public class ERXExtensions {
                 e.printStackTrace();
             }
 
-            Observer observer = new Observer();
-            ERXRetainer.retain(observer); // has to be retained
+            observer = new Observer();
 
             try {
                 ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
@@ -658,11 +659,12 @@ public class ERXExtensions {
      * @return true or false depending on if the object is a
      *		new object.
      */
-    // ENHANCEME: Should be able to differentiate between a deleted eo and a new eo by looking
-    //		  at the EOGlobalID
     // MOVEME: ERXEOFUtilities (when we have them)
     public static boolean isNewObject(EOEnterpriseObject eo) {
-        return eo.editingContext()==null || eo.editingContext().insertedObjects().containsObject(eo);
+        if (eo.editingContext() == null) return true;
+        
+        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
+        return gid.isTemporary();
     }
 
     /**
@@ -686,7 +688,7 @@ public class ERXExtensions {
         if(result!=null && result.count() == 1) {
             return result.lastObject();
         } else if (result!=null && result.count() > 1) {
-            log().warn("Attempting to get a raw primary key from an object with a compound key: " + eo);
+            log().warn("Attempting to get a raw primary key from an object with a compound key: " + eo.eoShallowDescription());
         }
         return result;
     }
@@ -1262,9 +1264,11 @@ public class ERXExtensions {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static String randomizeDirectActionURL(String daURL) {
-        int r=_random.nextInt();
-        char c=daURL.indexOf('?')==-1 ? '?' : '&';
-        return  daURL+c+"r="+r;
+	synchronized(_random) {
+	    int r=_random.nextInt();
+	    char c=daURL.indexOf('?')==-1 ? '?' : '&';
+	    return  daURL+c+"r="+r;
+	}
     }
     /**
      * This method can be used with Direct Action URLs to make sure
@@ -1275,16 +1279,18 @@ public class ERXExtensions {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static void addRandomizeDirectActionURL(StringBuffer daURL) {
-        int r=_random.nextInt();
-        char c='?';
-        for (int i=0; i<daURL.length(); i++) {
-            if (daURL.charAt(i)=='?') {
-                c='&'; break;
-            }
-        }
-        daURL.append(c);
-        daURL.append("r=");
-        daURL.append(r);
+	synchronized(_random) {
+	    int r=_random.nextInt();
+	    char c='?';
+	    for (int i=0; i<daURL.length(); i++) {
+		if (daURL.charAt(i)=='?') {
+		    c='&'; break;
+		}
+	    }
+	    daURL.append(c);
+	    daURL.append("r=");
+	    daURL.append(r);
+	}
     }
     /**
      * Adds the wosid for a given session to a given url. 
