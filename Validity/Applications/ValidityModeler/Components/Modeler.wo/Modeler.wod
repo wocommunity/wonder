@@ -270,6 +270,7 @@ ImageButton1: WOImageButton {
 	border = 0;
 	filename = "save.gif";
 	framework = "app";
+	action = saveAction;
 }
 
 KeyValueConditional1: WOKeyValueConditional {
