@@ -31,7 +31,6 @@ public class ERD2WFactory extends D2W {
     }
 
     
-/*
     public void myCheckRules() {
         if (!WOApplication.application().isCachingEnabled()) {
             ERD2WModel.erDefaultModel().checkRules();
@@ -59,6 +58,7 @@ public class ERD2WFactory extends D2W {
         return newPage;
     }    
 
+ /*
  */
 
 }
