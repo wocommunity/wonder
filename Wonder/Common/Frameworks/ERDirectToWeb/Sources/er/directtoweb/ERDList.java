@@ -40,16 +40,25 @@ public class ERDList extends ERDCustomEditComponent {
     }
 
     public WOComponent createObjectAction() {
+        WOComponent nextPage = context().page();
         String editRelationshipConfigurationName = (String)valueForBinding("editRelationshipConfigurationName");
         if(editRelationshipConfigurationName != null && editRelationshipConfigurationName.length() > 0) {
-            EditRelationshipPageInterface epi = (EditRelationshipPageInterface)D2W.factory().pageForConfigurationNamed(editRelationshipConfigurationName, session());
-            epi.setMasterObjectAndRelationshipKey(object(), key());
-            epi.setNextPage(context().page());
-            return (WOComponent)epi;
+            nextPage = D2W.factory().pageForConfigurationNamed(editRelationshipConfigurationName, session());
+            if(nextPage instanceof EditRelationshipPageInterface) {
+                EditRelationshipPageInterface epi = (EditRelationshipPageInterface)nextPage;
+                epi.setMasterObjectAndRelationshipKey(object(), key());
+                epi.setNextPage(context().page());
+            } else if(nextPage instanceof EditPageInterface) {
+                EOEnterpriseObject object = ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
+                EOEnterpriseObject eo = ERXEOControlUtilities.createAndAddObjectToRelationship(object.editingContext(), object, key(), (String)valueForBinding("destinationEntityName"), null);
+                EditPageInterface epi = (EditPageInterface)nextPage;
+                epi.setObject(eo);
+                epi.setNextPage(context().page());
+            }
         } else {
             ERXEOControlUtilities.createAndAddObjectToRelationship(object().editingContext(), object(), key(), (String)valueForBinding("destinationEntityName"), null);
         }
-        return context().page();
+        return nextPage;
     }
     // we will get asked quite a lot of times, so caching is in order
     
