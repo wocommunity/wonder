@@ -14,11 +14,7 @@ import er.extensions.*;
 
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
-    private boolean _propagateWillChange=true;
-    public abstract String relationshipNameForLogEntry();
-    public abstract EOEnterpriseObject logEntryType();
-    public EOEnterpriseObject insertionLogEntry=null;
-
+    /** logging support */
     public static ERXLogger log = ERXLogger.getERXLogger(ERCStampedEnterpriseObject.class);
 
     public static final NSArray TimestampAttributeKeys = new NSArray(new Object[] { "created", "lastModified"});
@@ -44,14 +40,33 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
     }        
 
 
+    private boolean _propagateWillChange=true;
+    public EOEnterpriseObject insertionLogEntry=null;
+
+    protected Boolean _implementsLogEntryInterface;
+    
+    public boolean implementsLogEntryInterface() {
+        if (_implementsLogEntryInterface == null) {
+            if (this instanceof ERCLogEntryInterface) {
+                _implementsLogEntryInterface = Boolean.TRUE;
+            } else {
+                _implementsLogEntryInterface = Boolean.FALSE;                
+            }
+        }
+        return _implementsLogEntryInterface.booleanValue();
+    }
     
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
-        if (relationshipNameForLogEntry()!=null && logEntryType() != null) {
-            insertionLogEntry=ERCoreBusinessLogic.createLogEntryLinkedToEO(logEntryType(),
-                                                                   null,
-                                                                   this,
-                                                                   relationshipNameForLogEntry());
+        if (implementsLogEntryInterface()) {
+            String relationshipName = ((ERCLogEntryInterface)this).relationshipNameForLogEntry();
+            EOEnterpriseObject logType = ((ERCLogEntryInterface)this).logEntryType();
+            if (relationshipName != null && logType != null) {
+                insertionLogEntry=ERCoreBusinessLogic.createLogEntryLinkedToEO(logType,
+                                                                               null,
+                                                                               this,
+                                                                               relationshipName);
+            }            
         }
         // We now set the date created/last modified in willInsert/Update/Delete
         // A side effect of this technique is that for new EOs, created/lastModified is null until the EO actually gets saved
