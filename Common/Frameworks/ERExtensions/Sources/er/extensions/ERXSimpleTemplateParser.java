@@ -74,7 +74,7 @@ public class ERXSimpleTemplateParser {
      * Returns a parser object with the given string as the undefined key label 
      * 
      * @param undefinedKeyLabel  string as the undefined key label, 
-     *                            for examle, "?", "N/A"
+     *                            for example, "?", "N/A"
      */
     public ERXSimpleTemplateParser(String undefinedKeyLabel) {
         super();
