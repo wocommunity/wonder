@@ -396,10 +396,10 @@ public class ERXStringUtilities {
      * @return display name for the given key
      */
     public static String displayNameForKey(String key) {
-        StringBuffer finalString = new StringBuffer();
+        StringBuffer finalString = null;
         if (key != null) {
-            NSArray keys=NSArray.componentsSeparatedByString(key,".");
-            String lastHop=(String)keys.objectAtIndex(keys.count()-1);
+            finalString = new StringBuffer();
+            String lastHop=key.indexOf(".") == -1 ? key : key.endsWith(".") ? "" : key.substring(key.lastIndexOf(".") + 1);
             StringBuffer tempString = new StringBuffer();
             char[] originalArray = lastHop.toCharArray();
             originalArray[0] = Character.toUpperCase(originalArray[0]);
@@ -419,7 +419,7 @@ public class ERXStringUtilities {
             finalString.append(tempString.toString());
             finalString.append(nextChar);
         }
-        return finalString.toString();
+        return finalString == null ? "" : finalString.toString();
     }
 
     /** 
