@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.Date;
 
 import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 /**
@@ -783,4 +784,25 @@ public class ERXJDBCConnectionBroker {
         }
 
     }// End class
+
+    /** returns a DbConnectionBroker which belongs to the adaptor who is responsible to save
+     * the EOEnterpriseObject to the database.
+     * 
+     * @param eo, the EOEnterpriseObject which gives information which adaptor should be used
+     * @return a DbConnectionBroker which uses the same connection url as the adaptor who is
+     * responsible for the eo or null, if no adaptor can be found for the eo.
+     */
+    public static DbConnectionBroker connectionBrokerForEoInEditingContext(EOEnterpriseObject eo) {
+        EOObjectStore os = eo.editingContext().rootObjectStore();
+        if (os instanceof EOObjectStoreCoordinator) {
+            EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator)os;
+            EOCooperatingObjectStore cos = osc.objectStoreForObject(eo);
+            if (cos instanceof EODatabaseContext) {
+                EODatabaseContext dbctx = (EODatabaseContext)cos;
+                EOAdaptor adaptor = dbctx.database().adaptor();
+                return ERXJDBCConnectionBroker.connectionBrokerForAdaptor(adaptor);
+            }
+        }
+        return null;
+    }
 }
