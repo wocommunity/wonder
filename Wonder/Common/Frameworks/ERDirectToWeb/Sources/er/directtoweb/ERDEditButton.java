@@ -25,9 +25,9 @@ public class ERDEditButton extends ERDActionButton {
     public ERDEditButton(WOContext context) {super(context);}
     
     protected EOEnterpriseObject localInstanceOfObject() {
-    	EOEnterpriseObject object = object();
-    	D2WContext d2wContext = d2wContext();
-        return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object, d2wContext);
+    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+    	return ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
     }
 
     public boolean isEditable() {
