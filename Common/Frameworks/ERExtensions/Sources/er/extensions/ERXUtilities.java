@@ -46,13 +46,8 @@ public class ERXUtilities {
     public static EOEnterpriseObject createEO(String entityName,
                                               EOEditingContext editingContext,
                                               NSDictionary objectInfo) {
-        Object delegate=editingContext.delegate();
         if (cat.isDebugEnabled())
             cat.debug("Creating object of type: " + entityName);
-        if (delegate==null)
-            throw new RuntimeException("Found null delegate");
-        if (!(delegate instanceof ERXEditingContextDelegate))
-            throw new RuntimeException("Found unexpected delegate class: "+delegate.getClass().getName());
         EOClassDescription cd=EOClassDescription.classDescriptionForEntityName(entityName);
         EOEnterpriseObject newEO=cd.createInstanceWithEditingContext(editingContext,null);
         if (objectInfo != null)
