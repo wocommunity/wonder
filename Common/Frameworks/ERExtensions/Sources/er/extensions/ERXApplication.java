@@ -61,6 +61,12 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             setContextClassName("er.extensions.ERXWOContext");
         ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
         ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
+        
+        // use our localizing string class
+        if(ERXLocalizer.isLocalizationEnabled()) {
+        	ERXPatcher.setClassForName(ERXWOString.class, "WOString");
+        }
+        
         //ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
         // Fix for 3190479 URI encoding should always be UTF8
