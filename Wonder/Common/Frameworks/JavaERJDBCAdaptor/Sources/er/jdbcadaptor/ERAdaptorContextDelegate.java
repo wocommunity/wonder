@@ -26,7 +26,6 @@ public class ERAdaptorContextDelegate implements EOAdaptorContext.Delegate {
      */
     public boolean adaptorContextShouldConnect(EOAdaptorContext context) {
         if (context instanceof ERJDBCContext) {
-            log.info("adaptorContextShouldConnect");
             ERJDBCContext ctx = (ERJDBCContext)context;
             ctx.checkoutConnection();
         }
@@ -38,7 +37,6 @@ public class ERAdaptorContextDelegate implements EOAdaptorContext.Delegate {
      */
     public boolean adaptorContextShouldBegin(EOAdaptorContext context) {
         if (context instanceof ERJDBCContext) {
-            log.info("adaptorContextShouldBegin");
             ERJDBCContext ctx = (ERJDBCContext)context;
             ctx.checkoutConnection();
         }
@@ -51,7 +49,6 @@ public class ERAdaptorContextDelegate implements EOAdaptorContext.Delegate {
      */
     public void adaptorContextDidCommit(EOAdaptorContext context) {
         if (context instanceof ERJDBCContext) {
-            log.info("adaptorContextDidCommit");
             ERJDBCContext ctx = (ERJDBCContext)context;
             ctx.freeConnection();
         }
@@ -62,7 +59,6 @@ public class ERAdaptorContextDelegate implements EOAdaptorContext.Delegate {
      */
     public void adaptorContextDidRollback(EOAdaptorContext context) {
         if (context instanceof ERJDBCContext) {
-            log.info("adaptorContextDidRollback");
             ERJDBCContext ctx = (ERJDBCContext)context;
             ctx.freeConnection();
         }
