@@ -2003,9 +2003,7 @@
 			children = (
 				F57EA6E301FF59C0019E57DA,
 				F57EA6E801FF59C0019E57DA,
-				F57EA6E401FF59C0019E57DA,
 				F57EA6E501FF59C0019E57DA,
-				F57EA6E901FF59C0019E57DA,
 			);
 			isa = PBXGroup;
 			name = "Other Sources";
@@ -2016,11 +2014,6 @@
 			path = CustomInfo.plist;
 			refType = 4;
 		};
-		F57EA6E401FF59C0019E57DA = {
-			isa = PBXFileReference;
-			path = h.template;
-			refType = 4;
-		};
 		F57EA6E501FF59C0019E57DA = {
 			isa = PBXFileReference;
 			path = java.template;
@@ -2029,11 +2022,6 @@
 		F57EA6E801FF59C0019E57DA = {
 			isa = PBXFileReference;
 			path = LICENSE.NPL;
-			refType = 4;
-		};
-		F57EA6E901FF59C0019E57DA = {
-			isa = PBXFileReference;
-			path = m.template;
 			refType = 4;
 		};
 		F57EA6ED01FF59C0019E57DA = {
