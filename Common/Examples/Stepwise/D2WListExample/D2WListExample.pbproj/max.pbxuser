@@ -1,0 +1,59 @@
+// !$*UTF8*$!
+{
+	F57EA4ED01FF427F019E57DA = {
+		activeBuildStyle = F57EA5BC01FF427F019E57DA;
+		activeTarget = F57EA54601FF427F019E57DA;
+		wantsIndex = 1;
+		wantsSCM = -1;
+	};
+	F57EA54601FF427F019E57DA = {
+		activeExec = 0;
+		customExecs = {
+		};
+		targetExecs = {
+			macosx = (
+				F57EA5BF01FF44D3019E57DA,
+			);
+		};
+	};
+	F57EA54801FF427F019E57DA = {
+		activeExec = 0;
+		customExecs = {
+		};
+	};
+	F57EA58001FF427F019E57DA = {
+		activeExec = 0;
+		customExecs = {
+		};
+	};
+	F57EA5A801FF427F019E57DA = {
+		activeExec = 0;
+		customExecs = {
+		};
+	};
+	F57EA5B001FF427F019E57DA = {
+		activeExec = 0;
+		customExecs = {
+		};
+	};
+	F57EA5B601FF427F019E57DA = {
+		activeExec = 0;
+		customExecs = {
+		};
+	};
+	F57EA5BF01FF44D3019E57DA = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = GDBDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		shlibInfoDictList = (
+		);
+		sourceDirectories = (
+		);
+	};
+}
