@@ -432,6 +432,7 @@
 				F69DE4020313E86B01257492,
 				F5E3B46903480557016A5D3F,
 				F5E3B46B034823BF016A5D3F,
+				F50C03940354549D014B9BC9,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -809,6 +810,7 @@
 				40B58282FFD5E8187F000001,
 				017C7B2FFFD7144B7F000001,
 				017C7B36FFD7144B7F000001,
+				F5BC5D5B0349D8D101AD0D07,
 			);
 		};
 		40B5827FFFD5E7DB7F000001 = {
@@ -1046,6 +1048,7 @@
 			buildRules = (
 			);
 			buildSettings = {
+				ANT_HOME = /usr/local/ant;
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
@@ -1121,6 +1124,18 @@
 //F52
 //F53
 //F54
+		F50C03910354549D014B9BC9 = {
+			isa = PBXFileReference;
+			name = ERXWOFileUpload.java;
+			path = er/extensions/ERXWOFileUpload.java;
+			refType = 4;
+		};
+		F50C03940354549D014B9BC9 = {
+			fileRef = F50C03910354549D014B9BC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F510755F02C453E501000102 = {
 			isa = PBXFrameworkReference;
 			path = ERJars.framework;
@@ -5748,6 +5763,30 @@
 			settings = {
 			};
 		};
+		F5BC5D5B0349D8D101AD0D07 = {
+			buildArgumentsString = "-f Build/build.xml $ACTION";
+			buildPhases = (
+			);
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ant;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = /usr/local/ant/bin/ant;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = ant;
+			productName = ant;
+			settingsToExpand = 6;
+			settingsToPassInEnvironment = 287;
+			settingsToPassOnCommandLine = 280;
+			shouldUseHeadermap = 0;
+		};
 		F5E3B46803480557016A5D3F = {
 			isa = PBXFileReference;
 			name = ERXBetweenQualifier.java;
@@ -6565,6 +6604,7 @@
 				F59C57E102C4565701000102,
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
+				F50C03910354549D014B9BC9,
 			);
 			isa = PBXGroup;
 			name = "WOF Additions";
