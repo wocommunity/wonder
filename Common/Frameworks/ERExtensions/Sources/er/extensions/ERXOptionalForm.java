@@ -13,14 +13,14 @@ import com.webobjects.appserver.WOContext;
  * 
  * Synopsis:<br/>
   *
- * @binding hasForm
+ * @binding showForm
  * @binding action
  * @binding name
  * @binding enctype
  * @binding directActionName
  * @binding actionClass
  */
-public class ERXOptionalForm extends WOComponent {
+public class ERXOptionalForm extends ERXStatelessComponent {
 
     /**
      * Public constructor
@@ -31,8 +31,19 @@ public class ERXOptionalForm extends WOComponent {
     }
 
     /**
-     * Component is stateless
-     * @return true
+     * Determines if a form tag should be shown.
+     * Two conditions determine if a form tag should
+     * be shown. The first is if the boolean binding
+     * 'showForm', if this is false then a form is not
+     * displayed. The second conditiion to not display
+     * a form is if the WOContext thinks that we are currently
+     * within a form, which would cause a nested form.
+     * This defaults to true.
+     * @return if a form should be displayed.
      */
-    public boolean isStateless() { return true; }
+    public boolean showForm() {
+        // Defaults to true
+        boolean showForm = valueForBooleanBinding("showForm", true);
+        return showForm ? !context().isInForm() : false;
+    }
 }
