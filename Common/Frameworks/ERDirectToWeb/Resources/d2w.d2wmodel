@@ -3275,7 +3275,7 @@
             }; 
         }, 
         {
-            author = 25; 
+            author = 57; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
@@ -3307,7 +3307,7 @@
             }; 
         }, 
         {
-            author = 20; 
+            author = 55; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
@@ -3355,7 +3355,7 @@
             }; 
         }, 
         {
-            author = 20; 
+            author = 55; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
@@ -3400,6 +3400,303 @@
                 class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
                 value = templateNameForCompactListPage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = pick; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForPickListPage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = tab; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForTabInspectPage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = wizard; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForWizardCreationPage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = compare; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForListComparePage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = csv; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForCSVListPage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = group; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForGroupingListPage; 
+            }; 
+        }, 
+        {
+            author = 55; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = select; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = pickType; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForPickTypePage; 
+            }; 
+        }, 
+        {
+            author = 51; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = inspect; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForInspectPage; 
+            }; 
+        }, 
+        {
+            author = 51; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = select; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForListPage; 
+            }; 
+        }, 
+        {
+            author = 51; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = confirm; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForConfirmPage; 
+            }; 
+        }, 
+        {
+            author = 51; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = query; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = pageName; 
+                value = templateNameForQueryPage; 
             }; 
         }, 
         {
@@ -3458,117 +3755,6 @@
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = pick; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOOrQualifier; 
-                        qualifiers = (
-                            {
-                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = task; 
-                                selectorName = "isEqualTo"; 
-                                value = list; 
-                            }, 
-                            {
-                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = task; 
-                                selectorName = "isEqualTo"; 
-                                value = select; 
-                            }
-                        ); 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForPickListPage; 
-            }; 
-        }, 
-        {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = tab; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOOrQualifier; 
-                        qualifiers = (
-                            {
-                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = task; 
-                                selectorName = "isEqualTo"; 
-                                value = edit; 
-                            }, 
-                            {
-                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = task; 
-                                selectorName = "isEqualTo"; 
-                                value = inspect; 
-                            }
-                        ); 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForTabInspectPage; 
-            }; 
-        }, 
-        {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = wizard; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOOrQualifier; 
-                        qualifiers = (
-                            {
-                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = task; 
-                                selectorName = "isEqualTo"; 
-                                value = edit; 
-                            }, 
-                            {
-                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = task; 
-                                selectorName = "isEqualTo"; 
-                                value = inspect; 
-                            }
-                        ); 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForWizardCreationPage; 
-            }; 
-        }, 
-        {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                         key = task; 
                         selectorName = "isEqualTo"; 
                         value = list; 
@@ -3585,84 +3771,6 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
                 value = ERD2WCalendarPage; 
-            }; 
-        }, 
-        {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = list; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = compare; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForListComparePage; 
-            }; 
-        }, 
-        {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = list; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = csv; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForCSVListPage; 
-            }; 
-        }, 
-        {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = list; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = group; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForGroupingListPage; 
             }; 
         }, 
         {
@@ -3692,99 +3800,6 @@
             }; 
         }, 
         {
-            author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOAndQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = select; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = subTask; 
-                        selectorName = "isEqualTo"; 
-                        value = pickType; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForPickTypePage; 
-            }; 
-        }, 
-        {
-            author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOOrQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = edit; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = inspect; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForInspectPage; 
-            }; 
-        }, 
-        {
-            author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOOrQualifier; 
-                qualifiers = (
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = select; 
-                    }, 
-                    {
-                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = task; 
-                        selectorName = "isEqualTo"; 
-                        value = list; 
-                    }
-                ); 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForListPage; 
-            }; 
-        }, 
-        {
-            author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = task; 
-                selectorName = "isEqualTo"; 
-                value = confirm; 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForConfirmPage; 
-            }; 
-        }, 
-        {
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
@@ -3797,21 +3812,6 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
                 value = ERDRecoverableErrorPage; 
-            }; 
-        }, 
-        {
-            author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = task; 
-                selectorName = "isEqualTo"; 
-                value = query; 
-            }; 
-            rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
-                keyPath = pageName; 
-                value = templateNameForQueryPage; 
             }; 
         }, 
         {
