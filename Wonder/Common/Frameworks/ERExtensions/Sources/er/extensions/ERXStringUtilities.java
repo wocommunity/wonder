@@ -445,4 +445,37 @@ public class ERXStringUtilities {
         if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
             sb.append(separator);
     }
+
+    /**
+     * Replaces a given string by another string in a string.
+     * @param old string to be replaced
+     * @param newString to be inserted
+     * @param buffer string to have the replacement done on it
+     * @return string after having all of the replacement done.
+     */
+    public static String replaceStringByStringInString(String old, String newString, String buffer) {
+        int begin, end;
+        int oldLength = old.length();
+        int length = buffer.length();
+        StringBuffer convertedString = new StringBuffer(length + 100);
+
+        begin = 0;
+        while(begin < length)
+        {
+            end = buffer.indexOf(old, begin);
+            if(end == -1)
+            {
+                convertedString.append(buffer.substring(begin));
+                break;
+            }
+            if(end == 0)
+                convertedString.append(newString);
+            else {
+                convertedString.append(buffer.substring(begin, end));
+                convertedString.append(newString);
+            }
+            begin = end+oldLength;
+        }
+        return convertedString.toString();
+    }    
 }
