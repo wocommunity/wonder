@@ -302,42 +302,54 @@ public class ERXFileUtilities {
             if (!srcDirectory.exists() || !dstDirectory.exists())
                 throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
                                            + " Dst: " + dstDirectory);
+            Throwable thrownException=null;
             File srcFiles[] = srcDirectory.listFiles();
             if (srcFiles != null && srcFiles.length > 0) {
                 FileInputStream in = null;
                 FileOutputStream out = null;
 
+                byte buf[] = new byte[1024 * 50];
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];
                     if (srcFile.exists() && srcFile.isFile()) {
-                        in = new FileInputStream(srcFile);
-                        File dstFile = null;
                         try {
+                            in = new FileInputStream(srcFile);
+                            File dstFile = null;
                             dstFile =new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
                             out = new FileOutputStream(dstFile);
 
                             //50 KBytes buffer
-                            byte buf[] = new byte[1024 * 50];
                             int read = -1;
                             while ((read = in.read(buf)) != -1) {
                                 out.write(buf, 0, read);
                             }
-                                                        
-                            if (deleteOriginals)
-                                srcFile.delete();
+
+                            if (deleteOriginals) srcFile.delete();
+                        } catch (Throwable t) {
+                            thrownException=t;
                         } finally {
-                            if (out != null)
+                            if (out != null) {
                                 try {
                                     out.close();
-                                } catch (IOException io) {}
+                                } catch (IOException ioe) {
+                                    if (thrownException==null) thrownException=ioe;
+                                }
+                            }
                             if (in != null) {
                                 try {
                                     in.close();
-                                } catch (IOException io) {}
+                                } catch (IOException ioe) {
+                                    if (thrownException==null) thrownException=ioe;
+                                }
                             }
                         }
                     }
                 }
+            }
+            if (thrownException!=null) {
+                if (thrownException instanceof IOException) throw (IOException)thrownException;
+                else if (thrownException instanceof Error) throw (Error)thrownException;
+                else throw (RuntimeException)thrownException;
             }
         }
 
