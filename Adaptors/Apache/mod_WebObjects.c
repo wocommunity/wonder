@@ -444,9 +444,7 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
    ap_send_http_header(r);
 
    if (! r->header_only) {
-      ap_soft_timeout("sending WebObjects response", r);
-      ap_rwrite(resp->content, resp->content_length, r);
-      ap_kill_timeout(r);
+      ap_send_mmap(resp->content, r, 0, resp->content_length);
    }
    return;
 }
