@@ -25,7 +25,11 @@ import com.webobjects.foundation.*;
  */
 public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
     
+    /** logging support */
+    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXPrimaryKeyListQualifier.class);
+
     public static String IsContainedInArraySelectorName = "isContainedInArray";
+    
     /**
      * Support class that listens for EOKeyValueQualifiers that have an <code>isContainedInArray</code>-selector and replaces these
      * with the ERXPrimaryKeyListQualifier. This means that when you set <code>isContainedInArray</code> as a display group
@@ -36,25 +40,26 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
     public static class KeyValueQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
         
         private EOQualifierSQLGeneration.Support _old;
-
+        
         public KeyValueQualifierSQLGenerationSupport(EOQualifierSQLGeneration.Support old) {
             _old = old;
         }
-
+        
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             return _old.sqlStringForSQLExpression(eoqualifier, e);
         }
-
+        
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
             if(IsContainedInArraySelectorName.equals(qualifier.selector().name())) {
                 return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)qualifier.value());
             }
-            return _old.schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
+            EOQualifier result = _old.schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
+            return result;
         }
-
+        
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
-           return _old.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
+            return _old.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
         }
     }
     
