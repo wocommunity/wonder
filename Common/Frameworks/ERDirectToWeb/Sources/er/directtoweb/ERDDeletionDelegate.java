@@ -9,6 +9,7 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
@@ -48,9 +49,29 @@ public class ERDDeletionDelegate implements NextPageDelegate {
             try {
                 if (_dataSource != null)
                     _dataSource.deleteObject(_object);
-                editingContext.deleteObject(_object);
-                editingContext.saveChanges();
-                _object=null;
+                if (editingContext instanceof EOSharedEditingContext) {
+                    if (ERXExtensions.isNewObject(_object)) {
+                        log.error("found a new object in a shared editing context "+editingContext);
+                        editingContext.deleteObject(_object);
+                    } else {
+                        //fault the eo into another ec, one cannot delete objects in an shared editing context
+                        EOEditingContext ec = ERXEC.newEditingContext();
+                        ec.lock();
+                        try {
+                            ec.setSharedEditingContext(null);
+                            _object = EOUtilities.localInstanceOfObject(ec, _object);
+                            ec.deleteObject(_object);
+                            ec.saveChanges();
+                        } finally {
+                            ec.unlock();
+                            ec.dispose();
+                        }
+                    }
+                } else {
+                    editingContext.deleteObject(_object);
+                    editingContext.saveChanges();
+                    _object=null;
+                }
             } catch (NSValidation.ValidationException e) {
                 if(e instanceof ERXValidationException) {
                     ERXValidationException ex = (ERXValidationException)e;
