@@ -13,6 +13,8 @@ Conditional2: WOConditional {
 MailContainer: WOGenericContainer {
 	href = href;
 	elementName = "A";
+        class = ^class;
+        style = ^style;
 }
 
 String: WOString {
