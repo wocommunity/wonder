@@ -358,10 +358,10 @@ public class ERXUtilities {
      * {@link ERXArrayUtilities}. 
      * @param eos mutable array to be sorted
      * @param key key to be sorted on.
-     * @deprecated use ERXArrayUtilities.sortedArraySortedWithKey(NSArray,String) instead
+     * @deprecated use ERXArrayUtilities.sortArrayWithKey(NSMutableArray,String) instead
      */
     public static void sortEOsUsingSingleKey(NSMutableArray eos, String key) {
-        ERXArrayUtilities.sortedArraySortedWithKey(eos, key, EOSortOrdering.CompareCaseInsensitiveAscending);
+        ERXArrayUtilities.sortArrayWithKey(eos, key, EOSortOrdering.CompareCaseInsensitiveAscending);
     }
 
     /**
@@ -371,10 +371,10 @@ public class ERXUtilities {
      * @param eos mutable array to be sorted
      * @param key key to be sorted on.
      * @param selector sort selector.
-     * @deprecated use ERXArrayUtilities.sortedArraySortedWithKey(NSArray,String,NSSelector) instead
+     * @deprecated use ERXArrayUtilities.sortArrayWithKey(NSMutableArray,String,NSSelector) instead
      */
     public static void sortEOsUsingSingleKey(NSMutableArray eos, String key, NSSelector selector) {
-        ERXArrayUtilities.sortedArraySortedWithKey(eos, key, selector);
+        ERXArrayUtilities.sortArrayWithKey(eos, key, selector);
     }
 
     /**

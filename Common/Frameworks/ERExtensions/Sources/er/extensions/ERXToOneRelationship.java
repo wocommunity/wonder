@@ -260,7 +260,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 }
             */
             if (_localSortKey()!=null && _localSortKey().length()>0)
-                ERXArrayUtilities.sortedArraySortedWithKey(aSortedArray, _localSortKey());
+                ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localSortKey());
 
             // if there is a value on the EO, then we need to make sure that the list's EOs are in the same EC
             // otherwise the popup selection will be wrong (will default to the first element)
@@ -291,7 +291,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                         aSortedArray.addObject(relObject);
                         log.info("adding missing relationship object to list "+relObject);
                         if (_localSortKey()!=null && _localSortKey().length() > 0) {
-                            ERXArrayUtilities.sortedArraySortedWithKey(aSortedArray, _localSortKey());
+                            ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localSortKey());
                         }
                     }
                 }
