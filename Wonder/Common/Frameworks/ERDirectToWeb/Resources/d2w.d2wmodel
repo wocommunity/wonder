@@ -1893,6 +1893,21 @@
             }; 
         }, 
         {
+            author = 15; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = customComponentName; 
+                selectorName = "isEqualTo"; 
+                value = ERDList; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDDefaultsEmbeddedAssignment; 
+                keyPath = displayNameForEntity; 
+                value = defaultEmbeddedEntityDisplayName; 
+            }; 
+        }, 
+        {
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
