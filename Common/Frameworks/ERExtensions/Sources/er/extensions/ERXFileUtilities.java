@@ -9,6 +9,8 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.io.*;
+import java.util.*;
+import java.util.zip.*;
 
 /**
 * Collection of handy {java.io.File} utilities.
@@ -46,9 +48,11 @@ public class ERXFileUtilities {
         if (file == null)
             throw new IOException("Attempting to write to a null file!");
         FileOutputStream out = new FileOutputStream(file);
-        
-        for (int b = stream.read(); b != -1; b = stream.read()) {
-            out.write(b);
+        //50 KBytes buffer
+        byte buf[] = new byte[1024 * 50];
+        int read = -1;
+        while ((read = stream.read(buf)) != -1) {
+            out.write(buf, 0, read);
         }
     }
     
@@ -259,4 +263,110 @@ public class ERXFileUtilities {
                 }
             }
         }
+
+
+    /** Creates a new NSArray which contains all files in the specified directory.
+        *
+        * @param directory the directory from which to add the files
+        * @param recursive if true then files are added recursively meaning subdirectories are scanned, too.
+        *
+        * @return a NSArray containing the files in the directory. If the specified directory does not
+        * exist then the array is empty.
+        */
+    public static NSArray arrayByAddingFilesInDirectory(File directory, boolean recursive) {
+        NSMutableArray files = new NSMutableArray();
+        if (!directory.exists()) {
+            return files;
+        }
+
+        File[] fileList = directory.listFiles();
+        if (fileList == null) {
+            return files;
+        }
+
+        for (int i = 0; i < fileList.length; i++) {
+            File f = fileList[i];
+            if (f.isDirectory() && recursive) {
+                files.addObjectsFromArray(arrayByAddingFilesInDirectory(f, true));
+            } else {
+                files.addObject(f);
+            }
+        }
+        return files;
+    }
+
+
+/** Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
+        * structure is created as a subdirectory from destination. If destination is <code>null</code>
+        * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
+        * uncompressed file(s).
+        *
+        *
+        * @param f The file to unzip
+        * @param destination the destination directory. If directory is null then the file will be unzipped in
+        * java.io.tmpdir, if it does not exist, then a directory is created and if it exists but is a file
+        * then the destination is set to the directory in which the file is located.
+        *
+        *
+        * @return the file or directory in which the zipfile was unzipped
+        *
+        * @exception IOException
+        */
+    public static File unzipFile(File f, File destination) throws IOException {
+        if (!f.exists()) {
+            throw new FileNotFoundException("file "+f+" does not exist");
+        }
+
+        String absolutePath;
+        if (destination != null) {
+            absolutePath = destination.getAbsolutePath();
+            if (!destination.exists()) {
+                destination.mkdir();
+            } else if (!destination.isDirectory()) {
+                absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
+            }
+        } else {
+            absolutePath = System.getProperty("java.io.tmpdir");
+        }
+        if (!absolutePath.endsWith(File.separator)) {
+            absolutePath += File.separator;
+        }
+
+        ZipFile zipFile = new ZipFile(f);
+
+        Enumeration en = zipFile.entries();
+        if (en.hasMoreElements()) {
+            ZipEntry firstEntry = (ZipEntry)en.nextElement();
+            if (firstEntry.isDirectory() || en.hasMoreElements()) {
+                String dir = absolutePath + f.getName();
+                if (dir.endsWith(".zip")) {
+                    dir = dir.substring(0, dir.length() - 4);
+                }
+                new File(dir).mkdir();
+                absolutePath = dir + File.separator;
+            } 
+        } else {
+            return null;
+        }
+        
+        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
+            ZipEntry ze = (ZipEntry)e.nextElement();
+            String name = ze.getName();
+            if (ze.isDirectory()) {
+                File d = new File(absolutePath + name);
+                d.mkdir();
+                if (log.isDebugEnabled()) {
+                    log.debug("created directory "+d.getAbsolutePath());
+                }
+            } else {
+                InputStream is = zipFile.getInputStream(ze);
+                writeInputStreamToFile(new File(absolutePath + name), is);
+                if (log.isDebugEnabled()) {
+                    log.debug("unzipped file "+ze.getName()+" into "+(absolutePath + name));
+                }
+            }
+        }
+
+        return new File(absolutePath);
+    }
 }
