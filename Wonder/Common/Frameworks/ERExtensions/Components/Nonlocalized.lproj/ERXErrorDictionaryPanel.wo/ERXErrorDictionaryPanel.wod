@@ -3,11 +3,11 @@ Conditional1: WOConditional {
 }
 
 Conditional2: WOConditional {
-	condition = ^shouldShowNewLineBelow;
+	condition = shouldShowNewLineBelow;
 }
 
 Conditional3: WOConditional {
-	condition = ^shouldShowNewLineAbove;
+	condition = shouldShowNewLineAbove;
 }
 
 DictionaryRepetition: WORepetition { 	
