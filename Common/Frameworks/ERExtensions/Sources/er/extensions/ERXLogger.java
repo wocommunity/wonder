@@ -24,7 +24,18 @@ public class ERXLogger extends org.apache.log4j.Logger {
 
     /** logging supprt */
     public static Logger log;
-    public static Factory factory = new ERXLogger.Factory();
+    public static Factory factory = null;
+    static {
+        String factoryClassName = System.getProperty("log4j.loggerFactory");
+        if(factoryClassName == null) {
+            factoryClassName = ERXLogger.Factory.class.getName();
+        }
+        try {
+            factory = (Factory)Class.forName(factoryClassName).newInstance();
+        } catch(Exception ex) {
+            System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
+        }
+    }
     
     private static boolean _isFirstTimeConfig = true;
     
@@ -143,6 +154,11 @@ public class ERXLogger extends org.apache.log4j.Logger {
             log = Logger.getLogger(ERXLogger.class.getName(), factory);
 
         log.info("Updated the logging configuration with the current system properties.");
+        if(log.isDebugEnabled()) {
+            log.debug("log4j.loggerFactory: " + System.getProperty("log4j.loggerFactory"));
+            log.debug("Factory: " + factory);
+            log.debug("", new RuntimeException());
+        }
         //PropertyPrinter printer = new PropertyPrinter(new PrintWriter(System.out));
         //printer.print(new PrintWriter(System.out));
     }
