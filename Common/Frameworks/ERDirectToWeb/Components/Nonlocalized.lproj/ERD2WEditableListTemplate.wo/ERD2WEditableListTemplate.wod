@@ -21,10 +21,6 @@ CancelActiveImage: WOActiveImage {
 	framework = "JavaDirectToWeb";
 }
 
-Conditional1: WOConditional {
-	condition = false;
-}
-
 Conditional2: WOConditional {
 	condition = d2wContext.showBanner;
 }
@@ -33,9 +29,9 @@ ERTableWithBorder1: ERXTableWithBorder {
 	color = "#999999";
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForEntity;
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
 }
 
 ErrorDictionaryPanel: ERXErrorDictionaryPanel {
@@ -49,17 +45,6 @@ ErrorDictionaryPanel2: ERXErrorDictionaryPanel {
 	errorMessages = currentErrorDictionary;
 }
 
-ExclamationImage: WOImage {
-	border = "0";
-	filename = "exclamation.gif";
-	framework = "JavaDirectToWeb";
-}
-
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
-}
-
 Form1: WOForm {
 	multipleSubmit = true;
 }
@@ -68,7 +53,7 @@ HiddenField: WOHiddenField {
 	value = dummy;
 }
 
-HideReturnOnSelect2: WOConditional {
+HideReturnOnSelect1: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;
@@ -80,7 +65,7 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
-ListEmpty: WOConditional {
+ListEmpty2: WOConditional {
 	condition = isListEmpty;
 }
 
@@ -123,7 +108,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnActiveImage: WOActiveImage {
+ReturnActiveImage2: WOActiveImage {
 	filename = "ReturnMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	action = backAction;
@@ -137,7 +122,7 @@ SaveActiveImage: WOActiveImage {
 	framework = "JavaDirectToWeb";
 }
 
-ShowCancel2: WOConditional {
+ShowCancel1: WOConditional {
 	condition = showCancel;
 }
 
