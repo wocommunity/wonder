@@ -37,10 +37,7 @@ There are three ways to use this script:
 		-Duse.grouping=true \
 		-Duse.reporting=true \
 		-Duse.mysql=true \
-		-Duse.additional.framework.1=SomeProjectLogic.framework \
-		-Duse.additional.framework.2=SomePattern1\* \
-		-Duse.additional.framework.3=SomePattern2\* \
-		-Duse.additional.framework.4=SomePattern3\* \
+		-Duse.additional.framework.[1-7]=SomePattern[1-7]\* \
 		generic.MODE
 
 	Leave out any option you don't want. Valid entries MODEs are:
@@ -260,7 +257,7 @@ There are three ways to use this script:
            </frameworks>
 
            <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
-                <include name="Mysql*.framework"/>
+                <include name="*PlugIn*.framework"/>
            </frameworks>
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.1">
                 <include name="${use.additional.framework.1}"/>
@@ -273,6 +270,15 @@ There are three ways to use this script:
            </frameworks>
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.4">
                 <include name="${use.additional.framework.4}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.5">
+                <include name="${use.additional.framework.5}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.6">
+                <include name="${use.additional.framework.6}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.7">
+                <include name="${use.additional.framework.7}"/>
            </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks"> 
                 <include name="JavaFoundation.framework" />
@@ -321,6 +327,7 @@ There are three ways to use this script:
                 <include name="**/*.sh" />
                 <include name="**/*.dat" />
                 <include name="**/mime.types" /> 
+                <include name="**/*.*" /> 
                 <include name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
@@ -368,6 +375,7 @@ There are three ways to use this script:
                 <include name="**/Properties" />
                 <include name="**/*.strings" />
                 <include name="**/*.djava" />
+                <include name="**/*.*" /> 
                 <include name="**/*.sh" />
                 <include name="**/*.defaults" /> <!-- SVGObjects specific --> 
             </resources>
@@ -425,7 +433,7 @@ There are three ways to use this script:
                 <include name="JavaBusinessLogic.framework"/>
            </frameworks>
             <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
-                <include name="Mysql*.framework"/>
+                <include name="*PlugIn.framework"/>
            </frameworks>
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.1">
                 <include name="${use.additional.framework.1}"/>
@@ -439,7 +447,16 @@ There are three ways to use this script:
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.4">
                 <include name="${use.additional.framework.4}"/>
            </frameworks>
-            <frameworks root="${wo.woroot}/Library/Frameworks"> 
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.5">
+                <include name="${use.additional.framework.5}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.6">
+                <include name="${use.additional.framework.6}"/>
+           </frameworks>
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.7">
+                <include name="${use.additional.framework.7}"/>
+           </frameworks>
+           <frameworks root="${wo.woroot}/Library/Frameworks"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
@@ -941,11 +958,13 @@ There are three ways to use this script:
     <target name="stepwise.all" depends="D2WListExample.all ,D2WInspectExample.all" />
     <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all, ERMovies.all" />
     <target name="common.all" depends="frameworks.all, applications.all, examples.all" />
+    <target name="dynareporting.base" depends="core.all, WOOgnl.all, DynaReporting.base" />
+    <target name="dynareporting.all" depends="core.all, WOOgnl.all, dynareporting.base" />
 
     <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
 
-    <target name="DynaReporting.base" depends="core.all, WOOgnl.all, DRGrouping.all, WRReporting.all" />
+    <target name="DynaReporting.base" depends="DRGrouping.all, WRReporting.all" />
     <target name="DynaReporting.all" depends="DynaReporting.base, DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
 
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
