@@ -215,6 +215,7 @@
     20 : (((task = 'inspect') or (task = 'list') or (task = 'select')) and (smartAttribute.allowsNull = (java.math.BigDecimal)'1') and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentName = ERD2WDisplayDateOrNull
     20 : (((task = 'inspect') or (task = 'list')) and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => formatter = ###,###.##;0;-###,###.##
     20 : (((task = 'list') and (subTask = 'groupPick')) or ((task = 'select') and (subTask = 'group'))) => pageName = ERD2WGroupingPickListPageTemplate
+    20 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartAttribute.allowsNull <> (java.math.BigDecimal)'1') and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentName = D2WDisplayDate
     20 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > (java.math.BigDecimal)'0') and (not (smartRelationship.isToMany = (java.math.BigDecimal)'1'))) => componentName = ERD2WDisplayToOne
     20 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > (java.math.BigDecimal)'0') and (smartRelationship.isToMany = (java.math.BigDecimal)'1')) => componentName = ERD2WDisplayToManyTable
     20 : ((not (task = 'edit')) and (propertyKey like '*email') and (not (task = 'query'))) => componentName = ERDDisplayMailTo
@@ -309,7 +310,6 @@
    100 : ((task = 'list') and (subTask = 'calendar')) => pageName = templateNameForListCalendarPage [er.directtoweb.ERDKeyValueAssignment]
    100 : ((task = 'list') and (subTask = 'group') and (targetOutput = 'xml')) => pageName = templateNameForGroupingListXMLPage [er.directtoweb.ERDKeyValueAssignment]
    100 : (task = 'editRelationship') => pageName = templateNameForEditRelationshipPage [er.directtoweb.ERDKeyValueAssignment]
-   200 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartAttribute.allowsNull <> (java.math.BigDecimal)'1') and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentName = D2WDisplayDate
    200 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (targetOutput = 'xml') and (propertyIsKeyPath = (java.math.BigDecimal)'1') and (pageConfiguration like '*')) => componentName = ERD2WXMLDisplayString
    200 : ((not (task = 'query')) and (targetOutput = 'xml') and (pageConfiguration like '*')) => componentName = ERD2WXMLDisplayString
    200 : ((task = 'list') and (targetOutput = 'xml')) => pageName = templateNameForListXMLPage [er.directtoweb.ERDKeyValueAssignment]
