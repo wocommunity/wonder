@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		6CA8E6D60168D9A500A801D4 = {
 			buildStyles = (
@@ -12,6 +12,13 @@
 				6CA8E7390168D9A500A801D4,
 			);
 			isa = PBXProject;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Nonlocalized,
+			);
 			mainGroup = 6CA8E6D70168D9A500A801D4;
 			productRefGroup = 6CA8E6FB0168D9A500A801D4;
 			projectDirPath = "";
@@ -23,10 +30,8 @@
 		};
 		6CA8E6D70168D9A500A801D4 = {
 			children = (
-				6CA8E6D80168D9A500A801D4,
 				6CA8E6DC0168D9A500A801D4,
 				6CA8E6E00168D9A500A801D4,
-				6CA8E6E50168D9A500A801D4,
 				6CA8E6ED0168D9A500A801D4,
 				6CA8E6FB0168D9A500A801D4,
 			);
@@ -34,36 +39,11 @@
 			name = ERMiniUglyLook;
 			refType = 4;
 		};
-		6CA8E6D80168D9A500A801D4 = {
-			children = (
-				6CA8E6D90168D9A500A801D4,
-				6CA8E6DA0168D9A500A801D4,
-				6CA8E6DB0168D9A500A801D4,
-			);
-			isa = PBXGroup;
-			name = Classes;
-			refType = 4;
-		};
-		6CA8E6D90168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = ERD2WInspectPageTemplateUgly.java;
-			refType = 4;
-		};
-		6CA8E6DA0168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = ERD2WListPageTemplateUgly.java;
-			refType = 4;
-		};
-		6CA8E6DB0168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = ERDSectionTextUgly.java;
-			refType = 4;
-		};
 		6CA8E6DC0168D9A500A801D4 = {
 			children = (
-				F5642A0B021851BA01A801D4,
-				F5642A10021851FB01A801D4,
-				F527D8C202184AA801A801D4,
+				F5CACF7902F4B0C401000103,
+				F5CACF7802F4B0AE01000103,
+				F5CACF7702F4B08F01000103,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -71,67 +51,10 @@
 		};
 		6CA8E6E00168D9A500A801D4 = {
 			children = (
-				F5642A0C021851BA01A801D4,
-				F5642A11021851FB01A801D4,
-				F527D8C302184AA801A801D4,
-				6CA8E6E20168D9A500A801D4,
+				F5CACFAA02F4B1BE01000103,
 			);
 			isa = PBXGroup;
 			name = Resources;
-			refType = 4;
-		};
-		6CA8E6E20168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = d2w.d2wmodel;
-			refType = 4;
-		};
-		6CA8E6E50168D9A500A801D4 = {
-			children = (
-				6CA8E6E60168D9A500A801D4,
-				6CA8E6E70168D9A500A801D4,
-				6CA8E6E80168D9A500A801D4,
-				6CA8E6E90168D9A500A801D4,
-				6CA8E6EA0168D9A500A801D4,
-				6CA8E6EB0168D9A500A801D4,
-				6CA8E6EC0168D9A500A801D4,
-			);
-			isa = PBXGroup;
-			name = "Other Sources";
-			refType = 4;
-		};
-		6CA8E6E60168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = CustomInfo.plist;
-			refType = 4;
-		};
-		6CA8E6E70168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = h.template;
-			refType = 4;
-		};
-		6CA8E6E80168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = java.template;
-			refType = 4;
-		};
-		6CA8E6E90168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = m.template;
-			refType = 4;
-		};
-		6CA8E6EA0168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = Makefile;
-			refType = 4;
-		};
-		6CA8E6EB0168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = Makefile.postamble;
-			refType = 4;
-		};
-		6CA8E6EC0168D9A500A801D4 = {
-			isa = PBXFileReference;
-			path = Makefile.preamble;
 			refType = 4;
 		};
 		6CA8E6ED0168D9A500A801D4 = {
@@ -150,7 +73,7 @@
 				F5642A140218525501A801D4,
 			);
 			isa = PBXGroup;
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			refType = 4;
 		};
 		6CA8E6EF0168D9A500A801D4 = {
@@ -406,55 +329,28 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		6CA8E7030168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
-				6CA8E7080168D9A500A801D4,
-				F527D8C402184AA801A801D4,
-				F527D8C502184AA801A801D4,
-				F5642A0D021851BA01A801D4,
-				F5642A0E021851BA01A801D4,
-				F5642A12021851FB01A801D4,
-				F5642A13021851FB01A801D4,
+				F5CACF8502F4B0F001000103,
+				F5CACF8702F4B10901000103,
+				F5CACF8B02F4B13D01000103,
+				F5CACF9702F4B14D01000103,
+				F5CACFA702F4B18C01000103,
+				F5CACFAB02F4B1BE01000103,
+				F5CACFAD02F4B1F701000103,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
-		};
-		6CA8E7080168D9A500A801D4 = {
-			fileRef = 6CA8E6E20168D9A500A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6CA8E70B0168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
-				6CA8E70C0168D9A500A801D4,
-				6CA8E70D0168D9A500A801D4,
-				6CA8E70E0168D9A500A801D4,
+				F5CACF8902F4B11B01000103,
+				F5CACFA902F4B1A101000103,
+				F5CACFAC02F4B1F501000103,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
-		};
-		6CA8E70C0168D9A500A801D4 = {
-			fileRef = 6CA8E6D90168D9A500A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6CA8E70D0168D9A500A801D4 = {
-			fileRef = 6CA8E6DA0168D9A500A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6CA8E70E0168D9A500A801D4 = {
-			fileRef = 6CA8E6DB0168D9A500A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6CA8E70F0168D9A500A801D4 = {
 			buildActionMask = 2147483647;
@@ -473,7 +369,6 @@
 				F5642A150218525501A801D4,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		6CA8E7110168D9A500A801D4 = {
 			fileRef = 6CA8E6EF0168D9A500A801D4;
@@ -540,7 +435,6 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		6CA8E71D0168D9A500A801D4 = {
 			isa = PBXTargetDependency;
@@ -609,21 +503,18 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		6CA8E7200168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		6CA8E7210168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		6CA8E7220168D9A500A801D4 = {
 			buildActionMask = 2147483647;
@@ -640,7 +531,6 @@
 				6CA8E72E0168D9A500A801D4,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		6CA8E7240168D9A500A801D4 = {
 			fileRef = 6CA8E6EF0168D9A500A801D4;
@@ -707,42 +597,36 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		6CA8E7300168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		6CA8E7310168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		6CA8E7320168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		6CA8E7330168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		6CA8E7340168D9A500A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		6CA8E7350168D9A500A801D4 = {
 			buildActionMask = 2147483647;
@@ -751,7 +635,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -764,7 +647,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -776,7 +658,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -823,31 +705,9 @@
 //F52
 //F53
 //F54
-		F527D8C202184AA801A801D4 = {
-			isa = PBXFolderReference;
-			path = ERDSectionTextUgly.wo;
-			refType = 4;
-		};
-		F527D8C302184AA801A801D4 = {
-			isa = PBXFileReference;
-			path = ERDSectionTextUgly.api;
-			refType = 4;
-		};
-		F527D8C402184AA801A801D4 = {
-			fileRef = F527D8C202184AA801A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F527D8C502184AA801A801D4 = {
-			fileRef = F527D8C302184AA801A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5642A0802184CFC01A801D4 = {
 			isa = PBXFrameworkReference;
-			path = ERDirectToWebJava.framework;
+			path = ERDirectToWeb.framework;
 			refType = 3;
 		};
 		F5642A0902184CFC01A801D4 = {
@@ -856,57 +716,193 @@
 			settings = {
 			};
 		};
-		F5642A0B021851BA01A801D4 = {
-			isa = PBXFolderReference;
-			path = ERD2WInspectPageTemplateUgly.wo;
-			refType = 4;
-		};
-		F5642A0C021851BA01A801D4 = {
-			isa = PBXFileReference;
-			path = ERD2WInspectPageTemplateUgly.api;
-			refType = 4;
-		};
-		F5642A0D021851BA01A801D4 = {
-			fileRef = F5642A0B021851BA01A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5642A0E021851BA01A801D4 = {
-			fileRef = F5642A0C021851BA01A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5642A10021851FB01A801D4 = {
-			isa = PBXFolderReference;
-			path = ERD2WListPageTemplateUgly.wo;
-			refType = 4;
-		};
-		F5642A11021851FB01A801D4 = {
-			isa = PBXFileReference;
-			path = ERD2WListPageTemplateUgly.api;
-			refType = 4;
-		};
-		F5642A12021851FB01A801D4 = {
-			fileRef = F5642A10021851FB01A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5642A13021851FB01A801D4 = {
-			fileRef = F5642A11021851FB01A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5642A140218525501A801D4 = {
 			isa = PBXFrameworkReference;
-			path = ERExtensionsJava.framework;
+			path = ERExtensions.framework;
 			refType = 3;
 		};
 		F5642A150218525501A801D4 = {
 			fileRef = F5642A140218525501A801D4;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACF7702F4B08F01000103 = {
+			children = (
+				F5CACF9A02F4B17701000103,
+				F5CACF9C02F4B18C01000103,
+				F5CACFA802F4B1A101000103,
+			);
+			isa = PBXGroup;
+			name = ERD2WInspectPageTemplateUgly;
+			refType = 4;
+		};
+		F5CACF7802F4B0AE01000103 = {
+			children = (
+				F5CACF8A02F4B13D01000103,
+				F5CACF8C02F4B14D01000103,
+				F5CACF9802F4B15E01000103,
+			);
+			isa = PBXGroup;
+			name = ERD2WListPageTemplateUgly;
+			refType = 4;
+		};
+		F5CACF7902F4B0C401000103 = {
+			children = (
+				F5CACF7A02F4B0F001000103,
+				F5CACF8602F4B10901000103,
+				F5CACF8802F4B11B01000103,
+			);
+			isa = PBXGroup;
+			name = ERDSectionTextUgly;
+			refType = 4;
+		};
+		F5CACF7A02F4B0F001000103 = {
+			children = (
+				F5CACF7B02F4B0F001000103,
+			);
+			isa = PBXVariantGroup;
+			name = ERDSectionTextUgly.wo;
+			path = "";
+			refType = 4;
+		};
+		F5CACF7B02F4B0F001000103 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDSectionTextUgly.wo;
+			refType = 4;
+		};
+		F5CACF8502F4B0F001000103 = {
+			fileRef = F5CACF7A02F4B0F001000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACF8602F4B10901000103 = {
+			isa = PBXFileReference;
+			name = ERDSectionTextUgly.api;
+			path = Components/ERDSectionTextUgly.api;
+			refType = 4;
+		};
+		F5CACF8702F4B10901000103 = {
+			fileRef = F5CACF8602F4B10901000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACF8802F4B11B01000103 = {
+			isa = PBXFileReference;
+			name = ERDSectionTextUgly.java;
+			path = Sources/er/directtoweb/look/ugly/ERDSectionTextUgly.java;
+			refType = 4;
+		};
+		F5CACF8902F4B11B01000103 = {
+			fileRef = F5CACF8802F4B11B01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACF8A02F4B13D01000103 = {
+			isa = PBXFileReference;
+			name = ERD2WListPageTemplateUgly.api;
+			path = Components/ERD2WListPageTemplateUgly.api;
+			refType = 4;
+		};
+		F5CACF8B02F4B13D01000103 = {
+			fileRef = F5CACF8A02F4B13D01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACF8C02F4B14D01000103 = {
+			children = (
+				F5CACF8D02F4B14D01000103,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WListPageTemplateUgly.wo;
+			path = "";
+			refType = 4;
+		};
+		F5CACF8D02F4B14D01000103 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WListPageTemplateUgly.wo;
+			refType = 4;
+		};
+		F5CACF9702F4B14D01000103 = {
+			fileRef = F5CACF8C02F4B14D01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACF9802F4B15E01000103 = {
+			isa = PBXFileReference;
+			name = ERD2WListPageTemplateUgly.java;
+			path = Sources/er/directtoweb/look/ugly/ERD2WListPageTemplateUgly.java;
+			refType = 4;
+		};
+		F5CACF9A02F4B17701000103 = {
+			isa = PBXFileReference;
+			name = ERD2WInspectPageTemplateUgly.api;
+			path = Components/ERD2WInspectPageTemplateUgly.api;
+			refType = 4;
+		};
+		F5CACF9C02F4B18C01000103 = {
+			children = (
+				F5CACF9D02F4B18C01000103,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WInspectPageTemplateUgly.wo;
+			path = "";
+			refType = 4;
+		};
+		F5CACF9D02F4B18C01000103 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WInspectPageTemplateUgly.wo;
+			refType = 4;
+		};
+		F5CACFA702F4B18C01000103 = {
+			fileRef = F5CACF9C02F4B18C01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACFA802F4B1A101000103 = {
+			isa = PBXFileReference;
+			name = ERD2WInspectPageTemplateUgly.java;
+			path = Sources/er/directtoweb/look/ugly/ERD2WInspectPageTemplateUgly.java;
+			refType = 4;
+		};
+		F5CACFA902F4B1A101000103 = {
+			fileRef = F5CACFA802F4B1A101000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACFAA02F4B1BE01000103 = {
+			isa = PBXFileReference;
+			name = d2w.d2wmodel;
+			path = Resources/d2w.d2wmodel;
+			refType = 4;
+		};
+		F5CACFAB02F4B1BE01000103 = {
+			fileRef = F5CACFAA02F4B1BE01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACFAC02F4B1F501000103 = {
+			fileRef = F5CACF9802F4B15E01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CACFAD02F4B1F701000103 = {
+			fileRef = F5CACF9A02F4B17701000103;
 			isa = PBXBuildFile;
 			settings = {
 			};
