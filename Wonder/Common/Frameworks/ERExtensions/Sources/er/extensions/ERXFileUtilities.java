@@ -837,4 +837,40 @@ public class ERXFileUtilities {
         }
     }
     
+    /** shortens a filename, for example aVeryLongFileName.java -> aVer...Name.java
+     * @param name the name to modify
+     * @param maxLength the maximum length of the name
+     * @return
+     */
+    public static String shortenFilename(String name, int maxLength) {
+        //TODO implementation...
+        return name;
+    }
+
+    /** returns the filename without its fileExtension
+     * @param name the name of the file
+     * @return the name of the file without the fileExtension
+     */
+    public static String removeFileExtension(String name) {
+        int index = name.lastIndexOf(".");
+        if (index == -1) {
+            return name;
+        } else {
+            return name.substring(0, index);
+        }
+    }
+
+    /** returns the fileExtension from the specified filename
+     * @param name the name of the file
+     * @return the fileExtension
+     */
+    public static String fileExtension(String name) {
+        int index = name.lastIndexOf(".");
+        if (index == -1) {
+            return "";
+        } else {
+            return name.substring(index + 1);
+        }
+    }
+    
 }
