@@ -141,15 +141,15 @@
                 <pathelement path="${wonder.root}/Common/Frameworks/WOOgnl/Sources/"/>
                 <pathelement path="${wonder.root}/PlugIns/PostgresqlPlugIn/Sources/"/>
                 <pathelement path="${wonder.root}/ExcelGeneration/Frameworks/ExcelGenerator/Sources/"/>
-                <!--pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
+                <pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
                 <pathelement path="${wonder.root}/Validity/Frameworks/Validity/Sources"/>
-                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/-->
+                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2003 Project Wonder.]]></bottom>
+            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2004  Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
-            <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
+            <link href="http://java.sun.com/j2se/1.4/docs/api/"/>
             <link offline="true" href="http://developer.apple.com/documentation/WebObjects/Reference/API/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://www.junit.org/junit/javadoc/3.7/"/>
