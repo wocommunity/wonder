@@ -6,16 +6,21 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 
-// Concrete event handler
-public class ERXEventRecordingDefaultHandler implements EOEventCenter.EventRecordingHandler{
+/**
+ * A concrete event recording handler object. This is useful for setting up custom event recording.
+ * This recoridng handler will record everything.
+ */
+public class ERXEventRecordingDefaultHandler implements EOEventCenter.EventRecordingHandler {
 
-    //does nothing by default
-    public void setLoggingEnabled( boolean flag, Class aClass){
+    /**
+     * Is always enabled by default.
+     * @param flag determines if reciever should log events.
+     * @param aClass reciever class.
+     */
+    public void setLoggingEnabled(boolean flag, Class aClass){
     }
 }
