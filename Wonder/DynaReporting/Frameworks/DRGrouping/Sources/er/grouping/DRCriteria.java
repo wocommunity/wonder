@@ -9,13 +9,22 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import er.extensions.*;
 
-/* DRCriteria.h created by Administrator on Sun 01-Nov-1998 */
-//#import <WebObjects/WebObjects.h>
+/**
+ * The "value" for the {@link DRMasterCriteria}. For example, given
+ * a <code>category</code> key, it would contain "Drama", "Sci-Fi" and "Comedy".
+ * It also assigns a {@link #score()} to objects to support header sorting.
+ * Some DRCriteria have very high scores and so always end up on the bottom;
+ * for example: "OTHER" and "TOTAL". <br />
+ * For numeric DRCriteria, the value is a really huge number and
+ * 1 + a really huge number ({@link MAXNUMBER}), respectively.
+ * For alpha DRCriteria. the value is a long word filled with z's ({@link MAXSTRING})
+ * and the same with one z concatenated, respectively.
+ */
 public class DRCriteria extends Object  {
     private static final ERXLogger log = ERXLogger.getLogger(DRCriteria.class,"grouping");
 
     protected NSDictionary _valueDict;
-
+    
     // The keys in the dict are DRSubMasterCriteria in the masterCriteria
     protected DRMasterCriteria _masterCriteria;
     protected String _label;
@@ -26,7 +35,7 @@ public class DRCriteria extends Object  {
     protected boolean _isTotal;
     protected boolean _isOther;
     protected Object _score;
-
+    
     public boolean isTotal() {
         return _isTotal;
     }
@@ -34,14 +43,12 @@ public class DRCriteria extends Object  {
         _isTotal = v;
     }
 
-
     public boolean isOther() {
         return _isOther;
     }
     public void setIsOther(boolean v) {
         _isOther = v;
     }
-
 
     static public DRCriteria asOtherWithMasterCriteria(DRMasterCriteria mc) {
         NSArray subMcs;
@@ -51,7 +58,7 @@ public class DRCriteria extends Object  {
         aVal.setMasterCriteria(mc);
         subMcs = aVal.masterCriteria().subCriteriaList();
         smc = (DRSubMasterCriteria)subMcs.objectAtIndex(0);
-        aVal.setValueDict(new NSDictionary(new Object[]{"*", "|Other|" , "OTHER"}, new Object[]{ "OTHER" , "lookupKey" , smc.keyDesc()}));
+        aVal.setValueDict( new NSDictionary(                                                                       new Object[]{"*", "|Other|" , "OTHER"},                                                                        new Object[]{ "OTHER" , "lookupKey" , smc.keyDesc()}));
         if (lb != null) {
             aVal.setLabel(lb);
         } else {
@@ -62,7 +69,6 @@ public class DRCriteria extends Object  {
         return aVal;
     }
 
-
     static public DRCriteria asTotalWithMasterCriteria(DRMasterCriteria mc) {
         NSArray subMcs;
         DRSubMasterCriteria smc;
@@ -72,10 +78,10 @@ public class DRCriteria extends Object  {
         subMcs = aVal.masterCriteria().subCriteriaList();
         smc = (DRSubMasterCriteria)subMcs.objectAtIndex(0);
         aVal.setValueDict(new NSDictionary(
-            new Object[]{"*", "|Total|" , "TOTAL"},
-            new Object[]{ "TOTAL" , "lookupKey" , smc.keyDesc()})
-        );
-        
+                                           new Object[]{"*", "|Total|" , "TOTAL"},
+                                           new Object[]{ "TOTAL" , "lookupKey" , smc.keyDesc()})
+                          );
+
         if (lb != null) {
             aVal.setLabel(lb);
         } else {
@@ -86,7 +92,6 @@ public class DRCriteria extends Object  {
         return aVal;
     }
 
-
     static public DRCriteria withMasterCriteriaValueDict(DRMasterCriteria mc, NSDictionary valD) {
         DRCriteria aVal = new DRCriteria();
         aVal.setMasterCriteria(mc);
@@ -94,16 +99,13 @@ public class DRCriteria extends Object  {
         return aVal;
     }
 
-
     public DRCriteria() {
         super();
         _label = null;
         _isTotal = false;
         _isOther = false;
         _score = null;
-        return;
     }
-
 
     public void setMasterCriteria(DRMasterCriteria val) {
         _masterCriteria = val;
@@ -111,7 +113,6 @@ public class DRCriteria extends Object  {
     public DRMasterCriteria masterCriteria() {
         return _masterCriteria;
     }
-
 
     public void setValueDict(NSDictionary val) {
         _valueDict = val;
@@ -121,17 +122,16 @@ public class DRCriteria extends Object  {
     }
 
     public String toString() {
-        return ""+(super.toString())+"-"+(_valueDict.toString());
+        return  "<" + super.toString() +": "+(_valueDict.toString()) + ">";
     }
-    
+
     private String _keyDesc = null;
-    public String keyDesc(){
-        if(_keyDesc == null){
+    public String keyDesc() {
+        if(_keyDesc == null) {
             _keyDesc = super.toString();
         }
         return _keyDesc;
     }
-
 
     public String calendarFormatForDates() {
         NSDictionary info = _masterCriteria.userInfo();
@@ -159,21 +159,21 @@ public class DRCriteria extends Object  {
         }
         return "|";
     }
-    
-    static private NSMutableDictionary _calFormatDict = new NSMutableDictionary();
-    static public NSMutableDictionary calFormatDict(){
-        return _calFormatDict;
-    }
-    static public NSTimestampFormatter formatterForFormat(String calFormat){
-        if(calFormat == null) calFormat = "%m/%d/%y";
-        NSTimestampFormatter v = (NSTimestampFormatter)_calFormatDict.objectForKey(calFormat);
-        if(v == null){
-            v = new NSTimestampFormatter(calFormat);
-            calFormatDict().setObjectForKey(v, calFormat);
-        }
-        return v;
-    }
 
+    static private NSMutableDictionary _calFormatDict = new NSMutableDictionary();
+
+    static public NSTimestampFormatter formatterForFormat(String calFormat) {
+        synchronized(_calFormatDict) {
+            if(calFormat == null) calFormat = "%m/%d/%y";
+            NSTimestampFormatter v = (NSTimestampFormatter)_calFormatDict.objectForKey(calFormat);
+            if(v == null) {
+                v = new NSTimestampFormatter(calFormat);
+                _calFormatDict.setObjectForKey(v, calFormat);
+            }
+            return v;
+        }
+    }
+    
     public String labelForDict(NSDictionary dict) {
         String highString, lowString;
         String lbl = "";
@@ -204,7 +204,6 @@ public class DRCriteria extends Object  {
         return lbl;
     }
 
-
     public String label() {
         if (_label == null) {
             NSArray subMcs = _masterCriteria.subCriteriaList();
@@ -234,11 +233,9 @@ public class DRCriteria extends Object  {
         return _label;
     }
 
-
     public void setLabel(String lbl) {
         _label = lbl;
     }
-
 
     public Object score() {
         if (_score == null) {
@@ -247,7 +244,7 @@ public class DRCriteria extends Object  {
                 NSArray subMcs = _masterCriteria.subCriteriaList();
                 DRSubMasterCriteria smc = (DRSubMasterCriteria)subMcs.objectAtIndex(0);
                 Object rawVal = _valueDict.objectForKey(smc.keyDesc());
-    
+
                 if (_valueDict.objectForKey("OTHER") != null) {
                     if (subMcs.count() > 1 || _masterCriteria.isString()) {
                         scr = MAXSTRING;
@@ -277,22 +274,21 @@ public class DRCriteria extends Object  {
                     scr = rawVal;
                 } else {
                     scr = DRCriteria.numberForValue(rawVal);
-               }
+                }
                 _score = scr;
             }
         }
-
         return _score;
     }
 
     static public double doubleForValue(Object v){
         double scr = 0.0;
-        if(v == null){
+        if(v == null) {
             return 0.0;
         } else if (v instanceof String) {
-            try{
+            try {
                 scr = (new Double((String)v)).doubleValue();
-            }catch(NumberFormatException e){
+            } catch(NumberFormatException e) {
                 //OWDebug.println(1, "v:"+v);
                 scr = 0.0;
             }
@@ -302,17 +298,17 @@ public class DRCriteria extends Object  {
         } else if (v instanceof NSTimestamp) {
             NSTimestamp vv = (NSTimestamp)v;
             scr = (double)vv.getTime() / 1000.0;
-        } else if(v == NSKeyValueCoding.NullValue){
+        } else if(v == NSKeyValueCoding.NullValue) {
             scr = 0.0;
         } else {
-            scr = (new Double(v+"")).doubleValue();
+            scr = (new Double(v.toString())).doubleValue();
         }
         return scr;
-     } 
+    }
 
-    static public Number numberForValue(Object v){
+    static public Number numberForValue(Object v) {
         double vv = doubleForValue(v);
         Number scr = new Double(vv);
         return scr;
-     } 
+    }
 }
