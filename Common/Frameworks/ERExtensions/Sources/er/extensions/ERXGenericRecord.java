@@ -104,7 +104,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return true
      */
     public boolean canUpdate() { return true; }
-
+    
     /**
         * Implementation of {@link ERXGuardedObjectInterface}.
      * This is used to work around a bug in EOF that doesn't refresh the relationship in the parent
