@@ -64,7 +64,7 @@ public class ERDMassModifyButton extends WOComponent {
         public WOComponent nextPage(WOComponent sender) {
             WOComponent result=nextPage;
             if (eo.editingContext()!=null) { // save was clicked
-                EOEditingContext ec=er.extensions.ERXExtensions.newEditingContext();
+                EOEditingContext ec=ERXEC.newEditingContext();
                 for (Enumeration ob=list.objectEnumerator(); ob.hasMoreElements();) {
                     EOEnterpriseObject eoItem=(EOEnterpriseObject)ob.nextElement();
                     EOEnterpriseObject localEOItem=EOUtilities.localInstanceOfObject(ec,eoItem);
