@@ -67,8 +67,8 @@ public class ERXToManyRelationship extends WOToManyRelationship {
     protected String _localSortKey() {
         if (destinationSortKey() == null) {
             setDestinationSortKey((String)valueForBinding("destinationSortKey"));
-            if (destinationSortKey() == null)
-                setDestinationSortKey(destinationDisplayKey());
+            if (destinationSortKey() == null|| destinationSortKey().length() == 0)
+                setDestinationSortKey(_localDestinationDisplayKey());
         }
         return destinationSortKey();
     }
