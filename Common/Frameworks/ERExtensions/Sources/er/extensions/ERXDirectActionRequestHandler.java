@@ -73,9 +73,12 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
                 log.error("Caught exception checking for cache. Leaving it up to the regular exception handler to cache. Request: " + request, e);
             } 
         }
-        if (response == null)
+        if (response == null) {
             response = super.handleRequest(request);
-
+        } else {
+            registerWillHandleActionRequest();
+            registerDidHandleActionRequestWithActionNamed(actionName);
+        }
         if (shouldCacheResult) {
             try {
                 ERXWOResponseCache.sharedInstance().cacheResponseForRequest(actionClass, actionName, request, response);
