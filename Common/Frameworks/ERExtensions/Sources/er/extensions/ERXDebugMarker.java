@@ -25,10 +25,22 @@ public class ERXDebugMarker extends WOComponent {
     public ERXDebugMarker(WOContext aContext) {
         super(aContext);
     }    
+
+    public static interface DebugPageProvider {
+        WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s);
+    }
     
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
 
+    private DebugPageProvider _debugPageProvider;
+    public DebugPageProvider debugPageProvider() {
+        if (_debugPageProvider==null) {
+            _debugPageProvider= (DebugPageProvider)valueForBinding("debugPageProvider");
+        }
+        return _debugPageProvider;
+    }
+    
     private Object _object;
     public Object object() {
         if (_object==null) {
@@ -39,6 +51,7 @@ public class ERXDebugMarker extends WOComponent {
     public void reset() {
         super.reset();
         _object=null;
+        _debugPageProvider=null;
     }
 
     public boolean disabled() { return object()==null; }
@@ -49,6 +62,7 @@ public class ERXDebugMarker extends WOComponent {
         if (object() instanceof EOEditingContext) {
             result=pageWithName("ERXEditingContextInspector");
             result.takeValueForKey(object(),"object");
+            result.takeValueForKey(debugPageProvider(),"debugPageProvider");
         } else if (object() instanceof EOEnterpriseObject) {
             result=debugPageForObject((EOEnterpriseObject)object(),session());
             if(result != null) {
@@ -62,7 +76,10 @@ public class ERXDebugMarker extends WOComponent {
         return result;
     }
 
-    public static WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s) {
+    public WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s) {
+        if(debugPageProvider() != null) {
+            return debugPageProvider().debugPageForObject(o, s);
+        }
         // Don't want the dependency on D2W. Not sure what the best solution is
         //return (WOComponent)D2W.factory().inspectPageForEntityNamed(o.entityName(),s);
         return null;

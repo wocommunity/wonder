@@ -1,5 +1,6 @@
 DebugMarker5: ERXDebugMarker {
 	object = item;
+	debugPageProvider = debugPageProvider;
 }
 
 ERXCollapsibleComponent2: ERXCollapsibleComponentContent {
