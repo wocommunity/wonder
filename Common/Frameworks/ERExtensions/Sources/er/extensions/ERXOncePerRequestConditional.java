@@ -13,17 +13,24 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import org.apache.log4j.Category;
 
-/** ERXOncePerRequestConditional is a component that will render it's embedded content only once during the RR loop.
+/** 
+ * ERXOncePerRequestConditional is a component that will 
+ * render it's embedded content only once during the RR loop.
  *  Useful for JavaScript code that should be included only once.
  */
 public class ERXOncePerRequestConditional extends ERXStatelessComponent {
+    /** logging support */
     static final Category cat = Category.getInstance(ERXOncePerRequestConditional.class.getName());
     
     String keyName = null;
     NSMutableDictionary displayCountDict;
     int stage = 0;
     String lastID;
-	
+    
+    /**
+     * Public constructor
+     * @param context context of request
+     */
     public ERXOncePerRequestConditional(WOContext context) {
         super(context);
 	if(application().isConcurrentRequestHandlingEnabled())
@@ -71,12 +78,12 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	}
 	
 	if(displayCountDict == null) {
-	    displayCountDict = new NSMutableDictionary(new Integer(0), key);
+	    displayCountDict = new NSMutableDictionary(ERXConstant.ZeroInteger, key);
 	} else if(displayCountDict.objectForKey(key) == null) {
-	    displayCountDict.setObjectForKey(new Integer(0),key);
+	    displayCountDict.setObjectForKey(ERXConstant.ZeroInteger, key);
 	} else {
 	    count = ((Integer)displayCountDict.objectForKey(key)).intValue() + 1;
-	    displayCountDict.setObjectForKey(new Integer(count), key);
+	    displayCountDict.setObjectForKey(ERXConstant.integerForInt(count), key);
 	}
     }
     
