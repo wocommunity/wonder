@@ -1,0 +1,88 @@
+BatchNumber: WOTextField {
+    value = currentBatchIndex;
+    numberformat = "0";
+    size = 3;
+	onChange = "form.target='_self';";
+}
+
+Conditional1: WOConditional {
+	condition = ^displayGroup.hasMultipleBatches;
+}
+
+Content: WOComponentContent {
+}
+
+DGHasQualifier: NonNullConditional {
+	condition = displayGroup.qualifier;
+}
+
+EntityName3: ERXPluralString {
+	count = ^displayGroup.allObjects.count;
+	value = ^objectName;
+}
+
+EntityNameConditional: WOConditional {
+    condition=hasObjectName;
+}
+
+ItemsPerBatch: WOTextField {
+    value = numberOfObjectsPerBatch;
+    numberformat = "0";
+    size = 2;
+    align="center";
+	onChange = "form.target='_self';";
+}
+
+LeftArrow: WOImageButton {
+    action = ^displayGroup.displayPreviousBatch;
+    filename = "lft-OSarw.gif";
+    border = "0";
+//    height = "11";
+//    width = "16";
+    framework = "JavaWOExtensions";
+	onClick = "form.target=\"_self\";";
+}
+
+NavigationTable : WOGenericContainer {
+    elementName="Table";
+    width=^width;
+    cellpadding=4;
+    cellspacing=0;
+    bgcolor=^bgcolor;
+    border=^border;
+};
+
+NextBatchLink: WOHyperlink {
+    action = ^displayGroup.displayNextBatch;
+}
+
+PreviousBatchLink: WOHyperlink {
+    action = ^displayGroup.displayPreviousBatch;
+}
+
+RightArrow: WOImageButton {
+    action = ^displayGroup.displayNextBatch;
+    filename = "rt-OSarw.gif";
+    border = "0";
+//    height = "11";
+//    width = "16";
+    framework = "JavaWOExtensions";
+	onClick = "form.target=\"_self\";";
+}
+
+SortComponent: WOSortOrderManyKey {
+    keyList=^sortKeyList;
+    displayGroup=^displayGroup;
+}
+
+SortKeyListConditional: WOConditional {
+    condition=hasSortKeyList;
+}
+
+String1: WOString {
+	value = filteredObjectsCount;
+}
+
+TotalBatches: WOString {
+    value = ^displayGroup.batchCount;
+}

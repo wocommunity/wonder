@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="macintosh" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERD2WSwitchComponent" wocomponentcontent="YES">
+
+		<binding name="shouldResetCache" defaults="YES/NO"/>
+	</wo>
+</wodefinitions>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXTabPanel" wocomponentcontent="true">
+
+		<binding name="tabs"/>
+		<binding name="tabNameKey"/>
+		<binding name="selectedTab"/>
+		<binding name="nonSelectedBgColor"/>
+		<binding name="bgcolor"/>
+		<binding name="submitActionName"/>
+		<binding name="textColor"/>
+		<binding name="borderColor"/>
+		<binding name="useFormSubmit" defaults="Boolean"/>
+
+		<validation message="&apos;tabs&apos; is a required binding">
+			<unbound name="tabs"/>
+		</validation>
+	</wo>
+</wodefinitions>

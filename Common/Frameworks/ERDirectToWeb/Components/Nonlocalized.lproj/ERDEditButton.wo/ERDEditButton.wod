@@ -1,0 +1,11 @@
+EditEO: WOHyperlink {
+	action = edit;
+}
+
+EditImage: WOImage {
+	alt = "Edit that Object";
+	border = "0";
+	filename = "write-btn.gif";
+	framework = "JavaDirectToWeb";
+}
+

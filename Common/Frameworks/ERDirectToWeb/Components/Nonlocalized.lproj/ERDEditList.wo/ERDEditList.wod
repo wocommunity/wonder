@@ -1,0 +1,34 @@
+CheckboxMatrix: ERXCheckboxMatrix { 
+	item = item;
+	list = list;
+	maxColumns = numberOfColumns;
+	selections = selections;
+}
+
+ErrorDictionaryPanel: ERXErrorDictionaryPanel {
+	errorMessages = errorMessage;
+}
+
+Form1: WOForm {
+	multipleSubmit = true;
+}
+
+Hidden: WOHiddenField {
+	value = dummy;
+}
+
+String1: WOString {
+	value = listLabel;
+}
+
+SubmitButton1: WOSubmitButton { WODebug=false;
+	action = cancel;
+	onSubmit = "return false;";
+	value = "Cancel";
+}
+
+SubmitButton2: WOSubmitButton { WODebug=false;
+	action = submit;
+}
+
+Wrapper: PageWrapper {}

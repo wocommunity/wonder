@@ -1,0 +1,5 @@
+ERStringWithLineBreaks1: ERStringWithLineBreaks {
+	value = objectPropertyValue;
+	valueWhenEmpty = localContext.valueWhenEmpty;
+}
+

@@ -1,0 +1,11 @@
+Conditional1: WOConditional {
+	condition = showNumber;
+}
+
+String: WOString {
+value=value;
+}
+
+String1: WOString {
+	value = ^count;
+}

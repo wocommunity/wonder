@@ -1,0 +1,8 @@
+String1: WOString {
+	value = value;
+}
+
+String2: WOString {
+	value = suffixWhenTrimmed;
+}
+

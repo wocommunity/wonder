@@ -1,0 +1,5 @@
+Image1: WOImage {
+        filename = "exclamation.gif";
+        framework = "JavaDirectToWeb";
+}
+

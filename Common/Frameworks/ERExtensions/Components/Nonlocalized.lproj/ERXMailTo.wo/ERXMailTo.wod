@@ -1,0 +1,8 @@
+MailContainer: WOGenericContainer {
+	href = href;
+	elementName = "A";
+}
+
+String: WOString {
+	value = ^email;
+}

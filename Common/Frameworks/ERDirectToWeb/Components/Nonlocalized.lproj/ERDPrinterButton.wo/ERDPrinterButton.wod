@@ -1,0 +1,48 @@
+Conditional1: WOConditional {
+	condition = ^useSubmitButton;
+	negate = true;
+}
+
+Conditional2: WOConditional {
+	condition = ^useSubmitButton;
+}
+
+Image1: WOImage {
+	filename = "printer.gif";
+	framework = "ERExtensions";
+	border = 0;
+}
+
+Image2: WOImage {
+	filename = "printer.gif";
+	framework = "ERExtensions";
+	border = 0;
+	onClick = "window.print();";
+}
+
+IsNotPrinterFriendly: ERXEqualConditional {
+	negated = true;
+	value1 = d2wContext.forcedSubTask;
+	value2 = "printerFriendly";
+}
+
+IsNotPrinterFriendly2: ERXEqualConditional {
+	negated = false;
+	value1 = d2wContext.forcedSubTask;
+	value2 = "printerFriendly";
+}
+
+PrintButton: ERXSingleButton {
+	action = printerFriendlyVersion;
+	doNotUseForm = ^doNotUseForm;
+	target = "PrinterFriendly";
+	value = "Printer Friendly View";
+}
+
+PrinterFriendlyLink2: ERXOpenJSWindowHyperlink {
+	action = printerFriendlyVersion;
+	scrollbars = true;
+	target = "PrinterFriendly";
+}
+
+

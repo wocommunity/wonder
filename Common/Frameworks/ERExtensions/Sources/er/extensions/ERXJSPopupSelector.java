@@ -1,0 +1,38 @@
+/*
+ * Copyright (C) NetStruxr, Inc. All rights reserved.
+ *
+ * This software is published under the terms of the NetStruxr
+ * Public Software License version 0.5, a copy of which has been
+ * included with this distribution in the LICENSE.NPL file.  */
+package er.extensions;
+
+import com.webobjects.foundation.*;
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+
+public class ERXJSPopupSelector extends WOComponent {
+
+    public ERXJSPopupSelector(WOContext aContext) {
+        super(aContext);
+    }
+
+    public boolean isStateless() { return true; }
+    
+    public String onClickString() {
+        String result=null;
+        Object item=valueForBinding("selectsItem");
+        NSArray list=(NSArray)valueForBinding("list");
+        String popupName=(String)valueForBinding("popupName");
+        if (list!=null && item!=null) {
+            int index=list.indexOfObject(item);
+            // by default we assume that there is one more item on top of the list (i.e. - none - or - pick one -)
+            // when the relationship is mandatory, this is not the case
+            Integer doNotAddOne=(Integer)valueForBinding("doNotAddOneToComputedIndex");
+            if (doNotAddOne==null || doNotAddOne.intValue()==0) index++;
+	    // FIXME the form index should NOT be hardcoded
+            result="javascript:window.document.forms[2]."+popupName+".selectedIndex="+index+"; return false;";
+        }
+        return result;
+    }
+}

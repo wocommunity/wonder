@@ -1,0 +1,14 @@
+
+
+ToOneRelationship: ERXToOneRelationship {
+	destinationDisplayKey = d2wContext.keyWhenRelationship;
+        possibleChoices = restrictedChoiceList;
+	maxColumns = d2wContext.numCols;
+	relationshipKey = d2wContext.propertyKey;
+	size = d2wContext.size;
+	sourceEntityName = d2wContext.entity.name;
+	sourceObject = displayGroup.queryMatch;
+	displayGroup = displayGroup;
+	uiStyle = d2wContext.toOneUIStyle;
+}
+

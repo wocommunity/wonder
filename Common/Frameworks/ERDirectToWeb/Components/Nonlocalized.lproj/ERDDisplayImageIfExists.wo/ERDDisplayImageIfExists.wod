@@ -1,0 +1,14 @@
+Image1: WOImage {
+	data = imageContent;
+	mimeType = "";
+}
+
+TestImageExists: ERXNonNullConditional {
+	condition = imageContent;
+}
+
+TestImageNotExists: ERXNonNullConditional {
+	condition = imageContent;
+	negate = true;
+}
+

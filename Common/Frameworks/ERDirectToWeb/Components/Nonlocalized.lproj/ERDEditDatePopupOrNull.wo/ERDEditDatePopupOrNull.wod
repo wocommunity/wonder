@@ -1,0 +1,40 @@
+Conditional1: WOConditional {
+	condition = editTime;
+}
+
+RadioButton1: WORadioButton {
+	name = radioBoxGroupName;
+	selection = radioValue;
+	value = date;
+	WODebug = false;
+}
+
+RadioButton2: WORadioButton {
+	name = radioBoxGroupName;
+	selection = radioValue;
+	value = empty;
+	WODebug = false;
+}
+
+TextField1: WOTextField {
+	maxlength = 5;
+	size = 5;
+	value = time;
+}
+
+dayPopup: WOPopUpButton {
+	list = dayList;
+	selection = day;
+}
+
+monthPopup: WOPopUpButton {
+	list = monthList;
+	selection = month;
+}
+
+yearPopup: WOPopUpButton {
+	list = yearList;
+	selection = year;
+}
+
+

@@ -1,0 +1,136 @@
+/*
+ * Copyright (C) NetStruxr, Inc. All rights reserved.
+ *
+ * This software is published under the terms of the NetStruxr
+ * Public Software License version 0.5, a copy of which has been
+ * included with this distribution in the LICENSE.NPL file.  */
+
+/* ERD2WPage.java created by max on Thu 26-Apr-2001 */
+package er.directtoweb;
+
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import er.extensions.*;
+import org.apache.log4j.Category;
+import org.apache.log4j.NDC;
+
+public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
+
+    ///////////////////////////////////////  log4j category  ///////////////////////////////////////
+    public final static Category cat = Category.getInstance("er.directtoweb.templates.ERD2WPage");
+    public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERD2WPage");
+
+    protected NSMutableDictionary errorMessages = new NSMutableDictionary();
+    protected NSMutableArray errorKeyOrder = new NSMutableArray();
+    protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
+    public String errorMessage="";
+
+    public ERD2WPage(WOContext c) {
+        super(c);
+    }
+    
+    protected EOEditingContext _context;
+    public void setObject(EOEnterpriseObject eo) {
+        _context = (eo != null) ? eo.editingContext() : null;
+        // for SmartAssignment
+        d2wContext().takeValueForKey(eo,"object");
+        super.setObject(eo);
+    }
+
+    // make kvc happy
+    public void setD2wContext(D2WContext newValue) {}
+    public void setLocalContext(D2WContext newValue) {
+        if (ERXExtensions.safeDifferent(newValue,localContext())) {
+            // HACK ALERT: this next line is made necessary by the brain-damageness of
+            // D2WComponent.setLocalContext, which holds on to the first non null value it gets.
+            // I swear if I could get my hands on the person who did that.. :-)
+            _localContext=newValue;
+        }
+        super.setLocalContext(newValue);
+        cat.debug("SetLocalContext "+newValue);
+        // This way
+        d2wContext().takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
+    }
+    
+    public boolean shouldPropogateExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldPropogateExceptions")); }
+    public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
+    
+    public void clearValidationFailed() {
+        errorMessages.removeAllObjects();
+        errorKeyOrder.removeAllObjects();
+        keyPathsWithValidationExceptions.removeAllObjects();
+    }
+
+    // Used to hold a cleaned-up validation key and message.
+    private NSMutableDictionary _temp = new NSMutableDictionary();
+    public void validationFailedWithException(Throwable e, Object value, String keyPath) {
+        if (validationCat.isDebugEnabled())
+            validationCat.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
+        if (shouldCollectValidationExceptions()) {
+            if (e instanceof ERXValidationException)
+                ((ERXValidationException)e).setObjectForKey(d2wContext(), "d2wContext");
+            _temp.removeAllObjects();
+            ERXValidation.validationFailedWithException(e,value,keyPath,_temp,propertyKey(),d2wContext().entity());
+            errorKeyOrder.addObjectsFromArray(_temp.allKeys());
+            errorMessages.addEntriesFromDictionary(_temp);
+            if (keyPath != null)
+                keyPathsWithValidationExceptions.addObject(keyPath);
+        } else if (parent() != null && shouldPropogateExceptions()) {
+            parent().validationFailedWithException(e, value, keyPath);
+        }
+    }
+
+    public boolean hasValidationExceptionForPropertyKey() {
+        return d2wContext().propertyKey() != null && keyPathsWithValidationExceptions.count() != 0 ?
+        keyPathsWithValidationExceptions.containsObject(d2wContext().propertyKey()) : false;
+    }
+    
+    // This will allow d2w pages to be listed on a per configuration basis in stats collecting.
+    public String descriptionForResponse(WOResponse aResponse, WOContext aContext) {
+        String descriptionForResponse = (String)d2wContext().valueForKey("pageConfiguration");
+        /*
+        if (descriptionForResponse == null)
+            cat.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
+         */
+        return descriptionForResponse != null ? descriptionForResponse : super.descriptionForResponse(aResponse, aContext);
+    }
+
+    protected NSMutableDictionary _userInfo = new NSMutableDictionary();
+    public NSMutableDictionary userInfo() { return _userInfo; }
+
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        // Need to make sure that we have a clean plate, every time 
+        clearValidationFailed();
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        try {
+            super.takeValuesFromRequest(r, c);
+        } finally {
+            /*NDC.pop(); JC_INFO - NSAutoreleasePools do not exist in pure Java. */
+        }
+    }
+
+    public WOActionResults invokeAction(WORequest r, WOContext c) {
+        WOActionResults result=null;
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        try {
+            result= super.invokeAction(r, c);
+        } finally {
+            /*NDC.pop(); JC_INFO - NSAutoreleasePools do not exist in pure Java. */
+        }
+        return result;
+    }
+
+    public void appendToResponse(WOResponse r, WOContext c) {
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        try {
+            super.appendToResponse(r,c);
+        } finally {
+            /*NDC.pop(); JC_INFO - NSAutoreleasePools do not exist in pure Java. */
+        }
+    }   
+
+
+}

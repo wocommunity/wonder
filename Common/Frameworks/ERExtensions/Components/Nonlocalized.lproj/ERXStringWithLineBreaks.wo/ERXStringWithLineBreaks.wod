@@ -1,0 +1,6 @@
+String: WOString {
+    valueWhenEmpty=valueWhenEmpty;
+    value = value;
+    escapeHTML = false;
+}
+

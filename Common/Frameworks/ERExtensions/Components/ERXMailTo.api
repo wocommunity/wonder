@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXMailTo" wocomponentcontent="false">
+
+		<binding name="email"/>
+
+		<validation message="&apos;email&apos; is a required binding">
+			<unbound name="email"/>
+		</validation>
+	</wo>
+</wodefinitions>

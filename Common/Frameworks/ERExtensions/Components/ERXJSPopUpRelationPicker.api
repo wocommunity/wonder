@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXJSPopUpRelationPicker" wocomponentcontent="false">
+
+		<binding name="parentEntitiesList"/>
+		<binding name="parentToChildrenRelationshipName"/>
+		<binding name="selectedParent"/>
+		<binding name="selectedChild"/>
+		<binding name="parentDisplayValueName"/>
+		<binding name="parentLabel"/>
+		<binding name="defaultChildKey"/>
+		<binding name="childrenSortKey"/>
+		<binding name="childDisplayValueName"/>
+		<binding name="childLabel"/>
+
+		<validation message="&apos;parentEntitiesList&apos; is a required binding">
+			<unbound name="parentEntitiesList"/>
+		</validation>
+
+		<validation message="&apos;selectedParent&apos; must be bound to a settable value">
+			<unsettable name="selectedParent"/>
+		</validation>
+
+		<validation message="&apos;selectedChild&apos; must be bound to a settable value">
+			<unsettable name="selectedChild"/>
+		</validation>
+
+		<validation message="&apos;parentToChildrenRelationshipName&apos; is a required binding">
+			<unbound name="parentToChildrenRelationshipName"/>
+		</validation>
+	</wo>
+</wodefinitions>
