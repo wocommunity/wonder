@@ -72,57 +72,12 @@ public class ERD2WUtilities {
         return result;
     }
 
-    /** This method faults the provied <code>EOEnterpriseObject</code> into a new <code>EOEditingContext</code>
-    * based on the current state:<br>
-    * 1. the <code>EOEnterpriseObject</code> is new: simply returns the <code>EOEnterpriseObject</code>,
-    * a new <code>EOEnterpriseObject</code> cannot be faulted into another <code>EOEditingContext</code><br>
-    *
-    * 2. if the d2wContext's task is 'edit' it creates a new -nested- <code>EOEditingContext</code> and
-    * faults the <code>EOEnterpriseObject</code> into it. Calls <code>setSharedEditingContext(false)</code> on
-    * the ec to ensure that this also works if one uses EOSharedEditingContexts.
-    * 
-    * 3. otherwise it creates a new PeerEditingContext and faults the <code>EOEnterpriseObject</code> into it.
-    * Calls <code>setSharedEditingContext(false)</code> on the ec to ensure that this also works if
-    * one uses EOSharedEditingContexts.
-    *
-    * This method should be called whenever on returns a new Page for a D2W action. It should simply behave like
-    * one assumes and not like the WO implementation: no nested EC's, no SharedEditingContext support.
-    *
-    * @param eo The <code>EOEnterpriseObject</code> that should be faulted. If the current page is
-    * a List page then it would mostly be current list object. If the current page is a Edit page then
-    * it would be object() and NOT the relationship object or whatever. object() because its the main object
-    * that needs to be faulted, then one must not care about relationships and so on.
-    * 
-    * @param d2wContext the current d2wContext
-    *
-    * @return
-    */
+    /** 
+     * @deprecated use ERXEOControlUtilities.editableInstanceOfObject(EOEnterpriseObject,boolean)
+     */
     public static EOEnterpriseObject localInstanceFromObjectWithD2WContext(EOEnterpriseObject eo,
                                                                            D2WContext d2wContext) {
-        EOEditingContext ec = eo.editingContext();
-        if(ec == null) throw new IllegalStateException("EC can't be null in localinstance");
-        EOEnterpriseObject localObject = eo;
-        if(ERXProperties.webObjectsVersionAsDouble() < 5.21d && ERXExtensions.isNewObject(localObject)) {
-            // do nothing as we can't localInstance anything here
-        } else {
-            boolean nest = d2wContext != null && ERXValueUtilities.booleanValue(d2wContext.valueForKey("useNestedEditingContext"));
-            EOEditingContext newEc = ERXEC.newEditingContext(nest ? ec : ec.parentObjectStore());
-            if(ec instanceof EOSharedEditingContext || ec.sharedEditingContext() == null) {
-                newEc.setSharedEditingContext(null);
-            }
-            ec.lock();
-            newEc.lock();
-            try {
-                localObject = EOUtilities.localInstanceOfObject(newEc, eo);
-                localObject.willRead();
-            } finally {
-                ec.unlock();
-                newEc.unlock();
-            }
-        }
-
-        return localObject;
+    	boolean createNestedContext = ERXValueUtilities.booleanValue(d2wContext.valueForKey("useNestedEditingContext"));
+    	return ERXEOControlUtilities.editableInstanceOfObject(eo,createNestedContext);
     }
-
-    
 }

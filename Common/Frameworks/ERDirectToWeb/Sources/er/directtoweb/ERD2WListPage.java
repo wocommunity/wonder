@@ -359,7 +359,9 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
     
     protected EOEnterpriseObject localInstanceOfObject() {
-        return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
+    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+    	return ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
     }
     
     public boolean showCancel() { return nextPage()!=null; }
