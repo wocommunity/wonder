@@ -261,6 +261,8 @@
 		017C7B38FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				9DF7E71503AE8C5110CF0E7D,
+				9DF7E71603AE8C5210CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -388,6 +390,8 @@
 //044
 		04B9D382FFD85E7B11CD2B8D = {
 			children = (
+				9DF7E71103AE8C4210CF0E7D,
+				9DF7E71203AE8C4210CF0E7D,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -920,6 +924,28 @@
 		};
 		9DC9079A0351F85B10CF0E7D = {
 			fileRef = 9DC907940351F85B10CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9DF7E71103AE8C4210CF0E7D = {
+			isa = PBXFileReference;
+			path = downArrow.gif;
+			refType = 4;
+		};
+		9DF7E71203AE8C4210CF0E7D = {
+			isa = PBXFileReference;
+			path = upArrow.gif;
+			refType = 4;
+		};
+		9DF7E71503AE8C5110CF0E7D = {
+			fileRef = 9DF7E71203AE8C4210CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9DF7E71603AE8C5210CF0E7D = {
+			fileRef = 9DF7E71103AE8C4210CF0E7D;
 			isa = PBXBuildFile;
 			settings = {
 			};
