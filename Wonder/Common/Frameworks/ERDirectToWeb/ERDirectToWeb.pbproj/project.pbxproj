@@ -64,6 +64,94 @@
 			settings = {
 			};
 		};
+		410CB0610524A21B0051BB32 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDDefaultDisplayNameAssignment.java;
+			path = er/directtoweb/ERDDefaultDisplayNameAssignment.java;
+			refType = 4;
+		};
+		410CB0620524A21B0051BB32 = {
+			fileRef = 410CB0610524A21B0051BB32;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		410CB0670524CB3F0051BB32 = {
+			children = (
+				F542071302C467E001000102,
+				F542071402C467E001000102,
+				F542071502C467E001000102,
+				F54206D502C467E001000102,
+				F54206D402C467E001000102,
+				F542071002C467E001000102,
+				F54206D202C467E001000102,
+				F54206DA02C467E001000102,
+				F542070302C467E001000102,
+				F54206D602C467E001000102,
+				F54206F502C467E001000102,
+				F54206C902C467E001000102,
+			);
+			isa = PBXGroup;
+			name = Deprecated;
+			path = "";
+			refType = 4;
+		};
+		410CB33F0524E5930051BB32 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDDefaultConfigurationNameAssignment.java;
+			path = er/directtoweb/ERDDefaultConfigurationNameAssignment.java;
+			refType = 4;
+		};
+		410CB3400524E5930051BB32 = {
+			fileRef = 410CB33F0524E5930051BB32;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		410CB69D05250FCD0051BB32 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDDefaultModelAssignment.java;
+			path = er/directtoweb/ERDDefaultModelAssignment.java;
+			refType = 4;
+		};
+		410CB69E05250FCD0051BB32 = {
+			fileRef = 410CB69D05250FCD0051BB32;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		410CB69F0525853E0051BB32 = {
+			children = (
+				F54206DB02C467E001000102,
+				F54206DC02C467E001000102,
+				F54206DD02C467E001000102,
+				F54206DE02C467E001000102,
+				F54206DF02C467E001000102,
+				F5E94DA7038C045301CF0E76,
+				F54206E002C467E001000102,
+				9DA572350356469710CF0E7D,
+			);
+			isa = PBXGroup;
+			name = "Delayed Assigments";
+			path = "";
+			refType = 4;
+		};
+		410CBB5B052594850051BB32 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDDelayedLocalizedAssignment.java;
+			path = er/directtoweb/ERDDelayedLocalizedAssignment.java;
+			refType = 4;
+		};
+		410CBB5C052594850051BB32 = {
+			fileRef = 410CBB5B052594850051BB32;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4111BB7D05037E5A00000102 = {
 			children = (
 				4111BB7F05037E5A00000102,
@@ -614,6 +702,148 @@
 			settings = {
 			};
 		};
+		4198E9B50526E2640048E379 = {
+			children = (
+				F54206EA02C467E001000102,
+				9419C8C903D8D07B00CF0E7D,
+				F5E95226038C5C3801CF0E76,
+				F6E7968202C877AF01AD0D07,
+				F6E7967002C877AF01AD0D07,
+				F6E7967202C877AF01AD0D07,
+				F6E7967802C877AF01AD0D07,
+				F5E95223038C5BD001CF0E76,
+				F6E7967302C877AF01AD0D07,
+				F6E7967402C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = Dates;
+			path = "";
+			refType = 4;
+		};
+		4198EA150526E2870048E379 = {
+			children = (
+				F6E7968602C877AF01AD0D07,
+				4119063104EFBC3000A88C3C,
+				4119069D04EFC02A00A88C3C,
+				F6E7967702C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = Password;
+			path = "";
+			refType = 4;
+		};
+		4198EACA0526E2A70048E379 = {
+			children = (
+				F6E7965302C877AF01AD0D07,
+				F6E7965A02C877AF01AD0D07,
+				FBD2153CF1759A0EDE795ADE,
+				F6E7969E02C877AF01AD0D07,
+				F6E7969F02C877AF01AD0D07,
+				F6E796A002C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "XML Templates & Components";
+			path = "";
+			refType = 4;
+		};
+		4198EB910526E4660048E379 = {
+			children = (
+				F6E7969B02C877AF01AD0D07,
+				F6E7968502C877AF01AD0D07,
+				FBD20D3C95A2D86A72DEDD96,
+				F6E7968902C877AF01AD0D07,
+				F6E7968A02C877AF01AD0D07,
+				F6E7968B02C877AF01AD0D07,
+				FBDED2D817EDBE5AD297D139,
+				F6E7967602C877AF01AD0D07,
+				50E9E19A03CBB56900CF0E76,
+				F6E7969402C877AF01AD0D07,
+				F6E7969302C877AF01AD0D07,
+				9D5BC62B033AB0C210CF0E7D,
+				F6E7969D02C877AF01AD0D07,
+				F6E7967902C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = Relationships;
+			path = "";
+			refType = 4;
+		};
+		4198EBEC0526E4A00048E379 = {
+			children = (
+				F6E7968E02C877AF01AD0D07,
+				9D86289B034E504C10CF0E7D,
+				F6E7968002C877AF01AD0D07,
+				F6E7967F02C877AF01AD0D07,
+				F6E7968D02C877AF01AD0D07,
+				F6E7969602C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = Boolean;
+			path = "";
+			refType = 4;
+		};
+		4198EC9C0526E9660048E379 = {
+			children = (
+				F6E7966F02C877AF01AD0D07,
+				F6E7966D02C877AF01AD0D07,
+				F6E7968702C877AF01AD0D07,
+				F6E7968802C877AF01AD0D07,
+				F6E7968302C877AF01AD0D07,
+				FBD20D3C95A2DE1DFB961D75,
+				F6E7968C02C877AF01AD0D07,
+				F6E7969202C877AF01AD0D07,
+				FBDED2DCDB37203D1C182CFC,
+				F6E796A602C877AF01AD0D07,
+				F6E7969502C877AF01AD0D07,
+				94AA72FC03D3504C00CF0E7D,
+				9409EBF6047BFEA300CF0E7D,
+			);
+			isa = PBXGroup;
+			name = "Text, URL & HTML";
+			path = "";
+			refType = 4;
+		};
+		4198EC9D0526E9D10048E379 = {
+			children = (
+				F6E7963702C877AF01AD0D07,
+				F6E7968F02C877AF01AD0D07,
+				F6E7969102C877AF01AD0D07,
+				F54206E502C467E001000102,
+				F6E7969902C877AF01AD0D07,
+				F6E7966C02C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = Number;
+			path = "";
+			refType = 4;
+		};
+		4198ED430526EC3A0048E379 = {
+			children = (
+				4198EBEC0526E4A00048E379,
+				4198E9B50526E2640048E379,
+				4198EC9D0526E9D10048E379,
+				4198EA150526E2870048E379,
+				4198EB910526E4660048E379,
+				4198EC9C0526E9660048E379,
+				F6E7967D02C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "Property Level Components";
+			refType = 4;
+		};
+		4198F0370526ED710048E379 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = d2wClient.d2wmodel;
+			path = Resources/d2wClient.d2wmodel;
+			refType = 4;
+		};
+		4198F0380526ED710048E379 = {
+			fileRef = 4198F0370526ED710048E379;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41B8F3EE0503CAFE00000102 = {
 			children = (
 				41B8F3EF0503CAFE00000102,
@@ -802,6 +1032,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditToManyFault;
+			path = "";
 			refType = 4;
 		};
 		50E9E19B03CBB58C00CF0E76 = {
@@ -988,6 +1219,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WQueryDateRange;
+			path = "";
 			refType = 4;
 		};
 		9419C8CA03D8D09800CF0E7D = {
@@ -1046,6 +1278,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WQueryEncryptedString;
+			path = "";
 			refType = 4;
 		};
 		94AA72FD03D3504C00CF0E7D = {
@@ -1200,6 +1433,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditFlag;
+			path = "";
 			refType = 4;
 		};
 		9D86289C034E504C10CF0E7D = {
@@ -2630,21 +2864,20 @@
 		};
 		F542066202C467DF01000102 = {
 			children = (
-				F5E95221038C5ACB01CF0E76,
-				F6E7966902C877AF01AD0D07,
+				4111C2560503948800000102,
 				F6E7963602C877AF01AD0D07,
 				F6E7963A02C877AF01AD0D07,
 				F6E7963B02C877AF01AD0D07,
 				F6E7964102C877AF01AD0D07,
 				F6E7964202C877AF01AD0D07,
 				F6E7964302C877AF01AD0D07,
-				4111C2560503948800000102,
-				4111BB7D05037E5A00000102,
-				F6E7965402C877AF01AD0D07,
+				F5E95221038C5ACB01CF0E76,
+				F6E7966902C877AF01AD0D07,
 				F6E7966A02C877AF01AD0D07,
-				F6E7967D02C877AF01AD0D07,
-				F6E796A502C877AF01AD0D07,
-				F542066702C467DF01000102,
+				4111BB7D05037E5A00000102,
+				4198ED430526EC3A0048E379,
+				F6E7965402C877AF01AD0D07,
+				4198EACA0526E2A70048E379,
 			);
 			isa = PBXGroup;
 			path = Sources;
@@ -2656,15 +2889,6 @@
 			name = ERD2WUtilities.java;
 			path = Sources/com/webobjects/directtoweb/ERD2WUtilities.java;
 			refType = 2;
-		};
-		F542066702C467DF01000102 = {
-			children = (
-				F542072202C467E001000102,
-			);
-			isa = PBXGroup;
-			name = KeyValueCodingProtectedAccessor;
-			path = er;
-			refType = 4;
 		};
 		F542066902C467DF01000102 = {
 			fileEncoding = 30;
@@ -6579,7 +6803,7 @@
 			refType = 2;
 		};
 		F56D7B8B036D945701AD0D07 = {
-			buildArgumentsString = "-emacs -Dproject.name=\"ERDirectToWeb\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml generic.$ACTION";
+			buildArgumentsString = "-emacs -Dproject.name=\"ERDirectToWeb\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml known.$ACTION";
 			buildPhases = (
 			);
 			buildSettings = {
@@ -6590,7 +6814,7 @@
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
-			buildToolPath = /usr/local/ant/bin/ant;
+			buildToolPath = /usr/local/bin/ant;
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
@@ -8253,6 +8477,7 @@
 				F542046E02C4672F01000102,
 				F542046C02C4672F01000102,
 				F542046802C4671901000102,
+				4198F0370526ED710048E379,
 				F542046602C4671901000102,
 				F6B782B70345524F01257492,
 			);
@@ -8840,6 +9065,7 @@
 				41600901050715F400000102,
 				410A1F570508A4B500000104,
 				410A1F590508A4B500000104,
+				4198F0380526ED710048E379,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9072,6 +9298,10 @@
 				412490F40504123C00000102,
 				41600900050715F400000102,
 				410A1F580508A4B500000104,
+				410CB0620524A21B0051BB32,
+				410CB3400524E5930051BB32,
+				410CB69E05250FCD0051BB32,
+				410CBB5C052594850051BB32,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9653,6 +9883,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDebugFlags;
+			path = "";
 			refType = 4;
 		};
 		F639B99D02EF369E0FCF0E72 = {
@@ -9727,31 +9958,17 @@
 		};
 		F6E7963602C877AF01AD0D07 = {
 			children = (
-				F54206C502C467E001000102,
-				F54206C902C467E001000102,
-				F54206D202C467E001000102,
+				410CB69F0525853E0051BB32,
+				410CB0670524CB3F0051BB32,
 				41B8F7340503FC3500000102,
-				F54206D402C467E001000102,
-				F54206D502C467E001000102,
-				F54206D602C467E001000102,
-				F54206DA02C467E001000102,
-				F54206DB02C467E001000102,
-				F54206DC02C467E001000102,
-				F54206DD02C467E001000102,
-				F54206DE02C467E001000102,
-				F54206DF02C467E001000102,
-				F5E94DA7038C045301CF0E76,
-				F54206E002C467E001000102,
-				9DA572350356469710CF0E7D,
-				F54206F502C467E001000102,
-				F54206F802C467E001000102,
-				F54206FC02C467E001000102,
+				410CB33F0524E5930051BB32,
+				410CB0610524A21B0051BB32,
+				410CB69D05250FCD0051BB32,
 				F542070202C467E001000102,
-				F542070302C467E001000102,
-				F542071002C467E001000102,
-				F542071302C467E001000102,
-				F542071402C467E001000102,
-				F542071502C467E001000102,
+				410CBB5B052594850051BB32,
+				F54206F802C467E001000102,
+				F54206C502C467E001000102,
+				F54206FC02C467E001000102,
 				F542071602C467E001000102,
 				F542071902C467E001000102,
 				F542071C02C467E001000102,
@@ -9800,19 +10017,23 @@
 				F542067602C467DF01000102,
 				F542069702C467DF01000102,
 				418CC2E8044306F500AD0D07,
-				F6E7963802C877AF01AD0D07,
 				F54206A802C467DF01000102,
-				F6E7963902C877AF01AD0D07,
 				F542066602C467DF01000102,
 				F54206CD02C467E001000102,
 				F54206CE02C467E001000102,
 				F54206CF02C467E001000102,
 				F542067502C467DF01000102,
-				F54206EA02C467E001000102,
 				F639B95F02EF33CE0FCF0E72,
+				F6E7963802C877AF01AD0D07,
+				F6E7963902C877AF01AD0D07,
+				F6E7967E02C877AF01AD0D07,
+				F6E7969C02C877AF01AD0D07,
+				F6E796A202C877AF01AD0D07,
+				F6E796A102C877AF01AD0D07,
 			);
 			isa = PBXGroup;
 			name = "Base Additions";
+			path = "";
 			refType = 4;
 		};
 		F6E7963B02C877AF01AD0D07 = {
@@ -9883,6 +10104,8 @@
 		};
 		F6E7964102C877AF01AD0D07 = {
 			children = (
+				F6E796A302C877AF01AD0D07,
+				F6E796A402C877AF01AD0D07,
 				F6E7963C02C877AF01AD0D07,
 				F5E94DCD038C3D5101CF0E76,
 				F6E7963D02C877AF01AD0D07,
@@ -10084,6 +10307,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDXMLPageWrapper;
+			path = "";
 			refType = 4;
 		};
 		F6E7965402C877AF01AD0D07 = {
@@ -10103,7 +10327,6 @@
 				F6E7965202C877AF01AD0D07,
 				F6E7964A02C877AF01AD0D07,
 				F6E7964D02C877AF01AD0D07,
-				F6E7965302C877AF01AD0D07,
 			);
 			isa = PBXGroup;
 			name = "Template Piece Components";
@@ -10167,6 +10390,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WGroupingListXMLPageTemplate;
+			path = "";
 			refType = 4;
 		};
 		F6E7965B02C877AF01AD0D07 = {
@@ -10319,12 +10543,10 @@
 				FBD20C97F2B69A0EDE795ADE,
 				F6E7965802C877AF01AD0D07,
 				F6E7965902C877AF01AD0D07,
-				F6E7965A02C877AF01AD0D07,
 				F6E7965B02C877AF01AD0D07,
 				FBD2127C9EDD9A0EDE795ADE,
 				F6E7965C02C877AF01AD0D07,
 				F6E7965D02C877AF01AD0D07,
-				FBD2153CF1759A0EDE795ADE,
 				FBD216FCCA0E9A0EDE795ADE,
 				F6E7965E02C877AF01AD0D07,
 				F6E7965F02C877AF01AD0D07,
@@ -10346,6 +10568,7 @@
 		F6E7966A02C877AF01AD0D07 = {
 			children = (
 				F54206FA02C467E001000102,
+				F542072202C467E001000102,
 			);
 			isa = PBXGroup;
 			name = "Principal Class";
@@ -10381,6 +10604,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDDHTMLComponent;
+			path = "";
 			refType = 4;
 		};
 		F6E7966E02C877AF01AD0D07 = {
@@ -10391,6 +10615,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDDisplayImageIfExists;
+			path = "";
 			refType = 4;
 		};
 		F6E7966F02C877AF01AD0D07 = {
@@ -10401,6 +10626,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDDisplayMailTo;
+			path = "";
 			refType = 4;
 		};
 		F6E7967002C877AF01AD0D07 = {
@@ -10411,6 +10637,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDDisplayYearsMonths;
+			path = "";
 			refType = 4;
 		};
 		F6E7967102C877AF01AD0D07 = {
@@ -10432,6 +10659,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditDateJavascript;
+			path = "";
 			refType = 4;
 		};
 		F6E7967302C877AF01AD0D07 = {
@@ -10442,6 +10670,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditDatePopup;
+			path = "";
 			refType = 4;
 		};
 		F6E7967402C877AF01AD0D07 = {
@@ -10452,6 +10681,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditDatePopupOrNull;
+			path = "";
 			refType = 4;
 		};
 		F6E7967502C877AF01AD0D07 = {
@@ -10462,6 +10692,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditList;
+			path = "";
 			refType = 4;
 		};
 		F6E7967602C877AF01AD0D07 = {
@@ -10472,6 +10703,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditListButton;
+			path = "";
 			refType = 4;
 		};
 		F6E7967702C877AF01AD0D07 = {
@@ -10482,6 +10714,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditPasswordConfirm;
+			path = "";
 			refType = 4;
 		};
 		F6E7967802C877AF01AD0D07 = {
@@ -10492,6 +10725,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditYearsMonths;
+			path = "";
 			refType = 4;
 		};
 		F6E7967902C877AF01AD0D07 = {
@@ -10502,6 +10736,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDLinkToViewList;
+			path = "";
 			refType = 4;
 		};
 		F6E7967A02C877AF01AD0D07 = {
@@ -10536,34 +10771,23 @@
 		};
 		F6E7967D02C877AF01AD0D07 = {
 			children = (
-				F6E7966D02C877AF01AD0D07,
 				F6E7966E02C877AF01AD0D07,
-				F6E7966F02C877AF01AD0D07,
-				F6E7967002C877AF01AD0D07,
-				F6E7967202C877AF01AD0D07,
-				F6E7967302C877AF01AD0D07,
-				F6E7967402C877AF01AD0D07,
+				F6E7966B02C877AF01AD0D07,
+				F6E7968102C877AF01AD0D07,
+				F6E7968402C877AF01AD0D07,
+				FBD20D3C95A236B0E03D1EB5,
+				F6E7969002C877AF01AD0D07,
+				F6E7969A02C877AF01AD0D07,
 				F6E7967502C877AF01AD0D07,
-				F6E7967602C877AF01AD0D07,
-				FBDED2D817EDBE5AD297D139,
-				4119063104EFBC3000A88C3C,
-				4119069D04EFC02A00A88C3C,
-				F6E7967702C877AF01AD0D07,
-				F6E7967802C877AF01AD0D07,
-				F6E796A102C877AF01AD0D07,
-				F6E796A202C877AF01AD0D07,
-				F54206E502C467E001000102,
-				FBDED2DCDB37203D1C182CFC,
-				F6E796A302C877AF01AD0D07,
-				F6E796A402C877AF01AD0D07,
-				F6E7967902C877AF01AD0D07,
 				F6E7967A02C877AF01AD0D07,
 				F6E7967B02C877AF01AD0D07,
 				F6E7967C02C877AF01AD0D07,
-				F5E95226038C5C3801CF0E76,
+				F6E7969702C877AF01AD0D07,
+				F6E7969802C877AF01AD0D07,
 			);
 			isa = PBXGroup;
-			name = "Property Level Components";
+			name = "Misc Property Level Components";
+			path = "";
 			refType = 4;
 		};
 		F6E7967E02C877AF01AD0D07 = {
@@ -10574,6 +10798,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WCustomComponentWithArgs;
+			path = "";
 			refType = 4;
 		};
 		F6E7967F02C877AF01AD0D07 = {
@@ -10584,6 +10809,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WCustomDisplayBoolean;
+			path = "";
 			refType = 4;
 		};
 		F6E7968002C877AF01AD0D07 = {
@@ -10594,6 +10820,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WCustomEditBoolean;
+			path = "";
 			refType = 4;
 		};
 		F6E7968102C877AF01AD0D07 = {
@@ -10604,6 +10831,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayConstant;
+			path = "";
 			refType = 4;
 		};
 		F6E7968202C877AF01AD0D07 = {
@@ -10614,6 +10842,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayDateOrNull;
+			path = "";
 			refType = 4;
 		};
 		F6E7968302C877AF01AD0D07 = {
@@ -10624,6 +10853,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayHTML;
+			path = "";
 			refType = 4;
 		};
 		F6E7968402C877AF01AD0D07 = {
@@ -10634,6 +10864,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayImage;
+			path = "";
 			refType = 4;
 		};
 		F6E7968502C877AF01AD0D07 = {
@@ -10644,6 +10875,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayList;
+			path = "";
 			refType = 4;
 		};
 		F6E7968602C877AF01AD0D07 = {
@@ -10654,6 +10886,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayPassword;
+			path = "";
 			refType = 4;
 		};
 		F6E7968702C877AF01AD0D07 = {
@@ -10664,6 +10897,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayString;
+			path = "";
 			refType = 4;
 		};
 		F6E7968802C877AF01AD0D07 = {
@@ -10674,6 +10908,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayStringWithLineBreaks;
+			path = "";
 			refType = 4;
 		};
 		F6E7968902C877AF01AD0D07 = {
@@ -10695,6 +10930,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayToManyTable;
+			path = "";
 			refType = 4;
 		};
 		F6E7968B02C877AF01AD0D07 = {
@@ -10705,6 +10941,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayToOne;
+			path = "";
 			refType = 4;
 		};
 		F6E7968C02C877AF01AD0D07 = {
@@ -10715,6 +10952,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayURL;
+			path = "";
 			refType = 4;
 		};
 		F6E7968D02C877AF01AD0D07 = {
@@ -10725,6 +10963,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayYesNo;
+			path = "";
 			refType = 4;
 		};
 		F6E7968E02C877AF01AD0D07 = {
@@ -10735,6 +10974,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditAllowRestrict;
+			path = "";
 			refType = 4;
 		};
 		F6E7968F02C877AF01AD0D07 = {
@@ -10745,6 +10985,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditNumberWithUnit;
+			path = "";
 			refType = 4;
 		};
 		F6E7969002C877AF01AD0D07 = {
@@ -10755,6 +10996,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditOrDefault;
+			path = "";
 			refType = 4;
 		};
 		F6E7969102C877AF01AD0D07 = {
@@ -10765,6 +11007,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditPercentage;
+			path = "";
 			refType = 4;
 		};
 		F6E7969202C877AF01AD0D07 = {
@@ -10775,6 +11018,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditString;
+			path = "";
 			refType = 4;
 		};
 		F6E7969302C877AF01AD0D07 = {
@@ -10785,6 +11029,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditToManyRelationship;
+			path = "";
 			refType = 4;
 		};
 		F6E7969402C877AF01AD0D07 = {
@@ -10795,6 +11040,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditToOneRelationship;
+			path = "";
 			refType = 4;
 		};
 		F6E7969502C877AF01AD0D07 = {
@@ -10805,6 +11051,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditURL;
+			path = "";
 			refType = 4;
 		};
 		F6E7969602C877AF01AD0D07 = {
@@ -10815,6 +11062,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WEditYesNo;
+			path = "";
 			refType = 4;
 		};
 		F6E7969702C877AF01AD0D07 = {
@@ -10825,6 +11073,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WPickFromEntities;
+			path = "";
 			refType = 4;
 		};
 		F6E7969802C877AF01AD0D07 = {
@@ -10835,6 +11084,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WPickFromList;
+			path = "";
 			refType = 4;
 		};
 		F6E7969902C877AF01AD0D07 = {
@@ -10845,6 +11095,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WPopUp;
+			path = "";
 			refType = 4;
 		};
 		F6E7969A02C877AF01AD0D07 = {
@@ -10855,6 +11106,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WQueryNonNull;
+			path = "";
 			refType = 4;
 		};
 		F6E7969B02C877AF01AD0D07 = {
@@ -10865,6 +11117,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WQueryToOneRelationship;
+			path = "";
 			refType = 4;
 		};
 		F6E7969C02C877AF01AD0D07 = {
@@ -10875,6 +11128,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WStatelessCustomComponentWithArgs;
+			path = "";
 			refType = 4;
 		};
 		F6E7969D02C877AF01AD0D07 = {
@@ -10885,6 +11139,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WTwoLevelEditToOneRelationship;
+			path = "";
 			refType = 4;
 		};
 		F6E7969E02C877AF01AD0D07 = {
@@ -10895,6 +11150,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WXMLDisplayNumber;
+			path = "";
 			refType = 4;
 		};
 		F6E7969F02C877AF01AD0D07 = {
@@ -10905,6 +11161,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WXMLDisplayString;
+			path = "";
 			refType = 4;
 		};
 		F6E796A002C877AF01AD0D07 = {
@@ -10915,6 +11172,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WXMLDisplayToMany;
+			path = "";
 			refType = 4;
 		};
 		F6E796A102C877AF01AD0D07 = {
@@ -10959,62 +11217,6 @@
 			isa = PBXGroup;
 			name = ERDList;
 			path = "";
-			refType = 4;
-		};
-		F6E796A502C877AF01AD0D07 = {
-			children = (
-				9419C8C903D8D07B00CF0E7D,
-				50E9E19A03CBB56900CF0E76,
-				F6E7967E02C877AF01AD0D07,
-				F6E7967F02C877AF01AD0D07,
-				F6E7968002C877AF01AD0D07,
-				F6E7966B02C877AF01AD0D07,
-				F6E7968102C877AF01AD0D07,
-				F6E7968202C877AF01AD0D07,
-				F6E7968302C877AF01AD0D07,
-				F6E7968402C877AF01AD0D07,
-				FBD20D3C95A236B0E03D1EB5,
-				F6E7968502C877AF01AD0D07,
-				F6E7966C02C877AF01AD0D07,
-				F6E7968602C877AF01AD0D07,
-				F6E7968702C877AF01AD0D07,
-				F6E7968802C877AF01AD0D07,
-				FBD20D3C95A2DE1DFB961D75,
-				FBD20D3C95A2D86A72DEDD96,
-				F6E7968902C877AF01AD0D07,
-				F6E7968A02C877AF01AD0D07,
-				F6E7968B02C877AF01AD0D07,
-				F6E7968C02C877AF01AD0D07,
-				F6E7968D02C877AF01AD0D07,
-				F6E7968E02C877AF01AD0D07,
-				F5E95223038C5BD001CF0E76,
-				9D86289B034E504C10CF0E7D,
-				F6E7963702C877AF01AD0D07,
-				F6E7968F02C877AF01AD0D07,
-				F6E7969002C877AF01AD0D07,
-				F6E7969102C877AF01AD0D07,
-				F6E7969202C877AF01AD0D07,
-				F6E796A602C877AF01AD0D07,
-				F6E7969302C877AF01AD0D07,
-				9D5BC62B033AB0C210CF0E7D,
-				F6E7969402C877AF01AD0D07,
-				F6E7969502C877AF01AD0D07,
-				F6E7969602C877AF01AD0D07,
-				F6E7969702C877AF01AD0D07,
-				F6E7969802C877AF01AD0D07,
-				F6E7969902C877AF01AD0D07,
-				94AA72FC03D3504C00CF0E7D,
-				F6E7969A02C877AF01AD0D07,
-				9409EBF6047BFEA300CF0E7D,
-				F6E7969B02C877AF01AD0D07,
-				F6E7969C02C877AF01AD0D07,
-				F6E7969D02C877AF01AD0D07,
-				F6E7969E02C877AF01AD0D07,
-				F6E7969F02C877AF01AD0D07,
-				F6E796A002C877AF01AD0D07,
-			);
-			isa = PBXGroup;
-			name = "Property Level D2WComponents";
 			refType = 4;
 		};
 		F6E796A602C877AF01AD0D07 = {
@@ -11066,6 +11268,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayImageWithUrl;
+			path = "";
 			refType = 4;
 		};
 		FBD20D3C95A2D86A72DEDD96 = {
@@ -11076,6 +11279,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayToManyCustom;
+			path = "";
 			refType = 4;
 		};
 		FBD20D3C95A2DE1DFB961D75 = {
@@ -11086,6 +11290,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WDisplayTextFromHTML;
+			path = "";
 			refType = 4;
 		};
 		FBD2127C9EDD9A0EDE795ADE = {
@@ -11106,6 +11311,7 @@
 			);
 			isa = PBXGroup;
 			name = ERD2WListXMLPageTemplate;
+			path = "";
 			refType = 4;
 		};
 		FBD216FCCA0E9A0EDE795ADE = {
@@ -11126,6 +11332,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDEditOwnedRelationship;
+			path = "";
 			refType = 4;
 		};
 		FBDED2DCDB37203D1C182CFC = {
