@@ -59,16 +59,14 @@ public class ERXValidation {
         String newErrorMessage=e.toString();
         // Need to reset the context for each validation exception.
         propertyNameContext.setEntity(null); 
-        if ((e instanceof NSValidation.ValidationException) &&
-            ((NSValidation.ValidationException)e).userInfo()!=null
-            && ((NSValidation.ValidationException)e).userInfo() instanceof NSDictionary) {
-            NSDictionary userInfo=(NSDictionary)((NSValidation.ValidationException)e).userInfo();
-            key = (String)userInfo.objectForKey(NSValidation.ValidationException.ValidatedKeyUserInfoKey);
+        if (e instanceof NSValidation.ValidationException) {
+            NSValidation.ValidationException nve = (NSValidation.ValidationException)e;
+            key = nve.key();
             if (key == null) {
                 cat.error("Unexpected null key with userInfo: userInfo");
                 key = "Unknown Key";
             } else {
-                Object eo=userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
+                Object eo=nve.object();
                 // this because exceptions raised by formatters have the failing VALUE in this key..
                 // strip the exception name
                 newErrorMessage=newErrorMessage.substring(newErrorMessage.indexOf(":")+1);

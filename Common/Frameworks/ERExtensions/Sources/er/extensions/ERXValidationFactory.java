@@ -133,7 +133,7 @@ public class ERXValidationFactory {
     public ERXValidationException convertException(NSValidation.ValidationException eov, Object value) {
         ERXValidationException erve = null;
         if (cat.isDebugEnabled())
-            cat.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>") + "userInfo: " + eov.userInfo());
+            cat.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
             NSDictionary userInfo = eov.userInfo() != null ? (NSDictionary)eov.userInfo() : ERXConstant.EmptyDictionary;

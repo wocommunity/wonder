@@ -507,7 +507,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                 Object property=e.nextElement();
                 if (property instanceof EOAttribute) {
                     EOAttribute a=(EOAttribute)property;
-                    if (a.valueClassName().equals("NSString"))
+                    if (a.className().equals("java.lang.String"))
                         attList.addObject(a.name());
                 }
             }
