@@ -17,6 +17,7 @@ import com.webobjects.foundation.*;
  * so calling retain multiple times on the same object does not have any effect
  * after the first call.
  */
+// ENHANCEME: Should implement reference counting.
 public class ERXRetainer {
 
     /** set used to retain references to objects */

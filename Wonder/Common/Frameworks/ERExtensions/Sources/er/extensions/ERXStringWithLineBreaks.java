@@ -50,6 +50,7 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
      * @return converts string bound to binding: <b>value</b>
      * 		into html-ified line breaks.
      */
+    // FIXME: Should use ERXSimpleHTMLFormatter
     public String value() {
         if (_value == null) {
             Object value = valueForObjectBinding("value");
