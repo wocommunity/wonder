@@ -18,7 +18,11 @@ public class ERXTable extends WOTable {
     public ERXTable(WOContext context) {
         super(context);
     }
-    
+
+    public boolean isStateless() {
+        return true;
+    }
+
     ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
     public final static Category cat = Category.getInstance(ERXTable.class);
 
