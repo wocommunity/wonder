@@ -164,4 +164,19 @@ public class ERXEOControlUtilities {
         }
         return filtered != null ? filtered : NSArray.EmptyArray;
     }
+
+    /**
+     * Gets all of the shared objects for a given entity name. Note that
+     * if the entity has not been loaded yet, ie it's model has not been
+     * accessed then this method will return an empty array.
+     * @param entityName name of the shared entity
+     * @return array of bound shared objects for the given entity name
+     */
+    public static NSArray sharedObjectsForEntityNamed(String entityName) {
+        NSArray sharedEos = (NSArray)EOSharedEditingContext.defaultSharedEditingContext().objectsByEntityName().objectForKey(entityName);
+        if (sharedEos == null) {
+            log.warn("Unable to find any shared objects for the entity named: " + entityName);
+        }
+        return sharedEos != null ? sharedEos : NSArray.EmptyArray;
+    }
 }
