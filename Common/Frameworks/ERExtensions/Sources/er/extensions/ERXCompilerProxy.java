@@ -246,7 +246,11 @@ public class ERXCompilerProxy {
         } else {
             mainProject = mainBundle.projectPath();
         }
-	if((new File(pathForCPFileList(mainProject))).exists()) {
+        if(mainProject == null || mainProject.equals("")){
+            // Assuming that bundle path is $PROJECT_DIR/build/foo.woa
+            mainProject = new File(mainBundle.bundlePath()).getParentFile().getParentFile().getAbsolutePath();
+        }
+        if((new File(pathForCPFileList(mainProject))).exists()) {
 	    log.info("Found open project for app at path " + mainProject);
 	    projectPaths.addObject(mainProject);
 	}
@@ -259,6 +263,10 @@ public class ERXCompilerProxy {
                 path = bundle.projectPath();
             } else {
                 path = projectInSearchPath(name);
+            }
+            if(path == null || path.equals("")){
+                // Assuming that bundle path is $PROJECT_DIR/build/foo.framework
+                path = new File(bundle.bundlePath()).getParentFile().getParentFile().getAbsolutePath();
             }
             if(path != null) {
                 File f = new File(pathForCPFileList(path));
