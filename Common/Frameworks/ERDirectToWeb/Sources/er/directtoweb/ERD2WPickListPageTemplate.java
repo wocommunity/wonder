@@ -8,7 +8,8 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 
 /**
- * A basic list but adding the ability to choose an arbitrary number of eos.  Useful for say picking which things you are interested in.<br />
+ * A basic list but adding the ability to choose an arbitrary number of eos.  
+ * Useful as a user-friendly replacement of the edit relationship page.<br />
  * 
  */
 
