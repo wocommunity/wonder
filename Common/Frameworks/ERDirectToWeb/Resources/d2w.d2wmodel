@@ -4151,6 +4151,15 @@
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldSetFailedValidationValue; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
                 keyPath = shouldShowActionButtons; 
                 value = 1; 
             }; 
