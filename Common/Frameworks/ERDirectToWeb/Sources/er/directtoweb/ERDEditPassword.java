@@ -15,7 +15,6 @@ import er.extensions.*;
  * if no password is set or it is set and there is a value given, then
  * the object is asked to validate this value.
  * This behaviour prevents having to enter the password multiple times.
- * In either case, the password is <b>never</b> given back to the client.
  *
  * @binding object the object to edit
  * @binding propertyKey the key of the object to edit
