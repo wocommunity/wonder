@@ -437,6 +437,7 @@
 				F56937BD03561CDA01CF0E76,
 				F6ED0C7A0361C03B01257492,
 				F5F0454A0364AFE801CF0E76,
+				F531D2ED03658BC001AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1147,6 +1148,18 @@
 		};
 		F510756102C453E601000102 = {
 			fileRef = F510755F02C453E501000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F531D2EC03658BC001AD0D07 = {
+			isa = PBXFileReference;
+			name = ERXWOText.java;
+			path = er/extensions/ERXWOText.java;
+			refType = 4;
+		};
+		F531D2ED03658BC001AD0D07 = {
+			fileRef = F531D2EC03658BC001AD0D07;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6649,6 +6662,7 @@
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
 				F50C03910354549D014B9BC9,
+				F531D2EC03658BC001AD0D07,
 			);
 			isa = PBXGroup;
 			name = "WOF Additions";
