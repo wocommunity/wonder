@@ -11,11 +11,11 @@
     "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of  @@tabSectionsContents.count@@";
     "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
     "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
-    "ERD2W.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
-     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
+    "ERD2W.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
+     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
     "ERDEditListButton.editButtonName" = "Edition de la liste de @@displayNameForProperty@@";
-    "ERDEmptyListMessage.emptyListMessage" = "Aucune valeurs trouvée pour @@displayNameForEntity@@.</b>";
-    "ERDTrashcan.confirmDeletionMessage" = "<B>Etes-vous sur de vouloir éliminer ce @@displayNameForEntity@@</B>:<br> @@object.userPresentableDescription@@?";
+    "ERDEmptyListMessage.emptyListMessage" = "<b>Aucune valeurs trouvée pour @@displayNameForEntity@@.</b>";
+    "ERDTrashcan.confirmDeletionMessage" = "<b>Etes-vous sur de vouloir éliminer ce @@displayNameForEntity@@?</b>";
     "ERDEditList.saveLabel" = "Enregistrer?";
     "ERD2WEditToManyRelationship.noChoiceAvailable" = "Aucune valeur disponible pour @@displayNameForEntity@@";
     "ERDDatePopup.monthList" = ( "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
