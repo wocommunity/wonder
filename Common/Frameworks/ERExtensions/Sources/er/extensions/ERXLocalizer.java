@@ -47,7 +47,7 @@ TODO: chaining of Localizers
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     protected static final ERXLogger log = ERXLogger.getERXLogger(ERXLocalizer.class);
     protected static final ERXLogger createdKeysLog = (ERXLogger)ERXLogger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
-    private static boolean isLocalizationEnabled = false;
+    private static boolean isLocalizationEnabled = true;
     private static boolean isInitialized = false;
     
     public static final String LocalizationDidResetNotification = "LocalizationDidReset";
@@ -324,7 +324,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
      * 		thread storage.
      */
     public static ERXLocalizer currentLocalizer() {
-        return (ERXLocalizer)ERXThreadStorage.valueForKey("localizer");
+        ERXLocalizer current = (ERXLocalizer)ERXThreadStorage.valueForKey("localizer");
+        if(current == null) {
+            current = defaultLocalizer();
+        }
+        return current;
     }
 
     /**
