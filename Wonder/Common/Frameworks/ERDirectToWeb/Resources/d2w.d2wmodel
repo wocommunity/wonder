@@ -59,7 +59,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er.directtoweb.ERDefaultPropertyNameAssignment; 
+                class = er.directtoweb.ERDDefaultPropertyNameAssignment; 
                 keyPath = displayNameForProperty; 
                 value = "<computed>"; 
             }; 
@@ -175,7 +175,7 @@
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = sortKeyForList; 
                 value = propertyKey; 
             }; 
@@ -566,7 +566,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er.directtoweb.ERDefaultEntityNameAssignment; 
+                class = er.directtoweb.ERDDefaultEntityNameAssignment; 
                 keyPath = displayNameForEntity; 
                 value = defaultDisplayNameForEntity; 
             }; 
@@ -1259,7 +1259,7 @@
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = isMandatory; 
                 value = smartRelationship.isMandatory; 
             }; 
@@ -1811,7 +1811,7 @@
                 value = {class = java.lang.Number; value = 0; }; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = maxLength; 
                 value = smartAttribute.width; 
             }; 
@@ -2845,7 +2845,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = styleSheetFrameworkName; 
                 value = lookFrameworkName; 
             }; 
@@ -3419,7 +3419,7 @@
                 value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = subTask; 
                 value = forcedSubTask; 
             }; 
@@ -4136,7 +4136,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er.directtoweb.ERDefaultCancelCreationMessageAssignment; 
+                class = er.directtoweb.ERDDefaultCancelCreationMessageAssignment; 
                 keyPath = cancelMessage; 
                 value = "<computed>"; 
             }; 
@@ -4912,7 +4912,7 @@
                 value = java.lang.String; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDefaultsAssignment; 
+                class = er.directtoweb.ERDDefaultsAssignment; 
                 keyPath = length; 
                 value = smartDefaultAttributeWidth; 
             }; 
@@ -4927,7 +4927,7 @@
                 value = java.lang.String; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDefaultsAssignment; 
+                class = er.directtoweb.ERDDefaultsAssignment; 
                 keyPath = rows; 
                 value = smartDefaultRows; 
             }; 
