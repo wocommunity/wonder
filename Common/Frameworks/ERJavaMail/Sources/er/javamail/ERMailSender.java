@@ -31,7 +31,8 @@ public class ERMailSender extends Thread {
     private Stats stats;
     private MimeMessage message;
 
-    // Holds sending messages. The queue size can be set er.javamail.senderQueue.size property
+    // Holds sending messages. The queue size can be set by 
+    // er.javamail.senderQueue.size property
     private ERQueue messages; 
     // For thread management
     private boolean threadSuspended = false;
