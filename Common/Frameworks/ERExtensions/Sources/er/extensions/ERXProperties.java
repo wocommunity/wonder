@@ -23,18 +23,10 @@ public class ERXProperties {
 
     ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
     public final static Category cat = Category.getInstance(ERXProperties.class);
-
-    public static String stringForKey(String s) { return System.getProperty(s); }
     
     public static NSArray arrayForKey(String s) {
         String s1 = System.getProperty(s);
-        NSArray nsarray;
-        if(s1 == null) {
-            nsarray = NSProperties.arrayForKey(s);
-            nsarray = nsarray != null ? nsarray : ERXConstant.EmptyArray;            
-        } else
-            nsarray = (NSArray)NSPropertyListSerialization.propertyListFromString(s1);
-        return nsarray;
+        return s1 != null ? (NSArray)NSPropertyListSerialization.propertyListFromString(s1) : null;
     }
 
     public static boolean booleanForKey(String s) {
@@ -43,14 +35,15 @@ public class ERXProperties {
 
     public static NSDictionary dictionaryForKey(String s) {
         String s1 = System.getProperty(s);
-        NSDictionary nsdictionary;
-        if (s1 == null) {
-            nsdictionary = NSProperties.dictionaryForKey(s);
-            nsdictionary = nsdictionary != null ? nsdictionary : ERXConstant.EmptyDictionary;            
-        } else
-            nsdictionary = (NSDictionary)NSPropertyListSerialization.propertyListFromString(s1);
-        return nsdictionary;
+        return s1 != null ? (NSDictionary)NSPropertyListSerialization.propertyListFromString(s1) : null;
     }
+
+    public static int intForKey(String s) {
+        String s1 = System.getProperty(s);
+        return s1 != null ? NSPropertyListSerialization.intForString(s1) : 0;
+    }
+    
+    public static String stringForKey(String s) { return System.getProperty(s); }
     
     public static void setArrayForKey(NSArray array, String key) {
         setStringForKey(NSPropertyListSerialization.stringFromPropertyList(array), key);

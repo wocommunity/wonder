@@ -38,7 +38,7 @@ public abstract class ERXApplication extends WOApplication {
     //------------------------------------------------------
     // Application Cycling
     public void run() {
-        int timeToLive=NSProperties.integerForKey("ERTimeToLive");
+        int timeToLive=ERXProperties.intForKey("ERTimeToLive");
         if (timeToLive!=0) {
             cat.info("Instance will live "+timeToLive+" seconds.");
             NSLog.out.appendln("Instance will live "+timeToLive+" seconds.");
@@ -47,13 +47,13 @@ public abstract class ERXApplication extends WOApplication {
             WOTimer t=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
             t.schedule();
         }
-        int timeToDie=NSProperties.integerForKey("ERTimeToDie");
+        int timeToDie=ERXProperties.intForKey("ERTimeToDie");
         if (timeToDie!=0) {
             // FIXME we could randomize this (30mn?) to help with restart related downtime problems?
             cat.info("Instance will not live past "+timeToDie+":00.");
             NSLog.out.appendln("Instance will not live past "+timeToDie+":00.");
             NSTimestamp now=new NSTimestamp();
-            int s=(timeToDie-now.hourOfDay())*3600-now.minuteOfHour()*60;
+            int s=(timeToDie-ERXTimestampUtility.hourOfDay(now))*3600-ERXTimestampUtility.minuteOfHour(now)*60;
             if (s<0) s+=24*3600; // how many seconds to the deadline
 
             // deliberately randomize this so that not all instances restart at the same time

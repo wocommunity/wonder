@@ -613,15 +613,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             ((ERXValidationException)e).setEoObject(this);
             throw e;
         } catch (NSValidation.ValidationException e) {
-            NSMutableDictionary newUserInfo=((NSDictionary)e.userInfo()).mutableClone();
-            if (newUserInfo.objectForKey(NSValidation.ValidationException.ValidatedKeyUserInfoKey)==null) {
-                newUserInfo.setObjectForKey(key,NSValidation.ValidationException.ValidatedKeyUserInfoKey);
-            }
-            if (newUserInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey)==null) {
-                newUserInfo.setObjectForKey(this,NSValidation.ValidationException.ValidatedObjectUserInfoKey);
-            }
-            validationException.debug("Exception raised while validating object: " + this + " class: " + getClass() + " pKey: " + primaryKey() + newUserInfo + "\n" + e);
-            throw new NSValidation.ValidationException(e.toString(), newUserInfo );
+            if (e.key() == null || e.object() == null)
+                e = new NSValidation.ValidationException(e.getMessage(), this, key);
+            validationException.debug("Exception: " + e.getMessage() + " raised while validating object: " + this + " class: " + getClass() + " pKey: " + primaryKey() + "\n" + e);
+            throw e;
         } catch (RuntimeException e) {
             NSLog.err.appendln("**** During validateValueForKey "+key);
             NSLog.err.appendln("**** caught "+e);
@@ -636,7 +631,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
         super.validateForSave();
-        if (NSProperties.booleanForKey("ERDebuggingEnabled"))
+        if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
             checkConsistency();
     }
     public void checkConsistency() throws NSValidation.ValidationException {}
