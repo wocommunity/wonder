@@ -218,7 +218,7 @@ public class ERXEOEncodingUtilities {
      * 		the keys denote the entity names and the values denote
      *		the possibly encrypted primary keys.
      */
-    public static NSDictionary dictionaryOfFormValuesForEnterpriseObjects(NSArray eos, String separator, boolean encrypt){
+    public static NSDictionary dictionaryOfFormValuesForEnterpriseObjects(NSArray eos, String separator, boolean encrypt){
         String base = encodeEnterpriseObjectsPrimaryKeyForUrl(eos, separator, encrypt);
         NSArray elements = NSArray.componentsSeparatedByString(base, "&");
         return(NSDictionary)NSPropertyListSerialization.propertyListFromString("{"+elements.componentsJoinedByString(";")+";}");
