@@ -23,13 +23,12 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     protected ERXNavigationItem _navigationItem;
     protected ERXNavigationState _navigationState;
 
+    protected boolean _linkDirectlyToDirectActions = true;
+    
     protected int _level=-1;
-    protected boolean _isDisabled;
-    protected boolean _isDisabledComputed;
-    protected boolean _meetsDisplayConditions=false;
-    protected boolean _meetsDisplayConditionsComputed=false;
-    protected boolean _isSelected;
-    protected boolean _isSelectedComputed;
+    protected Boolean _isDisabled;
+    protected Boolean _meetsDisplayConditions;
+    protected Boolean _isSelected;
     protected Boolean _hasActivity;
     protected WOComponent _redirect;
     
@@ -40,11 +39,11 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     public void reset() {
         _navigationItem = null;
         _navigationState = null;
-        _meetsDisplayConditionsComputed=false;
+        _meetsDisplayConditions=null;
         _level=-1;
         _hasActivity=null;
-        _isDisabledComputed=false;
-        _isSelectedComputed=false;
+        _isDisabled=null;
+        _isSelected=null;
         super.reset();
     }
 
@@ -54,6 +53,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         return _navigationState;
     }
 
+    /** AK This is only an experiment: when calling up a DA, we use a component action and redirect to the actual DA  */
     public WOComponent directActionRedirect() {
         WOComponent page = pageWithName("WORedirect");
         String url = context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
@@ -74,8 +74,11 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             return context().componentActionURL();
         }
         if (navigationItem().directActionName() != null) {
-            return context().componentActionURL();
-            //return context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
+            if(_linkDirectlyToDirectActions) {
+                return context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
+            } else {
+                return context().componentActionURL();
+            }
         }
 
         // If the user specified some javascript, put that into the HREF and return it
@@ -98,7 +101,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             anActionResult = (WOComponent)(pageWithName(navigationItem().pageName()));
         } else if ((navigationItem().directActionName() != null) && (navigationItem().directActionName() != "")) {
             // FIXME: Need to support directAction classes
-            if(false) {
+            if(_linkDirectlyToDirectActions) {
                 ERXDirectAction da = new ERXDirectAction(context().request());
                 anActionResult = (WOComponent)(da.performActionNamed(navigationItem().directActionName()));
             } else {
@@ -108,24 +111,29 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         return anActionResult;
     }
 
+    /**
+     * Decides whether the item gets displayed at all.
+     * This is done by evaluating the boolean value of a "conditions" array in the definition file.
+     * eg: conditions = ("session.user.canEditThisStuff", "session.user.isEditor")
+     * will display the item only if the user can edit this stuff *and* is an editor. 
+     */
     public boolean meetsDisplayConditions() {
-        if (!_meetsDisplayConditionsComputed) {
-            _meetsDisplayConditions = true;
+        if (_meetsDisplayConditions == null) {
+            _meetsDisplayConditions = Boolean.TRUE;
             if (navigationItem().conditions().count() != 0) {
                 Enumeration enumerator = navigationItem().conditions().objectEnumerator();
                 while (enumerator.hasMoreElements()) {
                     String anObject = (String)enumerator.nextElement();
-                    if (log.isDebugEnabled())
-                        log.debug(navigationItem().name() + " testing display condition: "+ anObject + " --> " + ((Number)valueForKeyPath(anObject) != null ? ((Number)valueForKeyPath(anObject)).intValue()!=0 : false));
-                    Number i = (Number)valueForKeyPath(anObject);
-                    _meetsDisplayConditions =i!=null ? i.intValue()!=0 : false;
-                    if (!_meetsDisplayConditions) break;
+                    Object value = valueForKeyPath(anObject);
+                    _meetsDisplayConditions = ERXValueUtilities.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
+                    if (log.isDebugEnabled()) {
+                        log.debug(navigationItem().name() + " testing display condition: "+ anObject + " --> " + value  + ":" + _meetsDisplayConditions);
+                    }
+                    if (!_meetsDisplayConditions.booleanValue()) break;
                 }
             }
         }
-
-        _meetsDisplayConditionsComputed = true;
-        return _meetsDisplayConditions;
+        return _meetsDisplayConditions.booleanValue();
     }
 
     public ERXNavigationItem navigationItem() {
@@ -136,20 +144,19 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     }
 
     public boolean isDisabled() {
-        if (!_isDisabledComputed) {
-            _isDisabled=navigationState().isDisabled() || !meetsDisplayConditions();
-            _isDisabledComputed=true;
+        if (_isDisabled == null) {
+            _isDisabled=navigationState().isDisabled() || !meetsDisplayConditions() ? Boolean.TRUE : Boolean.FALSE;
         }
-        return _isDisabled;
+        return _isDisabled.booleanValue();
     }
 
     public boolean isSelected() {
-        if (!_isSelectedComputed) {
+        if (_isSelected == null) {
             NSArray navigationState = navigationState().state();
-            _isSelected=!isDisabled() && navigationState != null && navigationState.containsObject(navigationItem().name());
-            _isSelectedComputed=true;
+            _isSelected=!isDisabled() && navigationState != null && navigationState.containsObject(navigationItem().name()) ? Boolean.TRUE : Boolean.FALSE;
+
         }
-        return _isSelected;
+        return _isSelected.booleanValue();
     }
 
     public int level() {
@@ -160,11 +167,11 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         return _level;
     }
 
-    private final static String[] LINK_CLASS=new String[] { "", "Nav1", "Nav2", "Nav3" };
-    private final static String[] LINK_CLASS_SELECTED=new String[] { "", "Nav1Selected", "Nav2Selected", "Nav3Selected" };
-    private final static String[] LINK_CLASS_DISABLED=new String[] { "", "Nav1", "Nav2Disabled", "Nav3Disabled" };
     public String linkClass() {
-        return isSelected() ? LINK_CLASS_SELECTED[level()] : isDisabled() ? LINK_CLASS_DISABLED[level()] : LINK_CLASS[level()];
+        if(level() == 0) {
+            return "";
+        }
+        return "Nav" + level() + (isSelected() ? "Selected" : (isDisabled() ? "Disabled" : ""));
     }
 
     private final static String[] COLOR=new String[] { "", "#EEEEEE", "#111111", "#EEEEEE", "#111111" };
