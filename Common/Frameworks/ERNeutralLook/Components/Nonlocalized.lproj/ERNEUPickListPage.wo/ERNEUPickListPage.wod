@@ -50,6 +50,10 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
+Conditional2: WOConditional {
+	condition = shouldShowSelectAll;
+}
+
 ERXNonNullConditional1: WOConditional {
 	condition = hasBranchChoices;
 	negate = true;
@@ -191,6 +195,18 @@ SubmitButton2: WOSubmitButton {
 SubmitButton3: WOSubmitButton {
 	action = backAction;
 	value = branch.branchButtonLabel;
+}
+
+SubmitButton4: WOSubmitButton {
+	action = selectAll;
+	value = "Select All";
+	onClick = "return createTarget(form, '_self')";
+}
+
+SubmitButton5: WOSubmitButton {
+	action = unselectAll;
+	value = "Clear Selection";
+	onClick = "return createTarget(form, '_self')";
 }
 
 SwitchComponent1: WOSwitchComponent {
