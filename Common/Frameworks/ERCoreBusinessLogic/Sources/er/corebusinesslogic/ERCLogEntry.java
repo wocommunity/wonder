@@ -29,7 +29,7 @@ public class ERCLogEntry extends _ERCLogEntry {
         
     }
 
-    public static ERCLogEntryClazz logEntryClazz() { return (ERCLogEntryClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCLogEntry"); }
+    public static ERCLogEntryClazz logEntryClazz() { return (ERCLogEntryClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCLogEntry"); }
 
     // Logging support
     public static ERCLogEntry createLogEntryLinkedToEO(EOEnterpriseObject type,

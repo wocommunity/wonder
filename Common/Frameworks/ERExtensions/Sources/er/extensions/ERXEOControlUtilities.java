@@ -346,7 +346,7 @@ public class ERXEOControlUtilities {
      * @return number of matching objects
      */
     public static Number objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
-        EOAttribute attribute = EOGenericRecordClazz.objectCountAttribute();
+        EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
         return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,attribute);
     }
 
@@ -365,7 +365,7 @@ public class ERXEOControlUtilities {
     public static Number objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOAttribute attribute = entity.attributeNamed(attributeName);
-        EOAttribute att2 = EOGenericRecordClazz.objectCountUniqueAttribute(attribute);
+        EOAttribute att2 = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
         return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,att2);
     }
 

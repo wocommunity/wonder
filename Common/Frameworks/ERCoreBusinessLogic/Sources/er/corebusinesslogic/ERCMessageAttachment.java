@@ -25,5 +25,5 @@ public class ERCMessageAttachment extends _ERCMessageAttachment {
         
     }
 
-    public static ERCMessageAttachmentClazz messageAttachmentClazz() { return (ERCMessageAttachmentClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCMessageAttachment"); }
+    public static ERCMessageAttachmentClazz messageAttachmentClazz() { return (ERCMessageAttachmentClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMessageAttachment"); }
 }

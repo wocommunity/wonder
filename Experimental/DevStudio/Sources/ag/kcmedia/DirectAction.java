@@ -70,7 +70,7 @@ public class DirectAction extends ERXDirectAction {
 
     public WOComponent dumpRulesAction() {
         WOComponent nextPage = pageWithName("ERXStringHolder");
-        String string = "Please a fileName parameter";
+        String string = "Please a provide fileName parameter";
         String fileName = context().request().stringFormValueForKey("fileName");
         if(fileName != null) {
             ERD2WRuleEditorModel model = new ERD2WRuleEditorModel(new File(fileName));

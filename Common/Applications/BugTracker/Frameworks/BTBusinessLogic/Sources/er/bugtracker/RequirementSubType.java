@@ -24,5 +24,5 @@ public class RequirementSubType extends _RequirementSubType {
         
     }
 
-    public static final RequirementSubTypeClazz clazz = (RequirementSubTypeClazz)EOGenericRecordClazz.clazzForEntityNamed("RequirementSubType");
+    public static final RequirementSubTypeClazz clazz = (RequirementSubTypeClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("RequirementSubType");
 }

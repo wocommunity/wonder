@@ -38,5 +38,5 @@ public class Priority extends _Priority {
         }
     }
 
-    public static final PriorityClazz clazz = (PriorityClazz)EOGenericRecordClazz.clazzForEntityNamed("Priority");
+    public static final PriorityClazz clazz = (PriorityClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Priority");
 }
