@@ -1,5 +1,5 @@
 HasMassMoveConfiguration: WOConditional {
-	condition = ^d2wContext.allowsFiltering;
+	condition = ^allowsFiltering;
 }
 
 Hyperlink1: WOHyperlink {
