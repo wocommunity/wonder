@@ -19,15 +19,11 @@ import er.extensions.*;
  * 
  */
 
-public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface, DTWGeneration, ERXComponentActionRedirector.Restorable  {
+public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface, DTWGeneration  {
 
     public WODisplayGroup displayGroup = new WODisplayGroup();
 
     public ERD2WQueryPage(WOContext context) { super(context); }
-
-    public String urlForCurrentState() {
-        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
-    }
 
     public boolean isDeep() {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("isDeep"));
