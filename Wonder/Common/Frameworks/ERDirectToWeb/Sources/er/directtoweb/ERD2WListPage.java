@@ -216,33 +216,29 @@ public abstract class ERD2WListPage extends D2WListPage {
     }
 
     public boolean isEntityInspectable() {
-        Integer isEntityInspectable=(Integer)d2wContext().valueForKey("isEntityInspectable");
-        return isEntityReadOnly() && (isEntityInspectable!=null && isEntityInspectable.intValue()!=0);
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityInspectable"), isEntityReadOnly());
+        // return isEntityReadOnly() && (isEntityInspectable!=null && isEntityInspectable.intValue()!=0);
     }
 
     public WOComponent deleteObjectAction() {
-        // FIXME: Shouldn't ave a hard dependency on names here.
         String confirmDeleteConfigurationName=(String)d2wContext().valueForKey("confirmDeleteConfigurationName");
-        if(confirmDeleteConfigurationName!=null){
-            ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed(confirmDeleteConfigurationName,session());
-            nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
-            nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
-            if(nextPage instanceof ERD2WInspectPage) {
-                ((ERD2WInspectPage)nextPage).setObject(object());
-            } else {
-                nextPage.setMessage("Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+":<br> "+object().userPresentableDescription()+ " ?");
-            }
-            return (WOComponent) nextPage;
+        ConfirmPageInterface nextPage;
+        if(confirmDeleteConfigurationName==null) {
+            log.warn("Using default delete template: ERD2WConfirmPageTemplate, set the 'confirmDeleteConfigurationName' key to something more sensible");
+            nextPage = (ConfirmPageInterface)pageWithName("ERD2WConfirmPageTemplate");
         } else {
-            ConfirmPageInterface nextPage = (ConfirmPageInterface)pageWithName("ERD2WConfirmPageTemplate");
-            nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
-            nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
-
-            nextPage.setMessage("Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+":<br> "+object().userPresentableDescription()+ " ?");
-            return (WOComponent) nextPage;
+            nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed(confirmDeleteConfigurationName,session());
         }
+        nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
+        nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
+        if(nextPage instanceof InspectPageInterface) {
+            ((InspectPageInterface)nextPage).setObject(object());
+        } else {
+            nextPage.setMessage("Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+":<br> "+object().userPresentableDescription()+ " ?");
+        }
+        return (WOComponent) nextPage;
     }
-    
+
     public WOComponent editObjectAction() {
         WOComponent result = null;
         String editConfigurationName=(String)d2wContext().valueForKey("editConfigurationName");
