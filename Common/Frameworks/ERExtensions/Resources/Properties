@@ -37,6 +37,7 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 #########################################################################
 er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 #er.extensions.ERXClassDescription.factoryClass = 
+#EOEditingContextDefaultFetchTimestampLag = 3600000
 
 #########################################################################
 # Cryptgraphy
