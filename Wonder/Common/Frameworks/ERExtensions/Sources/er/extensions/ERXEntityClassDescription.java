@@ -187,25 +187,57 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         public void compilerProxyDidCompileClasses(NSNotification n) {
             log.debug("CompilerProxyDidCompileClasses: " + n);
             reset();
-       }
+        }
 
+        private static Boolean _isRapidTurnaroundEnabled;
+        public boolean isRapidTurnaroundEnabled() {
+            if(_isRapidTurnaroundEnabled == null) {
+                _isRapidTurnaroundEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled") ? Boolean.TRUE : Boolean.FALSE;
+            }
+            return _isRapidTurnaroundEnabled.booleanValue();
+        }
         /**
-        * Method called by the {@link com.webobjects.appserver.WOApplication WOApplication}
+         * Method called by the {@link com.webobjects.appserver.WOApplication WOApplication}
          * has finished launching.
          */
         public void applicationDidFinishLaunching(NSNotification n) {
             log.debug("ApplicationDidFinishLaunching: " + n);
             for (Enumeration ge = EOModelGroup.defaultGroup().models().objectEnumerator(); ge.hasMoreElements();) {
-                for (Enumeration ee = ((EOModel)ge.nextElement()).entities().objectEnumerator(); ee.hasMoreElements();) {
+                EOModel model = (EOModel)ge.nextElement();
+                String frameworkName = null;
+                String modelPath = null;
+                
+                if(isRapidTurnaroundEnabled()) {
+                    for(Enumeration e = NSArray.componentsSeparatedByString(model.path(), File.separator).reverseObjectEnumerator(); e.hasMoreElements(); ) {
+                        String a = (String)e.nextElement();
+                        if(a.indexOf(".framework") > 0) {
+                            frameworkName = a.substring(0, a.indexOf(".framework"));
+                            break;
+                        }
+                    }
+                    if(frameworkName == null) {
+                        frameworkName = "app";
+                    }
+                    modelPath = ERXFileUtilities.pathForResourceNamed(model.name() + ".eomodeld", frameworkName, null);
+                    defaultLog.debug("Path for model <" + model.name() + "> in framework <"+frameworkName+">: " + modelPath);
+                }
+                                
+                for (Enumeration ee = model.entities().objectEnumerator(); ee.hasMoreElements();) {
                     EOEntity entity = (EOEntity)ee.nextElement();
                     EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entity.name());
                     defaultLog.debug("Reading defaults for: " + entity.name());
-                    if(cd instanceof ERXEntityClassDescription)
+                    if(cd instanceof ERXEntityClassDescription) {
                         ((ERXEntityClassDescription)cd).readDefaultValues();
+
+                        if(modelPath != null) {
+                            String path = modelPath + File.separator + entity.name() + ".plist";
+                            ERXFileNotificationCenter.defaultCenter().addObserver(cd, new NSSelector("modelFileDidChange", ERXConstant.NotificationClassArray), path);
+                        }
+                    }
                 }
             }
         }
-
+        
         /**
          * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}   
          * when an EOModel is loaded. 
@@ -334,6 +366,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 }
                 _registeredModelNames.addObject(model.name());
             }
+            
             // Don't want this guy getting in our way later on ;
             NSNotificationCenter.defaultCenter().removeObserver(model);
         }
@@ -461,6 +494,23 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         _validationQualiferCache = new NSMutableDictionary();
     }
 
+    public void modelFileDidChange(NSNotification n) {
+        File file = (File)n.object();
+        try {
+            defaultLog.debug("Reading .plist for entity <"+entity()+">");
+
+            NSDictionary userInfo = (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXFileUtilities.stringFromFile(file));
+            entity().setUserInfo((NSDictionary)userInfo.objectForKey("userInfo"));
+            
+            _validationInfo = ERXValueUtilities.dictionaryValue(entity().userInfo().objectForKey("ERXValidation"));
+            _validationQualiferCache = new NSMutableDictionary();
+            _initialDefaultValues = null;
+            readDefaultValues();
+        } catch(Exception ex) {
+            defaultLog.error("Can't read file <"+file.getAbsolutePath()+">", ex);
+        }
+    }
+    
     /**
      * This method is called when an object is
      * about to be deleted. If any validation
