@@ -206,6 +206,31 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
     }
 
+    /** Checks if the current object can be edited. */
+    public boolean isObjectEditable() {
+        boolean result = !isEntityReadOnly();
+        Object o = object();
+        if (o instanceof ERXGuardedObjectInterface) {
+            result = result && ((ERXGuardedObjectInterface)o).canUpdate();
+        }
+        return result;
+    }
+
+    /** Checks if the current object can be deleted. */
+    public boolean isObjectDeleteable() {
+        boolean result = !isEntityReadOnly();
+        Object o = object();
+        if (o instanceof ERXGuardedObjectInterface) {
+            result = result && ((ERXGuardedObjectInterface)o).canDelete();
+        }
+        return result;
+    }
+
+    /** Checks if the current object can be viewed. */
+    public boolean isObjectInspectable() {
+        return true;
+    }
+
     /** Checks if there is a validation exception in the D2WContext for the current property key. */
     public boolean hasValidationExceptionForPropertyKey() {
         return d2wContext().propertyKey() != null && keyPathsWithValidationExceptions.count() != 0 ?
