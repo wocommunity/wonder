@@ -521,7 +521,7 @@ There are three ways to use this script:
     
     <target name="WOOgnl.all">
         <antcall target="global.framework" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="Common/Frameworks/WOOgnl" />
 
