@@ -118,32 +118,34 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return name of the entity pointed to by the propertyKey
      *		off of the object in the context.
      */
-     // CHECKME: Should just be able to use 'smartRelationship.destinationEntity.name'
+    // CHECKME: Should just be able to use 'smartRelationship.destinationEntity.name'
     public Object defaultEmbeddedEntityName(D2WContext c) {
-        Object result = null;
-        Object rawObject=c.valueForKey("object");
-        String propertyKey=c.propertyKey();
-        if (rawObject!=null && rawObject instanceof EOEnterpriseObject && propertyKey != null) {
-            EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
-            EOEnterpriseObject lastEO=object;
-            if (propertyKey.indexOf(".")!=-1) {
-                String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
-                Object rawLastEO=object.valueForKeyPath(partialKeyPath);
-                lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
+        Object result = c.valueForKeyPath("smartRelationship.destinationEntity.name");
+        if(result == null) {
+            Object rawObject=c.valueForKey("object");
+            String propertyKey=c.propertyKey();
+            if (rawObject!=null && rawObject instanceof EOEnterpriseObject && propertyKey != null) {
+                EOEnterpriseObject object=(EOEnterpriseObject)rawObject;
+                EOEnterpriseObject lastEO=object;
+                if (propertyKey.indexOf(".")!=-1) {
+                    String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(propertyKey);
+                    Object rawLastEO=object.valueForKeyPath(partialKeyPath);
+                    lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
+                }
+                if (lastEO!=null) {
+                    // FIXME: Should be using the model group from the ec of the lastEO.
+                    EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
+                    String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(propertyKey);
+                    result=entity.relationshipNamed(lastKey);
+                }
             }
-            if (lastEO!=null) {
-                // FIXME: Should be using the model group from the ec of the lastEO.
-                EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
-                String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(propertyKey);
-                result=entity.relationshipNamed(lastKey);
+            if (result==null) {
+                result=c.relationship();
+                log.warn(propertyKey + "-" + rawObject);
             }
-        } 
-        if (result==null) {
-            result=c.relationship();
-            log.warn(propertyKey + "-" + rawObject);
+            if (result != null)
+                result = ((EORelationship)result).destinationEntity().name();
         }
-        if (result != null)
-            result = ((EORelationship)result).destinationEntity().name();
         return result;
     }
 
@@ -155,7 +157,9 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      *		the value of the current embeddedEntityname.
      */
     public String defaultEmbeddedListPageConfiguration(D2WContext c) {
-        return "ListEmbedded" + c.valueForKey("embeddedEntityName");
+        String result = "ListEmbedded" + c.valueForKey("embeddedEntityName");
+        log.debug(result);
+        return result;
     }
 
     /**
