@@ -42,7 +42,8 @@ public class ERXPatcher  {
 
 
     public static synchronized void installPatches() {
-
+        DynamicElementsPatches.cleanupXHTML = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXPatcher.cleanupXHTML"), false);
+        
         ERXPatcher.setClassForName(DynamicElementsPatches.SubmitButton.class, "WOSubmitButton");
         ERXPatcher.setClassForName(DynamicElementsPatches.ResetButton.class, "WOResetButton");
         ERXPatcher.setClassForName(DynamicElementsPatches.TextField.class, "WOTextField");
