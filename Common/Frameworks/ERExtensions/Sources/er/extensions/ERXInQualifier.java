@@ -20,7 +20,7 @@ import com.webobjects.eoaccess.*;
  * USER_ID IN (<array of numbers or data>)
  */
 // ENHANCEME: Should support in memory qualification
-// ENHANCEME: Should support restrictive qualifiers
+// ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
 
     /** register SQL generation support for the qualifier */
@@ -28,18 +28,6 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
         EOQualifierSQLGeneration.Support.setSupportForClass(new InQualifierSQLGenerationSupport(), ERXInQualifier.class);
     }
     
-    /**
-    * Public constructor inherited by EOKeyValueQualifier.
-     * @param key to qualify against
-     * @param s selector to use
-     * @param v value object
-     */
-    public ERXInQualifier(String k,
-                          NSSelector s,
-                          Object v) {
-        super(k,s,v);
-    }
-
     /**
     * Constructs an in qualifer for a given
      * attribute name and an array of values.
@@ -56,7 +44,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
      * @return string description of the qualifier
      */
     public String toString() {
-        return " <key: " + key() + " > IN '" + value() + "'";
+        return " <" + getClass().getName() + " key: " + key() + " > IN '" + value() + "'";
     }
     
     /*
@@ -67,7 +55,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
      * @return cloned primary key list qualifier.
      */
     public Object clone() {
-        return new ERXInQualifier(key(), selector(), value());
+        return new ERXInQualifier(key(), (NSArray)value());
     }
 
     /**
