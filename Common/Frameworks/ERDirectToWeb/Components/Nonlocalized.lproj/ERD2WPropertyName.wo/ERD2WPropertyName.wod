@@ -4,7 +4,6 @@ Conditional1: WOConditional {
 
 Conditional2: WOConditional {
 	condition = displayRequiredMarker;
-	negate = true;
 }
 
 GenericContainer1: WOGenericContainer {
