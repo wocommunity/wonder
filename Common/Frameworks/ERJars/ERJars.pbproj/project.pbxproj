@@ -123,6 +123,7 @@
 			files = (
 				6685560A01E84B5800CD2930,
 				504840DE040C01DE00CF0E76,
+				D777C4ED04571EB800000064,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +521,7 @@
 			children = (
 				6685560801E84B5700CD2930,
 				504840DD040C01DE00CF0E76,
+				D777C4EC04571EB800000064,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -614,6 +616,32 @@
 //662
 //663
 //664
+//D70
+//D71
+//D72
+//D73
+//D74
+		D777C4EC04571EB800000064 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = mail.jar;
+			path = Libraries/mail.jar;
+			refType = 4;
+		};
+		D777C4ED04571EB800000064 = {
+			fileRef = D777C4EC04571EB800000064;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+//D70
+//D71
+//D72
+//D73
+//D74
 //F60
 //F61
 //F62
