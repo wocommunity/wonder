@@ -40,12 +40,6 @@ public class ERJDBCAdaptor extends
      */
     public Connection checkoutConnection() {
         Connection c = ERXJDBCConnectionBroker.connectionBrokerForAdaptor(this).getConnection();
-        try {
-            log.info("autoCommit = "+c.getAutoCommit());
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         return c;
     }
