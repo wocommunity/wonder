@@ -14,10 +14,7 @@ import org.apache.log4j.spi.LoggingEvent;
 import java.util.Enumeration;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAdaptor;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.*;
 
 /**
  * The ERXPatternLayout adds some additional (and needed) layout options. The
@@ -121,6 +118,10 @@ class ERXPatternParser extends PatternParser {
                 addConverter(new JavaVMInfoPatternConverter(formattingInfo, extractOption()));
                 currentLiteral.setLength(0);
                 break;
+            case 'T':
+                addConverter(new ThreadStoragePatternConverter(formattingInfo, extractOption()));
+                currentLiteral.setLength(0);
+                break;                
             default: 
                 super.finalizeConverter(c);            
                 break;
@@ -162,7 +163,7 @@ class ERXPatternParser extends PatternParser {
                     first = false;                    
             }
             return "\t" + subParts.componentsJoinedByString("\n\t") + "\n";
-        }        
+        }
     }
 
     /**
@@ -197,6 +198,40 @@ class ERXPatternParser extends PatternParser {
             }
             return _appName != null ? _appName : "N/A";
         }
+    }
+
+    private class ThreadStoragePatternConverter extends PatternConverter {
+        private String key;
+        private NSArray keyParts;
+        private boolean isKeyPath;
+
+        ThreadStoragePatternConverter(FormattingInfo formattingInfo, String key) {
+            super(formattingInfo);
+            this.key = key;
+            isKeyPath = key != null && key.indexOf(".") != -1;
+            if (isKeyPath)
+                keyParts = NSArray.componentsSeparatedByString(key, ".");
+        }
+
+        public String convert(LoggingEvent event) {
+            Object value = null;
+            if (!isKeyPath) {
+                value = key != null ? ERXThreadStorage.valueForKey(key) : ERXThreadStorage.map();
+            } else {
+                value = ERXThreadStorage.map();
+                for (int j = 0; j < keyParts.count(); j++) {
+                    String part = (String)keyParts.objectAtIndex(j);
+                    if (j == 0) {
+                        value = ERXThreadStorage.valueForKey(part);
+                    } else {
+                        value = NSKeyValueCoding.Utility.valueForKey(value, part);
+                    }
+                    if (value == null)
+                        break;
+                }                
+            }
+            return value != null ? value.toString() : null;
+        }        
     }
     
     /**
