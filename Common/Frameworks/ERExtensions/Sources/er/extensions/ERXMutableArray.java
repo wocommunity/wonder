@@ -72,6 +72,9 @@ public class ERXMutableArray extends NSMutableArray implements List {
         return toBlob(this);
     }
 
+    public NSMutableArray mutableClone() {
+        return new ERXMutableArray((NSArray)this);
+    }
 
     /**
      * Removes a single instance of the specified element from this
