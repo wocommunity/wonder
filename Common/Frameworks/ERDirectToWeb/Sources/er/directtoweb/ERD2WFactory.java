@@ -26,7 +26,7 @@ public class ERD2WFactory extends D2W {
     protected static final ERXLogger log = ERXLogger.getERXLogger(ERD2WFactory.class);
 
     /**
-     * Gets the D2W facotry cast as an ERD2WFactory objects.
+     * Gets the D2W factory cast as an ERD2WFactory objects.
      * @return the singleton factory
      */
     public static ERD2WFactory erFactory() {
@@ -199,11 +199,14 @@ public class ERD2WFactory extends D2W {
         epi.setNextPage(s.context().page());
         return (WOComponent)epi;
     }
+
+    // ak: These next set of methods are intented to be overidden and extended
+    // however, the java compiler refuses to create a object method with the
+    // same name as a static one, thus the "_" prefix
     /**
      * Gets the <code>pageConfiguration</code> from the current page.
      */
-    // FIXME ak Actually, we don't need to be static
-    public static String pageConfigurationFromPage(WOComponent page) {
+    protected String _pageConfigurationFromPage(WOComponent page) {
         String pageConfiguration = null;
         if(page instanceof D2WPage) {
             if(((D2WPage)page).d2wContext() != null) {
@@ -211,8 +214,8 @@ public class ERD2WFactory extends D2W {
             }
         }
         if(pageConfiguration == null) {
-            String task = ERD2WFactory.taskFromPage(page);
-            String entityName = ERD2WFactory.entityNameFromPage(page);
+            String task = taskFromPage(page);
+            String entityName = entityNameFromPage(page);
             if(task != null) {
                 task = ERXStringUtilities.capitalize(task);
             } else {
@@ -234,9 +237,8 @@ public class ERD2WFactory extends D2W {
      * take the ERD2W interfaces into account.
      */
 
-    // FIXME ak Actually, we don't need to be static
     // FIXME ak We need to take the ERD2W interfaces into account
-    public static String taskFromPage(WOComponent page) {
+    protected String _taskFromPage(WOComponent page) {
         if(page == null)
             return null;
         if(page instanceof D2WPage)
@@ -261,8 +263,7 @@ public class ERD2WFactory extends D2W {
      * go up the component tree, but rather calls<code>entityName()</code>
      * and tries the "super" implementation if that fails.
      */
-    // FIXME ak Actually, we don't need to be static
-    public static String entityNameFromPage(WOComponent page) {
+    protected String _entityNameFromPage(WOComponent page) {
         if(page instanceof D2WPage) {
             try {
                 return ((D2WPage)page).entityName();
@@ -271,5 +272,27 @@ public class ERD2WFactory extends D2W {
             }
         }
         return D2W.entityNameFromPage(page);
+    }
+
+
+    /**
+     * Gets the <code>entityName</code> from the current page. Simply wrap the factory method {@link #_entityNameFromPage(WOComponent)}.
+     */
+    public static String entityNameFromPage(WOComponent page) {
+        return ERD2WFactory.erFactory()._entityNameFromPage(page);
+    }
+
+    /**
+     * Gets the <code>task</code> from the current page. Simply wrap the factory method {@link #_taskFromPage(WOComponent)}.
+     */
+    public static String taskFromPage(WOComponent page) {
+        return ERD2WFactory.erFactory()._taskFromPage(page);
+    }
+
+    /**
+     * Gets the <code>pageConfiguration</code> from the current page. Simply wrap the factory method {@link #_pageConfigurationFromPage(WOComponent)}.
+     */
+    public static String pageConfigurationFromPage(WOComponent page) {
+        return ERD2WFactory.erFactory()._pageConfigurationFromPage(page);
     }
 }
