@@ -436,7 +436,6 @@
 				017C7B51FFD714AF7F000001,
 				022D130C0059B6D611CD2978,
 				F510756102C453E601000102,
-				F510762C02C4541801000102,
 				F59C599A02C4575701000102,
 			);
 			isa = PBXFrameworksBuildPhase;
@@ -969,7 +968,6 @@
 			children = (
 				F510755F02C453E501000102,
 				40B5828DFFD5E91B7F000001,
-				F510756402C4541701000102,
 				40B5828EFFD5E91B7F000001,
 				40B5828FFFD5E91B7F000001,
 				F59C599802C4575701000102,
@@ -1112,18 +1110,6 @@
 		};
 		F510756102C453E601000102 = {
 			fileRef = F510755F02C453E501000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F510756402C4541701000102 = {
-			isa = PBXFrameworkReference;
-			name = JavaEOApplication.framework;
-			path = /System/Library/Frameworks/JavaEOApplication.framework;
-			refType = 0;
-		};
-		F510762C02C4541801000102 = {
-			fileRef = F510756402C4541701000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
