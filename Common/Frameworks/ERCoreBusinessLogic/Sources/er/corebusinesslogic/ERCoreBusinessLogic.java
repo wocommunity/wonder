@@ -14,17 +14,42 @@ import er.extensions.*;
 import java.util.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
+
+    //	===========================================================================
+    //	Class constant(s)
+    //	---------------------------------------------------------------------------    
     
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreBusinessLogic.class);
+    
+    /** property key that holds the email domain of the generated from email */
+    public static final String ProblemEmailDomainPropertyKey = "er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain";
 
+    /** property key that holds the emails of those who recieve problem emails */
+    public static final String ProblemEmailRecipientsPropertyKey = "er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailRecipients";
+
+    //	===========================================================================
+    //	Class variable(s)
+    //	---------------------------------------------------------------------------    
+    
+    /** holds the shared instance reference */
     protected static ERCoreBusinessLogic sharedInstance;
 
-    
+    /**
+     * Registers the class as the framework principal
+     */
     static {
         setUpFrameworkPrincipalClass(ERCoreBusinessLogic.class);
     }
 
+    //	===========================================================================
+    //	Class method(s)
+    //	---------------------------------------------------------------------------    
+    
+    /**
+     * Gets the shared instance of the ERCoreBusinessLogic.
+     * @return shared instance.
+     */
     public static ERCoreBusinessLogic sharedInstance() {
         if (sharedInstance == null) {
             sharedInstance = (ERCoreBusinessLogic)ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
@@ -32,17 +57,93 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         return sharedInstance;
     }
 
+    /**
+     * Sets the actor in the current thread storage.
+     * @param actor current user for this thread
+     */
+    public static void setActor(EOEnterpriseObject actor) {
+        if (log.isDebugEnabled())
+            log.debug("Setting actor to : "+actor);
+        if (actor!=null)
+            ERXThreadStorage.takeValueForKey(actor, "actor");
+        else
+            ERXThreadStorage.removeValueForKey("actor");
+    }
+
+    /**
+     * Gets the actor as a local instance in the given context.
+     * @param ec editing context to pull a local copy of the actor
+     *		into
+     * @return actor instance in the given editing context
+     */
+    public static EOEnterpriseObject actor(EOEditingContext ec) {
+        EOEnterpriseObject result = actor();
+        if (result != null && result.editingContext() != ec)
+            result = (EOEnterpriseObject)ERXUtilities.localInstanceOfObject(ec,result);
+        return result;
+    }
+
+    /**
+     * Gets the actor.
+     * @return current actor for the thread
+     */
+    public static EOEnterpriseObject actor() {
+        return (EOEnterpriseObject) ERXThreadStorage.valueForKey( "actor");
+    }
+
+    public static String staticStoredValueForKey(String key) {
+        return ERCStatic.staticClazz().staticStoredValueForKey(key);
+    }
+    public static int staticStoredIntValueForKey(String key) {
+        return ERCStatic.staticClazz().staticStoredIntValueForKey(key);
+    }
+    public static String staticStoredValueForKey(String key, EOEditingContext ec) {
+        return ERCStatic.staticClazz().staticStoredValueForKey(ec, key);
+    }
+    public static int staticStoredIntValueForKey(String key, EOEditingContext ec) {
+        return ERCStatic.staticClazz().staticStoredIntValueForKey(ec, key);
+    }
+
+    public static void takeStaticStoredValueForKey(String value, String key, EOEditingContext editingContext) {
+        ERCStatic.staticClazz().takeStaticStoredValueForKey(editingContext, value, key);
+    }
+
+    public static void invalidateStaticValueForKeyCache() {
+        ERCStatic.staticClazz().invalidateCache();
+    }
+
+    //	===========================================================================
+    //	Instance variable(s)
+    //	---------------------------------------------------------------------------
+
+    /** caches the email addresses to send to in the case of problems */
+    protected NSArray _emailsForProblemRecipients;
+
+    /** caches the problem email address domain */
+    protected String _problemEmailDomain;
+    
+    //	===========================================================================
+    //	Instance method(s)
+    //	---------------------------------------------------------------------------    
+    
+    /**
+     * Called when it is time to finish the
+     * initialization of the framework.
+     */
     public void finishInitialization() {
+        // Initialized shared data
         initializeSharedData();
         // Register handlers for user preferences.
         ERCoreUserPreferences.userPreferences().registerHandlers();
         log.debug("ERCoreBusinessLogic: finishInitialization");
     }
 
-    // Shared Data Init Point.  Keep alphabetical
+    /**
+     * Initializes the shared eof data.
+     */
     public void initializeSharedData() {
+        // Shared Data Init Point.  Keep alphabetical
         ERCMailState.mailStateClazz().initializeSharedData();
-        //MailMessage.initializeSharedData();
     }
 
     /**
@@ -71,103 +172,68 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         preferencesRelationship.setJoinSemantic(EORelationship.InnerJoin);
     }
 
-    private static EOEnterpriseObject _contactInfo;
-    public static EOEnterpriseObject contactInfo() {return _contactInfo;}
-    public static void setContactInfo(EOEnterpriseObject info) {
-        log.debug("setContactInfo: Registered "+info);
-        _contactInfo=info;
-    }
-
-    private static NSArray _emailsForProblemRecipients;
-    public static NSArray emailsForProblemRecipients() {
+    /**
+     * Gets the array of email addresses to send emails
+     * about problems to.
+     * @return array of email addresses
+     */
+    public NSArray emailsForProblemRecipients() {
+        if (_emailsForProblemRecipients == null) {
+            _emailsForProblemRecipients = ERXProperties.arrayForKeyWithDefault(ProblemEmailRecipientsPropertyKey,
+                                                                               NSArray.EmptyArray);
+        }
         return _emailsForProblemRecipients;
     }
-    public static void setEmailsForProblemRecipients(NSArray a) {
-        log.debug("setEmailsForProblemRecipients: Registered "+a);
+
+    /**
+     * Sets the emails for problem recipients. Should
+     * be an array of email addresses to report exceptions
+     * to in production applications.
+     * @param a array of email addresses
+     */
+    public void setEmailsForProblemRecipients(NSArray a) {
         _emailsForProblemRecipients=a;
     }
-    private static String _originatorForProblemEmails;
-    public static String originatorForProblemEmails() {
-        return _originatorForProblemEmails;
-    }
-    public static void setOriginatorForProblemEmails(String email) {
-        log.debug("setOriginatorForProblemEmails: Registered "+email);
-        _originatorForProblemEmails=email;
-    }
 
-    //------------------------------------------------------------------
-
-    public static String staticStoredValueForKey(String key) {
-        return ERCStatic.staticClazz().staticStoredValueForKey(key);
-    }
-    public static int staticStoredIntValueForKey(String key) {
-        return ERCStatic.staticClazz().staticStoredIntValueForKey(key);
-    }
-    public static String staticStoredValueForKey(String key, EOEditingContext ec) {
-        return ERCStatic.staticClazz().staticStoredValueForKey(ec, key);
-    }
-    public static int staticStoredIntValueForKey(String key, EOEditingContext ec) {
-        return ERCStatic.staticClazz().staticStoredIntValueForKey(ec, key);
-    }
-    
-    public static void takeStaticStoredValueForKey(String value, String key, EOEditingContext editingContext) {
-        ERCStatic.staticClazz().takeStaticStoredValueForKey(editingContext, value, key);
-    }
-
-    public static void invalidateStaticValueForKeyCache() {
-        ERCStatic.staticClazz().invalidateCache();
-    }
-    
-
-    public static void setActor(EOEnterpriseObject actor) {
-        if (log.isDebugEnabled())
-            log.debug("Setting actor to : "+actor);
-        if (actor!=null)
-            ERXThreadStorage.takeValueForKey(actor, "actor");
-        else
-            ERXThreadStorage.removeValueForKey("actor");
-    }
-    
-    public static EOEnterpriseObject actor(EOEditingContext ec) {
-        EOEnterpriseObject result = actor();
-        if (result != null && result.editingContext() != ec)
-            result = (EOEnterpriseObject)ERXUtilities.localInstanceOfObject(ec,result);
-        return result;
-    }
-    
-    public static EOEnterpriseObject actor() {
-         return (EOEnterpriseObject) ERXThreadStorage.valueForKey( "actor");
-    }
-
-    // Logging support
-    public static ERCLogEntry createLogEntryLinkedToEO(EOEnterpriseObject type,
-                                                       String text,
-                                                       EOEnterpriseObject eo,
-                                                       String relationshipKey) {
-        EOEditingContext editingContext=eo.editingContext();
-        ERCLogEntry logEntry = (ERCLogEntry)ERCLogEntry.logEntryClazz().createAndInsertObject(editingContext);
-        if(type != null) {
-            // CHECKME: (ak) what's type supposed to do??
-            // logEntry.addObjectToBothSidesOfRelationshipWithKey(type,"type");
+    /**
+     * Gets the problem email domain. This is used for constructing the
+     * from address when reporting an exception. Should be of the form:
+     * foo.com.
+     * @return problem email address domain
+     */
+    public String problemEmailDomain() {
+        if (_problemEmailDomain == null) {
+            _problemEmailDomain = System.getProperty(ProblemEmailDomainPropertyKey);
         }
-        if(relationshipKey != null) {
-            // CHECKME: (ak) what's relationshipKey supposed to do??
-            // logEntry.addObjectToBothSidesOfRelationshipWithKey(eo,relationshipKey);
-        }
-        logEntry.setText(text);
-        return logEntry;
+        return _problemEmailDomain;
+    }
+
+    /**
+     * Sets the problem email domain.
+     * @param value to set problem domain to
+     */
+    public void setProblemEmailDomain(String value) {
+        _problemEmailDomain = value;
     }
     
-    // ----------------------------------------------------------------------------------------
-    // Exception reporting
-    public static void reportException(Throwable exception, NSDictionary extraInfo) {
+    /**
+     * Reports an exception. If caching is enabled then the exception
+     * will also be emailed to the problem mail recipients.
+     * @param exception to be reported
+     * @param extraInfo dictionary of extra information about what was
+     *		happening when the exception was thrown.
+     */
+    public void reportException(Throwable exception, NSDictionary extraInfo) {
+        if (exception instanceof NSForwardException) {
+            exception = ((NSForwardException)exception).originalException();
+        }
         StringBuffer s = new StringBuffer();
         try {
             s.append("    **** Caught: "+exception + "\n");
             s.append("         Actor: "+actor() + "\n");
             s.append("         Extra Information "+extraInfo + "\n");
             if (exception instanceof EOGeneralAdaptorException) {
-                EOGeneralAdaptorException  e=(EOGeneralAdaptorException)exception;
+                EOGeneralAdaptorException  e= (EOGeneralAdaptorException)exception;
                 if (e.userInfo()!=null) {
                     Object userInfo=e.userInfo();
                     if (userInfo instanceof NSDictionary) {
@@ -177,33 +243,39 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                             Object value=uid.objectForKey(key);
                             s.append(key + " = " + value + ";\n");
                         }
-                    } else
+                    } else {
                         s.append(e.userInfo().toString());
-                    log.warn(s.toString());
+                    }
                 }
             } else {
-                exception.printStackTrace();
+                s.append(ERXUtilities.stackTrace(exception));
             }
-            if (WOApplication.application().isCachingEnabled()) {// we take this to mean we are in deployment
-                ERCMailableExceptionPage standardExceptionPage=(ERCMailableExceptionPage)WOApplication.application().pageWithName("ERCMailableExceptionPage",new WOContext(new WORequest(null, null, null, null, null, null)));
-                standardExceptionPage.setException(exception);
-                standardExceptionPage.setActor(actor());
-                standardExceptionPage.setExtraInfo(extraInfo);
+            log.warn(s.toString());
+            
+            // we take this to mean we are in deployment
+            if (WOApplication.application().isCachingEnabled()) {
+                if (emailsForProblemRecipients().count() == 0 || problemEmailDomain() == null) {
+                    log.error("Unable to log problem due to misconfiguration: recipients: "
+                              + emailsForProblemRecipients() + " email domain: " + problemEmailDomain());
+                } else {
+                    ERCMailableExceptionPage standardExceptionPage=(ERCMailableExceptionPage)WOApplication.application().pageWithName("ERCMailableExceptionPage",new WOContext(new WORequest(null, null, null, null, null, null)));
+                    standardExceptionPage.setException(exception);
+                    standardExceptionPage.setActor(actor());
+                    standardExceptionPage.setExtraInfo(extraInfo);
 
-                EOEditingContext ec = ERXExtensions.newEditingContext();
-                NSData d = standardExceptionPage.generateResponse().content();
-                String exceptionString = new String(d.bytes(0, d.length())); // FIXME inefficient?
-                String exceptionName = exception.getClass().getName();
-                String hostName = java.net.InetAddress.getLocalHost().getHostName();
+                    EOEditingContext ec = ERXExtensions.newEditingContext();
+                    String exceptionName = exception.getClass().getName();
+                    String hostName = ERXConfigurationManager.defaultManager().hostName();
 
-                ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@netstruxr.com",
-                                                              (NSArray)emailsForProblemRecipients(),
-                                                              null,
-                                                              null,
-                                                              exceptionName+" in "+WOApplication.application().name(),
-                                                              exceptionString,
-                                                              ec);
-                ec.saveChanges();
+                    ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
+                                                                  emailsForProblemRecipients(),
+                                                                  null,
+                                                                  null,
+                                                                  exceptionName+" in "+WOApplication.application().name(),
+                                                                  standardExceptionPage.generateResponse().contentString(),
+                                                                  ec);
+                    ec.saveChanges();
+                }                
             }
         } catch (Throwable u) {
             try {
@@ -212,7 +284,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                 s.append(ERXUtilities.stackTrace(exception));
                 s.append("** Second exception ");
                 s.append(ERXUtilities.stackTrace(u));
-                WOApplication.application().logString(s.toString());
+                NSLog.err.appendln(s.toString());
+                log.error(s.toString());
             } catch (Throwable u2) {} // WE DON'T WANT ANYTHING TO GO WRONG IN HERE as it would cause the app to instantly exit
         }
     }
