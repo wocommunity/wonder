@@ -8,6 +8,7 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
 
 /**
@@ -39,6 +40,13 @@ public class ERDInspect extends ERDCustomEditComponent {
         epi.setNextPage(context().page());
         return (WOComponent)epi;
     }
+
+    public WOComponent createObjectAction() {
+        EOEnterpriseObject eo = EOUtilities.createAndInsertInstance(object().editingContext(), (String) d2wContext().valueForKey("destinationEntityName"));
+        object().addObjectToBothSidesOfRelationshipWithKey(eo, key());
+        return context().page();
+    }
+    
     
     public WOComponent clearAction() {
         object().removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject)object().valueForKey(key()), key());
