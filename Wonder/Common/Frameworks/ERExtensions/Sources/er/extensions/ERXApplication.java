@@ -207,7 +207,7 @@ public abstract class ERXApplication extends WOApplication {
         */
     public static WOComponent instantiatePage (String pageName) {
         // Create a context from a fake request
-        WORequest fakeRequest = new WORequest("GET", "", "HTTP/1.1", null, null, null);
+        WORequest fakeRequest = new ERXRequest("GET", "", "HTTP/1.1", null, null, null);
         WOContext context = application().createContextForRequest( fakeRequest );
         return application().pageWithName(pageName, context);
     }
@@ -398,6 +398,40 @@ public abstract class ERXApplication extends WOApplication {
                 Runtime.getRuntime().exit( 1 );
             }
         }
+    }
+
+    /**
+     * Simple hook to null out the thread local storage so
+     * we don't hold a reference to the context object.
+     * @param request object
+     * @return response
+     */
+    public WOResponse dispatchRequest(WORequest request) {
+        WOResponse response = null;
+        try {
+            response = super.dispatchRequest(request);
+        } finally {
+            // We always want to get rid of the wocontext key.
+            ERXThreadStorage.removeValueForKey("wocontext");
+        }
+        return response;
+    }
+
+    /**
+     * When a context is created we push it into thread local storage.
+     * This handles the case for direct actions.
+     * @param request the request
+     * @return the newly created context
+     */
+    public WOContext createContextForRequest(WORequest request) {
+        WOContext context = super.createContextForRequest(request);
+        // We only want to push in the context the first time it is
+        // created, ie we don't want to loose the current context
+        // when we create a context for an error page.
+        if (ERXThreadStorage.valueForKey("wocontext") != null) {
+            ERXThreadStorage.takeValueForKey(context, "wocontext");
+        }
+        return context;
     }
     
     /** 
