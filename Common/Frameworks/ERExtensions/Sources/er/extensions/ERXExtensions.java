@@ -1138,18 +1138,23 @@ public class ERXExtensions {
     // MOVEME: ERXEOFUtilities
     public static void refreshSharedObjectsWithName(String entityName) {
         EOEditingContext peer = ERXExtensions.newEditingContext();
-        peer.setSharedEditingContext(null);
-        EOFetchSpecification fetchAll = ERXEOAccessUtilities.entityNamed(peer, entityName).fetchSpecificationNamed("FetchAll");
-        if (fetchAll != null) {
-            // Need to refault all the shared EOs first.
+        peer.lock();
+        try {
+            peer.setSharedEditingContext(null);
+            EOFetchSpecification fetchAll = ERXEOAccessUtilities.entityNamed(peer, entityName).fetchSpecificationNamed("FetchAll");
+            if (fetchAll != null) {
+                // Need to refault all the shared EOs first.
             for (Enumeration e = EOUtilities.objectsForEntityNamed(peer, entityName).objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 peer.rootObjectStore().refaultObject(eo, peer.globalIDForObject(eo), peer);
             }
-            fetchAll.setRefreshesRefetchedObjects(true);
-            peer.objectsWithFetchSpecification(fetchAll);
-        } else {
-            log().warn("Attempting to refresh a non-shared EO: " + entityName);
+                fetchAll.setRefreshesRefetchedObjects(true);
+                peer.objectsWithFetchSpecification(fetchAll);
+            } else {
+                log().warn("Attempting to refresh a non-shared EO: " + entityName);
+            }
+        } finally {
+            peer.unlock();
         }
     }
 
