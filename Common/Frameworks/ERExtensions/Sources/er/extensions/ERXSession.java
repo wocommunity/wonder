@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import org.apache.log4j.Category;
 import java.util.Enumeration;

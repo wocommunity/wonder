@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
@@ -220,12 +219,15 @@ public abstract class ERXApplication extends WOApplication {
                 }
             }
             extraInfo.setObjectForKey(context.request().uri(), "uri");
+            /* Nice information to have if you are a d2w application,
+               however ERExtensions does not link D2W.
             if (context.page() instanceof D2WComponent) {
                 D2WContext c=((D2WComponent)context.page()).d2wContext();
                 String pageConfiguration=(String)c.valueForKey("pageConfiguration");
                 if (pageConfiguration!=null)
                     extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
             }
+             */
             if (context.hasSession())
                 if (context.session().statistics() != null)
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
@@ -234,7 +236,8 @@ public abstract class ERXApplication extends WOApplication {
         return super.handleException(exception, context);
     }    
 
+    /*
     public D2WContext d2wContext() {
         return ERXExtensions.d2wContext();
-    }
+    }*/
 }

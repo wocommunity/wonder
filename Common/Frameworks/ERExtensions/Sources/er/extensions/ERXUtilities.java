@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 import java.util.Enumeration;
 import java.util.TimeZone;
@@ -498,7 +497,7 @@ public class ERXUtilities {
         EOEnterpriseObject lastEO=object;
         EORelationship relationship = null;
         if (keyPath.indexOf(".")!=-1) {
-            String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(keyPath);
+            String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
             Object rawLastEO=object.valueForKeyPath(partialKeyPath);
             lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
         }
@@ -506,7 +505,7 @@ public class ERXUtilities {
             // FIXME: Should use the model group of the object's editing context's
             //		root object store coordinator
             EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
-            String lastKey=KeyValuePath.lastPropertyKeyInKeyPath(keyPath);
+            String lastKey=ERXStringUtilities.lastPropertyKeyInKeyPath(keyPath);
             relationship=entity.relationshipNamed(lastKey);
         }
         return relationship;

@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.NextPageDelegate;
 
 public class ERXStringListPicker extends WOComponent {
 
@@ -21,7 +20,6 @@ public class ERXStringListPicker extends WOComponent {
     public Object item, _selection;
     public String explanationComponentName;
     public NSDictionary choices;
-    public NextPageDelegate nextPageDelegate;
     public WOComponent cancelPage, nextPage;
     
 
@@ -42,6 +40,6 @@ public class ERXStringListPicker extends WOComponent {
     
     public String entityNameForNewInstances() { return (String)choices.objectForKey(_selection); }
     
-    public WOComponent next() { return nextPageDelegate != null ? nextPageDelegate.nextPage(this) : nextPage; }
+    public WOComponent next() { return nextPage; }
     public WOComponent cancel() { return cancelPage; }
 }

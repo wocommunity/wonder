@@ -14,7 +14,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 
 public class ERXBatchNavigationBar extends WOComponent {

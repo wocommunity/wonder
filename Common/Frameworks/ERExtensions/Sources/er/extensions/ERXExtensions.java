@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
 import java.lang.reflect.Method;
 import java.lang.*;
 import java.util.*;
@@ -923,9 +922,9 @@ public class ERXExtensions {
                                                                                         String keyPath) {
         if (from!=null) {
             if (keyPath.indexOf('.')!=-1) { // we have a key path
-                String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(keyPath);
+                String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
                 from=(EOEnterpriseObject)from.valueForKeyPath(partialKeyPath);
-                keyPath=KeyValuePath.lastPropertyKeyInKeyPath(keyPath);
+                keyPath=ERXStringUtilities.lastPropertyKeyInKeyPath(keyPath);
             }
             //if the key is not a keyPath we can check if the key is actually a relationship
             EOEntity e=EOModelGroup.defaultGroup().entityNamed(from.entityName());
@@ -1268,6 +1267,7 @@ public class ERXExtensions {
     // DELETEME: Not sure exactly what to do with this one, tempted just to delete it
     //		to get rid of the D2W dependency. Could instead use the class description's
     //		basic name beautifier and have that be localized.
+    /*
     public static String displayNameForPropertyKey(String key, String entityName) {
         D2WContext context = d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -1279,26 +1279,28 @@ public class ERXExtensions {
         context.setPropertyKey(key);
         return context.displayNameForProperty();
     }
-
+     */
     // DELETEME: No real value add
+    /*
     public static Object configurationForKey(String key) {
         return System.getProperty(key) != null ?
         System.getProperty(key) : ERXExtensions.d2wContextValueForKey(key);
-    }
+    }*/
 
-
+    /*
     private static D2WContext _d2wContext;
     public static D2WContext d2wContext() {
         if (_d2wContext == null)
             _d2wContext = new D2WContext();
         return _d2wContext;
-    }
-    
+    }*/
+    /*
     public static Object d2wContextValueForKey(String key) {
         return key != null ? d2wContext().valueForKey(key) : null;
-    }
+    }*/
 
     // DELETEME: Shouldn't have this dependency.
+    /*
     public static Object d2wContextValueForKey(String key, String entityName) {
         D2WContext context = d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -1307,9 +1309,10 @@ public class ERXExtensions {
         // so that caching works correctly -- saves us from having to add entity as a significant key
         //System.out.println("pageConfig="+context.valueForKey("pageConfiguration"));
         return context.valueForKey(key);
-    }
+    }*/
 
     // DELETEME: This is silly.
+    /*
     public static String createConfigurationForEntityNamed(String entityName) {
         D2WContext context = d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -1318,7 +1321,7 @@ public class ERXExtensions {
         // so that caching works correctly -- saves us from having to add entity as a significant key
         context.valueForKey("pageConfiguration");
         return (String)context.valueForKey("createConfigurationNameForEntity");
-    }
+    } */
 
     /**
      * For a given enterprise object and key path, will return what
@@ -1357,11 +1360,11 @@ public class ERXExtensions {
             entity=EOModelGroup.defaultGroup().entityNamed(entityName);
             lastKey=key;
         } else {
-            String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(key);
+            String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(key);
             EOEnterpriseObject objectForPropertyDisplayed=(EOEnterpriseObject)object.valueForKeyPath(partialKeyPath);
             if (objectForPropertyDisplayed!=null) {
                 entity=EOModelGroup.defaultGroup().entityNamed(objectForPropertyDisplayed.entityName());
-                lastKey=KeyValuePath.lastPropertyKeyInKeyPath(key);
+                lastKey=ERXStringUtilities.lastPropertyKeyInKeyPath(key);
             }
         }
         if (entity!=null && lastKey!=null) {
@@ -1402,7 +1405,7 @@ public class ERXExtensions {
         // this method resolves the @keyPath..
         if(userInfoUnitString!=null && userInfoUnitString.indexOf("@")>-1){
             String keyPath = userInfoUnitString.substring(1);
-            String PropertyKeyWithoutLastProperty = KeyValuePath.keyPathWithoutLastProperty(prefixKeyPath);
+            String PropertyKeyWithoutLastProperty = ERXStringUtilities.keyPathWithoutLastProperty(prefixKeyPath);
             EOEnterpriseObject objectForPropertyDisplayed = null;
             if(PropertyKeyWithoutLastProperty!=null){
                 objectForPropertyDisplayed = object!=null ? (EOEnterpriseObject)object.valueForKeyPath(PropertyKeyWithoutLastProperty) : null;

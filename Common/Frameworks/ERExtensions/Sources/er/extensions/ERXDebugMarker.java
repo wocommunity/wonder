@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 
 public class ERXDebugMarker extends WOComponent {
@@ -53,7 +52,9 @@ public class ERXDebugMarker extends WOComponent {
     }
 
     public static WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s) {
-        return (WOComponent)D2W.factory().inspectPageForEntityNamed(o.entityName(),s);
+        // Don't want the dependency on D2W. Not sure what the best solution is
+        //return (WOComponent)D2W.factory().inspectPageForEntityNamed(o.entityName(),s);
+        return null;
     }
     
 }
