@@ -507,11 +507,6 @@ public class ERXSession extends WOSession implements Serializable {
      */
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         messageEncoding().setEncodingToResponse(aResponse);
-        if (aContext != null && aContext.request() != null) {
-            if (ERXApplication.requestHandlingLog.isInfoEnabled()) {
-                ERXApplication.requestHandlingLog.info(aContext.request());
-            }
-        }
         super.appendToResponse(aResponse, aContext);
     }
 
