@@ -4,6 +4,16 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
+SubmitChanges2: WOImageButton {
+	action = submitAction;
+	border = 0;
+	filename = "SaveMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = 1;
+	name = "Saves your changes";
+	width = 1;
+}
+
 AttributeValue1: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
