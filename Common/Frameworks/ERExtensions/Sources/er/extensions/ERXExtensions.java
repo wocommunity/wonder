@@ -103,7 +103,6 @@ public class ERXExtensions {
             ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
-            ERXArrayUtilities.initialize();
         }
 
         /**
@@ -141,13 +140,15 @@ public class ERXExtensions {
                 // This will load any optional configuration files, 
                 ERXConfigurationManager.defaultManager().initialize();
                 ERXLogger.configureLogging(System.getProperties());
-                
-                log().info("Initializing framework: ERXExtensions");
+
+                log().debug("Initializing framework: ERXExtensions");
 
                 NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
                 NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
 
+                ERXArrayUtilities.initialize();
+                
                 // False by default
                 if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
                     ERXSharedEOLoader.patchSharedEOLoading();
