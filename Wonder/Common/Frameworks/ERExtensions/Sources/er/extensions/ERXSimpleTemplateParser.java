@@ -59,7 +59,7 @@ public class ERXSimpleTemplateParser {
     protected boolean isLoggingDisabled = false;
 
     /** The label that will be appeared where an undefined key is found */ 
-    private String _undefinedKeyLabel;
+    private final String _undefinedKeyLabel;
 
     /** 
      * Returns a parser object with the default undefined label
