@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import org.apache.log4j.*;
 import org.apache.log4j.spi.*;
 import org.apache.log4j.helpers.LogLog;
@@ -24,21 +23,7 @@ import org.apache.log4j.helpers.LogLog;
 //	BufferSize - Number of Events to catch before calling ec.saveChanges()
 /////////////////////////////////////////////////////////////////////////////////////////////
 public class ERXEOFAppender extends AppenderSkeleton {
-
-    // FIXME:  Here we assume that the Log4j system is configured before the first CooperatingObjectStore
-    //		is created.  We need a way to determine if it is ok to create an editing context and insert
-    //		objects.
-    //	Max: Should use EOCooperatingObjectStore.defaultCoordinator().cooperatingObjectStores().count()
     
-    public ERXEOFAppender() {
-        ERXRetainer.retain(this);
-        NSNotificationCenter.defaultCenter().addObserver(this,
-                                                         new NSSelector("objectStoreWasAdded",
-                                                                        ERXConstant.NotificationClassArray),
-                                                         EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification,
-                                                         null);
-    }
-
     public boolean requiresLayout() { return false; }
     public synchronized void close() {
         if (!closed)
@@ -50,28 +35,38 @@ public class ERXEOFAppender extends AppenderSkeleton {
     public void setLoggingEntity(String loggingEntity) { loggingEntity = loggingEntity; }
     
     protected EOEditingContext ec;
-    protected boolean objectStoreWasAdded = false;
     public void objectStoreWasAdded(NSNotification n) {
-        objectStoreWasAdded = true;
         ec = ERXExtensions.newEditingContext();
-        NSNotificationCenter.defaultCenter().removeObserver(this);
-        ERXRetainer.release(this);
     }
 
+    // ENHANCEME: Should also check if the application has fully started up
+    protected boolean safeToCreateEditingContext() {
+        return EOObjectStoreCoordinator.defaultCoordinator().cooperatingObjectStores().count() > 0;
+    }
+
+    protected EOEditingContext editingContext() {
+        if (ec == null) {
+            if (safeToCreateEditingContext()) {
+                ec = ERXExtensions.newEditingContext();
+            }
+        }
+        return ec;
+    }
+    
     protected int bufferSize = -1;
     public int getBufferSize() { return bufferSize; }
     public void setBufferSize(int bufferSize) {
         if (bufferSize <= 0)
             LogLog.warn("BufferSize must be greater than 0!  Attempted to set bufferSize to: " + bufferSize);
         else
-            bufferSize = bufferSize;
+            this.bufferSize = bufferSize;
     }
     
     protected boolean conditionsChecked = false;
     protected boolean checkConditions() {
         if (getLoggingEntity() == null) {
             LogLog.warn("Attempting to log an event with a null LoggingEntity specified.");
-        } else if (!objectStoreWasAdded) {
+        } else if (!safeToCreateEditingContext()) {
             LogLog.warn("Attempting to log an event to an EREOFAppender before an ObjectStoreCoordinator has been added.");
         } else {
             conditionsChecked = true;
@@ -95,17 +90,23 @@ public class ERXEOFAppender extends AppenderSkeleton {
             LogLog.warn("Unable to log event: " + event.getMessage());
         }
     }
-
+    
     protected int currentBufferSize = 1;
     protected void subAppend(LoggingEvent event) {
         // Create Log Entry for event.
-        ERXEOFLogEntryInterface logEntry = (ERXEOFLogEntryInterface)ERXUtilities.createEO(getLoggingEntity(), ec);
-        // Note that layout is not required and can be null.
-        logEntry.intializeWithLoggingEvent(event, layout);
-        if (getBufferSize() == -1 || currentBufferSize == getBufferSize()) {
-            ec.saveChanges();
-        } else {
-            currentBufferSize++;
+        if (editingContext() != null) {
+            ERXEOFLogEntryInterface logEntry = (ERXEOFLogEntryInterface)ERXUtilities.createEO(getLoggingEntity(),
+                                                                                              editingContext());
+            // Note that layout is not required and can be null.
+            logEntry.intializeWithLoggingEvent(event, layout);
+            if (getBufferSize() == -1 || currentBufferSize == getBufferSize()) {
+                editingContext().saveChanges();
+                // Clean out the ec.
+                editingContext().revert();
+                currentBufferSize = 1;
+            } else {
+                currentBufferSize++;
+            }
         }
     }
 }
