@@ -9,21 +9,32 @@
 		breakpoints = (
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 49230514;
+			PBXPerProjectTemplateStateSaveDate = 49333510;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F67C8B1C02EF32740FCF0E72;
+									bookmark = F639B9DB02EF89B90FCF0E72;
 									history = (
 										F633473302E624FE0FCF0E72,
 										F633473402E624FE0FCF0E72,
 										F633473502E624FE0FCF0E72,
 										F67C8B1702EF32740FCF0E72,
-										F67C8B1802EF32740FCF0E72,
-										F67C8B1902EF32740FCF0E72,
+										F639B9BC02EF89B90FCF0E72,
+										F639B9BD02EF89B90FCF0E72,
+										F639B9BE02EF89B90FCF0E72,
+										F639B9BF02EF89B90FCF0E72,
+										F639B9C002EF89B90FCF0E72,
+										F639B9C102EF89B90FCF0E72,
+										F639B9C202EF89B90FCF0E72,
+										F639B9C302EF89B90FCF0E72,
+										F639B9C402EF89B90FCF0E72,
+										F639B9C502EF89B90FCF0E72,
+										F639B9C602EF89B90FCF0E72,
+										F639B9C702EF89B90FCF0E72,
+										F639B9C802EF89B90FCF0E72,
 									);
 									prevStack = (
 										F633473702E624FE0FCF0E72,
@@ -33,11 +44,29 @@
 										F633473B02E624FE0FCF0E72,
 										F67C8B1A02EF32740FCF0E72,
 										F67C8B1B02EF32740FCF0E72,
+										F639B9C902EF89B90FCF0E72,
+										F639B9CA02EF89B90FCF0E72,
+										F639B9CB02EF89B90FCF0E72,
+										F639B9CC02EF89B90FCF0E72,
+										F639B9CD02EF89B90FCF0E72,
+										F639B9CE02EF89B90FCF0E72,
+										F639B9CF02EF89B90FCF0E72,
+										F639B9D002EF89B90FCF0E72,
+										F639B9D102EF89B90FCF0E72,
+										F639B9D202EF89B90FCF0E72,
+										F639B9D302EF89B90FCF0E72,
+										F639B9D402EF89B90FCF0E72,
+										F639B9D502EF89B90FCF0E72,
+										F639B9D602EF89B90FCF0E72,
+										F639B9D702EF89B90FCF0E72,
+										F639B9D802EF89B90FCF0E72,
+										F639B9D902EF89B90FCF0E72,
+										F639B9DA02EF89B90FCF0E72,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {806, 522}}";
+									Frame = "{{0, 0}, {748, 660}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -78,11 +107,11 @@
 						Collapsed = NO;
 						Frame = "{{0, 23}, {1090, 811}}";
 						Split0 = {
-							ActiveTab = 3;
+							ActiveTab = 2;
 							Collapsed = NO;
-							Frame = "{{284, 0}, {806, 811}}";
+							Frame = "{{342, 0}, {748, 811}}";
 							Split0 = {
-								Frame = "{{0, 289}, {806, 522}}";
+								Frame = "{{0, 151}, {748, 660}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -128,24 +157,24 @@
 								};
 							};
 							Tab2 = {
-								BuildMessageFrame = "{{0, 0}, {808, 120}}";
-								BuildTranscriptFrame = "{{0, 129}, {808, 0}}";
-								Frame = "{{0, 0}, {806, 127}}";
+								BuildMessageFrame = "{{0, 0}, {750, 120}}";
+								BuildTranscriptFrame = "{{0, 129}, {750, 0}}";
+								Frame = "{{0, 0}, {748, 127}}";
 							};
 							Tab3 = {
-								Frame = "{{0, 0}, {806, 265}}";
+								Frame = "{{0, 0}, {748, 265}}";
 							};
 							TabCount = 4;
 							TabsVisible = YES;
 						};
 						SplitCount = 1;
 						Tab0 = {
-							Frame = "{{0, 0}, {260, 811}}";
+							Frame = "{{0, 0}, {318, 811}}";
 							GroupTreeTableConfiguration = (
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								227,
+								285,
 							);
 						};
 						Tab1 = {
@@ -169,9 +198,9 @@
 							Frame = "{{0, 0}, {226, 549}}";
 						};
 						Tab3 = {
-							Frame = "{{0, 0}, {191, 549}}";
+							Frame = "{{0, 0}, {191, 811}}";
 							Split0 = {
-								Frame = "{{0, 0}, {191, 265}}";
+								Frame = "{{0, 0}, {191, 393}}";
 								TargetTreeTableConfiguration = (
 									ActiveTarget,
 									16,
@@ -186,7 +215,7 @@
 									Name,
 									160,
 								);
-								Frame = "{{0, 274}, {191, 275}}";
+								Frame = "{{0, 402}, {191, 409}}";
 							};
 							SplitCount = 2;
 						};
@@ -217,7 +246,7 @@
 					WindowLocation = "{30, 102}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 49230514;
+			PBXWorkspaceStateSaveDate = 49333510;
 		};
 		perUserProjectItems = {
 			F633473302E624FE0FCF0E72 = F633473302E624FE0FCF0E72;
@@ -228,12 +257,41 @@
 			F633473902E624FE0FCF0E72 = F633473902E624FE0FCF0E72;
 			F633473A02E624FE0FCF0E72 = F633473A02E624FE0FCF0E72;
 			F633473B02E624FE0FCF0E72 = F633473B02E624FE0FCF0E72;
+			F639B9BC02EF89B90FCF0E72 = F639B9BC02EF89B90FCF0E72;
+			F639B9BD02EF89B90FCF0E72 = F639B9BD02EF89B90FCF0E72;
+			F639B9BE02EF89B90FCF0E72 = F639B9BE02EF89B90FCF0E72;
+			F639B9BF02EF89B90FCF0E72 = F639B9BF02EF89B90FCF0E72;
+			F639B9C002EF89B90FCF0E72 = F639B9C002EF89B90FCF0E72;
+			F639B9C102EF89B90FCF0E72 = F639B9C102EF89B90FCF0E72;
+			F639B9C202EF89B90FCF0E72 = F639B9C202EF89B90FCF0E72;
+			F639B9C302EF89B90FCF0E72 = F639B9C302EF89B90FCF0E72;
+			F639B9C402EF89B90FCF0E72 = F639B9C402EF89B90FCF0E72;
+			F639B9C502EF89B90FCF0E72 = F639B9C502EF89B90FCF0E72;
+			F639B9C602EF89B90FCF0E72 = F639B9C602EF89B90FCF0E72;
+			F639B9C702EF89B90FCF0E72 = F639B9C702EF89B90FCF0E72;
+			F639B9C802EF89B90FCF0E72 = F639B9C802EF89B90FCF0E72;
+			F639B9C902EF89B90FCF0E72 = F639B9C902EF89B90FCF0E72;
+			F639B9CA02EF89B90FCF0E72 = F639B9CA02EF89B90FCF0E72;
+			F639B9CB02EF89B90FCF0E72 = F639B9CB02EF89B90FCF0E72;
+			F639B9CC02EF89B90FCF0E72 = F639B9CC02EF89B90FCF0E72;
+			F639B9CD02EF89B90FCF0E72 = F639B9CD02EF89B90FCF0E72;
+			F639B9CE02EF89B90FCF0E72 = F639B9CE02EF89B90FCF0E72;
+			F639B9CF02EF89B90FCF0E72 = F639B9CF02EF89B90FCF0E72;
+			F639B9D002EF89B90FCF0E72 = F639B9D002EF89B90FCF0E72;
+			F639B9D102EF89B90FCF0E72 = F639B9D102EF89B90FCF0E72;
+			F639B9D202EF89B90FCF0E72 = F639B9D202EF89B90FCF0E72;
+			F639B9D302EF89B90FCF0E72 = F639B9D302EF89B90FCF0E72;
+			F639B9D402EF89B90FCF0E72 = F639B9D402EF89B90FCF0E72;
+			F639B9D502EF89B90FCF0E72 = F639B9D502EF89B90FCF0E72;
+			F639B9D602EF89B90FCF0E72 = F639B9D602EF89B90FCF0E72;
+			F639B9D702EF89B90FCF0E72 = F639B9D702EF89B90FCF0E72;
+			F639B9D802EF89B90FCF0E72 = F639B9D802EF89B90FCF0E72;
+			F639B9D902EF89B90FCF0E72 = F639B9D902EF89B90FCF0E72;
+			F639B9DA02EF89B90FCF0E72 = F639B9DA02EF89B90FCF0E72;
+			F639B9DB02EF89B90FCF0E72 = F639B9DB02EF89B90FCF0E72;
 			F67C8B1702EF32740FCF0E72 = F67C8B1702EF32740FCF0E72;
-			F67C8B1802EF32740FCF0E72 = F67C8B1802EF32740FCF0E72;
-			F67C8B1902EF32740FCF0E72 = F67C8B1902EF32740FCF0E72;
 			F67C8B1A02EF32740FCF0E72 = F67C8B1A02EF32740FCF0E72;
 			F67C8B1B02EF32740FCF0E72 = F67C8B1B02EF32740FCF0E72;
-			F67C8B1C02EF32740FCF0E72 = F67C8B1C02EF32740FCF0E72;
 		};
 		projectwideBuildSettings = {
 		};
@@ -329,10 +387,342 @@
 		vrLen = 1649;
 		vrLoc = 314;
 	};
-	F67C8B0702EF323F0FCF0E72 = {
+	F639B9BC02EF89B90FCF0E72 = {
+		fRef = F59C5D0502C4667301000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WKeyMapper.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 166;
+		vrLoc = 0;
+	};
+	F639B9BD02EF89B90FCF0E72 = {
+		fRef = F639B94B02EF32F00FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 0;
+	};
+	F639B9BE02EF89B90FCF0E72 = {
+		fRef = F639B9DF02EF89BA0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.html: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 190;
+		vrLoc = 0;
+	};
+	F639B9BF02EF89B90FCF0E72 = {
+		fRef = F59C5D1902C4667301000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WSwitchComponent.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 215;
+		vrLoc = 0;
+	};
+	F639B9C002EF89B90FCF0E72 = {
+		fRef = F54206FA02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERDirectToWeb.java: setD2wDebuggingEnabled";
+		rLen = 455;
+		rLoc = 4495;
+		rType = 0;
+		vrLen = 1889;
+		vrLoc = 3521;
+	};
+	F639B9C102EF89B90FCF0E72 = {
+		fRef = F54206A902C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WPage.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2023;
+		vrLoc = 4611;
+	};
+	F639B9C202EF89B90FCF0E72 = {
+		fRef = F542069F02C467DF01000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WKeyMapper.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1984;
+		vrLoc = 0;
+	};
+	F639B9C302EF89B90FCF0E72 = {
+		fRef = F54206CF02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERDCustomQueryComponent.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1553;
+		vrLoc = 0;
+	};
+	F639B9C402EF89B90FCF0E72 = {
+		fRef = F54206EA02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERDEditDatePopupCommon.java: 15";
+		rLen = 451;
+		rLoc = 452;
+		rType = 0;
+		vrLen = 1916;
+		vrLoc = 0;
+	};
+	F639B9C502EF89B90FCF0E72 = {
+		fRef = F54206BC02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WSwitchComponent.java: 7";
+		rLen = 24;
+		rLoc = 252;
+		rType = 0;
+		vrLen = 1921;
+		vrLoc = 312;
+	};
+	F639B9C602EF89B90FCF0E72 = {
+		fRef = F542067B02C467DF01000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WDisplayImage.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 655;
+		vrLoc = 0;
+	};
+	F639B9C702EF89B90FCF0E72 = {
+		fRef = F639B94D02EF33040FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.java: 20";
+		rLen = 0;
+		rLoc = 614;
+		rType = 0;
+		vrLen = 1137;
+		vrLoc = 0;
+	};
+	F639B9C802EF89B90FCF0E72 = {
+		fRef = F639B9DD02EF89BA0FCF0E72;
+		isa = PBXBookmark;
+	};
+	F639B9C902EF89B90FCF0E72 = {
+		fRef = F542069F02C467DF01000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WKeyMapper.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1253;
+		vrLoc = 0;
+	};
+	F639B9CA02EF89B90FCF0E72 = {
+		fRef = F59C5D0502C4667301000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WKeyMapper.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 166;
+		vrLoc = 0;
+	};
+	F639B9CB02EF89B90FCF0E72 = {
+		fRef = F639B94D02EF33040FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 421;
+		vrLoc = 0;
+	};
+	F639B9CC02EF89B90FCF0E72 = {
+		fRef = F639B94B02EF32F00FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 0;
+	};
+	F639B9CD02EF89B90FCF0E72 = {
+		fRef = F639B9DE02EF89BA0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.html: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 190;
+		vrLoc = 0;
+	};
+	F639B9CE02EF89B90FCF0E72 = {
+		fRef = F639B94D02EF33040FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 421;
+		vrLoc = 0;
+	};
+	F639B9CF02EF89B90FCF0E72 = {
+		fRef = F59C5D1902C4667301000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WSwitchComponent.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 215;
+		vrLoc = 0;
+	};
+	F639B9D002EF89B90FCF0E72 = {
+		fRef = F54206BC02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WSwitchComponent.java: 7";
+		rLen = 24;
+		rLoc = 252;
+		rType = 0;
+		vrLen = 1456;
+		vrLoc = 0;
+	};
+	F639B9D102EF89B90FCF0E72 = {
+		fRef = F639B94D02EF33040FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.java: 17";
+		rLen = 0;
+		rLoc = 772;
+		rType = 0;
+		vrLen = 731;
+		vrLoc = 0;
+	};
+	F639B9D202EF89B90FCF0E72 = {
+		fRef = F54206BC02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WSwitchComponent.java: 7";
+		rLen = 24;
+		rLoc = 252;
+		rType = 0;
+		vrLen = 1885;
+		vrLoc = 348;
+	};
+	F639B9D302EF89B90FCF0E72 = {
+		fRef = F54206A902C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WPage.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2023;
+		vrLoc = 4611;
+	};
+	F639B9D402EF89B90FCF0E72 = {
+		fRef = F542069F02C467DF01000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WKeyMapper.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1984;
+		vrLoc = 0;
+	};
+	F639B9D502EF89B90FCF0E72 = {
+		fRef = F54206CF02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERDCustomQueryComponent.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1553;
+		vrLoc = 0;
+	};
+	F639B9D602EF89B90FCF0E72 = {
+		fRef = F54206EA02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERDEditDatePopupCommon.java: 15";
+		rLen = 451;
+		rLoc = 452;
+		rType = 0;
+		vrLen = 1916;
+		vrLoc = 0;
+	};
+	F639B9D702EF89B90FCF0E72 = {
+		fRef = F639B94D02EF33040FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.java: 24";
+		rLen = 15;
+		rLoc = 734;
+		rType = 0;
+		vrLen = 1217;
+		vrLoc = 0;
+	};
+	F639B9D802EF89B90FCF0E72 = {
+		fRef = F54206BC02C467E001000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WSwitchComponent.java: 7";
+		rLen = 24;
+		rLoc = 252;
+		rType = 0;
+		vrLen = 1921;
+		vrLoc = 312;
+	};
+	F639B9D902EF89B90FCF0E72 = {
+		fRef = F542067B02C467DF01000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WDisplayImage.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 655;
+		vrLoc = 0;
+	};
+	F639B9DA02EF89B90FCF0E72 = {
+		fRef = F639B94D02EF33040FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERD2WDebugFlags.java: 20";
+		rLen = 0;
+		rLoc = 614;
+		rType = 0;
+		vrLen = 1137;
+		vrLoc = 0;
+	};
+	F639B9DB02EF89B90FCF0E72 = {
+		fRef = F639B9DC02EF89BA0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "_PBXProjectWatcher.java: 42";
+		rLen = 0;
+		rLoc = 1671;
+		rType = 0;
+		vrLen = 1956;
+		vrLoc = 997;
+	};
+	F639B9DC02EF89BA0FCF0E72 = {
 		isa = PBXFileReference;
-		name = ERD2WDebugFlags.api;
-		path = /Users/patrice/Developer/Wonder/ERDirectToWeb/Sources/ERD2WDebugFlags.api;
+		name = _PBXProjectWatcher.java;
+		path = /Users/patrice/Desktop/_PBXProjectWatcher.java;
+		refType = 0;
+	};
+	F639B9DD02EF89BA0FCF0E72 = {
+		isa = PBXFileReference;
+		name = _PBXProjectWatcher.java;
+		path = "/Users/patrice/Library/Mail/IMAP:pgautier@mail.apple.com/INBOX.imapmbox/Rapid_Turnaround_fix.mimeattach/_PBXProjectWatcher.java";
+		refType = 0;
+	};
+	F639B9DE02EF89BA0FCF0E72 = {
+		isa = PBXFileReference;
+		name = ERD2WDebugFlags.html;
+		path = /Users/patrice/Developer/Wonder/ERDirectToWeb/Components/Nonlocalized.lproj/ERD2WDebugFlags.wo/ERD2WDebugFlags.html;
+		refType = 0;
+	};
+	F639B9DF02EF89BA0FCF0E72 = {
+		isa = PBXFileReference;
+		name = ERD2WDebugFlags.html;
+		path = /Users/patrice/Developer/Wonder/ERDirectToWeb/Components/Nonlocalized.lproj/ERD2WDebugFlags.wo/ERD2WDebugFlags.html;
 		refType = 0;
 	};
 	F67C8B1702EF32740FCF0E72 = {
@@ -344,20 +734,6 @@
 		rType = 0;
 		vrLen = 1272;
 		vrLoc = 455;
-	};
-	F67C8B1802EF32740FCF0E72 = {
-		fRef = F54206FA02C467E001000102;
-		isa = PBXTextBookmark;
-		name = "ERDirectToWeb.java: setD2wDebuggingEnabled";
-		rLen = 19;
-		rLoc = 4520;
-		rType = 0;
-		vrLen = 2056;
-		vrLoc = 3521;
-	};
-	F67C8B1902EF32740FCF0E72 = {
-		fRef = F67C8B1D02EF32740FCF0E72;
-		isa = PBXBookmark;
 	};
 	F67C8B1A02EF32740FCF0E72 = {
 		fRef = F542069702C467DF01000102;
@@ -378,21 +754,5 @@
 		rType = 0;
 		vrLen = 2056;
 		vrLoc = 3521;
-	};
-	F67C8B1C02EF32740FCF0E72 = {
-		fRef = F67C8B0702EF323F0FCF0E72;
-		isa = PBXTextBookmark;
-		name = "ERD2WDebugFlags.api: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 124;
-		vrLoc = 0;
-	};
-	F67C8B1D02EF32740FCF0E72 = {
-		isa = PBXFileReference;
-		name = ERD2WDebugFlags.api;
-		path = /Users/patrice/Developer/Wonder/ERDirectToWeb/Sources/ERD2WDebugFlags.api;
-		refType = 0;
 	};
 }

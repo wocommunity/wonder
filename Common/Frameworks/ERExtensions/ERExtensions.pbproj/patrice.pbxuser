@@ -10,14 +10,14 @@
 		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
 		activeTarget = 40B58282FFD5E8187F000001;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 49225717;
+			PBXPerProjectTemplateStateSaveDate = 49403896;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F6C146D202EF1A060FCF0E72;
+									bookmark = F6A36B0102F0A3670FCF0E72;
 									history = (
 										F666DC3F02E49BE20FCF0E72,
 										F633473E02E624FF0FCF0E72,
@@ -29,7 +29,9 @@
 										F6C146C702EF1A060FCF0E72,
 										F6C146C802EF1A060FCF0E72,
 										F6C146C902EF1A060FCF0E72,
-										F6C146CA02EF1A060FCF0E72,
+										F67C8B1E02EF32740FCF0E72,
+										F6A36AFE02F0A3670FCF0E72,
+										F6A36AFF02F0A3670FCF0E72,
 									);
 									prevStack = (
 										F633474102E624FF0FCF0E72,
@@ -43,11 +45,13 @@
 										F6C146CF02EF1A060FCF0E72,
 										F6C146D002EF1A060FCF0E72,
 										F6C146D102EF1A060FCF0E72,
+										F67C8B2002EF32740FCF0E72,
+										F6A36B0002F0A3670FCF0E72,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {840, 592}}";
+									Frame = "{{0, 0}, {840, 488}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -88,11 +92,11 @@
 						Collapsed = NO;
 						Frame = "{{0, 23}, {1124, 777}}";
 						Split0 = {
-							ActiveTab = 2;
+							ActiveTab = 3;
 							Collapsed = NO;
 							Frame = "{{284, 0}, {840, 777}}";
 							Split0 = {
-								Frame = "{{0, 185}, {840, 592}}";
+								Frame = "{{0, 289}, {840, 488}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -224,10 +228,10 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{5, 136}";
+					WindowLocation = "{44, 67}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 49225717;
+			PBXWorkspaceStateSaveDate = 49403896;
 		};
 		perUserProjectItems = {
 			F620B96502E74E030FCF0E72 = F620B96502E74E030FCF0E72;
@@ -238,13 +242,18 @@
 			F633474202E624FF0FCF0E72 = F633474202E624FF0FCF0E72;
 			F633474302E624FF0FCF0E72 = F633474302E624FF0FCF0E72;
 			F666DC3F02E49BE20FCF0E72 = F666DC3F02E49BE20FCF0E72;
+			F67C8B1E02EF32740FCF0E72 = F67C8B1E02EF32740FCF0E72;
+			F67C8B2002EF32740FCF0E72 = F67C8B2002EF32740FCF0E72;
+			F6A36AFE02F0A3670FCF0E72 = F6A36AFE02F0A3670FCF0E72;
+			F6A36AFF02F0A3670FCF0E72 = F6A36AFF02F0A3670FCF0E72;
+			F6A36B0002F0A3670FCF0E72 = F6A36B0002F0A3670FCF0E72;
+			F6A36B0102F0A3670FCF0E72 = F6A36B0102F0A3670FCF0E72;
 			F6C146C402EF1A060FCF0E72 = F6C146C402EF1A060FCF0E72;
 			F6C146C502EF1A060FCF0E72 = F6C146C502EF1A060FCF0E72;
 			F6C146C602EF1A060FCF0E72 = F6C146C602EF1A060FCF0E72;
 			F6C146C702EF1A060FCF0E72 = F6C146C702EF1A060FCF0E72;
 			F6C146C802EF1A060FCF0E72 = F6C146C802EF1A060FCF0E72;
 			F6C146C902EF1A060FCF0E72 = F6C146C902EF1A060FCF0E72;
-			F6C146CA02EF1A060FCF0E72 = F6C146CA02EF1A060FCF0E72;
 			F6C146CB02EF1A060FCF0E72 = F6C146CB02EF1A060FCF0E72;
 			F6C146CC02EF1A060FCF0E72 = F6C146CC02EF1A060FCF0E72;
 			F6C146CD02EF1A060FCF0E72 = F6C146CD02EF1A060FCF0E72;
@@ -252,7 +261,6 @@
 			F6C146CF02EF1A060FCF0E72 = F6C146CF02EF1A060FCF0E72;
 			F6C146D002EF1A060FCF0E72 = F6C146D002EF1A060FCF0E72;
 			F6C146D102EF1A060FCF0E72 = F6C146D102EF1A060FCF0E72;
-			F6C146D202EF1A060FCF0E72 = F6C146D202EF1A060FCF0E72;
 		};
 		projectwideBuildSettings = {
 		};
@@ -354,6 +362,63 @@
 		vrLen = 1667;
 		vrLoc = 0;
 	};
+	F67C8B1E02EF32740FCF0E72 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: 48";
+		rLen = 40;
+		rLoc = 1968;
+		rType = 0;
+		vrLen = 1654;
+		vrLoc = 1174;
+	};
+	F67C8B2002EF32740FCF0E72 = {
+		fRef = F59C577802C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXApplication.java: 48";
+		rLen = 40;
+		rLoc = 1968;
+		rType = 0;
+		vrLen = 1654;
+		vrLoc = 1174;
+	};
+	F6A36AFE02F0A3670FCF0E72 = {
+		fRef = F59C578902C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXDirectAction.java: logoutAction";
+		rLen = 0;
+		rLoc = 3459;
+		rType = 0;
+		vrLen = 1329;
+		vrLoc = 2037;
+	};
+	F6A36AFF02F0A3670FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		rLen = 11;
+		rLoc = 45597;
+		rType = 0;
+	};
+	F6A36B0002F0A3670FCF0E72 = {
+		fRef = F59C578902C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXDirectAction.java: logoutAction";
+		rLen = 0;
+		rLoc = 3459;
+		rType = 0;
+		vrLen = 1329;
+		vrLoc = 2037;
+	};
+	F6A36B0102F0A3670FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: stringFromFile";
+		rLen = 22;
+		rLoc = 45597;
+		rType = 0;
+		vrLen = 1178;
+		vrLoc = 45063;
+	};
 	F6C146C402EF1A060FCF0E72 = {
 		fRef = F59C578102C4565601000102;
 		isa = PBXTextBookmark;
@@ -413,13 +478,6 @@
 		rType = 0;
 		vrLen = 2397;
 		vrLoc = 10429;
-	};
-	F6C146CA02EF1A060FCF0E72 = {
-		fRef = F59C577802C4565601000102;
-		isa = PBXTextBookmark;
-		rLen = 0;
-		rLoc = 50;
-		rType = 1;
 	};
 	F6C146CB02EF1A060FCF0E72 = {
 		fRef = F59C578102C4565601000102;
@@ -490,15 +548,5 @@
 		rType = 0;
 		vrLen = 2397;
 		vrLoc = 10429;
-	};
-	F6C146D202EF1A060FCF0E72 = {
-		fRef = F59C577802C4565601000102;
-		isa = PBXTextBookmark;
-		name = "ERXApplication.java: 48";
-		rLen = 40;
-		rLoc = 1968;
-		rType = 0;
-		vrLen = 2076;
-		vrLoc = 1174;
 	};
 }
