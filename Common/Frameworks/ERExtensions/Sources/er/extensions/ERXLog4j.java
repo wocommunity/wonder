@@ -41,7 +41,7 @@ public class ERXLog4j {
      * holds the notification that is posted after
      * the configuration system is updated.
      */
-    public static final String ConfigurationDidChangeNotification = "ConfigurationDidChangeNotification";
+    //public static final String ConfigurationDidChangeNotification = "ConfigurationDidChangeNotification";
 
     /** holds a reference to the current configuration file */
     private static String _configurationFilePath;
@@ -201,7 +201,7 @@ public class ERXLog4j {
     public static void loadConfiguration() {
         if (configurationFilePath() != null) {
             PropertyConfigurator.configure(readPropertiesFromPath(configurationFilePath()));
-            NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
+            //NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
         } else {
             log.error("Unable to reset logging, configFilePath is null.");
         }
