@@ -32,15 +32,20 @@ public class ERMailUtils extends Object {
     }
 
     /** Used to instanciate a WOComponent when no context is available,
-     * typically ouside of a session
+     * typically ouside of a session.  An optional argument
+     * sessionDictionary can be provided in order to set objects/keys
+     * in the newly create session of the component.
      *
      * @param pageName - The name of the WOComponent that must be instanciated.
      */
-    public static WOComponent instanciatePage (String pageName) {
+    public static WOComponent instanciatePage (String pageName, NSDictionary sessionDictionary) {
         // Create a context from a fake request
         WOContext context = new WOContext
 	    (new WORequest ("GET", "", "HTTP/1.1", null, null, null));
-        return WOApplication.application ().pageWithName (pageName, context);
+        WOComponent component = WOApplication.application ().pageWithName (pageName, context);
+        if (sessionDictionary != null)
+            setDictionaryValuesInSession (sessionDictionary, component.session ());
+        return component;
     }
 
     /** Use this method to send an HTML mail.
@@ -54,16 +59,20 @@ public class ERMailUtils extends Object {
 				     String pageName,  String alternatePageName,
 				     String emailFrom, String emailTo,
 				     String emailReplyTo, String subject) {
-	WOComponent mailPage = (WOComponent)ERMailUtils.instanciatePage (pageName);
+	WOComponent mailPage = (WOComponent)ERMailUtils.instanciatePage (pageName, 
+                                                                         delivery.sessionDictionary ());
 
         delivery.newMail ();
         delivery.setComponent (mailPage);
 
 	if (alternatePageName != null) {
 	    String alternateString = null;
-	    WOComponent alternateMailTemplate = (WOComponent)ERMailUtils.instanciatePage (alternatePageName);
-	    alternateString = alternateMailTemplate.generateResponse ().contentString ();
-	    if (alternateString != null) {
+	    WOComponent alternateMailTemplate =
+                (WOComponent)ERMailUtils.instanciatePage (alternatePageName,
+                                                          delivery.sessionDictionary ());
+            alternateString = alternateMailTemplate.generateResponse ().contentString ();
+
+            if (alternateString != null) {
 		delivery.setHiddenPlainTextContent (alternateString);
 		alternateMailTemplate.session ().terminate ();
 	    }
@@ -77,14 +86,28 @@ public class ERMailUtils extends Object {
 	    delivery.sendMail ();
 	} catch (javax.mail.MessagingException e) {
 	    // we must handle this exception correctly because the mail cannot be sent
-	    log.warn (ERXUtilities.stackTrace (e));
+	    log.warn ("While trying to sendMail: ", e);
 	} finally {
 	    // We need to force the termination of the sessions because there is some
             // sort of circular reference between the context and the session when it is
             // instanciated from a newly created WOContext.
 	    mailPage.session ().terminate ();
 	}
-    }	
+    }
+
+    public static void setDictionaryValuesInSession (NSDictionary dict, WOSession session) {
+        if ((dict == null) || (session == null))
+            return;
+
+        Enumeration en = dict.keyEnumerator ();
+        while (en.hasMoreElements ()) {
+            String key = (String)en.nextElement ();
+
+            Object object = dict.objectForKey (key);
+            if (object != null)
+                session.setObjectForKey (object, key);
+        }
+    }
 
     public static void sendHTMLMail (String pageName,  String alternatePageName,
 				     String emailFrom, String emailTo,
