@@ -317,20 +317,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             throw (erv != null ? erv : eov);
         }
     }
-
-    // CHECKME: Why is this disabled?
-    /*
-    public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
-        try {
-            super.validateObjectForSave(obj);
-        } catch (NSValidation.ValidationException eov) {
-            if (cat.isDebugEnabled())
-                cat.debug("Caught validation exception: " + eov);
-            ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
-            throw (erv != null ? erv : eov);
-        }
-    }
-    */
     
     /**
      * This method is called to validate a value
@@ -360,4 +346,18 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
         return validated;
     }
+
+    // CHECKME: Why is this disabled?
+    /*
+    public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
+        try {
+            super.validateObjectForSave(obj);
+        } catch (NSValidation.ValidationException eov) {
+            if (cat.isDebugEnabled())
+                cat.debug("Caught validation exception: " + eov);
+            ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
+            throw (erv != null ? erv : eov);
+        }
+    }
+    */
 }
