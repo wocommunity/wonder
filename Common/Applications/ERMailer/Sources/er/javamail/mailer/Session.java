@@ -4,10 +4,9 @@
 //
 // Created by max on Tue Oct 22 2002
 //
+package er.javamail.mailer;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 
 public class Session extends WOSession {
 

@@ -4,11 +4,9 @@
 //
 // Created by max on Tue Oct 22 2002
 //
- 
-import com.webobjects.foundation.*;
+package er.javamail.mailer;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 public class Main extends WOComponent {
 
