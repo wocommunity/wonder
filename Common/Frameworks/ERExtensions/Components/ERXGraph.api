@@ -9,6 +9,7 @@
 		<binding name="type"/>
 		<binding name="title"/>
 		<binding name="xAxisDataFormat"/>
+		<binding name="extraBindings"/>
 
 		<validation message="&apos;plotsForGraph&apos; is a required binding">
 			<unbound name="plotsForGraph"/>
