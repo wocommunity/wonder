@@ -138,7 +138,7 @@ public class WRRecordGroup extends WOComponent  {
     public double totalValueTotal() {
         if(totalValue != null) {
             if(totalValue.key().indexOf("~") == 0) {
-                return DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup()));
+                return DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup().rawRecordList()));
             } else {
                 String totalKey = (String)totalValue.attribute().userInfo().objectForKey("total");
                 if(totalKey != null) {
@@ -285,7 +285,7 @@ public class WRRecordGroup extends WOComponent  {
 
         if(totalKey != null) {
             if(totalKey.indexOf("~") == 0) {
-                doubleValue = DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalKey.substring(1), recordGroup()));
+                doubleValue = DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalKey.substring(1), recordGroup().rawRecordList()));
             } else if(totalKey.indexOf("@") == 0) {
                 doubleValue = DRCriteria.doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
                 if(doubleValue == 0.0 && totalKey.indexOf("@count") == 0) {
