@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr 
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERQualifiERXUtilities.java created by max on Wed 29-Aug-2001 */
 package er.extensions;
 
 import com.webobjects.directtoweb.*;
@@ -15,12 +13,23 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import org.apache.log4j.Category;
 
-// Useful for comparing qualifiers.
+/**
+ * Useful collection of qualifier utilities for comparing
+ * qualifires. This is needed because EOQualifier <code>equals</code>
+ * is not implemented. 
+ */
 public class ERXQualifierUtilities {
 
-    ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.extensions.ERQualifiERXUtilities");
+    /** logging support */
+    public final static Category cat = Category.getInstance(ERXQualifierUtilities.class);
 
+    /**
+     * Tests if two qualifiers are equal.
+     * 
+     * @param q1 first qualifier
+     * @param q2 second qualifier
+     * @retrun if the qualifiers are <code>equal<code>.
+     */
     public static boolean qualifiersAreEqual(EOQualifierEvaluation q1, EOQualifierEvaluation q2) {
         boolean areEqual = q1 == q2;
         if (!areEqual && q1.getClass().equals(q2.getClass())) {
@@ -41,6 +50,13 @@ public class ERXQualifierUtilities {
         return areEqual;
     }
 
+    /**
+     * Tests if arrays of qualifiers are equal.
+     * 
+     * @param q1s array of qualifiers
+     * @param q2s array of qualifiers
+     * @return if the array of qualfiers are equal
+     */
     public static boolean qualifierArraysAreEqual(NSArray q1s, NSArray q2s) {
         boolean areEqual = q1s.count() == q2s.count();
         if (areEqual) {
@@ -64,15 +80,36 @@ public class ERXQualifierUtilities {
         return areEqual;
     }
 
+    /**
+     * Tests if two EOKeyValueQualifiers are equal.
+     *
+     * @param q1 first qualifier
+     * @param q2 second qualifier
+     * @return if the two qualifiers are equal
+     */
     public static boolean keyValueQualifiersAreEqual(EOKeyValueQualifier q1, EOKeyValueQualifier q2) {
         return q1.key().equals(q2.key()) && q1.selector().equals(q2.selector()) && ((q1.value() == null && q2.value() == null) ||
                                                                                     (q1.value().equals(q2.value())));
     }
 
+    /**
+     * Tests if two EOKeyComparisonQualifier are equal
+     *
+     * @param q1 first qualifier
+     * @param q2 second qualifier
+     * @return if the two qualifiers are equal
+     */
     public static boolean keyComparisonQualifiersAreEqual(EOKeyComparisonQualifier q1, EOKeyComparisonQualifier q2) {
         return q1.leftKey().equals(q2.leftKey()) && q1.selector().equals(q2.selector()) && q1.rightKey().equals(q2.rightKey());
     }
     
+    /**
+     * Tests if two EONotQualifier are equal
+     *
+     * @param q1 first qualifier
+     * @param q2 second qualifier
+     * @return if the two qualifiers are equal
+     */
     public static boolean notQualifiersAreEqual(EONotQualifier q1, EONotQualifier q2) {
         return qualifiersAreEqual((EOQualifierEvaluation)q1.qualifier(), (EOQualifierEvaluation)q2.qualifier());
     }
