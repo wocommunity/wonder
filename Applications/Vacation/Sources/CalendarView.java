@@ -205,9 +205,20 @@ public class CalendarView extends VacationComponent {
 
         EOQualifier qual = EOQualifier.qualifierWithQualifierFormat("type = 'Holiday'", null);
         NSArray holidays = EOQualifier.filteredArrayWithQualifier(datesForDate, qual);
-
         if (holidays.count() > 0) return holidays;
-        else return datesForDate;
+
+
+        // remove any non-calendar types from the array
+        NSArray calendarChoices = (NSArray) application.settings.objectForKey("calendarChoices");
+        NSMutableArray parsedDates = new NSMutableArray();
+        Enumeration enumerator = datesForDate.objectEnumerator();
+
+        while (enumerator.hasMoreElements()) {
+            VacationEvent currentEvent = (VacationEvent) enumerator.nextElement();
+            if (calendarChoices.indexOfObject(currentEvent.type())!=NSArray.NotFound) parsedDates.addObject(currentEvent);
+        }
+
+        return parsedDates;
     }
     
     public WOComponent goDirectToMonth() {

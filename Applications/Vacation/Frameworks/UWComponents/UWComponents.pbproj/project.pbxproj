@@ -154,7 +154,6 @@
 				017C7B50FFD714AF7F000001,
 				017C7B51FFD714AF7F000001,
 				022D130C0059B6D611CD2978,
-				D777C38C04571CD900000064,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -637,7 +636,6 @@
 				40B5828FFFD5E91B7F000001,
 				40B58291FFD5E91B7F000001,
 				40B58292FFD5E91B7F000001,
-				D777C38B04571CD900000064,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -1007,18 +1005,6 @@
 		};
 		D777C38004570F4C00000064 = {
 			fileRef = D777C37F04570F4C00000064;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D777C38B04571CD900000064 = {
-			isa = PBXFrameworkReference;
-			name = ERJars.framework;
-			path = /Library/Frameworks/ERJars.framework;
-			refType = 0;
-		};
-		D777C38C04571CD900000064 = {
-			fileRef = D777C38B04571CD900000064;
 			isa = PBXBuildFile;
 			settings = {
 			};

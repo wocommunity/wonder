@@ -867,8 +867,8 @@
 				412B6455041D30A500000103,
 				412B63A6041D308200000103,
 				F8763CF503772B8B01A31911,
-				F5D2080F02B17BE101A318C2,
 				D7B7D726044AF2D300F5222D,
+				F5D2080F02B17BE101A318C2,
 				F5D2081A02B17BE101A318C2,
 				F5D2083002B17BE101A318C2,
 				F5D2078302B17BE101A318C2,
@@ -975,6 +975,7 @@
 				INFO_MODE_FLAG = "a+rX";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/WebObjects/Applications";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
+				JAVA_COMPILER_DEBUGGING_SYMBOLS = NO;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_DEBUGGER = jdb;
 				JAVA_ONLY = YES;
@@ -1003,7 +1004,7 @@
 			);
 			isa = PBXApplicationTarget;
 			name = Vacation;
-			productInstallPath = "$(LOCAL_LIBRARY_DIR)/WebObjects/Applicatons";
+			productInstallPath = "";
 			productName = Vacation;
 			productReference = F5D2078202B17BE101A318C2;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -1013,11 +1014,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string></string>
+	<string>Vacation</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>WOAfile.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string></string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -1029,7 +1030,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string></string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>webo</string>
 	<key>CFBundleVersion</key>
 	<string>3.5</string>
 	<key>NSExecutable</key>
