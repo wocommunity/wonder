@@ -47,12 +47,7 @@ public class ERXJSPopupSelector extends WOComponent {
                                                                                           this,
                                                                                           false);
             if (!doNotAddOne) index++;
-            String formName = null;
-            if(context() instanceof ERXMutableUserInfoHolderInterface) {
-                formName = (String)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().valueForKey("formName");
-            }
-            if(formName == null)
-                formName = "forms[2]";
+            String formName = ERXWOForm.formName(context(), "forms[2]");
             result="javascript:window.document."+formName+"."+popupName+".selectedIndex="+index+"; return false;";
         }
         return result;
