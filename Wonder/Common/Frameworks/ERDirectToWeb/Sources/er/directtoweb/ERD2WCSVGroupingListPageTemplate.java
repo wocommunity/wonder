@@ -8,7 +8,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
-public class ERD2WCSVGroupingListPageTemplate extends ERD2WGroupingListPageTemplate {
+public class ERD2WCSVGroupingListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WCSVGroupingListPageTemplate(WOContext context) { super(context); }
 }

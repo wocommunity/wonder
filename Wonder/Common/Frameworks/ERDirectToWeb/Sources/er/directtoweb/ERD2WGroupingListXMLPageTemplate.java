@@ -14,7 +14,7 @@ import java.util.*;
 import er.extensions.*;
 import org.apache.log4j.*;
 
-public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPageTemplate {
+public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingListXMLPageTemplate(WOContext context) {super(context);}
     //////////////////////////////////////////////  log4j category  //////////////////////////////////////////

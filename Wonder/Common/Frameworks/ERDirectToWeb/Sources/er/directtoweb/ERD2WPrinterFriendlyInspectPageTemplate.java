@@ -12,11 +12,4 @@ import com.webobjects.appserver.WOContext;
 public class ERD2WPrinterFriendlyInspectPageTemplate extends ERD2WInspectPage {
 
     public ERD2WPrinterFriendlyInspectPageTemplate(WOContext context) { super(context); }
-
-    // FIXME: Should be dynamic
-    public String pageTitle() {
-        return "NetStruxr - "+d2wContext().valueForKey("displayNameForEntity")+" View";
-    }
-
-    public NSTimestamp now() { return new NSTimestamp(); } 
 }
