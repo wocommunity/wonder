@@ -8,10 +8,12 @@ import java.net.*;
 import java.lang.*;
 import java.util.*;
 import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import org.apache.log4j.*;
 import com.webobjects.appserver._private.WOProjectBundle;
-
+import com.webobjects.appserver._private.WODirectActionRequestHandler;
 /* To find out about how to use this package, read the README.html in the resources folder*/
 /* WARNING: this is experimental and the results might be very confusing if you don«t understand what this class tries to do! */
 
@@ -33,7 +35,8 @@ public class ERXCompilerProxy {
     NSMutableDictionary _filesToWatch;
     String _className;
     String _destinationPath;
-
+    NSMutableSet classFiles = new NSMutableSet();
+    
     public static ERXCompilerProxy defaultProxy() {
         if(_defaultProxy == null)
             _defaultProxy = new ERXCompilerProxy();
@@ -131,6 +134,8 @@ public class ERXCompilerProxy {
                         packageName = (String)items.objectAtIndex(1);
                         CacheEntry entry = new CacheEntry(sourcePath, sourceName, packageName);
                         _filesToWatch.setObjectForKey((Object)entry,entry.classNameWithPackage());
+                        if(entry.classFile() != null)
+                            classFiles.addObject(entry);
                         if(WOApplication.application().isDebuggingEnabled()) {
                             cat.debug("fileToWatch:" + entry.classNameWithPackage());
                         }
@@ -168,19 +173,49 @@ public class ERXCompilerProxy {
         if(filesToCompile.count() > 0) {
             Compiler compiler = new Compiler(filesToCompile.objects(), _destinationPath);
             if(compiler.compile()) {
-                CompilerClassLoader cl = null;
                 e = filesToCompile.objectEnumerator();
+                while(e.hasMoreElements()) {
+                    cacheEntry = (CacheEntry)e.nextElement();
+                    classFiles.addObject(cacheEntry);
+                }
+                boolean didReset = false;
+                boolean didResetModelGroup = false;
+                CompilerClassLoader cl = null;
+                e = classFiles.objectEnumerator();
                 while(e.hasMoreElements()) {
                     cacheEntry = (CacheEntry)e.nextElement();
                     String className = cacheEntry.classNameWithPackage();
                     try {
                         if(cl == null)
-			    cl = new CompilerClassLoader(_destinationPath);
+			    cl = new CompilerClassLoader(_destinationPath, activeLoader);
                         //   Object o = Class.forName(className).newInstance();
                         Class class_ = cl.loadClass(className, true);
-                        // the whole magic is in these two lines
+                        // the whole magic is in these lines
+                        Class oldClass_ = classForName(cacheEntry.className());
                         setClassForName(class_, className);
-                        com.webobjects.appserver.WOApplication.application()._removeComponentDefinitionCacheContents();
+                        if(oldClass_ != null && !cacheEntry.className().equals(className)) {
+                            setClassForName(class_, cacheEntry.className());
+                        }
+                        if(!didReset) {
+                            com.webobjects.appserver.WOApplication.application()._removeComponentDefinitionCacheContents();
+                            NSKeyValueCoding.DefaultImplementation._flushCaches();
+                            NSKeyValueCoding._ReflectionKeyBindingCreation._flushCaches();
+                            NSKeyValueCoding.ValueAccessor._flushCaches();
+                            didReset = true;
+                        }
+                        if(WODirectAction.class.isAssignableFrom(class_)) {
+                            WOApplication app = WOApplication.application();
+                            WODirectActionRequestHandler handler = new WODirectActionRequestHandler(cacheEntry.className(), "default", false);
+                            boolean directActionIsDefault = app.requestHandlerForKey(app.directActionRequestHandlerKey()) == app.defaultRequestHandler();
+                            app.registerRequestHandler(handler, app.directActionRequestHandlerKey());
+                            if(directActionIsDefault)
+                                app.setDefaultRequestHandler(handler);
+                            cat.info("WODirectAction loaded: "+ cacheEntry.className());
+                        }
+                        if(EOEnterpriseObject.class.isAssignableFrom(class_) && !didResetModelGroup) {
+                            EOModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
+                            didResetModelGroup = true;
+                        }
                         cacheEntry.update();
                         // sparkle dust ends here
 
@@ -334,20 +369,27 @@ public class ERXCompilerProxy {
         }
     }
 
+    CompilerClassLoader activeLoader = null;
+    
     class CompilerClassLoader extends ClassLoader {
         protected String _classpath;
         protected String _destinationPath;
-
-        public CompilerClassLoader(String destinationPath) {
+        protected CompilerClassLoader _parent;
+        
+        public CompilerClassLoader(String destinationPath, CompilerClassLoader parent) {
             super();
             _destinationPath = destinationPath;
+            _parent = parent;
+            activeLoader = this;
 	}
 
         public synchronized Class loadClass(String name, boolean resolveIt) throws ClassNotFoundException {
             try {
                 return findClass(name);
             } catch(ClassNotFoundException ex) {
-                return super.loadClass(name, resolveIt);
+                if(_parent == null)
+                    return super.loadClass(name, resolveIt);
+                return _parent.loadClass(name, resolveIt);
             }
         }
 
