@@ -1,4 +1,4 @@
-<h1>How to use ERPrototypes<h1>
+<h1>How to use ERPrototypes</h1>
 
 <ol>
 <li><b>Setup the ERPrototypes framework</b><br/>
@@ -6,7 +6,7 @@
 </li>
 <li>
 If the EOEntity is missing, copy EOPrototypes EOEntity and renamed it to EOJDBC_YourDatabase_Prototypes.<br/>Edit the EOEntity and adjust the external types. For example change the external type from the attribute varcharLarge from 'LONGBLOB' to 'CLOB' if your database server uses CLOB's to store largelarge Strings.
-</li></li></ol>
+</li><li>Build and install the Framework</li></ol>
 <li>
 <b>Setup for EOModeler</b><br/>
 If you are always using the same database server then you should copy all attributes from EOJDBC_YourDatabase_Prototypes into the EOPrototypes entity. This enables EOModeler to generate correct SQL for your database because EOModeler will only look at the attributes from 'EOPrototypes' entity to resolve the external type and size. EOModeler does not know anything about EOJDBC_YourDatabase_Prototypes entities. They are an addition to get prototypes to work but they come not with WebObjects.</li>
