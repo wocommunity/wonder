@@ -13,14 +13,15 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
-/* To find out about how to use this package, read the README.html in the resources folder*/
+
+/* To find out about how to use this class, read the CompilerProxy.html in the Documentation folder */
 /* WARNING: this is experimental and the results might be very confusing if you don«t understand what this class tries to do! */
 
 public class ERXCompilerProxy {
 
     /* logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName());
-    static final ERXLogger classLoaderLog = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName()+".loading");
+    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName());
+    protected static final ERXLogger classLoaderLog = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName()+".loading");
 
     /** Notification you can register to when the Compiler Proxy reloads classes.
      * <br/>
@@ -32,36 +33,47 @@ public class ERXCompilerProxy {
     /** 
      * CPFileList is the file which describes in each line a path to java class to watch fo
      */
-    static final String CPFileList = "CPFileList.txt";
+    protected static final String CPFileList = "CPFileList.txt";
 
     /** Path to the jikes binary.<br/>
      * Note that the Compilerproxy currently only works on unix based systems.
      */
-    static final String _jikesPath = "/usr/bin/jikes";
+    protected static final String _jikesPath = "/usr/bin/jikes";
 
     /** Holds the Compilerproxy singleton
      */
-    static ERXCompilerProxy _defaultProxy;
+    protected static ERXCompilerProxy _defaultProxy;
 
-    /** Holds the classpath of the current app.
+    /**
+     * Holds the classpath of the current app.
      */
-    static String _classPath;
-    /** Holds a boolean that tells wether an error should raise an Exception or only log the error.
-     */
-    static boolean _raiseOnError = false;
+    protected static String _classPath;
 
-    static private boolean initialized = false;
+    /**
+     * Holds a boolean that tells wether an error should raise an Exception or only log the error.
+     */
+    protected static boolean _raiseOnError = false;
+
+    protected boolean initialized = false;
     
-    /** Holds the files to watch.
+    /**
+     * Holds the files to watch.
      */
-    NSMutableDictionary _filesToWatch;
-    String _className;
-    /** Holds the path where the compiled <code>.class</code> files go. Default is <code>Contents/Resources/Java</code>.
+    protected NSMutableDictionary _filesToWatch;
+    protected String _className;
+    
+    /**
+     * Holds the path where the compiled <code>.class</code> files go.
+     * Default is <code>Contents/Resources/Java</code>.
      */
-    String _destinationPath;
-    /** Currently compiled classes.
+    protected String _destinationPath;
+    
+    /**
+     * Currently compiled classes.
      */
-    NSMutableSet classFiles = new NSMutableSet();
+    protected NSMutableSet classFiles = new NSMutableSet();
+
+    protected NSArray _projectSearchPath;
     
     /** 
      * Returns the Compiler Proxy Singleton.<br/>
@@ -74,28 +86,55 @@ public class ERXCompilerProxy {
             _defaultProxy = new ERXCompilerProxy();
         return _defaultProxy;
     }
+    public static void setDefaultProxy(ERXCompilerProxy p) {
+        if(_defaultProxy != null) {
+            NSNotificationCenter.defaultCenter().removeObserver(_defaultProxy);
+        }
+        _defaultProxy = p;
+        _defaultProxy.initialize();
+    }
 
+    protected String pathForCPFileList(String directory) {
+        return directory + File.separator + CPFileList;
+    }
+    
     /** 
      * Returns an array of paths to the opened projects that have a <code>CPFileList.txt</code>.<br/>
      * This code is pretty fragile and subject to changes between versions of the dev-tools.
+     * You can get around it by setting <code>NSProjectSearchPath</code> to the paths to your projects:
+     * <code>(/Users/ak/Wonder/Common/Frameworks,/Users/Work)</code>
+     * will look for directories with a CPFileList.txt in all loaded bundles.
+     * So when you link to <code>ERExtensions.framework</code>,
+     * <code>/Users/ak/Wonder/Common/Frameworks/ERExtensions</code> will get found.
      * 
      * @return paths to opened projects
      */
-    NSArray projectPaths() {
+
+    public String projectInSearchPath(String bundleName) {
+        for(Enumeration e = _projectSearchPath.objectEnumerator(); e.hasMoreElements();) {
+            String path = e.nextElement() + File.separator + bundleName;
+            if(new File(pathForCPFileList(path)).exists()) {
+                return path;
+            }
+        }
+        return null;
+    }
+
+    protected NSArray projectPaths() {
 	NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
 	NSMutableArray projectPaths = new NSMutableArray();
 	String mainProject = null;
 	String mainBundleName = NSBundle.mainBundle().name();
-        // horrendous hack to avoid having to set the NSProjectPath manually.
+
         WOProjectBundle mainBundle = WOProjectBundle.projectBundleForProject(mainBundleName,false);
         if(mainBundle == null) {
-            mainProject = System.getProperty("projects." + mainBundleName);
+            mainProject = projectInSearchPath(mainBundleName);
             if(mainProject == null)
                 mainProject = "../..";
         } else {
             mainProject = mainBundle.projectPath();
         }
-	if((new File(mainProject + "/CPFileList.txt")).exists()) {
+	if((new File(pathForCPFileList(mainProject))).exists()) {
 	    log.info("Found open project for app at path " + mainProject);
 	    projectPaths.addObject(mainProject);
 	}
@@ -107,13 +146,13 @@ public class ERXCompilerProxy {
             if(bundle != null) {
                 path = bundle.projectPath();
             } else {
-                path = System.getProperty("projects." + name);
+                path = projectInSearchPath(name);
             }
             if(path != null) {
-                File f = new File( path + "/CPFileList.txt");
+                File f = new File(pathForCPFileList(path));
                 if(f.exists()) {
-                    log.info("Found open project for framework '" +path+ "' at path " + bundle.projectPath());
-                    projectPaths.addObject(bundle.projectPath());
+                    log.info("Found open project for framework '" +name+ "' at path " + path);
+                    projectPaths.addObject(path);
                 }
             }
         }
@@ -150,20 +189,22 @@ public class ERXCompilerProxy {
 	if (initialized) {
 	    return;
 	}
-	initialized = true;
+        log.info("initialize start");
+
+        initialized = true;
+        
         if(WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
             log.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
             _filesToWatch = new NSMutableDictionary();
             return;
         }
 
-	if(!ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXCompilerProxyEnabled"), false)) {
+	if(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCompilerProxyEnabled", false)) {
             log.info("Rapid-turnaround mode is disabled, set 'er.extensions.ERXCompilerProxyEnabled=true' in your WebObjects.properties to enable it.");
             _filesToWatch = new NSMutableDictionary();
             return;
 	}
 
-        log.debug("initialize");
 
 	//david teran: fixes a bug with some WebObjects version...
 	_classPath = System.getProperty("com.webobjects.classpath");
@@ -187,7 +228,7 @@ public class ERXCompilerProxy {
             _classPath += ":" + systemRoot + "ui.jar";
         }
 
-        _raiseOnError = System.getProperty("CPRaiseOnError") != null;
+        _raiseOnError = ERXProperties.booleanForKey("CPRaiseOnError");
 
 	NSArray projectPaths = projectPaths();
         if(projectPaths.count() == 0) {
@@ -212,7 +253,7 @@ public class ERXCompilerProxy {
 	_filesToWatch = new NSMutableDictionary();
 	for(Enumeration e = projectPaths.objectEnumerator(); e.hasMoreElements();) {
 	    String sourcePath = (String)e.nextElement();
-	    String fileListPath = sourcePath + "/CPFileList.txt";
+	    String fileListPath = pathForCPFileList(sourcePath);
 	    String fileList = _NSStringUtilities.stringFromFile(fileListPath, _NSStringUtilities.ASCII_ENCODING);
 
 	    NSArray allFiles = NSArray.componentsSeparatedByString(fileList, "\n");
@@ -239,12 +280,14 @@ public class ERXCompilerProxy {
 	    }
 	}
 	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("checkAndCompileOnNotification", new Class[] { NSNotification.class } ), WOApplication.ApplicationWillDispatchRequestNotification, null);
+        log.info("initialize end");
     }
 
     /** 
      * Contructor - does nothing special.
      */
     public ERXCompilerProxy() {
+        _projectSearchPath = ERXProperties.arrayForKeyWithDefault("NSProjectSearchPath", NSArray.EmptyArray);
     }
 
     /** 
@@ -356,6 +399,13 @@ public class ERXCompilerProxy {
                         if(EOEnterpriseObject.class.isAssignableFrom(class_) && !didResetModelGroup) {
                             EOModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
                             didResetModelGroup = true;
+                        }
+                        if(ERXCompilerProxy.class.getName().equals(className)) {
+                            try {
+                                ERXCompilerProxy.setDefaultProxy((ERXCompilerProxy)class_.newInstance());
+                            } catch(Exception ex) {
+                                log.error("Can't reload compiler proxy", ex);
+                            }
                         }
                         cacheEntry.update();
                         // sparkle dust ends here
@@ -479,7 +529,7 @@ public class ERXCompilerProxy {
         }
 
         String[] commandArray() {
-            String base[]  = new String[] { _jikesPath, "-g", "-d", _destinationPath, "-classpath", _destinationPath + ":" + _classPath};
+            String base[]  = new String[] { _jikesPath, "+E", "-g", "-d", _destinationPath, "-classpath", _destinationPath + ":" + _classPath};
             String commandLine [] =  new String [base.length+_files.length];
             for(int i = 0; i < base.length; i++ ) {
                 commandLine[i] = base[i];
@@ -491,7 +541,7 @@ public class ERXCompilerProxy {
         }
 
 	String commandLine() {
-            String base[]  = new String[] { _jikesPath, "-g", "-d", _destinationPath, "-classpath", _destinationPath + ":" + _classPath};
+            String base[]  = new String[] { _jikesPath, "+E", "-g", "-d", _destinationPath, "-classpath", _destinationPath + ":" + _classPath};
             String commandLine = "";
 
             for(int i = 0; i < base.length; i++ ) {
