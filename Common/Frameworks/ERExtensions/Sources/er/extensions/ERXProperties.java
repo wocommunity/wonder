@@ -244,7 +244,7 @@ public class ERXProperties extends Properties {
      *      system properties.
      */
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
-        String propertyValue = System.getProperty(s);
+        String propertyValue = ERXSystem.getProperty(s);
         final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
         if (RetainDefaultsEnabled && propertyValue == null) {
             propertyValue = Boolean.toString(booleanValue);
