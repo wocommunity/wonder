@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import java.util.*;
+import org.apache.log4j.NDC;
 
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder {
 
@@ -48,15 +49,14 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         return (NSMutableDictionary)errorMessagesDictionaries().objectAtIndex(index.intValue());
     }
 
-    protected String dummy;
+    public String dummy;
 
     public boolean showCancel() {
         return nextPage()!=null;
     }
 
     public boolean isEntityInspectable() {
-        Integer isEntityInspectable=(Integer)d2wContext().valueForKey("isEntityInspectable");
-        return isEntityReadOnly() && (isEntityInspectable!=null && isEntityInspectable.intValue()!=0);
+        return isEntityReadOnly() && ERXValueUtilities.booleanValue(d2wContext().valueForKey("isEntityInspectable"));
     }
 
     public void setObject(EOEnterpriseObject eo) {
@@ -116,6 +116,17 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
             editingContext().revert();
         }
         return null;
+    }
+
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        // Need to make sure that we have a clean plate, every time
+        clearValidationFailed();
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        try {
+            super.takeValuesFromRequest(r, c);
+        } finally {
+            NDC.pop();
+        }
     }
 
     public String saveLabel() {
