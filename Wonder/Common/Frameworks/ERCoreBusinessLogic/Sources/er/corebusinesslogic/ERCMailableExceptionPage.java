@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
-import er.extensions.ERXConfigurationManager;
+import er.extensions.*;
 
 public class ERCMailableExceptionPage extends WOComponent {
 
@@ -62,8 +62,8 @@ public class ERCMailableExceptionPage extends WOComponent {
     }
     
     public NSArray reasonLines() {
-        if (_reasonLines==null && exception!=null && exception.getMessage()!=null) {
-            _reasonLines=NSArray.componentsSeparatedByString(exception.getMessage(), "\n");
+        if (_reasonLines==null && exception!=null) {
+            _reasonLines = NSArray.componentsSeparatedByString(ERXUtilities.stackTrace(exception), "\n\t");
         }
         return _reasonLines;
     }
