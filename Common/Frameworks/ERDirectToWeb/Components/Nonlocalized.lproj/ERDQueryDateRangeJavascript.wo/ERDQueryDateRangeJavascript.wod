@@ -27,6 +27,10 @@ JavaScript2: WOJavaScript {
 }
 
 String1: WOString {
+	value = formatterString.toLowerCase;
+}
+
+String2: WOString {
 	value = minName;
 }
 
