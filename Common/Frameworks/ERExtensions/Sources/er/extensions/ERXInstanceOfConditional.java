@@ -54,7 +54,7 @@ public class ERXInstanceOfConditional extends WOComponent {
             String className = (String)valueForBinding("className");
             if (log.isDebugEnabled())
                 log.debug("Resolving class: " + className);
-            instance = _NSUtilities.classWithName(className);
+            instance = ERXPatcher.classForName(className);
             if (instance == null)
                 throw new NSForwardException(new ClassNotFoundException((String)valueForBinding("className")));
             _instanceOf = instance.isInstance(valueForBinding("object")) ? Boolean.TRUE : Boolean.FALSE;

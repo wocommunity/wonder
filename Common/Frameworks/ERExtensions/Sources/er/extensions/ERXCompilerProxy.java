@@ -167,7 +167,7 @@ public class ERXCompilerProxy {
      * @return class for the registered name or null
      */
     public Class classForName(String className) {
-        return com.webobjects.foundation._NSUtilities.classWithName(className);
+        return ERXPatcher.classForName(className);
     }
 
     /** 
@@ -178,7 +178,7 @@ public class ERXCompilerProxy {
      * @param className name for the class - normally clazz.getName()
      */
     public void setClassForName(Class clazz, String className) {
-        com.webobjects.foundation._NSUtilities.setClassForName(clazz, className);
+        ERXPatcher.setClassForName(clazz, className);
     }
 
     /** 
@@ -346,10 +346,10 @@ public class ERXCompilerProxy {
                         Class class_ = cl.loadClass(className, true);
 
                         // the whole magic is in these lines
-                        Class oldClass_ = classForName(cacheEntry.className());
-                        setClassForName(class_, className);
+                        Class oldClass_ = ERXPatcher.classForName(cacheEntry.className());
+                        ERXPatcher.setClassForName(class_, className);
                         if(oldClass_ != null && !cacheEntry.className().equals(className)) {
-                            setClassForName(class_, cacheEntry.className());
+                            ERXPatcher.setClassForName(class_, cacheEntry.className());
                         }
                         if(!didReset) {
                             com.webobjects.appserver.WOApplication.application()._removeComponentDefinitionCacheContents();
