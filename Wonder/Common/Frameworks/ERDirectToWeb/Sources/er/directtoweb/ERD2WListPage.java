@@ -253,12 +253,12 @@ public abstract class ERD2WListPage extends D2WListPage {
         if(editConfigurationName != null){
             EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
 
-            epi.setObject(localInstance());
+            epi.setObject(localInstanceOfObject());
             epi.setNextPage(context().page());
             result = (WOComponent)epi;
         } else {
-            EditPageInterface editpageinterface = D2W.factory().editPageForEntityNamed(localInstance().entityName(), session());
-            editpageinterface.setObject(localInstance());
+            EditPageInterface editpageinterface = D2W.factory().editPageForEntityNamed(object().entityName(), session());            
+            editpageinterface.setObject(localInstanceOfObject());
             editpageinterface.setNextPage(context().page());
             result = (WOComponent)editpageinterface;
         }
@@ -271,18 +271,18 @@ public abstract class ERD2WListPage extends D2WListPage {
 
         if(inspectConfigurationName!=null) {
             InspectPageInterface ipi=(InspectPageInterface)D2W.factory().pageForConfigurationNamed(inspectConfigurationName,session());
-            ipi.setObject(localInstance());
+            ipi.setObject(object());
             ipi.setNextPage(context().page());
             return (WOComponent)ipi;
         } else {
-            InspectPageInterface inspectpageinterface = D2W.factory().inspectPageForEntityNamed(localInstance().entityName(), session());
-            inspectpageinterface.setObject(localInstance());
+            InspectPageInterface inspectpageinterface = D2W.factory().inspectPageForEntityNamed(object().entityName(), session());
+            inspectpageinterface.setObject(object());
             inspectpageinterface.setNextPage(context().page());
             return (WOComponent)inspectpageinterface;
         }
     }
 
-    private EOEnterpriseObject localInstance() {
+    protected EOEnterpriseObject localInstanceOfObject() {
         return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
     }
     
@@ -298,10 +298,7 @@ public abstract class ERD2WListPage extends D2WListPage {
     private String _formTargetJavaScriptUrl;
     public String formTargetJavaScriptUrl() {
         if (_formTargetJavaScriptUrl==null) {
-            _formTargetJavaScriptUrl= application().resourceManager().urlForResourceNamed("formTarget.js",
-                                                                                          "ERDirectToWeb",
-                                                                                          null,
-                                                                                          context().request());
+            _formTargetJavaScriptUrl= application().resourceManager().urlForResourceNamed("formTarget.js", "ERDirectToWeb", null, context().request());
         }
         return _formTargetJavaScriptUrl;
     }
