@@ -308,10 +308,8 @@ public class ERXProperties {
             StringBuffer message = new StringBuffer();
             message.append("\n\n")
                     .append("ERXProperties has found the following Properties files: \n");
-            e = projectsInfo.objectEnumerator();
-            while (e.hasMoreElements()) 
-                message.append(e.nextElement()).append("\n");
-            
+            message.append(projectsInfo.componentsJoinedByString("\n"));
+            message.append("\n");
             log.info(message.toString());
         }
 
@@ -362,7 +360,7 @@ public class ERXProperties {
         try {
             actualPath = file.getCanonicalPath();
         } catch (Exception ex) {
-            log.warn("The file at " + path + " does not seem to exist. Exception: " 
+            log.warn("The file at " + path + " does not seem to exist: " 
                 + ex.getClass().getName() + ": " + ex.getMessage());
         }
         return actualPath;
