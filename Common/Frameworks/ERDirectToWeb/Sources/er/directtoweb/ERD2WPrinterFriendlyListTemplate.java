@@ -8,15 +8,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
-public class ERD2WPrinterFriendlyListTemplate extends ERD2WListPageTemplate {
+public class ERD2WPrinterFriendlyListTemplate extends ERD2WListPage {
 
     public ERD2WPrinterFriendlyListTemplate(WOContext context) { super(context); }
-    
-    // FIXME: This needs to be generalized.
-    public String pageTitle() {
-        return "NetStruxr - "+d2wContext().valueForKey("displayNameForEntity")+" List";
-    }
-
-    // in our case, sort ordering comes from the creation of the page
-    public boolean userPreferencesCanSpecifySorting() { return false; }
 }

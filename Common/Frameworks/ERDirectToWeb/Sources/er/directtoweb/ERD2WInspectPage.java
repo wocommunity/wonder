@@ -291,4 +291,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         "if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
     }
 
-}
+    // (ak) these actually belong to CompactEdit and PrinterFriendlyInspect
+    // moved them here to avoid to much subclassing
+    public boolean isEmbedded() {
+        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
+    }
+
+/*    // FIXME: Should be dynamic
+    public String pageTitle() {
+        return "NetStruxr - "+d2wContext().valueForKey("displayNameForEntity")+" View";
+    }
+*/
+    public NSTimestamp now() { return new NSTimestamp(); }
+    }

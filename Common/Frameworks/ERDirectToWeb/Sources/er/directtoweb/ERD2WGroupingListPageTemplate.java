@@ -10,18 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
-public class ERD2WGroupingListPageTemplate extends ERD2WListPage {
+public class ERD2WGroupingListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingListPageTemplate(WOContext context) { super(context); }
-    
-    protected NSArray sublist;
-    protected Object sublistSection;
-
-    // the sorting will come only from the rules
-    public boolean userPreferencesCanSpecifySorting() { return false; }
-    public String groupingKey() { return (String)d2wContext().valueForKey("groupingKey"); }
-    public String groupingComponentName() { return (String)d2wContext().valueForKey("groupingComponentName"); }
-    public int colspanForNavBar() { return 2*displayPropertyKeys().count()+2; }
-    public Object section() { return (Object)object().valueForKeyPath(groupingKey()); }
-    public Object sumForSublist() { return sublist.valueForKey("@sum."+propertyKey()); }
 }

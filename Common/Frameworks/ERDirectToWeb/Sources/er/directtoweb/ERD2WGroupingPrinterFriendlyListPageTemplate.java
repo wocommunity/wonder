@@ -8,10 +8,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
-public class ERD2WGroupingPrinterFriendlyListPageTemplate extends ERD2WGroupingListPageTemplate {
+public class ERD2WGroupingPrinterFriendlyListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingPrinterFriendlyListPageTemplate(WOContext context) { super(context); }
-    
-  // we don't ever want to batch
-    public int numberOfObjectsPerBatch() { return 0; }
 }

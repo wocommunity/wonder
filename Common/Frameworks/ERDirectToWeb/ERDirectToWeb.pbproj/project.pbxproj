@@ -89,18 +89,27 @@
 		F52DE9D70237AA1601AD0D0C = {
 			children = (
 				F5A143D501FF7F8801A80106,
+				F615AD2E026F045101F77686,
 				F5A143DD01FF7F8801A80106,
 				F52DE9D80237AA1601AD0D0C,
+				F615AD30026F050E01F77686,
 				F5A143ED01FF7F8801A80106,
 				F5A1440B01FF7F8801A80106,
+				F615AD32026F059101F77686,
 				F52DE9D90237AA1601AD0D0C,
+				F615AD34026F060B01F77686,
 				F5A1440E01FF7F8801A80106,
+				F615AD36026F06D501F77686,
 				F5A1441101FF7F8801A80106,
 				F5A143F001FF7F8801A80106,
+				F615AD38026F075D01F77686,
+				F615AD3A026F07AD01F77686,
 				F5A143F101FF7F8801A80106,
 				F5A1441D01FF7F8801A80106,
+				F5A1441F01FF7F8801A80106,
 				F52DE9DA0237AA1601AD0D0C,
 				F5A1442801FF7F8801A80106,
+				F634BADA026F0985012617F5,
 				F5A143F701FF7F8801A80106,
 				F5A143DC01FF7F8801A80106,
 				F5A143A501FF7F8801A80106,
@@ -1022,6 +1031,7 @@
 				F52DEA390237AA1601AD0D0C,
 				F52DEA3A0237AA1601AD0D0C,
 				F52DEA3B0237AA1601AD0D0C,
+				F634BADC026F0A5D012617F5,
 				F52DEA3C0237AA1601AD0D0C,
 				F52DEA3D0237AA1601AD0D0C,
 				F52DEA3E0237AA1601AD0D0C,
@@ -1174,7 +1184,6 @@
 		F52DEA390237AA1601AD0D0C = {
 			children = (
 				F55753CA0209E0D301A80106,
-				F5A1441F01FF7F8801A80106,
 				F55753C90209E0D301A80106,
 			);
 			isa = PBXGroup;
@@ -3959,6 +3968,8 @@
 				F641B2F9026AE1BD014E589E,
 				F641B2F6026AE0AC014E589E,
 				F63D832D026D7E8501FA2AC8,
+				F634BAE0026F0A5E012617F5,
+				F634BAE1026F0A5E012617F5,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -4385,6 +4396,15 @@
 				F63D832B026D7E1501FA2AC8,
 				F63D832E026D846401FA2AC8,
 				F59BA1C3026DE49E01000105,
+				F615AD2F026F045201F77686,
+				F615AD31026F050F01F77686,
+				F615AD33026F059201F77686,
+				F615AD35026F060C01F77686,
+				F615AD37026F06D601F77686,
+				F615AD39026F075D01F77686,
+				F615AD3B026F07AE01F77686,
+				F634BADB026F0986012617F5,
+				F634BAE2026F0A5E012617F5,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -6889,6 +6909,83 @@
 			path = ERD2WClassList.html;
 			refType = 4;
 		};
+		F615AD2E026F045101F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WConfirmPage.java;
+			refType = 4;
+		};
+		F615AD2F026F045201F77686 = {
+			fileRef = F615AD2E026F045101F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD30026F050E01F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WEditableListPage.java;
+			refType = 4;
+		};
+		F615AD31026F050F01F77686 = {
+			fileRef = F615AD30026F050E01F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD32026F059101F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WGroupingListPage.java;
+			refType = 4;
+		};
+		F615AD33026F059201F77686 = {
+			fileRef = F615AD32026F059101F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD34026F060B01F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WListComparePage.java;
+			refType = 4;
+		};
+		F615AD35026F060C01F77686 = {
+			fileRef = F615AD34026F060B01F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD36026F06D501F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WListXMLPage.java;
+			refType = 4;
+		};
+		F615AD37026F06D601F77686 = {
+			fileRef = F615AD36026F06D501F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD38026F075D01F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WPickListPage.java;
+			refType = 4;
+		};
+		F615AD39026F075D01F77686 = {
+			fileRef = F615AD38026F075D01F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F615AD3A026F07AD01F77686 = {
+			isa = PBXFileReference;
+			path = ERD2WPickTypePage.java;
+			refType = 4;
+		};
+		F615AD3B026F07AE01F77686 = {
+			fileRef = F615AD3A026F07AD01F77686;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F61FDB0E026D706801D8A50F = {
 			children = (
 				F5A1452301FF7F8801A80106,
@@ -6932,6 +7029,60 @@
 			name = ERDEditList;
 			path = "";
 			refType = 4;
+		};
+		F634BADA026F0985012617F5 = {
+			isa = PBXFileReference;
+			path = ERD2WWizardCreationPage.java;
+			refType = 4;
+		};
+		F634BADB026F0986012617F5 = {
+			fileRef = F634BADA026F0985012617F5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F634BADC026F0A5D012617F5 = {
+			children = (
+				F634BADD026F0A5D012617F5,
+				F634BADE026F0A5D012617F5,
+				F634BADF026F0A5D012617F5,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryPageWithFetchSpecificationTemplate;
+			refType = 4;
+		};
+		F634BADD026F0A5D012617F5 = {
+			isa = PBXFileReference;
+			path = ERD2WQueryPageWithFetchSpecificationTemplate.api;
+			refType = 4;
+		};
+		F634BADE026F0A5D012617F5 = {
+			isa = PBXFolderReference;
+			path = ERD2WQueryPageWithFetchSpecificationTemplate.wo;
+			refType = 4;
+		};
+		F634BADF026F0A5D012617F5 = {
+			isa = PBXFileReference;
+			path = ERD2WQueryPageWithFetchSpecificationTemplate.java;
+			refType = 4;
+		};
+		F634BAE0026F0A5E012617F5 = {
+			fileRef = F634BADD026F0A5D012617F5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F634BAE1026F0A5E012617F5 = {
+			fileRef = F634BADE026F0A5D012617F5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F634BAE2026F0A5E012617F5 = {
+			fileRef = F634BADF026F0A5D012617F5;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F63D8329026D7E1501FA2AC8 = {
 			children = (
