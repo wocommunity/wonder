@@ -537,8 +537,9 @@ public class ERXStringUtilities {
     }
 
     public static String escapeNonBasicLatinChars(String str) {
-        StringBuffer result = new StringBuffer(str.length());
+        if (str == null) return null;
 
+        StringBuffer result = new StringBuffer(str.length());
         for (int i = 0; i < str.length(); i++) 
             result.append(escapeNonBasicLatinChars(str.charAt(i)));
             
@@ -559,8 +560,9 @@ public class ERXStringUtilities {
     }
 
     public static String toHexString(String str) {
+        if (str == null) return null;
+
         StringBuffer result = new StringBuffer("\\u9999".length() * str.length());
-        
         for (int i = 0; i < str.length(); i++) 
             result.append(toHexString(str.charAt(i)));
 
