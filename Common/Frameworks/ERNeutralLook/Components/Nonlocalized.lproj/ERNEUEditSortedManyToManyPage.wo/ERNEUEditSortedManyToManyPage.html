@@ -4,7 +4,7 @@
 function editForm(){
 var result;
 for(var z=0; z<document.forms.length; z++){
-	if(document.forms[z].name == 'EditForm'){
+	if(document.forms[z].name == 'RelationshipForm'){
 		result = document.forms[z];
 	}
 }
@@ -38,6 +38,12 @@ BumpUp(abox);
    }
 }
 
+function MoveupFast(dbox){
+	 Moveup(dbox);
+	 Moveup(dbox);
+	 Moveup(dbox);
+}
+
 function Moveup(dbox) {
 for(var i = 0; i < dbox.options.length; i++) {
 if (dbox.options[i].selected && dbox.options[i] != "" && dbox.options[i] != dbox.options[0]) {
@@ -54,6 +60,13 @@ dbox.options[i-1].selected = tmpval3;
    }
 updateHidden();
 }
+
+function MovedownFast(ebox){
+	Movedown(ebox);
+	Movedown(ebox);
+	Movedown(ebox);
+}
+
 function Movedown(ebox) {
 for(var i = ebox.options.length - 1; i >-1; i--) {
 if (ebox.options[i].selected && ebox.options[i] != "" && ebox.options[i+1] != ebox.options[ebox.options.length]) {
@@ -96,9 +109,7 @@ function updateHidden(){
 
 <WEBOBJECT NAME=ToManyForm><TABLE><TR><TD VALIGN=middle><FONT SIZE=-1><STRONG><WEBOBJECT NAME=NumberOfEntities></WEBOBJECT> <WEBOBJECT NAME=EntityName></WEBOBJECT>(s)</STRONG></FONT></TD><TD><WEBOBJECT NAME=AttributeValue></WEBOBJECT></TD><WEBOBJECT NAME=DisplayArrows><WEBOBJECT NAME=Conditional3><TD ALIGN=CENTER><WEBOBJECT NAME=SubmitButton1></WEBOBJECT><P ALIGN=CENTER><WEBOBJECT NAME=SubmitButton2></WEBOBJECT></P></TD>
 </WEBOBJECT>
-<WEBOBJECT NAME=Conditional4><TD><a href="javascript:Moveup(editForm().list2);" ><WEBOBJECT NAME=Image1></WEBOBJECT></a><BR>
-<BR>
-	<a href="javascript:Movedown(editForm().list2);" ><WEBOBJECT NAME=Image2></WEBOBJECT></a>
+<WEBOBJECT NAME=Conditional4><TD ALIGN=CENTER><TABLE><TR><TD><A HREF="javascript:MoveupFast(editForm().list2);"><WEBOBJECT NAME=Image3></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:Moveup(editForm().list2);"><WEBOBJECT NAME=Image1></WEBOBJECT></A></TD></TR><TR><TD>&nbsp;</TD></TR><TR><TD><A HREF="javascript:Movedown(editForm().list2);"><WEBOBJECT NAME=Image2></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:MovedownFast(editForm().list2);"><WEBOBJECT NAME=Image4></WEBOBJECT></A></TD></TR></TABLE>
 </TD>
 </WEBOBJECT></WEBOBJECT>
 <TD VALIGN=middle><WEBOBJECT NAME=RemoveButton></WEBOBJECT><BR><WEBOBJECT NAME=Hyperlink1>Remove All</WEBOBJECT><WEBOBJECT NAME=HiddenField1></WEBOBJECT></TD></TR>
