@@ -32,7 +32,7 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
     }
 
     public Object yesNoBoolean() {
-        Object value = object().valueForKey(propertyKey());
+        Object value = object().valueForKeyPath(propertyKey());
         if(null == value)
             value = nullValue();
         return value;
