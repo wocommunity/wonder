@@ -60,18 +60,19 @@ public class ERD2WEditNumber extends D2WEditNumber {
         }
         return super.validateTakeValueForKeyPath(convertNumber(number), propertyKey());
     }
-    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
+    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath)  {
         // This is for number formatting exceptions
         String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
-        parent().validationFailedWithException(theException, theValue, keyPath);
+        Number formatValue = null;
+        try {
+        	if (theValue != null)
+        		formatValue = (Number) numberFormatter().parseObject((String) theValue);
+        } catch(Exception ex) {
+        	formatValue = (Number)objectPropertyValue();
+        }
+        parent().validationFailedWithException(theException, formatValue, keyPath);
     }
-    /*
-     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
-        // This is for number formatting exceptions
-        String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
-        parent().validationFailedWithException(theException, convertNumber(numberFormatValueForString((String)theValue)), keyPath);
-    }
-*/
+
     /* following needed because we do not want to leave control over our (light) numberFormatter to WebObjects, which needs a full fledged NSNumberFormatter */
     public String stringValue() {
         return value() != null ? numberFormatter().format(value()) : null;
