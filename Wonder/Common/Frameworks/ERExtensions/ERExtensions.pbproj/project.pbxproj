@@ -431,6 +431,7 @@
 				F698E7CF030C6F6B01257492,
 				F69DE4020313E86B01257492,
 				F5E3B46903480557016A5D3F,
+				F5E3B46B034823BF016A5D3F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5759,6 +5760,18 @@
 			settings = {
 			};
 		};
+		F5E3B46A034823BF016A5D3F = {
+			isa = PBXFileReference;
+			name = ERXEOEncodingUtilities.java;
+			path = er/extensions/ERXEOEncodingUtilities.java;
+			refType = 4;
+		};
+		F5E3B46B034823BF016A5D3F = {
+			fileRef = F5E3B46A034823BF016A5D3F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //F50
 //F51
 //F52
@@ -5932,6 +5945,7 @@
 			children = (
 				F59C577702C4565601000102,
 				F59C579202C4565701000102,
+				F5E3B46A034823BF016A5D3F,
 				F59C579802C4565701000102,
 				F59C579F02C4565701000102,
 				F59C57A102C4565701000102,
