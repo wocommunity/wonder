@@ -1,9 +1,17 @@
 Conditional1: WOConditional {
-	condition = objectPropertyValue;
+	condition = isYes;
 }
 
 Conditional2: WOConditional {
-	condition = objectPropertyValue;
+	condition = isYes;
 	negate = true;
+}
+
+ERXLocalizedString1: ERXLocalizedString {
+	value = "Yes";
+}
+
+ERXLocalizedString2: ERXLocalizedString {
+	value = "No";
 }
 

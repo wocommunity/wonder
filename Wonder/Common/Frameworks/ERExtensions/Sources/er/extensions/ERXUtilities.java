@@ -465,9 +465,9 @@ public class ERXUtilities {
                     flag = false;
             } else if(obj instanceof String) {
                 String s = (String)obj;
-                if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false"))
+                if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n"))
                     flag = false;
-		else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true"))
+		else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y"))
                     flag = true;
 		else
                     try {
