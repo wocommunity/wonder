@@ -47,14 +47,14 @@ public  class ERXRequest extends WORequest {
         return _browserLanguages;
     }
 
-    /** Translates ("de"," en;q=0.66") to ("de","en").
+    /** Translates ("de", "en-gb;q=0.66", "en-us;q=0.33") to ("de", "en_gb", "en-us", "en").
      * @param languages NSArray of Strings
      * @returns NSArray of normalized Strings
      */
     protected NSArray fixAbbreviationArray(NSArray languages) {
         NSMutableArray nsmutablearray = new NSMutableArray(languages.count());
         int cnt = languages.count();
-        for (int i = 0; i < cnt; i++) {
+        for (int i = cnt - 1; i >= 0; i--) {
             String string = (String) languages.objectAtIndex(i);
             int offset;
             string = string.trim();
@@ -63,13 +63,17 @@ public  class ERXRequest extends WORequest {
                 string = string.substring(0, offset);
             offset = string.indexOf('-');
             if (offset > 0) {
-                String cooked;
-                cooked = string.substring(0, 2);
-                cooked = cooked + "_";
-                cooked = cooked + string.substring(offset+1, offset+3);
-                string = cooked;
+                String langPrefix = string.substring(0, 2);  //  "en" part of "en-us"
+                if (!nsmutablearray.containsObject(langPrefix)) 
+                    nsmutablearray.insertObjectAtIndex(langPrefix, 0);
+                // converts "en-us" into "en_us";
+                StringBuffer cooked = new StringBuffer(string.length());
+                cooked.append(langPrefix)
+                    .append("_")
+                    .append(string.substring(offset+1, offset+3));
+                string = cooked.toString();
             }
-            nsmutablearray.addObject(string);
+            nsmutablearray.insertObjectAtIndex(string, 0);
         }
         return nsmutablearray;
     }
