@@ -79,14 +79,11 @@
 ./Sources/er/extensions/ERXMultiKey.java:er.extensions
 ./Sources/er/extensions/ERXMutableUserInfoHolderInterface.java:er.extensions
 ./Sources/er/extensions/ERXNavigation.java:er.extensions
-./Sources/er/extensions/ERXNextPageDelegate.java:er.extensions
 ./Sources/er/extensions/ERXNoHelpAvailableHelp.java:er.extensions
 ./Sources/er/extensions/ERXNonNullConditional.java:er.extensions
 ./Sources/er/extensions/ERXNonPluralFormLocalizer.java:er.extensions
 ./Sources/er/extensions/ERXNonZeroConditional.java:er.extensions
 ./Sources/er/extensions/ERXNumberFormatter.java:er.extensions
-./Sources/er/extensions/ERXObjectSaveDelegate.java:er.extensions
-./Sources/er/extensions/ERXObjectWasCreatedDelegate.java:er.extensions
 ./Sources/er/extensions/ERXOncePerRequestConditional.java:er.extensions
 ./Sources/er/extensions/ERXOptionalForm.java:er.extensions
 ./Sources/er/extensions/ERXPatternLayout.java:er.extensions
@@ -94,8 +91,6 @@
 ./Sources/er/extensions/ERXPrimaryKeyListQualifier.java:er.extensions
 ./Sources/er/extensions/ERXProperties.java:er.extensions
 ./Sources/er/extensions/ERXQualifierInSubquery.java:er.extensions
-./Sources/er/extensions/ERXQualifierTraversal.java:er.extensions
-./Sources/er/extensions/ERXQualifierTraversalCallback.java:er.extensions
 ./Sources/er/extensions/ERXQualifierUtilities.java:er.extensions
 ./Sources/er/extensions/ERXQueryRecentDates.java:er.extensions
 ./Sources/er/extensions/ERXRadioButtonMatrix.java:er.extensions
