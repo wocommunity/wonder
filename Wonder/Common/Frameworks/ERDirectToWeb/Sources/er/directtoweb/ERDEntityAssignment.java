@@ -86,7 +86,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
                 if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
                     cat.warn("Found multiple entities of the same length for pageConfiguration: " + c.valueForKey("pageConfiguration")
                              + " possible entities: " + possibleEntities);
-                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.objectAtIndex(0));
+                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
             }
             if (cat.isDebugEnabled())
                 cat.debug("Found possible entities: " + possibleEntities + " for pageConfiguration: " + c.valueForKey("pageConfiguration")
