@@ -90,6 +90,10 @@ public class ERXWOResponseCache {
         }
         return isEnabled.booleanValue();
     }
+    public void setIsEnabled(boolean enabled) {
+        isEnabled = (enabled ? Boolean.TRUE : Boolean.FALSE);
+    }
+    
     
     public Policy policy() {
         return this.policy;
