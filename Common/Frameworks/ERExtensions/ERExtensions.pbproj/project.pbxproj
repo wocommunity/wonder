@@ -3472,8 +3472,8 @@
 		};
 		F59C570602C4560D01000102 = {
 			isa = PBXFileReference;
-			name = GettingStarted;
-			path = Documentation/GettingStarted;
+			name = GettingStarted.txt;
+			path = Documentation/GettingStarted.txt;
 			refType = 2;
 		};
 		F59C570702C4560D01000102 = {
@@ -3484,8 +3484,8 @@
 		};
 		F59C570802C4560D01000102 = {
 			isa = PBXFileReference;
-			name = README;
-			path = Documentation/README;
+			name = README.txt;
+			path = Documentation/README.txt;
 			refType = 2;
 		};
 		F59C570902C4560D01000102 = {
@@ -3502,8 +3502,8 @@
 		};
 		F59C570B02C4560D01000102 = {
 			isa = PBXFileReference;
-			name = ToDo;
-			path = Documentation/ToDo;
+			name = ToDo.txt;
+			path = Documentation/ToDo.txt;
 			refType = 2;
 		};
 		F59C570C02C4562A01000102 = {
