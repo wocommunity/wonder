@@ -21,19 +21,26 @@ import er.extensions.*;
 
 public class ERD2WPropertyName extends D2WStatelessComponent {
     ERXLogger log = ERXLogger.getERXLogger(ERD2WPropertyName.class);
-    
-    public ERD2WPropertyName(WOContext context) { super(context); }
 
-    // public boolean isStateless() {return false;}
-    String displayNameForProperty;
-    public String displayNameForProperty() {
-        if(displayNameForProperty == null)
-            displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
-        return displayNameForProperty;
+    protected String _displayNameForProperty;
+    protected NSDictionary _contextDictionary;
+    public String currentKey;
+  
+    public ERD2WPropertyName(WOContext context) { 
+        super(context); 
     }
+
+    public String displayNameForProperty() {
+        if(_displayNameForProperty == null) {
+            _displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
+        }
+        return _displayNameForProperty;
+    }
+    
     public void reset() {
         super.reset();
-        displayNameForProperty = null;
+        _displayNameForProperty = null;
+        _contextDictionary = null;
     }
     
     public boolean hasNoErrors() {
@@ -48,6 +55,30 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
     }
 
+    public boolean d2wDebuggingEnabled() {
+        return ERDirectToWeb.d2wDebuggingEnabled(session());
+    }
+
+    public Object currentValue() {
+        return contextDictionaryForPropertyKey().valueForKey(currentKey);
+    }
+
+    public NSDictionary contextDictionary() {
+        if(_contextDictionary == null) {
+            _contextDictionary = (NSDictionary)d2wContext().valueForKey("contextDictionary");
+            if(_contextDictionary == null) {
+                ERD2WContextDictionary dict = new ERD2WContextDictionary(d2wContext().dynamicPage(), null, null);
+                _contextDictionary = dict.dictionary();
+                d2wContext().takeValueForKey(_contextDictionary, "contextDictionary");
+            }
+        }
+        return _contextDictionary;
+    }
+    
+    public NSDictionary contextDictionaryForPropertyKey() {
+        return (NSDictionary)contextDictionary().valueForKeyPath("componentLevelKeys." + propertyKey());
+    }
+    
     public String d2wComponentName() {
         String name = (String)d2wContext().valueForKey("componentName");
         if(name != null && name.indexOf("CustomComponent")>=0) {
@@ -82,7 +113,7 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
         return displayRequiredMarker;
     }
 
-    public void takeValueFromRequest(WORequest r, WOContext c) {
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
         // no form values in here!
     }
 
