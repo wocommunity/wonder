@@ -37,6 +37,9 @@ public class WOCheckboxMatrix extends WOComponent {
     public NSArray selections() {
         if (_selections == null) {
             _selections = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("selections",this);
+            if (_selections == null) {
+                _selections = NSArray.EmptyArray;
+            }
         }
         return _selections;
     }
@@ -48,6 +51,9 @@ public class WOCheckboxMatrix extends WOComponent {
             Number anIndex = null;
             Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
             NSArray anItemList = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("list",this);
+            if (anItemList == null) {
+                anItemList = NSArray.EmptyArray;
+            }
             int anItemCount = anItemList.count();
             while (anIndexEnumerator.hasMoreElements()) {
                 anIndex = new Integer((String)anIndexEnumerator.nextElement());

@@ -89,6 +89,9 @@ public class WOTabPanel extends WOComponent
     public NSArray tabs()  {
         if (_tabs==null) {
             _tabs=(NSArray)_WOJExtensionsUtil.valueForBindingOrNull("tabs",this);
+            if (_tabs == null) {
+                _tabs = NSArray.EmptyArray;
+            }
         }
         return _tabs;
     }
