@@ -450,6 +450,8 @@
 				F5E3A82403708A21013FACDE,
 				F5E3A83A03708C13013FACDE,
 				F5E3A84503708E6E013FACDE,
+				F522D6CD03A0397701CAC43C,
+				F59BE09503A5883C01CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1166,6 +1168,18 @@
 			settings = {
 			};
 		};
+		F522D6CC03A0397701CAC43C = {
+			isa = PBXFileReference;
+			name = ERXWOResponseCache.java;
+			path = er/extensions/ERXWOResponseCache.java;
+			refType = 4;
+		};
+		F522D6CD03A0397701CAC43C = {
+			fileRef = F522D6CC03A0397701CAC43C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5283C570365C94301CF0E76 = {
 			isa = PBXFileReference;
 			name = ERXFetchSpecificationBatchIterator.java;
@@ -1372,6 +1386,18 @@
 		};
 		F592A40C036D480201AD0D07 = {
 			fileRef = F592A409036D480201AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F59BE09403A5883C01CF0E76 = {
+			isa = PBXFileReference;
+			name = ERXWOResponseCacheKeyPolicy.java;
+			path = er/extensions/ERXWOResponseCacheKeyPolicy.java;
+			refType = 4;
+		};
+		F59BE09503A5883C01CF0E76 = {
+			fileRef = F59BE09403A5883C01CF0E76;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6876,6 +6902,8 @@
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
 				F50C03910354549D014B9BC9,
+				F522D6CC03A0397701CAC43C,
+				F59BE09403A5883C01CF0E76,
 				F531D2EC03658BC001AD0D07,
 				F5E3A81303707FA4013FACDE,
 			);
