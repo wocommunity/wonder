@@ -148,7 +148,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
             if(isSortedRelationship()){
                 Number lastIndex = null;
-                if (sortedObjects.count()>0) {
+                if (sortedObjects!=null && sortedObjects.count()>0) {
                     EOEnterpriseObject lastObject=(EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
                     lastIndex=(Number)lastObject.valueForKey(indexKey());
                 }
@@ -454,7 +454,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public void appendToResponse(WOResponse r, WOContext c){
-        if(sortedObjects == null && ((ERXSession)session()).javaScriptEnabled()){
+        if(((ERXSession)session()).javaScriptEnabled()){
             StringBuffer result = new StringBuffer();
             for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
                 e.hasMoreElements();){
