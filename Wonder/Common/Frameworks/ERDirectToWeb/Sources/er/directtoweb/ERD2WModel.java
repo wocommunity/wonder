@@ -463,7 +463,7 @@ public class ERD2WModel extends D2WModel {
     public Vector modelFilesInBundles () {
         Vector modelFiles = super.modelFilesInBundles();
         if (!_hasAddedExtraModelFile) {
-            String extraModelFilePath = NSProperties.stringForKey("ERExtraD2WModelFile");
+            String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
             // it appears super cache's the Vector, so only add the extraModelFile if we haven't already done it
             if (extraModelFilePath != null) {
                 if (cat.isDebugEnabled()) cat.debug("ERExtraD2WModelFile = \"" + extraModelFilePath + "\"");
