@@ -46,7 +46,7 @@ public abstract class ERXFrameworkPrincipal {
             if (initializedFrameworks.objectForKey(c.getName()) == null) {
                 log.debug("Starting up: " + c.getName());
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
-                ERXRetainer.retain(principal);
+                //ERXRetainer.retain(principal);
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
                 center.addObserver(principal,
                                    new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
@@ -71,7 +71,7 @@ public abstract class ERXFrameworkPrincipal {
      */
     public final void finishInitialization(NSNotification n) {
         NSNotificationCenter.defaultCenter().removeObserver(this);
-        ERXRetainer.release(this);
+        //ERXRetainer.release(this);
         finishInitialization();
     }
 
