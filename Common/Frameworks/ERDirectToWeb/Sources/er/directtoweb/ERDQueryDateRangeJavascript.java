@@ -12,7 +12,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
-public class ERDQueryDateRangeJavascript extends WOComponent {
+public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     public ERDQueryDateRangeJavascript(WOContext context) { super(context); }
 
@@ -21,11 +21,9 @@ public class ERDQueryDateRangeJavascript extends WOComponent {
     protected static final NSTimestampFormatter DATE_FORMAT_YEAR_TWO_DIGITS =
         new NSTimestampFormatter("%m/%d/%y") ;
 
-    protected WODisplayGroup _displayGroup;
     protected String key;
 
     public String propertyKey() { return key; }
-    public WODisplayGroup displayGroup() { return _displayGroup; }
 
     private String stringForDate(NSTimestamp d) {
         String result=null;
