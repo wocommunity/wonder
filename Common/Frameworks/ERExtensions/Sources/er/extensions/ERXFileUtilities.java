@@ -599,4 +599,32 @@ public class ERXFileUtilities {
 
         return new File(absolutePath);
     }
+
+    /**
+     * Generate an MD5 hash from a file.
+     *
+     * @param file the file to sum
+     * @return the MD5 sum of the bytes in file
+     * @exception IOException
+     */
+    public static byte[] md5(File file) throws IOException {
+        try {
+            java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");
+            return md5.digest(bytesFromFile(file));
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Generate an MD5 hash from a file.
+     *
+     * @param file the file to sum
+     * @return the hex encoded MD5 sum of the bytes in file
+     * @exception IOException
+     */
+    public static String md5Hex(File file) throws IOException {
+        return ERXStringUtilities.byteArrayToHexString(md5(file));
+    }
+    
 }
