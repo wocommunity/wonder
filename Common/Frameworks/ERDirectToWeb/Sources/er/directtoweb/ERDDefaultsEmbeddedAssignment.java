@@ -108,7 +108,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
             return classProperties.immutableClone();
         }
         
-        return new NSArray();
+        return NSArray.EmptyArray;
     }
     
     /**

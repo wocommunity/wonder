@@ -45,7 +45,7 @@ public class ERD2WCalendarPage extends ERD2WListPage {
                 System.err.println("Data Source: " + ds + "\n class: " + ds.getClass());
             _allObjects = ds.fetchObjects();
             } else {
-                _allObjects = ERXConstant.EmptyArray; // Empty Array
+                _allObjects = NSArray.EmptyArray; // Empty Array
                 System.err.println("Data Source: " + ds);
             }
             System.err.println("All Objects: " + _allObjects);
