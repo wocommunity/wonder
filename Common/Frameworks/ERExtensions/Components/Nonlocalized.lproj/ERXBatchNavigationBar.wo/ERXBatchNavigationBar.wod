@@ -120,31 +120,27 @@ SortKeyListConditional: WOConditional {
 	condition = hasSortKeyList;
 }
 
-String1: WOString {
+TotalBatches: WOString {
+	value = ^displayGroup.batchCount;
+}
+
+filteredObjectsCount: WOString {
 	value = filteredObjectsCount;
 }
 
-String2: WOString {
-	value = session.localizer.ERXBatchNavigationBar.of;
-}
-
-String3: WOString {
-	value = session.localizer.ERXBatchNavigationBar.show;
-}
-
-String4: WOString {
+items_per_page: WOString {
 	value = session.localizer.ERXBatchNavigationBar.items_per_page;
 }
 
-String5: WOString {
-	value = session.localizer.ERXBatchNavigationBar.page;
-}
-
-String6: WOString {
+of: WOString {
 	value = session.localizer.ERXBatchNavigationBar.of;
 }
 
-TotalBatches: WOString {
-	value = ^displayGroup.batchCount;
+page: WOString {
+	value = session.localizer.ERXBatchNavigationBar.page;
+}
+
+show: WOString {
+	value = session.localizer.ERXBatchNavigationBar.show;
 }
 
