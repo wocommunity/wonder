@@ -160,7 +160,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             String editConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("editConfigurationNameForEntity", eo.entityName());
             epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
             epi.setNextPage(context().page());
-            if (((er.extensions.ERXGenericRecord)eo).isNewEO())
+            if (((er.extensions.ERXGenericRecord)eo).isNewObject())
                 localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext(), false);
             else
                 localContext = er.extensions.ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
@@ -229,7 +229,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
             localContext.insertObject(newEO);
             // If the object already exists, then hookup the relationship, if not do it after the object is saved.
-            if (!((er.extensions.ERXGenericRecord)object).isNewEO()) {
+            if (!((er.extensions.ERXGenericRecord)object).isNewObject()) {
                 EOEnterpriseObject localEO = EOUtilities.localInstanceOfObject(localContext, object);
                 if (localEO != null)
                     localEO.addObjectToBothSidesOfRelationshipWithKey(newEO, key);

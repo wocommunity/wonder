@@ -26,6 +26,8 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
         super(c);
     }
 
+
+    
     public WOComponent editObjectInRelationship(){
         WOComponent result = null;
         System.out.println("browserSelections = "+browserSelections);
