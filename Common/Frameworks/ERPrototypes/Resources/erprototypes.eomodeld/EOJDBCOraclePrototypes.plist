@@ -8,6 +8,7 @@
             valueClassName = NSNumber; 
             valueType = d; 
         }, 
+        {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
         {
             columnName = ""; 
             externalType = CHAR; 
@@ -70,6 +71,22 @@
             name = longText; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSString; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = ""; 
+            externalType = BLOB; 
+            name = mutableArray; 
+            valueClassName = "er.extensions.ERXMutableArray"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = ""; 
+            externalType = BLOB; 
+            name = mutableDictionary; 
+            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueFactoryMethodName = fromBlob; 
         }, 
         {
             columnName = ""; 
@@ -166,7 +183,10 @@
         charFlag, 
         varcharLarge, 
         amount, 
-        type
+        type, 
+        mutableArray, 
+        mutableDictionary, 
+        blob
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -187,7 +207,10 @@
         charFlag, 
         varcharLarge, 
         amount, 
-        type
+        type, 
+        mutableArray, 
+        mutableDictionary, 
+        blob
     ); 
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 
