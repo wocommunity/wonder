@@ -14,7 +14,7 @@ import org.apache.log4j.Category;
 /**
  * ERXValidationExceptions extends the regular
  * {@link com.webobjects.foundation.NSValidation.ValidationException NSValidation.ValidationException}
- * to added template based resolution of the validation exception. See more
+ * to add template based resolution of the validation exception. See more
  * information about resolving templates in the {@link ERXValidationFactory ERXValidationFactory}.
  */
 public class ERXValidationException extends NSValidation.ValidationException implements NSKeyValueCoding {
