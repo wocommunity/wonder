@@ -277,13 +277,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
 
     public String formName() {
-        String result;
-        if(context() instanceof ERXMutableUserInfoHolderInterface) {
-            result = (String)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().valueForKey("formName");
-        } else {
-            result = "forms[0]";
-        }
-        return result;
+        return ERXWOForm.formName(context(), "forms[0]");
     }
     
     /**
