@@ -21,14 +21,46 @@ public class ERCStatic extends _ERCStatic {
     // Class methods go here
     
     public static class ERCStaticClazz extends _ERCStaticClazz {
+
         public ERCStatic objectMatchingKey(EOEditingContext ec, String value) {
             NSArray arr = preferencesWithKey(ec, value);
-            if(arr.count() == 1) {
-                return (ERCStatic)arr.objectAtIndex(0);
-            }
-            return null;
+            return (ERCStatic) (arr.count() == 1 ? arr.objectAtIndex(0) : null);
         }
+
+
+        // the STATIC table acts as a dictionary
+        private final static EOEditingContext _ec=ERXExtensions.newEditingContext();
+        public static String staticStoredValueForKey(String key) {
+            ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(_ec,key);
+            return entry!=null ? entry.value() : null;
+        }
+        public static int staticStoredIntValueForKey(String key) {
+            int result=-1;
+            String s= staticStoredValueForKey(key);
+            if (s!=null) {
+                try {
+                    result=Integer.parseInt(s);
+                } catch (NumberFormatException e) {}
+            }
+            return result;
+        }
+
+        public static void takeStaticStoredValueForKey(String value,
+                                                       String key,
+                                                       EOEditingContext editingContext) {
+            ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
+            if (entry==null) {
+                entry=(ERCStatic)ERXUtilities.createEO("ERCStatic", editingContext);
+            }
+            entry.setValue(value);
+        }
+            
+
+        
     }
 
-    public static ERCStaticClazz staticClazz() { return (ERCStaticClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCStatic"); }
+    public static ERCStaticClazz staticClazz() {
+        return (ERCStaticClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCStatic");
+    }
+
 }
