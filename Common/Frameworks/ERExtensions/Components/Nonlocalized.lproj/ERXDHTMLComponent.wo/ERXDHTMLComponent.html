@@ -181,7 +181,7 @@ function dhtmlGetPos(obj)
 function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 {
     if((navigator.appName.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Explorer") >= 0)
-       && navigator.appVersion.indexOf("Mac") == -1 || 1)
+       && navigator.appVersion.indexOf("Mac") == -1 || 0)
     {
 	var dhtmlName = varName + "_dhtml";
 	var inform = dhtmlGetFormByName(formName);
