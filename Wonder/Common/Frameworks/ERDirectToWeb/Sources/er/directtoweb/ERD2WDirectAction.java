@@ -112,10 +112,15 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             EOEditingContext ec = ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
             EOEnterpriseObject eo = null;
 
-            if(anActionName.startsWith(createPrefix)) {
-                eo = EOUtilities.createAndInsertInstance(ec,entityName);
-            } else {
-                eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
+            ec.lock();
+            try {
+                if(anActionName.startsWith(createPrefix)) {
+                    eo = EOUtilities.createAndInsertInstance(ec,entityName);
+                } else {
+                    eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
+                }
+            } finally {
+                ec.unlock();
             }
             epi.setObject(eo);
             epi.setNextPage(previousPageFromRequest());
