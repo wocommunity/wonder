@@ -91,6 +91,14 @@
 	<string>webo</string>
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
+	<key>NSJavaNeeded</key>
+	<string>YES</string>
+	<key>NSJavaPath</key>
+	<array>
+		<string>_WO$(SERVER_UNIQUIFIER)ERPrototypes.jar</string>
+	</array>
+	<key>NSJavaRoot</key>
+	<string>Versions/A/Resources/Java</string>
 </dict>
 </plist>
 ";
@@ -115,6 +123,7 @@
 		017C7B32FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				631EB688054571E10075BC1F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,6 +424,7 @@
 		};
 		40B5827FFFD5E7DB7F000001 = {
 			children = (
+				631EB684054571900075BC1F,
 				639E06BE0466687700A83704,
 				416649EF044767FD00000102,
 				40B5828CFFD5E91B7F000001,
@@ -532,6 +542,8 @@
 	<string>ERPrototypes.jar</string>
 	<key>NSJavaRoot</key>
 	<string>Resources/Java</string>
+	<key>NSPrincipalClass</key>
+	<string>er.prototypes.ERPPrincipalClass</string>
 </dict>
 </plist>
 ";
@@ -716,6 +728,43 @@
 //632
 //633
 //634
+		631EB684054571900075BC1F = {
+			children = (
+				631EB685054571B70075BC1F,
+			);
+			isa = PBXGroup;
+			name = Sources;
+			refType = 4;
+		};
+		631EB685054571B70075BC1F = {
+			children = (
+				631EB686054571BC0075BC1F,
+			);
+			isa = PBXGroup;
+			name = er;
+			refType = 4;
+		};
+		631EB686054571BC0075BC1F = {
+			children = (
+				631EB687054571E10075BC1F,
+			);
+			isa = PBXGroup;
+			name = prototypes;
+			refType = 4;
+		};
+		631EB687054571E10075BC1F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERPPrincipalClass.java;
+			path = Sources/er/prototypes/ERPPrincipalClass.java;
+			refType = 4;
+		};
+		631EB688054571E10075BC1F = {
+			fileRef = 631EB687054571E10075BC1F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		639E06BE0466687700A83704 = {
 			children = (
 				639E06BF046668A600A83704,
