@@ -6,9 +6,7 @@ import java.math.BigDecimal;
 /**
  * ERXValueUtilities has usefull conversion methods for
  * reading and transforming <code>boolean</code>,
- * <code>int</code>, <code>NSArray</code>,
- * <code>NSDictionary</code> and <code>BigDecimal</code>
- * values from other objects - mostly strings.
+ * <code>int</code> and <code>float</code>values.
  *
  * @created ak on Mon Oct 28 2002
  * @project ERExtensions
@@ -65,36 +63,35 @@ public class ERXValueUtilities {
      * a String or a Number. Numbers are false if they equal
      * <code>0</code>, Strings are false if they equal (case insensitive)
      * 'no', 'false' or parse to 0. The default value is used if
-     * the object is null or empty (in case the object is a String).
+     * the object is null.
      * @param obj object to be evaluated
      * @param def default value if object is null
      * @return boolean evaluation of the given object
      */
     public static boolean booleanValueWithDefault(Object obj, boolean def) {
-        boolean flag = def;
+        boolean flag = true;
         if (obj != null) {
             // FIXME: Should add support for the BooleanOperation interface
             if (obj instanceof Number) {
-                flag = ((Number)obj).intValue() != 0;
+                if (((Number)obj).intValue() == 0)
+                    flag = false;
             } else if(obj instanceof String) {
                 String s = ((String)obj).trim();
-                if(s.length() == 0) {
-                    //CHECKME AK: we take the empty string as a NULL value, this seems the most reasonable value to me as the RuleEditor in D2W is not able to provide <empty> string values anymore
-                    flag = def;
-                } else if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n")) {
+                if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n"))
                     flag = false;
-                } else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y")) {
+                else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y"))
                     flag = true;
-                } else {
+                else
                     try {
-                        flag = Integer.parseInt(s) != 0;
-                     } catch(NumberFormatException ex) {
-                        throw new NSForwardException(ex, "Error parsing boolean from value \"" + s + "\"");
+                        if (Integer.parseInt(s) == 0)
+                            flag = false;
+                    } catch(NumberFormatException numberformatexception) {
+                        throw new RuntimeException("Error parsing boolean from value \"" + s + "\"");
                     }
-                }
-            } else if (obj instanceof Boolean) {
+            } else if (obj instanceof Boolean)
                 flag = ((Boolean)obj).booleanValue();
-            }
+        } else {
+            flag = def;
         }
         return flag;
     }
@@ -136,8 +133,7 @@ public class ERXValueUtilities {
      * implementation tests if the object is an instance of
      * a String, Number and Boolean. Booleans are 1 if they equal
      * <code>true</code>. The default value is used if
-     * the object is null or empty (in case the object is a String)
-     * or the boolean value is false.
+     * the object is null or the boolean value is false.
      * @param obj object to be evaluated
      * @param def default value if object is null
      * @return int evaluation of the given object
@@ -147,15 +143,17 @@ public class ERXValueUtilities {
         if (obj != null) {
             if (obj instanceof Number) {
                 value = ((Number)obj).intValue();
-            } else if(obj instanceof String && ((String)obj).length() != 0) {
+            } else if(obj instanceof String) {
                 try {
-                    value = Integer.parseInt((String)obj);
-                } catch(NumberFormatException ex) {
-                    throw new NSForwardException(ex, "Error parsing integer from value \"" + value + "\"");
+                    String stringValue = ((String)obj).trim(); // Need to trim trailing space
+                    value = Integer.parseInt(stringValue);
+                } catch(NumberFormatException numberformatexception) {
+                    throw new IllegalStateException("Error parsing integer from value " + obj);
                 }
-            } else if (obj instanceof Boolean) {
+            } else if (obj instanceof Boolean)
                 value = ((Boolean)obj).booleanValue() ? 1 : def;
-            }
+        } else {
+            value = def;
         }
         return value;
     }
