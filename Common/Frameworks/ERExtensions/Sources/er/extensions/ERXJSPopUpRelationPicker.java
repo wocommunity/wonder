@@ -84,6 +84,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
     protected String elementID;
     protected Integer size;
+    private static final int NOT_FOUND = -1;
     
     public void awake() {
         super.awake();
@@ -105,43 +106,86 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         super.appendToResponse(response, context);
     }
     
+    protected int offsetForID(String id, String defaultString) {
+        if(!(id == null || id.trim().length() == 0 
+                || "null".equals(id) 
+                || (defaultString != id && defaultString.equals(id)))) {
+            try {
+                return Integer.parseInt(id);
+            } catch (Exception e) {
+                log.info("Exception while parsing ID", e);
+            }
+        }
+        return NOT_FOUND;
+    }
+    
+    protected Object parentFromID(String id) {
+        int offset = offsetForID(id, parentPopUpStringForAll());
+        if(offset != NOT_FOUND) {
+            return parentEntitiesList().objectAtIndex(offset);
+        }
+        return null;
+    }
+    
+    protected Object idForParent(Object parent) {
+        if(parent != null) {
+            return new Integer(parentEntitiesList().indexOfObject(parent));
+        }
+        return null;
+    }
+    
+    protected Object childFromID(Object parent, String id) {
+        if(id != null) {
+            NSArray ids = NSArray.componentsSeparatedByString(id, "|");
+            if(ids.count() == 2) {
+                if(parent != null) {
+                    parent = parentFromID((String)ids.objectAtIndex(0));
+                }
+                int offset = offsetForID((String)ids.objectAtIndex(1), childPopUpStringForAll());
+                if(offset != NOT_FOUND && parent != null) {
+                    return sortedChildren(parent).objectAtIndex(offset);
+                }
+            } else {
+                log.info("Child ID not valid: " + id);
+            }
+        }
+        return null;
+    }
+    
+    protected Object idForChild(Object parent, Object child) {
+        if(parent != null) {
+            int offset = sortedChildren(parent).indexOfObject(child);
+            if(offset != NOT_FOUND) {
+                return idForParent(parent) + "|" + offset;
+            }
+        }
+        return null;
+    }
+    
+   
     public void takeValuesFromRequest(WORequest request, WOContext context) {
-        // get the form values for selected_parent_id and selected_child_id and use these to set the selectedParent and selectedChild values
+        // get the form values for selected_parent_id and selected_child_id and use these to set the 
+        // selectedParent and selectedChild values
         // takeValues always returns a String, but sometimes it's an empty string if no value is set on the form element.
-        // the values returned correspond to the hashCode's of the objects, not the entityId's. This allows us to use this class with objects that don't inherit from NSObject.
+        // the values returned correspond to the hashCode's of the objects, not the entityId's. 
+        // This allows us to use this class with objects that don't inherit from NSObject.
         updateVarNames();
 
 
-        String parent_id = request.stringFormValueForKey(selectedParentId);
-        String child_id = request.stringFormValueForKey(selectedChildId);
+        String parentID = request.stringFormValueForKey(selectedParentId);
+        String childID = request.stringFormValueForKey(selectedChildId);
+        
+        Object parent = parentFromID(parentID);
+        setSelectedParent(parent);
+        
+        Object child = childFromID(parent, childID);
+        setSelectedChild(child);
 
-        if(parent_id == null || parent_id.trim().length() == 0 || "null".equals(parent_id) || (parentPopUpStringForAll() != null && parentPopUpStringForAll().equals(parent_id))) {
-            setSelectedParent(null);
-        } else {
-            try {
-                int parentIdToHash = Integer.parseInt(parent_id);
-                setSelectedParent(parentWithHashCode(parentIdToHash));
-            } catch (Exception e) {
-                log.info("Exception while getting parent" ,e);
-            }
-        }
-
-        if(child_id == null || child_id.trim().length() == 0 || "null".equals(child_id) || (childPopUpStringForAll() != null && childPopUpStringForAll().equals(child_id))) {
-            setSelectedChild(null);
-        } else {
-            try {
-                int childIdToHash = Integer.parseInt(child_id);
-                setSelectedChild(childWithHashCode(childIdToHash));
-            } catch (Exception e) {
-                setSelectedChild(null);
-                log.info("Exception while getting child" ,e);
-            }
-        }
         if (log.isDebugEnabled()) {
-            log.debug("selected_parent_id: " + parent_id);
+            log.debug("selected_parent_id: " + parentID);
             log.debug("selectedParent: " + selectedParent());
             
-            log.debug("selected_child_id: " + child_id);
+            log.debug("selected_child_id: " + childID);
             log.debug("selectedChild: " + selectedChild());
         }
         super.takeValuesFromRequest(request, context);
@@ -156,35 +200,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         NSMutableArray sortArray=new NSMutableArray(sortOrdering);
         NSArray result=EOSortOrdering.sortedArrayUsingKeyOrderArray(unsortedChildren(parent), sortArray);
         return result!=null ? result : NSArray.EmptyArray;
-    }
-
-    protected Object childWithHashCode(int hashCode) {
-        // run through the parents and all of their children and find a child with the hash code and return it, else return null
-        int iCount = parentEntitiesList().count();
-        for (int i=0;i<iCount;i++) {
-            Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
-            NSArray children = unsortedChildren(aParent);
-            int jCount = children.count();
-            for (int j=0;j<jCount;j++) {
-                Object aChild = (Object)children.objectAtIndex(j);
-                if (aChild.hashCode() == hashCode) {
-                    return aChild;
-                }
-            }
-        }
-        return null;
-    }
-
-    protected Object parentWithHashCode(int hashCode) {
-        // run through the parents and find one with the hash code and return it, else return null
-        int iCount = parentEntitiesList().count();
-        for (int i=0;i<iCount;i++) {
-            Object aEntity = (Object)parentEntitiesList().objectAtIndex(i);
-            if (aEntity.hashCode() == hashCode) {
-                return aEntity;
-            }
-        }
-        return null;
     }
 
     public String jsString() {
@@ -219,7 +234,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
      * @return
      */
     private String hiddenField(String name, Object value) {
-        return "<input type=\"hidden\" name=\""+name+"\"" + (value == null ? ""  : " value=\"" + value.hashCode()) + "\" />\n";
+        return "<input type=\"hidden\" name=\""+name+"\"" + (value == null ? ""  : " value=\"" + value) + "\" />\n";
     }
     
    /*
@@ -231,12 +246,15 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         StringBuffer returnString;
 
         returnString = new StringBuffer(500);
-        returnString.append(hiddenField(selectedParentId, selectedParent()));
-        returnString.append(hiddenField(selectedChildId, selectedChild()));
+        Object parentID = idForParent(selectedParent());
+        Object childID = idForChild(selectedParent(), selectedChild());
+        
+        returnString.append(hiddenField(selectedParentId, parentID));
+        returnString.append(hiddenField(selectedChildId, childID));
 
         String children = "allChildren("+parentsChildrenId+")";
         if(selectedParent() != null) {
-            children = "getParentEntityForId(" + parentsChildrenId + "," + selectedParent().hashCode() + ").children";
+            children = "getParentEntityForId(" + parentsChildrenId + ",'" + parentID + "').children";
         }
         returnString.append("<script language=\"JavaScript\">\nsetSelectToArrayOfEntities("
                +"window.document." + formName() + "." + childSelectName + "," 
@@ -270,7 +288,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             if (aEntity.equals(selectedParent())) {
                 returnString.append("selected=\"selected\" ");
             }
-            returnString.append("value=\"" + aEntity.hashCode() + "\">");
+            returnString.append("value=\"" + idForParent(aEntity) + "\">");
             returnString.append(NSKeyValueCoding.Utility.valueForKey(aEntity, parentDisplayValueName()));
             returnString.append("\n");
         }
@@ -302,21 +320,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         if (selectedParent() != null) {
             if (selectedChild()==null && defaultChildKey()!=null)
                 setSelectedChild(NSKeyValueCoding.Utility.valueForKey(selectedParent(), defaultChildKey()));
-            NSArray children = sortedChildren(selectedParent());
-            // write out each of the values for the options tags. be sure to set the selected tag if necessary
-            int iCount = children.count();
-            for (int i=0;i<iCount;i++) {
-                Object aChild = children.objectAtIndex(i);
-                returnString.append("\t<option ");
-                if ((i == iCount-1) && (selectedChild() == null) && (childPopUpStringForAll() == null)) {
-                    returnString.append("selected ");
-                } else if (aChild.equals(selectedChild())) {
-                    returnString.append("selected ");
-                }
-                returnString.append("value=\"" + aChild.hashCode() + "\">");
-                returnString.append(NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()));
-                returnString.append("\n");
-            }
+            appendChildPopupStringWithParent(returnString, selectedParent());
         } else {
             // nothing is selected in the parent, so set the children array to all possible child values
             // run through all parents, getting each child. However, if we don't have a parentPopUpStringForAll then we only do it for the last parent.
@@ -324,45 +328,15 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 int iCount = parentEntitiesList().count();
                 for (int i=0;i<iCount;i++) {
                     Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
-                    //prePendText = aParent.valueForKey(parentDisplayValueName()) + "+";
-                    NSArray children = sortedChildren(aParent);
-                    int jCount = children.count();
-                    for (int j=0;j<jCount;j++) {
-                        Object aChild = children.objectAtIndex(j);
-                        returnString.append("\t<option ");
-                        if ((j == jCount-1) && (selectedChild() == null) && (childPopUpStringForAll() == null)) {
-                            returnString.append("selected ");
-                        } else if (aChild.equals(selectedChild())) {
-                            returnString.append("selected ");
-                        }
-                        returnString.append("value=\"" + aChild.hashCode() + "\">");
-                        //returnString.append(prePendText);
-                        returnString.append(NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()));
-                        returnString.append("\n");
-                    }
+                    appendChildPopupStringWithParent(returnString, aParent);
                 }
             } else {
-                // only do the last parent because we don't have a selected parent AND we don't have the possibility of setting the parent to 'All'
+                // only do the last parent because we don't have a selected parent AND we don't have the possibility 
+                // of setting the parent to 'All'
                 Object aParent = parentEntitiesList().objectAtIndex(0);
                 setSelectedChild(defaultChildKey()!=null ?
                     NSKeyValueCoding.Utility.valueForKey(aParent, defaultChildKey()) : null);
-
-                //prePendText = aParent.valueForKey(parentDisplayValueName()) + "+";
-                NSArray children = sortedChildren(aParent);
-                int jCount = children.count();
-                for (int j=0;j<jCount;j++) {
-                    Object aChild = children.objectAtIndex(j);
-                    returnString.append("\t<option ");
-                    if ((j == jCount-1) && (selectedChild() == null) && (childPopUpStringForAll() == null)) {
-                        returnString.append("selected ");
-                    } else if (aChild.equals(selectedChild())) {
-                        returnString.append("selected ");
-                    }
-                    returnString.append("value=\"" + aChild.hashCode() + "\">");
-                    //returnString.append(prePendText);
-                    returnString.append(NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()));
-                    returnString.append("\n");
-                }
+                appendChildPopupStringWithParent(returnString, aParent);
             }
         }
 
@@ -370,6 +344,24 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         if (jsLog.isDebugEnabled()) jsLog.debug("JSPopUpRelationPicker childPopUpString  returnString is " + returnString);
         return returnString.toString();
     }
+    
+    private void appendChildPopupStringWithParent(StringBuffer returnString, Object aParent) {
+        NSArray children = sortedChildren(aParent);
+        // write out each of the values for the options tags. be sure to set the selected tag if necessary
+        int iCount = children.count();
+        for (int i=0;i<iCount;i++) {
+            Object aChild = children.objectAtIndex(i);
+            returnString.append("\t<option ");
+            if (((i == iCount-1) && (selectedChild() == null) && (childPopUpStringForAll() == null)) 
+                    || (aChild.equals(selectedChild()))) {
+                returnString.append("selected=\"selected\" ");
+            }
+            returnString.append("value=\"" + idForChild(aParent, aChild) + "\">");
+            returnString.append(NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()));
+            returnString.append("\n");
+        }
+    }
+
     protected StringBuffer selectHeader(String nm, String oc, Object selectedEntity, String additionalPopupText) {
         StringBuffer returnString;
         int i, iCount;
@@ -417,7 +409,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
             returnString.append("\n\tnew Entity(");
             returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aParent, parentDisplayValueName()) + "\",");
-            returnString.append(" \"" + aParent.hashCode() + "\",");
+            returnString.append(" \"" + idForParent(aParent) + "\",");
 
             // now do all the possible children of the parent. Each child should look like 'new Entity("poodle","4",null,false)'
             returnString.append(" new Array(");
@@ -431,7 +423,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 Object aChild = (Object)childrenOfAParent.objectAtIndex(j);
                 returnString.append("\n\t\t new Entity(");
                 returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
-                returnString.append(" \"" + aChild.hashCode() + "\","); // value text of pop-up
+                returnString.append(" \"" + idForChild(aParent, aChild) + "\","); // value text of pop-up
                 returnString.append(" null,");
                 if (aChild.equals(selectedChild())) {
                     returnString.append(" true");
