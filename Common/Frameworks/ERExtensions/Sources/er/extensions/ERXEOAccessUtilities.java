@@ -554,7 +554,14 @@ public class ERXEOAccessUtilities {
         EOAttribute attribute = e.entity().attributeNamed(key);
         if(attribute == null) {
             EORelationship relationship = e.entity().relationshipNamed(key);
-            attribute = ((EOJoin)relationship.joins().lastObject()).sourceAttribute();
+            if(relationship == null) {
+                throw new IllegalArgumentException(key +" is neither an attribute nor a relationship of entity " + e.entity().name());
+            }
+            if(relationship.isFlattened()) {
+                //FIXME!
+            } else {
+                attribute = ((EOJoin)relationship.joins().lastObject()).sourceAttribute();
+            }
         }
         sb.append(e.sqlStringForAttribute(attribute));
         sb.append(" IN ");

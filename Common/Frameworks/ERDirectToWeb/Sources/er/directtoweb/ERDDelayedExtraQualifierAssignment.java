@@ -81,14 +81,14 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
             return null;
         if(objects.count() == 0)
             return new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, null);
-        if(false) {
-            
+        if(true) {
             NSMutableArray qualifiers = new NSMutableArray();
             for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ) {
                 qualifiers.addObject(new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, e.nextElement()));
             }
             return new EOOrQualifier(qualifiers);
         } else {
+            // FIXME ak doesn't work with derived attributes
             return new ERXPrimaryKeyListQualifier(key, objects);
         }
     }
