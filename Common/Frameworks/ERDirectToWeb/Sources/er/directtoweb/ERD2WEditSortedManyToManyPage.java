@@ -127,7 +127,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public String browserStringForItem() {
-        return browserItem!=null ? browserItem.valueForKeyPath(displayKey()).toString() : null;
+        return browserItem!=null &&
+        browserItem.valueForKeyPath(displayKey())!=null ?
+        browserItem.valueForKeyPath(displayKey()).toString() : "missing data";
     }
 
     public String displayNameForRelationshipKey() {
