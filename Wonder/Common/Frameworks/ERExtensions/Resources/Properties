@@ -109,6 +109,13 @@ er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
 er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
 
 #########################################################################
+# ERXAdaptorChannelDelegate 
+#########################################################################
+# er.extensions.ERXAdaptorChannelDelegate.enabled=false
+# er.extensions.ERXAdaptorChannelDelegate.maxMilliSeconds=10
+# log4j.category.er.extensions.ERXAdaptorChannelDelegate.sqlLogging
+
+#########################################################################
 # ERXEC 
 #########################################################################
 # decides if new ECs use the shared editing context
