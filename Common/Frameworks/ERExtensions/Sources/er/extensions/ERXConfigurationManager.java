@@ -160,9 +160,15 @@ public class ERXConfigurationManager {
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
                 String url= stringForKey(aModelName + ".URL");
                 url = url ==null ? stringForKey("dbConnectURLGLOBAL") : url;
-                if (url!=null) {
+                String userName= stringForKey(aModelName + ".DBUser");
+                userName= userName ==null ? stringForKey("dbConnectUserGLOBAL") : userName;
+                String passwd= stringForKey(aModelName + ".DBPassword");
+                passwd= passwd ==null ? stringForKey("dbConnectPasswordGLOBAL") : passwd;
+                if (url!=null || userName!=null || passwd!=null) {
                     NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
-                    newCD.setObjectForKey(url, "URL");
+                    if (url!=null) newCD.setObjectForKey(url, "URL");
+                    if (userName!=null) newCD.setObjectForKey(userName,"username");
+                    if (passwd!=null) newCD.setObjectForKey(passwd,"password");
                     aModel.setConnectionDictionary(newCD);
                     if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary "+newCD);
                 }
