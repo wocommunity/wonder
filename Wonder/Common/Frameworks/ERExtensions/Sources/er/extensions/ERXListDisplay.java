@@ -21,7 +21,7 @@ public class ERXListDisplay extends WOComponent {
     ///////////////////////////  log4j category  ///////////////////////////
     public static final Category cat = Category.getInstance(ERXListDisplay.class);
     
-    public boolean synchronizesBindingsWithVariables() { return false; }
+    public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
 
     public boolean escapeHTML() {
