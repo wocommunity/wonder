@@ -211,6 +211,7 @@
 				50A226C80414923400FE4A4F,
 				50FC3E1A041D083400CF0E76,
 				50FC3E1C041D083400CF0E76,
+				415A945E0420113D00000105,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -752,6 +753,7 @@
 				C65E1ED80072974704CD2B8D,
 				FF70E86C02244EA903CD29B6,
 				5068EED4040E7C1500CF0E76,
+				415A945D0420113D00000105,
 				5068EEEC040E7C1500CF0E76,
 				50A226C70414923400FE4A4F,
 			);
@@ -899,6 +901,18 @@
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
+		};
+		415A945D0420113D00000105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = d2w.d2wmodel;
+			refType = 4;
+		};
+		415A945E0420113D00000105 = {
+			fileRef = 415A945D0420113D00000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 //410
 //411
