@@ -1,5 +1,5 @@
 EntityName: WOString {
-	value = ^d2wContext.displayNameForEntity;
+	value = ^displayNameForEntity;
 }
 
 ExclamationImage: WOImage {
@@ -9,21 +9,21 @@ ExclamationImage: WOImage {
 }
 
 FontContainer: WOGenericContainer {
-	color = ^d2wContext.textColor;
+	color = ^textColor;
 	elementName = "font";
 }
 
 NonNullConditional1: ERXNonNullConditional {
-	condition = ^d2wContext.emptyListMessage;
+	condition = ^emptyListMessage;
 	negate = true;
 }
 
 NonNullConditional2: ERXNonNullConditional {
-	condition = ^d2wContext.emptyListMessage;
+	condition = ^emptyListMessage;
 }
 
 String1: WOString {
-	value = ^d2wContext.emptyListMessage;
+	value = ^emptyListMessage;
 	escapeHTML = false;
 }
 
