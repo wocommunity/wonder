@@ -97,6 +97,7 @@ public class ERXExtensions {
 	    ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
+            ERXArrayUtilities.initialize();
         }
 
         /**
@@ -938,45 +939,10 @@ public class ERXExtensions {
     /**
      * Recursively flattens an array of arrays into a single
      * array of elements.<br/>
-     * <br/>
-     * For example:<br/>
-     * <code>NSArray foos;</code> //Assume exists<br/>
-     * <code>NSArray bars = (NSArray)foos.valueForKey("toBars");</code>
-     * In this case if <code>foos</code> contained five elements
-     * then the array <code>bars</code> will contain five arrays
-     * each corresponding to what <code>aFoo.toBars</code> would
-     * return. To have the entire collection of <code>bars</code>
-     * in one single arra you would call:
-     * <code>NSArray allBars = flatten(bars)</code>
-     * @param array to be flattened
-     * @return an array containing all of the elements from
-     *		all of the arrays contained within the array
-     *		passed in.
+     * @depreceated use {$link  ERXArrayUtilities.flatten} instead.
      */
-    // ENHANCEME: Should add option to filter duplicates
-    // MOVEME: ERXArrayUtilities
     public static NSArray flatten(NSArray array) {
-        NSMutableArray newArray=null;
-        for (int i=0; i<array.count(); i++) {
-            Object element=array.objectAtIndex(i);
-            if (element instanceof NSArray) {
-                if (newArray==null) {
-                    newArray=new NSMutableArray();
-                    for (int j=0; j<i; j++) {
-                        if(array.objectAtIndex(j)!=null){
-                            newArray.addObject(array.objectAtIndex(j));
-                        }
-                    }
-                }
-                NSArray a=flatten((NSArray)element);
-                for (int j=0; j<a.count();j++) {
-                    if(a.objectAtIndex(j)!=null){
-                        newArray.addObject(a.objectAtIndex(j));
-                    }
-                }
-            }
-        }
-        return (newArray !=null) ? newArray : array;
+        return ERXArrayUtilities.flatten(array);
     }
 
     /**
