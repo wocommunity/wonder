@@ -5,12 +5,58 @@
 	};
 	objectVersion = 38;
 	objects = {
+		4114919404477E4200000102 = {
+			isa = PBXFrameworkReference;
+			path = ERPrototypes.framework;
+			refType = 3;
+		};
+		4114919504477E4200000102 = {
+			fileRef = 4114919404477E4200000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4114919604477E5900000102 = {
+			buildArgumentsString = "-emacs -Dproject.name=\"BugTracker\" -Dproject.type=\"app\" -f ../../../Build/build/generic.xml generic.$ACTION";
+			buildPhases = (
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Ant;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = /usr/local/ant/bin/ant;
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = Ant;
+			passBuildSettingsInEnvironment = 1;
+			productName = Ant;
+			settingsToExpand = 6;
+			settingsToPassInEnvironment = 287;
+			settingsToPassOnCommandLine = 280;
+		};
+//410
+//411
+//412
+//413
+//414
+//660
+//661
+//662
+//663
+//664
 		666256D30203C81E00CEE8E5 = {
 			buildStyles = (
 				666257E80203C81E00CEE8E5,
 				666257E90203C81E00CEE8E5,
 				666257EA0203C81E00CEE8E5,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -26,6 +72,7 @@
 				666257540203C81E00CEE8E5,
 				666257560203C81E00CEE8E5,
 				666257BD0203C81E00CEE8E5,
+				4114919604477E5900000102,
 			);
 		};
 		666256D40203C81E00CEE8E5 = {
@@ -141,6 +188,7 @@
 		};
 		6662573F0203C81E00CEE8E5 = {
 			children = (
+				4114919404477E4200000102,
 				F6025981023E714801AD0D07,
 				F6025979023E712E01AD0D07,
 				F602597A023E712E01AD0D07,
@@ -156,7 +204,6 @@
 				6662574A0203C81E00CEE8E5,
 				6662574B0203C81E00CEE8E5,
 				6662574C0203C81E00CEE8E5,
-				F5D271050321D19601864B48,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -343,7 +390,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		666257550203C81E00CEE8E5 = {
 			isa = PBXTargetDependency;
@@ -364,6 +410,7 @@
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -416,7 +463,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		666257570203C81E00CEE8E5 = {
 			buildActionMask = 2147483647;
@@ -553,7 +599,7 @@
 				666257B50203C81E00CEE8E5,
 				666257B60203C81E00CEE8E5,
 				666257B70203C81E00CEE8E5,
-				F5D271070321D19601864B48,
+				4114919504477E4200000102,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -659,6 +705,7 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -702,7 +749,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		666257BE0203C81E00CEE8E5 = {
 			buildActionMask = 2147483647;
@@ -926,6 +972,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -1017,151 +1065,181 @@
 			refType = 4;
 		};
 		F54C4B1D02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Application.java;
 			refType = 4;
 		};
 		F54C4B1E02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = BTListPage.java;
 			refType = 4;
 		};
 		F54C4B1F02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = BugReportEmail.java;
 			refType = 4;
 		};
 		F54C4B2002C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = BugsPerUser.java;
 			refType = 4;
 		};
 		F54C4B2102C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ComponentPicker.java;
 			refType = 4;
 		};
 		F54C4B2202C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ComponentReport.java;
 			refType = 4;
 		};
 		F54C4B2302C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = CreateTestItemFromReq.java;
 			refType = 4;
 		};
 		F54C4B2402C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = DirectAction.java;
 			refType = 4;
 		};
 		F54C4B2502C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = EditBug.java;
 			refType = 4;
 		};
 		F54C4B2602C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = EditOwner.java;
 			refType = 4;
 		};
 		F54C4B2702C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = EditRequirement.java;
 			refType = 4;
 		};
 		F54C4B2802C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FileBugFromTestItem.java;
 			refType = 4;
 		};
 		F54C4B2902C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FreeQuery.java;
 			refType = 4;
 		};
 		F54C4B2A02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = HomePage.java;
 			refType = 4;
 		};
 		F54C4B2B02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Inspectbug.java;
 			refType = 4;
 		};
 		F54C4B2C02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = LinkToBookmarkBug.java;
 			refType = 4;
 		};
 		F54C4B2D02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Main.java;
 			refType = 4;
 		};
 		F54C4B2E02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MarkReadFly.java;
 			refType = 4;
 		};
 		F54C4B2F02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MenuHeader.java;
 			refType = 4;
 		};
 		F54C4B3002C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OnlineHatSystem.java;
 			refType = 4;
 		};
 		F54C4B3102C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PageWrapper.java;
 			refType = 4;
 		};
 		F54C4B3202C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PriorityComponent.java;
 			refType = 4;
 		};
 		F54C4B3302C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PushRelease.java;
 			refType = 4;
 		};
 		F54C4B3402C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ReadMarker.java;
 			refType = 4;
 		};
 		F54C4B3502C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Session.java;
 			refType = 4;
 		};
 		F54C4B3602C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = StatusComponent.java;
 			refType = 4;
 		};
 		F54C4B3702C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TextForEdit.java;
 			refType = 4;
 		};
 		F54C4B3802C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TextForInspect.java;
 			refType = 4;
 		};
 		F54C4B3902C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TextForNew.java;
 			refType = 4;
 		};
 		F54C4B3A02C4DF3A01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ViewUser.java;
 			refType = 4;
@@ -1347,6 +1425,7 @@
 			};
 		};
 		F54C4C5F02C4E41301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = KeyValueCodingProtectedAccessor.java;
 			refType = 4;
@@ -1358,180 +1437,210 @@
 			};
 		};
 		F55BB69E02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = MenuHeader.api;
 			path = Components/MenuHeader.api;
 			refType = 2;
 		};
 		F55BB69F02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = BTListPage.api;
 			path = Components/BTListPage.api;
 			refType = 2;
 		};
 		F55BB6A002C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = BugReportEmail.api;
 			path = Components/BugReportEmail.api;
 			refType = 2;
 		};
 		F55BB6A102C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = BugsPerUser.api;
 			path = Components/BugsPerUser.api;
 			refType = 2;
 		};
 		F55BB6A202C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ComponentPicker.api;
 			path = Components/ComponentPicker.api;
 			refType = 2;
 		};
 		F55BB6A302C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ComponentReport.api;
 			path = Components/ComponentReport.api;
 			refType = 2;
 		};
 		F55BB6A402C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CreateBugFromTicket.api;
 			path = Components/CreateBugFromTicket.api;
 			refType = 2;
 		};
 		F55BB6A502C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CreateTestItemFromReq.api;
 			path = Components/CreateTestItemFromReq.api;
 			refType = 2;
 		};
 		F55BB6A602C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = EditBug.api;
 			path = Components/EditBug.api;
 			refType = 2;
 		};
 		F55BB6A702C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = EditOwner.api;
 			path = Components/EditOwner.api;
 			refType = 2;
 		};
 		F55BB6A802C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = EditRequirement.api;
 			path = Components/EditRequirement.api;
 			refType = 2;
 		};
 		F55BB6A902C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = FileBugFromTestItem.api;
 			path = Components/FileBugFromTestItem.api;
 			refType = 2;
 		};
 		F55BB6AA02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = FileReqFromTicket.api;
 			path = Components/FileReqFromTicket.api;
 			refType = 2;
 		};
 		F55BB6AB02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = FreeQuery.api;
 			path = Components/FreeQuery.api;
 			refType = 2;
 		};
 		F55BB6AC02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = HomePage.api;
 			path = Components/HomePage.api;
 			refType = 2;
 		};
 		F55BB6AD02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Inspectbug.api;
 			path = Components/Inspectbug.api;
 			refType = 2;
 		};
 		F55BB6AE02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = LinkToBookmarkBug.api;
 			path = Components/LinkToBookmarkBug.api;
 			refType = 2;
 		};
 		F55BB6AF02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.api;
 			path = Components/Main.api;
 			refType = 2;
 		};
 		F55BB6B002C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = MarkReadFly.api;
 			path = Components/MarkReadFly.api;
 			refType = 2;
 		};
 		F55BB6B102C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = OnlineHatSystem.api;
 			path = Components/OnlineHatSystem.api;
 			refType = 2;
 		};
 		F55BB6B202C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = PageWrapper.api;
 			path = Components/PageWrapper.api;
 			refType = 2;
 		};
 		F55BB6B302C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = PriorityComponent.api;
 			path = Components/PriorityComponent.api;
 			refType = 2;
 		};
 		F55BB6B402C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = PushRelease.api;
 			path = Components/PushRelease.api;
 			refType = 2;
 		};
 		F55BB6B502C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ReadMarker.api;
 			path = Components/ReadMarker.api;
 			refType = 2;
 		};
 		F55BB6B602C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = StatusComponent.api;
 			path = Components/StatusComponent.api;
 			refType = 2;
 		};
 		F55BB6B702C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = TextForEdit.api;
 			path = Components/TextForEdit.api;
 			refType = 2;
 		};
 		F55BB6B802C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = TextForInspect.api;
 			path = Components/TextForInspect.api;
 			refType = 2;
 		};
 		F55BB6B902C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = TextForNew.api;
 			path = Components/TextForNew.api;
 			refType = 2;
 		};
 		F55BB6BA02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = TicketReportEmail.api;
 			path = Components/TicketReportEmail.api;
 			refType = 2;
 		};
 		F55BB6BB02C4DC7B01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ViewUser.api;
 			path = Components/ViewUser.api;
@@ -2366,27 +2475,32 @@
 			refType = 2;
 		};
 		F55BB81802C4DCC201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GettingStarted;
 			refType = 4;
 		};
 		F55BB81902C4DCC201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ReadMe.html;
 			refType = 4;
 		};
 		F55BB81A02C4DCC201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ToDo;
 			refType = 4;
 		};
 		F55BB81B02C4DCDF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = user.d2wmodel;
 			path = Resources/user.d2wmodel;
 			refType = 2;
 		};
 		F55BB81C02C4DCDF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CustomInfo.plist;
 			path = Resources/CustomInfo.plist;
@@ -2415,6 +2529,7 @@
 			refType = 2;
 		};
 		F55BB82002C4DCEC01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = Resources/English.lproj/Localizable.strings;
@@ -2427,6 +2542,7 @@
 			};
 		};
 		F586B87B031536070123DCAA = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/Localizable.strings;
@@ -2443,6 +2559,7 @@
 			refType = 4;
 		};
 		F586B882031582010123DCAA = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CollapsibleList.api;
 			path = Components/CollapsibleList.api;
@@ -2465,6 +2582,7 @@
 			refType = 4;
 		};
 		F586B889031582010123DCAA = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CollapsibleList.java;
 			path = Sources/er/bugtracker/CollapsibleList.java;
@@ -2500,18 +2618,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
-		};
-		F5D271050321D19601864B48 = {
-			isa = PBXFrameworkReference;
-			name = FrontBasePlugIn.framework;
-			path = /Library/Frameworks/FrontBasePlugIn.framework;
-			refType = 0;
-		};
-		F5D271070321D19601864B48 = {
-			fileRef = F5D271050321D19601864B48;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 //F50
 //F51
