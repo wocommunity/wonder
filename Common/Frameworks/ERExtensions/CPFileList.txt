@@ -88,6 +88,7 @@
 ./Sources/er/extensions/ERXNonNullConditional.java:er.extensions
 ./Sources/er/extensions/ERXNonPluralFormLocalizer.java:er.extensions
 ./Sources/er/extensions/ERXNonZeroConditional.java:er.extensions
+./Sources/er/extensions/ERXNSPrintWriterLogger.java:er.extensions
 ./Sources/er/extensions/ERXNumberFormatter.java:er.extensions
 ./Sources/er/extensions/ERXOncePerRequestConditional.java:er.extensions
 ./Sources/er/extensions/ERXOptionalForm.java:er.extensions
