@@ -16,9 +16,13 @@ import er.extensions.*;
 
 /**
  * Converts given entries of a D2WContext with a specified page configuration to a dictionary and to rules again.<br />
- * Very useful for debugging and testing. You can effectively dump a context for a given page configuration into a <code>.plist</code> file once you are content with your page, then make tons of changes to the rules and all the while test the changed value against all your stored dictionaries, which should make you more confident to make changes like <code>*true* => componentName = "D2WString" [100]</code><br />
+ * Very useful for debugging and testing. You can effectively dump a context for a given page configuration 
+ * into a <code>.plist</code> file once you are content with your page, then make tons of changes to the rules 
+ * and all the while test the changed value against all your stored dictionaries, which should make you 
+ * more confident to make changes like <code>*true* => componentName = "D2WString" [100]</code><br />
  * Also, given a dictionary, you can re-create the rules for creating these entries with any given level.<br />
- * Reads in your <code>d2wClientConfiguration.plists</code> files from every bundle and also reads in the values  given in the <code>editors</code> and <code>supports</code> fields.<br />
+ * Reads in your <code>d2wClientConfiguration.plists</code> files from every bundle and also reads in the values  
+ * given in the <code>editors</code> and <code>supports</code> fields.<br />
  * So be sure to keep the entries to those files up to date :) <br />
 <code><pre>
  NSArray pageKeys = new NSArray(new Object [] {"pageWrapperName", "pageName", "headComponentName", "displayPropertyKeys"});
@@ -33,42 +37,42 @@ import er.extensions.*;
 public class ERD2WContextDictionary {
     private static final ERXLogger log = ERXLogger.getERXLogger(ERD2WContextDictionary.class);
 
-    protected D2WContext context;
-    protected String pageConfiguration;
-    protected NSMutableArray pageLevelKeys;
-    protected NSMutableArray componentLevelKeys;
-    protected NSMutableDictionary dict;
-    protected NSMutableDictionary allKeys;
+    protected D2WContext _context;
+    protected String _pageConfiguration;
+    protected NSMutableArray _pageLevelKeys;
+    protected NSMutableArray _componentLevelKeys;
+    protected NSMutableDictionary _dictionary;
+    protected NSMutableDictionary _allKeys;
 
     public ERD2WContextDictionary(String pageConfigurationName, NSArray pageKeys, NSArray componentKeys) {
-        this.pageConfiguration = pageConfigurationName;
+        _pageConfiguration = pageConfigurationName;
 
-        context = new D2WContext();
-        context.setDynamicPage(pageConfiguration);
+        _context = new D2WContext();
+        _context.setDynamicPage(_pageConfiguration);
         if(pageKeys == null) {
-            pageLevelKeys = new NSMutableArray(new Object[] {"pageWrapperName","displayPropertyKeys"});
+            _pageLevelKeys = new NSMutableArray(new Object[] {"pageWrapperName", "displayPropertyKeys"});
         } else {
-            pageLevelKeys = pageKeys.mutableClone();
+            _pageLevelKeys = pageKeys.mutableClone();
         }
 
         if(componentKeys == null) {
-            componentLevelKeys = new NSMutableArray(new Object[] {"componentName", "customComponentName", "displayNameForProperty"});
+            _componentLevelKeys = new NSMutableArray(new Object[] {"componentName", "customComponentName", 
+                    "displayNameForProperty", "propertyKey"});
         } else {
-            componentLevelKeys = componentKeys.mutableClone();
+            _componentLevelKeys = componentKeys.mutableClone();
         }
 
-        if("edit".equals(context.task())) {
-            componentLevelKeys.addObject("isMandatory");
+        if("edit".equals(_context.task())) {
+            _componentLevelKeys.addObject("isMandatory");
         }
-        if("list".equals(context.task())) {
-            componentLevelKeys.addObject("propertyIsSortable");
-            componentLevelKeys.addObject("sortKeyForList");
+        if("list".equals(_context.task())) {
+            _componentLevelKeys.addObject("propertyIsSortable");
+            _componentLevelKeys.addObject("sortKeyForList");
         }
-        allKeys = new NSMutableDictionary();
+        _allKeys = new NSMutableDictionary();
+        
         NSMutableDictionary components = new NSMutableDictionary();
         NSMutableDictionary editors = new NSMutableDictionary();
-        allKeys.setObjectForKey(components, "components");
-        allKeys.setObjectForKey(editors, "editors");
         for(Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements(); ) {
             NSBundle bundle = (NSBundle)e.nextElement();
             NSDictionary dict;
@@ -81,97 +85,97 @@ public class ERD2WContextDictionary {
                     editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
                 }
             }
-            if(dict != null) {
-                dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wclientConfiguration", bundle);
-                if(dict.objectForKey("components") != null) {
-                    components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
-                }
-                if(dict.objectForKey("editors") != null) {
-                    editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
-                }
-            }
         }
+        _allKeys.setObjectForKey(components, "components");
+        _allKeys.setObjectForKey(editors, "editors");
     }
     
     public ERD2WContextDictionary(String pageConfiguration, NSDictionary dictionary) {
-        this.pageConfiguration = pageConfiguration;
-        this.dict = dictionary.mutableClone();
+        _pageConfiguration = pageConfiguration;
+        _dictionary = dictionary.mutableClone();
     }
 
     protected void addPageLevelValues() {
-        for(Enumeration e = pageLevelKeys.objectEnumerator(); e.hasMoreElements(); ) {
+        for(Enumeration e = _pageLevelKeys.objectEnumerator(); e.hasMoreElements(); ) {
             String key = (String)e.nextElement();
-            Object o = context.valueForKey(key);
+            Object o = _context.valueForKey(key);
             if(o != null)
-                dict.takeValueForKey(o, key);
+                _dictionary.takeValueForKey(o, key);
         }
-        String path = "components." + context.valueForKey("pageName") + ".editors";
-        NSArray keys = (NSArray)allKeys.valueForKeyPath(path);
+        String path = "components." + _context.valueForKey("pageName") + ".editors";
+        NSArray keys = (NSArray)_allKeys.valueForKeyPath(path);
         if(keys != null) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
                 String key = (String)e.nextElement();
-                Object o = context.valueForKey(key);
+                Object o = _context.valueForKey(key);
                 if(o != null)
-                    dict.takeValueForKeyPath(o, key);
+                    _dictionary.takeValueForKeyPath(o, key);
             }
         }
-        path = "components." + context.valueForKey("pageName") + ".supports";
-        keys = (NSArray)allKeys.valueForKeyPath(path);
+        path = "components." + _context.valueForKey("pageName") + ".supports";
+        keys = (NSArray)_allKeys.valueForKeyPath(path);
         if(keys != null) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
                 String key = (String)e.nextElement();
-                Object o = context.valueForKey(key);
+                Object o = _context.valueForKey(key);
                 if(o != null)
-                    dict.takeValueForKeyPath(o, key);
+                    _dictionary.takeValueForKeyPath(o, key);
             }
         }
     }
 
-    protected void addComponentLevelValuesForKey(String propertyKey) {
-        context.setPropertyKey(propertyKey);
-        dict.takeValueForKeyPath( new NSMutableDictionary(), "componentLevelKeys." + propertyKey);
-        for(Enumeration e = componentLevelKeys.objectEnumerator(); e.hasMoreElements(); ) {
+    /**
+     * Returns the keys for the given property key. To find which keys are
+     * requiered, the componentName key is used to get the editors and supports.
+     * @param propertyKey
+     */
+    protected NSDictionary componentLevelValuesForKey(String propertyKey) {
+        _context.setPropertyKey(propertyKey);
+        NSMutableDictionary dictionary = new NSMutableDictionary();
+        for(Enumeration e = _componentLevelKeys.objectEnumerator(); e.hasMoreElements(); ) {
             String key = (String)e.nextElement();
-            Object o = context.valueForKey(key);
+            Object o = _context.valueForKey(key);
             if(o != null)
-                dict.takeValueForKeyPath(o, "componentLevelKeys." + propertyKey + "." + key);
+                dictionary.setObjectForKey(o, key);
         }
-        String path = "components." + dict.valueForKeyPath("componentLevelKeys." + propertyKey + ".componentName") + ".editors";
-        NSArray keys = (NSArray)allKeys.valueForKeyPath(path);
+        String path = "components." + dictionary.objectForKey("componentName") + ".editors";
+        NSArray keys = (NSArray)_allKeys.valueForKeyPath(path);
         if(keys != null) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
                 String key = (String)e.nextElement();
-                Object o = context.valueForKey(key);
+                Object o = _context.valueForKey(key);
                 if(o != null)
-                    dict.takeValueForKeyPath(o, "componentLevelKeys." + propertyKey + "." + key);
+                    dictionary.setObjectForKey(o, key);
             }
         }
-        path = "components." + dict.valueForKeyPath("componentLevelKeys." + propertyKey + ".componentName") + ".supports";
-        keys = (NSArray)allKeys.valueForKeyPath(path);
+        path = "components." + dictionary.objectForKey("componentName") + ".supports";
+        keys = (NSArray)_allKeys.valueForKeyPath(path);
         if(keys != null) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
                 String key = (String)e.nextElement();
-                Object o = context.valueForKey(key);
+                Object o = _context.valueForKey(key);
                 if(o != null)
-                    dict.takeValueForKeyPath(o, key);
+                    dictionary.setObjectForKey(o, key);
             }
         }
+        return dictionary;
     }
 
     public NSDictionary dictionary() {
-        if(dict == null) {
-            dict = new NSMutableDictionary();
+        if(_dictionary == null) {
+            _dictionary = new NSMutableDictionary();
             addPageLevelValues();
-            NSArray displayPropertyKeys = (NSArray)context.valueForKey("displayPropertyKeys");
+            NSArray displayPropertyKeys = (NSArray)_context.valueForKey("displayPropertyKeys");
             if(displayPropertyKeys != null && displayPropertyKeys.count() > 0) {
-                dict.setObjectForKey( new NSMutableDictionary(), "componentLevelKeys");
+                NSMutableDictionary componentLevelKeys = new NSMutableDictionary();
                 for(Enumeration e = displayPropertyKeys.objectEnumerator(); e.hasMoreElements(); ) {
                     String key = (String)e.nextElement();
-                    addComponentLevelValuesForKey(key);
+                    componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
                 }
+                _dictionary.setObjectForKey( componentLevelKeys, "componentLevelKeys");
             }
         }
-        return dict;
+        return _dictionary;
     }
 
     public NSArray rulesForLevel(int level) {
@@ -180,7 +184,7 @@ public class ERD2WContextDictionary {
             String key = (String)e.nextElement();
             if(!"componentLevelKeys".equals(key)) {
                 Object value = dictionary().valueForKey(key);
-                EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + pageConfiguration + "'" , null);
+                EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + _pageConfiguration + "'" , null);
                 Assignment a;
                 if("true".equals(value) || "false".equals(value)) {
                     a = new BooleanAssignment(key, value);
@@ -190,12 +194,12 @@ public class ERD2WContextDictionary {
                 arr.addObject(new Rule(level, q, a));
             }
         }
-        NSArray keys = (NSArray)dict.valueForKey("displayPropertyKeys");
+        NSArray keys = (NSArray)_dictionary.valueForKey("displayPropertyKeys");
         if(keys != null && keys.count() > 0) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
                 String key = (String)e.nextElement();
                 Object value = dictionary().valueForKeyPath("componentLevelKeys." + key);
-                EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + pageConfiguration + "' and propertyKey = '" + key + "'" , null);
+                EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + _pageConfiguration + "' and propertyKey = '" + key + "'" , null);
                 Assignment a;
                 if("true".equals(value) || "false".equals(value)) {
                     a = new BooleanAssignment(key, value);
@@ -208,6 +212,6 @@ public class ERD2WContextDictionary {
         return arr;
     }
     public D2WContext context() {
-        return context;
+        return _context;
     }
 }
