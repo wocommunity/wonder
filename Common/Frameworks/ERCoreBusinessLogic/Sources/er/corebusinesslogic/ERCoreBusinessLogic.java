@@ -21,8 +21,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         setUpFrameworkPrincipalClass(ERCoreBusinessLogic.class);
     }
 
-    ERCoreBusinessLogic sharedInstance;
-    public ERCoreBusinessLogic sharedInstance() {
+    static ERCoreBusinessLogic sharedInstance;
+    public static ERCoreBusinessLogic sharedInstance() {
         if(sharedInstance == null) {
             sharedInstance = (ERCoreBusinessLogic)ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
         }
@@ -40,6 +40,32 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public void initializeSharedData() {
         ERCMailState.mailStateClazz().initializeSharedData();
         //MailMessage.initializeSharedData();
+    }
+
+    /**
+     * Registers a run-time relationship called "preferences" on the actor 
+     * entity of your business logic. The framework needs preferences 
+     * relationship to access user preferences for a specific actor. 
+     * Call this method when you initialize your business logic layer. 
+     * (Check BTBusinessLogic class as an example.)
+     * 
+     * @param  entityName  String name for your actor entity
+     * @param  attributeNameToJoin  String attribute name on the actor
+     *         entity; used by the relationship and typically it's the 
+     *         primary key. 
+     */
+    public void addPreferenceRelationshipToActorEntity(String entityName, String attributeNameToJoin) {
+        EOEntity actor = EOModelGroup.defaultGroup().entityNamed(entityName);
+        EOEntity preference = EOModelGroup.defaultGroup().entityNamed("ERCPreference");
+
+        EOJoin preferencesJoin = new EOJoin(actor.attributeNamed(attributeNameToJoin), preference.attributeNamed("userID"));
+        EORelationship preferencesRelationship = new EORelationship();
+
+        preferencesRelationship.setName("preferences");
+        actor.addRelationship(preferencesRelationship);
+        preferencesRelationship.addJoin(preferencesJoin);
+        preferencesRelationship.setToMany(true);
+        preferencesRelationship.setJoinSemantic(EORelationship.InnerJoin);
     }
 
     private static EOEnterpriseObject _contactInfo;
