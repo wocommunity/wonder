@@ -10,15 +10,15 @@
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{897, 568}";
+				ContentSize = "{1044, 710}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {897, 545}}";
+					Frame = "{{0, 23}, {1044, 687}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{317, 0}, {580, 545}}";
+						Frame = "{{317, 0}, {727, 687}}";
 						Split0 = {
-							Frame = "{{0, 217}, {580, 328}}";
+							Frame = "{{0, 217}, {727, 470}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -54,9 +54,9 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {582, 93}}";
-							BuildTranscriptFrame = "{{0, 102}, {582, 93}}";
-							Frame = "{{0, 0}, {580, 193}}";
+							BuildMessageFrame = "{{0, 0}, {729, 93}}";
+							BuildTranscriptFrame = "{{0, 102}, {729, 93}}";
+							Frame = "{{0, 0}, {727, 193}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {580, 295}}";
@@ -65,7 +65,7 @@
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {293, 545}}";
+						Frame = "{{0, 0}, {293, 687}}";
 					};
 					Tab1 = {
 						ClassesFrame = "{{0, 0}, {202, 56}}";
@@ -95,6 +95,11 @@
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
+	};
+	F5A1443401FF7F8801A80106 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{38, 474}, {750, 502}}";
+		};
 	};
 	F5A1454D01FF7F8801A80106 = {
 		activeExec = 0;
