@@ -13,13 +13,15 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
-public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
+public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WListPage.class);
 
     /**
-     * Public constructor
+     * Public constructor.
+     * Registers for {@link EOEditingContext.EditingContextDidSaveChangesNotification} so that
+     * component stays informed when objects are deleted and added.
      * @param c current context
      */
     public ERD2WListPage(WOContext c) {
@@ -27,17 +29,20 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
         NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("savedChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
     }
 
+    /** Override to un-register for stop obsevring notifcations. */
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
     }
     
-    /** reimplementation of D2WList stuff */
+    // reimplementation of D2WList stuff
     
+    /** Holds the display group. */
     protected WODisplayGroup _displayGroup;
     public boolean _hasToUpdate = false;
     protected boolean _rowFlip = false;
 
+    /** Returns the display group, creating one if there is none present. */
     public WODisplayGroup displayGroup() {
         if(_displayGroup == null) {
             _displayGroup = new WODisplayGroup();
@@ -48,10 +53,13 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
         return _displayGroup;
     }
 
+    /** Called when an {@link EOditingContext} has changed. Sets {@link #_hasToUpdate} which in turn lets the group refetch on the next display. */
+    // CHECKME ak is this really needed? I'd think it's kindo of overkill.
     public void savedChanges(NSNotification nsnotification) {
         _hasToUpdate = true;
     }
 
+    /** Checks if the entity is read only, meaning that you can't edit it's objects. */
     public boolean isEntityReadOnly() {
         boolean flag = super.isEntityReadOnly();
         flag = !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !flag);
@@ -59,18 +67,22 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
         return flag;
     }
 
+    /** Checks if the current task is select. We need this because this page implements the {@link SelectPageInterface} so we can't do an instanceof test.  */
     public boolean isSelecting() {
         return task().equals("select");
     }
 
+    /** Checks if the current list is empty. */
     public boolean isListEmpty() {
         return listSize() == 0;
     }
 
+    /** The number of objects in the list. */
     public int listSize() {
         return displayGroup().allObjects().count();
     }
 
+    /** Utility to have alternating row colors. Override this to have more than one color. */
     public String alternatingColorForRow() {
         _rowFlip = !_rowFlip;
         if(_rowFlip || !alternateRowColor())
@@ -79,18 +91,21 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
            return backgroundColorForTableDark();
     }
 
+    /** The background color for the current row. Override this to have more than one color. */
     public String backgroundColorForRow() {
        return !isSelecting() || object() != displayGroup().selectedObject() ? alternatingColorForRow() : "#FFFF00";
     }
 
+    /** Does nothing and exists only for KeyValueCoding.*/
     public void setBackgroundColorForRow(String value) {
-        // just for KVC reasons
     }
 
+    /** The currently selected object.*/
     public EOEnterpriseObject selectedObject() {
         return (EOEnterpriseObject)displayGroup().selectedObject();
     }
 
+    /** Sets currently selected object. Pushes the value to the display group, clearing the selection if needed. */
     public void setSelectedObject(EOEnterpriseObject eo) {
         if(eo != null)
             displayGroup().selectObject(eo);
@@ -98,6 +113,7 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
             displayGroup().clearSelection();
     }
 
+    /** Action method to select an object. */
     public WOComponent selectObjectAction() {
         setSelectedObject(object());
         if(nextPageDelegate() != null)
@@ -295,7 +311,8 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
         if(nextPage instanceof InspectPageInterface) {
             ((InspectPageInterface)nextPage).setObject(object());
         } else {
-            nextPage.setMessage("Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+":<br> "+object().userPresentableDescription()+ " ?");
+            String message = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2WList.confirmDeletionMessage", d2wContext()); 
+            nextPage.setMessage(message);
         }
         return (WOComponent) nextPage;
     }
