@@ -25,8 +25,8 @@ public class ERXDatabaseContextDelegate {
              
     /** Basic logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXDatabaseContextDelegate.class);
-    /** Faulting logging support, logging category: <b>er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace</b> */
-    public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace");
+    /** Faulting logging support, logging category: <b>er.transaction.adaptor.FaultFiring</b> */
+    public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.FaultFiring");
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate;
@@ -130,7 +130,7 @@ public class ERXDatabaseContextDelegate {
                                                 EOFetchSpecification fs,
                                                 EODatabaseChannel channel) {
         if (dbLog.isDebugEnabled()) {
-            dbLog.debug("databaseContextDidSelectObjects " + fs + " \n" + ERXUtilities.stackTrace());
+            dbLog.debug("databaseContextDidSelectObjects " + fs);
         }
     }
 
