@@ -58,3 +58,10 @@ D2WInspectExampleJava	ProjectWonder/Examples/Stepwise/D2WInspectExampleJava
 
 PBXTool			ProjectWonder/Utilities/PBXTool
 ERXGenerator			ProjectWonder/Utilities/ERXGenerator
+
+#######################################################################
+# Contributions
+
+PayPal			ProjectWonder/Contributions/PayPal
+Validity		ProjectWonder/Contributions/Validity
+
