@@ -31,6 +31,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     public ERXTestRunner aTestRunner;
     public ERXTestResult testResult;
     public long runTime;
+    public NSArray allTests;
     
     public ERXWOTestInterface(WOContext context) {
         super(context);
@@ -41,11 +42,42 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
         testResult = null;
     }
 
+    protected NSArray bundles() {
+        NSMutableArray bundles = new NSMutableArray(NSBundle.frameworkBundles());
+        bundles.addObject(NSBundle.mainBundle());
+        return bundles;
+    }
+
+    public NSArray allTests() {
+        if(allTests == null) {
+            String thisBundleName = NSBundle.bundleForClass(getClass()).name();
+            NSMutableArray theClassNames = new NSMutableArray();
+            Enumeration bundleEnum = bundles().objectEnumerator();
+            while (bundleEnum.hasMoreElements()) {
+                NSBundle bundle = (NSBundle)bundleEnum.nextElement();
+                if (!bundle.name().equals(thisBundleName)) {
+                    Enumeration classNameEnum = bundle.bundleClassNames().objectEnumerator();
+                    while (classNameEnum.hasMoreElements()) {
+                        String className = (String)classNameEnum.nextElement();
+                        if (className != null
+                            && ( className.endsWith( "TestCase" ) || className.startsWith("tests."))
+                            && !className.startsWith( "junit." )
+                            && className.indexOf( "$" ) < 0)
+                            theClassNames.addObject(className);
+                    }
+                }
+            }
+            allTests = theClassNames;
+        }
+        return allTests;
+    }
+    
     private void resetInterface() {
         runTime = 0;
         errorMessage = "";
         aTestRunner = new ERXTestRunner(this);
         testResult = new ERXTestResult();
+        allTests = null;
     }
 
     // ACTION METHOD

@@ -15,13 +15,13 @@ Form1: WOForm {
 	action = performTest;
 }
 
+PopUpButton1: WOPopUpButton {
+	list = allTests;
+	selection = theTest;
+}
+
 SubmitButton1: WOSubmitButton {
 	action = performTest;
 	value = "Run";
-}
-
-testCaseTextField: WOTextField {
-	size = 40;
-	value = theTest;
 }
 
