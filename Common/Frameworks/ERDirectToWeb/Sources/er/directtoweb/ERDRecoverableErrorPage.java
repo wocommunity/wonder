@@ -16,7 +16,7 @@ import er.extensions.ERXSession;
  * 
  */
 
-public class ERDRecoverableErrorPage extends ERD2WPage implements ErrorPageInterface {
+public class ERDRecoverableErrorPage extends ERD2WPage implements ERDErrorPageInterface {
 
     public ERDRecoverableErrorPage(WOContext context) { super(context); }
     
@@ -37,7 +37,11 @@ public class ERDRecoverableErrorPage extends ERD2WPage implements ErrorPageInter
     protected String _message;
     public void setMessage(String message) { _message=message; }
     public String message() {return _message; }
-    
+
+    protected Exception _exception;
+    public void setException(Exception exception) { _exception=exception; }
+    public Exception exception() {return _exception; }
+
     public String formattedMessage() {
         //return Services.breakDown(_message,60);
         return WOMessage.stringByEscapingHTMLString(message());

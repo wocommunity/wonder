@@ -195,6 +195,9 @@ public class ERD2WFactory extends D2W {
     public WOComponent errorPageForException(Throwable e, WOSession s) {
         myCheckRules();
         ErrorPageInterface epi=D2W.factory().errorPage(s);
+        if(epi instanceof ERDErrorPageInterface && e instanceof Throwable) {
+        	((ERDErrorPageInterface)epi).setException((Exception)e);
+        }
         epi.setMessage(ERXUtilities.stackTrace(e));
         epi.setNextPage(s.context().page());
         return (WOComponent)epi;

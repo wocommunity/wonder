@@ -1122,6 +1122,19 @@
 			settings = {
 			};
 		};
+		41D6409705C92B2B00BB3C39 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDErrorPageInterface.java;
+			path = er/directtoweb/ERDErrorPageInterface.java;
+			refType = 4;
+		};
+		41D6409A05C92B2B00BB3C39 = {
+			fileRef = 41D6409705C92B2B00BB3C39;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41E12C8D0501CA0A00000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -9505,6 +9518,7 @@
 				41E307CF056E1C8B0060148F,
 				418C6D7F059700CA00E772A7,
 				4131AAC805AEBF580066ECD8,
+				41D6409A05C92B2B00BB3C39,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10327,6 +10341,7 @@
 				F54206C702C467E001000102,
 				F54206C802C467E001000102,
 				F54206EF02C467E001000102,
+				41D6409705C92B2B00BB3C39,
 				F54206F702C467E001000102,
 				F542070102C467E001000102,
 				41E12C8D0501CA0A00000102,
