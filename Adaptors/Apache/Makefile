@@ -63,8 +63,35 @@ mod_WebObjects.o: mod_WebObjects.c ${COMMON_OBJFILES}
 	${CC} -c ${CFLAGS} mod_WebObjects.c ${COMMON_OBJFILES}
 endif
 
+ifeq "LINUX" "$(OS)"
 
+# If Apache is in a nonstandard location, change this
+#APACHEINCLUDEFLAGS = -I/usr/local/apache/include
+APACHEINCLUDEFLAGS = -I/usr/include/apache
 
+CFLAGS = -O2 -Wall -I../Adaptor ${LDAPACHESSLFLAG} $(DEBUG_FLAG) -DSINGLE_THREADED_ADAPTOR -D$(OS) -DEAPI -DFORKING_WEBSERVER -DAPACHE ${OPENSSLINCLUDEFLAGS} ${APACHEINCLUDEFLAGS} ${OPENSSLLIBFLAGS} -L/lib 
+APXSFLAGS = -i
+LDFLAGS += -G -L/lib -lc ${OPENSSLLIBFLAGS}
 
+all: adaptor
 
+adaptor: mod_WebObjects.so
+	${APXS} ${APXSFLAGS} mod_WebObjects.so 
+
+mod_WebObjects.so : mod_WebObjects.o ${COMMON_OBJFILES}
+# ${APXS} ${APXSFLAGS} -c mod_WebObjects.c ${COMMON_OBJFILES}
+# ${APXS} ${APXSFLAGS} mod_WebObjects.o ${COMMON_OBJFILES}
+	ld ${LDFLAGS} mod_WebObjects.o ${COMMON_OBJFILES} -o mod_WebObjects.so
+
+clean:
+	rm -f mod_WebObjects.so mod_WebObjects.o *.o
+
+#mod_WebObjects.o: mod_WebObjects.c
+# ${APXS} ${APXSFLAGS} -c mod_WebObjects.c
+
+mod_WebObjects.o: mod_WebObjects.c ${COMMON_OBJFILES}
+	${CC} -c ${CFLAGS} mod_WebObjects.c ${COMMON_OBJFILES}
+endif
+
+#################################
 include ../Adaptor/make.postamble
