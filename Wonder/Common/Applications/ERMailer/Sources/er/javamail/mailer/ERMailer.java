@@ -54,6 +54,8 @@ public class ERMailer {
         NSArray unsentMessages = ERCMailMessage.mailMessageClazz().messagesToBeSent(ec);
 
         sendMailMessages(unsentMessages);
+
+        ec.dispose();
         
         log.debug("Done outgoing mail processing.");
     }
