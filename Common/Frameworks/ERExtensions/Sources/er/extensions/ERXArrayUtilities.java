@@ -1114,4 +1114,39 @@ public class ERXArrayUtilities extends Object {
         }
         return aa;
     }
+    
+    /** pretty prints an Object array which is ugly when using toString
+     * @param o the object which one wants to print as a String
+     * @return the String which can be used in lets say 
+     * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
+     */
+    public static String objectArrayToString(Object[] o) {
+        return new NSArray(o).toString();
+    }
+    
+    /** pretty prints a two dimensional Object array which is ugly when using toString
+     * @param o the object which one wants to print as a String
+     * @return the String which can be used in lets say 
+     * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
+     */
+    public static String objectArrayToString(Object[][] o) {
+        NSMutableArray a = new NSMutableArray();
+        for (int i = 0; i < o.length; i++) {
+            a.addObject(objectArrayToString(o[i]));
+        }
+        return a.toString();
+    }
+    
+    /** pretty prints a NSArray of two dimensional Object array which is ugly when using toString
+     * @param o the object which one wants to print as a String
+     * @return the String which can be used in lets say 
+     * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
+     */
+    public static String objectArraysToString(NSArray a) {
+        NSMutableArray aa = new NSMutableArray();
+        for (int i = 0; i < a.count(); i++) {
+            aa.addObject(objectArrayToString((Object[][])a.objectAtIndex(i)));
+        }
+        return aa.toString();
+    }
 }
