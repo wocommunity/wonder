@@ -118,6 +118,10 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         ERCStatic.staticClazz().takeStaticStoredValueForKey(editingContext, value, key);
     }
 
+    public static void takeStaticStoredValueForKey(String value, String key) {
+        ERCStatic.staticClazz().takeStaticStoredValueForKey(value, key);
+    }    
+
     public static void invalidateStaticValueForKeyCache() {
         ERCStatic.staticClazz().invalidateCache();
     }
@@ -243,8 +247,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         }
         StringBuffer s = new StringBuffer();
         try {
-            s.append("    **** Caught: "+exception + "\n");
-            s.append("         Actor: " + (actor() != null ? actor().toString() : "No Actor") + "\n");
+            s.append(" **** Caught: "+exception + "\n");
+            s.append("      Actor: " + (actor() != null ? actor().toString() : "No Actor") + "\n");
             if (extraInfo != null && extraInfo.count() > 0) {
                 s.append("         Extra Information: \n");
                 for (Enumeration keyEnumerator = extraInfo.keyEnumerator(); keyEnumerator.hasMoreElements();) {
