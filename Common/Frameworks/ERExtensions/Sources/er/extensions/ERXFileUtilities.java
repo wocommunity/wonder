@@ -7,6 +7,8 @@
 package er.extensions;
 
 import java.io.*;
+// Java 1.4 only
+import java.nio.channels.*;
 import java.net.*;
 import java.util.*;
 import java.util.zip.*;
@@ -500,14 +502,34 @@ public class ERXFileUtilities {
                     FileInputStream in = new FileInputStream(srcFile);
                     FileOutputStream out = new FileOutputStream(dstFile);
                     try {
+                        //////////////////////
+                        // Java 1.4 Only
+                        //////////////////////
 
+                        // Create channel on the source
+                        FileChannel srcChannel = in.getChannel();
+
+                        // Create channel on the destination
+                        FileChannel dstChannel = out.getChannel();
+
+                        // Copy file contents from source to destination
+                        dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+
+                        // Close the channels
+                        srcChannel.close();
+                        dstChannel.close();
+
+                        //////////////////////
+                        // Java 1.3
+                        //////////////////////
+                        /*
                         //50 KBytes buffer
                         byte buf[] = new byte[1024 * 50];
                         int read = -1;
                         while ((read = in.read(buf)) != -1) {
                             out.write(buf, 0, read);
                         }
-
+                         */
                         if (deleteOriginals && (srcFile.canWrite() || forceDelete))
                             srcFile.delete();
                     } catch (Throwable t) {
