@@ -17,62 +17,6 @@
 			path = Resources/French.lproj/Localizable.strings;
 			refType = 4;
 		};
-		9D5BC3B7033AA4A510CF0E7D = {
-			children = (
-				9D5BC3B8033AA4A510CF0E7D,
-				9D5BC3BA033AA4A510CF0E7D,
-				9D5BC3D7033AA73510CF0E7D,
-			);
-			isa = PBXGroup;
-			name = ERD2WEditSortedToManyRelationship;
-			refType = 4;
-		};
-		9D5BC3B8033AA4A510CF0E7D = {
-			isa = PBXFileReference;
-			name = ERD2WEditSortedToManyRelationship.api;
-			path = Components/ERD2WEditSortedToManyRelationship.api;
-			refType = 2;
-		};
-		9D5BC3BA033AA4A510CF0E7D = {
-			isa = PBXFileReference;
-			name = ERD2WEditSortedToManyRelationship.java;
-			path = er/directtoweb/ERD2WEditSortedToManyRelationship.java;
-			refType = 4;
-		};
-		9D5BC3BB033AA4A510CF0E7D = {
-			fileRef = 9D5BC3B8033AA4A510CF0E7D;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		9D5BC3BD033AA4A510CF0E7D = {
-			fileRef = 9D5BC3BA033AA4A510CF0E7D;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		9D5BC3D7033AA73510CF0E7D = {
-			children = (
-				9D5BC3D8033AA73510CF0E7D,
-			);
-			isa = PBXVariantGroup;
-			name = ERD2WEditSortedToManyRelationship.wo;
-			path = "";
-			refType = 4;
-		};
-		9D5BC3D8033AA73510CF0E7D = {
-			includeInIndex = 1;
-			isa = PBXFolderReference;
-			name = Nonlocalized;
-			path = Components/Nonlocalized.lproj/ERD2WEditSortedToManyRelationship.wo;
-			refType = 2;
-		};
-		9D5BC3DD033AA73510CF0E7D = {
-			fileRef = 9D5BC3D7033AA73510CF0E7D;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		9D5BC62B033AB0C210CF0E7D = {
 			children = (
 				9D5BC62C033AB0C210CF0E7D,
@@ -7365,8 +7309,6 @@
 				F542048402C4674D01000102,
 				F639B99D02EF369E0FCF0E72,
 				F639B99F02EF369F0FCF0E72,
-				9D5BC3BB033AA4A510CF0E7D,
-				9D5BC3DD033AA73510CF0E7D,
 				9D5BC633033AB0C210CF0E7D,
 				9D5BC641033AB19910CF0E7D,
 			);
@@ -7572,7 +7514,6 @@
 				F6A30E2D02F8BFCB0FCF0E72,
 				F6B41516032D7E020FCF0E72,
 				F686D4E5033285420FCF0E72,
-				9D5BC3BD033AA4A510CF0E7D,
 				9D5BC635033AB0C210CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
@@ -9302,7 +9243,6 @@
 				F6E7969102C877AF01AD0D07,
 				F6E7969202C877AF01AD0D07,
 				F6E7969302C877AF01AD0D07,
-				9D5BC3B7033AA4A510CF0E7D,
 				9D5BC62B033AB0C210CF0E7D,
 				F6E7969402C877AF01AD0D07,
 				F6E7969502C877AF01AD0D07,
