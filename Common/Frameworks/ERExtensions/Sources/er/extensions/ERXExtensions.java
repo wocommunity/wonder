@@ -104,6 +104,7 @@ public class ERXExtensions {
             ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
+            ERXPrimaryKeyListQualifier.installSupport();
             if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
                 NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
