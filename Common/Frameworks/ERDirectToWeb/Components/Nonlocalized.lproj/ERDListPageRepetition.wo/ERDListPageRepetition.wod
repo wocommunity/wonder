@@ -15,7 +15,7 @@ AttributeDisplay: WOSwitchComponent {
 
 AttributeRepetition: WORepetition {
 	_unroll = true;
-	item = d2wContext.propertyKey;
+	item = propertyKey;
 	list = currentSectionKeys;
 }
 
@@ -28,7 +28,7 @@ AttributeSorter2: ERXSortOrder {
 
 ColumnLabelRepetition: WORepetition {
 	_unroll = true;
-	item = d2wContext.propertyKey;
+	item = propertyKey;
 	list = currentSectionKeys;
 }
 
@@ -64,7 +64,7 @@ LeftAction: WOSwitchComponent {
 }
 
 LeftActions: WORepetition {
-	item = d2wContext.propertyKey;
+	item = propertyKey;
 	list = leftActions;
 }
 
@@ -100,7 +100,7 @@ RightAction: WOSwitchComponent {
 }
 
 RightActions: WORepetition {
-	item = d2wContext.propertyKey;
+	item = propertyKey;
 	list = rightActions;
 }
 

@@ -1,6 +1,6 @@
 AttributeRepetition: WORepetition {
 	_unroll = true;
-	item = d2wContext.propertyKey;
+	item = propertyKey;
 	list = currentSectionKeys;
 }
 
@@ -24,7 +24,7 @@ Conditional4: WOConditional {
 
 ERTable1: ERXTable {
 	goingVertically = d2wContext.matrixLayoutVertical;
-	item = d2wContext.propertyKey;
+	item = propertyKey;
 	list = currentSectionKeys;
 	maxColumns = d2wContext.maxColumns;
 }
