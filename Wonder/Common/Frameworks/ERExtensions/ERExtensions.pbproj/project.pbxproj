@@ -302,6 +302,8 @@
 				414045F70521B01000000102,
 				4198E3C8052634260048E379,
 				4198E3CA052634260048E379,
+				41D6423705CF9CC600BB3C39,
+				41D6423805CF9CC600BB3C39,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,6 +503,7 @@
 				4105E4A605C7C933003BA93B,
 				4105E4A805C7CBA9003BA93B,
 				4105EC4505C81354003BA93B,
+				41D6423905CF9CC600BB3C39,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1813,6 +1816,65 @@
 		};
 		419E564D0507E29500000104 = {
 			fileRef = 419E56450507E29500000104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41D6422E05CF9CC600BB3C39 = {
+			children = (
+				41D6422F05CF9CC600BB3C39,
+				41D6423005CF9CC600BB3C39,
+				41D6423605CF9CC600BB3C39,
+			);
+			isa = PBXGroup;
+			name = ERXLongResponse;
+			path = "";
+			refType = 2;
+		};
+		41D6422F05CF9CC600BB3C39 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXLongResponse.api;
+			path = Components/ERXLongResponse.api;
+			refType = 4;
+		};
+		41D6423005CF9CC600BB3C39 = {
+			children = (
+				41D6423105CF9CC600BB3C39,
+			);
+			isa = PBXVariantGroup;
+			name = ERXLongResponse.wo;
+			path = "";
+			refType = 4;
+		};
+		41D6423105CF9CC600BB3C39 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXLongResponse.wo;
+			refType = 4;
+		};
+		41D6423605CF9CC600BB3C39 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXLongResponse.java;
+			path = Sources/er/extensions/ERXLongResponse.java;
+			refType = 4;
+		};
+		41D6423705CF9CC600BB3C39 = {
+			fileRef = 41D6422F05CF9CC600BB3C39;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41D6423805CF9CC600BB3C39 = {
+			fileRef = 41D6423005CF9CC600BB3C39;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41D6423905CF9CC600BB3C39 = {
+			fileRef = 41D6423605CF9CC600BB3C39;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -8123,6 +8185,7 @@
 				F6E798B402C8799401AD0D07,
 				F6E798B502C8799401AD0D07,
 				F584E53802E529E601000102,
+				41D6422E05CF9CC600BB3C39,
 				F6E798B602C8799401AD0D07,
 				F6E798B702C8799401AD0D07,
 				F6E798B902C8799401AD0D07,
