@@ -2592,6 +2592,10 @@
 				F645C8D502478A2901AD0D07,
 				F6F4D1AB0251D9F501AD0D07,
 				F61422F40253620001AD0D07,
+				F604FC9B0259E8FB01AD0D07,
+				F604FC9C0259E8FB01AD0D07,
+				F604FC9D0259E8FB01AD0D07,
+				F604FC9E0259E8FB01AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -4281,6 +4285,50 @@
 //F62
 //F63
 //F64
+		F604FC970259E8F901AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXArrayUtilities.java;
+			refType = 4;
+		};
+		F604FC980259E8F901AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXDictionaryUtilities.java;
+			refType = 4;
+		};
+		F604FC990259E8F901AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXStringUtilities.java;
+			refType = 4;
+		};
+		F604FC9A0259E8F901AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXTimestampUtilities.java;
+			refType = 4;
+		};
+		F604FC9B0259E8FB01AD0D07 = {
+			fileRef = F604FC970259E8F901AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F604FC9C0259E8FB01AD0D07 = {
+			fileRef = F604FC980259E8F901AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F604FC9D0259E8FB01AD0D07 = {
+			fileRef = F604FC990259E8F901AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F604FC9E0259E8FB01AD0D07 = {
+			fileRef = F604FC9A0259E8F901AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F61422E70253618901AD0D07 = {
 			fileRef = F6F4D1AD0251EB4D01AD0D07;
 			isa = PBXBuildFile;
@@ -4466,6 +4514,10 @@
 		};
 		F645C87B0247899001AD0D07 = {
 			children = (
+				F604FC970259E8F901AD0D07,
+				F604FC980259E8F901AD0D07,
+				F604FC990259E8F901AD0D07,
+				F604FC9A0259E8F901AD0D07,
 				F57EA60F01FF59BF019E57DA,
 				F57EA5E001FF59BF019E57DA,
 				F57EA5E401FF59BF019E57DA,
