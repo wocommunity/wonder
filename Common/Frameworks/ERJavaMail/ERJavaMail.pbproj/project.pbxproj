@@ -473,7 +473,6 @@
 		40B58282FFD5E8187F000001 = {
 			buildPhases = (
 				F55E8E57032D65C3010A39CE,
-				F5251E5A032D6431019C4BA9,
 				40B58283FFD5E8187F000001,
 				40B58284FFD5E8187F000001,
 				40B58285FFD5E8187F000001,
@@ -991,19 +990,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F5251E5A032D6431019C4BA9 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			generatedFileNames = (
-			);
-			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "sh \"${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh\"";
 		};
 		F53788A50335ADF401000010 = {
 			includeInIndex = 1;
