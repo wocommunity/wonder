@@ -32,6 +32,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import java.util.*;
 
+/**
+ * (Back port from WO 5 WOExtensions)<br />
+ * 
+ */
+
 public class WOTable extends WOComponent {
 
     NSArray _list;

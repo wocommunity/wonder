@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 import java.math.BigDecimal;
 import er.extensions.*;
 
+/**
+ * Common superclass of all ER's edit number components.<br />
+ * 
+ */
+
 public class ERD2WEditNumber extends D2WEditNumber {
 
     public ERD2WEditNumber(WOContext context) { super(context); }

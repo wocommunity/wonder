@@ -11,6 +11,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSKeyValueCoding;
 import er.extensions.*;
 
+/**
+ * Used to display a tab as text.<br />
+ * 
+ */
+
 public class ERDTabText extends ERXStatelessComponent {
     String tabText;
 

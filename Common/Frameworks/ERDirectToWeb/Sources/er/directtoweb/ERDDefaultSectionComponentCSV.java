@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Displays section name for CSV pages.<br />
+ * 
+ */
+
 public class ERDDefaultSectionComponentCSV extends ERDDefaultSectionComponent {
 
     public ERDDefaultSectionComponentCSV(WOContext context) { super(context); }

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.directtoweb.NextPageDelegate;
 
+/**
+ * Generic little delegate.  Nice when all you really want to do is return a page, but the interface says you have to use a delegate.<br />
+ * 
+ */
+
 public class ERDPageDelegate implements NextPageDelegate {
 
     public WOComponent _nextPage;

@@ -15,6 +15,12 @@ import er.extensions.ERXUtilities;
 import er.extensions.ERXConstant;
 import er.extensions.ERXLogger;
 
+/**
+ * Used for displaying the propertyName in a template.<br />
+ * 
+ * @binding localContext
+ */
+
 public class ERD2WPropertyName extends D2WStatelessComponent {
     ERXLogger log = ERXLogger.getERXLogger(ERD2WPropertyName.class);
     

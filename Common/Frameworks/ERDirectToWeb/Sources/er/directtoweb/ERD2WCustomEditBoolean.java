@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Allows editing boolean values based on radio buttons and strings.<br />
+ * 
+ */
+
 public class ERD2WCustomEditBoolean extends D2WEditBoolean {
 
     public ERD2WCustomEditBoolean(WOContext context) {

@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Used to present a message to the user with only one option, usually "OK".<br />
+ * 
+ */
+
 public class ERD2WMessagePageTemplate extends ERD2WMessagePage {
     
     public ERD2WMessagePageTemplate(WOContext context) { super(context); }

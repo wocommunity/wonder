@@ -16,6 +16,11 @@ import er.extensions.ERXLogger;
 // Fixes validation failures being propogated
 // Adds valueForBinding that resolves in the d2wContext.
 
+/**
+ * Correctly handles validation exceptions, plus a bunch of other stuff.<br />
+ * 
+ */
+
 public class ERDCustomQueryComponentWithArgs extends ERDCustomQueryComponent implements ERXExceptionHolder {
 
     public ERDCustomQueryComponentWithArgs(WOContext context) {

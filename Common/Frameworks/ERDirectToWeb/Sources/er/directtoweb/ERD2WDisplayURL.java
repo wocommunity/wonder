@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
+/**
+ * Displays the url in a hyperlink with target set to "_new"<br />
+ * 
+ */
+
 public class ERD2WDisplayURL extends D2WDisplayString {
 
     public ERD2WDisplayURL(WOContext context) { super(context); }

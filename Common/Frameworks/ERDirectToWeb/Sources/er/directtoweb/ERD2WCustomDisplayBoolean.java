@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Allows the display of strings instead of Yes/NO or checkboxes for boolean values.<br />
+ * 
+ */
+
 public class ERD2WCustomDisplayBoolean extends D2WDisplayBoolean {
 
    public ERD2WCustomDisplayBoolean(WOContext context) {

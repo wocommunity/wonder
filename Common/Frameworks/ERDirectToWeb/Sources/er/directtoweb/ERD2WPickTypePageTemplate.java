@@ -7,6 +7,11 @@
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Useful for picking the type of something.  A type being a string description and either radio buttons or checkboxes  displayed to the left.<br />
+ * 
+ */
+
 public class ERD2WPickTypePageTemplate extends ERD2WPickTypePage {
 
     public ERD2WPickTypePageTemplate(WOContext context) {super(context);}

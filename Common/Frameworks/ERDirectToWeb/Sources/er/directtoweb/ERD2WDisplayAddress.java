@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 
 // FIXME: This depends on NS specific keypaths for an address.
+/**
+ * Displays an address.  Needs some cleanup to be more generic.<br />
+ * 
+ */
+
 public class ERD2WDisplayAddress extends D2WStatelessComponent {
 
     public ERD2WDisplayAddress(WOContext context) { super(context); }

@@ -9,6 +9,15 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
+/**
+ * Useful for displaying a list of eos. Ex. a list of person eos could be displayed as "Fred, Mark and Max".<br />
+ * 
+ * @binding list
+ * @binding attribute
+ * @binding nullArrayDisplay
+ * @binding escapeHTML" defaults="Boolean
+ */
+
 public class ERXListDisplay extends WOComponent {
 
     public ERXListDisplay(WOContext aContext) {

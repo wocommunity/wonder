@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Allows the choice to not specify a date.<br />
+ * 
+ */
+
 public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 
     public ERDEditDatePopupOrNull(WOContext context) { super(context); }

@@ -13,6 +13,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXLogger;
 
+/**
+ * Superclass for most custom query components.<br />
+ * 
+ */
+
 public class ERDCustomQueryComponent extends ERDCustomEditComponent {
 
     public ERDCustomQueryComponent(WOContext context) {

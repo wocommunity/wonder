@@ -14,6 +14,19 @@ import com.webobjects.directtoweb.*;
 import java.lang.reflect.*;
 import er.extensions.ERXConstant;
 
+/**
+ * Used to select multiple items from a list.<br />
+ * 
+ * @binding dataSource
+ * @binding list
+ * @binding selectedObjects
+ * @binding action
+ * @binding displayKeys
+ * @binding entityName
+ * @binding pageConfiguration
+ * @binding branchDelegate
+ */
+
 public class ERD2WPick extends ERDCustomEditComponent {
 
     /**

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditString;
 
+/**
+ * Allows specifing the maxLength for a WOTextField.<br />
+ * 
+ */
+
 public class ERD2WEditString extends D2WEditString {
 
         public ERD2WEditString(WOContext context) { super(context); }

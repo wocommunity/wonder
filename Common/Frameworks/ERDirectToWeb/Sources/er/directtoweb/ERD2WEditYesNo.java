@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.directtoweb.D2WEditBoolean;
 import er.extensions.*;
 
+/**
+ * Edits a boolean with radio buttons and Yes/No<br />
+ * 
+ */
+
 public class ERD2WEditYesNo extends D2WEditBoolean {
     public static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditYesNo.class);
 

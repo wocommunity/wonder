@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Compact list page.  Doesn't have any of the navigation at the top.<br />
+ * 
+ */
+
 public class ERD2WCompactListPageTemplate extends ERD2WListPage {
 
     public ERD2WCompactListPageTemplate(WOContext context) {

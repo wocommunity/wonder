@@ -17,6 +17,16 @@ import java.io.ByteArrayOutputStream;
 import com.webobjects.woextensions.*;
 import er.extensions.*;
 
+/**
+ * WOComponent display of an ERTestResult.<br />
+ * 
+ * @binding errorMessage
+ * @binding testResult
+ * @binding runTime
+ * @binding test
+ * @binding showExceptions
+ */
+
 public class ERXWOTestResult extends WOComponent {
     public Throwable exception;
     private NSArray _reasonLines;

@@ -12,6 +12,13 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.net.*;
 
+/**
+ * Used to edit urls with a default value.<br />
+ * 
+ * @binding value
+ * @binding size
+ */
+
 public class ERXEditURL extends WOComponent {
 
     public ERXEditURL(WOContext aContext) {

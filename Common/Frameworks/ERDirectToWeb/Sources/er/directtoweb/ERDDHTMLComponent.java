@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
+/**
+ * Rich text edit component.<br />
+ * 
+ */
+
 public class ERDDHTMLComponent extends ERDCustomEditComponent {
     static final ERXLogger log = ERXLogger.getERXLogger(ERDDHTMLComponent.class);
 

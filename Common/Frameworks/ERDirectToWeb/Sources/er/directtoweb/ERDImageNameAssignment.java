@@ -11,6 +11,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import er.extensions.ERXLogger;
 
+/**
+ * Default way of generating image references for tabs and sections.<br />
+ * 
+ */
+
 public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */

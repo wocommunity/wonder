@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import java.util.Enumeration;
 
+/**
+ * Provides a toOne relationship-like component except the value is pushed in as a string.<br />
+ * 
+ */
+
 public class ERDEditStringWithChoices extends ERDCustomEditComponent {
 
     public ERDEditStringWithChoices(WOContext context) {super(context);}

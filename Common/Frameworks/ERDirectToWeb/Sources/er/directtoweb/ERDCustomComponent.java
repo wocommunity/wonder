@@ -13,6 +13,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Simpler CustomEditComponent. Work in progress.<br />
+ * 
+ */
+
 public abstract class ERDCustomComponent extends WOComponent {
 
     public ERDCustomComponent(WOContext context) {super(context);}

@@ -31,6 +31,20 @@ import com.webobjects.woextensions.*;
 
  
  */
+/**
+ * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.<br />
+ * 
+ * @binding tabs
+ * @binding tabNameKey
+ * @binding selectedTab
+ * @binding nonSelectedBgColor
+ * @binding bgcolor
+ * @binding submitActionName
+ * @binding textColor
+ * @binding borderColor
+ * @binding useFormSubmit" defaults="Boolean
+ */
+
 public class ERXTabPanel extends WOTabPanel  {
 
     public ERXTabPanel(WOContext c) {

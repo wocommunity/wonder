@@ -29,6 +29,11 @@ import com.webobjects.appserver.*;
 import java.util.Enumeration;
 
 // Almost direct port of WOSortOrder from WO 5's WOExtensions.
+/**
+ * (Back port from WO 5 WOExtensions)<br />
+ * 
+ */
+
 public class WOSortOrder extends WOComponent {
 
     public WOSortOrder(WOContext aContext) {

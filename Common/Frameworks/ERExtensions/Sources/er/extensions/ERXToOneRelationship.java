@@ -12,6 +12,27 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.Enumeration;
 
+/**
+ * description forthcoming!<br />
+ * 
+ * @binding dataSource
+ * @binding destinationDisplayKey
+ * @binding isMandatory
+ * @binding relationshipKey
+ * @binding sourceEntityName
+ * @binding sourceObject
+ * @binding uiStyle
+ * @binding destinationSortKey
+ * @binding noSelectionString
+ * @binding possibleChoices
+ * @binding qualifier
+ * @binding popupName
+ * @binding size
+ * @binding maxColumns
+ * @binding displayGroup
+ * @binding localizeDisplayKeys" defaults="Boolean
+ */
+
 public class ERXToOneRelationship extends WOToOneRelationship {
 
     public ERXToOneRelationship(WOContext context) {

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
+/**
+ * xml display component for strings<br />
+ * 
+ */
+
 public class ERD2WXMLDisplayString extends D2WDisplayString {
 
     public ERD2WXMLDisplayString(WOContext context) {

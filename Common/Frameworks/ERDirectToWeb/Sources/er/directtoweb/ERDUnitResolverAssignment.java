@@ -10,6 +10,11 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 
+/**
+ * Used to resolve units off of EOAttributes.  Will resolve paths with "@foo" off of the object itself.<br />
+ * 
+ */
+
 public class ERDUnitResolverAssignment extends ERDDelayedAssignment {
 
     /**

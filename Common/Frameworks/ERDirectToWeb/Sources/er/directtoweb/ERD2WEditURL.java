@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditString;
 
+/**
+ * Used for editing urls.<br />
+ * 
+ */
+
 public class ERD2WEditURL extends D2WEditString {
 
     public ERD2WEditURL(WOContext context) { super(context); }

@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * Displays a grouped list of eos in an xml template.<br />
+ * 
+ */
+
 public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingListXMLPageTemplate(WOContext context) {super(context);}

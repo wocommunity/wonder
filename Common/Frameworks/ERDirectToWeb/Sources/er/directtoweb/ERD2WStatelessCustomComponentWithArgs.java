@@ -12,6 +12,11 @@ import er.extensions.ERXExceptionHolder;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 // Stateless version of D2WCustomComponentWithArgs
+/**
+ * Stateless version of D2WCustomComponentWithArgs.<br />
+ * 
+ */
+
 public class ERD2WStatelessCustomComponentWithArgs extends D2WStatelessComponent implements ERXExceptionHolder {
 
     public ERD2WStatelessCustomComponentWithArgs(WOContext context) { super(context); }

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
 
+/**
+ * More robust confirm messaging.  Still a work in progress.<br />
+ * 
+ */
+
 public class ERD2WConfirmPageTemplate extends ERD2WConfirmPage {
 
     public ERD2WConfirmPageTemplate(WOContext context) { super(context); }

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
+/**
+ * Small improvements to the EditPageInterface.<br />
+ * 
+ */
+
 public interface ERDEditPageInterface extends EditPageInterface {
     // Not having this one is very annoying.
     public EOEnterpriseObject object();    

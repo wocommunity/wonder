@@ -12,6 +12,26 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.Enumeration;
 
+/**
+ * description forthcoming!<br />
+ * 
+ * @binding dataSource
+ * @binding destinationDisplayKey
+ * @binding isMandatory
+ * @binding relationshipKey
+ * @binding sourceEntityName
+ * @binding sourceObject
+ * @binding uiStyle
+ * @binding qualifier
+ * @binding possibleChoices
+ * @binding maxColumns
+ * @binding size
+ * @binding width
+ * @binding destinationSortKey
+ * @binding goingVertically
+ * @binding localizeDisplayKeys" defaults="Boolean
+ */
+
 public class ERXToManyRelationship extends WOToManyRelationship {
 
     /** logging support */

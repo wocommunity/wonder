@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.*;
 
+/**
+ * Superclass for all tab and wizard pages.<br />
+ * 
+ */
+
 public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";

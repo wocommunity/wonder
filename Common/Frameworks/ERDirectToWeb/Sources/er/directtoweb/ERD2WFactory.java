@@ -15,6 +15,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 
+/**
+ * Not used at the moment, but shows how it might be used in the future.<br />
+ * 
+ */
+
 public class ERD2WFactory extends D2W {
 
     /**

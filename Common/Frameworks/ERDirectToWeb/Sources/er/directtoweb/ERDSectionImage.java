@@ -9,6 +9,12 @@ package er.directtoweb;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Used to display sections as images instead of text.<br />
+ * 
+ * @binding d2wContext
+ */
+
 public class ERDSectionImage extends WOComponent {
 
     public ERDSectionImage(WOContext context) { super(context); }

@@ -12,6 +12,19 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
 
+/**
+ * Useful when given a list of n items and you want to display m keys. This will construct a table nxm and push the current indexes up though the bindings.<br />
+ * 
+ * @binding list
+ * @binding item
+ * @binding repetetions
+ * @binding index
+ * @binding row
+ * @binding col
+ * @binding maxColumns
+ * @binding cellBackgroundColor
+ */
+
 public class ERXRepeatingTable extends WOComponent {
 
     public ERXRepeatingTable(WOContext aContext) {

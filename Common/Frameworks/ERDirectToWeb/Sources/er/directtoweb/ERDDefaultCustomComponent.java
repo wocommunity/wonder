@@ -10,6 +10,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.ERXLogger;
 
+/**
+ * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.<br />
+ * 
+ */
+
 public class ERDDefaultCustomComponent extends WOComponent {
 
     public ERDDefaultCustomComponent(WOContext context) { super(context); }
