@@ -24,7 +24,7 @@ PopUpButton3: WOPopUpButton {
 	selection = dateEvent.toPeriod;
 }
 
-TextField9: WOTextField { maxlength = 10; numberformat = "###0.00"; size = 10; value = dateEvent.totalTime; }
+TextField9: WOTextField { maxlength = 10; numberformat = application.settings.numberFormat; size = 10; value = dateEvent.totalTime; }
 
 TextField10: WOTextField { maxlength = 120; size = 40; value = dateEvent.comment; }
 
