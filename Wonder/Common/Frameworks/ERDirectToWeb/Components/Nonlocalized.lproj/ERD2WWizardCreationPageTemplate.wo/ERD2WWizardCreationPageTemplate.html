@@ -1,31 +1,43 @@
-<WEBOBJECT NAME=PageWrapper><WEBOBJECT NAME=Help></WEBOBJECT><WEBOBJECT NAME=EditForm><WEBOBJECT NAME=MainTable><TR VALIGN=top><TD VALIGN=top ALIGN=right><WEBOBJECT NAME=InspectTable><WEBOBJECT NAME=BannerConditional><TR><TD ALIGN=center><TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=2><WEBOBJECT NAME=InspectTableHeaderRow><TD VALIGN=top ALIGN=LEFT COLSPAN=3><FONT SIZE=4><b><WEBOBJECT NAME=EntityName></WEBOBJECT></b>    </FONT><WEBOBJECT NAME=StepName></WEBOBJECT><FONT SIZE=4><b><font COLOR=#ff0000></font></b></FONT><FONT SIZE=4>   Step </FONT><FONT SIZE=2><WEBOBJECT NAME=StepNumber></WEBOBJECT></FONT><FONT SIZE=4> of </FONT><FONT SIZE=2><WEBOBJECT NAME=TotalSteps></WEBOBJECT></FONT><FONT SIZE=4>     </FONT></TD></WEBOBJECT></TABLE></TD></TR></WEBOBJECT><TR><TD ALIGN=CENTER><WEBOBJECT NAME=Errors></WEBOBJECT></TD></TR>
-<TR><TD VALIGN=top ALIGN=left><WEBOBJECT NAME=InspectTable2><WEBOBJECT NAME=Sections><WEBOBJECT NAME=HasSectionName>
-				<TR>
-					<TD COLSPAN=4 BGCOLOR=#FFFFFF HEIGHT=26 VALIGN=middle><WEBOBJECT NAME=SwitchComponent3></WEBOBJECT></TD>
-				</TR>
-				</WEBOBJECT>
-				<TR HEIGHT=9>
-					<TD COLSPAN=4></TD>
-				</TR>
-		<WEBOBJECT NAME=NotUsingMatrixLayout><WEBOBJECT NAME=AttributeRepetition>
-					<TR>
-						<TD VALIGN=TOP ALIGN=LEFT><WEBOBJECT NAME=SwitchComponent1></WEBOBJECT></TD>
-						<TD ALIGN=left VALIGN=top COLSPAN=3><WEBOBJECT NAME=AttributeValue2></WEBOBJECT></TD>
-					</TR>
-				</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional4>
-				<TR>
-					<TD COLSPAN=4><WEBOBJECT NAME=ERTable1>
-							<TABLE CELLPADDING=0 CELLSPACING=0 BORDER=0>
-								<TR>
-									<TD VALIGN=TOP ALIGN=LEFT WIDTH=150><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></TD>
-									<TD WIDTH=12></TD>
-									<TD VALIGN=TOP><WEBOBJECT NAME=AttributeValue1></WEBOBJECT></TD>
-								</TR>
-							</TABLE>
-						</WEBOBJECT></TD>
-				</TR>
-			</WEBOBJECT></WEBOBJECT>
-		<TR BGCOLOR=#999999>
-			<TD COLSPAN=4 ALIGN=left></TD>
-		</TR>
-	</WEBOBJECT></TD></TR></WEBOBJECT></TD></TR><TR><TD ALIGN=center COLSPAN=3><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR><WEBOBJECT NAME=ShowCancel><TD><WEBOBJECT NAME=CancelLink><WEBOBJECT NAME=CancelButton></WEBOBJECT></WEBOBJECT></TD></WEBOBJECT><WEBOBJECT NAME=ShowPrevious><TD><WEBOBJECT NAME=LeftArrow></WEBOBJECT></TD></WEBOBJECT><WEBOBJECT NAME=ShowNext><TD><WEBOBJECT NAME=RightArrow></WEBOBJECT></TD></WEBOBJECT><WEBOBJECT NAME=ShowSave><TD><WEBOBJECT NAME=SubmitChanges></WEBOBJECT></TD></WEBOBJECT></TR></TABLE></TD></TR></WEBOBJECT></WEBOBJECT></WEBOBJECT>
+<webobject name=PageWrapper><webobject name=Help></webobject><webobject name=EditForm><webobject name=MainTable>
+			<tr>
+				<td colspan=2><webobject name=Conditional1>
+						<table cellspacing=0 cellpadding=3 border=0 width="100%">
+							<webobject name=InspectTableHeaderRow>
+								<td align=LEFT valign=middle class=BannerText><webobject name=StepName></webobject></td>
+								<td align=RIGHT class=BannerStepNumbersText valign=middle><webobject name=Steps></webobject></td>
+							</webobject>
+						</table>
+					</webobject></td>
+			</tr>
+			<tr>
+				<td colspan=2><webobject name=Errors></webobject></td>
+			</tr>
+			<tr valign=top>
+				<td align=right valign=top colspan=2><webobject name=InspectPageRepetition></webobject></td>
+			</tr>
+			<tr bgcolor="#999999">
+				<td align=center>
+					<table cellspacing=1 border=0 cellpadding=0>
+						<tr>
+							<td align=CENTER class=requiredMarker>*</td>
+							<td><font color="#ffffff" size=-1>: Required Field</font></td>
+						</tr>
+					</table>
+				</td>
+				<td align=center>
+					<table border=0 cellpadding=0 cellspacing=0>
+						<tr>
+							<webobject name=ShowCancel>
+								<td><webobject name=CancelLink><webobject name=CancelButton></webobject></webobject></td>
+							</webobject><webobject name=ShowPrevious>
+								<td><webobject name=LeftArrow></webobject></td>
+							</webobject><webobject name=ShowNext>
+								<td><webobject name=RightArrow></webobject></td>
+							</webobject><webobject name=ShowSave>
+								<td><webobject name=SubmitChanges></webobject></td>
+							</webobject>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</webobject></webobject></webobject>

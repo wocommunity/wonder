@@ -14,17 +14,6 @@ BackLink2: WOHyperlink {
 	action = backAction;
 }
 
-Banner: WOImage {
-	border = "0";
-	filename = d2wContext.bannerFileName;
-	framework = "JavaDirectToWeb";
-}
-
-BannerConditional: WOConditional {
-	_unroll = true;
-	condition = showBanner;
-}
-
 Conditional1: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
@@ -36,6 +25,13 @@ Conditional2: WOConditional {
 Conditional3: WOConditional {
 	condition = showDisplayProperty;
 	negate = true;
+}
+
+ERDBannerComponent1: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	framework = "JavaDirectToWeb";
+	showBanner = d2wContext.showBanner;
 }
 
 ERPrinterButton: ERDPrinterButton {
@@ -54,20 +50,9 @@ ERRepeatingTable1: ERXRepeatingTable {
         col=col;
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForEntity;
-}
-
-ExclamationImage: WOImage {
-	border = "0";
-	filename = "exclamation.gif";
-	framework = "JavaDirectToWeb";
-}
-
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
 }
 
 HideReturnOnSelect1: WOConditional {
