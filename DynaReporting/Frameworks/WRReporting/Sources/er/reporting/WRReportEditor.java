@@ -37,7 +37,7 @@ public class WRReportEditor extends WOComponent implements DRMasterCriteriaEditi
 
 
     public void resetGroups() {
-        NSNotificationCenter.defaultCenter().postNotification("DRReportModelRebuild", null, null);
+        NSNotificationCenter.defaultCenter().postNotification(DRReportModel.DRReportModelRebuildNotification, null, null);
     }
 
 
