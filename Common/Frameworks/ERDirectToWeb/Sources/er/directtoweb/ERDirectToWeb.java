@@ -74,8 +74,10 @@ public class ERDirectToWeb {
         // called implicitely because ERDirectToWeb is the principal class of the framework
         if (!_isInitialized) {
             if (log.isDebugEnabled()) log.debug("Initializing framework: ERDirectToWeb");
-            Class c=ERD2WModel.class;        // force initialization
-                                             // Configures the system for trace rule firing.
+            Object o=ERD2WModel.erDefaultModel();        // force initialization
+                                                         // NOTE: doing Class.ERD2WModel doesn't seem enough
+                                                         // to guarantee fire of ERD2WModel's static initializer
+                                                         // Configures the system for trace rule firing.
             D2W.setFactory(new ERD2WFactory());
             try {
                 ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
