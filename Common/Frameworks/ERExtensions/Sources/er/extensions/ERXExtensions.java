@@ -436,19 +436,37 @@ public class ERXExtensions {
     }
 
     public static Object rawPrimaryKeyFromPrimaryKeyAndEO(NSDictionary primaryKey, EOEnterpriseObject eo) {
-        Object result = null;
-        if(primaryKey!=null && primaryKey.allValues().count() == 1)
-            result=primaryKey.allValues().lastObject();
-        else if (primaryKey!=null && primaryKey.allValues().count() > 1)
+        NSArray result = primaryKeyArrayForObject(eo);
+
+        if(result!=null && result.count() == 1) {
+            return result.lastObject();
+        } else if (result!=null && result.count() > 1) {
             cat().warn("Attempting to get a raw primary key from an object with a compound key: " + eo);
+        }
         return result;
     }
-
+    
+    public static NSArray primaryKeyArrayForObject(EOEnterpriseObject obj) {
+        EOEditingContext ec = obj.editingContext();
+        if (ec == null) {
+            //you don't have an EC! Bad EO. We can do nothing.
+            return null;
+        }
+        EOGlobalID gid = ec.globalIDForObject(obj);
+        if (gid.isTemporary()) {
+            //no pk yet assigned
+            return null;
+        }
+        EOKeyGlobalID kGid = (EOKeyGlobalID) gid;
+        return kGid.keyValuesArray();
+    }
+    
     public static Object rawPrimaryKeyForObject(EOEnterpriseObject eo) {
         Object result = null;
         if (eo!=null)  {
-            NSDictionary d=EOUtilities.primaryKeyForObject(eo.editingContext(),eo);
-            result = rawPrimaryKeyFromPrimaryKeyAndEO(d, eo);
+            // NSDictionary d=EOUtilities.primaryKeyForObject(eo.editingContext(),eo);
+            // result = rawPrimaryKeyFromPrimaryKeyAndEO(d, eo);
+            result = rawPrimaryKeyFromPrimaryKeyAndEO(null, eo);
         }
         return result;
     }

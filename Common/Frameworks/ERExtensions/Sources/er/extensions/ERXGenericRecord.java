@@ -546,14 +546,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public boolean parentObjectStoreIsObjectStoreCoordinator() { return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator; }
 
     public String toString() {
-        String pk = "null pk";
-        try {
-            primaryKey();
-            pk = (pk == null) ? "null pk" : pk;
-        } catch(NullPointerException ex) {
-        }
-        return "<" + getClass().getName() + " "+ pk + ">";
-    }/* */
+        String pk = primaryKey();
+        EOEditingContext ec = editingContext();
+        pk = (pk == null) ? "null" : pk;
+        return "<" + getClass().getName() + " pk:\""+ pk + "\">";
+    }
+    
     public String description() { return toString(); }
     public String toLongString() { return super.toString(); }
 
