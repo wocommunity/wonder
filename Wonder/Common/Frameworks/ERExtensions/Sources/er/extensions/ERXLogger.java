@@ -6,7 +6,12 @@
 //
 package er.extensions;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Properties;
 import org.apache.log4j.*;
+import org.apache.log4j.config.PropertyGetter;
+import org.apache.log4j.config.PropertyPrinter;
 import org.apache.log4j.spi.*;
 
 /**
@@ -21,14 +26,18 @@ public class ERXLogger extends org.apache.log4j.Logger {
     public static Logger log;
     public static Factory factory = new ERXLogger.Factory();
     
+    private static boolean _isFirstTimeConfig = true;
+    
     /**
      * Sets the default Logger factory so that ERXLogger
      * classes are created instead of Logger classes. Also
      * configures the log4j logging system.
      */
     static {
-        ERXLog4j.configureLogging();
-        log = Logger.getLogger("er.utilities.log4j.ERXLogger", factory);
+        configureLogging(System.getProperties());
+        //ERXLog4j.configureLogging();
+        // configurator will set the logger since it needs to log.
+        //log = Logger.getLogger("er.utilities.log4j.ERXLogger", factory);
     }
 
     /**
@@ -117,6 +126,28 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public ERXLogger(String name) {
         super(name);
+    }
+
+    /** 
+     * Sets up the logging system with the given configuration 
+     * in {@link java.util.Properties} format. 
+     * 
+     * @param  properties with the logging configuration 
+     */
+    public static synchronized void configureLogging(Properties properties) {
+        if (_isFirstTimeConfig) {
+            BasicConfigurator.configure();
+            Logger.getRootLogger().setLevel(Level.INFO);
+            _isFirstTimeConfig = false;
+        }
+        PropertyConfigurator.configure(properties);
+        
+        if (log == null) 
+            log = Logger.getLogger(ERXLogger.class.getName(), factory);
+
+        log.info("Updated the logging configuration with the current system properties.");
+        //PropertyPrinter printer = new PropertyPrinter(new PrintWriter(System.out));
+        //printer.print(new PrintWriter(System.out));
     }
 
     /**
