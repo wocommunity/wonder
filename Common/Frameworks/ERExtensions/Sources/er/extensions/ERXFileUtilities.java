@@ -778,4 +778,17 @@ public class ERXFileUtilities {
         return ERXStringUtilities.byteArrayToHexString(md5(file));
     }
 
+    public static long length(File f) {
+        if (!f.isDirectory()) {
+            return f.length();
+        } else {
+            long length = 0;
+            File[] files = f.listFiles();
+            for (int i = files.length; i-- > 0;) {
+                length += length(files[i]);
+            }
+            return length;
+        }
+    }
+    
 }
