@@ -569,13 +569,13 @@ public class ERXStringUtilities {
     }
 
     public static String toHexString(char c) {
-        StringBuffer result = new StringBuffer("\\u9999".length());
+        StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length());
         String u = Long.toHexString((int) c).toUpperCase();
         switch (u.length()) {
-            case 1:   result.append("\\u000");  break;
-            case 2:   result.append("\\u00");   break;
-            case 3:   result.append("\\u0");    break;
-            default:  result.append("\\u");     break;
+            case 1:   result.append("\u005C\u005Cu000");  break;
+            case 2:   result.append("\u005C\u005Cu00");   break;
+            case 3:   result.append("\u005C\u005Cu0");    break;
+            default:  result.append("\u005C\u005Cu");     break;
         }
         result.append(u);
         return result.toString();
@@ -584,7 +584,7 @@ public class ERXStringUtilities {
     public static String toHexString(String str) {
         if (str == null) return null;
 
-        StringBuffer result = new StringBuffer("\\u9999".length() * str.length());
+        StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length() * str.length());
         for (int i = 0; i < str.length(); i++) 
             result.append(toHexString(str.charAt(i)));
 
