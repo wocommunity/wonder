@@ -40,6 +40,12 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         return result;
     }
 
+    public String propertyKey() { return (String)d2wContext().valueForKey("propertyKey"); }
+    public void setPropertyKey(String propertyKey) {
+        d2wContext().takeValueForKey(propertyKey, "propertyKey");
+        ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().takeValueForKey(propertyKey, "componentIdentifier");
+    }
+    
     public boolean hasPropertyName() {
         String displayNameForProperty=(String)d2wContext().valueForKey("displayNameForProperty");
         return displayNameForProperty!=null && displayNameForProperty.length()>0;
@@ -86,7 +92,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
                 sectionsContentsFromRule=(NSArray)displayPropertyKeys();
             }
             if (sectionsContentsFromRule == null)
-                throw new RuntimeException("Couldn't find sectionsContents or displayPropertyKeys in d2wContext!");
+                throw new RuntimeException("Couldn't find sectionsContents or displayPropertyKeys in d2wContext: " + d2wContext().valueForKey("pageConfiguration"));
             if(sectionsContentsFromRule.count() > 0 && !(sectionsContentsFromRule.objectAtIndex(0) instanceof ERD2WContainer))
                 _sectionsContents = ERDirectToWeb.convertedPropertyKeyArray(sectionsContentsFromRule, '(', ')');
             else
