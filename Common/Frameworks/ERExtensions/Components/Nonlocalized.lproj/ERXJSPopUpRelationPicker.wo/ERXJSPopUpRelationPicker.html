@@ -13,7 +13,7 @@ function getParentEntityForId(parentschildren,parent_id) {
 			return parentschildren[loop];
 		}
 	}
-	return null;
+	return undefined;
 }
 function getParentEntityForChildId(parentschildren,child_id) {
 	for(loop = 0; loop < parentschildren.length; loop++) {
@@ -24,11 +24,11 @@ function getParentEntityForChildId(parentschildren,child_id) {
 			}
 		}
 	}
-	return null;
+	return undefined;
 }
 function compareEntities(a, b) {
-	if(a.name < b.name) return -1;
-	if( a.name == b.name) return 0;
+	if(a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+	if(a.name == b.name) return 0;
 	return 1;
 }
 function allChildren(parentschildren) {
