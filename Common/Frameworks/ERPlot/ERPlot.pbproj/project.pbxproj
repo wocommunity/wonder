@@ -121,6 +121,8 @@
 				41ABC9EC0522E00700000102,
 				41ABCA4A0523078900000102,
 				41ABCA4C0523078900000102,
+				41451EB20773344A00783D49,
+				41451EB30773344A00783D49,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,6 +134,8 @@
 				41ABCA4B0523078900000102,
 				412A9FE40528BD6E00C72F2C,
 				412A9FE60528BDAE00C72F2C,
+				41451E9E077332C300783D49,
+				41451EB40773344A00783D49,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,6 +442,8 @@
 			children = (
 				412A9FE30528BD6E00C72F2C,
 				412A9FE50528BDAE00C72F2C,
+				41451E9B077332C300783D49,
+				41451EAD0773344A00783D49,
 				41ABC9E10522E00700000102,
 				41ABCA410523078900000102,
 				40B5828AFFD5E91B7F000001,
@@ -751,6 +757,86 @@
 			settings = {
 			};
 		};
+		41451E9B077332C300783D49 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERPCategoryChart.java;
+			path = Sources/er/plot/ERPCategoryChart.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41451E9E077332C300783D49 = {
+			fileRef = 41451E9B077332C300783D49;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41451EAD0773344A00783D49 = {
+			children = (
+				41451EAE0773344A00783D49,
+				41451EAF0773344A00783D49,
+				41451EB10773344A00783D49,
+			);
+			isa = PBXGroup;
+			name = ERPLineChart;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41451EAE0773344A00783D49 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERPLineChart.api;
+			path = Components/ERPLineChart.api;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41451EAF0773344A00783D49 = {
+			children = (
+				41451EB00773344A00783D49,
+			);
+			isa = PBXVariantGroup;
+			name = ERPLineChart.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41451EB00773344A00783D49 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERPLineChart.wo;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41451EB10773344A00783D49 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERPLineChart.java;
+			path = Sources/er/plot/ERPLineChart.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41451EB20773344A00783D49 = {
+			fileRef = 41451EAE0773344A00783D49;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41451EB30773344A00783D49 = {
+			fileRef = 41451EAF0773344A00783D49;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41451EB40773344A00783D49 = {
+			fileRef = 41451EB10773344A00783D49;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41ABC9E10522E00700000102 = {
 			children = (
 				41ABC9E20522E00700000102,
@@ -903,7 +989,7 @@
 		};
 		41C0048C0522D0BE00000102 = {
 			isa = PBXFileReference;
-			lastKnownFileType = file;
+			lastKnownFileType = wrapper.framework;
 			name = DRGrouping.framework;
 			path = /Library/Frameworks/DRGrouping.framework;
 			refType = 0;
@@ -911,7 +997,7 @@
 		};
 		41C0048D0522D0BE00000102 = {
 			isa = PBXFileReference;
-			lastKnownFileType = file;
+			lastKnownFileType = wrapper.framework;
 			name = ERCalendar.framework;
 			path = /Library/Frameworks/ERCalendar.framework;
 			refType = 0;
@@ -983,7 +1069,7 @@
 		};
 		41C004970522D0BE00000102 = {
 			isa = PBXFileReference;
-			lastKnownFileType = file;
+			lastKnownFileType = wrapper.framework;
 			name = WRReporting.framework;
 			path = /Library/Frameworks/WRReporting.framework;
 			refType = 0;

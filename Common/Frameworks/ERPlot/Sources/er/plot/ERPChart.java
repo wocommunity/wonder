@@ -6,7 +6,23 @@ import java.io.*;
 import org.jfree.chart.*;
 import org.jfree.data.*;
 
-public class ERPChart extends ERXStatelessComponent {
+/**
+ * Abstract superclass of the charts. The most important binding is <code>items</code> which
+ * should contain an array of objects from which the values <code>nameKey</code> and <code>
+ * valueKey</code> are retrieved. For example, you might have an array of
+ * @binding name the name of the chart
+ * @binding chartType the type of the chart (possible values depend on the concrete subclass)
+ * @binding imageType the type of the image to show: <code>png</code> (default) or <code>jpeg</code>
+ * @binding width the width of the chart (400 pixel if not specified)
+ * @binding height the height of the chart (400 pixel if not specified)
+ * @binding dataset Dataset to use. If this is given, then items, nameKey, valueKey and categoryKey are not considered.
+ * @binding items array of values to display the chart for
+ * @binding nameKey the key for the name (must return String)
+ * @binding valueKey the key for the value (must return Number)
+ * 
+ * @author ak
+ */
+public abstract class ERPChart extends ERXStatelessComponent {
     
     /** logging support */
     private static final ERXLogger log = ERXLogger.getERXLogger(ERPChart.class, "plot");
@@ -17,7 +33,8 @@ public class ERPChart extends ERXStatelessComponent {
 
     protected NSArray _items;
     protected String _name;
-    protected String _type;
+    protected String _chartType;
+    protected String _imageType;
     protected String _nameKey;
     protected String _valueKey;
     protected int _width = 0;
@@ -43,14 +60,14 @@ public class ERPChart extends ERXStatelessComponent {
 
     public int width() {
         if(_width == 0) {
-            _width = intValueForBinding("_width", DEFAULT_SIZE);
+            _width = intValueForBinding("width", DEFAULT_SIZE);
         }
         return _width;
     }
 
     public int height() {
         if(_height == 0) {
-            _height = intValueForBinding("_height", DEFAULT_SIZE);
+            _height = intValueForBinding("height", DEFAULT_SIZE);
         }
         return _height;
     }
@@ -63,11 +80,21 @@ public class ERPChart extends ERXStatelessComponent {
         return _nameKey;
     }
 
-    public String type() {
-        if(_type == null) {
-            _type = (String)valueForBinding("type");
+    public String chartType() {
+        if(_chartType == null) {
+            _chartType = (String)valueForBinding("chartType");
         }
-        return _type;
+        return _chartType;
+    }
+
+    public String imageType() {
+        if(_imageType == null) {
+            _imageType = (String)valueForBinding("imageType");
+            if(_imageType == null) {
+                _imageType = "image/png";
+            }
+        }
+        return _imageType;
     }
 
     public String valueKey() {
@@ -82,10 +109,10 @@ public class ERPChart extends ERXStatelessComponent {
         super.reset();
         _imageData = null;
         _imageKey = null;
-
+        _imageType = null;
         _items = null;
         _name = null;
-        _type = null;
+        _chartType = null;
         _nameKey = null;
         _valueKey = null;
         _width = 0;
@@ -94,12 +121,13 @@ public class ERPChart extends ERXStatelessComponent {
         _chart = null;
     }
 
-    public JFreeChart chart() {
-        return null;
-    }
+    public abstract JFreeChart chart();
     
     public Dataset dataset() {
-        return null;
+        if(_dataset == null) {
+            _dataset = (Dataset)valueForBinding("dataset");
+        }
+        return _dataset;
     }
 
     public NSData imageData() {
@@ -108,7 +136,11 @@ public class ERPChart extends ERXStatelessComponent {
                 JFreeChart chart = chart();
                 if(chart != null) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ChartUtilities.writeChartAsJPEG(baos, chart, height(), width());
+                    if("image/jpeg".equals(imageType())) {
+                        ChartUtilities.writeChartAsJPEG(baos, chart, width(), height());
+                    } else {
+                        ChartUtilities.writeChartAsPNG(baos, chart, width(), height());
+                    }
                     _imageData = new NSData(baos.toByteArray());
                 }
             } catch (Exception ex) {
