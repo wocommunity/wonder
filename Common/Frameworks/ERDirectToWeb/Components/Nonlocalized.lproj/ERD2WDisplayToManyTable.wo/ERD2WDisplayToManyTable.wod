@@ -5,7 +5,7 @@ InspectAction: WOHyperlink {
         target = target;
 }
 
-WOTable: WOTable {
+WOTable: ERXTable {
         border = d2wContext.componentBorder;
         cellpadding = 0;
         item = item;
