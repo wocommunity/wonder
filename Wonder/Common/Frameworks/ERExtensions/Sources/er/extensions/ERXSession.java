@@ -207,6 +207,49 @@ public class ERXSession extends WOSession implements Serializable {
     }
 
     /**
+     * Returns the NSArray of language names available for  
+     * this application. This is simply a cover method of 
+     * {@link ERXLocalizer#availableLanguages}, 
+     * but will be convenient for binding to dynamic elements 
+     * like language selector popup. 
+     * 
+     * @return   NSArray of language name strings available 
+     *           for this application
+     * @see      availableLanguagesForThisSession, 
+     *           ERXLocalizer#availableLanguages
+     * @TypeInfo java.lang.String 
+     */ 
+    public NSArray availableLanguagesForTheApplication() {
+        return ERXLocalizer.availableLanguages();
+    }
+    
+    /** 
+     * Returns the NSArray of language names available for 
+     * this particular session. 
+     * The resulting array is an intersect of web browser's 
+     * language array ({@link ERXRequest#browserLanguages}) 
+     * and localizer's available language array 
+     * ({@link ERXLocalizer#availableLanguages}). 
+     * <p>
+     * Note that the order of the resulting language names  
+     * is not defined at this morment.
+     * 
+     * @return   NSArray of language name strings available 
+     *           for this particular session
+     * @see      availableLanguagesForTheApplication, 
+     *           ERXRequest#browserLanguages, 
+     *           ERXLocalizer#availableLanguages
+     * @TypeInfo java.lang.String 
+     */ 
+    public NSArray availableLanguagesForThisSession() {
+        NSArray browserLanguages = null;
+        if (context() != null  &&  context().request() != null) 
+            browserLanguages = context().request().browserLanguages();
+        return ERXArrayUtilities.intersectingElements(browserLanguages, 
+                                            ERXLocalizer.availableLanguages());
+    }
+
+    /**
      * Returns the message encoding of the current session. 
      * If it's not already set up but no current <code>language()</code> 
      * available for the session, it creates one with 
@@ -336,7 +379,7 @@ public class ERXSession extends WOSession implements Serializable {
     }
 
     /*
-     * Backtrack detection - Pulled from David Neuman's wonderful security framework.
+     * Backtrack detection - Pulled from David Neumann's wonderful security framework.
      */
 
     /**
