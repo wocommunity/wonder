@@ -39,6 +39,7 @@ and limitations under the License.
 #define CTHREADS	1
 #define PTHREADS	2
 #define WIN32_THREADS	3
+#define NSAPI_THREADS   4
 
 #ifdef SINGLE_THREADED_ADAPTOR
 #define THREAD_MODEL SINGLE
@@ -51,6 +52,12 @@ and limitations under the License.
 #endif
 #ifdef HPUX
 #define THREAD_MODEL PTHREADS
+#endif
+
+/* Override the previous definition if we are building NSAPI. */
+#ifdef NSAPI
+#undef THREAD_MODEL
+#define THREAD_MODEL NSAPI_THREADS
 #endif
 #endif
 

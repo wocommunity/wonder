@@ -215,7 +215,7 @@ static int nonBlockingRecv(net_fd appfd, int receiveTimeout, char *input_buffer,
                
                /* select timeout (don't log if we were just polling) */
                if (receiveTimeout > 0)
-                  WOLog(WO_DBG, "nonBlockingRecv(): timed out (%d sec)", receiveTimeout);
+                  WOLog(WO_DBG, "nonBlockingRecv(): timed out (%d sec)", receiveTimeout+retryTimeout);
                appfd->status = TR_TIMEOUT;
                return -1;
             } else {
@@ -517,6 +517,11 @@ static TR_STATUS sendBuffers(net_fd appfd, struct iovec *buffers, int bufferCoun
                buffers->iov_len -= sent;
                sent = 0;
             }
+         }
+         while (bufferCount > 0 && buffers->iov_len == 0)
+         {
+            buffers++;
+            bufferCount--;
          }
       }
    }

@@ -305,7 +305,10 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     server_rec *s = r->server;
     conn_rec *c = r->connection;
     table *hdrs = r->headers_in;
-    table *penv = r->subprocess_env;
+
+    /* extra headers from http://httpd.apache.org/dev/apidoc/apidoc_request_rec.html */
+    table *proc_env = r->subprocess_env;
+
     char *port;
     const char *rem_logname;
 
@@ -323,7 +326,10 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
      *	some we can copy blindly
      */
     ap_table_do(copyTableEntries, (void *)req, hdrs, NULL);
-    ap_table_do(copyTableEntries, (void *)req, penv, NULL);
+
+    /* copy extra headers */
+    ap_table_do(copyTableEntries, (void *)req, proc_env, NULL);
+
 
 #ifdef APACHE_SECURITY_ENABLED
     /******client cert support***** */
@@ -333,32 +339,42 @@ static void copyHeaders(request_rec *r, HTTPRequest *req) {
     // and this is how we do it for apache-ssl
     //ssl = r->connection->client->ssl
     if (ssl) {
+        WOLog(WO_DBG,"we have ssl");
+        xs = 0;
         xs = SSL_get_peer_certificate(ssl);
-        hdrValue = X509_NAME_oneline(X509_get_subject_name(xs), NULL, 0);
-        req_addHeader(req, "SSL_CLIENT_CERT_CN", hdrValue, 0);
+        if (xs) {
+            WOLog(WO_DBG,"we have a client side cert");
+            hdrValue = 0;
+            hdrValue = X509_NAME_oneline(X509_get_subject_name(xs), NULL, 0);
+            req_addHeader(req, "SSL_CLIENT_CERT_CN", hdrValue, 0);
 
-        hdrValue = SSL_get_version(ssl);
-        req_addHeader(req, "SSL_PROTOCOL_VERSION", hdrValue, 0);
+            hdrValue = SSL_get_version(ssl);
 
-        /* We have to load the SSL related information the hard way because the ssl module might not have been invoked yet if it's loading order is not dead last in the module loading order, or at least after this module.  In either case the env vars won't have the SSL entries for us to pick up. Doing it this way ensures client cert support will work regardless */
+            req_addHeader(req, "SSL_PROTOCOL_VERSION", hdrValue, 0);
 
-        /* the cert length */
-        n=i2d_X509(xs,NULL);
-        /* make sure its a valid length <1 is probably not valid either */
-        if(n<1)
-            WOLog(WO_ERR,"invalid certificate length: %d ",n);
-        else{
-            /* alloc space for the reformed cert. Using this api call, the allocated memory should be freed by Apache. */
-            d=t=ap_palloc(r->pool,n);
-            /* reform the cert structure into a byte array */
-            i2d_X509(xs,&d);
-            /* alloc space for the base64 encoded form */
-            d=ap_palloc(r->pool,(n*4)/3+2+2+1);
-            /* convert to base64 */
-            uuencoden(d,t,n);
-            //WOLog(WO_DBG, "This is what I got: %s\n", d);
+            /* We have to load the SSL related information the hard way because the ssl module might not have been invoked yet if it's loading order is not dead last in the module loading order, or at least after this module.  In either case the env vars won't have the SSL entries for us to pick up. Doing it this way ensures client cert support will work regardless */
 
-            req_addHeader(req, "SSL_CLIENT_CERT", d, 0);
+            /* the cert length */
+            n=i2d_X509(xs,NULL);
+
+            /* make sure its a valid length <1 is probably not valid either */
+            if(n<1)
+                WOLog(WO_ERR,"invalid certificate length: %d ",n);
+            else{
+
+                /* alloc space for the reformed cert. Using this api call, the allocated memory should be freed by Apache. */
+                d=t=ap_palloc(r->pool,n);
+
+                /* reform the cert structure into a byte array */
+                i2d_X509(xs,&d);
+                /* alloc space for the base64 encoded form */
+                d=ap_palloc(r->pool,(n*4)/3+2+2+1);
+                /* convert to base64 */
+                uuencoden(d,t,n);
+                //WOLog(WO_DBG, "This is what I got: %s\n", d);
+
+                req_addHeader(req, "SSL_CLIENT_CERT", d, 0);
+            }
         }
     }
         /* *****client cert support******* */
@@ -445,9 +461,26 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
     */
    ap_send_http_header(r);
 
-   if (! r->header_only) {
-      ap_send_mmap(resp->content, r, 0, resp->content_length);
+   /* The following is Rentsch's version */
+//    if (! r->header_only) {
+//       ap_send_mmap(resp->content, r, 0, resp->content_length);
+//    }
+
+   /* The following is Apple's 5.2 version */
+   /* resp->content_valid will be 0 for HEAD requests and empty responses */
+   if ( (!r->header_only) && (resp->content_valid) ) {
+       while (resp->content_read < resp->content_length)
+       {
+	   ap_soft_timeout("sending WebObjects response", r);
+	   ap_rwrite(resp->content, resp->content_valid, r);
+	   ap_kill_timeout(r);
+	   resp_getResponseContent(resp, 1);
+       }
+       ap_soft_timeout("sending WebObjects response", r);
+       ap_rwrite(resp->content, resp->content_valid, r);
+       ap_kill_timeout(r);
    }
+   
    return;
 }
 
@@ -465,6 +498,32 @@ static int die(request_rec *r, const char *msg, int status) {
    return die_resp(r,resp);
 }
 
+
+/* Read up to dataSize bytes into the buffer at dataBuffer. */
+/* Returns the number of bytes read, or -1 on error. */
+static int readContentData(HTTPRequest *req, void *dataBuffer, int dataSize, int mustFill) {
+   request_rec *r = (request_rec *)req->api_handle;
+   int len_remaining = dataSize;
+   /* set up to get content data */
+   int len_read, total_len_read = 0;
+   char *data = (char *)dataBuffer;
+
+   /* Should these be soft or hard timeouts ? */
+   while ((len_remaining > 0 && mustFill) || (total_len_read == 0)) {
+      ap_soft_timeout("reading WebObjects input", r);
+      len_read = ap_get_client_block(r, data, len_remaining);
+      ap_kill_timeout(r);
+      if (len_read <= 0) {
+         return -1;
+      }
+      total_len_read += len_read;
+      data += len_read;
+      len_remaining -= len_read;
+   }
+   if (total_len_read == 0)
+      WOLog(WO_WARN,"readContentData(): returning zero bytes of content data");
+   return total_len_read;
+}
 
 /*
  *	here it is.  The handler function for WebObjects requests.
@@ -519,6 +578,7 @@ static int WebObjects_handler(request_rec *r) {
     *	build the request ....
     */
    req = req_new( r->method, NULL);
+   req->api_handle = r;				/* stash this in case it's needed */
 
    /*
     *	validate the method
@@ -539,34 +599,14 @@ static int WebObjects_handler(request_rec *r) {
     *   assume that POSTs with content length will be reformatted to GETs later
     */
    if ((req->content_length > 0) && ap_should_client_block(r) ) {
-      /* set up to get content data */
-      int len_read;
-      int len_remaining = req->content_length;
-      char *buffer = WOMALLOC(req->content_length);
-      char *data = buffer;
-      int err = WOURLOK;
-
-      /* Should these be soft or hard timeouts ? */
-      while (len_remaining > 0) {
-         ap_soft_timeout("reading WebObjects input", r);
-         len_read = ap_get_client_block(r, data, len_remaining);
-         ap_kill_timeout(r);
-         if (len_read < 0) {
-            err = WOURLNoPostData;
-            break;
-         } else if (len_read == 0) {
-            err = WOURLInvalidPostData;
-            break;
-         }
-         data += len_read;
-         len_remaining -= len_read;
-      }
-
-      if (err != WOURLOK) {
+      req_allocateContent(req, req->content_length, 1);
+      req->getMoreContent = (req_getMoreContentCallback)readContentData;
+      if (req->content_buffer_size == 0)
+         return die(r, ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
+      if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
          req_free(req);
-         return die(r, WOURLstrerror(err), HTTP_BAD_REQUEST);
+         return die(r, WOURLstrerror(WOURLInvalidPostData), HTTP_BAD_REQUEST);
       }
-      req->content = buffer;
    }
 
    /* Always get the query string */
@@ -586,10 +626,8 @@ static int WebObjects_handler(request_rec *r) {
     *	note that handleRequest free()'s the 'req' for us
     */
    ap_soft_timeout("messaging WebObjects application", r);
-   req->api_handle = r;				/* stash this in case it's needed */
    resp = tr_handleRequest(req, r->uri, &wc, r->protocol, docroot);
    ap_kill_timeout(r);
-
    if (resp != NULL) {
       sendResponse(r, resp);
       resp_free(resp);

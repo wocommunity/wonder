@@ -35,6 +35,10 @@ and limitations under the License.
 #include "Platform.h"
 #include "womalloc.h"
 
+#ifndef SINGLE_THREADED_ADAPTOR
+static char *unnamedLock = "(unnamed)";
+#endif
+
 /*
  * Error functions. This template is based on the unix errno facilities.
  * A more sophisticated implementation may be required for multithreaded
@@ -88,6 +92,7 @@ extern void WA_freeErrorDescription(char *msg)
    LocalFree((LPVOID)msg);
 }
 
+
 #if (THREAD_MODEL == WIN32_THREADS)
 typedef struct {
    HANDLE lock;
@@ -105,7 +110,7 @@ WA_recursiveLock WA_createLock(const char *name)
       if (name)
          lock->name = name;
       else
-         lock->name = "(unnamed)";
+         lock->name = unnamedLock;
    } else
       WOLog(WO_ERR, "WA_createLock(): could not malloc");
    return (WA_recursiveLock)lock;
@@ -174,7 +179,7 @@ WA_recursiveLock WA_createLock(const char *name)
       if (name)
          lock->name = name;
       else
-         lock->name = "(unnamed)";
+         lock->name = unnamedLock;
    }
    return lock;
 }
@@ -258,7 +263,7 @@ WA_recursiveLock WA_createLock(const char *name)
       if (name)
          lock->name = name;
       else
-         lock->name = "(unnamed)";
+         lock->name = unnamedLock;
    }
    return lock;
 }
@@ -317,3 +322,92 @@ void WA_yield()
 }
 
 #endif /* pthreads */
+
+
+#if (THREAD_MODEL == NSAPI_THREADS)
+#include <nsapi.h>
+
+typedef struct {
+   SYS_THREAD lockingThread;
+   unsigned int lockCount;
+   CONDVAR condvar;
+   CRITICAL crit;
+   const char *name;
+} NSAPIThreadRecursiveLock;
+
+WA_recursiveLock WA_createLock(const char *name)
+{
+   NSAPIThreadRecursiveLock *lock;
+
+   lock = WOMALLOC(sizeof(NSAPIThreadRecursiveLock));
+   if (lock)
+   {
+      lock->crit = crit_init();
+      lock->condvar = condvar_init(lock->crit);
+      lock->lockCount = 0;
+      lock->lockingThread = NULL;
+      if (name)
+         lock->name = name;
+      else
+         lock->name = unnamedLock;
+   }
+   if (!lock)
+      WOLog(WO_ERR, "WA_createLock() failed for lock %s", name ? name : unnamedLock);
+   return lock;
+}
+
+/*
+ * Lock the mutex.
+ */
+#ifdef EXTRA_DEBUGGING_LOGS
+void _WA_lock(WA_recursiveLock _lock, const char *file, int line)
+#else
+void WA_lock(WA_recursiveLock _lock)
+#endif
+{
+   NSAPIThreadRecursiveLock *lock = (NSAPIThreadRecursiveLock *)_lock;
+   SYS_THREAD self = systhread_current();
+#ifdef EXTRA_DEBUGGING_LOGS
+   if (_lock != logMutex)
+      WOLog(WO_DBG, "  locking %s from %s:%d", lock->name, file, line);
+#endif
+   crit_enter(lock->crit);
+   while (lock->lockingThread != self && lock->lockCount != 0)
+      condvar_wait(lock->condvar);
+   lock->lockingThread = self;
+   lock->lockCount++;
+   crit_exit(lock->crit);
+}
+
+
+/*
+ * Unlock the mutex.
+ */
+#ifdef EXTRA_DEBUGGING_LOGS
+void _WA_unlock(WA_recursiveLock _lock, const char *file, int line)
+#else
+void WA_unlock(WA_recursiveLock _lock)
+#endif
+{
+   NSAPIThreadRecursiveLock *lock = (NSAPIThreadRecursiveLock *)_lock;
+#ifdef EXTRA_DEBUGGING_LOGS
+   if (_lock != logMutex)
+      WOLog(WO_DBG, " unlocking %s from %s:%d",  lock->name, file, line);
+#endif
+   crit_enter(lock->crit);
+   lock->lockCount--;
+   if (lock->lockCount == 0)
+   {
+      lock->lockingThread = NULL;
+      condvar_notify(lock->condvar);
+   }
+   crit_exit(lock->crit);
+}
+
+void WA_yield()
+{
+   /* Couldn't find a 'yield' in NSAPI. A 1 ms sleep may be overkill. */
+   systhread_sleep(1);
+}
+
+#endif /* NSAPI_THREADS */
