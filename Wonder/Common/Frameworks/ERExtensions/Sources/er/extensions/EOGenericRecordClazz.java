@@ -212,7 +212,7 @@ public class EOGenericRecordClazz extends Object {
      * Fetches all of the objects matching the given qualifer
      * format corresponding to the clazz's entity using the 
      * given editing context.
-     * @oaram ec editing context
+     * @param ec editing context
      * @param qualifer format string
      * @param args qualifier format arguments
      * @return array of objects corresponding to the passed in

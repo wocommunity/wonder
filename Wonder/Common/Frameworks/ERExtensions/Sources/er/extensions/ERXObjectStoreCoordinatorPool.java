@@ -4,7 +4,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import er.extensions.*;
 import java.util.*;
 
 /**
@@ -30,9 +29,12 @@ public class ERXObjectStoreCoordinatorPool {
         
     }
 
-    /** creates a new ERXObjectStoreCoordinatorPool, this object is a singleton. This object is responsible to provide EOObjectStoreCoordinators based on the current Threads' session. It is used by MultiOSCFactory to get a rootObjectStore if the MultiOSCFactory is asked for a new EOEditingContext.
-        *
-     *
+    /**
+     * Creates a new ERXObjectStoreCoordinatorPool. This object is a singleton. 
+     * This object is responsible to provide EOObjectStoreCoordinators 
+     * based on the current Threads' session. 
+     * It is used by MultiOSCFactory to get a rootObjectStore if the 
+     * MultiOSCFactory is asked for a new EOEditingContext.
      */
     private ERXObjectStoreCoordinatorPool() {
         maxOS = ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators");

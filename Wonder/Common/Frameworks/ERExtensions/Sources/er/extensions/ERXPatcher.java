@@ -63,8 +63,7 @@ public class ERXPatcher  {
     }
 
     /** This class holds patches for WebObjects dynamic elements, which have always a closing tag and all
-        * attribute values are enclosed in quotes. The patches are automatically registered if this framework gets
-        * loaded by the {@link com.cluster9.webobjects.PrincipalClass}.<br/>
+        * attribute values are enclosed in quotes. The patches are automatically registered if this framework gets loaded.<br/>
         * <b>Note</b>: <code>WOForm</code> is not replaced, because it is ok if you don't use <code>?</code>-bindings.
         * If you need additional parameters, just insert <code>WOHiddenField</code>s.<br/>
         * Also <code>WOJavaScript</code> is not replaced, even if it is not XHTML-conform.
