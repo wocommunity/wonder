@@ -758,7 +758,7 @@ public class WRReport extends WOComponent  {
     }
 
     public String classAttributeTd() {
-        return "WRAttribute" + depth + "Total" + currentIndex;
+        return "WRAttribute" + depth + "Total" + this.totalCount();
     }
 
     public String classColSpanTd() {
