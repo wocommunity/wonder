@@ -17,8 +17,8 @@ public class ERXNSLogLog4jBridge extends NSLog.Logger {
     private final int type;
     
     public ERXNSLogLog4jBridge(int type) {
-	super();
-	this.type = type;
+        super();
+        this.type = type;
         setIsEnabled(true);
     }
 
@@ -47,7 +47,7 @@ public class ERXNSLogLog4jBridge extends NSLog.Logger {
     }
 
     public void appendln() {
-	log.info(""); // Assuming poepole will always put "%n" at the end of the layout pattern.  
+        log.info(""); // Assuming people will always put "%n" at the end of the layout pattern.  
     }
 
     public void flush() {
