@@ -251,5 +251,6 @@ public class WRQuickReport extends WOComponent  {
 
     public void appendToResponse(WOResponse r, WOContext c) {
         super.appendToResponse(r, c);
+        //reset();
     }
 }

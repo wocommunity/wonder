@@ -25,9 +25,13 @@ public class ERD2WDisplayList extends ERDCustomEditComponent {
 
     public NSArray listToDisplay() {
         NSArray objects = (NSArray)(object() instanceof NSArray ? object() : objectKeyPathValue());
-        String sortKey = (String)valueForBinding("sortKey");
-        if(sortKey != null) {
-            objects = ERXArrayUtilities.sortedArraySortedWithKey(objects, sortKey);
+        if(objects != null) {
+            String sortKey = (String)valueForBinding("sortKey");
+            if(sortKey != null) {
+                objects = ERXArrayUtilities.sortedArraySortedWithKey(objects, sortKey);
+            }
+        } else {
+            objects = NSArray.EmptyArray;
         }
         return objects;
     }
