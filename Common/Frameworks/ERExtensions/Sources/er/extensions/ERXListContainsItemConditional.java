@@ -12,7 +12,7 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * Conditional component that tests if a given item is contained
- * in an {@link NSArray}.
+ * in an {@link com.webobjects.foundation.NSArray}.
  * <br/>
  * Synopsis:<br/>
  * item=<i>anItem</i>;list=<i>aList</i>;[negate=<i>aBoolean</i>;]
@@ -21,7 +21,7 @@ import com.webobjects.appserver.WOContext;
  * @binding item object to test inclusion in the list
  * @binding negate inverts the sense of the conditional.
  */
-
+// ENHANCEME: Should support java.util.List interface
 public class ERXListContainsItemConditional extends WOComponent {
 
     /**
