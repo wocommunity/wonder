@@ -79,6 +79,20 @@ public abstract class ERXApplication extends WOApplication {
             ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
         }
     }
+
+    /** holds the default model group */
+    protected EOModelGroup defaultModelGroup;
+
+    /**
+     * Delegate method for the {@see EOModelGroup} class delegate.
+     * @returns a fixed ERXModelGroup
+     */
+    public EOModelGroup defaultModelGroup() {
+        if(defaultModelGroup == null) {
+            defaultModelGroup = ERXModelGroup.modelGroupForLoadedBundles();
+        }
+        return defaultModelGroup;
+    }
     
     /**
      * The ERXApplication contructor.
@@ -90,8 +104,9 @@ public abstract class ERXApplication extends WOApplication {
             _displayMainMethodWarning();
         }        
         installPatches();
-        
-        ERXModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
+
+        EOModelGroup.setClassDelegate(this);
+
         registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
 
         Long timestampLag = Long.getLong("EOEditingContextDefaultFetchTimestampLag");
