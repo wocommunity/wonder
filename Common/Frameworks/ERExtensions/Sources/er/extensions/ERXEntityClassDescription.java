@@ -346,7 +346,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     eoentity.setClassName(defaultClassName);
                     log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + defaultClassName);
                 } else {
-                    log.warn(eoentity.name() + ": not setting class from EOGenericRecord to " + defaultClassName + ", there are no real attributes");
+                    log.debug(eoentity.name() + ": not setting class from EOGenericRecord to "
+                              + defaultClassName + ", there are no real attributes");
                 }
             } 
         }
