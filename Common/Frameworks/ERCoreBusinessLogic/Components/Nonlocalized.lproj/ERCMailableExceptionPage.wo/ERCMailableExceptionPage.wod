@@ -8,22 +8,13 @@ Conditional1: ERXNonNullConditional {
 }
 
 ExceptionNameString: WOString {
-    value = exception.name;
+    value = exception.getClass.getName;
     escapeHTML = false;
 }
 ExtraInfoRowRepetition: WODictionaryRepetition {
     dictionary = extraInfo;
     key = currentUserInfoKey;
     item = currentUserInfoValue;
-}
-
-HasUserInfoConditional: WOConditional {
-    condition = exception.userInfo;
-}
-
-NoUserInfoConditional: WOConditional {
-    condition = exception.userInfo;
-    negate = true;
 }
 
 ReasonRepetition: WORepetition {
@@ -58,13 +49,7 @@ UserInfoKeyString: WOString {
     escapeHTML = false;
 }
 
-UserInfoRowRepetition: WODictionaryRepetition {
-    dictionary = exception.userInfo;
-    key = currentUserInfoKey;
-    item = currentUserInfoValue;
-}
-
 UserInfoValueString: WOString {
-    value = currentUserInfoValue;
+    value = currentUserInfoValue.toString;
     escapeHTML = true;
 }
