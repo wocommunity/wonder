@@ -10,24 +10,50 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import er.extensions.*;
 
 public class ERDList extends ERDCustomEditComponent {
+    static final ERXLogger log = ERXLogger.getLogger(ERDList.class);
+    NSArray list;
 
     public ERDList(WOContext context) { super(context); }
-    
+
     public boolean synchronizesVariablesWithBindings() { return false; }
 
-    public NSArray list() { return (NSArray)(hasBinding("list") ? valueForBinding("list") : objectKeyPathValue()); }
+
+    public void reset() {
+        list = null;
+        super.reset();
+    }
+
+    // we will get asked quite a lot of times, so caching is in order
+    
+    public NSArray list() {
+        if(list == null) {
+            try {
+                if(hasBinding("list")) {
+                    list = (NSArray)valueForBinding("list");
+                } else {
+                    list = (NSArray)objectKeyPathValue();
+                }
+            } catch(java.lang.ClassCastException ex) {
+                // (ak) This happens quite often when you haven't set up all display keys...
+                // the statement makes this more easy to debug
+                log.error(ex + " while getting " + key() + " of " + object());
+                list = new NSArray();
+            }
+        }
+        return list;
+    }
 
     // This is fine because we only use the D2WList if we have at least one element in the list.
-    public String entityName() { return list().count() > 0 ? ((EOEnterpriseObject)list().objectAtIndex(0)).entityName() : null; }
 
     // FIXME: This sucks.
     public boolean isTargetXML(){
-        String listPageConfiguration = (String)valueForBinding("listPageConfiguration");
+        String listPageConfiguration = (String)valueForBinding("embeddedPageConfiguration");
         return listPageConfiguration != null && listPageConfiguration.indexOf("XML") > -1;
     }
-    
+
     public boolean erD2WListOmitCenterTag() {
         return hasBinding("erD2WListOmitCenterTag") ? booleanForBinding("erD2WListOmitCenterTag") : false;
     }
