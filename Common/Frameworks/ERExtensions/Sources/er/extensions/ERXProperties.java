@@ -22,12 +22,9 @@ import java.util.*;
 public class ERXProperties {
 
     ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.extensions.ERProperties");
+    public final static Category cat = Category.getInstance(ERXProperties.class);
 
-    public static String stringForKey(String s) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? s1 : NSProperties.stringForKey(s);
-    }
+    public static String stringForKey(String s) { return System.getProperty(s); }
     
     public static NSArray arrayForKey(String s) {
         String s1 = System.getProperty(s);
@@ -41,8 +38,7 @@ public class ERXProperties {
     }
 
     public static boolean booleanForKey(String s) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? ERXUtilities.booleanValue(s1) : NSProperties.booleanForKey(s);
+        return ERXUtilities.booleanValue(System.getProperty(s));
     }
 
     public static NSDictionary dictionaryForKey(String s) {

@@ -38,7 +38,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
     private static String _applicationHostUrl;
     public static String applicationHostUrl() {
         if (_applicationHostUrl ==null) {
-            _applicationHostUrl =NSProperties.stringForKey("ERApplicationHostURL");
+            _applicationHostUrl = System.getProperty("ERApplicationHostURL");
             if (_applicationHostUrl ==null || _applicationHostUrl.length()==0)
                 throw new RuntimeException("The ERApplicationHostURL default was empty -- please set it for the machine running the target application: it should look like http://mymachine.com");
         }

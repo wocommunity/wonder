@@ -81,9 +81,7 @@ public class ERXConfigurationManager {
         return defaultManager;
     }
     
-    public String stringForKey(String key) {
-        return NSProperties.stringForKey(key);
-    }
+    public String stringForKey(String key) { return System.getProperty(key); }
 
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());

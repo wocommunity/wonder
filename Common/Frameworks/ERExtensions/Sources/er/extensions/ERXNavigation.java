@@ -118,7 +118,7 @@ public class ERXNavigation {
         if (level > 0) {
             NSMutableArray navTemp = new NSMutableArray(navigationState());
             if (navTemp.count() >= level)
-                navTemp.replaceObjectAtIndex(level - 1, state);
+                navTemp.replaceObjectAtIndex(state, level - 1);
             else
                 navTemp.addObject(state);
             setNavigationState(navTemp);
