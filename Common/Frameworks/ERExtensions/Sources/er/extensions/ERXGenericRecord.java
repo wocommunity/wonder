@@ -558,7 +558,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return the committed snapshot value for the given key
      */
     public Object committedSnapshotValueForKey(String key) {
-        return (editingContext().committedSnapshotForObject(this)).objectForKey(key);
+        NSDictionary snapshot = editingContext().committedSnapshotForObject(this);
+        return snapshot != null ? snapshot.objectForKey(key) : null;
     }
 
     /**
