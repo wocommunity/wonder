@@ -95,6 +95,11 @@ ExclamationImage: WOImage {
 	width = "32";
 }
 
+FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
 FontContainer: WOGenericContainer {
 	color = d2wContext.textColor;
 	elementName = "font";
