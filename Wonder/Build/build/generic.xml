@@ -13,11 +13,8 @@ There are three ways to use this script:
 		web     --> copy to ${wo.server.root}
 		clean   --> remove .classes, .framework or .woa
 
-2) from the command line to build individual parts of WONDER, for example
-		ERExtensions.all     --> create in ${build.root}
-		ERExtensions.install --> copy to ${wo.localroot}
-		ERExtensions.web     --> copy to ${wo.server.root}
-		ERExtensions.clean   --> remove .classes, .framework or .woa
+2) from the command line to build specific parts of WONDER, for example
+        ant -emacs -f ~/Wonder/Build/generic.xml ERExtensions.all
 
 3) to build your own clickable targets in PBX.
    You need to define a custom build target in Project Builder like this:
@@ -397,10 +394,13 @@ There are three ways to use this script:
          <copy todir="${wo.localroot}/Library/WebObjects/JavaApplications/${project.name}.woa">
             <fileset dir="${build.root}/${project.name}.woa" />
         </copy>
+        <exec dir="${wo.localroot}/Library/WebObjects/JavaApplications/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
+            <arg line="a+x ${project.name}" />
+        </exec>
     </target>
 
     <target name="global.web.framework" depends="global.properties">
-        <mkdir dir="${wo.server.root}/Frameworks/${project.name}.frameworks" />
+        <mkdir dir="${wo.server.root}/Frameworks/${project.name}.framework" />
         <copy todir="${wo.server.root}/Frameworks/${project.name}.framework/WebServerResources">
             <fileset dir="${build.root}/${project.name}.framework/WebServerResources" />
         </copy>
@@ -670,7 +670,6 @@ There are three ways to use this script:
     <target name="experimental.all" depends="DevStudio.all" />
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
-    <target name="all" depends="all.clean, all.compile" />
 
     <target name="all.clean">
         <antcall target="global.clean.framework" >
@@ -742,7 +741,7 @@ There are three ways to use this script:
         </antcall>
      </target>
 
-    <target name="all.web" depends="all.compile">
+    <target name="all.web">
         <!--ERJars does not have WebServerResources -->
         <!--antcall target="global.web.framework" >
             <param name="project.name" value="ERJars" />
@@ -814,7 +813,7 @@ There are three ways to use this script:
         </antcall>
      </target>
 
-    <target name="all.install" depends="all.compile">
+    <target name="all.install">
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERJars" />
         </antcall>
@@ -883,4 +882,10 @@ There are three ways to use this script:
             <param name="project.name" value="DevStudio" />
         </antcall>
      </target>
+
+    <target name="all" depends="all.compile" />
+    <target name="install" depends="all.compile, all.install" />
+    <target name="web" depends="all.compile, all.web" />
+    <target name="clean" depends="all.clean" />
+
 </project>
