@@ -63,6 +63,10 @@ public class EOGenericRecordClazz extends Object {
         return EOUtilities.objectFromRawRow(ec, entityName(), dict);
     }
 
+    public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
+        return EOUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk);
+    }
+
     public NSArray objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
         return EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
     }
