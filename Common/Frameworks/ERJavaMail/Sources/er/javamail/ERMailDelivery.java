@@ -172,7 +172,7 @@ public abstract class ERMailDelivery {
 
     /** Sets the to-addresses array for the current message instance */
     public void setToAddresses (NSArray toAddresses) throws MessagingException, AddressException {
-        setAddresses (toAddresses, Message.RecipientType.TO);
+        setAddresses (toAddresses, Message.RecipientType.TO, true);
     }
 
     public void setToAddress (String toAddress) throws MessagingException, AddressException {
@@ -181,12 +181,12 @@ public abstract class ERMailDelivery {
 
     /** Sets the cc-addresses array for the current message instance */
     public void setCCAddresses (NSArray ccAddresses) throws MessagingException, AddressException {
-        setAddresses (ccAddresses, Message.RecipientType.CC);
+        setAddresses (ccAddresses, Message.RecipientType.CC, true);
     }
 
     /** Sets the bcc-addresses array for the current message instance */
     public void setBCCAddresses (NSArray bccAddresses) throws MessagingException, AddressException {
-        setAddresses (bccAddresses, Message.RecipientType.BCC);
+        setAddresses (bccAddresses, Message.RecipientType.BCC, true);
     }
 
     /** Sets the object for the message. This is the identifying object from the calling program. */
@@ -341,8 +341,24 @@ public abstract class ERMailDelivery {
     /** Sets addresses regarding their recipient type in current message */
     private void setAddresses (NSArray addressesArray, Message.RecipientType type)
         throws MessagingException, AddressException {
+        setAddresses (addressesArray, type, false);
+    }
+
+    
+    /**
+     * Sets addresses regarding their recipient type in the current message.
+     * Has the option to filter the address list based on the white and black
+     * lists.
+     */
+    private void setAddresses (NSArray addressesArray,
+                               Message.RecipientType type,
+                               boolean filterAddresses)
+        throws MessagingException, AddressException {
             InternetAddress [] addresses = null;
 
+            if (filterAddresses)
+                addressesArray = ERJavaMail.sharedInstance().filterEmailAddresses(addressesArray);
+            
             if (!ERJavaMail.sharedInstance ().centralize ())
                 addresses = ERMailUtils.convertNSArrayToInternetAddresses (addressesArray);
             else
