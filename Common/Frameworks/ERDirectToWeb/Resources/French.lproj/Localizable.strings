@@ -1,4 +1,6 @@
 {
+    "Test message for unit test" = "FAIL - app comes before this";
+    "Test message for unit test in framework" = "SUCCESS";
     "ERDEditPasswordConfirm" = {
          infoMessage = "<i>Veuillez noter que le login et le mot de passe sont sensible aux majuscules. Aussi un mot de passe doit avoir entre 6 et 16 caractères et au moins un chiffre.</i>";
         newPasswordLabel = "Nouveau mot de passe";
@@ -7,6 +9,8 @@
         confirmNewLabel = "Confirmation du nouveau mot de passe.";
     };
     "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of  @@tabSectionsContents.count@@";
+    "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
+    "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
     "ERD2W.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
      "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
     "ERDEditListButton.editButtonName" = "Edition de la liste de @@displayNameForProperty@@";
