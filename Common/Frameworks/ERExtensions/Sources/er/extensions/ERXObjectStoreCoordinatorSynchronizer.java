@@ -105,11 +105,11 @@ public class ERXObjectStoreCoordinatorSynchronizer {
      */
     private class ProcessChangesQueue implements Runnable {
         private abstract class SnapshotProcessor {
-            public abstract void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID);
+            public abstract void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID);
         }
         
         private class DeleteProcessor extends SnapshotProcessor {
-            public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
+            public void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.forgetSnapshotForGlobalID(globalID);
                 if(log.isDebugEnabled()) {
                     log.debug("forget: " + globalID);
@@ -117,16 +117,16 @@ public class ERXObjectStoreCoordinatorSynchronizer {
             }
         }
         private class UpdateProcessor extends SnapshotProcessor {
-            public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
+            public void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.forgetSnapshotForGlobalID(globalID);
                 database.recordSnapshotForGlobalID(snapshot, globalID);
                 if(log.isDebugEnabled()) {
-                    log.debug("update: " + globalID);
+                    log.debug("update: " + globalID + " -- " + snapshot);
                 }
             }
         }
         private class InsertProcessor extends SnapshotProcessor {
-            public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
+            public void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.recordSnapshotForGlobalID(snapshot, globalID);
                 if(log.isDebugEnabled()) {
                     log.debug("insert: " + globalID);
@@ -141,6 +141,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         private SnapshotProcessor _updateProcessor = new UpdateProcessor();
         
         private ProcessChangesQueue() {
+            Thread.currentThread().setName("ProcessChangesQueue");
         }
         
         private void addChange(Change changes) {
@@ -182,32 +183,30 @@ public class ERXObjectStoreCoordinatorSynchronizer {
          * @param sender
          */
         private void process(EOObjectStoreCoordinator sender, SnapshotProcessor processor, NSDictionary changesByEntity) {
-            for(Enumeration entityNames = changesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
-                String entityName = (String)entityNames.nextElement();
-                EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
-                NSArray snapshots = (NSArray)changesByEntity.objectForKey(entityName);
-                NSMutableDictionary dbcs = new NSMutableDictionary();
-                for (Enumeration oscs = _synchronizer.coordinators(); oscs.hasMoreElements(); ) {
-                    EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) oscs.nextElement();
-                    if (osc != sender) {
+            NSMutableDictionary dbcs = new NSMutableDictionary();
+            for (Enumeration oscs = _synchronizer.coordinators(); oscs.hasMoreElements(); ) {
+                EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) oscs.nextElement();
+                if (osc != sender) {
+                    for(Enumeration entityNames = changesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
+                        String entityName = (String)entityNames.nextElement();
+                        EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
+                        NSArray snapshots = (NSArray)changesByEntity.objectForKey(entityName);
                         EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
                         if(dbc == null) {
                             dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc,entityName);
                             dbcs.setObjectForKey(dbc, entityName);
                         }
                         EODatabase database = dbc.database();
-                        Enumeration snapshotsEnumerator = snapshots.objectEnumerator();
-                        while (snapshotsEnumerator.hasMoreElements()) {
+                        for(Enumeration snapshotsEnumerator = snapshots.objectEnumerator(); snapshotsEnumerator.hasMoreElements(); ) {
                             NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
-                            if (snapshot != null) {
-                                EOGlobalID globalID = entity.globalIDForRow(snapshot);
-                                EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
-                                dbc.lock();
-                                try {
-                                    processor.processSnapshotForGlobalID(dbc, snapshot, globalID);
-                                } finally {
-                                    dbc.unlock();
-                                }
+                            EOGlobalID globalID = entity.globalIDForRow(snapshot);
+                            EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
+                            dbc.lock();
+                            
+                            try {
+                                processor.processSnapshotForGlobalID(database, snapshot, globalID);
+                            } finally {
+                                dbc.unlock();
                             }
                         }
                     }
@@ -227,8 +226,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         
         public Change(EOObjectStoreCoordinator osc, NSDictionary userInfo) {
             _coordinator = osc;
-            _deleted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("updated"), osc);
-            _updated = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("deleted"), osc);
+            _deleted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("deleted"), osc);
+            _updated = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("updated"), osc);
             _inserted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("inserted"), osc);
         }
         /**
@@ -275,11 +274,11 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         }
         
         public NSDictionary deleted() {
-            return _updated;
+            return _deleted;
         }
         
         public NSDictionary inserted() {
-            return _updated;
+            return _inserted;
         }
         
         public EOObjectStoreCoordinator coordinator() {
