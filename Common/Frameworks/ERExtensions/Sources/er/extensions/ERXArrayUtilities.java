@@ -1,9 +1,3 @@
-//
-// NSArrayUtilities.java
-// Project vwdBussinessLogicJava
-//
-// Created by ak on Wed Jun 06 2001
-//
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -121,7 +115,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Filters an array using the {@link EOQualifierEvaluation} interface.
+     * Filters an array using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
      * 
      * @param array to be filtered
      * @param qualifier to do the filtering
@@ -136,8 +130,8 @@ public class ERXArrayUtilities extends Object {
 
     /**
      * Filters any kinds of collections that implements {@link Enumeration} 
-     * interface such as {@link NSArray}, {@link NSSet}, {@link Vector} 
-     * and {@link Hashtable} using the {@link EOQualifierEvaluation} interface. 
+     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
+     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
      *
      * @param enumeration to be filtered; to obtain an enumeration, 
      *             use objectEnumerator() for the collections in 
@@ -159,9 +153,9 @@ public class ERXArrayUtilities extends Object {
     /**
      * Filters any kind of collections that implements {@link Iterator} 
      * interface such as {@link ArrayList}, {@link HashMap}, {@link SortedSet} 
-     * and {@link TreeSet} using the {@link EOQualifierEvaluation} interface. 
+     * and {@link TreeSet} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
      *
-     * @param iterator to be filtered; use itarator() to obtain 
+     * @param iterator to be filtered; use iterator() to obtain 
      *             an iterator from the collections
      * @param qualifier to do the filtering
      * @return array of filtered results.
@@ -279,7 +273,7 @@ public class ERXArrayUtilities extends Object {
      * then the array <code>bars</code> will contain five arrays
      * each corresponding to what <code>aFoo.toBars</code> would
      * return. To have the entire collection of <code>bars</code>
-     * in one single arra you would call:
+     * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
      * @param array to be flattened
      * @return an array containing all of the elements from
@@ -301,7 +295,7 @@ public class ERXArrayUtilities extends Object {
      * then the array <code>bars</code> will contain five arrays
      * each corresponding to what <code>aFoo.toBars</code> would
      * return. To have the entire collection of <code>bars</code>
-     * in one single arra you would call:
+     * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
      * @param array to be flattened
      * @param filterDuplicates determines if the duplicate values
@@ -402,7 +396,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * The core class of {@link NSArray$Operator}, which adds support for keyPaths.<br/>
+     * The core class of {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator}, which adds support for keyPaths.<br/>
      */
 
     static abstract class BaseOperator implements NSArray.Operator {
@@ -415,7 +409,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>sort</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>sort</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -448,7 +442,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>fetchSpec</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>fetchSpec</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -480,7 +474,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>flatten</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>flatten</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -505,7 +499,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>isEmpty</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>isEmpty</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -532,7 +526,7 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>subarrayWithRange</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>subarrayWithRange</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -566,7 +560,7 @@ public class ERXArrayUtilities extends Object {
     
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray$Operator} for the key <b>flatten</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>flatten</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -595,7 +589,7 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>objectAtIndex</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>objectAtIndex</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -629,7 +623,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>avgNonNull</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>avgNonNull</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -668,7 +662,7 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Define an {@link NSArray$Operator} for the key <b>reverse</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>reverse</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -768,7 +762,7 @@ public class ERXArrayUtilities extends Object {
      * Filters a given array with a named fetch specification and bindings.
      *
      * @param array array to be filtered.
-     * @param fetchSpec name of the {@link EOFetchSpecification}.
+     * @param fetchSpec name of the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation}.
      * @param entity name of the {@link com.webobjects.eoaccess.EOEntity EOEntity} 
      * to which the fetch specification is associated.
      * @param bindings bindings dictionary for qualifier variable substitution.
@@ -807,7 +801,7 @@ public class ERXArrayUtilities extends Object {
      * Filters a given array with a named fetch specification.
      *
      * @param array array to be filtered.
-     * @param fetchSpec name of the {@link EOFetchSpecification}.
+     * @param fetchSpec name of the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation}.
      * @param entity name of the {@link com.webobjects.eoaccess.EOEntity EOEntity} 
      * to which the fetch specification is associated.
      * @return array filtered and sorted by the named fetch specification.
