@@ -18,7 +18,19 @@ public class ERXTableWithBorder extends WOComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }      
 
+
+    // renderBorder false can be used to not output a table at all
+    // this is useful since NetScape 4.7 and earlier get extremely slow
+    // when table nesting gets past a certain level
+    
     public boolean renderBorder() {
-        return hasBinding("renderBorder") ? ERXUtilities.booleanValue(valueForBinding("renderBorder")) : true;
+        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("renderBorder", this, true);
     }
+
+    public Number border() {
+        Number result=(Number) (hasBinding("border") ? valueForBinding("border") : null);
+        if (result==null) result=ERXConstant.OneInteger;
+        return result;
+    }
+    
 }
