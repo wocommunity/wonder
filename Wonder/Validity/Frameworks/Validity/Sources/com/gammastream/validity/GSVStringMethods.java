@@ -4,7 +4,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.gammastream.validity._private.*;
 
 import java.math.BigDecimal;
 import java.net.InetAddress;
@@ -51,11 +50,6 @@ public class GSVStringMethods {
      *	For programatic purposes, we include this constant which is used for the <code>compareTo</code> method.
      */
     public final static String LESS_EQUAL = "<=";
-    
-    /**
-     *	Internal parser for verifing various strings. (URLs, Email Addresses, etc.)
-     */
-    private static GSVUtilityParser _parser = null;
 
     /**
      *	Determines whether the specified attribute is empty.
@@ -337,13 +331,15 @@ public class GSVStringMethods {
      *	@return	<code>true</code> if the url is valid; otherwise, <code>false</code>
      */
     public final static boolean isValidURL(Object object, Object attribute, String key, NSDictionary params){
-        if(attribute instanceof String){
+        if(attribute instanceof String) {
             try {
-                GSVStringMethods.parser((String)attribute).validateURL();
-                return true;
-            } catch(ParseException e){
+                java.net.URL url = new java.net.URL((String)attribute);
+                // accept only http-urls
+                return url.getProtocol().equals("http");
+
+            } catch(java.net.MalformedURLException mue) {
                 //ignore
-                NSLog.err.appendln(e.getMessage());
+                NSLog.err.appendln(mue.getMessage());
             }
         }
         return false;
@@ -360,30 +356,20 @@ public class GSVStringMethods {
      *	@return	<code>true</code> if the address is valid; otherwise, <code>false</code>
      */
     public final static boolean isValidEmailAddress(Object object, Object attribute, String key, NSDictionary params){
-        if(attribute instanceof String){
+        if(attribute instanceof String) {
             try {
-                GSVStringMethods.parser((String)attribute).validateEmailAddress();
-                return true;
-            } catch(ParseException e){
+                javax.mail.internet.InternetAddress add = new javax.mail.internet.InternetAddress((String)attribute);
+                add.validate();
+                // get sure it is only the address and no personal
+                return (add.getPersonal() == null);
+
+            } catch(javax.mail.internet.AddressException ae) {
                 //ignore
-                NSLog.err.appendln(e.getMessage());
+                NSLog.err.appendln(ae.getMessage());
             }
         }
         return false;
     }
-    
-    
-    /**
-     *	Internal parser for verifing various strings. (URLs, Email Addresses, etc.)
-     */
-     public static GSVUtilityParser parser(String str){
-        if( _parser == null ){
-            _parser = new GSVUtilityParser(new StringReader(str));
-        } else {
-            GSVUtilityParser.ReInit(new StringReader(str));
-        }
-        return _parser;
-     }
 
     
 }
