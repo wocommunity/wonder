@@ -6,17 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
 
 public class ERD2WGroupingPrinterFriendlyListPageTemplate extends ERD2WGroupingListPageTemplate {
 
-    public ERD2WGroupingPrinterFriendlyListPageTemplate(WOContext context) {super(context);}
+    public ERD2WGroupingPrinterFriendlyListPageTemplate(WOContext context) { super(context); }
     
   // we don't ever want to batch
-    public int numberOfObjectsPerBatch() {
-      return 0;
-    }
-
+    public int numberOfObjectsPerBatch() { return 0; }
 }

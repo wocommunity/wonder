@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -17,7 +16,7 @@ import com.webobjects.directtoweb.*;
 //	Look in the Comparision template for how this component can be used.
 public class ERD2WKeyMapper extends D2WStatelessComponent {
 
-    public ERD2WKeyMapper(WOContext context) {super(context);}
+    public ERD2WKeyMapper(WOContext context) { super(context); }
     
     public void reset() {
         super.reset();
@@ -58,5 +57,4 @@ public class ERD2WKeyMapper extends D2WStatelessComponent {
     public void takeValuesFromRequest(WORequest q, WOContext c) {
         // no form in here -- so do nothing -- do not call super
     }
-
 }
