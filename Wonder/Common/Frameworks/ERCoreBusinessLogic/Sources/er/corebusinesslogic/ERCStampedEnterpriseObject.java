@@ -21,7 +21,7 @@ public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
 
     public static ERXLogger log = ERXLogger.getERXLogger(ERCStampedEnterpriseObject.class);
 
-
+    public static final NSArray TimestampAttributeKeys = new NSArray(new Object[] { "created", "lastModified"});
     
     // FIXME not thread safe..
     private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();

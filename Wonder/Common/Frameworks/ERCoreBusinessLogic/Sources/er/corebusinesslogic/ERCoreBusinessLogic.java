@@ -10,11 +10,12 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import er.extensions.*;
 import java.util.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
+    
+    /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreBusinessLogic.class);
 
     static {
@@ -33,7 +34,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         initializeSharedData();
         // Register handlers for user preferences.
         ERCoreUserPreferences.userPreferences().registerHandlers();
-        System.err.println("ERCoreBusinessLogic: finishInitialization");
+        log.debug("ERCoreBusinessLogic: finishInitialization");
     }
 
     // Shared Data Init Point.  Keep alphabetical
