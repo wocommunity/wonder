@@ -18,6 +18,9 @@ public class DRReportModel extends Object  {
     public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";
     public static final String DRReportModelRebuildNotification = "DRReportModelRebuild";
 
+    public static final String GROUP_DEF_KEY = "GroupDef";
+    public static final String ATTRIBUTE_DEF_KEY = "AttributeDef";
+    
     protected NSMutableArray _vList;
     protected NSMutableArray _hList;
     protected NSMutableArray _zList;
@@ -99,8 +102,8 @@ public class DRReportModel extends Object  {
 
     //
     // Each defrecord in array has a 
-    // masterCriteriaList:  "GroupDef" 
-    // attributeList: "AttributeDef"
+    // masterCriteriaList:  GROUP_DEF_KEY 
+    // attributeList: ATTRIBUTE_DEF_KEY
     //
     static public boolean boolForString(String s) {
         return ERXValueUtilities.booleanValue(s);
@@ -208,10 +211,10 @@ public class DRReportModel extends Object  {
         
         NSDictionary rawdict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(plistString);
 
-        NSArray mcList = DRReportModel.masterCriteriaList((NSArray)rawdict.objectForKey("GroupDef"));
-        NSArray attList = DRReportModel.attributeList((NSArray)rawdict.objectForKey("AttributeDef"));
-        dict.setObjectForKey(mcList, "GroupDef");
-        dict.setObjectForKey(attList, "AttributeDef");
+        NSArray mcList = DRReportModel.masterCriteriaList((NSArray)rawdict.objectForKey(GROUP_DEF_KEY));
+        NSArray attList = DRReportModel.attributeList((NSArray)rawdict.objectForKey(ATTRIBUTE_DEF_KEY));
+        dict.setObjectForKey(mcList, GROUP_DEF_KEY);
+        dict.setObjectForKey(attList, ATTRIBUTE_DEF_KEY);
         return dict;
     }
 
@@ -324,8 +327,8 @@ public class DRReportModel extends Object  {
         NSMutableDictionary dict = new NSMutableDictionary();
         NSArray mcListString = DRReportModel.masterCriteriaListString(mcList);
         NSArray attListString = DRReportModel.attributeListString(attList);
-        dict.setObjectForKey(mcListString, "GroupDef");
-        dict.setObjectForKey(attListString, "AttributeDef");
+        dict.setObjectForKey(mcListString, GROUP_DEF_KEY);
+        dict.setObjectForKey(attListString, ATTRIBUTE_DEF_KEY);
         return dict.toString();
     }
 
@@ -776,10 +779,8 @@ public class DRReportModel extends Object  {
 
     public String coordinateKey(NSDictionary coordDict) {
         String lookupCoordKey = "/";
-        Enumeration en = _criteriaList.objectEnumerator();
-
-        while (en.hasMoreElements()) {
-            DRMasterCriteria mc = (DRMasterCriteria)en.nextElement();
+        for (Enumeration criterias = _criteriaList.objectEnumerator(); criterias.hasMoreElements(); ) {
+            DRMasterCriteria mc = (DRMasterCriteria)criterias.nextElement();
             String lookupkey;
             DRCriteria c = (DRCriteria)coordDict.objectForKey(mc.keyDesc());
 
@@ -799,18 +800,15 @@ public class DRReportModel extends Object  {
     }
 
     public void makeRecordGroupsStaleTotal() {
-        NSArray rgs = _registeredRecordGroups.allValues();
-        Enumeration en = rgs.objectEnumerator();
-        
-        while (en.hasMoreElements()) {
-            DRRecordGroup rg = (DRRecordGroup)en.nextElement();
-            rg.makeStale();
+        for(Enumeration recordGroups = _registeredRecordGroups.allValues().objectEnumerator(); recordGroups.hasMoreElements(); ) {
+            DRRecordGroup recordGroup = (DRRecordGroup)recordGroups.nextElement();
+            recordGroup.makeStale();
         }
     }
 
     public DRRecordGroup recordGroupForCoordinates(NSDictionary coordDict) {
         String coordKey = this.coordinateKey(coordDict);
-        DRRecordGroup rg = (DRRecordGroup)_registeredRecordGroups.objectForKey(coordKey);
-        return rg;
+        DRRecordGroup recordGroup = (DRRecordGroup)_registeredRecordGroups.objectForKey(coordKey);
+        return recordGroup;
     }
 }
