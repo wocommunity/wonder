@@ -41,7 +41,7 @@ public class ERXAdaptorChannelDelegate {
     
     public void adaptorChannelDidEvaluateExpression(EOAdaptorChannel channel,  EOSQLExpression expression) {
         if(log == null) {
-            log = ERXLogger.getERXLogger(ERXAdaptorChannelDelegate.class);
+            log = ERXLogger.getERXLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
         }
         if(log.isDebugEnabled()) {
             long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;
@@ -52,6 +52,10 @@ public class ERXAdaptorChannelDelegate {
     }
 
     public boolean adaptorChannelShouldEvaluateExpression(EOAdaptorChannel channel,  EOSQLExpression expression) {
+        if (expression.toString().indexOf("SELECT null FROM null") != -1) {
+            log.error("hier wars ", new Throwable());
+            
+        }
         _lastMilliseconds = System.currentTimeMillis();
         return true;
     }
