@@ -45,7 +45,7 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
         _value = null;
     }
     /**
-     * Converts '\r\n', '\n', '\r' into "<BR>" and
+        * Converts '\r\n', '\n', '\r' into "&lt;br /&gt;" and
      * converts '\t' into five non-breaking spaces.
      * @return converts string bound to binding: <b>value</b>
      * 		into html-ified line breaks.
@@ -54,25 +54,38 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
     public String value() {
         if (_value == null) {
             Object value = objectValueForBinding("value");
-            String result = null;
-            if (value != null) {
-                result = (value instanceof String) ? (String)value : value.toString();
-                result = WOResponse.stringByEscapingHTMLString(result);
-                // FIXME: This could be optimized
-                result = ERXExtensions.replaceStringByStringInString("\r\n", "\r", result);
-                result = ERXExtensions.replaceStringByStringInString("\n", "\r", result);
-                result = ERXExtensions.replaceStringByStringInString("\r", br(), result);
-                result = ERXExtensions.replaceStringByStringInString("\t",
-                                                                    tabs(),
-                                                                    result);
-            }
-            _value = result;
+            _value = valueToString(value);
         }
         return _value;
     }
 
+    protected String valueToString(Object value) {
+        String result = null;
+        if (value != null) {
+            result = (value instanceof String) ? (String)value : value.toString();
+            result = WOResponse.stringByEscapingHTMLString(result);
+            // FIXME: This could be optimized
+            result = ERXExtensions.replaceStringByStringInString("\r\n", "\r", result);
+            result = ERXExtensions.replaceStringByStringInString("\n", "\r", result);
+            result = ERXExtensions.replaceStringByStringInString("\r", br(), result);
+            result = ERXExtensions.replaceStringByStringInString("\t", tabs(), result);
+        }
+        return result;
+    }
+    
+    /**
+     * Set the value to be displayed.<br />
+     * This is useful when you want to return a string from a DirectAction for example for debugging purposes.
+     * @param newValue Object to display
+     */
+    public void setValue(Object newValue) {
+        if(newValue != null) {
+            _value = valueToString(newValue);
+        }
+    }
+    
     public String br() {
-        return "<BR>";
+        return "<br />";
     }
 
     public String tabs() {
@@ -84,6 +97,6 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
      * @return value to display when the string is empty
      */
     public Object valueWhenEmpty() {
-        return objectValueForBinding("valueWhenEmpty");
+        return valueToString(objectValueForBinding("valueWhenEmpty"));
     }
 }
