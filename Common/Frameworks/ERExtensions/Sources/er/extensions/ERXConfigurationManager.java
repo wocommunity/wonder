@@ -160,6 +160,7 @@ public class ERXConfigurationManager {
                     new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
                     EOModelGroup.ModelAddedNotification,
                     null);
+            loadOptionalConfigurationFiles();
         }
     }
 
@@ -200,6 +201,32 @@ public class ERXConfigurationManager {
         }
     }
 
+    /**
+     * This will overlay the current system config files. It will then
+     * re-load the command line args.
+     */
+    public void loadOptionalConfigurationFiles() {
+        if (ERXProperties.optionalConfigurationFiles() != null
+            && ERXProperties.optionalConfigurationFiles().count() > 0) {
+            Properties systemProperties = System.getProperties();
+            for (Enumeration configEnumerator = ERXProperties.optionalConfigurationFiles().objectEnumerator();
+                 configEnumerator.hasMoreElements();) {
+                String configFile = (String)configEnumerator.nextElement();
+                File file = new File(configFile);
+                if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
+                    try {
+                        Properties props = ERXProperties.propertiesFromFile(file);
+                        ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
+                    } catch (java.io.IOException ex) {
+                        log.error("Unable to load optional configuration file: " + configFile, ex);
+                    }
+                }
+            }
+            if (_commandLineArguments != null  &&  _commandLineArguments.length > 0)
+                _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
+        }
+    }
+    
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
@@ -253,7 +280,7 @@ public class ERXConfigurationManager {
         Properties commandLineProperties = ERXProperties.propertiesFromArgv(commandLineArguments);
         Properties systemProperties = System.getProperties(); 
         ERXProperties.transferPropertiesFromSourceToDest(commandLineProperties, systemProperties);
-        log.info("Reinserted the command line arguments to the system properties.");
+        log.debug("Reinserted the command line arguments to the system properties.");
     }
 
     public void modelAddedHandler(NSNotification n) {
@@ -296,10 +323,8 @@ public class ERXConfigurationManager {
                 if (path!=null) {                    
                     if (path.indexOf(" ")!=-1) {
                         NSArray a=NSArray.componentsSeparatedByString(path," ");
-                        //System.out.println("found "+a);
                         if (a.count()==2) {
                             path = ERXFileUtilities.pathForResourceNamed((String)a.objectAtIndex(0),                                                                                                     (String)a.objectAtIndex(1), null);
-                            //System.out.println("path= "+path);
                         }
                     }
                 } else {
