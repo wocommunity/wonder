@@ -378,6 +378,7 @@ public class ERXConfigurationManager {
                         log.debug(cl);
                         aModel.setAdaptorName("ERJDBC");
                     } catch (ClassNotFoundException e1) {
+                        log.error("cannot use Model Connection pooling because framework JavaERJDBCAdaptor is missing. Make sure the framework is loaded by the application");
                     }
                 }
                 NSDictionary jdbcInfoDictionary = null;
