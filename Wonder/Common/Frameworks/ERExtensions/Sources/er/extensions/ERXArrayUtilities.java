@@ -246,23 +246,29 @@ public class ERXArrayUtilities extends Object {
 
     /**
      * Subtracts the contents of one array from another.
-     * Note: Current implementation does not preserve order.
+     * The order of the array should be preseved.
+     * 
      * @param main array to have values removed from it.
      * @param minus array of values to remove from the main array
-     * @param result array after performing subtraction.
+     * @return array after performing subtraction.
      */
-    // FIXME: This has the side effect of removing any duplicate elements from
-    //		the main array as well as not preserving the order of the array
-    public static NSArray arrayMinusArray(NSArray main, NSArray minus){
-        NSSet result = ERXArrayUtilities.setFromArray(main);
-        return result.setBySubtractingSet(ERXArrayUtilities.setFromArray(minus)).allObjects();
+    public static NSArray arrayMinusArray(NSArray main, NSArray minus) {
+		NSSet minusSet = new NSSet(minus);
+		NSMutableArray mutableResult = new NSMutableArray(main.count()); 
+		Enumeration enum = main.objectEnumerator();
+		while (enum.hasMoreElements()) {
+			Object obj = enum.nextElement();
+			if (! minusSet.containsObject(obj)) 
+				mutableResult.addObject(obj);
+		}
+		return mutableResult.immutableClone();
     }
-
+	
     /**
      * Subtracts a single object from an array.
      * @param main array to have value removed from it.
      * @param minus object to be removed
-     * @param result array after performing subtraction.
+     * @return array after performing subtraction.
      */
     public static NSArray arrayMinusObject(NSArray main, Object object) {
         NSMutableArray mutable = new NSMutableArray(main);
