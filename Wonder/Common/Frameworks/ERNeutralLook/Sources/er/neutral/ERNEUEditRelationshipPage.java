@@ -11,8 +11,9 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.directtoweb.*;
 
-public class ERNEUEditRelationshipPage extends D2WEditRelationshipPage {
+public class ERNEUEditRelationshipPage extends ERD2WEditRelationshipPage {
 
     public ERNEUEditRelationshipPage(WOContext context) {
         super(context);
