@@ -1,6 +1,9 @@
 Action: WOString {
 	value = ^action;
 }
+ContextID: WOString {
+	value = context.contextID;
+}
 
 ComponentContent: WOComponentContent {
 }
@@ -41,7 +44,7 @@ On: WOConditional {
 RemoteCall: ERXJSRemoteCall {
 	name = "validateValueForKeyInEntity";
 	actionClass = "ERXJSInputValidator$Action";
-	parameters = "(_vvalue,_vkey,_ventityName)";
+	parameters = "(_vvalue,_vkey,_ventityName,contextID)";
 }
 
 Repetition1: WORepetition {
