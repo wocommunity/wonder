@@ -53,7 +53,7 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
     // FIXME: Should use ERXSimpleHTMLFormatter
     public String value() {
         if (_value == null) {
-            Object value = valueForObjectBinding("value");
+            Object value = objectValueForBinding("value");
             String result = null;
             if (value != null) {
                 result = (value instanceof String) ? (String)value : value.toString();
@@ -84,6 +84,6 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
      * @return value to display when the string is empty
      */
     public Object valueWhenEmpty() {
-        return valueForObjectBinding("valueWhenEmpty");
+        return objectValueForBinding("valueWhenEmpty");
     }
 }

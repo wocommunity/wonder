@@ -87,7 +87,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
      * @return returns if the generated url should be relative or not(absolute).
      */
     public boolean relative() {
-        return valueForBooleanBinding("relative", true);
+        return booleanValueForBinding("relative", true);
     }
 
     /**
@@ -98,7 +98,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
      *		should be encrypted or not.
      */
     public boolean shouldEncryptObjectFormValues() {
-        return valueForBooleanBinding("shouldEncryptObjectFormValues");
+        return booleanValueForBinding("shouldEncryptObjectFormValues");
     }
     /**
      * Cover method to return the binding: <b>objectsForFormValues</b>
