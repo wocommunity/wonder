@@ -1,7 +1,7 @@
 /*
- $Id$
+  $Id$
  
- ERMailDeliveryHTML.java - Camille Troillard - tuscland@mac.com
+  ERMailDeliveryHTML.java - Camille Troillard - tuscland@mac.com
 */
 
 package er.javamail;
@@ -18,13 +18,10 @@ import javax.mail.internet.*;
 /** This ERMailDelivery subclass is specifically crafted for HTML messages
     using a WOComponent as redering device.
     @author Camille Troillard <tuscland@mac.com> */
-public class ERMailDeliveryHTML extends ERMailDelivery {
-
-    /** WOComponent used to render the HTML message. */
-    private WOComponent mailComponent;
-
+public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
+{
     /** Holds the HTML content */
-    protected String htmlContent;
+    protected String _htmlContent;
     
     /** Plain text preamble set in top of HTML source so that non-HTML compliant mail readers
         can at least display this message. */
@@ -32,11 +29,6 @@ public class ERMailDeliveryHTML extends ERMailDelivery {
 
     /** True if this the current message has a plain text preamble. */
     private boolean hasHiddenPlainTextContent = false;
-
-    /** Sets the WOComponent used to render the HTML message. */
-    public void setWOComponentContent (WOComponent component) {
-        mailComponent = component;
-    }
 
     /** Sets the Plain text preamble that will be displayed set in top of HTML source.
         Non-HTML compliant mail readers can at least display this message. */
@@ -52,74 +44,78 @@ public class ERMailDeliveryHTML extends ERMailDelivery {
      * @param content HTML content to be used
      */
     public void setHTMLContent (String content) {
-        htmlContent = content;
+        _htmlContent = content;
     }
 
     /** Creates a new mail instance within ERMailDelivery.  Sets hasHiddenPlainTextContent to false. */
     public void newMail () {
         super.newMail ();
         hasHiddenPlainTextContent = false;
-        htmlContent = null;
+        _htmlContent = null;
+    }
+
+    protected String htmlContent () {
+	String htmlContent = null;
+
+	if (this.component () != null) {
+	    WOContext context = this.component ().context ();
+
+	    // CHECKME:  It's probably not a good idea to do this here
+	    // since the context could also have been generating relative URLs
+	    // unless the context is created from scratch
+	    context._generateCompleteURLs ();
+	    WOMessage response = this.component ().generateResponse ();
+	    htmlContent = response.contentString ();
+	} else {
+	    htmlContent = _htmlContent;
+	}
+
+	return htmlContent;
     }
 
     /** Pre-processes the mail before it gets sent.
         @see ERMailDelivery#prepareMail */
-    protected DataHandler prepareMail () {
+    protected DataHandler prepareMail () throws MessagingException {
         MimeMultipart multipart = null;
         MimeBodyPart textPart = null;
         MimeBodyPart htmlPart = null;
 
-        try {
-            this.mimeMessage ().setSentDate (new Date ());
-            multipart = new MimeMultipart ("alternative");
-            
-            // set the plain text part
-            if (hasHiddenPlainTextContent) {
-                textPart = new MimeBodyPart ();
-                textPart.setText (hiddenPlainTextContent, ERMailDelivery.DefaultCharset);
-                multipart.addBodyPart (textPart);
-            }
+	this.mimeMessage ().setSentDate (new Date ());
+	multipart = new MimeMultipart ("alternative");
+		
+	// set the plain text part
+	if (hasHiddenPlainTextContent) {
+	    textPart = new MimeBodyPart ();
+	    textPart.setText (hiddenPlainTextContent, ERMailDelivery.DefaultCharset);
+	    multipart.addBodyPart (textPart);
+	}
 
-            // create and fill the html message part
-            htmlPart = new MimeBodyPart ();
+	// create and fill the html message part
+	htmlPart = new MimeBodyPart ();
 
-            String htmlMessage = null;
+	// Set the content of the html part
+	htmlPart.setContent (this.htmlContent (), "text/html");
+	multipart.addBodyPart (htmlPart);
+	
+	// Inline attachements
+	if (this.inlineAttachments ().count () > 0) {
+	    // Create a "related" MimeMultipart
+	    MimeMultipart relatedMultiparts = new MimeMultipart ("related");
+			
+	    // add each inline attachments to the message
+	    Enumeration en = this.inlineAttachments ().objectEnumerator ();
+	    while (en.hasMoreElements ()) {
+		ERMailAttachment attachment = (ERMailAttachment)en.nextElement ();
+		BodyPart bp = attachment.getBodyPart ();
+		relatedMultiparts.addBodyPart (bp);
+	    }
+	    
+	    // Add this multipart to the main multipart as a compound BodyPart
+	    BodyPart relatedAttachmentsBodyPart = new MimeBodyPart ();
+	    relatedAttachmentsBodyPart.setDataHandler (new DataHandler (relatedMultiparts, relatedMultiparts.getContentType ()));
+	    multipart.addBodyPart (relatedAttachmentsBodyPart);
+	}
 
-            if (mailComponent != null) {
-                WOContext context = mailComponent.context ();
-                context._generateCompleteURLs ();
-                WOMessage response = mailComponent.generateResponse ();
-                htmlMessage = response.contentString ();
-            } else {
-                htmlMessage = htmlContent;
-            }
-
-            // Set the content of the html part
-            htmlPart.setContent (htmlMessage, "text/html");
-            multipart.addBodyPart (htmlPart);
-
-            // Inline attachements
-            if (this.inlineAttachments ().count () > 0) {
-                // Create a "related" MimeMultipart
-                MimeMultipart relatedMultiparts = new MimeMultipart ("related");
-                
-                // add each inline attachments to the message
-                Enumeration en = this.inlineAttachments ().objectEnumerator ();
-                while (en.hasMoreElements ()) {
-                    ERMailAttachment attachment = (ERMailAttachment)en.nextElement ();
-                    BodyPart bp = attachment.getBodyPart ();
-                    relatedMultiparts.addBodyPart (bp);
-                }
-
-                // Add this multipart to the main multipart as a compound BodyPart
-                BodyPart relatedAttachmentsBodyPart = new MimeBodyPart ();
-                relatedAttachmentsBodyPart.setDataHandler (new DataHandler (relatedMultiparts, relatedMultiparts.getContentType ()));
-                multipart.addBodyPart (relatedAttachmentsBodyPart);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace ();
-        }
-        
         return new DataHandler (multipart, multipart.getContentType ());
     }
 

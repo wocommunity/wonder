@@ -1,7 +1,7 @@
 Hyperlink1: WOHyperlink {
-	action = application.sendTextOnlyMail;
+	action = sendTextOnlyMail;
 }
 
 Hyperlink2: WOHyperlink {
-	action = application.sendHTMLMail;
+	action = sendHTMLMail;
 }
