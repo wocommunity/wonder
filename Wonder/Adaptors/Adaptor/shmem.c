@@ -387,7 +387,7 @@ void *WOShmem_lock(const void *addr, unsigned int size, int exclusive)
             if (lock_file_section(WOShmem_fd, offset, size, lockInfo, exclusive))
             {
                /* failed; put the info struct back on the cache */
-               WA_lock(WOShmem_mutex)
+	       WA_lock(WOShmem_mutex);
                info->cache = WOShmem_lockInfoCache;
                WOShmem_lockInfoCache = info;
                WA_unlock(WOShmem_mutex);
@@ -419,7 +419,7 @@ void WOShmem_unlock(void *handle)
          /* how should we recover? */
       }
       /* put the info struct back on the cache */
-      WA_lock(WOShmem_mutex)
+      WA_lock(WOShmem_mutex);
       info->cache = WOShmem_lockInfoCache;
       WOShmem_lockInfoCache = info;
       WA_unlock(WOShmem_mutex);
