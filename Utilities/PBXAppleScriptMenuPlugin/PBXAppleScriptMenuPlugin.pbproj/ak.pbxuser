@@ -2,107 +2,316 @@
 {
 	089C1669FE841209C02AAC07 = {
 		activeBuildStyle = 014CEA420018CDE011CA2923;
+		activeExecutable = F526043A024D2FC501000102;
 		activeTarget = 089C1673FE841209C02AAC07;
 		addToTargets = (
-			089C1673FE841209C02AAC07,
 		);
 		breakpoints = (
+			F515ED1F0276084501000105,
+		);
+		executables = (
+			F526043A024D2FC501000102,
 		);
 		perUserDictionary = {
-			PBXWorkspaceConfiguration = {
-				ContentSize = "{1155, 858}";
-				LeftSlideOut = {
-					ActiveTab = 0;
-					Frame = "{{0, 23}, {1155, 835}}";
-					Split0 = {
-						ActiveTab = 2;
-						Frame = "{{278, 0}, {877, 835}}";
+			PBXPerProjectTemplateStateSaveDate = 44543503;
+			PBXWorkspaceContents = (
+				{
+					LeftSlideOut = {
 						Split0 = {
-							Frame = "{{0, 131}, {877, 704}}";
+							Split0 = {
+								NavContent0 = {
+									bookmark = F5D6312502A7ADF601000104;
+									history = (
+										F538A7C602A7A1C701000104,
+										F538A7C702A7A1C701000104,
+										F538A7CA02A7A1C701000104,
+										F538A7CB02A7A1C701000104,
+										F538A7CF02A7A1C701000104,
+										F538A7D202A7A1C701000104,
+										F5D6310C02A7ADF601000104,
+										F5D6310D02A7ADF601000104,
+										F5D6310E02A7ADF601000104,
+										F5D6310F02A7ADF601000104,
+										F5D6311002A7ADF601000104,
+										F5D6311102A7ADF601000104,
+										F5D6311202A7ADF601000104,
+										F5D6311302A7ADF601000104,
+										F5D6311402A7ADF601000104,
+										F5D6311502A7ADF601000104,
+										F5D6311602A7ADF601000104,
+										F5D6311702A7ADF601000104,
+									);
+									prevStack = (
+										F538A7D502A7A1C701000104,
+										F538A7D602A7A1C701000104,
+										F538A7D702A7A1C701000104,
+										F538A7D802A7A1C701000104,
+										F538A7D902A7A1C701000104,
+										F538A7DA02A7A1C701000104,
+										F538A7DB02A7A1C701000104,
+										F538A7DC02A7A1C701000104,
+										F538A7DD02A7A1C701000104,
+										F538A7DE02A7A1C701000104,
+										F538A7DF02A7A1C701000104,
+										F538A7E002A7A1C701000104,
+										F5D6311802A7ADF601000104,
+										F5D6311902A7ADF601000104,
+										F5D6311A02A7ADF601000104,
+										F5D6311B02A7ADF601000104,
+										F5D6311C02A7ADF601000104,
+										F5D6311D02A7ADF601000104,
+										F5D6311E02A7ADF601000104,
+										F5D6311F02A7ADF601000104,
+										F5D6312002A7ADF601000104,
+										F5D6312102A7ADF601000104,
+										F5D6312202A7ADF601000104,
+										F5D6312302A7ADF601000104,
+										F5D6312402A7ADF601000104,
+									);
+								};
+								NavCount = 1;
+								NavGeometry0 = {
+									Frame = "{{0, 0}, {750, 441}}";
+									NavBarVisible = YES;
+								};
+							};
+							SplitCount = 1;
+							Tab0 = {
+								Debugger = {
+									Split0 = {
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									TabCount = 2;
+								};
+								LauncherConfigVersion = 7;
+							};
+							Tab1 = {
+								LauncherConfigVersion = 3;
+								Runner = {
+								};
+							};
+							TabCount = 4;
+						};
+						SplitCount = 1;
+						Tab1 = {
+							OptionsSetName = "Hierarchy, all classes";
+						};
+						Tab3 = {
+							SplitCount = 2;
+						};
+						TabCount = 6;
+					};
+				},
+			);
+			PBXWorkspaceGeometries = (
+				{
+					ContentSize = "{1025, 615}";
+					LeftSlideOut = {
+						ActiveTab = 0;
+						Collapsed = NO;
+						Frame = "{{0, 23}, {1025, 592}}";
+						Split0 = {
+							ActiveTab = 2;
+							Collapsed = NO;
+							Frame = "{{275, 0}, {750, 592}}";
+							Split0 = {
+								Frame = "{{0, 151}, {750, 441}}";
+							};
+							SplitCount = 1;
+							Tab0 = {
+								Debugger = {
+									Collapsed = NO;
+									Frame = "{{0, 0}, {572, 214}}";
+									Split0 = {
+										Frame = "{{0, 24}, {572, 190}}";
+										Split0 = {
+											Frame = "{{0, 0}, {279, 190}}";
+										};
+										Split1 = {
+											DebugVariablesTableConfiguration = (
+												Name,
+												63.80298,
+												Value,
+												86.07401,
+												Summary,
+												108.123,
+											);
+											Frame = "{{288, 0}, {284, 190}}";
+										};
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									Tab0 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									Tab1 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									TabCount = 2;
+									TabsVisible = YES;
+								};
+								Frame = "{{0, 0}, {572, 214}}";
+								LauncherConfigVersion = 7;
+							};
+							Tab1 = {
+								Frame = "{{0, 0}, {775, 125}}";
+								LauncherConfigVersion = 3;
+								Runner = {
+									Frame = "{{0, 0}, {775, 125}}";
+								};
+							};
+							Tab2 = {
+								BuildMessageFrame = "{{0, 0}, {752, 118}}";
+								BuildTranscriptFrame = "{{0, 127}, {752, 2}}";
+								Frame = "{{0, 0}, {750, 127}}";
+							};
+							Tab3 = {
+								Frame = "{{0, 0}, {815, 265}}";
+							};
+							TabCount = 4;
+							TabsVisible = YES;
 						};
 						SplitCount = 1;
 						Tab0 = {
-							Debugger = {
-								Frame = "{{0, 0}, {877, 208}}";
-								Split0 = {
-									Frame = "{{0, 24}, {877, 184}}";
-									Split0 = {
-										Frame = "{{0, 0}, {429, 184}}";
-									};
-									Split1 = {
-										Frame = "{{438, 0}, {439, 184}}";
-									};
-									SplitCount = 2;
-								};
-								SplitCount = 1;
-								Tab0 = {
-									Frame = "{{0, 0}, {100, 50}}";
-								};
-								Tab1 = {
-									Frame = "{{0, 0}, {100, 50}}";
-								};
-								TabCount = 2;
-							};
-							Frame = "{{0, 0}, {877, 208}}";
-							LauncherConfigVersion = 4;
+							Frame = "{{0, 0}, {251, 592}}";
+							GroupTreeTableConfiguration = (
+								TargetStatusColumn,
+								18,
+								MainColumn,
+								218,
+							);
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {877, 109}}";
-							LauncherConfigVersion = 3;
-							Runner = {
-								Frame = "{{0, 0}, {877, 109}}";
-							};
+							ClassesFrame = "{{0, 0}, {247, 330}}";
+							ClassesTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXClassColumnIdentifier,
+								204,
+							);
+							Frame = "{{0, 0}, {245, 549}}";
+							MembersFrame = "{{0, 339}, {247, 210}}";
+							MembersTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXMethodColumnIdentifier,
+								203,
+							);
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {879, 0}}";
-							BuildTranscriptFrame = "{{0, 9}, {879, 100}}";
-							Frame = "{{0, 0}, {877, 107}}";
+							Frame = "{{0, 0}, {226, 592}}";
 						};
 						Tab3 = {
-							Frame = "{{0, 0}, {760, 158}}";
+							Frame = "{{0, 0}, {191, 549}}";
+							Split0 = {
+								Frame = "{{0, 0}, {191, 265}}";
+								TargetTreeTableConfiguration = (
+									ActiveTarget,
+									16,
+									TargetName,
+									159,
+								);
+							};
+							Split1 = {
+								BuildStyleTreeTableConfiguration = (
+									IsActive,
+									16,
+									Name,
+									160,
+								);
+								Frame = "{{0, 274}, {191, 275}}";
+							};
+							SplitCount = 2;
 						};
-						TabCount = 4;
-					};
-					SplitCount = 1;
-					Tab0 = {
-						Frame = "{{0, 0}, {254, 835}}";
-					};
-					Tab1 = {
-						ClassesFrame = "{{0, 0}, {202, 56}}";
-						Frame = "{{0, 0}, {200, 100}}";
-						MembersFrame = "{{0, 65}, {202, 35}}";
-						OptionsSetName = "Hierarchy, all classes";
-					};
-					Tab2 = {
-						Frame = "{{0, 0}, {200, 100}}";
-					};
-					Tab3 = {
-						Frame = "{{0, 0}, {200, 835}}";
-						Split0 = {
-							Frame = "{{0, 0}, {200, 400}}";
+						Tab4 = {
+							ExecutableTreeTableConfiguration = (
+								ActiveExecutable,
+								16,
+								ExecutableName,
+								158,
+							);
+							Frame = "{{0, 0}, {191, 549}}";
 						};
-						Split1 = {
-							Frame = "{{0, 409}, {200, 426}}";
+						Tab5 = {
+							BreakpointsTreeTableConfiguration = (
+								breakpointColumn,
+								197,
+								enabledColumn,
+								31,
+							);
+							Frame = "{{0, 0}, {250, 549}}";
 						};
-						SplitCount = 2;
+						TabCount = 6;
+						TabsVisible = YES;
 					};
-					Tab4 = {
-						Frame = "{{0, 0}, {250, 628}}";
-					};
-					TabCount = 5;
-				};
-			};
+					StatusViewVisible = YES;
+					Template = F5F68CF101725D4C0D7A8F4C;
+					ToolbarVisible = YES;
+					WindowLocation = "{54, 55}";
+				},
+			);
+			PBXWorkspaceStateSaveDate = 44543503;
+		};
+		perUserProjectItems = {
+			F538A7C602A7A1C701000104 = F538A7C602A7A1C701000104;
+			F538A7C702A7A1C701000104 = F538A7C702A7A1C701000104;
+			F538A7CA02A7A1C701000104 = F538A7CA02A7A1C701000104;
+			F538A7CB02A7A1C701000104 = F538A7CB02A7A1C701000104;
+			F538A7CF02A7A1C701000104 = F538A7CF02A7A1C701000104;
+			F538A7D202A7A1C701000104 = F538A7D202A7A1C701000104;
+			F538A7D502A7A1C701000104 = F538A7D502A7A1C701000104;
+			F538A7D602A7A1C701000104 = F538A7D602A7A1C701000104;
+			F538A7D702A7A1C701000104 = F538A7D702A7A1C701000104;
+			F538A7D802A7A1C701000104 = F538A7D802A7A1C701000104;
+			F538A7D902A7A1C701000104 = F538A7D902A7A1C701000104;
+			F538A7DA02A7A1C701000104 = F538A7DA02A7A1C701000104;
+			F538A7DB02A7A1C701000104 = F538A7DB02A7A1C701000104;
+			F538A7DC02A7A1C701000104 = F538A7DC02A7A1C701000104;
+			F538A7DD02A7A1C701000104 = F538A7DD02A7A1C701000104;
+			F538A7DE02A7A1C701000104 = F538A7DE02A7A1C701000104;
+			F538A7DF02A7A1C701000104 = F538A7DF02A7A1C701000104;
+			F538A7E002A7A1C701000104 = F538A7E002A7A1C701000104;
+			F5D6310C02A7ADF601000104 = F5D6310C02A7ADF601000104;
+			F5D6310D02A7ADF601000104 = F5D6310D02A7ADF601000104;
+			F5D6310E02A7ADF601000104 = F5D6310E02A7ADF601000104;
+			F5D6310F02A7ADF601000104 = F5D6310F02A7ADF601000104;
+			F5D6311002A7ADF601000104 = F5D6311002A7ADF601000104;
+			F5D6311102A7ADF601000104 = F5D6311102A7ADF601000104;
+			F5D6311202A7ADF601000104 = F5D6311202A7ADF601000104;
+			F5D6311302A7ADF601000104 = F5D6311302A7ADF601000104;
+			F5D6311402A7ADF601000104 = F5D6311402A7ADF601000104;
+			F5D6311502A7ADF601000104 = F5D6311502A7ADF601000104;
+			F5D6311602A7ADF601000104 = F5D6311602A7ADF601000104;
+			F5D6311702A7ADF601000104 = F5D6311702A7ADF601000104;
+			F5D6311802A7ADF601000104 = F5D6311802A7ADF601000104;
+			F5D6311902A7ADF601000104 = F5D6311902A7ADF601000104;
+			F5D6311A02A7ADF601000104 = F5D6311A02A7ADF601000104;
+			F5D6311B02A7ADF601000104 = F5D6311B02A7ADF601000104;
+			F5D6311C02A7ADF601000104 = F5D6311C02A7ADF601000104;
+			F5D6311D02A7ADF601000104 = F5D6311D02A7ADF601000104;
+			F5D6311E02A7ADF601000104 = F5D6311E02A7ADF601000104;
+			F5D6311F02A7ADF601000104 = F5D6311F02A7ADF601000104;
+			F5D6312002A7ADF601000104 = F5D6312002A7ADF601000104;
+			F5D6312102A7ADF601000104 = F5D6312102A7ADF601000104;
+			F5D6312202A7ADF601000104 = F5D6312202A7ADF601000104;
+			F5D6312302A7ADF601000104 = F5D6312302A7ADF601000104;
+			F5D6312402A7ADF601000104 = F5D6312402A7ADF601000104;
+			F5D6312502A7ADF601000104 = F5D6312502A7ADF601000104;
+		};
+		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
-		wantsSCM = -1;
+		wantsSCM = 1;
 	};
 	089C1673FE841209C02AAC07 = {
 		activeExec = 0;
-		customExecs = {
-			macosx = (
-				F526043A024D2FC501000102,
-			);
-		};
+	};
+	F515ED1F0276084501000105 = {
+		fileReference = F6226516024F2E7F01AD0D07;
+		isa = PBXFileBreakpoint;
+		lineNumber = 110;
+		state = 1;
 	};
 	F526043A024D2FC501000102 = {
 		activeArgIndex = 2147483647;
@@ -124,6 +333,500 @@
 		isa = PBXApplicationReference;
 		name = "Project Builder.app";
 		path = "/Developer/Applications/Project Builder.app";
+		refType = 0;
+	};
+	F538A7C602A7A1C701000104 = {
+		fRef = F515F1450277124E01000105;
+		isa = PBXTextBookmark;
+		name = "pre.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1025;
+		vrLoc = 0;
+	};
+	F538A7C702A7A1C701000104 = {
+		fRef = F538A7EA02A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSTextView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1066;
+		vrLoc = 0;
+	};
+	F538A7CA02A7A1C701000104 = {
+		fRef = F538A7E202A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSApplication.h: 236";
+		rLen = 0;
+		rLoc = 9554;
+		rType = 0;
+		vrLen = 1486;
+		vrLoc = 8192;
+	};
+	F538A7CB02A7A1C701000104 = {
+		fRef = F538A7E302A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSObjCRuntime.h: 56";
+		rLen = 65;
+		rLoc = 1267;
+		rType = 0;
+		vrLen = 894;
+		vrLoc = 918;
+	};
+	F538A7CF02A7A1C701000104 = {
+		fRef = F538A7E402A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSDocument.h: 147";
+		rLen = 11;
+		rLoc = 10356;
+		rType = 0;
+		vrLen = 2111;
+		vrLoc = 9509;
+	};
+	F538A7D202A7A1C701000104 = {
+		fRef = F538A7E902A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSString.h: 75";
+		rLen = 45;
+		rLoc = 2528;
+		rType = 0;
+		vrLen = 1633;
+		vrLoc = 1726;
+	};
+	F538A7D502A7A1C701000104 = {
+		fRef = F515F1450277124E01000105;
+		isa = PBXTextBookmark;
+		name = "pre.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1025;
+		vrLoc = 0;
+	};
+	F538A7D602A7A1C701000104 = {
+		fRef = F515F14102760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxcore.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 994;
+		vrLoc = 0;
+	};
+	F538A7D702A7A1C701000104 = {
+		fRef = F6226511024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 676;
+		vrLoc = 0;
+	};
+	F538A7D802A7A1C701000104 = {
+		fRef = F6226515024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.h: 130";
+		rLen = 0;
+		rLoc = 3597;
+		rType = 0;
+		vrLen = 980;
+		vrLoc = 3364;
+	};
+	F538A7D902A7A1C701000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: selection";
+		rLen = 0;
+		rLoc = 4373;
+		rType = 0;
+		vrLen = 1057;
+		vrLoc = 1116;
+	};
+	F538A7DA02A7A1C701000104 = {
+		fRef = F6226515024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.h: 157";
+		rLen = 0;
+		rLoc = 4401;
+		rType = 0;
+		vrLen = 1058;
+		vrLoc = 4394;
+	};
+	F538A7DB02A7A1C701000104 = {
+		fRef = F538A7E602A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSDocument.h: 14";
+		rLen = 0;
+		rLoc = 405;
+		rType = 0;
+		vrLen = 944;
+		vrLoc = 0;
+	};
+	F538A7DC02A7A1C701000104 = {
+		fRef = F538A7E502A7A1C701000104;
+		isa = PBXTextBookmark;
+		name = "NSApplication.h: 236";
+		rLen = 0;
+		rLoc = 9554;
+		rType = 0;
+		vrLen = 1486;
+		vrLoc = 8192;
+	};
+	F538A7DD02A7A1C701000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: allNavigators";
+		rLen = 0;
+		rLoc = 4241;
+		rType = 0;
+		vrLen = 1411;
+		vrLoc = 1001;
+	};
+	F538A7DE02A7A1C701000104 = {
+		fRef = F515F14202760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxinterface.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 278;
+		vrLoc = 0;
+	};
+	F538A7DF02A7A1C701000104 = {
+		fRef = F515F14102760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxcore.h: 17";
+		rLen = 0;
+		rLoc = 406;
+		rType = 0;
+		vrLen = 861;
+		vrLoc = 133;
+	};
+	F538A7E002A7A1C701000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: navigator";
+		rLen = 0;
+		rLoc = 1975;
+		rType = 0;
+		vrLen = 1033;
+		vrLoc = 1160;
+	};
+	F538A7E202A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSApplication.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSApplication.h;
+		refType = 0;
+	};
+	F538A7E302A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSObjCRuntime.h;
+		path = /System/Library/Frameworks/Foundation.framework/Versions/C/Headers/NSObjCRuntime.h;
+		refType = 0;
+	};
+	F538A7E402A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSDocument.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSDocument.h;
+		refType = 0;
+	};
+	F538A7E502A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSApplication.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSApplication.h;
+		refType = 0;
+	};
+	F538A7E602A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSDocument.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSDocument.h;
+		refType = 0;
+	};
+	F538A7E902A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSString.h;
+		path = /System/Library/Frameworks/Foundation.framework/Versions/C/Headers/NSString.h;
+		refType = 0;
+	};
+	F538A7EA02A7A1C701000104 = {
+		isa = PBXFileReference;
+		name = NSTextView.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSTextView.h;
+		refType = 0;
+	};
+	F5D6310C02A7ADF601000104 = {
+		fRef = F622651A024F2EBD01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXAppleScriptMenuPlugin.m: 40";
+		rLen = 0;
+		rLoc = 1200;
+		rType = 0;
+		vrLen = 794;
+		vrLoc = 575;
+	};
+	F5D6310D02A7ADF601000104 = {
+		fRef = F5D6312602A7ADF601000104;
+		isa = PBXTextBookmark;
+		name = "NSMenuItem.h: 18";
+		rLen = 0;
+		rLoc = 479;
+		rType = 0;
+		vrLen = 647;
+		vrLoc = 0;
+	};
+	F5D6310E02A7ADF601000104 = {
+		fRef = F5D6312702A7ADF601000104;
+		isa = PBXTextBookmark;
+		name = "NSMenu.h: 61";
+		rLen = 0;
+		rLoc = 1859;
+		rType = 0;
+		vrLen = 550;
+		vrLoc = 0;
+	};
+	F5D6310F02A7ADF601000104 = {
+		fRef = F515F14102760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxcore.h: 17";
+		rLen = 0;
+		rLoc = 406;
+		rType = 0;
+		vrLen = 582;
+		vrLoc = 133;
+	};
+	F5D6311002A7ADF601000104 = {
+		fRef = F515F14202760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxinterface.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 278;
+		vrLoc = 0;
+	};
+	F5D6311102A7ADF601000104 = {
+		fRef = F6226519024F2EBD01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXAppleScriptMenuPlugin.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 288;
+		vrLoc = 0;
+	};
+	F5D6311202A7ADF601000104 = {
+		fRef = F6226515024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.h: init";
+		rLen = 0;
+		rLoc = 564;
+		rType = 0;
+		vrLen = 555;
+		vrLoc = 0;
+	};
+	F5D6311302A7ADF601000104 = {
+		fRef = F6280F9D024F511E01AD0D07;
+		isa = PBXTextBookmark;
+		name = "Read me.rtf: 12";
+		rLen = 0;
+		rLoc = 981;
+		rType = 0;
+		vrLen = 1314;
+		vrLoc = 0;
+	};
+	F5D6311402A7ADF601000104 = {
+		fRef = F6226511024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 676;
+		vrLoc = 0;
+	};
+	F5D6311502A7ADF601000104 = {
+		fRef = F6280F9E024F5D7C01AD0D07;
+		isa = PBXTextBookmark;
+		name = "Simple test: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 686;
+		vrLoc = 0;
+	};
+	F5D6311602A7ADF601000104 = {
+		fRef = F6226512024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.m: invokeWithString:";
+		rLen = 0;
+		rLoc = 2581;
+		rType = 0;
+		vrLen = 898;
+		vrLoc = 2151;
+	};
+	F5D6311702A7ADF601000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: result";
+		rLen = 16;
+		rLoc = 4524;
+		rType = 0;
+		vrLen = 1274;
+		vrLoc = 3354;
+	};
+	F5D6311802A7ADF601000104 = {
+		fRef = F6226512024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.m: refresh";
+		rLen = 0;
+		rLoc = 1692;
+		rType = 0;
+		vrLen = 692;
+		vrLoc = 1433;
+	};
+	F5D6311902A7ADF601000104 = {
+		fRef = F622651A024F2EBD01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXAppleScriptMenuPlugin.m: 40";
+		rLen = 0;
+		rLoc = 1200;
+		rType = 0;
+		vrLen = 794;
+		vrLoc = 575;
+	};
+	F5D6311A02A7ADF601000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: result";
+		rLen = 16;
+		rLoc = 4524;
+		rType = 0;
+		vrLen = 760;
+		vrLoc = 3868;
+	};
+	F5D6311B02A7ADF601000104 = {
+		fRef = F6226512024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.m: invokeWithString:";
+		rLen = 0;
+		rLoc = 2581;
+		rType = 0;
+		vrLen = 746;
+		vrLoc = 2237;
+	};
+	F5D6311C02A7ADF601000104 = {
+		fRef = F515F14102760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxcore.h: 17";
+		rLen = 0;
+		rLoc = 406;
+		rType = 0;
+		vrLen = 582;
+		vrLoc = 133;
+	};
+	F5D6311D02A7ADF601000104 = {
+		fRef = F515F14202760C9701000105;
+		isa = PBXTextBookmark;
+		name = "pbxinterface.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 278;
+		vrLoc = 0;
+	};
+	F5D6311E02A7ADF601000104 = {
+		fRef = F6226519024F2EBD01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXAppleScriptMenuPlugin.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 288;
+		vrLoc = 0;
+	};
+	F5D6311F02A7ADF601000104 = {
+		fRef = F6226515024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.h: init";
+		rLen = 0;
+		rLoc = 564;
+		rType = 0;
+		vrLen = 555;
+		vrLoc = 0;
+	};
+	F5D6312002A7ADF601000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: result";
+		rLen = 16;
+		rLoc = 4524;
+		rType = 0;
+		vrLen = 1274;
+		vrLoc = 3354;
+	};
+	F5D6312102A7ADF601000104 = {
+		fRef = F6280F9D024F511E01AD0D07;
+		isa = PBXTextBookmark;
+		name = "Read me.rtf: 12";
+		rLen = 0;
+		rLoc = 981;
+		rType = 0;
+		vrLen = 1314;
+		vrLoc = 0;
+	};
+	F5D6312202A7ADF601000104 = {
+		fRef = F6226511024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 676;
+		vrLoc = 0;
+	};
+	F5D6312302A7ADF601000104 = {
+		fRef = F6280F9E024F5D7C01AD0D07;
+		isa = PBXTextBookmark;
+		name = "Simple test: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 686;
+		vrLoc = 0;
+	};
+	F5D6312402A7ADF601000104 = {
+		fRef = F6226512024F2E2F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "AppleScriptItem.m: invokeWithString:";
+		rLen = 0;
+		rLoc = 2581;
+		rType = 0;
+		vrLen = 898;
+		vrLoc = 2151;
+	};
+	F5D6312502A7ADF601000104 = {
+		fRef = F6226516024F2E7F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "PBXTextViewPoser.m: newMenu";
+		rLen = 4;
+		rLoc = 1490;
+		rType = 0;
+		vrLen = 1523;
+		vrLoc = 1630;
+	};
+	F5D6312602A7ADF601000104 = {
+		isa = PBXFileReference;
+		name = NSMenuItem.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSMenuItem.h;
+		refType = 0;
+	};
+	F5D6312702A7ADF601000104 = {
+		isa = PBXFileReference;
+		name = NSMenu.h;
+		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSMenu.h;
 		refType = 0;
 	};
 }

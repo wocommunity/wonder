@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		014CEA410018CDE011CA2923 = {
 			isa = PBXBundleReference;
@@ -88,7 +88,7 @@
 				089C1679FE841209C02AAC07,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "/Developer/ProjectBuilder Extras/Plug-ins";
 				LIBRARY_SEARCH_PATHS = "";
@@ -140,9 +140,11 @@
 				F6226513024F2E2F01AD0D07,
 				F6226517024F2E7F01AD0D07,
 				F622651B024F2EBD01AD0D07,
+				F515F146027712AB01000105,
+				F515F147027712AB01000105,
+				F515F148027712AC01000105,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		089C1675FE841209C02AAC07 = {
 			buildActionMask = 2147483647;
@@ -151,7 +153,6 @@
 				F59CDA57023056EF01000103,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		089C1676FE841209C02AAC07 = {
 			buildActionMask = 2147483647;
@@ -162,23 +163,23 @@
 				F622651C024F2EBD01AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		089C1677FE841209C02AAC07 = {
 			buildActionMask = 2147483647;
 			files = (
 				1058C7AFFEA557BF11CA2CBB,
 				F5260439024D2AFF01000102,
+				F53BA724024FCB1A01000102,
+				F515ED2402760A9001000105,
+				F515ED2502760A9001000105,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		089C1679FE841209C02AAC07 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		089C167CFE841241C02AAC07 = {
 			children = (
@@ -218,6 +219,9 @@
 		};
 		08FB77AFFE84173DC02AAC07 = {
 			children = (
+				F515F1450277124E01000105,
+				F515F14102760C9701000105,
+				F515F14202760C9701000105,
 				08FB77B6FE84183AC02AAC07,
 				F6226511024F2E2F01AD0D07,
 				F6226512024F2E2F01AD0D07,
@@ -257,6 +261,7 @@
 			children = (
 				1058C7ADFEA557BF11CA2CBB,
 				F5260438024D2AFF01000102,
+				F53BA723024FCB1A01000102,
 			);
 			isa = PBXGroup;
 			name = "Linked Frameworks";
@@ -272,6 +277,8 @@
 			children = (
 				089C1672FE841209C02AAC07,
 				089C167FFE841241C02AAC07,
+				F515ED2002760A9001000105,
+				F515ED2102760A9001000105,
 			);
 			isa = PBXGroup;
 			name = "Other Frameworks";
@@ -311,6 +318,63 @@
 //F52
 //F53
 //F54
+		F515ED2002760A9001000105 = {
+			isa = PBXFrameworkReference;
+			name = PBXCore.framework;
+			path = /System/Library/PrivateFrameworks/PBXCore.framework;
+			refType = 0;
+		};
+		F515ED2102760A9001000105 = {
+			isa = PBXFrameworkReference;
+			name = PBXInterface.framework;
+			path = /System/Library/PrivateFrameworks/PBXInterface.framework;
+			refType = 0;
+		};
+		F515ED2402760A9001000105 = {
+			fileRef = F515ED2002760A9001000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F515ED2502760A9001000105 = {
+			fileRef = F515ED2102760A9001000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F515F14102760C9701000105 = {
+			isa = PBXFileReference;
+			path = pbxcore.h;
+			refType = 4;
+		};
+		F515F14202760C9701000105 = {
+			isa = PBXFileReference;
+			path = pbxinterface.h;
+			refType = 4;
+		};
+		F515F1450277124E01000105 = {
+			isa = PBXFileReference;
+			path = pre.h;
+			refType = 4;
+		};
+		F515F146027712AB01000105 = {
+			fileRef = F515F1450277124E01000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F515F147027712AB01000105 = {
+			fileRef = F515F14102760C9701000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F515F148027712AC01000105 = {
+			fileRef = F515F14202760C9701000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5260438024D2AFF01000102 = {
 			isa = PBXFrameworkReference;
 			name = Carbon.framework;
@@ -319,6 +383,18 @@
 		};
 		F5260439024D2AFF01000102 = {
 			fileRef = F5260438024D2AFF01000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F53BA723024FCB1A01000102 = {
+			isa = PBXFrameworkReference;
+			name = AppleScriptKit.framework;
+			path = /System/Library/Frameworks/AppleScriptKit.framework;
+			refType = 0;
+		};
+		F53BA724024FCB1A01000102 = {
+			fileRef = F53BA723024FCB1A01000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
