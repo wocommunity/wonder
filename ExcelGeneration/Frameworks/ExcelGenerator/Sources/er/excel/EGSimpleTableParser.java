@@ -165,7 +165,7 @@ public class EGSimpleTableParser {
     }
     
     private void parseNode(Node node) {
-    	String tagName = node.getLocalName();
+    	String tagName = node.getLocalName().toLowerCase();
     	if("font".equals(tagName)) {
     	} else if("style".equals(tagName)) {
     		parseStyle(node);
