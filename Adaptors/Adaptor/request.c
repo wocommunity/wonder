@@ -52,6 +52,8 @@ HTTPRequest *req_new(const char *method, char *uri)
    HTTPRequest *req;
 
    req = WOCALLOC(1,sizeof(HTTPRequest));
+   //ak: adding the request method string, to be able to support other methods like HEAD, GET and POST
+   req->method_str = (method ? method : "");
    req->method = get_http_method(method);
    req->request_str = uri;		/* no strdup(), but we free */
    return req;
@@ -90,7 +92,7 @@ const char *req_validateMethod(HTTPRequest *req)
    }
    if ((req->method == HTTP_UNKNOWN_METHOD) ||
        (req->method == HTTP_PUT_METHOD)) {
-      return INV_METHOD;
+      return NULL;
    }
 
    return NULL;		/* no error */
@@ -117,18 +119,12 @@ void req_reformatRequest(HTTPRequest *req, WOAppReq *app, WOURLComponents *wc, c
       WOFREE(req->request_str);
 
    /* METHOD + SizeURL + SPACE + http_version_length + \r\n + NULL) */
-   req->request_str = WOMALLOC(5 + SizeURL(wc) + 1 + http_version_length + 2 + 1); 
+   req->request_str = WOMALLOC(strlen(req->method_str) + 1 + SizeURL(wc) + 1 + http_version_length + 2 + 1); 
 
-   if (req->method == HTTP_POST_METHOD) {
-      strcpy(req->request_str, "POST ");
-      req_addHeader(req, REQUEST_METHOD_HEADER, "POST", 0);
-   } else if (req->method == HTTP_HEAD_METHOD) {
-      strcpy(req->request_str, "HEAD ");
-      req_addHeader(req, REQUEST_METHOD_HEADER, "HEAD", 0);
-   } else {
-      strcpy(req->request_str, "GET ");
-      req_addHeader(req, REQUEST_METHOD_HEADER, "GET", 0);
-   }
+   strcpy(req->request_str, req->method_str);
+   strcat(req->request_str," ");
+   req_addHeader(req, REQUEST_METHOD_HEADER, req->method_str, 0);
+   
    ComposeURL(req->request_str + strlen(req->request_str), wc);
    strcat(req->request_str," ");
    if (http_version) {
