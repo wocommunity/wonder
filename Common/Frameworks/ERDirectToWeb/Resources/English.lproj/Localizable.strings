@@ -29,6 +29,7 @@
     "ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
     "ERDInspect.select" = "Select...";
     "ERDInspect.clear" = "Clear";
+    "ERDInspect.create" = "Create";
     "ERDList.create" = "Add";
     "ERDQueryTwoLevelRelationship.all" = "- all -";
     "ERD2W.pickButtonLabel" = "Select";
