@@ -209,6 +209,12 @@ public class ERCMailDelivery {
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
         WOComponent component = ERXApplication.instantiatePage(componentName);
+        if (component == null) {
+            log.warn("Created null component for name \"" + componentName + "\"");
+        } else if (log.isDebugEnabled()) {
+            log.debug("Created component with name \"" + componentName + "\" class name \""
+                      + component.getClass().getName() + "\"");
+        }
         if (bindings != null && bindings.count() > 0)
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
         return composeComponentEmail(from, to, cc, bcc, title, component, ec);
