@@ -66,8 +66,8 @@
 			productName = Server;
 			productReference = 017C7B2CFFD7144B7F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -109,6 +109,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B31FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -131,6 +132,7 @@
 				F57ECEC902F371CD01000103,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B32FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -151,6 +153,7 @@
 				F57ECE5B02F3715601000103,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B33FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -163,12 +166,14 @@
 				022D130C0059B6D611CD2978,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B34FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B35FFD7144B7F000001 = {
 			isa = PBXTargetDependency;
@@ -203,8 +208,8 @@
 			productName = Client;
 			productReference = 017C7B2DFFD7144B7F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -238,6 +243,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B38FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -249,12 +255,14 @@
 				F57ECEE202F3733901000103,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B39FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B3AFFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -268,12 +276,14 @@
 				F5F1F88D021A68C30116EB0C,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B3BFFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B3CFFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -284,6 +294,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
 		};
@@ -326,6 +337,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
@@ -536,8 +548,8 @@
 			productName = WOFramework;
 			productReference = 40B58281FFD5E8187F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -581,6 +593,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58284FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -590,24 +603,28 @@
 				F57ECEE802F3735901000103,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58285FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58286FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58287FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58288FFD5E82B7F000001 = {
 			children = (
@@ -639,7 +656,6 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
-				F5B6D52B021B26960118DAF1,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -1277,76 +1293,11 @@
 			settings = {
 			};
 		};
-		F5B6D52B021B26960118DAF1 = {
-			children = (
-				F5F9F558021B21A601B9794E,
-				F747DBA3028666F801290464,
-				F747DBC60286897901290464,
-				F747DBB10286841801290464,
-				F5F9F55C021B21A601B9794E,
-				F5F9F560021B21A601B9794E,
-				F747DBAB02866E2301290464,
-				F5F9F563021B21A601B9794E,
-			);
-			isa = PBXGroup;
-			name = "API files";
-			refType = 4;
-		};
 		F5F1F88D021A68C30116EB0C = {
 			fileRef = 40B58281FFD5E8187F000001;
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F5F9F558021B21A601B9794E = {
-			isa = PBXFileReference;
-			path = CancelledPayPalTransaction.api;
-			refType = 4;
-		};
-		F5F9F55C021B21A601B9794E = {
-			isa = PBXFileReference;
-			path = PayPalSingleItemFormLink.api;
-			refType = 4;
-		};
-		F5F9F560021B21A601B9794E = {
-			isa = PBXFileReference;
-			path = PayPalSingleItemHyperlink.api;
-			refType = 4;
-		};
-		F5F9F563021B21A601B9794E = {
-			isa = PBXFileReference;
-			path = SuccessfulPayPalTransaction.api;
-			refType = 4;
-		};
-//F50
-//F51
-//F52
-//F53
-//F54
-//F70
-//F71
-//F72
-//F73
-//F74
-		F747DBA3028666F801290464 = {
-			isa = PBXFileReference;
-			path = PayPalAddToCartHyperlink.api;
-			refType = 4;
-		};
-		F747DBAB02866E2301290464 = {
-			isa = PBXFileReference;
-			path = PayPalViewShoppingCartHyperlink.api;
-			refType = 4;
-		};
-		F747DBB10286841801290464 = {
-			isa = PBXFileReference;
-			path = PayPalDonateHyperlink.api;
-			refType = 4;
-		};
-		F747DBC60286897901290464 = {
-			isa = PBXFileReference;
-			path = PayPalDonateFormLink.api;
-			refType = 4;
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
