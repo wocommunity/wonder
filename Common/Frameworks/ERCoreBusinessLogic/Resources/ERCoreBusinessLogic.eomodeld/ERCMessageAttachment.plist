@@ -15,6 +15,7 @@
     relationships = (
         {
             destination = ERCMailMessage; 
+            isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = mailMessageId; }); 
