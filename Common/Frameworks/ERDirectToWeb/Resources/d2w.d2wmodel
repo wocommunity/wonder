@@ -1564,6 +1564,21 @@
         {
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "*"; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = confirmConfigurationName; 
+                value = confirmConfigurationNameForEntity; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = confirmConfigurationNameForEntity; 
@@ -1592,6 +1607,21 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = confirmRows; 
                 value = 4; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "*"; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = createConfigurationName; 
+                value = createConfigurationNameForEntity; 
             }; 
         }, 
         {
@@ -1962,6 +1992,21 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = displayValueForNull; 
                 value = N/A; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "*"; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = editConfigurationName; 
+                value = editConfigurationNameForEntity; 
             }; 
         }, 
         {
@@ -2436,6 +2481,21 @@
         {
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "*"; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = inspectConfigurationName; 
+                value = inspectConfigurationNameForEntity; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = inspectConfigurationNameForEntity; 
@@ -2787,6 +2847,21 @@
                 class = er.directtoweb.ERDDefaultsAssignment; 
                 keyPath = length; 
                 value = smartDefaultAttributeWidth; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "*"; 
+            }; 
+            rhs = {
+                class = er.directtoweb.ERDKeyValueAssignment; 
+                keyPath = listConfigurationName; 
+                value = listConfigurationNameForEntity; 
             }; 
         }, 
         {
@@ -4322,7 +4397,11 @@
         {
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = showEditButton; }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = showEditButton; 
+                value = 0; 
+            }; 
         }, 
         {
             author = 10; 
