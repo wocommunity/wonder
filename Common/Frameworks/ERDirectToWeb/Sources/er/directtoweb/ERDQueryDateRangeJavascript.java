@@ -47,8 +47,7 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     public Format dateFormatter() {
     	if(_dateFormatter == null) {
-    		_dateFormatter = ERXLocalizer.currentLocalizer().localizedDateFormatForKey(formatter());
-            log.info(_dateFormatter);
+    		_dateFormatter = ERXTimestampFormatter.dateFormatterForPattern(formatter());
     	}
     	return _dateFormatter;
     }
