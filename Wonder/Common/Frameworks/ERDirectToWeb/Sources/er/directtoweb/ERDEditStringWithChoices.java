@@ -78,15 +78,15 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
         currentElement = null;
     }
 
-    public void takeValuesFromRequest(WORequest r, WOContext c) {
-        super.takeValuesFromRequest(r, c);
+    public void setSelectedElement(Object value) {
+        selectedElement = (ERXKeyValuePair)value;
         if (selectedElement!=null) {
             object().takeValueForKey(selectedElement.key(), key());
         } else {
             object().takeValueForKey(null, key());
         }
-    }
-
+   }
+ 
     public void appendToResponse(WOResponse r, WOContext c) {
         String chosenKey = (String)objectPropertyValue();
         if(log.isDebugEnabled()) log.debug("chosenKey = "+chosenKey);
