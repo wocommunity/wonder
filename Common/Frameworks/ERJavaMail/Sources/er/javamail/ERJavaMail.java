@@ -87,8 +87,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
         // Smtp host
         this.setupSmtpHostSafely ();
+
         this.setDefaultSession (this.newSession ());
 
+        if (this.defaultSession () == null)
+            log.warn("Unable to create default mail session!");
+        
         // Default X-Mailer header
         this.setDefaultXMailerHeader (System.getProperty ("er.javamail.XMailerHeader"));
         log.debug ("er.javamail.XMailHeader: " + this.defaultXMailerHeader ());
