@@ -48,6 +48,11 @@ public class ERCStatic extends _ERCStatic {
         }
 
         public static void takeStaticStoredValueForKey(String value,
+                                                       String key) {
+            takeStaticStoredValueForKey(value, key, _ec);
+        }
+
+        public static void takeStaticStoredValueForKey(String value,
                                                        String key,
                                                        EOEditingContext editingContext) {
             ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
