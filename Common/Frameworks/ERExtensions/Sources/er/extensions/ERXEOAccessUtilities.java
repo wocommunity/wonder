@@ -221,12 +221,22 @@ public class ERXEOAccessUtilities {
     public static EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         EOModel model = entity.model();
-        EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-        EODatabase db = new EODatabase(adaptor);
+        EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, model.name());
+        EOAdaptor adaptor = dbc.adaptorContext().adaptor();
         EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
-
+        
         NSArray attributes = spec.rawRowKeyPaths();
+        log.info(attributes);
         if (attributes == null || attributes.count() == 0) attributes = entity.attributesToFetch();
+        
+        EOQualifier qualifier = spec.qualifier();
+        if(qualifier != null)
+            qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity);
+        if(qualifier != spec.qualifier()) {
+            spec = (EOFetchSpecification)spec.clone();
+            spec.setQualifier(qualifier);
+        }
+        
         EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
         String sql = sqlExpr.statement();
         if (end >= 0) {
@@ -273,6 +283,10 @@ public class ERXEOAccessUtilities {
         int rowCount = -1;
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         EOModel model = entity.model();
+        if(spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
+            spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
+        }
+        
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, 0, -1);
         String statement = sql.statement();
         int index = statement.toLowerCase().indexOf(" from ");
