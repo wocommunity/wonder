@@ -28,6 +28,11 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
     private NSArray _elements;
     /** holds the min count to match against, defaults to 0 */
     private int _minCount = 0;
+
+    ///// Fix for EOSQLQualifier ///
+    public _isEmpty(){
+        return false;
+    }
     
     public ERXEOToManyQualifier(EOEntity e,
                                 String toManyKey,
@@ -117,7 +122,6 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
         targetRelationship=targetEntity.relationshipNamed((String)toManyKeys.lastObject());
         targetEntity=targetRelationship.destinationEntity();
 
-       
         if (targetRelationship.joins()==null || targetRelationship.joins().count()==0) {
             // we have a flattened many to many
             String definitionKeyPath=targetRelationship.definition();                        
