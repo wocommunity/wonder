@@ -97,6 +97,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         super.setObject(eo);
     }
 
+    /** Can be used to get this instance into KVC */
+    public final WOComponent self() {
+        return this;
+    }
+    
     /**
      * {@see} D2WContext for this page. Checks if there is a "d2wContext" binding, too.
      * @returns d2wContext
