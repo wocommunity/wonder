@@ -122,8 +122,7 @@ IsEditingConditional3: WOConditional {
 
 IsEntityWritable: WOConditional {
 	_unroll = true;
-	condition = isEntityReadOnly;
-	negate = true;
+	condition = d2wContext.isEntityDeletable;
 }
 
 IsEntityWritable2: WOConditional {
