@@ -26,6 +26,7 @@
             </fileset>
             <fileset dir="${wo.system.root}">
                 <include name="Java**/Resources/Java/*.jar" />
+                <exclude name="JavaWOExtensions.framework"/>
             </fileset>
         </path>
 	</target>
@@ -125,6 +126,7 @@
 				<include name="**/*.css" />
 			</wsresources>
 			<frameworks root="${build.root}">
+				<include name="JavaWO*.framework"/>
 				<include name="ER*.framework"/>
 				<exclude name="ERNeutralLook.framework"/>
 				<include name="BT*.framework"/>
@@ -136,6 +138,7 @@
 				<include name="Java*.framework"/>
 				<exclude name="Java*Cocoa.framework"/>
 				<exclude name="JavaOpen*.framework"/>
+				<exclude name="JavaWOExtensions.framework"/>
 				<exclude name="JavaEOGeneration*.framework"/>
 				<exclude name="JavaEOInterface.framework"/>
 				<exclude name="JavaEODistribution.framework"/>
