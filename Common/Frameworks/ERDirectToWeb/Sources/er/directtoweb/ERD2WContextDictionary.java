@@ -206,4 +206,7 @@ public class ERD2WContextDictionary {
         }
         return arr;
     }
+    public D2WContext context() {
+        return context;
+    }
 }
