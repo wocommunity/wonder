@@ -224,9 +224,7 @@ public class ERXUtilities {
      * @return the shared object registered in the default shared editing context
      */
     public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
-        return EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
-                                                     entityName,
-                                                     pk);
+        return ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName, pk);
     }
     
     /**
