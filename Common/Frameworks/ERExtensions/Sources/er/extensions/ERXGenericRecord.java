@@ -331,11 +331,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return if the editing context has the correct delegate set.
      */
     public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
-        if(true) {
-            editingContext.setDelegate(null);
-            return true;
-        }
-        
         Object delegate=editingContext.delegate();
 
         if (delegate==null) {
