@@ -17,7 +17,7 @@ import org.apache.log4j.helpers.LogLog;
  * Basic log4j EOF Appender<br>
  *	Very basic appender, useful for logging events to a database using EOF.
  *  Manditory Fields:<br>
- *	LogEntity - Entity for creating logging events.  The class mapped to this entity must
+ *	LoggingEntity - Entity for creating logging events.  The class mapped to this entity must
  *		implement the interface: {@link ERXEOFLogEntryInterface}
  *  Optional Fields:<br>
  *	BufferSize - Number of Events to catch before calling ec.saveChanges()
