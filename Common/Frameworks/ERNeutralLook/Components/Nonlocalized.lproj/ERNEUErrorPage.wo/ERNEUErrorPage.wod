@@ -13,7 +13,7 @@ Help: ERDDebuggingHelp {
 }
 
 Hyperlink1: WOHyperlink {
-	action = nextPageClicked;
+	action = nextPage;
 }
 
 Image1: WOImage {
