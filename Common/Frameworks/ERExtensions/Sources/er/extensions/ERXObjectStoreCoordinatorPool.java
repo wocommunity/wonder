@@ -1,9 +1,9 @@
 package er.extensions;
 
+
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.util.*;
 
 /**
@@ -24,22 +24,29 @@ import java.util.*;
 public class ERXObjectStoreCoordinatorPool {
     private static ERXLogger log = ERXLogger.getERXLogger(ERXObjectStoreCoordinatorPool.class);
     
+    private Hashtable _oscForSession;
+    private int _maxOS;
+    private int _currentObjectStoreIndex;
+    private List _objectStores;
+    private List _sharedEditingContexts;
+    private Observer _observer;
+    private Object _lock = new Object();
+    protected static ERXObjectStoreCoordinatorPool _pool;
+
     static {
-        ObjectStoreCoordinatorSynchronizer.sharedInstance();
+        initialize();
     }
-    
-    private Hashtable oscForSession;
-    private int maxOS;
-    private int currentObjectStoreIndex;
-    private ObjectStoreCoordinator[] objectStores;
-    private Observer observer;
-    private Object lock = new Object();
-    protected static ERXObjectStoreCoordinatorPool defaultPool;
-    
-    static {
-        defaultPool = new ERXObjectStoreCoordinatorPool();
-        log.info("setting ERXEC.factory to MultiOSCFactory");
-        ERXEC.setFactory(new MultiOSCFactory());
+   
+    /**
+     * Creates the singleton and registers the multi factory.
+     */
+    public static void initialize() {
+        if(_pool == null) {
+            ERXObjectStoreCoordinatorSynchronizer.initialize();
+            _pool = new ERXObjectStoreCoordinatorPool();
+            log.info("setting ERXEC.factory to MultiOSCFactory");
+            ERXEC.setFactory(new MultiOSCFactory());
+        }
     }
     
     /**
@@ -50,46 +57,39 @@ public class ERXObjectStoreCoordinatorPool {
      * MultiOSCFactory is asked for a new EOEditingContext.
      */
     private ERXObjectStoreCoordinatorPool() {
-        maxOS = ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators");
-        if (maxOS == 0)
+        _maxOS = ERXProperties.intForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators");
+        if (_maxOS == 0) {
             //this should work like the default implementation
-            maxOS = 1;
-        observer = new Observer();
-        oscForSession = new Hashtable();
+            log.warn("Registering the pool with only one coordinator doesn't make a lot of sense.");
+            _maxOS = 1;
+        }
+        _oscForSession = new Hashtable();
+        
+        NSSelector sel = new NSSelector("sessionDidCreate", ERXConstant.NotificationClassArray);
+        NSNotificationCenter.defaultCenter().addObserver(this, sel, WOSession.SessionDidCreateNotification, null);
+        sel = new NSSelector("sessionDidTimeout", ERXConstant.NotificationClassArray);
+        NSNotificationCenter.defaultCenter().addObserver(this, sel, WOSession.SessionDidTimeOutNotification, null);
     }
     
     /** 
-     * Observer class that stores EOObjectStoreCoordinators per session. 
-     * Registers for sessionDidCreate and sessionDidTimeout to maintain its array.
+     * checks if the new Session has already  a EOObjectStoreCoordinator assigned, 
+     * if not it assigns a EOObjectStoreCoordinator to the session.
+     * @param n {@link WOSession#SessionDidCreateNotification}
      */
-    public static class Observer {
-        protected Observer() {
-            NSSelector sel = new NSSelector("sessionDidCreate", ERXConstant.NotificationClassArray);
-            NSNotificationCenter.defaultCenter().addObserver(this, sel, WOSession.SessionDidCreateNotification, null);
-            sel = new NSSelector("sessionDidTimeout", ERXConstant.NotificationClassArray);
-            NSNotificationCenter.defaultCenter().addObserver(this, sel, WOSession.SessionDidTimeOutNotification, null);
+    public void sessionDidCreate(NSNotification n) {
+        WOSession s = (WOSession) n.object();
+        if (_oscForSession.get(s.sessionID()) == null) {
+            _oscForSession.put(s.sessionID(), nextObjectStore());
         }
-        
-        /** 
-         * checks if the new Session has already  a EOObjectStoreCoordinator assigned, 
-         * if not it assigns a EOObjectStoreCoordinator to the session.
-         * @param n {@link WOSession#SessionDidCreateNotification}
-         */
-        public void sessionDidCreate(NSNotification n) {
-            WOSession s = (WOSession) n.object();
-            if (defaultPool.oscForSession.get(s.sessionID()) == null) {
-                defaultPool.oscForSession.put(s.sessionID(), defaultPool.nextObjectStore());
-            }
-        }
-        
-        /** Removes the timed out session from the internal array.
-         * session.
-         * @param n {@link WOSession#SessionDidTimeOutNotification}
-         */
-        public void sessionDidTimeout(NSNotification n) {
-            String sessionID = (String) n.object();
-            defaultPool.oscForSession.remove(sessionID);
-        }
+    }
+    
+    /** Removes the timed out session from the internal array.
+     * session.
+     * @param n {@link WOSession#SessionDidTimeOutNotification}
+     */
+    public void sessionDidTimeout(NSNotification n) {
+        String sessionID = (String) n.object();
+        _oscForSession.remove(sessionID);
     }
     
     /**
@@ -114,10 +114,10 @@ public class ERXObjectStoreCoordinatorPool {
         String sessionID = sessionID();
         EOObjectStore os = null;
         if (sessionID != null) {
-            os = (EOObjectStore) oscForSession.get(sessionID);
+            os = (EOObjectStore) _oscForSession.get(sessionID);
             if (os == null) {
                 os = nextObjectStore();
-                oscForSession.put(sessionID, os);
+                _oscForSession.put(sessionID, os);
             }
         } else {
             os = nextObjectStore();
@@ -131,15 +131,24 @@ public class ERXObjectStoreCoordinatorPool {
      * @return the next EOObjectStore based on round robin
      */
     public EOObjectStore nextObjectStore() {
-        synchronized (lock) {
-            if (objectStores == null) {
+        synchronized (_lock) {
+            if (_objectStores == null) {
                 _initObjectStores();
             }
-            if (currentObjectStoreIndex == maxOS) {
-                currentObjectStoreIndex = 0;
+            if (_currentObjectStoreIndex == _maxOS) {
+                _currentObjectStoreIndex = 0;
             }
-            return (EOObjectStore) objectStores[currentObjectStoreIndex++];
+            return (EOObjectStore) _objectStores.get(_currentObjectStoreIndex++);
         }
+    }
+    
+    public EOSharedEditingContext sharedEditingContextForObjectStore(EOObjectStore os) {
+        int index = _objectStores.indexOf(os);
+        EOSharedEditingContext ec = null;
+        if(index >= 0) {
+            ec = (EOSharedEditingContext)_sharedEditingContexts.get(index);
+        }
+        return ec;
     }
     
     /** 
@@ -154,11 +163,11 @@ public class ERXObjectStoreCoordinatorPool {
         }
         
         public EOEditingContext _newEditingContext(boolean validationEnabled) {
-            ObjectStoreCoordinator os = (ObjectStoreCoordinator)defaultPool.currentRootObjectStore();
+            EOObjectStore os = (EOObjectStore)_pool.currentRootObjectStore();
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
             ec.lock();
             try {
-                ec.setSharedEditingContext(os.sharedEditingContext());
+                ec.setSharedEditingContext(_pool.sharedEditingContextForObjectStore(os));
             } finally {
                 ec.unlock();
             }
@@ -168,266 +177,17 @@ public class ERXObjectStoreCoordinatorPool {
     
     private void _initObjectStores() {
         log.info("initializing Pool...");
-        objectStores = new ObjectStoreCoordinator[maxOS];
-        for (int i = 0; i < maxOS; i++) {
-            objectStores[i] = new ObjectStoreCoordinator();
+        _objectStores = new ArrayList(_maxOS);
+        _sharedEditingContexts = new ArrayList(_maxOS);
+        for (int i = 0; i < _maxOS; i++) {
+            EOObjectStore os = new EOObjectStoreCoordinator();
+            _objectStores.add(os);
+            _sharedEditingContexts.add(new EOSharedEditingContext(os));
+        }
+        if(_maxOS > 0) {
+            EOObjectStoreCoordinator.setDefaultCoordinator((EOObjectStoreCoordinator)_objectStores.get(0));
         }
         log.info("initializing Pool finished");
      }
-    
-    
-    /** 
-     * Subclass to store additional stuff like the shared EC, 
-     * and in future times maybe the useage count, locking etc. 
-     */
-    //CHECKME ak: until this is not fleshed out, we do not need it....
-    public static class ObjectStoreCoordinator extends EOObjectStoreCoordinator {
-        protected EOSharedEditingContext sharedEditingContext;
-        private Hashtable databaseContextsForModels = new Hashtable();
-        
-        public ObjectStoreCoordinator() {
-            super();
-            //ObjectStoreCoordinatorSynchronizer.sharedInstance().addObjectStoreCoordinator(this);
-            databaseContextsForModels = new Hashtable();
-            
-            EOModelGroup eomodelgroup = EOModelGroup.modelGroupForObjectStoreCoordinator(this);
-            for (int i = 0; i < eomodelgroup.models().count(); i++) {
-                EOModel m = (EOModel)eomodelgroup.models().objectAtIndex(i);
-                EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(m, this);
-                databaseContextsForModels.put(m.name(), dbc);
-            }
-        }
-        
-        public Hashtable databaseContextsForModels() { 
-            return databaseContextsForModels; 
-        }
-        
-        public EOSharedEditingContext sharedEditingContext() {
-            if (sharedEditingContext == null)
-                sharedEditingContext = new EOSharedEditingContext(this);
-            return sharedEditingContext;
-        }
-        
-    }
-    
-    /** 
-     * Thread and locking safe implementation to propagate 
-     * the changes from one EOF stack to another 
-     */
-    private static class ProcessChangesQueue implements Runnable {
-        List elements = new LinkedList();
-        ObjectStoreCoordinatorSynchronizer synchronizer;
-        
-        private ProcessChangesQueue(ObjectStoreCoordinatorSynchronizer synchronizer) {
-            this.synchronizer = synchronizer;
-        }
-        
-        private void addChange(Change changes) {
-            synchronized (elements) {
-                elements.add(changes);
-            }
-        }
-        
-        public void run() {
-            boolean run = true;
-            while (true) {
-                try {
-                    //FIXME: we should use wait and notify here...
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    run = false;
-                    log.info("Interrupted: " + e, e);
-                }
-                if (elements.size() > 0) {
-                    Change changes = null;
-                    synchronized(elements) {
-                        changes = (Change)elements.remove(0);
-                    }
-                    EOObjectStoreCoordinator sender = changes.coordinator();
-                    //FIXME: ak do sth useful
-                    //processDeletes(changes.deleted(), sender);
-                    //processInserts(changes.inserted(), sender);
-                    processUpdates(changes.updated(), sender);
-                }
-            }
-        }
-        
-        private synchronized void processUpdates(NSDictionary updatesByEntity, EOObjectStoreCoordinator sender) {
-            for(Enumeration entityNames = updatesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
-                String entityName = (String)entityNames.nextElement();
-                EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
-                NSArray snapshots = (NSArray)updatesByEntity.objectForKey(entityName);
-                NSMutableDictionary dbcs = new NSMutableDictionary();
-                for (Enumeration oscs = synchronizer.oscs.objectEnumerator(); oscs.hasMoreElements(); ) {
-                    EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) oscs.nextElement();
-                    if (osc == sender) {
-                        continue;
-                    }
-                    EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
-                    if(dbc == null) {
-                        dbc = databaseContextForEntityNamed(entityName, osc);
-                        dbcs.setObjectForKey(dbc, entityName);
-                    }
-                    EODatabase database = dbc.database();
-                    Enumeration snapshotsEnumerator = snapshots.objectEnumerator();
-                    while (snapshotsEnumerator.hasMoreElements()) {
-                        NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
-                        if (snapshot != null) {
-                            EOGlobalID globalID = entity.globalIDForRow(snapshot);
-                            EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
-                            dbc.lock();
-                            try {
-                                database.forgetSnapshotForGlobalID(globalID);
-                                database.recordSnapshotForGlobalID(snapshot, globalID);
-                            } finally {
-                                dbc.unlock();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        private EODatabaseContext databaseContextForEntityNamed(String entityName, EOObjectStoreCoordinator osc) {
-            return Change.databaseContextForEntityNamed(entityName, osc);
-        }
-        
-    }
-    
-    /**
-     * Holds a change notification (one transaction).
-     * @author ak
-     */
-    private static class Change {
-        private EOObjectStoreCoordinator _coordinator;
-        private NSDictionary _inserted;
-        private NSDictionary _updated;
-        private NSDictionary _deleted;
-        
-        public Change(EOObjectStoreCoordinator osc, NSDictionary userInfo) {
-            _coordinator = osc;
-            _deleted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("updated"), osc);
-            _updated = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("deleted"), osc);
-            _inserted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("inserted"), osc);
-        }
-        /**
-         * Returns a dictionary of snapshots where the key is the entity name and the value an
-         * array of snapshots.
-         * @param objects
-         * @param osc
-         * @return
-         */
-        private NSDictionary snapshotsGroupedByEntity(NSArray objects, EOObjectStoreCoordinator osc) {
-            if(objects != null) {
-                return NSDictionary.EmptyDictionary;
-            }
-            
-            NSMutableDictionary result = new NSMutableDictionary();
-            NSMutableDictionary dbcs = new NSMutableDictionary();
-            
-            for(Enumeration gids = objects.objectEnumerator(); gids.hasMoreElements();) {
-                EOKeyGlobalID globalID = (EOKeyGlobalID) gids.nextElement();
-                String entityName = globalID.entityName();
-                
-                EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
-                if(dbc == null) {
-                    dbc = databaseContextForEntityNamed(entityName, osc);
-                    dbcs.setObjectForKey(dbc, entityName);
-                }
-                NSMutableArray snapshotsForEntity = (NSMutableArray)result.objectForKey(entityName);
-                if(snapshotsForEntity == null) {
-                    snapshotsForEntity = new NSMutableArray();
-                    result.setObjectForKey(snapshotsForEntity, entityName);
-                }
-                synchronized(snapshotsForEntity) {
-                    Object o = dbc.snapshotForGlobalID(globalID);
-                    if(o != null) {
-                        snapshotsForEntity.addObject(o);
-                    }
-                }
-            }
-            return result.immutableClone();
-        }
-        
-        public NSDictionary updated() {
-            return _updated;
-        }
-        
-        public NSDictionary deleted() {
-            return _updated;
-        }
-        
-        public NSDictionary inserted() {
-            return _updated;
-        }
-        
-        public EOObjectStoreCoordinator coordinator() {
-            return _coordinator;
-        }
-        
-        private static synchronized EODatabaseContext databaseContextForEntityNamed(String entityName, EOObjectStoreCoordinator osc) {
-            EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
-            EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
-            return dbc;
-        }
-    }
-    
-    /** 
-     * Synchronizes the different EOF stacks with the use of the ProcessChangesQueue.
-     * 
-     */
-    public static class ObjectStoreCoordinatorSynchronizer {
-        
-        private static ObjectStoreCoordinatorSynchronizer sharedInstance = new ObjectStoreCoordinatorSynchronizer();
-        private NSMutableArray oscs;
-        private static boolean inited = false;
-        private ProcessChangesQueue queueThread;
-        
-        private ObjectStoreCoordinatorSynchronizer() {
-            oscs = new NSMutableArray();
-            queueThread = new ProcessChangesQueue(this);
-            new Thread(queueThread).start();
-            NSNotificationCenter.defaultCenter().addObserver(
-                    this,
-                    new NSSelector("objectStoreWasAdded", new Class[] { NSNotification.class } ),
-                    EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification,
-                    null);
-            NSNotificationCenter.defaultCenter().addObserver(
-                    this,
-                    new NSSelector("objectStoreWasRemoved", new Class[] { NSNotification.class } ),
-                    EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification,
-                    null);
-        }
-        
-        public void objectStoreWasRemoved(NSNotification n) {
-            EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator)n.object();
-            oscs.removeObject(osc);
-            NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
-        }      
-        
-        public void objectStoreWasAdded(NSNotification n) {
-            EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator)n.object();
-            oscs.addObject(osc);
-            
-            NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class } );
-            NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
-        }
-        
-        private static ObjectStoreCoordinatorSynchronizer sharedInstance() {
-            if (!inited) {
-                inited = true;
-                //EOObjectStoreCoordinator.setDefaultCoordinator(osc);
-                //sharedInstance.addObjectStoreCoordinator(EOObjectStoreCoordinator.defaultCoordinator());
-            }
-            return sharedInstance;
-        }
-        
-        public void publishChange(NSNotification n) {
-            if (oscs.count() >= 2) {
-                Change changes = new Change((EOObjectStoreCoordinator)n.object(), n.userInfo());
-                queueThread.addChange(changes);
-            }
-        }
-    }    
 }
 
