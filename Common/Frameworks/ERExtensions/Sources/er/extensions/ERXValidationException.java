@@ -105,7 +105,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     /** caches any set additionalExceptions */
     protected NSArray additionalExceptions;
     
-    /** holds a reference to the context of the ecxception */
+    /** holds a reference to the context of the exception */
     protected volatile NSKeyValueCoding _context;
     
     /** holds a reference to the exception delegate */
@@ -128,7 +128,19 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * @return result of the lookup on the object
      */
     public Object valueForKey(String key) {
-        return com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
+    	try {
+    		return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
+    	} catch(NSKeyValueCoding.UnknownKeyException ex) {
+    		// AK: when we try to fix the bug in ERDirectToWeb templates that specify "context." explicitly 
+    		// by setting up ourselves as the context, we could still run into keys we can't resolve 
+    		// (like "indefiniteArticle") and we just return null for that. Of course we should fix the templates instead
+    		// and then ask the context *before* we ask ourself, so the displayPropertyKey of the context gets
+    		// precedence over our version
+    		if(context() != null && context() != this) {
+    			return context().valueForKey(key);
+    		}
+    		throw ex;
+    	}
     }
 
     /**
@@ -138,7 +150,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * @param key to be set
      */
     public void takeValueForKey(Object obj, String key) {
-        com.webobjects.foundation.NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, obj, key);
+        NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, obj, key);
     }
 
     /**
