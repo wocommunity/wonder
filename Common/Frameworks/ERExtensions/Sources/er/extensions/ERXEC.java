@@ -218,17 +218,23 @@ public class ERXEC extends EOEditingContext {
      */
     protected boolean autoLock(String method) {
         boolean unlock = false;
+        
         if (lockCount == 0 && useAutoLock()) {
             unlock = true;
+            autoLocked = true;
             lock();
-            if (!autoLocked && !isFinalizing) {
-                if(lockLoggerTrace.isDebugEnabled()) {
-                    lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
-                } else {
-                    lockLogger.warn("called method " + method + " without a lock, ec="+this);
-                }
-            }
         }
+
+        if(lockCount == 0) {
+	        if (!autoLocked && !isFinalizing) {
+	            if(lockLoggerTrace.isDebugEnabled()) {
+	                lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
+	            } else {
+	                lockLogger.warn("called method " + method + " without a lock, ec="+this);
+	            }
+	        }
+        }
+        
         return unlock;
     }
 
@@ -252,7 +258,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.reset();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
 
@@ -262,7 +271,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.recordObject(eoenterpriseobject, eoglobalid);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
  
@@ -272,7 +284,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.forgetObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -282,7 +297,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.processRecentChanges();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -292,7 +310,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.updatedObjects();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -302,7 +323,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.registeredObjects();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -312,7 +336,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.insertedObjects();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -322,7 +349,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.deletedObjects();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -332,7 +362,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.setSharedEditingContext(eosharededitingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -342,7 +375,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.objectForGlobalID(eoglobalid);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -352,7 +388,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.globalIDForObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -362,7 +401,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.committedSnapshotForObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -372,7 +414,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.currentEventSnapshotForObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -382,7 +427,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.objectWillChange(obj);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -392,7 +440,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.insertObjectWithGlobalID(eoenterpriseobject, eoglobalid);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -402,7 +453,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.insertObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -412,7 +466,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.deleteObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -422,7 +479,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.hasChanges();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -432,7 +492,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.saveChanges();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -442,7 +505,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.faultForGlobalID(eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -452,7 +518,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.arrayFaultWithSourceGlobalID(eoglobalid, s, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -462,7 +531,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -472,7 +544,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.editingContextDidForgetObjectWithGlobalID(eoeditingcontext, eoglobalid);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -482,7 +557,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.objectsForSourceGlobalID(eoglobalid, s, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -492,7 +570,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.refaultObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -502,7 +583,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.refaultObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -512,7 +596,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.objectsWithFetchSpecification(eofetchspecification, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -522,7 +609,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.saveChangesInEditingContext(eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -532,7 +622,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.refaultAllObjects();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -542,7 +635,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.invalidateObjectsWithGlobalIDs(nsarray);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -552,7 +648,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.invalidateAllObjects();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -562,7 +661,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.lockObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -572,7 +674,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.revert();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -582,7 +687,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.saveChanges(obj);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -592,7 +700,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.refreshObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -602,7 +713,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.undo();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -612,7 +726,10 @@ public class ERXEC extends EOEditingContext {
         try {
             super.redo();
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
@@ -622,7 +739,10 @@ public class ERXEC extends EOEditingContext {
         try {
             return super.invokeRemoteMethod(eoeditingcontext, eoglobalid, s, aclass, aobj);
         } finally {
-            if (unlock) unlock();
+            if (unlock) {
+                unlock();
+                autoLocked = false;
+            }
         }
     }
     
