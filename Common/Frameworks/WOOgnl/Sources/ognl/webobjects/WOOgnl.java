@@ -11,14 +11,14 @@ package ognl.webobjects;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-//import org.apache.log4j.Category;
+//import org.apache.log4j.Logger;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import ognl.*;
 
 public class WOOgnl {
 
-    //public static final Category cat = Category.getInstance("ognl.webobjects.WOOgnl");
+    //public static final Logger log = Logger.getLogger("ognl.webobjects.WOOgnl");
 
     public static final String DefaultWOOgnlBindingFlag = "~";
 
@@ -90,8 +90,8 @@ public class WOOgnl {
                     if (ognlExpression.length() > 0) {
                         WOOgnlAssociation ognlAssociation = new WOOgnlAssociation(ognlExpression);
                         NSArray keys = associations.allKeysForObject(association);
-                        //if (cat.isDebugEnabled())
-                        //    cat.debug("Constructing Ognl association for binding key(s): "
+                        //if (log.isDebugEnabled())
+                        //    log.debug("Constructing Ognl association for binding key(s): "
                         //              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
                         if (keys.count() == 1)
                             associations.setObjectForKey(ognlAssociation, keys.lastObject());
