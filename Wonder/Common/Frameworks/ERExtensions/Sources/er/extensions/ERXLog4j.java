@@ -54,7 +54,14 @@ public class ERXLog4j {
             loadConfiguration();
             cat.info("Log4j configured.");
             setIsLoggingConfigured(true);
+            Category.defaultHierarchy.setCategoryFactory(new ERXFactory());
             _isInitialized = true;
+        }
+    }
+
+    static class ERXFactory implements org.apache.log4j.spi.CategoryFactory {
+        public Category makeNewCategoryInstance(String name) {
+            return new ERXLog(name);
         }
     }
 
