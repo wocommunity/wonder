@@ -1,0 +1,98 @@
+CHANGES FROM 1.0
+================
+
+General
+-------
+- Added ERPlot framework (based on JFreechart) Doesn't do to much but will get 
+  very useful with DynaGrouping.
+- Added ExcelGenerator framework (based on POI)
+- Refactored code from ERMailer to ERCoreBusinessLogic
+- Ant Builds based in property files
+- Eclipse support for most projects
+
+ERExtensions
+------------
+- Tons of fixes and localization improvements
+- ERExtensions and ERUtilities cleaned up, moved and deprecated stuff 
+  to the respective Utilities. There's more to do in this venue, but 
+  it should be done before the release.
+- Autolocking Editing context, very useful for debugging
+- Autounlocking of ECs after the app finished handling the request
+- Primary key improvements (string<->pk) for easier DA apps, now handles
+  compound, non-integer PKs
+- Session store deadlock detection
+- Assertions
+- Navigation improvements
+- More utilities (compression, runtime)
+- XML support for the dynamic elements
+- Improved validation (more EOF exceptions are caught and transformed)
+- Component action redirector
+- PK batching display group, result batching display group
+- Multiple on-the-fly object store coordinators, inter-instance change notification
+- RPC via javascript made easy, cool validation using it
+- Dictionaries and arrays as EOF custom value types
+- Automatic localization of formatters in WOStrings and WOTextFields
+- Scaling Numberformatter subclass (displays value * xx)
+- Path-based request handlers. (Max Muller) See RSS feed generation in the music store for an example:
+http://phobos.apple.com/WebObjects/MZSearch.woa/wa/MRSS/rssGenerator
+- Graceful shutdown via signal handling (Max Muller)
+- Remote file copy methods for use with scp (Wilfredo Sanchez)
+- Property based enabling of statistics logging (Max Muller)
+- Added ability to load optional configurations files during application startup, this is useful for storing database passwords and other sensitive configuration defaults that should not be kept in a cvs repository (Max Muller)
+- Added aggregate SQL functions to ERXEOAccessUtiltiies. Useful when say you want to get the MAX() of say FOO which matches a given qualifier. Allows you to use the power of EOQualifiers with functions in SQL. (Max Muller)
+- Added utility methods for getting the md5 hash of files (Wilfredo Sanchez)
+- Corrected a bug in ERXInQualifier where prefetched relationships would not generate the correct SQL (Patrice Gautier)
+- Added utility methods to get a BigDecimal from the  System Properties (Thomas Burkholder)
+- New Log4J MailAppender that can send components as mails.
+
+ERDirectToWeb
+-------------
+- Assignments cleaned up, you will get deprecation warnings if you use them
+- Complex HTML factored out: the repetitions are now separate components
+- Action buttons: easy to add your own functions to repetitions
+- Embedding made easy
+- Much better project structure in PBX
+- Better ruleset factoring
+- Calendar page now works
+- Grouping page now works
+- New QueryAll page, EditRelationshipPage, ProgressPage
+- Message pages structured more sensibly
+- Better support for the WebAssistant
+- Much better debugging display in the property names
+- Fixed rule system priority handling
+- Refinement of D2W page for handling a sorted toMany relationship (Bruno Posokhow)
+- Addition of ERD2WQueryStringOperator for custom query operators (Bruno Posokhow)
+
+ERNeutralLook
+-------------
+- Improved javascript support in ERNEUEditSortedManyToManyPage (Bruno Posokhow)
+
+ERCoreBusinessLogic
+-------------------
+- Integrated mail delivery TimerTask from ERMailer, makes for easier subclassing (Max Muller)
+- Added ability to store gzipped values for mail content, helps storage size when sending tons of mail (Max Muller)
+- Added archiving function for archiving important mails in a separate table (Max Muller)
+
+DynaReporting
+-------------
+- Custom value conversion (allows you to step in and transform a Timestamp->NSTimestamp)
+- Style sheet support for reports
+- Easier, propertyList based WRQuickReport
+- Better WOOgnl integration
+
+Updating from 1.0
+-----------------
+
+Due to the sheer number of changes, this can not be a binary compatible release, 
+although we tried to break as few things as possible.
+
+- if you use embedded property level components (ERDList+ERDInspect), you should contact the list.
+- if you use the Page templates in ERD2W (not ERNeutralLook) you will have to check
+  your app thoroughly. 
+- if you use sections, you should convert them from 
+  "('Some Section', (someKey, someOtherKey))" to
+  "('(someSection)', someKey, someOtherKey)" and let the localizer handle it.
+- if you use the current localized template, the delimiter has changed from "@" to "@@" to 
+  allow for @count and the like. The old one should still work, but spews out a warning.
+- ERD2W is not compatible with the WebServiceAssistant and JavaClient. Both use custom
+  D2W model subclasses. Do not use them together in one application.
