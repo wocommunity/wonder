@@ -64,8 +64,8 @@ public class ERXFetchSpecificationBatchIterator {
      * @param fetchSpecication to iterate through
      * @param ec editing context to fetch against
      */    
-    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecication, EOEditingContext ec) {
-        this(fetchSpecication, ec, DefaultBatchSize);
+    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification, EOEditingContext ec) {
+        this(fetchSpecification, ec, DefaultBatchSize);
     }
 
     /**
@@ -77,12 +77,28 @@ public class ERXFetchSpecificationBatchIterator {
      * @param ec editing context to fetch against
      * @param batchSize number of objects to fetch in a given batch
      */
-    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecication, EOEditingContext ec, int batchSize) {
+    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification, EOEditingContext ec, int batchSize) {
+        this(fetchSpecification,(NSArray)null,ec,batchSize);
+    }    
+
+    /**
+     * Constructs a fetch specification iterator for a fetch specification,
+     * an optional set of pre-fetched primary keys
+     * and a batch size. All objects will be
+     * fetched from the given editing context. Note that you can switch
+     * out different editing contexts between calls to <b>nextBatch</b>
+     * @param fetchSpecication to iterate through
+     * @param pkeys primary keys to iterate through
+     * @param ec editing context to fetch against
+     * @param batchSize number of objects to fetch in a given batch
+     */
+    public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification, NSArray pkeys, EOEditingContext ec, int batchSize) {
         super();
-        this.fetchSpecification = fetchSpecication;
+        this.fetchSpecification = fetchSpecification;
+        this.primaryKeys = pkeys;
         setEditingContext(ec);
         setBatchSize(batchSize);
-    }    
+    }
 
     /**
      * Gets the batch size.
