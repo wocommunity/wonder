@@ -19,7 +19,7 @@ import com.webobjects.appserver.*;
  *  This subclass is installed when the frameworks loads. 
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
-    static final ERXLogger log = ERXLogger.getLogger(ERXWOForm.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERXWOForm.class);
     WOAssociation _formName;
     
     public ERXWOForm(String name, NSDictionary associations,

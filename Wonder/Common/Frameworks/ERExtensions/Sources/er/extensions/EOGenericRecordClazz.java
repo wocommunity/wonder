@@ -27,7 +27,7 @@ import com.webobjects.eoaccess.*;
  */
 public class EOGenericRecordClazz extends Object {
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getLogger(EOGenericRecordClazz.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(EOGenericRecordClazz.class);
     
     /** caches the clazz objects */
     private static NSMutableDictionary allClazzes = new NSMutableDictionary();

@@ -11,7 +11,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 public class ERXGroupingRepetition extends WOComponent {
 
@@ -19,8 +18,8 @@ public class ERXGroupingRepetition extends WOComponent {
         super(aContext);
     }
 
-    ////////////////////////////////////////////  log4j category  ///////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXGroupingRepetition.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXGroupingRepetition.class);
 
     private NSMutableArray _sections;
     private Object _sectionItem;
@@ -37,14 +36,14 @@ public class ERXGroupingRepetition extends WOComponent {
             if (list!=null) {
                 for (Enumeration e=list.objectEnumerator(); e.hasMoreElements();) {
                     Object item=e.nextElement();
-                    if(cat.isDebugEnabled()) cat.debug("item = "+item);
+                    if(log.isDebugEnabled()) log.debug("item = "+item);
                     setValueForBinding(item,"item");
                     // Sections have to be copiable objects -- no EOs!!
                     Object section=valueForBinding("sectionForItem");
-                    if(cat.isDebugEnabled()) cat.debug("section = "+section);
+                    if(log.isDebugEnabled()) log.debug("section = "+section);
                     if (section==null) section=NULL;
                     Object sectionKey=copiableKeyForSection(section);
-                    if(cat.isDebugEnabled()) cat.debug("copiableKeyForSection = "+sectionKey);
+                    if(log.isDebugEnabled()) log.debug("copiableKeyForSection = "+sectionKey);
                     NSMutableArray itemsForSection=null;
                     if (_sections.containsObject(section))
                         itemsForSection=(NSMutableArray)_itemsPerSection.objectForKey(sectionKey);
@@ -64,7 +63,7 @@ public class ERXGroupingRepetition extends WOComponent {
     public Object copiableKeyForSection(Object section) {
         Object result=section;
         if (section!=null && section!=NULL) {
-            if(cat.isDebugEnabled()) cat.debug("_sectionKey = "+_sectionKey);
+            if(log.isDebugEnabled()) log.debug("_sectionKey = "+_sectionKey);
             if (_sectionKey==null) {
                 _sectionKey=(String)valueForBinding("sectionKey");
             }

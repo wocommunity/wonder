@@ -13,7 +13,6 @@ import com.webobjects.appserver.*;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
-import org.apache.log4j.*;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // Configuration Manager
@@ -53,7 +52,7 @@ import org.apache.log4j.*;
 public class ERXConfigurationManager {
 
     /////////////////////////////////////  log4j category  ////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.extensions.ConfigurationManager");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.extensions.ConfigurationManager");
 
     static ERXConfigurationManager defaultManager=null;
     
@@ -103,7 +102,7 @@ public class ERXConfigurationManager {
     public void resetConnectionDictionaryInModel(EOModel aModel)  {
         if(aModel!=null) {
             String aModelName=aModel.name();
-            cat.debug("Adjusting "+aModelName);
+            log.debug("Adjusting "+aModelName);
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
                 String serverName= stringForKey(aModelName + ".DBServer");
                 serverName=serverName==null ? stringForKey("dbConnectServerGLOBAL") : serverName;
@@ -118,7 +117,7 @@ public class ERXConfigurationManager {
                     if (userName!=null) dict.setObjectForKey(userName,"userName");
                     if (passwd!=null) dict.setObjectForKey(passwd,"password");
                     aModel.setConnectionDictionary(dict);
-                    if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary "+dict);
+                    if (log.isDebugEnabled()) log.debug("New Connection Dictionary "+dict);
                 }
                 
             } else if (aModel.adaptorName().indexOf("Flat")!=-1) {
@@ -145,7 +144,7 @@ public class ERXConfigurationManager {
                 if (path!=null) dict.setObjectForKey(path,"path");
                 if (operatingSystem()==WindowsOperatingSystem) dict.setObjectForKey("\r\n","rowSeparator");
                 aModel.setConnectionDictionary(dict);
-                if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary "+dict);
+                if (log.isDebugEnabled()) log.debug("New Connection Dictionary "+dict);
             } else if (aModel.adaptorName().indexOf("OpenBase")!=-1) {
                 String db= stringForKey(aModelName + ".DBDatabase");
                 db = db ==null ? stringForKey("dbConnectDatabaseGLOBAL") : db;
@@ -160,7 +159,7 @@ public class ERXConfigurationManager {
                     NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
                     newCD.setObjectForKey(h, "hostName");
                     aModel.setConnectionDictionary(newCD);
-                    if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary "+newCD);
+                    if (log.isDebugEnabled()) log.debug("New Connection Dictionary "+newCD);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
                 String url= stringForKey(aModelName + ".URL");
@@ -190,7 +189,7 @@ public class ERXConfigurationManager {
                     }
                     if (plugin!=null) newCD.setObjectForKey(plugin,"plugin");                    
                     aModel.setConnectionDictionary(newCD);
-                    if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary for "+aModel.name()+": "+newCD);
+                    if (log.isDebugEnabled()) log.debug("New Connection Dictionary for "+aModel.name()+": "+newCD);
                 }
             }
             // based on an idea from Stefan Apelt <stefan@tetlabors.de>
@@ -199,10 +198,10 @@ public class ERXConfigurationManager {
             if(f != null) {
                 NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
                 if(dict != null) {
-                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes from " + f);
+                    if (log.isDebugEnabled()) log.debug("Adjusting prototypes from " + f);
                     EOEntity proto = aModel.entityNamed("EOPrototypes");
                     if (proto == null) {
-                        cat.warn("No prototypes found in model named \"" + aModelName + "\", although the EOPrototypesFile default was set!");
+                        log.warn("No prototypes found in model named \"" + aModelName + "\", although the EOPrototypesFile default was set!");
                     } else {
                         aModel.removeEntity(proto);
                         proto = new EOEntity(dict, aModel);
@@ -218,9 +217,9 @@ public class ERXConfigurationManager {
                 // we look for the entity globally so we can have one prototype entity
                 EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
                 if (newPrototypeEntity == null) {
-                    cat.warn("Prototype Entity named "+e+" not found in model "+aModel.name());
+                    log.warn("Prototype Entity named "+e+" not found in model "+aModel.name());
                 } else {
-                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes to those from entity " + e);
+                    if (log.isDebugEnabled()) log.debug("Adjusting prototypes to those from entity " + e);
 
                     EOEntity proto = aModel.entityNamed("EOPrototypes");
                     if(proto != null) aModel.removeEntity(proto);

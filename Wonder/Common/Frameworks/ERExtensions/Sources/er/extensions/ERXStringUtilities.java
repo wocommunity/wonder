@@ -309,7 +309,7 @@ public class ERXStringUtilities extends Object {
             in.close();
             return new String(buffer);
         } catch(Throwable t) {
-            // cat.debug(t.toString());
+            // log.debug(t.toString());
         }
         return null;
     }

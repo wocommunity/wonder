@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
 
 public class ERXToManyRelationship extends WOToManyRelationship {
 
@@ -20,7 +19,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
     }
 
     ////////////////////////////////////////////// log4j category //////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXToManyRelationship.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXToManyRelationship.class);
 
     public boolean isStateless() { return true; }
 

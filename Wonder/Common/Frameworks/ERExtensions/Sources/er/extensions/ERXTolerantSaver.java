@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
 /**
  * This class is pulled directly out of David Neumann's
@@ -28,7 +27,7 @@ import org.apache.log4j.Category;
 public class ERXTolerantSaver {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERXTolerantSaver.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXTolerantSaver.class);
 
     /**
      * Filters a list of relationships for only the ones that
@@ -207,36 +206,36 @@ public class ERXTolerantSaver {
     // we should probably return ints for status and re-throw the original exception
     // in some cases
     public static String save(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
-        if (cat.isDebugEnabled()) cat.debug("TolerantSaver: save...");
+        if (log.isDebugEnabled()) log.debug("TolerantSaver: save...");
         try {
-            //if (cat.isDebugEnabled()) cat.debug("about to save changes...");
+            //if (log.isDebugEnabled()) log.debug("about to save changes...");
             ec.saveChanges();
         } catch(NSValidation.ValidationException eov) {
-            cat.info("TolerantSaver: Caught EOValidationException: " + eov.getMessage());
+            log.info("TolerantSaver: Caught EOValidationException: " + eov.getMessage());
         } catch(EOGeneralAdaptorException e) {
             EOEnterpriseObject failedEO;
             NSDictionary userInfo = (NSDictionary)e.userInfo();
-            //if (cat.isDebugEnabled()) cat.debug("TolerantSaver: Exception occurred name: "+ eName);
-            //if (cat.isDebugEnabled()) cat.debug("Exception occurred e: -------------------------");
-            //if (cat.isDebugEnabled()) cat.debug("Exception occurred e: "+e);
-            //if (cat.isDebugEnabled()) cat.debug("Exception occurred userInfo: "+ userInfo);
-            //if (cat.isDebugEnabled()) cat.debug("Exception occurred e: ^^^^^^^^^^^^^^^^^^^^^^^^^");
+            //if (log.isDebugEnabled()) log.debug("TolerantSaver: Exception occurred name: "+ eName);
+            //if (log.isDebugEnabled()) log.debug("Exception occurred e: -------------------------");
+            //if (log.isDebugEnabled()) log.debug("Exception occurred e: "+e);
+            //if (log.isDebugEnabled()) log.debug("Exception occurred userInfo: "+ userInfo);
+            //if (log.isDebugEnabled()) log.debug("Exception occurred e: ^^^^^^^^^^^^^^^^^^^^^^^^^");
             if(!(userInfo == null)) {
                 String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
                 if (!(eType == null)) {
                     if (eType.equals("EOAdaptorOptimisticLockingFailure")) {
-                        //if (cat.isDebugEnabled()) cat.debug("about to get EOFailedAdaptorOperationKey");
+                        //if (log.isDebugEnabled()) log.debug("about to get EOFailedAdaptorOperationKey");
                         EOAdaptorOperation op = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
                         EODatabaseOperation dbop = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
-                        //if (cat.isDebugEnabled()) cat.debug("about to get _changedValues");
+                        //if (log.isDebugEnabled()) log.debug("about to get _changedValues");
                         if (op != null && dbop != null) {
                             NSDictionary changedValues =  op.changedValues();
-                            //if (cat.isDebugEnabled()) cat.debug("about to get _entity: _changedValues"+ changedValues);
+                            //if (log.isDebugEnabled()) log.debug("about to get _entity: _changedValues"+ changedValues);
                             NSDictionary snapshot = dbop.dbSnapshot();
-                            if (cat.isDebugEnabled()) cat.debug("snapshot"+ snapshot);
+                            if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
                             EOEntity ent = op.entity();
                             String entName = ent.name();
-                            if (cat.isDebugEnabled()) cat.debug("entName"+ entName);
+                            if (log.isDebugEnabled()) log.debug("entName"+ entName);
                             NSArray pkAttribs = ent.primaryKeyAttributes();
                             EOQualifier qual = ERXTolerantSaver.qualifierWithSnapshotAndPks(pkAttribs, snapshot);
                             EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
@@ -244,7 +243,7 @@ public class ERXTolerantSaver {
                             NSArray objs = ec.objectsWithFetchSpecification(fs);
                             if (objs.count() > 0) {
                                 failedEO = (EOEnterpriseObject) objs.objectAtIndex(0);
-                                if (cat.isDebugEnabled()) cat.debug("failedEO"+ failedEO);
+                                if (log.isDebugEnabled()) log.debug("failedEO"+ failedEO);
                                 if (merge) {
                                     //EODatabaseContext dbcontext = ChangeCatcher.databaseContextForEntityNamed (entName, ec);
                                     //EODatabase db = dbcontext.database();
@@ -256,28 +255,28 @@ public class ERXTolerantSaver {
                                     applyChangesToEO(changedValues, failedEO, ent);
                                 }
                             } else {
-                                if (cat.isDebugEnabled()) cat.debug("TolerantSaver: EO was NOT there anymore!");
+                                if (log.isDebugEnabled()) log.debug("TolerantSaver: EO was NOT there anymore!");
                                 failedEO = null;
                             }
                             if (writeAnyWay) {
-                                if (cat.isDebugEnabled()) cat.debug("TolerantSaver: about to save changes again");
+                                if (log.isDebugEnabled()) log.debug("TolerantSaver: about to save changes again");
                                 ec.saveChanges();
                             }
                             return "EOAdaptorOptimisticLockingFailure";
                         } else {
-                            cat.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey. "+e+"\n\n"+e.userInfo());
+                            log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey. "+e+"\n\n"+e.userInfo());
                         }
                     }                    
                 } else {
-                    cat.error("TolerantSaver: No EOAdaptorFailureKey Exception:" + e);
+                    log.error("TolerantSaver: No EOAdaptorFailureKey Exception:" + e);
                     return "Error: No EOAdaptorFailureKey";
                 }
             } else {
-                cat.error("TolerantSaver: No UserInfo: "+e);
+                log.error("TolerantSaver: No UserInfo: "+e);
                 return "Error: No UserInfo";
             }
         }
-        if (cat.isDebugEnabled()) cat.debug("TolerantSaver: save... done");
+        if (log.isDebugEnabled()) log.debug("TolerantSaver: save... done");
         return null;
     }
 }

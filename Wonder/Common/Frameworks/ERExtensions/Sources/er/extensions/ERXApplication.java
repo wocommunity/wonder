@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
-import org.apache.log4j.Category;
 
 /**
  *  ERXApplication is the abstract superclass of WebObjects applications
@@ -26,7 +25,7 @@ import org.apache.log4j.Category;
 public abstract class ERXApplication extends WOApplication {
 
     /** logging support */
-    public static final ERXLogger cat = ERXLogger.getLogger(ERXApplication.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);
 
     // FIXME: Should correct all references to WORequestHandler.DidHandleRequestNotification and then delete this ivar.
     public static final String WORequestHandlerDidHandleRequestNotification = WORequestHandler.DidHandleRequestNotification;
@@ -73,7 +72,7 @@ public abstract class ERXApplication extends WOApplication {
     public void run() {
         int timeToLive=ERXProperties.intForKey("ERTimeToLive");
         if (timeToLive > 0) {
-            cat.info("Instance will live "+timeToLive+" seconds.");
+            log.info("Instance will live "+timeToLive+" seconds.");
             NSLog.out.appendln("Instance will live "+timeToLive+" seconds.");
             NSTimestamp now=new NSTimestamp();
             NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
@@ -82,7 +81,7 @@ public abstract class ERXApplication extends WOApplication {
         }
         int timeToDie=ERXProperties.intForKey("ERTimeToDie");
         if (timeToDie > 0) {
-            cat.info("Instance will not live past "+timeToDie+":00.");
+            log.info("Instance will not live past "+timeToDie+":00.");
             NSLog.out.appendln("Instance will not live past "+timeToDie+":00.");
             NSTimestamp now=new NSTimestamp();
             int s=(timeToDie-ERXTimestampUtility.hourOfDay(now))*3600-ERXTimestampUtility.minuteOfHour(now)*60;
@@ -125,10 +124,10 @@ public abstract class ERXApplication extends WOApplication {
      *  called
      */
     public void startRefusingSessions() {
-        cat.info("Refusing new sessions");
+        log.info("Refusing new sessions");
         NSLog.out.appendln("Refusing new sessions");
         refuseNewSessions(true);
-        cat.info("Registering kill timer");
+        log.info("Registering kill timer");
         NSTimestamp now=new NSTimestamp();
         NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, 1800);
         WOTimer t=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
@@ -139,7 +138,7 @@ public abstract class ERXApplication extends WOApplication {
      *  Killing the instance will log a 'Forcing exit' message and then call <code>System.exit(1)</code>
      */
     public void killInstance() {
-        cat.info("Forcing exit");
+        log.info("Forcing exit");
         NSLog.out.appendln("Forcing exit");
         System.exit(1);
     }
@@ -237,7 +236,7 @@ public abstract class ERXApplication extends WOApplication {
                 if (context.session().statistics() != null)
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
         }
-        cat.warn("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
+        log.warn("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
         return super.handleException(exception, context);
     }    
 

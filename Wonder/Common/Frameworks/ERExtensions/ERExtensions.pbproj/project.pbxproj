@@ -1041,7 +1041,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -2005,7 +2005,7 @@
 			refType = 2;
 		};
 		F59C544902C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXBatchNavigationBar.wo;
@@ -2021,7 +2021,7 @@
 			refType = 2;
 		};
 		F59C544F02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXBatchNavigationBarInForm.wo;
@@ -2037,7 +2037,7 @@
 			refType = 2;
 		};
 		F59C545502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXCheckboxMatrix.wo;
@@ -2053,7 +2053,7 @@
 			refType = 2;
 		};
 		F59C545B02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXCollapsibleComponentContent.wo;
@@ -2069,7 +2069,7 @@
 			refType = 2;
 		};
 		F59C546102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXColoredTabPanel.wo;
@@ -2085,7 +2085,7 @@
 			refType = 2;
 		};
 		F59C546702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDebugMarker.wo;
@@ -2101,7 +2101,7 @@
 			refType = 2;
 		};
 		F59C546D02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDHTMLComponent.wo;
@@ -2117,7 +2117,7 @@
 			refType = 2;
 		};
 		F59C547302C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDirectActionHyperlink.wo;
@@ -2133,7 +2133,7 @@
 			refType = 2;
 		};
 		F59C547802C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDirectActionImage.wo;
@@ -2149,7 +2149,7 @@
 			refType = 2;
 		};
 		F59C547E02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDisplayDataAsString.wo;
@@ -2165,7 +2165,7 @@
 			refType = 2;
 		};
 		F59C548402C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEditingContextInspector.wo;
@@ -2181,7 +2181,7 @@
 			refType = 2;
 		};
 		F59C548A02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEditURL.wo;
@@ -2197,7 +2197,7 @@
 			refType = 2;
 		};
 		F59C549002C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEmptyComponent.wo;
@@ -2213,7 +2213,7 @@
 			refType = 2;
 		};
 		F59C549602C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEqualConditional.wo;
@@ -2229,7 +2229,7 @@
 			refType = 2;
 		};
 		F59C549C02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXErrorDictionaryPanel.wo;
@@ -2245,7 +2245,7 @@
 			refType = 2;
 		};
 		F59C54A202C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXFakeRelationship.wo;
@@ -2261,7 +2261,7 @@
 			refType = 2;
 		};
 		F59C54A802C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXFixedLengthString.wo;
@@ -2277,7 +2277,7 @@
 			refType = 2;
 		};
 		F59C54AE02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXGraph.wo;
@@ -2293,7 +2293,7 @@
 			refType = 2;
 		};
 		F59C54B502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXGroupingRepetition.wo;
@@ -2309,7 +2309,7 @@
 			refType = 2;
 		};
 		F59C54BB02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXGroupingTable.wo;
@@ -2325,7 +2325,7 @@
 			refType = 2;
 		};
 		F59C54C102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXHyperlinkKeyValueSetter.wo;
@@ -2341,7 +2341,7 @@
 			refType = 2;
 		};
 		F59C54C702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXImageTabPanel.wo;
@@ -2357,7 +2357,7 @@
 			refType = 2;
 		};
 		F59C54CD02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXInstanceOfConditional.wo;
@@ -2373,7 +2373,7 @@
 			refType = 2;
 		};
 		F59C54D302C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSAutoClosePage.wo;
@@ -2389,7 +2389,7 @@
 			refType = 2;
 		};
 		F59C54D902C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSConfirmPanel.wo;
@@ -2405,7 +2405,7 @@
 			refType = 2;
 		};
 		F59C54DF02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSCookiesConditional.wo;
@@ -2421,7 +2421,7 @@
 			refType = 2;
 		};
 		F59C54E502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSFormForTarget.wo;
@@ -2437,7 +2437,7 @@
 			refType = 2;
 		};
 		F59C54EB02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo;
@@ -2453,7 +2453,7 @@
 			refType = 2;
 		};
 		F59C54F102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSOpenWindowSubmitButton.wo;
@@ -2469,7 +2469,7 @@
 			refType = 2;
 		};
 		F59C54F702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSPopUpRelationPicker.wo;
@@ -2485,7 +2485,7 @@
 			refType = 2;
 		};
 		F59C54FD02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSPopupSelector.wo;
@@ -2501,7 +2501,7 @@
 			refType = 2;
 		};
 		F59C550302C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSTwoLevelEditToOneRelationship.wo;
@@ -2517,7 +2517,7 @@
 			refType = 2;
 		};
 		F59C550902C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLinkRandomizer.wo;
@@ -2533,7 +2533,7 @@
 			refType = 2;
 		};
 		F59C550F02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXListContainsItemConditional.wo;
@@ -2549,7 +2549,7 @@
 			refType = 2;
 		};
 		F59C551502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXListDisplay.wo;
@@ -2565,7 +2565,7 @@
 			refType = 2;
 		};
 		F59C551B02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLocalizedString.wo;
@@ -2581,7 +2581,7 @@
 			refType = 2;
 		};
 		F59C552102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLog4JConfiguration.wo;
@@ -2597,7 +2597,7 @@
 			refType = 2;
 		};
 		F59C552702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXMailTo.wo;
@@ -2613,7 +2613,7 @@
 			refType = 2;
 		};
 		F59C552D02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXMandatoryFieldMarker.wo;
@@ -2629,7 +2629,7 @@
 			refType = 2;
 		};
 		F59C553902C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXNonNullConditional.wo;
@@ -2645,7 +2645,7 @@
 			refType = 2;
 		};
 		F59C553F02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXNonZeroConditional.wo;
@@ -2661,7 +2661,7 @@
 			refType = 2;
 		};
 		F59C554502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXOncePerRequestConditional.wo;
@@ -2677,7 +2677,7 @@
 			refType = 2;
 		};
 		F59C554B02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXOptionalForm.wo;
@@ -2693,7 +2693,7 @@
 			refType = 2;
 		};
 		F59C555102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXPluralString.wo;
@@ -2709,7 +2709,7 @@
 			refType = 2;
 		};
 		F59C555702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXQueryRecentDates.wo;
@@ -2725,7 +2725,7 @@
 			refType = 2;
 		};
 		F59C555D02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXRadioButtonMatrix.wo;
@@ -2741,7 +2741,7 @@
 			refType = 2;
 		};
 		F59C556302C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXRepeatingTable.wo;
@@ -2757,7 +2757,7 @@
 			refType = 2;
 		};
 		F59C556902C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXSingleButton.wo;
@@ -2773,7 +2773,7 @@
 			refType = 2;
 		};
 		F59C556F02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXSortOrder.wo;
@@ -2789,7 +2789,7 @@
 			refType = 2;
 		};
 		F59C557502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStringListPicker.wo;
@@ -2805,7 +2805,7 @@
 			refType = 2;
 		};
 		F59C557B02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStringWithLineBreaks.wo;
@@ -2821,7 +2821,7 @@
 			refType = 2;
 		};
 		F59C558102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStyleSheet.wo;
@@ -2837,7 +2837,7 @@
 			refType = 2;
 		};
 		F59C558702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXSuccess.wo;
@@ -2853,7 +2853,7 @@
 			refType = 2;
 		};
 		F59C558D02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXTable.wo;
@@ -2869,7 +2869,7 @@
 			refType = 2;
 		};
 		F59C559302C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXTableWithBorder.wo;
@@ -2885,7 +2885,7 @@
 			refType = 2;
 		};
 		F59C559902C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXTabPanel.wo;
@@ -2901,7 +2901,7 @@
 			refType = 2;
 		};
 		F59C559F02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXToManyRelationship.wo;
@@ -2917,7 +2917,7 @@
 			refType = 2;
 		};
 		F59C55A502C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXToOneRelationship.wo;
@@ -2933,7 +2933,7 @@
 			refType = 2;
 		};
 		F59C55AB02C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXUnreadMarker.wo;
@@ -2949,7 +2949,7 @@
 			refType = 2;
 		};
 		F59C55B102C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXWOTestInterface.wo;
@@ -2965,7 +2965,7 @@
 			refType = 2;
 		};
 		F59C55B702C4557A01000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXWOTestResult.wo;
@@ -5836,7 +5836,7 @@
 			};
 		};
 		F6DC3ABB02E4A3A40FCF0E72 = {
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			generatedFileNames = (

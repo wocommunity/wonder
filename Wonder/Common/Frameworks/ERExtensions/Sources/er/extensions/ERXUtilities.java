@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import java.util.Enumeration;
 import java.util.TimeZone;
 import java.io.*;
@@ -23,7 +22,7 @@ import java.io.*;
 public class ERXUtilities {
 
     /** logging support */
-    public static Category cat = Category.getInstance(ERXUtilities.class);
+    public static ERXLogger log = ERXLogger.getERXLogger(ERXUtilities.class);
 
     /**
      * Adds an object to another objects relationship. Has
@@ -86,8 +85,8 @@ public class ERXUtilities {
     public static EOEnterpriseObject createEO(String entityName,
                                               EOEditingContext editingContext,
                                               NSDictionary objectInfo) {
-        if (cat.isDebugEnabled())
-            cat.debug("Creating object of type: " + entityName);
+        if (log.isDebugEnabled())
+            log.debug("Creating object of type: " + entityName);
         EOClassDescription cd=EOClassDescription.classDescriptionForEntityName(entityName);
         if (cd==null)
             throw new RuntimeException("Could not find class description for entity named "+entityName);
@@ -260,7 +259,7 @@ public class ERXUtilities {
             dbContext.unlock();
         } catch (Exception e) {
             dbContext.unlock();
-            cat.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e);
+            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e);
         }
         return primaryKey;
     }
@@ -329,7 +328,7 @@ public class ERXUtilities {
             e.setCachesObjects(false);
             e.removeSharedObjectFetchSpecificationByName("FetchAll");
         } else {
-            cat.warn("MakeSharedEntityEditable: enity already editable: " + entityName);
+            log.warn("MakeSharedEntityEditable: enity already editable: " + entityName);
         }
     }
 
@@ -541,7 +540,7 @@ public class ERXUtilities {
             if (bundle.name() != null)
                 frameworkNames.addObject(bundle.name());
             else
-                cat.warn("Null framework name for bundle: " + bundle);
+                log.warn("Null framework name for bundle: " + bundle);
         }
         return frameworkNames;
     }

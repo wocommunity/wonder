@@ -11,10 +11,9 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
 
 public class ERXFakeRelationship extends WOComponent {
-    private static final Category cat = Category.getInstance(ERXFakeRelationship.class.getName());
+    private static final ERXLogger log = ERXLogger.getERXLogger(ERXFakeRelationship.class.getName());
 
     // temps for our children
     NSArray theList;
@@ -117,7 +116,7 @@ public class ERXFakeRelationship extends WOComponent {
 
 	// this could be more bullet proof
 	boolean hasStringPk = pk.className().equals("java.lang.String");
-	cat.debug(pk.className());
+	log.debug(pk.className());
 
 	while(e.hasMoreElements()) {
 	    String s = (String)e.nextElement();
@@ -133,7 +132,7 @@ public class ERXFakeRelationship extends WOComponent {
 		    selections.addObject(eo);
 		}
 	    } catch(Exception ex) {
-		cat.warn(ex + " with pkValue " + pkValue);
+		log.warn(ex + " with pkValue " + pkValue);
 		// we do nothing here, when we reconstruct the array on setSelection, we simply ignore this value
 	    }
 	}

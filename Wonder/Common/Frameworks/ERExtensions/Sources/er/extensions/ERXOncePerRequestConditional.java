@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 /** 
  * ERXOncePerRequestConditional is a component that will 
@@ -19,7 +18,7 @@ import org.apache.log4j.Category;
  */
 public class ERXOncePerRequestConditional extends ERXStatelessComponent {
     /** logging support */
-    static final Category cat = Category.getInstance(ERXOncePerRequestConditional.class.getName());
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXOncePerRequestConditional.class.getName());
     
     String keyName = null;
     int currentStage = -1;
@@ -98,8 +97,8 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 
     public boolean displayContent() {
 	int showCount = displayCountForKey(keyName() + "--" + currentStage);
-        if(cat.isDebugEnabled())
-            cat.debug("displayContent - showCount: " + showCount + " stage:" + currentStage);
+        if(log.isDebugEnabled())
+            log.debug("displayContent - showCount: " + showCount + " stage:" + currentStage);
 	return showCount == 0;
     }
 }

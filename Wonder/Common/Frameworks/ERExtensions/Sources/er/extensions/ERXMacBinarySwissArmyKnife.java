@@ -9,7 +9,6 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
 
 /* This draws liberally from code by Gregory L. Guerin:
 
@@ -23,7 +22,7 @@ import org.apache.log4j.Category;
 public class ERXMacBinarySwissArmyKnife {
 
     /////////////////////////////////////////  log4j category  //////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXMacBinarySwissArmyKnife.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXMacBinarySwissArmyKnife.class);
 
     /**
     ** Offsets in header where the fields are located.

@@ -12,7 +12,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
 
 public class ERXGraph extends WOComponent {
 
@@ -20,7 +19,7 @@ public class ERXGraph extends WOComponent {
         super(aContext);
     }
 
-    public static final Category cat = Category.getInstance(ERXGraph.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXGraph.class);
     
     public boolean synchronizesVariablesWithBindings() { return false; }
 
@@ -36,8 +35,8 @@ public class ERXGraph extends WOComponent {
             plot.addContentsOfDictionary((NSDictionary)valueForBinding("extraBindings"));
         plot.addContentsOfDictionary(plotsDictionary());
         initPlotSettings(plot);
-        if(cat.isDebugEnabled())
-            cat.debug("Plot settings: " +plot.settings());
+        if(log.isDebugEnabled())
+            log.debug("Plot settings: " +plot.settings());
         plot.generateGraph();
         return plot.imageData();
     }

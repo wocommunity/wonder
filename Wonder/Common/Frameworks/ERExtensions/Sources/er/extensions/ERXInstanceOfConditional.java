@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.lang.*;
-import org.apache.log4j.Category;
 
 /**
  * Conditional component that tests if an object is an instance of a given
@@ -30,7 +29,7 @@ public class ERXInstanceOfConditional extends WOComponent {
     }
 
     /** logging support */
-    public final static Category log = Category.getInstance(ERXInstanceOfConditional.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXInstanceOfConditional.class);
 
     /** component is stateless */
     public boolean isStateless() { return true; }

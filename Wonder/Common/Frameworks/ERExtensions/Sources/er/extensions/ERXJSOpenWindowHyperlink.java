@@ -11,7 +11,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.lang.*;
-import org.apache.log4j.Category;
 
 public class ERXJSOpenWindowHyperlink extends WOComponent {
 
@@ -19,8 +18,8 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
         super(aContext);
     }
 
-    ///////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXJSOpenWindowHyperlink.class);
+    ///** logging support *//
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJSOpenWindowHyperlink.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }

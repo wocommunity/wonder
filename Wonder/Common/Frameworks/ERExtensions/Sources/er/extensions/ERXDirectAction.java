@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
 /**
  * Basic collector for direct action additions. This class currectly adds two
@@ -20,7 +19,7 @@ import org.apache.log4j.Category;
 public class ERXDirectAction extends WODirectAction {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERXDirectAction.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXDirectAction.class);
 
     /** holds a reference to the current browser used for this session */
     private ERXBrowser browser;

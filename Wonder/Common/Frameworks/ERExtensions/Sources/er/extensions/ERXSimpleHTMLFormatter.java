@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import java.text.*;
 
 /**
@@ -20,7 +19,7 @@ import java.text.*;
 public class ERXSimpleHTMLFormatter extends java.text.Format {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERXSimpleHTMLFormatter.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSimpleHTMLFormatter.class);
 
     /** holds the HTML return string */
     private final static String HTMLReturn = "<br>";

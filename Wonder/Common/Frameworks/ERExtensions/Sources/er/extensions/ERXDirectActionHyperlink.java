@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 /**
  * This component can be used for two things:<br/>
@@ -51,7 +50,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
     public final static String SUFFIX_MARKER="**SUFFIX**";
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXDirectActionHyperlink.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDirectActionHyperlink.class);
     /**
      * Holds the default entity name separator
      * that is used when objects are encoded into urls.
@@ -267,7 +266,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
                 if (pkDict != null && pkDict.allValues().count() == 1)
                     pk = pkDict.allValues().lastObject().toString();
                 else
-                    cat.warn("Attempting to use an eo: " + eo + " that implements GeneratesPrimaryKeyInterface that gave back: " + pkDict);
+                    log.warn("Attempting to use an eo: " + eo + " that implements GeneratesPrimaryKeyInterface that gave back: " + pkDict);
             }
             if (pk == null)
                 throw new RuntimeException("Primary key is null for object: " + eo);
@@ -292,14 +291,14 @@ public class ERXDirectActionHyperlink extends WOComponent {
      */
     // MOVEME: EOGenericRecordClazz
     public static NSArray decodeEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary values) {
-        if (cat.isDebugEnabled()) cat.debug("values = "+values);
+        if (log.isDebugEnabled()) log.debug("values = "+values);
         NSMutableArray encoded = new NSMutableArray();
         NSArray temp = (NSArray)values.objectForKey("sep");
         String separator = temp != null && temp.count() > 0 ? (String)temp.lastObject() : null;
         if (temp != null && temp.count() > 1)
-            cat.warn("Found multiple separators in form values: " + temp);
+            log.warn("Found multiple separators in form values: " + temp);
         if (separator == null) {
-            cat.warn("Form value: sep not found, using default entity name separator: " + DefaultEntityNameSeparator);
+            log.warn("Form value: sep not found, using default entity name separator: " + DefaultEntityNameSeparator);
             separator = DefaultEntityNameSeparator;  
         } 
         for (Enumeration e = values.keyEnumerator(); e.hasMoreElements();) {
@@ -307,7 +306,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
             if (key.indexOf(separator) != -1) {
                 boolean isEncrypted = key.indexOf(separator + "E") != -1;
                 String entityName = key.substring(0, key.indexOf(separator));
-                cat.debug("Decoding entity named: " + entityName);
+                log.debug("Decoding entity named: " + entityName);
                 // FIXME: This needs to be made case insensitive and should be getting the
                 //        model group from the ec
                 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -328,14 +327,14 @@ public class ERXDirectActionHyperlink extends WOComponent {
                                 if (eo != null)
                                     encoded.addObject(eo);
                             } else {
-                                cat.warn("Value null after blowfish decode: " + values.objectForKey(key));
+                                log.warn("Value null after blowfish decode: " + values.objectForKey(key));
                             }
                         }
                     } else {
-                        cat.warn("Entity: " + entity.name() + " has compound pk. Attributes: " + entity.primaryKeyAttributes());
+                        log.warn("Entity: " + entity.name() + " has compound pk. Attributes: " + entity.primaryKeyAttributes());
                     }
                 } else {                    
-                    cat.warn("Unable to find entity for name: " + entityName);
+                    log.warn("Unable to find entity for name: " + entityName);
                 }
             }
         }

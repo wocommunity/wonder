@@ -85,7 +85,7 @@ import java.util.*;
 public class ERXBrowserFactory {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getLogger(ERXBrowserFactory.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBrowserFactory.class);
 
     private static final String _DEFAULT_BROWSER_CLASS_NAME = "er.extensions.ERXBasicBrowser";
     

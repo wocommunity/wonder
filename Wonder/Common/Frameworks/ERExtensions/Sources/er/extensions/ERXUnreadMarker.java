@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 // Nice little unread marker.  Subclass in specific look frameworks to provide custom
 //	unread marker images.
@@ -21,7 +20,7 @@ public class ERXUnreadMarker extends WOComponent {
     }
 
     /////////////////////////////////  log4j category  /////////////////////////////////
-    public static Category cat = Category.getInstance(ERXUnreadMarker.class);
+    public static ERXLogger log = ERXLogger.getERXLogger(ERXUnreadMarker.class);
     
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }

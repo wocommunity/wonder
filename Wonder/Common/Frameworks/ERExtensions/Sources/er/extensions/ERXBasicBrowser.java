@@ -54,7 +54,7 @@ import java.util.*;
 public class ERXBasicBrowser extends ERXBrowser {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getLogger(ERXBasicBrowser.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBasicBrowser.class);
 
     private final String _browserName;
     private final String _version;

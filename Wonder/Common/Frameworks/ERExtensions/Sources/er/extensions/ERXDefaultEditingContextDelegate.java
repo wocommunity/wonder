@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 /**
  * Default editing context delegate. This delegate
@@ -31,9 +30,9 @@ import org.apache.log4j.Category;
 public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXDefaultEditingContextDelegate.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDefaultEditingContextDelegate.class);
     /** logging support for modified objects */
-    public static final Category catMod = Category.getInstance("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
+    public static final ERXLogger logMod = ERXLogger.getERXLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
 
     /**
      * flag that can tell if the editing context is in
@@ -61,7 +60,7 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
      */
     public void editingContextWillSaveChanges(EOEditingContext ec) throws Throwable {
         try {
-            if (cat.isDebugEnabled()) cat.debug("EditingContextWillSaveChanges: start calling will*");            
+            if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: start calling will*");            
             _isInWillSaveChanges=true;                      
             if (ec != null && ec.hasChanges()) {
                 NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, ec);
@@ -89,18 +88,18 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
                             ((ERXGenericRecord)eo).willInsert();
                     }
                 }                
-                if (cat.isDebugEnabled()) cat.debug("EditingContextWillSaveChanges: done calling will*");
-                if (catMod.isDebugEnabled()) {
-                    if (ec.updatedObjects()!=null) catMod.debug("** Updated Objects "+ec.updatedObjects().count()+" - "+ec.updatedObjects());
-                    if (ec.insertedObjects()!=null) catMod.debug("** Inserted Objects "+ec.insertedObjects().count()+" - "+ec.insertedObjects());
-                    if (ec.deletedObjects()!=null) catMod.debug("** Deleted Objects "+ec.deletedObjects().count()+" - "+ec.deletedObjects());
+                if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: done calling will*");
+                if (logMod.isDebugEnabled()) {
+                    if (ec.updatedObjects()!=null) logMod.debug("** Updated Objects "+ec.updatedObjects().count()+" - "+ec.updatedObjects());
+                    if (ec.insertedObjects()!=null) logMod.debug("** Inserted Objects "+ec.insertedObjects().count()+" - "+ec.insertedObjects());
+                    if (ec.deletedObjects()!=null) logMod.debug("** Deleted Objects "+ec.deletedObjects().count()+" - "+ec.deletedObjects());
                 }
             }
         } catch (Throwable e) {
-            if (cat.isDebugEnabled()) // i want this stack trace shown in one of the two categories, but not both
-                cat.debug("Stack Trace:\n" + ERXUtilities.stackTrace(e));
-            else if (catMod.isDebugEnabled())
-                catMod.debug("Stack Trace:\n" + ERXUtilities.stackTrace(e));
+            if (log.isDebugEnabled()) // i want this stack trace shown in one of the two categories, but not both
+                log.debug("Stack Trace:\n" + ERXUtilities.stackTrace(e));
+            else if (logMod.isDebugEnabled())
+                logMod.debug("Stack Trace:\n" + ERXUtilities.stackTrace(e));
             try {
                 StringBuffer buffer = new StringBuffer();
                 buffer.append("The following exception has occurred with ec: " + ec + "\n" + ERXUtilities.stackTrace(e) + "\n");
@@ -125,9 +124,9 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
                         buffer.append(toDebugString((EOEnterpriseObject)en.nextElement()));
                     }
                 }
-                catMod.error(buffer);
+                logMod.error(buffer);
             } catch (Throwable e2) {
-                cat.error("Caught "+e2+" trying to print editing context state");
+                log.error("Caught "+e2+" trying to print editing context state");
             } finally {
                 _isInWillSaveChanges=false;                
             }

@@ -10,12 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.*;
 
 public class ERXJSPopupSelector extends WOComponent {
 
-    ///////////////////////////////////////  log4j category  /////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXJSPopupSelector.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJSPopupSelector.class);
     
     
     public ERXJSPopupSelector(WOContext aContext) {
@@ -32,7 +31,7 @@ public class ERXJSPopupSelector extends WOComponent {
         if (list!=null && item!=null) {
             int index=list.indexOfObject(item);
             if (index==-1) {
-                cat.info(item+" could not be found in "+list);
+                log.info(item+" could not be found in "+list);
             }
             // by default we assume that there is one more item on top of the list (i.e. - none - or - pick one -)
             // when the relationship is mandatory, this is not the case
