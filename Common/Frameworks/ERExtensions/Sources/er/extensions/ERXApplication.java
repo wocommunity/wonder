@@ -663,6 +663,8 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     /** holds the info on checked-out sessions */
     private Hashtable _sessions = new Hashtable();
 
+    private static final ERXFormatterFactory formatterProvider = new ERXFormatterFactory();
+
     /** Holds info about where and who checked out */
     private class SessionInfo {
         Exception _trace = new Exception();
@@ -734,4 +736,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     public Number sessionTimeOutInMinutes() {
         return new Integer(sessionTimeOut().intValue() / 60);
     }
+    
+    public ERXFormatterFactory formatterFactory() {
+        return formatterProvider;
+    }
 }
+
+
