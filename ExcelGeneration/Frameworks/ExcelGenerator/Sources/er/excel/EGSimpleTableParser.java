@@ -252,8 +252,10 @@ public class EGSimpleTableParser {
     				&& "tr".equals(rowNode.getLocalName().toLowerCase())) {
     			NSMutableDictionary rowDict = new NSMutableDictionary(sheetDict);
     			addEntriesFromNode(rowDict, rowNode);
-    			
-    			//log.info("Row: " + rowNum);
+
+                        if(log.isDebugEnabled()) {
+                            log.debug("Row: " + rowNum);
+                        }
     			HSSFRow row = sheet.createRow(rowNum);
     			
     			rowNum = rowNum + 1;
@@ -274,8 +276,10 @@ public class EGSimpleTableParser {
     					
     					String cellTypeName = dictValueForKey(cellDict, "cellType", "CELL_TYPE_NUMERIC");
     					String cellFormatName = dictValueForKey(cellDict, "cellFormat", "0.00;-;-0.00");
-    					
-    					log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
+
+                                        if(log.isDebugEnabled()) {
+                                            log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
+                                        }
     					Integer cellType = (Integer)ERXKeyValueCodingUtilities.classValueForKey(HSSFCell.class, cellTypeName);
     					
     					switch(cellType.intValue()) {
@@ -340,7 +344,10 @@ public class EGSimpleTableParser {
     							cell.setCellStyle(style);
     						}
     					}
-    					//log.info("Cell: " + value);
+
+                                        if(log.isDebugEnabled()) {
+                                            log.debug("Cell: " + value);
+                                        }
     				}
     			}
     		}
@@ -445,7 +452,9 @@ public class EGSimpleTableParser {
     		}
     		
     		_styles.setObjectForKey(cellStyle, dict);
-    		log.info("Created style (" + cellStyleName + "): " + dict);
+                if(log.isDebugEnabled()) {
+                    log.debug("Created style (" + cellStyleName + "): " + dict);
+                }
     	}
     	return cellStyle;
     }
