@@ -3,7 +3,7 @@ D2WSwitchComponent: ERD2WSwitchComponent {
 	_entityName = ^entityName;
 	_settings = ^settings;
 	_task = "inspect";
-	_unroll = YES;
+	_unroll = true;
 	displayKeys = ^displayKeys;
 	nextPage = ^nextPage;
 	nextPageDelegate = actionPageDelegate;
