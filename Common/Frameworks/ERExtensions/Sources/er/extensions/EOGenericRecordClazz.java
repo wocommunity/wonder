@@ -18,6 +18,8 @@ The methods from EOUtilities are mirrored here so you don't have to import EOAcc
 */
 
 public class EOGenericRecordClazz extends Object {
+    public static final ERXLogger log = ERXLogger.getLogger(EOGenericRecordClazz.class);
+    
     private String _entityName;
 
     private static NSMutableDictionary allClazzes = new NSMutableDictionary();
@@ -52,7 +54,15 @@ public class EOGenericRecordClazz extends Object {
             clazz.setEntityName(entityName);
             allClazzes.setObjectForKey(clazz,entityName);
         }
+        if(log.isDebugEnabled()) {
+            log.debug("clazzForEntityNamed '" +entityName+ "': " + clazz.getClass().getName());
+        }
         return clazz;
+    }
+    
+    public EOEnterpriseObject createAndInsertObject(EOEditingContext ec) {
+        EOEnterpriseObject eo = ERXUtilities.createEO(entityName(), ec);
+        return eo;
     }
     
     public NSArray allObjects(EOEditingContext ec) {
