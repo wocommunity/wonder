@@ -102,10 +102,10 @@ There are three ways to use this script:
             <param name="use.wonder.changenotification" value="true" />
 
             <!-- set this if you want to use Wonder's DynaGrouping, or leave out if not -->
-            <param name="use.wonder.grouping" value="true" />
+            <param name="use.grouping" value="true" />
 
             <!-- set this if you want to use Wonder's DynaReporting, or leave out if not -->
-            <param name="use.wonder.reporting" value="true" />
+            <param name="use.reporting" value="true" />
 
             <!-- set this if you want to use your own built frameworks, or leave out if not -->
             <!-- You have up to 4 of them and you can use patterns -->
@@ -379,6 +379,9 @@ There are three ways to use this script:
                 <include name="ERDirectToWeb.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.wonder.logic"> 
+                <include name="ERPrototypes.framework" />
+            </frameworks>
+            <frameworks root="${wonder.lib.root}" if="use.wonder.logic"> 
                 <include name="ERCoreBusinessLogic.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.wonder.mail"> 
@@ -558,6 +561,16 @@ There are three ways to use this script:
         </antcall>
     </target>
     
+    <target name="ERPrototypes.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERPrototypes" />
+            <param name="project.dir" value="Common/Frameworks/ERPrototypes" />
+
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
+
     <target name="ERCoreBusinessLogic.all">
         <antcall target="global.framework" >
             <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
@@ -901,7 +914,7 @@ There are three ways to use this script:
     </target>
 
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all, ERCalendar.all" />
+    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all, ERCalendar.all" />
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
     <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
@@ -933,6 +946,9 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERDirectToWeb" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="ERPrototypes" />
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERCoreBusinessLogic" />
@@ -1046,6 +1062,9 @@ There are three ways to use this script:
             <param name="project.name" value="ERDirectToWeb" />
         </antcall>
         <antcall target="global.web.framework" >
+            <param name="project.name" value="ERPrototypes" />
+        </antcall>
+        <antcall target="global.web.framework" >
             <param name="project.name" value="ERCoreBusinessLogic" />
         </antcall>
         <antcall target="global.web.framework" >
@@ -1153,6 +1172,9 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERDirectToWeb" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="ERPrototypes" />
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERCoreBusinessLogic" />
