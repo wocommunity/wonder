@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.*;
+import java.lang.reflect.Constructor;
 
 /** KVC access to localization.
 Monitors a set of files in all frameworks and returns a string given a key for a language.
@@ -80,7 +81,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     
     static NSMutableDictionary localizers = new NSMutableDictionary();
     
-    private NSMutableDictionary cache;
+    protected NSMutableDictionary cache;
     private NSMutableDictionary createdKeys;
     private String NOT_FOUND = "**NOT_FOUND**";
 
@@ -118,14 +119,20 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         l = (ERXLocalizer)localizers.objectForKey(language);
         if(l == null) {
             if(availableLanguages().containsObject(language)) {
-                if (_languagesWithoutPluralForm.containsObject(language)) 
-                    l = new ERXNonPluralFormLocalizer(language);
-                else 
-                    l = new ERXLocalizer(language);
+                if (_languagesWithoutPluralForm.containsObject(language))
+                    l = createLocalizerForLanguage(language, false);
+                    //l = new ERXNonPluralFormLocalizer(language);
+                else
+                    l = createLocalizerForLanguage(language, true);
+                    //l = new ERXLocalizer(language);
             } else {
                 l = (ERXLocalizer)localizers.objectForKey(defaultLanguage());
                 if(l == null) {
-                    l = new ERXLocalizer(defaultLanguage());
+                    //l = new ERXLocalizer(defaultLanguage());
+                    if (_languagesWithoutPluralForm.containsObject(defaultLanguage()))
+                        l = createLocalizerForLanguage(defaultLanguage(), false);
+                    else
+                        l = createLocalizerForLanguage(defaultLanguage(), true);
                     localizers.setObjectForKey(l, defaultLanguage());
                 }
            }
@@ -134,6 +141,34 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return l;
     }
 
+    protected static ERXLocalizer createLocalizerForLanguage(String language, boolean pluralForm) {
+        ERXLocalizer localizer = null;
+        String className = null;
+        if (pluralForm) {
+            className = System.getProperty("er.extensions.ERXLocalizer.pluralFormClassName");
+            if (className == null)
+                className = "er.extensions.ERXLocalizer";
+        } else {
+            className = System.getProperty("er.extensions.ERXLocalizer.nonPluralFormClassName");
+            if (className == null)
+                className = "er.extensions.ERXNonPluralFormLocalizer";            
+        }
+        try {
+            Class localizerClass = Class.forName(className);
+            Constructor constructor = localizerClass.getConstructor(ERXConstant.StringClassArray);
+            localizer = (ERXLocalizer)constructor.newInstance(new Object[] {language});
+        } catch (Exception e) {
+            cat.error("Unable to create localizer for class name: " + className + " exception: " + e.getMessage() + " will use default classes");
+        }
+        if (localizer == null) {
+            if (pluralForm)
+                localizer = new ERXLocalizer(language);
+            else
+                localizer = new ERXNonPluralFormLocalizer(language);                
+        }
+        return localizer;
+    }
+    
     public static void setLocalizerForLanguage(ERXLocalizer l, String language) {
         localizers.setObjectForKey(l, language);
     }
