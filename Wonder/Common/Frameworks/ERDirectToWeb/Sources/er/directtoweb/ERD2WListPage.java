@@ -265,6 +265,9 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     }
     
     public void setDataSource(EODataSource eodatasource) {
+        if (eodatasource.editingContext() != null) {
+            setEditingContext(eodatasource.editingContext());
+        }
         NSArray sortOrderings=sortOrderings();
         displayGroup().setDataSource(eodatasource);
         setSortOrderingsOnDisplayGroup(sortOrderings, displayGroup());
@@ -332,7 +335,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         } else {
             epi = D2W.factory().editPageForEntityNamed(object().entityName(), session());            
         }
-        epi.setObject(localInstanceOfObject());
+        EOEnterpriseObject leo = localInstanceOfObject();
+        epi.setObject(leo);
         epi.setNextPage(context().page());
         return (WOComponent)epi;
     }
@@ -433,6 +437,33 @@ public String pageTitle() {
             }
         }
         return _referenceEOs;
+    }
+
+    public EOEditingContext _context;
+    public void awake() {
+        super.awake();
+        if (_context!=null) {
+            _context.lock();
+        }
+    }
+
+    public void sleep() {
+        if (_context!=null) {
+            _context.unlock();
+        }
+        super.sleep();
+    }
+
+    public void setEditingContext(EOEditingContext newEditingContext) {
+        if (newEditingContext != _context) {
+            if (_context != null) {
+                _context.unlock();
+            }
+            _context = newEditingContext;
+            if (_context != null) {
+                _context.lock();
+            }
+        }
     }
 
 }
