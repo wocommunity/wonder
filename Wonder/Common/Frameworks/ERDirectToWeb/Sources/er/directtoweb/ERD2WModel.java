@@ -136,26 +136,31 @@ public class ERD2WModel extends D2WModel {
         lhsKeys[s]=keyPath;
         Object result=_cache.get(k);
         if (result==null) {
-            //boolean resetTraceRuleFiring = false;
-            if (ruleTraceEnabledCat.isDebugEnabled() && !NSLog.debugLoggingAllowedForLevel(21)) {
-                Category ruleFireCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".fire");
-                if (ruleFireCat.isDebugEnabled()) {
-                    NSLog.setAllowedDebugLevel(21);
-                    //resetTraceRuleFiring = true;
-                    ruleFireCat.debug("Possible candidates for keyPath: " + keyPath + "\n" +
+            boolean resetTraceRuleFiring = false;
+            Category ruleFireCat=null;
+            if (ruleTraceEnabledCat.isDebugEnabled()) {
+                Category ruleCandidatesCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".candidates");
+                ruleFireCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".fire");
+                if (ruleFireCat.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
+                    NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
+                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+                    resetTraceRuleFiring = true;
+                }
+                if (ruleCandidatesCat.isDebugEnabled()) {
+                    ruleFireCat.debug("CANDIDATES for keyPath: " + keyPath + "\n" +
                                       descriptionForRuleSet(canidateRuleSetForRHSInContext(keyPath, context)));
                 }
             }
             result=super.fireRuleForKeyPathInContext(keyPath,context);
             _cache.put(k,result==null ? NULL_VALUE : result);
             if (ruleTraceEnabledCat.isDebugEnabled()) {
-                Category ruleCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".fire");
-                if (ruleCat.isDebugEnabled())
-                ruleCat.debug("FIRE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: " + new NSArray(significantKeys)
+                if (ruleFireCat.isDebugEnabled())
+                ruleFireCat.debug("FIRE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: " + new NSArray(significantKeys)
                               + " value: " + (result==null ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
-            //if (resetTraceRuleFiring)
-            //    Rule.traceRuleFiring = false;
+            if (resetTraceRuleFiring) {
+                NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
+            }
         } else {
             if (ruleTraceEnabledCat.isDebugEnabled()) {
                 Category ruleCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".cache");
@@ -313,9 +318,9 @@ public class ERD2WModel extends D2WModel {
         // transfer all this into
         for (Enumeration e7=dependendKeysPerKey.keys(); e7.hasMoreElements(); ) {
             String key=(String)e7.nextElement();
-            if (NSLog.debugLoggingAllowedForLevel(21)) System.out.print("Rhs key "+key+" <-- ");
+            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) System.out.print("Rhs key "+key+" <-- ");
             Vector keys=(Vector)dependendKeysPerKey.get(key);
-            if (NSLog.debugLoggingAllowedForLevel(21)) System.out.println(keys);
+            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) System.out.println(keys);
             String[] a=new String[keys.size()];
             for (int i=0; i<keys.size();i++) a[i]=(String)keys.elementAt(i);
             _significantKeysPerKey.put(key,a);
@@ -649,7 +654,7 @@ public class ERD2WModel extends D2WModel {
         _uniqueNotQualifiers = new Hashtable();
     }
     
-    // FIXME: Must be a better way of doing this.
+    // FIXME: Must be a better way of doing 
     public String nameForSet(NSSet set) {
         NSMutableArray stringObjects = new NSMutableArray();
         stringObjects.addObjectsFromArray(set.allObjects());
