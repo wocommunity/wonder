@@ -8,7 +8,7 @@
             class = EOKeyValueQualifier; 
             key = isActive; 
             selectorName = "isEqualTo:"; 
-            value = {class = NSdoubleNumber; value = 1; }; 
+            value = {class = NSNumber; value = 1; }; 
         }; 
         sortOrderings = ({class = EOSortOrdering; key = name; selectorName = "compareAscending:"; }); 
     }; 
@@ -24,19 +24,19 @@
                     class = EOKeyValueQualifier; 
                     key = login; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = username; class = EOQualifierVariable; }; 
+                    value = {"_key" = username; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = password; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = password; class = EOQualifierVariable; }; 
+                    value = {"_key" = password; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = isAdmin; 
                     selectorName = "isNotEqualTo:"; 
-                    value = {class = NSdoubleNumber; value = 0; }; 
+                    value = {class = NSNumber; value = 0; }; 
                 }
             ); 
         }; 
@@ -54,13 +54,13 @@
                     class = EOKeyValueQualifier; 
                     key = login; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = username; class = EOQualifierVariable; }; 
+                    value = {"_key" = username; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = password; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = password; class = EOQualifierVariable; }; 
+                    value = {"_key" = password; class = EOQualifierVariable; }; 
                 }
             ); 
         }; 

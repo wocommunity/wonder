@@ -11,13 +11,13 @@
                     class = EOKeyValueQualifier; 
                     key = owner; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = user; class = EOQualifierVariable; }; 
+                    value = {"_key" = user; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EONotQualifier; 
                     qualifier = {
                         class = EOKeyValueQualifier; 
-                        key = state.oid; 
+                        key = "state.oid"; 
                         selectorName = "isNotEqualTo:"; 
                         value = clsd; 
                     }; 

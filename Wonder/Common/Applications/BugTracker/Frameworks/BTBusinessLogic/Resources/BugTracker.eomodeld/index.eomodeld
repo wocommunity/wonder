@@ -1,17 +1,17 @@
 {
-    EOModelVersion = 2.1; 
+    EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
     connectionDictionary = {
         URL = "jdbc:mysql://localhost/bug"; 
-        driver = org.gjt.mm.mysql.Driver; 
+        driver = "org.gjt.mm.mysql.Driver"; 
         jdbc2Info = {
-            ANSI92_CONFORMANCE = ANSI92EntryLevel; 
-            DBMS_NAME = MySQL; 
-            DRIVER_NAME = "Mark Matthews' MySQL Driver"; 
-            DRIVER_VER = 2.0.7; 
-            IDENTIFIER_QUOTE_STRING = " "; 
-            NON_NULLABLE_COLUMNS = T; 
-            STRING_FUNCTIONS = "ACII,CHAR,CHAR_LENGTH,CHARACTER_LENGTH,CONCAT,ELT,FIELD,FIND_IN_SET,INSERT,INSTR,INTERVAL,LCASE,LEFT,LENGTH,LOCATE,LOWER,LTRIM,MID,POSITION,OCTET_LENGTH,REPEAT,REPLACE,REVERSE,RIGHT,RTRIM,SPACE,SOUNDEX,SUBSTRING,SUBSTRING_INDEX,TRIM,UCASE,UPPER"; 
+            "ANSI92_CONFORMANCE" = ANSI92EntryLevel; 
+            "DBMS_NAME" = MySQL; 
+            "DRIVER_NAME" = "Mark Matthews' MySQL Driver"; 
+            "DRIVER_VER" = "2.0.7"; 
+            "IDENTIFIER_QUOTE_STRING" = " "; 
+            "NON_NULLABLE_COLUMNS" = T; 
+            "STRING_FUNCTIONS" = "ACII,CHAR,CHAR_LENGTH,CHARACTER_LENGTH,CONCAT,ELT,FIELD,FIND_IN_SET,INSERT,INSTR,INTERVAL,LCASE,LEFT,LENGTH,LOCATE,LOWER,LTRIM,MID,POSITION,OCTET_LENGTH,REPEAT,REPLACE,REVERSE,RIGHT,RTRIM,SPACE,SOUNDEX,SUBSTRING,SUBSTRING_INDEX,TRIM,UCASE,UPPER"; 
             typeInfo = {
                 BIGINT = {
                     createParams = 1; 
@@ -209,20 +209,19 @@
         username = nobody; 
     }; 
     entities = (
-        {className = er.bugtracker.Bug; name = Bug; }, 
-        {className = er.bugtracker.Component; name = Component; }, 
-        {className = er.bugtracker.Difficulty; name = Difficulty; }, 
-        {className = EOGenericRecord; name = EOJDBCPrototypes; }, 
-        {className = er.bugtracker.Framework; name = Framework; }, 
-        {className = er.bugtracker.People; name = People; }, 
-        {className = er.bugtracker.Priority; name = Priority; }, 
-        {className = er.bugtracker.Release; name = Release; }, 
-        {className = er.bugtracker.Requirement; name = Requirement; parent = Bug; }, 
-        {className = er.bugtracker.RequirementSubType; name = RequirementSubType; }, 
-        {className = er.bugtracker.RequirementType; name = RequirementType; }, 
-        {className = er.bugtracker.State; name = State; }, 
-        {className = er.bugtracker.TestItem; name = TestItem; }, 
-        {className = er.bugtracker.TestItemState; name = TestItemState; }, 
+        {className = "er.bugtracker.Bug"; name = Bug; }, 
+        {className = "er.bugtracker.Component"; name = Component; }, 
+        {className = "er.bugtracker.Difficulty"; name = Difficulty; }, 
+        {className = "er.bugtracker.Framework"; name = Framework; }, 
+        {className = "er.bugtracker.People"; name = People; }, 
+        {className = "er.bugtracker.Priority"; name = Priority; }, 
+        {className = "er.bugtracker.Release"; name = Release; }, 
+        {className = "er.bugtracker.Requirement"; name = Requirement; parent = Bug; }, 
+        {className = "er.bugtracker.RequirementSubType"; name = RequirementSubType; }, 
+        {className = "er.bugtracker.RequirementType"; name = RequirementType; }, 
+        {className = "er.bugtracker.State"; name = State; }, 
+        {className = "er.bugtracker.TestItem"; name = TestItem; }, 
+        {className = "er.bugtracker.TestItemState"; name = TestItemState; }, 
         {className = EOGenericRecord; name = XBugTestItem; }, 
         {className = EOGenericRecord; name = XRequirementTestItem; }
     ); 
@@ -236,8 +235,8 @@
         TestItemState
     ); 
     internalInfo = {
-        _deletedEntityNamesInObjectStore = (TEST_MODULE, BUG_TICKETS, TICKET_BUG); 
-        _schemaSynchronizationOptions = {
+        "_deletedEntityNamesInObjectStore" = ("TEST_MODULE", "BUG_TICKETS", "TICKET_BUG", eoprototypes); 
+        "_schemaSynchronizationOptions" = {
             EOSchemaSynchronizationForeignKeyConstraintsKey = YES; 
             EOSchemaSynchronizationPrimaryKeyConstraintsKey = YES; 
             EOSchemaSynchronizationPrimaryKeySupportKey = YES; 
