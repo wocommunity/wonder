@@ -10,16 +10,16 @@ import com.webobjects.foundation.*;
 import er.extensions.*;
 
 /**
- * @author david@cluster9.com
- *
+ * @author david@cluster9.com<br/>
+ *<br/>
  * Automatically generates Long primary keys for entities. Features a cache
  * which reduces database roundtrips as well as optionally encoding Entity type
- * in PK value.
- * 
- * usage:
- * 
- * override either the ERXGeneratesPrimaryKey interface like this:
- * <code>
+ * in PK value.<br/>
+ * <br/>
+ * usage:<br/>
+ * <br/>
+ * override either the ERXGeneratesPrimaryKey interface like this:<br/>
+ * <code><pre>
  * private NSDictionary _primaryKeyDictionary = null;
  * public NSDictionary primaryKeyDictionary(boolean inTransaction) {
  *     if (_primaryKeyDictionary == null) {
@@ -27,19 +27,21 @@ import er.extensions.*;
  *     }
  *     return _primaryKeyDictionary;
  * }
- * </code>
- * or manually call 
- * <code>ERXLongPrimaryKeyFactory.primaryKeyDictionary(EOEnterpriseObject eo);</code>
- * 
- * the necessary database table is generated on the fly.
- * 
- * <b>Encoding Entity in PK values</b>
+ * </pre>
+ * </code><br/>
+ * or manually call<br/> 
+ * <code>ERXLongPrimaryKeyFactory.primaryKeyDictionary(EOEnterpriseObject eo);</code><br/>
+ * <br/>
+ * the necessary database table is generated on the fly.<br/>
+ * <br/>
+ * <b>Encoding Entity in PK values</b><br/>
  * If the system property <code>ERXIntegerPrimaryKeyFactory.encodeEntityInPkValue</code> is 
  * set to <code>true</code> then the last 6 bits from the 64 bit primary key is
  * used to encode the Subentity in the pk value. This speeds up inheritance with multiple tables.
- * In order to support this you must add an entry to the userInfo from the Subentities:
- * <code>key=entityCode</code>
- * <code>value=<<an unique integer, no longer than 6 bit - 1</code>
+ * In order to support this you must add an entry to the userInfo from the Subentities:<br/>
+ * <br/>
+ * <code>key=entityCode</code><br/>
+ * <code>value= %lt;%lt; an unique integer, no longer than 6 bit - 1</code><br/>
  * 
  */
 public class ERXLongPrimaryKeyFactory {
