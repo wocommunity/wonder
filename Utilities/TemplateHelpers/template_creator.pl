@@ -8,17 +8,19 @@
 # it will also create a d2wmodel that contains rules like
 #   *true* -> templateNameForInspectPage = "CMSInspectPagePlain" (20)
 
-die print("usage: $0 <destination directory> <prefix> <postfix>\n") if($#ARGV != 2);
+die print("usage: $0 <destination directory> <prefix> <postfix> <package>\n") if($#ARGV != 3);
 
 # you may need to adjust this path
-$pathToERDirectToWeb = "~/Roots/ERDirectToWebJava.framework/Resources/";
+$pathToERDirectToWeb = "~/Roots/ERDirectToWeb.framework/Resources/";
 
-($dest, $prefix, $postfix) = @ARGV;
-$dest = "." if(!defined($dest) || $dest eq "");
+($dest, $prefix, $postfix, $package) = @ARGV;
+#$dest = "tmp";
 $pattern = 'ERD2W(.*?)Template';
+$packageDir = $package;
+$packageDir =~ s|\.|/|g;
 
-$cmd = "find $pathToERDirectToWeb -name \\*Template.wo";
-print $cmd;
+$cmd = "find $pathToERDirectToWeb -name \\*Template.wo -type d |grep -v CVS";
+#warn $cmd;
 @files = `$cmd`;
 
 foreach $file (@files) {
@@ -27,20 +29,31 @@ foreach $file (@files) {
         if($class =~ m|$pattern|) {
             $typeName = "$1";
             $newClass = "$prefix$typeName$postfix";
-            print "creating $newClass\n";
-            open OUT, ">$dest/$newClass.java" || die("Can't open $dest/$newClass.java");
-            print OUT "package er.directtoweb;\n";
-            print OUT "import com.webobjects.appserver.WOContext;\n";
+            warn "creating $newClass\n";
+            system "mkdir -p $dest/Sources/$packageDir" if (!-e "$dest/Sources/$packageDir/");
+            open OUT, ">$dest/Sources/$packageDir/$newClass.java" || die("Can't open $dest/Sources/$packageDir/$newClass.java");
+            print OUT "package $package;\n";
+            print OUT "import com.webobjects.appserver.*;\n";
+            print OUT "import com.webobjects.directtoweb.*;\n";
+            print OUT "import er.extensions.*;\n";
+            print OUT "import er.directtoweb.*;\n";
             print OUT "public class $newClass extends $class {\n";
-            print OUT "\tpublic $newClass(WOContext c) {\n";
-            print OUT "\t\tsuper(c);\n";
-            print OUT "\t\}\n}\n";
+            print OUT "\tpublic $newClass(WOContext wocontext) {\n";
+            print OUT "\t\tsuper(wocontext);\n";
+            print OUT "\t\}\n\n}\n";
             close OUT;
-            system "cp -r $source/$class.wo $dest/$newClass.wo";
-            system "rm -rf $dest/$newClass.wo/CVS";
-            system "mv $dest/$newClass.wo/$class.html $dest/$newClass.wo/$newClass.html";
-            system "mv $dest/$newClass.wo/$class.wod $dest/$newClass.wo/$newClass.wod";
-            system "mv $dest/$newClass.wo/$class.woo $dest/$newClass.wo/$newClass.woo";
+            system "mkdir $dest/Components/Nonlocalized.lproj" if(!-e "$dest/Components/Nonlocalized.lproj");
+            system "rm -rf $dest/Components/Nonlocalized.lproj/$newClass.wo" if(-e "$dest/Components/Nonlocalized.lproj/$newClass.wo");
+            system "cp -r $source/$class.wo $dest/Components/Nonlocalized.lproj/$newClass.wo";
+            system "cp -r $source/../$class.api $dest/Components/$newClass.api";
+            system "rm -rf $dest/Components/Nonlocalized.lproj/$newClass.wo/CVS";
+            
+            print "~/Roots/PBXTool $dest/IDE/*.pbproj/project.pbxproj $newClass $newClass.java $newClass.api $newClass.wo\n";
+            $classes .= " $newClass ";
+            
+            system "mv $dest/Components/Nonlocalized.lproj/$newClass.wo/$class.html $dest/Components/Nonlocalized.lproj/$newClass.wo/$newClass.html";
+            system "mv $dest/Components/Nonlocalized.lproj/$newClass.wo/$class.wod $dest/Components/Nonlocalized.lproj/$newClass.wo/$newClass.wod";
+            system "mv $dest/Components/Nonlocalized.lproj/$newClass.wo/$class.woo $dest/Components/Nonlocalized.lproj/$newClass.wo/$newClass.woo";
             $rules .= "
 {
     author = 20; 
@@ -55,6 +68,7 @@ foreach $file (@files) {
     }
 }
 chop($rules);
-open D2W, ">$dest/d2w.d2wmodel" || die("Can't open $dest/d2w.d2wmodel");
+            print "~/Roots/PBXTool $dest/IDE/*.pbproj/project.pbxproj 'Components' $classes\n";
+open D2W, ">$dest/Resources/d2w.d2wmodel" || die("Can't open $dest/Resources/d2w.d2wmodel");
 print D2W "{ rules = ( $rules );}";
 close D2W;
