@@ -271,8 +271,6 @@ public abstract class ERXApplication extends WOApplication {
      */
     public String rawName() { return super.name(); }
 
-
-
     /**
      *  Puts together a dictionary with a bunch of useful information relative to the current state when the exception
      *  occurred. Potentially added information:<br/>
@@ -285,9 +283,9 @@ public abstract class ERXApplication extends WOApplication {
      * <li>the previous page list (from the WOStatisticsStore)</li>
      * </ol>
      * <br/>
-     * @return the WOResponse of the generated exception page.
+     * @return dictionary containing extra information for the current context.
      */
-    public NSDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
+    public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
         NSMutableDictionary extraInfo=new NSMutableDictionary();
         if (context!=null && context.page()!=null) {
             extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
@@ -319,25 +317,57 @@ public abstract class ERXApplication extends WOApplication {
         }
         return extraInfo;
     }
-
     
     /**
-     *  Logs extra information about the current state
+     * Logs extra information about the current state.
+     * @param exception to be handled
+     * @param context current context
      * @return the WOResponse of the generated exception page.
      */
     public WOResponse handleException(Exception exception, WOContext context) {
-        NSDictionary extraInfo=extraInformationForExceptionInContext(exception, context);
-        log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo, exception instanceof NSForwardException? ((NSForwardException) exception).originalException() : exception);
+        // We first want to test if we ran out of memory. If so we need to quite ASAP.
+        handlePotentiallyFatalException(exception);
+
+        // Not a fatal exception, business as usual.
+        
+        NSDictionary extraInfo = extraInformationForExceptionInContext(exception, context);
+        
+        log.error("Exception caught, " + exception.getMessage() + " extra info: "
+                  + extraInfo, exception instanceof NSForwardException ?
+                  ((NSForwardException) exception).originalException() : exception);
+        
+        return super.handleException(exception, context);
+    }
+
+    /**
+     * Standard exception page. Also logs error to standard out.
+     * @param exception to be handled
+     * @param context current context
+     * @return the WOResponse of the generic exception page.
+     */
+    public WOResponse genericHandleException(Exception exception, WOContext context) {
+        return super.handleException(exception, context);
+    }
+    
+    /**
+     * Handles the potentially fatal OutOfMemoryError by quiting the
+     * application ASAP. Broken out into a separate method to make
+     * custom error handling easier, ie generating your own error
+     * pages in production, etc.
+     * @param exception to check if it is a fatal exception.
+     */
+    public void handlePotentiallyFatalException(Exception exception) {
         if( exception instanceof NSForwardException ) {
             Throwable t = ((NSForwardException) exception).originalException();
             if( t instanceof OutOfMemoryError ) {
+                // We first log just in case the log4j call puts us in a bad state.
+                NSLog.err.appendln("Ran out of memory, killing this instance");
                 log.error("Ran out of memory, killing this instance");
                 Runtime.getRuntime().exit( 1 );
             }
         }
-        return super.handleException(exception, context);
     }
-
+    
     /** 
      * Logs the warning message if the main method was not called 
      * during the startup.
@@ -355,9 +385,4 @@ public abstract class ERXApplication extends WOApplication {
             + "    ERXApplication.main(argv, Application.class); \n"
             + "}\n\n");
     }
-
-    /*
-    public D2WContext d2wContext() {
-        return ERXExtensions.d2wContext();
-    }*/
 }
