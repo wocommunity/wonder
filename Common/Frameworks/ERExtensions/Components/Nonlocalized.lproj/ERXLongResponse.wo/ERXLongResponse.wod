@@ -1,0 +1,17 @@
+CompletionBar1: WOCompletionBar {
+	value = task.status;
+	valueMin = 0;
+	valueMax = 100;
+}
+
+Form1: WOForm {
+}
+
+String1: WOString {
+	value = task.message;
+}
+
+SubmitButton1: WOSubmitButton {
+	action = cancel;
+	value = "Cancel";
+}
