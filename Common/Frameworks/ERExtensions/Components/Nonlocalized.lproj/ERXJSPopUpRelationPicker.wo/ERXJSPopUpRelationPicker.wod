@@ -32,3 +32,7 @@ String4: WOString {
 	value = parentLabel;
 	escapeHTML = false;
 }
+Array: WOString {
+	value = jsString;
+	escapeHTML = false;
+}
