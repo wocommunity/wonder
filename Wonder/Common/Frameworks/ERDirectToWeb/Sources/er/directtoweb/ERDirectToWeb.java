@@ -339,7 +339,7 @@ public class ERDirectToWeb {
     private static D2WContext _context;
     public static D2WContext d2wContext() {
         if (_context == null)
-            _context = new ERD2WContext();
+            _context = ERD2WContext.newContext();
         return _context;
     }
 
