@@ -7,6 +7,7 @@
 			6CA8E7010168D9A500A801D4,
 		);
 		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 49590399;
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{763, 592}";
 				LeftSlideOut = {
@@ -90,23 +91,20 @@
 					TabCount = 5;
 				};
 			};
+			PBXWorkspaceStateSaveDate = 49590399;
+		};
+		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
 	6CA8E6FF0168D9A500A801D4 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 	6CA8E7010168D9A500A801D4 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 	6CA8E71E0168D9A500A801D4 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 }
