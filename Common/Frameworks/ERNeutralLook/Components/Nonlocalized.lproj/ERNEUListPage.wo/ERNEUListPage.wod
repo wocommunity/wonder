@@ -204,9 +204,10 @@ ListTableRow: WOGenericContainer {
 NavBar: WOBatchNavigationBar {
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
-	objectName = entity.name;
+	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
+       	 d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {
