@@ -106,6 +106,7 @@
 		017C7B31FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				F6960A730369F81001257492,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,6 +503,7 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
+				F6960A720369F81001257492,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -586,6 +588,28 @@
 				ATTRIBUTES = (
 					Merge,
 				);
+			};
+		};
+//660
+//661
+//662
+//663
+//664
+//F60
+//F61
+//F62
+//F63
+//F64
+		F6960A720369F81001257492 = {
+			isa = PBXFileReference;
+			name = CPCreateFileList.sh;
+			path = Resources/CPCreateFileList.sh;
+			refType = 4;
+		};
+		F6960A730369F81001257492 = {
+			fileRef = F6960A720369F81001257492;
+			isa = PBXBuildFile;
+			settings = {
 			};
 		};
 	};
