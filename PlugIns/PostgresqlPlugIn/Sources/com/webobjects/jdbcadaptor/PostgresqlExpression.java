@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Postgres needs special handling of NSData conversion, special
@@ -58,25 +59,9 @@ public class PostgresqlExpression extends JDBCExpression {
         'A', 'B', 'C', 'D', 'E', 'F'
     };
     
-    static private final char _SQL_ESCAPE_CHAR = '|';
+    private static final char _SQL_ESCAPE_CHAR = '|';
     
-    /**
-     * Overridden to scale timestamp values to the scale that JDBC Timestamp supports (milliseconds).
-     */
-    public NSMutableDictionary bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
-        NSMutableDictionary result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
-        if(obj instanceof NSTimestamp) {
-            NSTimestamp ts = (NSTimestamp)obj;
-            int nanos = ts.getNanos();
-            int trunctuatedNanos = ((nanos/1000000)*1000000);
-            if(trunctuatedNanos != nanos) {
-                long millis = ts.getTime();
-                ts = new NSTimestamp(millis, trunctuatedNanos);
-                result.setObjectForKey(ts, "BindVariableValue");
-            }
-        }
-        return result;
-    }
+    private static final NSTimestampFormatter _TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
     
     /**
      * Overridden to remove the rtrim usage. The original implementation
@@ -325,12 +310,38 @@ public class PostgresqlExpression extends JDBCExpression {
         String value;
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
+        } else if(obj instanceof NSTimestamp && isTimestampAttribute(eoattribute)) {
+            value = "'" + _TIMESTAMP_FORMATTER.format(obj) + "'";
         } else {
             value = ((obj == null || obj == NSKeyValueCoding.NullValue) ? "NULL" : obj.toString());
         }
         return value;
     }
     
+    private boolean isTimestampAttribute(EOAttribute eoattribute) {
+        return "T".equals(eoattribute.valueType());
+    }
+    
+    /**
+     * Overridden to exclude timestamp attributes.
+     */
+    public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {
+        if(isTimestampAttribute(eoattribute)) {
+            return false;
+        }
+        return super.mustUseBindVariableForAttribute(eoattribute);
+    }
+
+    /**
+     * Overridden to exclude timestamp attributes.
+     */
+    public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
+        if(isTimestampAttribute(eoattribute)) {
+            return false;
+        }
+        return super.shouldUseBindVariableForAttribute(eoattribute);
+    }
+
     /**
      * Overrides the parent implementation to compose the final string
      * expression for the join clauses.
@@ -405,7 +416,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     /**
      * Overridden because the original version throws an exception when the
-     * data contains negative byte values.
+     * data contains negative byte values. 
+     * This method is only for smaller values like binary primary keys or such.
      *
      * @param data  the data to be converted to a SQL string
      * @return  the SQL string for raw data
@@ -465,7 +477,7 @@ public class PostgresqlExpression extends JDBCExpression {
             EOEntity kpEntity = entityForKeyPath(kp);
             attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
         }
-        if(attribute != null && v != null && v != NSKeyValueCoding.NullValue && true) {
+        if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
             String s = columnTypeStringForAttribute(attribute);
             return super.sqlStringForValue(v,kp) + "::" + s;
         } 
