@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 34;
 	objects = {
 		6503BD8E02076D1300A801E6 = {
 			isa = PBXFileReference;
@@ -790,7 +790,6 @@
 //F53
 //F54
 		F51619660207537001A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXTableWithBorder.wo;
 			refType = 4;
@@ -813,7 +812,6 @@
 			};
 		};
 		F516196B020753AF01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXFormForTarget.wo;
 			refType = 4;
@@ -836,7 +834,6 @@
 			};
 		};
 		F5161970020753E701A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXLog4JConfiguration.wo;
 			refType = 4;
@@ -859,7 +856,6 @@
 			};
 		};
 		F51619750207541C01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXNoHelpAvailableHelp.wo;
 			refType = 4;
@@ -887,7 +883,6 @@
 			};
 		};
 		F516197C0207547601A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXOpenJSWindowHyperlink.wo;
 			refType = 4;
@@ -910,7 +905,6 @@
 			};
 		};
 		F5161981020754A501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXColoredTabPanel.wo;
 			refType = 4;
@@ -933,7 +927,6 @@
 			};
 		};
 		F51619860207556D01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXGroupingRepetition.wo;
 			refType = 4;
@@ -956,7 +949,6 @@
 			};
 		};
 		F516198B020759F501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXGraph.wo;
 			refType = 4;
@@ -979,7 +971,6 @@
 			};
 		};
 		F516199002075A2201A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXJSTwoLevelEditToOneRelationship.wo;
 			refType = 4;
@@ -1002,7 +993,6 @@
 			};
 		};
 		F516199502075A5C01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXRepeatingTable.wo;
 			refType = 4;
@@ -1101,13 +1091,23 @@
 			};
 		};
 		F567C7C802897B7C01257492 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXLocalizedString.wo;
 			refType = 4;
 		};
 		F567C7C902897B7C01257492 = {
 			fileRef = F567C7C802897B7C01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F578333202AD902001257492 = {
+			isa = PBXFileReference;
+			path = ERXNonPluralFormLocalizer.java;
+			refType = 4;
+		};
+		F578333302AD902001257492 = {
+			fileRef = F578333202AD902001257492;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1746,19 +1746,16 @@
 			refType = 4;
 		};
 		F57EA65E01FF59BF019E57DA = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXDirectActionHyperlink.wo;
 			refType = 4;
 		};
 		F57EA67101FF59BF019E57DA = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXJSConfirmPanel.wo;
 			refType = 4;
 		};
 		F57EA67C01FF59BF019E57DA = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXDirectActionImage.wo;
 			refType = 4;
@@ -2536,6 +2533,7 @@
 				F53F521D028977D101257492,
 				F567C7C702897B6F01257492,
 				F6F0213B02ACDF5701AD0D07,
+				F578333302AD902001257492,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -3109,7 +3107,6 @@
 			};
 		};
 		F58700040206394A01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXNonNullConditional.wo;
 			refType = 4;
@@ -3132,7 +3129,6 @@
 			};
 		};
 		F58700090206397D01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXStringListPicker.wo;
 			refType = 4;
@@ -3155,7 +3151,6 @@
 			};
 		};
 		F587000E020639A601A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXLinkRandomizer.wo;
 			refType = 4;
@@ -3183,7 +3178,6 @@
 			};
 		};
 		F5870015020639CB01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXFixedLengthString.wo;
 			refType = 4;
@@ -3206,7 +3200,6 @@
 			};
 		};
 		F587FFA8020631FE01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXEditURL.wo;
 			refType = 4;
@@ -3229,7 +3222,6 @@
 			};
 		};
 		F587FFAD0206329701A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXToOneRelationship.wo;
 			refType = 4;
@@ -3252,7 +3244,6 @@
 			};
 		};
 		F587FFB20206336F01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXWOTestInterface.wo;
 			refType = 4;
@@ -3275,7 +3266,6 @@
 			};
 		};
 		F587FFB70206339F01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXJSPopUpRelationPicker.wo;
 			refType = 4;
@@ -3298,7 +3288,6 @@
 			};
 		};
 		F587FFBC020634C101A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXBatchNavigationBarInForm.wo;
 			refType = 4;
@@ -3321,7 +3310,6 @@
 			};
 		};
 		F587FFC6020635D401A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXInstanceOfConditional.wo;
 			refType = 4;
@@ -3344,7 +3332,6 @@
 			};
 		};
 		F587FFCB0206362101A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXPluralString.wo;
 			refType = 4;
@@ -3367,7 +3354,6 @@
 			};
 		};
 		F587FFD00206364501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXSortOrder.wo;
 			refType = 4;
@@ -3390,7 +3376,6 @@
 			};
 		};
 		F587FFD5020636A601A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXBatchNavigationBar.wo;
 			refType = 4;
@@ -3413,7 +3398,6 @@
 			};
 		};
 		F587FFDA020636D801A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXListContainsItemConditional.wo;
 			refType = 4;
@@ -3436,7 +3420,6 @@
 			};
 		};
 		F587FFE40206372E01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXDebugMarker.wo;
 			refType = 4;
@@ -3459,7 +3442,6 @@
 			};
 		};
 		F587FFE90206376201A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXDisplayDataAsString.wo;
 			refType = 4;
@@ -3482,7 +3464,6 @@
 			};
 		};
 		F587FFEE0206378501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXSuccess.wo;
 			refType = 4;
@@ -3510,7 +3491,6 @@
 			};
 		};
 		F587FFF5020637D201A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXMailTo.wo;
 			refType = 4;
@@ -3533,7 +3513,6 @@
 			};
 		};
 		F587FFFA0206380301A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXRadioButtonMatrix.wo;
 			refType = 4;
@@ -3556,7 +3535,6 @@
 			};
 		};
 		F587FFFF0206385601A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXNonZeroConditional.wo;
 			refType = 4;
@@ -3651,7 +3629,6 @@
 			};
 		};
 		F5EF5A30020641BE01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXTabPanel.wo;
 			refType = 4;
@@ -3674,7 +3651,6 @@
 			};
 		};
 		F5EF5A35020641FC01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXToManyRelationship.wo;
 			refType = 4;
@@ -3697,7 +3673,6 @@
 			};
 		};
 		F5EF5A3A0206423C01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXErrorDictionaryPanel.wo;
 			refType = 4;
@@ -3720,7 +3695,6 @@
 			};
 		};
 		F5EF5A3F0206427701A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXOpenJSWindowSubmitButton.wo;
 			refType = 4;
@@ -3743,7 +3717,6 @@
 			};
 		};
 		F5EF5A44020642C001A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXWOTestResult.wo;
 			refType = 4;
@@ -3766,7 +3739,6 @@
 			};
 		};
 		F5EF5A49020642F401A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXMandatoryFieldMarker.wo;
 			refType = 4;
@@ -3789,7 +3761,6 @@
 			};
 		};
 		F5EF5A4E0206434101A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXListDisplay.wo;
 			refType = 4;
@@ -3812,7 +3783,6 @@
 			};
 		};
 		F5EF5A53020643BB01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXCheckboxMatrix.wo;
 			refType = 4;
@@ -3835,7 +3805,6 @@
 			};
 		};
 		F5EF5A580206449501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXCollapsibleComponentContent.wo;
 			refType = 4;
@@ -3858,7 +3827,6 @@
 			};
 		};
 		F5FEEACA02063B2001A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXEqualConditional.wo;
 			refType = 4;
@@ -3881,7 +3849,6 @@
 			};
 		};
 		F5FEEACF02063C5A01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXOptionalForm.wo;
 			refType = 4;
@@ -3904,7 +3871,6 @@
 			};
 		};
 		F5FEEAD902063CB201A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXUnreadMarker.wo;
 			refType = 4;
@@ -3927,7 +3893,6 @@
 			};
 		};
 		F5FEEADE02063CE801A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXHyperlinkKeyValueSetter.wo;
 			refType = 4;
@@ -3950,7 +3915,6 @@
 			};
 		};
 		F5FEEAE802063D4501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXEmptyComponent.wo;
 			refType = 4;
@@ -3973,7 +3937,6 @@
 			};
 		};
 		F5FEEAED02063D7501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXStyleSheet.wo;
 			refType = 4;
@@ -3996,7 +3959,6 @@
 			};
 		};
 		F5FEEAF702063E1501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXTable.wo;
 			refType = 4;
@@ -4019,7 +3981,6 @@
 			};
 		};
 		F5FEEAFC02063E4601A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXGroupingTable.wo;
 			refType = 4;
@@ -4042,7 +4003,6 @@
 			};
 		};
 		F5FEEB0102063E7C01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXSingleButton.wo;
 			refType = 4;
@@ -4065,7 +4025,6 @@
 			};
 		};
 		F5FEEB0602063F5B01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXStringWithLineBreaks.wo;
 			refType = 4;
@@ -4088,7 +4047,6 @@
 			};
 		};
 		F5FEEB0B02063F9E01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXCheckCookies.wo;
 			refType = 4;
@@ -4111,7 +4069,6 @@
 			};
 		};
 		F5FEEB100206403C01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXQueryRecentDates.wo;
 			refType = 4;
@@ -4134,7 +4091,6 @@
 			};
 		};
 		F5FEEB150206407501A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXJSPopupSelector.wo;
 			refType = 4;
@@ -4157,7 +4113,6 @@
 			};
 		};
 		F5FEEB1A020640A601A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXImageTabPanel.wo;
 			refType = 4;
@@ -4180,7 +4135,6 @@
 			};
 		};
 		F5FEEB1F020640CA01A801D4 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXEditingContextInspector.wo;
 			refType = 4;
@@ -4283,7 +4237,6 @@
 			refType = 4;
 		};
 		F61422F1025361FF01AD0D07 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXFakeRelationship.wo;
 			refType = 4;
@@ -5097,6 +5050,7 @@
 		F645C8B70247899001AD0D07 = {
 			children = (
 				F6A85F9B026B03EC0146FA97,
+				F578333202AD902001257492,
 				F6F4D1AA0251D9F501AD0D07,
 				F57EA5C701FF59BF019E57DA,
 				6503BD8E02076D1300A801E6,
@@ -5240,7 +5194,6 @@
 			};
 		};
 		F645C8CA02478A0601AD0D07 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXOncePerRequestConditional.wo;
 			refType = 4;
@@ -5274,7 +5227,6 @@
 			};
 		};
 		F645C8D002478A2701AD0D07 = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXDHTMLComponent.wo;
 			refType = 4;
@@ -5413,7 +5365,6 @@
 			refType = 4;
 		};
 		F7BA9416027F9A7201A8010C = {
-			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXJSAutoClosePage.wo;
 			refType = 4;
