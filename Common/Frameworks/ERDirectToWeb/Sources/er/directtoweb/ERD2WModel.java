@@ -15,6 +15,7 @@ import com.webobjects.directtoweb.ERD2WUtilities;
 import java.util.*;
 import java.io.*;
 import er.extensions.*;
+import java.net.URL;
 
 /**
  * Overhaul of the caching system.
@@ -105,13 +106,6 @@ public class ERD2WModel extends D2WModel {
         if (rules() !=null && rules().count() > 0) prepareDataStructures();
     }
     
-    // These are public cover methods for protected methods.
-    // DELETEME: These are no longer needed.
-    public NSArray publicRules() { return rules(); }
-    public void publicAddRule(Rule rule) { addRule(rule); }
-    public void publicAddRules(NSArray rules) { addRules(rules); }
-    public void publicRemoveRule(Rule rule) { removeRule(rule); }
-
     public NSArray rules() {
         return super.rules();
     }
@@ -420,7 +414,8 @@ public class ERD2WModel extends D2WModel {
     protected void setCurrentFile(File currentFile) { _currentFile = currentFile; }
     protected File currentFile() { return _currentFile; }
 
-    protected void mergeFile(File modelFile) {
+    protected void mergePathURL(URL modelURL) {
+        File modelFile = new File(modelURL.getFile()); 
         if (log.isDebugEnabled()) log.debug("Merging rule file \"" + modelFile.getPath()
                                             + "\"");
         setCurrentFile(modelFile);
@@ -442,10 +437,13 @@ public class ERD2WModel extends D2WModel {
                 ruleDecodeLog.error("Could not load rule file: " + except.getMessage());
             }
         }
-        super.mergeFile(modelFile);
+        super.mergePathURL(modelURL);
         setCurrentFile(null);
     }
-
+    protected void mergeFile(File modelFile) {
+        super.mergeFile(modelFile);
+    }
+    
     protected Hashtable _uniqueAssignments = new Hashtable();
     protected void uniqueRuleAssignments(NSArray rules) {
         if (rules != null && rules.count() > 0) {
