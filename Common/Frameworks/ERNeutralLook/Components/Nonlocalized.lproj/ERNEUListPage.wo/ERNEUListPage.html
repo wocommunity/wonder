@@ -22,15 +22,13 @@
                   <TD>
                      <TABLE>
                         <TR>
-                           <TD>
-                              <WEBOBJECT NAME=IsSelecting>
+                           <TD> <WEBOBJECT NAME=IsSelecting>
                                  <WEBOBJECT NAME=SelectEO><WEBOBJECT NAME=SelectImage></WEBOBJECT></WEBOBJECT>
                               </WEBOBJECT>
                               <WEBOBJECT NAME=IsListing>
                                  <WEBOBJECT NAME=IsEntityWritable>
-                                 <WEBOBJECT NAME=ERXNonNullConditional2><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=ERXNonNullConditional1><WEBOBJECT NAME=EditButton></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-                                 <WEBOBJECT NAME=IsEntityNotWritable>
-                                 <WEBOBJECT NAME=InspectButton></WEBOBJECT></WEBOBJECT>
+                                 <WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=ERXNonNullConditional2><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=ERXNonNullConditional1><WEBOBJECT NAME=EditButton></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>
+                                 <WEBOBJECT NAME=IsEntityNotWritable><WEBOBJECT NAME=InspectButton></WEBOBJECT></WEBOBJECT>
                               </WEBOBJECT>
                            </TD>
                            <TD> </TD>
@@ -57,7 +55,7 @@
                   </TD>
                </WEBOBJECT>
                <TR HEIGHT=2>
-                  <TD BGCOLOR="#ffffff" COLSPAN=6><IMG BORDER=0 HEIGHT=2 WIDTH=1></TD>
+                  <TD BGCOLOR="#ffffff" COLSPAN=<WEBOBJECT NAME=ColSpanNumber></WEBOBJECT>><IMG BORDER=0 HEIGHT=2 WIDTH=1></TD>
                </TR>
             </WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=AreThereBackgroundColors></WEBOBJECT><BR>
          
