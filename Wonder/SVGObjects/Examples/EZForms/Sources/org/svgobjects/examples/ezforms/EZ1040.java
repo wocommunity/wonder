@@ -12,7 +12,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
 public class EZ1040 extends WOComponent {
-    protected Applicant contact;
+    public Applicant contact;
     
     public EZ1040(WOContext context) {
         super(context);
