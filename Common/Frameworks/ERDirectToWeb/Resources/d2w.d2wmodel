@@ -180,13 +180,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -330,13 +330,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -390,13 +390,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }
@@ -604,13 +604,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -685,13 +685,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -722,13 +722,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -768,13 +768,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -811,13 +811,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -854,13 +854,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -888,7 +888,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.valueClassName; 
+                        key = smartAttribute.className; 
                         selectorName = "isEqualTo"; 
                         value = java.lang.String; 
                     }, 
@@ -929,13 +929,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -972,13 +972,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -1047,13 +1047,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }
@@ -1220,7 +1220,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.valueClassName; 
+                        key = smartAttribute.className; 
                         selectorName = "isEqualTo"; 
                         value = java.lang.String; 
                     }
@@ -1306,7 +1306,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.valueClassName; 
+                        key = smartAttribute.className; 
                         selectorName = "isEqualTo"; 
                         value = java.lang.String; 
                     }, 
@@ -1353,13 +1353,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }
@@ -1396,13 +1396,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }
@@ -1535,13 +1535,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -1733,13 +1733,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }
@@ -1776,13 +1776,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = com.webobjects.foundation.NSTimestamp; 
                             }
@@ -1924,7 +1924,7 @@
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.valueClassName; 
+                key = smartAttribute.className; 
                 selectorName = "isEqualTo"; 
                 value = com.webobjects.foundation.NSTimestamp; 
             }; 
@@ -1980,7 +1980,7 @@
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.valueClassName; 
+                key = smartAttribute.className; 
                 selectorName = "isEqualTo"; 
                 value = com.webobjects.foundation.NSTimestamp; 
             }; 
@@ -2004,7 +2004,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.valueClassName; 
+                        key = smartAttribute.className; 
                         selectorName = "isEqualTo"; 
                         value = java.lang.Number; 
                     }
@@ -2030,7 +2030,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.valueClassName; 
+                        key = smartAttribute.className; 
                         selectorName = "isEqualTo"; 
                         value = java.math.BigDecimal; 
                     }
@@ -2167,13 +2167,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -2204,13 +2204,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -2451,13 +2451,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -2488,13 +2488,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }
@@ -2571,13 +2571,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.lang.Number; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.valueClassName; 
+                                key = smartAttribute.className; 
                                 selectorName = "isEqualTo"; 
                                 value = java.math.BigDecimal; 
                             }
@@ -2684,7 +2684,7 @@
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.valueClassName; 
+                key = smartAttribute.className; 
                 selectorName = "isEqualTo"; 
                 value = java.lang.String; 
             }; 
@@ -2756,7 +2756,7 @@
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.valueClassName; 
+                key = smartAttribute.className; 
                 selectorName = "isEqualTo"; 
                 value = java.math.BigDecimal; 
             }; 
@@ -4010,7 +4010,7 @@
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.valueClassName; 
+                key = smartAttribute.className; 
                 selectorName = "isEqualTo"; 
                 value = java.lang.String; 
             }; 
