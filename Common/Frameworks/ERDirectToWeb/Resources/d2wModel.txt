@@ -99,8 +99,9 @@
     10 : ((pageConfiguration like 'SelectGroup*') or (pageConfiguration like 'ListGroup*')) => subTask = group
     10 : ((propertyKey like 'a*') or (propertyKey like 'e*') or (propertyKey like 'u*') or (propertyKey like 'i*') or (propertyKey like 'o*') or (propertyKey like 'u*')) => indefiniteArticleForProperty = an
     10 : ((propertyKey like 'a*') or (propertyKey like 'e*') or (propertyKey like 'u*') or (propertyKey like 'i*') or (propertyKey like 'o*') or (propertyKey like 'u*')) => upperIndefiniteArticleForProperty = An
-    10 : ((propertyType = 'r') and (task = 'edit')) => inspectConfigurationName = editEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
-    10 : ((propertyType = 'r') and (task = 'inspect')) => inspectConfigurationName = inspectEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
+    10 : ((propertyType = 'r') and (propertyKey <> null) and (task = 'edit')) => inspectConfigurationName = editEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
+    10 : ((propertyType = 'r') and (propertyKey <> null) and (task = 'inspect')) => inspectConfigurationName = inspectEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
+    10 : ((propertyType = 'r') and (propertyKey <> null)) => listConfigurationName = listEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
     10 : ((smartAttribute.allowsNull = (java.math.BigDecimal)'1') or (isMandatory = (java.math.BigDecimal)'0')) => choicesNames = ("Yes", "No", "Unset")
     10 : ((smartRelationship <> null) or (smartAttribute <> null) or (attribute <> null) or (relationship <> null)) => propertyIsSortable = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : ((task = 'edit') and ((propertyKey = 'password') or (smartAttribute.userInfo.erPrototype = 'password'))) => componentName = ERDEditPassword
@@ -136,7 +137,6 @@
     10 : (propertyKey = 'selectAllAction') => componentName = ERDSelectAllButton
     10 : (propertyType = 'r') => emptyListMessage = ERDEmptyListMessage.emptyEmbeddedListMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : (propertyType = 'r') => isMandatory = smartRelationship.isMandatory [er.directtoweb.ERDKeyValueAssignment]
-    10 : (propertyType = 'r') => listConfigurationName = listEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
     10 : (smartAttribute.className = 'java.math.BigDecimal') => maxLength = 30
     10 : (subTask = 'compact') => shouldRenderBorder = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (subTask = 'pickType') => choiceDisplayKey = toString
@@ -150,7 +150,7 @@
     10 : (task = 'queryAll') => displayPropertyKeys = visibleEntityNames [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => branchChoices = ()
     10 : *true* => browserSize = 5
-    10 : *true* => cancelMessage = ERD2W.cancelCreationMessage [er.directtoweb.ERDLocalizedAssignment]
+    10 : *true* => cancelMessage = ERD2W.cancelCreationMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : *true* => componentsToShowAtEndOfList = ("ERD2WCustomComponentWithArgs", "ERD2WStatelessCustomComponentWithArgs", "D2WCustomQueryComponent", "D2WCustomComponent", "D2WKeyPathContainer")
     10 : *true* => confirmConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => confirmDeleteConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
