@@ -582,16 +582,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         formatString = localizedStringForKeyWithDefault(formatString);
         Format result = (Format)_dateFormatters.get(formatString);
 		if(result == null) {
-			// HACK ak
-			// we need to sync on the localizer and hold our breath that no one else relies on Locale.getDefault()
-			// at this time. All of this because the NSTimestampFormatter doesn't have a setLocale() method...
 			synchronized(ERXLocalizer.class) {
-				Locale old = Locale.getDefault();
-				Locale.setDefault(locale());
-				NSTimestampFormatter formatter = new NSTimestampFormatter(formatString);
+                Locale current = locale();
+				NSTimestampFormatter formatter = new NSTimestampFormatter(formatString, new DateFormatSymbols(current));
 				result = formatter;
 				_dateFormatters.put(formatString, result);
-				Locale.setDefault(old);
 			}
 		}
 		return result;
