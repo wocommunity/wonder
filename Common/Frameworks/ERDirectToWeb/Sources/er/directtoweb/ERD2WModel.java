@@ -279,6 +279,14 @@ public class ERD2WModel extends D2WModel {
                     String k=(String)e6.nextElement();
                     addKeyToVector(k, recipientForNewKeys);
                 }
+            } else if (r.rhs() instanceof DefaultAssignment) {
+                // special treatment for the only custom assignment coming for the D2W default rule set
+                // since it does not implement ERDComputingAssignmentInterface, we add the required keys explicitely here
+                // another way to do this would be to introduce a rule with the required keys in their LHS, but that is
+                // quite a few rules and this is a bit more self contained
+                addKeyToVector("task", dependendantKeys);
+                addKeyToVector("entity", dependendantKeys);
+                addKeyToVector("propertyKey", dependendantKeys);
             }
             c.keys=new NSMutableArray();
         }
