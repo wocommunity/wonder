@@ -1,5 +1,5 @@
 // _ERCMailMessage.java
-// 
+//
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to ERCMailMessage.java instead.
 package er.corebusinesslogic;
@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
+    public static ERXLogger log = ERXLogger.getERXLogger(_ERCMailMessage.class);
+    
     public _ERCMailMessage() {
         super();
     }
@@ -24,13 +26,33 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
         public NSArray ripeMessagesWithDate(EOEditingContext ec, Object date) {
             NSMutableDictionary _dict = new NSMutableDictionary(2);
-            
+
             if(date != null) _dict.setObjectForKey( date, "date");
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "ERCMailMessage", "ripeMessages", _dict);
         }
 
     }
 
+    public boolean contentGzippedAsBoolean() {
+        return contentGzipped() != null && contentGzipped().booleanValue();
+    }
+    
+    public Boolean contentGzipped() {
+        return (Boolean)storedValueForKey("contentGzipped");
+    }
+
+    public void setContentGzipped(Boolean aValue) {
+        takeStoredValueForKey(aValue, "contentGzipped");
+    }
+
+    public Boolean shouldArchiveSentMail() {
+        return (Boolean)storedValueForKey("shouldArchiveSentMail");
+    }
+
+    public void setShouldArchiveSentMail(Boolean aValue) {
+        takeStoredValueForKey(aValue, "shouldArchiveSentMail");        
+    }
+    
     public String fromAddress() {
         return (String)storedValueForKey("fromAddress");
     }
@@ -59,13 +81,6 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, "bccAddresses");
     }
 
-    public String exceptionReason() {
-        return (String)storedValueForKey("exceptionReason");
-    }
-    public void setExceptionReason(String aValue) {
-        takeStoredValueForKey(aValue, "exceptionReason");
-    }    
-    
     public String title() {
         return (String)storedValueForKey("title");
     }
@@ -73,20 +88,65 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, "title");
     }
 
+    public String exceptionReason() {
+        return (String)storedValueForKey("exceptionReason");
+    }
+    
+    public void setExceptionReason(String aValue) {
+        takeStoredValueForKey(aValue, "exceptionReason");
+    }    
+    
     public String text() {
-        return (String)storedValueForKey("text");
+        String value = null;
+        if (contentGzippedAsBoolean()) {
+            value = (String)storedGzippedValueForKey("textCompressed");
+        } else {
+            value = (String)storedValueForKey("text");
+        }
+        return value;
     }
     public void setText(String aValue) {
-        takeStoredValueForKey(aValue, "text");
+        if (contentGzippedAsBoolean()) {
+            takeStoredGzippedValueForKey(aValue, "textCompressed");
+        } else {
+            takeStoredValueForKey(aValue, "text");            
+        }
     }
 
-	public String plainText() {
-		return (String)storedValueForKey("plainText");
-	}
-	public void setPlainText(String aValue) {
-		takeStoredValueForKey(aValue, "plainText");
-	}
+    public String plainText() {
+        String value = null;
+        if (contentGzippedAsBoolean()) {
+            value = storedGzippedValueForKey("plainTextCompressed");
+        } else {
+            value = (String)storedValueForKey("plainText");
+        }
+        return value;
+    }
 
+    public void setPlainText(String aValue) {
+        if (contentGzippedAsBoolean()) {
+            takeStoredGzippedValueForKey(aValue, "plainTextCompressed");
+        } else {
+            takeStoredValueForKey(aValue, "plainText");            
+        }        
+    }    
+    
+    public String storedGzippedValueForKey(String key) {
+        NSData data = (NSData)storedValueForKey(key);
+        String value = null;
+        if (data != null && data.bytes().length > 0) {
+            value = ERXCompressionUtilities.gunzipByteArrayAsString(data.bytes());
+        }
+        return value;
+    }
+
+    public void takeStoredGzippedValueForKey(String aValue, String key) {
+        byte bytes[] = ERXCompressionUtilities.gzipStringAsByteArray(aValue);
+        if (bytes.length > 0) {
+            takeStoredValueForKey(new NSData(bytes), key);
+        }
+    }
+    
     public NSTimestamp dateSent() {
         return (NSTimestamp)storedValueForKey("dateSent");
     }
@@ -143,18 +203,15 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
     public void setAttachments(NSMutableArray aValue) {
         takeStoredValueForKey(aValue, "attachments");
     }
+    
     public void addToAttachments(ERCMessageAttachment object) {
-        NSMutableArray array = (NSMutableArray)attachments();
-
-        willChange();
-        array.addObject(object);
+        includeObjectIntoPropertyWithKey(object, "attachments");
     }
+    
     public void removeFromAttachments(ERCMessageAttachment object) {
-        NSMutableArray array = (NSMutableArray)attachments();
-
-        willChange();
-        array.removeObject(object);
+        removeObjectFromPropertyWithKey(object, "attachments");
     }
+    
     public void addToBothSidesOfAttachments(ERCMessageAttachment object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "attachments");
     }

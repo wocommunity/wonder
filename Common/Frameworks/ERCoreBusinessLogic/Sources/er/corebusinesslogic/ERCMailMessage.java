@@ -12,7 +12,7 @@ import er.extensions.*;
 public class ERCMailMessage extends _ERCMailMessage {
 
     //	===========================================================================
-    //	Class variable(s)
+    //	Class Constant(s)
     //	---------------------------------------------------------------------------
         
     /** logging support */
@@ -21,6 +21,10 @@ public class ERCMailMessage extends _ERCMailMessage {
     /** holds the address separator */
     public static final String AddressSeparator = ",";
 
+    //	===========================================================================
+    //	Clazz Object(s)
+    //	---------------------------------------------------------------------------    
+    
     /**
      * Clazz object used to hold all clazz related methods.
      */
@@ -38,7 +42,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     //	===========================================================================
-    //	Class method(s)
+    //	Class Method(s)
     //	---------------------------------------------------------------------------
 
     /**
@@ -49,6 +53,10 @@ public class ERCMailMessage extends _ERCMailMessage {
         return (ERCMailMessageClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailMessage");
     }
 
+    //	===========================================================================
+    //	Instance Constructor(s)
+    //	---------------------------------------------------------------------------
+    
     /**
      * Public constructor.
      */
@@ -56,6 +64,10 @@ public class ERCMailMessage extends _ERCMailMessage {
         super();
     }
 
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------    
+    
     /**
      * Default state of the mail message is
      * 'Ready To Be Sent'.
@@ -64,13 +76,17 @@ public class ERCMailMessage extends _ERCMailMessage {
     public void awakeFromInsertion(EOEditingContext anEditingContext) {
         super.awakeFromInsertion(anEditingContext);
         setState(ERCMailState.READY_TO_BE_SENT_STATE);
-        setReadAsBoolean(false);
+        if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldArchive",
+                                                   false)) {
+            setShouldArchiveSentMail(Boolean.TRUE);
+        }
+        if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldGzipContent",
+                                                   true)) {
+            setContentGzipped(Boolean.TRUE);
+        }
+        
     }
         
-    /** log entry support is disabled */
-    public String relationshipNameForLogEntry() {  return null; }
-    public EOEnterpriseObject logEntryType() 	{  return null; }
-
     // State Methods
     public boolean isReadyToSendState() 	{ return state() == ERCMailState.READY_TO_BE_SENT_STATE; }
     public boolean isSentState() 		{ return state() == ERCMailState.SENT_STATE; }
@@ -118,6 +134,10 @@ public class ERCMailMessage extends _ERCMailMessage {
             setBccAddresses(bccAddresses.componentsJoinedByString(AddressSeparator));
         }
     }
+
+    public boolean shouldArchiveSentMailAsBoolean() {
+        return shouldArchiveSentMail() != null && shouldArchiveSentMail().booleanValue();
+    }
     
     /**
      * Long description of the mail message.
@@ -143,6 +163,29 @@ public class ERCMailMessage extends _ERCMailMessage {
         return sb.toString();
     }
 
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("To: ");
+        sb.append(toAddresses());
+        sb.append("\n");
+        sb.append("cc: ");
+        sb.append(ccAddresses());
+        sb.append("\n");
+        sb.append("Created: ");
+        sb.append(created());
+        sb.append("\n");
+        sb.append("Title: ");
+        sb.append(title());
+        return sb.toString();
+    }
+
+    public ERCMailMessage archive() {
+        ERCMailMessage archive = (ERCMailMessage)ERXUtilities.createEO("ERCMailMessageArchive",
+                                                                                     editingContext());
+        archive.takeValuesFromDictionary(archive.snapshot());
+        return archive;
+    }
+    
     /**
      * Appends test to the currently stored text.
      * Useful for nested mime messages or multi-part messages.
@@ -160,7 +203,7 @@ public class ERCMailMessage extends _ERCMailMessage {
         }
         return value;
     }
-    
+
     // Validation Methods
     public Object validateFromAddress(String newValue) {
         return validateEmptyStringForKey(newValue, "fromAddress");
