@@ -30,6 +30,7 @@ import java.util.*;
  */
 
 public class ERD2WContextDictionary {
+    private static final ERXLogger log = ERXLogger.getERXLogger(ERD2WContextDictionary.class);
 
     protected D2WContext context;
     protected String pageConfiguration;
@@ -63,13 +64,34 @@ public class ERD2WContextDictionary {
             componentLevelKeys.addObject("sortKeyForList");
         }
         allKeys = new NSMutableDictionary();
-        for(Enumeration e = NSBundle.allBundles().objectEnumerator(); e.hasMoreElements(); ) {
+        NSMutableDictionary components = new NSMutableDictionary();
+        NSMutableDictionary editors = new NSMutableDictionary();
+        allKeys.setObjectForKey(components, "components");
+        allKeys.setObjectForKey(editors, "editors");
+        for(Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements(); ) {
             NSBundle bundle = (NSBundle)e.nextElement();
-            allKeys.addEntriesFromDictionary(ERXDictionaryUtilities.dictionaryFromPropertyList("d2wClientConfiguration", bundle));
-            allKeys.addEntriesFromDictionary(ERXDictionaryUtilities.dictionaryFromPropertyList("d2wclientConfiguration", bundle));
+            NSDictionary dict;
+            dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wClientConfiguration", bundle);
+            if(dict != null) {
+                if(dict.objectForKey("components") != null) {
+                    components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
+                }
+                if(dict.objectForKey("editors") != null) {
+                    editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
+                }
+            }
+            if(dict != null) {
+                dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wclientConfiguration", bundle);
+                if(dict.objectForKey("components") != null) {
+                    components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
+                }
+                if(dict.objectForKey("editors") != null) {
+                    editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
+                }
+            }
         }
     }
-
+    
     public ERD2WContextDictionary(String pageConfiguration, NSDictionary dictionary) {
         this.pageConfiguration = pageConfiguration;
         this.dict = dictionary.mutableClone();
@@ -114,7 +136,6 @@ public class ERD2WContextDictionary {
                 dict.takeValueForKeyPath(o, "componentLevelKeys." + propertyKey + "." + key);
         }
         String path = "components." + dict.valueForKeyPath("componentLevelKeys." + propertyKey + ".componentName") + ".editors";
-
         NSArray keys = (NSArray)allKeys.valueForKeyPath(path);
         if(keys != null) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
