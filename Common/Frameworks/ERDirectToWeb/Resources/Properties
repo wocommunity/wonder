@@ -1,0 +1,17 @@
+
+# ERDirectToWeb Framework Properties
+
+# These properties are pushed into the Java system properties for 
+# applications linking against to this framework
+# You can override them from the application's Properties file or 
+# command-line arguments.
+# Remove the leading '#' to uncomment a property
+
+#########################################################################
+# Common ERDirectToWeb Setting
+#########################################################################
+
+# ERD2WModel class
+#ERExtraD2WModelFile = 
+
+
