@@ -511,18 +511,20 @@ public class ERXSession extends WOSession implements Serializable {
     }
 
     /**
-     * Ovverrides terminate to set the shared editing context of the default
-     * editing context to null to avoid a locking problem in WO 5.1.1.
+     * Overrides terminate to free up resources and unregister for notifications.
      */
     public void terminate() {
-        // WOFIX: 5.1.2
-        // work around a bug in WO 5.1.2 where the sessions EC will keep a lock on the SEC
-//        defaultEditingContext().setSharedEditingContext(null);
-//        if (_observer != null) 
-//            NSNotificationCenter.defaultCenter().removeObserver(_observer);
-//        if (_browser != null) 
-//            ERXBrowserFactory.factory().releaseBrowser(_browser);
-        log.debug("will terminate, sessionId is "+sessionID());
+        if (_observer != null) {
+            NSNotificationCenter.defaultCenter().removeObserver(_observer);
+            _observer = null;
+        }
+        if (_browser != null) {
+            ERXBrowserFactory.factory().releaseBrowser(_browser);
+            _browser = null;
+        }
+        if(log.isDebugEnabled()) {
+            log.debug("Will terminate, sessionId is "+sessionID());
+        }
         super.terminate();
     }
 
