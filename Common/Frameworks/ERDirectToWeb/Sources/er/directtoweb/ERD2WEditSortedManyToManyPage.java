@@ -20,6 +20,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     // this pages allows the editing of a sorted many-to-many relationship
     // d2wContext keys:
     //   indexKey: the key on the join entity that contains sort order info
+
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditSortedManyToManyPage.class);
     
     public ERD2WEditSortedManyToManyPage(WOContext c) {
         super(c);
@@ -59,7 +61,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
         EOSortOrdering indexOrdering = EOSortOrdering.sortOrderingWithKey(indexKey(), EOSortOrdering.CompareAscending);
         relationshipDisplayGroup.setSortOrderings(new NSArray(indexOrdering));
-
         
         relationshipDisplayGroup.fetch();
         setPropertyKey(displayKey());
@@ -108,6 +109,16 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public boolean displayNew() {
         return _state == NEW;
     }
+    
+    public boolean isSortedRelationship(){
+        if(entity().userInfo().valueForKey("isSortedJoinEntity") != null &&
+            ((String)entity().userInfo().valueForKey("isSortedJoinEntity")).equals("true")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     public String browserStringForItem() {
         return browserItem!=null ? browserItem.valueForKeyPath(displayKey()).toString() : null;
@@ -141,12 +152,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                                                              editingContext());
 
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
-            Number lastIndex=ERXConstant.ZeroInteger;
+            Number lastIndex = null;
             if (sortedObjects!=null && sortedObjects.count()>0) {
                 EOEnterpriseObject lastObject=(EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
                 lastIndex=(Number)lastObject.valueForKey(indexKey());
             }
-            int newIndex=lastIndex!=null ? lastIndex.intValue() : 0;
+            int newIndex = lastIndex!=null ? lastIndex.intValue()+1 : 0;
             joinEO.takeValueForKey(ERXConstant.integerForInt(newIndex),indexKey());
             joinEO.addObjectToBothSidesOfRelationshipWithKey(_localEoToAddToRelationship,
                                                              destinationRelationship().name());
@@ -247,7 +258,63 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return (String)d2wContext().valueForKey("indexKey");
     }
 
-    
-    
-    
+    public WOComponent moveObjectUp()
+    {
+        if(browserSelection()!=null){
+            NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
+            int selectedIndex = ((Integer)browserSelection().valueForKey(indexKey())).intValue();
+            if(selectedIndex!=0){
+                objectAtIndex(selectedIndex-1).takeValueForKey(new Integer(selectedIndex),
+                                                               indexKey());
+                browserSelection().takeValueForKey(new Integer(selectedIndex-1),
+                                                   indexKey());
+            }
+        }
+        relationshipDisplayGroup.updateDisplayedObjects();
+        return null;
+    }
+
+    public WOComponent moveObjectDown()
+    {
+        if(browserSelection()!=null){
+            NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
+            int selectedIndex = ((Integer)browserSelection().valueForKey(indexKey())).intValue();
+            EOEnterpriseObject lastObject =
+                (EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
+            int lastIndex =
+                ((Integer)lastObject.valueForKey(indexKey())).intValue();
+            if(selectedIndex!=lastIndex){
+                objectAtIndex(selectedIndex+1).takeValueForKey(new Integer(selectedIndex),
+                                                               indexKey());
+                browserSelection().takeValueForKey(new Integer(selectedIndex+1),
+                                                   indexKey());
+            }
+        }
+        relationshipDisplayGroup.updateDisplayedObjects();
+        return null;
+    }
+
+    public EOEnterpriseObject objectAtIndex(int index){
+        EOEnterpriseObject result = null;
+        for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
+            e.hasMoreElements();){
+            EOEnterpriseObject indexObject = (EOEnterpriseObject)e.nextElement();
+            if( ((Integer)indexObject.valueForKey(indexKey())).intValue() == index){
+                result = indexObject;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public EOEnterpriseObject browserSelection(){
+        EOEnterpriseObject result = null;
+        if (browserSelections != null) {
+            if(browserSelections.count()>1){
+                throw new RuntimeException("Please choose only one element");
+            }else
+                result = (EOEnterpriseObject)browserSelections.objectAtIndex(0);
+        }
+        return result;
+    }    
 }
