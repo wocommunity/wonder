@@ -1,3 +1,10 @@
+CollapseContainer: D2WCollapsibleComponentContent {
+        _unroll = true;
+        allowCollapsing = d2wContext.allowCollapsing;
+        closedLabel = toOneDescription;
+        submitActionName = "";
+}
+
 EditToOneRelationship: ERXToOneRelationship {
         destinationDisplayKey = keyWhenRelationship;
         possibleChoices = restrictedChoiceList;
@@ -11,12 +18,6 @@ EditToOneRelationship: ERXToOneRelationship {
         uiStyle = d2wContext.toOneUIStyle;
 	noSelectionString = d2wContext.noSelectionString;
 	popupName = d2wContext.popupName;
-}
-
-CollapseContainer: D2WCollapsibleComponentContent {
-        _unroll = YES;
-        allowCollapsing = d2wContext.allowCollapsing;
-        closedLabel = toOneDescription;
-        submitActionName = "";
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 }
 
