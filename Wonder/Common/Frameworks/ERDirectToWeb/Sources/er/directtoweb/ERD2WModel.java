@@ -349,7 +349,8 @@ public class ERD2WModel extends D2WModel {
     protected void mergeFile(File modelFile) {
         if(cat.isDebugEnabled()) cat.debug("model file being merged = "+modelFile);
         setCurrentFile(modelFile);
-        /* Uncomment this code if rules are not unarchiving correctly */
+        // Uncomment this code if rules are not unarchiving correctly
+        /*
         try {
             NSDictionary dic = Services.dictionaryFromFile(modelFile);
             cat.info("\n\n Got dictionary for file: " + modelFile);
@@ -365,8 +366,8 @@ public class ERD2WModel extends D2WModel {
             }
         } catch (IOException except) {
             cat.error("Bad, bad" + except.getMessage());
-        } 
-        //super.mergeFile(modelFile);
+        } */
+        super.mergeFile(modelFile);
         //uniqueRuleAssignments();
         setCurrentFile(null);
         ERXExtensions.forceGC(1);
