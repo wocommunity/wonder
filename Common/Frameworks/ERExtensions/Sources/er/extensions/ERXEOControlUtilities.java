@@ -158,6 +158,30 @@ public class ERXEOControlUtilities {
      * Computes an aggregate function for a given attribute
      * restricted by a given qualifier. For instance
      * select MAX(AGE) from User where name like 'M*'
+     *
+     * @param ec editing context used for the fetch
+     * @param entityName name of the entity
+     * @param attributeName attribute for the function to be performed on
+     * @param function name, ie MAX, MIN, AVG, etc.
+     * @param qualifier to restrict data set
+     * @return aggregate result of the fuction call
+     */
+    public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
+                                                        String entityName,
+                                                        String attributeName,
+                                                        String function,
+                                                        String fetchSpecificationName,
+                                                        NSDictionary bindings) {
+       EOFetchSpecification fs = fetchSpecificationNamedWithBindings(entityName,
+                                                                     fetchSpecificationName,
+                                                                     bindings);
+        return aggregateFunctionWithQualifier(ec, entityName, attributeName, function, fs.qualifier());
+    }
+    
+    /**
+     * Computes an aggregate function for a given attribute
+     * restricted by a given qualifier. For instance
+     * select MAX(AGE) from User where name like 'M*'
      * 
      * @param ec editing context used for the fetch
      * @param entityName name of the entity
@@ -280,8 +304,8 @@ public class ERXEOControlUtilities {
      * 		bindings replaced.
      */
     public static EOFetchSpecification fetchSpecificationNamedWithBindings(String entityName,
-                                                                    String fetchSpecificationName,
-                                                                    NSDictionary bindings) {
+                                                                           String fetchSpecificationName,
+                                                                           NSDictionary bindings) {
         EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed(fetchSpecificationName,
                                                                                       entityName);
         return fetchSpec != null && bindings != null ?
