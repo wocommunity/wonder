@@ -37,7 +37,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     public WOComponent nextStep() {
         // FIXME: This is no longer needed.  We now have validationKeys that will serve the same purpose.
-        NSNotificationCenter.defaultCenter().postNotification(ERD2WWizardCreationPageTemplate.WILL_GOTO_NEXT_PAGE, null);
+        NSNotificationCenter.defaultCenter().postNotification(ERD2WWizardCreationPage.WILL_GOTO_NEXT_PAGE, null);
         if (errorMessages.count()==0 && _currentStep < tabSectionsContents().count())
             _currentStep++;
         return null;
