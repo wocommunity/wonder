@@ -43,7 +43,7 @@ public class ERXLocalizer implements NSKeyValueCoding {
     public static ERXLocalizer localizerForLanguages(NSArray languages) {
         if(languages == null || languages.count() == 0) return localizerForLanguage(defaultLanguage);
         ERXLocalizer l = null;
-        Enumeration e = localizers.objectEnumerator();
+        Enumeration e = languages.objectEnumerator();
         while(e.hasMoreElements()) {
             String language = (String)e.nextElement();
             l = (ERXLocalizer)localizers.objectForKey(language);
