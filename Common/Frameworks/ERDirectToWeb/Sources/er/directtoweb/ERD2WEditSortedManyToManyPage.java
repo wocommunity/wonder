@@ -148,7 +148,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
             if(isSortedRelationship()){
                 Number lastIndex = null;
-                if (sortedObjects!=null && sortedObjects.count()>0) {
+                if (sortedObjects.count()>0) {
                     EOEnterpriseObject lastObject=(EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
                     lastIndex=(Number)lastObject.valueForKey(indexKey());
                 }
