@@ -52,7 +52,6 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_CLASS_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Java/Extensions/jce1_2_2.jar\"";
-				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
@@ -479,6 +478,12 @@
 				413BCC79046311A700000102,
 				413BCCFA04631A7F00000102,
 				413BE5AC0463315E00000102,
+				63AB6FF0048CBC1F00A83704,
+				63BE1728048D10E200A83704,
+				637DFB8504A08C7200A83704,
+				637DFBC604A0B26800A83704,
+				63C4CD0F04AA445700A83704,
+				63DF10BB04AAD68D00A83704,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1593,6 +1598,32 @@
 			settings = {
 			};
 		};
+		637DFB8404A08C7200A83704 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXBatchingDisplayGroupDelegate.java;
+			path = er/extensions/ERXBatchingDisplayGroupDelegate.java;
+			refType = 4;
+		};
+		637DFB8504A08C7200A83704 = {
+			fileRef = 637DFB8404A08C7200A83704;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		637DFBC504A0B26800A83704 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXBatchingDisplayGroup.java;
+			path = er/extensions/ERXBatchingDisplayGroup.java;
+			refType = 4;
+		};
+		637DFBC604A0B26800A83704 = {
+			fileRef = 637DFBC504A0B26800A83704;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		639E08E50466746E00A83704 = {
 			isa = PBXFrameworkReference;
 			name = JavaJDBCAdaptor.framework;
@@ -1601,6 +1632,58 @@
 		};
 		639E08E60466746E00A83704 = {
 			fileRef = 639E08E50466746E00A83704;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		63AB6FEF048CBC1F00A83704 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXCompressionUtilities.java;
+			path = er/extensions/ERXCompressionUtilities.java;
+			refType = 4;
+		};
+		63AB6FF0048CBC1F00A83704 = {
+			fileRef = 63AB6FEF048CBC1F00A83704;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		63BE1727048D10E200A83704 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXObjectStoreCoordinatorPool.java;
+			path = er/extensions/ERXObjectStoreCoordinatorPool.java;
+			refType = 4;
+		};
+		63BE1728048D10E200A83704 = {
+			fileRef = 63BE1727048D10E200A83704;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		63C4CD0B04AA430500A83704 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXMutableDictionary.java;
+			path = er/extensions/ERXMutableDictionary.java;
+			refType = 4;
+		};
+		63C4CD0E04AA445700A83704 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXMutableArray.java;
+			path = er/extensions/ERXMutableArray.java;
+			refType = 4;
+		};
+		63C4CD0F04AA445700A83704 = {
+			fileRef = 63C4CD0E04AA445700A83704;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		63DF10BB04AAD68D00A83704 = {
+			fileRef = 63C4CD0B04AA430500A83704;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7109,16 +7192,18 @@
 		F6E7989702C8799401AD0D07 = {
 			children = (
 				F59C577702C4565601000102,
+				637DFB8404A08C7200A83704,
 				50287842040960A40043FCB8,
-				F59C579202C4565701000102,
 				500567410408508100CF0E76,
 				F5E99BAF0354DE4F01CF0E76,
 				F5E3B46A034823BF016A5D3F,
+				F59C579202C4565701000102,
 				F59C579802C4565701000102,
 				F5283C570365C94301CF0E76,
 				F59C579F02C4565701000102,
 				F59C57A102C4565701000102,
 				F69DF13F02C76B3F01AD0D07,
+				63BE1727048D10E200A83704,
 				F59C57ED02C4565701000102,
 				F59C57F102C4565701000102,
 				F59C57F202C4565701000102,
@@ -7168,6 +7253,8 @@
 				F59C57DD02C4565701000102,
 				F59C57E302C4565701000102,
 				F59C57EB02C4565701000102,
+				63C4CD0B04AA430500A83704,
+				63C4CD0E04AA445700A83704,
 			);
 			isa = PBXGroup;
 			name = "Foundation Additions";
@@ -7727,6 +7814,7 @@
 				F6ED0C790361C03B01257492,
 				F592A409036D480201AD0D07,
 				633FC07B040A414D00AE7795,
+				63AB6FEF048CBC1F00A83704,
 			);
 			isa = PBXGroup;
 			name = Utilities;
@@ -7752,6 +7840,7 @@
 				F522D6CC03A0397701CAC43C,
 				F59BE09403A5883C01CF0E76,
 				F531D2EC03658BC001AD0D07,
+				637DFBC504A0B26800A83704,
 			);
 			isa = PBXGroup;
 			name = "WOF Additions";
