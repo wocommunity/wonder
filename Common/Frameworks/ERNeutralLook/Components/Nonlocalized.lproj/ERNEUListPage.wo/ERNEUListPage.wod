@@ -2,6 +2,10 @@ AreThereBackgroundColors: ERXNonNullConditional {
 	condition = d2wContext.referenceRelationshipForBackgroupColor;
 }
 
+AreThereReferenceEO: ERXNonNullConditional {
+	condition = referenceEOs;
+}
+
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
