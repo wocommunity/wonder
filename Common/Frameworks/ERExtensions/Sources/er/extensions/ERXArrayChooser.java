@@ -310,18 +310,24 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             }
         }
     }
-
+    
     protected Object realSourceObject() {
         Object realSourceObject = sourceObject();
-        String masterKey = relationshipKey();
-        if(masterKey.indexOf('.') != -1) {
-            String partialPath = ERXStringUtilities.keyPathWithoutLastProperty(masterKey);
-            realSourceObject = NSKeyValueCodingAdditions.Utility.valueForKeyPath(realSourceObject, partialPath);
+        //NOTE ak: this check is needed if we are used in a query binding and want to query a keyPath
+        if(realSourceObject instanceof EOEnterpriseObject) {
+            String masterKey = relationshipKey();
+            if(masterKey.indexOf('.') != -1) {
+                String partialPath = ERXStringUtilities.keyPathWithoutLastProperty(masterKey);
+                realSourceObject = NSKeyValueCodingAdditions.Utility.valueForKeyPath(realSourceObject, partialPath);
+            }
         }
         return realSourceObject;
     }
     
     protected String realRelationshipKey() {
-        return ERXStringUtilities.lastPropertyKeyInKeyPath(relationshipKey());
+        if(sourceObject() instanceof EOEnterpriseObject) {
+            return ERXStringUtilities.lastPropertyKeyInKeyPath(relationshipKey());
+        }
+        return relationshipKey();
     }
 }
