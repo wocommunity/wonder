@@ -1,0 +1,14 @@
+<project name="Wonder" default="core">
+<target name="all">
+<ant antFile="Build/build/generic.xml" target="all" />
+</target>
+<target name="reporting">
+<ant antFile="Build/build/generic.xml" target="DynaReporting.all" />
+</target>
+<target name="core">
+<ant antFile="Build/build/generic.xml" target="frameworks.all" />
+</target>
+<target name="clean">
+<ant antFile="Build/build/generic.xml" target="clean" />
+</target>
+</project>
