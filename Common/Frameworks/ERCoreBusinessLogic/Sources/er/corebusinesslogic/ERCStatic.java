@@ -24,11 +24,23 @@ public class ERCStatic extends _ERCStatic {
     
     public static class ERCStaticClazz extends _ERCStaticClazz {
 
-        public ERCStatic objectMatchingKey(EOEditingContext ec, String value) {
-            NSArray arr = preferencesWithKey(ec, value);
-            if (arr.count()>1) throw new IllegalStateException("Found "+arr.count()+" rows for key "+value);
-            return (ERCStatic) (arr.count() == 1 ? arr.objectAtIndex(0) : null);
+
+        private NSMutableDictionary _staticsPerKey=new NSMutableDictionary();
+
+        
+        public ERCStatic objectMatchingKey(EOEditingContext ec, String key) {
+            Object result=_staticsPerKey.objectForKey(key);
+            if (result==null) {
+                NSArray arr = preferencesWithKey(ec, key);
+                if (arr.count()>1) throw new IllegalStateException("Found "+arr.count()+" rows for key "+key);
+                result=arr.count() == 1 ? arr.objectAtIndex(0) : NSKeyValueCoding.NullValue;
+                _staticsPerKey.setObjectForKey(result,key);
+                result= result == NSKeyValueCoding.NullValue ? null : result;
+            }
+            return (ERCStatic)result;
         }
+
+        public void invalidateCache() { _staticsPerKey.removeAllObjects(); }
 
 
         // the STATIC table acts as a dictionary
