@@ -5,6 +5,17 @@
 	};
 	objectVersion = 38;
 	objects = {
+		F533017C037B1A6501CF0E76 = {
+			isa = PBXFileReference;
+			path = ERCLogEntryInterface.java;
+			refType = 4;
+		};
+		F533017D037B1A6501CF0E76 = {
+			fileRef = F533017C037B1A6501CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F55597E602832F8C01000104 = {
 			isa = PBXFrameworkReference;
 			path = ERCoreBusinessLogic.framework;
@@ -391,6 +402,7 @@
 				F5DD888802C4D59001000102,
 				F5DD888902C4D59001000102,
 				F5F37BD0036E0CE601CF0E76,
+				F533017D037B1A6501CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -922,6 +934,7 @@
 				F5DD886402C4D59001000102,
 				F5DD886502C4D59001000102,
 				F5DD886702C4D59001000102,
+				F533017C037B1A6501CF0E76,
 				F5DD886802C4D59001000102,
 				F5DD886902C4D59001000102,
 				F5DD886A02C4D59001000102,
