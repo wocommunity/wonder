@@ -64,6 +64,16 @@ public class ERCMailDelivery {
         return result.toString();
     }
 
+
+    /**
+        * Is  Mail turned on
+     *
+     * @return if the Mail is turned on
+     */ 
+    public static boolean usesMail(){
+        return ERXProperties.booleanForKey("er.corebusinesslogic.ERCUseMailFacility");
+    }
+
     /**
      * Composes a mail message.
      *
@@ -85,8 +95,7 @@ public class ERCMailDelivery {
                                      String message,
                                      EOEditingContext ec) {
         ERCMailMessage mailMessage = null;
-        boolean usesMail = ERXProperties.booleanForKey("er.corebusinesslogic.ERCUseMailFacility");
-        if(usesMail){
+        if(usesMail()){
             mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
             String safeTitle=title!=null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
             mailMessage.setTitle(safeTitle);
