@@ -132,7 +132,7 @@
                 <exclude name="WOPayPal.framework"/>
                 <exclude name="Validity.framework"/>
             </frameworks>
-            <frameworks root="wo.woroot">
+            <frameworks root="${wo.woroot}">
                 <include name="Library/Frameworks/JavaJDBCAdaptor.framework" />
                 <include name="Library/Frameworks/JavaXML.framework"/>
                 <include name="Library/Frameworks/JavaEOControl.framework" />
@@ -143,7 +143,7 @@
                 <include name="Library/Frameworks/JavaFoundation.framework" />
                 <include name="Library/Frameworks/JavaDTWGeneration.framework" />
             </frameworks>
-            <frameworks root="wo.localroot">
+            <frameworks root="${wo.localroot}">
                 <include name="Library/Frameworks/Mysql*.framework"/>
             </frameworks>
         </woapplication>
@@ -182,7 +182,7 @@
                 <include name="**/*.js" />
                 <include name="**/*.css" />
             </wsresources>
-            <frameworks root="wo.woroot">
+            <frameworks root="${wo.woroot}">
                 <include name="Library/Frameworks/JavaFoundation.framework" />
                 <include name="Library/Frameworks/JavaEOControl.framework" />
                 <include name="Library/Frameworks/JavaEOAccess.framework" />
