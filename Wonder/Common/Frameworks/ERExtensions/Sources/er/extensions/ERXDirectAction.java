@@ -76,6 +76,40 @@ public class ERXDirectAction extends WODirectAction {
         return result;
     }
 
+    /**
+     * Action used for forcing garbage collection. If WOCachingEnabled is true (we take this to mean 
+     * that the application is in production) you need to give a password to access it.<br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>
+     * <br/>
+     * Form Values:<br/>
+     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXGCPassword</code>.
+     * <br/>
+     * @return short info about free and used memory before and after GC.
+     */
+    public WOComponent forceGCAction() {
+        ERXStringHolder result=(ERXStringHolder)pageWithName("ERXStringHolder");
+        if (!WOApplication.application().isCachingEnabled() ||
+            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXGCPassword"))) {
+            Runtime runtime = Runtime.getRuntime();
+            ERXUnitAwareDecimalFormat decimalFormatter = new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
+            decimalFormatter.setMaximumFractionDigits(2);
+           
+            String info = "Before: ";
+            info += decimalFormatter.format(runtime.totalMemory()) + " total, ";
+            info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
+            
+            ERXExtensions.forceGC(5);
+  
+            info += "After: ";
+            info += decimalFormatter.format(runtime.totalMemory()) + " total, ";
+            info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
+
+            result.setValue(info);
+        }
+        return result;
+    }
 
     public WOComponent logoutAction() {
         if (existingSession()!=null) {
