@@ -21,10 +21,9 @@ public class ERXPluralString extends WOComponent {
 
     public String value() {
         Number c=(Number)valueForBinding("count");
-        return plurify((String)valueForBinding("value"),
-                       c!=null ? c.intValue() : 0);
+        return ERXLocalizer.localizerForSession(session()).plurifiedString((String)valueForBinding("value"), c!=null ? c.intValue() : 0);
     }
-
+/*
     public static String plurify(String s, int howMany) {
         String result=s;
         if (s!=null && howMany!=1) {
@@ -54,7 +53,7 @@ public class ERXPluralString extends WOComponent {
         }
         return result;  
     }
-
+*/
     
     public boolean showNumber() {
         return hasBinding("showNumber") ? ERXUtilities.booleanValue(valueForBinding("showNumber")) : true;

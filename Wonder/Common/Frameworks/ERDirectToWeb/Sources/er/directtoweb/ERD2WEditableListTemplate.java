@@ -96,7 +96,7 @@ public class ERD2WEditableListTemplate extends ERD2WListPageTemplate implements 
                                                                  keyPath,
                                                                  currentErrorDictionary(),
                                                                  propertyKey(),
-                                                                  ((ERXSession)session()).localizer(),
+                                                                  ERXLocalizer.localizerForSession(session()),
                                                                  d2wContext().entity(),
                                                                   ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
     }
@@ -118,7 +118,13 @@ public class ERD2WEditableListTemplate extends ERD2WListPageTemplate implements 
     }
 
     public String saveLabel() {
-        return "Save "+ERXPluralString.plurify((String)d2wContext().valueForKey("displayNameForEntity"),
-                                            displayGroup().allObjects().count());
+        String templateKey = (String)d2wContext().valueForKey("saveLabelTemplateKey");
+        String displayName = (String)d2wContext().valueForKey("displayNameForEntity");
+        int count = displayGroup().allObjects().count();
+        if(templateKey == null)
+            templateKey = "ERDEditList.saveLabel";
+        
+        String saveLabel = ERXLocalizer.localizerForSession(session()).plurifiedStringWithTemplateForKey(templateKey, displayName, count, d2wContext());
+        return saveLabel;
     }
 }

@@ -484,8 +484,8 @@ public class ERXExtensions {
         return result;
     }
 
-    public static String plurify(String s, int howMany) {
-        return ERXPluralString.plurify(s, howMany);
+    public static String plurify(String s, int howMany, String language) {
+        return ERXLocalizer.localizerForLanguage(language).plurifiedString(s, howMany);
     }
 
     public static boolean safeEquals(Object v1, Object v2) {

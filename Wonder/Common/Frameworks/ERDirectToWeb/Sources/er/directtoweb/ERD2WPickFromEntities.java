@@ -11,6 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
 
@@ -31,6 +32,7 @@ public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
         String result=null;
         if (item!=null) {
             D2WContext d2wContext = ERDirectToWeb.d2wContext();
+            d2wContext.takeValueForKey(ERXLocalizer.fakeSessionForSession(session()), "session");
             d2wContext.setEntity(EOModelGroup.defaultGroup().entityNamed((String)item));
             result=(String)d2wContext.valueForKey("displayNameForEntity");
         }

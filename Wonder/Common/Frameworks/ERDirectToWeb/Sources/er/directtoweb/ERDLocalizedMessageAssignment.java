@@ -22,7 +22,7 @@ public class ERDLocalizedMessageAssignment extends ERDDelayedAssignment  impleme
     }
 
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return (ERXLocalizer) c.valueForKeyPath("session.localizer");
+        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
     }
 
     public NSArray _dependentKeys;
