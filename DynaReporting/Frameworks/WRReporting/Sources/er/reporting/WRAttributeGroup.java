@@ -14,13 +14,12 @@ import er.extensions.*;
 public class WRAttributeGroup extends WOComponent  {
 
     protected DRReportModel _model;
-    protected String _totalsOnly;
+    protected Boolean _totalsOnly;
     protected NSArray _groups;
 
-    protected int depth;
-    protected DRAttribute attrib;
-    protected boolean totalsOnly;
-    protected DRGroup aGroup;
+    public int depth;
+    public DRAttribute attrib;
+    public DRGroup aGroup;
 
     public WRAttributeGroup(WOContext c){
         super(c);
@@ -37,6 +36,9 @@ public class WRAttributeGroup extends WOComponent  {
         return false;
     }
 
+    public boolean isStateless() {
+        return true;
+    }
 
     public void awake() {
         this.reset();
@@ -46,7 +48,6 @@ public class WRAttributeGroup extends WOComponent  {
         if (_model == null) {
             _model = (DRReportModel)this.valueForBinding("model");
         }
-
         return _model;
     }
 
@@ -55,18 +56,12 @@ public class WRAttributeGroup extends WOComponent  {
         if (_totalsOnly == null) {
             Object v = (Object)this.valueForBinding("totalsOnly");
             if (ERXValueUtilities.booleanValue(v)) {
-                _totalsOnly = "true";
-            }else {
-                _totalsOnly = "false";
-            }
-
-            if (!_totalsOnly.equals("true")) {
-                totalsOnly = false;
+                _totalsOnly = Boolean.TRUE;
             } else {
-                totalsOnly = true;
+                _totalsOnly = Boolean.FALSE;
             }
         }
-        return totalsOnly;
+        return _totalsOnly.booleanValue();
     }
 
 
