@@ -39,6 +39,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     protected EOEnterpriseObject _newEOInRelationship;
     protected EOEditingContext _editingContext;
     private String _relationshipKey;
+    public String relationshipKey(){ return _relationshipKey; }
     public WODisplayGroup relationshipDisplayGroup = new WODisplayGroup();
     public EOEnterpriseObject browserItem;
     public NSArray browserSelections;
@@ -54,8 +55,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if (!object().isToManyKey(relationshipKey))
             throw new RuntimeException(relationshipKey+" is not a to-many relationship");
         
-        EODetailDataSource relationshipDataSource = new EODetailDataSource(object().classDescription(), _relationshipKey);
-        relationshipDataSource.qualifyWithRelationshipKey(_relationshipKey, newObject);
+        EODetailDataSource relationshipDataSource = new EODetailDataSource(object().classDescription(), relationshipKey());
+        relationshipDataSource.qualifyWithRelationshipKey(relationshipKey(), newObject);
         setDataSource(relationshipDataSource);
         relationshipDisplayGroup.setDataSource(relationshipDataSource);
 
@@ -133,7 +134,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public String displayNameForRelationshipKey() {
-        return Services.capitalize(_relationshipKey);
+        return Services.capitalize(relationshipKey());
     }
 
     public EOEnterpriseObject objectToAddToRelationship() {
@@ -171,7 +172,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             }
             joinEO.addObjectToBothSidesOfRelationshipWithKey(_localEoToAddToRelationship,
                                                              destinationRelationship().name());
-            object().addObjectToBothSidesOfRelationshipWithKey(joinEO, _relationshipKey);
+            object().addObjectToBothSidesOfRelationshipWithKey(joinEO, relationshipKey());
             dataSource().insertObject(joinEO);
             relationshipDisplayGroup.fetch();
         } else {
@@ -193,9 +194,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 object.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
                                                                     destinationRelationship().name());
                 object().removeObjectFromBothSidesOfRelationshipWithKey(object,
-                                                                      _relationshipKey);                                                                    
-                //editingContext().deleteObject(object);
-                dataSource().deleteObject(object);
+                                                                      relationshipKey());                                                                    
+                editingContext().deleteObject(object);
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
             if(isSortedRelationship()){
@@ -319,7 +319,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             // In the case we have a self join relationship we have to be more clever
             if(_destinationRelationship==null){
                 EOEntity originEntity = EOModelGroup.defaultGroup().entityNamed(originEntityName);
-                EORelationship originRelationship = originEntity.relationshipNamed(_relationshipKey);
+                EORelationship originRelationship = originEntity.relationshipNamed(relationshipKey());
                 EORelationship inverseOriginRelationship = originRelationship.inverseRelationship();
                 for (Enumeration e=joinRelationships.objectEnumerator(); e.hasMoreElements();) {
                     EORelationship r=(EORelationship)e.nextElement();
