@@ -13,6 +13,7 @@ import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
 import java.util.Enumeration;
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -196,8 +197,16 @@ class ERXPatternParser extends PatternParser {
          */
         public String convert(LoggingEvent event) {
             if (_portNumber == null) {
-                if (WOApplication.application() != null) 
-                    _portNumber = WOApplication.application().port().toString();
+                if (WOApplication.application() != null) {
+                    //_portNumber = WOApplication.application().port().toString();
+
+                    // WO 5.1.x -- Apple Ref# 2260519
+                    NSArray adaptors = WOApplication.application().adaptors();
+                    if (adaptors != null  &&  adaptors.count() > 0) {
+                        WOAdaptor primaryAdaptor = (WOAdaptor)adaptors.objectAtIndex(0);
+                        _portNumber = String.valueOf(primaryAdaptor.port()); 
+                    }
+                }
             }
             return _portNumber != null ? _portNumber : "N/A";
         }
