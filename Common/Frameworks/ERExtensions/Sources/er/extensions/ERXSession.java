@@ -382,8 +382,6 @@ public class ERXSession extends WOSession {
     /**
      * Overrides the ComponentAction handler to set the didBackTrack
      * flag by calling the method <code>didBacktrack</code>. 
-     * Also provides automatic encoding support for component action 
-     * with <code>messageEncoding</code> object.
      * @param aRequest current request
      * @param aContext current context
      * @return super's implementation of <code>invokeAction</code>
@@ -414,7 +412,9 @@ public class ERXSession extends WOSession {
 
     /**
      * Overridden to display debugging information when a
-     * user backtracks.
+     * user backtracks. 
+     * Also provides automatic encoding support for component action 
+     * with <code>messageEncoding</code> object.
      * @param aResponse current response object
      * @param aContext current context object
      */
