@@ -34,8 +34,8 @@ class ERCNConnectionKeeper implements ExceptionListener {
     // Open the connection to the JMS server.
     void openConnection(boolean verboseLogging) {
         if (_isConnected) {
-            stopConnection(false);
-            closeConnection(false);
+            stopConnection(QUIET_LOGGING);
+            closeConnection(QUIET_LOGGING);
             _isConnected = false;
         }
 
