@@ -44,6 +44,68 @@
 //412
 //413
 //414
+//500
+//501
+//502
+//503
+//504
+		503362D905EE9CFD00039CB0 = {
+			children = (
+				503362DA05EE9D1900039CB0,
+			);
+			isa = PBXGroup;
+			path = javamail;
+			refType = 4;
+		};
+		503362DA05EE9D1900039CB0 = {
+			children = (
+				503362DB05EE9D3600039CB0,
+				503362DC05EE9D3600039CB0,
+			);
+			isa = PBXGroup;
+			path = mailer;
+			refType = 4;
+		};
+		503362DB05EE9D3600039CB0 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERMailer.java;
+			refType = 4;
+		};
+		503362DC05EE9D3600039CB0 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERMailerTimerTask.java;
+			refType = 4;
+		};
+		503362DD05EE9D3600039CB0 = {
+			fileRef = 503362DB05EE9D3600039CB0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		503362DE05EE9D3600039CB0 = {
+			fileRef = 503362DC05EE9D3600039CB0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		503362DF05EE9EB100039CB0 = {
+			isa = PBXFrameworkReference;
+			path = ERJavaMail.framework;
+			refType = 3;
+		};
+		503362E005EE9EB100039CB0 = {
+			fileRef = 503362DF05EE9EB100039CB0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//500
+//501
+//502
+//503
+//504
 //F50
 //F51
 //F52
@@ -168,6 +230,7 @@
 				F5C403D802022B0501A801D4,
 				F5C4042902022BDC01A801D4,
 				F5C4042E02022C8601A801D4,
+				503362DF05EE9EB100039CB0,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -454,6 +517,8 @@
 				F5DD888902C4D59001000102,
 				F5F37BD0036E0CE601CF0E76,
 				F533017D037B1A6501CF0E76,
+				503362DD05EE9D3600039CB0,
+				503362DE05EE9D3600039CB0,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -475,6 +540,7 @@
 				F5C4042F02022C8601A801D4,
 				F55598E9028334B101000104,
 				416649FF04476AAB00000102,
+				503362E005EE9EB100039CB0,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -962,6 +1028,7 @@
 		};
 		F5DD885E02C4D59001000102 = {
 			children = (
+				503362D905EE9CFD00039CB0,
 				F5DD885F02C4D59001000102,
 			);
 			isa = PBXGroup;

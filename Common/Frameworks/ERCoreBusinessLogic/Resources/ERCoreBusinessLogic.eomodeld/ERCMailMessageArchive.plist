@@ -25,7 +25,6 @@
             prototypeName = dateTime; 
         }, 
         {
-            allowsNull = Y; 
             columnName = "EXCEPTION_REASON"; 
             name = exceptionReason; 
             prototypeName = varchar1000; 
@@ -43,12 +42,6 @@
         }, 
         {
             allowsNull = Y; 
-            columnName = "plain_text_compressed"; 
-            name = plainTextCompressed; 
-            prototypeName = blob; 
-        }, 
-        {
-            allowsNull = Y; 
             columnName = "REPLY_TO_ADDR"; 
             name = replyToAddress; 
             prototypeName = varchar1000; 
@@ -58,18 +51,7 @@
             name = shouldArchiveSentMail; 
             prototypeName = intBoolean; 
         }, 
-        {
-            allowsNull = Y; 
-            columnName = "TEXT_"; 
-            name = text; 
-            prototypeName = varcharLarge; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "TEXT_COMPRESSED"; 
-            name = textCompressed; 
-            prototypeName = blob; 
-        }, 
+        {columnName = "TEXT_"; name = text; prototypeName = varcharLarge; }, 
         {columnName = TITLE; name = title; prototypeName = varchar255; }, 
         {columnName = "TO_ADDR"; name = toAddresses; prototypeName = varchar1000; }, 
         {
@@ -80,42 +62,43 @@
         }
     ); 
     attributesUsedForLocking = (
-        id, 
-        mailStateID, 
-        fromAddress, 
-        toAddresses, 
         bccAddresses, 
-        title, 
-        xMailer, 
-        isRead, 
         contentGzipped, 
-        shouldArchiveSentMail
+        exceptionReason, 
+        fromAddress, 
+        id, 
+        isRead, 
+        mailStateID, 
+        replyToAddress, 
+        shouldArchiveSentMail, 
+        title, 
+        toAddresses, 
+        xMailer
     ); 
     className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
-        state, 
-        created, 
-        lastModified, 
-        fromAddress, 
-        toAddresses, 
-        ccAddresses, 
         bccAddresses, 
-        title, 
-        text, 
-        dateSent, 
-        replyToAddress, 
-        attachments, 
-        xMailer, 
-        isRead, 
-        exceptionReason, 
-        plainText, 
+        ccAddresses, 
         contentGzipped, 
+        created, 
+        dateSent, 
+        exceptionReason, 
+        fromAddress, 
+        isRead, 
+        lastModified, 
+        plainText, 
+        replyToAddress, 
         shouldArchiveSentMail, 
-        plainTextCompressed, 
-        textCompressed
+        text, 
+        title, 
+        toAddresses, 
+        xMailer, 
+        attachments, 
+        state
     ); 
-    externalName = "ERCMAIL_MESSAG"; 
-    name = ERCMailMessage; 
+    externalName = "ERCMAIL_MESSAG_ARCHIVE"; 
+    fetchSpecificationDictionary = {}; 
+    name = ERCMailMessageArchive; 
     primaryKeyAttributes = (id); 
     relationships = (
         {
@@ -124,6 +107,7 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = mailMessageId; sourceAttribute = id; }); 
             name = attachments; 
+            ownsDestination = Y; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
         }, 
         {
@@ -135,8 +119,4 @@
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
         }
     ); 
-    userInfo = {
-        modificationDate = "2002-06-04 14:00:54 +0200"; 
-        superclass = ERCStampedEnterpriseObject; 
-    }; 
 }
