@@ -43,6 +43,9 @@ public class ERXSharedEOLoader {
     /////////////////////////////////////////  log4j category  ///////////////////////////////////////
     public static final ERXLogger log = ERXLogger.getERXLogger("er.extensions.fixes.ERSharedEOLoader");
 
+    /** holds the key to enable patched shared eo loading */
+    public static final String PatchSharedEOLoadingPropertyKey = "er.extensions.ERXSharedEOLoader.PatchSharedEOLoading";
+    
     public static ERXSharedEOLoader _defaultLoader;
     protected static boolean _loadingComplete = false;
 

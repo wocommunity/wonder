@@ -130,7 +130,6 @@ public class ERXExtensions {
     static {
         if (!_isInitialized) {
             try {
-                //ERXLog4j.configureLogging();
                 ERXLogger.configureLogging(System.getProperties());
                 
                 log().info("Initializing framework: ERXExtensions");
@@ -140,6 +139,11 @@ public class ERXExtensions {
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
                 NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
 
+                // False by default
+                if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
+                    ERXSharedEOLoader.patchSharedEOLoading();
+                }
+                
                 // Initing defaultEditingContext delegates
                 _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
                 _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
