@@ -20,9 +20,9 @@ public class ERXErrorDictionaryPanel extends WOComponent {
     
     public NSMutableDictionary errorMessages=new NSMutableDictionary();
     public NSMutableArray errorKeyOrder;
-    protected String errorKey;
+    public String errorKey;
     //protected String errorMessageItem;
-    protected String extraErrorMessage;
+    public String extraErrorMessage;
 
     public boolean hasErrors() {
         boolean hasErrors = false;

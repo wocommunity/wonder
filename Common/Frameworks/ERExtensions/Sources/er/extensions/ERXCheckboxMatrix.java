@@ -19,10 +19,10 @@ public class ERXCheckboxMatrix extends WOComponent {
         super(aContext);
     }
 
-    protected Object currentItem;
-    protected int index;
-    protected String wrapperElementID;
     protected NSArray _selections;
+    protected Object currentItem;
+    public int index;
+    public String wrapperElementID;
 
     public boolean isStateless() { return true; }
 
@@ -97,7 +97,7 @@ public class ERXCheckboxMatrix extends WOComponent {
             return (NSArray)valueForBinding("list");
     }
 
-    boolean isListEmpty() {
+    public boolean isListEmpty() {
         NSArray anItemList = (NSArray)valueForBinding("list");
         return (anItemList == null || anItemList.count() == 0);
     }
