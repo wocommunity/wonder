@@ -76,7 +76,8 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
     protected Object localizedValueForDisplayNameOfKeyPath(String keyPath, D2WContext c) {
         String result = ERXStringUtilities.displayNameForKey((String)c.valueForKeyPath(keyPath));
         if(result != null) {
-            return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
+            result = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
+            return result;
         }
         return null;
     }
@@ -120,7 +121,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
             c.takeValueForKey(destinationEntity, "entity");
             result = c.valueForKey("displayNameForEntity");
             c.takeValueForKey(entity, "entity");
-        }
+        } 
         return result;
     }
 
