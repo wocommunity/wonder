@@ -90,6 +90,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         keyPathsWithValidationExceptions.removeAllObjects();
     }
 
+    public boolean shouldSetFailedValidationValue() {
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldSetFailedValidationValue"));
+    }
+
     // Used to hold a cleaned-up validation key and message.
     private NSMutableDictionary _temp = new NSMutableDictionary();
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
@@ -101,25 +105,25 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 erv.setContext(d2wContext());
                 errorKeyOrder.addObject(d2wContext().displayNameForProperty());
                 errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
-                if (erv.eoObject() != null && erv.propertyKey() != null &&
-                    ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false)) {
+                if (erv.eoObject() != null && erv.propertyKey() != null && shouldSetFailedValidationValue()) {
                     erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
                 }   
             } else {
                 _temp.removeAllObjects();
-                ERXValidation.validationFailedWithException(e,
-                                                        value,
-                                                        keyPath,
-                                                        _temp,
-                                                        propertyKey(),
-                                                        ERXLocalizer.localizerForSession(session()),d2wContext().entity(),
-                                                        ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
+                ERXValidation.validationFailedWithException(e, value, keyPath, _temp, propertyKey(), ERXLocalizer.localizerForSession(session()), d2wContext().entity(), shouldSetFailedValidationValue());
                 errorKeyOrder.addObjectsFromArray(_temp.allKeys());
                 errorMessages.addEntriesFromDictionary(_temp);
             }
             d2wContext().takeValueForKey(errorMessages, "errorMessages");
-            if (keyPath != null)
-                keyPathsWithValidationExceptions.addObject(keyPath);
+            if (keyPath != null) {
+                // this is set when you have multiple keys failing
+                // your keyPath should look like "foo,bar.baz"
+                if(keyPath.indexOf(",") > 0) {
+                    keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString(keyPath,","));
+                } else {
+                    keyPathsWithValidationExceptions.addObject(keyPath);
+                }
+            }
         } else if (parent() != null && shouldPropogateExceptions()) {
             parent().validationFailedWithException(e, value, keyPath);
         }
