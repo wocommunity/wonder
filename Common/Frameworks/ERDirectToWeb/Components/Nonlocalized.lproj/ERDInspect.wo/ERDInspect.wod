@@ -25,7 +25,21 @@ Select: WOSubmitButton {
 	value = session.localizer.ERDInspect.select;
 }
 
+Select2: WOSubmitButton {
+	action = createObjectAction;
+	value = session.localizer.ERDInspect.create;
+}
+
+Select3: WOSubmitButton {
+	action = editRelationshipAction;
+	value = session.localizer.ERDInspect.select;
+}
+
 ShowActions: WOConditional {
+	condition = ^showActions;
+}
+
+ShowActions2: WOConditional {
 	condition = ^showActions;
 }
 
