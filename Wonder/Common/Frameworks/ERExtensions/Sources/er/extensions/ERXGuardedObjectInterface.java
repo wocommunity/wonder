@@ -29,4 +29,11 @@ public interface ERXGuardedObjectInterface {
      * @return if it is safe to update
      */
     public boolean canUpdate();
+
+    /**
+        *
+     * To be implemented in order to determine additional operations to be done during deletion
+     * due to a bug in EOF that doesn't refresh relationships correctly in the parent editingContext
+     */
+    public void delete();
 }
