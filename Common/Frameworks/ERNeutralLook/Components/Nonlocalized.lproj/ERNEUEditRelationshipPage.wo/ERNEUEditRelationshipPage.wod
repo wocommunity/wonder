@@ -1,3 +1,9 @@
+ActiveImage2: WOActiveImage {
+	action = editObjectInRelationship;
+	filename = "EditMetalSmBtn.gif";
+	framework = "JavaDirectToWeb";
+}
+
 AttributeName: WOString {
 	value = displayNameForRelationshipKey;
 }
