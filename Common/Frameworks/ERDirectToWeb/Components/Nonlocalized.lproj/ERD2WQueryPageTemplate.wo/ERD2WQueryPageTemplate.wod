@@ -25,24 +25,30 @@ Conditional2: WOConditional {
 	condition = showResults;
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForEntity;
+Conditional3: WOConditional {
+	condition = fetchLimit;
+	negate = true;
 }
 
-FetchLimit: WOString {
-	_unroll = true;
-	value = fetchLimit;
-}
-
-FetchLimitConditional: WOConditional {
-	_unroll = true;
+Conditional4: WOConditional {
 	condition = fetchLimit;
 }
 
 FontContainer: WOGenericContainer {
 	color = d2wContext.textColor;
 	elementName = "font";
+}
+
+Header: ERXLocalizedString {
+	object = self;
+	otherObject = d2wContext;
+	templateString = "ERD2WQueryPage.restrictedMessage";
+}
+
+Header2: ERXLocalizedString {
+	object = self;
+	otherObject = d2wContext;
+	templateString = "ERD2WQueryPage.plainMessage";
 }
 
 Help: ERDDebuggingHelp {
@@ -56,14 +62,6 @@ ListPage: D2WList {
 	d2wContext = d2wContext;
 }
 
-MainTable: WOGenericContainer {
-	_unroll = true;
-	border = "0";
-	cellpadding = "5";
-	cellspacing = "5";
-	elementName = "table";
-}
-
 PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
@@ -73,6 +71,11 @@ PageWrapper: WOSwitchComponent {
 QueryForm: WOForm {
 	action = queryAction;
 	name = "EditForm";
+}
+
+QueryPageRepetition: ERDQueryPageRepetition {
+	d2wContext = localContext;
+	displayGroup = displayGroup;
 }
 
 QueryResetButton: WOResetButton {
@@ -105,26 +108,6 @@ QueryTableHeaderRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-QueryTableRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = backgroundColorForTable;
-	elementName = "tr";
-}
-
-ResourceInputRepresentation: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	displayGroup = displayGroup;
-	localContext = localContext;
-}
-
-ResourceRepetition: WORepetition {
-	_unroll = true;
-	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
-}
-
 ReturnButton: WOImage {
 	alt = "Returns to the previous page";
 	border = "0";
@@ -137,10 +120,5 @@ ReturnButton: WOImage {
 
 ShowCancel: WOConditional {
 	condition = showCancel;
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.propertyNameComponentName;
-	localContext = d2wContext;
 }
 
