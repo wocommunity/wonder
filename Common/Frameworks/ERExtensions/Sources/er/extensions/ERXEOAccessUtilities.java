@@ -688,4 +688,30 @@ public class ERXEOAccessUtilities {
         }
         return couldClose;
     }
+
+    /**
+     * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
+     * @param entity
+     * @param keyPath
+     * @return
+     */
+    public static EOEntity destinationEntityForKeyPath(EOEntity entity, String keyPath) {
+        if(keyPath == null || keyPath.length() == 0) {
+            return entity;
+        }
+        NSArray keyArray = NSArray.componentsSeparatedByString(keyPath, ".");
+        for(Enumeration keys = keyArray.objectEnumerator(); keys.hasMoreElements(); ) {
+            String key = (String)keys.nextElement();
+            EORelationship rel = entity.anyRelationshipNamed(key);
+            if(rel == null) {
+                if(entity.anyAttributeNamed(key) == null) {
+                    log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
+                }
+                return null;
+            }
+            entity = rel.destinationEntity();
+        }
+        return entity;
+    }
 }
+
