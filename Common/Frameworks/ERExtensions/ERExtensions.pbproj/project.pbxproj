@@ -1586,6 +1586,8 @@
 	<string>ERExtensions.jar</string>
 	<key>NSJavaRootClient</key>
 	<string>WebServerResources/Java</string>
+	<key>NSPrincipalClass</key>
+	<string>er.extensions.ERXExtensions</string>
 </dict>
 </plist>
 ";
