@@ -1,0 +1,19 @@
+# JVM              == java
+# JVMOptions       == 
+# JDB              == jdb
+# JDBOptions       == 
+# ApplicationClass == org.svgobjects.examples.ezforms.Application
+APPROOT\Resources\Java\
+APPROOT\Resources\Java\SVGObjectsEZForms.jar
+
+WOROOT\Library\Frameworks\JavaEOAccess.framework\Resources\Java\javaeoaccess.jar
+WOROOT\Library\Frameworks\JavaEOControl.framework\Resources\Java\javaeocontrol.jar
+WOROOT\Library\Frameworks\JavaFoundation.framework\Resources\Java\javafoundation.jar
+WOROOT\Library\Frameworks\JavaJDBCAdaptor.framework\Resources\Java\javajdbcadaptor.jar
+WOROOT\Library\Frameworks\JavaPlot.framework\Resources\Java\javaplot.jar
+WOROOT\Library\Frameworks\JavaWebObjects.framework\Resources\Java\javawebobjects.jar
+WOROOT\Library\Frameworks\JavaWOJSPServlet.framework\Resources\Java\javawojspservlet.jar
+WOROOT\Library\Frameworks\JavaXML.framework\Resources\Java\javaxml.jar
+HOMEROOT\Roots\JavaWOExtensions.framework\Resources\Java\JavaWOExtensions.jar
+
+
