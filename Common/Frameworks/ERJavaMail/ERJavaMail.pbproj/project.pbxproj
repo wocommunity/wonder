@@ -747,6 +747,34 @@
 //4E2
 //4E3
 //4E4
+//500
+//501
+//502
+//503
+//504
+		50FEDE9203E5C4DA00CF0E76 = {
+			fileRef = F53788A50335ADF401000010;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50FEDE9403E5C4E900CF0E76 = {
+			fileRef = 4E16E64A0392AC7300CF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50FEDE9503E5C4E900CF0E76 = {
+			fileRef = 4E16E64B0392AC7300CF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//500
+//501
+//502
+//503
+//504
 //F50
 //F51
 //F52
@@ -1024,6 +1052,9 @@
 			dstPath = Java;
 			dstSubfolderSpec = 7;
 			files = (
+				50FEDE9203E5C4DA00CF0E76,
+				50FEDE9403E5C4E900CF0E76,
+				50FEDE9503E5C4E900CF0E76,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
