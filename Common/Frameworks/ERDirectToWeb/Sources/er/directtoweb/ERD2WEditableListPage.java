@@ -31,23 +31,21 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
      */
     protected NSMutableDictionary errorMessages=new NSMutableDictionary();
     protected String errorMessage;
-    private NSArray _errorMessagesDictionaries;
+    private NSMutableDictionary _errorMessagesDictionaries;
     
-    protected NSArray errorMessagesDictionaries(){
+    protected NSMutableDictionary errorMessagesDictionaries(){
         if(_errorMessagesDictionaries == null){
-            NSMutableArray result = new NSMutableArray();
-            for(Enumeration e = displayGroup().allObjects().objectEnumerator(); e.hasMoreElements();e.nextElement()){
-                result.addObject(new NSMutableDictionary());
-            }
-            _errorMessagesDictionaries = (NSArray)result;
+            _errorMessagesDictionaries = new NSMutableDictionary();
         }
         return _errorMessagesDictionaries;
     }
 
     public NSMutableDictionary currentErrorDictionary() {
-        Object o = d2wContext().valueForKey("object");
-        int index = displayGroup().allObjects().indexOfObject(o);
-        return ((index==0) ? (NSMutableDictionary) new NSMutableDictionary() : (NSMutableDictionary)errorMessagesDictionaries().objectAtIndex(index));
+        Object key = d2wContext().valueForKeyPath("object.hashCode");
+        if (errorMessagesDictionaries().objectForKey(key) == null) {
+            errorMessagesDictionaries().setObjectForKey(new NSMutableDictionary(), key);
+        }
+        return (NSMutableDictionary)errorMessagesDictionaries().objectForKey(key);
     }
     
     public String dummy;
@@ -66,8 +64,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     }
 
     public EOEditingContext editingContext() {
-        EOEnterpriseObject eo=(EOEnterpriseObject)displayGroup().allObjects().objectAtIndex(0);
-        return eo.editingContext();
+        return displayGroup().dataSource().editingContext();
     }
 
     public WOComponent backAction() {
