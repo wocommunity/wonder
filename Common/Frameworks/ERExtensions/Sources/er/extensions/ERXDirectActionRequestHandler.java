@@ -91,8 +91,15 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
             
             // This should retrieve the session object belonging to the same
             // worker thread that's been calling the current handleRequest method.
-            WOContext context = (WOContext)ERXThreadStorage.valueForKey("wocontext");
-            WOSession session =  context != null ? context.session() : null;
+            WOSession session;
+            if(false) {
+                // ak only enable when fixed
+                // as we will create deadlocks checking out the session this early.
+                WOContext context = (WOContext)ERXThreadStorage.valueForKey("wocontext");
+                session = context != null ? context.session() : null;
+            } else {
+                session = ERXExtensions.session();   // get it from the thread specific storage
+            }
 
             if (session != null  &&  session instanceof ERXSession) {
                 ERXSession erxSession = (ERXSession)session;
