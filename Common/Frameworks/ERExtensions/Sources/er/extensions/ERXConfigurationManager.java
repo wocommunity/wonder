@@ -363,6 +363,7 @@ public class ERXConfigurationManager {
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
+                NSDictionary jdbcInfoDictionary = null;
                 String url= System.getProperty(aModelName + ".URL");
                 url = url ==null ? System.getProperty("dbConnectURLGLOBAL") : url;
                 String userName= System.getProperty(aModelName + ".DBUser");
@@ -372,6 +373,17 @@ public class ERXConfigurationManager {
                 String driver= System.getProperty(aModelName + ".DBDriver");
                 driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
                 String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
+                if (jdbcInfo != null && jdbcInfo.charAt(0) == '^') {
+                    String modelName = jdbcInfo.substring(1, jdbcInfo.length());
+                    EOModel modelForCopy = aModel.modelGroup().modelNamed(modelName);
+                    if (modelForCopy != null) {
+                        jdbcInfoDictionary = (NSDictionary)modelForCopy.connectionDictionary().objectForKey("jdbc2Info");
+                    } else {
+                        log.warn("Unable to find model named \"" + modelName + "\"");
+                        jdbcInfo = null;
+                    }
+                }
+                
                 jdbcInfo= jdbcInfo ==null ? System.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
                 String plugin= System.getProperty(aModelName + ".DBPlugin");
                 plugin= plugin ==null ? System.getProperty("dbConnectPluginGLOBAL") : plugin;
@@ -381,7 +393,9 @@ public class ERXConfigurationManager {
                     if (userName!=null) newConnectionDictionary.setObjectForKey(userName,"username");
                     if (passwd!=null) newConnectionDictionary.setObjectForKey(passwd,"password");
                     if (driver!=null) newConnectionDictionary.setObjectForKey(driver,"driver");
-                    if (jdbcInfo!=null) {
+                    if (jdbcInfoDictionary != null) {
+                        newConnectionDictionary.setObjectForKey(jdbcInfoDictionary, "jdbc2Info");
+                    } else if (jdbcInfo!=null) {
                         NSDictionary d=(NSDictionary)NSPropertyListSerialization.propertyListFromString(jdbcInfo);
                         if (d!=null)
                             newConnectionDictionary.setObjectForKey(d,"jdbc2Info");
