@@ -528,31 +528,33 @@ public class ERXStringUtilities {
         }
     }
     
+    public static String escapeNonBasicLatinChars(char c) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+        if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 
+            return String.valueOf(c);
+        else 
+            return toHexString(c);
+    }
+
     public static String escapeNonBasicLatinChars(String str) {
         StringBuffer result = new StringBuffer(str.length());
-        
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (Character.UnicodeBlock.of(c).equals(Character.UnicodeBlock.BASIC_LATIN)) 
-                result.append(c);
-            else 
-                result.append(toHexString(c));
-        }
+
+        for (int i = 0; i < str.length(); i++) 
+            result.append(escapeNonBasicLatinChars(str.charAt(i)));
+            
         return result.toString();
     }
-    
+
     public static String toHexString(char c) {
         StringBuffer result = new StringBuffer("\\u9999".length());
         String u = Long.toHexString((int) c).toUpperCase();
-
-        result.append("\\u");
-        if (u.length() == 1) {
-            result.append("000");
-        } else if (u.length() == 2) {
-            result.append("00");
+        switch (u.length()) {
+            case 1:   result.append("\\u000");  break;
+            case 2:   result.append("\\u00");   break;
+            case 3:   result.append("\\u0");    break;
+            default:  result.append("\\u");     break;
         }
         result.append(u);
-        
         return result.toString();
     }
 
