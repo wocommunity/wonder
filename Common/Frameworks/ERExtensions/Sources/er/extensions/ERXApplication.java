@@ -56,6 +56,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * to be used instead of WOForm, WOFileUpload, WOText.
      */
     public void installPatches() {
+        EOModelGroup.setClassDelegate(this);
         ERXPatcher.installPatches();
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
@@ -103,6 +104,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
             defaultModelGroup = ERXModelGroup.modelGroupForLoadedBundles();
+            defaultModelGroup.setDelegate(new ERXDefaultModelGroupDelegate());
         }
         return defaultModelGroup;
     }
@@ -118,7 +120,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         }        
         installPatches();
 
-        EOModelGroup.setClassDelegate(this);
 
         registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
 
