@@ -12,6 +12,7 @@
 		<binding name="totalToShow"/>
 		<binding name="totalDict"/>
 		<binding name="colors"/>
+		<binding name="formatForSingleTotal"/>
 
 		<validation message="&apos;model&apos; is a required binding">
 			<unbound name="model"/>
