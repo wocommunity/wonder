@@ -17,21 +17,26 @@ import org.apache.log4j.Category;
 // details on the improvements made to validation handling.
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
-    public static final Category cat = Category.getInstance("er.validation.EREntityClassDescription");
+    public static final Category cat = Category.getInstance(ERXEntityClassDescription.class);
 
     public static class Observer {
         public void modelWasAddedNotification(NSNotification n) {
             // Don't want this guy getting in our way.
+            cat.debug("modelWasAddedNotification: " + ((EOModel)n.object()).name());
             NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
             ERXEntityClassDescription.registerDescriptionForEntitiesInModel((EOModel)n.object());
         }
         public void classDescriptionNeededForEntityName(NSNotification n) {
+            cat.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get
+            cat.debug("Entity: " + e);
             ERXEntityClassDescription.registerDescriptionForEntity(e);
         }
         public void classDescriptionNeededForClass(NSNotification n) {
-            ERXEntityClassDescription.registerDescriptionForClass((Class)n.object());
+            Class c = (Class)n.object();
+            cat.debug("classDescriptionNeededForClass: " + c.getName());
+            ERXEntityClassDescription.registerDescriptionForClass(c);
         }
     }
     
@@ -64,8 +69,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         if (!_registeredModelNames.containsObject(model.name())) {
             for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
                 EOEntity eoentity = (EOEntity)e.nextElement();
+                if(cat.isDebugEnabled())
+                    cat.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
                 _entitiesForClass.setObjectForKey(eoentity, eoentity.className());
             }
+            _registeredModelNames.addObject(model.name());
         }
         // Don't want this guy getting in our way later on ;)
         NSNotificationCenter.defaultCenter().removeObserver(model);
@@ -83,16 +91,28 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     }
 
     // What we do here is go ahead and register all of the entities mapped onto this class, except for EOGenericRecord.
+    // FIXME: I'm probably missing something here, but this code tried to get an NSArray, whereas _entitiesForClass contains EOEntities!
     public static void registerDescriptionForClass(Class class1) {
-        NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
-        if (entities != null) {
-            if (cat.isDebugEnabled())
-                cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
-            for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
-                EOClassDescription.registerClassDescription(new ERXEntityClassDescription((EOEntity)e.nextElement()), class1);
+        if(false) {
+            NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
+            if (entities != null) {
+                if (cat.isDebugEnabled())
+                    cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
+                for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
+                    EOClassDescription.registerClassDescription(new ERXEntityClassDescription((EOEntity)e.nextElement()), class1);
+                }
+            } else {
+                cat.error("Unable to register descriptions for class: " + class1.getName());
             }
         } else {
-            cat.error("Unable to register descriptions for class: " + class1.getName());
+            EOEntity entity = (EOEntity)_entitiesForClass.objectForKey(class1.getName());
+            if (entity != null) {
+                if (cat.isDebugEnabled())
+                    cat.debug("Registering description for class: " + class1.getName() + " found entity: " + entity.name());
+                EOClassDescription.registerClassDescription(new ERXEntityClassDescription(entity), class1);
+            } else {
+                cat.error("Unable to register descriptions for class: " + class1.getName());
+            }
         }
     }
 
