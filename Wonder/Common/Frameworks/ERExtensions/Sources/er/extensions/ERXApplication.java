@@ -198,12 +198,7 @@ public abstract class ERXApplication extends WOApplication {
         return super.handleException(exception, context);
     }    
 
-    // DELETE ME
-    protected D2WContext _d2wContext;
-    // DELETE ME
     public D2WContext d2wContext() {
-        if (_d2wContext == null)
-            _d2wContext = new D2WContext();
-        return _d2wContext;
+        return ERXExtensions.d2wContext();
     }
 }

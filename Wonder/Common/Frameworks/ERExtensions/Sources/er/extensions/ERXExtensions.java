@@ -1269,7 +1269,7 @@ public class ERXExtensions {
     //		to get rid of the D2W dependency. Could instead use the class description's
     //		basic name beautifier and have that be localized.
     public static String displayNameForPropertyKey(String key, String entityName) {
-        D2WContext context = ((ERXApplication)WOApplication.application()).d2wContext();
+        D2WContext context = d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         context.setEntity(entity);
         // grosse but efficient hack -- force the computation of pageConfiguration
@@ -1286,14 +1286,21 @@ public class ERXExtensions {
         System.getProperty(key) : ERXExtensions.d2wContextValueForKey(key);
     }
 
-    // DELETEME: Shouldn't have this depenedency
+
+    private static D2WContext _d2wContext;
+    public static D2WContext d2wContext() {
+        if (_d2wContext == null)
+            _d2wContext = new D2WContext();
+        return _d2wContext;
+    }
+    
     public static Object d2wContextValueForKey(String key) {
-        return key != null ? ((ERXApplication)WOApplication.application()).d2wContext().valueForKey(key) : null;
+        return key != null ? d2wContext().valueForKey(key) : null;
     }
 
     // DELETEME: Shouldn't have this dependency.
     public static Object d2wContextValueForKey(String key, String entityName) {
-        D2WContext context = ((ERXApplication)WOApplication.application()).d2wContext();
+        D2WContext context = d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         context.setEntity(entity);
         // grosse but efficient hack -- force the computation of pageConfiguration
@@ -1304,7 +1311,7 @@ public class ERXExtensions {
 
     // DELETEME: This is silly.
     public static String createConfigurationForEntityNamed(String entityName) {
-        D2WContext context = ((ERXApplication)WOApplication.application()).d2wContext();
+        D2WContext context = d2wContext();
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         context.setEntity(entity);
         // grosse but efficient hack -- force the computation of pageConfiguration
