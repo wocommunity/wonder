@@ -194,7 +194,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                                                                     destinationRelationship().name());
                 object().removeObjectFromBothSidesOfRelationshipWithKey(object,
                                                                       _relationshipKey);                                                                    
-                object.editingContext().deleteObject(object);
+                //editingContext().deleteObject(object);
                 dataSource().deleteObject(object);
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
