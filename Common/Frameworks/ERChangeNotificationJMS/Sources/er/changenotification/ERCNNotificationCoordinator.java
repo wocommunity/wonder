@@ -10,14 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import java.util.Properties;
 
 import javax.jms.*;
-import javax.naming.InitialContext;
-import javax.naming.Context;
-//import org.exolab.jms.client.JmsTopicConnectionFactory;
-//import org.exolab.jms.jndi.JndiConstants;
-import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
 
 /**
  * ERCNNotificationCoordinator is the primary controller of the change 
@@ -77,29 +71,23 @@ import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
  * 
  * </pre>
  */
-public class ERCNNotificationCoordinator implements ExceptionListener {
+public class ERCNNotificationCoordinator {
+
+    static final String LOG_HEADER = "ERChangeNotification: ";
 
     private static final ERCNNotificationCoordinator _coordinator = new ERCNNotificationCoordinator();
 
+    private ERCNConfiguration _configuration;
+    private ERCNConnectionKeeper _connectionKeeper;
     private ERCNPublisher _publisher;
     private ERCNSubscriber _subscriber;
-
-    private NSArray _entitiesNotToSynchronize;
-    private NSArray _changeTypesToTrack;
-
-    private Context _context;
-    private TopicConnection _connection;
-    private Topic _topic;
-
-    private String _topicName;
-    private boolean _isSubscriberDurable;
 
     private boolean _isInitialized = false;
     private boolean _isTerminated = false;
 
     static {
-        NSLog.debug.appendln("Registering the observer to initialize ERChangeNotification Framework");
-        
+        NSLog.debug.appendln(LOG_HEADER + "Registering the observer to initialize ERChangeNotification Framework");
+
         NSNotificationCenter.defaultCenter().addObserver(
             _coordinator, 
             new NSSelector("initialize", new Class[] { NSNotification.class } ), 
@@ -115,40 +103,10 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         return _coordinator;
     }
 
-    public NSArray entitiesNotToSynchronize() {
-        return _entitiesNotToSynchronize;
-    }
-    
-    public void setEntitiesNotToSynchronize(NSArray newEntitiesNotToSynchronize) {
-        if (newEntitiesNotToSynchronize != null) 
-            _entitiesNotToSynchronize = newEntitiesNotToSynchronize;
-        else 
-            _entitiesNotToSynchronize = NSArray.EmptyArray;
-    } 
-    
-    public NSArray changeTypesToTrack() {
-        return _changeTypesToTrack;
-    }
-
-    public void setChangeTypesToTrack(NSArray newChangeTypesToTrack) {
-        if (newChangeTypesToTrack != null) 
-            _changeTypesToTrack = newChangeTypesToTrack;
-        else 
-            _changeTypesToTrack = NSArray.EmptyArray;
-    } 
-    
-    protected Topic topic() {
-        return _topic;
-    }
-
-    protected TopicConnection connection() {
-        return _connection;
-    }
-
     protected String id() {
         WOApplication app = WOApplication.application();
         String host = app.host();
-        Number port = app.port(); // Don't forget to apply Max's change
+        Number port = app.port();
         String appName = app.name();
         return host + ":" + port + "/" + appName;
     }
@@ -156,92 +114,43 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
     public synchronized void initialize(NSNotification notification) {
         if (_isInitialized)  return;
 
-        NSLog.out.appendln("Initializing ERChangeNotificationJMS Framework");
+        NSLog.out.appendln(LOG_HEADER + "Initializing ERChangeNotification framework");
 
-        setEntitiesNotToSynchronize((NSArray)NSPropertyListSerialization.propertyListFromString(
-                System.getProperty("er.changenotification.entitiesNotToSynchronize")));
-        setChangeTypesToTrack((NSArray)NSPropertyListSerialization.propertyListFromString(
-                System.getProperty("er.changenotification.changeTypesToTrack")));
-        _topicName = System.getProperty("er.changenotification.jms.topicName");
-        _isSubscriberDurable = "true".equals(System.getProperty("er.changenotification.jms.durableSubscribers"));
-        
-        String host = System.getProperty("er.changenotification.jms.serverHostName");
-        if (host == null  ||  host.length() == 0) 
-            host = "localhost";
-        
-        // Uses OpenJMS embedded JNDI server to locate the TopicConnectionFactory 
-        // and Destination objects. Of course, you can use your own JNDI servers 
-        // if you want. 
-        // Set RMI as the protocol. Note that OpenJMS also supports TCP, HTTP and SSL 
-        // protocols as well. 
-        String port = "1099";
-        String jndiName = "JndiServer";
-        String protocol = "rmi";
-        String protocolType = RmiJndiInitialContextFactory.class.getName();
-
-        Properties props = new Properties();
-        props.put(Context.PROVIDER_URL, protocol + "://" + host + ":" + port + "/" + jndiName);
-        props.put(Context.INITIAL_CONTEXT_FACTORY, protocolType);
-        
-        NSLog.debug.appendln("props: " + props);
-        
-        try {
-            // Open the connection to the JMS server. 
-            _context = new InitialContext(props);
-            TopicConnectionFactory factory = (TopicConnectionFactory)_context.lookup("JmsTopicConnectionFactory");
-            if (factory == null) 
-                throw new RuntimeException("Failed to locate connection factory");
-            
-            _topic = (Topic)_context.lookup(_topicName);
-            if (_topic == null) 
-                throw new RuntimeException("Failed to locate topic \"" + _topic +"\"");
-
-            _connection = factory.createTopicConnection();
-            
-            // Set itself as the exception listener. 
-            _connection.setExceptionListener(this);
-
-        } catch (Exception ex) {
-            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            ex.printStackTrace();
-            return;
-        }
-    
-        // Create the notification publisher object and register it as the observer for 
+        // Create the notification publisher object and register it as the observer for
         // the EOObjectStoreCoordinator changes. 
         _publisher = new ERCNPublisher(this);
+
         NSNotificationCenter.defaultCenter().addObserver(
-            _publisher, 
+            this,
             new NSSelector("publishChange", new Class[] { NSNotification.class } ), 
             EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, 
             EOObjectStoreCoordinator.defaultCoordinator());
 
         // Create the notification subscriber object and register it as the observer for 
         // the distributed change notifications.  
-        _subscriber = new ERCNSubscriber(this, _isSubscriberDurable);
-        try {
-            _subscriber.topicSubscriber().setMessageListener(_subscriber);
-        } catch (JMSException ex) {
-            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            ex.printStackTrace();
-            return;
-        }
+        _subscriber = new ERCNSubscriber(this);
 
-        // Start to receive notifications from the connection. 
-        try {
-            _connection.start();
-        } catch (JMSException ex) {
-            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            ex.printStackTrace();
-            return;
-        }
+        // Create the connection keeper object and initiate connection.
+        _connectionKeeper = new ERCNConnectionKeeper(this);
 
-        NSLog.out.appendln("Finished initializing ERChangeNotificationJMS Framework");
+        _connectionKeeper.openConnection(ERCNConnectionKeeper.VERBOSE_LOGGING);
+        if (! _connectionKeeper.isConnected())
+            _connectionKeeper.initiateRecoveryTask();
+
+        NSLog.out.appendln(LOG_HEADER + "Finished initializing ERChangeNotificationJMS framework");
 
         _isInitialized = true;
     }
 
-    /** 
+    void didConnect(TopicConnection connection) {
+        _subscriber.subscribe(connection);
+    }
+
+    void didDisconnect(TopicConnection connection) {
+        _subscriber.unsubscribe();
+    }
+
+    /**
      * releases JMS resouces, including closing the connection. 
      * <p>
      * This method is supposed to be called by the applicaiton's 
@@ -250,42 +159,56 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
      // ENHANCEME: Should remove observers as well. 
     public synchronized void terminate() {
         if (_isTerminated)   return;
-        
-        try {
-            _connection.stop();
-         } catch (JMSException ex) {
-            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            ex.printStackTrace();
-        }
-       
+
+        _connectionKeeper.stopConnection(ERCNConnectionKeeper.VERBOSE_LOGGING);
+
         _publisher.terminate();
-   	_subscriber.terminate();
+   	    _subscriber.terminate();
         
-        NSLog.out.appendln("Closing the JMS connection.");
-        try {
-            _connection.close();
-        } catch (JMSException ex) {
-            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            ex.printStackTrace();
-        }
+        NSLog.out.appendln(LOG_HEADER + "Closing the JMS connection.");
+        _connectionKeeper.closeConnection(ERCNConnectionKeeper.VERBOSE_LOGGING);
+        _connectionKeeper.terminate();
 
         _isTerminated = true;
     }
 
     public void finalize() throws Throwable {
-        if (! _isTerminated)   terminate(); 
+        if (! _isTerminated)   terminate();
         super.finalize();
     }
 
-    // ENHANCEME: Should handle connection errors; try to reconnect when the 
-    //            connection is interrupted. 
-    public void onException(JMSException exception) {
-        NSLog.err.appendln("An exception occured: " + exception.getClass().getName() + " - " + exception.getMessage());
-        exception.printStackTrace();
+    public void publishChange(NSNotification notification) {
+        _publisher.publishChange(notification);
+    }
+
+    public ERCNConfiguration configuration() {
+        if (_configuration == null)
+            _configuration = ERCNConfiguration.getInstance();
+        return _configuration;
+    }
+
+    public ERCNSubscriberDelegate subscriberDelegate() {
+        return ERCNSubscriber.delegate();
+    }
+
+    public void setSubscriberDelegate(ERCNSubscriberDelegate delegate) {
+        ERCNSubscriber.setDelegate(delegate);
+    }
+
+    Topic topic() {
+        return _connectionKeeper.topic();
+    }
+
+    TopicConnection connection() {
+        return _connectionKeeper.connection();
+    }
+
+    public boolean isConnected() {
+        return _connectionKeeper.isConnected();
     }
 
     public static EODatabaseContext databaseContextForEntityNamed(String entityName, EOEditingContext editingContext) {
-        return EOUtilities.databaseContextForModelNamed(editingContext, 
+        return EOUtilities.databaseContextForModelNamed(editingContext,
                         EOModelGroup.defaultGroup().entityNamed(entityName).model().name());
     }
 

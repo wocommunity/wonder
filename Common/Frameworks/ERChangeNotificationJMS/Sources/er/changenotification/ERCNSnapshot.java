@@ -24,6 +24,10 @@ import java.io.Serializable;
  */
 public class ERCNSnapshot implements Serializable {
 
+    public static final String INSERTED = "inserted";
+    public static final String UPDATED = "updated";
+    public static final String DELETED = "deleted";
+
     private final String _senderHost;
     private final Number _senderPort;
     private final String _senderAppName;
@@ -32,8 +36,8 @@ public class ERCNSnapshot implements Serializable {
     private final NSDictionary _shapshotsForUpdateGroupedByEntity;
     private final NSDictionary _globalIDsForDeletionGroupedByEntity;
     
-    private transient boolean _shouldPostChange = false;
     private transient String _toString;
+    private transient int _entryCount = 0;
 
     public ERCNSnapshot(NSNotification notification) {
         WOApplication app = WOApplication.application();
@@ -43,21 +47,22 @@ public class ERCNSnapshot implements Serializable {
 
         NSDictionary userInfo = (NSDictionary)notification.userInfo();
 
-        ERCNNotificationCoordinator coordinator = ERCNNotificationCoordinator.coordinator();
-        if (coordinator.changeTypesToTrack().containsObject("inserted")) 
+        ERCNConfiguration configuration = ERCNNotificationCoordinator.coordinator().configuration();
+        if (configuration.changeTypesToPublish().containsObject(INSERTED))
             _shapshotsForInsertionGroupedByEntity = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("inserted"));
         else 
             _shapshotsForInsertionGroupedByEntity = NSDictionary.EmptyDictionary;
 
-        if (coordinator.changeTypesToTrack().containsObject("updated")) 
+        if (configuration.changeTypesToPublish().containsObject(UPDATED))
             _shapshotsForUpdateGroupedByEntity = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("updated"));
         else 
             _shapshotsForUpdateGroupedByEntity = NSDictionary.EmptyDictionary;
 
-        if (coordinator.changeTypesToTrack().containsObject("deleted")) 
+        if (configuration.changeTypesToPublish().containsObject(DELETED))
             _globalIDsForDeletionGroupedByEntity = globalIDsGroupedByEntity((NSArray)userInfo.objectForKey("deleted"));
         else 
             _globalIDsForDeletionGroupedByEntity = NSDictionary.EmptyDictionary;
+
     }
 
     public NSDictionary shapshotsForInsertionGroupedByEntity() {
@@ -73,11 +78,17 @@ public class ERCNSnapshot implements Serializable {
     }
 
     public boolean shouldPostChange() { 
-        return _shouldPostChange; 
+        return _entryCount > 0;
     }
 
-    public boolean shouldSynchronizeEntity(String entityName) {
-        return ! ERCNNotificationCoordinator.coordinator().entitiesNotToSynchronize().containsObject(entityName);
+    public static boolean shouldApplyChangeFor(String operation) {
+        ERCNConfiguration configuration = ERCNNotificationCoordinator.coordinator().configuration();
+        return configuration.changeTypesToSubscrive().containsObject(operation);
+    }
+
+    public static boolean shouldSynchronizeEntity(String entityName) {
+        ERCNConfiguration configuration = ERCNNotificationCoordinator.coordinator().configuration();
+        return ! configuration.entitiesNotToSynchronize().containsObject(entityName);
     }
 
     public String senderHost() {
@@ -105,14 +116,17 @@ public class ERCNSnapshot implements Serializable {
             String entityName = globalID.entityName();
 
             if (shouldSynchronizeEntity(entityName)) {
-                _shouldPostChange = true;
                 EODatabaseContext dbContext = ERCNNotificationCoordinator.databaseContextForEntityNamed(entityName, ec);
                 NSMutableArray snapshotsForEntity = (NSMutableArray)result.objectForKey(entityName);
                 if (snapshotsForEntity == null) {
                     snapshotsForEntity = new NSMutableArray();
                     result.setObjectForKey(snapshotsForEntity, entityName);
                 }
-                snapshotsForEntity.addObject(dbContext.snapshotForGlobalID(globalID));
+                NSDictionary snapshot = dbContext.snapshotForGlobalID(globalID);
+                if (snapshot != null) {
+                    snapshotsForEntity.addObject(snapshot);
+                    _entryCount++;
+                }
             }
         }
         ec.unlock();
@@ -130,13 +144,13 @@ public class ERCNSnapshot implements Serializable {
             String entityName = globalID.entityName();
 
             if (shouldSynchronizeEntity(entityName)) {
-                _shouldPostChange = true;
                 NSMutableArray globalIDsForEntity = (NSMutableArray)result.objectForKey(entityName);
                 if (globalIDsForEntity == null) {
                     globalIDsForEntity = new NSMutableArray();
                     result.setObjectForKey(globalIDsForEntity, entityName);
                 }
                 globalIDsForEntity.addObject(globalID);
+                _entryCount++;
             }
         }
         return result.immutableClone();
@@ -176,4 +190,5 @@ public class ERCNSnapshot implements Serializable {
         }
         return sbuf.toString();
     }
+    
 }
