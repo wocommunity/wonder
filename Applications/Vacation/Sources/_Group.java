@@ -1,5 +1,5 @@
 // Group.java
-// Created on Tue Nov 05 10:23:10 US/Pacific 2002 by Apple EOModeler Version 5.0
+// Created on Wed Jun 04 14:01:58 Europe/London 2003 by Apple EOModeler Version 5.0
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
@@ -65,6 +65,28 @@ public class _Group extends EOGenericRecord {
 
     public void removeFromPersons(Person object) {
         NSMutableArray array = (NSMutableArray)persons();
+
+        willChange();
+        array.removeObject(object);
+    }
+
+    public NSArray subGroups() {
+        return (NSArray)storedValueForKey("subGroups");
+    }
+
+    public void setSubGroups(NSMutableArray value) {
+        takeStoredValueForKey(value, "subGroups");
+    }
+
+    public void addToSubGroups(Group object) {
+        NSMutableArray array = (NSMutableArray)subGroups();
+
+        willChange();
+        array.addObject(object);
+    }
+
+    public void removeFromSubGroups(Group object) {
+        NSMutableArray array = (NSMutableArray)subGroups();
 
         willChange();
         array.removeObject(object);

@@ -28,7 +28,7 @@
     ); 
     attributesUsedForLocking = (groupID, name, parentGroupID); 
     className = Group; 
-    classProperties = (name, parentGroup, persons); 
+    classProperties = (name, parentGroup, persons, subGroups); 
     externalName = GROUPS; 
     fetchSpecificationDictionary = {}; 
     name = Group; 
@@ -47,6 +47,13 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = groupID; sourceAttribute = groupID; }); 
             name = persons; 
+        }, 
+        {
+            destination = Group; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = parentGroupID; sourceAttribute = groupID; }); 
+            name = subGroups; 
         }
     ); 
 }
