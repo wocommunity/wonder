@@ -122,6 +122,7 @@
 			files = (
 				4188B8C1061DB796006A7425,
 				4188B8C2061DB796006A7425,
+				41E665370644C8B5001F8CD3,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -652,6 +653,7 @@
 		};
 		41C004B70522D3BA00000102 = {
 			children = (
+				41E665360644C8B5001F8CD3,
 				4188B8BF061DB796006A7425,
 				4188B8C0061DB796006A7425,
 			);
@@ -710,6 +712,19 @@
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
+		};
+		41E665360644C8B5001F8CD3 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = PostgresqlSynchronizationFactory.java;
+			path = Sources/com/webobjects/jdbcadaptor/PostgresqlSynchronizationFactory.java;
+			refType = 4;
+		};
+		41E665370644C8B5001F8CD3 = {
+			fileRef = 41E665360644C8B5001F8CD3;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
