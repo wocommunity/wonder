@@ -58,6 +58,7 @@ public class ERXGroupingRepetition extends WOComponent {
                     itemsForSection.addObject(item);
                 }
                 String sortKey = (String)valueForBinding("sortKey");
+                //the key act on the array, so it must be in the form "@sortAsc.someKey"
                 if(sortKey != null) {
                     _sections = (NSMutableArray)_sections.valueForKeyPath(sortKey);
                 }
