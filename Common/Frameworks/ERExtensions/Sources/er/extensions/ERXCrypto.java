@@ -293,11 +293,9 @@ public class ERXCrypto {
         if(_secretKeyPath == null){
             String fn = "SecretKey.ser";
             //ENHANCEME: we should avoid calling the WOApplication.application() if not strictly required (giorgio_v)
-            try {
-                WOResourceManager rm = ((WOApplication)WOApplication.application()).resourceManager();
-                _secretKeyPath = (String)rm.pathForResourceNamed( fn, secretKeyPathFramework(), null );
-            } catch( NullPointerException e ) {
-                log.error( "Caught exception trying to read the secret key file "+e+" - "+ERXUtilities.stackTrace(e) );
+            if( WOApplication.application() != null && WOApplication.application().resourceManager() != null ) {
+                _secretKeyPath = (String)WOApplication.application().resourceManager().pathForResourceNamed
+                ( fn, secretKeyPathFramework(), null );
             }
             if(_secretKeyPath == null) _secretKeyPath = fn;
         }
