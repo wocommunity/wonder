@@ -17,15 +17,6 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
 
     String varName = null;
 
-    public Object objectKeyPathValue() {
-//        log.warn("current:" + super.objectKeyPathValue());
-       return super.objectKeyPathValue();
-    }
-    public void setObjectKeyPathValue(Object newValue) {
-        super.setObjectKeyPathValue(newValue);
-//        log.warn("new:" + newValue + " - "  + object() + " - " + key());
-    }
-
     public ERDDHTMLComponent(WOContext context) {
         super(context);
     }
@@ -50,5 +41,14 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
 	    log.debug(varName);
 	}
 	return varName;
+    }
+    
+    public void takeValuesFromRequest(WORequest q, WOContext c) throws NSValidation.ValidationException {
+        super.takeValuesFromRequest(q,c);
+        try {
+            object().validateTakeValueForKeyPath(objectKeyPathValue(),key());
+        } catch(Throwable e) {
+            validationFailedWithException (e, objectKeyPathValue(), key());
+        }
     }
 }
