@@ -44,6 +44,10 @@ import com.webobjects.foundation.*;
  * To access ERXBrowser's boolean questions from WOConditionals 
  * on a web component, set the path like "session.brower.isIFrameSupported" 
  * to their condition bindings. <br>
+ * 
+ * ERXDirectAction also holds a browser object for the current request. 
+ * Use its <code>browser</code> method to access the object from a 
+ * session-less direct action. <br>
  */  
 public abstract class ERXBrowser implements NSKeyValueCoding {
 
