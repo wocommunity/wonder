@@ -12,7 +12,7 @@ on handleMenu(context)
 	repeat with i from 1 to (the number of characters in context)
 		set c to character i of context
 		if c = " " then
-			c = "+"
+			set c to "+"
 		end if
 		set newstring to newstring & c
 	end repeat
