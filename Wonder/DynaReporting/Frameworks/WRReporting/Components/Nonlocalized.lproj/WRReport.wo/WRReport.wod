@@ -105,7 +105,7 @@ numberOfCrits:WORepetition{
 recordGroupTest:WOSwitchComponent {
 	WOComponentName = componentName;
 	model = model;
-	recordGroup= recordGroupTest;
+	recordGroup= recordGroup;
 	showHeadings= showRecordGroupHeadings;
 	displayType = selectedRecordGroupDisplayType;
 	totalToShow = recordGroupTotalToShow;
@@ -114,6 +114,7 @@ recordGroupTest:WOSwitchComponent {
 	colorForCoords = colorForCoords;
 	colors = colorDict;
 	totalDict = totalDict;
+        coordinates = currentCoordinates;
 	reportStyle = selectedReportStyle;
 }
 rowSpanTd: WOGenericContainer{
@@ -124,6 +125,7 @@ rowSpanTd: WOGenericContainer{
 rowSpanTd2: WOGenericContainer{
 	elementName = "TD";
 	bgcolor = bgcolorRowSpanTd;
+	nowrap = "nowrap";
 }
 rowSpanTd2Span: WOGenericContainer{
 	elementName = "TD";
