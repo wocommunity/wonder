@@ -4276,16 +4276,7 @@
             }; 
         }, 
         {
-            author = 0; 
-            class = "com.webobjects.directtoweb.Rule"; 
-            rhs = {
-                class = "com.webobjects.directtoweb.BooleanAssignment"; 
-                keyPath = propertyIsSortable; 
-                value = false; 
-            }; 
-        }, 
-        {
-            author = 0; 
+            author = 10; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
@@ -4320,6 +4311,15 @@
                 class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = propertyIsSortable; 
                 value = true; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
+                keyPath = propertyIsSortable; 
+                value = false; 
             }; 
         }, 
         {
