@@ -34,6 +34,8 @@ There are three ways to use this script:
 		-Duse.svgobjects=true \
 		-Duse.validity=true \
 		-Duse.woogln=true \
+		-Duse.grouping=true \
+		-Duse.reporting=true \
 		-Duse.mysql=true \
 		-Duse.additional.framework.1=SomeProjectLogic.framework \
 		-Duse.additional.framework.2=SomePattern1\* \
@@ -98,6 +100,12 @@ There are three ways to use this script:
 
             <!-- set this if you want to use Wonder's ERChangeNotificationJMS, or leave out if not -->
             <param name="use.wonder.changenotification" value="true" />
+
+            <!-- set this if you want to use Wonder's DynaGrouping, or leave out if not -->
+            <param name="use.wonder.grouping" value="true" />
+
+            <!-- set this if you want to use Wonder's DynaReporting, or leave out if not -->
+            <param name="use.wonder.reporting" value="true" />
 
             <!-- set this if you want to use your own built frameworks, or leave out if not -->
             <!-- You have up to 4 of them and you can use patterns -->
@@ -234,6 +242,18 @@ There are three ways to use this script:
             <frameworks root="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOngl.framework" />
             </frameworks>
+            <frameworks root="${wonder.lib.root}" if="use.grouping"> 
+                <include name="DRGrouping.framework" />
+            </frameworks>
+            <frameworks root="${wonder.lib.root}" if="use.reporting"> 
+                <include name="DRGrouping.framework" />
+                <include name="WRReporting.framework" />
+                <include name="WOOgnl.framework" />
+            </frameworks>
+           <frameworks root="${wo.localroot}/Library/Frameworks" if="use.reporting">
+                <include name="WOComponentElements.framework"/>
+           </frameworks>
+
            <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
                 <include name="Mysql*.framework"/>
            </frameworks>
@@ -332,6 +352,7 @@ There are three ways to use this script:
             <resources dir="${project.dir}/Resources">
                 <include name="*.eomodeld/**" />
                 <include name="**/*.plist" />
+                <include name="**/*.dat" />
                 <include name="**/*.d2wmodel" />
                 <include name="**/Properties" />
                 <include name="**/*.strings" />
@@ -374,7 +395,21 @@ There are three ways to use this script:
             <frameworks root="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOngl.framework" />
             </frameworks>
-           <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
+            <frameworks root="${wonder.lib.root}" if="use.grouping"> 
+                <include name="DRGrouping.framework" />
+            </frameworks>
+            <frameworks root="${wonder.lib.root}" if="use.reporting"> 
+                <include name="DRGrouping.framework" />
+                <include name="WRReporting.framework" />
+                <include name="WOOgnl.framework" />
+            </frameworks>
+           <frameworks root="${wo.localroot}/Library/Frameworks" if="use.reporting">
+                <include name="WOComponentElements.framework"/>
+           </frameworks>
+           <frameworks root="${wo.localroot}/Library/Frameworks" if="use.movies">
+                <include name="JavaBusinessLogic.framework"/>
+           </frameworks>
+            <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
                 <include name="Mysql*.framework"/>
            </frameworks>
            <frameworks root="${wonder.lib.root}" if="use.additional.framework.1">
@@ -655,6 +690,67 @@ There are three ways to use this script:
         </antcall>
     </target>
 
+    <target name="DRGrouping.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="DRGrouping" />
+            <param name="project.dir" value="DynaReporting/Frameworks/DRGrouping" />
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
+
+    <target name="WRReporting.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="WRReporting" />
+            <param name="project.dir" value="DynaReporting/Frameworks/WRReporting" />
+            <param name="use.wonder.core" value="true" />
+            <param name="use.reporting" value="true" />
+        </antcall>
+    </target>
+
+    <target name="DocsByExample.all">
+        <antcall target="global.application" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.reporting.examples.Application" />
+            <param name="project.name" value="DocsByExample" />
+            <param name="project.dir" value="DynaReporting/Examples/DocsByExample" />
+
+            <param name="use.wonder.core" value="true" />
+            <param name="use.reporting" value="true" />
+            <param name="use.mysql" value="true" />
+            <param name="use.movies" value="true" />
+        </antcall>
+    </target>
+
+    <target name="DynaReporter.all">
+        <antcall target="global.application" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.reporting.examples.Application" />
+            <param name="project.name" value="DynaReporter" />
+            <param name="project.dir" value="DynaReporting/Examples/DynaReporter" />
+
+            <param name="use.wonder.core" value="true" />
+            <param name="use.reporting" value="true" />
+            <param name="use.mysql" value="true" />
+            <param name="use.movies" value="true" />
+        </antcall>
+    </target>
+
+    <target name="DRGroupingTest.all">
+        <antcall target="global.application" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="er.grouping.examples.Application" />
+            <param name="project.name" value="DRGroupingTest" />
+            <param name="project.dir" value="DynaReporting/Examples/DRGroupingTest" />
+
+            <param name="use.wonder.core" value="true" />
+            <param name="use.grouping" value="true" />
+            <param name="use.mysql" value="true" />
+            <param name="use.movies" value="true" />
+        </antcall>
+    </target>
+
     <target name="Validity.framework.all">
         <antcall target="global.framework" >
             <param name="project.principal.class" value="" />
@@ -787,6 +883,9 @@ There are three ways to use this script:
     <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
 
+    <target name="DynaReporting.base" depends="core.all, WOOgnl.all, DRGrouping.all, WRReporting.all" />
+    <target name="DynaReporting.all" depends="DynaReporting.base, DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
+
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
 
@@ -885,6 +984,21 @@ There are three ways to use this script:
         <antcall target="global.clean.application" >
             <param name="project.name" value="DevStudio" />
         </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="DocsByExample" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="DynaReporter" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="DRGroupingTest" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="DRGrouping" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="WRReporting" />
+        </antcall>
      </target>
 
     <target name="all.web">
@@ -972,10 +1086,28 @@ There are three ways to use this script:
         <antcall target="global.web.application" >
             <param name="project.name" value="NetStruxrCaseStudy" />
         </antcall>
-       <antcall target="global.web.application" >
+        <antcall target="global.web.application" >
             <param name="project.name" value="DevStudio" />
         </antcall>
-     </target>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="DevStudio" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="DocsByExample" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="DynaReporter" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="DRGroupingTest" />
+        </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="DRGrouping" />
+        </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="WRReporting" />
+        </antcall>
+      </target>
 
     <target name="frameworks.all.install">
         <antcall target="global.install.framework" >
@@ -1023,6 +1155,12 @@ There are three ways to use this script:
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERCalendar" />
         </antcall>
+       <antcall target="global.install.framework" >
+            <param name="project.name" value="DRGrouping" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="WRReporting" />
+        </antcall>
     </target>
 
     <target name="applications.all.install">
@@ -1068,7 +1206,16 @@ There are three ways to use this script:
         <antcall target="global.install.application" >
             <param name="project.name" value="DevStudio" />
         </antcall>
-     </target>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="DocsByExample" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="DynaReporter" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="DRGroupingTest" />
+        </antcall>
+    </target>
 
     <target name="all.install" depends="frameworks.all.install, applications.all.install" />
 
