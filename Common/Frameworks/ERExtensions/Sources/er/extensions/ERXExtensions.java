@@ -1028,6 +1028,35 @@ public class ERXExtensions {
         return new String(hexchars);
     }
 
+
+    /**
+        * Converts a hex string into an array of bytes
+     * @param s string
+     * @return byte array
+     */
+    // CHECKME: Anyone know the reason why this has final in the method
+    //		signature?
+    // MOVEME: ERXStringUtilities
+    public byte[] hexStringToByteArray(String s) {
+        byte[] result=null;
+        if (s!=null) {
+            int l=s.length();
+            if (l % 2 !=0) throw new RuntimeException("hexStringToByteArray: expected an even length string");
+            s=s.toLowerCase();
+            result=new byte[l/2];
+            int i=0;
+            for (int j=0; j<l;) {
+                char c1=s.charAt(j++); int b1=c1<'a' ? c1-'0' : c1-'a'+10;
+                char c2=s.charAt(j++); int b2=c2<'a' ? c2-'0' : c2-'a'+10;
+                result[i++]=(byte)((b1<<4)+b2);
+            }
+        }
+        return result;
+    }
+
+
+
+    
     /**
      * Returns the byte array for a given file.
      * @param f file to get the bytes from
