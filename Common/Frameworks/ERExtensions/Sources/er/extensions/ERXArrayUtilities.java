@@ -8,11 +8,10 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import org.apache.log4j.*;
 import java.util.Enumeration;
 
 /**
- * Collection of {@link NSArray} utilities.
+ * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
 public class ERXArrayUtilities extends Object {
     /**
