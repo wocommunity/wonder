@@ -1145,7 +1145,6 @@
 				F57EA6FD01FF59C0019E57DA,
 				F57EA68701FF59BF019E57DA,
 				669CC77B0236A5C100CD2933,
-				F57EA64701FF59BF019E57DA,
 				F57EA6C901FF59BF019E57DA,
 			);
 			isa = PBXGroup;
@@ -1785,13 +1784,6 @@
 		F57EA64501FF59BF019E57DA = {
 			isa = PBXFileReference;
 			path = WOToOneRelationship.java;
-			refType = 4;
-		};
-		F57EA64701FF59BF019E57DA = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "Web Components";
 			refType = 4;
 		};
 		F57EA65E01FF59BF019E57DA = {
