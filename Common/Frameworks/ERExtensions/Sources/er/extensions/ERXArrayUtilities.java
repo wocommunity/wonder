@@ -502,7 +502,7 @@ public class ERXArrayUtilities extends Object {
         ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
         ERXAssert.PRE.notNull("Attepting to sort an array with null keys.", keys);
         if (keys.count() < 2)
-            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector);
+            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector == null ? EOSortOrdering.CompareAscending : selector);
 
         NSMutableArray order = new NSMutableArray(keys.count());
         for (Enumeration keyEnumerator = keys.objectEnumerator(); keyEnumerator.hasMoreElements();) {
@@ -1226,5 +1226,11 @@ public class ERXArrayUtilities extends Object {
             a.removeLastObject();
         }
         return a;
+    }
+    
+    public static String[] toStringArray(NSArray a) {
+        String[] b = new String[a.count()];
+        for (int i = a.count(); i-- > 0; b[i] = a.objectAtIndex(i).toString());
+        return b;
     }
 }
