@@ -89,7 +89,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean showCancel() { return super.showCancel() && shouldShowCancelButton(); }
     public boolean doesNotHaveForm() { return !ERXUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
-    /* those are only needed when running MT -
     public void awake() {
         super.awake();
     	if (_context!=null) {
@@ -98,7 +97,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }
     
     public void sleep() {
-        System.out.println("D2WInspectPage.sleep");
     	if (_context!=null) {
             _context.unlock();
         }
@@ -118,8 +116,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         }
     }
 
-*/    
-
+    public void setObject(EOEnterpriseObject eoenterpriseobject) {
+        EOEditingContext eoeditingcontext = eoenterpriseobject == null ? null : eoenterpriseobject.editingContext();
+        setEditingContext(eoeditingcontext);
+        super.setObject(eoenterpriseobject);
+    }
+    
     /*
 
      We expect d2wContext.sectionsContents to return one of the three following formats:
