@@ -402,6 +402,19 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * The core class of {@link NSArray$Operator}, which adds support for keyPaths.<br/>
+     */
+
+    static abstract class BaseOperator implements NSArray.Operator {
+        public NSArray contents(NSArray array, String keypath) {
+            if(array != null && array.count() > 0  && keypath != null && keypath.length() > 0) {
+                array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+            }
+            return array;
+        }
+    }
+
+    /**
      * Define an {@link NSArray$Operator} for the key <b>sort</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
@@ -475,7 +488,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * Which in this case would return myArray flattened.
      */
-    static class FlattenOperator implements NSArray.Operator {
+    static class FlattenOperator extends BaseOperator {
         /** public empty constructor */
         public FlattenOperator() {}
 
@@ -487,15 +500,12 @@ public class ERXArrayUtilities extends Object {
          */
         public Object compute(NSArray array, String keypath) {
             array = flatten(array);
-            if(keypath != null && keypath.length() > 0) {
-                array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
-            }
-            return array;
+            return contents(array, keypath);
         }
     }
 
     /**
-	* Define an {@link NSArray$Operator} for the key <b>isEmpty</b>.<br/>
+     * Define an {@link NSArray$Operator} for the key <b>isEmpty</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -522,7 +532,7 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-	* Define an {@link NSArray$Operator} for the key <b>subarrayWithRange</b>.<br/>
+     * Define an {@link NSArray$Operator} for the key <b>subarrayWithRange</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -535,7 +545,6 @@ public class ERXArrayUtilities extends Object {
         public SubarrayWithRangeOperator() {}
 
         /**
-        * returns true if the given array is empty, usefull for WOHyperlink disabled binding.
          * @param array array to be checked.
          * @param keypath name of fetch specification.
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
@@ -565,7 +574,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * Which in this case would return myArray flattened.
      */
-    static class UniqueOperator implements NSArray.Operator {
+    static class UniqueOperator extends BaseOperator {
         /** public empty constructor */
         public UniqueOperator() {}
 
@@ -578,9 +587,7 @@ public class ERXArrayUtilities extends Object {
         public Object compute(NSArray array, String keypath) {
 	    synchronized (array) {
                 array = arrayWithoutDuplicates(array);
-                if(keypath != null && keypath.length() > 0) {
-                    array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
-                }
+                array = contents(array, keypath);
                 return array;
 	    }
         }
@@ -669,7 +676,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * which return a reversed result as to you would normally get.
      */
-    static class ReverseOperator implements NSArray.Operator {
+    static class ReverseOperator extends BaseOperator {
         /** public empty constructor */
         public ReverseOperator() {}
 
@@ -682,9 +689,7 @@ public class ERXArrayUtilities extends Object {
         public Object compute(NSArray array, String keypath) {
             synchronized (array) {
                 array = reverse(array);
-                if(keypath != null && keypath.length() > 0) {
-                    array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
-                }
+                array = contents(array, keypath);
                 return array;
             }
         }
