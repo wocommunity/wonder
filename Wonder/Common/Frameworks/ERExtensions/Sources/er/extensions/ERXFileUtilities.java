@@ -20,7 +20,6 @@ public class ERXFileUtilities {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileUtilities.class);
 
-
     /**
      * Returns the byte array for a given stream.
      * @param in stream to get the bytes from
@@ -43,7 +42,29 @@ public class ERXFileUtilities {
         }
         return data;
     }
-        
+
+    /**
+     * Returns a string from the input stream using the specified
+     * encoding.
+     * @param in stream to read
+     * @param encoding to be used, null will use the default
+     * @return string representation of the stream.
+     */
+    public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
+        return new String(bytesFromInputStream(in), encoding);
+    }
+
+    /**
+     * Returns a string from the input stream using the default
+     * encoding.
+     * @param in stream to read
+     * @param encoding to be used, null will use the default
+     * @return string representation of the stream.
+     */
+    public static String stringFromInputStream(InputStream in) throws IOException {
+        return new String(bytesFromInputStream(in));
+    }
+    
     /**
     * Returns the byte array for a given file.
      * @param f file to get the bytes from
@@ -52,7 +73,7 @@ public class ERXFileUtilities {
      */
     public static byte[] bytesFromFile(File f) throws IOException {
         if (f == null)
-            throw new IOException("null file");
+            throw new IllegalStateException("null file");
         int size = (int)f.length();
         FileInputStream fis = new FileInputStream(f);
         byte[] data = new byte[size];
@@ -70,7 +91,7 @@ public class ERXFileUtilities {
      */
     public static void writeInputStreamToFile(File file, InputStream stream) throws IOException {
         if (file == null)
-            throw new IOException("Attempting to write to a null file!");
+            throw new IllegalStateException("Attempting to write to a null file!");
         FileOutputStream out = new FileOutputStream(file);
         //50 KBytes buffer
         byte buf[] = new byte[1024 * 50];
