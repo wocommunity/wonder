@@ -10,7 +10,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import wrox.eo.User;
+import er.wrox.eo.User;
 
 public class LinkToInspectUser extends WOComponent {
 
