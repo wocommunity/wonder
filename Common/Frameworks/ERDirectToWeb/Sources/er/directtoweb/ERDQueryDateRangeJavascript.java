@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import er.extensions.*;
 
 public class ERDQueryDateRangeJavascript extends WOComponent {
 
@@ -74,14 +75,12 @@ public class ERDQueryDateRangeJavascript extends WOComponent {
                     dateIsValid = reformattedDate.equals(modifiedDateString);
                 }
                 if (!dateIsValid)
-                    throw new NSValidation.ValidationException("Please check <B>"+
-                                                               valueForBinding("displayNameForProperty")+"</B>: "+dateString+" is not a valid date");
+                    throw ERXValidationFactory.defaultFactory().createException(null, propertyKey(), dateString, "InvalidDateFormatException");
 
             }
         } catch (java.text.ParseException nspe) {
             NSValidation.ValidationException v =
-            new NSValidation.ValidationException("Please check the format of <B>"+
-                                                 valueForBinding("displayNameForProperty")+"</B> "+dateString+" is not a valid date");
+            ERXValidationFactory.defaultFactory().createException(null, propertyKey(), dateString, "InvalidDateFormatException");
             parent().validationFailedWithException( v, date, propertyKey());
         } catch (NSValidation.ValidationException v) {
             parent().validationFailedWithException(v,date,propertyKey());

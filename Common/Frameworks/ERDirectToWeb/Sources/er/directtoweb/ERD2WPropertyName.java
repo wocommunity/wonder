@@ -21,8 +21,19 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     public ERD2WPropertyName(WOContext context) { super(context); }
 
     // public boolean isStateless() {return false;}
+    String displayNameForProperty;
+    public String displayNameForProperty() {
+        if(displayNameForProperty == null)
+            displayNameForProperty = (String)d2wContext().valueForKey("displayNameForProperty");
+        return displayNameForProperty;
+    }
+    public void reset() {
+        super.reset();
+        displayNameForProperty = null;
+    }
+    
     public boolean hasNoErrors() {
-        String keyPath = "errorMessages." + d2wContext().valueForKey("displayNameForProperty");
+        String keyPath = "errorMessages." + displayNameForProperty();
         return d2wContext().valueForKeyPath(keyPath) == null;
     }
 

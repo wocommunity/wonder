@@ -60,13 +60,10 @@ public class ERD2WEditNumber extends D2WEditNumber {
             } catch (Exception e) {
                 cat.warn("Unable to parse number: " + anObject + " + " + propertyKey());
                 throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "IllegalCharacterInNumberException");
-                //throw new NSValidation.ValidationException("Invalid Character in Numerical Value: " + anObject + ", in field <b>" + d2wContext().displayNameForProperty() + "<b>");
             }
         } else if (anObject!=null && !(anObject instanceof Number)) {
             cat.warn("Unable to read number: " + anObject);
             throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
-
-            // throw new NSValidation.ValidationException("Sorry, I could not read this number: "+anObject);
         }
         return super.validateTakeValueForKeyPath(convertNumber(number), aPath);
     }

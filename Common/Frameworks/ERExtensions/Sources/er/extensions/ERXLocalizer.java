@@ -187,6 +187,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
 
+    public static ERXLocalizer localizerForSession(Object session) {
+        return ((ERXSession)session).localizer();
+    }
+    
     public String localizedStringForKeyWithDefault(String key) {
         String result = localizedStringForKey(key);
         if(result == null) {

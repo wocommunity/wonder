@@ -37,7 +37,9 @@ public class ERXValidation {
                                                      Object value,
                                                      String keyPath,
                                                      NSMutableDictionary errorMessages,
-                                                     String displayPropertyKeyPath) {
+                                                     String displayPropertyKeyPath,
+                                                     ERXLocalizer localizer
+                                                     ) {
         validationFailedWithException(e,value,keyPath,errorMessages,displayPropertyKeyPath,null);
     }
 
@@ -46,8 +48,10 @@ public class ERXValidation {
                                                      String keyPath,
                                                      NSMutableDictionary errorMessages,
                                                      String displayPropertyKeyPath,
-                                                     EOEntity entity) {
-        validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, entity, pushChangesDefault);
+                                                     EOEntity entity,
+                                                     ERXLocalizer localizer
+                                                     ) {
+        validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, entity, localizer, pushChangesDefault);
     }
 
     public static void validationFailedWithException(Throwable e,
@@ -56,7 +60,9 @@ public class ERXValidation {
                                                      NSMutableDictionary errorMessages,
                                                      String displayPropertyKeyPath,
                                                      EOEntity entity,
-                                                     boolean pushChanges) {
+                                                     ERXLocalizer localizer,
+                                                     boolean pushChanges
+                                                     ) {
         if (cat.isDebugEnabled())
             cat.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
         boolean addKeyToErrorMessage=false;
@@ -99,10 +105,10 @@ public class ERXValidation {
         if (propertyNameContext.entity() != null && key != null) {
             propertyNameContext.setPropertyKey(key);
             //FIXME: (ak) this is just until I can rethink the whole message processing
-            ERXLocalizer l = ERXLocalizer.localizerForLanguage(((ERXValidationException)e).targetLanguage());
-            NSMutableDictionary fakeSession = new NSMutableDictionary(l, "localizer");
+            NSMutableDictionary fakeSession = new NSMutableDictionary(localizer, "localizer");
             propertyNameContext.takeValueForKey( fakeSession, "session");
-            errorMessages.setObjectForKey(newErrorMessage, propertyNameContext.displayNameForProperty());
+            if(newErrorMessage != null)
+                errorMessages.setObjectForKey(newErrorMessage, propertyNameContext.displayNameForProperty());
         } else {
             errorMessages.setObjectForKey(newErrorMessage, key);
         }
