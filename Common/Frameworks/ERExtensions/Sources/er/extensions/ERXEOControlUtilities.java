@@ -253,6 +253,23 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Gets the shared enterprise object with the given primary
+     * from the default shared editing context. This has the
+     * advantage of not requiring a roundtrip to the database to
+     * lookup the object.
+     * @param entityName name of the entity
+     * @param pk primary key of object to be found
+     * @return the shared object registered in the default shared editing context
+     */
+    public static EOEnterpriseObject sharedObjectWithPrimaryKey(String entityName, Object primaryKey) {
+        EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, new Object[] {primaryKey});
+        EOEnterpriseObject eo = EOSharedEditingContext.defaultSharedEditingContext().objectForGlobalID(gid);
+        return (eo != null) ? eo : EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
+                                                     entityName,
+                                                     primaryKey);
+    }
+    
+    /**
      * Gets a fetch specification from a given entity. If qualifier binding variables
      * are passed in then the fetchspecification is cloned and the binding variables
      * are substituted returning a fetch specification that can be used.
