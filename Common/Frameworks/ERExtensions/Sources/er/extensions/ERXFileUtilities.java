@@ -119,16 +119,46 @@ public class ERXFileUtilities {
         bis.close();
         out.flush();
         out.close();
-        
     }
 
+    /**
+     * Writes the contents of <code>s</code> to <code>f</code>
+     * using the platform's default encoding.
+     * 
+     * @param s the string to be written to file
+     * @param f the destination file
+     */
     public static void stringToFile(String s, File f) throws IOException {
-        if (s == null) throw new NullPointerException("string argument cannot be null");
-        if (f == null) throw new NullPointerException("file argument cannot be null");
-
-        byte[] bytes = s.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        writeInputStreamToFile(bais, f);
+        stringToFile( s, f, System.getProperty("file.encoding") );
+    }
+    
+    /**
+     * Writes the contents of <code>s</code> to <code>f</code>
+     * using specified encoding.
+     * 
+     * @param s the string to be written to file
+     * @param f the destination file
+     * @param encoding  the desired encoding
+     */
+    public static void stringToFile(String s, File f, String encoding) throws IOException {
+        if (s == null) throw new IllegalArgumentException("string argument cannot be null");
+        if (f == null) throw new IllegalArgumentException("file argument cannot be null");
+        if (encoding == null) throw new IllegalArgumentException("encoding argument cannot be null");
+        Reader reader = new BufferedReader(new StringReader(s));
+        FileOutputStream fos = new FileOutputStream(f);
+        Writer out;
+        if( encoding == null )
+            out = new BufferedWriter( new OutputStreamWriter(fos) );
+        else
+            out = new BufferedWriter( new OutputStreamWriter(fos, encoding) );        
+        char buf[] = new char[1024 * 50];
+        int read = -1;
+        while ((read = reader.read(buf)) != -1) {
+            out.write(buf, 0, read);
+        }
+        reader.close();
+        out.flush();
+        out.close();
     }
 
     /**
@@ -318,8 +348,8 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Reads a file in from the file system and then parses
-     * it as if it were a property list.
+     * Reads a file in from the file system and then parses
+     * it as if it were a property list, using the platform's default encoding.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
      *		'app' for the application bundle.
@@ -327,13 +357,28 @@ public class ERXFileUtilities {
      *		specified.
      */
     public static Object readPropertyListFromFileInFramework(String fileName, String aFrameWorkName) {
-        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null);
+        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null, System.getProperty("file.encoding"));
     }
 
     /**
-        * Reads a file in from the file system for the given set
+     * Reads a file in from the file system and then parses
+     * it as if it were a property list, using the specified encoding.
+     *
+     * @param fileName name of the file
+     * @param aFrameWorkName name of the framework, null or
+     *		'app' for the application bundle.
+     * @param encoding  the encoding used with <code>fileName</code>
+     * @return de-serialized object from the plist formatted file
+     *		specified.
+     */
+    public static Object readPropertyListFromFileInFramework(String fileName, String aFrameWorkName, String encoding) {
+        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null, encoding);
+    }
+    
+    /**
+     * Reads a file in from the file system for the given set
      * of languages and then parses the file as if it were a
-     * property list.
+     * property list, using the platform's default encoding.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
      *		'app' for the application bundle.
@@ -341,28 +386,42 @@ public class ERXFileUtilities {
      * @return de-serialized object from the plist formatted file
      *		specified.
      */
-    // FIXME: Not the best way of handling encoding
-    // ENHANCEME: Should be using an InputStream instead of a File
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
+        return readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding") );
+    }
+
+    /**
+     * Reads a file in from the file system for the given set
+     * of languages and then parses the file as if it were a
+     * property list, using the specified encoding.
+     *
+     * @param fileName name of the file
+     * @param aFrameWorkName name of the framework, null or
+     *		'app' for the application bundle.
+     * @param languageList language list search order
+     * @param encoding  the encoding used with <code>fileName</code>
+     * @return de-serialized object from the plist formatted file
+     *		specified.
+     */    
+    public static Object readPropertyListFromFileInFramework(String fileName,
+                                                             String aFrameWorkName,
+                                                             NSArray languageList,
+                                                             String encoding) {
         String filePath = pathForResourceNamed(fileName, aFrameWorkName, languageList);
         Object result=null;
         if (filePath!=null) {
             File file = new File(filePath);
             try {
-                try {
-                    result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
-                } catch (IllegalArgumentException iae) {
-                    result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
-                }
+                result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, encoding));
             } catch (IOException ioe) {
                 log.error("ConfigurationManager: Error reading file <"+filePath+">");
             }
         }
         return result;
     }
-
+    
     /**
         * Deletes all of the files in a given directory with the option to
      * recursively delete all of the directories in the given directory.
@@ -860,12 +919,33 @@ public class ERXFileUtilities {
     
     /** shortens a filename, for example aVeryLongFileName.java -> aVer...Name.java
      * @param name the name to modify
-     * @param maxLength the maximum length of the name
-     * @return
+     * @param maxLength the maximum length of the name.
+     * <code>maxLength</code> values under 4 have no effect, the returned string is
+     * always a....java
+     * @return the shortened filename
      */
     public static String shortenFilename(String name, int maxLength) {
-        //TODO implementation...
-        return name;
+        String ext = fileExtension( name );
+        String s = removeFileExtension( name );
+        // not sure but we could use \u2026, instead...
+        String elips = "...";
+        int elipsLength = elips.length();
+        int stringLength = s.length();
+        if( stringLength == maxLength )
+            return name;
+        if( maxLength  <= elipsLength )
+            maxLength = elipsLength + 1;
+        int noOfChars = maxLength - elipsLength;
+        int mod = noOfChars%2;
+        int firstHalf = noOfChars/2 + mod;
+        int secondHalf = firstHalf - mod;        
+        StringBuffer sb = new StringBuffer();
+        sb.append( s.substring( 0, firstHalf ) );
+        sb.append( elips );
+        sb.append( s.substring( stringLength-secondHalf, stringLength ) );
+        sb.append( "." );
+        sb.append( ext );
+        return sb.toString();
     }
 
     /** returns the filename without its fileExtension
