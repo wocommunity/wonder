@@ -19,7 +19,7 @@ import er.extensions.*;
 public class ERDSortedManyToManyAssignment extends ERDAssignment {
 
     /** holds the array of dependent keys */
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "object.entityName" });
+    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "object.entityName", "propertyKey" });
 
     /** User info key that specifies if a given relationship is a sorted join */
     public static final String SortedJoinRelationshipUserInfoKey = "SortedJoinRelationship";
