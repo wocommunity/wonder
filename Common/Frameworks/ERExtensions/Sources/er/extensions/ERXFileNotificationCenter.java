@@ -108,7 +108,7 @@ public class ERXFileNotificationCenter {
      * @param file file to watch for changes
      */
     public void addObserver(Object observer, NSSelector selector, File file) {
-        if (file == null || !file.exists())
+        if (file == null)
             throw new RuntimeException("Attempting to register a null file. " + (file != null ? " File path: " + file.getAbsolutePath() : null));
         if (observer == null)
             throw new RuntimeException("Attempting to register null observer for file: " + file);
@@ -138,8 +138,11 @@ public class ERXFileNotificationCenter {
      * @param file file to record the last modified date
      */
     public void registerLastModifiedDateForFile(File file) {
-        if (file != null || !file.exists())
+        if (file != null) {
+            // Note that if the file doesn't exist, it will be registered with a 0
+            // lastModified time by virtue of the semantics of File.lastModified.
             _lastModifiedByFilePath.setObjectForKey(new Long(file.lastModified()), file.getAbsolutePath());
+        }
     }
 
     /**

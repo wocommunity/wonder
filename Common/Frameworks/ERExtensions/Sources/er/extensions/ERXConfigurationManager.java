@@ -127,6 +127,13 @@ public class ERXConfigurationManager {
     }
 
     /**
+     * If set, touching this path will be used to signal a change to properties files.
+     */
+    private static String propertiesTouchFile() {
+        return ERXProperties.stringForKey("er.extensions.ERXConfigurationManager.PropertiesTouchFile");
+    }
+    
+    /**
      * Returns the single instance of this class
      * 
      * @return the configuration manager
@@ -187,23 +194,72 @@ public class ERXConfigurationManager {
 
         _isRapidTurnAroundInitialized = true;
         
+        boolean rapidTurnaround = true;
+        
+        if (WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
+            log.info("WOCachingEnabled is true. Disabling the rapid turnaround for Properties files");
+            rapidTurnaround = false;
+        }
+
         NSArray propertyPaths = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
         _monitoredProperties = new NSMutableArray();
 
         for (Enumeration e = propertyPaths.objectEnumerator(); e.hasMoreElements();) {
             String path = (String) e.nextElement();
-            try {
-                ERXFileNotificationCenter.defaultCenter().addObserver(this,
-                        new NSSelector("updateSystemProperties", ERXConstant.NotificationClassArray),
-                        path);
-                _monitoredProperties.addObject(path);
-                log.debug("Registered: " + path);
-            } catch (Exception ex) {
-                log.error("An exception occured while registering the observer for the "
-                            + "logging configuration file: " 
-                            + ex.getClass().getName() + " " + ex.getMessage());
+
+            _monitoredProperties.addObject(path);
+            
+            if (rapidTurnaround) {
+                registerForFileNotification(path, "updateSystemProperties");
             }
         }
+        
+        if (!rapidTurnaround) {
+            registerPropertiesTouchFiles();
+        }
+    }
+
+    private void registerPropertiesTouchFiles() {
+        String propertiesTouchFile = propertiesTouchFile();
+        
+        if (propertiesTouchFile != null) {
+            String appNamePlaceHolder = "/{AppName}/";
+            int appNamePlaceHolderIndex = propertiesTouchFile.lastIndexOf(appNamePlaceHolder);
+            if (appNamePlaceHolderIndex == -1) {
+                registerForFileNotification(propertiesTouchFile, "updateAllSystemProperties");
+            }
+            else {
+                if (WOApplication.application() != null) {
+                    StringBuffer appSpecificTouchFile = new StringBuffer();
+                    
+                    appSpecificTouchFile.append(propertiesTouchFile.substring(0, appNamePlaceHolderIndex + 1));
+                    appSpecificTouchFile.append(WOApplication.application().name());
+                    appSpecificTouchFile.append(propertiesTouchFile.substring(appNamePlaceHolderIndex + appNamePlaceHolder.length() - 1));
+                    
+                    registerForFileNotification(appSpecificTouchFile.toString(), "updateAllSystemProperties");
+                }
+                
+                StringBuffer globalTouchFile = new StringBuffer();
+                
+                globalTouchFile.append(propertiesTouchFile.substring(0, appNamePlaceHolderIndex + 1));
+                globalTouchFile.append(propertiesTouchFile.substring(appNamePlaceHolderIndex + appNamePlaceHolder.length()));
+                
+                registerForFileNotification(globalTouchFile.toString(), "updateAllSystemProperties");
+            }            
+        }
+    }
+    
+    private void registerForFileNotification(String path, String callbackMethod) {
+        try {
+            ERXFileNotificationCenter.defaultCenter().addObserver(this,
+                                                                  new NSSelector(callbackMethod, ERXConstant.NotificationClassArray),
+                                                                  path);
+            log.debug("Registered: " + path);
+        } catch (Exception ex) {
+            log.error("An exception occured while registering the observer for the "
+                      + "logging configuration file: " 
+                      + ex.getClass().getName() + " " + ex.getMessage());
+        }            
     }
 
     /**
@@ -248,33 +304,46 @@ public class ERXConfigurationManager {
      * This method is called when rapid turnaround is enabled and one 
      * of the configuration files changes.
      * 
-     * @param  n NSNotification object for the event 
+     * @param  n NSNotification object for the event (null means load all files)
      */
     public synchronized void updateSystemProperties(NSNotification n) {
-        _updateSystemPropertiesFromMonitoredProperties((File)n.object(), _monitoredProperties);
+        _updateSystemPropertiesFromMonitoredProperties(n != null ? (File)n.object() : null, _monitoredProperties);
         if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) 
             _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
         ERXLogger.configureLogging(System.getProperties());
         
         NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
     }
-
+    
+    public synchronized void updateAllSystemProperties(NSNotification notification) {
+        updateSystemProperties(null);
+    }
+    
+    /**
+     * If updatedFile is null, all files are reread.
+     */
     private void _updateSystemPropertiesFromMonitoredProperties(File updatedFile, NSArray monitoredProperties) {
         if (monitoredProperties == null  ||  monitoredProperties.count() == 0)  return;
         
-        String updatedFilePath = null;
-        try {
-            updatedFilePath = updatedFile.getCanonicalPath();
-        } catch (IOException ex) {
-            log.error(ex.toString());
-            return; 
+        int firstDirtyFile = 0;
+        
+        if (updatedFile != null) {
+            try {
+                // Find the position of the updatedFile in the monitoredProperties list, 
+                // so that we can reload it and everything after it on the list. 
+                firstDirtyFile = monitoredProperties.indexOfObject(updatedFile.getCanonicalPath());
+                if (firstDirtyFile < 0) {
+                    return;
+                }
+            } catch (IOException ex) {
+                log.error(ex.toString());
+                return; 
+            }
         }
+        
 
         Properties systemProperties = System.getProperties();
-        // Find the position of the updatedFile in the monitoredProperties list, 
-        // then reload it and everything after it on the list. 
-        for (int i = monitoredProperties.indexOfObject(updatedFilePath); 
-                  0 <= i  &&  i < _monitoredProperties.count(); i++) {
+        for (int i = firstDirtyFile; i < _monitoredProperties.count(); i++) {
             String monitoredPropertiesPath = (String) _monitoredProperties.objectAtIndex(i);
             Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
             ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
