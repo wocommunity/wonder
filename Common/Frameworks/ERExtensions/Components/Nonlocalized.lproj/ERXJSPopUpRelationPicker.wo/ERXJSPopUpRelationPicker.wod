@@ -1,3 +1,8 @@
+Array: WOString {
+	value = jsString;
+	escapeHTML = false;
+}
+
 ChildPopUpString: WOString {
 	escapeHTML = false;
 	value = childPopUpString;
@@ -30,9 +35,5 @@ String3: WOString {
 }
 String4: WOString {
 	value = parentLabel;
-	escapeHTML = false;
-}
-Array: WOString {
-	value = jsString;
 	escapeHTML = false;
 }
