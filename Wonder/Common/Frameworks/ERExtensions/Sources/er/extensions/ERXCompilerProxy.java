@@ -20,29 +20,62 @@ import com.webobjects.appserver._private.WODirectActionRequestHandler;
 public class ERXCompilerProxy {
     static final Category cat = Category.getInstance(ERXCompilerProxy.class.getName());
     static final Category classLoaderCat = Category.getInstance(ERXCompilerProxy.class.getName()+".loading");
+    /** Notification you can register to when the Compiler Proxy reloads classes.
+     * <br/>
+     * The object is an array of classes that did recompiled since the last time the notification was sent.
+     */
     public static final String CompilerProxyDidCompileClassesNotification = "CompilerProxyDidCompileClasses";
 
-    /** CPFileList is the file which describes in each line a path to java class to watch for*/
+    /** 
+     * CPFileList is the file which describes in each line a path to java class to watch fo
+     */
     static final String CPFileList = "CPFileList.txt";
 
+    /** Path to the jikes binary.<br/>
+     * Note that the Compilerproxy currently only works on unix based systems.
+     */
     static final String _jikesPath = "/usr/bin/jikes";
 
+    /** Holds the Compilerproxy singleton
+     */
     static ERXCompilerProxy _defaultProxy;
 
+    /** Holds the classpath of the current app.
+     */
     static String _classPath;
+    /** Holds a boolean that tells wether an error should raise an Exception or only log the error.
+     */
     static boolean _raiseOnError = false;
 
+    /** Holds the files to watch.
+     */
     NSMutableDictionary _filesToWatch;
     String _className;
+    /** Holds the path where the compiled <code>.class</code> files go. Default is <code>Contents/Resources/Java</code>.
+     */
     String _destinationPath;
+    /** Currently compiled classes.
+     */
     NSMutableSet classFiles = new NSMutableSet();
     
+    /** 
+     * Returns the Compiler Proxy Singleton.<br/>
+     * Creates one if needed.
+     * 
+     * @return compiler proxy singleton
+     */
     public static ERXCompilerProxy defaultProxy() {
         if(_defaultProxy == null)
             _defaultProxy = new ERXCompilerProxy();
         return _defaultProxy;
     }
 
+    /** 
+     * Returns an array of paths to the opened projects that have a <code>CPFileList.txt</code>.<br/>
+     * This code is pretty fragile and subject to changes between versions of the dev-tools.
+     * 
+     * @return paths to opened projects
+     */
     NSArray projectPaths() {
 	NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
 	NSMutableArray projectPaths = new NSMutableArray();
@@ -82,14 +115,32 @@ public class ERXCompilerProxy {
 	return projectPaths;
     }
 
+    /** 
+     * Returns the class registered for the name <code>className</code>.<br/>
+     * Uses the private WebObjects class cache.
+     * 
+     * @param className class name
+     * @return class for the registered name or null
+     */
     public Class classForName(String className) {
         return com.webobjects.foundation._NSUtilities.classWithName(className);
     }
 
+    /** 
+     * Sets the class registered for the name <code>className</code> to the given class.<br/>
+     * Changes the private WebObjects class cache.
+     * 
+     * @param clazz class object
+     * @param className name for the class - normally clazz.getName()
+     */
     public void setClassForName(Class clazz, String className) {
         com.webobjects.foundation._NSUtilities.setClassForName(clazz, className);
     }
 
+    /** 
+     * Initializes the CopilerProxy singleton.<br/>
+     * Registers for ApplicationWillDispatchRequest notification.
+     */
     public void initialize() {
         if(WOApplication.application().isCachingEnabled()) {
             cat.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
@@ -152,9 +203,19 @@ public class ERXCompilerProxy {
 	NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("checkAndCompileOnNotification", new Class[] { NSNotification.class } ), WOApplication.ApplicationWillDispatchRequestNotification, null);
     }
 
+    /** 
+     * Contructor - does nothing special.
+     */
     public ERXCompilerProxy() {
     }
 
+    /** 
+     * Method that will be called upon <code>ApplicationWillDispatchRequest</code>.<br/>
+     * Checks if the request is not a resource request and then calls {$see checkAndCompileOnNotification()}
+     * 
+     * @param theNotification notification sent upon 
+     *     ApplicationWillDispatchRequest
+     */
     public void checkAndCompileOnNotification(NSNotification theNotification) {
         //cat.debug("Received ApplicationWillDispatchRequestNotification");
         WORequest r = (WORequest)theNotification.object();
@@ -164,6 +225,11 @@ public class ERXCompilerProxy {
             checkAndCompileAllClasses();
     }
 
+    /** 
+     * Main magic bullet routine.<br/>
+     * 
+     * You don't need to understand what it does, in fact you don't even want to...it will be certainly different tomorrow.
+     */
     void checkAndCompileAllClasses() {
         CacheEntry cacheEntry;
         Enumeration e = _filesToWatch.objectEnumerator();
@@ -245,6 +311,10 @@ public class ERXCompilerProxy {
         File _sourceFile;
         File _classFile;
 
+	/** @param basePath 
+	 * @param path 
+	 * @param packageName 
+	 */
         public CacheEntry(String basePath, String path, String packageName) {
             _className = NSPathUtilities.lastPathComponent(path);
             _className = _className.substring(0,_className.indexOf("."));
@@ -412,6 +482,9 @@ public class ERXCompilerProxy {
         }
 
 
+	/** @param name 
+	 * @exception ClassNotFoundException 
+	 */
         protected Class findClass(String name) throws ClassNotFoundException {
             File classFile = findClassFile(name);
             if (classFile == null) {
@@ -435,6 +508,8 @@ public class ERXCompilerProxy {
             return newClass;
         }
 
+	/** @param name 
+	 */
         public URL getResource(String name) {
             return ClassLoader.getSystemResource(name);
         }
