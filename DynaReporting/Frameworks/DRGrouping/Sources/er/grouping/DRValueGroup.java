@@ -23,8 +23,7 @@ public class DRValueGroup extends DRValue  {
     }
 
     static public DRValue withRecordAttribute(DRRecord rec, DRAttribute att) {
-        DRValueGroup aVal = new DRValueGroup();
-        aVal.initWithRecordAttribute(rec, att);
+        DRValueGroup aVal = new DRValueGroup(rec, att);
         return aVal;
     }
 
@@ -32,7 +31,7 @@ public class DRValueGroup extends DRValue  {
         return _showTotal;
     }
 
-    public DRValueGroup initWithRecordAttribute(DRRecord rec, DRAttribute att) {
+    public DRValueGroup(DRRecord rec, DRAttribute att) {
         _isGroup = true;
         _hasTotaled = false;
         _total = 0.0;
@@ -46,9 +45,7 @@ public class DRValueGroup extends DRValue  {
         _record = rec;
         _attribute = att;
         this.buildSubValues();
-        return this;
     }
-
 
     private void buildSubValues() {
         NSArray attrs = this.attribute().attributes();
