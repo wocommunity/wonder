@@ -235,7 +235,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * Called on the object after is has been deleted.
      * The editing context is passed to the object since
      * by this point the editingContext of the object is
-     * null.
+     * null. You should check if the <code>ec</code>
+     * is a child context when doing something here that
+     * can't be undone.
      * @param ec editing context that used to be associated
      *		with the object.
      */
@@ -329,9 +331,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return if the editing context has the correct delegate set.
      */
     public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
-	Object delegate=editingContext.delegate();
-	
-	if (delegate==null) {
+        if(true) {
+            editingContext.setDelegate(null);
+            return true;
+        }
+        
+        Object delegate=editingContext.delegate();
+
+        if (delegate==null) {
 	    EOObjectStore parent = editingContext.parentObjectStore();
 	    if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
 		Object parentDelegate=((EOEditingContext)parent).delegate();
