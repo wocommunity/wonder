@@ -22,6 +22,9 @@ public class ERXDirectAction extends WODirectAction {
     /** logging support */
     public final static Category cat = Category.getInstance(ERXDirectAction.class);
 
+    /** holds a reference to the current browser used for this session */
+    private ERXBrowser browser;
+
     /** Public constructor */
     public ERXDirectAction(WORequest r) { super(r); }
 
@@ -85,6 +88,29 @@ public class ERXDirectAction extends WODirectAction {
         return r;
     }
     
+    /**
+     * Returns the browser object representing the web 
+     * browser's "user-agent" string. You can obtain 
+     * browser name, version, platform and Mozilla version, etc. 
+     * through this object. <br>
+     * Good for WOConditional's condition binding to deal 
+     * with different browser versions. 
+     * @return browser object
+     */
+    public ERXBrowser browser() { 
+        if (browser == null  &&  request() != null) {
+            ERXBrowserFactory browserFactory = ERXBrowserFactory.factory();
+            browser = browserFactory.browserMatchingRequest(request());
+            browserFactory.retainBrowser(browser);
+        }
+        return browser; 
+    }
 
+    public WOActionResults performActionNamed(String actionName) {
+        WOActionResults actionResult = super.performActionNamed(actionName);
+        if (browser != null) 
+            ERXBrowserFactory.factory().releaseBrowser(browser);
+        return actionResult;
+    }
     
 }
