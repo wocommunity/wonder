@@ -105,8 +105,18 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             return null;
         }
 
-        String entityName = (String)newPage.valueForKeyPath("d2wContext.entity.name");
-        String taskName = (String)newPage.valueForKeyPath("d2wContext.task");
+        String entityName = null;
+        String taskName = null;
+        D2WContext context = null; 
+        if(newPage instanceof D2WPage) {
+            context = ((D2WPage)newPage).d2wContext();
+        } else {
+            context = new D2WContext(session());
+            context.setDynamicPage(anActionName);
+        }
+        entityName = ((EOEntity)context.entity()).name();
+        taskName = (String)context.task();
+        
         if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
             EditPageInterface epi=(EditPageInterface)newPage;
             EOEditingContext ec = ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
