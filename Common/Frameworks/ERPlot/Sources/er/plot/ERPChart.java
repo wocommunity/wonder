@@ -1,8 +1,13 @@
 package er.plot;
 import java.io.ByteArrayOutputStream;
 
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.imagemap.ImageMapUtil;
+import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
+import org.jfree.chart.imagemap.URLTagFragmentGenerator;
 import org.jfree.data.general.Dataset;
 
 import com.webobjects.appserver.WOContext;
@@ -42,6 +47,8 @@ public abstract class ERPChart extends ERXStatelessComponent {
 
     protected NSData _imageData;
     public String _imageKey;
+    public String _imageMap;
+    public String _imageMapName;
 
     protected NSArray _items;
     protected String _name;
@@ -155,24 +162,59 @@ public abstract class ERPChart extends ERXStatelessComponent {
         }
         return _dataset;
     }
-
+    
     public NSData imageData() {
         if(_imageData == null) {
             try {
                 JFreeChart chart = chart();
                 if(chart != null) {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    if("image/jpeg".equals(imageType())) {
-                        ChartUtilities.writeChartAsJPEG(baos, chart, width(), height());
-                    } else {
-                        ChartUtilities.writeChartAsPNG(baos, chart, width(), height());
+                    ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                    ChartRenderingInfo info = null;
+                    if(showToolTips() || showUrls()) {
+                        info = new ChartRenderingInfo(new StandardEntityCollection());
                     }
-                    _imageData = new NSData(baos.toByteArray());
+                    if("image/jpeg".equals(imageType())) {
+                        ChartUtilities.writeChartAsJPEG(imageStream, chart, width(), height(), info);
+                    } else {
+                        ChartUtilities.writeChartAsPNG(imageStream, chart, width(), height(), info);
+                    }
+                    if(showToolTips() || showUrls()) {
+                        _imageMapName = "ERP" + System.identityHashCode(chart);
+                        ToolTipTagFragmentGenerator toolTipGenerator = null;
+                        URLTagFragmentGenerator urlTagFragmentGenerator = null;
+                        if(showToolTips()) {
+                            toolTipGenerator = new ToolTipTagFragmentGenerator() {
+                                public String generateToolTipFragment(String toolTip) {
+                                    return " title=\"" +toolTip + "\"";
+                                }
+                            };
+                        }
+                        if(showUrls()) {
+                            urlTagFragmentGenerator = new URLTagFragmentGenerator() {
+                                public String generateURLFragment(String url) {
+                                    return " href=\""+url+"\"";
+                                }
+                            };
+                        }
+                        _imageMap = ImageMapUtil.getImageMap(_imageMapName, info, 
+                                toolTipGenerator, urlTagFragmentGenerator);
+                    }
+                    _imageData = new NSData(imageStream.toByteArray());
                 }
             } catch (Exception ex) {
                 NSForwardException._runtimeExceptionForThrowable(ex);
             }
         }
         return _imageData;
+    }
+    
+    public String imageMap() {
+        NSData data = imageData();
+        return _imageMap;
+    }
+    
+    public String otherTagString() {
+        String map = imageMap();
+        return map == null ? null : "usemap=\"#" + _imageMapName  + "\"";
     }
 }    
