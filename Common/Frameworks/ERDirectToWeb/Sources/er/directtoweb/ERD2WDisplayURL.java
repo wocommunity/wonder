@@ -20,7 +20,7 @@ public class ERD2WDisplayURL extends D2WDisplayString {
 
     public String href() {
         String href = objectPropertyValue() != null ? objectPropertyValue().toString() : null;
-        if(href.indexOf("://") < 0) {
+        if(href != null && href.indexOf("://") < 0) {
             href = "http://" + href;
         }
         return href;
