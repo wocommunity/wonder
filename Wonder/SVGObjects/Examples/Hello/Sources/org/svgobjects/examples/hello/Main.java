@@ -5,10 +5,10 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
 public class Main extends WOComponent {
-    protected String text = "hello";
-    protected NSDictionary style;
-    protected NSArray styles = new NSArray(new String[]{"Stripes", "Bevel", "Prism", "Shadow", "Highway", "RedWhiteBlue", "Rings", "TrainTracks", "Dotted"});
-    protected String selectedStyle = (String) styles.objectAtIndex(0);
+    public String text = "hello";
+    public NSDictionary style;
+    public NSArray styles = new NSArray(new String[]{"Stripes", "Bevel", "Prism", "Shadow", "Highway", "RedWhiteBlue", "Rings", "TrainTracks", "Dotted"});
+    public String selectedStyle = (String) styles.objectAtIndex(0);
     
     public Main(WOContext context) {
         super(context);
