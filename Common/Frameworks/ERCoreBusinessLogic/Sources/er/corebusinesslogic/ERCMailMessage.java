@@ -155,7 +155,7 @@ public class ERCMailMessage extends _ERCMailMessage {
 
     public Object validateEmptyStringForKey(Object value, String field) {
         if(value == null || "".equals(value) || ((String)value).length() == 0) {
-            NSValidation.ValidationException e = ERXValidationFactory.defaultFactory().createCustomException(this, field, value, "null");
+            NSValidation.ValidationException e = ERXValidationFactory.defaultFactory().createCustomException(this, field, value, "empty" + field);
             throw e;
         }
         return value;
