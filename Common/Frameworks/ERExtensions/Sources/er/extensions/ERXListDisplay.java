@@ -31,6 +31,7 @@ public class ERXListDisplay extends WOComponent {
         return ERXValueUtilities.booleanValueWithDefault(valueForBinding("escapeHTML"), true);
     }
     
+//    ENHANCEME: add localization support
     public String displayString() {
         return ERXArrayUtilities.friendlyDisplayForKeyPath((NSArray)valueForBinding("list"),
                                                    (String)valueForBinding("attribute"),
