@@ -79,6 +79,7 @@ see the changed version and a message from ERXCompilerProxy in the console.
   <li>You must reload after making changes and before stopping your application, 
     because the file modification times are read only at start. If you stop the 
     application before reloading, your last changes will not be recognized. 
+  <li>If you change a class in a framework, the compiled file still ends up in your app's Java/ directory. This is intentional, but means that you should clean-rebuild your app if you rebuild your framework.
   <li>Changes in the Application class (among others) will not be recognized before 
     a restart. They are only read once, due to the nature of Java's class loading 
     and can't be fixed. If you cache your classes, you need to register for <code>CompilerProxyDidCompileClassesNotification</code> 
