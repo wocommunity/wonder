@@ -18,6 +18,7 @@ public interface ERXReplicableInterface {
     * returns a new object with the same attributes and replicated replationships
      */
     public ERXGenericRecord replicate(EOEditingContext ec);
+    public void deplicate();
 
 }
 
