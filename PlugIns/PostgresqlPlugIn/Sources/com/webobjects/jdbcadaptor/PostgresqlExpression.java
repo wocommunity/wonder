@@ -25,13 +25,6 @@ public class PostgresqlExpression extends JDBCExpression {
     public static final NSSelector RegexOperator = new NSSelector( "~", new Class[]{ Object.class });
     
     /**
-     * if true, don't use new join clause code. 
-     *
-     * @deprecated
-     */
-    private boolean disableOuterJoins = false;
-    
-    /**
      * if true, don't use typecasting. 
      */
     private boolean _disableTypeCasting = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting");
@@ -78,10 +71,7 @@ public class PostgresqlExpression extends JDBCExpression {
     public void addJoinClause(String leftName,
                               String rightName,
                               int semantic) {
-        if (disableOuterJoins)
-            super.addJoinClause(leftName, rightName, semantic);
-        else
-            assembleJoinClause(leftName, rightName, semantic);
+        assembleJoinClause(leftName, rightName, semantic);
     }
     
     /**
@@ -96,7 +86,7 @@ public class PostgresqlExpression extends JDBCExpression {
     public String assembleJoinClause(String leftName,
                                      String rightName,
                                      int semantic) {
-        if (disableOuterJoins == true || !useAliases()) {
+        if (!useAliases()) {
             return super.assembleJoinClause(leftName, rightName, semantic);
         }
         
@@ -224,18 +214,14 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         sb.append(" FROM ");
         String fieldString;
-        if (disableOuterJoins) {
-            fieldString = tableList;
+        if (_alreadyJoined.count() > 0) {
+            fieldString = joinClauseString();
         } else {
-            if (_alreadyJoined.count() > 0) {
-                fieldString = joinClauseString();
-            } else {
-                fieldString = tableList;
-            }
+            fieldString = tableList;
         }
         sb.append(fieldString);
         if ((whereClause != null && whereClause.length() > 0) ||
-            (disableOuterJoins && (joinClause != null && joinClause.length() > 0))) {
+            (joinClause != null && joinClause.length() > 0)) {
             sb.append(" WHERE ");
             if (joinClause != null && joinClause.length() > 0) {
                 sb.append(joinClause);
@@ -324,10 +310,6 @@ public class PostgresqlExpression extends JDBCExpression {
      * expression for the join clauses.
      */
     public String joinClauseString() {
-        if (disableOuterJoins)
-            return super.joinClauseString();
-        
-        
         NSMutableDictionary seenIt = new NSMutableDictionary();
         StringBuffer sb = new StringBuffer();
         JoinClause jc;
