@@ -212,7 +212,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
      * @return localized string for the given key
      */
     public Object valueForKey(String key) {
-        return localizedValueForKey(key);
+        return valueForKeyPath(key);
     }
     
     public Object valueForKeyPath(String key) {
@@ -396,7 +396,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public String localizedTemplateStringForKeyWithObjectOtherObject(String key, Object o1, Object o2) {
-        String template = localizedStringForKey(key);
+        String template = (String)valueForKeyPath(key);
         if (template != null)
             return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
         return key;
