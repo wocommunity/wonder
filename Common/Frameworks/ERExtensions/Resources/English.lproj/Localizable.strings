@@ -9,4 +9,8 @@
     "Could not save your changes: " = "Could not save your changes: ";
     ERXCheckboxMatrix.deselectAll = "None";
     ERXCheckboxMatrix.selectAll = "All";
+    ERXBatchNavigationBar.of = "of";
+    ERXBatchNavigationBar.show = "Show";
+    ERXBatchNavigationBar.items_per_page = "items/page";
+    ERXBatchNavigationBar.page = "Page";
 }
