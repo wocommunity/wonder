@@ -2,7 +2,7 @@ ComponentContent1: WOComponentContent {
 }
 
 report: WOSwitchComponent {
-	WOComponentName = "LUReport"; 
+	WOComponentName = "WRReport"; 
 	model = model; 
 	recordGroupTotalToShow = ^recordGroupTotalToShow; 
 	recordGroupTotalFormat = ^recordGroupTotalFormat;
