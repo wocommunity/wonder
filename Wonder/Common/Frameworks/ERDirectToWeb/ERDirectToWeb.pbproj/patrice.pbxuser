@@ -9,7 +9,7 @@
 		breakpoints = (
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 44843255;
+			PBXPerProjectTemplateStateSaveDate = 48536701;
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{1187, 840}";
 				LeftSlideOut = {
@@ -93,37 +93,12 @@
 					TabCount = 5;
 				};
 			};
-			PBXWorkspaceStateSaveDate = 44843255;
+			PBXWorkspaceStateSaveDate = 48536701;
 		};
 		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
-	};
-	F5A143C801FF7F8801A80106 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{84, 432}, {750, 502}}";
-		};
-	};
-	F5A143F001FF7F8801A80106 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{107, 411}, {750, 502}}";
-		};
-	};
-	F5A143F701FF7F8801A80106 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{61, 453}, {750, 502}}";
-		};
-	};
-	F5A143FD01FF7F8801A80106 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{61, 453}, {750, 502}}";
-		};
-	};
-	F5A144E901FF7F8801A80106 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{84, 432}, {750, 502}}";
-		};
 	};
 	F5A1454D01FF7F8801A80106 = {
 		activeExec = 0;
