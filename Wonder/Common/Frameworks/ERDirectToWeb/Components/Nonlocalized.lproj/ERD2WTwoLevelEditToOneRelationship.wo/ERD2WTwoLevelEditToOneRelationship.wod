@@ -1,4 +1,4 @@
-ToOneRelationship: JSTwoLevelEditToOneRelationship {
+ToOneRelationship: ERXJSTwoLevelEditToOneRelationship {
     //_componentName=d2wContext.editTwoLevelComponentName; 
     sortKey = d2wContext.sortKey;
     restrictingRelationshipSortKey = d2wContext.restrictingRelationshipSortKey;
