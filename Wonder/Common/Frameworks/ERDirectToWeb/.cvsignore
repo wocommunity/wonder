@@ -6,3 +6,4 @@ ant.frameworks.user.home
 ant.classpaths.wo.wosystemroot
 ant.classpaths.wo.wolocalroot
 ant.classpaths.user.home
+woproject
