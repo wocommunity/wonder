@@ -1,16 +1,9 @@
 package er.grouping;
 
-import java.lang.*;
 import java.util.*;
-import java.io.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import er.extensions.*;
 
-/* DRMasterCriteria.h created by Administrator on Sun 01-Nov-1998 */
-//#import <WebObjects/WebObjects.h>
 public class DRMasterCriteria extends Object  {
 
     //
@@ -35,7 +28,6 @@ public class DRMasterCriteria extends Object  {
         return aVal;
     }
 
-
     public boolean shouldTotal() {
         if (_userInfo == null) {
             return true;
@@ -45,7 +37,6 @@ public class DRMasterCriteria extends Object  {
         }
         return false;
     }
-
 
     public boolean shouldShowOther() {
         if (_userInfo == null) {
@@ -57,7 +48,6 @@ public class DRMasterCriteria extends Object  {
         return false;
     }
 
-
     public boolean isString() {
         if (_userInfo == null) {
             return true;
@@ -67,7 +57,6 @@ public class DRMasterCriteria extends Object  {
         }
         return false;
     }
-
 
     public DRMasterCriteria initWithSubMasterCriteria(NSArray smcList, NSDictionary info) {
         _subCriteriaList = new NSArray(smcList);
@@ -90,7 +79,6 @@ public class DRMasterCriteria extends Object  {
         return this;
     }
 
-
     public DRMasterCriteria() {
         super();
         _label = null;
@@ -98,21 +86,17 @@ public class DRMasterCriteria extends Object  {
         _criteriaLookupDict = new NSMutableDictionary();
     }
 
-
     public NSMutableDictionary userInfo() {
         return _userInfo;
     }
-
 
     public NSArray subCriteriaList() {
         return _subCriteriaList;
     }
 
-
     public boolean useStringMatchForLookup() {
         return _useStringMatchForLookup;
     }
-
 
     public boolean decideLookupMethod(NSArray scList) {
         Enumeration anEnum = scList.objectEnumerator();
@@ -125,11 +109,9 @@ public class DRMasterCriteria extends Object  {
         return true;
     }
 
-
     public boolean isPreset() {
         return _isPreset;
     }
-
 
     public boolean decideIsPreset(NSArray scList) {
         Enumeration anEnum = scList.objectEnumerator();
@@ -141,7 +123,6 @@ public class DRMasterCriteria extends Object  {
         }
         return true;
     }
-
 
     public NSDictionary valueDictFromValuesRecord(NSDictionary vlDict, DRRecord rec) {
         NSMutableDictionary dict = new NSMutableDictionary();
@@ -174,16 +155,13 @@ public class DRMasterCriteria extends Object  {
         return dict;
     }
 
-
     public NSDictionary valueDictRecord(DRRecord rec) {
         return this.valueDictFromValuesRecord(null, rec);
     }
 
-
     public NSDictionary valueDictFromValues(NSDictionary vlDict) {
         return this.valueDictFromValuesRecord(vlDict, null);
     }
-
 
     public void criteriaWithPossibleValueList(NSDictionary vlDict) {
         NSDictionary valueDict = this.valueDictFromValues(vlDict);
@@ -192,11 +170,9 @@ public class DRMasterCriteria extends Object  {
         _criteriaLookupDict.setObjectForKey(crit, lookupKey);
     }
 
-
     public NSDictionary criteriaLookupDict() {
         return _criteriaLookupDict;
     }
-
 
     public void walkPresetsPossibleValues(NSArray presets, NSDictionary vlDict) {
         DRSubMasterCriteria scSub = (DRSubMasterCriteria)presets.objectAtIndex(0);
@@ -221,7 +197,6 @@ public class DRMasterCriteria extends Object  {
         }
 
     }
-
 
     private void criteriaWithPossibleValues() {
         this.walkPresetsPossibleValues(_subCriteriaList, new NSDictionary());
@@ -254,7 +229,6 @@ public class DRMasterCriteria extends Object  {
 
     }
 
-
     public void groupRecordRecordGroupsDictGroupParent(DRRecord rec, NSMutableDictionary recGrpDict, DRGroup grp, DRRecordGroup parent) {
         DRRecordGroup recGrp = this.findRecordGroupForRecordGroupsDictGroupParent(rec, recGrpDict, grp, parent);
 
@@ -263,7 +237,6 @@ public class DRMasterCriteria extends Object  {
         }
 
     }
-
 
     public DRRecordGroup findRecordGroupForRecordGroupsDictGroupParent(DRRecord rec, NSMutableDictionary recGrpDict, DRGroup grp, DRRecordGroup parent) {
         //OWDebug.println(1, "entered");
@@ -295,9 +268,9 @@ public class DRMasterCriteria extends Object  {
 
             if (crit==null) {
                 return null;
-            }else{
+            } else {
                 recGrp = (DRRecordGroup)recGrpDict.objectForKey(crit.keyDesc());
-                if(recGrp == null){
+                if(recGrp == null) {
                     recGrp = DRRecordGroup.withCriteriaGroupParent(crit, grp, parent);
                     recGrpDict.setObjectForKey(recGrp, crit.keyDesc());
                     //_criteriaLookupDict.setObjectForKey(crit, lookupKey);
@@ -310,17 +283,15 @@ public class DRMasterCriteria extends Object  {
             recGrpDict.setObjectForKey(recGrp, crit.keyDesc());
             _criteriaLookupDict.setObjectForKey(crit, lookupKey);
             
-        }else{
+        } else {
         
             recGrp = (DRRecordGroup)recGrpDict.objectForKey(crit.keyDesc());
         }
         //OWDebug.println(1, "recGrpDict.allKeys():"+recGrpDict.allKeys());
 
-
         //OWDebug.println(1, " - DONE -");
         return recGrp;
     }
-
 
     public String label() {
         if (_label==null) {

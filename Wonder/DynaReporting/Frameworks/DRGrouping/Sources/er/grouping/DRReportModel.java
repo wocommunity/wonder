@@ -12,8 +12,6 @@ import org.xml.sax.*;
 import er.extensions.*;
 import sun.misc.*;
 
-/* DRReportModel.h created by Administrator on Sun 01-Nov-1998 */
-//#import <WebObjects/WebObjects.h>
 public class DRReportModel extends Object  {
     private static er.extensions.ERXLogger log = er.extensions.ERXLogger.getERXLogger(DRReportModel.class);
 
@@ -75,7 +73,6 @@ public class DRReportModel extends Object  {
         //OWDebug.println(1, "orderings:"+arr);
     }
 
-
     static public NSArray masterCriteriaForKey(String akey) {
         DRMasterCriteria mc;
         NSMutableArray mcrits = new NSMutableArray();
@@ -86,7 +83,6 @@ public class DRReportModel extends Object  {
         mcrits.addObject(mc);
         return mcrits;
     }
-
 
     static public boolean writeStringToDiskPathAtomically(String string, String path, boolean flag) {
         _NSStringUtilities.writeToFile(new File(path), string);
@@ -104,22 +100,18 @@ public class DRReportModel extends Object  {
     // attributeList: "AttributeDef"
     //
     static public boolean boolForString(String s) {
-        if (s.equals("true")) {
+        if ("true".equals(s)) {
             return true;
         }
-
         return false;
     }
-
 
     static public String stringForBool(boolean b) {
         if (b) {
             return "true";
         }
-
         return "false";
     }
-
 
     static public NSArray possibleValues(NSDictionary smcdict) {
         //NSArray rawpossVals = (NSArray)smcdict.objectForKey("possibleValues");
@@ -144,20 +136,17 @@ public class DRReportModel extends Object  {
             StringReader stringReader = new StringReader(xmlString);
             InputSource is = new InputSource(stringReader);
             // invoke setEncoding (on the input source) if the XML contains multibyte characters
-            try{
+            try {
                 possVals = (NSArray)decoder.decodeRootObject(is);
-            }catch(Exception e){
+            } catch(Exception e) {
                 //OWDebug.println(1, "e:"+e);
             }
-
-            //JC_ERROR - Please Fix: this class does not exist in pure java foundation. 
             //possVals = NSArchiver .unarchiveObjectWithData(rawpossVals);
         } else if(rawpossVals instanceof NSArray){
             possVals = (NSArray)rawpossVals;
         }
         return possVals;
     }
-
 
     static public NSArray subMasterCriteriaList(NSArray smcList) {
         NSMutableArray arr = new NSMutableArray();
@@ -166,13 +155,11 @@ public class DRReportModel extends Object  {
         while (en.hasMoreElements()) {
             NSDictionary smcdict = (NSDictionary)en.nextElement();
             NSArray possVals = DRReportModel.possibleValues(smcdict);
-            DRSubMasterCriteria smc = DRSubMasterCriteria.withKeyUseMethodUseTimeFormatFormatPossibleValuesUseTypeGroupEdgesPossibleValues((String)smcdict.objectForKey("key"), ERXValueUtilities.booleanValue(smcdict.objectForKey("useMethod")), ERXValueUtilities.booleanValue(smcdict.objectForKey("useTimeFormat")), (String)smcdict.objectForKey("format"), (String)smcdict.objectForKey("possibleValuesUseType"), ERXValueUtilities.booleanValue(smcdict.objectForKey("groupEdges")), possVals);
+            DRSubMasterCriteria smc = new DRSubMasterCriteria(smcdict, possVals);
             arr.addObject(smc);
         }
-
         return arr;
     }
-
 
     static public NSArray masterCriteriaList(NSArray mcList) {
         NSMutableArray arr = new NSMutableArray();
@@ -184,10 +171,8 @@ public class DRReportModel extends Object  {
             DRMasterCriteria mc = DRMasterCriteria.withSubMasterCriteriaUserInfo(smcList, (NSDictionary)mcdict.objectForKey("userInfo"));
             arr.addObject(mc);
         }
-
         return arr;
     }
-
 
     static public NSArray attributeList(NSArray attList) {
         NSMutableArray arr = new NSMutableArray();
@@ -212,7 +197,6 @@ public class DRReportModel extends Object  {
         return arr;
     }
 
-
     static public NSDictionary modelDictWithPListString(String plistString) {
         NSMutableDictionary dict = new NSMutableDictionary();
         
@@ -231,11 +215,9 @@ public class DRReportModel extends Object  {
         return dict;
     }
 
-
     static public NSDictionary modelFromPlistString(String plistString) {
         return DRReportModel.modelDictWithPListString(plistString);
     }
-
 
     static public NSArray masterSubCriteriaListString(NSArray smcList) {
         NSMutableArray arr = new NSMutableArray();
@@ -276,7 +258,6 @@ public class DRReportModel extends Object  {
         return arr;
     }
 
-
     static public NSArray masterCriteriaListString(NSArray mcList) {
         NSMutableArray arr = new NSMutableArray();
         Enumeration en = mcList.objectEnumerator();
@@ -295,7 +276,6 @@ public class DRReportModel extends Object  {
 
         return arr;
     }
-
 
     static public NSDictionary stringForAttribute(DRAttribute att) {
         NSMutableDictionary dict = new NSMutableDictionary();
@@ -327,7 +307,6 @@ public class DRReportModel extends Object  {
         return dict;
     }
 
-
     static public NSArray attributeListString(NSArray attList) {
         NSMutableArray arr = new NSMutableArray();
         Enumeration en = attList.objectEnumerator();
@@ -341,7 +320,6 @@ public class DRReportModel extends Object  {
         return arr;
     }
 
-
     static public String pListStringAttributeListMasterCriteriaList(NSArray attList, NSArray mcList) {
         NSMutableDictionary dict = new NSMutableDictionary();
         NSArray mcListString = DRReportModel.masterCriteriaListString(mcList);
@@ -351,13 +329,11 @@ public class DRReportModel extends Object  {
         return dict.toString();
     }
 
-
     static public DRReportModel withRawRecordsCriteriaListAttributeList(NSArray rawr, NSArray aCritArray, NSArray aAttribList) {
         DRReportModel rmod = new DRReportModel();
         rmod.initWithRawRecords(rawr, aCritArray, aAttribList);
         return rmod;
     }
-
 
     public void buildGrandTotal() {
         DRRecordGroup rg = DRRecordGroup.withCriteriaGroupParent(null, null, null);
@@ -365,7 +341,6 @@ public class DRReportModel extends Object  {
         rg.recordList().addObjectsFromArray(_records);
         //OWDebug.println(1, "buildGrandTotal: rg:"+ rg);
     }
-
 
     public DRReportModel initWithRawRecords(NSArray rawr, NSArray aCritArray, NSArray aAttribList) {
         NSDictionary dict;
@@ -402,7 +377,6 @@ public class DRReportModel extends Object  {
         return this;
     }
 
-
     public void synchModel() {
         //OWDebug.println(1, "entered");
         this.computeRecordValuesForRecords(this.records());
@@ -413,12 +387,10 @@ public class DRReportModel extends Object  {
         this.buildOrderings();
     }
 
-
     public void synchModel(NSNotification not) {
         //OWDebug.println(1, "notification:"+ not);
         //[self synchModel];
     }
-
 
     public void groupAllRecordGroups() {
         Enumeration anEnum = _groups.objectEnumerator();
@@ -429,7 +401,6 @@ public class DRReportModel extends Object  {
         }
 
     }
-
 
     public NSArray recordsForRawRecords(NSArray rawr) {
         NSMutableArray recs = new NSMutableArray();
@@ -443,14 +414,12 @@ public class DRReportModel extends Object  {
         return new NSArray(recs);
     }
 
-
     //
     // Used to recache derived values in Record objects
     //
     public int attributeListDepth() {
         return _attributeListDepth;
     }
-
 
     public NSArray flatAttributeList() {
         return _flatAttributeList;
@@ -485,7 +454,6 @@ public class DRReportModel extends Object  {
         //OWDebug.println(1, "lst:"+lst);
     }
 
-
     public void flatListForAttributeList() {
         //OWDebug.println(1, "entered");
         _flatAttributeList.removeAllObjects();
@@ -504,7 +472,6 @@ public class DRReportModel extends Object  {
 
         //OWDebug.println(1, "_flatAttributeDepthDict: "+ _flatAttributeDepthDict);
     }
-
 
     private void getFlatAttributeDepthDictTotals() {
         int i;
@@ -540,7 +507,6 @@ public class DRReportModel extends Object  {
 
     }
 
-
     public void flatListForAttributeListTotals() {
         _flatAttributeListTotal.removeAllObjects();
         _flatAttributeListTotalDict.removeAllObjects();
@@ -559,21 +525,17 @@ public class DRReportModel extends Object  {
         //OWDebug.println(1, "_flatAttributeListTotalDict:"+ _flatAttributeListTotalDict);
     }
 
-
     public NSDictionary flatAttributeDepthDict() {
         return _flatAttributeDepthDict;
     }
-
 
     public NSDictionary flatAttributeListTotalDict() {
         return _flatAttributeListTotalDict;
     }
 
-
     public NSArray flatAttributeListTotal() {
         return _flatAttributeListTotal;
     }
-
 
     private void computeRecordValuesForRecords(NSArray recs) {
         Enumeration anEnum = recs.objectEnumerator();
@@ -584,7 +546,6 @@ public class DRReportModel extends Object  {
         }
 
     }
-
 
     //
     // keys: 'groups', 'lookup'
@@ -604,7 +565,6 @@ public class DRReportModel extends Object  {
         NSDictionary dict = new NSDictionary(new Object[]{grps, grpDict}, new Object[]{"groups", "lookup"});
         return dict;
     }
-
 
     public int spanForVListIndexAsCellsShowHeadingShowTotals(boolean forVlist, int indx, boolean asCells, boolean showHeading, boolean showTotals) {
         NSArray lst;
@@ -655,7 +615,6 @@ public class DRReportModel extends Object  {
         return span;
     }
 
-
     public NSArray dimensionForName(String dim) {
         if (dim == null) {
             return this.vList();
@@ -675,7 +634,6 @@ public class DRReportModel extends Object  {
 
         return this.vList();
     }
-
 
     public void moveUpDimension(DRGroup vGroup, boolean up, String dim) {
         int cnt;
@@ -706,21 +664,17 @@ public class DRReportModel extends Object  {
 
     }
 
-
     public NSArray zList() {
         return _zList;
     }
-
 
     public NSArray hList() {
         return _hList;
     }
 
-
     public NSArray vList() {
         return _vList;
     }
-
 
     public void addToVList(DRGroup drg) {
         if (!_vList.containsObject(drg)) {
@@ -737,7 +691,6 @@ public class DRReportModel extends Object  {
 
     }
 
-
     public void addToHList(DRGroup drg) {
         if (!_hList.containsObject(drg)) {
             _hList.addObject(drg);
@@ -752,7 +705,6 @@ public class DRReportModel extends Object  {
         }
 
     }
-
 
     public void addToZList(DRGroup drg) {
         if (!_zList.containsObject(drg)) {
@@ -769,16 +721,13 @@ public class DRReportModel extends Object  {
 
     }
 
-
     public NSArray records() {
         return _records;
     }
 
-
     public NSArray groups() {
         return _groups;
     }
-
 
     public DRGroup groupForMasterCriteria(DRMasterCriteria mc) {
         return (DRGroup)_groupDict.objectForKey(mc.keyDesc());
@@ -800,7 +749,6 @@ public class DRReportModel extends Object  {
         return _rawRecords;
     }
 
-
     public NSArray criteriaList() {
         return _criteriaList;
     }
@@ -808,11 +756,9 @@ public class DRReportModel extends Object  {
         _criteriaList = arr;
     }
 
-
     public NSArray attributeList() {
         return _attributeList;
     }
-
 
     public void setAttributeList(NSArray arr) {
         //OWDebug.println(1, "entered");
@@ -823,11 +769,9 @@ public class DRReportModel extends Object  {
         //[self flatListForAttributeList];
     }
 
-
     public String toString() {
         return _groups.toString();
     }
-
 
     public String coordinateKey(NSDictionary coordDict) {
         String lookupCoordKey = "/";
@@ -843,40 +787,29 @@ public class DRReportModel extends Object  {
             } else {
                 lookupkey = (String)c.valueDict().objectForKey("lookupKey");
             }
-
             lookupCoordKey = lookupCoordKey + lookupkey + "/";
         }
-
         return lookupCoordKey;
     }
-
 
     public void registerRecordGroupWithCoordinates(DRRecordGroup recGrp, NSDictionary coordDict) {
         String coordKey = this.coordinateKey(coordDict);
         _registeredRecordGroups.setObjectForKey(recGrp, coordKey);
     }
 
-
     public void makeRecordGroupsStaleTotal() {
         NSArray rgs = _registeredRecordGroups.allValues();
         Enumeration en = rgs.objectEnumerator();
-
+        
         while (en.hasMoreElements()) {
             DRRecordGroup rg = (DRRecordGroup)en.nextElement();
             rg.makeStale();
         }
-
     }
-
 
     public DRRecordGroup recordGroupForCoordinates(NSDictionary coordDict) {
-        //OWDebug.println(1, "coordDict:"+coordDict);
         String coordKey = this.coordinateKey(coordDict);
-        //OWDebug.println(1, "coordKey:"+coordKey);
         DRRecordGroup rg = (DRRecordGroup)_registeredRecordGroups.objectForKey(coordKey);
-        //OWDebug.println(1, "rg:"+rg);
         return rg;
     }
-
-
 }
