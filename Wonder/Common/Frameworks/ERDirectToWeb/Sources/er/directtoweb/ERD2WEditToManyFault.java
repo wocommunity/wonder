@@ -11,7 +11,10 @@ import com.webobjects.directtoweb.*;
 
 import er.extensions.*;
 
-public class ERD2WEditToManyFault extends com.webobjects.directtoweb.D2WEditToManyFault {
+/**
+ * Enhanced to-many component, which provides the means to specify which edit-relationship page gets chosen.
+ */
+public class ERD2WEditToManyFault extends D2WEditToManyFault {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditToManyFault.class);
@@ -25,8 +28,10 @@ public class ERD2WEditToManyFault extends com.webobjects.directtoweb.D2WEditToMa
     }
 
     /**
-     * Edits the relationship values of the object.
-     * @return edit page
+     * Edits the relationship values of the object. You can set the 
+     * key <code>editRelationshipConfigurationName</code> to return a EditRelationshipPageInterface.
+     * 
+     * @return page to edit the relationship
      */
     public WOComponent editValues() {
         WOComponent editPage = null;
