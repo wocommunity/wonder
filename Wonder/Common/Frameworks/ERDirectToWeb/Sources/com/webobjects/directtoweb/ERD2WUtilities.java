@@ -100,7 +100,14 @@ public class ERD2WUtilities {
             if(ec instanceof EOSharedEditingContext || ec.sharedEditingContext() == null) {
                 newEc.setSharedEditingContext(null);
             }
-            localObject = EOUtilities.localInstanceOfObject(newEc, eo);
+            ec.lock();
+            newEc.lock();
+            try {
+                localObject = EOUtilities.localInstanceOfObject(newEc, eo);
+            } finally {
+                ec.unlock();
+                newEc.unlock();
+            }
         }
 
         return localObject;
