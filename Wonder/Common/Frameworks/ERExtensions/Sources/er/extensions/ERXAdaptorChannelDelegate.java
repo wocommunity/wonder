@@ -43,7 +43,7 @@ public class ERXAdaptorChannelDelegate {
         if(log.isDebugEnabled()) {
             long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;
             if(millisecondsNeeded > _maxMilliseconds) {
-                log.info("Expression took " + millisecondsNeeded + " ms : " + expression);
+                log.debug("Expression took " + millisecondsNeeded + " ms : " + expression);
             }
         }
     }
