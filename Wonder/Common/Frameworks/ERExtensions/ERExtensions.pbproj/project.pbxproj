@@ -459,6 +459,7 @@
 				9419AD3003D792BD00CF0E7D,
 				509AC52803EB364B00CF0E76,
 				500567420408508100CF0E76,
+				50287843040960A40043FCB8,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1131,6 +1132,19 @@
 		};
 		500D40B903CDFC7100CF0E76 = {
 			fileRef = 500D40B803CDFC7100CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50287842040960A40043FCB8 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXEC.java;
+			path = er/extensions/ERXEC.java;
+			refType = 4;
+		};
+		50287843040960A40043FCB8 = {
+			fileRef = 50287842040960A40043FCB8;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6695,6 +6709,7 @@
 		F6E7989702C8799401AD0D07 = {
 			children = (
 				F59C577702C4565601000102,
+				50287842040960A40043FCB8,
 				F59C579202C4565701000102,
 				500567410408508100CF0E76,
 				F5E99BAF0354DE4F01CF0E76,
