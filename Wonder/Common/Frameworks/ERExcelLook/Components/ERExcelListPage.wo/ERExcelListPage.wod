@@ -1,7 +1,7 @@
 AttributeCell: WOGenericContainer {
-	CLASS = d2wContext.excelClassForProperty;
+	class = d2wContext.excelClassForProperty;
 	elementName = "td";
-	CELLTYPE = d2wContext.excelCellTypeForProperty;
+	cellType = d2wContext.excelCellTypeForProperty;
 }
 
 AttributeDisplay: WOSwitchComponent {
@@ -11,9 +11,9 @@ AttributeDisplay: WOSwitchComponent {
 }
 
 AttributeLabelCell: WOGenericContainer {
-	CLASS = d2wContext.excelClassForPropertyName;
+	class = d2wContext.excelClassForPropertyName;
 	elementName = "td";
-	CELLTYPE = d2wContext.excelCellTypeForPropertyName;
+	cellType = d2wContext.excelCellTypeForPropertyName;
 }
 
 AttributeRepetition: WORepetition {
@@ -41,9 +41,9 @@ EntityRepetition: WORepetition {
 ListTable: WOGenericContainer {
 	name = d2wContext.excelSheetName;
 	elementName = "Table";
-	CELLFORMAT = d2wContext.excelCellFormatForSheet;
-	CLASS = d2wContext.excelClassForSheet;
-	CELLTYPE = d2wContext.excelCellTypeForSheet;
+	cellFormat = d2wContext.excelCellFormatForSheet;
+	class = d2wContext.excelClassForSheet;
+	cellType = d2wContext.excelCellTypeForSheet;
 }
 
 PropertyNameComponent: WOSwitchComponent {
