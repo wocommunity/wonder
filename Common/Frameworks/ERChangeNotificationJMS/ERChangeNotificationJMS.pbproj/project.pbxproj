@@ -122,6 +122,9 @@
 				77BC206D03B5303400257492,
 				77BC206F03B5304000257492,
 				77BC207103B5307100257492,
+				77A5A26803BFDA5B00257492,
+				77A5A26B03BFDA5B00257492,
+				77A5A26C03BFDA5B00257492,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -701,6 +704,86 @@
 //772
 //773
 //774
+		77A5A25803BFDA5B00257492 = {
+			children = (
+				77A5A25A03BFDA5B00257492,
+			);
+			isa = PBXGroup;
+			path = StartupItemsMacOSX;
+			refType = 4;
+		};
+		77A5A25A03BFDA5B00257492 = {
+			children = (
+				77A5A25C03BFDA5B00257492,
+				77A5A26503BFDA5B00257492,
+				77A5A25D03BFDA5B00257492,
+			);
+			isa = PBXGroup;
+			path = OpenJMS;
+			refType = 4;
+		};
+		77A5A25C03BFDA5B00257492 = {
+			fileEncoding = 30;
+			isa = PBXExecutableFileReference;
+			path = OpenJMS;
+			refType = 4;
+		};
+		77A5A25D03BFDA5B00257492 = {
+			children = (
+				77A5A26103BFDA5B00257492,
+			);
+			isa = PBXGroup;
+			path = Resources;
+			refType = 4;
+		};
+		77A5A26103BFDA5B00257492 = {
+			children = (
+				77A5A26203BFDA5B00257492,
+				77A5A26403BFDA5B00257492,
+			);
+			isa = PBXVariantGroup;
+			name = Localizable.strings;
+			path = "";
+			refType = 4;
+		};
+		77A5A26203BFDA5B00257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/Localizable.strings;
+			refType = 4;
+		};
+		77A5A26403BFDA5B00257492 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = Japanese;
+			path = Japanese.lproj/Localizable.strings;
+			refType = 4;
+		};
+		77A5A26503BFDA5B00257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = StartupParameters.plist;
+			refType = 4;
+		};
+		77A5A26803BFDA5B00257492 = {
+			fileRef = 77A5A25C03BFDA5B00257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		77A5A26B03BFDA5B00257492 = {
+			fileRef = 77A5A26103BFDA5B00257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		77A5A26C03BFDA5B00257492 = {
+			fileRef = 77A5A26503BFDA5B00257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		77BC206C03B5303400257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -868,6 +951,7 @@
 				F6DCAA05032A537401257492,
 				F6DCAA03032A532D01257492,
 				77BC206E03B5304000257492,
+				77A5A25803BFDA5B00257492,
 			);
 			isa = PBXGroup;
 			path = Support;
