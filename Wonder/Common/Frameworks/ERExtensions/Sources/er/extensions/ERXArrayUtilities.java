@@ -177,6 +177,18 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Subtracts a single object from an array.
+     * @param main array to have value removed from it.
+     * @param minus object to be removed
+     * @param result array after performing subtraction.
+     */
+    public static NSArray arrayMinusObject(NSArray main, Object object) {
+        NSMutableArray mutable = new NSMutableArray(main);
+        mutable.removeObject(object);
+        return mutable.immutableClone();
+    }
+        
+    /**
      * Creates an array preserving order by adding all of the
      * non-duplicate values from the second array to the first.
      * @param a1 first array
