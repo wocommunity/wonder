@@ -115,7 +115,11 @@ public class ERXCompilerProxy {
             _filesToWatch = new NSMutableDictionary();
 	    return;
         }
-	_destinationPath = _classPath.substring(0,_classPath.indexOf(".woa")) + ".woa/Contents/Resources/Java/";
+        if(_classPath.indexOf(".woa") < 0) {
+            cat.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment");
+            return;
+        }
+        _destinationPath = _classPath.substring(0,_classPath.indexOf(".woa")) + ".woa/Contents/Resources/Java/";
 	_filesToWatch = new NSMutableDictionary();
 	for(Enumeration e = projectPaths.objectEnumerator(); e.hasMoreElements();) {
 	    String sourcePath = (String)e.nextElement();
