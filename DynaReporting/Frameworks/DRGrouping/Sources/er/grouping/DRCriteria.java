@@ -7,10 +7,13 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
+import er.extensions.*;
 
 /* DRCriteria.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
 public class DRCriteria extends Object  {
+    private static final ERXLogger log = ERXLogger.getLogger(DRCriteria.class,"grouping");
+
     protected NSDictionary _valueDict;
 
     // The keys in the dict are DRSubMasterCriteria in the masterCriteria
@@ -262,18 +265,19 @@ public class DRCriteria extends Object  {
                 } else if (rawVal instanceof NSDictionary) {
                     Object v = ((NSDictionary)rawVal).objectForKey("L");
                     //OWDebug.println(1, "v:"+v);
-                    if ((v instanceof String) ) {    //&& Integer.parseInt((String)v) == 0
-                        // means value is "L": lowest possible value for dim
+                    try{
+                        if (v instanceof String)
+                            scr = new Double((String)v);
+                        else
+                            scr = DRCriteria.numberForValue(v);
+                    } catch(NumberFormatException e) {
                         scr = new Double(-1.0*MAXNUMBER);
-                    } else {
-                        scr = DRCriteria.numberForValue(v);
                     }
                 } else if(rawVal instanceof String){
                     scr = rawVal;
                 } else {
                     scr = DRCriteria.numberForValue(rawVal);
-    
-                }
+               }
                 _score = scr;
             }
         }
