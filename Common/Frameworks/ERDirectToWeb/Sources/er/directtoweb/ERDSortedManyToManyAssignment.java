@@ -21,7 +21,9 @@ public class ERDSortedManyToManyAssignment extends ERDAssignment {
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "object.entityName" });
 
-
+    /** User info key that specifies if a given relationship is a sorted join */
+    public static final String SortedJoinRelationshipUserInfoKey = "SortedJoinRelationship";
+    
     /**
     * Static constructor required by the EOKeyValueUnarchiver
      * interface. If this isn't implemented then the default
@@ -67,11 +69,8 @@ public class ERDSortedManyToManyAssignment extends ERDAssignment {
      */
     public Object keyWhenRelationship(D2WContext context) {
         EOEntity joinEntity=context.entity();
-        // for now we rely on the fact that join entity should only have 2 relationships
-        // and one of them is going back to the original object
-        NSArray relationships=joinEntity.relationships();
-        if (relationships==null || relationships.count()!=2)
-            throw new RuntimeException("Found unexpected relationship array on "+joinEntity.name()+": "+relationships);
+        NSArray relationships=joinRelationshipsForJoinEntity(joinEntity);
+        
         EORelationship destinationRelationship=null;
         String originEntityName=(String)context.valueForKeyPath("object.entityName");
         for (Enumeration e=relationships.objectEnumerator(); e.hasMoreElements();) {
@@ -84,5 +83,33 @@ public class ERDSortedManyToManyAssignment extends ERDAssignment {
         return (destinationRelationship!=null ? (destinationRelationship.name()+".") : "") + "userPresentableDescription";
     }
 
+    /**
+     * Calculates the join relationships for a given join entity. 
+     * @param entity to find join relationships
+     * @return array containing two join relationships
+     */
+    public static NSArray joinRelationshipsForJoinEntity(EOEntity entity) {
+        NSArray joinRelationships = null;
+        if (entity.relationships() == null || entity.relationships().count() < 2) {
+            throw new RuntimeException("Join entity: " + entity + " does not have any relationships!");
+        } else if (entity.relationships().count() == 2) {
+            joinRelationships = entity.relationships();
+        } else {
+            NSMutableArray relationshipCache = new NSMutableArray();
+            for (Enumeration e = entity.relationships().objectEnumerator(); e.hasMoreElements();) {
+                EORelationship relationship = (EORelationship)e.nextElement();
+                if (relationship.userInfo() != null
+                    && ERXUtilities.booleanValue(relationship.userInfo().objectForKey(SortedJoinRelationshipUserInfoKey))) {
+                    relationshipCache.addObject(relationship);
+                }
+            }
+            if (relationshipCache.count() != 2)
+                throw new RuntimeException("Did not find two relationships with user info entries: " +
+                                           SortedJoinRelationshipUserInfoKey + " found: " + relationshipCache.valueForKey("name")
+                                           + " for entity: " + entity.name());
+            joinRelationships = relationshipCache;
+        }
+        return joinRelationships;
+    }
 }
     

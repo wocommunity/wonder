@@ -116,13 +116,13 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
     
     public boolean isSortedRelationship(){
+        boolean isSorted = false;
         if(entity().userInfo().valueForKey("isSortedJoinEntity") != null &&
             ((String)entity().userInfo().valueForKey("isSortedJoinEntity")).equals("true")){
-            return true;
+            isSorted = true;
         }
-        else{
-            return false;
-        }
+        log.info("Sorted relationship entity: " + entity().name() + " is sorted? " + isSorted);
+        return isSorted;
     }
 
     public String browserStringForItem() {
@@ -232,11 +232,10 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return null;
     }
 
-
-    
     private EORelationship _destinationRelationship;
     public EORelationship destinationRelationship() {
         if (_destinationRelationship==null) {
+            /*
             EOEntity joinEntity=entity();
             // for now we rely on the fact that join entity should only have 2 relationships
             // and one of them is going back to the original object
@@ -255,9 +254,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             
             if (filteredRelationships.count()!=2)
                 throw new RuntimeException("Found unexpected relationship array on "+joinEntity.name()+": "+relationships);
+            */
+            NSArray joinRelationships = ERDSortedManyToManyAssignment.joinRelationshipsForJoinEntity(entity());
+
             EORelationship destinationRelationship=null;
             String originEntityName=object().entityName();
-            for (Enumeration e=relationships.objectEnumerator(); e.hasMoreElements();) {
+            for (Enumeration e=joinRelationships.objectEnumerator(); e.hasMoreElements();) {
                 EORelationship r=(EORelationship)e.nextElement();
                 if (!originEntityName.equals(r.destinationEntity().name())) {
                     _destinationRelationship=r;
