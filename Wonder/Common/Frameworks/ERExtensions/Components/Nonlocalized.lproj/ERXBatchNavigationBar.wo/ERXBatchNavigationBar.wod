@@ -124,6 +124,26 @@ String1: WOString {
 	value = filteredObjectsCount;
 }
 
+String2: WOString {
+	value = session.localizer.ERXBatchNavigationBar.of;
+}
+
+String3: WOString {
+	value = session.localizer.ERXBatchNavigationBar.show;
+}
+
+String4: WOString {
+	value = session.localizer.ERXBatchNavigationBar.items_per_page;
+}
+
+String5: WOString {
+	value = session.localizer.ERXBatchNavigationBar.page;
+}
+
+String6: WOString {
+	value = session.localizer.ERXBatchNavigationBar.of;
+}
+
 TotalBatches: WOString {
 	value = ^displayGroup.batchCount;
 }
