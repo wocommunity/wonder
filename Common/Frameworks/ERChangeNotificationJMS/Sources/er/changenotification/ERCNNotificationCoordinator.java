@@ -130,9 +130,9 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         return _changeTypesToTrack;
     }
 
-    public void setChageTypesToTrack(NSArray newChageTypesToTrack) {
-        if (newChageTypesToTrack != null) 
-            _changeTypesToTrack = newChageTypesToTrack;
+    public void setChangeTypesToTrack(NSArray newChangeTypesToTrack) {
+        if (newChangeTypesToTrack != null) 
+            _changeTypesToTrack = newChangeTypesToTrack;
         else 
             _changeTypesToTrack = NSArray.EmptyArray;
     } 
@@ -160,7 +160,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
 
         setEntitiesNotToSynchronize((NSArray)NSPropertyListSerialization.propertyListFromString(
                 System.getProperty("er.changenotification.entitiesNotToSynchronize")));
-        setChageTypesToTrack((NSArray)NSPropertyListSerialization.propertyListFromString(
+        setChangeTypesToTrack((NSArray)NSPropertyListSerialization.propertyListFromString(
                 System.getProperty("er.changenotification.changeTypesToTrack")));
         _topicName = System.getProperty("er.changenotification.jms.topicName");
         _isSubscriberDurable = "true".equals(System.getProperty("er.changenotification.jms.durableSubscribers"));
