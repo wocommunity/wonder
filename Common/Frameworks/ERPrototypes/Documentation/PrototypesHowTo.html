@@ -16,4 +16,4 @@ If you are always using the same database server then you should copy all attrib
 <li>Add the ERPrototypes and ERExtensions framework to your project</li>
 <li>Switch to the 'Application' target and edit this target</li><li>You should select 'Frameworks and Libraries' and move ERPrototypes.framework to the top of the list. This ensures that ERPrototypes is loaded before any other framework. This is very important.<br/>See this screenshot:<br/><img src="s1.jpg" border="10"/></li><li>Now edit the 'Properties' file and add a Property with key='erprototypes.EOPrototypesEntity' and value='EOJDBC_YourDatabase_Prototypes'. You must ensure that every model is in a framework, you cannot use Models in the Application with this sort of Prototypes.<br/>See this screenshot:<br/><img src="s2.jpg" border="10"/></li>
 </ol></li></ol>
-
+<b>Please make sure that you are not using any EOModel that has an EOEntity named 'EOPrototypes'. FrontBase for example shipped their FrontBasePlugIn.framework with a EOModel that contained an EOEntity named EOPrototypes. This gives errors when you open it in EOModeler and also at runtime.</b>
