@@ -37,6 +37,8 @@ public class Application extends ERXApplication {
         // http://myhost:aPort/cgi-bin/WebObjects/MyApp.woa/wa/WOEventSetup
         EOEventCenter.setPassword("4Events");
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
+        ERXLocalizer.setFrameworkSearchPath(new NSArray(new Object [] {
+            "app", "BTBusinessLogic", "ERDirectToWeb", "ERExtensions"} ));
         NSNotificationCenter.defaultCenter().addObserver(this,
                                                          new NSSelector("finishInitialization", ERXConstant.NotificationClassArray),
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
