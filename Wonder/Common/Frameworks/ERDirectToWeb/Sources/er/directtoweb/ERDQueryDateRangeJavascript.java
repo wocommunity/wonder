@@ -25,7 +25,9 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 	protected String _minName;
 	protected String _formatter;
 	protected String _maxName;
-	
+	protected String _formName;
+	protected String _javascriptName;
+		
 	public ERDQueryDateRangeJavascript(WOContext context) { 
     	super(context); 
     }
@@ -54,6 +56,11 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return result;
     }
 
+    public String javascriptName() {
+    	if(_javascriptName == null) _javascriptName = "date_" + context().elementID().replace('.', '_');
+    	return _javascriptName;
+    }
+    
     public Object minValue() {
         if(_minValue == null){
             _minValue=stringForDate((NSTimestamp)displayGroup().queryMin().valueForKey(propertyKey()));
@@ -112,20 +119,26 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return _datePickerJavaScriptUrl;
     }
 
+    public String formName() {
+        if (_formName==null) _formName=ERXWOForm.formName(context(), "QueryForm");
+        return _formName;
+    }
+
     public String minName() {
-        if (_minName==null) _minName="min"+hashCode();
+        if (_minName==null) _minName=javascriptName()+ "min";
         return _minName;
     }
+    
     public String minHREF() {
-        return "javascript:show_calendar('QueryForm." + minName() + "',null,null,'"+formatterStringForScript()+"')"; 
+        return "javascript:show_calendar('"+formName()+"." + minName() + "',null,null,'"+formatterStringForScript()+"')"; 
     }
 
     public String maxName() {
-    	if (_maxName==null) _maxName="max"+hashCode();
+    	if (_maxName==null) _maxName=javascriptName()+ "max";
     	return _maxName;
     }
     public String maxHREF() {
-    	return "javascript:show_calendar('QueryForm." + maxName() + "',null,null,'"+formatterStringForScript()+"')";
+    	return "javascript:show_calendar('"+formName()+ "." + maxName() + "',null,null,'"+formatterStringForScript()+"')";
     }
     
     public String formatter() {
