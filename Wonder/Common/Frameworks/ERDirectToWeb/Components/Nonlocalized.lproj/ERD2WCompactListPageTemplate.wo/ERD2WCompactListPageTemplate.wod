@@ -40,7 +40,7 @@ ColumnLabelRepetition: WORepetition {
 }
 
 Conditional1: WOConditional {
-	condition = ^d2wContext.hasHeader;
+	condition = d2wContext.hasHeader;
 }
 
 ERTrashcan1: ERDTrashcan {
