@@ -10,6 +10,10 @@
 		<binding name="valueKey"/>
 		<binding name="categoryKey"/>
 		<binding name="dataset"/>
+		<binding name="orientation"/>
+		<binding name="showUrls"/>
+		<binding name="showLegend"/>
+		<binding name="showToolTips"/>
 
 		<validation message="Either items, nameKey, categoryKey and valueKey or dataset must be bound">
 			<or>
