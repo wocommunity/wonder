@@ -30,7 +30,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 		_repository.put(DefaultKey, new ERXNumberFormatter());
 	};
 	
-	private String _ignoredChars = "%$,";
+	private String _ignoredChars = "%$";
     private BigDecimal _factor;
 	private String _operator;
 	 
