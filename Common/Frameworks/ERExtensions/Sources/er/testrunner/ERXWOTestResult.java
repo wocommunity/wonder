@@ -30,6 +30,14 @@ public class ERXWOTestResult extends WOComponent {
         super(aContext);
     }
 
+    public void setCurrentError(TestFailure value) {
+        currentError = value;
+        if(currentError != null) {
+            exception = currentError.thrownException();
+            error = new WOExceptionParser(exception);
+        }
+    }
+
     /////////////////////////////////////  log4j category  ////////////////////////////////////
     public static final Category cat = Category.getInstance(ERXWOTestResult.class);
 
@@ -56,9 +64,7 @@ public class ERXWOTestResult extends WOComponent {
     /////////////////////////////////////
     public String currentErrorStackTrace() {
         ByteArrayOutputStream byos = new ByteArrayOutputStream();
-        exception = currentError.thrownException();
-        error = new WOExceptionParser(exception);
-        exception.printStackTrace(new PrintStream(byos));
+        currentError.thrownException().printStackTrace(new PrintStream(byos));
         return byos.toString();
     }
     public String currentErrorTestName() {
