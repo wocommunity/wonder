@@ -446,7 +446,8 @@ public abstract class ERXApplication extends WOApplication {
             ERXThreadStorage.removeValueForKey("wocontext");
         }
         if (requestHandlingLog.isDebugEnabled()) {
-            requestHandlingLog.debug("Returning response: " + response);
+
+            requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
         }        
         return response;
     }
