@@ -40,7 +40,8 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
         super();
     }
     
-    public ERXDirectActionRequestHandler(String actionClassName, String defaultActionName,
+    public ERXDirectActionRequestHandler(String actionClassName,
+                                         String defaultActionName,
 					boolean shouldAddToStatistics) {
         super(actionClassName, defaultActionName, shouldAddToStatistics);
     }
