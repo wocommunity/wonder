@@ -562,25 +562,10 @@ public class ERXExtensions {
     }
 
     /**
-     * Tests if an enterprise object is a new object by
-     * looking to see if it is in the list of inserted
-     * objects for the editing context or if the editing
-     * context is null.<br/>
-     * <br/>
-     * Note: An object that has been deleted will have it's
-     * editing context set to null which means this method
-     * would report true for an object that has been deleted
-     * from the database.
-     * @param eo enterprise object to check
-     * @return true or false depending on if the object is a
-     *		new object.
+     * @deprecated use {@link ERXEOControlUtilities.isNewObject(EOEnterpriseObject)}
      */
-    // MOVEME: ERXEOFUtilities (when we have them)
     public static boolean isNewObject(EOEnterpriseObject eo) {
-        if (eo.editingContext() == null) return true;
-        
-        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
-        return gid.isTemporary();
+        return ERXEOControlUtilities.isNewObject(eo);
     }
 
     /**
