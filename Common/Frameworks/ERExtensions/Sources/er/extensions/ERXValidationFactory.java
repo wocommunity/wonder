@@ -225,6 +225,7 @@ public class ERXValidationFactory {
         // If caching is not enabled then we want to enable dynamic reloading of validation templates.
         setCachingEnabled(WOApplication.application().isCachingEnabled());
         loadTemplates();
+        ERXValidation.setPushChangesDefault(ERXUtilities.booleanValueWithDefault(System.getProperties().getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
     }
     
     // This loads a configures the templates.  Override to provide custom template loading.
