@@ -31,6 +31,12 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     protected String chosenKeyPathes;
     public String entityForReportName;
 
+    private final static String DASH="-";
+    private final static String DASHES="--------------------------------------------------------";
+    private final static ERXKeyValuePair DEFAULT_PAIR=new ERXKeyValuePair(DASH, DASHES);
+    private final static NSArray DEFAULT_ARRAY=new NSArray(DEFAULT_PAIR);
+
+    
     public void reset(){
         super.reset();
         chosenKeyPathes = null;
@@ -49,9 +55,12 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
         if(cat.isDebugEnabled())
             cat.debug("availableElements = "
                       +ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
-                                                                     entityForReportName, ERXLocalizer.localizerForSession(session()).language()));
+                                                                     entityForReportName,
+                                                                     ERXLocalizer.localizerForSession(session()).language()));
+        
         return ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
-                                                             entityForReportName, ERXLocalizer.localizerForSession(session()).language());
+                                                             entityForReportName,
+                                                             ERXLocalizer.localizerForSession(session()).language());
     }
 
     
@@ -64,26 +73,22 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                 NSArray keyPathsArray = (NSArray)NSPropertyListSerialization.propertyListFromString(keyPathesFromDatabase);
                 if(cat.isDebugEnabled()) cat.debug("keyPathsArray = "+keyPathsArray);
                 if(keyPathsArray!=null){
-                    chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray, entityForReportName, ERXLocalizer.localizerForSession(session()).language());
-                    if(((ERXSession)session()).browser().isNetscape()){
+                    chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray,
+                                                                                  entityForReportName,
+                                                                                  ERXLocalizer.localizerForSession(session()).language());
+                    if(((ERXSession)session()).browser().isNetscape()) {
                         NSMutableArray tmp = new NSMutableArray();
-                        ERXKeyValuePair defaultObject =
-                        new ERXKeyValuePair(new String("-"),
-                                           new String("--------------------------------------------------------"));
-                        tmp.addObject(defaultObject);
+                        tmp.addObject(DEFAULT_PAIR);
                         tmp.addObjectsFromArray(chosenObjects);
                         chosenObjects = (NSArray)tmp;
                     }
                     chosenKeyPathes = keyPathsArray.componentsJoinedByString ( "," );
-                }else{
-                    chosenObjects = new NSArray();
+                }else {
+                    chosenObjects = ERXConstant.EmptyArray;
                 }
                 if(cat.isDebugEnabled()) cat.debug("chosenObjects = "+chosenObjects);
-            }else if(((ERXSession)session()).browser().isNetscape()){
-                ERXKeyValuePair defaultObject =
-                new ERXKeyValuePair(new String("-"),
-                                   new String("--------------------------------------------------------"));
-                chosenObjects = new NSArray(defaultObject);
+            } else if(((ERXSession)session()).browser().isNetscape()) {
+                chosenObjects = DEFAULT_ARRAY;
             }
         }
         super.appendToResponse(r,c);
@@ -105,7 +110,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
             String value = NSPropertyListSerialization.stringFromPropertyList((NSArray)result);
             try{
                 object().validateTakeValueForKeyPath(value, key());
-            }catch (NSValidation.ValidationException v) {
+            } catch (NSValidation.ValidationException v) {
                 parent().validationFailedWithException(v,value,key());
             }
         }
