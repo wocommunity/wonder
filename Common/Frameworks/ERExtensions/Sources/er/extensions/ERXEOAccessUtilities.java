@@ -247,6 +247,8 @@ public class ERXEOAccessUtilities {
                             sql.substring(index + 1, sql.length()));
                     sql = buf.toString();
 
+                } else if (url.toLowerCase().indexOf("openbase") != -1) { // Openbase support for limiting result set
+                    sql += " return results " + start + " to " + end;
                 } else if (url.toLowerCase().indexOf("mysql") != -1) {
                     sql += " LIMIT " + start + ", " + (end - start);
                 }
