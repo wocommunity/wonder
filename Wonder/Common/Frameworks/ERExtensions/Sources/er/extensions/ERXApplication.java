@@ -54,12 +54,16 @@ public abstract class ERXApplication extends WOApplication {
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOForm.class, "WOForm");
-        ERXCompilerProxy.defaultProxy().setClassForName(ERXWOText.class, "WOText");
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
         // WO 5.1 specific patches
         if (ERXProperties.webObjectsVersionAsDouble() < 5.2) {
+            // ERXWOText contains a patch for WOText to not include the value 
+            // attribute (#2948062). Fixed in WO 5.2
+            ERXCompilerProxy.defaultProxy().setClassForName(ERXWOText.class, "WOText");
+
             // ERXWOFileUpload returns a better warning than throwing a ClassCastException. 
+            // Fixed in WO 5.2
             ERXCompilerProxy.defaultProxy().setClassForName(ERXWOFileUpload.class, "WOFileUpload");
         }
     }
