@@ -1,4 +1,4 @@
-1 June, 2003
+21 June, 2003
 
 README for Apache2 WebObjects adaptor, hosted by Project WONDER.
 
@@ -37,13 +37,14 @@ See the sample configuration file for some appropriate settings.
 7. If you use Monitor to deploy your applications, make sure to set the correct adaptor path for your applications.
 
 
+IMPORTANT NOTE ON USE WITH SSL
+
+You cannot use an adaptor module build with -DAPACHE_SECURITY_ENABLED if you don't have your server set up to use SSL.  You must use apachectl -D SSL -k start or httpd -D SSL if you use the default httpd.conf for Apache2.  If you don't, the webserver won't run, complaining about an unresolved alias _ssl_module in mod_WebObjects.so.  The solution is simple.  If you're not using SSL, change the ENABLE_SSL_SUPPORT flag in the Makefile to reflect that fact.
+
+
 KNOWN ISSUES
 
-Currently, there is preliminary support.  It compiles and installs fine on OS X with one caveat: SSL support.  If you enable SSL, the module will build just fine and dandy.  It will even install itself without complaining.  But when you run the apachectl configtest, it fails with the message:
-
-Syntax error on line xxx of $(YourApache2Dir)/conf/httpd.conf:
-Cannot load $(YourApache2Dir)/modules/mod_WebObjects.so into server: dyld: $(YourApache2Dir)/bin/httpd Undefined symbols:
-_ssl_module
+None.  Please let us know if you find bugs.
 
 
 SUPPORT
@@ -53,21 +54,20 @@ If you have questions, suggestion, or problems, you may e-mail me at tcripps@mac
 
 TODO
 
-#1 on the list is to get the SSL bug fixed as soon as possible.  I'd really appreciate any help you can offer!
+Testing!  The adaptor has had minimal testing.
 
-Testing!  The adaptor has had minimal testing.  That's not to say it won't work, but it definitely needs some testing before it's ready for major deployment.
-
-Improve the Makefile.  If any libtool/gcc/Makefile experts would like to help, it would be welcome.
+Improve the Makefile for multiple platform support.
 
 
 THANKS
 
 Apple Computer, Inc. for the original code.
-Senmeisha Inc., whose port came out about the same time, whose Linux build script I've borrowed, and who gave me the last piece of the puzzle for getting the project to compile with mod_ssl support. (Note the extant issues above.)
+Hideshi Nakase of Senmeisha Inc., who has graciously worked with me and provided valuable assistance and code.
 Jonathan Rentzsch for encouragement and inspiration.
+Piotr Intres, for fixing a configuration bug.
 Project WONDER, for being a home for all things WebObjects.
-Homer and Bart Simpson, whose antics kept me sane while working on the port.
 Travis Cripps, who did this port to Apache2. :)
+All others who have contributed.
 You, for using it.
 
 
@@ -75,6 +75,13 @@ LICENSE
 The original code was released under the APSL, and is courtesy of Apple, Computer, Inc.  You can see their copyright statements in the code files.  That license still applies.  Basically, it means you can use the code however you like.
 
 
-LASTLY
+LASTLY -- ALMOST
 There is no expressed warranty with this software.  This is not Apple's code.  I have altered their code to work with Apache2.  If you have problems with the software, if your machine melts down into a pool of silicone and plastic when you install this software, please don't come after me.  And certainly don't get mad at Apple--they did the Right Thingª by opening the code.
+
+
+HISTORY
+
+21 June, 2003 - Enhanced makefile; fixed bugs in configuration parameters, ssl, and building with Apache2's apxs; cleaned up code in general.
+
+3 June, 2001 - Initial version.
 
