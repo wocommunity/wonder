@@ -2404,6 +2404,7 @@
 				F645C8CE02478A0801AD0D07,
 				F645C8D302478A2901AD0D07,
 				F645C8D402478A2901AD0D07,
+				F645C8D7024791E801AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -5229,6 +5230,12 @@
 		};
 		F645C8D502478A2901AD0D07 = {
 			fileRef = F645C8D202478A2701AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F645C8D7024791E801AD0D07 = {
+			fileRef = F645C8C4024789B301AD0D07;
 			isa = PBXBuildFile;
 			settings = {
 			};
