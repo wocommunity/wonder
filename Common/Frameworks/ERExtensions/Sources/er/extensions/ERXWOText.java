@@ -12,7 +12,7 @@ import com.webobjects.eocontrol.*;
  * @project ERExtensions
  */
 
-public class ERXWOText extends com.webobjects.appserver._private.WOText {
+public class ERXWOText extends ERXPatcher.DynamicElementsPatches.Text {
     /**
      * Public constructor
      * @param context the context
