@@ -31,7 +31,7 @@ public class ERXObjectStoreCoordinatorPool {
     private Hashtable oscForSession;
     private int maxOS;
     private int currentObjectStoreIndex;
-    private EOObjectStoreCoordinator[] objectStores;
+    private ObjectStoreCoordinator[] objectStores;
     private Observer observer;
     private Object lock = new Object();
     protected static ERXObjectStoreCoordinatorPool defaultPool;
@@ -154,17 +154,23 @@ public class ERXObjectStoreCoordinatorPool {
         }
         
         public EOEditingContext _newEditingContext(boolean validationEnabled) {
-            EOObjectStoreCoordinator os = (EOObjectStoreCoordinator)defaultPool.currentRootObjectStore();
+            ObjectStoreCoordinator os = (ObjectStoreCoordinator)defaultPool.currentRootObjectStore();
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
+            ec.lock();
+            try {
+                ec.setSharedEditingContext(os.sharedEditingContext());
+            } finally {
+                ec.unlock();
+            }
             return ec;
         }
     }
     
     private void _initObjectStores() {
         log.info("initializing Pool...");
-        objectStores = new EOObjectStoreCoordinator[maxOS];
+        objectStores = new ObjectStoreCoordinator[maxOS];
         for (int i = 0; i < maxOS; i++) {
-            objectStores[i] = new EOObjectStoreCoordinator();
+            objectStores[i] = new ObjectStoreCoordinator();
         }
         log.info("initializing Pool finished");
      }
