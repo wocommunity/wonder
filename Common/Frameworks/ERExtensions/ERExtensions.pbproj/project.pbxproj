@@ -296,6 +296,8 @@
 				413BE5AD0463315E00000102,
 				41600221046856BD00000102,
 				41E8155A04F05D5B00A88C3C,
+				419E564B0507E29500000104,
+				419E564D0507E29500000104,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -486,6 +488,8 @@
 				63DF10BB04AAD68D00A83704,
 				413B78DF04AB575F00000102,
 				4150A86F050324B700000102,
+				416009A50507C9D800000102,
+				419E564C0507E29500000104,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1413,6 +1417,31 @@
 			settings = {
 			};
 		};
+		416009260507C9A400000102 = {
+			children = (
+				416009A40507C9D800000102,
+				F6E798B002C8799401AD0D07,
+				F6E798AF02C8799401AD0D07,
+				419E56420507E29500000104,
+			);
+			isa = PBXGroup;
+			name = "Dates & Grouping";
+			path = "";
+			refType = 2;
+		};
+		416009A40507C9D800000102 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXDateGrouper.java;
+			path = Sources/er/extensions/ERXDateGrouper.java;
+			refType = 4;
+		};
+		416009A50507C9D800000102 = {
+			fileRef = 416009A40507C9D800000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		416B00DA040EC20100000106 = {
 			children = (
 				416B00DB040EC20100000106,
@@ -1468,6 +1497,65 @@
 		};
 		416B00E5040EC20100000106 = {
 			fileRef = 416B00DD040EC20100000106;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		419E56420507E29500000104 = {
+			children = (
+				419E56430507E29500000104,
+				419E56440507E29500000104,
+				419E56450507E29500000104,
+			);
+			isa = PBXGroup;
+			name = ERXMonthView;
+			path = "";
+			refType = 4;
+		};
+		419E56430507E29500000104 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXMonthView.api;
+			path = Components/ERXMonthView.api;
+			refType = 4;
+		};
+		419E56440507E29500000104 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXMonthView.java;
+			path = Sources/er/extensions/ERXMonthView.java;
+			refType = 4;
+		};
+		419E56450507E29500000104 = {
+			children = (
+				419E56460507E29500000104,
+			);
+			isa = PBXVariantGroup;
+			name = ERXMonthView.wo;
+			path = "";
+			refType = 4;
+		};
+		419E56460507E29500000104 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXMonthView.wo;
+			refType = 4;
+		};
+		419E564B0507E29500000104 = {
+			fileRef = 419E56430507E29500000104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		419E564C0507E29500000104 = {
+			fileRef = 419E56440507E29500000104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		419E564D0507E29500000104 = {
+			fileRef = 419E56450507E29500000104;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -5010,6 +5098,7 @@
 				F6E7989802C8799401AD0D07,
 				F6E7989902C8799401AD0D07,
 				F6E798CB02C8799401AD0D07,
+				416009260507C9A400000102,
 				F6E7989A02C8799401AD0D07,
 				F6E7989E02C8799401AD0D07,
 				F584E53902E52AE101000102,
@@ -7509,6 +7598,7 @@
 			);
 			isa = PBXGroup;
 			name = ERXGroupingRepetition;
+			path = Sources;
 			refType = 4;
 		};
 		F6E798B002C8799401AD0D07 = {
@@ -7519,6 +7609,7 @@
 			);
 			isa = PBXGroup;
 			name = ERXGroupingTable;
+			path = Sources;
 			refType = 4;
 		};
 		F6E798B102C8799401AD0D07 = {
@@ -7770,8 +7861,6 @@
 				F6E798AC02C8799401AD0D07,
 				F6E798AD02C8799401AD0D07,
 				F6E798AE02C8799401AD0D07,
-				F6E798AF02C8799401AD0D07,
-				F6E798B002C8799401AD0D07,
 				F6E798B102C8799401AD0D07,
 				509AC51F03EB364B00CF0E76,
 				F6E798B202C8799401AD0D07,
