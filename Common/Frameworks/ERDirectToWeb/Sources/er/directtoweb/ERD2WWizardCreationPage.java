@@ -93,6 +93,9 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
             cpi.setCancelDelegate(new ERDPageDelegate(context().page()));
             cpi.setConfirmDelegate(new _confirmCancellationDelegate());
             cpi.setMessage((String)d2wContext().valueForKey("cancelMessage"));
+            if(cpi instanceof InspectPageInterface) {
+                ((InspectPageInterface)cpi).setObject(object());
+            }
             result=(WOComponent)cpi;
         } else {
             result=superCancelAction();
