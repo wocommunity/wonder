@@ -531,6 +531,7 @@
 				INFO_FILE = "$(CONTENTS_DIR)/$(INFO_FILE_NAME)";
 				INFO_FILE_NAME = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/WebObjects/Applications";
+				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_FLAGS = "-deprecation";
 				JAVA_DEBUGGER = jdb;
 				JAVA_ONLY = YES;
@@ -623,6 +624,7 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks $(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER = /usr/local/bin/jikes;
 				JAVA_COMPILER_FLAGS = "-deprecation";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;

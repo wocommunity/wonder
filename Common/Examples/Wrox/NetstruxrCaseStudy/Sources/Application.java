@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.*;
-import wrox.eo.User;
+import er.wrox.eo.User;
 import java.util.Enumeration;
 
 public class Application extends WOApplication { 
@@ -28,16 +28,7 @@ public class Application extends WOApplication {
         statisticsStore().setPassword("4AppStats");
         // Make direct actions be the default request handler.
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
-        // Configuring log4j.
-        //ERXLog4j.setConfigurationFilePath(WOApplication.application().resourceManager().pathForResourceNamed("CaseStudyConfiguration.config", null, null));
-        registerUserPreferenceHandler();
-        //ERXLog4j.configureLogging();
-        //Class c=ERD2WModel.class;        // force initialization
-                                         // Configures the system for trace rule firing.
-        //if (!WOApplication.application().isCachingEnabled()) {
-        //    ERXLog4j.configureRapidTurnAround();
-        //    ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
-        //}
+        er.wrox.eo.User.registerUserPreferenceHandler();
         //ERXEntityClassDescription.registerDescription();
         //ERXValidationFactory.defaultFactory().configureFactory();
     }
@@ -66,7 +57,7 @@ public class Application extends WOApplication {
     public void reportException(Throwable exception, NSDictionary extraInfo) {
         try {
              NSLog.out.appendln("    **** Caught: "+exception);
-             NSLog.out.appendln("         Actor: "+User.actor());
+             //NSLog.out.appendln("         Actor: "+User.actor());
              NSLog.out.appendln("         Extra Information "+extraInfo);
             exception.printStackTrace();
             if (WOApplication.application().isCachingEnabled()) {// we take this to mean we are in deployment
@@ -79,18 +70,5 @@ public class Application extends WOApplication {
              NSLog.out.appendln("** Second exception ");
             u.printStackTrace();
         }
-    }
-
-    public static void registerUserPreferenceHandler() {
-        User._UserPreferenceHandler uph = new User._UserPreferenceHandler();
-        ERXRetainer.retain(uph);
-        NSNotificationCenter.defaultCenter().addObserver(uph,
-                                                         new NSSelector("handleSortOrderingChange", ERXConstant.NotificationClassArray),
-                                                         ERXSortOrder.SortOrderingChanged,
-                                                         null);
-        NSNotificationCenter.defaultCenter().addObserver(uph,
-                                                         new NSSelector("handleBatchSizeChange", ERXConstant.NotificationClassArray),
-                                                         ERXBatchNavigationBar.BatchSizeChanged,
-                                                         null);
     }
 }

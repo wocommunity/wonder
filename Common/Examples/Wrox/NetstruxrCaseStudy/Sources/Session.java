@@ -10,7 +10,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import org.apache.log4j.Category;
-import wrox.eo.User;
+import er.wrox.eo.User;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXCrypto;
 

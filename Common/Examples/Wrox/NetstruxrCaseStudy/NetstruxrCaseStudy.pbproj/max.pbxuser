@@ -75,12 +75,12 @@
 						Frame = "{{0, 0}, {200, 100}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {181, 640}}";
+						Frame = "{{0, 0}, {181, 647}}";
 						Split0 = {
-							Frame = "{{0, 0}, {181, 312}}";
+							Frame = "{{0, 0}, {181, 315}}";
 						};
 						Split1 = {
-							Frame = "{{0, 321}, {181, 319}}";
+							Frame = "{{0, 324}, {181, 323}}";
 						};
 						SplitCount = 2;
 					};
@@ -93,6 +93,16 @@
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
+	};
+	6CA8E86B0168DA0900A801D4 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{100, 218}, {750, 502}}";
+		};
+	};
+	6CA8E87D0168DA0900A801D4 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{77, 239}, {750, 502}}";
+		};
 	};
 	6CA8E8BB0168DA0900A801D4 = {
 		activeExec = 0;
