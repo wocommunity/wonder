@@ -161,6 +161,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isVersion7();
     public abstract boolean isVersion6();
     public abstract boolean isVersion5();
+    public abstract boolean isVersion51();  // IE 5.0 and IE 5.1 on Mac OS is different
 
     public abstract boolean isVersion45();  // Netscape 4.5 to 4.7 is very different from 4.0 
                                             // NOTE: 4.6 and 4.7 is fell into this group
