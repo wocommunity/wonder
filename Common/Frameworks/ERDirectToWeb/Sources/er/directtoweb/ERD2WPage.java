@@ -518,7 +518,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // (ak) these actually belong to CompactEdit and PrinterFriendlyInspect
     // moved them here to avoid to much subclassing
     public boolean isEmbedded() {
-        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
+        return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
     }
 
     /*    // FIXME: Should be dynamic

@@ -122,7 +122,7 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
             for (Enumeration e= testResult.errors(); e.hasMoreElements(); i++) {
                 TestFailure failure= (TestFailure)e.nextElement();
                 userLog().info(i + ") " + failure.failedTest());
-                userLog().info(aTestRunner.getFilteredTrace(failure.thrownException()));
+                userLog().info(BaseTestRunner.getFilteredTrace(failure.thrownException()));
             }
         }
     }
@@ -139,7 +139,7 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
             for (Enumeration e= testResult.failures(); e.hasMoreElements(); i++) {
                 TestFailure failure= (TestFailure) e.nextElement();
                 userLog().info(i + ") " + failure.failedTest());
-                userLog().info(aTestRunner.getFilteredTrace(failure.thrownException()));
+                userLog().info(BaseTestRunner.getFilteredTrace(failure.thrownException()));
             }
         }
     }
