@@ -1,8 +1,84 @@
-<WEBOBJECT NAME=Custom1></WEBOBJECT><noScript><b>You must enable JavaScript for this page to work !!!</b></noscript>
-<table>	<tr><td align=center><I><FONT COLOR=#8a8a8a><WEBOBJECT NAME=String2></WEBOBJECT></font></i></td><td align=center><I><FONT COLOR=#8a8a8a><WEBOBJECT NAME=String1></WEBOBJECT></font></i></td></tr>
-<TR>
-		<TD><WEBOBJECT NAME=ParentPopUpString></WEBOBJECT></TD>
-		<TD><WEBOBJECT NAME=ChildPopUpString></WEBOBJECT></TD>
-	</TR>
+<!--webobject name=Custom1></webobject--><script>
+<webobject name="Array"></webobject>
+function Entity(n,id,ch,sel,def) {
+	this.name = n;
+	this.entityId = id;
+	this.children = ch;
+	this.selected = sel;
+	this.def = def;
+}
+function getParentEntityForId(parent_id) {
+	for(loop = 0; loop < parentschildren.length; loop++) {
+		if (parentschildren[loop].entityId == parent_id) {
+			return parentschildren[loop];
+		}
+	}
+	return null;
+}
+function allChildren() {
+	var allChildren = new Array();
+	for (loop=0; loop < parentschildren.length; loop++) {
+		if (parentschildren[loop].children != null) {
+			allChildren = allChildren.concat(parentschildren[loop].children);
+		}
+	}
+	return allChildren;
+}
+function parentSwapped(new_parent_id,children_select,selected_parent,selected_child) {
+	var parent_entity = getParentEntityForId(new_parent_id);
+	if (parent_entity.name.length < 2) return false;
+	selected_parent.value = new_parent_id;
+	var children_array = null;
+	if (parent_entity != null) {
+		children_array = parent_entity.children;
+		setSelectToArrayOfEntities(children_select, children_array, childPopUpStringForAll);
+	} else {
+		children_array = allChildren();
+		setSelectToArrayOfEntities(children_select, allChildren(), childPopUpStringForAll);
+	}
+	children_select.options[parent_entity.def].selected = true;
+	childSwapped(children_select.options[parent_entity.def].value,selected_child)
+}
+function childSwapped(new_child_id,selected_child) {
+	selected_child.value = new_child_id;
+}
+function setSelectToArrayOfEntities(the_select, the_entities_array, allString) {
+	var isSelectedEntity = false;
+	var loopStart = 0;
+	var loopEnd = the_entities_array.length;
+	var entitiesLoopOffset = 0;
+	for (loop=0; loop < the_select.options.length; loop++) {
+		the_select.options[loop] = null;
+	}
+	if (allString != null) {
+		the_select.options[0] = new Option(allString, null, false, false);
+		loopStart = 1;
+		loopEnd = loopEnd + 1;
+		entitiesLoopOffset = -1;
+	}
+	for (loop=loopStart; loop < loopEnd; loop++) {
+		the_select.options[loop] = new Option(the_entities_array[loop + entitiesLoopOffset].name, the_entities_array[loop + entitiesLoopOffset].entityId, false, the_entities_array[loop + entitiesLoopOffset].selected);
+		if ((the_entities_array[loop + entitiesLoopOffset].selected) == true) {
+			the_select.options[loop].selected = true;
+			isSelectedEntity = true;
+		}
+		if (isSelectedEntity == false) {
+			the_select.options[0].selected = true;
+		}
+	}
+}
+</script>
+<noscript>
+	<b>You must enable JavaScript for this page to work !!!</b>
+</noscript>
+<table>
+	<tr>
+		<td align=center><i><font color=#8a8a8a><webobject name=String2></webobject></font></i></td>
+		<td align=center><i><font color=#8a8a8a><webobject name=String1></webobject></font></i></td>
+	</tr>
+	<tr>
+		<td><webobject name=ParentPopUpString></webobject></td>
+		<td><webobject name=ChildPopUpString></webobject></td>
+	</tr>
 </table>
 <webobject name=HiddenFormElementStrings></webobject>
