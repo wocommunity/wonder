@@ -72,8 +72,10 @@ public class WOOgnl {
         OgnlRuntime.setElementsAccessor(NSArray.class, e);
         OgnlRuntime.setElementsAccessor(NSDictionary.class, e);
         OgnlRuntime.setElementsAccessor(NSSet.class, e);
-        // Register template parser.
-        WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
+        // Register template parser
+        if (!"false".equals(System.getProperty("ognl.active"))) {
+            WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
+        }
     }
 
     public void convertOgnlConstantAssociations(NSMutableDictionary associations) {
