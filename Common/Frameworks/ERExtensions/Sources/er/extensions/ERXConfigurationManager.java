@@ -476,8 +476,8 @@ public class ERXConfigurationManager {
     /**
      * Checks if the application is deployed as a servlet.
      * <p>
-     * The current implementation checks if the application is 
-     * linked against "JavaWOJSPServlet.framework". 
+     * The current implementation only checks if the application  
+     * is linked against <code>JavaWOJSPServlet.framework</code>. 
      * 
      * @return true if the application is deployed as a servlet
      */
