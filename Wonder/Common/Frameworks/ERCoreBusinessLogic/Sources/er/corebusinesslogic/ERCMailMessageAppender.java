@@ -404,21 +404,25 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
                 standardExceptionPage.setErrorMessage(title);
                 standardExceptionPage.setActor(ERCoreBusinessLogic.sharedInstance().actor());
                 standardExceptionPage.setExtraInfo(extraInformation);
-                
-                NSArray parts = NSArray.componentsSeparatedByString(ERXUtilities.stackTrace(), "\n\t");
-                NSMutableArray subParts = new NSMutableArray();
-                boolean first = true;
-                for (Enumeration e = parts.reverseObjectEnumerator(); e.hasMoreElements();) {
-                    String element = (String)e.nextElement();
-                    if (element.indexOf("org.apache.log4j") != -1)
-                        break;
-                    if (!first)
-                        subParts.insertObjectAtIndex(element, 0);
-                    else
-                        first = false;
-                }                
-                
-                standardExceptionPage.setReasonLines(subParts);
+
+                if (event.getThrowableInformation() != null && event.getThrowableInformation().getThrowable() != null) {
+                    standardExceptionPage.setException(event.getThrowableInformation().getThrowable());
+                } else {
+                    NSArray parts = NSArray.componentsSeparatedByString(ERXUtilities.stackTrace(), "\n\t");
+                    NSMutableArray subParts = new NSMutableArray();
+                    boolean first = true;
+                    for (Enumeration e = parts.reverseObjectEnumerator(); e.hasMoreElements();) {
+                        String element = (String)e.nextElement();
+                        if (element.indexOf("org.apache.log4j") != -1)
+                            break;
+                        if (!first)
+                            subParts.insertObjectAtIndex(element, 0);
+                        else
+                            first = false;
+                    }
+                    standardExceptionPage.setReasonLines(subParts);
+                }
+
                 standardExceptionPage.setFormattedMessage(this.layout.format(event));
                 message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
                                                               toAddressesAsArray(),
