@@ -1,4 +1,4 @@
-<project name="ERExtensions" default="all" basedir="..">
+<project name="ERExtensions" default="all" basedir="../../../..">
     <property name="project.principal.class" value="er.extensions.ERExtensions" />
     <property name="project.name" value="${ant.project.name}" />
 
@@ -70,18 +70,18 @@
     
 
     <target name="clean" depends="init">
-        <ant antfile="../../../Build/build/common.xml" target="${ant.project.name}.clean" />
+        <ant antfile="Build/build/common.xml" target="${ant.project.name}.clean" />
     </target>
 
     <target name="install" depends="init">
-        <ant antfile="../../../Build/build/common.xml" target="install" />
+        <ant antfile="Build/build/common.xml" target="install" />
     </target>
 
     <target name="usage" depends="init">
-        <ant antfile="../../../Build/build/common.xml" target="usage" />
+        <ant antfile="Build/build/common.xml" target="usage" />
     </target>
 
     <target name="all" depends="init">
-        <ant antfile="../../../Build/build/common.xml" target="${ant.project.name}.all" />
+        <ant antfile="Build/build/common.xml" target="${ant.project.name}.all" />
     </target>
 </project>
