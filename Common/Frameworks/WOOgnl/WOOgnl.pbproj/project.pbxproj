@@ -1,0 +1,836 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 34;
+	objects = {
+		F5274010017CADD2014387C8 = {
+			buildStyles = (
+				F527406B017CADD2014387C8,
+				F527406C017CADD2014387C8,
+				F527406D017CADD2014387C8,
+				F527406E017CADD2014387C8,
+				F527406F017CADD2014387C8,
+			);
+			isa = PBXProject;
+			mainGroup = F5274011017CADD2014387C8;
+			productRefGroup = F5274032017CADD2014387C8;
+			projectDirPath = "";
+			targets = (
+				F5274036017CADD2014387C8,
+				F5274038017CADD2014387C8,
+				F5274053017CADD2014387C8,
+			);
+		};
+		F5274011017CADD2014387C8 = {
+			children = (
+				F5274012017CADD2014387C8,
+				F527401C017CADD2014387C8,
+				F5274025017CADD2014387C8,
+				F5274032017CADD2014387C8,
+			);
+			isa = PBXGroup;
+			name = WOOgnl;
+			refType = 4;
+		};
+		F5274012017CADD2014387C8 = {
+			children = (
+				F5274013017CADD2014387C8,
+				F5274014017CADD2014387C8,
+				F5274015017CADD2014387C8,
+				F5274016017CADD2014387C8,
+				F5274017017CADD2014387C8,
+				F5274018017CADD2014387C8,
+				F5274019017CADD2014387C8,
+				F527401A017CADD2014387C8,
+				F527401B017CADD2014387C8,
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
+		};
+		F5274013017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = NSArrayPropertyAccessor.java;
+			refType = 4;
+		};
+		F5274014017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = NSDictionaryPropertyAccessor.java;
+			refType = 4;
+		};
+		F5274015017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = NSFoundationElementsAccessor.java;
+			refType = 4;
+		};
+		F5274016017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = NSObjectPropertyAccessor.java;
+			refType = 4;
+		};
+		F5274017017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = WOOgnl.java;
+			refType = 4;
+		};
+		F5274018017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = WOOgnlHTMLTemplateParser.java;
+			refType = 4;
+		};
+		F5274019017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = WOOgnlAssociation.java;
+			refType = 4;
+		};
+		F527401A017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = NSClassResolver.java;
+			refType = 4;
+		};
+		F527401B017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = D2WOgnlAssignment.java;
+			refType = 4;
+		};
+		F527401C017CADD2014387C8 = {
+			children = (
+				F5274020017CADD2014387C8,
+			);
+			isa = PBXGroup;
+			name = "Other Sources";
+			refType = 4;
+		};
+		F5274020017CADD2014387C8 = {
+			isa = PBXFileReference;
+			path = LICENSE.NPL;
+			refType = 4;
+		};
+		F5274025017CADD2014387C8 = {
+			children = (
+				F5274026017CADD2014387C8,
+				F5274027017CADD2014387C8,
+				F5274028017CADD2014387C8,
+				F5274029017CADD2014387C8,
+				F527402A017CADD2014387C8,
+				F527402B017CADD2014387C8,
+				F527402C017CADD2014387C8,
+				F527402D017CADD2014387C8,
+				F527402F017CADD2014387C8,
+				F5274030017CADD2014387C8,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+		};
+		F5274026017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaEOProject.framework;
+			path = /System/Library/Frameworks/JavaEOProject.framework;
+			refType = 0;
+		};
+		F5274027017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaWOExtensions.framework;
+			path = /System/Library/Frameworks/JavaWOExtensions.framework;
+			refType = 0;
+		};
+		F5274028017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaFoundation.framework;
+			path = /System/Library/Frameworks/JavaFoundation.framework;
+			refType = 0;
+		};
+		F5274029017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaEOControl.framework;
+			path = /System/Library/Frameworks/JavaEOControl.framework;
+			refType = 0;
+		};
+		F527402A017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaJDBCAdaptor.framework;
+			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
+			refType = 0;
+		};
+		F527402B017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaDirectToWeb.framework;
+			path = /System/Library/Frameworks/JavaDirectToWeb.framework;
+			refType = 0;
+		};
+		F527402C017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaEOAccess.framework;
+			path = /System/Library/Frameworks/JavaEOAccess.framework;
+			refType = 0;
+		};
+		F527402D017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaXML.framework;
+			path = /System/Library/Frameworks/JavaXML.framework;
+			refType = 0;
+		};
+		F527402F017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaDTWGeneration.framework;
+			path = /System/Library/Frameworks/JavaDTWGeneration.framework;
+			refType = 0;
+		};
+		F5274030017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			name = JavaWebObjects.framework;
+			path = /System/Library/Frameworks/JavaWebObjects.framework;
+			refType = 0;
+		};
+		F5274032017CADD2014387C8 = {
+			children = (
+				F5274033017CADD2014387C8,
+				F5274034017CADD2014387C8,
+				F5274035017CADD2014387C8,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		F5274033017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			path = WOOgnl.framework;
+			refType = 3;
+		};
+		F5274034017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			path = "_WO$(SERVER_UNIQUIFIER)WOOgnl.tmp";
+			refType = 3;
+		};
+		F5274035017CADD2014387C8 = {
+			isa = PBXFrameworkReference;
+			path = "_WO$(CLIENT_UNIQUIFIER)WOOgnl.tmp";
+			refType = 3;
+		};
+		F5274036017CADD2014387C8 = {
+			buildPhases = (
+				F5274064017CADD2014387C8,
+				F5274065017CADD2014387C8,
+				F5274066017CADD2014387C8,
+				F5274067017CADD2014387C8,
+				F5274068017CADD2014387C8,
+				F5274069017CADD2014387C8,
+				F527406A017CADD2014387C8,
+			);
+			buildSettings = {
+				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
+				CLIENT_UNIQUIFIER = Client;
+				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
+				CURRENT_SYMLINK = "$(VERSIONS_DIR)/Current";
+				FRAMEWORK_VERSION = A;
+				INFO_FILE_NAME = Info.plist;
+				INSTALL_PATH = "$(HOME)/roots";
+				PRODUCT_NAME = WOOgnl;
+				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
+				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
+				RESOURCES_SYMLINK = "$(WRAPPER_DIR)/Resources";
+				SERVER_UNIQUIFIER = Server;
+				VERSIONS_DIR = "$(WRAPPER_DIR)/Versions";
+				WEBSERVER_BUILD_VERSION_DIR = "$(WEBSERVER_VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
+				WEBSERVER_CONTENTS_DIR = "$(WEBSERVER_BUILD_VERSION_DIR)";
+				WEBSERVER_CURRENT_SYMLINK = "$(WEBSERVER_VERSIONS_DIR)/Current";
+				WEBSERVER_INSTALL_DIR = "$(WEBSERVER_INSTALL_DIR_FRAMEWORK)";
+				WEBSERVER_RESOURCES_DIR = "$(CONTENTS_DIR)/WebServerResources";
+				WEBSERVER_RESOURCES_JAVA_DIR = "$(WEBSERVER_RESOURCES_DIR)/Java";
+				WEBSERVER_RESOURCES_SYMLINK = "$(WEBSERVER_WRAPPER_DIR)/WebServerResources";
+				WEBSERVER_VERSIONS_DIR = "$(WEBSERVER_WRAPPER_DIR)/Versions";
+				WEBSERVER_WRAPPER_DIR = "$(WRAPPER_DIR)";
+				WRAPPER_DIR = "$(INSTALL_PATH_FOR_STYLE)/$(WRAPPER_NAME)";
+				WRAPPER_EXTENSION = framework;
+				WRAPPER_NAME = "$(PRODUCT_NAME).$(WRAPPER_EXTENSION)";
+			};
+			dependencies = (
+				F5274037017CADD2014387C8,
+				F5274052017CADD2014387C8,
+			);
+			isa = PBXFrameworkTarget;
+			name = WOOgnl;
+			productInstallPath = "$(HOME)/roots";
+			productName = WOOgnl;
+			productReference = F5274033017CADD2014387C8;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string></string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>Has_WOComponents</key>
+	<true/>
+	<key>NSExecutable</key>
+	<string>WOOgnl</string>
+	<key>NSJavaNeeded</key>
+	<true/>
+	<key>NSJavaPath</key>
+	<array>
+		<string>WOOgnl.jar</string>
+	</array>
+	<key>NSJavaPathClient</key>
+	<string>WOOgnl.jar</string>
+	<key>NSJavaRoot</key>
+	<string>Resources/Java</string>
+	<key>NSJavaRootClient</key>
+	<string>WebServerResources/Java</string>
+	<key>NSPrincipalClass</key>
+	<string>ognl.webobjects.WOOgnl</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		F5274037017CADD2014387C8 = {
+			isa = PBXTargetDependency;
+			target = F5274038017CADD2014387C8;
+		};
+		F5274038017CADD2014387C8 = {
+			buildPhases = (
+				F5274039017CADD2014387C8,
+				F527403A017CADD2014387C8,
+				F527403B017CADD2014387C8,
+				F5274045017CADD2014387C8,
+				F5274051017CADD2014387C8,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Users/max/roots";
+				FRAMEWORK_VERSION = TMP;
+				JAVA_ARCHIVE_CLASSES = YES;
+				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
+				OTHER_JAVA_CLASS_PATH = "";
+				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)WOOgnl";
+				SERVER_UNIQUIFIER = Server;
+				WRAPPER_EXTENSION = tmp;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = "Application Server";
+			productName = "Application Server";
+			productReference = F5274034017CADD2014387C8;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>_WO$(SERVER_UNIQUIFIER)WOOgnl</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>NSJavaNeeded</key>
+	<string>YES</string>
+	<key>NSJavaPath</key>
+	<array>
+		<string>_WO$(SERVER_UNIQUIFIER)WOOgnl.jar</string>
+	</array>
+	<key>NSJavaRoot</key>
+	<string>Versions/A/Resources/Java</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		F5274039017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		F527403A017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		F527403B017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+				F527403C017CADD2014387C8,
+				F527403D017CADD2014387C8,
+				F527403E017CADD2014387C8,
+				F527403F017CADD2014387C8,
+				F5274040017CADD2014387C8,
+				F5274041017CADD2014387C8,
+				F5274042017CADD2014387C8,
+				F5274043017CADD2014387C8,
+				F5274044017CADD2014387C8,
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		F527403C017CADD2014387C8 = {
+			fileRef = F5274013017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527403D017CADD2014387C8 = {
+			fileRef = F5274014017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527403E017CADD2014387C8 = {
+			fileRef = F5274015017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527403F017CADD2014387C8 = {
+			fileRef = F5274016017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274040017CADD2014387C8 = {
+			fileRef = F5274017017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274041017CADD2014387C8 = {
+			fileRef = F5274018017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274042017CADD2014387C8 = {
+			fileRef = F5274019017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274043017CADD2014387C8 = {
+			fileRef = F527401A017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274044017CADD2014387C8 = {
+			fileRef = F527401B017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274045017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5274046017CADD2014387C8,
+				F5274047017CADD2014387C8,
+				F5274048017CADD2014387C8,
+				F5274049017CADD2014387C8,
+				F527404A017CADD2014387C8,
+				F527404B017CADD2014387C8,
+				F527404C017CADD2014387C8,
+				F527404D017CADD2014387C8,
+				F527404F017CADD2014387C8,
+				F5274050017CADD2014387C8,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		F5274046017CADD2014387C8 = {
+			fileRef = F5274026017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274047017CADD2014387C8 = {
+			fileRef = F5274027017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274048017CADD2014387C8 = {
+			fileRef = F5274028017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274049017CADD2014387C8 = {
+			fileRef = F5274029017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527404A017CADD2014387C8 = {
+			fileRef = F527402A017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527404B017CADD2014387C8 = {
+			fileRef = F527402B017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527404C017CADD2014387C8 = {
+			fileRef = F527402C017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527404D017CADD2014387C8 = {
+			fileRef = F527402D017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527404F017CADD2014387C8 = {
+			fileRef = F527402F017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274050017CADD2014387C8 = {
+			fileRef = F5274030017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274051017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		F5274052017CADD2014387C8 = {
+			isa = PBXTargetDependency;
+			target = F5274053017CADD2014387C8;
+		};
+		F5274053017CADD2014387C8 = {
+			buildPhases = (
+				F5274054017CADD2014387C8,
+				F5274055017CADD2014387C8,
+				F5274056017CADD2014387C8,
+				F5274057017CADD2014387C8,
+				F5274063017CADD2014387C8,
+			);
+			buildSettings = {
+				CLIENT_UNIQUIFIER = Client;
+				COMPILE_JAVA_SOURCES_IN_NIB_FILES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"\\\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Users/max/roots";
+				FRAMEWORK_VERSION = TMP;
+				JAVA_ARCHIVE_CLASSES = YES;
+				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
+				OTHER_JAVA_CLASS_PATH = "";
+				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)WOOgnl";
+				WRAPPER_EXTENSION = tmp;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = "Web Server";
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = "Web Server";
+			productReference = F5274035017CADD2014387C8;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>_WO$(CLIENT_UNIQUIFIER)WOOgnl</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		F5274054017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		F5274055017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		F5274056017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		F5274057017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5274058017CADD2014387C8,
+				F5274059017CADD2014387C8,
+				F527405A017CADD2014387C8,
+				F527405B017CADD2014387C8,
+				F527405C017CADD2014387C8,
+				F527405D017CADD2014387C8,
+				F527405E017CADD2014387C8,
+				F527405F017CADD2014387C8,
+				F5274061017CADD2014387C8,
+				F5274062017CADD2014387C8,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		F5274058017CADD2014387C8 = {
+			fileRef = F5274026017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274059017CADD2014387C8 = {
+			fileRef = F5274027017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527405A017CADD2014387C8 = {
+			fileRef = F5274028017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527405B017CADD2014387C8 = {
+			fileRef = F5274029017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527405C017CADD2014387C8 = {
+			fileRef = F527402A017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527405D017CADD2014387C8 = {
+			fileRef = F527402B017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527405E017CADD2014387C8 = {
+			fileRef = F527402C017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F527405F017CADD2014387C8 = {
+			fileRef = F527402D017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274061017CADD2014387C8 = {
+			fileRef = F527402F017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274062017CADD2014387C8 = {
+			fileRef = F5274030017CADD2014387C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5274063017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		F5274064017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		F5274065017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		F5274066017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		F5274067017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		F5274068017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		F5274069017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			name = "Shell Script";
+			neededFileNames = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
+		};
+		F527406A017CADD2014387C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			name = "Shell Script";
+			neededFileNames = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
+		};
+		F527406B017CADD2014387C8 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F527406C017CADD2014387C8 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F527406D017CADD2014387C8 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				INSTALL_MODE_FLAG = "a+rX";
+				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				SPLIT_INSTALL = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F527406E017CADD2014387C8 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				INSTALL_MODE_FLAG = "a-w,a+rX";
+				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
+				SPLIT_INSTALL = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F527406F017CADD2014387C8 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				INSTALL_MODE_FLAG = "a-w,a+rX";
+				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
+				SPLIT_INSTALL = YES;
+				WEBSERVER_DOCROOT = "$(LOCAL_LIBRARY_DIR)/WebServer/Documents";
+				WEBSERVER_INSTALL_DIR_APPLICATION = "$(WEBSERVER_INSTALL_ROOT)";
+				WEBSERVER_INSTALL_DIR_FRAMEWORK = "$(WEBSERVER_INSTALL_ROOT)/Frameworks";
+				WEBSERVER_INSTALL_ROOT = "$(WEBSERVER_DOCROOT)/WebObjects";
+				WEBSERVER_RESOURCES_DIR = "$(WEBSERVER_CONTENTS_DIR)/WebServerResources";
+				WEBSERVER_RESOURCES_JAVA_DIR = "$(WEBSERVER_INSTALL_ROOT)/Java";
+				WEBSERVER_WRAPPER_DIR = "$(WEBSERVER_INSTALL_DIR)/$(WRAPPER_NAME)";
+			};
+			isa = PBXBuildStyle;
+			name = WebServer;
+		};
+	};
+	rootObject = F5274010017CADD2014387C8;
+}
