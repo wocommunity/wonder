@@ -88,29 +88,20 @@ public class ERD2WUtilities {
     * @return
     */
     public static EOEnterpriseObject localInstanceFromObjectWithD2WContext(EOEnterpriseObject eo, D2WContext d2wContext) {
-        if (eo.editingContext() == null) {
-            throw new NullPointerException("localInstanceFromObjectWithD2WContext: the argument eo must have a valid EOEditingContext: eo.editingContext() != null");
-        }
+        EOEditingContext ec = eo.editingContext();
+        if(ec == null) throw new IllegalStateException("EC can't be null in localinstance");
         EOEnterpriseObject localObject = eo;
-        if (ERXExtensions.isNewObject(eo)) {
-            //do nothing, a newObject cannot be faulted into another EC!
-        } else if ("edit".equals(d2wContext.valueForKey("task"))) {
-            //create a new nested EC and fault the object into it
-            EOEditingContext ec = ERXEC.newEditingContext(eo.editingContext());
-            //FIXME: we cannot use childEc's because if the EO is not saved to the DB
-            //then the EO is not displayed as EO if one uses for example a ERD2WEditToOneRelationship
-            //component: the new EO will not be displayed in the list
-            //EOEditingContext ec = ERXEC.newEditingContext();
-            ec.setSharedEditingContext(null);
-            localObject = EOUtilities.localInstanceOfObject(ec, eo);
+        if(ERXProperties.webObjectsVersionAsDouble() < 5.21d && ERXExtensions.isNewObject(localObject)) {
+            // do nothing as we can't localInstance anything here
         } else {
-            //create a new Peer EC and fault the object into it
-            //this is done regardeless if the object's editingContext is
-            //a sharedec or not.
-            EOEditingContext ec = ERXEC.newEditingContext();
-            ec.setSharedEditingContext(null);
-            localObject = EOUtilities.localInstanceOfObject(ec, eo);
+            boolean nest = d2wContext != null && ERXValueUtilities.booleanValue(d2wContext.valueForKey("useNestedEditingContext"));
+            EOEditingContext newEc = ERXEC.newEditingContext(nest ? ec : ec.parentObjectStore());
+            if(ec instanceof EOSharedEditingContext) {
+                newEc.setSharedEditingContext(null);
+            }
+            localObject = EOUtilities.localInstanceOfObject(newEc, eo);
         }
+
         return localObject;
     }
 
