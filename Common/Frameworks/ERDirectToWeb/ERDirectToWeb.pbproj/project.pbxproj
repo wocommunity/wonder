@@ -128,6 +128,7 @@
 				F54206DB02C467E001000102,
 				F54206DC02C467E001000102,
 				F54206DD02C467E001000102,
+				417A1B57052CCCE200000105,
 				F54206DE02C467E001000102,
 				F54206DF02C467E001000102,
 				F5E94DA7038C045301CF0E76,
@@ -685,6 +686,19 @@
 		};
 		41600901050715F400000102 = {
 			fileRef = 416008F9050715F400000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		417A1B57052CCCE200000105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDDelayedExtraQualifierAssignment.java;
+			path = er/directtoweb/ERDDelayedExtraQualifierAssignment.java;
+			refType = 4;
+		};
+		417A1B58052CCCE200000105 = {
+			fileRef = 417A1B57052CCCE200000105;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -9302,6 +9316,7 @@
 				410CB3400524E5930051BB32,
 				410CB69E05250FCD0051BB32,
 				410CBB5C052594850051BB32,
+				417A1B58052CCCE200000105,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
