@@ -96,7 +96,11 @@ public class ERDEditPassword extends ERDCustomEditComponent {
         } else {
             String password = password();
             if(!passwordExists() || (passwordExists() && password != null)) {
-                object().validateTakeValueForKeyPath(password, key());
+                try {
+                    object().validateTakeValueForKeyPath(password, key());
+                } catch(NSValidation.ValidationException ex) {
+                    validationFailedWithException(ex, password, key());
+                }
             }
         }
     }
