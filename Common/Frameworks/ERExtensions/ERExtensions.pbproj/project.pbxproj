@@ -1107,6 +1107,8 @@
 				F57EA5C201FF59BF019E57DA,
 				F57EA6ED01FF59C0019E57DA,
 				669CC7790236A4B800CD2933,
+				F61422F70253628701AD0D07,
+				F61422F50253624C01AD0D07,
 				F57EA6E201FF59C0019E57DA,
 				F57EA6FD01FF59C0019E57DA,
 				F57EA68701FF59BF019E57DA,
@@ -2410,7 +2412,9 @@
 				F645C8D7024791E801AD0D07,
 				F6280FA2024F8F8B01AD0D07,
 				F6F4D1AE0251EB4D01AD0D07,
-				F6F4D1AF0251EB4D01AD0D07,
+				F61422E70253618901AD0D07,
+				F61422F20253620001AD0D07,
+				F61422F30253620001AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -2587,6 +2591,7 @@
 				F645C8CF02478A0901AD0D07,
 				F645C8D502478A2901AD0D07,
 				F6F4D1AB0251D9F501AD0D07,
+				F61422F40253620001AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -3044,6 +3049,8 @@
 			files = (
 				669CC77A0236A4B800CD2933,
 				669CC77C0236A5C200CD2933,
+				F61422F60253624D01AD0D07,
+				F61422F80253628801AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -4274,6 +4281,77 @@
 //F62
 //F63
 //F64
+		F61422E70253618901AD0D07 = {
+			fileRef = F6F4D1AD0251EB4D01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F61422E8025361B501AD0D07 = {
+			children = (
+				F61422EF025361FF01AD0D07,
+				F61422F0025361FF01AD0D07,
+				F61422F1025361FF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = ERXFakeRelationship;
+			refType = 4;
+		};
+		F61422EF025361FF01AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXFakeRelationship.api;
+			refType = 4;
+		};
+		F61422F0025361FF01AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXFakeRelationship.java;
+			refType = 4;
+		};
+		F61422F1025361FF01AD0D07 = {
+			isa = PBXFolderReference;
+			path = ERXFakeRelationship.wo;
+			refType = 4;
+		};
+		F61422F20253620001AD0D07 = {
+			fileRef = F61422F1025361FF01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F61422F30253620001AD0D07 = {
+			fileRef = F61422EF025361FF01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F61422F40253620001AD0D07 = {
+			fileRef = F61422F0025361FF01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F61422F50253624C01AD0D07 = {
+			isa = PBXFileReference;
+			path = ClassList.txt;
+			refType = 4;
+		};
+		F61422F60253624D01AD0D07 = {
+			fileRef = F61422F50253624C01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F61422F70253628701AD0D07 = {
+			isa = PBXFileReference;
+			path = ERXClassList.html;
+			refType = 4;
+		};
+		F61422F80253628801AD0D07 = {
+			fileRef = F61422F70253628701AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F6280FA1024F8F8B01AD0D07 = {
 			isa = PBXFileReference;
 			path = calendar.gif;
@@ -4560,6 +4638,7 @@
 				F645C8950247899001AD0D07,
 				F645C8960247899001AD0D07,
 				F645C8970247899001AD0D07,
+				F61422E8025361B501AD0D07,
 				F645C8980247899001AD0D07,
 				F645C8990247899001AD0D07,
 				F645C89A0247899001AD0D07,
@@ -5282,12 +5361,6 @@
 		};
 		F6F4D1AE0251EB4D01AD0D07 = {
 			fileRef = F6F4D1AC0251EB4D01AD0D07;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F6F4D1AF0251EB4D01AD0D07 = {
-			fileRef = F6F4D1AD0251EB4D01AD0D07;
 			isa = PBXBuildFile;
 			settings = {
 			};
