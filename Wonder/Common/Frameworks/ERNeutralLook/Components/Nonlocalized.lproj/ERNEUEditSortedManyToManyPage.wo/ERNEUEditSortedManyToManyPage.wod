@@ -79,9 +79,13 @@ HiddenField1: WOHiddenField {
 }
 
 Hyperlink1: WOHyperlink {
+	action = removeAllFromToManyRelationship;
 }
 
 Hyperlink2: WOHyperlink {
+}
+
+Hyperlink3: WOHyperlink {
 }
 
 Image1: WOImage {
