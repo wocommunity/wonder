@@ -528,6 +528,43 @@ public class ERXStringUtilities {
         }
     }
     
+    public static String escapeNonBasicLatinChars(String str) {
+        StringBuffer result = new StringBuffer(str.length());
+        
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (Character.UnicodeBlock.of(c).equals(Character.UnicodeBlock.BASIC_LATIN)) 
+                result.append(c);
+            else 
+                result.append(toHexString(c));
+        }
+        return result.toString();
+    }
+    
+    public static String toHexString(char c) {
+        StringBuffer result = new StringBuffer("\\u9999".length());
+        String u = Long.toHexString((int) c).toUpperCase();
+
+        result.append("\\u");
+        if (u.length() == 1) {
+            result.append("000");
+        } else if (u.length() == 2) {
+            result.append("00");
+        }
+        result.append(u);
+        
+        return result.toString();
+    }
+
+    public static String toHexString(String str) {
+        StringBuffer result = new StringBuffer("\\u9999".length() * str.length());
+        
+        for (int i = 0; i < str.length(); i++) 
+            result.append(toHexString(str.charAt(i)));
+
+        return result.toString();
+    }
+    
     /** 
      * Cleans up the given version string by removing extra 
      * dots(.), for example, 5.1.3 becomes 5.13, so that 
