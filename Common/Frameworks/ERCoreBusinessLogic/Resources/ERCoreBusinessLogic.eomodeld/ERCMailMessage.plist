@@ -32,7 +32,6 @@
         }, 
         {columnName = "FROM_ADDR"; name = fromAddress; prototypeName = varchar255; }, 
         {columnName = ID; name = id; prototypeName = id; }, 
-        {columnName = "IS_READ"; name = isRead; prototypeName = flag; }, 
         {columnName = "LAST_MODIFIED"; name = lastModified; prototypeName = dateTime; }, 
         {columnName = "MAIL_STATE_ID"; name = mailStateID; prototypeName = osType; }, 
         {
@@ -87,7 +86,6 @@
         bccAddresses, 
         title, 
         xMailer, 
-        isRead, 
         contentGzipped, 
         shouldArchiveSentMail
     ); 
@@ -106,7 +104,6 @@
         replyToAddress, 
         attachments, 
         xMailer, 
-        isRead, 
         exceptionReason, 
         plainText, 
         contentGzipped, 
