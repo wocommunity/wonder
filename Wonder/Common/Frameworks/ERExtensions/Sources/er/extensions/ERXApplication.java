@@ -61,6 +61,10 @@ public abstract class ERXApplication extends WOApplication {
         ERXCompilerProxy.defaultProxy().setClassForName(ERXAnyField.class, "WOAnyField");
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
+        // Fix for 3190479 URI encoding should always be UTF8
+        // See http://www.w3.org/International/O-URL-code.html
+        com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF8";
+        
         // WO 5.1 specific patches
         if (ERXProperties.webObjectsVersionAsDouble() < 5.2d) {
             // ERXWOText contains a patch for WOText to not include the value 
