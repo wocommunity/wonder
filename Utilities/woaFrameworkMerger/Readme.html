@@ -192,5 +192,30 @@
 
 <P><B>woaFrameworkMerger.pl</B> currently does not support Windows. This is largely because I don't know how  <SPAN CLASS="path">.woa/Contents/Windows/CLSSPATH.TXT</SPAN> or <SPAN CLASS="path">.woa/Contents/Windows/SUBPATHS.TXT</SPAN> work, and I lack the time and motivation to spend cycles learning, coding and testing. If you want to add Windows support, please be my guest! Doesn't look <B>too</B> hard...
 
+<H1>What's this <I>woaFrameworkAndWSResourceMerger.pl</I>?</H1>
+
+<P>It's a descendant of <I>woaFrameworkMerger.pl</I>, written by Giorgio Valoti, that copies over your web server resources as well as your frameworks. To quote Giorgio:
+
+<BLOCKQUOTE>I've made a quick and dirty hack to merge web server resources using  
+your script.
+
+<P>I copy *all* the frameworks' web server resources, so I can set the  
+property WOFrameworksBaseURL to  
+/WebObjects/&lt;APP_NAME&gt;.woa/Contents/Frameworks without subclassing the  
+resource manager.
+I use the modified version with a different PBX setup. I've created a  
+new legacy target with a simple shell script:
+
+<P><CODE>pbxbuild -target ${PRODUCT_NAME} -buildstyle Deployment build
+<BR>pbxbuild -target ${PRODUCT_NAME} -buildstyle WebServer build
+<BR>perl ~/Developer/Tools/woaframeworkmerger/current ${DSTROOT}${LOCAL_LIBRARY_DIR}/WebObjects/Applications/${PRODUCT_NAME}.woa</CODE>
+
+<P>This way, I avoid a potential problem with the script when used as an  
+additional aggregate target build phase, namely the scripts does not  
+find the web server distribution directory.
+</BLOCKQUOTE>
+
+<P>Use it the same way you use <I>woaFrameworkMerger.pl</I> &mdash; <I>woaFrameworkAndWSResourceMerger.pl</I> just does more. It probably makes sense to merge these two scripts eventually, and provide switch-based control over its actions, but we'll have to save that for another day.
+
 </BODY>
 </HTML>
