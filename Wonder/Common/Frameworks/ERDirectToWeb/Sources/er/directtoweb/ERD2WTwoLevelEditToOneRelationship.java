@@ -12,7 +12,6 @@ import com.webobjects.appserver.WOContext;
 /**
  * Uses JSTwoLevelEditToOneRelationship to edit the relationship.<br />
  * 
- * @binding object
  */
 
 public class ERD2WTwoLevelEditToOneRelationship extends D2WEditToOneRelationship {

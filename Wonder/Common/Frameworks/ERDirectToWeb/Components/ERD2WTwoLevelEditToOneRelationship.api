@@ -2,6 +2,5 @@
 <wodefinitions>
 	<wo class="ERD2WTwoLevelEditToOneRelationship" wocomponentcontent="false">
 
-		<binding name="object"/>
 	</wo>
 </wodefinitions>
