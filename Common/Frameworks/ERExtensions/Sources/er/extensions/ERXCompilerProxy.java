@@ -14,12 +14,100 @@ import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.appserver._private.WODirectActionRequestHandler;
 
-/* To find out about how to use this class, read the CompilerProxy.html in the Documentation folder */
-/* WARNING: this is experimental and the results might be very confusing if you don«t understand what this class tries to do! */
-
-/**
- * used for dynamic re-compilation of java files<br />
- * 
+/** ERXCompilerProxy is a class that creates a rapid-turnaround mode for WebObjects
+5 for Java similar to how you use WebScript with WO 4.5.1. <br />
+<p>Instead of recompiling
+your Application or Frameworks, you simply change the source code in question
+and reload your page. In some cases, you may also have to restart your Application
+but you won't have to rebuild it.</p>
+<p>ERXCompilerProxy is especially well suited for DirectToWeb applications. The
+restrictions of Java's classloading are partially compensated by the highly
+dynamic nature of D2W apps.</p>
+<h2>Installation</h2>
+<p>Check if you have <code>jikes</code> installed in <code>/usr/bin</code>. On
+Windows, install <code>jikes.exe</code> in <code>$NEXT_ROOT/Local/Library/Executables/</code></p>
+<h2>Usage</h2>
+<p>To use this framework you must complete a few easy steps and you will very
+seldom have to rebuild or even restart your project again:</p>
+<ul>
+<li>Add ERExtensions.framework and ERJars.framework to your project. You do
+not need to add the ERExtensions.framework to your framework projects if you
+only want to use the ERXCompilerProxy, but you need to add it to the application.
+<br>
+<li>In your <code>~/WebObjects.properties</code> file add a line
+<p><code>er.extensions.ERXCompilerProxyEnabled=true</code></p>
+<li>Then <b>either</b> create a file named <code>CPFileList.txt</code> in your
+project's and your framework's root directory. This file should contain lines
+with "<code>./project_relative_path_to_Someclass.java:package_of_SomeClass_or_empty&lt;return&gt;</code>"
+for every file you want to get recompiled. On Windows, this is currently your
+only option unless someone writes a shell script that mimics what the supplied
+unix script does (find all java classes under the project root, grep for package
+                  and class names and put it into a <code>CPFileList.txt</code> file)<br>
+<li><b>or</b> create a new shell build phase right after the "Frameworks &amp;
+Libraries":</p>
+<ol>
+<li> Set the current target to your app
+<li> Click on "Files &amp; Build Phases" tab
+<li> Choose "Project/New Build Phase/New Shell Script Build Phase" from
+the Menu and drag the build phase right after the "Frameworks &amp; Libraries"
+<li> Insert the code <code>
+<pre>sh "${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh"</pre>
+</code>
+</ol>
+Now, everytime you build this project, every source file directly under the
+project directory will be put into the <code>CPFileList.txt</code> file.<br>
+</ul>
+That's all. Now build your app, make a change in Main.java and reload. You should
+see the changed version and a message from ERXCompilerProxy in the console.
+<h2>What it does</h2>
+<p>The ERXCompilerProxy does several things to works it's magic. First, on startup,
+it registers for the <code>ApplicationDidFinishLaunching</code> Notification.
+When the App starts, it reads the <code>CPFileList.txt</code> files from your
+<b>currently opened</b> projects to find out about the files to watch. So remember
+to have your framework projects open in PB.</p>
+<p>It also registers for the <code>ApplicationWillDispatchRequest</code> Notification,
+which gets triggered whenever a page is requested. It tries to compile the files
+that have changed and throws an Exception describing the errors if there where
+any and then aborts further handling of the request - you will get an error
+from your browser. However, if everything went well, it creates a new ClassLoader
+and throws away the component definition cache and a few other things. Then,
+when the next "pageWithName" is called, the updated class will be used.</p>
+<p>This is slightly different from how WebScript handled things. In Java, you
+simply can't change an Object's class implementation at runtime - so if you
+already have a page (or any other Object) this object will not use the newer
+class. Only Objects created after the compilation will have new behaviour.</p>
+<p>The freshly compiled files will be put into your App's <code>Resources/Java</code>
+directory into the proper package hierarchy. So, if you simply restart your
+App, the newer files will be used. When you re-build your project, your normal
+<code>.jar</code> will contains the correct classes anyway.</p>
+<p><b>NOTE:</b> Since all new class files end up in <code>Resources/Java</code>,
+when you clean-build your App, you also need to recompile your frameworks when
+you have changed classes there! A normal build will not delete the files, so
+recompilation of the frameworks is not needed.</p>
+<h2>Knows bugs and limitations</h2>
+<ul>
+<li>Since Java can't redefine objects, the new code will get used only for new
+objects. You may either have to reload multiple times or start a new session
+to get things to work.
+<li>You may see an error <code>"IllegalAccess in KeyValueCodingProtectedAccessor"</code>.
+You will probably have defined a new variable in your component with protected
+access. Either set the scope of the variable to public or restart your app.
+The number of these messages is greatly reduced if your components and EOs
+are in a package hierarchy and you have a KeyValueCodingProtectedAccessor
+subclass for this package.
+<li>You must have the respective projects opened in Project Builder. If you
+don't, ERXCompilerProxy can't find the sources.
+<li>You must reload after making changes and before stopping your application,
+because the file modification times are read only at start. If you stop the
+application before reloading, your last changes will not be recognized.
+<li>Changes in the Application class (among others) will not be recognized before
+a restart. They are only read once, due to the nature of Java's class loading
+and can't be fixed. If you cache your classes, you need to register for <code>CompilerProxyDidCompileClassesNotification</code>
+and reset the cache when you recieve it.
+<li>If you make changes in your EO's classes, you should definitely restart
+your application after pressing reload. You may seriously mess up your data
+if you have a mix of previously instaniated Objects and new ones.
+</ul>
  */
 
 public class ERXCompilerProxy {
@@ -36,12 +124,13 @@ public class ERXCompilerProxy {
     public static final String CompilerProxyDidCompileClassesNotification = "CompilerProxyDidCompileClasses";
 
     /** 
-     * CPFileList is the file which describes in each line a path to java class to watch fo
+     * denotes the name of  file which describes in each line a path to java class to watch for.<br />
+     * The format of this file is:<br />
+     * name.of.package:unix_path_to_java_file_relative_to_this_file&lt;return&gt;
      */
     protected static final String CPFileList = "CPFileList.txt";
 
-    /** Path to the jikes binary.<br/>
-     * Note that the Compilerproxy currently only works on unix based systems.
+    /** Path to the jikes binary.<br />
      */
     protected static String _jikesPath = "/usr/bin/jikes";
 
@@ -91,6 +180,7 @@ public class ERXCompilerProxy {
             _defaultProxy = new ERXCompilerProxy();
         return _defaultProxy;
     }
+    
     public static void setDefaultProxy(ERXCompilerProxy p) {
         if(_defaultProxy != null) {
             NSNotificationCenter.defaultCenter().removeObserver(_defaultProxy);
@@ -210,7 +300,7 @@ public class ERXCompilerProxy {
             return;
 	}
 
-        boolean isWindows = !("/".equals(File.fileSeparator));
+        boolean isWindows = File.pathSeparatorChar == ';';
         // Oh, yuck! Please comebody come up with a better way...
         if(isWindows) {
             _jikesPath = System.getProperty("NEXT_ROOT") + "/Local/Library/Executables/jikes.exe";
@@ -734,7 +824,7 @@ public class ERXCompilerProxy {
                     c = defineClass(className, buffer, 0, buffer.length);
                 }
             } catch (Throwable t) {
-                log.warn("Error relaoding class "+className+": " + t);
+                log.warn("Error reloading class "+className+": " + t);
             }
             return c;
         }
