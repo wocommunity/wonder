@@ -23,22 +23,26 @@ import com.webobjects.directtoweb.*;
  * @binding doNotUseForm" defaults="Boolean
  */
 
-public class ERDPrinterButton extends ERDCustomEditComponent {
+public class ERDPrinterButton extends ERDActionButton {
 
     public ERDPrinterButton(WOContext context) { super(context); }
     
-    public String task() { return (String)valueForBinding("task");  }
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
-    public EODataSource dataSource() { return (EODataSource)valueForBinding("dataSource"); }
-    public WODisplayGroup displayGroup() { return (WODisplayGroup)valueForBinding("displayGroup"); }
-
     public WOComponent printerFriendlyVersion() {
         WOComponent result = null;
-        if(task().equals("edit") || task().equals("inspect"))
-            result = editPrinterFriendlyVersion();
-        else if(task().equals("list") || task().equals("pick"))
-            result = listPrinterFriendlyVersion();
+        if(object() != null) {
+            D2WContext dummyContext = new D2WContext();
+            dummyContext.takeValueForKey(object(), "object");
+            dummyContext.setEntity(EOUtilities.entityNamed(object().editingContext(),object().entityName()));
+            dummyContext.setTask("inspect");
+            
+            result=ERDirectToWeb.printerFriendlyPageForD2WContext(dummyContext,session());
+            ((EditPageInterface)result).setObject(object());
+        } else {
+            if(task().equals("edit") || task().equals("inspect"))
+                result = editPrinterFriendlyVersion();
+            else if(task().equals("list") || task().equals("pick"))
+                result = listPrinterFriendlyVersion();
+        }
         return result;
     }
 
