@@ -861,21 +861,31 @@ public class ERXJDBCConnectionBroker {
                     } else {
                         int wait = ERXProperties.intForKeyWithDefault(
                                 "er.extensions.ERXJDBCConnectionBroker.connectionPingInterval", 60 * 5);
-
+                        String sql = ERXProperties.stringForKeyWithDefault(
+                                "er.extensions.ERXJDBCConnectionBroker.connectionPingSQL", "SELECT 1+1;");
                         synchronized (connPool) {
                             for (int i = 0; i < connPool.length; i++) {
-                                if (connStatus[i] == FREE) {
+                                if (connStatus[i] == FREE && connPool[i] != null) {
                                     synchronized (connStatus) {
                                         Connection c = connPool[i];
                                         connStatus[i] = IN_USE;
+                                        ERXJDBCConnectionBroker.log.debug("pinging connection "+connStatus[i]);
                                         try {
                                             c.setAutoCommit(false);
                                             c.setReadOnly(false);
-                                            ResultSet rs = c.getMetaData().getTables("", "", "*", null);
-                                            c.commit();
-                                        } catch (SQLException e) {
-                                            ERXJDBCConnectionBroker.log.error("could not ping connection " + c, e);
+                                            ResultSet rs = c.createStatement().executeQuery(sql);
+                                        } catch (Exception e) {
+                                            if (ERXJDBCConnectionBroker.log.isDebugEnabled()) {
+                                                ERXJDBCConnectionBroker.log.error("could not ping connection " + c +", reason: "+e.getMessage(), e);
+                                            } else {
+                                                ERXJDBCConnectionBroker.log.error("could not ping connection " + c +", reason: "+e.getMessage());
+                                            }
                                         } finally {
+                                            try {
+                                                c.rollback();
+                                            } catch (SQLException e1) {
+                                                throw new NSForwardException(e1, "could not rollback connection!");
+                                            }
                                             connStatus[i] = FREE;
                                         }
                                     }
