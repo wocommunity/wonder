@@ -1,15 +1,10 @@
-/*
- * Copyright (C) NetStruxr, Inc. All rights reserved.
- *
- * This software is published under the terms of the NetStruxr
- * Public Software License version 0.5, a copy of which has been
- * included with this distribution in the LICENSE.NPL file.  */
 package er.reporting;
 
 import java.lang.reflect.*;
 import com.webobjects.foundation.*;
 import org.apache.log4j.Category;
 
+/** This class exists so {@link NSKeyValueCoding} can access protected instance variables and methods.*/
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
     public static final Category cat = Category.getInstance(KeyValueCodingProtectedAccessor.class);
