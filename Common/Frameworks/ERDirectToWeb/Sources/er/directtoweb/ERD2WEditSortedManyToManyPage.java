@@ -186,6 +186,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if (browserSelections != null) {
             for (Enumeration e = browserSelections.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject object=(EOEnterpriseObject)e.nextElement();
+                EOEnterpriseObject _localEoToRremoveFromRelationship =
+                    (EOEnterpriseObject)object.valueForKey(destinationRelationship().name());
+                object.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
+                                                                    destinationRelationship().name());
+                object().removeObjectFromBothSidesOfRelationshipWithKey(object,
+                                                                      _relationshipKey);                                                                    
                 object.editingContext().deleteObject(object);
                 dataSource().deleteObject(object);
             }
