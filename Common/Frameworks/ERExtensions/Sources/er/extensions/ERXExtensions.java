@@ -529,46 +529,10 @@ public class ERXExtensions {
     }
 
     /**
-     * Displays a list of attributes off of enterprise
-     * objects in a 'friendly' manner. <br/>
-     * <br/>
-     * For example, given an array containing three user
-     * objects and the attribute key "firstName", the
-     * result of calling this method would be the string:
-     * "Max, Anjo and Patrice".
-     * @param list of objects to be displayed in a friendly
-     *		manner
-     * @param attribute key to be called on each object in
-     *		the list
-     * @param nullArrayDisplay string to be returned if the
-     *		list is null or empty
-     * @param friendly display string
+     * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
      */
-    // FIXME: Localization, also doesn't have to be eos. if attribute isn't specified should default to toString
     public static String friendlyEOArrayDisplayForKey(NSArray list, String attribute, String nullArrayDisplay) {
-        String result=null;
-        int count = list!=null ? list.count() : 0;
-        if (count==0) {
-            result=nullArrayDisplay;
-        } else if (count == 1) {
-            result= (String) (attribute!= null ? ((EOEnterpriseObject)list.objectAtIndex(0)).valueForKeyPath(attribute) :
-                              ((EOEnterpriseObject)list.objectAtIndex(0)).toString());
-        } else if (count > 1) {
-            StringBuffer buffer = new StringBuffer();
-            for(int i = 0; i < count; i++) {
-                String attributeValue =  (attribute!= null ? (String) ((EOEnterpriseObject)list.objectAtIndex(i)).valueForKeyPath(attribute) :
-                                          ((EOEnterpriseObject)list.objectAtIndex(i)).toString());
-                if (i == 0) {
-                    buffer.append(attributeValue);
-                } else if  (i == (count - 1)) {
-                    buffer.append(" and " + attributeValue);
-                } else {
-                    buffer.append(", " + attributeValue);
-                }
-            }
-            result=buffer.toString();
-        }
-        return result;
+        return ERXArrayUtilities.friendlyDisplayForKeyPath(list, attribute, nullArrayDisplay, ", ", " and ");
     }
 
     /**
@@ -1336,19 +1300,12 @@ public class ERXExtensions {
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(a1,a2);
     }
 
+    /**
+    * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
+    */
     // DELETEME: duplicate method friendlyEOArrayDisplayForKey
     public static String userPresentableEOArray(NSArray array, String attribute) {
-        String userPresentable = "";
-        if (array != null && array.count() > 0) {
-            if (attribute == null)
-                attribute = "description";
-            if (array.count() > 1) {
-                NSArray subArray = array.subarrayWithRange(new NSRange(0, array.count() - 1));
-                userPresentable = ((NSArray)subArray.valueForKey(attribute)).componentsJoinedByString(", ") + " and ";
-            }
-            userPresentable += ((NSKeyValueCoding)array.lastObject()).valueForKey(attribute);
-        }
-        return userPresentable;
+        return ERXArrayUtilities.friendlyDisplayForKeyPath(array, attribute, "None", ", ", " and ");
     }
 
     /**
