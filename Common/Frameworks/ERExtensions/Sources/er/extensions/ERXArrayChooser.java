@@ -88,10 +88,6 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         return _localizeDisplayKeys.booleanValue();
     }
 
-    protected ERXLocalizer localizer() {
-        return ERXLocalizer.currentLocalizer();
-    }
-
     public String sourceEntityName() {
         if(_sourceEntityName == null) {
             _sourceEntityName = (String)valueForBinding("sourceEntityName");
