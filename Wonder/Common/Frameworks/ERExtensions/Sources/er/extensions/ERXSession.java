@@ -309,19 +309,18 @@ public class ERXSession extends WOSession implements Serializable {
     }
 
     /**
-     * Ensures that the editing context has a delegate
-     * set, if not it will set one via the
-     * <code>setDefaultDelegate</code> method.
+     * Ensures that the returned editingContext was created with
+     * the {@link ERXEC} factory.
      * @return the session's default editing context with
      * 		the default delegate set.
      */
-    // FIXME: Should use the ec factory methods to just
-    //		create and set the editing context.
+    private boolean _editingContextWasCreated = false;
     public EOEditingContext defaultEditingContext() {
-        EOEditingContext ec = super.defaultEditingContext();
-        if (ec.delegate() == null)
-            ERXExtensions.setDefaultDelegate(ec);
-        return ec;
+        if(!_editingContextWasCreated) {
+            setDefaultEditingContext(ERXEC.newEditingContext());
+            _editingContextWasCreated = true;
+        }
+        return super.defaultEditingContext();
     }
 
     /**
