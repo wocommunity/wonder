@@ -78,6 +78,7 @@ public class ERXFileUtilities {
      * @return byte array of the file.
      */
     public static byte[] bytesFromFile(File f) throws IOException {
+        if (f == null) throw new IllegalArgumentException("null file");
         return bytesFromFile(f, (int)f.length());
     }
 
