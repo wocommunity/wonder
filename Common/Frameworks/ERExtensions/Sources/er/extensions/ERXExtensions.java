@@ -918,7 +918,7 @@ public class ERXExtensions {
     }
 
     /**
-     * Filters an array using the {@link EOQualifierEvaluation} interface.
+     * Filters an array using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
      * @deprecated use {@link ERXArrayUtilities#filteredArrayWithQualifierEvaluation(NSArray, EOQualifierEvaluation)
      * ERXArrayUtilities.filteredArrayWithQualifierEvaluation}
      */
