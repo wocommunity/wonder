@@ -31,6 +31,8 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
         super(context);
     }
 
+    public int currentStep() { return _currentStep; }
+    
     public boolean showPrevious() { return _currentStep>1 && shouldShowPreviousButton(); }
 
     public boolean showNext() { return _currentStep< tabSectionsContents().count() && shouldShowNextButton(); }
