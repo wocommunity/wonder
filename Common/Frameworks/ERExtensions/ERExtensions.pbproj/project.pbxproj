@@ -894,7 +894,7 @@
 				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
 				RESOURCES_SYMLINK = "$(WRAPPER_DIR)/Resources";
 				SERVER_UNIQUIFIER = Server;
-				SPLIT_INSTALL = YES;
+				SPLIT_INSTALL = NO;
 				VERSIONS_DIR = "$(WRAPPER_DIR)/Versions";
 				WEBSERVER_BUILD_VERSION_DIR = "$(WEBSERVER_VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				WEBSERVER_CONTENTS_DIR = "$(WEBSERVER_BUILD_VERSION_DIR)";
@@ -918,7 +918,7 @@
 			);
 			isa = PBXFrameworkTarget;
 			name = ERExtensions;
-			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productInstallPath = "$(INSTALL_PREFIX)/Frameworks";
 			productName = WOFramework;
 			productReference = 40B58281FFD5E8187F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
