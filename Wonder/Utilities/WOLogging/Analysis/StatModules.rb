@@ -5,7 +5,7 @@ class StatModule
 
 	attr_accessor :result_hash, :title
 	
-	def initialize( title, log_manager )
+	def initialize( title, args, log_manager )
 		puts(" + Initializing stat module: "+self.class.to_s)
 		@title = title
 		@cache_machine = log_manager.cache_machine
@@ -67,8 +67,8 @@ end
 
 class PageStatModule < StatModule
 
-	def initialize( title, log_manager )
-		super( title, log_manager )
+	def initialize( title, args, log_manager )
+		super( title, args, log_manager )
 		@type = POS_PAGE_NAME
 		@treshold = 1
 	end
@@ -118,11 +118,16 @@ end
 # ----------------------------------------------------------------------------
 
 class SessionTrackStatModule < StatModule
-	def initialize( title, log_manager )
-		super( title, log_manager )
+	def initialize( title, args, log_manager )
+		super( title, args, log_manager )
 		@type = POS_SESSION_ID
 		@tmp_hash = Hash.new
+		@conv_hash = Hash.new
 		@treshold = 1
+		@conv_pages = nil
+		if args!=nil && args.length>0	
+			@conv_pages = args[0].split(/,/)
+		end
 	end
 
 	def generate_stats()
@@ -135,6 +140,35 @@ class SessionTrackStatModule < StatModule
 			else
 				@tmp_hash[ track_string ] = Array [ 1, Array[ record.info[POS_SESSION_ID] ] ]
 			end
+      
+			
+			if @conv_pages
+				n = record
+				i = 0
+				milestone_page = nil
+				prev_page = nil
+				current_page = nil
+				while n != nil && i < @conv_pages.length
+					prev_page = current_page
+					milestone_page = @conv_pages[i]
+					current_page = n.info[POS_PAGE_NAME]
+					#puts("* #{current_page}<=>#{milestone_page}")
+					if current_page == milestone_page
+						#puts("   * prev: #{prev_page}, #{current_page}")
+						if (prev_page != current_page)
+							if @conv_hash[milestone_page]!=nil
+								#puts("incrementing for page #{milestone_page}: #{@conv_hash[milestone_page]}")
+								@conv_hash[milestone_page]=@conv_hash[milestone_page]+1
+							else
+								#puts("putting 1 for page #{milestone_page}")
+								@conv_hash[milestone_page]=1
+							end
+							i=i+1
+						end		
+					end
+					n = n.next[ @type ]
+			  end
+			end # if @conv_pages available
 		}
 
 		prepare_results()
@@ -151,6 +185,30 @@ class SessionTrackStatModule < StatModule
 							current_array.push( [ track_string , @tmp_hash[track_string][0], session_list ] )
 					end
 		}
+
+		if @conv_pages
+			current_array = Array.new
+			@result_hash["Conversion"] = current_array
+			prev_value = nil
+			first_value = nil
+			current_array.push( [ "Page name", "Occurances", "LCR", "GCR" ] )
+			@conv_hash.keys.sort { |k1,k2| @conv_hash[k2] <=> @conv_hash[k1] }.each { |page|
+				value = @conv_hash[page]
+				lcr ="--"
+				if prev_value
+					lcr = (value.to_f / prev_value.to_f * 1000).to_i / 10 
+				end
+				gcr = "--"
+				if first_value
+					gcr = (value.to_f / first_value.to_f * 1000).to_i / 10
+				end
+				current_array.push( [ page, value, "#{lcr} %%", "#{gcr} %%" ] )
+				prev_value = value
+				if first_value==nil
+					first_value = value
+				end
+			}
+		end # if conv_pages available		
 	end
 	
 		

@@ -29,12 +29,15 @@ require 'Utils'
 
 
 	def add_statistics( class_desc, title ) 
-		#puts("Adding '#{class_desc}'")
-		$stats.push( STAT_NAME_MAPPINGS[class_desc].new( title,$log_manager ) )
+		add_statistics_with_params( class_desc, title, nil )
 	end
 
+	def add_statistics_with_params( class_desc, title, args )
+		$stats.push( STAT_NAME_MAPPINGS[class_desc].new( title,args,$log_manager ) )
+	end	
+			
 	Object.send(:alias_method, :AddStatistics, :add_statistics )
-
+	Object.send(:alias_method, :AddStatisticsWithParams, :add_statistics_with_params )
 
 	def parse_args()
 		if ARGV.length < 2
