@@ -43,9 +43,10 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
     public Object value() {
     	int index = 0;
     	if(">".equals(displayGroup().queryOperator().valueForKey(propertyKey()))) {
-    		index = 2;
+    		index = 1;
+    	} else {
+    		index = displayGroup().queryMatch().valueForKey(propertyKey()) != null ? 2 : 0;
     	}
-     	index = displayGroup().queryMatch().valueForKey(propertyKey()) != null ? 1 : 0;
      	return queryNumbers.objectAtIndex(index);
     }
 
