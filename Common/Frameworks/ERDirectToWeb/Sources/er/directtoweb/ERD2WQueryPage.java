@@ -74,5 +74,14 @@ public class ERD2WQueryPage extends D2WQueryPage {
 
     public EODataSource queryDataSource() {
         return !_wasCancelled ? super.queryDataSource() : null;
-    }    
+    }
+
+    public WOComponent returnPage;
+    public WOComponent returnAction(){
+        return returnPage;
+    }
+
+    public boolean showCancel(){
+        return returnPage != null;
+    }
 }
