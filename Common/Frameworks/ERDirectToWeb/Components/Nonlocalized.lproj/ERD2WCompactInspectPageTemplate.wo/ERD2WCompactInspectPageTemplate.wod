@@ -1,3 +1,7 @@
+ERDDebuggingHelp1: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
 EditForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
 	multipleSubmit = true;
