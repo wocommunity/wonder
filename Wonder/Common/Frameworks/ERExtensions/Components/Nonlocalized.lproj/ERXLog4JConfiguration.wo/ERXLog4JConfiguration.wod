@@ -109,7 +109,7 @@ String1: WOString {
 }
 
 StringLoggerLevel: WOString {
-	value = logger.chainedLevel.toString;
+	value = logger.level.toString;
 }
 
 StringLoggerName: WOString {
