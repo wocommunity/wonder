@@ -42,6 +42,8 @@ ERSingleButton1: ERXSingleButton {
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 Form1: WOForm {

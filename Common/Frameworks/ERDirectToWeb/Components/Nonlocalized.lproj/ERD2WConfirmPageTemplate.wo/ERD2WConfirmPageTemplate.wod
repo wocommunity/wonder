@@ -30,6 +30,8 @@ ERD2WDebuggingHelp1: ERDDebuggingHelp {
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 Form2: WOForm {

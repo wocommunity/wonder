@@ -80,6 +80,8 @@ EditForm: ERXOptionalForm {
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 HasSectionHelp2: ERXNonNullConditional {
