@@ -55,34 +55,6 @@ public class ERXSession extends WOSession {
     /** flag to indicate if java script has been set */
     protected boolean _javaScriptInitialized=false;
 
-    /* holder for the browser name */
-    //protected String _browser;
-    /* flag if the browser is IE */
-    //protected boolean isIE;
-    /* flag if the browser is Netscape */
-    //protected boolean isNetscape;
-    /* flag if the browser is iCab */
-    //protected boolean isICab;
-    /* flag if the browser is Omniweb */
-    //protected boolean isOmniweb;
-    /* flag if the browser platform is Mac */    
-    //protected boolean isMac;
-    /* flag if the browser platform is Windows */    
-    //protected boolean isWindows;
-    /* flag if the browser platform is Linux */    
-    //protected boolean isLinux;
-    /* flag if the browser is version 3 */
-    //protected boolean isVersion3;
-    /* flag if the browser is version 4 */    
-    //protected boolean isVersion4;
-    /* flag if the browser is version 5 */    
-    //protected boolean isVersion5;
-    // ENHANCEME: Need a version6 test
-    /* holds the platform string */
-    //protected String platform;
-    /* holds the version string */    
-    //protected String version;
-
     /** holds a debugging store for a given session. */
     protected NSMutableDictionary _debuggingStore;
 
@@ -205,54 +177,8 @@ public class ERXSession extends WOSession {
         _javaScriptInitialized=true;
     }
 
-    // MOVEME: All of this browser stuff should move to it's own class ERXBrowser
-    /*
-     * Browser string
-     * @return what type of browser
-     */
-    //public String browser() { return _browser; }
-
-    /*
-     * browser is IE?
-     * @return if browser is IE.
-     */
-    //public boolean browserIsIE() { return isIE; }
-    /*
-     * browser is Omniweb?
-     * @return if browser is Omniweb.
-     */
-    //public boolean browserIsOmniweb() { return isOmniweb; }
-    /*
-     * browser is Netscape?
-     * @return if browser is Netscape.
-     */
-    //public boolean browserIsNetscape() { return isNetscape;  }
-    /*
-     * browser is not Netscape?
-     * @return if browser is not Netscape.
-     */
-    //public boolean browserIsNotNetscape() { return !isNetscape; }
-
-    /*
-     * browser is not netscape or is a version 5
-     * browser.
-     * @return if this browser can handle nested tables
-     */
-    /*
-    public boolean browserRenderNestedTablesFast() {
-        return browserIsNotNetscape() || isVersion5;
-    }
-    */
-    
-    /*
-     * Does the browser support IFramew?
-     * @return if the browser is IE.
-     */
-    //public boolean browserSupportsIFrames() { return browserIsIE(); }
-
     /**
-     * Overridden to provide all the browser checking for
-     * the current User-Agent. Also performs a few checks to
+     * Overridden to provide a few checks to
      * see if javascript is enabled.
      */
     public void awake() {
@@ -260,62 +186,8 @@ public class ERXSession extends WOSession {
         ERXExtensions.setSession(this);
         ERXLocalizer.setCurrentLocalizer(localizer());
         NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
-        WORequest request=context()!=null ? context().request() : null;
-        // ENHANCEME: Should pull all of this browser detection out into it's own object with a factory
-        //		so that others can return their own subclasses of the browser object or parse the
-        //		the user-agent in a different manner. The factory could also maintain a cache of the
-        //		user-agent to browser object.
-        /*
-        if (_browser==null && request!=null) {
-            String userAgent=(String)request.headerForKey("User-Agent");
-            isOmniweb=isICab=isIE=isNetscape=false;
-            if (userAgent!=null) {
-                if (userAgent.indexOf("OmniWeb")!=-1) {
-                    isOmniweb=true;
-                    _browser ="OmniWeb";
-                } else if (userAgent.indexOf("iCab")!=-1) {
-                    isICab=true;
-                    _browser ="iCab";
-                } else if (userAgent.indexOf("MSIE")!=-1) {
-                    isIE=true;
-                    _browser ="MSIE";
-                } else if (userAgent.indexOf("Mozilla")!=-1) {
-                    isNetscape=true;
-                    _browser ="Netscape";
-                }
 
-                if (userAgent.indexOf("Win")!=-1) {
-                    isMac=isLinux=false;
-                    isWindows=true;
-                    platform="Windows";
-                } else if (userAgent.indexOf("Mac")!=-1) {
-                    isWindows=isLinux=false;
-                    isMac=true;
-                    platform="Mac";
-                } else if (userAgent.indexOf("Linux")!=-1) {
-                    isWindows=isMac=false;
-                    isLinux=true;
-                    platform="Linux";
-                }
-                if (userAgent.indexOf("5.0")!=-1 || userAgent.indexOf("5.5")!=-1) {
-                    isVersion3=isVersion4=false;
-                    isVersion5=true;
-                    version="5.0 or 5.5";
-                } else if (userAgent.indexOf("4.0")!=-1 ||
-                           userAgent.indexOf("4.5")!=-1 || userAgent.indexOf("4.7")!=-1) {
-                    isVersion3=isVersion5=false;
-                    isVersion4=true;
-                    version="4.0, 4.6, 4.7";
-                } else if (userAgent.indexOf("3.0")!=-1) {
-                    isVersion4=isVersion5=false;
-                    isVersion3=true;
-                    version="3.0";
-                }
-            }
-            if (_browser==null) _browser="Unknown";
-            if (cat.isDebugEnabled()) cat.debug("Browser="+_browser+" platform="+platform+" Version="+version);
-        }
-        */
+        WORequest request=context()!=null ? context().request() : null;
         if (request!=null && cat.isDebugEnabled()) cat.debug("Form values "+request.formValues());
         // FIXME: Shouldn't be hardcoded form value.
         if (request!=null && request.formValueForKey("javaScript")!=null) {
