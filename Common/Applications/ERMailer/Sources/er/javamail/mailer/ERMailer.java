@@ -16,6 +16,7 @@ import er.javamail.*;
 import er.corebusinesslogic.*;
 
 import java.util.Enumeration;
+import javax.mail.*;
 
 /**
  * Mailer bridge class. Used to pull mail out of the
@@ -131,33 +132,28 @@ public class ERMailer {
      * @return a mail delevery object
      */
     // ENHANCEME: Not handling hidden text, plain text, double byte (Japanese) language or file attachments.
-    public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) {
+    public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) throws MessagingException {
         ERMailDeliveryHTML mail = new ERMailDeliveryHTML();
 
-        try {
-            // Add all of the addresses
-            mail.setFromAddress(message.fromAddress());
-            if (message.replyToAddress() != null)
-                mail.setReplyToAddress(message.replyToAddress());
-            mail.setToAddresses(message.toAddressesAsArray());
-            if (message.ccAddressesAsArray().count() > 0)
-                mail.setCCAddresses(message.ccAddressesAsArray());
-            if (message.bccAddressesAsArray().count() > 0)
-                mail.setBCCAddresses(message.bccAddressesAsArray());
+        // Add all of the addresses
+        mail.setFromAddress(message.fromAddress());
+        if (message.replyToAddress() != null)
+            mail.setReplyToAddress(message.replyToAddress());
+        mail.setToAddresses(message.toAddressesAsArray());
+        if (message.ccAddressesAsArray().count() > 0)
+            mail.setCCAddresses(message.ccAddressesAsArray());
+        if (message.bccAddressesAsArray().count() > 0)
+            mail.setBCCAddresses(message.bccAddressesAsArray());
 
-            // Set the xMailer if one is specified
-            // Note (tuscland): setXMailerHeader has a higher precedence over
-            // System property er.javamail.XMailerHeader
-            if (message.xMailer() != null)
-                mail.setXMailerHeader(message.xMailer());
+        // Set the xMailer if one is specified
+        // Note (tuscland): setXMailerHeader has a higher precedence over
+        // System property er.javamail.XMailerHeader
+        if (message.xMailer() != null)
+            mail.setXMailerHeader(message.xMailer());
 
-            // Set the content
-            mail.setSubject(message.title());
-            mail.setHTMLContent(message.text());
-        } catch (Exception e) {
-            log.error("Caught exception constructing mail to delevery: " + ERXUtilities.stackTrace(e));
-            mail = null;
-        }
+        // Set the content
+        mail.setSubject(message.title());
+        mail.setHTMLContent(message.text());
         return mail;
     }
 }
