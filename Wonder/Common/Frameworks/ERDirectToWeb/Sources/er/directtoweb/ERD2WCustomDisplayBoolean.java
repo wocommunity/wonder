@@ -38,4 +38,9 @@ public class ERD2WCustomDisplayBoolean extends D2WDisplayBoolean {
             return choicesNames().objectAtIndex(0);
         return choicesNames().objectAtIndex(1);
     }
+
+    public void reset(){
+        super.reset();
+        _choicesNames = null;
+    }
 }
