@@ -24,11 +24,15 @@ public class ERDEditButton extends ERDCustomEditComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
+
+
+    protected EOEnterpriseObject localInstanceOfObject() {
+        return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
+    }
     
     // Assuming that object() is the eo
     public WOComponent edit() {
-        EOEditingContext context = er.extensions.ERXExtensions.newEditingContext();
-        EOEnterpriseObject localObject = EOUtilities.localInstanceOfObject(context, object());
+        EOEnterpriseObject localObject = localInstanceOfObject();
         String configuration = (String)d2wContext().valueForKey("editConfigurationNameForEntity");
         if(log.isDebugEnabled()){
            log.debug("configuration = "+configuration);
@@ -36,7 +40,7 @@ public class ERDEditButton extends ERDCustomEditComponent {
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(configuration, session());
         epi.setObject(localObject);
         epi.setNextPage(context().page());
-        context.hasChanges(); // Ensuring it survives.
+        localObject.editingContext().hasChanges(); // Ensuring it survives.
         return (WOComponent)epi;
     }
 }
