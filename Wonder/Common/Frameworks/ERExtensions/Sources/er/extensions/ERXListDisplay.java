@@ -8,18 +8,12 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 public class ERXListDisplay extends WOComponent {
 
     public ERXListDisplay(WOContext aContext) {
         super(aContext);
     }
-
-    ///////////////////////////  log4j category  ///////////////////////////
-    public static final Category cat = Category.getInstance(ERXListDisplay.class);
     
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
@@ -33,5 +27,4 @@ public class ERXListDisplay extends WOComponent {
                                                          (String)valueForBinding("attribute"),
                                                          (String)valueForBinding("nullArrayDisplay"));
     }
-
 }

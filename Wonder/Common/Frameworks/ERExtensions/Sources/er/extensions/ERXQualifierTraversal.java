@@ -17,7 +17,7 @@ import org.apache.log4j.Category;
 public class ERXQualifierTraversal {
 
     ///////////////////////////  log4j category  ///////////////////////////
-    public static final Category cat = Category.getInstance("er.extensions.eo.ERQualifierTraversal");
+    public static final Category cat = Category.getInstance(ERXQualifierTraversal.class);
     
     // a simple class that traverses a network of qualifiers; this would be better achieved with categories
     static public boolean traverseQualifier(EOQualifierEvaluation q, ERXQualifierTraversalCallback cb) {
