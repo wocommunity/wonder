@@ -178,6 +178,7 @@
 				F6EBF5F902DF503D0FCF0E72,
 				F6EBF6BC02DF507D0FCF0E72,
 				F6EBF6BF02DF50980FCF0E72,
+				506CC13305F0279400C3A3F8,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -694,6 +695,7 @@
 				F6EBF5F302DF503D0FCF0E72,
 				F6EBF5FA02DF507D0FCF0E72,
 				F6EBF6BD02DF50980FCF0E72,
+				506CC13205F0279400C3A3F8,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -800,6 +802,28 @@
 //412
 //413
 //414
+//500
+//501
+//502
+//503
+//504
+		506CC13205F0279400C3A3F8 = {
+			isa = PBXFrameworkReference;
+			name = JavaEOProject.framework;
+			path = /System/Library/Frameworks/JavaEOProject.framework;
+			refType = 0;
+		};
+		506CC13305F0279400C3A3F8 = {
+			fileRef = 506CC13205F0279400C3A3F8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//500
+//501
+//502
+//503
+//504
 //940
 //941
 //942
