@@ -15,6 +15,16 @@ public class ERXArrayUtilities extends Object {
     public static NSArray arrayFromPropertyList(String name, NSBundle bundle) {
         return (NSArray)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(name, "plist", bundle));
     }
+
+    public static NSArray valuesForKeyPaths(NSArray array, NSArray paths) {
+        NSMutableArray result = new NSMutableArray();
+
+        Enumeration e = paths.objectEnumerator();
+        while(e.hasMoreElements()) {
+            result.addObject((NSArray)array.valueForKeyPath((String)e.nextElement()));
+        }
+        return result;
+    }
     
     public static NSMutableArray sortedMutableArraySortedWithKey(NSArray arr, String key) {
         return sortedArraySortedWithKey(arr, key).mutableClone();
