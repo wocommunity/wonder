@@ -15,8 +15,8 @@ import java.util.*;
 // ported from WebScript - Corrected nil context problem.
 public class ERXCheckboxMatrix extends WOComponent {
 
-    private static final Integer DEFAULT_PADDING = new Integer(0);
-    private static final Integer DEFAULT_SPACING = new Integer(0);
+    private static final Integer DEFAULT_PADDING = ERXConstant.ZeroInteger;
+    private static final Integer DEFAULT_SPACING = ERXConstant.ZeroInteger;
 
     public ERXCheckboxMatrix(WOContext aContext) {
         super(aContext);
