@@ -232,24 +232,33 @@
     <!-- Create Wonder Source Destribution.                   -->
     <!-- ==================================================== -->
     <target name="dist.source">
-        <copy todir="${dist.base}/${project.name}-src-${project.version}">
+        <copy todir="${dist.base}/${project.name}-src-${project.version}" includeEmptyDirs="false">
             <fileset dir="${wonder.root}">
                 <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/> 
             </fileset>
         </copy>
         
-        <!-- <tar tarfile="${dist.base}/${project.name}-src-${project.version}.tar">
-            <tarfileset dir="${wonder.root}">
+        <tar tarfile="${dist.base}/${project.name}-src-${project.version}.tar" longfile="gnu">
+            <tarfileset dir="${dist.base}/${project.name}-src-${project.version}">
                 <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/>
             </tarfileset>
         </tar>
 
-        <gzip src="$${dist.base}/${project.name}-src-${project.version}.tar" 
-            zipfile="${dist.base}/${project.name}-src-${project.version}.tar.gz"/>
+        <gzip src="${dist.base}/${project.name}-src-${project.version}.tar" 
+            zipfile="${dist.base}/${project.name}-src-${project.version}.tgz"/>
 
-        <delete file="${dist.base}/${project.name}-src-${project.version}.tar"/> -->
+        <delete file="${dist.base}/${project.name}-src-${project.version}.tar"/>
+    </target>
+
+    <!-- ==================================================== -->
+    <!-- Zip Wonder Prebuilt Destribution.                    -->
+    <!-- ==================================================== -->
+    <target name="dist.prebuilt.zip">
+        <zip destfile="${dist.base}/${project.name}-${project.version}.zip" 
+            basedir="${dist.base}/${project.name}-${project.version}"
+            excludes="**/CVS/*, **/dist/**" />
     </target>
 
 
