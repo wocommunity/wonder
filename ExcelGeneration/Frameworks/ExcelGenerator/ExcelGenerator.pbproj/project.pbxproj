@@ -438,7 +438,6 @@
 		40B5827FFFD5E7DB7F000001 = {
 			children = (
 				504845D605F802000088B69A,
-				4153A57B05F75CF000A59891,
 				41E14D9505F5F13900DE10B6,
 				40B58289FFD5E91B7F000001,
 				40B5828AFFD5E91B7F000001,
@@ -1121,12 +1120,18 @@
 			fileRef = 41E14D9705F5F13900DE10B6;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
 			};
 		};
 		41E14D9B05F5F13900DE10B6 = {
 			fileRef = 41E14D9805F5F13900DE10B6;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
 			};
 		};
 		41E14E4E05F5F5BB00DE10B6 = {
@@ -1237,6 +1242,7 @@
 //504
 		504845D605F802000088B69A = {
 			children = (
+				4153A57B05F75CF000A59891,
 			);
 			isa = PBXGroup;
 			name = Classes;
