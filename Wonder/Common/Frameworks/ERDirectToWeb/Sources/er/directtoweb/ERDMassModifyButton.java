@@ -87,6 +87,9 @@ public class ERDMassModifyButton extends WOComponent {
                 } catch (NSValidation.ValidationException e) {
                     String errorMessage = " Could not save your changes: "+e.getMessage()+" ";
                     ErrorPageInterface epf=D2W.factory().errorPage(sender.session());
+                    if(epf instanceof ERDErrorPageInterface) {
+                    	((ERDErrorPageInterface)epf).setException(e);
+                    }
                     epf.setMessage(errorMessage);
                     epf.setNextPage(nextPage);
                     result=(WOComponent)epf;

@@ -244,6 +244,9 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         WOActionResults newPage = null;
         try {
             ErrorPageInterface epf=D2W.factory().errorPage(session());
+            if(epf instanceof ERDErrorPageInterface) {
+            	((ERDErrorPageInterface)epf).setException(ex);
+            }
             epf.setMessage(ex.toString());
             epf.setNextPage(previousPageFromRequest());
             newPage = (WOActionResults)epf;
