@@ -58,6 +58,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public static final String NETSCAPE = "Netscape";
     public static final String OMNIWEB 	= "OmniWeb";
     public static final String OPERA 	= "Opera";
+    public static final String SAFARI	= "Safari";
 
     public static final String UNKNOWN_VERSION = "Unknown Version";
 
@@ -137,6 +138,12 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
      * @return true if browser is Opera.
      */
     public abstract boolean isOpera();
+
+    /**
+     * Browser is Safari?
+     * @return true if browser is Safari.
+     */
+    public abstract boolean isSafari();
 
     public abstract boolean isMozilla50Compatible();
     public abstract boolean isMozilla45Compatible();

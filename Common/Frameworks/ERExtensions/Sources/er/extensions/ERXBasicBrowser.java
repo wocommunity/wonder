@@ -68,6 +68,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean _isNetscape;
     private final boolean _isOmniWeb;
     private final boolean _isOpera;
+    private final boolean _isSafari;
     private final boolean _isUnknownBrowser;
 
     private final boolean _isMozillaVersion50;
@@ -113,6 +114,7 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isNetscape		= _browserName.equals(NETSCAPE);
         _isOmniWeb		= _browserName.equals(OMNIWEB);
         _isOpera		= _browserName.equals(OPERA);
+        _isSafari		= _browserName.equals(SAFARI);
         _isUnknownBrowser	= _browserName.equals(UNKNOWN_BROWSER);
 
         _isMozillaVersion50	= -1 < _mozillaVersion.indexOf("5.0");
@@ -175,6 +177,8 @@ public class ERXBasicBrowser extends ERXBrowser {
     public boolean isOmniWeb() { return _isOmniWeb; }
 
     public boolean isOpera() { return _isOpera; }
+
+    public boolean isSafari() { return _isSafari; }
 
 
     public boolean isMozilla50Compatible() { return _isMozillaVersion50; }
