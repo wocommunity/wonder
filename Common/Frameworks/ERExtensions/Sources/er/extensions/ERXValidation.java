@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.NoSuchElementException;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -134,6 +136,12 @@ public class ERXValidation {
                 if (pushChanges)  {
                     try {
                         ((EOEnterpriseObject)eo).takeValueForKeyPath(value, key);
+                    } catch(NSKeyValueCoding.UnknownKeyException  ex) {
+                        // AK: as we could have custom components that have non-existant keys
+                        // we of course can't push a value, so we discard the resulting exception
+                    } catch(NoSuchElementException  ex) {
+                        // AK: as we could have custom components that have non-existant keys
+                        // we of course can't push a value, so we discard the resulting exception
                     } catch(Exception ex) {
                         log.error("Can't push value to key '" + key + "': " + value, ex);
                     }
