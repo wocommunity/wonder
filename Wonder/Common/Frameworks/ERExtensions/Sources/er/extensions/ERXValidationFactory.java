@@ -14,10 +14,17 @@ import org.apache.log4j.Category;
 import java.util.*;
 import java.lang.reflect.*;
 
+/**
+ * The validation factory controls creating validation
+ * exceptions, both from model thrown exceptions and 
+ * custom validation exceptions. The factory is responsible
+ * for resolving validation remplates for validation
+ * exceptions and generating validation messages.
+ */
 public class ERXValidationFactory {
 
     /** logging support */
-    public final static Category cat = Category.getInstance("er.validation.ERXValidationFactory");
+    public final static Category cat = Category.getInstance(ERXValidationFactory.class);
     
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
@@ -41,7 +48,10 @@ public class ERXValidationFactory {
 
     /** Regular ERXValidationException constructor parameters */
     private static Class[] _regularConstructor = new Class[] { String.class, Object.class, String.class, Object.class };
-        
+
+    /** holds the marker for an un defined validation template */
+    private final static String UNDEFINED_VALIDATION_TEMPLATE = "Undefined Validation Template";
+    
     /**
      * Sets the default factory to be used for converting
      * model thrown exceptions.
@@ -90,6 +100,13 @@ public class ERXValidationFactory {
         public ERXValidationException createCustomException(EOEnterpriseObject eo, String method);
     }
 
+    /**
+     * Exception delegates can be used to provide hooks to customize
+     * how messages are generated for validation exceptions and how
+     * tempates are looked up. A validation exception can have a 
+     * delegate set or a default delegate can be set on the factory
+     * itself.
+     */
     public interface ExceptionDelegateInterface {
         public String messageForException(ERXValidationException erv);
         public String templateForException(ERXValidationException erv);
@@ -122,6 +139,15 @@ public class ERXValidationFactory {
 
     /** holds the validation exception class */
     private Class _validationExceptionClass;
+
+    /** holds the template cache for a given set of keys */
+    private Hashtable _cache=new Hashtable(1000);
+
+    /** holds the default template delimiter, "@" */
+    private String _delimiter = "@";
+    
+    /** caches the constructor used to build validation exceptions */
+    protected Constructor regularConstructor;
     
     /**
      * Sets the validation class to be used when
@@ -143,7 +169,11 @@ public class ERXValidationFactory {
         return _validationExceptionClass;
     }
 
-    protected Constructor regularConstructor;
+    /**
+     * Simple method used to lookup and cache the 
+     * constructor to build validation exceptions.
+     * @return constructor used to build validation exceptions
+     */
     protected Constructor regularValidationExceptionConstructor() {
         if (regularConstructor == null) {
             try {
@@ -155,6 +185,19 @@ public class ERXValidationFactory {
         return regularConstructor;
     }
     
+    /**
+     * Entry point for creating validation exceptions. This
+     * method is used by all of the other methods to create
+     * validation exceptions for an enterprise object, a property
+     * key, a value and a type. The type should correspond to 
+     * one of the validation exception types defined in
+     * {@link ERXValidationException ERXValidationException}.
+     * @param eo enterprise object that is failing validation
+     * @param property attribute that failed validation
+     * @param value that failed validating
+     * @param type of the validation exception
+     * @return validation exception for the given information
+     */
     public ERXValidationException createException(EOEnterpriseObject eo, String property, Object value, String type) {
         ERXValidationException erve = null;
         try {
@@ -168,13 +211,30 @@ public class ERXValidationFactory {
         return erve;
     }
 
+    /**
+     * Creates a custom validation exception for a given
+     * enterprise object and method. This method is just
+     * a cover method for calling the four arguement method
+     * specifying <code>null</code> for proptery and value.
+     * @param eo enterprise object failing validation
+     * @param name of the method to use to look up the validation
+     *		exception template, for instance "FirstNameCanNotMatchLastNameValidationException"
+     * @return a custom validation exception for the given criteria
+     */
     public ERXValidationException createCustomException(EOEnterpriseObject eo, String method) {
-        ERXValidationException erv = createException(eo, null, null, ERXValidationException.CustomMethodException);
-        if (erv != null)
-            erv.setMethod(method);
-        return erv;
+        return createCustomException(eo, null, null, method);
     }
 
+    /**
+     * Creates a custom validation exception. This is the prefered 
+     * way of creating custom validation exceptions.
+     * @param eo enterprise object failing validation
+     * @param property attribute that failed validation
+     * @param value that failed validation
+     * @param method unique identified usually corresponding to a 
+     *		method name to pick up the validation template
+     * @return custom validation exception
+     */
     public ERXValidationException createCustomException(EOEnterpriseObject eo, String property, Object value, String method) {
         ERXValidationException erv = createException(eo, property, value, ERXValidationException.CustomMethodException);
         if (erv != null)
@@ -182,9 +242,29 @@ public class ERXValidationFactory {
         return erv;
     }    
     
-    // Not very eligant, but until we have a way of throwing our own class of validation exception this is the only way.
-    // Note that this is only used to convert model thrown exceptions in ERXEntityClassDescription.
-    public ERXValidationException convertException(NSValidation.ValidationException eov) { return convertException(eov, null); }
+    /**
+     * Converts a model thrown validation exception into
+     * an {@link ERXValidationException ERXValidationException}.
+     * This is a cover method for the two argument version
+     * passing in null as the value.
+     * @param eov validation exception to be converted
+     * @return converted validation exception
+     */
+    public ERXValidationException convertException(NSValidation.ValidationException eov) { 
+        return convertException(eov, null); 
+    }
+
+    /**
+     * Converts a given model thrown validation exception into
+     * an {@link ERXValidationException ERXValidationException}.
+     * This method is used by {@link ERXEntityClassDescription ERXEntityClassDescription}
+     * to covert model thrown validation exceptions. This isn't 
+     * a very elegant solution, but until we can register our
+     * our validation exception class this is what we have to do.
+     * @param eov validation exception to be converted
+     * @param value that failed validation
+     * @return converted validation exception
+     */
     public ERXValidationException convertException(NSValidation.ValidationException eov, Object value) {
         ERXValidationException erve = null;
         if (cat.isDebugEnabled())
@@ -227,6 +307,14 @@ public class ERXValidationFactory {
         return erve;
     }
 
+    /**
+     * Entry point for generating an exception message
+     * for a given message. The method <code>getMessage</code>
+     * off of {@link ERXValidationException ERXValidationException}
+     * calls this method passing in itself as the parameter.
+     * @param erv validation exception
+     * @return a localized validation message for the given exception
+     */
     // FIXME: Right now the delegate methods are implemented as a formal interface.  Not ideal.  Should be implemented as
     //	an informal interface.  Can still return null to not have an effect.
     public String messageForException(ERXValidationException erv) {
@@ -241,9 +329,14 @@ public class ERXValidationFactory {
         }
         return message;
     }
-    
-    // Override this method in subclasses to provide a different mechanism for resolving getting/generating a template.
-    private final static String UNDEFINED_VALIDATION_TEMPLATE = "Undefined Validation Template";
+
+    /**
+     * Entry point for finding a template for a given validation
+     * exception. Override this method to provide your own
+     * template resolution scheme.
+     * @param erv validation exception
+     * @return validation template for the given exception
+     */
     public String templateForException(ERXValidationException erv) {
         String template = null;
         if (erv.delegate() != null && erv.delegate() instanceof ExceptionDelegateInterface) {
@@ -268,28 +361,36 @@ public class ERXValidationFactory {
         return template;
     }
 
-    private Hashtable _cache=new Hashtable(1000);
     /**
-     * Called when the Localizer is reset.
+     * Called when the Localizer is reset. This will
+     * reset the template cache.
+     * @param n notification posted when the localizer
+     *		is reset.
      */
     public void resetTemplateCache(NSNotification n) {
         _cache = new Hashtable(1000);
         if (cat.isDebugEnabled()) cat.debug("Resetting template cache");
     }
-    
-    // Override this method in subclasses to provide a different context for the template parse, a d2wcontext comes to mind ;)
+
+    /**
+     * The context for a given validation exception can be used
+     * to resolve keys in validation template. If a context is
+     * not provided for a validation exception then this method
+     * will be called if a context is needed for a validation
+     * exception. Override this method if you want to provide
+     * your own default contexts to validation exception template
+     * parsing.
+     * @param erv a given validation exception
+     * @return context to be used for this validation exception
+     */
+    // CHECKME: Doesn't need to be the NSKeyValueCoding interface now with WO 5
     public NSKeyValueCoding contextForException(ERXValidationException erv) {
         NSKeyValueCoding context = null;
         if (erv.delegate() != null && erv.delegate() instanceof ExceptionDelegateInterface) {
             context = ((ExceptionDelegateInterface)erv.delegate()).contextForException(erv);
         }
-        if (context == null)
-            context = erv;
         return context;
     }
-
-    /** holds the default template delimiter, "@" */
-    private String _delimiter = "@";
     
     /**
      * returns the template delimiter, the
@@ -314,12 +415,11 @@ public class ERXValidationFactory {
      * finished launching.
      */
     public void configureFactory() {
-        // CHECKME: This might be better configured in a static init block of ERXValidation.
-        
+        // CHECKME: This might be better configured in a static init block of ERXValidationFactory.        
         ERXValidation.setPushChangesDefault(ERXUtilities.booleanValueWithDefault(System.getProperties().getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
 
-        NSNotificationCenter center = NSNotificationCenter.defaultCenter();
-        if(WOApplication.application().isCachingEnabled()) {
+        if (WOApplication.application().isCachingEnabled()) {
+            NSNotificationCenter center = NSNotificationCenter.defaultCenter();
             center.addObserver(this,
                                new NSSelector("resetTemplateCache",  ERXConstant.NotificationClassArray),
                                ERXLocalizer.LocalizationDidResetNotification,
@@ -327,6 +427,16 @@ public class ERXValidationFactory {
         }
     }
 
+    /**
+     * Finds a template for a given entity, property key, exception type and target
+     * language. This method provides the defaulting behaviour needed to handle model
+     * thrown validation exceptions.
+     * @param entityName name of the entity
+     * @param property key name
+     * @param type validation exception type
+     * @param targetLanguage target language name
+     * @return a templaet for the given set of parameters
+     */
     protected String templateForEntityPropertyType(String entityName, String property, String type, String targetLanguage) {
         // 1st try the whole string.
         String template = templateForKeyPath(entityName + "." + property + "." + type, targetLanguage);

@@ -18,16 +18,33 @@ The methods from EOUtilities are mirrored here so you don't have to import EOAcc
 */
 
 public class EOGenericRecordClazz extends Object {
+    /** logging support */
     public static final ERXLogger log = ERXLogger.getLogger(EOGenericRecordClazz.class);
     
+    /** caches the entity name */
     private String _entityName;
 
+    /** caches the clazz objects */
     private static NSMutableDictionary allClazzes = new NSMutableDictionary();
     
+    /**
+     * Default public constructor
+     */
     public EOGenericRecordClazz() {
     }
 
+    /**
+     * Resets the clazz cache.
+     */
     public static void resetClazzCache() { allClazzes.removeAllObjects(); }
+    
+    /**
+     * Creates a clazz object for a given entity.
+     * Will look for a clazz object with the name:
+     * <entity name>$<entity name>Clazz.
+     * @param entity to generate the clazz for
+     * @return clazz object for the given entity
+     */
     private static EOGenericRecordClazz classFromEntity(EOEntity entity) {
         EOGenericRecordClazz clazz = null;
         if(entity == null) {
@@ -47,6 +64,13 @@ public class EOGenericRecordClazz extends Object {
         return clazz;
     }
     
+    /**
+     * Method used to get a clazz object for a given entity name.
+     * This method will cache the generated clazz object so that 
+     * for a given entity name only one clazz object will be created.
+     * @param entityName name of the entity to get the Clazz object for
+     * @return clazz object for the given entity
+     */
     public static EOGenericRecordClazz clazzForEntityNamed(String entityName) {
         EOGenericRecordClazz clazz = (EOGenericRecordClazz)allClazzes.objectForKey(entityName);
         if(clazz == null) {
@@ -60,11 +84,26 @@ public class EOGenericRecordClazz extends Object {
         return clazz;
     }
     
+    /**
+     * Creates and inserts an object of the type of
+     * the clazz into the given editing context.
+     * @param ec an editing context
+     * @return newly created and inserted object
+     */
     public EOEnterpriseObject createAndInsertObject(EOEditingContext ec) {
         EOEnterpriseObject eo = ERXUtilities.createEO(entityName(), ec);
         return eo;
     }
 
+    /**
+     * Generates an array of primary key values for
+     * the clazz's entity. Uses the database context
+     * for the entity's model and the given editingcontext.
+     *
+     * @param ec am editing context
+     * @param i number of primary keys to generate
+     * @return array of new primary keys
+     */
     public NSArray newPrimaryKeys(EOEditingContext ec, int i) {
         EODatabaseContext dc = EODatabaseContext.registeredDatabaseContextForModel(entity().model(), ec);
         
