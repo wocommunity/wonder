@@ -8,6 +8,7 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import java.util.StringTokenizer;
 
 /**
  * This stateless component is useful for displaying a
@@ -89,7 +90,11 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
     // ENHANCEME: Should support adding either &nbsp or ' '
     public String value() {
         if (_fixedLengthString == null) {
-            String result=(String)valueForBinding("value");
+            String result;
+            if(escapeHTML())
+                result =(String)valueForBinding("value");
+            else
+                result = strippedValue();
             int l=length();
             if (l!=0 && result!=null) {
                 int sl=result.length();
@@ -109,6 +114,33 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
             _fixedLengthString = result;
         }
         return _fixedLengthString;
+    }
+
+    /**
+     * Returns the value stripped from HTML tags if <b>escapeHTML</b> is false.
+     * This makes sense because it is not terribly useful to have half-finished tags in your code.
+     * @return value stripped from tags.
+     */
+    public String strippedValue() {
+        String value=(String)valueForBinding("value");
+        StringTokenizer tokenizer = new StringTokenizer(value, "<");
+        int token = 0;
+        StringBuffer result = new StringBuffer();
+        String nextPart;
+        int l=length();
+        int currentLength = 0;
+        while (tokenizer.hasMoreTokens() && currentLength < l) {
+            if(token == 0)
+                nextPart = tokenizer.nextToken(">");
+            else
+                nextPart = tokenizer.nextToken("<");
+            if (nextPart != null && token != 0) {
+                result.append(nextPart.substring(1));
+                currentLength += nextPart.length() - 1;
+            }
+            token = 1 - token;
+        }
+        return result.toString();
     }
 
     /**
