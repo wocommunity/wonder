@@ -133,10 +133,6 @@ public class DRAttribute extends Object  {
         return _emptyArray;
     }
 
-    public String toString() {
-        return ""+(super.toString())+"-"+(_keyPath);
-    }
-
     public void setAttributeGroup(DRAttributeGroup atg) {
         _attributeGroup = atg;
     }
@@ -149,5 +145,9 @@ public class DRAttribute extends Object  {
     }
     public void setIsPlaceHolderTotal(boolean aval) {
         _isPlaceHolderTotal = aval;
+    }
+
+    public String toString() {
+        return "<DRAttribute label:\"" + label() + "\"; keyPath:\"" + keyPath() + "\"; format:\"" + format() + "\"; >";
     }
 }
