@@ -16,14 +16,14 @@ import er.extensions.*;
  * Generic link component used to view a list.<br />
  * 
  * @binding list
- * @binding listPageConfigurationName
+ * @binding listConfigurationName
  */
 
 public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public ERDLinkToViewList(WOContext context) { super(context); }
     
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDLinkToViewList");
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDLinkToViewList.class,"directtoweb,components");
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
