@@ -14,7 +14,7 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import org.apache.log4j.NDC;
 
-public abstract class ERD2WListPage extends D2WListPage implements ERXComponentActionRedirector.Restorable  {
+public abstract class ERD2WListPage extends ERD2WPage implements ListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WListPage.class);
@@ -25,10 +25,93 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
      */
     public ERD2WListPage(WOContext c) {
         super(c);
-        if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
-            displayGroup().setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
-        }
+        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("savedChanges", ERXConstant.NotificationClassArray), EOEditingContext.EditingContextDidSaveChangesNotification, null);
     }
+
+    public void finalize() throws Throwable {
+        NSNotificationCenter.defaultCenter().removeObserver(this);
+        super.finalize();
+    }
+    
+    /** reimplementation of D2WList stuff */
+    
+    protected WODisplayGroup _displayGroup;
+    public boolean _hasToUpdate = false;
+    protected boolean _rowFlip = false;
+
+    public WODisplayGroup displayGroup() {
+        if(_displayGroup == null) {
+            _displayGroup = new WODisplayGroup();
+            if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
+                _displayGroup.setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
+            }
+        }
+        return _displayGroup;
+    }
+
+    public void savedChanges(NSNotification nsnotification) {
+        _hasToUpdate = true;
+    }
+
+    public boolean isEntityReadOnly() {
+        boolean isEntityReadOnly = super.isEntityReadOnly();
+        boolean isEditable = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), true);
+        boolean readOnly = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("readOnly"), false);
+        return isEntityReadOnly && !isEditable && readOnly;
+    }
+
+    public boolean isSelecting() {
+        return d2wContext().task().equals("select");
+    }
+
+    public boolean isListEmpty() {
+        return listSize() == 0;
+    }
+
+    public int listSize() {
+        return displayGroup().allObjects().count();
+    }
+
+    public String alternatingColorForRow() {
+        _rowFlip = !_rowFlip;
+        if(_rowFlip || !alternateRowColor())
+           return backgroundColorForTable();
+        else
+           return backgroundColorForTableDark();
+    }
+
+    public String backgroundColorForRow() {
+       return !isSelecting() || object() != displayGroup().selectedObject() ? alternatingColorForRow() : "#FFFF00";
+    }
+
+    public void setBackgroundColorForRow(String value) {
+        // just for KVC reasons
+    }
+
+    public EOEnterpriseObject selectedObject() {
+        return (EOEnterpriseObject)displayGroup().selectedObject();
+    }
+
+    public void setSelectedObject(EOEnterpriseObject eo) {
+        if(eo != null)
+            displayGroup().selectObject(eo);
+        else
+            displayGroup().clearSelection();
+    }
+
+    public WOComponent selectObjectAction() {
+        setSelectedObject(object());
+        if(nextPageDelegate() != null)
+            return nextPageDelegate().nextPage(this);
+        else
+            return null;
+    }
+
+    public WOComponent backAction() {
+        return nextPageDelegate() == null ? nextPage() == null ? (WOComponent)D2W.factory().queryPageForEntityNamed(entity().name(), session()) : nextPage() : nextPageDelegate().nextPage(this);
+    }
+
+    /*** end of reimplementation */
 
     public String urlForCurrentState() {
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
@@ -71,13 +154,10 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         d2wContext().takeValueForKey(eo,"object");
     }
 
-    public boolean isEntityReadOnly() {
-        return !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
-    }
-
     private boolean _hasBeenInitialized=false;
 
     private Integer _batchSize = null;
+    
     public int numberOfObjectsPerBatch() {
         if (_batchSize == null) {
             NSKeyValueCoding userPreferences=(NSKeyValueCoding)d2wContext().valueForKey("userPreferences");
@@ -142,78 +222,34 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         // the default D2W mechanism is completely disabled
         return null;
     }
-
-    public D2WContext d2wContext() {
-        if(hasBinding("localContext") && super.d2wContext()==null) {
-            setLocalContext((D2WContext)valueForBinding("localContext"));
-        }
-        return super.d2wContext();
-    }
-    
-    // make kvc happy
-    public void setD2wContext(D2WContext newValue) {
-        log.info("Hu? this should never be called.");
-    }
-    
-    public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue,super.d2wContext())) {
-            _hasBeenInitialized=false;
-            _batchSize=null;
-            // HACK ALERT: this next line is made necessary by the brain-damageness of
-            // D2WComponent.setLocalContext, which holds on to the first non null value it gets.
-            // I swear if I could get my hands on the person who did that.. :-)
-            _localContext=newValue;
-            if (log.isDebugEnabled()) log.debug("SetLocalContext "+newValue);
-        }
-        super.setLocalContext(newValue);
-    }
-
     
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         setupPhase();
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
-        try {
-            super.takeValuesFromRequest(r, c);
-        } finally {
-            NDC.pop();
-        }
+        super.takeValuesFromRequest(r, c);
     }
 
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         setupPhase();
-        WOActionResults result=null;
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
-        try {
-            result= super.invokeAction(r, c);
-        } finally {
-            NDC.pop();
-        }
-        return result;
+        return super.invokeAction(r, c);
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
         setupPhase();
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
-        try {
-            super.appendToResponse(r,c);
-        } catch(Exception ex) {
-            ERDirectToWeb.reportException(ex, d2wContext());
-        } finally {
-            NDC.pop();
-        }
-    }
-
-    public void setDataSource(EODataSource eodatasource) {
-        try{
-            super.setDataSource(eodatasource);
-        } catch (Exception ex) {
-            log.warn("Exception when setting datasource", ex);
-            NSArray sortOrderings=sortOrderings();
-            displayGroup().setDataSource(eodatasource);
-            displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
+        _rowFlip = true;
+        if(_hasToUpdate) {
             displayGroup().fetch();
+            _hasToUpdate = false;
         }
+        super.appendToResponse(r,c);
     }
+    
+    public void setDataSource(EODataSource eodatasource) {
+        NSArray sortOrderings=sortOrderings();
+        displayGroup().setDataSource(eodatasource);
+        displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
+        displayGroup().fetch();
+    }
+    
     protected void setupPhase() {
         WODisplayGroup dg=displayGroup();
         if (dg!=null) {
@@ -226,10 +262,10 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
                         ((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
                 }
                 NSArray sortOrderings=sortOrderings();
-                displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
-                displayGroup().setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-                displayGroup().fetch();
-                displayGroup().updateDisplayedObjects();
+                dg.setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
+                dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
+                dg.fetch();
+                dg.updateDisplayedObjects();
                 _hasBeenInitialized=true;
             }
             // this will have the side effect of resetting the batch # to sth correct, in case
@@ -266,42 +302,31 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
     }
 
     public WOComponent editObjectAction() {
-        WOComponent result = null;
+        EditPageInterface epi;
         String editConfigurationName=(String)d2wContext().valueForKey("editConfigurationName");
-
+        log.debug("editConfigurationName: " + editConfigurationName);
         if(editConfigurationName != null) {
-            log.debug("editConfigurationName = "+editConfigurationName);
-            Object page = D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
-            log.debug("page = "+page);
-            EditPageInterface epi = (EditPageInterface)page;
-
-            epi.setObject(localInstanceOfObject());
-            epi.setNextPage(context().page());
-            result = (WOComponent)epi;
+            epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
         } else {
-            EditPageInterface editpageinterface = D2W.factory().editPageForEntityNamed(object().entityName(), session());            
-            editpageinterface.setObject(localInstanceOfObject());
-            editpageinterface.setNextPage(context().page());
-            result = (WOComponent)editpageinterface;
+            epi = D2W.factory().editPageForEntityNamed(object().entityName(), session());            
         }
-        return result;
+        epi.setObject(localInstanceOfObject());
+        epi.setNextPage(context().page());
+        return (WOComponent)epi;
     }
 
     public WOComponent inspectObjectAction() {
-        WOComponent result = null;
+        InspectPageInterface ipi;
         String inspectConfigurationName=(String)d2wContext().valueForKey("inspectConfigurationName");
-
+        log.debug("inspectConfigurationName: " + inspectConfigurationName);
         if(inspectConfigurationName!=null) {
-            InspectPageInterface ipi=(InspectPageInterface)D2W.factory().pageForConfigurationNamed(inspectConfigurationName,session());
-            ipi.setObject(object());
-            ipi.setNextPage(context().page());
-            return (WOComponent)ipi;
+            ipi=(InspectPageInterface)D2W.factory().pageForConfigurationNamed(inspectConfigurationName,session());
         } else {
-            InspectPageInterface inspectpageinterface = D2W.factory().inspectPageForEntityNamed(object().entityName(), session());
-            inspectpageinterface.setObject(object());
-            inspectpageinterface.setNextPage(context().page());
-            return (WOComponent)inspectpageinterface;
+            ipi = D2W.factory().inspectPageForEntityNamed(object().entityName(), session());
         }
+        ipi.setObject(object());
+        ipi.setNextPage(context().page());
+        return (WOComponent)ipi;
     }
 
     
