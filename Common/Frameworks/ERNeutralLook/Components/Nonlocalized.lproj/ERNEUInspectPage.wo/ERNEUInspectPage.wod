@@ -121,7 +121,7 @@ EditLink: WOHyperlink {
 
 EditingForm:ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
-	hasForm = d2wContext.hasForm;
+	showForm = d2wContext.hasForm;
 	multipleSubmit = true;
 	name = "EditForm";
 }
