@@ -104,3 +104,9 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 #########################################################################
 er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
 er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
+
+#########################################################################
+# ERXEC 
+#########################################################################
+er.extensions.ERXEC.useSharedEditingContext=true
+
