@@ -103,18 +103,31 @@ public class ERXFileUtilities {
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
         if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
-        BufferedInputStream bis = new BufferedInputStream(stream);
         FileOutputStream out = new FileOutputStream(file);
+        writeInputStreamToOutputStream(stream, out);
+    }
+    
+    public static void writeInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(in);
         byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
         int read = -1;
-        while ((read = stream.read(buf)) != -1) {
+        while ((read = bis.read(buf)) != -1) {
             out.write(buf, 0, read);
         }
         bis.close();
         out.flush();
         out.close();
+        
     }
 
+    public static void stringToFile(String s, File f) throws IOException {
+        if (s == null) throw new NullPointerException("string argument cannot be null");
+        if (f == null) throw new NullPointerException("file argument cannot be null");
+
+        byte[] bytes = s.getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        writeInputStreamToFile(bais, f);
+    }
 
     /**
         * Copy a file across hosts using scp.
