@@ -46,12 +46,15 @@ public class ERD2WModel extends D2WModel {
     private Hashtable _systemCache=new Hashtable(10000);
     private Hashtable _significantKeysPerKey=new Hashtable(500);
 
+    private static ERD2WModel _defaultModel;
+    
     // put here the keys than can either provided as input or computed
     // FIXME should add API from clients to add to this array
     static NSMutableArray BACKSTOP_KEYS=new NSMutableArray(new Object[] { "pageConfiguration", "entity", "task" });
     static {
         Class c=D2WFastModel.class; // force initialization
-        D2WModel.setDefaultModel(new ERD2WModel(NSArray.EmptyArray));
+        _defaultModel = new ERD2WModel(NSArray.EmptyArray);
+        D2WModel.setDefaultModel(_defaultModel);
     }
 
     /**
@@ -60,7 +63,7 @@ public class ERD2WModel extends D2WModel {
      */
     public static ERD2WModel erDefaultModel() {
         if(!(D2WModel.defaultModel() instanceof ERD2WModel)) {
-            D2WModel.setDefaultModel(new ERD2WModel(NSArray.EmptyArray));
+            D2WModel.setDefaultModel(_defaultModel);
             log.warn("erDefaultModel had wrong class, fixing to ERD2WModel");
         }
         return (ERD2WModel)D2WModel.defaultModel();
