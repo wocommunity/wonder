@@ -188,6 +188,9 @@ public class ERXValidationFactory {
         return message;
     }
 
+    //ak: This should belong to ERXMultiKey if we are prepared to put NULL values in it, if not, we should check every throw if ERXValidationException if it has values for every argument...
+    private Object _kvcNullValue(Object o) {return (o == null? NSKeyValueCoding.NullValue : o);}
+    
     // Override this method in subclasses to provide a different mechanism for resolving getting/generating a template.
     private final static String UNDEFINED_VALIDATION_TEMPLATE = "Undefined Validation Template";
     public String templateForException(ERXValidationException erv) {
@@ -200,8 +203,9 @@ public class ERXValidationFactory {
             String property = erv.isCustomMethodException() ? erv.method() : erv.propertyKey();
             String type = erv.type();
             String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : defaultTargetLanguage();
+
             cat.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
-            ERXMultiKey k = new ERXMultiKey(new NSArray(new Object[] {entityName, property, type, targetLanguage}));
+            ERXMultiKey k = new ERXMultiKey(new NSArray(new Object[] {_kvcNullValue(entityName), _kvcNullValue(property), _kvcNullValue(type), _kvcNullValue(targetLanguage)}));
             template = (String)_cache.get(k);
             // Not in the cache.  Simple resolving.
             if (template == null) {
