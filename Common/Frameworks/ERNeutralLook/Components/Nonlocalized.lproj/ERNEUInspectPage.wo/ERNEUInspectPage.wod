@@ -37,6 +37,46 @@ CancelLink: WOHyperlink {
 	action = cancelAction;
 }
 
+Conditional1: WOConditional {
+	condition = session.browser.isIE;
+	negate = true;
+}
+
+Conditional2: WOConditional {
+	condition = false;
+}
+
+Conditional3: WOConditional {
+	condition = session.browser.isIE;
+}
+
+Conditional4: WOConditional {
+	condition = session.browser.isIE;
+	negate = true;
+}
+
+Conditional5: WOConditional {
+	condition = session.browser.isIE;
+}
+
+Conditional6: WOConditional {
+	condition = session.browser.isIE;
+	negate = true;
+}
+
+Conditional7: WOConditional {
+	condition = session.browser.isIE;
+}
+
+Conditional8: WOConditional {
+	condition = session.browser.isIE;
+	negate = true;
+}
+
+Conditional9: WOConditional {
+	condition = session.browser.isIE;
+}
+
 DeleteButton: WOImage {
 	alt = "Deletes this object";
 	border = "0";
@@ -186,6 +226,31 @@ ReturnLink: WOHyperlink {
 
 ShowCancel: WOConditional {
 	condition = showCancel;
+}
+
+SubmitButton1: WOSubmitButton {
+	action = cancelAction;
+	value = "Cancel";
+}
+
+SubmitButton2: WOSubmitButton {
+	action = submitAction;
+	value = "Save";
+}
+
+SubmitButton3: WOSubmitButton {
+	action = editAction;
+	value = "Edit";
+}
+
+SubmitButton4: WOSubmitButton {
+	action = nextPage;
+	value = "Return";
+}
+
+SubmitButton5: WOSubmitButton {
+	action = deleteAction;
+	value = "Delete";
 }
 
 SubmitChanges: WOImageButton {
