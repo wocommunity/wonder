@@ -9,24 +9,84 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
+/**
+ * This stateless component is useful for displaying a
+ * string of a fixed length. For example imagine you have
+ * the string: 'The brown dog jumped' and for a given table
+ * cell you only want to display at most 10 characters of the
+ * string, then using this component you could bind the given
+ * string to the 'value' binding, 10 to the 'length' binding
+ * and the string '...' to the 'suffixWhenTrimmed' binding.
+ * When rendering this would display:<br/>
+ * The brown ...
+ * <br/>
+ * This component can also be used to pad whitespace onto the
+ * end of strings that are shorter than the given length.
+ * <br/>
+ * Synopsis:<br/>
+ * value=<i>aString</i>;length=<i>aNumber</i>;[shouldPadToLength=<i>aBoolean</i>;][suffixWhenTrimmed=<i>aString</i>;]
+ *
+ * @binding value string that is passed in to display in a fixed
+ *		length setting.
+ * @binding length fixed length that is compared to the length of
+ *		the passed in string.
+ * @binding shouldPadToLength boolean binding to indicate if the
+ *		string to be displayed is shorter than the fixed
+ *		length if it should then be padded with white space.
+ * @binding suffixWhenTrimmed only appended to the end of the string
+ *		if characters are trimmed from the end of the string
+ *		to be displayed
+ */
 public class ERXFixedLengthString extends ERXStatelessComponent {
 
+    /**
+     * flag to indicate if characters were trimmed from the end of
+     * the passed in string.
+     */
+    protected boolean valueWasTrimmed = false;
+    /** Holds the local cache for the calculated fixed length string */
+    protected String _fixedLengthString;
+    
+    /**
+     * Public constructor
+     * @param context to be used
+     */
     public ERXFixedLengthString(WOContext context) {
         super(context);
     }
-    
+
+    /**
+     * Fixed length of the string to be displayed.
+     * @return int value of the binding: <b>length</b>
+     */
     public int length() {
         Integer l=(Integer)valueForBinding("length");
         return l!=null ? l.intValue() : 0;
     }
 
+    /**
+     * Resets cached instance variables.
+     */
     public void reset() {
         super.reset();
         valueWasTrimmed = false;
         _fixedLengthString = null;
     }
-    private boolean valueWasTrimmed = false;
-    private String _fixedLengthString;
+
+    /**
+     * Calculates the fixed length string from the string
+     * passed in via the binding: <b>value</b>.
+     * If the length of the value string is greater than
+     * the int value of the <b>length</b> binding then
+     * the string is trimmed to the fixed length. If the
+     * string is shorter than the fixed length size and
+     * the binding: <b>shouldPadToLength</b> is set to
+     * true then whitespace is added to the end of the string
+     * buffer.
+     * @return fixed length version of the string passed in
+     * 		via the <b>value</b> binding.
+     */
+    // ENHANCEME: Should support adding either &nbsp or ' '
     public String value() {
         if (_fixedLengthString == null) {
             String result=(String)valueForBinding("value");
@@ -36,7 +96,7 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
                 if (sl!=l) {
                     if (sl<l) {
                         StringBuffer sb=new StringBuffer(result);
-                        if (valueForBooleanBinding("padToLength", true)) {
+                        if (valueForBooleanBinding("shouldPadToLength", true)) {
                             for (int i=sl; i<l; i++) sb.append(' ');
                         }
                         result=sb.toString();
@@ -50,7 +110,13 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
         }
         return _fixedLengthString;
     }
-    
+
+    /**
+     * Returns the value for the binding: <b>suffixWhenTrimmed</b>
+     * only if the string was trimmed.
+     * @return optionally returns the suffix to be added to the end
+     * 		of the string to be displayed.
+     */
     public String suffixWhenTrimmed() {
         value();
         String result = null;

@@ -17,11 +17,19 @@ import com.webobjects.appserver.*;
 // All this guy does is save the editing context of the object and return the next page.
 // Useful for confirm pages.
 public class ERXObjectSaveDelegate implements NextPageDelegate {
-
+    /** holds the object */
     private EOEnterpriseObject _object;
+    /**
+     * holds a reference to the objects ec so that it won't be
+     * collected by the garbage collector
+     */
     private EOEditingContext _context;
+    /** holds the next page */
     private WOComponent _nextPage;
 
+    /**
+     * returns the object
+     */
     protected EOEnterpriseObject object() { return _object; }
     protected EOEditingContext editingContext() { return _context; }
     

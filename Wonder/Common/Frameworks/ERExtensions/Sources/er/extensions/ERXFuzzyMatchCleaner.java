@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+// FIXME: Should move all of fuzzy matching stuff in here and then add a static inner inerface
 public interface ERXFuzzyMatchCleaner {
     public String cleanStringForFuzzyMatching(String s);
 }
