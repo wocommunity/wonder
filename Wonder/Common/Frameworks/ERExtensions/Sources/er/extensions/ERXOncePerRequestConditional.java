@@ -68,7 +68,7 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
             cat.debug("stage:" + stage + ", currentStage:" + currentStage + ", context:" + contextID + ", lastID:" + lastID);
 
 	
-	if(stage != currentStage || !lastID.equals(contextID)) {
+	if(stage != currentStage || lastID == null || !lastID.equals(contextID)) {
             if(cat.isDebugEnabled())
                 cat.debug("did reset");
 	    if(displayCountDict != null)
