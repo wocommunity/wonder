@@ -81,7 +81,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             } else {
                 editPage = D2W.factory().editPageForEntityNamed(object().entityName(),session());
             }
-            editPage.setObject(ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext()));
+	    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+	    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+	    	EOEnterpriseObject object = ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
+	    	editPage.setObject(object);
             editPage.setNextPage(nextPage());
             returnPage = (WOComponent)editPage;
         }
