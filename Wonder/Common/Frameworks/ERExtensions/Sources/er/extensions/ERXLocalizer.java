@@ -566,6 +566,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 */
 	
     public Format localizedDateFormatForKey(String formatString) {
+    	formatString = formatString == null ? "%Y/%m/%d" : formatString;
 		Format result = (Format)_dateFormatters.get(formatString);
 		if(result == null) {
 			// HACK ak
@@ -589,6 +590,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * @return
 	 */
     public Format localizedNumberFormatForKey(String formatString) {
+    	formatString = formatString == null ? "#,##0.00;-(#,##0.00)" : formatString;
 		Format result = (Format)_numberFormatters.get(formatString);
 		if(result == null) {
 			synchronized(_numberFormatters) {

@@ -1,5 +1,6 @@
 package er.extensions;
 
+import java.math.BigInteger;
 import java.text.Format;
 
 import com.webobjects.appserver.WOAssociation;
@@ -71,10 +72,18 @@ public class ERXWOString extends WODynamicElement {
     			if(format == null) {
     				if(_dateFormat != null) {
     					String formatString = (String)_dateFormat.valueInComponent(component);
-    					format = ERXTimestampFormatter.dateFormatterForPattern(formatString);
+    					if(formatString == null) {
+    						format = ERXTimestampFormatter.defaultDateFormatterForObject(formatString);
+    					} else {
+    						format = ERXTimestampFormatter.dateFormatterForPattern(formatString);
+    					}
     				} else if(_numberFormat != null) {
     					String formatString = (String)_numberFormat.valueInComponent(component);
-    					format = ERXNumberFormatter.numberFormatterForPattern(formatString);
+    					if(formatString == null) {
+        					format = ERXNumberFormatter.defaultNumberFormatterForObject(valueInComponent);
+    					} else {
+        					format = ERXNumberFormatter.numberFormatterForPattern(formatString);
+    					}
     				}
     			}
     			if(format != null) {

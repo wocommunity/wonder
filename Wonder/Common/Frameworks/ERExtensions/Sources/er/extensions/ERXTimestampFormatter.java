@@ -22,6 +22,16 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 		_repository.put(DefaultKey, new ERXTimestampFormatter());
 	};
 	
+
+	/**
+	 * @param object
+	 * @return
+	 */
+	public static Format defaultDateFormatterForObject(Object object) {
+		Format result = dateFormatterForPattern("%Y/%m/%d");
+		return result;
+	}
+
 	/**
 	 * Returns a shared instance for the specified pattern.
 	 * @return shared instance of formatter
