@@ -35,9 +35,6 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     static {
         configureLogging(System.getProperties());
-        //ERXLog4j.configureLogging();
-        // configurator will set the logger since it needs to log.
-        //log = Logger.getLogger("er.utilities.log4j.ERXLogger", factory);
     }
 
     /**
