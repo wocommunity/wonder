@@ -12,7 +12,7 @@
                 <include name="ER*.framework/Resources/Java/*.jar" />
                 <include name="BT*.framework/Resources/Java/*.jar" />
             </fileset>
-            <fileset dir="Build/lib">
+            <fileset dir="${wonder.root}/Build/lib">
                 <include name="woproject.jar" />
             </fileset>
             <fileset dir="${wo.woroot}/Library/Frameworks">
