@@ -393,7 +393,7 @@ public class ERXValidationFactory {
     }
     
     /**
-     * returns the template delimiter, the
+     * Returns the template delimiter, the
      * default delimiter is "@".
      * @return template delimiter
      */
