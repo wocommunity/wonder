@@ -281,6 +281,18 @@ public class ERXEOControlUtilities {
         EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
         EODatabase database = dbc.database();
         database.recordSnapshotForSourceGlobalID(null, gid, relationshipName);
+        Object o = eo.storedValueForKey(relationshipName);
+        if(o instanceof EOFaulting) {
+        	EOFaulting toManyArray = (EOFaulting)o;
+            if (!toManyArray.isFault()) {
+            	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
+            	toManyArray.turnIntoFault(tmpToManyArray.faultHandler());
+            }
+        } else {
+        	log.warn("Wrong class: " + o.getClass());
+        	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
+        	eo.takeStoredValueForKey(tmpToManyArray, relationshipName);
+        }
     }
 
     /**
