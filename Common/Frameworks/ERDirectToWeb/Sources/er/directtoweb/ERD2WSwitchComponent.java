@@ -4,31 +4,25 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.directtoweb.ERD2WUtilities;
-import java.lang.*;
-import java.util.*;
-import er.extensions.*;
 import org.apache.log4j.Category;
 
-// This works around the following bug: if you switch the pageConfiguration and refresh the page, 
+// This works around the following bug: if you switch the pageConfiguration and refresh the page,
 // the context is not regenerated.  This is only used for nested configurations.
 
 // FIXME: This should be re-written as a Dynamic element.
 // the right way to go is probably to use EOSwitchComponent
 public class ERD2WSwitchComponent extends D2WSwitchComponent  {
 
-      public ERD2WSwitchComponent(WOContext context) {super(context);}
-    
-    public static final Category cat = Category.getInstance("er.directtoweb.ERD2WSwitchComponent");
-    
+    public ERD2WSwitchComponent(WOContext context) { super(context); }
+
+    public static final Category cat = Category.getInstance(ERD2WSwitchComponent.class);
+
     public void resetCaches() {
         cat.debug("Resetting caches");
         takeValueForKey(null,"_task"); // this will break in 5.0 :-)
@@ -53,7 +47,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent  {
         maybeResetCaches();
         super.appendToResponse(r, c);
     }
-    
+
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e, value, keyPath);
     }

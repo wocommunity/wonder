@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.appserver.*;
-import ERDDefaultSectionComponent;
+import com.webobjects.appserver.WOContext;
 
 public class ERDDefaultSectionComponentCSV extends ERDDefaultSectionComponent {
-public ERDDefaultSectionComponentCSV(WOContext context) {super(context);}
+
+    public ERDDefaultSectionComponentCSV(WOContext context) { super(context); }
 }

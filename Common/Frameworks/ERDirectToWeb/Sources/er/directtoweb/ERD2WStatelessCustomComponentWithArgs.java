@@ -4,21 +4,18 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.*;
-
-import er.directtoweb.ERDirectToWeb;
+import er.extensions.ERXExceptionHolder;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 // Stateless version of D2WCustomComponentWithArgs
 public class ERD2WStatelessCustomComponentWithArgs extends D2WStatelessComponent implements ERXExceptionHolder {
 
-public ERD2WStatelessCustomComponentWithArgs(WOContext context) {super(context);}
-    
+    public ERD2WStatelessCustomComponentWithArgs(WOContext context) { super(context); }
+
     private Object _extraBindings;
     public Object extraBindings() {
         _extraBindings=d2wContext().valueForKey("extraBindings");
@@ -33,7 +30,7 @@ public ERD2WStatelessCustomComponentWithArgs(WOContext context) {super(context);
 
     // Done this way so that subClasses can always get the original valueForBinding.
     public Object originalValueForBinding(String binding) { return super.valueForBinding(binding); }
-    
+
     public Object valueForBinding(String binding) {
         return hasBinding(binding) ? originalValueForBinding(binding) : d2wContext().valueForKey(binding);
     }
