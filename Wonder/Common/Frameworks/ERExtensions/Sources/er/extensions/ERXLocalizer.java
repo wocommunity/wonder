@@ -21,10 +21,16 @@ TODO: FileObserver, Session integration, chaining of Localizers, API to add file
 
 public class ERXLocalizer implements NSKeyValueCoding {
     static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
+
+    // these will eventually become defaults
     static NSArray fileNamesToWatch = new NSArray(new Object [] {"Localizable.strings", "ValidationTemplate.strings"});
     static NSArray frameworkSearchPath = new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"});
+    static NSArray availableLanguages = new NSArray(new Object [] {"English", "German"});
+    static String defaultLanguage = "English";
+
 
     static NSMutableDictionary localizers = new NSMutableDictionary();
+    
     private NSMutableDictionary cache;
     private String NOT_FOUND = "**NOT_FOUND**";
 
@@ -34,12 +40,32 @@ public class ERXLocalizer implements NSKeyValueCoding {
             ((ERXLocalizer)e.nextElement()).load();
         }
     }
-
+    public static ERXLocalizer localizerForLanguages(NSArray languages) {
+        if(languages == null || languages.count() == 0) return localizerForLanguage(defaultLanguage);
+        ERXLocalizer l = null;
+        Enumeration e = localizers.objectEnumerator();
+        while(e.hasMoreElements()) {
+            String language = (String)e.nextElement();
+            l = (ERXLocalizer)localizers.objectForKey(language);
+            if(l != null) {
+                return l;
+            }
+            if(availableLanguages.containsObject(language)) {
+                return localizerForLanguage(language);
+            }
+        }
+        return localizerForLanguage((String)languages.objectAtIndex(0));
+    }
+    
     public static ERXLocalizer localizerForLanguage(String language) {
         ERXLocalizer l = null;
         l = (ERXLocalizer)localizers.objectForKey(language);
         if(l == null) {
-            l = new ERXLocalizer(language);
+            if(availableLanguages.containsObject(language)) {
+                l = new ERXLocalizer(language);
+            } else {
+                l = (ERXLocalizer)localizers.objectForKey(defaultLanguage);
+            }
             localizers.setObjectForKey(l, language);
         }
         return l;
