@@ -13,10 +13,10 @@ import com.webobjects.directtoweb.*;
 // MOVEME: ERDConfigurationAssignment
 /**
  * Generated pageConfigurations that will use the tab inspect tempaltes.<br />
- * 
+ * @deprecated use ERDDefaultConfigurationNameAssignment with key inspectTabConfigurationName
  */
 
-public class ERDTabConfigurationAssignment extends ERDConfigurationAssignment {
+public class ERDTabConfigurationAssignment extends ERDDefaultConfigurationNameAssignment {
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -27,6 +27,7 @@ public class ERDTabConfigurationAssignment extends ERDConfigurationAssignment {
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDTabConfigurationAssignment.class, ERDDefaultConfigurationNameAssignment.class);
         return new ERDTabConfigurationAssignment(eokeyvalueunarchiver);
     }
     
@@ -44,7 +45,5 @@ public class ERDTabConfigurationAssignment extends ERDConfigurationAssignment {
      */
     public ERDTabConfigurationAssignment(String key, Object value) { super(key,value); }
 
-    public Object inspectConfigurationNameForEntity(D2WContext c) { return "InspectTab" + (c.valueForKey("object") != null ?
-                                                                                        ((EOEnterpriseObject)c.valueForKey("object")).entityName() :
-                                                                                        c.entity().name()); }
+    public Object inspectConfigurationName(D2WContext c) { return "InspectTab" + (c.valueForKey("object") != null ?((EOEnterpriseObject)c.valueForKey("object")).entityName() :                                                                                         c.entity().name()); }
 }
