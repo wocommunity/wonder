@@ -8,12 +8,13 @@ HasDirectAction2: ERXNonNullConditional {
 }
 
 UseForm: WOConditional {
-   condition=^hasForm;
+   condition=context.isInForm;
+	negate = true;
 }
 
 UseForm2: WOConditional {
-   condition=^hasForm;
-	negate = true;
+   condition=context.isInForm;
+	negate = false;
 }
 
 content: WOComponentContent {
