@@ -63,6 +63,7 @@ public abstract class ERXApplication extends WOApplication {
 
         // Fix for 3190479 URI encoding should always be UTF8
         // See http://www.w3.org/International/O-URL-code.html
+        // For WO 5.1.x users, please comment this statement to compile.
         com.webobjects.appserver._private.WOURLEncoder.WO_URL_ENCODING = "UTF8";
         
         // WO 5.1 specific patches
