@@ -64,7 +64,7 @@ public class ERXErrorDictionaryPanel extends WOComponent {
                                                                                         result);
         
         if (result!=null) {
-            if (result.endsWith("property is not allowed to be NULL") ||
+            if (result.endsWith("is not allowed to be null.") ||
                 (result.startsWith(" The ") &&
                  result.indexOf(" property ")!=-1 &&
                  result.indexOf(" must have a ")!=-1 &&
@@ -73,7 +73,7 @@ public class ERXErrorDictionaryPanel extends WOComponent {
                 char c;
                 if (displayErrorKey == null) {
                     result=result.substring(result.indexOf("'")+1,
-                                            result.indexOf("property is not allowed to be NULL")-2);
+                                            result.indexOf("is not allowed to be null.")-2);
                     c=result.charAt(0);
                 } else {
                     result = displayErrorKey;
