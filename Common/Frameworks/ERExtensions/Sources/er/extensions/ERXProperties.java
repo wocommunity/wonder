@@ -189,7 +189,7 @@ public class ERXProperties {
      *		system properties.
      */
     public static boolean booleanForKeyWithDefault(String s, boolean defaultValue) {
-        return ERXUtilities.booleanValue(System.getProperty(s)) ? true : defaultValue;
+        return ERXUtilities.booleanValueWithDefault(System.getProperty(s), defaultValue);
     }
     
     /**
