@@ -441,6 +441,9 @@ public class ERXSession extends WOSession implements Serializable {
     // MOVEME: ERXWOUtilities
     public String requestsContextID(WORequest aRequest){
         String uri = aRequest.uri();
+        int idx = uri.indexOf('?');
+        if (idx != -1)
+            uri = uri.substring(0, idx);
         String eID = NSPathUtilities.lastPathComponent(uri);
         NSArray eIDs = NSArray.componentsSeparatedByString(eID, ".");
         String reqCID = "1";
@@ -449,7 +452,7 @@ public class ERXSession extends WOSession implements Serializable {
         }
         return reqCID;
     }
-
+    
     /**
      * Method inspects the passed in request to see if
      * the user backtracked. If the context ID for the request is 2 clicks
