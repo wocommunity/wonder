@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
-import org.apache.log4j.NDC;
 
 public abstract class ERD2WListPage extends ERD2WPage implements ListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
 
@@ -54,14 +53,14 @@ public abstract class ERD2WListPage extends ERD2WPage implements ListPageInterfa
     }
 
     public boolean isEntityReadOnly() {
-        boolean isEntityReadOnly = super.isEntityReadOnly();
-        boolean isEditable = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), true);
-        boolean readOnly = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("readOnly"), false);
-        return isEntityReadOnly && !isEditable && readOnly;
+        boolean flag = super.isEntityReadOnly();
+        flag = !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !flag);
+        flag = ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("readOnly"), flag);
+        return flag;
     }
 
     public boolean isSelecting() {
-        return d2wContext().task().equals("select");
+        return task().equals("select");
     }
 
     public boolean isListEmpty() {
@@ -129,13 +128,31 @@ public abstract class ERD2WListPage extends ERD2WPage implements ListPageInterfa
         return name;
     }
 
+    public static WOComponent printerFriendlyVersion(D2WContext d2wContext, WOSession session, EODataSource dataSource, WODisplayGroup displayGroup) {
+        ListPageInterface result=(ListPageInterface)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext,session);
+        result.setDataSource(dataSource);
+        WODisplayGroup dg = null;
+        if(result instanceof D2WListPage) {
+            dg = ((D2WListPage)result).displayGroup();
+        } else if(result instanceof ERD2WListPage) {
+            dg = ((ERD2WListPage)result).displayGroup();
+        } else {
+            try {
+                dg = (WODisplayGroup)((WOComponent)result).valueForKey("displayGroup");
+            } catch(Exception ex) {
+                log.warn("Can't get displayGroup from page of class: " + result.getClass().getName());
+            }
+        }
+        if(dg != null) {
+            dg.setSortOrderings(displayGroup.sortOrderings());
+            dg.setNumberOfObjectsPerBatch(displayGroup.allObjects().count());
+            dg.updateDisplayedObjects();
+        }
+        return (WOComponent)result;
+    }
+    
     public WOComponent printerFriendlyVersion() {
-        D2WListPage result=(D2WListPage)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
-        result.setDataSource(dataSource());
-        result.displayGroup().setSortOrderings(displayGroup().sortOrderings());
-        result.displayGroup().setNumberOfObjectsPerBatch(listSize());
-        result.displayGroup().updateDisplayedObjects();
-        return result;
+        return ERD2WListPage.printerFriendlyVersion(d2wContext(), session(), dataSource(), displayGroup());
     }
 
     // This will allow d2w pages to be listed on a per configuration basis in stats collecting.

@@ -85,15 +85,6 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
         return null;
     }
 
-    public WOComponent printerFriendlyVersion() {
-        D2WListPage result=(D2WListPage)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
-        result.setDataSource(dataSource());
-        result.displayGroup().setSortOrderings(displayGroup().sortOrderings());
-        result.displayGroup().setNumberOfObjectsPerBatch(displayGroup().allObjects().count());
-        result.displayGroup().updateDisplayedObjects();
-        return result;
-    }
-
     public boolean singleSelection() {
         if (_singleSelection==null) {
             _singleSelection = ERXValueUtilities.booleanValue(d2wContext().valueForKey("singleSelection")) ? Boolean.TRUE : Boolean.FALSE;
