@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import java.util.*;
 
 /**
  * Adds class-level inheritance to EOF.<br />
@@ -161,7 +162,26 @@ public class EOGenericRecordClazz extends Object {
      * @return enterprise object for the raw row
      */
     public EOEnterpriseObject objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
-        return EOUtilities.objectFromRawRow(ec, entityName(), dict);
+        return EOUtilities.objectFromRawRow(ec, entityNameForRawRow(dict), dict);
+    }
+
+    public String entityNameForRawRow(NSDictionary dict) {
+        String entityName = entityName();
+        if(entity().isAbstractEntity() && entity().subEntities().count() > 0) {
+            for(Enumeration e = entity().subEntities().objectEnumerator(); e.hasMoreElements();) {
+                EOEntity sub = (EOEntity)e.nextElement();
+                if(sub.restrictingQualifier() != null) {
+                    if(sub.restrictingQualifier().evaluateWithObject(dict)) {
+                        return sub.name();
+                    }
+                } else {
+                    if(sub.isAbstractEntity()) {
+                        // do sth useful?
+                    }
+                }
+            }
+        }
+        return entityName;
     }
 
     /**
@@ -344,6 +364,7 @@ public class EOGenericRecordClazz extends Object {
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
         String entityName = entityName();
         EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
+        //NSArray nsarray = EOUtilities.rawRowsForQualifierFormat(ec, fs.qualifier(), );
         NSArray nsarray = ec.objectsWithFetchSpecification(fs);
         return nsarray;
     }
