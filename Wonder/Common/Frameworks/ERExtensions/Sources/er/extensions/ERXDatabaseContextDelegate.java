@@ -22,7 +22,7 @@ import java.util.Enumeration;
  * debugging abilities to tracking down when faults are fired.
  */
 public class ERXDatabaseContextDelegate {
-
+             
     /** Basic logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace</b> */
@@ -182,7 +182,7 @@ public class ERXDatabaseContextDelegate {
      FIXME: should support per-model sql statements in order to support different databases
      **/
     public void setReadWriteForConnectionInDatabaseContext(boolean isReadWrite, EODatabaseContext dbc) {
-        if (_readOnlySessionProperties() != null && _readWriteSessionProperties() != null) {
+        if (_readOnlySessionProperties().length() > 0 && _readWriteSessionProperties().length() > 0) {
             log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
             try {
 
@@ -209,13 +209,23 @@ public class ERXDatabaseContextDelegate {
 
     
     public void _configureReadWrite(Connection aConnection) throws SQLException {
-        log.debug("Setting the JDBC connection to read/write");
+        if (log.isDebugEnabled())
+            log.debug("Setting the JDBC connection "+aConnection+" to read / write, current state:"+
+                      " isReadOnly="+aConnection.isReadOnly()+
+                      ", isolation level="+aConnection.getTransactionIsolation());
+        aConnection.commit();
         aConnection.createStatement().executeUpdate(_readWriteSessionProperties());
+        aConnection.commit();
     }
 
     public void _configureReadOnly(Connection aConnection) throws SQLException {
-        log.debug("Setting the JDBC connection to read only");
+        if (log.isDebugEnabled())
+            log.debug("Setting the JDBC connection "+aConnection+" to read only, current state:"+
+                      " isReadOnly="+aConnection.isReadOnly()+
+                      ", isolation level="+aConnection.getTransactionIsolation());
+        aConnection.commit();
         aConnection.createStatement().executeUpdate(_readOnlySessionProperties());
+        aConnection.commit();
     }
 
     private String _readOnlySessionProperties;
