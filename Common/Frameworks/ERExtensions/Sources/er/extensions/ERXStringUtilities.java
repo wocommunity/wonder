@@ -338,8 +338,9 @@ public class ERXStringUtilities {
      * @param bundle to look for the resource in
      * @return string of the given file specified in the bundle
      */
-    // CHECKME: The bundle isn't being used. Is this right?
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
+        if(bundle != null)
+            return stringWithContentsOfFile(bundle.pathForResource(name, extension, null));
          return stringWithContentsOfFile(WOApplication.application().resourceManager().pathForResourceNamed(name +"." + extension, null, null));
     }
 
