@@ -93,7 +93,6 @@ public class ERXExtensions {
          */
         public void finishedLaunchingApp(NSNotification n) {
             ERXLog4j.configureRapidTurnAround(); // Will only enable if WOCaching is off.
-            ERXSession.registerNotifications();
  	    // initialize compiler proxy
 	    ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
