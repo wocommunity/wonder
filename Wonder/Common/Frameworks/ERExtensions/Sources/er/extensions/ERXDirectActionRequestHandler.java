@@ -11,7 +11,8 @@ import com.webobjects.appserver._private.*;
 
 /**
  * Improved direct action request handler. Will automatically handle
- * character encodings for supported 
+ * character encodings and checks the {@link ERXWOResponseCache} before
+ * actually calling the action.
  * 
  * NOTE: This class is multi thread safe. 
  */

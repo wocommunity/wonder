@@ -11,8 +11,36 @@ import java.util.*;
 import com.webobjects.appserver.*;
 
 /**
- * The response cache is a way to cache WOResponse
- * objects for a given set of cache keys.
+ * The response cache is a way to cache WOResponse output from a DirectAction
+ * for a given set of cache keys. You can specify the headers, formValues and cookies
+ * to take into account. Your DirectAction class must implement the {@link Cacheable} interface and
+ * should look like this:<pre><code>
+
+ public class DirectAction extends WODirectAction implements ERXWOResponseCache.Cacheable {
+    static {
+        ERXWOResponseCacheKeyPolicy.sharedInstance().createPolicyEntryForClass(DirectAction.class, 
+            new NSArray(new Object[] {"default", "cached"}), 
+            NSArray.EmptyArray, NSArray.EmptyArray, NSArray.EmptyArray);
+    }
+    public DirectAction(WORequest aRequest) {
+        super(aRequest);
+    }
+
+    public WOActionResults notCachedAction() {
+        return pageWithName("NotCached");
+    }
+    
+    public WOActionResults cachedAction() {
+        return pageWithName("Cached");
+    }
+    
+    public WOActionResults defaultAction() {
+        return pageWithName("Main");
+    }
+}
+</code></pre>
+You must also set the default <code>er.extensions.ERXWOResponseCache.Enabled=true</code> for the cache to get used.
+ * 
  */
 public class ERXWOResponseCache {
 
