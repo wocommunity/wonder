@@ -1015,4 +1015,28 @@ public class ERXEOControlUtilities {
         }
         return result;
     }
+    
+    /**
+     * Triggers all faults in an efficient manner.
+     * @param ec
+     * @param globalIDs
+     * @return
+     */
+    public static NSArray objectsForFaults(EOEditingContext ec, NSArray possibleFaults) {
+        NSMutableArray result = new NSMutableArray();
+        NSMutableArray faultGIDs = new NSMutableArray();
+        for (Enumeration objects = possibleFaults.objectEnumerator(); objects.hasMoreElements();) {
+            EOEnterpriseObject eo = (EOEnterpriseObject)objects.nextElement();
+            if(EOFaultHandler.isFault(eo)) {
+                EOGlobalID gid = ec.globalIDForObject(eo);
+                faultGIDs.addObject(gid);
+            } else {
+                result.addObject(eo);
+            }
+        }
+        NSArray loadedObjects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, faultGIDs);
+        result.addObjectsFromArray(loadedObjects);
+        return result;
+    }
+
 }
