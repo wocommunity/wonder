@@ -96,7 +96,7 @@ public class ERD2WUtilities {
         } else {
             boolean nest = d2wContext != null && ERXValueUtilities.booleanValue(d2wContext.valueForKey("useNestedEditingContext"));
             EOEditingContext newEc = ERXEC.newEditingContext(nest ? ec : ec.parentObjectStore());
-            if(ec instanceof EOSharedEditingContext) {
+            if(ec instanceof EOSharedEditingContext || ec.sharedEditingContext() == null) {
                 newEc.setSharedEditingContext(null);
             }
             localObject = EOUtilities.localInstanceOfObject(newEc, eo);
