@@ -457,6 +457,59 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Returns the first object of the array.  If the array is null or empty, null is returned.
+     *
+     * @param array the array to search.
+     * @return the first object in array.  null if array is empty or if array is null.
+     */
+    public static Object firstObject(NSArray array) {
+        Object result = null;
+        
+        if ( array != null && array.count() > 0 )
+            result = array.objectAtIndex(0);
+        
+        return result;
+    }
+    
+    /**
+     * This returns the index of the first object in the arry with a given value for a given keypath.
+     * @param array the array to search.
+     * @param value the value to look for.
+     * @param keyPath the keypath to use to compare to value.
+     * @return index of the first object with the qualification.  -1 if none matches.
+     */
+    public static int indexOfFirstObjectWithValueForKeyPath(NSArray array, Object value, String keyPath) {
+        final int count = array.count();
+        int result = -1;
+        int i = 0;
+        
+        while ( i < count && result == -1 ) {
+            Object theObject = array.objectAtIndex(i);
+            Object theValue = NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(theObject, keyPath);
+            
+            if ( (value == null && theValue == null) || (value != null && theValue != null && value.equals(theValue)) )
+                result = i;
+            
+            i++;
+        }
+        
+        return result;
+    }
+    
+    /**
+     * This returns the first object in the array with a given value for a given key path.
+     * @param array the array to search.
+     * @param value the value to look for.
+     * @param keyPath the keypath to use to compare to value.
+     * @return first object in the array with the qualification.  null if none matches.
+     */
+    public static Object firstObjectWithValueForKeyPath(NSArray array, Object value, String keyPath) {
+        final int index = indexOfFirstObjectWithValueForKeyPath(array, value, keyPath);
+        
+        return index >= 0 ? array.objectAtIndex(index) : null;
+    }    
+    
+    /**
      * Sorts a given array with a key in ascending fashion and returns a mutable clone of the result.
      * @param array array to be sorted.
      * @param key sort key.
