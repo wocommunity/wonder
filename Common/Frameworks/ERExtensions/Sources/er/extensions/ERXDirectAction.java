@@ -26,6 +26,22 @@ public class ERXDirectAction extends WODirectAction {
         return null;
     }
 
+    public WOComponent testAction() {
+        // FIXME: password protection?
+        WOComponent result=null;
+        if (!WOApplication.application().isCachingEnabled() ||
+            !ERXExtensions.safeEquals(request().formValueForKey("pw"), System.getProperty("ERXLog4jPassword"))) {
+            
+            result=pageWithName("ERXWOTestInterface");
+            String whichTest = context().request().stringFormValueForKey("case");
+            if(whichTest != null) {
+                result.takeValueForKey(whichTest, "theTest");
+            }
+        }
+             
+        return result;
+    }
+    
     public WOComponent log4jAction() {
         // FIXME: password protection?
         WOComponent result=null;
