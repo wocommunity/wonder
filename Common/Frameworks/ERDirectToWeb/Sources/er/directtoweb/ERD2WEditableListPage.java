@@ -81,8 +81,9 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
                 editingContext().saveChanges();
             }
             result = backAction();
-        } catch(NSValidation.ValidationException EOVe) {
-            errorMessage = EOVe.toString();
+        } catch(NSValidation.ValidationException ex) {
+            errorMessage = ex.toString();
+            validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
         }
         return result;
     }
