@@ -96,7 +96,9 @@ public class ERD2WEditableListTemplate extends ERD2WListPageTemplate implements 
                                                                  keyPath,
                                                                  currentErrorDictionary(),
                                                                  propertyKey(),
-                                                                 d2wContext().entity(), ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
+                                                                  ((ERXSession)session()).localizer(),
+                                                                 d2wContext().entity(),
+                                                                  ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
     }
 
     public void clearValidationFailed(){

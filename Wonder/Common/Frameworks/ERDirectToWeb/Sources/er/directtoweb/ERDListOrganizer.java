@@ -49,9 +49,9 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
         if(cat.isDebugEnabled())
             cat.debug("availableElements = "
                       +ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
-                                                                     entityForReportName));
+                                                                     entityForReportName, ((ERXSession)session()).language()));
         return ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
-                                                             entityForReportName);
+                                                             entityForReportName, ((ERXSession)session()).language());
     }
 
     
@@ -64,7 +64,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                 NSArray keyPathsArray = (NSArray)NSPropertyListSerialization.propertyListFromString(keyPathesFromDatabase);
                 if(cat.isDebugEnabled()) cat.debug("keyPathsArray = "+keyPathsArray);
                 if(keyPathsArray!=null){
-                    chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray, entityForReportName);
+                    chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray, entityForReportName, ((ERXSession)session()).language());
                     if(((ERXSession)session()).browserIsNetscape()){
                         NSMutableArray tmp = new NSMutableArray();
                         ERXKeyValuePair defaultObject =

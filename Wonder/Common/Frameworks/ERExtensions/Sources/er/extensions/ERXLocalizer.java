@@ -191,8 +191,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return ((ERXSession)session).localizer();
     }
     
-    public String localizedStringForKeyWithDefault(String key) {
-        String result = localizedStringForKey(key);
+    public String language() {return language;}
+
+    public Object localizedValueForKeyWithDefault(String key) {
+        Object result = localizedValueForKey(key);
         if(result == null) {
             cat.info("Default key inserted: '"+key+"'/"+language);
             cache.setObjectForKey(key, key);
@@ -200,16 +202,22 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return result;
     }
-    public String language() {return language;}
-    
-    public String localizedStringForKey(String key) {
-        String result = (String)cache.objectForKey(key);
+
+    public Object localizedValueForKey(String key) {
+        Object result = cache.objectForKey(key);
         if(result == NOT_FOUND) return null;
         if(result != null) return result;
 
         cat.warn("Key not found: '"+key+"'/"+language);
         cache.setObjectForKey(NOT_FOUND, key);
         return null;
+    }
+
+    public String localizedStringForKeyWithDefault(String key) {
+        return (String)localizedValueForKeyWithDefault(key);
+    }
+    public String localizedStringForKey(String key) {
+        return (String)localizedValueForKey(key);
     }
 
     public String localizedTemplateStringForKeyWithObject(String key, Object o1) {
