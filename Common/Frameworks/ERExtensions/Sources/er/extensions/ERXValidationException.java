@@ -96,10 +96,10 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public String method() { return (String) objectForKey( ValidatedMethodUserInfoKey ); }
     public void setMethod(String aMethod) { setObjectForKey(aMethod, ValidatedMethodUserInfoKey ); }
     
-    public EOEnterpriseObject eoObject() { return (EOEnterpriseObject) objectForKey( ValidatedObjectUserInfoKey ); }
+    public EOEnterpriseObject eoObject() { return (EOEnterpriseObject)object(); }
     public void setEoObject( EOEnterpriseObject anObject ) { setObjectForKey( anObject, ValidatedObjectUserInfoKey ); }
     
-    public String propertyKey() { return (String) objectForKey( ValidatedKeyUserInfoKey ); }
+    public String propertyKey() { return key(); }
     public void setPropertyKey( String aProperty ) { setObjectForKey( aProperty, ValidatedKeyUserInfoKey ); }
 
     public String type() { return (String) objectForKey( ValidationTypeUserInfoKey ); }
