@@ -224,7 +224,7 @@ public class WOToManyRelationship extends WOComponent {
         return sourceObject();
     }
 
-    private String _localDestinationDisplayKey() {
+    protected String _localDestinationDisplayKey() {
         String destinationDisplayKey = destinationDisplayKey();
         if (null==destinationDisplayKey) {
             setDestinationDisplayKey( (String)valueForBinding("destinationDisplayKey"));
@@ -281,7 +281,7 @@ public class WOToManyRelationship extends WOComponent {
         return dataSource();
     }
 
-    private Object _localUiStyle() {
+    protected Object _localUiStyle() {
         if (null== uiStyle()) {
             setUiStyle((String)valueForBinding("uiStyle"));
             // if still no value let's determine one
@@ -298,7 +298,7 @@ public class WOToManyRelationship extends WOComponent {
         return uiStyle();
     }
 
-    private boolean _localIsMandatory() {
+    protected boolean _localIsMandatory() {
         if (!isMandatory()) {
             Object aValue = valueForBinding("isMandatory");
             setIsMandatory(aValue);

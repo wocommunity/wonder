@@ -117,7 +117,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         if (destinationSortKey() == null) {
             setDestinationSortKey((String)valueForBinding("destinationSortKey"));
             if (destinationSortKey() == null)
-                setDestinationSortKey(destinationDisplayKey());
+                setDestinationSortKey(_localDestinationDisplayKey());
         }
         return destinationSortKey();
     }
