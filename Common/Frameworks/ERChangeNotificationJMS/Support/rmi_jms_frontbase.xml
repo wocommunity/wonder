@@ -27,7 +27,8 @@
     <RdbmsDatabaseConfiguration
       driver="com.frontbase.jdbc.FBJDriver" 
       url="jdbc:FrontBase://localhost/openjms" 
-      user="_system" />
+      user="_system" 
+      password="secret" />
 
   </DatabaseConfiguration>
 
