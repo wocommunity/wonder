@@ -551,7 +551,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             primaryKey();
             pk = (pk == null) ? "null pk" : pk;
         } catch(NullPointerException ex) {
-            cat.warn(ex);
         }
         return "<" + getClass().getName() + " "+ pk + ">";
     }/* */
