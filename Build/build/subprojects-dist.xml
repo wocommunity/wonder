@@ -78,6 +78,34 @@
     </target>
 
 
+    <!-- DynaReporting Framework -->
+    <target name="DynaReporting.framework.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="DRGrouping" />
+            <param name="project.dir" value="DynaReporting/Frameworks/DRGrouping" />
+        </antcall>
+        <antcall target="copy.framework" >
+            <param name="project" value="WRReporting" />
+            <param name="project.dir" value="DynaReporting/Frameworks/WRReporting" />
+        </antcall>
+    </target>
+
+    <!-- DynaReporting Example Applications -->
+    <target name="DynaReporting.example.all">
+        <antcall target="copy.application" >
+            <param name="project" value="DocsByExample" />
+            <param name="project.dir" value="DynaReporting/Examples/DocsByExample" />
+        </antcall>
+        <antcall target="copy.application" >
+            <param name="project" value="DRGroupingTest" />
+            <param name="project.dir" value="DynaReporting/Examples/DRGroupingTest" />
+        </antcall>
+        <antcall target="copy.application" >
+            <param name="project" value="DynaReporter" />
+            <param name="project.dir" value="DynaReporting/Examples/DynaReporter" />
+        </antcall>
+    </target>
+
     <!-- WOPayPal -->
     <target name="WOPayPal.all">
         <antcall target="copy.framework" >
@@ -150,9 +178,10 @@
         </copy>
     </target>
     
+    <target name="DynaReporting.all" depends="DynaReporting.framework.all, DynaReporting.example.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all, SVGObjects.example.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
-    <target name="dist.prebuilt" depends="WOPayPal.all, Validity.all, SVGObjects.all" />
+    <target name="dist.prebuilt" depends="DynaReporting.all, SVGObjects.all, Validity.all, WOPayPal.all" />
 
     <target name="all" depends="dist.prebuilt" />
 	
