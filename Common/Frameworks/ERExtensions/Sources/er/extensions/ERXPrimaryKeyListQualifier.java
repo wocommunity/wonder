@@ -49,13 +49,13 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * @param eos array of enterprise objects
      */
     public ERXPrimaryKeyListQualifier(String key, NSArray eos) {
-        super(key, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(eos));
+        super(key, ERXEOAccessUtilities.primaryKeysForObjects(eos));
     }
 
     /**
      * Constructs a primary key list qualifer for a given
      * set of enterprise objects, the primary key
-     * attribute name and a foriegn key. This type of
+     * attribute name and a foreign key. This type of
      * qualifier can be useful for prefetching a to-one
      * relationship off of many enterprise objects.
      * @param key primary key attribute name
@@ -63,7 +63,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * @param eos array of enterprise objects
      */    
     public ERXPrimaryKeyListQualifier(String key, String foreignKey, NSArray eos) {
-        this(key, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(foreignKey, eos));
+        this(key, ERXEOAccessUtilities.snapshotsForObjectsFromRelationshipNamed(eos, foreignKey));
     }
         
     /*
