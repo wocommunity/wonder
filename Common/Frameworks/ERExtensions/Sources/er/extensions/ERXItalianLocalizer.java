@@ -8,18 +8,11 @@
 
 package er.extensions;
 
-import com.webobjects.foundation.*;
 /**
  *  ERXItalianLocalizer is a subclass of {@link ERXLocalizer}.<br/>
  *  <br/>
- *  Overrides <code>plurifiedString</code> from its super class 
+ *  Overrides <code>plurify</code> from its super class 
  *  and tries to pluralize the string according to italian grammar rules.
- *  It just define a default behavior, but you can provide your own plural strings
- *  by using a dict entry
- *  {
- *   localizerExceptions = {"Foo"=>"Foos"...};
- *  }
- * in your Localizable.strings.
  */
 public class ERXItalianLocalizer extends ERXLocalizer {
     static final ERXLogger log = ERXLogger.getERXLogger(ERXItalianLocalizer.class);
@@ -28,14 +21,9 @@ public class ERXItalianLocalizer extends ERXLocalizer {
         super(aLanguage);
     }
     
-    public String plurifiedString(String name, int count) {
-        if(!language.equals("Italian"))
-            return super.plurifiedString(name,count);
+    protected String plurify(String name, int count) {
         String result = name;
         if(name != null && count > 1) {
-            String exception = (String) valueForKeyPath("localizerExceptions." + name);
-            if(exception != null) 
-                return exception;
             if(result.matches("^.+cie$"))
                 return result;
             if(result.matches("^.+[^aeiou][gc]o$")) {
@@ -48,7 +36,4 @@ public class ERXItalianLocalizer extends ERXLocalizer {
         }
         return result;
     }
-    
-    public String toString() { return "<ERXItalianLocalizer "+language+">"; }
-    
 }
