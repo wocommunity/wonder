@@ -748,28 +748,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @deprecated use {@link ERXEC$Factory#didSave} instead.
      */
     public static void didSave(NSNotification n) {
-        EOEditingContext ec=(EOEditingContext)n.object();
-        // Changed objects
-        NSArray updatedObjects=(NSArray)n.userInfo().objectForKey("updated");
-        for (Enumeration e = updatedObjects.objectEnumerator(); e.hasMoreElements();) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-            if (eo instanceof ERXGenericRecord)
-                ((ERXGenericRecord)eo).didUpdate();
-        }
-        // Deleted objects
-        NSArray deletedObjects=(NSArray)n.userInfo().objectForKey("deleted");
-        for (Enumeration e = deletedObjects.objectEnumerator(); e.hasMoreElements();) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-            if (eo instanceof ERXGenericRecord)
-                ((ERXGenericRecord)eo).didDelete(ec);
-        }
-        // Inserted objects
-        NSArray insertedObjects=(NSArray)n.userInfo().objectForKey("inserted");
-        for (Enumeration e = insertedObjects.objectEnumerator(); e.hasMoreElements();) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-            if (eo instanceof ERXGenericRecord)
-                ((ERXGenericRecord)eo).didInsert();
-        }
+        ERXEC.factory().didSave(n);
     }
 
     /**
