@@ -725,17 +725,23 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     private class SessionInfo {
         Exception _trace = new Exception();
         WOContext _context;
+        
         public SessionInfo(WOContext wocontext) {
             _context = wocontext;
         }
-        public Exception trace() {
-            return _trace;
-        }
-        public WOContext context() {
-            return _context;
-        }
+        
+        public Exception trace() { return _trace; }
+        public WOContext context() { return _context; }
+        
         public String exceptionMessageForCheckout(WOContext wocontext) {
-            log.error("There is an error in the session check-out: old contextID " + (_context == null ? "<NULL>" : _context.contextID()), _trace);
+            String contextDescription = null;
+            if (_context != null) {
+                contextDescription = "contextId: " + _context.contextID() + " request: " + _context.request();
+            } else {
+                contextDescription = "<NULL>";
+            }
+
+            log.error("There is an error in the session check-out: old context: " + contextDescription, trace());
             if(_context == null) {
                 return "Original context was null";
             } else if(_context.equals(wocontext)) {
