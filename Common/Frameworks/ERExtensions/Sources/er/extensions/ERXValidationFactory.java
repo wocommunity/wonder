@@ -16,14 +16,10 @@ import org.apache.log4j.Category;
 import java.util.*;
 import java.lang.reflect.*;
 
-// FIXME: Now that ERXLocalizer is handling all of the loading of localized files this class no longer needs
-//	  to worry about loading all of those files.
 public class ERXValidationFactory {
 
     /** logging support */
     public final static Category cat = Category.getInstance("er.validation.ERXValidationFactory");
-    /** holds the default validation template file name */
-    private static final String DEFAULT_VALIDATION_FILE_NAME = "ValidationTemplate.strings";
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
     /** holds a reference to the default validation delegate */
@@ -123,21 +119,6 @@ public class ERXValidationFactory {
         _mappings = new NSDictionary( objects, keys );
     }
 
-    // DELETEME: don't need file observing once we have templates being managed by ERXLocalizer
-    private static FileObserver _defaultFileObserver;
-    // DELETEME: don't need file observing once we have templates being managed by ERXLocalizer
-    public static FileObserver defaultFileObserver() {
-        if (_defaultFileObserver == null)
-            _defaultFileObserver = new FileObserver();
-        return _defaultFileObserver;
-    }
-
-    // DELETEME: Once all file observing is removed
-    public static class FileObserver {
-        public void fileDidChange(NSNotification n) {
-            ERXValidationFactory.defaultFactory().loadTemplates();
-        }
-    }
     /** holds the validation exception class */
     private Class _validationExceptionClass;
     /**
@@ -260,7 +241,7 @@ public class ERXValidationFactory {
             String entityName = erv.eoObject().entityName();
             String property = erv.isCustomMethodException() ? erv.method() : erv.propertyKey();
             String type = erv.type();
-            String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : defaultTargetLanguage();
+            String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : ERXLocalizer.defaultLanguage();
 
             cat.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
             ERXMultiKey k = new ERXMultiKey(new NSArray(new Object[] {_kvcNullValue(entityName), _kvcNullValue(property), _kvcNullValue(type), _kvcNullValue(targetLanguage)}));
@@ -274,6 +255,15 @@ public class ERXValidationFactory {
         return template;
     }
 
+    private Hashtable _cache=new Hashtable(1000);
+    /**
+     * Called when the Localizer is reset.
+     */
+    public void resetTemplateCache(NSNotification n) {
+        _cache = new Hashtable(1000);
+        if (cat.isDebugEnabled()) cat.debug("Resetting template cache");
+    }
+    
     // Override this method in subclasses to provide a different context for the template parse, a d2wcontext comes to mind ;)
     public NSKeyValueCoding contextForException(ERXValidationException erv) {
         NSKeyValueCoding context = null;
@@ -302,106 +292,24 @@ public class ERXValidationFactory {
     // FIXME: Should be setTemplateDelimiter, what was I thinking
     public void setDelimiter(String delimiter) { _delimiter = delimiter; }
 
-    /** flags if template caching is enabled */
-    private boolean _cachingEnabled = true;
-    /**
-     * Sets if template caching is enabled.
-     * @param cachingEnabled if caching is enabled
-     */
-    public void setCachingEnabled(boolean cachingEnabled) { _cachingEnabled = cachingEnabled; }
-    /**
-     * Tells if caching is enabled. This determines if the
-     * validation templates will be reloaded if they change.
-     * This flag defaults to the value of the caching flag off
-     * of WOApplication.
-     * @return if caching is enabled
-     */
-    public boolean cachingEnabled() { return _cachingEnabled; }
-
     /**
      * Method used to configure the validation factory
      * for operation. This method is called on the default
      * factory from an observer when the application is
-     * finished launching. This method loads the templates
-     * and enables or disables caching.
+     * finished launching.
      */
     public void configureFactory() {
-        // If caching is not enabled then we want to enable dynamic reloading of validation templates.
-        setCachingEnabled(WOApplication.application().isCachingEnabled());
-        loadTemplates();
         // CHECKME: This might be better configured in a static init block of ERXValidation.
         
         ERXValidation.setPushChangesDefault(ERXUtilities.booleanValueWithDefault(System.getProperties().getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
-    }
-    
-    // This loads a configures the templates.  Override to provide custom template loading.
-    private NSMutableDictionary _templates = new NSMutableDictionary();
-    public void loadTemplates() {
-        resetTemplateCache();
-        resetTemplateHolder();
-        int loadedTempaltes = 0;
-        if (cat.isDebugEnabled()) cat.debug("Starting loading of templates");
-        // Load all of the files from all of the frameworks.
-        for (Enumeration e = ERXUtilities.allFrameworkNames().objectEnumerator(); e.hasMoreElements();) {
-            String frameworkName = (String)e.nextElement();
-            for (Enumeration ee = templateFileNames().objectEnumerator(); ee.hasMoreElements();) {
-                String fileName = (String)ee.nextElement();
-                for (Enumeration eee = targetDisplayLanguages().objectEnumerator(); eee.hasMoreElements();) {
-                    String targetLanguage = (String)eee.nextElement();
-                    NSDictionary template = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, frameworkName,
-                                                                                                           new NSArray(targetLanguage));
-                    if (template != null) {
-                        addTemplatesFromDictionary(template, targetLanguage);
-                        loadedTempaltes++;
-                        if (!cachingEnabled()) {
-                            String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
-                                                                                                                 frameworkName,
-                                                                                                                 new NSArray(targetLanguage));
-                            ERXFileNotificationCenter.defaultCenter().addObserver(defaultFileObserver(),
-                                                                                  new NSSelector("fileDidChange", ERXConstant.NotificationClassArray),
-                                                                                  filePath);
-                        }
-                        if (cat.isDebugEnabled())
-                            cat.debug("Found validation template in file: " + fileName + " in framework: " + frameworkName + " for target language: " +
-                                      targetLanguage);
-                    }
-                }
-            }
-        }
-        // Load all the files from the application.
-        for (Enumeration e = templateFileNames().objectEnumerator(); e.hasMoreElements();) {
-            String fileName = (String)e.nextElement();
-            for (Enumeration ee = targetDisplayLanguages().objectEnumerator(); ee.hasMoreElements();) {
-                String targetLanguage = (String)ee.nextElement();
-                NSDictionary template = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, null, new NSArray(targetLanguage));
-                if (template != null) {
-                    addTemplatesFromDictionary(template, targetLanguage);
-                    loadedTempaltes++;
-                    if (!cachingEnabled()) {
-                        String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
-                                                                                                             null,
-                                                                                                             new NSArray(targetLanguage));
-                        ERXFileNotificationCenter.defaultCenter().addObserver(defaultFileObserver(),
-                                                                              new NSSelector("fileDidChange", ERXConstant.NotificationClassArray),
-                                                                              filePath);
-                    }
-                    if (cat.isDebugEnabled())
-                        cat.debug("Found validation template in file: " + fileName + " for language: " + targetLanguage + " in application");
-                }                
-            }
-        }
-        if (cat.isDebugEnabled()) cat.debug("Finished loading: " + loadedTempaltes + " templates files.  Structure: " + _templates);
-    }
 
-    // Resets the cache.
-    private Hashtable _cache=new Hashtable(1000);
-    protected void resetTemplateCache() {
-        _cache = new Hashtable(1000);
-        if (cat.isDebugEnabled()) cat.debug("Resetting template cache");
-    }
-    protected void resetTemplateHolder() {
-        _templates = new NSMutableDictionary();
-        if (cat.isDebugEnabled()) cat.debug("Resetting template holder");
+        NSNotificationCenter center = NSNotificationCenter.defaultCenter();
+        if(WOApplication.application().isCachingEnabled()) {
+            center.addObserver(this,
+                               new NSSelector("resetTemplateCache",  ERXConstant.NotificationClassArray),
+                               ERXLocalizer.LocalizationDidResetNotification,
+                               null);
+        }
     }
 
     protected String templateForEntityPropertyType(String entityName, String property, String type, String targetLanguage) {
@@ -427,57 +335,13 @@ public class ERXValidationFactory {
         return template;
     }
 
-    public NSDictionary templatesForLanguage(String language) { return (NSDictionary)(language != null ? _templates.objectForKey(language) :
-                                                                                      _templates.objectForKey(defaultTargetLanguage())); }
-
-    protected NSMutableDictionary editableTemplateForLanguage(String language) {
-        language = language != null ? language : defaultTargetLanguage();
-        NSMutableDictionary template = (NSMutableDictionary)_templates.objectForKey(language);
-        if (template == null) {
-            template = new NSMutableDictionary();
-            _templates.setObjectForKey(template, language);
-            if (cat.isDebugEnabled())
-                cat.debug("Creating template entry for language: " + language);
-        }
+    /**
+     * Get the template for a given key in a given language.
+     * Uses {@link ERXLocalizer} to handle the actual lookup.
+     * @returns template for key or null if none is found
+     */
+    public String templateForKeyPath(String key, String language) {
+        String template = ERXLocalizer.localizerForLanguage(language).localizedStringForKey(key);
         return template;
     }
-
-    // Note that this only resolves directly
-    public String templateForKeyPath(String key, String language) {
-        NSDictionary templates = templatesForLanguage(language);
-        if (templates == null)
-            cat.warn("Templates for language: " + language + " are not currently loaded.");
-        return templates != null ? (String)templates.objectForKey(key) : null;
-    }
-    public void addTemplateForKeyPath(String template, String key, String language) {
-        NSMutableDictionary templates = editableTemplateForLanguage(language);
-        if (templates.objectForKey(key) != null) {
-            cat.info("Replacing previous validation template: " + templates.objectForKey(key) + " for key: " + key + " with: " + template);
-            templates.removeObjectForKey(key);
-        }
-        templates.setObjectForKey(template, key);
-    }
-
-    public void addTemplatesFromDictionary(NSDictionary templates, String language) {
-        for (Enumeration e = templates.keyEnumerator(); e.hasMoreElements();) {
-            String key = (String)e.nextElement();
-            addTemplateForKeyPath((String)templates.objectForKey(key), key, language);
-        }
-    }
-
-    private NSMutableArray _templateFileNames = new NSMutableArray(DEFAULT_VALIDATION_FILE_NAME);
-    public NSArray templateFileNames() { return _templateFileNames; }
-    public void setTemplateFileNames(NSArray fileNames) { _templateFileNames = new NSMutableArray(fileNames); }
-    public void addTemplateFileName(String name) {
-        if (!_templateFileNames.containsObject(name))
-            _templateFileNames.addObject(name);
-    }
-
-    // These are used for knowing how to build the cache, ie which localized resources to load.
-
-    public NSArray targetDisplayLanguages() { return ERXLocalizer.availableLanguages(); }
-    public void setTargetDisplayLanguages(NSArray targets) { ERXLocalizer.setAvailableLanguages(targets); }
-
-    public String defaultTargetLanguage() { return ERXLocalizer.defaultLanguage(); }
-    public void setDefaultTargetLanguage(String target) { ERXLocalizer.setDefaultLanguage(target);}
 }
