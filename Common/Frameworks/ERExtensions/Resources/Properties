@@ -107,6 +107,12 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
 er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
 
+# if set to true then all database operations are serialized to disk
+er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk=
+# files are written to the directory specified in the following directory
+er.extensions.ERXDatabaseContextDelegate.transactionFileLocation=/tmp/wonder/transactionLogs/@@ApplicationName@@_@@WOPort@@
+
+
 #########################################################################
 # ERXAdaptorChannelDelegate 
 #########################################################################
@@ -151,22 +157,23 @@ dbMinConnectionsGLOBAL=1
 # this means your UNIX process which is running the JVM from 
 # your application must be able to use a lot of open files. 
 # see ulimit to understand how to change the default settings
-dbMaxConnectionsGLOBAL=5
+#dbMaxConnectionsGLOBAL=5
 
 # path to the logfile for the JDBC connection pooling
-dbLogPathGLOBAL=/tmp/ERXJDBCConnectionBroker_@@name@@_@@WOPort@@.log
+#dbLogPathGLOBAL=/tmp/ERXJDBCConnectionBroker_@@name@@_@@WOPort@@.log
 
 # time how long a JDBC connection should be reused
 # value is in days
-dbConnectionRecycleGLOBAL=1.0
+#dbConnectionRecycleGLOBAL=1.0
 
 # time in seconds how long a request may use a connection
 # in this case a download may not take longer than 3 days
 # value is in seconds
-dbMaxCheckoutGLOBAL=86400
+#dbMaxCheckoutGLOBAL=86400
 
 # debug level for the Connection Pooling, 0 - 3
-dbDebugLevelGLOBAL=1
+#dbDebugLevelGLOBAL=1
+
 
 #########################################################################
 # ERXLongPrimaryKeyFactory 
