@@ -42,6 +42,7 @@
 ./Sources/er/directtoweb/ERD2WEditOrDefault.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WEditPercentage.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WEditRelationshipPage.java:er.directtoweb
+./Sources/er/directtoweb/ERD2WEditSortedManyToManyPage.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WEditString.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WEditToManyRelationship.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WEditToOneRelationship.java:er.directtoweb

@@ -2,16 +2,16 @@
     rules = (
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = nonSelectedTabBgColor; 
                 value = "#999999"; 
             }; 
         }, 
         {
-            author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            author = 100; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -19,14 +19,14 @@
                 value = editRelationship; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
-                value = er.neutral.ERNEUEditRelationshipPage; 
+                value = templateNameForEditRelationshipPage; 
             }; 
         }, 
         {
-            author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            author = 100; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -34,97 +34,112 @@
                 value = queryAll; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
-                value = er.neutral.ERNEUQueryAllPage; 
+                value = templateNameForQueryAllPage; 
             }; 
         }, 
         {
-            author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            author = 20; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = "entity.userInfo.isJoinEntity"; 
+                selectorName = "isEqualTo"; 
+                value = true; 
+            }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForEditRelationshipPage; 
-                value = er.neutral.ERNEUEditRelationshipPage; 
+                value = "er.neutral.ERNEUEditSortedManyToManyPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = templateNameForEditRelationshipPage; 
+                value = "er.neutral.ERNEUEditRelationshipPage"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForErrorPage; 
-                value = er.neutral.ERNEUErrorPage; 
+                value = "er.neutral.ERNEUErrorPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForInspectPage; 
-                value = er.neutral.ERNEUInspectPage; 
+                value = "er.neutral.ERNEUInspectPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForListPage; 
-                value = er.neutral.ERNEUListPage; 
+                value = "er.neutral.ERNEUListPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForQueryAllPage; 
-                value = er.neutral.ERNEUQueryAllPage; 
+                value = "er.neutral.ERNEUQueryAllPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForQueryPage; 
-                value = er.neutral.ERNEUQueryPage; 
+                value = "er.neutral.ERNEUQueryPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForTabInspectPage; 
-                value = er.neutral.ERNEUTabInspectPage; 
+                value = "er.neutral.ERNEUTabInspectPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForWizardCreationPage; 
-                value = er.neutral.ERNEUWizardCreationPage; 
+                value = "er.neutral.ERNEUWizardCreationPage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useTabImages; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useTabSectionImages; 
                 value = false; 
             }; 
