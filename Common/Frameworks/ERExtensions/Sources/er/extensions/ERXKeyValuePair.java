@@ -11,7 +11,6 @@ package er.extensions;
  * pairs.
  */
 // ENHANCEME: Should implement NSKeyValueCoding
-// FIXME: Should implement equals
 public class ERXKeyValuePair {
 
     /**
@@ -49,4 +48,17 @@ public class ERXKeyValuePair {
      * @return da value
      */
     public Object value() { return _value; }
+    
+    public boolean equals( Object object ) {
+        if( object instanceof ERXKeyValuePair ) {
+            ERXKeyValuePair kvp = (ERXKeyValuePair) object;
+            return kvp != null && value() != null && key() != null && 
+                value().equals( kvp.value() ) && key().equals( kvp.key() );        
+        }
+        return false;
+    }
+    
+    public String toString() {
+        return "[ "+ key() +": "+ value() +" ]";
+    }
 }
