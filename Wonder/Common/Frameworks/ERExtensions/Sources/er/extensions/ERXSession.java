@@ -322,6 +322,11 @@ public class ERXSession extends WOSession implements Serializable {
         }
         return super.defaultEditingContext();
     }
+    
+    public void setDefaultEditingContext(EOEditingContext ec) {
+    	_editingContextWasCreated = true;
+    	super.setDefaultEditingContext(ec);
+    }
 
     /**
      * Returns if this user has javascript enabled.
