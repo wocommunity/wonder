@@ -150,7 +150,7 @@ public class ERXConfigurationManager {
 
     /**
      * Initializes the configuration manager. 
-     * The framework principal {@link ERXExtensions} calles 
+     * The framework principal {@link ERXExtensions} calls 
      * this method when the ERExtensions framework is loaded. 
      */
     public void initialize() {
@@ -283,19 +283,32 @@ public class ERXConfigurationManager {
         log.debug("Reinserted the command line arguments to the system properties.");
     }
 
+    /**
+     * Called when a model is loaded. This will reset the connection
+     * dictionary and insert the correct EOPrototypes if those are used
+     * @param n notification posted when a model is loaded. The object is
+     * 		the model.
+     */
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());
     }
     
-    /* reset the connection dictionary to the specified values that are in the defaults.
-	This method will look for defaults in the form 
-		<MODELNAME>.DBServer
-		<MODELNAME>.DBUser
-		<MODELNAME>.DBPassword
-		<MODELNAME>.URL (for JDBC)        
-        if the serverName and username both exists, we overwrite the connection dict
-           (password is optional). Otherwise we fall back to what's in the model.
-    */
+    /**
+     * Resets the connection dictionary to the specified values that are in the defaults.
+     * This method will look for defaults in the form 
+     * 		<MODELNAME>.DBServer
+     * 		<MODELNAME>.DBUser
+     * 		<MODELNAME>.DBPassword
+     * 		<MODELNAME>.URL (for JDBC)        
+     *   if the serverName and username both exists, we overwrite the connection dict
+     *      (password is optional). Otherwise we fall back to what's in the model.
+     *
+     * Likewise default values can be specified of the form:
+     * dbConnectUserGLOBAL
+     * dbConnectPasswordGLOBAL
+     * dbConnectURLGLOBAL
+     * @param aModel to be reset
+     */
     public void resetConnectionDictionaryInModel(EOModel aModel)  {
         if(aModel!=null) {
             String aModelName=aModel.name();
@@ -350,6 +363,7 @@ public class ERXConfigurationManager {
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
+                NSDictionary jdbcInfoDictionary = null;
                 String url= System.getProperty(aModelName + ".URL");
                 url = url ==null ? System.getProperty("dbConnectURLGLOBAL") : url;
                 String userName= System.getProperty(aModelName + ".DBUser");
@@ -359,6 +373,17 @@ public class ERXConfigurationManager {
                 String driver= System.getProperty(aModelName + ".DBDriver");
                 driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
                 String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
+                if (jdbcInfo != null && jdbcInfo.charAt(0) == '^') {
+                    String modelName = jdbcInfo.substring(1, jdbcInfo.length());
+                    EOModel modelForCopy = aModel.modelGroup().modelNamed(modelName);
+                    if (modelForCopy != null) {
+                        jdbcInfoDictionary = (NSDictionary)modelForCopy.connectionDictionary().objectForKey("jdbc2Info");
+                    } else {
+                        log.warn("Unable to find model named \"" + modelName + "\"");
+                        jdbcInfo = null;
+                    }
+                }
+                
                 jdbcInfo= jdbcInfo ==null ? System.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
                 String plugin= System.getProperty(aModelName + ".DBPlugin");
                 plugin= plugin ==null ? System.getProperty("dbConnectPluginGLOBAL") : plugin;
@@ -368,7 +393,9 @@ public class ERXConfigurationManager {
                     if (userName!=null) newConnectionDictionary.setObjectForKey(userName,"username");
                     if (passwd!=null) newConnectionDictionary.setObjectForKey(passwd,"password");
                     if (driver!=null) newConnectionDictionary.setObjectForKey(driver,"driver");
-                    if (jdbcInfo!=null) {
+                    if (jdbcInfoDictionary != null) {
+                        newConnectionDictionary.setObjectForKey(jdbcInfoDictionary, "jdbc2Info");
+                    } else if (jdbcInfo!=null) {
                         NSDictionary d=(NSDictionary)NSPropertyListSerialization.propertyListFromString(jdbcInfo);
                         if (d!=null)
                             newConnectionDictionary.setObjectForKey(d,"jdbc2Info");
@@ -440,7 +467,7 @@ public class ERXConfigurationManager {
             String osName=System.getProperty("os.name").toLowerCase();
             if (osName.indexOf("windows")!=-1) _operatingSystem=WindowsOperatingSystem;
             else if (osName.indexOf("solaris")!=-1) _operatingSystem=SolarisOperatingSystem;
-            else if (osName.indexOf("macos")!=-1) _operatingSystem=MacOSXOperatingSystem;
+            else if (osName.indexOf("macos")!=-1 || osName.indexOf("mac os")!=-1) _operatingSystem=MacOSXOperatingSystem;
             else _operatingSystem=UnknownOperatingSystem;
         }
         return _operatingSystem;
