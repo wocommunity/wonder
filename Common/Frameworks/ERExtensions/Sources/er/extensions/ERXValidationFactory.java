@@ -144,8 +144,8 @@ public class ERXValidationFactory {
     /** holds the template cache for a given set of keys */
     private Hashtable _cache=new Hashtable(1000);
 
-    /** holds the default template delimiter, "@" */
-    private String _delimiter = "@";
+    /** holds the default template delimiter, "@@" */
+    private String _delimiter = "@@";
     
     /** caches the constructor used to build validation exceptions */
     protected Constructor regularConstructor;
