@@ -93,10 +93,11 @@ public class ERXExtensions {
          * @param n notification posted when the app is done launching
          */
         public void finishedLaunchingApp(NSNotification n) {
-            ERXLog4j.configureLogging(); // Call this again to update configuration from ERConfigurationPath
-            ERXLog4j.configureRapidTurnAround(); // Will only enable if WOCaching is off.
- 	    // initialize compiler proxy
-	    ERXCompilerProxy.defaultProxy().initialize();
+            ERXConfigurationManager.defaultManager().configureRapidTurnAround();
+            //ERXLog4j.configureLogging(); // Call this again to update configuration from ERConfigurationPath
+            //ERXLog4j.configureRapidTurnAround(); // Will only be enabled if WOCaching is off.
+            // initialize compiler proxy
+            ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
             ERXArrayUtilities.initialize();
@@ -130,8 +131,9 @@ public class ERXExtensions {
     static {
         if (!_isInitialized) {
             try {
-                ERXLog4j.configureLogging();
-                ERXConfigurationManager.initializeDefaults();
+                //ERXLog4j.configureLogging();
+                ERXLogger.configureLogging(System.getProperties());
+                ERXConfigurationManager.defaultManager().initialize();
                 log().info("Initializing framework: ERXExtensions");
                 // Initing defaultEditingContext delegates
                 _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
@@ -220,7 +222,7 @@ public class ERXExtensions {
                                           // Allows rapid turn-around of adaptor debugging.
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("configureAdaptorContext", ERXConstant.NotificationClassArray),
-                                                             ERXLog4j.ConfigurationDidChangeNotification,
+                                                             ERXConfigurationManager.ConfigurationDidChangeNotification,
                                                              null);
             _isConfigureAdaptorContextRapidTurnAround = true;
         }
