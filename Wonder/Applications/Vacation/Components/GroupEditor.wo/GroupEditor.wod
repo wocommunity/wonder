@@ -2,6 +2,7 @@ Template1: Template {
 }
 
 Form1: WOForm {
+	multipleSubmit = true;
 }
 
 TextField1: WOTextField {
@@ -19,4 +20,8 @@ PopUpButton1: WOPopUpButton {
 SubmitButton1: WOSubmitButton {
 	action = saveChanges;
 	value = "Save Changes";
+}
+
+DMTable1: DMTable {
+	group = group;
 }
