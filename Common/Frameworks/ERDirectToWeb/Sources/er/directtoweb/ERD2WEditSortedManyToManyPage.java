@@ -97,7 +97,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     } 
 
     public String displayKey() {
-        return keyWhenRelationship();
+        return destinationRelationship().name()+".userPresentableDescription";
     }
 
     public boolean displayQuery() {
@@ -152,13 +152,15 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                                                              editingContext());
 
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
-            Number lastIndex = null;
-            if (sortedObjects!=null && sortedObjects.count()>0) {
-                EOEnterpriseObject lastObject=(EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
-                lastIndex=(Number)lastObject.valueForKey(indexKey());
+            if(isSortedRelationship()){
+                Number lastIndex = null;
+                if (sortedObjects!=null && sortedObjects.count()>0) {
+                    EOEnterpriseObject lastObject=(EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
+                    lastIndex=(Number)lastObject.valueForKey(indexKey());
+                }
+                int newIndex = lastIndex!=null ? lastIndex.intValue()+1 : 0;
+                joinEO.takeValueForKey(ERXConstant.integerForInt(newIndex),indexKey());                
             }
-            int newIndex = lastIndex!=null ? lastIndex.intValue()+1 : 0;
-            joinEO.takeValueForKey(ERXConstant.integerForInt(newIndex),indexKey());
             joinEO.addObjectToBothSidesOfRelationshipWithKey(_localEoToAddToRelationship,
                                                              destinationRelationship().name());
             object().addObjectToBothSidesOfRelationshipWithKey(joinEO, _relationshipKey);
