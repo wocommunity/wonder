@@ -46,7 +46,12 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     /** Returns the display group, creating one if there is none present. */
     public WODisplayGroup displayGroup() {
         if(_displayGroup == null) {
-            _displayGroup = new WODisplayGroup();
+            boolean useBatchingDisplayGroup = ERXValueUtilities.booleanValue(d2wContext().valueForKey("useBatchingDisplayGroup"));
+            if(useBatchingDisplayGroup) {
+                _displayGroup = new ERXBatchingDisplayGroup();
+            } else {
+                _displayGroup = new WODisplayGroup();
+            }
             _displayGroup.setSelectsFirstObjectAfterFetch(false);
             if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
                 _displayGroup.setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
