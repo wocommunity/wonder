@@ -44,7 +44,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
         Number newValue=null;
         if (anObject!=null && anObject instanceof Number) {
             newValue=(Number)anObject;
-            if (newValue instanceof BigDecimal && !isDecimalNumber() && attribute().valueType().equals("i")) {
+            if (newValue instanceof BigDecimal && !isDecimalNumber() && attribute().valueType() != null && attribute().valueType().equals("i")) {
                 // we are getting a BigDecimal from WOTextField even though we asked for an Integer!
                 newValue=ERXConstant.integerForInt(newValue.intValue());
             }
