@@ -45,6 +45,7 @@ NonZeroConditional2: ERXNonZeroConditional {
 
 String1: WOString {
 	value = ^emptyListMessage;
+	escapeHTML = false;
 }
 
 SwitchComponent2: WOSwitchComponent {
