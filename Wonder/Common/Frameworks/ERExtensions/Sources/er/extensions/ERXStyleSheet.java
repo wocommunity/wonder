@@ -79,15 +79,12 @@ public class ERXStyleSheet extends WOComponent {
     }
     /**
      * Returns the style sheet framework name either resolved
-     * via the binding <b>styleSheetFrameworkName</b> or by
-     * calling <code>configurationForKey</code> off
-     * of {@link ERXExtensions}.
+     * via the binding <b>styleSheetFrameworkName</b>.
      * @return style sheet framework name
      */
     public String styleSheetFrameworkName() {
         if (!_frameworkNameInitialized) {
-            _styleSheetFrameworkName = (String)(hasBinding("styleSheetFrameworkName") ? valueForBinding("styleSheetFrameworkName") :
-                                                ERXExtensions.configurationForKey("styleSheetFrameworkName"));
+            _styleSheetFrameworkName = (String)valueForBinding("styleSheetFrameworkName");
             _frameworkNameInitialized = true;
             if (cat.isDebugEnabled())
                 cat.debug("Style sheet framework name: " + _styleSheetFrameworkName);
@@ -97,15 +94,12 @@ public class ERXStyleSheet extends WOComponent {
 
     /**
      * Returns the style sheet name either resolved
-     * via the binding <b>styleSheetName</b> or by
-     * calling <code>configurationForKey</code> off
-     * of {@link ERXExtensions}.
+     * via the binding <b>styleSheetName</b>.
      * @return style sheet name
      */
     public String styleSheetName() {
         if (!_styleSheetNameInitialized) {
-            _styleSheetName = (String)(hasBinding("styleSheetName") ? valueForBinding("styleSheetName") :
-                                       ERXExtensions.configurationForKey("styleSheetName"));
+            _styleSheetName = (String)valueForBinding("styleSheetName");                                      
             _styleSheetNameInitialized = true;
             if (cat.isDebugEnabled())
                 cat.debug("Style sheet name: " + _styleSheetName);

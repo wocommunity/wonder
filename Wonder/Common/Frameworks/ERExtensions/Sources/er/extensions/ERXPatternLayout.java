@@ -14,7 +14,6 @@ import org.apache.log4j.spi.LoggingEvent;
 import java.util.Enumeration;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-import com.webobjects.directtoweb.*;
 
 // This guy allows you to specify '#' when using a log4j pattern layout to get the ProcessId of the
 // current WOApp or '$' to get the name of the WOApp.  Note that processId is a category off of 

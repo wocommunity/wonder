@@ -136,4 +136,26 @@ public class ERXStringUtilities extends Object {
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
          return stringWithContentsOfFile(WOApplication.application().resourceManager().pathForResourceNamed(name +"." + extension, null, null));
     }
+
+    public static final String lastPropertyKeyInKeyPath(String keyPath) {
+        String part = null;
+        if (keyPath != null) {
+            int index = keyPath.lastIndexOf(".");
+            if (index != -1)
+                part = keyPath.substring(index + 1);
+            else
+                part = keyPath;
+        }
+        return part;
+    }
+
+    public static final String keyPathWithoutLastProperty(String keyPath) {
+        String part = null;
+        if(keyPath != null) {
+            int index = keyPath.lastIndexOf(".");
+            if (index != -1)
+                part = keyPath.substring(0, index);
+        }
+        return part;
+    }
 }

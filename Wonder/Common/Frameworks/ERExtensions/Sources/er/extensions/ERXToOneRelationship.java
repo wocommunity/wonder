@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
 import java.util.Enumeration;
 import org.apache.log4j.Category;
 
@@ -96,14 +95,14 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     protected Object _localRelativeSourceObject() {
         Object relativeSourceObject = null;
         if (_localSourceObject() instanceof EOEnterpriseObject && hasKeyPath()) {
-            String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(_localRelationshipKey());
+            String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(_localRelationshipKey());
             relativeSourceObject = ((EOEnterpriseObject)_localSourceObject()).valueForKeyPath(partialKeyPath);
         }
         return relativeSourceObject != null ? relativeSourceObject : _localSourceObject();
     }
 
     protected String _localRelativeRelationshipKey() {
-        return hasKeyPath() ? KeyValuePath.lastPropertyKeyInKeyPath(_localRelationshipKey()) : _localRelationshipKey();
+        return hasKeyPath() ? ERXStringUtilities.lastPropertyKeyInKeyPath(_localRelationshipKey()) : _localRelationshipKey();
     }
 
     protected boolean hasKeyPath() { return _localRelationshipKey().indexOf(".") != -1; }
@@ -123,9 +122,9 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             ERXUtilities.localInstanceOfObject(_eo.editingContext(), (EOEnterpriseObject)anEO) : null;
         // Need to handle the keyPath situation.
         if (_eo != null && masterKey.indexOf(".") != -1) {
-            String partialKeyPath=KeyValuePath.keyPathWithoutLastProperty(masterKey);
+            String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(masterKey);
             _eo = (EOEnterpriseObject)_eo.valueForKeyPath(partialKeyPath);
-            masterKey = KeyValuePath.lastPropertyKeyInKeyPath(masterKey);
+            masterKey = ERXStringUtilities.lastPropertyKeyInKeyPath(masterKey);
         }
         if (anEO!=null) {
             if (isDictionary) {
