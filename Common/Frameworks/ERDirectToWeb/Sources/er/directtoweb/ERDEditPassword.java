@@ -74,26 +74,29 @@ public class ERDEditPassword extends ERDCustomEditComponent {
 
     public boolean passwordExists() { return objectKeyPathValue() != null ? true : false; }
 
+    protected void updateContextValues() {
+        if(context() instanceof ERXMutableUserInfoHolderInterface) {
+            NSMutableDictionary userInfo = ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo();
+            userInfo.takeValueForKey(key(), passwordPropertyKey);
+            userInfo.takeValueForKey(_password, "ERDEditPassword." + key() + ".value");
+        }
+    }
+
+    public void appendToResponse(WOResponse r, WOContext c) {
+        super.appendToResponse(r,c);
+        if(passwordConfirmationValidates()) {
+            updateContextValues();
+        }
+    }
+    
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
         if(passwordConfirmationValidates()) {
-            if(context() instanceof ERXMutableUserInfoHolderInterface) {
-                NSMutableDictionary userInfo = ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo();
-                userInfo.takeValueForKey(key(), passwordPropertyKey);
-                userInfo.takeValueForKey(_password, "ERDEditPassword." + key() + ".value");
-            }
+            updateContextValues();
         } else {
             String password = password();
             if(!passwordExists() || (passwordExists() && password != null)) {
-                if (object() instanceof NSValidation) {
-                    try {
-                        object().validateTakeValueForKeyPath(password, key());
-                    } catch (NSValidation.ValidationException e) {
-                        validationFailedWithException(e, password, key());
-                    }
-                } else {
-                    object().validateTakeValueForKeyPath(password, key());
-                }
+                object().validateTakeValueForKeyPath(password, key());
             }
         }
     }

@@ -37,7 +37,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
     public void fail(String errorCode) {
         if(log.isDebugEnabled())
             log.debug("fail:<object:" + object() + "; key:" + key() + ";  password: " + password() + "; code:" + errorCode + ";>");
-        validationFailedWithException(ERXValidationFactory.defaultFactory().createException(object(), key(), password(), errorCode), password(), key());
+        validationFailedWithException(ERXValidationFactory.defaultFactory().createException(object(), key(), password(), errorCode), password(), key() + "," + passwordPropertyKey());
     }
 
     public String passwordPropertyKey() {
@@ -45,6 +45,9 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         if(context() instanceof ERXMutableUserInfoHolderInterface) {
             NSDictionary userInfo = ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo();
             passwordPropertyKey = (String) userInfo.valueForKey(ERDEditPassword.passwordPropertyKey);
+        }
+        if(passwordPropertyKey == null) {
+            throw new IllegalStateException("Can't find the passwordPropertyKey. There needs to be a ERDEditPassword component on this page and its 'passwordConfirmationValidates' needs to be true for this component to work.");
         }
         return passwordPropertyKey;
     }
@@ -100,15 +103,7 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
             if(!password.equals(passwordConfirm)) {
                 fail("PasswordsDontMatchException");
             } else {
-                if (object() instanceof NSValidation) {
-                    try {
-                        object().validateTakeValueForKeyPath(password, passwordPropertyKey);
-                    } catch (NSValidation.ValidationException e) {
-                        validationFailedWithException(e, password, passwordPropertyKey);
-                    }
-                } else {
-                    object().validateTakeValueForKeyPath(password, passwordPropertyKey);
-                }
+                object().validateTakeValueForKeyPath(password, passwordPropertyKey);
             }
         }
     }
