@@ -65,13 +65,19 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     private static NSMutableArray _registeredModelNames = new NSMutableArray();
     private static NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
+
     public static void registerDescriptionForEntitiesInModel(EOModel model) {
         if (!_registeredModelNames.containsObject(model.name())) {
             for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
                 EOEntity eoentity = (EOEntity)e.nextElement();
                 if(cat.isDebugEnabled())
                     cat.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
-                _entitiesForClass.setObjectForKey(eoentity, eoentity.className());
+                NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(eoentity.className());
+                if(array == null) {
+                    array = new NSMutableArray();
+                }
+                array.addObject(eoentity);
+                _entitiesForClass.setObjectForKey(array, eoentity.className());
             }
             _registeredModelNames.addObject(model.name());
         }
@@ -91,31 +97,19 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     }
 
     // What we do here is go ahead and register all of the entities mapped onto this class, except for EOGenericRecord.
-    // FIXME: I'm probably missing something here, but this code tried to get an NSArray, whereas _entitiesForClass contains EOEntities!
     public static void registerDescriptionForClass(Class class1) {
-        if(false) {
-            NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
-            if (entities != null) {
-                if (cat.isDebugEnabled())
-                    cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
-                for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
-                    EOClassDescription.registerClassDescription(new ERXEntityClassDescription((EOEntity)e.nextElement()), class1);
-                }
-            } else {
-                cat.error("Unable to register descriptions for class: " + class1.getName());
+        NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
+        if (entities != null) {
+            if (cat.isDebugEnabled())
+                cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
+            for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
+                EOClassDescription.registerClassDescription(new ERXEntityClassDescription((EOEntity)e.nextElement()), class1);
             }
         } else {
-            EOEntity entity = (EOEntity)_entitiesForClass.objectForKey(class1.getName());
-            if (entity != null) {
-                if (cat.isDebugEnabled())
-                    cat.debug("Registering description for class: " + class1.getName() + " found entity: " + entity.name());
-                EOClassDescription.registerClassDescription(new ERXEntityClassDescription(entity), class1);
-            } else {
-                cat.error("Unable to register descriptions for class: " + class1.getName());
-            }
+            cat.error("Unable to register descriptions for class: " + class1.getName());
         }
     }
-
+    
     public ERXEntityClassDescription(EOEntity entity) { super(entity); }
 
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
