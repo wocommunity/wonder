@@ -13,6 +13,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import java.lang.reflect.*;
 import er.extensions.ERXConstant;
+import er.extensions.ERXEOControlUtilities;
 
 /**
  * Used to select multiple items from a list.<br />
@@ -41,7 +42,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     // This is fine because we only use the D2WPick component if list() > 0;
-    public EODataSource datasource() { return er.extensions.ERXExtensions.dataSourceForArray(list()); }
+    public EODataSource datasource() { return ERXEOControlUtilities.dataSourceForArray(list()); }
 
     public NSArray list() { return (NSArray)objectKeyPathValue(); }
 
