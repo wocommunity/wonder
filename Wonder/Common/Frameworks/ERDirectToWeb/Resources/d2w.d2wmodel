@@ -59,7 +59,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERDefaultPropertyNameAssignment; 
+                class = er.directtoweb.ERDefaultPropertyNameAssignment; 
                 keyPath = displayNameForProperty; 
                 value = "<computed>"; 
             }; 
@@ -190,7 +190,7 @@
                 value = r; 
             }; 
             rhs = {
-                class = er/directtoweb/RelationshipSortAssignment; 
+                class = er.directtoweb.ERDRelationshipSortAssignment; 
                 keyPath = sortKeyForList; 
                 value = "<RelationshipSortAssignment>"; 
             }; 
@@ -566,7 +566,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERDefaultEntityNameAssignment; 
+                class = er.directtoweb.ERDefaultEntityNameAssignment; 
                 keyPath = displayNameForEntity; 
                 value = defaultDisplayNameForEntity; 
             }; 
@@ -942,7 +942,7 @@
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/SmartAttributeAssignment; 
+                class = er.directtoweb.ERDSmartAttributeAssignment; 
                 keyPath = smartAttribute; 
                 value = "<computedAttribute>"; 
             }; 
@@ -1065,7 +1065,7 @@
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/SmartRelationshipAssignment; 
+                class = er.directtoweb.ERDSmartRelationshipAssignment; 
                 keyPath = smartRelationship; 
                 value = "<computedRelationship>"; 
             }; 
@@ -1393,7 +1393,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERConfigurationAssignment; 
+                class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = createConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
@@ -1402,7 +1402,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERConfigurationAssignment; 
+                class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = editConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
@@ -1420,7 +1420,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERConfigurationAssignment; 
+                class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = inspectConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
@@ -1502,7 +1502,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERConfigurationAssignment; 
+                class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = confirmConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
@@ -1606,7 +1606,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERConfigurationAssignment; 
+                class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = listConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
@@ -2421,7 +2421,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERTabDictionaryComputer; 
+                class = er.directtoweb.ERDTabDictionaryComputer; 
                 keyPath = tabs; 
                 value = "<ERTabDictionaryComputer>"; 
             }; 
@@ -2430,7 +2430,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERTabDictionaryComputer; 
+                class = er.directtoweb.ERDTabDictionaryComputer; 
                 keyPath = tabContents; 
                 value = "<ERTabDictionaryComputer>"; 
             }; 
@@ -2465,7 +2465,7 @@
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/UnitResolverAssignment; 
+                class = er.directtoweb.ERDUnitResolverAssignment; 
                 keyPath = resolvedUnit; 
                 value = "<UnitResolverAssignment>"; 
             }; 
@@ -2717,7 +2717,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERImageNameAssignment; 
+                class = er.directtoweb.ERDImageNameAssignment; 
                 keyPath = sectionImageName; 
                 value = "<computed>"; 
             }; 
@@ -4136,7 +4136,7 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er/directtoweb/ERDefaultCancelCreationMessageAssignment; 
+                class = er.directtoweb.ERDefaultCancelCreationMessageAssignment; 
                 keyPath = cancelMessage; 
                 value = "<computed>"; 
             }; 
@@ -4912,7 +4912,7 @@
                 value = java.lang.String; 
             }; 
             rhs = {
-                class = er/directtoweb/ERDefaultsAssignment; 
+                class = er.directtoweb.ERDefaultsAssignment; 
                 keyPath = length; 
                 value = smartDefaultAttributeWidth; 
             }; 
@@ -4927,7 +4927,7 @@
                 value = java.lang.String; 
             }; 
             rhs = {
-                class = er/directtoweb/ERDefaultsAssignment; 
+                class = er.directtoweb.ERDefaultsAssignment; 
                 keyPath = rows; 
                 value = smartDefaultRows; 
             }; 
