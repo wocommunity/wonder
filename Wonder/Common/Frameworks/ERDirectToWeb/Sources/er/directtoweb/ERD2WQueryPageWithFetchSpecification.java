@@ -19,14 +19,10 @@ import java.util.*;
  * 
  */
 
-public class ERD2WQueryPageWithFetchSpecification extends D2WQueryPage implements ERXComponentActionRedirector.Restorable  {
+public class ERD2WQueryPageWithFetchSpecification extends ERD2WQueryPage  {
 
     public ERD2WQueryPageWithFetchSpecification(WOContext context) {
         super(context);
-    }
-
-    public String urlForCurrentState() {
-        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
     private EOFetchSpecification _fetchSpecification;
