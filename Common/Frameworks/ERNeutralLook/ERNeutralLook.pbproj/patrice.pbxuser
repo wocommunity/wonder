@@ -13,21 +13,21 @@
 			017C7B2FFFD7144B7F000001,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 49161629;
+			PBXPerProjectTemplateStateSaveDate = 49418996;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F6C1435B02EE25930FCF0E72;
+									bookmark = F6602C0302F1D19D0FCF0E72;
 									history = (
 										F6EBF72302DF55240FCF0E72,
 										F6EBF72502DF55240FCF0E72,
 										F6EBF72602DF55240FCF0E72,
 										F6EBF72702DF55240FCF0E72,
 										F6EBF72A02DF55240FCF0E72,
-										F65884B302DF71B70FCF0E72,
+										F6C146DF02EF1A070FCF0E72,
 									);
 									prevStack = (
 										F6EBF72C02DF55240FCF0E72,
@@ -216,14 +216,14 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{318, 366}";
+					WindowLocation = "{235, 327}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 49161629;
+			PBXWorkspaceStateSaveDate = 49418996;
 		};
 		perUserProjectItems = {
-			F65884B302DF71B70FCF0E72 = F65884B302DF71B70FCF0E72;
-			F6C1435B02EE25930FCF0E72 = F6C1435B02EE25930FCF0E72;
+			F6602C0302F1D19D0FCF0E72 = F6602C0302F1D19D0FCF0E72;
+			F6C146DF02EF1A070FCF0E72 = F6C146DF02EF1A070FCF0E72;
 			F6EBF72302DF55240FCF0E72 = F6EBF72302DF55240FCF0E72;
 			F6EBF72502DF55240FCF0E72 = F6EBF72502DF55240FCF0E72;
 			F6EBF72602DF55240FCF0E72 = F6EBF72602DF55240FCF0E72;
@@ -243,8 +243,8 @@
 	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
 	};
-	F65884B302DF71B70FCF0E72 = {
-		fRef = F65884B502DF71B70FCF0E72;
+	F6602C0302F1D19D0FCF0E72 = {
+		fRef = F6602C0402F1D19D0FCF0E72;
 		isa = PBXTextBookmark;
 		name = "ERNEUInspectPage.html: 1";
 		rLen = 0;
@@ -253,14 +253,14 @@
 		vrLen = 1497;
 		vrLoc = 519;
 	};
-	F65884B502DF71B70FCF0E72 = {
+	F6602C0402F1D19D0FCF0E72 = {
 		isa = PBXFileReference;
 		name = ERNEUInspectPage.html;
 		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
 		refType = 0;
 	};
-	F6C1435B02EE25930FCF0E72 = {
-		fRef = F6C1435C02EE25930FCF0E72;
+	F6C146DF02EF1A070FCF0E72 = {
+		fRef = F6C146E002EF1A070FCF0E72;
 		isa = PBXTextBookmark;
 		name = "ERNEUInspectPage.html: 1";
 		rLen = 0;
@@ -269,7 +269,7 @@
 		vrLen = 1497;
 		vrLoc = 519;
 	};
-	F6C1435C02EE25930FCF0E72 = {
+	F6C146E002EF1A070FCF0E72 = {
 		isa = PBXFileReference;
 		name = ERNEUInspectPage.html;
 		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
