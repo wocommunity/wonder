@@ -11,7 +11,7 @@ import com.webobjects.directtoweb.*;
 import er.extensions.ERXSession;
 
 // FIXME: All of the message pages need to be cleaned up.
-public class ERDRecoverableErrorPage extends WOComponent implements ErrorPageInterface {
+public class ERDRecoverableErrorPage extends ERD2WPage implements ErrorPageInterface {
 
     public ERDRecoverableErrorPage(WOContext context) { super(context); }
     
@@ -19,13 +19,16 @@ public class ERDRecoverableErrorPage extends WOComponent implements ErrorPageInt
     public void setWrapperName(String wrapperName) { _wrapperName=wrapperName; }
 
     public String wrapperName() {
-        return _wrapperName!=null ? _wrapperName : ((ERXSession)session()).wrapperPageName();
+        return _wrapperName!=null ? _wrapperName : (String)d2wContext().valueForKey("pageWrapperName");
     }
     
     protected WOComponent _nextPage;
     public void setNextPage(WOComponent page) { _nextPage=page; }
     public WOComponent nextPageClicked() { return _nextPage; }
-   
+
+    /*protected D2WContext _d2wContext;
+    public D2WContext d2wContext() {return _d2wContext; }
+*/
     protected String _message;
     public void setMessage(String message) { _message=message; }
     public String message() {return _message; }
