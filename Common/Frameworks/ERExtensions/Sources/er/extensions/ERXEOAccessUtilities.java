@@ -6,6 +6,7 @@
 //
 package er.extensions;
 
+import java.io.*;
 import java.util.*;
 
 import com.webobjects.eoaccess.*;
@@ -19,6 +20,7 @@ public class ERXEOAccessUtilities {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
+    public static NSRecursiveLock adaptorOperationsLock = new NSRecursiveLock();
 
     /**
      * Finds an entity that is contained in a string. This is used a lot in
@@ -788,5 +790,71 @@ public class ERXEOAccessUtilities {
         }
         return ret;
     }
-    
+ 
+    public static void writeAdaptorOperationsToDisk(NSArray adaptorOps, File file) throws IOException {
+        adaptorOperationsLock.lock();
+        try {
+            ByteArrayOutputStream bous = new ByteArrayOutputStream();
+            ObjectOutputStream os;
+            NSMutableArray ops = new NSMutableArray();
+            for (int i = 0; i < adaptorOps.count(); i++) {
+                EOAdaptorOperation a = (EOAdaptorOperation) adaptorOps.objectAtIndex(i);
+                ERXAdaptorOperationWrapper wrapper = new ERXAdaptorOperationWrapper(a);
+                ops.addObject(wrapper);
+            }
+            os = new ObjectOutputStream(bous);
+            os.writeObject(ops);
+            os.flush();
+            os.close();
+            file.createNewFile();
+            ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(bous.toByteArray()), file);
+        } finally {
+            adaptorOperationsLock.unlock();
+        }
+    }
+
+    public static NSArray readAdaptorOperationsFromDisk(File dir) throws IOException {
+        NSMutableArray ops = new NSMutableArray();
+
+        File[] files = dir.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            File f = files[i];
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+            try {
+                NSArray sops = (NSArray) ois.readObject();
+                ops.addObjectsFromArray((NSArray) sops.valueForKey("operation"));
+                ois.close();
+            } catch (ClassNotFoundException e) {
+                throw new IOException("cannot read object, reason "+e.getMessage()); 
+            }
+        }
+        return ops;
+    }
+
+    public static void insertAdaptorOperations(NSArray ops) {
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, "TestModel");
+        context.lock();
+        adaptorOperationsLock.lock();
+        EODatabaseChannel dchannel = context.availableChannel();
+        EOAdaptorChannel achannel = dchannel.adaptorChannel();
+        achannel.adaptorContext().beginTransaction();
+        try {
+            boolean wasOpen = achannel.isOpen();
+            if (!wasOpen) {
+                achannel.openChannel();
+            }
+            achannel.performAdaptorOperations(ops);
+            if (!wasOpen) {
+                achannel.closeChannel();
+            }
+        } finally {
+            achannel.adaptorContext().commitTransaction();
+            context.unlock();
+            adaptorOperationsLock.unlock();
+            ec.unlock();
+        }
+    }
+
 }
