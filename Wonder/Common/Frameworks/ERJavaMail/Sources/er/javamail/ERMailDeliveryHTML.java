@@ -23,6 +23,9 @@ public class ERMailDeliveryHTML extends ERMailDelivery {
     /** WOComponent used to render the HTML message. */
     private WOComponent mailComponent;
 
+    /** Holds the HTML content */
+    protected String htmlContent;
+    
     /** Plain text preamble set in top of HTML source so that non-HTML compliant mail readers
         can at least display this message. */
     private String hiddenPlainTextContent = "";
@@ -42,10 +45,21 @@ public class ERMailDeliveryHTML extends ERMailDelivery {
         hasHiddenPlainTextContent = true;
     }
 
-    /** Creates a new mail instance within OMailDelivery.  Sets hasHiddenPlainTextContent to false. */
+    /**
+     * Sets the HTML content. Note that if you set the
+     * WOComponent to be used when rendering the message
+     * this content will be ignored.
+     * @param content HTML content to be used
+     */
+    public void setHTMLContent (String content) {
+        htmlContent = content;
+    }
+
+    /** Creates a new mail instance within ERMailDelivery.  Sets hasHiddenPlainTextContent to false. */
     public void newMail () {
         super.newMail ();
         hasHiddenPlainTextContent = false;
+        htmlContent = null;
     }
 
     /** Pre-processes the mail before it gets sent.
@@ -68,13 +82,20 @@ public class ERMailDeliveryHTML extends ERMailDelivery {
 
             // create and fill the html message part
             htmlPart = new MimeBodyPart ();
-			WOContext context = mailComponent.context ();
-			context._generateCompleteURLs ();
-            WOMessage response = mailComponent.generateResponse ();
-            String messageString = response.contentString ();
+
+            String htmlMessage = null;
+
+            if (mailComponent != null) {
+                WOContext context = mailComponent.context ();
+                context._generateCompleteURLs ();
+                WOMessage response = mailComponent.generateResponse ();
+                htmlMessage = response.contentString ();
+            } else {
+                htmlMessage = htmlContent;
+            }
 
             // Set the content of the html part
-            htmlPart.setContent (messageString, "text/html");
+            htmlPart.setContent (htmlMessage, "text/html");
             multipart.addBodyPart (htmlPart);
 
             // Inline attachements
