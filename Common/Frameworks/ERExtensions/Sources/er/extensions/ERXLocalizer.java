@@ -8,6 +8,8 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+
+import java.text.Format;
 import java.util.*;
 import java.lang.reflect.Constructor;
 
@@ -45,12 +47,27 @@ TODO: chaining of Localizers
 */
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXLocalizer.class);
+    
+	protected static final ERXLogger log = ERXLogger.getERXLogger(ERXLocalizer.class);
+    
     protected static final ERXLogger createdKeysLog = (ERXLogger)ERXLogger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
+
     private static boolean isLocalizationEnabled = true;
+    
     private static boolean isInitialized = false;
     
     public static final String LocalizationDidResetNotification = "LocalizationDidReset";
+    
+    private static Observer observer;
+    
+    private static NSMutableArray monitoredFiles;
+    
+    static NSArray fileNamesToWatch;
+    static NSArray frameworkSearchPath;
+    static NSArray availableLanguages;
+    static String defaultLanguage;
+    
+    static NSMutableDictionary localizers = new NSMutableDictionary();
     
     public static class Observer {
         public void fileDidChange(NSNotification n) {
@@ -67,9 +84,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
         }
     }
-
-    private static Observer observer;
-    private static NSMutableArray monitoredFiles;
 
     public static void initialize() {
         if(!isInitialized) {
@@ -88,228 +102,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
     
-    public static boolean isLocalizationEnabled() { return isLocalizationEnabled; }
-    public static void setIsLocalizationEnabled(boolean value) { isLocalizationEnabled = value; }
-    
-    static NSArray fileNamesToWatch;
-    static NSArray frameworkSearchPath;
-    static NSArray availableLanguages;
-    static String defaultLanguage;
-    
-    static NSMutableDictionary localizers = new NSMutableDictionary();
-    
-    protected NSMutableDictionary cache;
-    private NSMutableDictionary createdKeys;
-    private String NOT_FOUND = "**NOT_FOUND**";
-
-    /**
-     * Resets the localizer cache. If WOCaching is
-     * enabled then after being reinitialize all of
-     * the localizers will be reloaded.
-     */
-    public static void resetCache() {
-        initialize();
-        if (WOApplication.application().isCachingEnabled()) {
-            Enumeration e = localizers.objectEnumerator();
-            while (e.hasMoreElements()) {
-                ((ERXLocalizer)e.nextElement()).load();
-            }
-        } else {
-            localizers = new NSMutableDictionary();
-        }
+    public static boolean isLocalizationEnabled() { 
+    	return isLocalizationEnabled; 
     }
-    
-    public static ERXLocalizer localizerForLanguages(NSArray languages) {
-        if (! isLocalizationEnabled)   
-            return createLocalizerForLanguage("Nonlocalized", false);
-
-        if (languages == null || languages.count() == 0)  return localizerForLanguage(defaultLanguage());
-        ERXLocalizer l = null;
-        Enumeration e = languages.objectEnumerator();
-        while(e.hasMoreElements()) {
-            String language = (String)e.nextElement();
-            l = (ERXLocalizer)localizers.objectForKey(language);
-            if(l != null) {
-                return l;
-            }
-            if(availableLanguages().containsObject(language)) {
-                return localizerForLanguage(language);
-            }
-        }
-        return localizerForLanguage((String)languages.objectAtIndex(0));
-    }
-    
-    private static NSArray _languagesWithoutPluralForm = new NSArray(new Object [] {"Japanese"});
-    
-    public static ERXLocalizer localizerForLanguage(String language) {
-        if (! isLocalizationEnabled)   
-            return createLocalizerForLanguage("Nonlocalized", false);
-            
-        ERXLocalizer l = null;
-        l = (ERXLocalizer)localizers.objectForKey(language);
-        if(l == null) {
-            if(availableLanguages().containsObject(language)) {
-                if (_languagesWithoutPluralForm.containsObject(language))
-                    l = createLocalizerForLanguage(language, false);
-                else
-                    l = createLocalizerForLanguage(language, true);
-            } else {
-                l = (ERXLocalizer)localizers.objectForKey(defaultLanguage());
-                if(l == null) {
-                    if (_languagesWithoutPluralForm.containsObject(defaultLanguage()))
-                        l = createLocalizerForLanguage(defaultLanguage(), false);
-                    else
-                        l = createLocalizerForLanguage(defaultLanguage(), true);
-                    localizers.setObjectForKey(l, defaultLanguage());
-                }
-           }
-            localizers.setObjectForKey(l, language);
-        }
-        return l;
-    }
-
-    /**
-     * Creates a localizer for a given language and with an
-     * indication if the language supports plural forms. To provide
-     * your own subclass of an ERXLocalizer you can set the system
-     * property <code>er.extensions.ERXLocalizer.pluralFormClassName</code>
-     * or <code>er.extensions.ERXLocalizer.nonPluralFormClassName</code>.
-     * @param language name to construct the localizer for
-     * @param pluralForm denotes if the language supports the plural form
-     * @return a localizer for the given language
-     */
-    protected static ERXLocalizer createLocalizerForLanguage(String language, boolean pluralForm) {
-        ERXLocalizer localizer = null;
-        String className = null;
-        if (pluralForm) {
-            className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.pluralFormClassName", "er.extensions.ERXLocalizer");
-        } else {
-            className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.nonPluralFormClassName", "er.extensions.ERXNonPluralFormLocalizer");            
-        }
-        try {
-            Class localizerClass = Class.forName(className);
-            Constructor constructor = localizerClass.getConstructor(ERXConstant.StringClassArray);
-            localizer = (ERXLocalizer)constructor.newInstance(new Object[] {language});
-        } catch (Exception e) {
-            log.error("Unable to create localizer for language \"" + language + "\" class name: " + className + " exception: " + e.getMessage() + ", will use default classes", e);
-        }
-        if (localizer == null) {
-            if (pluralForm)
-                localizer = new ERXLocalizer(language);
-            else
-                localizer = new ERXNonPluralFormLocalizer(language);                
-        }
-        return localizer;
-    }
-    
-    public static void setLocalizerForLanguage(ERXLocalizer l, String language) {
-        localizers.setObjectForKey(l, language);
-    }
-
-    /**
-     * Cover method that calls <code>localizedStringForKey</code>.
-     * @param key to resolve a localized varient of
-     * @return localized string for the given key
-     */
-    public Object valueForKey(String key) {
-        return valueForKeyPath(key);
-    }
-    
-    public Object valueForKeyPath(String key) {
-        Object result = localizedValueForKey(key);
-        if(result == null) {
-            int indexOfDot = key.indexOf(".");
-            if(indexOfDot > 0) {
-                String firstComponent = key.substring(0, indexOfDot);
-                String otherComponents = key.substring(indexOfDot+1, key.length());
-                result = cache.objectForKey(firstComponent);
-                if(log.isDebugEnabled())
-                    log.debug("Trying " + firstComponent + " . " + otherComponents);
-                if(result != null) {
-                    try {
-                        result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
-                        if(result != null) {
-                            cache.setObjectForKey(result, key);
-                        } else {
-                            cache.setObjectForKey(NOT_FOUND, key);
-                        }
-                    } catch (NSKeyValueCoding.UnknownKeyException e) {
-                        if (log.isDebugEnabled()) {
-                            log.debug(e.getMessage());
-                        }
-                        cache.setObjectForKey(NOT_FOUND, key);
-                    }
-                }
-            }
-        }
-        return result;
-    }
-    public void takeValueForKey(Object value, String key) {
-        cache.setObjectForKey(value, key);
-    }
-    public void takeValueForKeyPath(Object value, String key) {
-        cache.setObjectForKey(value, key);
-    }
-    
-    String language;
-    public ERXLocalizer(String aLanguage) {
-        language = aLanguage;
-        cache = new NSMutableDictionary();
-        createdKeys = new NSMutableDictionary();
-        load();
-    }
-
-    public void load() {
-        cache.removeAllObjects();
-        createdKeys.removeAllObjects();
-
-        if (log.isDebugEnabled())
-            log.debug("Loading templates for language: " + language + " for files: "
-                      + fileNamesToWatch() + " with search path: " + frameworkSearchPath());
-        
-        NSArray languages = new NSArray(language);
-        Enumeration fn = fileNamesToWatch().objectEnumerator();
-        while(fn.hasMoreElements()) {
-            String fileName = (String)fn.nextElement();
-            Enumeration fr = frameworkSearchPath().reverseObjectEnumerator();
-            while(fr.hasMoreElements()) {
-                String framework = (String)fr.nextElement();
-                
-                String path = ERXFileUtilities.pathForResourceNamed(fileName, framework, languages);
-                if(path != null) {
-                    try {
-                        framework = "app".equals(framework) ? null : framework;
-                        log.debug("Loading: " + fileName + " - " 
-                            + (framework == null ? "app" : framework) + " - " 
-                            + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
-                       NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
-                       // HACK: ak we have could have a collision between the search path for validation strings and
-                       // the normal localized strings.
-                       if(fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
-                           NSMutableDictionary newDict = new NSMutableDictionary();
-                           for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements(); ) {
-                               String key = (String)keys.nextElement();
-                               newDict.setObjectForKey(dict.objectForKey(key), ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX + key);
-                           }
-                           dict = newDict;
-                       }
-                        cache.addEntriesFromDictionary(dict);
-                        if(!monitoredFiles.containsObject(path)) {
-                            ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
-                            monitoredFiles.addObject(path);
-                        }
-                    } catch(Exception ex) {
-                        log.warn("Exception loading: " + fileName + " - " 
-                            + (framework == null ? "app" : framework) + " - " 
-                            + languages + ":" + ex, ex);
-                    }
-                } else  {
-                    log.debug("Unable to create path for resource named: " + fileName 
-                        + " framework: " + (framework == null ? "app" : framework)
-                        + " languages: " + languages);
-                }
-            }
-        }
+    public static void setIsLocalizationEnabled(boolean value) { 
+    	isLocalizationEnabled = value; 
     }
 
     // CHECKME: Don't think that we need these any more now that we can have access to
@@ -382,6 +179,294 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizerForLanguages(request.browserLanguages());
     }    
     
+
+    /**
+     * Resets the localizer cache. If WOCaching is
+     * enabled then after being reinitialize all of
+     * the localizers will be reloaded.
+     */
+    public static void resetCache() {
+        initialize();
+        if (WOApplication.application().isCachingEnabled()) {
+            Enumeration e = localizers.objectEnumerator();
+            while (e.hasMoreElements()) {
+                ((ERXLocalizer)e.nextElement()).load();
+            }
+        } else {
+            localizers = new NSMutableDictionary();
+        }
+    }
+    
+    public static ERXLocalizer localizerForLanguages(NSArray languages) {
+        if (! isLocalizationEnabled)   
+            return createLocalizerForLanguage("Nonlocalized", false);
+
+        if (languages == null || languages.count() == 0)  return localizerForLanguage(defaultLanguage());
+        ERXLocalizer l = null;
+        Enumeration e = languages.objectEnumerator();
+        while(e.hasMoreElements()) {
+            String language = (String)e.nextElement();
+            l = (ERXLocalizer)localizers.objectForKey(language);
+            if(l != null) {
+                return l;
+            }
+            if(availableLanguages().containsObject(language)) {
+                return localizerForLanguage(language);
+            }
+        }
+        return localizerForLanguage((String)languages.objectAtIndex(0));
+    }
+    
+    private static NSArray _languagesWithoutPluralForm = new NSArray(new Object [] {"Japanese"});
+    
+    public static ERXLocalizer localizerForLanguage(String language) {
+        if (! isLocalizationEnabled)   
+            return createLocalizerForLanguage("Nonlocalized", false);
+            
+        ERXLocalizer l = null;
+        l = (ERXLocalizer)localizers.objectForKey(language);
+        if(l == null) {
+            if(availableLanguages().containsObject(language)) {
+                if (_languagesWithoutPluralForm.containsObject(language))
+                    l = createLocalizerForLanguage(language, false);
+                else
+                    l = createLocalizerForLanguage(language, true);
+            } else {
+                l = (ERXLocalizer)localizers.objectForKey(defaultLanguage());
+                if(l == null) {
+                    if (_languagesWithoutPluralForm.containsObject(defaultLanguage()))
+                        l = createLocalizerForLanguage(defaultLanguage(), false);
+                    else
+                        l = createLocalizerForLanguage(defaultLanguage(), true);
+                    localizers.setObjectForKey(l, defaultLanguage());
+                }
+           }
+            localizers.setObjectForKey(l, language);
+        }
+        return l;
+    }
+
+
+    public static String defaultLanguage() {
+        if (defaultLanguage == null) {
+            defaultLanguage = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.defaultLanguage", "English");
+        }
+        return defaultLanguage;
+    }
+    public static void setDefaultLanguage(String value) {
+        defaultLanguage = value;
+        resetCache();
+    }
+
+    public static NSArray fileNamesToWatch() {
+        if (fileNamesToWatch == null) {
+            fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray(new Object [] {"Localizable.strings", "ValidationTemplate.strings"}));
+            if (log.isDebugEnabled())
+                log.debug("FileNamesToWatch: " + fileNamesToWatch);
+        }
+        return fileNamesToWatch;
+    }
+    public static void setFileNamesToWatch(NSArray value) {
+        fileNamesToWatch = value;
+        resetCache();
+    }
+
+    public static NSArray availableLanguages() {
+        if(availableLanguages == null) {
+            availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new Object [] {"English", "German", "Japanese"}));
+            if (log.isDebugEnabled())
+                log.debug("AvailableLanguages: " + availableLanguages);
+        }
+        return availableLanguages;
+    }
+    public static void setAvailableLanguages(NSArray value) {
+        availableLanguages = value;
+        resetCache();
+    }
+
+    public static NSArray frameworkSearchPath() {
+        if (frameworkSearchPath == null) {
+            frameworkSearchPath = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.frameworkSearchPath", new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"}));
+            if (log.isDebugEnabled())
+                log.debug("FrameworkSearchPath: " + frameworkSearchPath);
+        }
+        return frameworkSearchPath;
+    }
+    public static void setFrameworkSearchPath(NSArray value) {
+        frameworkSearchPath = value;
+        resetCache();
+    }
+
+    /**
+     * Creates a localizer for a given language and with an
+     * indication if the language supports plural forms. To provide
+     * your own subclass of an ERXLocalizer you can set the system
+     * property <code>er.extensions.ERXLocalizer.pluralFormClassName</code>
+     * or <code>er.extensions.ERXLocalizer.nonPluralFormClassName</code>.
+     * @param language name to construct the localizer for
+     * @param pluralForm denotes if the language supports the plural form
+     * @return a localizer for the given language
+     */
+    protected static ERXLocalizer createLocalizerForLanguage(String language, boolean pluralForm) {
+        ERXLocalizer localizer = null;
+        String className = null;
+        if (pluralForm) {
+            className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.pluralFormClassName", "er.extensions.ERXLocalizer");
+        } else {
+            className = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.nonPluralFormClassName", "er.extensions.ERXNonPluralFormLocalizer");            
+        }
+        try {
+            Class localizerClass = Class.forName(className);
+            Constructor constructor = localizerClass.getConstructor(ERXConstant.StringClassArray);
+            localizer = (ERXLocalizer)constructor.newInstance(new Object[] {language});
+        } catch (Exception e) {
+            log.error("Unable to create localizer for language \"" + language + "\" class name: " + className + " exception: " + e.getMessage() + ", will use default classes", e);
+        }
+        if (localizer == null) {
+            if (pluralForm)
+                localizer = new ERXLocalizer(language);
+            else
+                localizer = new ERXNonPluralFormLocalizer(language);                
+        }
+        return localizer;
+    }
+    
+    public static void setLocalizerForLanguage(ERXLocalizer l, String language) {
+        localizers.setObjectForKey(l, language);
+    }
+
+    
+    protected NSMutableDictionary cache;
+    private NSMutableDictionary createdKeys;
+    private String NOT_FOUND = "**NOT_FOUND**";
+    protected Hashtable _dateFormatters = new Hashtable();
+    protected Hashtable _numberFormatters = new Hashtable();
+    protected String language;
+    protected Locale locale;
+    
+   
+    public ERXLocalizer(String aLanguage) {
+        language = aLanguage;
+        cache = new NSMutableDictionary();
+        createdKeys = new NSMutableDictionary();
+        String shortLanguage = null;
+        NSDictionary dict = ERXDictionaryUtilities.dictionaryFromPropertyList("Languages", 
+        		NSBundle.bundleForName("JavaWebObjects"));
+        for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements();) {
+			String key = (String) keys.nextElement();
+			String value = (String)dict.valueForKey(key);
+			if(aLanguage.equals(value)) {
+				shortLanguage = key;
+				break;
+			}
+		}
+        if(shortLanguage != null) {
+        	locale = new Locale(shortLanguage);
+        } else {
+        	log.error("Locale for " + aLanguage + " not found!");
+        	locale = Locale.getDefault();
+        }
+        load();
+    }
+
+    public void load() {
+        cache.removeAllObjects();
+        createdKeys.removeAllObjects();
+
+        if (log.isDebugEnabled())
+            log.debug("Loading templates for language: " + language + " for files: "
+                      + fileNamesToWatch() + " with search path: " + frameworkSearchPath());
+        
+        NSArray languages = new NSArray(language);
+        Enumeration fn = fileNamesToWatch().objectEnumerator();
+        while(fn.hasMoreElements()) {
+            String fileName = (String)fn.nextElement();
+            Enumeration fr = frameworkSearchPath().reverseObjectEnumerator();
+            while(fr.hasMoreElements()) {
+                String framework = (String)fr.nextElement();
+                
+                String path = ERXFileUtilities.pathForResourceNamed(fileName, framework, languages);
+                if(path != null) {
+                    try {
+                        framework = "app".equals(framework) ? null : framework;
+                        log.debug("Loading: " + fileName + " - " 
+                            + (framework == null ? "app" : framework) + " - " 
+                            + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
+                       NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
+                       // HACK: ak we have could have a collision between the search path for validation strings and
+                       // the normal localized strings.
+                       if(fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
+                           NSMutableDictionary newDict = new NSMutableDictionary();
+                           for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements(); ) {
+                               String key = (String)keys.nextElement();
+                               newDict.setObjectForKey(dict.objectForKey(key), ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX + key);
+                           }
+                           dict = newDict;
+                       }
+                        cache.addEntriesFromDictionary(dict);
+                        if(!monitoredFiles.containsObject(path)) {
+                            ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
+                            monitoredFiles.addObject(path);
+                        }
+                    } catch(Exception ex) {
+                        log.warn("Exception loading: " + fileName + " - " 
+                            + (framework == null ? "app" : framework) + " - " 
+                            + languages + ":" + ex, ex);
+                    }
+                } else  {
+                    log.debug("Unable to create path for resource named: " + fileName 
+                        + " framework: " + (framework == null ? "app" : framework)
+                        + " languages: " + languages);
+                }
+            }
+        }
+    }
+
+    /**
+     * Cover method that calls <code>localizedStringForKey</code>.
+     * @param key to resolve a localized varient of
+     * @return localized string for the given key
+     */
+    public Object valueForKey(String key) {
+        return valueForKeyPath(key);
+    }
+    
+    public Object valueForKeyPath(String key) {
+        Object result = localizedValueForKey(key);
+        if(result == null) {
+            int indexOfDot = key.indexOf(".");
+            if(indexOfDot > 0) {
+                String firstComponent = key.substring(0, indexOfDot);
+                String otherComponents = key.substring(indexOfDot+1, key.length());
+                result = cache.objectForKey(firstComponent);
+                if(log.isDebugEnabled())
+                    log.debug("Trying " + firstComponent + " . " + otherComponents);
+                if(result != null) {
+                    try {
+                        result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
+                        if(result != null) {
+                            cache.setObjectForKey(result, key);
+                        } else {
+                            cache.setObjectForKey(NOT_FOUND, key);
+                        }
+                    } catch (NSKeyValueCoding.UnknownKeyException e) {
+                        if (log.isDebugEnabled()) {
+                            log.debug(e.getMessage());
+                        }
+                        cache.setObjectForKey(NOT_FOUND, key);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public void takeValueForKey(Object value, String key) {
+        cache.setObjectForKey(value, key);
+    }
+    public void takeValueForKeyPath(Object value, String key) {
+        cache.setObjectForKey(value, key);
+    }
+
     public String language() { return language; }
     public NSDictionary createdKeys() { return createdKeys; }
 
@@ -474,53 +559,67 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     
     public String toString() { return "<" + getClass().getName() + " " + language + ">"; }
 
-    public static String defaultLanguage() {
-        if (defaultLanguage == null) {
-            defaultLanguage = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.defaultLanguage", "English");
-        }
-        return defaultLanguage;
-    }
-    public static void setDefaultLanguage(String value) {
-        defaultLanguage = value;
-        resetCache();
-    }
+    /**
+	 * Returns a localized date formatter for the given key.
+	 * @param formatString
+	 * @return
+	 */
+	
+    public Format localizedDateFormatForKey(String formatString) {
+		Format result = (Format)_dateFormatters.get(formatString);
+		if(result == null) {
+			// HACK ak
+			// we need to sync on the localizer and hold our breath that no one else relies on Locale.getDefault()
+			// at this time. All of this because the NSTimestampFormatter doesn't have a setLocale() method...
+			synchronized(ERXLocalizer.class) {
+				Locale old = Locale.getDefault();
+				Locale.setDefault(locale());
+				NSTimestampFormatter formatter = new NSTimestampFormatter(formatString);
+				result = formatter;
+				_dateFormatters.put(formatString, result);
+				Locale.setDefault(old);
+			}
+		}
+		return result;
+	}
 
-    public static NSArray fileNamesToWatch() {
-        if (fileNamesToWatch == null) {
-            fileNamesToWatch = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.fileNamesToWatch", new NSArray(new Object [] {"Localizable.strings", "ValidationTemplate.strings"}));
-            if (log.isDebugEnabled())
-                log.debug("FileNamesToWatch: " + fileNamesToWatch);
-        }
-        return fileNamesToWatch;
-    }
-    public static void setFileNamesToWatch(NSArray value) {
-        fileNamesToWatch = value;
-        resetCache();
-    }
+	/**
+	 * Returns a localized number formatter for the given key.
+	 * @param formatString
+	 * @return
+	 */
+    public Format localizedNumberFormatForKey(String formatString) {
+		Format result = (Format)_numberFormatters.get(formatString);
+		if(result == null) {
+			synchronized(_numberFormatters) {
+				NSNumberFormatter formatter = new ERXNumberFormatter(formatString);
+				formatter.setLocale(locale()); 
+				formatter.setLocalizesPattern(true);
+				result = formatter;
+				_numberFormatters.put(formatString, result);
+			}
+		}
+		return result;
+	}
 
-    public static NSArray availableLanguages() {
-        if(availableLanguages == null) {
-            availableLanguages = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.availableLanguages", new NSArray(new Object [] {"English", "German", "Japanese"}));
-            if (log.isDebugEnabled())
-                log.debug("AvailableLanguages: " + availableLanguages);
-        }
-        return availableLanguages;
-    }
-    public static void setAvailableLanguages(NSArray value) {
-        availableLanguages = value;
-        resetCache();
-    }
 
-    public static NSArray frameworkSearchPath() {
-        if (frameworkSearchPath == null) {
-            frameworkSearchPath = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.frameworkSearchPath", new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"}));
-            if (log.isDebugEnabled())
-                log.debug("FrameworkSearchPath: " + frameworkSearchPath);
-        }
-        return frameworkSearchPath;
-    }
-    public static void setFrameworkSearchPath(NSArray value) {
-        frameworkSearchPath = value;
-        resetCache();
-    }
+	/**
+	 * @param formatter
+	 * @param pattern
+	 * @return
+	 */
+	public void setLocalizedNumberFormatForKey(Format formatter, String pattern) {
+		_numberFormatters.put(pattern, formatter);
+	}
+
+	/**
+	 * @return
+	 */
+	public Locale locale() {
+		return locale;
+	}
+	
+	public void setLocale(Locale value) {
+		locale = value;
+	}
 }

@@ -47,14 +47,20 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @return shared instance of formatter
      */
     public static NSNumberFormatter numberFormatterForPattern(String pattern) {
-    	synchronized(_repository) {
-    		ERXNumberFormatter formatter = (ERXNumberFormatter)_repository.get(pattern);
-    		if(formatter == null) {
-    			formatter = new ERXNumberFormatter(pattern);
-    			_repository.put(pattern, formatter);
+    	ERXNumberFormatter formatter;
+    	if(ERXLocalizer.isLocalizationEnabled()) {
+    		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
+    		formatter = (ERXNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
+    	} else {
+    		synchronized(_repository) {
+    			formatter = (ERXNumberFormatter)_repository.get(pattern);
+    			if(formatter == null) {
+    				formatter = new ERXNumberFormatter(pattern);
+    				_repository.put(pattern, formatter);
+    			}
     		}
-    		return formatter;
     	}
+    	return formatter;
     }
     
     /**
@@ -62,11 +68,16 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @return shared instance of formatter
      */
     public static void setNumberFormatterForPattern(NSNumberFormatter formatter, String pattern) {
-    	synchronized(_repository) {
-    		if(formatter == null) {
-    			_repository.remove(pattern);
-    		} else {
-    			_repository.put(pattern, formatter);
+    	if(ERXLocalizer.isLocalizationEnabled()) {
+    		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
+    		localizer.setLocalizedNumberFormatForKey(formatter, pattern);
+    	} else {
+    		synchronized(_repository) {
+    			if(formatter == null) {
+    				_repository.remove(pattern);
+    			} else {
+    				_repository.put(pattern, formatter);
+    			}
     		}
     	}
     }

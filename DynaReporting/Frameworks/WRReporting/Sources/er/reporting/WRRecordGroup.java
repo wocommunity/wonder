@@ -91,7 +91,7 @@ public class WRRecordGroup extends WOComponent  {
             if(frmt == null) frmt = "#,###0.00";
             NSNumberFormatter v = (NSNumberFormatter)formatDict().objectForKey(frmt);
             if(v == null) {
-                v = new NSNumberFormatter(frmt);
+                v = ERXNumberFormatter.numberFormatterForPattern(frmt);
                 setFormatterForFormat(v, frmt);
             }
             return v;
