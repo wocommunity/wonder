@@ -1,0 +1,7 @@
+Image1: WOImage {
+	alt = "^alt";
+	height = "^height";
+	mimeType = "^mimeType";
+	src = src;
+	width = "^width";
+}
