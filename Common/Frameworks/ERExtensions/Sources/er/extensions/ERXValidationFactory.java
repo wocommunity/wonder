@@ -35,6 +35,9 @@ public class ERXValidationFactory {
     /** holds the default mappings that map model thrown validation strings to exception types */
     private static NSDictionary _mappings;
 
+    /** holds the value 'ValidationTemplate.' */
+    public static final String VALIDATION_TEMPLATE_PREFIX = "ValidationTemplate.";
+
     /** holds the method name 'messageForException' */
     // FIXME: This is better done with an NSSelector and using the method: implementedByObject
     private static final String EDI_MFE_METHOD_NAME = "messageForException";
@@ -518,6 +521,6 @@ public class ERXValidationFactory {
      * @return template for key or null if none is found
      */
     public String templateForKeyPath(String key, String language) {
-        return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(key);
+        return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(VALIDATION_TEMPLATE_PREFIX + key);
     }
 }
