@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class Framework extends _Framework {
-    static final ERXLogger log = ERXLogger.getLogger(Framework.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(Framework.class);
 
     public Framework() {
         super();

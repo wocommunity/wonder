@@ -29,6 +29,7 @@
 ./Sources/er/bugtracker/BTListPage.java:er.bugtracker
 ./Sources/er/bugtracker/BugReportEmail.java:er.bugtracker
 ./Sources/er/bugtracker/BugsPerUser.java:er.bugtracker
+./Sources/er/bugtracker/CollapsibleList.java:er. bugtracker
 ./Sources/er/bugtracker/ComponentPicker.java:er.bugtracker
 ./Sources/er/bugtracker/ComponentReport.java:er.bugtracker
 ./Sources/er/bugtracker/CreateTestItemFromReq.java:er.bugtracker

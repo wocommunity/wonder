@@ -24,7 +24,7 @@ public class Session extends ERXSession {
 
     public void  setDefaultEditingContext(EOEditingContext newEc) {
         super.setDefaultEditingContext(newEc);
-        cat.debug("Set default EditingContext: " + newEc.getClass().getName());
+        log.debug("Set default EditingContext: " + newEc.getClass().getName());
     }
 
     

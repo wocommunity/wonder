@@ -19,7 +19,7 @@ import er.extensions.*;
 public class CollapsibleList extends WOComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(CollapsibleList.class,"components");
+    private static final ERXLogger log = ERXLogger.getERXLogger(CollapsibleList.class.getClass().getName() + ".components");
     protected String openedLabelString;
     protected String closedLabelString;
 	

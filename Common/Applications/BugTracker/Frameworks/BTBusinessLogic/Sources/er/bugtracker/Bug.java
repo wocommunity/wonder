@@ -8,7 +8,7 @@ import er.extensions.*;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 
 public class Bug extends _Bug {
-    static final ERXLogger log = ERXLogger.getLogger(Bug.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(Bug.class);
 
     public boolean _componentChanged;
     public boolean _ownerChanged;
