@@ -64,7 +64,7 @@ public class ERXNavigationItem {
             if (values.valueForKey("childrenChoices") != null) {
                 _childrenChoices = (NSDictionary)values.valueForKey("childrenChoices");
             } else {
-                _childrenChoices = ERXConstant.EmptyDictionary;
+                _childrenChoices = NSDictionary.EmptyDictionary;
             }
             if (values.valueForKey("childrenConditions") == null || ((String)values.valueForKey("childrenConditions")).equals("")) {
                 _childrenConditions = NSArray.EmptyArray;
