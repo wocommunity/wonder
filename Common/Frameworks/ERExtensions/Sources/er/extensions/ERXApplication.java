@@ -423,9 +423,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      *         {@link #handleException(Exception, WOContext)} is called
      */
     public WOResponse reportException(Throwable exception, NSDictionary extraInfo) {
+        Throwable t = exception instanceof NSForwardException ? ((NSForwardException) exception).originalException() : exception;
+        
         log.error("Exception caught, " + exception.getMessage() + " extra info: "
-                  + extraInfo, exception instanceof NSForwardException ?
-                  ((NSForwardException) exception).originalException() : exception);
+                  + extraInfo, t);
+        t.printStackTrace();
         return null;
     }
 
@@ -727,5 +729,9 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             session = super.restoreSessionWithID(sessionID,wocontext);
         }
         return session;
+    }
+
+    public Number sessionTimeOutInMinutes() {
+        return new Integer(sessionTimeOut().intValue() / 60);
     }
 }
