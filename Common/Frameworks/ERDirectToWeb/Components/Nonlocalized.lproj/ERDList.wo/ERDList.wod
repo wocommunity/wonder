@@ -4,6 +4,7 @@ List1: ERXD2WList {
 	pageConfiguration = ^listConfigurationName;
 	list = list;
 	entityName = ^destinationEntityName;
+	settings = settings;
 }
 
 NoEmptyListMessage: ERXNonNullConditional {
