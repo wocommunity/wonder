@@ -131,9 +131,15 @@ public class ERXSession extends WOSession {
 
     public ERXSession() {
         // Setting the default editing context delegate
-        ERXExtensions.setDefaultDelegate(defaultEditingContext());
         _navigation = createNavigation();
         _navigation.setIsDisabled(false);
+    }
+
+    public EOEditingContext defaultEditingContext() {
+        EOEditingContext ec = super.defaultEditingContext();
+        if(ec.delegate() == null)
+            ERXExtensions.setDefaultDelegate(ec);
+        return ec;
     }
 
     public boolean javaScriptEnabled() {
