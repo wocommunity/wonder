@@ -42,10 +42,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     public final static String KEY_MARKER="** KEY_MARKER **";
 
+    public static class ERXGenericRecordClazz extends EOGenericRecordClazz {
+        
+    }
+
     // This is used to fix a bug in EOF where an object has a to-one to an abstract entity.  If the EO has not been fetch yet an exception
     // can occur that will manifest itself as '*** -[NSConcreteMutableDictionary setObject:forKey:]: attempt to insert nil key'  This method
     // works around that bug if called before storedValueForKey.
-
 
  public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
      /*
@@ -459,9 +462,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             !(editingContext() instanceof EOSharedEditingContext) &&
             !(((EOEnterpriseObject)eo).editingContext() instanceof EOSharedEditingContext)) {
             if (((EOEnterpriseObject)eo).editingContext()==null || editingContext()==null) {
-                cat.warn("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
-                // editingContext().insertObject(((EOEnterpriseObject)eo));
-                // throw new RuntimeException("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
+                //(ak) commented out because when we have a mandatory, propagte PK relationship, this is called before the new OE is inserted.
+                // cat.warn("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
+                if(editingContext()==null) throw new RuntimeException("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
             } else {
                 throw new RuntimeException("******** Attempted to link to EOs through "+key+" in different editing contexts: "+this+" and "+eo);
             }
