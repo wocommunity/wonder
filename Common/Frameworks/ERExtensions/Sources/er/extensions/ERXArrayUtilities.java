@@ -429,7 +429,8 @@ public class ERXArrayUtilities extends Object {
     }
     
     /**
-     * This returns the index of the first object in the arry with a given value for a given keypath.
+     * Finds the index of the first object in the array with a given value for a given keypath.
+     * Assumes that all objects in the array either are NSKeyValueCoding.NullValue or have the given keypath.
      * @param array the array to search.
      * @param value the value to look for.
      * @param keyPath the keypath to use to compare to value.
@@ -439,14 +440,15 @@ public class ERXArrayUtilities extends Object {
         final int count = array.count();
         int result = -1;
         int i = 0;
-        
-        while ( i < count && result == -1 ) {
-            Object theObject = array.objectAtIndex(i);
-            Object theValue = NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(theObject, keyPath);
-            
-            if ( (value == null && theValue == null) || (value != null && theValue != null && value.equals(theValue)) )
-                result = i;
-            
+        while ( i < count) {
+            Object currentObject = array.objectAtIndex(i);
+            if(currentObject != NSKeyValueCoding.NullValue) {
+                Object currentValue = NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(currentObject, keyPath);
+                currentValue = (currentValue == NSKeyValueCoding.NullValue ? null : currentValue);
+                if(currentValue == value || (value != null && value.equals(currentValue))) {
+                    return i;
+                }
+            }
             i++;
         }
         
@@ -454,7 +456,7 @@ public class ERXArrayUtilities extends Object {
     }
     
     /**
-     * This returns the first object in the array with a given value for a given key path.
+     * Finds the first object in the array with a given value for a given key path.
      * @param array the array to search.
      * @param value the value to look for.
      * @param keyPath the keypath to use to compare to value.
