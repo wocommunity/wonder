@@ -52,7 +52,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static final Object lock = new Object();
 
     public static boolean shouldTrimSpaces(){
-        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", true);
+        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
     }
     
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
