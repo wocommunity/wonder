@@ -62,7 +62,7 @@ public class ERXJDBCConnectionBroker {
         }
         return dbBroker;
     }
-    
+
     /**
      * @param modelName
      * @return
@@ -108,10 +108,8 @@ public class ERXJDBCConnectionBroker {
         String password = (String) d.objectForKey("password");
         int minConnections = Integer.parseInt((String) d.objectForKey("minConnections"));
         int maxConnections = Integer.parseInt((String) d.objectForKey("maxConnections"));
-        String logPath = (String) d.objectForKey("logPath");
         double connectionRecycle = Double.parseDouble((String) d.objectForKey("connectionRecycle"));
         int maxCheckout = Integer.parseInt((String) d.objectForKey("maxCheckout"));
-        int debugLevel = Integer.parseInt((String) d.objectForKey("debugLevel"));
 
         if (log.isDebugEnabled()) {
             log.debug("driver=" + driver);
@@ -120,16 +118,13 @@ public class ERXJDBCConnectionBroker {
             log.debug("password=" + password);
             log.debug("minConnections=" + minConnections);
             log.debug("maxConnections=" + maxConnections);
-            log.debug("logPath=" + logPath);
             log.debug("connectionRecycle=" + connectionRecycle);
             log.debug("maxCheckout=" + maxCheckout);
-            log.debug("debugLevel=" + debugLevel);
         }
-        new File(logPath).getParentFile().mkdirs();
 
         try {
-            dbBroker = new DbConnectionBroker(driver, url, username, password, minConnections, maxConnections, logPath,
-                    connectionRecycle, true, maxCheckout, debugLevel);
+            dbBroker = new DbConnectionBroker(driver, url, username, password, minConnections, maxConnections, connectionRecycle,
+                    maxCheckout);
         } catch (IOException e) {
             log.error("could not initiate a DbConnectionBroker");
             log.error("driver=" + driver);
@@ -138,10 +133,8 @@ public class ERXJDBCConnectionBroker {
             log.error("password=" + password);
             log.error("minConnections=" + minConnections);
             log.error("maxConnections=" + maxConnections);
-            log.error("logPath=" + logPath);
             log.error("connectionRecycle=" + connectionRecycle);
             log.error("maxCheckout=" + maxCheckout);
-            log.error("debugLevel=" + debugLevel);
             log.error(e);
             throw new NSForwardException(e);
         } finally {
@@ -150,9 +143,9 @@ public class ERXJDBCConnectionBroker {
     }
 
     /**
-     * DbConnectionBroker a broker for sql connections.
-     * Original version from Marc A. Mnich, based on version 1.0.13 3/12/02
-     * Creates and manages a pool of database connections.
+     * DbConnectionBroker a broker for sql connections. Original version from
+     * Marc A. Mnich, based on version 1.0.13 3/12/02 Creates and manages a pool
+     * of database connections.
      * 
      * @author David Teran, david@cluster9.com
      */
@@ -166,16 +159,14 @@ public class ERXJDBCConnectionBroker {
 
         private long[]           connLockTime, connCreateDate;
         private String[]         connID;
-        private String           dbDriver, dbServer, dbLogin, dbPassword, logFileString;
-        private int              currConnections, connLast, minConns, maxConns, maxConnMSec, maxCheckoutSeconds,
-                debugLevel;
+        private String           dbDriver, dbServer, dbLogin, dbPassword;
+        private int              currConnections, connLast, minConns, maxConns, maxConnMSec, maxCheckoutSeconds;
 
         //available: set to false on destroy, checked by getConnection()
         private boolean          available                 = true;
-        
-        private Boolean supportsTransactions = null;
-        
-        private PrintWriter      log;
+
+        private Boolean          supportsTransactions      = null;
+
         private SQLWarning       currSQLWarning;
         private String           pid;
 
@@ -205,37 +196,23 @@ public class ERXJDBCConnectionBroker {
          * debugLevel: Level of debug messages output to the log file. 0 -> no
          * messages, 1 -> Errors, 2 -> Warnings, 3 -> Information
          */
-        public DbConnectionBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns,
-                int maxConns, String logFileString, double maxConnTime) throws IOException {
+        public DbConnectionBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns, int maxConns,
+                double maxConnTime) throws IOException {
 
-            setupBroker(dbDriver, dbServer, dbLogin, dbPassword, minConns, maxConns, logFileString, maxConnTime, false,
-                    DEFAULTMAXCHECKOUTSECONDS, DEFAULTDEBUGLEVEL);
-        }
-
-        /*
-         * Special constructor to handle logfile append
-         */
-        public DbConnectionBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns,
-                int maxConns, String logFileString, double maxConnTime, boolean logAppend) throws IOException {
-
-            setupBroker(dbDriver, dbServer, dbLogin, dbPassword, minConns, maxConns, logFileString, maxConnTime,
-                    logAppend, DEFAULTMAXCHECKOUTSECONDS, DEFAULTDEBUGLEVEL);
+            setupBroker(dbDriver, dbServer, dbLogin, dbPassword, minConns, maxConns, maxConnTime, DEFAULTMAXCHECKOUTSECONDS);
         }
 
         /*
          * Special constructor to handle connection checkout expiration
          */
-        public DbConnectionBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns,
-                int maxConns, String logFileString, double maxConnTime, boolean logAppend, int maxCheckoutSeconds,
-                int debugLevel) throws IOException {
+        public DbConnectionBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns, int maxConns,
+                double maxConnTime, int maxCheckoutSeconds) throws IOException {
 
-            setupBroker(dbDriver, dbServer, dbLogin, dbPassword, minConns, maxConns, logFileString, maxConnTime,
-                    logAppend, maxCheckoutSeconds, debugLevel);
+            setupBroker(dbDriver, dbServer, dbLogin, dbPassword, minConns, maxConns, maxConnTime, maxCheckoutSeconds);
         }
 
-        private void setupBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns,
-                int maxConns, String logFileString, double maxConnTime, boolean logAppend, int maxCheckoutSeconds,
-                int debugLevel) throws IOException {
+        private void setupBroker(String dbDriver, String dbServer, String dbLogin, String dbPassword, int minConns, int maxConns,
+                double maxConnTime, int maxCheckoutSeconds) throws IOException {
 
             connPool = new Connection[maxConns];
             connStatus = new int[maxConns];
@@ -248,51 +225,23 @@ public class ERXJDBCConnectionBroker {
             this.dbServer = dbServer;
             this.dbLogin = dbLogin;
             this.dbPassword = dbPassword;
-            this.logFileString = logFileString;
             this.maxCheckoutSeconds = maxCheckoutSeconds;
-            this.debugLevel = debugLevel;
             maxConnMSec = (int) (maxConnTime * 86400000.0); //86400 sec/day
             if (maxConnMSec < 30000) { // Recycle no less than 30 seconds.
                 maxConnMSec = 30000;
             }
 
-            try {
-                log = new PrintWriter(new FileOutputStream(logFileString, logAppend), true);
-
-                // Can't open the requested file. Open the default file.
-            } catch (IOException e1) {
-                try {
-                    log = new PrintWriter(
-                            new FileOutputStream("DCB_" + System.currentTimeMillis() + ".log", logAppend), true);
-
-                } catch (IOException e2) {
-                    throw new IOException("Can't open any log file");
-                }
-            }
-
-            // Write the pid file (used to clean up dead/broken connection)
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd G 'at' hh:mm:ss a zzz");
-            Date nowc = new Date();
-            pid = formatter.format(nowc);
-
-            BufferedWriter pidout = new BufferedWriter(new FileWriter(logFileString + "pid"));
-            pidout.write(pid);
-            pidout.close();
-
-            log.println("-----------------------------------------");
-            log.println("-----------------------------------------");
-            log.println("Starting DbConnectionBroker Version 1.0.13:");
-            log.println("dbDriver = " + dbDriver);
-            log.println("dbServer = " + dbServer);
-            log.println("dbLogin = " + dbLogin);
-            log.println("log file = " + logFileString);
-            log.println("minconnections = " + minConns);
-            log.println("maxconnections = " + maxConns);
-            log.println("Total refresh interval = " + maxConnTime + " days");
-            log.println("logAppend = " + logAppend);
-            log.println("maxCheckoutSeconds = " + maxCheckoutSeconds);
-            log.println("debugLevel = " + debugLevel);
-            log.println("-----------------------------------------");
+            ERXJDBCConnectionBroker.log.info("-----------------------------------------");
+            ERXJDBCConnectionBroker.log.info("-----------------------------------------");
+            ERXJDBCConnectionBroker.log.info("Starting DbConnectionBroker");
+            ERXJDBCConnectionBroker.log.info("dbDriver = " + dbDriver);
+            ERXJDBCConnectionBroker.log.info("dbServer = " + dbServer);
+            ERXJDBCConnectionBroker.log.info("dbLogin = " + dbLogin);
+            ERXJDBCConnectionBroker.log.info("minconnections = " + minConns);
+            ERXJDBCConnectionBroker.log.info("maxconnections = " + maxConns);
+            ERXJDBCConnectionBroker.log.info("Total refresh interval = " + maxConnTime + " days");
+            ERXJDBCConnectionBroker.log.info("maxCheckoutSeconds = " + maxCheckoutSeconds);
+            ERXJDBCConnectionBroker.log.info("-----------------------------------------");
 
             // Initialize the pool of connections with the mininum connections:
             // Problems creating connections may be caused during reboot when
@@ -312,12 +261,10 @@ public class ERXJDBCConnectionBroker {
                         connectionsSucceeded = true;
                         break;
                     } catch (SQLException e) {
-                        if (debugLevel > 0) {
-                            log.println("--->Attempt (" + String.valueOf(i) + " of " + String.valueOf(dbLoop)
-                                    + ") failed to create new connections set at startup: ");
-                            log.println("    " + e);
-                            log.println("    Will try again in 15 seconds...");
-                        }
+                        ERXJDBCConnectionBroker.log.error("--->Attempt (" + String.valueOf(i) + " of " + String.valueOf(dbLoop)
+                                + ") failed to create new connections set at startup: ");
+                        ERXJDBCConnectionBroker.log.error("    " + e);
+                        ERXJDBCConnectionBroker.log.error("    Will try again in 15 seconds...");
                         try {
                             Thread.sleep(15000);
                         } catch (InterruptedException e1) {
@@ -326,9 +273,7 @@ public class ERXJDBCConnectionBroker {
                 }
                 if (!connectionsSucceeded) { // All attempts at connecting to db
                     // exhausted
-                    if (debugLevel > 0) {
-                        log.println("\r\nAll attempts at connecting to Database exhausted");
-                    }
+                    ERXJDBCConnectionBroker.log.error("\r\nAll attempts at connecting to Database exhausted");
                     throw new IOException();
                 }
             } catch (Exception e) {
@@ -363,49 +308,16 @@ public class ERXJDBCConnectionBroker {
 
             while (forever) {
 
-                // Make sure the log file is the one this instance opened
-                // If not, clean it up!
-                try {
-                    BufferedReader in = new BufferedReader(new FileReader(logFileString + "pid"));
-                    String curr_pid = in.readLine();
-                    if (curr_pid.equals(pid)) {
-                        //log.println("They match = " + curr_pid);
-                    } else {
-                        //log.println("No match = " + curr_pid);
-                        log.close();
-
-                        // Close all connections silently - they are definitely
-                        // dead.
-                        for (int i = 0; i < currConnections; i++) {
-                            try {
-                                connPool[i].close();
-                            } catch (SQLException e1) {
-                            } // ignore
-                        }
-                        // Returning from the run() method kills the thread
-                        return;
-                    }
-
-                    in.close();
-
-                } catch (IOException e1) {
-                    log.println("Can't read the file for pid info: " + logFileString + "pid");
-                }
-
                 // Get any Warnings on connections and print to event file
                 for (int i = 0; i < currConnections; i++) {
                     try {
                         currSQLWarning = connPool[i].getWarnings();
                         if (currSQLWarning != null) {
-                            if (debugLevel > 1) {
-                                log.println("Warnings on connection " + String.valueOf(i) + " " + currSQLWarning);
-                            }
+                            ERXJDBCConnectionBroker.log.warn("Warnings on connection " + String.valueOf(i) + " " + currSQLWarning);
                             connPool[i].clearWarnings();
                         }
                     } catch (SQLException e) {
-                        if (debugLevel > 1) {
-                            log.println("Cannot access Warnings: " + e);
-                        }
+                        ERXJDBCConnectionBroker.log.warn("Cannot access Warnings: " + e);
                     }
 
                 }
@@ -422,15 +334,10 @@ public class ERXJDBCConnectionBroker {
                                 // Check the time it's been checked out and
                                 // recycle
                                 long timeInUse = System.currentTimeMillis() - connLockTime[i];
-                                if (debugLevel > 2) {
-                                    log.println("Warning.  Connection " + i + " in use for " + timeInUse + " ms");
-                                }
+                                ERXJDBCConnectionBroker.log.debug("Warning.  Connection " + i + " in use for " + timeInUse + " ms");
                                 if (maxCheckoutMillis != 0) {
                                     if (timeInUse > maxCheckoutMillis) {
-                                        if (debugLevel > 1) {
-                                            log.println("Warning. Connection " + i
-                                                    + " failed to be returned in time.  Recycling...");
-                                        }
+                                        ERXJDBCConnectionBroker.log.debug("Warning. Connection " + i + " failed to be returned in time.  Recycling...");
                                         throw new SQLException();
                                     }
                                 }
@@ -458,27 +365,19 @@ public class ERXJDBCConnectionBroker {
                         // Connection has a problem, restart it
                     } catch (SQLException e) {
 
-                        if (debugLevel > 1) {
-                            log.println(new Date().toString() + " ***** Recycling connection " + String.valueOf(i)
-                                    + ":");
-                        }
+                        ERXJDBCConnectionBroker.log.debug(new Date().toString() + " ***** Recycling connection " + String.valueOf(i) + ":");
 
                         try {
                             connPool[i].close();
                         } catch (SQLException e0) {
-                            if (debugLevel > 0) {
-                                log
-                                        .println("Error!  Can't close connection!  Might have been closed already.  Trying to recycle anyway... ("
+                            ERXJDBCConnectionBroker.log.error("Error!  Can't close connection!  Might have been closed already.  Trying to recycle anyway... ("
                                                 + e0 + ")");
-                            }
                         }
 
                         try {
                             createConn(i);
                         } catch (SQLException e1) {
-                            if (debugLevel > 0) {
-                                log.println("Failed to create connection: " + e1);
-                            }
+                            ERXJDBCConnectionBroker.log.error("Failed to create connection: " + e1);
                             connStatus[i] = FREE; // Can't open, try again next
                             // time
                         }
@@ -553,7 +452,7 @@ public class ERXJDBCConnectionBroker {
                         } while ((gotOne == false) && (loop < currConnections));
 
                     } catch (SQLException e1) {
-                        log.println("Error: " + e1);
+                        ERXJDBCConnectionBroker.log.error("Error: " + e1);
                     }
 
                     if (gotOne) {
@@ -566,9 +465,8 @@ public class ERXJDBCConnectionBroker {
                                     createConn(currConnections);
                                     currConnections++;
                                 } catch (SQLException e) {
-                                    if (debugLevel > 0) {
-                                        log.println("Error: Unable to create new connection: " + e);
-                                    }
+                                    ERXJDBCConnectionBroker.log.error("Error: Unable to create new connection: " + e);
+                                    
                                 }
                             }
                         }
@@ -577,22 +475,17 @@ public class ERXJDBCConnectionBroker {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
                         }
-                        if (debugLevel > 0) {
-                            log.println("-----> Connections Exhausted!  Will wait and try again in loop "
-                                    + String.valueOf(outerloop));
-                        }
+                        ERXJDBCConnectionBroker.log.error("-----> Connections Exhausted!  Will wait and try again in loop " + String.valueOf(outerloop));
+                        
                     }
 
                 } // End of try 10 times loop
 
             } else {
-                if (debugLevel > 0) {
-                    log.println("Unsuccessful getConnection() request during destroy()");
-                }
+                ERXJDBCConnectionBroker.log.warn("Unsuccessful getConnection() request during destroy()");
             } // End if(available)
-
-            if (debugLevel > 2) {
-                log.println("Handing out connection " + idOfConnection(conn) + " --> "
+            if (ERXJDBCConnectionBroker.log.isDebugEnabled()) {
+            ERXJDBCConnectionBroker.log.debug("Handing out connection " + idOfConnection(conn) + " --> "
                         + (new SimpleDateFormat("MM/dd/yyyy  hh:mm:ss a")).format(new java.util.Date()));
             }
 
@@ -638,9 +531,7 @@ public class ERXJDBCConnectionBroker {
                 //log.println("Freed connection " + String.valueOf(thisconn) +
                 //            " normal exit: ");
             } else {
-                if (debugLevel > 0) {
-                    log.println("----> Error: Could not free connection!!!");
-                }
+                ERXJDBCConnectionBroker.log.error("----> Error: Could not free connection!!!");
             }
 
             return res;
@@ -672,15 +563,12 @@ public class ERXJDBCConnectionBroker {
                 connID[i] = connPool[i].toString();
                 connLockTime[i] = 0;
                 connCreateDate[i] = now.getTime();
-                
+
             } catch (ClassNotFoundException e2) {
-                if (debugLevel > 0) {
-                    log.println("Error creating connection: " + e2);
-                }
+                ERXJDBCConnectionBroker.log.error("Error creating connection: " + e2);
             }
 
-            log.println(now.toString() + "  Opening connection " + String.valueOf(i) + " " + connPool[i].toString()
-                    + ":");
+            ERXJDBCConnectionBroker.log.error(now.toString() + "  Opening connection " + String.valueOf(i) + " " + connPool[i].toString() + ":");
         }
 
         /**
@@ -750,27 +638,19 @@ public class ERXJDBCConnectionBroker {
                 try {
                     connPool[i].close();
                 } catch (SQLException e1) {
-                    if (debugLevel > 0) {
-                        log.println("Cannot close connections on Destroy");
-                    }
+                    ERXJDBCConnectionBroker.log.warn("Cannot close connections on Destroy");
                 }
             }
 
             if (useCount > 0) {
                 //bt-test successful
-                String msg = "Unsafe shutdown: Had to close " + useCount + " active DB connections after " + millis
-                        + "ms";
-                log.println(msg);
-                // Close all open files
-                log.close();
+                String msg = "Unsafe shutdown: Had to close " + useCount + " active DB connections after " + millis + "ms";
+                ERXJDBCConnectionBroker.log.info(msg);
                 // Throwing following Exception is essential because servlet
                 // authors
                 // are likely to have their own error logging requirements.
                 throw new SQLException(msg);
             }
-
-            // Close all open files
-            log.close();
 
         }//End destroy()
 
@@ -816,30 +696,29 @@ public class ERXJDBCConnectionBroker {
         public int getSize() {
             return currConnections;
         }//End getSize()
-        
+
         /**
-         * 
+         *  
          */
         public boolean supportsTransaction() {
             if (supportsTransactions == null) {
-            try {
-                Connection con = getConnection();
+                try {
+                    Connection con = getConnection();
 
-                supportsTransactions = (con.getTransactionIsolation() != 0) ? Boolean.TRUE : Boolean.FALSE;
+                    supportsTransactions = (con.getTransactionIsolation() != 0) ? Boolean.TRUE : Boolean.FALSE;
 
-                if(supportsTransactions.booleanValue()) {
-                    con.setAutoCommit(false);
+                    if (supportsTransactions.booleanValue()) {
+                        con.setAutoCommit(false);
+                    }
+
+                    freeConnection(con);
+
+                } catch (Exception sqle) {
+                    throw new RuntimeException("Failed to create connection pool", sqle);
                 }
-
-                freeConnection(con);
-
-            } catch(Exception sqle) {
-                throw new RuntimeException("Failed to create connection pool", sqle);
-            }
             }
             return supportsTransactions.booleanValue();
         }
-
 
         public class ConnectionPing implements Runnable {
 
@@ -851,34 +730,36 @@ public class ERXJDBCConnectionBroker {
             public void run() {
                 ERXJDBCConnectionBroker.log.debug("starting up ConnectionPing");
                 while (true) {
-                    boolean b = ERXProperties.booleanForKeyWithDefault(
-                            "er.extensions.ERXJDBCConnectionBroker.connectionPingEnabled", false);
+                    boolean b = ERXProperties
+                            .booleanForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.connectionPingEnabled", false);
                     if (!b) {
                         try {
                             Thread.sleep(1000 * 60 * 1); // wait a minute
                         } catch (InterruptedException e) {
                         }
                     } else {
-                        int wait = ERXProperties.intForKeyWithDefault(
-                                "er.extensions.ERXJDBCConnectionBroker.connectionPingInterval", 60 * 5);
-                        String sql = ERXProperties.stringForKeyWithDefault(
-                                "er.extensions.ERXJDBCConnectionBroker.connectionPingSQL", "SELECT 1+1;");
+                        int wait = ERXProperties.intForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.connectionPingInterval",
+                                60 * 5);
+                        String sql = ERXProperties.stringForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.connectionPingSQL",
+                                "SELECT 1+1;");
                         synchronized (connPool) {
                             for (int i = 0; i < connPool.length; i++) {
                                 if (connStatus[i] == FREE && connPool[i] != null) {
                                     synchronized (connStatus) {
                                         Connection c = connPool[i];
                                         connStatus[i] = IN_USE;
-                                        ERXJDBCConnectionBroker.log.debug("pinging connection "+connStatus[i]);
+                                        ERXJDBCConnectionBroker.log.debug("pinging connection " + connStatus[i]);
                                         try {
                                             c.setAutoCommit(false);
                                             c.setReadOnly(false);
                                             ResultSet rs = c.createStatement().executeQuery(sql);
                                         } catch (Exception e) {
                                             if (ERXJDBCConnectionBroker.log.isDebugEnabled()) {
-                                                ERXJDBCConnectionBroker.log.error("could not ping connection " + c +", reason: "+e.getMessage(), e);
+                                                ERXJDBCConnectionBroker.log.error("could not ping connection " + c + ", reason: "
+                                                        + e.getMessage(), e);
                                             } else {
-                                                ERXJDBCConnectionBroker.log.error("could not ping connection " + c +", reason: "+e.getMessage());
+                                                ERXJDBCConnectionBroker.log.error("could not ping connection " + c + ", reason: "
+                                                        + e.getMessage());
                                             }
                                         } finally {
                                             try {
@@ -900,7 +781,6 @@ public class ERXJDBCConnectionBroker {
                 }
             }
         }
-
 
     }// End class
 }
