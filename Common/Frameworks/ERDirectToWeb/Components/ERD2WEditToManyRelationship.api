@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="macintosh" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-        <wo wocomponentcontent="NO" class="ERD2WEditToManyRelationship">
+        <wo wocomponentcontent="false" class="ERD2WEditToManyRelationship">
 
         </wo>
 </wodefinitions>
