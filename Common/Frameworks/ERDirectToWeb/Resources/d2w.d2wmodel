@@ -538,6 +538,38 @@
             }; 
         }, 
         {
+            author = 50; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = "attribute.className"; 
+                        selectorName = "isEqualTo"; 
+                        value = "java.lang.String"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = "attribute.externalType"; 
+                        selectorName = "isEqualTo"; 
+                        value = CLOB; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = componentName; 
+                value = ERD2WEditLargeString; 
+            }; 
+        }, 
+        {
             author = 30; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
@@ -2833,6 +2865,38 @@
             }; 
         }, 
         {
+            author = 50; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = "attribute.className"; 
+                        selectorName = "isEqualTo"; 
+                        value = "java.lang.String"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = "attribute.externalType"; 
+                        selectorName = "isEqualTo"; 
+                        value = CLOB; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 50; 
+            }; 
+        }, 
+        {
             author = 30; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
@@ -4286,6 +4350,34 @@
                 keyPath = resolvedUnit; 
                 value = "<UnitResolverAssignment>"; 
             }; 
+        }, 
+        {
+            author = 50; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = "attribute.className"; 
+                        selectorName = "isEqualTo"; 
+                        value = "java.lang.String"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = "attribute.externalType"; 
+                        selectorName = "isEqualTo"; 
+                        value = CLOB; 
+                    }
+                ); 
+            }; 
+            rhs = {class = "com.webobjects.directtoweb.Assignment"; keyPath = rows; value = 10; }; 
         }, 
         {
             author = 5; 
