@@ -210,7 +210,7 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-NavBar: WOBatchNavigationBar {
+NavBar: ERXBatchNavigationBar {
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
