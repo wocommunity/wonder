@@ -12,7 +12,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />
- * 
+ * RENAMEME: ERDDisplayList
  */
 
 public class ERD2WDisplayList extends ERDCustomEditComponent {

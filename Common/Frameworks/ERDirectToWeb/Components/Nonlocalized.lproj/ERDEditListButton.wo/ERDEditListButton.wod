@@ -8,6 +8,10 @@ Conditional1: WOConditional {
 	condition = permissionToEdit;
 }
 
+Conditional2: WOConditional {
+	condition = ^showEditButton;
+}
+
 HasElements: ERXNonZeroConditional {
 	condition = list.count;
 }

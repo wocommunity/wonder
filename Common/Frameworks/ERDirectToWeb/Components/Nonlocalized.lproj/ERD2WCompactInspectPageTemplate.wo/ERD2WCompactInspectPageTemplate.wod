@@ -43,9 +43,8 @@ ERTable1: ERXTable {
 	maxColumns = d2wContext.maxColumns;
 }
 
-EditForm: ERXOptionalForm {
+EditForm: WOForm {
 	enctype = d2wContext.formEncoding;
-	hasForm = ^hasForm;
 	multipleSubmit = true;
 	name = "EditForm";
 }

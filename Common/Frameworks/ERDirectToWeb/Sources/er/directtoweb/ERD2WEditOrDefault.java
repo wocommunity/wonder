@@ -18,8 +18,6 @@ import er.extensions.ERXConstant;
 /**
  * Generic edit or default value component, uses other components like editNumber or editString.<br />
  * 
- * @binding localContext
- * @binding object
  */
 
 public class ERD2WEditOrDefault extends D2WComponent {

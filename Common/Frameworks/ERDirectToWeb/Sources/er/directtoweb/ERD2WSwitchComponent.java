@@ -20,7 +20,6 @@ import er.extensions.ERXLogger;
 /**
  * Rewrite of D2WSwitchComponent to not cache the D2WContext.  Useful for nesting configurations.<br />
  * 
- * @binding shouldResetCache" defaults="YES/NO
  */
 
 public class ERD2WSwitchComponent extends D2WSwitchComponent  {

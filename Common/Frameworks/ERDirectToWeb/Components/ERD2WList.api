@@ -5,7 +5,7 @@
 		<binding name="object"/>
 		<binding name="key"/>
 		<binding name="emptyListMessage"/>
-		<binding name="listPageConfiguration"/>
+		<binding name="embeddedPageConfiguration"/>
 		<binding name="list"/>
 	</wo>
 </wodefinitions>

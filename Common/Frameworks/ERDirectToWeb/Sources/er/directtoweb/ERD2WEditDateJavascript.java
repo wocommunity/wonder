@@ -8,8 +8,8 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-
-public class ERD2WEditDateJavascript extends WOComponent {
+// REMOVEME: use ERDEditDateJavascript
+public class ERD2WEditDateJavascript extends ERDEditDateJavascript {
 
     public ERD2WEditDateJavascript(WOContext context) {
         super(context);
