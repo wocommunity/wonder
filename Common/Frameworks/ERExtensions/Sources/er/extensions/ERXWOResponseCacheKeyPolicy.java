@@ -54,10 +54,10 @@ public class ERXWOResponseCacheKeyPolicy implements ERXWOResponseCache.Policy {
         if (actionNames.count() > 0) {
             for (Enumeration actionNameEnumerator = actionNames.objectEnumerator(); actionNameEnumerator.hasMoreElements();) {
                 String actionName = (String)actionNameEnumerator.nextElement();
-                cacheKeyMap.put(policyCacheEntry, actionClass.getName() + "@" + actionName);
+                cacheKeyMap.put(actionClass.getName() + "@" + actionName, policyCacheEntry);
             }
         } else {
-            cacheKeyMap.put(policyCacheEntry, actionClass.getName());
+            cacheKeyMap.put(actionClass.getName(), policyCacheEntry);
         }
     }
 
