@@ -45,6 +45,15 @@ public class ERXErrorDictionaryPanel extends WOComponent {
         return result;
     }
 
+    public Boolean _shouldShowNewLineBelow;
+    public boolean shouldShowNewLineBelow() {
+        boolean result = false;
+        if (_shouldShowNewLineBelow != null)
+            result = ERXUtilities.booleanValue(_shouldShowNewLineBelow);
+        return result;
+    }
+    
+    
     private final static String eliminable = "Could not save your changes: null";
     private final static String couldNotSave = "Could not save your changes: ";
     public static String massageErrorMessage(String initialMessage, String displayErrorKey) {
