@@ -32,7 +32,7 @@ public class ERXCrypto {
     public static final Category cat = Category.getInstance(ERXCrypto.class);
     
     private static SecretKey secretKey() throws NoSuchAlgorithmException {
-        String blowfishKey = NSProperties.stringForKey("ERBlowfishCipherKey");
+        String blowfishKey = System.getProperty("ERBlowfishCipherKey");
         if (blowfishKey == null) {
             NSLog.err.appendln("WARNING: ERBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
             blowfishKey = "DefaultBlowfishCipherKey";

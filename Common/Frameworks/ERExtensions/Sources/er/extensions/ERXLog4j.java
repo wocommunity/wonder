@@ -42,9 +42,9 @@ public class ERXLog4j {
         if (!_isInitialized) {
             // This must be passed in via the command line.  This will be useful for variable substitution in a
             // log4j config file
-            if (NSProperties.stringForKey("ERLogApplicationName") != null)
-                ERXProperties.setStringForKey(NSProperties.stringForKey("ERLogApplicationName"), "er.applicationName");
-            String configurationPath=NSProperties.stringForKey("ERConfigurationPath");
+            if (System.getProperty("ERLogApplicationName") != null)
+                ERXProperties.setStringForKey(System.getProperty("ERLogApplicationName"), "er.applicationName");
+            String configurationPath=ERXProperties.stringForKey("ERConfigurationPath");
             if (configurationPath==null) {
                 File mainProperties=new File(System.getProperty("user.home"),
                                              "WebObjects.properties");
