@@ -832,6 +832,7 @@
 				40B58287FFD5E8187F000001,
 				017C7B3CFFD7144B7F000001,
 				01CC6D580020D11E11CD2B8D,
+				F6DC3ABB02E4A3A40FCF0E72,
 			);
 			buildSettings = {
 				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
@@ -5873,6 +5874,18 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F6DC3ABB02E4A3A40FCF0E72 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			shellPath = /bin/sh;
+			shellScript = ". \"${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh\"";
 		};
 		F6E7989102C8799401AD0D07 = {
 			children = (
