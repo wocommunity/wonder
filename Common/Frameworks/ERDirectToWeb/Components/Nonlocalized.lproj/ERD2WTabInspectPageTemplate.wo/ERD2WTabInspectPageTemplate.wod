@@ -247,10 +247,6 @@ ShowCancel2: WOConditional {
 	condition = showCancel;
 }
 
-String1: WOString {
-	value = currentTab.name;
-}
-
 SubmitChanges: WOImageButton {
 	action = submitAction;
 	alt = "Saves your changes";
