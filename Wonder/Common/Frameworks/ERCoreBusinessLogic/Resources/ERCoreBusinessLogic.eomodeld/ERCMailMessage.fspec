@@ -1,0 +1,37 @@
+{
+    messagesToBeSent = {
+        class = EOFetchSpecification; 
+        entityName = ERCMailMessage; 
+        fetchLimit = 0; 
+        isDeep = YES; 
+        qualifier = {
+            class = EOKeyValueQualifier; 
+            key = mailStateID; 
+            selectorName = "isEqualTo:"; 
+            value = sent; 
+        }; 
+    }; 
+    ripeMessages = {
+        class = EOFetchSpecification; 
+        entityName = ERCMailMessage; 
+        fetchLimit = 0; 
+        isDeep = YES; 
+        qualifier = {
+            class = EOAndQualifier; 
+            qualifiers = (
+                {
+                    class = EOKeyValueQualifier; 
+                    key = mailStateID; 
+                    selectorName = "isEqualTo:"; 
+                    value = rtbs; 
+                }, 
+                {
+                    class = EOKeyValueQualifier; 
+                    key = lastModified; 
+                    selectorName = "isLessThan:"; 
+                    value = {_key = date; class = EOQualifierVariable; }; 
+                }
+            ); 
+        }; 
+    }; 
+}
