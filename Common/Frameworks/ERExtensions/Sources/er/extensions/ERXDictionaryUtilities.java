@@ -66,4 +66,23 @@ public class ERXDictionaryUtilities extends Object {
         }
         return new NSDictionary(result);
     }
+    
+    /**
+     * Removes an array of keys from a dictionary and
+     * returns the result.
+     * @param d dictionary to be pruned
+     * @param a array of keys to be pruned
+     * @return pruned dictionary
+     */
+    public static NSDictionary dictionaryByRemovingFromDictionaryKeysInArray(NSDictionary d, NSArray a) {
+        NSMutableDictionary result=new NSMutableDictionary();
+        if (d!=null && a!=null) {
+            for (Enumeration e=d.allKeys().objectEnumerator();e.hasMoreElements();) {
+                String key=(String)e.nextElement();
+                if (!a.containsObject(key))
+                    result.setObjectForKey(d.objectForKey(key),key);
+            }
+        }
+        return result;
+    }    
 }
