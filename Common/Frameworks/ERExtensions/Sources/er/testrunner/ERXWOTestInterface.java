@@ -60,7 +60,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
                     while (classNameEnum.hasMoreElements()) {
                         String className = (String)classNameEnum.nextElement();
                         if (className != null
-                            && ( className.endsWith( "TestCase" ) || className.startsWith("tests."))
+                            && ( className.endsWith( "TestCase" ) || className.indexOf("tests.") == 0 || className.indexOf(".tests.") > 0)
                             && !className.startsWith( "junit." )
                             && className.indexOf( "$" ) < 0)
                             theClassNames.addObject(className);
@@ -68,6 +68,12 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
                 }
             }
             allTests = theClassNames;
+            try {
+                allTests = theClassNames.sortedArrayUsingComparator(NSComparator.AscendingStringComparator);
+            } catch (Exception ex) {
+                cat.warn(ex);
+                // so we won't get sorted, oh well :)
+            }
         }
         return allTests;
     }

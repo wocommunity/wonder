@@ -1086,6 +1086,17 @@
 			settings = {
 			};
 		};
+		F55412400270D30001000105 = {
+			isa = PBXFileReference;
+			path = ERXTestCase.java;
+			refType = 4;
+		};
+		F55412410270D30001000105 = {
+			fileRef = F55412400270D30001000105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F558841A025B832201000102 = {
 			isa = PBXFileReference;
 			path = ERXLogger.java;
@@ -2621,6 +2632,7 @@
 				F5BE99C40262584501000102,
 				F5177FC00266EB2801000102,
 				F6A85F9C026B03EC0146FA97,
+				F55412410270D30001000105,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -4655,6 +4667,7 @@
 			children = (
 				F57EA5D101FF59BF019E57DA,
 				F57EA60201FF59BF019E57DA,
+				F55412400270D30001000105,
 				F57EA60301FF59BF019E57DA,
 				F57EA60401FF59BF019E57DA,
 				F645C87D0247899001AD0D07,
