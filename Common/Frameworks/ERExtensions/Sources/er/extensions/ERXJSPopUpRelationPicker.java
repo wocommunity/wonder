@@ -72,9 +72,12 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
     protected String parentLabel;
     protected String childLabel;
 
-    protected String childLabel() { return childLabel != null ? childLabel : "Types"; }
-    protected String parentLabel() { return parentLabel != null ? parentLabel : "Categories"; }
-
+    public String childLabel() { return childLabel != null ? childLabel : "Types"; }
+    public void setChildLabel(String childLabel) { this.childLabel = childLabel; }
+    
+    public String parentLabel() { return parentLabel != null ? parentLabel : "Categories"; }
+    public void setParentLabel(String parentLabel) { this.parentLabel = parentLabel; }
+    
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         // get the form values for selected_parent_id and selected_child_id and use these to set the selectedParent and selectedChild values
         // takeValues always returns a String, but sometimes it's an empty string if no value is set on the form element.
@@ -158,7 +161,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         return null;
     }
 
-    protected String jsString() {
+    public String jsString() {
         // this method returns all the javascript we need to embed in the web page.
         StringBuffer returnString;
 
@@ -310,7 +313,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
     }
     return new NSArray(children);
     }*/
-    protected String parentPopUpString() {
+    public String parentPopUpString() {
         /* returns the string to create the pop-up with the initial parent values something like:
         <select name="parent_select" onChange="parentSwapped(window.document.the_form.parent_select.options[selectedIndex].value);">
         <option selected value=1>dogs
@@ -342,7 +345,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         returnString.append("</select>\n");
         return returnString.toString();
     }
-    protected String childPopUpString() {
+    public String childPopUpString() {
         /* returns the string to create the pop-up with the initial child values something like:
         <select name="children_select">
         <option value=4>poodle
@@ -435,7 +438,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
         if (log.isDebugEnabled()) log.debug("JSPopUpRelationPicker childPopUpString  returnString is " + returnString);
         return returnString.toString();
     }
-    private StringBuffer selectHeader(String nm, String oc, Object selectedEntity, String additionalPopupText) {
+    protected StringBuffer selectHeader(String nm, String oc, Object selectedEntity, String additionalPopupText) {
         StringBuffer returnString;
         int i, iCount;
         Object aEntity;
@@ -523,7 +526,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
     return returnString.toString();
     }*/
 
-    protected String parentschildrenArrayCreationString() {
+    public String parentschildrenArrayCreationString() {
         // here's an example of the string this method should return:
         //var parentschildren = new Array(new Entity("dogs","1",new Array(new Entity("poodle","4",null,false),new Entity("puli","5",null,true),new Entity("greyhound","5",null,false)),false), new Entity("fish","2",new Array(new Entity("trout","6",null,true),new Entity("mackerel","7",null,false),new Entity("bass","8",null,false)),true), new Entity("birds","3",new Array(new Entity("robin","9",null,false),new Entity("hummingbird","10",null,false),new Entity("crow","11",null,true)),false));
         StringBuffer returnString;
