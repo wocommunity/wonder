@@ -121,7 +121,8 @@ public class DRValue extends Object  {
             return null;
         if(_attribute.keyPath().indexOf("~") == 0) {
             String code = _attribute.keyPath().substring(1);
-            return WOOgnl.factory().getValue(code, this);
+            // we ignore WOOgnl because it is handled in the reporting framework
+            return null;
         }
         return _record.rawRecord().valueForKeyPath(_attribute.keyPath());
     }
