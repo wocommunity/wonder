@@ -11,6 +11,8 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+import er.extensions.ERXConfigurationManager;
+
 public class ERCMailableExceptionPage extends WOComponent {
 
     public ERCMailableExceptionPage(WOContext aContext) {
@@ -55,6 +57,6 @@ public class ERCMailableExceptionPage extends WOComponent {
 
     public NSTimestamp now() { return new NSTimestamp(); }
     public String hostName() {
-        return ERCoreBusinessLogic.defaultHostName();
+        return ERXConfigurationManager.defaultManager().hostName();
     }
 }
