@@ -1198,6 +1198,7 @@
 				F5A1440A01FF7F8801A80106,
 				F5A143EE01FF7F8801A80106,
 				F5A1443801FF7F8801A80106,
+				F5CDF6DB0214ADD4015AB589,
 				F5A1443901FF7F8801A80106,
 				F5A143EF01FF7F8801A80106,
 				F5A143C001FF7F8801A80106,
@@ -2618,6 +2619,7 @@
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
+			path = "";
 			refType = 4;
 		};
 		F5A1453C01FF7F8801A80106 = {
@@ -2794,6 +2796,8 @@
 	<string>Resources/Java</string>
 	<key>NSJavaRootClient</key>
 	<string>WebServerResources/Java</string>
+	<key>NSPrincipalClass</key>
+	<string>er.directtoweb.ERDirectToWeb</string>
 </dict>
 </plist>
 ";
@@ -3539,6 +3543,7 @@
 				F5A146DB01FF7F8801A80106,
 				F5D9B6AD02078A2001A80106,
 				F55234160209D68D01A80106,
+				F5CDF6DC0214ADD8015AB589,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -4944,6 +4949,17 @@
 		};
 		F5A9FF0A0201F7A401A80106 = {
 			fileRef = F5A9FF090201F7A401A80106;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CDF6DB0214ADD4015AB589 = {
+			isa = PBXFileReference;
+			path = ERDKeyValueAssignment.java;
+			refType = 4;
+		};
+		F5CDF6DC0214ADD8015AB589 = {
+			fileRef = F5CDF6DB0214ADD4015AB589;
 			isa = PBXBuildFile;
 			settings = {
 			};

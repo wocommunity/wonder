@@ -19,13 +19,12 @@ import java.io.*;
 import java.lang.*;
 import er.extensions.*;
 import org.apache.log4j.Category;
-import er.extensions.*;
 
 // new caching scheme, plus log4j integration.
 public class ERD2WModel extends D2WModel {
 
     /////////////////////////////////////  log4j category  ////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.directtoweb.ERD2WModel");
+    public static final Category cat = Category.getInstance(ERD2WModel.class);
 
     ///////////////////////////////////// Notification Titles /////////////////////////////////
     // Register for this notification to have the hook in place to load non-d2wmodel based rules
@@ -36,15 +35,7 @@ public class ERD2WModel extends D2WModel {
     private Hashtable _systemCache=new Hashtable(10000);
     private Hashtable _significantKeysPerKey=new Hashtable(500);
 
-    /* Workaround for the following bug:
-
-        the Live Assistant sorts the rule by priority before saving. However, within the same priority, rules end up being ordered randomly. This makes working with d2wmodel files and diff tools (and by extension CVS) extremely difficult, since even if you only modify one rule, diff ends up detecting thousands of lines of changes.
-
-        this class overrides sortRules to sort on the text description of the rule as a secondary key, after priority
-        */
-
-
-    // put here the keys than can either provided as input or computed
+        // put here the keys than can either provided as input or computed
     // FIXME should add API from clients to add to this array
     static NSMutableArray BACKSTOP_KEYS=new NSMutableArray(new Object[] { "pageConfiguration", "entity", "task" });
     static {
@@ -82,7 +73,7 @@ public class ERD2WModel extends D2WModel {
         /*
          the following sort call was to attempt to make assistant generated files more CVS compatible
          by preserving the rule order better. Commenting out since it's very memory hungry (calling description on every rule)
-         and we are not using the 
+         and we are not using the Assistant
         EOSortOrdering.sortArrayUsingKeyOrderArray((NSMutableArray)rules(),
                                                    _ruleSortOrderingKeyVector);
         cat.debug("Finished sorting.");
@@ -244,12 +235,12 @@ public class ERD2WModel extends D2WModel {
         // we first put all those implicit depedencies introduced by the computedKey business
         Vector v=new Vector();
         v.addElement("propertyKey");
-        dependendKeysPerKey.put(D2WModel.PropertyIsKeyPathKey,v.clone(/* JC_ERROR - This will not compile: calls to clone() must be wrapped with the following code: 'try {...} catch (CloneNotSupportedException e) {...}' */));
+        dependendKeysPerKey.put(D2WModel.PropertyIsKeyPathKey,v.clone());
         v.addElement("entity");
-        dependendKeysPerKey.put(D2WModel.RelationshipKey,v.clone(/* JC_ERROR - This will not compile: calls to clone() must be wrapped with the following code: 'try {...} catch (CloneNotSupportedException e) {...}' */));
-        dependendKeysPerKey.put(D2WModel.AttributeKey,v.clone(/* JC_ERROR - This will not compile: calls to clone() must be wrapped with the following code: 'try {...} catch (CloneNotSupportedException e) {...}' */));
-        dependendKeysPerKey.put(D2WModel.PropertyTypeKey,v.clone(/* JC_ERROR - This will not compile: calls to clone() must be wrapped with the following code: 'try {...} catch (CloneNotSupportedException e) {...}' */));
-        dependendKeysPerKey.put(D2WModel.PropertyKeyPortionInModelKey,v.clone(/* JC_ERROR - This will not compile: calls to clone() must be wrapped with the following code: 'try {...} catch (CloneNotSupportedException e) {...}' */));
+        dependendKeysPerKey.put(D2WModel.RelationshipKey,v.clone());
+        dependendKeysPerKey.put(D2WModel.AttributeKey,v.clone());
+        dependendKeysPerKey.put(D2WModel.PropertyTypeKey,v.clone());
+        dependendKeysPerKey.put(D2WModel.PropertyKeyPortionInModelKey,v.clone());
 
         // then enumerate through all the rules; h 
         for (Enumeration e=publicRules().objectEnumerator(); e.hasMoreElements();) {
@@ -355,14 +346,30 @@ public class ERD2WModel extends D2WModel {
     protected File _currentFile;
     protected void setCurrentFile(File currentFile) { _currentFile = currentFile; }
     protected File currentFile() { return _currentFile; }
-    
-    protected void mergeFile(File modelFile) {
 
-            if(cat.isDebugEnabled()) cat.debug("model file being merged = "+modelFile);
-            setCurrentFile(modelFile);
-            super.mergeFile(modelFile);
-            //uniqueRuleAssignments();
-            setCurrentFile(null);
+    protected void mergeFile(File modelFile) {
+        if(cat.isDebugEnabled()) cat.debug("model file being merged = "+modelFile);
+        setCurrentFile(modelFile);
+        /* Uncomment this code if rules are not unarchiving correctly
+        try {
+            NSDictionary dic = Services.dictionaryFromFile(modelFile);
+            cat.info("\n\n Got dictionary for file: " + modelFile);
+            for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
+                NSDictionary aRule = (NSDictionary)e.nextElement();
+                NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
+                EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
+                try {
+                    addRule((Rule)archiver.decodeObjectForKey("rule"));
+                } catch (Exception ex) {
+                    cat.error("Bad rule: " + aRule);
+                }
+            }
+        } catch (IOException except) {
+            cat.error("Bad, bad" + except.getMessage());
+        } */
+        super.mergeFile(modelFile);
+        //uniqueRuleAssignments();
+        setCurrentFile(null);
         ERXExtensions.forceGC(1);
     }
 
@@ -650,5 +657,3 @@ public class ERD2WModel extends D2WModel {
         return stringObjects.componentsJoinedByString(".");
     }
 }
-
-
