@@ -8,17 +8,14 @@
         <property name="build.temp.dir" value="${build.root}/tmp$" />
 
         <path id="project.class.path">
-            <fileset dir="${wo.system.root}">
-                <include name="JavaFoundation.*/Resources/Java/*.jar" />
-                <include name="JavaEOControl.*/Resources/Java/*.jar" />
-                <include name="JavaEOAccess.*/Resources/Java/*.jar" />
-                <include name="JavaWebObjects.*/Resources/Java/*.jar" />
-                <include name="JavaJDBCAdaptor.*/Resources/Java/*.jar" />
-                <include name="JavaXML.*/Resources/Java/*.jar" />
-            </fileset>
             <fileset dir="${build.root}">
-                <include name="JavaWOExtensions.*/Resources/Java/*.jar" />
-                <include name="Validity.*/Resources/Java/*.jar" />
+                <include name="ER*.framework/Resources/Java/*.jar" />
+                <include name="BT*.framework/Resources/Java/*.jar" />
+                <include name="Validity.framework/Resources/Java/*.jar" />
+            </fileset>
+            <fileset dir="${wo.woroot}/Library/Frameworks">
+                <include name="Java**/Resources/Java/*.jar" />
+                <exclude name="JavaWOExtensions.framework"/>
             </fileset>
         </path>
     </target>
@@ -117,7 +114,7 @@
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
         </taskdef>
-        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
@@ -138,13 +135,14 @@
                 <include name="**/*.js" />
                 <include name="**/*.css" />
             </wsresources>
-            <frameworks root="${wo.system.root}">
-                <include name="Java*.framework"/>
-                <exclude name="Java*Cocoa.framework"/>
-                <exclude name="JavaOpen*.framework"/>
-                <exclude name="JavaEOGeneration*.framework"/>
-                <exclude name="JavaEOInterface.framework"/>
-                <exclude name="JavaEODistribution.framework"/>
+            <frameworks root="wo.woroot">
+                <include name="Library/Frameworks/JavaFoundation.framework" />
+                <include name="Library/Frameworks/JavaEOControl.framework" />
+                <include name="Library/Frameworks/JavaEOAccess.framework" />
+                <include name="Library/Frameworks/JavaWebObjects.framework" />
+                <include name="Library/Frameworks/JavaJDBCAdaptor.framework" />
+                <include name="Library/Frameworks/JavaWOExtensions.framework" />
+                <include name="Library/Frameworks/JavaXML.framework" />
             </frameworks>
             <frameworks root="${build.root}">
                 <include name="Validity.framework" />
