@@ -134,7 +134,7 @@
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 Project Wonder.]]></bottom>
+            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2003 Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
             <link href="http://developer.apple.com/techpubs/webobjects/WebObjects_5.1/Reference/Javadoc/"/>
