@@ -5,7 +5,7 @@ ToManyRelationship: ERXToManyRelationship {
 	relationshipKey = key;
 	size = ^size;
 	sourceEntityName = ^entity.name;
-	sourceObject = ^displayGroup.queryMatch;
+	sourceObject = displayGroup.queryMatch;
 	displayGroup = displayGroup;
 	uiStyle = ^toManyUIStyle;
 	localizeDisplayKeys = ^localizeDisplayKeys;
