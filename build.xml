@@ -1,21 +1,19 @@
-<project name="Wonder" default="core">
+<project name="Wonder" default="compile">
     <!-- 
      this file is just a tiny wrapper around the core file Build/build/generic.xml
      more info about the builds can be found there
     -->
     <target name="clean">
-        <ant antFile="Build/build/generic.xml" target="clean" />
+        <ant antFile="Build/build/generic.xml" target="all.clean" />
     </target>
     <target name="compile">
-        <ant antFile="Build/build/generic.xml" target="compile" />
+        <ant antFile="Build/build/generic.xml" target="all.compile" />
     </target>
     <target name="install">
-        <ant antFile="Build/build/generic.xml" target="install" />
+        <ant antFile="Build/build/generic.xml" target="all.install" />
+        <ant antFile="Build/build/generic.xml" target="all.web" />
     </target>
-    <target name="web">
-        <ant antFile="Build/build/generic.xml" target="web" />
-    </target>
-    <target name="all" depends="clean,compile,install,web" />
+    <target name="all" depends="clean,compile,install" />
     
     <!-- these are just for convenience -->
     <target name="reporting">
