@@ -37,10 +37,6 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
         log.info(classProperties);
         return classProperties.immutableClone();
     }
-
-    public Object embeddedEntityName(D2WContext c) {
-        return defaultEmbeddedEntityName(c);
-    }
     
     public Object defaultEmbeddedEntityName(D2WContext c) {
         Object result = null;
