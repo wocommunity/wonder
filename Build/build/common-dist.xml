@@ -19,13 +19,13 @@
 
         <copy todir="${dist}/Documentation/Frameworks/${framework.name}">
             <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
         <copy todir="${dist}/Documentation/Frameworks/${framework.name}/Support">
             <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
@@ -47,22 +47,29 @@
         <copy todir="${dist}/Applications/${application.name}">
             <fileset dir="${build.root}/${application.name}" />
         </copy>
+        
+        <chmod file="${dist}/Applications/${application.name}/${project}" perm="ugo+rx"/>
 
-        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources">
+        <copy todir="${dist}/Applications/${application.name}" overwrite="true">
+            <fileset dir="${project.source.dir}/Support/ForDistribution" />
+        </copy>
+
+        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources" flatten="true" includeEmptyDirs="false">
             <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
         </copy>
 
-        <copy todir="${dist}/Documentation/Applications/${project}">
+        <copy todir="${dist}/Documentation/Applications/${project}" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
-        <copy todir="${dist}/Documentation/Applications/${project}/Support">
+        <copy todir="${dist}/Documentation/Applications/${project}/Support" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
+
 
         <echo message="-------------------------------------" />
         <echo message="${application.name}" />
@@ -209,14 +216,14 @@
     <target name="dist.source">
         <copy todir="${dist.base}/${project.name}-src-${project.version}">
             <fileset dir="${wonder.root}">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/> 
             </fileset>
         </copy>
         
         <!-- <tar tarfile="${dist.base}/${project.name}-src-${project.version}.tar">
             <tarfileset dir="${wonder.root}">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/>
             </tarfileset>
         </tar>

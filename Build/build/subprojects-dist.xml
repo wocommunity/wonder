@@ -19,13 +19,13 @@
 
         <copy todir="${dist}/Documentation/Frameworks/${framework.name}">
             <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
         <copy todir="${dist}/Documentation/Frameworks/${framework.name}/Support">
             <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
@@ -47,20 +47,26 @@
         <copy todir="${dist}/Applications/${application.name}">
             <fileset dir="${build.root}/${application.name}" />
         </copy>
+        
+        <chmod file="${dist}/Applications/${application.name}/${project}" perm="ugo+rx"/>
 
-        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources">
+        <copy todir="${dist}/Applications/${application.name}" overwrite="true">
+            <fileset dir="${project.source.dir}/Support/ForDistribution" />
+        </copy>
+
+        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources" flatten="true" includeEmptyDirs="false">
             <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
         </copy>
 
-        <copy todir="${dist}/Documentation/Applications/${project}">
+        <copy todir="${dist}/Documentation/Applications/${project}" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Documentation">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
-        <copy todir="${dist}/Documentation/Applications/${project}/Support">
+        <copy todir="${dist}/Documentation/Applications/${project}/Support" includeEmptyDirs="false">
             <fileset dir="${project.source.dir}/Support">
-                <exclude name="**/CVS/**" />
+                <exclude name="**/CVS/*" />
             </fileset>
         </copy>
 
@@ -102,7 +108,14 @@
         </antcall>
     </target>
 	
-    <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
+    <target name="Validity.base" depends="Validity.framework.all, Validity.application.all">
+        <copy todir="${dist}/Documentation/Applications/Validity" includeEmptyDirs="false">
+            <fileset dir="${wonder.root}/Validity/Documentation">
+                <exclude name="**/CVS/*" />
+            </fileset>
+        </copy>
+    </target>
+    
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
     <target name="dist.prebuilt" depends="WOPayPal.all, Validity.all" />
 
