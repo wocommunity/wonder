@@ -346,7 +346,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(availableLanguages == null) {
             String availableLanguagesString = System.getProperty("er.extensions.ERXLocalizer.availableLanguages");
             if(availableLanguages == null) {
-                availableLanguages = new NSArray(new Object [] {"English", "German"});
+                availableLanguages = new NSArray(new Object [] {"English", "German", "Japanese"});
             } else {
                 availableLanguages = NSArray.componentsSeparatedByString(availableLanguagesString, ",");
             }
