@@ -1,0 +1,41 @@
+#!/bin/sh
+
+. /etc/rc.common
+
+##
+# Start up the OpenJMS server on Mac OS X / Darwin
+#
+# 2002-12-29  Tatsuya Kawano <tatsuyak@mac.com>
+#             First version (only implements startup)
+##
+
+export JAVA_HOME=/Library/Java/Home
+export OPENJMS_HOME=/usr/local/openjms
+
+StartService ()
+{
+	ConsoleMessage "Starting OpenJMS Server"
+
+	cd $OPENJMS_HOME/bin
+
+	# Replace -config path with the one that you actually use.
+	$OPENJMS_HOME/bin/startjms.sh -config $OPENJMS_HOME/config/rmi_jms_jdbm.xml & 
+}
+
+StopService()
+{
+
+	cd $OPENJMS_HOME/bin
+
+	# Do nothing for now.
+
+}
+
+RestartService ()
+{
+	StopService
+	StartService
+}
+
+
+RunService "$1"
