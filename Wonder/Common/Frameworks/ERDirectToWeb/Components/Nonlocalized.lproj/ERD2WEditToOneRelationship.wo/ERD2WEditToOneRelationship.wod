@@ -19,6 +19,7 @@ EditToOneRelationship: ERXToOneRelationship {
 	noSelectionString = d2wContext.noSelectionString;
 	popupName = d2wContext.popupName;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+	uniqueID = d2wContext.propertyKey;
 	destinationEntityName = d2wContext.destinationEntityName;
 }
 
