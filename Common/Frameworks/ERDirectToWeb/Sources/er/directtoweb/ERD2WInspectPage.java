@@ -256,7 +256,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 try {
                     _objectWasSaved=true;
                     returnComponent = tryToSaveChanges(true) ? nextPage() : null;
-                } finally {
+                }catch (NSValidation.ValidationException e) {
+						 log.info(e.getMessage(), e);
+						 errorMessage = " Could not save your changes: "+e.getMessage()+" ";
+					 } finally {
                     _objectWasSaved=false;
                 }
             } else {
