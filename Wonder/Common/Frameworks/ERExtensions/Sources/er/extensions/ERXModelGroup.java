@@ -39,6 +39,7 @@ public class ERXModelGroup extends EOModelGroup {
      */
     public static EOModelGroup modelGroupForLoadedBundles() {
         EOModelGroup eomodelgroup = new ERXModelGroup();
+        System.out.println("ERX: eomodelgroup id = "+System.identityHashCode(eomodelgroup));
         NSArray nsarray = NSBundle.frameworkBundles();
         int i = nsarray.count() + 1;
 
