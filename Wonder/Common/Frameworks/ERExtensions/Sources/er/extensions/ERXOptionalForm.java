@@ -43,7 +43,7 @@ public class ERXOptionalForm extends ERXStatelessComponent {
      */
     public boolean showForm() {
         // Defaults to true
-        boolean showForm = valueForBooleanBinding("showForm", true);
+        boolean showForm = booleanValueForBinding("showForm", true);
         return showForm ? !context().isInForm() : false;
     }
 }
