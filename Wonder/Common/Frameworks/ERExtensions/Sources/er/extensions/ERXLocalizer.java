@@ -236,6 +236,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public void load() {
         cache.removeAllObjects();
         createdKeys.removeAllObjects();
+
+        if (log.isDebugEnabled())
+            log.debug("Loading templates for language: " + language + " for files: "
+                      + fileNamesToWatch() + " with search path: " + frameworkSearchPath());
         
         NSArray languages = new NSArray(language);
         WOResourceManager rm = WOApplication.application().resourceManager();
@@ -260,6 +264,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                     } catch(Exception ex) {
                         log.warn("Exception loading: " + fileName + " - " + framework + " - " + languages + ":" + ex);
                     }
+                } else if (log.isDebugEnabled()) {
+                    log.debug("Unable to create path for resource named: " + fileName + " framework: " + framework
+                             + " languages: " + languages);
                 }
             }
         }
@@ -420,13 +427,15 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public static NSArray fileNamesToWatch() {
-        if(fileNamesToWatch == null) {
+        if (fileNamesToWatch == null) {
             String fileNamesToWatchString = System.getProperty("er.extensions.ERXLocalizer.fileNamesToWatch");
             if(fileNamesToWatchString == null) {
                 fileNamesToWatch = new NSArray(new Object [] {"Localizable.strings", "ValidationTemplate.strings"});
             } else {
                 fileNamesToWatch = NSArray.componentsSeparatedByString(fileNamesToWatchString, ",");
             }
+            if (log.isDebugEnabled())
+                log.debug("FileNamesToWatch: " + fileNamesToWatch);
         }
         return fileNamesToWatch;
     }
@@ -443,6 +452,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             } else {
                 availableLanguages = NSArray.componentsSeparatedByString(availableLanguagesString, ",");
             }
+            if (log.isDebugEnabled())
+                log.debug("AvailableLanguages: " + availableLanguages);
         }
         return availableLanguages;
     }
@@ -452,13 +463,15 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public static NSArray frameworkSearchPath() {
-        if(frameworkSearchPath == null) {
+        if (frameworkSearchPath == null) {
             String frameworkSearchPathString = System.getProperty("er.extensions.ERXLocalizer.frameworkSearchPath");
-            if(frameworkSearchPathString == null) {
+            if (frameworkSearchPathString == null) {
                 frameworkSearchPath = new NSArray(new Object [] {"app", "ERDirectToWeb", "ERExtensions"});
             } else {
                 frameworkSearchPath = NSArray.componentsSeparatedByString(frameworkSearchPathString, ",");
             }
+            if (log.isDebugEnabled())
+                log.debug("FrameworkSearchPath: " + frameworkSearchPathString);
         }
         return frameworkSearchPath;
     }
