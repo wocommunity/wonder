@@ -54,6 +54,7 @@
 		089C166AFE841209C02AAC07 = {
 			children = (
 				F6280F9D024F511E01AD0D07,
+				F6280F9E024F5D7C01AD0D07,
 				08FB77AFFE84173DC02AAC07,
 				089C167CFE841241C02AAC07,
 				089C1671FE841209C02AAC07,
@@ -422,6 +423,12 @@
 		F6280F9D024F511E01AD0D07 = {
 			isa = PBXFileReference;
 			path = "Read me.rtf";
+			refType = 4;
+		};
+		F6280F9E024F5D7C01AD0D07 = {
+			isa = PBXFileReference;
+			name = "Simple test";
+			path = "Contextual Menu Scripts/Simple test";
 			refType = 4;
 		};
 	};
