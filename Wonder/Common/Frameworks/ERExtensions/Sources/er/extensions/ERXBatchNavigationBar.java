@@ -70,10 +70,9 @@ public class ERXBatchNavigationBar extends WOComponent {
             if (displayGroup()!=null) {
                 cat.debug("Setting db # of objects per batch to "+newValue);
                 displayGroup().setNumberOfObjectsPerBatch(newValue.intValue());
-                // For some strange reason when switching the number of items per batch
-                // the display group likes to start on the last batch.
-                if(cat.isDebugEnabled()) cat.debug("The batch index is being set to :"+0);
-                displayGroup().setCurrentBatchIndex(0);
+
+                if(cat.isDebugEnabled()) cat.debug("The batch index is being set to : "+ 1);
+                displayGroup().setCurrentBatchIndex(1);
             }
             D2WContext context=(D2WContext)valueForBinding("d2wContext");
             if (context!=null) {
