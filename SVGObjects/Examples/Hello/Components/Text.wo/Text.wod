@@ -1,0 +1,4 @@
+StyleSwitchComponent: WOSwitchComponent {
+	text = text;
+	WOComponentName = styleComponent;
+}
