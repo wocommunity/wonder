@@ -3,6 +3,7 @@
 	<name>ERDirectToWeb</name>
 	<comment></comment>
 	<projects>
+		<project>ERExtensions</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
