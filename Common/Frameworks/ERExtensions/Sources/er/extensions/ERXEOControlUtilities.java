@@ -179,4 +179,23 @@ public class ERXEOControlUtilities {
         }
         return sharedEos != null ? sharedEos : NSArray.EmptyArray;
     }
+
+    /**
+     * Gets a fetch specification from a given entity. If qualifier binding variables
+     * are passed in then the fetchspecification is cloned and the binding variables
+     * are substituted returning a fetch specification that can be used.
+     * @param entityName name of the entity that the fetch specification is bound to
+     * @param fetchSpecificationName name of the fetch specification
+     * @param dictionary of qualifier bindings
+     * @return fetch specification identified by name and potentially with the qualifier
+     * 		bindings replaced.
+     */
+    public static EOFetchSpecification fetchSpecificationNamedWithBindings(String entityName,
+                                                                    String fetchSpecificationName,
+                                                                    NSDictionary bindings) {
+        EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed(fetchSpecificationName,
+                                                                                      entityName);
+        return fetchSpec != null && bindings != null ?
+            fetchSpec.fetchSpecificationWithQualifierBindings(bindings) : fetchSpec;
+    }
 }
