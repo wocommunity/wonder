@@ -1,3 +1,9 @@
+Hyperlink1: WOHyperlink {
+	href = href;
+	onmouseout = "window.status='';return true;";
+	onmouseover = "window.status='Date Picker';return true;";
+}
+
 Image1: WOImage {
 	border = 0;
 	filename = "calendar.gif";
@@ -9,12 +15,12 @@ JavaScript1: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
 }
 
-String1: WOString {
-	value = name;
+JavaScript2: WOJavaScript {
+	scriptSource = datePickerJavaScriptUrl;
 }
 
-String2: WOString {
-	value = datePickerJavaScriptUrl;
+String1: WOString {
+	value = name;
 }
 
 TextField1: WOTextField {
