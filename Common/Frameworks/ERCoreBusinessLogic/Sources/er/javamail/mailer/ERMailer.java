@@ -177,8 +177,18 @@ public class ERMailer {
      */
     // ENHANCEME: Not handling double byte (Japanese) language or file attachments.
     public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) throws MessagingException {
-        ERMailDeliveryHTML mail = new ERMailDeliveryHTML();
+        ERMailDelivery mail = null;
+        if (message.text() != null) {
+            mail = new ERMailDeliveryHTML();
+            ((ERMailDeliveryHTML)mail).setHTMLContent(message.text());
 
+            if (message.plainText() != null)
+                ((ERMailDeliveryHTML)mail).setHiddenPlainTextContent(message.plainText());            
+        } else {
+            mail = new ERMailDeliveryPlainText();
+            ((ERMailDeliveryPlainText)mail).setTextContent(message.plainText());
+        }
+        
         // Add all of the addresses
         mail.setFromAddress(message.fromAddress());
         if (message.replyToAddress() != null)
@@ -197,10 +207,6 @@ public class ERMailer {
 
         // Set the content
         mail.setSubject(messageTitlePrefix() + message.title());
-        mail.setHTMLContent(message.text());
-        
-        if (message.plainText() != null)
-            mail.setHiddenPlainTextContent(message.plainText());
         return mail;
     }
 
