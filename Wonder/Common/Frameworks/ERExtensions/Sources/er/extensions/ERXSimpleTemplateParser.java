@@ -178,7 +178,11 @@ public class ERXSimpleTemplateParser {
                     if (log.isDebugEnabled()) {
                         log.debug("calling valueForKeyPath("+object+", "+element+")");
                     }
-                    obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element); 
+                    if (object instanceof NSKeyValueCodingAdditions) {
+                        obj = ((NSKeyValueCodingAdditions)object).valueForKeyPath(element);
+                    } else {
+                        obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element);
+                    }
                     // For just in case the above doesn't throw an exception when the 
                     // key is not defined. (NSDictionary doesn't seem to throw the exception.)
                     if (obj == null  &&  otherObject != null) {
