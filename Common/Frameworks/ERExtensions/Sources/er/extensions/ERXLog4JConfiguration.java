@@ -58,6 +58,9 @@ public class ERXLog4JConfiguration extends WOComponent {
         NSMutableArray result=new NSMutableArray();
         for (Enumeration e=Category.getCurrentCategories(); e.hasMoreElements();) {
             Category cat=(Category)e.nextElement();
+            if(filterString() != null && cat.getName().indexOf(filterString()) < 0 ) {
+                continue; 
+            }
             while (cat!=null) {
                 addCategory(cat, result);
                 cat=parentForCategory(cat);
