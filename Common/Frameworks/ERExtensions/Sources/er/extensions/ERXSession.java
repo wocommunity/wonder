@@ -377,7 +377,8 @@ public class ERXSession extends WOSession {
         stream.defaultReadObject();
         if (_serializableLanguageName != null) 
             setLanguage(_serializableLanguageName);
-        cat.debug("Session has been deserialized: " + toString());
+        if (cat.isDebugEnabled()) 
+            cat.debug("Session has been deserialized: " + toString());
     }
 
     public String toString() {
