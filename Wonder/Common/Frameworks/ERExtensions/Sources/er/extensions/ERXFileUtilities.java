@@ -102,12 +102,16 @@ public class ERXFileUtilities {
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
         if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
+        BufferedInputStream bis = new BufferedInputStream(stream);
         FileOutputStream out = new FileOutputStream(file);
         byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
         int read = -1;
         while ((read = stream.read(buf)) != -1) {
             out.write(buf, 0, read);
         }
+        bis.close();
+        out.flush();
+        out.close();
     }
 
 
@@ -633,6 +637,11 @@ public class ERXFileUtilities {
      * @param forceDelete if <code>true</code> then the original is deleted even if the file is read only
      */
     public static File zipFile(File f, boolean absolutePaths, boolean deleteOriginal, boolean forceDelete) throws IOException {
+        return zipFile(f, absolutePaths, deleteOriginal, forceDelete, 9);
+    }
+
+    public static File zipFile(File f, boolean absolutePaths, boolean deleteOriginal, boolean forceDelete, int level) throws IOException {
+        
 
         if (!f.exists()) {
             throw new FileNotFoundException("file "+f+" does not exist");
@@ -644,7 +653,7 @@ public class ERXFileUtilities {
         }
 
         ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
-        zout.setLevel(9);
+        zout.setLevel(level);
 
         NSArray files = f.isDirectory() ? arrayByAddingFilesInDirectory(f, true) : new NSArray(f);
 
