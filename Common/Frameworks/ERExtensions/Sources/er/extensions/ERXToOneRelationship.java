@@ -248,7 +248,8 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 		ec = ((EOEnterpriseObject)_sourceObject).editingContext();
 	    else
 		ec = session().defaultEditingContext();
-	    
+	    ec.lock();
+	    try {
 	    anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
 
             aSortedArray = new NSMutableArray(anUnsortedArray);
@@ -294,6 +295,9 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                     aSortedArray.insertObjectAtIndex(noSelectionString(), 0);
             }
             set_privateList(aSortedArray);
+	    } finally {
+	    	ec.unlock();
+	    }
         }
         return _privateList();
     }
