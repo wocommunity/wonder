@@ -248,8 +248,8 @@ public class ERXEC extends EOEditingContext {
 
         if(lockCount == 0) {
 	        if (!isAutoLocked() && !isFinalizing) {
-	            if(lockLoggerTrace.isDebugEnabled()) {
-	                lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
+	            if(lockTrace.isDebugEnabled()) {
+	                lockTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
 	            } else {
 	                lockLogger.warn("called method " + method + " without a lock, ec="+this);
 	            }
@@ -728,6 +728,8 @@ public class ERXEC extends EOEditingContext {
     	/** holds whether to newly created instances use the shared editing context.*/
     	protected Boolean useSharedEditingContext = null;
     	
+    	protected WeakHashMap activeEditingContexts = new WeakHashMap();
+    	
     	public DefaultFactory() {
     		// Initing defaultEditingContext delegates
     		defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
@@ -885,8 +887,20 @@ public class ERXEC extends EOEditingContext {
     			ec.setSharedEditingContext(null);
     			ec.unlock();
     		}
+    		activeEditingContexts.put(ec, Thread.currentThread().getName());
     		NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
     		return ec;
+    	}
+    	
+    	public NSArray lockedEditingContexts() {
+    	    NSMutableArray ecs = new NSMutableArray();
+    	    for (Iterator e = activeEditingContexts.keySet().iterator(); e.hasNext();) {
+    	        ERXEC ec = (ERXEC) e.next();
+    	        if (ec.lockCount() > 0) {
+    	            ecs.addObject(ec);
+    	        }
+    	    }
+    	    return ecs;
     	}
     	
     	/** Actual EC creation bottleneck. Override this to return other subclasses. */
