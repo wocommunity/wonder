@@ -27,8 +27,8 @@ public class ERXTableWithBorder extends WOComponent {
         return ERXUtilities.booleanValueForBindingOnComponentWithDefault("renderBorder", this, true);
     }
 
-    public Number border() {
-        Number result=(Number) (hasBinding("border") ? valueForBinding("border") : null);
+    public Object border() {
+        Object result = (hasBinding("border") ? valueForBinding("border") : null);
         if (result==null) result=ERXConstant.OneInteger;
         return result;
     }
