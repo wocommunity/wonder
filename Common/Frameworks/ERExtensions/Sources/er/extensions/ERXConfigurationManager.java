@@ -313,6 +313,10 @@ public class ERXConfigurationManager {
             String aModelName=aModel.name();
             log.debug("Adjusting "+aModelName);
             NSMutableDictionary newConnectionDictionary=null;
+            if(aModel.adaptorName() == null) {
+                log.info("Skipping model '" + aModel.name() + "', it has no adaptor name set");
+                return;
+            }
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
                 String serverName= System.getProperty(aModelName + ".DBServer");
                 serverName=serverName==null ? System.getProperty("dbConnectServerGLOBAL") : serverName;
