@@ -64,10 +64,14 @@ public class ERXValueUtilities {
      * Basic utility method for determining if an object
      * represents either a true or false value. The current
      * implementation tests if the object is an instance of
-     * a String or a Number. Numbers are false if they equal
-     * <code>0</code>, Strings are false if they equal (case insensitive)
-     * 'no', 'false' or parse to 0. The default value is used if
-     * the object is null.
+     * a <code>String</code>, a <code>Number</code> or a
+     * <code>ERXUtilities.BooleanOperation</code>. 
+     * Numbers are false if they equal <code>0</code>,
+     * Strings are false if they equal (case insensitive)
+     * 'no', 'false' or parse to 0. 
+     * <code>ERXUtilities.BooleanOperation</code> are false if <code>value</code>
+     * returns <code>false</code>.
+     * The default value is used if the object is null.
      * @param obj object to be evaluated
      * @param def default value if object is null
      * @return boolean evaluation of the given object
@@ -75,7 +79,6 @@ public class ERXValueUtilities {
     public static boolean booleanValueWithDefault(Object obj, boolean def) {
         boolean flag = true;
         if (obj != null) {
-            // FIXME: Should add support for the BooleanOperation interface
             if (obj instanceof Number) {
                 if (((Number)obj).intValue() == 0)
                     flag = false;
@@ -92,8 +95,10 @@ public class ERXValueUtilities {
                     } catch(NumberFormatException numberformatexception) {
                         throw new RuntimeException("Error parsing boolean from value \"" + s + "\"");
                     }
-            } else if (obj instanceof Boolean)
+            } else if (obj instanceof Boolean) {
                 flag = ((Boolean)obj).booleanValue();
+            } else if( obj instanceof ERXUtilities.BooleanOperation )
+                flag = ((ERXUtilities.BooleanOperation) obj ).value();
         } else {
             flag = def;
         }
