@@ -20,14 +20,14 @@ Hyperlink2: WOHyperlink {
 
 Image1: WOImage {
 	filename = "s.gif";
-	framework = "ERMiniExtensions";
+	framework = "ERExtensions";
 	height = 1;
 	width = 5;
 }
 
 Image2: WOImage {
 	filename = "s.gif";
-	framework = "ERMiniExtensions";
+	framework = "ERExtensions";
 	height = 1;
 	width = 5;
 }
