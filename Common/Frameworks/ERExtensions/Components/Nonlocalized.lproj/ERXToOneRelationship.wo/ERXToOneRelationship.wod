@@ -39,4 +39,5 @@ RadioButtonMatrix: ERXRadioButtonMatrix {
 
 String: WOString {
 	value = theCurrentValue;
+	escapeHTML = false;
 }
