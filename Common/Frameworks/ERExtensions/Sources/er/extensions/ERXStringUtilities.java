@@ -368,19 +368,20 @@ public class ERXStringUtilities {
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
         String path = null;
         if(bundle != null) {
-            path = bundle.pathForResource(name, extension, null);
-        }
-        if(path == null) {
-            path = ERXFileUtilities.pathForResourceNamed(name + "." + extension, null, null);
-        }
-        if(path != null) {
-            return stringWithContentsOfFile(path);
+            path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
+            try {
+                InputStream stream = bundle.inputStreamForResourcePath(path);
+                byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
+                return new String(bytes);
+            } catch (IOException e) {
+                log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
+            }
         } else {
             log.warn("Not found: " + name + "." + extension + " in bundle " + bundle.name());
         }
         return null;
     }
-
+    
     public static final String firstPropertyKeyInKeyPath(String keyPath) {
         String part = null;
         if (keyPath != null) {

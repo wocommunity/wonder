@@ -8,13 +8,13 @@ package er.extensions;
 
 import java.io.*;
 import java.math.*;
+import java.net.URL;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.*;
 import java.util.*;
 
-import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
 
 /**
  * Collection of simple utility methods used to get and set properties
@@ -609,11 +609,14 @@ public class ERXProperties extends Properties {
             
             if (aPropertiesPath == null) {
                 // The framework project is not opened from PBX, use the one in the bundle. 
-                aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
-                if (aPropertiesPath != null) {
-                    aPropertiesPath = getActualPath(aPropertiesPath);
-                    projectsInfo.addObject("Framework:   " + frameworkName 
-                            + " (not opened, installed) " + aPropertiesPath); 
+                URL url =  ERXFileUtilities.pathURLForResourceNamed("Properties", frameworkName, null);
+                if(url != null) {
+                    aPropertiesPath = url.getFile();
+                    if (aPropertiesPath != null) {
+                        aPropertiesPath = getActualPath(aPropertiesPath);
+                        projectsInfo.addObject("Framework:   " + frameworkName 
+                                + " (not opened, installed) " + aPropertiesPath); 
+                    }
                 }
             }
             

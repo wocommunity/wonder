@@ -6,10 +6,22 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSSet;
 
 /**
  * The reason that this model group is needed is because the regular
@@ -42,29 +54,31 @@ public class ERXModelGroup extends
     public static EOModelGroup modelGroupForLoadedBundles() {
         EOModelGroup eomodelgroup = new ERXModelGroup();
         NSArray nsarray = NSBundle.frameworkBundles();
-        int i = nsarray.count() + 1;
+        int bundleCount = nsarray.count() + 1;
 
         if (log.isDebugEnabled()) log.debug("Loading bundles" + nsarray.valueForKey("name"));
 
-        NSMutableArray nsmutablearray = new NSMutableArray(i);
-        nsmutablearray.addObject(NSBundle.mainBundle());
-        nsmutablearray.addObjectsFromArray(nsarray);
-        for (int i6 = 0; i6 < i; i6++) {
-            NSBundle nsbundle = (NSBundle) nsmutablearray.objectAtIndex(i6);
-            NSArray nsarray7 = nsbundle.pathsForResources("eomodeld", null);
-            int i8 = nsarray7.count();
-            for (int i9 = 0; i9 < i8; i9++) {
-                String string = (String) nsarray7.objectAtIndex(i9);
-                String string10 = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities
-                        .lastPathComponent(string)));
-                EOModel eomodel = eomodelgroup.modelNamed(string10);
-                if (eomodel == null)
-                    eomodelgroup.addModelWithPath(string);
-                else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L))
+        NSMutableArray bundles = new NSMutableArray(bundleCount);
+        bundles.addObject(NSBundle.mainBundle());
+        bundles.addObjectsFromArray(nsarray);
+        for (int currentBundle = 0; currentBundle < bundleCount; currentBundle++) {
+            NSBundle nsbundle = (NSBundle) bundles.objectAtIndex(currentBundle);
+            NSArray paths = nsbundle.resourcePathsForResources("eomodeld", null);
+            int pathCount = paths.count();
+            for (int currentPath = 0; currentPath < pathCount; currentPath++) {
+                String path = (String) paths.objectAtIndex(currentPath);
+                String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities
+                        .lastPathComponent(path)));
+                EOModel eomodel = eomodelgroup.modelNamed(modelName);
+                if (eomodel == null) {
+                    URL url = nsbundle.pathURLForResourcePath(path);
+                    eomodelgroup.addModelWithPathURL(url);
+                } else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L)) {
                         NSLog.debug
-                                .appendln("Ignoring model at path \"" + string + "\" because the model group "
+                                .appendln("Ignoring model at path \"" + path + "\" because the model group "
                                         + eomodelgroup + " already contains the model from the path \""
-                                        + eomodel.path() + "\"");
+                                        + eomodel.pathURL() + "\"");
+                }
             }
         }
         // correcting an EOF Inheritance bug
@@ -85,7 +99,7 @@ public class ERXModelGroup extends
         Enumeration enumeration = _modelsByName.objectEnumerator();
         String name = eomodel.name();
         if (_modelsByName.objectForKey(name) != null) {
-            log.warn("The model '" + name + "' (path: " + eomodel.path() + ") cannot be added to model group " + this
+            log.warn("The model '" + name + "' (path: " + eomodel.pathURL() + ") cannot be added to model group " + this
                     + " because it already contains a model with that name.");
             return;
         }
@@ -97,7 +111,7 @@ public class ERXModelGroup extends
         }
         NSSet intersection = nsmutableset.setByIntersectingSet(nsset);
         if (intersection.count() != 0) {
-            log.warn("The model '" + name + "' (path: " + eomodel.path()
+            log.warn("The model '" + name + "' (path: " + eomodel.pathURL()
                     + ") has an entity name conflict with the entities " + intersection
                     + " already in the model group " + this);
             Enumeration e = intersection.objectEnumerator();
