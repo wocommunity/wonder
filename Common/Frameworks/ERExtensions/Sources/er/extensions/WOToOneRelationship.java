@@ -392,7 +392,7 @@ public class WOToOneRelationship extends WOComponent {
                 // WO 5
                 //_RelationshipSupport._sortEOsUsingSingleKey(aSortedArray, _localDestinationDisplayKey());
                 ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localDestinationDisplayKey());
-            // WO 5    
+           // WO 5    
             //catch (NSComparator.ComparisonException e)
             //    throw new NSForwardException(e);
             } catch (Exception e) {
