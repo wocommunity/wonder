@@ -131,7 +131,7 @@ int init_adaptor(struct _strtbl *options)
           WOLog(WO_ERR, "init_adaptor(): str_init failed");
     }
 
-    WOLog(WO_DBG, "init_adaptor(): beginning initialization");
+    WOLog(WO_DBG, "init_adaptor(): beginning initialization. Adaptor version " ADAPTOR_VERSION ".");
     if (options) {
         char *optionsDescription = st_description(options);
         WOLog(WO_INFO, "init_adaptor(): config options are: %s", optionsDescription);
@@ -184,7 +184,7 @@ int init_adaptor(struct _strtbl *options)
        }
     }
 #endif
-    
+
     if (ret == 0)
        if ((ret = WOShmem_init(stateFile, sizeof(WOApp) * WA_MAX_APP_COUNT + sizeof(WOInstance) * WA_MAX_APP_INSTANCE_COUNT * WA_MAX_APP_COUNT + 1024 * 10)))
           WOLog(WO_ERR,"init_adaptor(): WOShmem_init() failed");

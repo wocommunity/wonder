@@ -272,13 +272,13 @@ char *st_description(strtbl *st)
 #define	SEMI	';'
 #define	MAXSTR	256
 
-#define	ATEND(STR)	(isspace(*STR) || (*STR == EQUAL) || (*STR == SEMI) || (*STR == RIGHTCURLY))
+#define	ATEND(STR)	(isspace((int)*STR) || (*STR == EQUAL) || (*STR == SEMI) || (*STR == RIGHTCURLY))
 
 inline
 static const char *_getstr(const char *s, char *str)
 {
    int count = MAXSTR - 1;
-   while (*s && isspace(*s))	s++;
+   while (*s && isspace((int)*s))	s++;
    if (*s == QUOTE) {
       while (*s && (*++s != QUOTE))
          if (count--)
@@ -306,7 +306,7 @@ strtbl *st_newWithString(const char *s)
    s++;
    while (*s != RIGHTCURLY) {
       s = _getstr(s, key);
-      while (*s && isspace(*s))	s++;
+      while (*s && isspace((int)*s))	s++;
       if (*s == EQUAL)
          s = _getstr(s+1, value);
 
@@ -315,7 +315,7 @@ strtbl *st_newWithString(const char *s)
             st = st_new(0);
          st_add(st, key, value, STR_COPYKEY|STR_COPYVALUE);
       }
-      while (*s && (isspace(*s) || (*s == SEMI)))	s++;
+      while (*s && (isspace((int)*s) || (*s == SEMI)))	s++;
    }
 
    return st;

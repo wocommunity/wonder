@@ -266,7 +266,7 @@ hostent_t hostlookup(const char *name)
    if (name == NULL)
       name = "localhost";
 
-   if (isdigit(*name) && ((hostaddr.s_addr = inet_addr(name)) != -1)) {
+   if (isdigit((int)*name) && ((hostaddr.s_addr = inet_addr(name)) != -1)) {
       /*
        *	dotted notation, we have all the info we need...
        */
