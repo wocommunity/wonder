@@ -7,6 +7,7 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationItem {
@@ -20,6 +21,7 @@ public class ERXNavigationItem {
 
     protected String _action;
     protected NSArray _conditions;
+    protected EOQualifier _qualifier;
     protected String _directActionName;
     protected String _directActionClass;
     protected String _name;
@@ -46,6 +48,9 @@ public class ERXNavigationItem {
                 _conditions = NSArray.EmptyArray;
             } else {
                 _conditions=NSArray.componentsSeparatedByString((String)values.valueForKey("conditions"),",");
+            }
+            if (values.valueForKey("qualifier") == null || ((String)values.valueForKey("qualifier")).equals("")) {
+                _qualifier = EOQualifier.qualifierWithQualifierFormat((String)values.valueForKey("qualifier"), null);
             }
             _directActionName=(String)values.valueForKey("directActionName");
             _directActionClass=(String)values.valueForKey("directActionClass");
@@ -86,6 +91,7 @@ public class ERXNavigationItem {
     }
 
     public NSArray children() { return _children; }
+    public EOQualifier qualifier() { return _qualifier; }
     public String childrenBinding() { return _childrenBinding; }
     public NSArray childrenConditions() { return _childrenConditions; }
     public NSDictionary childrenChoices() { return _childrenChoices; }
