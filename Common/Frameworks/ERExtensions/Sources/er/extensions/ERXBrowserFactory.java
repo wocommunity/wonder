@@ -11,49 +11,56 @@ import com.webobjects.appserver.*;
 import java.util.*;
 
 /**
- * All WebObjects applications have exactly one ERXBrowserFactory 
- * instance. Its primary role is to manage ERXBrowser objects. 
- * It provides facility to parse "user-agent" HTTP header and to 
+ * All WebObjects applications have exactly one <code>ERXBrowserFactory</code> 
+ * instance. Its primary role is to manage {@link ERXBrowser} objects. 
+ * It provides facility to parse <code>"user-agent"</code> HTTP header and to 
  * create an appropriate browser object. It also maintains the 
- * browser pool to store shared ERXBrowser objects. Since ERXBrowser 
- * object is immutable, it can be safely shared between sessions 
- * and ERXBrowserFactory tries to have only one instance of 
- * ERXBrowser for each kind of web browsers.<br>
- * 
- * The primary method called by ERXSession and ERXDirectAction is 
- * <code>browserMatchingRequest</code> which takes a WORequest as 
- * the parameter and returns a shared instance of browser object. 
+ * browser pool to store shared <code>ERXBrowser</code> objects. 
+ * Since <code>ERXBrowser</code> object is immutable, it can be 
+ * safely shared between sessions and <code>ERXBrowserFactory</code> 
+ * tries to have only one instance of <code>ERXBrowser</code> for 
+ * each kind of web browsers.
+ * <p>
+ * The primary method called by {@link ERXSession} and {@link ERXDirectAction} 
+ * is {@link #browserMatchingRequest browserMatchingRequest} 
+ * which takes a {@link com.webobjects.appserver.WORequest WORequest} 
+ * as the parameter and returns a shared instance of browser object. 
  * You actually wouldn't have to call this function by yourself 
- * because ERXSession and ERXDirectAction provide <code>broser</code> 
- * method that returns a browser object for the current request
- * for you.<br>
- * 
- * Note that ERXSession and ERXDirectAction call ERXBrowserFactory's 
- * <code>retainBrowser</code> and <code>releaseBrowser</code> 
+ * because <code>ERXSession</code> and <code>ERXDirectAction</code> 
+ * provide {@link ERXSession#browser browser}</code> method 
+ * that returns a browser object for the current request for you.
+ * <p>
+ * Note that <code>ERXSession</code> and <code>ERXDirectAction</code> 
+ * call <code>ERXBrowserFactory</code>'s 
+ * {@link #retainBrowser retailnBrowser} and {@link #releaseBrowser releaseBrowser}  
  * to put the browser object to the browser pool when it is 
  * created and to remove the browser object from the pool when 
  * it is no longer referred from sessions and direct actions. 
- * ERXSession and ERXDirectAction automatically handle this and 
- * you do not have to call these methods from your code.<br>
- * 
+ * <code>ERXSession</code> and <code>ERXDirectAction</code> 
+ * automatically handle this and you do not have to call these 
+ * methods from your code.<br>
+ * <p>
  * The current implementation of the parsers support variety of 
  * Web browsers in the market such as Internet Explorer (IE), 
  * OmniWeb, Netscape, iCab and Opera, versions between 2.0 and 7.0. <br>
- * 
- * To customize the parsers for "user-agent" HTTP header, subclass  
- * ERXBrowserFactory and override methods like <code>parseBrowserName</code>, 
- * <code>parseVersion</code>, <code>parseMozillaVersion</code> 
- * and <code>parsePlatform</code>. Then put the following statement 
- * into the application's constructor. <br>
- * 
- * <code>ERXBrowserFactory.setFactory(new SubClassOfERXBrowserFactory());</code><br>
- * 
- * If you want to use your own subclass of ERXBrowser, extend 
- * ERXBrowserFactory and override <code>createBrowser</code> method. 
- * This method will only have to contain <code>return new SubClassOfERXBrowser();</code> 
- * statement and should not call super. Then, again, put 
- * <code>ERXBrowserFactory.setFactory(new SubClassOfERXBrowserFactory)</code> 
- * statement into the application's constructor. <br>
+ * <p>
+ * To customize the parsers for <code>"user-agent"</code> HTTP header, 
+ * subclass <code>ERXBrowserFactory</code> and override methods 
+ * like {@link #parseBrowserName parseBrowserName}, 
+ * {@link #parseVersion parseVersion}, 
+ * {@link #parseMozillaVersion parseMozillaVersion} and 
+ * {@link #parsePlatform parsePlatForm}. 
+ * Then put the following statement into the application's 
+ * constructor. 
+ * <p>
+ * <code>ERXBrowserFactory.{@link #setFactory 
+ * setFactory(new SubClassOfERXBrowserFactory())};</code>
+ * <p>
+ * If you want to use your own subclass of <code>ERXBrowser</code>, 
+ * put the follwoing statement into the application's constructor.
+ * <p>
+ * <code>ERXBrowserFactory.factory().{@link #setBrowserClassName 
+ * setBrowserClassName("NameOfTheSubClassOfERXBrowser")}</code>
  */ 
 
 // This implementation is tested with the following browsers (or "user-agent" strings)
@@ -79,23 +86,57 @@ public class ERXBrowserFactory {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getLogger(ERXBrowserFactory.class);
+
+    private static final String _DEFAULT_BROWSER_CLASS_NAME = "er.extensions.ERXBasicBrowser";
     
     private static ERXBrowserFactory _factory = new ERXBrowserFactory();
     public static ERXBrowserFactory factory() { return _factory; }
     public static void setFactory(ERXBrowserFactory newFactory) { _factory = newFactory; }
 
+    private String _browserClassName;
+
+    /**
+     * Returns the name of the {@link ERXBrowser} subclass. 
+     * The default value is <code>"er.extensions.ERXBasicBrowser"</code>.
+     * 
+     * @return	the name of the ERXBrowser subclass; default to 
+     *          <code>"er.extensions.ERXBasicBrowser"</code>
+     * @see	#setBrowserClassName
+     */
+    public String browserClassName() { return _browserClassName; }
+    
+    /**
+     * Sets the name of the {@link ERXBrowser} subclass.
+     * 
+     * @param name	the name of the ERXBrowser subclass; ignored if null
+     * @see		#browserClassName
+     * @see		#createBrowser
+     */
+    public void setBrowserClassName(String name) { 
+        if (name != null  &&  name.length() > 0) 
+            _browserClassName = name; 
+    }
+
+    public ERXBrowserFactory() {
+        // ENHANCEME: (tk) to arrow to set the class name from property files and launch arguments. 
+        setBrowserClassName(_DEFAULT_BROWSER_CLASS_NAME);
+    }
+
     /** 
-     * Get a shared browser object for given request. 
-     * Parses "user-agent" string in the request and gets the appropiate 
-     * browser object. <br>
+     * Gets a shared browser object for given request. 
+     * Parses <code>"user-agent"</code> string in the request and gets 
+     * the appropiate browser object. 
+     * <p>
      * This is the primary method to call from application logics, and 
      * once you get a browser object, you are responsible to call 
-     * <code>retainBrowser</code> to keep the browser object in the browser pool. 
-     * You are also required to call <code>releaseBrowser</code> to release the 
-     * browser from the pool when it is no longer needed. 
+     * {@link #retainBrowser retainBrowser} to keep the browser 
+     * object in the browser pool. 
+     * <p>
+     * You are also required to call {@link #releaseBrowser releaseBrowser} 
+     * to release the browser from the pool when it is no longer needed. 
      * 
-     * @param request WORequest
-     * @return a shared browser object
+     * @param request 	WORequest
+     * @return 		a shared browser object
      */
     public ERXBrowser browserMatchingRequest(WORequest request) {
         if (request == null)   throw new IllegalArgumentException("Request can't be null.");
@@ -116,9 +157,9 @@ public class ERXBrowserFactory {
     }
 
     /** 
-     * Get a shared browser object from browser pool. If such browser object 
-     * does not exist, this method will create one by using 
-     * <code>createBrowser</code> method.
+     * Gets a shared browser object from browser pool. If such browser 
+     * object does not exist, this method will create one by using 
+     * {@link #createBrowser createBrowser} method.
      * 
      * @param browserName string
      * @param version string
@@ -136,36 +177,73 @@ public class ERXBrowserFactory {
     }
 
     /** 
-     * Creates a new browser object for given parameters. Override this method 
-     * if you need to provide your own subclass of ERXBrowser. 
-     * If you override it, your implementation should not call super.
-     * 
+     * Creates a new browser object for given parameters. Override this 
+     * method if you need to provide your own subclass of {@link ERXBrowser}. 
+     * If you override it, your implementation should not call <code>super</code>.
+     * <p>
+     * Alternatively, use {@link #setBrowserClassName} and {@link #browserClassName}.
+     *
      * @param browserName string
      * @param version string
      * @param mozillaVersion string
      * @param platform string
      * @userInfo dictionary
-     * @return new browser object that is a concrete subclass of ERXBrowser
+     * @return new browser object that is a concrete subclass of <code>ERXBrowser</code>
+     * @see	#setBrowserClassName
+     * @see	#browserClassName
      */
     public synchronized ERXBrowser createBrowser(String browserName, String version, String mozillaVersion,
                                                 String platform, NSDictionary userInfo) {
-        return new ERXBasicBrowser(browserName, version, mozillaVersion, platform, userInfo);
+        ERXBrowser browser = null;
+        try {
+            browser = _createBrowserWithClassName(browserClassName(), 
+                                        browserName, version, mozillaVersion, platform, userInfo);
+        } catch (Exception ex) {
+            log.error("Unable to create a browser for class name: " + browserClassName() 
+                            + " with exception: " + ex.getMessage() + ".  Will use default classes."
+                            + " Please ensure that the fully-qualified name for the class is specified"
+                            + " if it is in a different package.");
+        }
+        if (browser == null) {
+            try {
+                browser = _createBrowserWithClassName(_DEFAULT_BROWSER_CLASS_NAME, 
+                                        browserName, version, mozillaVersion, platform, userInfo);
+            } catch (Exception ex) {
+                log.error("Unable to create even a default browser for class name: " + _DEFAULT_BROWSER_CLASS_NAME
+                            + " with exception: " + ex.getMessage()
+                            + "  Will instanciate a brwoser with regular" 
+                            + " new " + _DEFAULT_BROWSER_CLASS_NAME + "(...) statement.");
+                browser = new ERXBasicBrowser(browserName, version, mozillaVersion, platform, userInfo);
+            }
+        }
+        return browser;
     }
 
-    /** 
-     * 
-     * @param
-     */ 
+    private ERXBrowser _createBrowserWithClassName(String className, String browserName, String version, 
+                                            String mozillaVersion, String platform, NSDictionary userInfo) 
+
+                                            throws  ClassNotFoundException, 
+                                                    NoSuchMethodException, 
+                                                    InstantiationException, 
+                                                    IllegalAccessException, 
+                                                    java.lang.reflect.InvocationTargetException 
+    {
+                            
+        Class browserClass = Class.forName(className);
+        Class[] paramArray = new Class[] { String.class, String.class, String.class, 
+                                                                String.class, NSDictionary.class };
+        java.lang.reflect.Constructor constructor = browserClass.getConstructor(paramArray);
+        return (ERXBrowser)constructor.newInstance(new Object[] {
+                    browserName, version, mozillaVersion, platform, userInfo } );
+    }
+        
+
     public synchronized void retainBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
 	_browserPool().setObjectForKey(browser, key);
         _incrementReferenceCounterForKey(key);
     }
 
-    /** 
-     * 
-     * @param
-     */ 
     public synchronized void releaseBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
         ERXMutableInteger count = _decrementReferenceCounterForKey(key);
@@ -178,10 +256,6 @@ public class ERXBrowserFactory {
         } 
     }
 
-    /** 
-     * 
-     * @param
-     */ 
     public String parseBrowserName(String userAgent) {
         String browserString = _browserString(userAgent);
 
@@ -199,10 +273,6 @@ public class ERXBrowserFactory {
         return browser;
     }
 
-    /** 
-     * 
-     * @param
-     */ 
     public String parseVersion(String userAgent) {
         String browserString = _browserString(userAgent);
         int startpos;
@@ -226,10 +296,6 @@ public class ERXBrowserFactory {
         return version;
     }
 
-    /** 
-     * 
-     * @param
-     */ 
     public String parseMozillaVersion(String userAgent) {
         final String mozilla = "Mozilla/";
         String mozillaVersion = ERXBrowser.UNKNOWN_VERSION;
@@ -242,10 +308,6 @@ public class ERXBrowserFactory {
         return mozillaVersion;
     }
 
-    /** 
-     * 
-     * @param
-     */ 
     public String parsePlatform(String userAgent) {
         String platform = ERXBrowser.UNKNOWN_PLATFORM;
         if      (userAgent.indexOf("Win") > -1) 	platform = ERXBrowser.WINDOWS;
@@ -254,10 +316,6 @@ public class ERXBrowserFactory {
         return platform;
     }
 
-    /** 
-     * 
-     * @param
-     */ 
     public String parseCPU(String userAgent) {
         String cpu = ERXBrowser.UNKNOWN_CPU;
         if      (userAgent.indexOf("PowerPC") > -1) 	cpu = ERXBrowser.POWER_PC;
