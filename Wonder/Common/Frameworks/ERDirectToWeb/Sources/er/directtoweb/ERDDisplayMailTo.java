@@ -46,18 +46,13 @@ public class ERDDisplayMailTo extends ERDCustomEditComponent {
 
     public boolean showBrackets() {
         if (_showBrackets == null) {
-            _showBrackets = ERXUtilities.booleanValue(valueForBinding("showBrackets")) ? Boolean.TRUE : Boolean.FALSE;
+            _showBrackets = booleanValueForBinding("showBrackets") ? Boolean.TRUE : Boolean.FALSE;
         }
         return _showBrackets.booleanValue();
     }
     
     public String mailToHref() {
-        String mailToHref = null;
-        if(hasBinding("email")) {
-            mailToHref = "mailto:"+(String)valueForBinding("email");
-        } else if (object() != null && key() != null) {
-            mailToHref = "mailto:" + objectKeyPathValue();
-        }
+        String mailToHref = "mailto:" + email();
         return mailToHref;
     }
     
