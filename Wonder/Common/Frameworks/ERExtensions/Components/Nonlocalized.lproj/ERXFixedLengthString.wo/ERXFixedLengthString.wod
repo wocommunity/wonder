@@ -1,10 +1,10 @@
 String1: WOString {
 	value = value;
-	escapeHTML = ^escapeHtml;
+	escapeHTML = escapeHTML;
 }
 
 String2: WOString {
 	value = suffixWhenTrimmed;
-	escapeHTML = ^escapeHtml;
+	escapeHTML = escapeHTML;
 }
 

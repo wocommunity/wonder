@@ -124,4 +124,12 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
             result = (String)valueForObjectBinding("suffixWhenTrimmed");
         return result;
     }
+    
+    /**
+     * Returns the value for the binding: <b>escapeHTML</b>.
+     * @return optionally returns the boolean value of the binding or TRUE of not given.
+     */
+    public boolean escapeHTML() {
+        return valueForBooleanBinding("escapeHTML", true);
+    }
 }
