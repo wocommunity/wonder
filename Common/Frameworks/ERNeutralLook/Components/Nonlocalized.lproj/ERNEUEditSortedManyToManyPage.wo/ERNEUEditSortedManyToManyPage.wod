@@ -28,7 +28,7 @@ AttributeValue: WOBrowser {
 	list = relationshipDisplayGroup.displayedObjects;
 	multiple = false;
 	selections = browserSelections;
-	size = d2wContext.browserSize;
+	size = browserSize;
 	name = "list2";
 	value = itemHashCode;
 }
