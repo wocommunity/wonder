@@ -6,15 +6,21 @@
 
 package er.javamail;
 
-import er.extensions.*;
-import java.util.*;
-import org.apache.oro.text.regex.*;
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXLogger;
+import er.extensions.ERXProperties;
+import er.extensions.ERXValidationFactory;
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+import java.util.Properties;
 
 
 public class ERJavaMail extends ERXFrameworkPrincipal {
-    public static final ERXLogger log = ERXLogger.getERXLogger (ERJavaMail.class);
+
+    private static final ERXLogger log = ERXLogger.getERXLogger (ERJavaMail.class);
 
     static {
 	setUpFrameworkPrincipalClass (ERJavaMail.class);
@@ -29,7 +35,8 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     }
 
     // Mail Validation ivars
-    protected static final String EMAIL_VALIDATION_PATTERN = "^[A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)*[@][A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)+$";
+    protected static final String EMAIL_VALIDATION_PATTERN =
+        "^[A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)*[@][A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)+$";
     protected Perl5Matcher _matcher;
     protected Pattern _pattern = null;
 
@@ -37,72 +44,68 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         if (log.isDebugEnabled ())
 	    log.debug ("Initializing Framework.");
 
-		Perl5Compiler compiler	= new Perl5Compiler ();
-		_matcher = new Perl5Matcher ();
+        Perl5Compiler compiler	= new Perl5Compiler ();
+        _matcher = new Perl5Matcher ();
 
-		try {
-			_pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
-		} catch (MalformedPatternException e) {
-			throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
-		}
+        try {
+            _pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
+        } catch (MalformedPatternException e) {
+            throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
+        }
 
-		this.initializeFrameworkFromSystemProperties ();
-		log.info ("ERJavaMail: finished initialization");
+        this.initializeFrameworkFromSystemProperties ();
+        log.info ("ERJavaMail: finished initialization");
     }
 
     public void initializeFrameworkFromSystemProperties () {
-		// Admin Email
-		String adminEmail = System.getProperty ("er.javamail.adminEmail");
-		if ((adminEmail == null) || (adminEmail.length () == 0))
+        // Admin Email
+        String adminEmail = System.getProperty ("er.javamail.adminEmail");
+        if ((adminEmail == null) || (adminEmail.length () == 0))
             throw new RuntimeException ("ERJavaMail: the property er.javamail.adminEmail is not specified!");
         this.setAdminEmail (adminEmail);
-		log.debug ("er.javamail.adminEmail: " + _adminEmail);
+        log.debug ("er.javamail.adminEmail: " + _adminEmail);
 
-		// JavaMail Debug Enabled ?
-		boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
+        // JavaMail Debug Enabled ?
+        boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
         this.setDebugEnabled (debug);
-		log.debug ("er.javamail.debugEnabled: " + debug);
+        log.debug ("er.javamail.debugEnabled: " + debug);
 
-		// Centralize mails ?
+        // Centralize mails ?
         boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
-		this.setCentralize (centralize);
-		log.debug ("er.javamail.centralize: " + centralize);
+        this.setCentralize (centralize);
+        log.debug ("er.javamail.centralize: " + centralize);
 
-		// Time to wait when sender if overflowed
-		int milliswait = ERXProperties.intForKey ("er.javamail.milliSecondsWaitIfSenderOverflowed");
+        // Time to wait when sender if overflowed
+        int milliswait = ERXProperties.intForKey ("er.javamail.milliSecondsWaitIfSenderOverflowed");
         if (milliswait > 1000)
-			this.setMilliSecondsWaitIfSenderOverflowed (milliswait);
-		log.debug ("er.javamail.milliSecondsWaitIfSenderOverflowed: " + milliswait);
+            this.setMilliSecondsWaitIfSenderOverflowed (milliswait);
+        log.debug ("er.javamail.milliSecondsWaitIfSenderOverflowed: " + milliswait);
 
-		// Smtp host
-		String smtpHost = System.getProperty ("er.javamail.smtpHost");
-        if ((smtpHost == null) || (smtpHost.length () == 0))
-            throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
-		log.debug ("er.javamail.smtpHost: " + smtpHost);
-
-		// With the smtp-host, we can setup the session
-        Properties props = new Properties ();
-        props.put ("mail.smtp.host", smtpHost);
-        this.setDefaultProperties (props);
-        javax.mail.Session session = javax.mail.Session.getDefaultInstance (this.defaultProperties (), null);
-        this.setDefaultSession (session);
+        // Smtp host
+        this.setupSmtpHostSafely ();
+        this.setDefaultSession (this.newSession ());
 
         // Default X-Mailer header
         this.setDefaultXMailerHeader (System.getProperty ("er.javamail.XMailerHeader"));
         log.debug ("er.javamail.XMailHeader: " + this.defaultXMailerHeader ());
     }
 
+    protected void setupSmtpHostSafely () {
+        // Smtp host
+        String smtpHost = System.getProperty ("er.javamail.smtpHost");
+        if ((smtpHost == null) || (smtpHost.length () == 0)) {
+            // Try to fail back to default java config
+            smtpHost = System.getProperty ("mail.smtp.host");
+    
+            if ((smtpHost == null) || (smtpHost.length () == 0)) {
+                throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
+            } else
+                System.setProperty ("er.javamail.smtpHost", smtpHost);
+        } else
+            System.setProperty ("mail.smtp.host", smtpHost);
 
-    protected Properties _defaultProperties;
-
-    public void setDefaultProperties (Properties javaMailProperties) {
-        _defaultProperties = javaMailProperties;
+        log.debug ("er.javamail.smtpHost: " + smtpHost);
     }
-
-    public Properties defaultProperties () {
-        return _defaultProperties;
-    }
-
 
     protected javax.mail.Session _defaultSession;
 
@@ -122,9 +125,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         return session;
     }
 
-    /** Return a newly allocated Session object from the default Properties */
+    /** Return a newly allocated Session object from the System Properties */
     public javax.mail.Session newSession () {
-        return javax.mail.Session.getInstance (this.defaultProperties ());
+        return javax.mail.Session.getInstance (System.getProperties ());
     }
 
 
@@ -203,8 +206,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         @return the email if correct */
     public String validateEmail (EOEnterpriseObject object, String key, String email) {
         if (email != null) {
-            if (!isValidEmail(email))
-                throw ERXValidationFactory.defaultFactory ().createException (object, key, email, "malformedEmail");
+            if (!this.isValidEmail(email))
+                throw ERXValidationFactory.defaultFactory ().createException
+                    (object, key, email, "malformedEmail");
         }
 
         return email;
@@ -216,10 +220,5 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         if (email != null)
             return _matcher.matches (email, _pattern);
         return false;
-    }
-
-    /** Define a standard ERJavMail exception */
-    public static class Exception extends java.lang.Exception {
-		public Exception (String message) { super (message); }
     }
 }
