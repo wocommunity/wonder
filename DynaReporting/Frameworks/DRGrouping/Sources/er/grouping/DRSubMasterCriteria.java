@@ -308,8 +308,8 @@ public class DRSubMasterCriteria extends Object  {
             }
         }
         if(isPeriodic()) {
-            double v1 = DRCriteria.doubleForValue(_rawPossibleValues.lastObject());
-            double v2 = DRCriteria.doubleForValue(_rawPossibleValues.objectAtIndex(0));
+            double v1 = DRValueConverter.converter().doubleForValue(_rawPossibleValues.lastObject());
+            double v2 = DRValueConverter.converter().doubleForValue(_rawPossibleValues.objectAtIndex(0));
             _periodicDelta = v1 - v2;
         }
     }
@@ -351,9 +351,9 @@ public class DRSubMasterCriteria extends Object  {
         NSMutableArray possibleValuesToUse = possibleValuesToUse();
         Object maxVal = possibleValuesToUse.lastObject();
         Object minVal = possibleValuesToUse.objectAtIndex(0);
-        double v = DRCriteria.doubleForValue(aval);
-        double maxv = DRCriteria.doubleForValue(maxVal);
-        double minv = DRCriteria.doubleForValue(minVal);
+        double v = DRValueConverter.converter().doubleForValue(aval);
+        double maxv = DRValueConverter.converter().doubleForValue(maxVal);
+        double minv = DRValueConverter.converter().doubleForValue(minVal);
 
         if (!isPeriodic()) {
             if (!groupEdges()) {
@@ -408,8 +408,8 @@ public class DRSubMasterCriteria extends Object  {
 
             lowVal = possibleValuesToUse.objectAtIndex(i);
             highVal = possibleValuesToUse.objectAtIndex(nextIndex);
-            minv = DRCriteria.doubleForValue(lowVal);
-            maxv = DRCriteria.doubleForValue(highVal);
+            minv = DRValueConverter.converter().doubleForValue(lowVal);
+            maxv = DRValueConverter.converter().doubleForValue(highVal);
 
             if ((v <= maxv) && (v > minv)) {
                 break;
@@ -434,11 +434,11 @@ public class DRSubMasterCriteria extends Object  {
             NSTimestamp nvts = vts.timestampByAddingGregorianUnits(0, 0, 0, 0, 0, (int)delta);
             return nvts;
         } else if (val instanceof Number) {
-            v = DRCriteria.doubleForValue(val) + delta;
+            v = DRValueConverter.converter().doubleForValue(val) + delta;
             return (new Double(v));
         }
 
-        v = DRCriteria.doubleForValue(val) + delta;
+        v = DRValueConverter.converter().doubleForValue(val) + delta;
         return (new Double(v)).toString();
     }
 
@@ -489,8 +489,8 @@ public class DRSubMasterCriteria extends Object  {
     public String lookUpKeyForValue(Object aVal) {
         String s;
 
-        if (_useTimeFormat && aVal instanceof NSTimestamp) {
-            NSTimestamp ts = (NSTimestamp)aVal;
+        if (_useTimeFormat) {
+            NSTimestamp ts = DRValueConverter.converter().timestampForValue(aVal);
             NSTimestampFormatter formatter = DRCriteria.formatterForFormat(_format);
             try {
                 s = formatter.format(ts);
