@@ -39,7 +39,6 @@ public class ERXValidation {
         return _propertyNameContext;
     }
 
-    
     public static void validationFailedWithException(Throwable e,
                                                      Object value,
                                                      String keyPath,

@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import org.apache.log4j.Category;

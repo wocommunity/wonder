@@ -8,7 +8,6 @@
 /* ERGraphUtilities.java created by angela on Thu 01-Nov-2001 */
 package er.extensions;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;

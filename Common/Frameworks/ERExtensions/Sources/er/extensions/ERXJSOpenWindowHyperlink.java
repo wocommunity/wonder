@@ -11,7 +11,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.lang.*;
-import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 
 public class ERXJSOpenWindowHyperlink extends WOComponent {

@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
 import java.lang.*;
 import java.util.*;
 import org.apache.log4j.Category;
@@ -631,9 +630,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     /** Caches the context used for validations */
     // FIXME: We should have a better mechanism than this.
-    private static D2WContext _validationContext;
+    //private static D2WContext _validationContext;
     
     // DELETEME: Let's ditch this for now, it is kinda half baked
+    /*
     public static Object ruleValueForAttributeAndKey(EOAttribute a, String key) {
         if (_validationContext==null) {
             _validationContext=new D2WContext();
@@ -641,7 +641,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         _validationContext.setEntity(a.entity());
         _validationContext.setPropertyKey(a.name());
         return _validationContext.valueForKey(key);
-    }
+    }*/
 
     /**
      * Overrides the default validation mechanisms to provide
@@ -673,6 +673,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                 String unit=(String)attr.userInfo().objectForKey("unit");
                 if (unit==null) unit="";
                 Number inputValue = (Number)value;
+                /*
                 String min=(String)ruleValueForAttributeAndKey(attr,"minValue");
                 if (min!=null) {
                     Integer minimum = ERXConstant.integerForString(min);
@@ -686,6 +687,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                         throw new NSValidation.ValidationException("<b>" +KEY_MARKER+"</b> should be smaller than <b>" +max+ " "+unit+"</b>.");
                     }
                 }
+                 */
             }
             if (validation.isDebugEnabled())
                 validation.debug("Before call to super, classDescription: " + classDescription());
