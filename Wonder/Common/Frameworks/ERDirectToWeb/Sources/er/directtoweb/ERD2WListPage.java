@@ -408,7 +408,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     }
 
     public boolean shouldShowSelectAll() {
-        return listSize()>10;
+        return listSize()>10 || ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSelectAll"));
     }
 
     public void warmUpForDisplay(){
