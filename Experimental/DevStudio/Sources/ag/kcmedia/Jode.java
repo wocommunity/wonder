@@ -15,8 +15,7 @@ import java.io.File;
 import jode.bytecode.*;
 import jode.decompiler.*;
 import jode.type.Type;
-import java.lang.reflect.Modifier;
-import JavaCCtoHTML;
+import java.lang.reflect.*;
 
 public class Jode extends Object {
     static final ERXLogger log = ERXLogger.getERXLogger(JavaBrowser.class,"components");
@@ -250,7 +249,14 @@ public class Jode extends Object {
                     + "added to ClassPaths property in the Localizable.strings file.";
             }
             sourceCode = writer.toString();
-            sourceCode = JavaCCtoHTML.prettyString(sourceCode);
+            try {
+                Class JavaCCtoHTML = Class.forName("JavaCCtoHTML");
+                NSSelector prettyString = new NSSelector("prettyString", new Class [] {String.class});
+                prettyString.invoke(JavaCCtoHTML, sourceCode);
+                // sourceCode = JavaCCtoHTML.prettyString(sourceCode);
+            } catch (Exception ex) {
+                log.error(ex);
+            }
             sourceCode = ERXExtensions.replaceStringByStringInString("\n\n", "<br>", sourceCode);
             return sourceCode;
         }
