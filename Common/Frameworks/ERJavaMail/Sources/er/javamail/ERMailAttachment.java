@@ -1,7 +1,7 @@
 /*
- $Id$
+  $Id$
 
- ERMailAttachement.java - Camille Troillard - tuscland@mac.com
+  ERMailAttachement.java - Camille Troillard - tuscland@mac.com
 */
 
 package er.javamail;
@@ -16,13 +16,13 @@ public abstract class ERMailAttachment {
         this.setContent (content);
     }
 
-	protected Object content () {
-		return _content;
-	}
+    protected Object content () {
+	return _content;
+    }
 
     protected void setContent (Object content) {
-		_content = content;
-	}
+	_content = content;
+    }
 
-    protected abstract BodyPart getBodyPart () throws Exception;
+    protected abstract BodyPart getBodyPart () throws MessagingException;
 }

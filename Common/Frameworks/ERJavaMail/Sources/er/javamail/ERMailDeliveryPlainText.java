@@ -27,7 +27,7 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
 
     /** Pre-processes the mail before it gets sent.
         @see ERMailDelivery#prepareMail */
-    protected DataHandler prepareMail () {
+    protected DataHandler prepareMail () throws MessagingException {
 		// FIXME: We must set the good charset
         return new DataHandler (textContent, "text/plain");
     }
