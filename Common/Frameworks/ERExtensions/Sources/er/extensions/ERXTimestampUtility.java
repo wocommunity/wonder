@@ -14,17 +14,38 @@ import java.util.*;
 // A simle utility for providing deprecated functionality for NSTimestamps
 public class ERXTimestampUtility {
 
+    protected static GregorianCalendar _calendar = (GregorianCalendar)GregorianCalendar.getInstance();
+    
     public static GregorianCalendar calendarForTimestamp(NSTimestamp t) {
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTime(t);
-        return c;
+        _calendar.setTime(t);
+        return _calendar;
+    }
+
+    public static int dayOfCommonEra(NSTimestamp t) {
+        return yearOfCommonEra(t)*365 + dayOfYear(t);
     }
     
+    public static int dayOfWeek(NSTimestamp t) {
+        return calendarForTimestamp(t).get(GregorianCalendar.DAY_OF_WEEK);        
+    }
+
+    public static int dayOfYear(NSTimestamp t) {
+        return calendarForTimestamp(t).get(GregorianCalendar.DAY_OF_YEAR);
+    }    
+    
     public static int hourOfDay(NSTimestamp t) {
-        return calendarForTimestamp(t).get(GregorianCalendar.HOUR);
+        return calendarForTimestamp(t).get(GregorianCalendar.HOUR_OF_DAY);
     }
 
     public static int minuteOfHour(NSTimestamp t) {
         return calendarForTimestamp(t).get(GregorianCalendar.MINUTE);        
+    }
+
+    public static int monthOfYear(NSTimestamp t) {
+        return calendarForTimestamp(t).get(GregorianCalendar.MONTH);        
+    }
+
+    public static int yearOfCommonEra(NSTimestamp t) {
+        return calendarForTimestamp(t).get(GregorianCalendar.YEAR);
     }
 }
