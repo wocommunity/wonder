@@ -234,6 +234,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 object().editingContext().saveChanges();
             saved = true;
         } catch (NSValidation.ValidationException e) {
+            if (e instanceof ERXValidationException) {
+                ERXValidationException ex = (ERXValidationException)e;
+                ex.setContext(d2wContext());
+                Object o = ex.object();
+                if(o instanceof EOEnterpriseObject) {
+                    EOEnterpriseObject eo = (EOEnterpriseObject)o;
+                    d2wContext().takeValueForKey( eo.entityName(),"entityName");
+                    d2wContext().takeValueForKey( ex.propertyKey(),"propertyKey");
+                }
+            }
             errorMessage = " Could not save your changes: "+e.getMessage()+" ";
         }
         return saved;

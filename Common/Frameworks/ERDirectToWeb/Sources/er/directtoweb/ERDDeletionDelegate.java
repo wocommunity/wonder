@@ -11,6 +11,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
+import er.extensions.*;
 
 public class ERDDeletionDelegate implements NextPageDelegate {
 
@@ -47,7 +48,19 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                 editingContext.saveChanges();
                 _object=null;
             } catch (NSValidation.ValidationException e) {
-                cat.info("Validation Exception: " + e.getMessage());
+                if(e instanceof ERXValidationException) {
+                    ERXValidationException ex = (ERXValidationException)e;
+                    D2WContext context = (D2WContext)sender.valueForKey("d2wContext");
+                    Object o = ex.object();
+                    
+                    if(o instanceof EOEnterpriseObject) {
+                        EOEnterpriseObject eo = (EOEnterpriseObject)o;
+                        context.takeValueForKey( eo.entityName(),"entityName");
+                        context.takeValueForKey( ex.propertyKey(),"propertyKey");
+                    }
+                    ((ERXValidationException)e).setContext(context);
+                }
+                cat.info("Validation Exception: "+ e + e.getMessage());
                 editingContext.revert();
                 String errorMessage = " Could not save your changes: "+e.getMessage()+" ";
                 ErrorPageInterface epf=D2W.factory().errorPage(sender.session());
