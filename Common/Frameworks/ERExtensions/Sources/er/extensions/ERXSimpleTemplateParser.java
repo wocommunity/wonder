@@ -176,6 +176,9 @@ public class ERXSimpleTemplateParser {
                     throw new RuntimeException("\"\" is not a valid keypath in template: " + template);
                 Object obj;
                 try {
+                    if (log.isDebugEnabled()) {
+                        log.debug("calling valueForKeyPath("+object+", "+element+")");
+                    }
                     obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element); 
                     // For just in case the above doesn't throw an exception when the 
                     // key is not defined. (NSDictionary doesn't seem to throw the exception.)
