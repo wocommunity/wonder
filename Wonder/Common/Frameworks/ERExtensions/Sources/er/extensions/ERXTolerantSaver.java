@@ -83,16 +83,25 @@ public class ERXTolerantSaver {
         return null;
     }
 
-    public static void applyEOChangesForValue(Object val, EOAttribute attrib, NSArray rels, EOEnterpriseObject eo){
+    /**
+     * Method used to push an object identified by it's primary
+     * key into one or many relationships off of a given enterprise
+     * object.
+     * @param val primary key of a given object
+     * @param rels array of relationships that the object should be
+     *		added to.
+     * @param eo enterprise object to have the object added to.
+     */
+    public static void applyEOChangesForValue(Object val, NSArray rels, EOEnterpriseObject eo){
         int i;
         int cnt = rels.count();
         EOEditingContext ec = eo.editingContext();
-        for(i=0; i<cnt; i++){
+        for (i=0; i < cnt; i++) {
             EORelationship rel = (EORelationship)rels.objectAtIndex(i);
             String relKey = rel.name();
             EOEntity destEnt = rel.destinationEntity();
             NSDictionary pkDict = primaryKeyFor(val, destEnt);
-            if(pkDict != null){
+            if (pkDict != null) {
                 EOGlobalID gid = destEnt.globalIDForRow(pkDict);
                 EOEnterpriseObject destEO = ec.faultForGlobalID(gid, ec);
                 eo.takeValueForKey(destEO, relKey);
@@ -100,34 +109,53 @@ public class ERXTolerantSaver {
         }
     }
 
-    public static void applyChangesToEO(NSDictionary changedValues, EOEnterpriseObject failedEO, EOEntity ent){
+    /**
+     * Method used to apply a set of changes to a re-fetched eo.
+     * This method is used to re-apply changes to a given eo after
+     * it has been refetched.
+     * @param changedValues dictionary of the changed values to be
+     *		applied to the object.
+     * @param failedEO enterprise object to have the changes re-applied
+     *		to.
+     * @param ent EOEntity of the failedEO
+     */
+    public static void applyChangesToEO(NSDictionary changedValues, EOEnterpriseObject failedEO, EOEntity ent) {
         int i;
         NSArray keys = changedValues.allKeys();
         int cnt = keys.count();
-        NSArray cps = ent.classProperties ();
-        NSArray rels = ent.relationships ();
-        for(i=0; i<cnt; i++){
+        NSArray cps = ent.classProperties();
+        NSArray rels = ent.relationships();
+        for (i=0; i<cnt; i++) {
             String key = (String)keys.objectAtIndex(i);
             EOAttribute attrib = ent.attributeNamed(key);
-            if(attrib != null){
+            if (attrib != null) {
                 Object val = changedValues.objectForKey(key);
                 NSArray relsUsingAttrib = relationshipsForAttribute(attrib, rels);
                 int cnt2 = relsUsingAttrib.count();
-                if(cps.containsObject(attrib)){
+                if (cps.containsObject(attrib)) {
                     failedEO.takeValueForKey(val, key);
                 }
-                if(cnt2 > 0){
-                    applyEOChangesForValue(val, attrib, relsUsingAttrib, failedEO);
+                if (cnt2 > 0) {
+                    applyEOChangesForValue(val, relsUsingAttrib, failedEO);
                 }
             }
         }
     }
 
-    public static EOQualifier qualifierWithSnapshotAndPks(NSArray pkAttribs, NSDictionary snapshot){
+    /**
+     * Constructs a qualifier for a given array of
+     * primary key attributes and a given snapshot.
+     * @param pkAttribs array of EOAttributes that define
+     *		the primary keys of a given entity
+     * @param snapshot to form the qualifier for
+     * @return qualifier that can be used to re-fetch the
+     *		given snapshot.
+     */
+    public static EOQualifier qualifierWithSnapshotAndPks(NSArray pkAttribs, NSDictionary snapshot) {
         int i;
         int cnt = pkAttribs.count();
         NSMutableArray qualArray = new NSMutableArray();
-        for(i=0;i<cnt;i++){
+        for (i = 0; i < cnt; i++) {
             EOAttribute attrib = (EOAttribute)pkAttribs.objectAtIndex(i);
             String key = attrib.name();
             EOKeyValueQualifier qual = new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, snapshot.objectForKey(key));
@@ -136,20 +164,52 @@ public class ERXTolerantSaver {
         return (EOQualifier)new EOAndQualifier(qualArray);
     }
 
-
+    /**
+     * Cover method for calling the method <code>save</code> with the
+     * third parameter (merge) set to true. See the description of
+     * the three parameter version for a detailed explanation.
+     * @param ec editing context to be saved.
+     * @param writeAnyWay boolean flag to determine if the editing
+     *		context should be resaved after a general adaptor
+     *		exception
+     * @return string representation of the exception that happened.
+     *		This will be changed in the future.
+     */
     public static String save(EOEditingContext ec, boolean writeAnyWay) {
         return save(ec, writeAnyWay, true);
     }
+
+    // DELETEME: This is the same as save
     public static String saveMerge(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
         return save(ec, writeAnyWay, merge);
     }
 
+    /**
+     * Entry point for saving an editing context in a tolerant
+     * manner. The two flags for this methad are <code>writeAnyWay</code>
+     * and <code>merge</code>. The writeAnyWay flag controls if a second
+     * save should be performed if the first operation fails due to a general
+     * adaptor operation. Note that even if this option is specified as
+     * false the object will be refetched and optionally have the new changes
+     * merged into. This means that the objects that failed saving to the
+     * database will be ready to be saved if writeAnyWay is false. The second
+     * option is to merge the previous changes if a failure occurs. If this
+     * is set to true then when a locking failure occurs the object is refetched
+     * and then the previous changes are re-applied to the object.
+     * @param ec editing context to be saved
+     * @param writeAnyWay boolean flag to determine if an editing context should
+     *		be saved again after a failure.
+     * @param merge boolean flag that determines if changes should be re-applied
+     *		if a locking failure occurs when the first save happens
+     * @return string indicating the exception that happened, null if everything
+     *		went smooth. This should be changed in the future.
+     */
     // FIXME: returning those strings for error conditions is not very good
     // we should probably return ints for status and re-throw the original exception
     // in some cases
     public static String save(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
         if (cat.isDebugEnabled()) cat.debug("TolerantSaver: save...");
-        try{
+        try {
             //if (cat.isDebugEnabled()) cat.debug("about to save changes...");
             ec.saveChanges();
         } catch(NSValidation.ValidationException eov) {
@@ -162,15 +222,15 @@ public class ERXTolerantSaver {
             //if (cat.isDebugEnabled()) cat.debug("Exception occurred e: "+e);
             //if (cat.isDebugEnabled()) cat.debug("Exception occurred userInfo: "+ userInfo);
             //if (cat.isDebugEnabled()) cat.debug("Exception occurred e: ^^^^^^^^^^^^^^^^^^^^^^^^^");
-            if(!(userInfo == null)){
+            if(!(userInfo == null)) {
                 String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
-                if(!(eType == null)){
-                    if(eType.equals("EOAdaptorOptimisticLockingFailure")){
+                if (!(eType == null)) {
+                    if (eType.equals("EOAdaptorOptimisticLockingFailure")) {
                         //if (cat.isDebugEnabled()) cat.debug("about to get EOFailedAdaptorOperationKey");
                         EOAdaptorOperation op = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
                         EODatabaseOperation dbop = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
                         //if (cat.isDebugEnabled()) cat.debug("about to get _changedValues");
-                        if (op!=null && dbop!=null) {
+                        if (op != null && dbop != null) {
                             NSDictionary changedValues =  op.changedValues();
                             //if (cat.isDebugEnabled()) cat.debug("about to get _entity: _changedValues"+ changedValues);
                             NSDictionary snapshot = dbop.dbSnapshot();
@@ -183,10 +243,10 @@ public class ERXTolerantSaver {
                             EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
                             fs.setRefreshesRefetchedObjects(true);
                             NSArray objs = ec.objectsWithFetchSpecification(fs);
-                            if(objs.count() > 0){
+                            if (objs.count() > 0) {
                                 failedEO = (EOEnterpriseObject) objs.objectAtIndex(0);
                                 if (cat.isDebugEnabled()) cat.debug("failedEO"+ failedEO);
-                                if(merge){
+                                if (merge) {
                                     //EODatabaseContext dbcontext = ChangeCatcher.databaseContextForEntityNamed (entName, ec);
                                     //EODatabase db = dbcontext.database();
                                     //EOGlobalID gid = ec.globalIDForObject(failedEO);
@@ -196,11 +256,11 @@ public class ERXTolerantSaver {
                                     //db.recordSnapshotForGlobalID(ss, gid);
                                     applyChangesToEO(changedValues, failedEO, ent);
                                 }
-                            }else{
+                            } else {
                                 if (cat.isDebugEnabled()) cat.debug("TolerantSaver: EO was NOT there anymore!");
                                 failedEO = null;
                             }
-                            if(writeAnyWay){
+                            if (writeAnyWay) {
                                 if (cat.isDebugEnabled()) cat.debug("TolerantSaver: about to save changes again");
                                 ec.saveChanges();
                             }
