@@ -129,6 +129,13 @@ String3: WOString {
 	value = session.javaScriptEnabled;
 }
 
+SubmitButton1: WOSubmitButton {
+	action = switchSubmitTab;
+	name = currentTabNameWithoutSpaces;
+	style = "position:absolute; left:-1000px;";
+	value = "-";
+}
+
 TabContainer: WOGenericContainer { 
 	align = "center";
 	bgcolor = tabBgColor;
