@@ -48,10 +48,12 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 */
 	public static Format defaultNumberFormatterForObject(Object object) {
 		Format result = null;
-		if((object instanceof Double) || (object instanceof BigDecimal) || (object instanceof Float))
-			result = numberFormatterForPattern("#,##0.00;-(#,##0.00)");
-		else 
-			result = numberFormatterForPattern("0");
+		if(object != null && !(object instanceof String)) {
+			if((object instanceof Double) || (object instanceof BigDecimal) || (object instanceof Float))
+				result = numberFormatterForPattern("#,##0.00;-(#,##0.00)");
+			else if(object instanceof Number)
+				result = numberFormatterForPattern("0");
+		}
 		return result;
 	}
 
@@ -60,17 +62,15 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @return shared instance of formatter
      */
     public static NSNumberFormatter numberFormatterForPattern(String pattern) {
-    	ERXNumberFormatter formatter;
+    	NSNumberFormatter formatter;
     	if(ERXLocalizer.isLocalizationEnabled()) {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
-    		formatter = (ERXNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
+    		formatter = (NSNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
     	} else {
-    		synchronized(_repository) {
-    			formatter = (ERXNumberFormatter)_repository.get(pattern);
-    			if(formatter == null) {
-    				formatter = new ERXNumberFormatter(pattern);
-    				_repository.put(pattern, formatter);
-    			}
+    		formatter = (NSNumberFormatter)_repository.get(pattern);
+    		if(formatter == null) {
+    			formatter = new ERXNumberFormatter(pattern);
+    			_repository.put(pattern, formatter);
     		}
     	}
     	return formatter;
@@ -85,12 +85,10 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
     		localizer.setLocalizedNumberFormatForKey(formatter, pattern);
     	} else {
-    		synchronized(_repository) {
-    			if(formatter == null) {
-    				_repository.remove(pattern);
-    			} else {
-    				_repository.put(pattern, formatter);
-    			}
+    		if(formatter == null) {
+    			_repository.remove(pattern);
+    		} else {
+    			_repository.put(pattern, formatter);
     		}
     	}
     }
