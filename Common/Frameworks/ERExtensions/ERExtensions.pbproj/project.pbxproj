@@ -4193,7 +4193,7 @@
 			refType = 2;
 		};
 		F59C56FB02C455DB01000102 = {
-			fileEncoding = 30;
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = Japanese;
 			path = Resources/Japanese.lproj/ValidationTemplate.strings;
@@ -4218,7 +4218,7 @@
 			refType = 2;
 		};
 		F59C56FE02C455DB01000102 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/ValidationTemplate.strings;
