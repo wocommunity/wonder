@@ -38,4 +38,8 @@ public class ERXMutableDictionary extends NSMutableDictionary {
     public ERXMutableDictionary() {
         super();
     }
+
+    public Object clone() {
+        return new ERXMutableDictionary(this);
+    }
 }
