@@ -355,7 +355,7 @@ public class ERD2WModel extends D2WModel {
                 addKeyToVector("propertyKey", dependendantKeys);
             }
             if(localizationEnabled && r.rhs() instanceof ERDLocalizableAssignmentInterface) {
-                addKeyToVector("session.localizer.language", dependendantKeys);
+                addKeyToVector("session.language", dependendantKeys);
             }
             c.keys=new NSMutableArray();
         }
