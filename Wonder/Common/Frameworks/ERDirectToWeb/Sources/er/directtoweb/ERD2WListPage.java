@@ -46,6 +46,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     public WODisplayGroup displayGroup() {
         if(_displayGroup == null) {
             _displayGroup = new WODisplayGroup();
+            _displayGroup.setSelectsFirstObjectAfterFetch(false);
             if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
                 _displayGroup.setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
             }
