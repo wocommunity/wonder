@@ -111,32 +111,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean showCancel() { return super.showCancel() && shouldShowCancelButton(); }
     public boolean doesNotHaveForm() { return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
-    public void awake() {
-        super.awake();
-    	if (_context!=null) {
-            _context.lock();
-        }
-    }
-    
-    public void sleep() {
-    	if (_context!=null) {
-            _context.unlock();
-        }
-        super.sleep();
-   }
-
-    public void setEditingContext(EOEditingContext newEditingContext) {
-        if (newEditingContext != _context) {
-            if (_context != null) {
-                _context.unlock();
-            }
-            _context = newEditingContext;
-            if (_context != null) {
-                _context.lock();
-            }
-        }
-    }
-
     public void setObject(EOEnterpriseObject eoenterpriseobject) {
         EOEditingContext eoeditingcontext = eoenterpriseobject == null ? null : eoenterpriseobject.editingContext();
 
@@ -150,8 +124,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 eoeditingcontext.unlock();
             }
         }
-        
-        setEditingContext(eoeditingcontext);
         super.setObject(eoenterpriseobject);
     }
     

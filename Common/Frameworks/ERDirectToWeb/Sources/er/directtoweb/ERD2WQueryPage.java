@@ -54,8 +54,8 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
     }
     
     public void appendToResponse(WOResponse arg0, WOContext arg1) {
-    	loadQueryBindings();
-    	super.appendToResponse(arg0, arg1);
+        loadQueryBindings();
+        super.appendToResponse(arg0, arg1);
     }
     
     protected void saveQueryBindings() {
