@@ -19,12 +19,12 @@ public abstract class ERXApplication extends WOApplication {
     static {
         // This will configure the Log4j system.
         // This is OK to call multiple times as it will only be configured the first time.
-        ERXLog4j.configureLogging();
+        // ERXLog4j.configureLogging();
     }
     
     //////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    // public static final ERXLogger cat = ERXLogger.getLogger(ERXApplication.class);
-    public static final Category cat = Category.getInstance(ERXApplication.class);
+    public static final ERXLogger cat = ERXLogger.getLogger(ERXApplication.class);
+    // public static final Category cat = Category.getInstance(ERXApplication.class);
 
     ////////////////////////////////////////////// Notification Hooks //////////////////////////////////////////
     // A few undocumented notifications that are nice ;)
