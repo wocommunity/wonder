@@ -6,12 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
 
 /**
  * Better layout options that the {@see WOToOneRelationship}, in addition you can set a 
