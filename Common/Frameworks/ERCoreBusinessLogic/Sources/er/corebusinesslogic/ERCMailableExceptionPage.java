@@ -9,29 +9,28 @@ package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 import er.extensions.ERXConfigurationManager;
+import er.extensions.ERXStatelessComponent;
 
-public class ERCMailableExceptionPage extends WOComponent {
-
-    public ERCMailableExceptionPage(WOContext aContext) {
-        super(aContext);
-    }
+public class ERCMailableExceptionPage extends ERXStatelessComponent {
 
     public EOEnterpriseObject actor;
     public Throwable exception;
     public NSArray _reasonLines;
     public String currentReasonLine;
     public NSDictionary extraInfo;
-    
+
     public String currentUserInfoKey;
-    public String currentUserInfoValue;
+    public String currentUserInfoValue;    
+    
+    public ERCMailableExceptionPage(WOContext aContext) {
+        super(aContext);
+    }
 
     public boolean isEventLoggingEnabled() {
         return false;
     }
-
 
     public void setException(Throwable value) {
         exception = value;
@@ -45,8 +44,10 @@ public class ERCMailableExceptionPage extends WOComponent {
         extraInfo = value;
     }
 
-    public boolean isStateless() { return true; }
-    public void reset() { _reasonLines=null; }
+    public void reset() {
+        super.reset();
+        _reasonLines=null;
+    }
     
     public NSArray reasonLines() {
         if (_reasonLines==null && exception!=null && exception.getMessage()!=null) {
@@ -55,7 +56,10 @@ public class ERCMailableExceptionPage extends WOComponent {
         return _reasonLines;
     }
 
-    public NSTimestamp now() { return new NSTimestamp(); }
+    public NSTimestamp now() {
+        return new NSTimestamp();
+    }
+    
     public String hostName() {
         return ERXConfigurationManager.defaultManager().hostName();
     }
