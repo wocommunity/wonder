@@ -41,18 +41,6 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
         return ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("fetchLimit"), 0);
     }
 
-    // debug helpers
-    public boolean d2wComponentNameDebuggingEnabled() {
-        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
-    }
-    public String d2wCurrentComponentName() {
-        String name = (String)d2wContext().valueForKey("componentName");
-        if(name.indexOf("CustomComponent")>=0) {
-            name = (String)d2wContext().valueForKey("customComponentName");
-        }
-        return name;
-    }
-
     // add the ability to AND the existing qualifier from the DG
     public EOQualifier qualifier() {
         EOQualifier q=displayGroup.qualifier();
