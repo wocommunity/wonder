@@ -7,5 +7,6 @@
 		<binding name="enctype"/>
 		<binding name="directActionName"/>
 		<binding name="actionClass"/>
+		<binding name="multipleSubmit" defaults="Boolean"/>
 	</wo>
 </wodefinitions>

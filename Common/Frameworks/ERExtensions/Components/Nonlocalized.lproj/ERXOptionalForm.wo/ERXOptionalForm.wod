@@ -8,13 +8,13 @@ HasDirectAction2: ERXNonNullConditional {
 }
 
 UseForm: WOConditional {
-   condition=context.isInForm;
-	negate = true;
+        condition=showForm;
+        negate = false;
 }
 
 UseForm2: WOConditional {
-   condition=context.isInForm;
-	negate = false;
+        condition = showForm;
+        negate = true;
 }
 
 content: WOComponentContent {
@@ -27,7 +27,7 @@ content3: WOComponentContent {
 }
 
 form: WOForm {
-  multipleSubmit=true;
+        multipleSubmit=true;
 	name = ^name;
 	enctype = ^enctype;
 	directActionName = ^directActionName;
@@ -35,7 +35,7 @@ form: WOForm {
 }
 
 form2: WOForm {
-  multipleSubmit=true;
+        multipleSubmit=true;
 	name = ^name;
 	action = ^action;
 	enctype = ^enctype;
