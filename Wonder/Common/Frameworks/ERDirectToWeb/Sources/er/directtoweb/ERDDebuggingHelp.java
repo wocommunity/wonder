@@ -15,7 +15,7 @@ public class ERDDebuggingHelp extends WOComponent {
     public ERDDebuggingHelp(WOContext context) { super(context); }
 
     public boolean synchronizesVariablesWithBindings() { return false; }
-
+    
     public boolean showHelp() {
         return ERDirectToWeb.d2wDebuggingEnabled(session()) || ERXUtilities.booleanValue(valueForBinding("condition"));
     }
@@ -25,6 +25,14 @@ public class ERDDebuggingHelp extends WOComponent {
     public WOComponent toggleComponentNameDebugging() {
         ERDirectToWeb.setD2wComponentNameDebuggingEnabled(session(),
                                                           !ERDirectToWeb.d2wComponentNameDebuggingEnabled(session()));
+        return null;
+    }
+
+    public String key;
+
+    public Object debugValueForKey() {
+        if(key != null && !"".equals(key))
+            return parent().valueForKeyPath("d2wContext."+key);
         return null;
     }
 }
