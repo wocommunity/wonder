@@ -168,7 +168,7 @@ public final class GSVEntity extends Object implements WOXMLCoding {
 	NSArray myattributes = attributes().immutableClone();
 	for ( Enumeration e = myattributes.objectEnumerator(); e.hasMoreElements();) {
 	    GSVAttribute attribute = (GSVAttribute)e.nextElement();
-	    NSLog.debug.appendln("checking attribute"+eoentity.name()+"."+attribute.name());
+	    //NSLog.debug.appendln("checking attribute"+eoentity.name()+"."+attribute.name());
 	    EOAttribute a = eoentity.attributeNamed(attribute.name());
 	    EORelationship p = eoentity.relationshipNamed(attribute.name());
 	    
@@ -179,24 +179,31 @@ public final class GSVEntity extends Object implements WOXMLCoding {
 		NSLog.out.appendln("attribute "+attribute.name() + " in entity " + name() + " is (now?) an relationship which cannot have a validation rule, deleted from Valididy model");
 		removeAttribute(attribute);
 	    } else {
+                EOEditingContext ec = new EOEditingContext();
+                ec.lock();
 		try {
 		    if (attribute == null) {
 			NSLog.debug.appendln("attribute == null");
 		    } else if (attribute.name() == null) {
 			NSLog.debug.appendln("attribute.name() == null, attribute = "+attribute);
 		    } else {
-			NSLog.debug.appendln("checking eo="+eoentity.name()+", attributename="+attribute.name());
+			//NSLog.debug.appendln("checking eo="+eoentity.name()+", attributename="+attribute.name());
 			EOClassDescription eoclassdescription = EOClassDescription.classDescriptionForEntityName(eoentity.name());
 			EOEnterpriseObject eoenterpriseobject = eoclassdescription.createInstanceWithEditingContext(null, null);
-			eoenterpriseobject.valueForKeyPath(attribute.name());
+                        ec.insertObject(eoenterpriseobject);
+                        eoenterpriseobject.valueForKeyPath(attribute.name());
+                        
 		    }
 		} catch (com.webobjects.foundation.NSKeyValueCoding$UnknownKeyException e1) {
-		    NSLog.debug.appendln(e1);
+		    //NSLog.debug.appendln(e1);
 		    NSLog.out.appendln("attribute "+attribute.name() + " does not exist in entity " + name() + " anymore, deleted from Valididy model");
 		    removeAttribute(attribute);
-		}
+                } finally {
+                    ec.unlock();
+                    ec.dispose();
+                    
+                }
 	    }
 	}
     }
-    
 }
