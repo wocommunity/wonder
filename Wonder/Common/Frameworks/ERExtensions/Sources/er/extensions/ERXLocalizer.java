@@ -282,6 +282,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                             + (framework == null ? "app" : framework) + " - " 
                             + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
+                       // HACK: ak we have could have a collision between the search path for validation strings and
+                       // the normal localized strings.
+                       if(fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
+                           NSMutableDictionary newDict = new NSMutableDictionary();
+                           for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements(); ) {
+                               String key = (String)keys.nextElement();
+                               newDict.setObjectForKey(dict.objectForKey(key), ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX + key);
+                           }
+                           dict = newDict;
+                       }
                         cache.addEntriesFromDictionary(dict);
                         if(!monitoredFiles.containsObject(path)) {
                             ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
