@@ -5,6 +5,74 @@
 	};
 	objectVersion = 38;
 	objects = {
+		50E9E19A03CBB56900CF0E76 = {
+			children = (
+				50E9E19B03CBB58C00CF0E76,
+				50E9E19D03CBB5A700CF0E76,
+				50E9E1A403CBB5BB00CF0E76,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditToManyFault;
+			refType = 4;
+		};
+		50E9E19B03CBB58C00CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WEditToManyFault.api;
+			path = ../Components/ERD2WEditToManyFault.api;
+			refType = 4;
+		};
+		50E9E19C03CBB58C00CF0E76 = {
+			fileRef = 50E9E19B03CBB58C00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50E9E19D03CBB5A700CF0E76 = {
+			children = (
+				50E9E19E03CBB5A700CF0E76,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WEditToManyFault.wo;
+			path = "";
+			refType = 4;
+		};
+		50E9E19E03CBB5A700CF0E76 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WEditToManyFault.wo;
+			refType = 2;
+		};
+		50E9E1A303CBB5A700CF0E76 = {
+			fileRef = 50E9E19D03CBB5A700CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50E9E1A403CBB5BB00CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WEditToManyFault.java;
+			path = er/directtoweb/ERD2WEditToManyFault.java;
+			refType = 4;
+		};
+		50E9E1A503CBB5BB00CF0E76 = {
+			fileRef = 50E9E1A403CBB5BB00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//500
+//501
+//502
+//503
+//504
+//940
+//941
+//942
+//943
+//944
 		9405BE5403C9FC9600CF0E7D = {
 			children = (
 				9405BE5503C9FC9600CF0E7D,
@@ -7766,6 +7834,8 @@
 				F5E94DE3038C3DB101CF0E76,
 				9405BE5C03C9FC9600CF0E7D,
 				9405BE6803C9FE1E00CF0E7D,
+				50E9E19C03CBB58C00CF0E76,
+				50E9E1A303CBB5A700CF0E76,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7976,6 +8046,7 @@
 				F5E94DA8038C045301CF0E76,
 				F5E94DE1038C3D9E01CF0E76,
 				9405BE5D03C9FC9600CF0E7D,
+				50E9E1A503CBB5BB00CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9862,6 +9933,7 @@
 		};
 		F6E796A502C877AF01AD0D07 = {
 			children = (
+				50E9E19A03CBB56900CF0E76,
 				F6E7967E02C877AF01AD0D07,
 				F6E7967F02C877AF01AD0D07,
 				F6E7968002C877AF01AD0D07,
