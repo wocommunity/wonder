@@ -1,5 +1,6 @@
 ./D2WPick.java:er.directtoweb
 ./DelayedComputingKeyValueAssignment.java:er.directtoweb
+./ERDLocalizedAssignment.java:er.directtoweb
 ./ERD2WCalendarPage.java:er.directtoweb
 ./ERD2WCompactInspectPageTemplate.java:er.directtoweb
 ./ERD2WCompactListPageTemplate.java:er.directtoweb

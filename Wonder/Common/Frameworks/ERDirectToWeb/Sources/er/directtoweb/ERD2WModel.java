@@ -23,6 +23,7 @@ public class ERD2WModel extends D2WModel {
 
     /////////////////////////////////////  log4j category  ////////////////////////////////////
     public static final Category cat = Category.getInstance(ERD2WModel.class);
+    public static final Category ruleDecodeCat = Category.getInstance("er.directtoweb.rules.decode");
 
     ///////////////////////////////////// Notification Titles /////////////////////////////////
     // Register for this notification to have the hook in place to load non-d2wmodel based rules
@@ -366,23 +367,24 @@ public class ERD2WModel extends D2WModel {
         if(cat.isDebugEnabled()) cat.debug("model file being merged = "+modelFile);
         setCurrentFile(modelFile);
         // Uncomment this code if rules are not unarchiving correctly
-        /*
-        try {
-            NSDictionary dic = Services.dictionaryFromFile(modelFile);
-            cat.info("\n\n Got dictionary for file: " + modelFile);
-            for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
-                NSDictionary aRule = (NSDictionary)e.nextElement();
-                NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
-                EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
-                try {
-                    addRule((Rule)archiver.decodeObjectForKey("rule"));
-                } catch (Exception ex) {
-                    cat.error("Bad rule: " + aRule);
+        if(ruleDecodeCat.isDebugEnabled()) {
+            try {
+                NSDictionary dic = Services.dictionaryFromFile(modelFile);
+                ruleDecodeCat.info("Got dictionary for file: " + modelFile + "\n\n");
+                for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
+                    NSDictionary aRule = (NSDictionary)e.nextElement();
+                    NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
+                    EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
+                    try {
+                        addRule((Rule)archiver.decodeObjectForKey("rule"));
+                    } catch (Exception ex) {
+                        ruleDecodeCat.error("Bad rule: " + aRule);
+                    }
                 }
+            } catch (IOException except) {
+                ruleDecodeCat.error("Bad, bad" + except.getMessage());
             }
-        } catch (IOException except) {
-            cat.error("Bad, bad" + except.getMessage());
-        } */
+        }
         super.mergeFile(modelFile);
         //uniqueRuleAssignments();
         setCurrentFile(null);
