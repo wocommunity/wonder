@@ -59,8 +59,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         setDataSource(relationshipDataSource);
         relationshipDisplayGroup.setDataSource(relationshipDataSource);
 
-        EOSortOrdering indexOrdering = EOSortOrdering.sortOrderingWithKey(indexKey(), EOSortOrdering.CompareAscending);
-        relationshipDisplayGroup.setSortOrderings(new NSArray(indexOrdering));
+        if(isSortedRelationship()){
+            EOSortOrdering indexOrdering = EOSortOrdering.sortOrderingWithKey(indexKey(),
+                                                                              EOSortOrdering.CompareAscending);
+            relationshipDisplayGroup.setSortOrderings(new NSArray(indexOrdering));
+        }
+
         
         relationshipDisplayGroup.fetch();
         setPropertyKey(displayKey());
@@ -97,6 +101,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     } 
 
     public String displayKey() {
+        System.out.println(destinationRelationship().name()+".userPresentableDescription");
         return destinationRelationship().name()+".userPresentableDescription";
     }
 
@@ -236,7 +241,19 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             // for now we rely on the fact that join entity should only have 2 relationships
             // and one of them is going back to the original object
             NSArray relationships=joinEntity.relationships();
-            if (relationships==null || relationships.count()!=2)
+            if (relationships==null)
+                throw new RuntimeException("Empty relationship array on "+joinEntity.name()+": "+relationships);
+            NSMutableArray filteredRelationships = new NSMutableArray();
+            for(Enumeration e = relationships.objectEnumerator(); e.hasMoreElements();){
+                EORelationship	relationship = (EORelationship)e.nextElement();
+                EOEntity destinationEntity = relationship.destinationEntity();
+                if(destinationEntity.sharedObjectFetchSpecificationNames().count()==0){
+                    filteredRelationships.addObject(relationship);
+                }
+            }
+            //Need to filter out relationships that are going to shared EOs
+            
+            if (filteredRelationships.count()!=2)
                 throw new RuntimeException("Found unexpected relationship array on "+joinEntity.name()+": "+relationships);
             EORelationship destinationRelationship=null;
             String originEntityName=object().entityName();
@@ -262,15 +279,24 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     public WOComponent moveObjectUp()
     {
+        if(log.isDebugEnabled()){
+            log.debug("browserSelection ="+browserSelection());
+        }
         if(browserSelection()!=null){
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
-            int selectedIndex = ((Integer)browserSelection().valueForKey(indexKey())).intValue();
+           int selectedIndex = ((Integer)browserSelection().valueForKey(indexKey())).intValue();
+           if(log.isDebugEnabled()){
+               log.debug("sortedObjects ="+sortedObjects);
+               log.debug("selectedIndex = "+selectedIndex);
+               log.debug("indexKey = "+indexKey());
+           } 
             if(selectedIndex!=0){
                 objectAtIndex(selectedIndex-1).takeValueForKey(new Integer(selectedIndex),
                                                                indexKey());
                 browserSelection().takeValueForKey(new Integer(selectedIndex-1),
                                                    indexKey());
             }
+            
         }
         relationshipDisplayGroup.updateDisplayedObjects();
         return null;
