@@ -31,6 +31,14 @@ public class ERMessage extends Object {
     public Object callbackObject () {
         return anObject;
     }
+
+    public boolean shouldSendMessage() {
+        Address to[] = null;
+        try {
+            to = message.getRecipients(Message.RecipientType.TO);
+        } catch (MessagingException m) {}
+        return to != null && to.length > 0;
+    }
     
     /**
      * @param recipientType which can be: 
