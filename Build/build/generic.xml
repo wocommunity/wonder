@@ -157,13 +157,14 @@ There are three ways to use this script:
         </antcall>
     </target>
    <target name="global.environment">
-        <property file="Build/build/build.properties" />
+        <property name="wonder.root" value="${basedir}" />
+        <property file="${wonder.root}/Build/build/build.properties" />
         <property file="${user.home}/build.properties" />
-        <property file="Build/build/default.properties" />
-        <property file="Build/build/${os.name}.properties" />
-        <property file="Build/build/default-os.properties" />
+        <property file="${wonder.root}/Build/build/default.properties" />
+        <property file="${wonder.root}/Build/build/${os.name}.properties" />
+        <property file="${wonder.root}/Build/build/default-os.properties" />
 
-        <!-- default values. can be overridden by *.properties files of -D options. -->
+        <!-- default values. can be overridden by *.properties files or -D options. -->
         <property name="wo.woroot" value="/System" />
         <property name="wo.localroot" value="/Local" />
         <property name="build.root" value="${user.home}/Roots" />
@@ -193,7 +194,7 @@ There are three ways to use this script:
 
     <target name="global.prepare" depends="global.properties">
 	<path id="ant.classpath">
-	    <fileset dir="${basedir}/Build/">
+	    <fileset dir="${wonder.root}/Build/">
 		<include name="lib/*.jar"/>
 	    </fileset>
 	</path>
