@@ -206,7 +206,7 @@
             editors = (valueWhenEmpty); 
             inspectionInformation = "Edits a boolean with radio buttons and Yes/No. Use ERD2WCustomEditBoolean instead."; 
         }; 
-        ERD2WEditableListPageTemplate = {
+        ERD2WEditableListTemplate = {
             editors = (
                 backgroundColorForTable, 
                 headComponentName, 
