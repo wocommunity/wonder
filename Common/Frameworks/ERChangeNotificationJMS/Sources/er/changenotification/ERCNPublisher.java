@@ -8,7 +8,6 @@ package er.changenotification;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import er.extensions.ERXLogger;
 
 import javax.jms.*;
 
@@ -25,9 +24,6 @@ import javax.jms.*;
  * threads can perform the operation concurrently. 
  */ 
 public class ERCNPublisher {
-
-    /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCNPublisher.class);
 
     private ERCNNotificationCoordinator _coordinator; 
     private final ThreadLocal _topicSessionCollection = new ThreadLocal();
@@ -49,7 +45,7 @@ public class ERCNPublisher {
                 topicSession = _coordinator.connection().createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
                 _topicSessionCollection.set(topicSession);
             } catch (JMSException ex) {
-                log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
                 ex.printStackTrace();
             }
         }
@@ -63,7 +59,7 @@ public class ERCNPublisher {
                 topicPublisher = _topicSession().createPublisher(_coordinator.topic());
                 _topicPublisherCollection.set(topicPublisher);
             } catch (JMSException ex) {
-                log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             }
         }
         return topicPublisher;
@@ -81,10 +77,10 @@ public class ERCNPublisher {
             try {
                 ObjectMessage message = _topicSession().createObjectMessage(snapshot);
                 _topicPublisher().publish(_coordinator.topic(), message, deliveryMode, priority, timeToLive);
-                if (log.isDebugEnabled())
-                    log.debug("Posted a message with snapshot: " + snapshot);
+                if (NSLog.debug.isEnabled())
+                    NSLog.debug.appendln("Posted a message with snapshot: " + snapshot);
             } catch (JMSException ex) {
-                log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             }
         }
     }

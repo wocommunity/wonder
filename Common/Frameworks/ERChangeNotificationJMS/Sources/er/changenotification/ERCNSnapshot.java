@@ -12,7 +12,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
 import java.io.Serializable;
-import er.extensions.ERXLogger;
 
 /** 
  * ERCNSnapshot encapsulates changes in enterprise objects for single 
