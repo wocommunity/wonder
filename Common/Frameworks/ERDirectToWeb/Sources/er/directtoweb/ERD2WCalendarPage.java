@@ -131,9 +131,13 @@ public class ERD2WCalendarPage extends ERD2WListPage {
             // get the beginning of that month
              */
             // we take now by default
-            _beginningOfTheMonth=new NSTimestamp(today.yearOfCommonEra(),
-                                                     today.monthOfYear(),
-                                                     1,0,0,0,today.timeZone ());
+            _beginningOfTheMonth=new NSTimestamp(ERXTimestampUtility.yearOfCommonEra(today),
+                                                 ERXTimestampUtility.monthOfYear(today),
+                                                 1,
+                                                 0,
+                                                 0,
+                                                 0,
+                                                 NSTimeZone.getDefault());
         }
         return _beginningOfTheMonth;
     }
@@ -147,14 +151,15 @@ public class ERD2WCalendarPage extends ERD2WListPage {
 
     public NSTimestamp endDate() {
         if (_endDate == null) {
-            _endDate = endOfTheMonth().timestampByAddingGregorianUnits(0, 0, 6 - endOfTheMonth().dayOfWeek(), 0, 0, 0);
+            _endDate = endOfTheMonth().timestampByAddingGregorianUnits(0, 0,
+                                                                       6 - ERXTimestampUtility.dayOfWeek(endOfTheMonth()), 0, 0, 0);
         }
         return _endDate;
     }
     
     public NSTimestamp beginningDate() {
         if (_beginningDate==null) {
-            _beginningDate=beginningOfTheMonth().timestampByAddingGregorianUnits(0, 0, - beginningOfTheMonth().dayOfWeek(), 0, 0, 0);
+            _beginningDate=beginningOfTheMonth().timestampByAddingGregorianUnits(0, 0, - ERXTimestampUtility.dayOfWeek(beginningOfTheMonth()), 0, 0, 0);
         }
         return _beginningDate;
     }
@@ -214,22 +219,22 @@ public class ERD2WCalendarPage extends ERD2WListPage {
     }
 
     public boolean dateIsToday() {
-        return ( today!=null && date!=null &&
-                 today.dayOfCommonEra()==date.dayOfCommonEra() );
+        return (today!=null && date!=null &&
+                 ERXTimestampUtility.dayOfCommonEra(today)==ERXTimestampUtility.dayOfCommonEra(date));
     }
     public boolean dateIsSelectedDate() {
-        return ( selectedDate()!=null && date!=null &&
-                 selectedDate().dayOfCommonEra()==date.dayOfCommonEra() );
+        return (selectedDate()!=null && date!=null &&
+                 ERXTimestampUtility.dayOfCommonEra(selectedDate())==ERXTimestampUtility.dayOfCommonEra(date));
     }
 
     private void _eosOnDate(NSTimestamp aDate, NSMutableArray eos) {
-        long dayOfCommonEra = aDate.dayOfCommonEra();
+        long dayOfCommonEra = ERXTimestampUtility.dayOfCommonEra(aDate);
         NSArray displayedObjects = _allObjects();
         boolean stop = false;
         int imax = displayedObjects.count();
         for (int i=0; i < imax; i++) {
             NSTimestamp d=dateForEOAtIndex(i);
-            if (dayOfCommonEra == d.dayOfCommonEra()) {
+            if (dayOfCommonEra == ERXTimestampUtility.dayOfCommonEra(d)) {
                 stop = true;  // will stop when days no longer match
                 eos.addObject(displayedObjects.objectAtIndex(i));
             }
