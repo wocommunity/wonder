@@ -36,6 +36,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
 
 import er.extensions.ERXDictionaryUtilities;
+import er.extensions.ERXKeyValueCodingUtilities;
 import er.extensions.ERXLogger;
 import er.extensions.ERXNumberFormatter;
 
@@ -137,19 +138,6 @@ public class EGSimpleTableParser {
 		return result;
 	}
     
-    private Object classValueForKey(Class clazz, String key) {
-    	Object result = null;
-    	if(key != null) {
-    		try {
-    			Field f = clazz.getDeclaredField(key);
-    			result = f.get(clazz);
-    		} catch (Exception e) {
-    			throw new NSForwardException(e);
-    		}
-    	}
-    	return result;
-    }
-    
     private void takeBooleanValueForKey(NSDictionary dict, String key, Object target, String defaultValue) {
     	String value = dictValueForKey(dict, key, defaultValue);
     	if(value != null) {
@@ -167,7 +155,7 @@ public class EGSimpleTableParser {
     private void takeClassValueForKey(NSDictionary dict, String key, Object target, String defaultValue) {
     	String value = dictValueForKey(dict, key, defaultValue);
     	if(value != null) {
-   			Number number = (Number)classValueForKey(target.getClass(), value);
+   			Number number = (Number)ERXKeyValueCodingUtilities.classValueForKey(target.getClass(), value);
 			NSKeyValueCoding.Utility.takeValueForKey(target, number, key);
     	}
     }
@@ -306,7 +294,7 @@ public class EGSimpleTableParser {
     					String cellFormatName = dictValueForKey(cellDict, "cellFormat", "0.00;-;-0.00");
     					
     					log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
-    					Integer cellType = (Integer)classValueForKey(HSSFCell.class, cellTypeName);
+    					Integer cellType = (Integer)ERXKeyValueCodingUtilities.classValueForKey(HSSFCell.class, cellTypeName);
     					
     					switch(cellType.intValue()) {
     						case HSSFCell.CELL_TYPE_FORMULA:
