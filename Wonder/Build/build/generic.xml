@@ -33,7 +33,7 @@ There are three ways to use this script:
 		-Duse.wonder.changenotification=true \
 		-Duse.svgobjects=true \
 		-Duse.validity=true \
-		-Duse.woogln=true \
+		-Duse.woognl=true \
 		-Duse.grouping=true \
 		-Duse.reporting=true \
 		-Duse.mysql=true \
@@ -121,7 +121,7 @@ There are three ways to use this script:
             <param name="use.validity" value="true" />
 
             <!-- set this if you want to use WOOgnl, or leave out if not -->
-            <param name="use.woogln" value="true" />
+            <param name="use.woognl" value="true" />
 
             <!-- set this if you want to use MySQL, or leave out if not -->
             <param name="use.mysql" value="true" />
@@ -240,7 +240,7 @@ There are three ways to use this script:
                 <include name="Validity.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.woognl"> 
-                <include name="WOOngl.framework" />
+                <include name="WOOgnl.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.grouping"> 
                 <include name="DRGrouping.framework" />
@@ -397,7 +397,7 @@ There are three ways to use this script:
                 <include name="Validity.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.woognl"> 
-                <include name="WOOngl.framework" />
+                <include name="WOOgnl.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.grouping"> 
                 <include name="DRGrouping.framework" />
@@ -644,8 +644,10 @@ There are three ways to use this script:
             <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.d2w" value="true" />
             <param name="use.wonder.logic" value="true" />
+            <param name="use.woognl" value="true" />
             <param name="use.mysql" value="true" />
             <param name="use.additional.framework.1" value="BTBusinessLogic.framework" />
+            <param name="use.additional.framework.2" value="C9Extensions.framework" />
         </antcall>
     </target>
 
