@@ -15,7 +15,9 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 
     //////////////////////////////////////////////  log4j category  //////////////////////////////////////////
     public final static Category cat = Category.getInstance(ERXNumberFormatter.class);
-
+    public ERXNumberFormatter() {
+    }
+    
     protected static ERXNumberFormatter _sharedInstance;
     public static ERXNumberFormatter sharedInstance() {
         if (_sharedInstance == null)
@@ -35,6 +37,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
             }
         }
         String filteredString = new String(filteredChars, 0, count);
-        return parseObject(filteredString);
+        return super.parseObject(filteredString);
     }
 }
