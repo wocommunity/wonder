@@ -164,9 +164,7 @@ public class WOCollapsibleComponentContent extends WOComponent {
         return (submitActionName()!=null);
     }
 
-    public int anchor() {
-        return _anchor;
+    public String anchor() {
+        return "" + _anchor;
     }
-
-
 }
