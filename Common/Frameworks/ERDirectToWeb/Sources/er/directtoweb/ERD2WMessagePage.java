@@ -13,6 +13,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXLogger;
 
+/**
+ * Superclass for all message pages.  Still a work in progress.<br />
+ * 
+ */
+
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDBranchInterface {
 
     /** logging support */

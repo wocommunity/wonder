@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
+/**
+ * Used for building date queries with javascript.<br />
+ * 
+ */
+
 public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
     public ERDQueryDateRangeJavascript(WOContext context) { super(context); }

@@ -10,6 +10,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import er.extensions.ERXConstant;
 
+/**
+ * Displays a number as say 5 years 2 months.<br />
+ * 
+ */
+
 public class ERDDisplayYearsMonths extends ERDCustomEditComponent {
 
     public ERDDisplayYearsMonths(WOContext context) {super(context);}

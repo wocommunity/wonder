@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
+/**
+ * Cool class.  Specify a 'unit' in the userInfo dictionary of an EOAttribute and this component will display the number plus the unit.<br />
+ * 
+ */
+
 public class ERDDisplayNumberWithUnit extends ERDCustomEditComponent {
 
     public ERDDisplayNumberWithUnit(WOContext context) { super(context); }

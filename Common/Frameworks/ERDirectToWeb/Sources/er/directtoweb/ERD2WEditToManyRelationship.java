@@ -12,6 +12,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import er.extensions.*;
 
+/**
+ * Same as the first except that it uses ERToManyRelationship to work around the webscript bug in the *Matrix components.<br />
+ * 
+ */
+
 public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
 
     public ERD2WEditToManyRelationship(WOContext context) { super(context); }

@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
 
+/**
+ * Query page utilizing fetch specifications.<br />
+ * 
+ */
+
 public class ERD2WQueryPageWithFetchSpecification extends D2WQueryPage {
 
     public ERD2WQueryPageWithFetchSpecification(WOContext context) {

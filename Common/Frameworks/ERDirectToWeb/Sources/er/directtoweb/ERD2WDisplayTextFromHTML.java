@@ -10,6 +10,11 @@ import com.webobjects.appserver.WOContext;
 import er.extensions.ERXExtensions;
 import com.webobjects.directtoweb.D2WDisplayString;
 
+/**
+ * Extracts text from html and displays the text.<br />
+ * 
+ */
+
 public class ERD2WDisplayTextFromHTML extends D2WDisplayString {
 
     public ERD2WDisplayTextFromHTML(WOContext context) {super(context);}

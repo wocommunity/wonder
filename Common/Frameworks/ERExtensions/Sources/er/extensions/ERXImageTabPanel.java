@@ -19,6 +19,19 @@ import com.webobjects.appserver.*;
  where tabName is the name of the tab, minus spaces
  */
 
+/**
+ * Tab panel using images.<br />
+ * 
+ * @binding bgcolor
+ * @binding nonSelectedBgColor
+ * @binding selectedTab
+ * @binding submitActionName
+ * @binding tabNameKey
+ * @binding tabs
+ * @binding textColor
+ * @binding useFormSubmit" defaults="Boolean
+ */
+
 public class ERXImageTabPanel extends ERXTabPanel  {
 
     public ERXImageTabPanel(WOContext context) {

@@ -10,6 +10,14 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.lang.*;
 
+/**
+ * Given a count and a string pluralizes the string if count &gt; 1.<br />
+ * 
+ * @binding value
+ * @binding count
+ * @binding showNumber" defaults="Boolean
+ */
+
 public class ERXPluralString extends WOComponent {
 
     public ERXPluralString(WOContext aContext) {

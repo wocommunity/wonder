@@ -15,6 +15,20 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 
+/**
+ * Nice component used for editing a toMany relationship by taking the user to another page to pick which objects belong in the relationship.<br />
+ * 
+ * @binding choiceDisplayKey
+ * @binding choicePageName
+ * @binding choices
+ * @binding editButtonName
+ * @binding extraBindings
+ * @binding key
+ * @binding numberOfColumns
+ * @binding object
+ * @binding showEditButton" defaults="Boolean
+ */
+
 public class ERDEditListButton extends ERDCustomEditComponent {
 
     public ERDEditListButton(WOContext context) {super(context);}

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayDate;
 
+/**
+ * Displays a date or a null string.<br />
+ * 
+ */
+
 public class ERD2WDisplayDateOrNull extends D2WDisplayDate {
     
     public ERD2WDisplayDateOrNull(WOContext context) { super(context); }

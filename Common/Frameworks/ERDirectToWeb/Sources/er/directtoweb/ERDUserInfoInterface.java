@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * Interface implemented by templates to allow stuff and retriving of transient information.<br />
+ * 
+ */
+
 public interface ERDUserInfoInterface {
     public NSMutableDictionary userInfo();
 }

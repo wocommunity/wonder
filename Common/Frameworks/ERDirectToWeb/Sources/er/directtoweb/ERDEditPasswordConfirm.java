@@ -11,6 +11,17 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.*;
 
+/**
+ * Used to edit passwords where when changed the changed value must be confirmed.<br />
+ * 
+ * @binding errorMessage
+ * @binding password
+ * @binding passwordConfirm
+ * @binding extraBindings
+ * @binding key
+ * @binding object
+ */
+
 public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
 
     /** logging support */

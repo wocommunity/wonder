@@ -13,6 +13,15 @@ import com.webobjects.eoaccess.*;
 
 // Nice little unread marker.  Subclass in specific look frameworks to provide custom
 //	unread marker images.
+/**
+ * Nice for denoting that something has not been viewed. Extended in look frameworks.<br />
+ * 
+ * @binding item
+ * @binding list
+ * @binding condition" defaults="Boolean
+ * @binding negate" defaults="Boolean
+ */
+
 public class ERXUnreadMarker extends WOComponent {
 
     public ERXUnreadMarker(WOContext aContext) {

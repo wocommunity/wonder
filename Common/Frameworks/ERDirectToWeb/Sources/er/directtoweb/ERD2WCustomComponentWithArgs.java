@@ -15,6 +15,11 @@ import er.extensions.ERXLogger;
 // Useful component and important bug fix
 // Fixes validation failures being propogated
 // Adds valueForBinding that resolves in the d2wContext.
+/**
+ * Allows custom components to resolve valueForBinding requests in the rules.<br />
+ * 
+ */
+
 public class ERD2WCustomComponentWithArgs extends D2WCustomComponent implements ERXExceptionHolder {
 
    public ERD2WCustomComponentWithArgs(WOContext context) {

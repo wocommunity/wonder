@@ -13,6 +13,13 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Nice edit button for editing a toMany relationship in another page.<br />
+ * 
+ * @binding object
+ * @binding d2wContext
+ */
+
 public class ERDEditButton extends ERDCustomEditComponent {
 
    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDEditButton");

@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Crazy cool little date picker that uses javascript to pick the date from a little calendar.  Need to remove image refs.<br />
+ * 
+ */
+
 public class ERDEditDateJavascript extends ERDCustomEditComponent {
     static final ERXLogger log = ERXLogger.getERXLogger(ERDEditDateJavascript.class);
 

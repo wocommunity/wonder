@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * A tab inspect/edit template.<br />
+ * 
+ */
+
 public class ERD2WTabInspectPageTemplate extends ERD2WTabInspectPage {
 
     public ERD2WTabInspectPageTemplate(WOContext context) {

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.directtoweb.NextPageDelegate;
 
+/**
+ * NextPageDelegate that takes a given page name and when called creates and returns the given named page.<br />
+ * 
+ */
+
 public class ERDPageNameDelegate implements NextPageDelegate {
 
     protected String _pageName;

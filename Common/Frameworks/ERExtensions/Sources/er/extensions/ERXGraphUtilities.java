@@ -15,6 +15,11 @@ import com.webobjects.appserver.*;
 import java.util.*;
 import java.awt.*; //for pie charts
 
+/**
+ * Utility methods useful when using GifPlot.<br />
+ * 
+ */
+
 public class ERXGraphUtilities {
 
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXGraphUtilities.class);

@@ -13,6 +13,21 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
+/**
+ * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say states and depending on which state is picked the second popup might reflect all of the cities of that state.<br />
+ * 
+ * @binding parentEntitiesList
+ * @binding parentToChildrenRelationshipName
+ * @binding selectedParent
+ * @binding selectedChild
+ * @binding parentDisplayValueName
+ * @binding parentLabel
+ * @binding defaultChildKey
+ * @binding childrenSortKey
+ * @binding childDisplayValueName
+ * @binding childLabel
+ */
+
 public class ERXJSPopUpRelationPicker extends WOComponent {
 
     public ERXJSPopUpRelationPicker(WOContext aContext) {

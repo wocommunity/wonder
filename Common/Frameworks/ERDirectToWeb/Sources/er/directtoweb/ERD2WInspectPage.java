@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 import java.util.Enumeration;
 import er.extensions.*;
 
+/**
+ * Superclass for all inspecting/editing ERD2W templates.<br />
+ * 
+ */
+
 public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, ERDEditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface {
 
     /**

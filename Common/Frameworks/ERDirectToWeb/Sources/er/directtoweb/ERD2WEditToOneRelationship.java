@@ -12,6 +12,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import er.extensions.*;
 
+/**
+ * Same as the first except that it supports validation propogation and uses ERToOneRelationship.<br />
+ * 
+ */
+
 public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
 
     public ERD2WEditToOneRelationship(WOContext context) {

@@ -16,6 +16,11 @@ import er.extensions.*;
 // MOVEME: This should move into the defaults assignment, only reason
 //		it is here is because we used to not have the dependent
 //		keys passing in the current keyPath.
+/**
+ * Beautify the entity name.<br />
+ * 
+ */
+
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */

@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Beefed up inspect page.<br />
+ * 
+ */
+
 public class ERD2WInspectPageTemplate extends ERD2WInspectPage {
     
     public ERD2WInspectPageTemplate(WOContext context) { super(context); }

@@ -13,6 +13,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Custom query component that let's the user select from a set of shared eos.<br />
+ * 
+ */
+
 public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
 
     public ERD2WPickFromEntities(WOContext context) {

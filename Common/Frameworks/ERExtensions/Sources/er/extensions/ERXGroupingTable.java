@@ -9,6 +9,32 @@ package er.extensions;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
 
+/**
+ * Table implementation of a grouping repetition.<br />
+ * 
+ * @binding list
+ * @binding item
+ * @binding sectionForItem
+ * @binding subList
+ * @binding subListSection
+ * @binding sectionKey
+ * @binding maxColumns
+ * @binding col
+ * @binding index
+ * @binding row
+ * @binding tableBackgroundColor
+ * @binding border
+ * @binding cellpadding
+ * @binding cellspacing
+ * @binding rowBackgroundColor
+ * @binding cellBackgroundColor
+ * @binding cellAlign
+ * @binding cellVAlign
+ * @binding cellWidth
+ * @binding tableWidth
+ * @binding goingVertically" defaults="Boolean
+ */
+
 public class ERXGroupingTable extends ERXGroupingRepetition {
 
     public ERXGroupingTable(WOContext context) {

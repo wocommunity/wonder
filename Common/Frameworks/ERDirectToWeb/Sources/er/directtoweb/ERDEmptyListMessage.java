@@ -10,6 +10,12 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
 import er.extensions.ERXStatelessComponent;
 
+/**
+ * Default component shown when a D2W list is empty.<br />
+ * 
+ * @binding d2wContext
+ */
+
 public class ERDEmptyListMessage extends ERXStatelessComponent {
 
     public ERDEmptyListMessage(WOContext context) { super(context); }

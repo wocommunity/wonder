@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Displays section name as a string for printer friendly version of the pages.<br />
+ * 
+ */
+
 public class ERDDefaultSectionComponentPrinterFriendly extends ERDDefaultSectionComponent {
     
     public ERDDefaultSectionComponentPrinterFriendly(WOContext context) { super(context); }

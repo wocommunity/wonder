@@ -6,5 +6,10 @@
 //
 package er.directtoweb;
 
+/**
+ * For localized assignments<br />
+ * 
+ */
+
 public interface ERDLocalizableAssignmentInterface {
 }

@@ -13,6 +13,18 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
 
+/**
+ * Nice component wrapper around GifPlot, just bind arrays and strings<br />
+ * 
+ * @binding plotsForGraph
+ * @binding xAxisLabel
+ * @binding yAxisLabel
+ * @binding type
+ * @binding title
+ * @binding xAxisDataFormat
+ * @binding extraBindings
+ */
+
 public class ERXGraph extends WOComponent {
 
     public ERXGraph(WOContext aContext) {

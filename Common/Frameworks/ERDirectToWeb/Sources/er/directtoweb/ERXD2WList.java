@@ -13,6 +13,17 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
+/**
+ * Same as D2WList but uses ERD2WSwitchComponent so that its context won't be cached in case the page is reused.<br />
+ * 
+ * @binding action
+ * @binding list
+ * @binding entityName
+ * @binding dataSource
+ * @binding pageConfiguration
+ * @binding displayKeys
+ */
+
 public class ERXD2WList extends D2WList {
     protected EOArrayDataSource _dataSource = null;
 

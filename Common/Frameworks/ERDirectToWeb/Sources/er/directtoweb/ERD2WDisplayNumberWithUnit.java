@@ -9,6 +9,13 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayNumber;
 
+/**
+ * Same as ERDDisplayNumberWithUnit only subclass is different.  This should be cleaned up.<br />
+ * 
+ * @binding key
+ * @binding object
+ */
+
 public class ERD2WDisplayNumberWithUnit extends D2WDisplayNumber {
 
     public ERD2WDisplayNumberWithUnit(WOContext context) { super(context); }

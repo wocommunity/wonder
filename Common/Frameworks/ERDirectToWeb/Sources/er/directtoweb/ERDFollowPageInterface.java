@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOComponent;
 
+/**
+ * Interface used for follow page configurations, ie the first page config is an edit and we want an inspect to follow, maybe for the user to look at it before saving.<br />
+ * 
+ */
+
 public interface ERDFollowPageInterface {
     public WOComponent previousPage();
     public void setPreviousPage(WOComponent existingPageName);

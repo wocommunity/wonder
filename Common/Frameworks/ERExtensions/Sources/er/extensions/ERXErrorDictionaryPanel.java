@@ -12,6 +12,15 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
 
+/**
+ * Useful for displaying a dictionary of caught exception messages.<br />
+ * 
+ * @binding errorMessages
+ * @binding extraErrorMessage
+ * @binding shouldShowNewLineAbove" defaults="Boolean
+ * @binding errorKeyOrder
+ */
+
 public class ERXErrorDictionaryPanel extends WOComponent {
 
     public ERXErrorDictionaryPanel(WOContext aContext) {

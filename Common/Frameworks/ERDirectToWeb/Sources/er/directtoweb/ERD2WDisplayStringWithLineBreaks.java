@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.directtoweb.D2WDisplayString;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Displays string with line breaks.<br />
+ * 
+ */
+
 public class ERD2WDisplayStringWithLineBreaks extends D2WDisplayString {
     
      public ERD2WDisplayStringWithLineBreaks(WOContext context) {

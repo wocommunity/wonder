@@ -7,6 +7,11 @@
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.<br />
+ * 
+ */
+
 public class ERDInspect extends ERDCustomEditComponent {
     public ERDInspect(WOContext context) {
         super(context);

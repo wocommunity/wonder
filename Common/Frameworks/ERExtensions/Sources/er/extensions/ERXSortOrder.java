@@ -17,6 +17,22 @@ import com.webobjects.appserver.*;
 //	2) It posts a notification when the sort ordering changes.  This second one is nice
 //		if you want the app to 'remember' what the last sort was for a user.
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Better sort order changer. Useful for providing custom sort order images and remembering the sort orderings.<br />
+ * 
+ * @binding d2wContext
+ * @binding displayGroup
+ * @binding displayKey
+ * @binding key
+ * @binding unsortedImageSrc
+ * @binding sortedAscendingImageSrc
+ * @binding sortedDescendingImageSrc
+ * @binding unsortedImageName
+ * @binding sortedAscendingImageName
+ * @binding sortedDescendingImageName
+ * @binding imageFramework
+ */
+
 public class ERXSortOrder extends WOSortOrder {
 
     public ERXSortOrder(WOContext context) {

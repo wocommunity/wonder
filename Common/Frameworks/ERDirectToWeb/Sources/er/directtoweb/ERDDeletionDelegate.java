@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Delete used after confirming a delete action.<br />
+ * 
+ */
+
 public class ERDDeletionDelegate implements NextPageDelegate {
 
     /** logging support */

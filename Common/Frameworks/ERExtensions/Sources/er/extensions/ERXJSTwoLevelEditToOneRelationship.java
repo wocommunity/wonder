@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Uses JSPopUpRelationPicker to edit a toOne relationship.<br />
+ * 
+ */
+
 public class ERXJSTwoLevelEditToOneRelationship extends WOComponent {
 
     public ERXJSTwoLevelEditToOneRelationship(WOContext aContext) {

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
 
+/**
+ * page wrapper in xml.<br />
+ * 
+ */
+
 public class ERDXMLPageWrapper extends WOComponent {
 
     public ERDXMLPageWrapper(WOContext context) { super(context); }

@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Beefed up list page.<br />
+ * 
+ */
+
 public class ERD2WListPageTemplate extends ERD2WListPage {
     
     public ERD2WListPageTemplate(WOContext context) { super(context); }

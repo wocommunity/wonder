@@ -20,6 +20,11 @@ import er.extensions.ERXLogger;
 //	trueValue - the value used if the condition returns true
 //	falseValue - the value used if the condition returns false
 ///////////////////////////////////////////////////////////////////////////////
+/**
+ * Takes a condition and evalutaes this condition everytime the rule is asked for.<br />
+ * 
+ */
+
 public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
 
     /** logging support */

@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.ERXLogger;
 
 // now that we use reflection to fire methods, there's no reason to have a lot a assignment classes
+/**
+ * A bunch of methods used for pulling default values from attributes and relationships.<br />
+ * 
+ */
+
 public class ERDDefaultsAssignment extends ERDAssignment {
 
     /** logging support */
