@@ -77,8 +77,10 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
     public ERDDelayedExtraQualifierAssignment (String key, Object value) { super(key,value); }
 
     protected EOQualifier qualifierForArray(String key, NSArray objects) {
-        if(objects == null || objects.count() == 0)
+        if(objects == null)
             return null;
+        if(objects.count() == 0)
+            return new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, null);
 
         NSMutableArray qualifiers = new NSMutableArray();
         for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ) {
@@ -93,6 +95,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
 
     protected EOQualifier extraQualifier(D2WContext c, NSDictionary dict) {
         NSMutableArray qualifiers = new NSMutableArray();
+        EOQualifier result = null;
         for(Enumeration e = dict.keyEnumerator(); e.hasMoreElements(); ) {
             String key = (String)e.nextElement();
             Object value = c.valueForKeyPath((String)dict.objectForKey(key));
@@ -105,8 +108,8 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
             if(q != null) qualifiers.addObject(q);
         }
         if(qualifiers.count() > 0)
-            return new EOAndQualifier(qualifiers);
-        return null;
+            result = new EOAndQualifier(qualifiers);
+        return result;
     }
 
     public Object fireNow(D2WContext c) {
