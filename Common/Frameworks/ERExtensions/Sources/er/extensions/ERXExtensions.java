@@ -139,10 +139,23 @@ public class ERXExtensions {
                 // CHECKME: This shouldn't be needed now with WO 5
                 ERXRetainer.retain(_defaultEditingContextDelegate);
                 ERXRetainer.retain(_defaultECNoValidationDelegate);
+            
+            } catch (Exception e) {
+                System.out.println("Caught exception: " + e.getMessage() + " stack: ");
+                e.printStackTrace();
+            }
 
-                Observer observer = new Observer();
-                ERXRetainer.retain(observer); // has to be retained
+            Observer observer = new Observer();
+            ERXRetainer.retain(observer); // has to be retained
+
+            try {
                 ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
+            } catch (Exception e) {
+                System.out.println("Caught exception: " + e.getMessage() + " stack: ");
+                e.printStackTrace();
+            }
+            
+            try {
                 EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
                 ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
