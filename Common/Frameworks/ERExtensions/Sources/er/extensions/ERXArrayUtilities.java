@@ -377,7 +377,7 @@ public class ERXArrayUtilities extends Object {
                 return array;
             }
             EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            return filteredArrayWithFetchSpecificationNamedEntityNamed(array, keypath, eo.entityName());
+            return filteredArrayWithEntityFetchSpecification(array, eo.entityName(), keypath, null);
         }
     }
 
@@ -629,5 +629,47 @@ public class ERXArrayUtilities extends Object {
             reverse = reverseTemp.immutableClone();
         }
         return reverse != null ? reverse : NSArray.EmptyArray;
+    }
+
+    /**
+     * Displays a list of attributes off of
+     * objects in a 'friendly' manner. <br/>
+     * <br/>
+     * For example, given an array containing three user
+     * objects and the attribute key "firstName", the
+     * result of calling this method would be the string:
+     * "Max, Anjo and Patrice".
+     * @param list of objects to be displayed in a friendly
+     *		manner
+     * @param attribute key to be called on each object in
+     *		the list
+     * @param nullArrayDisplay string to be returned if the
+     *		list is null or empty
+     * @param separator string to be used for the first items
+     * @param finalSeparator used between the last items
+     * @returns friendly display string
+     */
+    public static String friendlyDisplayForKeyPath(NSArray list, String attribute, String nullArrayDisplay, String separator, String finalSeparator) {
+        String result=null;
+        int count = list!=null ? list.count() : 0;
+        if (count==0) {
+            result=nullArrayDisplay;
+        } else if (count == 1) {
+            result= (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(0), attribute) : list.objectAtIndex(0)).toString();
+        } else if (count > 1) {
+            StringBuffer buffer = new StringBuffer();
+            for(int i = 0; i < count; i++) {
+                String attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i)).toString();
+                if (i == 0) {
+                    buffer.append(attributeValue);
+                } else if  (i == (count - 1)) {
+                    buffer.append(finalSeparator + attributeValue);
+                } else {
+                    buffer.append(separator + attributeValue);
+                }
+            }
+            result=buffer.toString();
+        }
+        return result;
     }
 }

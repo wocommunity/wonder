@@ -23,8 +23,8 @@ public class ERXListDisplay extends WOComponent {
     }
     
     public String displayString() {
-        return ERXExtensions.friendlyEOArrayDisplayForKey((NSArray)valueForBinding("list"),
-                                                         (String)valueForBinding("attribute"),
-                                                         (String)valueForBinding("nullArrayDisplay"));
+        return ERXArrayUtilities.friendlyDisplayForKeyPath((NSArray)valueForBinding("list"),
+                                                   (String)valueForBinding("attribute"),
+                                                   (String)valueForBinding("nullArrayDisplay"), ", ", " and ");
     }
 }
