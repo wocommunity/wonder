@@ -9,12 +9,14 @@ import er.extensions.*;
 public class ERCStatic extends _ERCStatic {
     static final ERXLogger log = ERXLogger.getLogger(ERCStatic.class);
 
-    public ERCStatic() {
-        super();
+    public String toString() {
+        return entityName()+": "+key()+"="+value();
     }
-
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public String description() {
+        return toString();
+    }
+    public String userPresentableDescription() {
+        return toString();
     }
     
     
@@ -51,6 +53,7 @@ public class ERCStatic extends _ERCStatic {
             ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
             if (entry==null) {
                 entry=(ERCStatic)ERXUtilities.createEO("ERCStatic", editingContext);
+                entry.setKey(key);
             }
             entry.setValue(value);
         }
