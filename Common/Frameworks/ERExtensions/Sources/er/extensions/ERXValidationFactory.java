@@ -347,8 +347,11 @@ public class ERXValidationFactory {
             String entityName = erv.eoObject().entityName();
             String property = erv.isCustomMethodException() ? erv.method() : erv.propertyKey();
             String type = erv.type();
-            String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : ERXLocalizer.currentLocalizer().language();
-
+            String targetLanguage = erv.targetLanguage();
+            if (targetLanguage == null) {
+                targetLanguage = ERXLocalizer.currentLocalizer() != null ? ERXLocalizer.currentLocalizer().language() : ERXLocalizer.defaultLanguage();
+            }
+            
             log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
             ERXMultiKey k = new ERXMultiKey(new Object[] {entityName, property,
                 type,targetLanguage});
