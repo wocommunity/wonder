@@ -7,11 +7,11 @@
 
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+
 import er.extensions.*;
 
 public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {

@@ -3,9 +3,8 @@
  */
 package er.extensions;
 
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.foundation.NSForwardException;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Long response task interface and default implementation should take away the need to tie your

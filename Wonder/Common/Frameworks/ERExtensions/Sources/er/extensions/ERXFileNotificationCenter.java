@@ -6,12 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import java.io.*;
-import java.util.Enumeration;
+import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * The file notification center is only used in developement systems. It provides a nice repository about

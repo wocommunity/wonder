@@ -6,9 +6,8 @@
 //
 package er.directtoweb;
 
+import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.BooleanQualifier;
-import com.webobjects.directtoweb.NonNullQualifier;
 
 /**
  * Basic utility method used when traversing graphs

@@ -1,10 +1,11 @@
 package er.extensions;
 
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import java.util.*;
+import com.webobjects.foundation.*;
 
 /**
  * This class implements EOF stack pooling including EOF stack synchronizing. 

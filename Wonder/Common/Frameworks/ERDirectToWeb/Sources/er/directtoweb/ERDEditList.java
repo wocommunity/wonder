@@ -6,12 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
-import java.util.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 /**

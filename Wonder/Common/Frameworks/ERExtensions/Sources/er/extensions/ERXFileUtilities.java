@@ -6,12 +6,13 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.zip.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
 * Collection of handy {java.io.File} utilities.

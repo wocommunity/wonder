@@ -7,8 +7,8 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.ERXConstant;
+
+import er.extensions.*;
 
 /**
  * Displays a number as say 5 years 2 months.<br />

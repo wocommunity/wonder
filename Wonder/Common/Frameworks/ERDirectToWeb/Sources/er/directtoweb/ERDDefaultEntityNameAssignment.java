@@ -6,11 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 // MOVEME: This should move into the defaults assignment, only reason

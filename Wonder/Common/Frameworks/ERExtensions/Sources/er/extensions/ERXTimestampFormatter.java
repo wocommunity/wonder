@@ -1,11 +1,9 @@
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-
 import java.text.*;
 import java.util.*;
+
+import com.webobjects.foundation.*;
 
 /**
  * Provides localization to timestamp formatters.<br />

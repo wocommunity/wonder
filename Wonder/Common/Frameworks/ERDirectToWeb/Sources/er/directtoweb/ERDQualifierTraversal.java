@@ -6,11 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.Enumeration;
+import java.util.*;
+
+import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.BooleanQualifier;
-import com.webobjects.directtoweb.NonNullQualifier;
-import er.extensions.ERXLogger;
+
+import er.extensions.*;
 
 /**
  * Contains a single method for traversing

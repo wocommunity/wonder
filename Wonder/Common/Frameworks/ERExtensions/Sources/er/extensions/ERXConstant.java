@@ -6,8 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.math.*;
+
 import com.webobjects.foundation.*;
-import java.math.BigDecimal;
 
 /**
  * Collection of base constants. Note that upon class initialization

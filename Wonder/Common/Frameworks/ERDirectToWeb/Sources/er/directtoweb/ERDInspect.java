@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 /**
  * Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.<br />

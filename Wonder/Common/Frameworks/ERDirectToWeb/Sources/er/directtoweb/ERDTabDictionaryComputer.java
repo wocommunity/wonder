@@ -6,9 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * This class is needed because the original tab

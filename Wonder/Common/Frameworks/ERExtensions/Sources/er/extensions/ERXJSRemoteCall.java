@@ -1,8 +1,8 @@
 package er.extensions;
 import java.util.*;
-import com.webobjects.foundation.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * JavaScript remote execution.

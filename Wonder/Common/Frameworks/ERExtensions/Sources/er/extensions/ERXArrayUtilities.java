@@ -1,10 +1,10 @@
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import java.math.*;
 import java.util.*;
-import java.io.*;
-import java.math.BigDecimal;
+
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.

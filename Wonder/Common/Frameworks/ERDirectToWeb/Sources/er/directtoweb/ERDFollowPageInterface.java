@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.*;
 
 /**
  * Interface used for follow page configurations, ie the first page config is an edit and we want an inspect to follow, maybe for the user to look at it before saving.<br />

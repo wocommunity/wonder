@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import java.util.*;
+
 import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
+import com.webobjects.foundation.*;
 
 /**
  * The reason that this model group is needed is because the

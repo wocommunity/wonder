@@ -1,9 +1,10 @@
 package er.extensions;
 
 
-import com.webobjects.foundation.*;
 import java.io.*;
 import java.util.*;
+
+import com.webobjects.foundation.*;
 
 /**
  * Custom subclass of NSMutableArray. Implements {@see java.util.List} and

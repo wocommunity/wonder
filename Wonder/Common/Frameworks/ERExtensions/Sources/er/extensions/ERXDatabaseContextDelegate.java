@@ -6,12 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
 import java.sql.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+
 import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * This delegate implements several methods from the formal interface

@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WEditLargeString;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 
 /**
  * Works around an issue in WOText where a null value is transformed into "". This is not what WOTextField does.<br />

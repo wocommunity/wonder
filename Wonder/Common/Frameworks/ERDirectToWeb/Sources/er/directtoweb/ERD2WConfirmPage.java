@@ -1,6 +1,5 @@
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
 
 /** 

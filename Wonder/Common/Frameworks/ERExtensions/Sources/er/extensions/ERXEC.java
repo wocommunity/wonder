@@ -5,10 +5,10 @@
 //  Created by Max Muller on Sun Feb 23 2003.
 //
 package er.extensions;
-import java.util.Vector;
+import java.util.*;
 
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Subclass that has every public method overridden to support automatic 

@@ -1,8 +1,7 @@
 package er.extensions;
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.appserver._private.*;
+import com.webobjects.foundation.*;
 
 /**
  * Client side part of the JavaScript validation.

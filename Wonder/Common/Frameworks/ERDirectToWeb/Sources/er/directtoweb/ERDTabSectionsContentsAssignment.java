@@ -6,11 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
 import java.util.*;
+
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Assignment used to construct and cache the 

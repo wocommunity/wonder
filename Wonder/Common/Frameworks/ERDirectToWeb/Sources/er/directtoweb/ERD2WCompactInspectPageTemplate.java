@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
-import er.extensions.*;
+import com.webobjects.appserver.*;
 
 /**
  * Inspect template that is typically embedded in a page.<br />

@@ -1,10 +1,10 @@
 package er.extensions;
 
 import java.util.*;
-import com.webobjects.foundation.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import er.extensions.*;
+import com.webobjects.foundation.*;
 
 /**
  * Wrapper around the WO-private NSUtilities which allows for some Objective-C-Style poseAs.

@@ -1,8 +1,5 @@
 package er.extensions;
-import java.util.*;
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 
 /**
  * Displays stats on how long the various phases in the request-response loop took.

@@ -8,7 +8,6 @@ package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.eocontrol.*;
 
 import er.extensions.*;

@@ -6,14 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.io.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  *  ERXApplication is the abstract superclass of WebObjects applications

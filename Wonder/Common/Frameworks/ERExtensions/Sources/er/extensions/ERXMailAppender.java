@@ -6,16 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.*;
 
-import com.webobjects.foundation.*;
+import org.apache.log4j.*;
+import org.apache.log4j.helpers.*;
+import org.apache.log4j.spi.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import org.apache.log4j.*;
-import org.apache.log4j.spi.*;
-import org.apache.log4j.helpers.LogLog;
+import com.webobjects.foundation.*;
 
 /**
  * Basic log4j Mail Message Appender<br>

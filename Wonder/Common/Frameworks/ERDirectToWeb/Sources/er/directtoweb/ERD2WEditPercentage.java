@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WEditNumber;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 
 /**
  * Edits a percentage number with radio buttons.<br />

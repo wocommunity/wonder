@@ -1,7 +1,6 @@
 package er.extensions;
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Patch for WOText to not include the <code>value</code> attribute.

@@ -6,15 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import com.webobjects.appserver.*;
-import er.extensions.*;
+import java.net.*;
 import java.util.*;
-import java.net.URL;
+
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * Principle class of the ERDirectToWeb framework.

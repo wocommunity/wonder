@@ -1,12 +1,12 @@
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import er.directtoweb.*;
 
 /**
  * ERD2WControllerFactory a an enhancement of the D2W factory class with the notion of "Processes". <br />

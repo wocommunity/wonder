@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
  * Beefed up inspect page.<br />

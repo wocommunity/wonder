@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 
 /**
  * NextPageDelegate that takes a given page name and when called creates and returns the given named page.<br />

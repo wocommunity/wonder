@@ -1,10 +1,11 @@
 package er.directtoweb;
 
-import java.util.Enumeration;
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 /**

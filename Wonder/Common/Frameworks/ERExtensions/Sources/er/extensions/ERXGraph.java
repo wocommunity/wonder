@@ -6,12 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.plot.*;
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
+import com.webobjects.foundation.*;
+import com.webobjects.plot.*;
 
 /**
  * Nice component wrapper around GifPlot, just bind arrays and strings<br />

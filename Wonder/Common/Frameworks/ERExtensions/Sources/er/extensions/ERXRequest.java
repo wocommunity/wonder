@@ -1,10 +1,9 @@
 package er.extensions;
 import java.net.*;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /** Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle

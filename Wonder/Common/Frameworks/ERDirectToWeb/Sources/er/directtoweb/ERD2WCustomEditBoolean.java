@@ -6,12 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import com.webobjects.foundation.*;
 
 /**
  * Allows editing boolean values based on radio buttons and strings.<br />

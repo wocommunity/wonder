@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
  * An empty component does not contain any html or wod. This admittedly

@@ -8,11 +8,9 @@
 //
 package er.extensions;
 
+import java.io.*;
+
 import com.webobjects.foundation.*;
-import java.io.PrintWriter;
-import java.io.PrintStream;
-import java.io.OutputStreamWriter;
-import java.io.ByteArrayOutputStream;
 
 /**
  * <code>ERXNSPrintWriterLogger</code> is an alternative of 

@@ -6,11 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.ERXExceptionHolder;
-import er.extensions.ERXLogger;
+
+import er.extensions.*;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated

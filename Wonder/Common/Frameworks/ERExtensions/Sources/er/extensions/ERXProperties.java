@@ -6,18 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.util.*;
+import java.io.*;
 import java.math.*;
-import java.io.File;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.*;
 
-import com.webobjects.appserver._private.WOProjectBundle;
+import com.webobjects.appserver.*;
+import com.webobjects.appserver._private.*;
+import com.webobjects.foundation.*;
 
 /**
  * Collection of simple utility methods used to get and set properties

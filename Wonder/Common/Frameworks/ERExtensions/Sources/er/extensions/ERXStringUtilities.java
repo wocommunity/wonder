@@ -5,12 +5,13 @@
 // Created by ak on Mon Nov 05 2001
 //
 package er.extensions;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.io.*;
 import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Collection of {@link java.lang.String String} utilities. Contains

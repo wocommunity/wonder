@@ -24,13 +24,12 @@
 package er.extensions;
 //package com.webobjects.woextensions;
 
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXLocalizer;
-import java.util.Enumeration;
 
 /**
  * (Back port from WO 5 WOExtensions)<br />

@@ -6,10 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import java.util.*;
+
 import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Generates a subquery for the qualifier given in argument

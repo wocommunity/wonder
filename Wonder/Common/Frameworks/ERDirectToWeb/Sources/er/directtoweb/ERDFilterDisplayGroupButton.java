@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+
+import er.extensions.*;
 
 /**
  * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.<br />

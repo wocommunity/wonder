@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
  * description forthcoming!<br />

@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 
 /* HACK Alert
    we need to sublass one of the qualifier class of D2W in order for the LA code to work properly

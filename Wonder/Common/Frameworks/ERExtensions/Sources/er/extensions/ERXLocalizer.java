@@ -6,12 +6,12 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-
-import java.text.Format;
+import java.lang.reflect.*;
+import java.text.*;
 import java.util.*;
-import java.lang.reflect.Constructor;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /** KVC access to localization.
 Monitors a set of files in all frameworks and returns a string given a key for a language.

@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 //	This is essentially an assignment that will be fired everytime, note that the ERD2WModel will
 //	cache the assignment instead of the value it returns.

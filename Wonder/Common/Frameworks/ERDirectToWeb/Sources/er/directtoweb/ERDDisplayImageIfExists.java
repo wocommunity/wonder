@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.NSData;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Displays an image if it exists.<br />

@@ -23,12 +23,12 @@
  */
 package er.extensions;
 
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-import er.extensions.ERXUtilities;
-import java.util.Enumeration;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This is a back port of WOToManyRelationship from WO 5 WOExtensions to 4.5.  The only changes that have been
 // made are due to api changes between the two.

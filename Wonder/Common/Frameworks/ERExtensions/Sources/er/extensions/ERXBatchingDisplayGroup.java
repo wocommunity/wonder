@@ -4,9 +4,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
 
 /**
 * Extends {@link WODisplayGroup} in order to provide real batching.

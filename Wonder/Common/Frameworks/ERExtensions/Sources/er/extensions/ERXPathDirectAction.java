@@ -6,10 +6,11 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import java.util.*;
 import java.net.*;
+import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Utility direct action class that provides a bunch of nice utility methods

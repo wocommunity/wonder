@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
  * !!Don't use, use ERDInspect instead!! Embedded component that can be used for nesting page configurations, ie ERD2WInspect can be a customComponentName.<br />

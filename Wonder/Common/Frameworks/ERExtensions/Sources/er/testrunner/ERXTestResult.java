@@ -6,11 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import com.webobjects.foundation.*;
 import junit.framework.*;
-import junit.runner.*;
-import java.io.PrintStream;
-import java.util.*;
+
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 /**

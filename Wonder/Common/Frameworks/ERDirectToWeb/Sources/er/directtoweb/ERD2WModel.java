@@ -6,16 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import java.util.*;
-import java.io.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import java.net.URL;
 
 /**
  * Overhaul of the caching system.

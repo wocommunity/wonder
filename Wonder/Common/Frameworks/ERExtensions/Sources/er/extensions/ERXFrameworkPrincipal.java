@@ -6,11 +6,8 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSNotificationCenter;
-import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSSelector;
-import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /** 
  * Designated starter class for frameworks.

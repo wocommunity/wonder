@@ -8,7 +8,6 @@ package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
 
 /**
  * Similiar to the message page, except this one has the choice Yes or No.<br />

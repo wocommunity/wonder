@@ -6,11 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
 import java.util.*;
-import er.extensions.ERXLogger;
+
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * DelayedRuleAssignment expects an array of rules as its value. The rules are

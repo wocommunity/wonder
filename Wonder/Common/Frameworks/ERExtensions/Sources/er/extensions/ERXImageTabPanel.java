@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.NSArray;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /*
  This component takes a list of tabs, the same as ERXTabPanel

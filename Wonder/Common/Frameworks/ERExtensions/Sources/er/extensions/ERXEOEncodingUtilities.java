@@ -6,23 +6,11 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSPropertyListSerialization;
+import java.util.*;
 
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
-
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModel;
-import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
-
-import java.util.Enumeration;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 public class ERXEOEncodingUtilities {
 

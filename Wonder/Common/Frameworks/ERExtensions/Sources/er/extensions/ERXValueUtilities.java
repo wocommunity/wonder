@@ -1,7 +1,8 @@
 package er.extensions;
-import com.webobjects.foundation.*;
+import java.math.*;
+
 import com.webobjects.appserver.*;
-import java.math.BigDecimal;
+import com.webobjects.foundation.*;
 
 /**
  * ERXValueUtilities has usefull conversion methods for

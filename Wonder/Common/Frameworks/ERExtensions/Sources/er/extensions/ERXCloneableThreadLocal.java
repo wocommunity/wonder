@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 
 /**
  * <code>ERXClonableThreadLocal</code> extends {@link InheritableThreadLocal}

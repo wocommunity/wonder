@@ -5,14 +5,10 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
-import er.extensions.*;
-
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import java.util.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Query page utilizing fetch specifications.<br />

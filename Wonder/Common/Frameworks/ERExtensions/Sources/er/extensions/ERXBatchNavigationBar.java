@@ -10,10 +10,9 @@ package er.extensions;
 // 1) User typing null for either number of objects per batch or the page number
 // 2) When resetting the number of items per batch the page first page displayed would be the last page.
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 
 /**
  * Better navigation bar<br />

@@ -6,9 +6,9 @@
  */
 package er.extensions;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 
-import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.*;
 
 /**
  * Utilities for use with key value coding.

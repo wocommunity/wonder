@@ -6,9 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import java.lang.*;
 
 /**
  * Given a count and a string pluralizes the string if count &gt; 1.<br />

@@ -102,7 +102,7 @@ GroupingRepetition: ERXGroupingRepetition {
 	subListSection = sublistSection;
 	subList = sublist;
 	sectionForItem = section;
-	sectionKey = "name";
+	sectionKey = d2wContext.keyWhenGrouping;
 	splitArrays = true;
 	sortKey = d2wContext.groupingOrderKey;
 }

@@ -8,7 +8,7 @@ package er.extensions;
 
 // needed for nested page configs as well as pick pages
 // Removes forms from WOComponent
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
  * Better navigation bar without a form.<br />

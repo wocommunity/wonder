@@ -6,15 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.lang.reflect.Method;
-import java.lang.*;
-import java.util.*;
 import java.io.*;
-import org.apache.log4j.Logger;
+import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.log4j.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Principal class of the ERExtensions framework. This class
