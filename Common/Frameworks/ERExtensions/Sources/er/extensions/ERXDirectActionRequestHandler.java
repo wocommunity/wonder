@@ -8,12 +8,22 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.appserver._private.WODirectActionRequestHandler;
 
 /**
  * 
  * NOTE: This class is multi thread safe. 
  */
-public class ERXDirectActionRequestHandler extends com.webobjects.appserver._private.WODirectActionRequestHandler {
+public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler {
+
+    public ERXDirectActionRequestHandler() {
+        super();
+    }
+    
+    public ERXDirectActionRequestHandler(String actionClassName, String defaultActionName,
+					boolean shouldAddToStatistics) {
+        super(actionClassName, defaultActionName, shouldAddToStatistics);
+    }
 
     public WOResponse handleRequest(WORequest request) {
         WOResponse response = super.handleRequest(request);
