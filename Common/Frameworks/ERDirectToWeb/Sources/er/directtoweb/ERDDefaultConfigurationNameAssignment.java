@@ -71,10 +71,12 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
         String entityName;
         if(entity != null) {
             entityName = entity.name();
-        } else if(c.valueForKey("object") != null) {
+        } else if(c.valueForKey("object") != null && c.valueForKey("object") instanceof EOEnterpriseObject) {
             entityName = ((EOEnterpriseObject)c.valueForKey("object")).entityName();
-        } else {
+        } else if (c.entity() != null) {
             entityName = c.entity().name();
+        } else {
+            entityName = "*all*";
         }
         return entityName;
     }
