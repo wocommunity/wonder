@@ -20,12 +20,4 @@ public abstract class ERCEnterpriseObject extends ERXGenericRecord {
         return pk==null ? null : ERXCrypto.blowfishEncode(pk);
     }
 
-    // This is used for objects that need different configurations based on the entities of some of their relationships.
-    // An example is that a SpaceDisposalOffer needs different configurations based on the entity of the property relationship.
-    public String uniqueEntityName() { return entityName(); }
-
-    public String contentTeamEntityName(){return entityName(); }
-
-    public String dummy(){  return " "; }
-    public String notApplicable() { return "N/A"; }
 }
