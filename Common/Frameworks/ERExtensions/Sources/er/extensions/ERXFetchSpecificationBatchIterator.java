@@ -220,7 +220,7 @@ public class ERXFetchSpecificationBatchIterator {
                                                                                                       fetchSpecification.qualifier(),
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
-            log.info("Fetching primary keys.");
+            log.debug("Fetching primary keys.");
             NSArray primaryKeyDictionaries = editingContext().objectsWithFetchSpecification(pkFetchSpec);
             
             String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
