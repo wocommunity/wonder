@@ -59,7 +59,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         WOComponent returnPage = null;
         if (previousPage() == null) {
             EditPageInterface editPage=D2W.factory().editPageForEntityNamed(object().entityName(),session());
-            editPage.setObject(object());
+            editPage.setObject(ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext()));
             editPage.setNextPage(nextPage());
             returnPage = (WOComponent)editPage;
         }
