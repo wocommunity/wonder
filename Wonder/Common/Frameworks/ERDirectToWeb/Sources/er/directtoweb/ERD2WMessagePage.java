@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERMessagePage.java created by max on Wed 14-Mar-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -13,9 +11,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 
-// Still a work in progress.
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDBranchInterface {
 
     ///////////////////////////////////////  log4j category  ///////////////////////////////////////
