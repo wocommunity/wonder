@@ -34,18 +34,52 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         String value = context().request().stringFormValueForKey("_vvalue");
         String entity = context().request().stringFormValueForKey("_ventityName");
 
+        String contextID = context().request().stringFormValueForKey("contextID");
+
         _callback = context().request().stringFormValueForKey("callback");
 
+        if(value != null && value.length() == 0)
+            value = null;
+        
         Object newValue = value;
 
-        log.info("validateKeyAndValueInEntityAction: key="+key+", value="+value+", entity="+entity + ", callback=" + _callback);
+        log.debug("validateKeyAndValueInEntityAction: key="+key+", value="+value+", entity="+entity + ", contextID "+contextID+ ", callback=" + _callback);
 
+        EOEnterpriseObject eo = null;
+        WOComponent page = null;
         try {
-            EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entity);
-            if(cd != null)
-                newValue = cd.validateValueForKey(value, key);
-        } catch (NSValidation.ValidationException ex) {
+            if(contextID != null)
+                page = session().restorePageForContextID(contextID);
+            log.debug("Page: " + (page != null ? "Yes" : "No"));
+            if(page != null && true) {
+                eo = (EOEnterpriseObject)page.valueForKey("object");
+                eo.editingContext().lock();
+                eo.validateValueForKey(value, key);
+             } else {
+                EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entity);
+                if(cd != null)
+                    newValue = cd.validateValueForKey(value, key);
+            }
+        } catch (ERXValidationException ex) {
+            try {
+                log.info(ex);
+                NSKeyValueCoding d2wContext = (NSKeyValueCoding)page.valueForKey("d2wContext");
+                d2wContext.takeValueForKey(key, "propertyKey");
+                ex.setContext(d2wContext);
+                ex.setTargetLanguage((String)session().valueForKeyPath("language"));
+                _errors = ex.getMessage();
+            } catch(Exception ex1) {
+                _errors = ex1.toString();
+            }
+        } catch (NSValidation.ValidationException ex1) {
             _errors = ex.getMessage();
+        } finally {        
+            if(eo != null)
+                eo.editingContext().unlock();
+            if(page != null) {
+                // we cheat here because calling sleep() is not enough...
+                page._sleepInContext(page.context());
+            }
         }
     }
     
