@@ -42,7 +42,8 @@ public class ERXEditDateJavascript extends WOComponent {
     }
     
     public String formatterStringForScript() {
-    	return ERXEditDateJavascript.formatterStringForScript(dateformat);
+        String format = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(dateformat);
+        return ERXEditDateJavascript.formatterStringForScript(format);
     }
     
     public static String formatterStringForScript(String format) {
