@@ -4,11 +4,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 
 /**
- * Tracks and logs the SQL that gets sent to the database. If the logger
- * <code>log4j.category.er.extensions.ERXAdaptorChannelDelegate.sqlLogging=DEBUG</code>
- * and the milliseconds used exceed the time specified in the system property
- * <code>er.extensions.ERXSQLExpressionTracker.maxMilliSeconds</code>, then the SQL expression is logged together with the
- * time used and the parameters.
+ * Tracks and logs the SQL that gets sent to the database. If the milliseconds used exceed 
+ * the time specified in the system property
+ * <code>er.extensions.ERXSQLExpressionTracker.trace.milliSeconds.[debug|info|warn|error]</code>, and the entity name
+ * matches the regular expression <code>er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern</code> then the SQL 
+ * expression is logged together with the time used and the parameters. <br />
  * NOTE: to get patched into EOF, this class registers itself for the 
  * <code>EODatabaseContext.DatabaseChannelNeededNotification</code> notification and creates a new channel. If you
  * would like to handle creation of the channel yourself *and* you need the logging feature, you need to: <ul>
@@ -20,8 +20,7 @@ import com.webobjects.eoaccess.*;
 public class ERXAdaptorChannelDelegate {
     private ERXLogger log = null;
     private long _lastMilliseconds;
-    private long _maxMilliseconds = Long.getLong("er.extensions.ERXAdaptorChannelDelegate.maxMilliSeconds", 0).longValue();
-
+ 
     private static ERXAdaptorChannelDelegate _delegate;
 
     public static void setupDelegate() {
@@ -40,11 +39,28 @@ public class ERXAdaptorChannelDelegate {
         if(log == null) {
             log = ERXLogger.getERXLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
         }
-        if(log.isDebugEnabled()) {
-            long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;
-            if(millisecondsNeeded > _maxMilliseconds) {
-                String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
-                log.debug("\"" + entityName  + "\" expression took " + millisecondsNeeded + " ms: " + expression);
+        String entityMatchPattern = ERXProperties.stringForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern", ".*");
+        long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;
+        String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
+        if(entityName.matches(entityMatchPattern)) {
+            long debugMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug", 5);
+            long infoMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.info", 100);
+            long warnMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.warn", 500);
+            long errorMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.error", 5000);
+            int maxLength = ERXProperties.intForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.maxLength", 3000);
+
+            String description = "\"" + entityName  + "\"@" + channel.adaptorContext().hashCode() + " expression took " + millisecondsNeeded + " ms: " + expression.statement();
+            if(description.length() > maxLength) {
+                description = description.substring(0, maxLength);
+            }
+            if(millisecondsNeeded > errorMilliseconds) {
+                log.error(description, new RuntimeException("Statement running too long"));
+            } else if(millisecondsNeeded > warnMilliseconds) {
+                log.warn(description);
+            } else if(millisecondsNeeded > infoMilliseconds) {
+                log.info(description);
+            } else if(millisecondsNeeded > debugMilliseconds) {
+                log.debug(description);
             }
         }
     }
@@ -54,11 +70,7 @@ public class ERXAdaptorChannelDelegate {
         return true;
     }
 
-    public void setMaxMilliSeconds(long value) {
-        _maxMilliseconds = value;
-    }
-
-    public void dataBaseChannelNeeded(NSNotification n) {
+   public void dataBaseChannelNeeded(NSNotification n) {
         if(Boolean.getBoolean("er.extensions.ERXAdaptorChannelDelegate.enabled")) {
             EODatabaseContext context = (EODatabaseContext)n.object();
             EODatabaseChannel channel = new EODatabaseChannel(context);

@@ -56,6 +56,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     
     private static boolean isInitialized = false;
     
+    private static Boolean _useLocalizedFormatters;
+    
     public static final String LocalizationDidResetNotification = "LocalizationDidReset";
     
     private static Observer observer = new Observer();
@@ -581,16 +583,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         formatString = formatString == null ? ERXTimestampFormatter.DEFAULT_PATTERN : formatString;
         formatString = localizedStringForKeyWithDefault(formatString);
         Format result = (Format)_dateFormatters.get(formatString);
-		if(result == null) {
-			synchronized(ERXLocalizer.class) {
-                Locale current = locale();
-				NSTimestampFormatter formatter = new NSTimestampFormatter(formatString, new DateFormatSymbols(current));
-				result = formatter;
-				_dateFormatters.put(formatString, result);
-			}
-		}
-		return result;
-	}
+        if(result == null) {
+            Locale current = locale();
+            NSTimestampFormatter formatter = new NSTimestampFormatter(formatString, new DateFormatSymbols(current));
+            result = formatter;
+            _dateFormatters.put(formatString, result);
+        }
+        return result;
+    }
 
 	/**
 	 * Returns a localized number formatter for the given key.
@@ -603,19 +603,18 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public Format localizedNumberFormatForKey(String formatString) {
         formatString = formatString == null ? "#,##0.00;-(#,##0.00)" : formatString;
         formatString = localizedStringForKeyWithDefault(formatString);
-		Format result = (Format)_numberFormatters.get(formatString);
-		if(result == null) {
-			synchronized(_numberFormatters) {
-				NSNumberFormatter formatter = new ERXNumberFormatter();
-				formatter.setLocale(locale()); 
-				formatter.setLocalizesPattern(true);
-				formatter.setPattern(formatString);
-				result = formatter;
-				_numberFormatters.put(formatString, result);
-			}
-		}
-		return result;
-	}
+        Format result = (Format)_numberFormatters.get(formatString);
+        if(result == null) {
+            Locale current = locale();
+            NSNumberFormatter formatter = new ERXNumberFormatter();
+            formatter.setLocale(current); 
+            formatter.setLocalizesPattern(true);
+            formatter.setPattern(formatString);
+            result = formatter;
+            _numberFormatters.put(formatString, result);
+        }
+        return result;
+    }
 
 
 	/**
@@ -645,4 +644,15 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	public void setLocalizedDateFormatForKey(NSTimestampFormatter formatter, String pattern) {
 		_dateFormatters.put(pattern, formatter);
 	}
+
+    /**
+     * @return
+     */
+    public static boolean useLocalizedFormatters() {
+        if(_useLocalizedFormatters == null) {
+            _useLocalizedFormatters = ERXProperties.booleanForKey("er.extensions.ERXLocalizer.useLocalizedFormatters") 
+                ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _useLocalizedFormatters.booleanValue();
+    }
 }

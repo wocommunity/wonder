@@ -66,7 +66,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      */
     public static NSNumberFormatter numberFormatterForPattern(String pattern) {
     	NSNumberFormatter formatter;
-    	if(ERXLocalizer.isLocalizationEnabled()) {
+    	if(ERXLocalizer.useLocalizedFormatters()) {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
     		formatter = (NSNumberFormatter)localizer.localizedNumberFormatForKey(pattern);
     	} else {
@@ -84,7 +84,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
      * @return shared instance of formatter
      */
     public static void setNumberFormatterForPattern(NSNumberFormatter formatter, String pattern) {
-    	if(ERXLocalizer.isLocalizationEnabled()) {
+    	if(ERXLocalizer.useLocalizedFormatters()) {
     		ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
     		localizer.setLocalizedNumberFormatForKey(formatter, pattern);
     	} else {

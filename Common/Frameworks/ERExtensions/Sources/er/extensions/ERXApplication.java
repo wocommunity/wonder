@@ -46,9 +46,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         WOApplication.main(argv, applicationClass);
     }
 
-    /** improved streaming support*/
-    public NSMutableArray _streamingRequestHandlerKeys = new NSMutableArray(streamActionRequestHandlerKey());
-
     /**
      * Installs several bufixes and enhancements to WODynamicElements.
      * Sets the Context class name to "er.extensions.ERXWOContext" if
@@ -728,6 +725,9 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             + "}\n\n");
     }
 
+    /** improved streaming support*/
+    protected NSMutableArray _streamingRequestHandlerKeys = new NSMutableArray(streamActionRequestHandlerKey());
+    
     public void registerStreamingRequestHandlerKey(String s) {
         if (!_streamingRequestHandlerKeys.containsObject(s)) _streamingRequestHandlerKeys.addObject(s);
     }
@@ -761,8 +761,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 
     /** holds the info on checked-out sessions */
     private Hashtable _sessions = new Hashtable();
-
-    private static final ERXFormatterFactory formatterProvider = new ERXFormatterFactory();
 
     /** Holds info about where and who checked out */
     private class SessionInfo {
@@ -843,16 +841,24 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         return new Integer(sessionTimeOut().intValue() / 60);
     }
     
+    protected static final ERXFormatterFactory _formatterFactory = new ERXFormatterFactory();
+    
+    /** Getting formatters into KVC: bind to <code>application.formatterFactory.(60/#,##0.00)</code>*/
     public ERXFormatterFactory formatterFactory() {
-        return formatterProvider;
+        return _formatterFactory;
     }
     
-    public short _responseCompressionEnabled = -1;
+    
+    protected Boolean _responseCompressionEnabled;
+
+    /** checks the value of <code>er.extensions.ERXApplication.responseCompressionEnabled</code> and if true
+        turns on response compression by gzip */
     public boolean responseCompressionEnabled() {
-        if (_responseCompressionEnabled == -1) {
-            _responseCompressionEnabled = "true".equals(System.getProperty("er.extensions.ERXApplication.responseDownloadEnabled")) ? (short)1 : (short)0;
+        if (_responseCompressionEnabled == null) {
+            _responseCompressionEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.responseCompressionEnabled", false) 
+            ? Boolean.TRUE : Boolean.FALSE;
         }
-        return _responseCompressionEnabled == 1;
+        return _responseCompressionEnabled.booleanValue();
     }
 }
 
