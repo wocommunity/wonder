@@ -298,6 +298,10 @@
 				41E8155A04F05D5B00A88C3C,
 				419E564B0507E29500000104,
 				419E564D0507E29500000104,
+				414045F50521B01000000102,
+				414045F70521B01000000102,
+				4198E3C8052634260048E379,
+				4198E3CA052634260048E379,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -490,6 +494,8 @@
 				4150A86F050324B700000102,
 				416009A50507C9D800000102,
 				419E564C0507E29500000104,
+				414045F60521B01000000102,
+				4198E3C9052634260048E379,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -879,6 +885,7 @@
 				40B5828AFFD5E91B7F000001,
 				F59C576C02C4565601000102,
 				04B9D382FFD85E7B11CD2B8D,
+				414045EC0521B01000000102,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -1391,6 +1398,64 @@
 			settings = {
 			};
 		};
+		414045EC0521B01000000102 = {
+			children = (
+				414045ED0521B01000000102,
+				414045EE0521B01000000102,
+				414045EF0521B01000000102,
+			);
+			isa = PBXGroup;
+			name = ERXDebugTimer;
+			refType = 4;
+		};
+		414045ED0521B01000000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXDebugTimer.api;
+			path = Components/ERXDebugTimer.api;
+			refType = 4;
+		};
+		414045EE0521B01000000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXDebugTimer.java;
+			path = Sources/er/extensions/ERXDebugTimer.java;
+			refType = 4;
+		};
+		414045EF0521B01000000102 = {
+			children = (
+				414045F00521B01000000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERXDebugTimer.wo;
+			path = "";
+			refType = 4;
+		};
+		414045F00521B01000000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXDebugTimer.wo;
+			refType = 4;
+		};
+		414045F50521B01000000102 = {
+			fileRef = 414045ED0521B01000000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		414045F60521B01000000102 = {
+			fileRef = 414045EE0521B01000000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		414045F70521B01000000102 = {
+			fileRef = 414045EF0521B01000000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4150A86E050324B700000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1497,6 +1562,65 @@
 		};
 		416B00E5040EC20100000106 = {
 			fileRef = 416B00DD040EC20100000106;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4198E3BF052634260048E379 = {
+			children = (
+				4198E3C0052634260048E379,
+				4198E3C1052634260048E379,
+				4198E3C2052634260048E379,
+			);
+			isa = PBXGroup;
+			name = ERXStringHolder;
+			path = "";
+			refType = 2;
+		};
+		4198E3C0052634260048E379 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXStringHolder.api;
+			path = Components/ERXStringHolder.api;
+			refType = 4;
+		};
+		4198E3C1052634260048E379 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXStringHolder.java;
+			path = Sources/er/extensions/ERXStringHolder.java;
+			refType = 4;
+		};
+		4198E3C2052634260048E379 = {
+			children = (
+				4198E3C3052634260048E379,
+			);
+			isa = PBXVariantGroup;
+			name = ERXStringHolder.wo;
+			path = "";
+			refType = 4;
+		};
+		4198E3C3052634260048E379 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXStringHolder.wo;
+			refType = 4;
+		};
+		4198E3C8052634260048E379 = {
+			fileRef = 4198E3C0052634260048E379;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4198E3C9052634260048E379 = {
+			fileRef = 4198E3C1052634260048E379;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4198E3CA052634260048E379 = {
+			fileRef = 4198E3C2052634260048E379;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6874,7 +6998,7 @@
 			};
 		};
 		F5BC5D5B0349D8D101AD0D07 = {
-			buildArgumentsString = "-emacs -Dproject.name=\"ERExtensions\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml generic.$ACTION";
+			buildArgumentsString = "-emacs -Dproject.name=\"ERExtensions\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml known.$ACTION";
 			buildPhases = (
 			);
 			buildSettings = {
@@ -6885,7 +7009,7 @@
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
-			buildToolPath = /usr/local/ant/bin/ant;
+			buildToolPath = /usr/local/bin/ant;
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
@@ -7877,6 +8001,7 @@
 				F6E798BC02C8799401AD0D07,
 				F6E798BD02C8799401AD0D07,
 				F6E798BE02C8799401AD0D07,
+				4198E3BF052634260048E379,
 				F6E798BF02C8799401AD0D07,
 				F6E798C002C8799401AD0D07,
 				F6E798C102C8799401AD0D07,
