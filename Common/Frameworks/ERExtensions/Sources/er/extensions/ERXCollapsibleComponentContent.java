@@ -10,6 +10,20 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.woextensions.*;
 
+/**
+ * Better collapsible component content.<br />
+ * 
+ * @binding closedImageFileName" defaults="Resources
+ * @binding closedLabel
+ * @binding condition" defaults="Boolean
+ * @binding openedImageFileName" defaults="Resources
+ * @binding openedLabel
+ * @binding visibility
+ * @binding framework" defaults="Frameworks
+ * @binding submitActionName
+ * @binding wrapLabelWithHTMLTag" defaults="Boolean
+ */
+
 public class ERXCollapsibleComponentContent extends WOCollapsibleComponentContent {
 
     public ERXCollapsibleComponentContent(WOContext context) {

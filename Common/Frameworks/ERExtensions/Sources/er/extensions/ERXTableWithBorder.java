@@ -9,6 +9,16 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
+/**
+ * Allows turning the border on and off of a table. Useful for Netscape which doesn't handle nested tables very well.<br />
+ * 
+ * @binding color
+ * @binding width
+ * @binding renderBorder" defaults="Boolean
+ * @binding bgcolor
+ * @binding doNotRenderTop" defaults="Boolean
+ */
+
 public class ERXTableWithBorder extends WOComponent {
 
     public ERXTableWithBorder(WOContext aContext) {

@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Useful for picking a String from a list.<br />
+ * 
+ */
+
 public class ERXStringListPicker extends WOComponent {
 
     public ERXStringListPicker(WOContext aContext) {

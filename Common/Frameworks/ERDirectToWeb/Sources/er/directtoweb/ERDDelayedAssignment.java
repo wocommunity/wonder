@@ -12,6 +12,11 @@ import com.webobjects.directtoweb.*;
 //	This is essentially an assignment that will be fired everytime, note that the ERD2WModel will
 //	cache the assignment instead of the value it returns.
 //	Interesting subclasses are DelayedBooleanAssignment and DelayedConditionalAssignment
+/**
+ * Crazy assignment used when you actually don't want the computed value cached.<br />
+ * 
+ */
+
 public abstract class ERDDelayedAssignment extends Assignment  {
 
     /** 

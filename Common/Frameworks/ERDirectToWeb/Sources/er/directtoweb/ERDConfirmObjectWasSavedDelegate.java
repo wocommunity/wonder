@@ -10,6 +10,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
+/**
+ * Determines if the user wants the changes saved if so provides a confirm page, if note uses cancel delegate.<br />
+ * 
+ */
+
 public class ERDConfirmObjectWasSavedDelegate extends ERDConfirmObjectDelegate {
 
     public ERDConfirmObjectWasSavedDelegate(EOEnterpriseObject eo, String confirmPageName, NextPageDelegate confirmDelegate, NextPageDelegate cancelDelegate) {

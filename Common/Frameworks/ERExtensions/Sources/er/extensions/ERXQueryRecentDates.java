@@ -9,6 +9,13 @@ package er.extensions;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
+/**
+ * Nice for adjusting the query specs for dates on a display group.<br />
+ * 
+ * @binding displayGroup
+ * @binding key
+ */
+
 public class ERXQueryRecentDates extends WOComponent {
 
     public ERXQueryRecentDates(WOContext aContext) {

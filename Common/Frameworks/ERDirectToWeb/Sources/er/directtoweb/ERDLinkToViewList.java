@@ -12,6 +12,13 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+/**
+ * Generic link component used to view a list.<br />
+ * 
+ * @binding list
+ * @binding listPageConfigurationName
+ */
+
 public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public ERDLinkToViewList(WOContext context) { super(context); }

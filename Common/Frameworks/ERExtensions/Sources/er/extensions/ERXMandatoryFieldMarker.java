@@ -9,6 +9,12 @@ package er.extensions;
 import com.webobjects.appserver.*;
 
 // Subclasses in look frameworks provide custom images for manditory fields.
+/**
+ * Displays a mandatory field marker. Extended in look frameworks to provide custom images.<br />
+ * 
+ * @binding condition
+ */
+
 public class ERXMandatoryFieldMarker extends WOComponent {
 
     public ERXMandatoryFieldMarker(WOContext aContext) {

@@ -28,6 +28,25 @@ import java.util.*;
 //	postCreateNextPageDelegateKey - key that allows you to get your own nextPageDelegate into the fray.
 /////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Crazy component.  Useful for editing/creating objects in an owned toOne or toMany relationship.  Even works with relationships to abstract entities.<br />
+ * 
+ * @binding showAddButton" defaults="Boolean
+ * @binding key
+ * @binding object
+ * @binding listConfigurationNameForEntity
+ * @binding entityNamesForNewInstances
+ * @binding explanationComponentName
+ * @binding uiStyle
+ * @binding destinationSortKey
+ * @binding destinationDisplayKey
+ * @binding selectionListKey
+ * @binding preRelationshipKeys
+ * @binding permissionToEdit" defaults="Boolean
+ * @binding postRelationshipKeys
+ * @binding useForms" defaults="Boolean
+ */
+
 public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
 
 

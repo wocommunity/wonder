@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.*;
 import java.util.*;
 
 // A simle utility for providing deprecated functionality for NSTimestamps
+/**
+ * A simle utility for providing deprecated functionality for NSTimestamps<br />
+ * 
+ */
+
 public class ERXTimestampUtility {
 
     protected static GregorianCalendar _calendar = (GregorianCalendar)GregorianCalendar.getInstance();

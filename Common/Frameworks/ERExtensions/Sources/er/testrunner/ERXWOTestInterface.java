@@ -17,6 +17,11 @@ import java.io.PrintStream;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * component for ineractively running tests.<br />
+ * 
+ */
+
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
 
     /** logging support */

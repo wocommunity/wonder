@@ -18,6 +18,11 @@ import er.extensions.*;
 //	yearRangeTop - specifies the upper limit for year to be displayed.
 //	yearRangeBottom - specifies the lower limit for year to be displayed
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Common superclass for date editing components.<br />
+ * 
+ */
+
 public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
 
     public ERDEditDatePopupCommon(WOContext context) { super(context); }

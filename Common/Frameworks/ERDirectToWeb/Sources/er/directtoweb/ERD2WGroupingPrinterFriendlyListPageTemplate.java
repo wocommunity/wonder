@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Printer friendly version.<br />
+ * 
+ */
+
 public class ERD2WGroupingPrinterFriendlyListPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingPrinterFriendlyListPageTemplate(WOContext context) { super(context); }

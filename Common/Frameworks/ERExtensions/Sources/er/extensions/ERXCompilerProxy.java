@@ -17,6 +17,11 @@ import com.webobjects.appserver._private.WODirectActionRequestHandler;
 /* To find out about how to use this class, read the CompilerProxy.html in the Documentation folder */
 /* WARNING: this is experimental and the results might be very confusing if you don«t understand what this class tries to do! */
 
+/**
+ * used for dynamic re-compilation of java files<br />
+ * 
+ */
+
 public class ERXCompilerProxy {
 
     /* logging support */

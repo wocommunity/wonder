@@ -15,6 +15,11 @@ import com.webobjects.appserver.*;
 import java.util.*;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
+/**
+ * Not very generic right now, but will be in the future. Nice for mantaining a stack based navigation system, ie drilling down pushes nav state onto the stack and backing up pops state off the stack.<br />
+ * 
+ */
+
 public class ERXNavigation {
 
     /** logging support */

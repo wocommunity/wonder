@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import er.extensions.*;
 
+/**
+ * Inspect template that is typically embedded in a page.<br />
+ * 
+ */
+
 public class ERD2WCompactInspectPageTemplate extends ERD2WInspectPage {
 
     public ERD2WCompactInspectPageTemplate(WOContext context) {

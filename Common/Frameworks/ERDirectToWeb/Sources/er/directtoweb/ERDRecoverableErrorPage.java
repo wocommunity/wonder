@@ -11,6 +11,11 @@ import com.webobjects.directtoweb.*;
 import er.extensions.ERXSession;
 
 // FIXME: All of the message pages need to be cleaned up.
+/**
+ * A recoverable error page.<br />
+ * 
+ */
+
 public class ERDRecoverableErrorPage extends ERD2WPage implements ErrorPageInterface {
 
     public ERDRecoverableErrorPage(WOContext context) { super(context); }

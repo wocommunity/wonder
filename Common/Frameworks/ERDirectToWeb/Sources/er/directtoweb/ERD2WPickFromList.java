@@ -11,6 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Custom query component that let's the user select from an arbitrary list.<br />
+ * 
+ */
+
 public class ERD2WPickFromList extends ERDCustomQueryComponent {
 
     public ERD2WPickFromList(WOContext context) { super(context); }

@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Printer friendly inspect page.<br />
+ * 
+ */
+
 public class ERD2WPrinterFriendlyInspectPageTemplate extends ERD2WInspectPage {
 
     public ERD2WPrinterFriendlyInspectPageTemplate(WOContext context) { super(context); }

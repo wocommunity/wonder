@@ -10,6 +10,12 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Displays a byte array of data as a String.<br />
+ * 
+ * @binding data
+ */
+
 public class ERXDisplayDataAsString extends WOComponent {
 
     public ERXDisplayDataAsString(WOContext aContext) {

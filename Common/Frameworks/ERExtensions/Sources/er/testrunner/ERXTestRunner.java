@@ -14,6 +14,11 @@ import junit.framework.*;
 import junit.runner.*;
 import er.extensions.*;
 
+/**
+ * runs tests with ERTestListeners.<br />
+ * 
+ */
+
 public class ERXTestRunner extends BaseTestRunner {
 
     /** logging support */

@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 
 //    This component will remap keys, useful if you want to have the ability to have two sets of keys for a page
 //	Look in the Comparision template for how this component can be used.
+/**
+ * Useful for remapping keys if say you want to compare two different objects in a compare list.<br />
+ * 
+ */
+
 public class ERD2WKeyMapper extends D2WStatelessComponent {
 
     public ERD2WKeyMapper(WOContext context) { super(context); }

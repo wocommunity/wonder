@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.foundation.NSData;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Displays an image if it exists.<br />
+ * 
+ */
+
 public class ERDDisplayImageIfExists extends ERDCustomEditComponent {
 
     public ERDDisplayImageIfExists(WOContext context) { super(context); }

@@ -11,6 +11,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
 // FIXME: This may need to subclass EOQualifier now.
+/**
+ * Qualifer used to test if something is null.<br />
+ * 
+ */
+
 public class ERDNullQualifier extends Object implements EOQualifierEvaluation {
 
     private String _keyPath;

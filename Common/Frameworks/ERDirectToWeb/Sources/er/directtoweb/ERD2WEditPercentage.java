@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WEditNumber;
 
+/**
+ * Edits a percentage number with radio buttons.<br />
+ * 
+ */
+
 public class ERD2WEditPercentage extends D2WEditNumber {
 
     public ERD2WEditPercentage(WOContext context) {

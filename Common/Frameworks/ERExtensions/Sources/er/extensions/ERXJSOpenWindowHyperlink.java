@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.lang.*;
 
+/**
+ * Given an action opens the action in a new window.<br />
+ * 
+ */
+
 public class ERXJSOpenWindowHyperlink extends WOComponent {
 
     public ERXJSOpenWindowHyperlink(WOContext aContext) {

@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.foundation.*;
 
+/**
+ * Used to hold pieces of a tabsSectionsContents, holds either sections or tabs.<br />
+ * 
+ */
+
 public class ERD2WContainer {
     public String name;
     public String displayName;

@@ -6,6 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+/**
+ * Nice interface implemented by all ER edit pages.  In a next page delegate you can ask the sender if the object was saved.  Useful for determining which button the user hit, ie save or cancel.<br />
+ * 
+ */
+
 public interface ERDObjectSaverInterface {
     public boolean objectWasSaved();
 }

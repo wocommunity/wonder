@@ -18,6 +18,15 @@ import er.extensions.*;
 //		for displaying in the hyperlink.  Not required.
 //	showBrackets - Boolean, specifies if the <> should be displayed around the mailto link.
 /////////////////////////////////////////////////////////////////////////////////
+/**
+ * A display mailto component with a number of bindings.<br />
+ * 
+ * @binding email
+ * @binding object
+ * @binding key
+ * @binding showBrackets
+ */
+
 public class ERDDisplayMailTo extends ERDCustomEditComponent {
 
      public ERDDisplayMailTo(WOContext context) { super(context); }

@@ -11,6 +11,11 @@ import com.webobjects.appserver.WOContext;
 
 // This component right now is only good for displaying an image via the src tag
 // Other important d2w keys, imageHeight and imageWidth
+/**
+ * Displays an image via the src binding.<br />
+ * 
+ */
+
 public class ERD2WDisplayImage extends D2WDisplayString {
     
     public ERD2WDisplayImage(WOContext context) {

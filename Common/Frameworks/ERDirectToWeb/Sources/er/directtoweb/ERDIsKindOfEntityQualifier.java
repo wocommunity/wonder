@@ -14,6 +14,11 @@ import com.webobjects.directtoweb.*;
 /* HACK Alert
    we need to sublass one of the qualifier class of D2W in order for the LA code to work properly
 */
+/**
+ * Tests if an object is a kind of an entity.<br />
+ * 
+ */
+
 public class ERDIsKindOfEntityQualifier extends BooleanQualifier {
 
     private String _entityName;

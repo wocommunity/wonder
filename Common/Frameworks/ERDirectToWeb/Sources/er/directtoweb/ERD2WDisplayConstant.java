@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.*;
 
+/**
+ * For a given key it asks the context for the value.  Presumablly the constant is already in the rules.<br />
+ * 
+ */
+
 public class ERD2WDisplayConstant extends D2WStatelessComponent {
 
     public ERD2WDisplayConstant(WOContext context) {super(context);}

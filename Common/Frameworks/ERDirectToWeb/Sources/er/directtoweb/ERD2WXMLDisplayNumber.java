@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayNumber;
 
+/**
+ * xml display component for numbers<br />
+ * 
+ */
+
 public class ERD2WXMLDisplayNumber extends D2WDisplayNumber {
 
     public ERD2WXMLDisplayNumber(WOContext context) {

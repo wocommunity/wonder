@@ -8,6 +8,11 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Beefed up query page.<br />
+ * 
+ */
+
 public class ERD2WQueryPageTemplate extends ERD2WQueryPage {
 
     public ERD2WQueryPageTemplate(WOContext context) {

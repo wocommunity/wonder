@@ -11,6 +11,12 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSKeyValueCoding;
 import er.extensions.*;
 
+/**
+ * Used to display sections as text.<br />
+ * 
+ * @binding d2wContext
+ */
+
 public class ERDSectionText extends ERXStatelessComponent {
     String sectionText;
 

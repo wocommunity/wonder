@@ -16,6 +16,11 @@ import java.io.PrintStream;
 import java.util.*;
 import er.extensions.*;
 
+/**
+ * Used for running a batch of tests.<br />
+ * 
+ */
+
 public class ERXBatchTestInterface extends Object implements ERXTestListener {
 
     /** logging support */

@@ -12,6 +12,11 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.directtoweb.D2WStatelessComponent;
 import er.extensions.ERXConstant;
 
+/**
+ * Popup used for picking a number.<br />
+ * 
+ */
+
 public class ERD2WPopUp extends D2WStatelessComponent {
 
     public ERD2WPopUp(WOContext context) { super(context); }

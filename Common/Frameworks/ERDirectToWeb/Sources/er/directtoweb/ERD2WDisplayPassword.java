@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
 
+/**
+ * Displays '*********' instead.<br />
+ * 
+ */
+
 public class ERD2WDisplayPassword extends D2WDisplayString {
 
      public ERD2WDisplayPassword(WOContext context) { super(context); }

@@ -32,6 +32,11 @@ import er.extensions.ERXUtilities;
 import er.extensions.ERXLocalizer;
 import java.util.Enumeration;
 
+/**
+ * (Back port from WO 5 WOExtensions)<br />
+ * 
+ */
+
 public class WOToOneRelationship extends WOComponent {
 
     // ** passed-in (required)

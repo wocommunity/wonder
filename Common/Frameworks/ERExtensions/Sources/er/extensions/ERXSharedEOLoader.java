@@ -39,6 +39,11 @@ import java.util.*;
 // from entity 'someEntity'
 
 // CHECKME: I believe this bug has been fixed, should be removed if this is the case.
+/**
+ * Java port of Kelly Hawk's shared EO loader. Works around a bug with shared eos and multiple models.<br />
+ * 
+ */
+
 public class ERXSharedEOLoader {
     /////////////////////////////////////////  log4j category  ///////////////////////////////////////
     public static final ERXLogger log = ERXLogger.getERXLogger("er.extensions.fixes.ERSharedEOLoader");

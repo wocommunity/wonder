@@ -11,6 +11,21 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 
+/**
+ * Works around a webscript bug.<br />
+ * 
+ * @binding list
+ * @binding item
+ * @binding selection
+ * @binding maxColumns
+ * @binding cellpadding
+ * @binding cellspacing
+ * @binding width
+ * @binding cellAlign
+ * @binding cellVAlign
+ * @binding cellWidth
+ */
+
 public class ERXRadioButtonMatrix extends WOComponent {
 
     private static final Integer DEFAULT_PADDING = new Integer(0);

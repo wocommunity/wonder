@@ -11,6 +11,12 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Given an object displays a link to show information about the editing context of that object.*<br />
+ * 
+ * @binding object
+ */
+
 public class ERXDebugMarker extends WOComponent {
 
     /** logging support */

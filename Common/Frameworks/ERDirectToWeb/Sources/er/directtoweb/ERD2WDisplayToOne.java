@@ -10,6 +10,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayToOne;
 import com.webobjects.directtoweb.D2WContext;
 
+/**
+ * Same as original except allows display of noSelectionString if relationship is null.<br />
+ * 
+ */
+
 public class ERD2WDisplayToOne extends D2WDisplayToOne {
 
     public ERD2WDisplayToOne(WOContext context) { super(context); }

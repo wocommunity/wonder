@@ -13,6 +13,13 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXLogger;
 
+/**
+ * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.<br />
+ * 
+ * @binding d2wContext
+ * @binding displayGroup
+ */
+
 public class ERDFilterDisplayGroupButton extends WOComponent {
 
     public ERDFilterDisplayGroupButton(WOContext context) { super(context); }

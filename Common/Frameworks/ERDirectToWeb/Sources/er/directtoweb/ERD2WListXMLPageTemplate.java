@@ -7,6 +7,11 @@
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * List xml template.<br />
+ * 
+ */
+
 public class ERD2WListXMLPageTemplate extends ERD2WListXMLPage {
 
     public ERD2WListXMLPageTemplate(WOContext context) {super(context);}

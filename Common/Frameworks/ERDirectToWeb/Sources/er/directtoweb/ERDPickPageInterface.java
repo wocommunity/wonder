@@ -12,6 +12,11 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.eocontrol.EODataSource;
 
 // PickPageInterface - Used for selecting multiple objects from a select page.
+/**
+ * Formal interface for multiple object selection.<br />
+ * 
+ */
+
 public interface ERDPickPageInterface {
 
     /**

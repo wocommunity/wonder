@@ -9,6 +9,11 @@ package er.directtoweb;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Used to display a tab as text instead of images.<br />
+ * 
+ */
+
 public class ERDTabImage extends WOComponent {
 
     public ERDTabImage(WOContext context) { super(context); }
