@@ -137,6 +137,11 @@
 				F6DCAA12032A547B01257492,
 				F6DCAA13032A547B01257492,
 				F6DCAA14032A547B01257492,
+				774A641E05FCBC62007CEC6B,
+				774A641F05FCBC62007CEC6B,
+				774A642005FCBC62007CEC6B,
+				774A642305FCBC70007CEC6B,
+				774A642405FCBC70007CEC6B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,10 +156,7 @@
 				017C7B51FFD714AF7F000001,
 				022D130C0059B6D611CD2978,
 				F604989B03212E6101257492,
-				77D32F7404DBF67A00EFBD10,
 				77D32F7A04DBF75000EFBD10,
-				77D32F7C04DBF75B00EFBD10,
-				77D32F7F04DBF76000EFBD10,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -616,10 +618,7 @@
 		40B5828CFFD5E91B7F000001 = {
 			children = (
 				F604989903212E6101257492,
-				77D32F7304DBF67A00EFBD10,
 				77D32F7904DBF74F00EFBD10,
-				77D32F7B04DBF75B00EFBD10,
-				77D32F7E04DBF76000EFBD10,
 				022D130B0059B6D511CD2978,
 				40B5828DFFD5E91B7F000001,
 				40B5828EFFD5E91B7F000001,
@@ -706,6 +705,66 @@
 //772
 //773
 //774
+		774A641B05FCBC62007CEC6B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERCNConfigurationV2.java;
+			refType = 4;
+		};
+		774A641C05FCBC62007CEC6B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERCNConfigurationV1.java;
+			refType = 4;
+		};
+		774A641D05FCBC62007CEC6B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERCNConfiguration.java;
+			refType = 4;
+		};
+		774A641E05FCBC62007CEC6B = {
+			fileRef = 774A641B05FCBC62007CEC6B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		774A641F05FCBC62007CEC6B = {
+			fileRef = 774A641C05FCBC62007CEC6B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		774A642005FCBC62007CEC6B = {
+			fileRef = 774A641D05FCBC62007CEC6B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		774A642105FCBC70007CEC6B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERCNSubscriberDelegate.java;
+			refType = 4;
+		};
+		774A642205FCBC70007CEC6B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERCNConnectionKeeper.java;
+			refType = 4;
+		};
+		774A642305FCBC70007CEC6B = {
+			fileRef = 774A642105FCBC70007CEC6B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		774A642405FCBC70007CEC6B = {
+			fileRef = 774A642205FCBC70007CEC6B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		77A5A25803BFDA5B00257492 = {
 			children = (
 				77A5A25A03BFDA5B00257492,
@@ -822,22 +881,6 @@
 			settings = {
 			};
 		};
-		77D32F7304DBF67A00EFBD10 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "exolabcore-0.3.5.jar";
-			path = "Libraries/exolabcore-0.3.5.jar";
-			refType = 4;
-		};
-		77D32F7404DBF67A00EFBD10 = {
-			fileRef = 77D32F7304DBF67A00EFBD10;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
 		77D32F7904DBF74F00EFBD10 = {
 			includeInIndex = 1;
 			isa = PBXZipArchiveReference;
@@ -850,39 +893,6 @@
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-		77D32F7B04DBF75B00EFBD10 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "openjms-client-0.7.5.jar";
-			path = "Libraries/openjms-client-0.7.5.jar";
-			refType = 4;
-		};
-		77D32F7C04DBF75B00EFBD10 = {
-			fileRef = 77D32F7B04DBF75B00EFBD10;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-		77D32F7E04DBF76000EFBD10 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "openjms-rmi-0.7.5.jar";
-			path = "Libraries/openjms-rmi-0.7.5.jar";
-			refType = 4;
-		};
-		77D32F7F04DBF76000EFBD10 = {
-			fileRef = 77D32F7E04DBF76000EFBD10;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
 				);
 			};
 		};
@@ -908,7 +918,6 @@
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
-					Merge,
 				);
 			};
 		};
@@ -977,9 +986,14 @@
 		F6DCAA09032A547B01257492 = {
 			children = (
 				F6DCAA0B032A547B01257492,
+				774A642205FCBC70007CEC6B,
 				F6DCAA0C032A547B01257492,
 				F6DCAA0E032A547B01257492,
+				774A642105FCBC70007CEC6B,
 				F6DCAA0D032A547B01257492,
+				774A641D05FCBC62007CEC6B,
+				774A641C05FCBC62007CEC6B,
+				774A641B05FCBC62007CEC6B,
 			);
 			isa = PBXGroup;
 			path = changenotification;
