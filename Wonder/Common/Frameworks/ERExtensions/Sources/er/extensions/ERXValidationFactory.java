@@ -113,7 +113,7 @@ public class ERXValidationFactory {
             ERXValidationException.NullPropertyException,
             ERXValidationException.InvalidNumberException,
             ERXValidationException.MandatoryToOneRelationshipException,
-            ERXValidationException.MandatoryRelationshipException,
+            ERXValidationException.MandatoryToManyRelationshipException,
             ERXValidationException.ObjectRemovalException,
             ERXValidationException.ObjectsRemovalException,
         };
