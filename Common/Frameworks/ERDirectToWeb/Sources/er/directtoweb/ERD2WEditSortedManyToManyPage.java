@@ -167,9 +167,16 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             // no object was selected
             _state = QUERY;
         }
-
-        return null;
+        WOComponent result = null;
+        if(selectActionDelegate!=null){
+            result = selectActionDelegate.nextPage(context().page());
+        }
+        return result;
     }
+
+    private NextPageDelegate selectActionDelegate;
+    public NextPageDelegate selectActionDelegate(){ return selectActionDelegate; }
+    public void setSelectActionDelegate(NextPageDelegate newSelectActionDelegate){ selectActionDelegate = newSelectActionDelegate; }
 
     public WOComponent removeFromToManyRelationshipAction() {
         if(((ERXSession)session()).javaScriptEnabled())
