@@ -1,8 +1,10 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.foundation.*;
+import java.sql.*;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Postgres needs special handling of NSData conversion, special
@@ -33,6 +35,31 @@ public class PostgresqlExpression extends JDBCExpression {
     
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
+    }
+
+    
+    /**
+     * Overridden to support milliseconds to work with Postgres
+     */
+    public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
+        String type = columnTypeStringForAttribute(eoattribute);
+        if ("timestamp".equals(type)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /** 
+     * Overridden to support milliseconds to work with Postgres
+     */
+    public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {
+        String type = columnTypeStringForAttribute(eoattribute);
+        if ("timestamp".equals(type)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -109,7 +136,10 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden to add typecasts after the value. I.e. '2'::char. This is
      * done because Postgres can be very strict regarding type conversions.
      * NULL values are excluded from casting.
+     * Also contains a bugfix to handle milli seconds in timestamps
      */
+    static NSTimestampFormatter timestampFormatter = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S");
+
     public String sqlStringForValue(Object v, String kp) {
         String result = super.sqlStringForValue(v,kp);
         if(v != null && v != NSKeyValueCoding.NullValue) {
@@ -122,12 +152,23 @@ public class PostgresqlExpression extends JDBCExpression {
                 attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
             }
             if(attribute != null) {
-                result = result + "::" + columnTypeStringForAttribute(attribute);
+                String s = columnTypeStringForAttribute(attribute);
+                //handel millis seconds, too.
+                if (v instanceof NSTimestamp) {
+                    NSTimestamp t = (NSTimestamp)v;
+                    String timestampString = "'"+timestampFormatter.format(t);
+                    Timestamp ts = new Timestamp(t.getTime());
+                    String nanoString = ts.getNanos() + "";
+                    nanoString = nanoString.substring(0, 3);
+                    timestampString += "." + nanoString + "'";
+                    result = timestampString;
+                }
+                result = result + "::" + s;
             }
         }
         return result;
     }
-    
+
     /** Helper class to store a join definition */
     private class JoinClause {
         String table1;
@@ -339,5 +380,5 @@ public class PostgresqlExpression extends JDBCExpression {
             ent = rel.destinationEntity();
         }
         return ent;
-    }
+    }    
 }
