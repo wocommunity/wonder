@@ -97,11 +97,15 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
         if (log.isDebugEnabled()) {
             log.debug("Entity: " + c.entity().name());
             log.debug("Object " + c.valueForKey("object"));
+            log.debug("qualifierFormat "+qualFormat);
+            log.debug("ardgs "+args);
         }
         EOQualifier qualifier = 
            EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
         if (log.isDebugEnabled()) {
             System.err.println("Qualifier keys: " + qualifier.allQualifierKeys());
+            System.err.println("Qualifier : " + qualifier);
+
         }
         if (log.isDebugEnabled())
             log.debug("DelayedConditonalQualifier: " + qualifier);
