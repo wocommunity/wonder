@@ -108,5 +108,11 @@ er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
 #########################################################################
 # ERXEC 
 #########################################################################
+# decides if new ECs use the shared editing context
 er.extensions.ERXEC.useSharedEditingContext=true
 
+#########################################################################
+# ERXApplication 
+#########################################################################
+# decides if locked editing contexts should be unlocked after the RR-loop.
+er.extensions.ERXApplication.useEditingContextUnlocker=false
