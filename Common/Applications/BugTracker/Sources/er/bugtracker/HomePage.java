@@ -36,6 +36,8 @@ public class HomePage extends WOComponent {
     protected int isEngineering;
     private String headForAll;
     private String headForNew;
+
+    public NSDictionary createdKeys() {return ((Session)session()).localizer().createdKeys();}
     
     public WOComponent refresh() {
         EOEnterpriseObject userObject = (EOEnterpriseObject)session().valueForKey("user");
