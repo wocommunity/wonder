@@ -22,13 +22,13 @@ import java.util.*;
  * and even more specific questions like <code>isIFrameSupported</code> 
  * and <code>willRenderNestedTablesFast</code>. <br>
  * 
- * ERXBrowser is immutable and shared by different sessions and
+ * ERXBasicBrowser is immutable and shared by different sessions and
  * direct actions. 
  * The shared instances are managed by ERXBrowserFactory which 
  * is also responsible to parse "user-agent" header in a WORequest 
  * object and to get an appropriate browser object. <br>
  * 
- * You can extends ERXBrowser or its concrete subclass ERXBasicBrowser 
+ * You can extends ERXBasicBrowser or its abstract parent ERXBrowser 
  * to implement more specific questions for your application. 
  * One good example will be to have a question <code>isSupportedBrowser</code> 
  * that checks if the client is using one of the supported 
@@ -39,7 +39,7 @@ import java.util.*;
  * returns the object. 
  * 
  * To access ERXBasicBrowser's boolean questions from WOConditionals 
- * on a web component, set the path like "session.brower.isIFrameSupported" 
+ * on a web component, set the key path like "session.brower.isIFrameSupported" 
  * to their condition bindings. <br>
  * 
  * ERXDirectAction also holds a browser object for the current request. 
@@ -178,6 +178,8 @@ public class ERXBasicBrowser extends ERXBrowser {
      */
     public NSDictionary userInfo() { return _userInfo; }
 
+    public boolean isUnknownBrowser() { return _isUnknownBrowser; }
+
     /**
      * Browser is iCab?
      * @return true if browser is iCab.
@@ -240,6 +242,10 @@ public class ERXBasicBrowser extends ERXBrowser {
     public boolean isVersion3() { return _isVersion3; }
     public boolean isVersion2() { return _isVersion2; }
 
+    public boolean isUnknownPlatform() { return _isUnknownPlatform; }
+    public boolean isMacOS() { return _isMacOS; }
+    public boolean isWindows() { return _isWindows; }
+    public boolean isLinux() { return _isLinux; }
 
     /**
      * Does the browser support IFrames?
