@@ -28,7 +28,7 @@ package er.extensions;
 
 import com.webobjects.appserver.*;
 
-public class WOCollapsibleComponentContent extends WOComponent {
+public class _WOCollapsibleComponentContent extends WOComponent {
 
     private boolean _isVisible;
     private boolean _isVisibleSet;
@@ -42,7 +42,7 @@ public class WOCollapsibleComponentContent extends WOComponent {
     private static String _undefinedMarker="UNDEFINED";
     private static int _counter = 0;
 
-    public WOCollapsibleComponentContent(WOContext aContext)  {
+    public _WOCollapsibleComponentContent(WOContext aContext)  {
         super(aContext);
         _isVisibleSet = false;
         _submitActionName=_undefinedMarker;

@@ -15,8 +15,15 @@ import java.util.*;
 import org.apache.log4j.Category;
 
 public abstract class ERXApplication extends WOApplication {
-
+    // We want this to happen early.
+    static {
+        // This will configure the Log4j system.
+        // This is OK to call multiple times as it will only be configured the first time.
+        ERXLog4j.configureLogging();
+    }
+    
     //////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
+    // public static final ERXLogger cat = ERXLogger.getLogger(ERXApplication.class);
     public static final Category cat = Category.getInstance(ERXApplication.class);
 
     ////////////////////////////////////////////// Notification Hooks //////////////////////////////////////////
@@ -25,12 +32,6 @@ public abstract class ERXApplication extends WOApplication {
     public static final String ApplicationWillDispatchRequestNotification = "WOApplicationWillDispatchRequestNotification";
     public static final String ApplicationDidDispatchRequestNotification = "WOApplicationDidDispatchRequestNotification";
     
-    // We want this to happen early.
-    static {
-        // This will configure the Log4j system.
-        // This is OK to call multiple times as it will only be configured the first time.
-        ERXLog4j.configureLogging();
-    }
 
     //------------------------------------------------------
     // Application Cycling
