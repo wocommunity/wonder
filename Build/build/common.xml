@@ -43,7 +43,7 @@
 
     <target name="checkupdate">
         <uptodate property="no.changes" targetfile="${build.jar.file}">
-            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
+            <srcfiles dir="${project.dir}/Sources" />
         </uptodate>
     </target>
     
