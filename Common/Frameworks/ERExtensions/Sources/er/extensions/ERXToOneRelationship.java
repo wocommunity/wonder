@@ -306,7 +306,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         if (theCurrentItem==noSelectionString()) {
             return theCurrentItem;
         }
-        return super.theCurrentValue();
+        return com.webobjects.foundation.NSKeyValueCodingAdditions.Utility.valueForKeyPath(theCurrentItem, _localDestinationDisplayKey());
     }
 
     public void awake() {
