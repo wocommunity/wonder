@@ -15,6 +15,7 @@
 		<binding name="keysInZ"/>
 		<binding name="keysInV"/>
 		<binding name="keysInH"/>
+		<binding name="recordGroupComponentName"/>
 
 		<validation message="&apos;model&apos; is a required binding">
 			<unbound name="model"/>
