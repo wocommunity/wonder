@@ -11,5 +11,6 @@ ToOneRelationship: ERXToOneRelationship {
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 	destinationEntityName = d2wContext.destinationEntityName;
         isMandatory = d2wContext.isMandatory;
+	noSelectionString = d2wContext.noSelectionString;
 }
 
