@@ -185,4 +185,8 @@ public class ERXComponentActionRedirector {
             responses.removeObjectForKey(sessionID);
         }
     }
+    private static Observer observer;
+    static {
+        observer = new Observer();
+    }
 }
