@@ -74,7 +74,7 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
         } catch (NSValidation.ValidationException ex1) {
             _errors = ex1.getMessage();
         } finally {        
-            if(eo != null)
+            if(eo != null && eo.editingContext() != null)
                 eo.editingContext().unlock();
             if(page != null) {
                 // we cheat here because calling sleep() is not enough...
