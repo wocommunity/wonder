@@ -8,10 +8,21 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSKeyValueCoding;
+import er.extensions.*;
 
-public class ERDSectionText extends WOComponent {
+public class ERDSectionText extends ERXStatelessComponent {
+    String sectionText;
 
     public ERDSectionText(WOContext context) { super(context); }
+
+    public void reset() { sectionText = null; }
     
-    public boolean isStateless() { return true; }
+    public String sectionText() {
+        if(sectionText == null) {
+            sectionText = (String)((NSKeyValueCoding)valueForBinding("d2wContext")).valueForKey("sectionKey");
+            sectionText = ((ERXSession)session()).localizer().localizedStringForKeyWithDefault(sectionText);
+        }
+        return sectionText;
+    }
 }
