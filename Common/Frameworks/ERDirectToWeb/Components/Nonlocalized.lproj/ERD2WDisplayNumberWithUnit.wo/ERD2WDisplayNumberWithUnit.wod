@@ -8,9 +8,9 @@ HaveValue2: ERXNonNullConditional {
 }
 
 String1: WOString {
-	numberformat = formatter;
 	value = objectPropertyValue;
 	valueWhenEmpty = "&nbsp;";
+	formatter = numberFormatter;
 }
 
 String2: WOString {
