@@ -172,7 +172,9 @@ public class ERXJDBCConnectionBroker {
 
         //available: set to false on destroy, checked by getConnection()
         private boolean          available                 = true;
-
+        
+        private Boolean supportsTransactions = null;
+        
         private PrintWriter      log;
         private SQLWarning       currSQLWarning;
         private String           pid;
@@ -670,6 +672,7 @@ public class ERXJDBCConnectionBroker {
                 connID[i] = connPool[i].toString();
                 connLockTime[i] = 0;
                 connCreateDate[i] = now.getTime();
+                
             } catch (ClassNotFoundException e2) {
                 if (debugLevel > 0) {
                     log.println("Error creating connection: " + e2);
@@ -813,6 +816,30 @@ public class ERXJDBCConnectionBroker {
         public int getSize() {
             return currConnections;
         }//End getSize()
+        
+        /**
+         * 
+         */
+        public boolean supportsTransaction() {
+            if (supportsTransactions == null) {
+            try {
+                Connection con = getConnection();
+
+                supportsTransactions = (con.getTransactionIsolation() != 0) ? Boolean.TRUE : Boolean.FALSE;
+
+                if(supportsTransactions.booleanValue()) {
+                    con.setAutoCommit(false);
+                }
+
+                freeConnection(con);
+
+            } catch(Exception sqle) {
+                throw new RuntimeException("Failed to create connection pool", sqle);
+            }
+            }
+            return supportsTransactions.booleanValue();
+        }
+
 
         public class ConnectionPing implements Runnable {
 
@@ -863,6 +890,7 @@ public class ERXJDBCConnectionBroker {
                 }
             }
         }
+
 
     }// End class
 }
