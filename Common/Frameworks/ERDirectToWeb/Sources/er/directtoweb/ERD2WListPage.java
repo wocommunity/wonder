@@ -25,6 +25,9 @@ public abstract class ERD2WListPage extends D2WListPage {
      */
     public ERD2WListPage(WOContext c) {
         super(c);
+        if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
+            displayGroup().setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
+        }
     }
 
     // debug helpers
