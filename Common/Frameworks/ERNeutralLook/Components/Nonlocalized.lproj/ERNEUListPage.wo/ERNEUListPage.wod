@@ -10,6 +10,7 @@ AttributeCell: WOGenericContainer {
 	align = d2wContext.justification;
 	elementName = "td";
 	valign = "middle";
+	width = d2wContext.width;
 }
 
 AttributeDisplay: WOSwitchComponent {
