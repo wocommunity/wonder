@@ -159,7 +159,7 @@ public abstract class ERDCustomEditComponent extends WOComponent {
     public D2WContext localContext() {
         return d2wContext();
     }
-    public D2WContext d2wContext() {
+    protected D2WContext d2wContextFromBindings() {
         if (d2wContext == null && !synchronizesVariablesWithBindings()) {
             d2wContext = (D2WContext)super.valueForBinding("localContext");
             if(d2wContext == null) {
@@ -167,6 +167,9 @@ public abstract class ERDCustomEditComponent extends WOComponent {
             }
         }
         return d2wContext;
+    }
+    public D2WContext d2wContext() {
+        return d2wContextFromBindings();
     }
 
     public Object valueForBinding(String binding) {
@@ -184,8 +187,8 @@ public abstract class ERDCustomEditComponent extends WOComponent {
             log.debug("***** CustomEditComponent: super.hasBinding(binding) == true");
             value = super.valueForBinding(binding);
             log.debug("***** CustomEditComponent: value = " + value);
-        } else if(d2wContext() != null){
-            value = d2wContext().valueForKey(binding);
+        } else  if(d2wContextFromBindings() != null) {
+            value = d2wContextFromBindings().valueForKey(binding);
         } else {
             WOComponent parent=parent();
             if (parent instanceof ERDCustomEditComponent ||
