@@ -72,7 +72,7 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
                 _errors = ex1.toString();
             }
         } catch (NSValidation.ValidationException ex1) {
-            _errors = ex.getMessage();
+            _errors = ex1.getMessage();
         } finally {        
             if(eo != null)
                 eo.editingContext().unlock();
