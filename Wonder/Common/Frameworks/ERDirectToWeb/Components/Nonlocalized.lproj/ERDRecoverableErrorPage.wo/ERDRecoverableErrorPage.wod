@@ -9,6 +9,7 @@ Image1: WOImage {
 
 String1: WOString {
 	value = message;
+	escapeHTML = false;
 }
 
 SubmitButton3: WOSubmitButton {
