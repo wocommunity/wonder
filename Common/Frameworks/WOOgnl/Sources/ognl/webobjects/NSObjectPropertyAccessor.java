@@ -11,9 +11,14 @@ package ognl.webobjects;
 import com.webobjects.foundation.*;
 import ognl.PropertyAccessor;
 import ognl.OgnlException;
+import java.util.Map;
 
 public class NSObjectPropertyAccessor implements PropertyAccessor {
 
+    public Object getProperty(Map map, Object target, Object name) throws OgnlException {
+        return getProperty(target, name);
+    }
+    
     public Object getProperty(Object target, Object name) throws OgnlException {
         Object property = null;
         //try {
@@ -34,5 +39,9 @@ public class NSObjectPropertyAccessor implements PropertyAccessor {
         } catch (Exception e) {
             throw new OgnlException(name.toString(), e);
         }
+    }
+
+    public void setProperty(Map map, Object target, Object name, Object value) throws OgnlException {
+        setProperty(target, name, value);
     }
 }
