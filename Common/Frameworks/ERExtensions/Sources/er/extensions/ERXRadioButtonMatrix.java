@@ -10,9 +10,10 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 /**
- * Works around a webscript bug.<br />
+ * Radio button list with lots of more options.<br />
  * 
  * @binding list
+ * @binding uniqueID
  * @binding item
  * @binding selection
  * @binding maxColumns
@@ -24,7 +25,7 @@ import com.webobjects.foundation.*;
  * @binding cellWidth
  */
 
-public class ERXRadioButtonMatrix extends WOComponent {
+public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 
     private static final Integer DEFAULT_PADDING = new Integer(0);
     private static final Integer DEFAULT_SPACING = new Integer(0);
@@ -36,10 +37,7 @@ public class ERXRadioButtonMatrix extends WOComponent {
     protected Object currentItem;
     protected Object _selection;
     protected Number index;
-
-    public boolean isStateless() {
-        return true;
-    }
+    protected Object uniqueID;
 
     public void reset() {
         invalidateCaches();
@@ -91,38 +89,37 @@ public class ERXRadioButtonMatrix extends WOComponent {
         return "";
     }
 
+    public void awake() {
+        super.awake();
+        uniqueID = valueForBinding("uniqueID");
+        if(uniqueID == null) {
+            uniqueID = context().elementID();
+        }
+    }
 
     public void invalidateCaches() {
         _selection=null;
         currentItem=null;
         index=null;
+        uniqueID=null;
     }
 
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-        reset();
         super.appendToResponse(aResponse, aContext);
     }
 
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
-        reset();
-        setSelection((String)aRequest.formValueForKey(uniqueID()));
+        setSelection(aRequest.stringFormValueForKey(uniqueID()));
         super.takeValuesFromRequest(aRequest, aContext);
     }
-
+    
     public String uniqueID() {
-        Object id = valueForBinding("uniqueID");
-
-        if(id == null) {
-            return context().elementID();
-
-        } else {
-            return id.toString();
-        }
+        return uniqueID.toString();
     }
-
+    
     public Object cellpadding() {
         Object v = valueForBinding("cellpadding");
-
+        
         if(v != null) {
             return v;
         } else {
