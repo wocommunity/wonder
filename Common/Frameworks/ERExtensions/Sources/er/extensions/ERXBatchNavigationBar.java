@@ -77,7 +77,7 @@ public class ERXBatchNavigationBar extends WOComponent {
                 if(cat.isDebugEnabled()) cat.debug("The batch index is being set to : "+ 1);
                 displayGroup().setCurrentBatchIndex(1);
             }
-            D2WContext context=(D2WContext)valueForBinding("d2wContext");
+            Object context=valueForBinding("d2wContext");
             if (context!=null) {
                 NSNotificationCenter.defaultCenter().postNotification("BatchSizeChanged",
                                                                       ERXConstant.integerForInt(newValue.intValue()),
