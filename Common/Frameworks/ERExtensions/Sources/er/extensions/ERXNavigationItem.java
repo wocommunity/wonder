@@ -44,13 +44,18 @@ public class ERXNavigationItem {
             if (log.isDebugEnabled())
                 log.debug("ERXNavigationItem " + uniqueID() + "assigned these values at creation:\n" + values);
             _action=(String)values.valueForKey("action");
-            if (values.valueForKey("conditions") == null || ((String)values.valueForKey("conditions")).equals("")) {
-                _conditions = NSArray.EmptyArray;
-            } else {
-                _conditions=NSArray.componentsSeparatedByString((String)values.valueForKey("conditions"),",");
+            _conditions = NSArray.EmptyArray;
+            Object o = values.valueForKey("conditions");
+            if (o != null) {
+                if(o instanceof NSArray) {
+                    _conditions = (NSArray)o;
+                } else if(o instanceof String) {
+                    _conditions=NSArray.componentsSeparatedByString((String)o,",");
+                }
             }
-            if (values.valueForKey("qualifier") == null || ((String)values.valueForKey("qualifier")).equals("")) {
-                _qualifier = EOQualifier.qualifierWithQualifierFormat((String)values.valueForKey("qualifier"), null);
+            o = values.valueForKey("qualifier");
+            if (o instanceof String && ((String)o).trim().length() > 0) {
+                _qualifier = EOQualifier.qualifierWithQualifierFormat((String)o, null);
             }
             _directActionName=(String)values.valueForKey("directActionName");
             _directActionClass=(String)values.valueForKey("directActionClass");
