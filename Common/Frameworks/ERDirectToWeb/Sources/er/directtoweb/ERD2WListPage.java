@@ -219,7 +219,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                     String sortSelectorKey=(String)sortOrderingDefinition.objectAtIndex(i++);
                     if(displayPropertyKeys.containsObject(sortKey)) {
                         EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
-                                                                       ERXUtilities.sortSelectorWithKey(sortSelectorKey));
+                                                                       ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
                         so.addObject(sortOrdering);
                     } else {
                         log.warn("Sort key '"+sortKey+"' is not in display keys");

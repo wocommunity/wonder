@@ -256,7 +256,7 @@ public void sessionDidCreate(NSNotification n) {
         }
 
         private EODatabaseContext databaseContextForEntityNamed(String entityName, ObjectStoreCoordinator osc) {
-            return synchronizer.databaseContextForEntityNamed(entityName, osc);
+            return ObjectStoreCoordinatorSynchronizer.databaseContextForEntityNamed(entityName, osc);
         }
         
     }

@@ -65,10 +65,10 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
             result = (value instanceof String) ? (String)value : value.toString();
             result = WOResponse.stringByEscapingHTMLString(result);
             // FIXME: This could be optimized
-            result = ERXExtensions.replaceStringByStringInString("\r\n", "\r", result);
-            result = ERXExtensions.replaceStringByStringInString("\n", "\r", result);
-            result = ERXExtensions.replaceStringByStringInString("\r", br(), result);
-            result = ERXExtensions.replaceStringByStringInString("\t", tabs(), result);
+            result = ERXStringUtilities.replaceStringByStringInString("\r\n", "\r", result);
+            result = ERXStringUtilities.replaceStringByStringInString("\n", "\r", result);
+            result = ERXStringUtilities.replaceStringByStringInString("\r", br(), result);
+            result = ERXStringUtilities.replaceStringByStringInString("\t", tabs(), result);
         }
         return result;
     }

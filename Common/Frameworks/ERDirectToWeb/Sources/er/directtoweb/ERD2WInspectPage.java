@@ -175,7 +175,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldSaveChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChanges")); }
     public boolean shouldValidateBeforeSave() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
     public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
-    public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
+    public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
         validationLog.debug("tryToSaveChanges calling validateForSave");
