@@ -1,6 +1,7 @@
 package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import java.math.BigDecimal;
 
 /**
  * ERXValueUtilities has usefull conversion methods for
@@ -221,4 +222,41 @@ public class ERXValueUtilities {
         }
         return value;
     }
+
+
+    /**
+     * Basic utility method for reading BigDecimal values which works also with Strings.
+     * The current implementation uses {@link #bigDecimalValueWithDefault(Object, NSDictionary)}
+     * with a default of <code>null</code>.
+     * @param obj object to be evaluated
+     * @return BigDecimal evaluation of the given object
+     */
+    public static BigDecimal bigDecimalValue(Object obj) {
+        return bigDecimalValueWithDefault(obj,null);
+    }
+
+    /**
+     * Basic utility method for reading <code>BigDecimal</code> values.
+     * The default value is used if the object is null.
+     * @param obj object to be evaluated
+     * @param def default value if object is null
+     * @return int evaluation of the given object
+     */
+    public static BigDecimal bigDecimalValueWithDefault(Object obj, BigDecimal def) {
+        BigDecimal value = def;
+        if (obj != null) {
+            if (obj instanceof BigDecimal) {
+                value =(BigDecimal)obj;
+            } else if(obj instanceof String) {
+                value = new BigDecimal((String)obj);
+            } else if(obj instanceof Number) {
+                value = new BigDecimal(((Number)obj).doubleValue());
+            } else if(obj instanceof Boolean) {
+                value = new BigDecimal(((Boolean)obj).booleanValue() ? 0.0D : 1.0D);
+            } else {
+                throw new RuntimeException("Not a String or Number " + obj);
+            }
+        }
+        return value;
+    }    
 }
