@@ -10,7 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.*;
 
-/* All WebObjects applications have exactly one ERXBrowserFactory 
+/**
+ * All WebObjects applications have exactly one ERXBrowserFactory 
  * instance. Its primary role is to manage ERXBrowser objects. 
  * It provides facility to parse "user-agent" HTTP header and to 
  * create an appropriate browser object. It also maintains the 
