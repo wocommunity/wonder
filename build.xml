@@ -8,7 +8,6 @@
     </target>
     <target name="compile">
         <ant antFile="Build/build/generic.xml" target="all.compile" />
-        <ant antFile="Build/build/subprojects.xml" target="all" />
     </target>
     <target name="install">
         <ant antFile="Build/build/generic.xml" target="all.install" />
