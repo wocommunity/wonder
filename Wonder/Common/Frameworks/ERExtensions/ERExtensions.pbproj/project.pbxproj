@@ -423,6 +423,7 @@
 				F54C4C5C02C4E2A001000102,
 				F54C4C5E02C4E2F101000102,
 				F69DF14002C76B3F01AD0D07,
+				F57D5EAE02E538B901000102,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -1245,6 +1246,18 @@
 			isa = PBXGroup;
 			name = ERXJSOpenWindowSubmitButton;
 			refType = 4;
+		};
+		F57D5EAD02E538B901000102 = {
+			isa = PBXFileReference;
+			name = ERXInQualifier.java;
+			path = er/extensions/ERXInQualifier.java;
+			refType = 4;
+		};
+		F57D5EAE02E538B901000102 = {
+			fileRef = F57D5EAD02E538B901000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F584E53802E529E601000102 = {
 			children = (
@@ -6520,6 +6533,7 @@
 		F6E798CB02C8799401AD0D07 = {
 			children = (
 				F59C579502C4565701000102,
+				F57D5EAD02E538B901000102,
 				F59C57CF02C4565701000102,
 				F59C57D102C4565701000102,
 			);

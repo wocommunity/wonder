@@ -9,6 +9,9 @@
 	40B5827EFFD5E7DB7F000001 = {
 		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
 		activeTarget = 40B58282FFD5E8187F000001;
+		addToTargets = (
+			017C7B2FFFD7144B7F000001,
+		);
 		perUserDictionary = {
 			PBXPerProjectTemplateStateSaveDate = 48575201;
 			PBXWorkspaceContents = (
@@ -1266,7 +1269,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: toString";
 		rLen = 0;
-		rLoc = 4227;
+		rLoc = 4211;
 		rType = 0;
 		vrLen = 1030;
 		vrLoc = 3181;
@@ -2120,7 +2123,7 @@
 		rLen = 0;
 		rLoc = 4008;
 		rType = 0;
-		vrLen = 1362;
+		vrLen = 941;
 		vrLoc = 3270;
 	};
 	F584E57502E52DB201000102 = {
