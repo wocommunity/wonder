@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXDirectActionHyperlink" wocomponentcontent="true">
+
+		<binding name="actionClass"/>
+		<binding name="entityNameSeparator"/>
+		<binding name="href"/>
+		<binding name="isStateless"/>
+		<binding name="objectForFormValue"/>
+		<binding name="objectsForFormValues"/>
+		<binding name="relative"/>
+		<binding name="shouldEncryptObjectFormValues"/>
+		<binding name="synchronizesVariablesWithBindings"/>
+		<binding name="directActionName"/>
+	</wo>
+</wodefinitions>
