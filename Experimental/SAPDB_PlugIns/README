@@ -1,0 +1,21 @@
+
+EOF SAPDB PlugIns
+----------------------------------
+
+WARNING !!!!
+
+    Very preliminary stage of development.
+    
+    Primary key generation from sequences should work
+    (like in Oracle PlugIn)
+
+
+Please refer to: 
+
+    Apple tn2027
+    www.sapdb.org
+
+
+Contact:
+    
+    wojtek at power.com.pl
