@@ -79,4 +79,15 @@ public class ERDImageNameAssignment extends ERDAssignment implements ERDLocaliza
                      c.valueForKey("pageConfiguration"));        
         return imageNameForKey(sectionKey, baseImageDirectory, "section");
     }
+
+    public Object tabImageName(D2WContext c) {
+        String tabKey = (String)(c.valueForKey("tabKey"));
+        String baseImageDirectory = (String)(c.valueForKey("baseImageDirectory"));
+        if (tabKey == null)
+            log.warn("TabKey is null for pageConfiguration: " + c.valueForKey("pageConfiguration"));
+        if (baseImageDirectory == null)
+            log.warn("BaseImageDirectory is null for tabKey: " + tabKey + " and pageConfiguration: " +
+                     c.valueForKey("pageConfiguration"));
+        return imageNameForKey(tabKey, baseImageDirectory, "tab");
+    }
 }
