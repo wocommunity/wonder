@@ -1,5 +1,11 @@
 // !$*UTF8*$!
 {
+	F51FB063025D150901000102 = {
+		fileReference = F5A143F401FF7F8801A80106;
+		isa = PBXFileBreakpoint;
+		lineNumber = 15;
+		state = 1;
+	};
 	F5A1439F01FF7F8801A80106 = {
 		activeBuildStyle = F5A1470801FF7F8801A80106;
 		activeTarget = F5A1454D01FF7F8801A80106;
@@ -7,18 +13,19 @@
 			F5A1454F01FF7F8801A80106,
 		);
 		breakpoints = (
+			F51FB063025D150901000102,
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{1044, 710}";
+				ContentSize = "{1044, 648}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {1044, 687}}";
+					Frame = "{{0, 23}, {1044, 625}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{317, 0}, {727, 687}}";
+						Frame = "{{317, 0}, {727, 625}}";
 						Split0 = {
-							Frame = "{{0, 217}, {727, 470}}";
+							Frame = "{{0, 217}, {727, 408}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -59,13 +66,13 @@
 							Frame = "{{0, 0}, {727, 193}}";
 						};
 						Tab3 = {
-							Frame = "{{0, 0}, {580, 295}}";
+							Frame = "{{0, 0}, {727, 295}}";
 						};
 						TabCount = 4;
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {293, 687}}";
+						Frame = "{{0, 0}, {293, 625}}";
 					};
 					Tab1 = {
 						ClassesFrame = "{{0, 0}, {202, 56}}";
