@@ -21,7 +21,7 @@ import org.apache.log4j.Category;
 public class ERXExtensions {
 
     ////////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.extensions.utilities.ERXExtensions");
+    public static final Category cat = Category.getInstance(ERXExtensions.class);
 
     // EditngContextDelegate methods
     private static ERXEditingContextDelegate _defaultEditingContextDelegate;
