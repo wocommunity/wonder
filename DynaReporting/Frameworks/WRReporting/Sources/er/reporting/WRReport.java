@@ -44,6 +44,8 @@ public class WRReport extends WOComponent  {
     protected Boolean _showRecordGroupHeadings;
     protected Boolean _showPresentationControls;
     protected Boolean _showEditing;
+    protected Boolean _shouldGetColorsFromParent;
+    
     protected String _componentName;
 
     protected Boolean _showNavigation;
@@ -52,6 +54,7 @@ public class WRReport extends WOComponent  {
     //NSMutableDictionary _currCritDictCache;
     protected Boolean _showCustomReportStyle;
     boolean _initializedDimensionArrayFromBindings;
+    protected Boolean _showTopCriteriaLabel;
 
     public WRReport(WOContext c) {
         super(c);
@@ -64,9 +67,9 @@ public class WRReport extends WOComponent  {
         _initializedDimensionArrayFromBindings = false;
         _recordGroupDisplayTypes = new NSArray(new Object[]{"SINGLE_TOTAL" , "TABLE" , "TOTALS"});
         _reportStyles = new NSArray(new Object[]{"VERTICAL_ROWS" , "NESTED_CELLS"});
-        
-        Class arrClass [] = {NSNotification.class};
-        NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("rebuildModel", arrClass), "DRReportModelRebuild", null);
+
+        NSSelector rebuildModelSelector = new NSSelector("rebuildModel", ERXConstant.NotificationClassArray);
+        NSNotificationCenter.defaultCenter().addObserver(this, rebuildModelSelector, DRReportModel.DRReportModelRebuildNotification, null);
     }
 
     public Boolean booleanValueForBinding(String name) {
@@ -74,10 +77,10 @@ public class WRReport extends WOComponent  {
         return flag ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public NSArray recordGroupDisplayTypes(){
+    public NSArray recordGroupDisplayTypes() {
         return _recordGroupDisplayTypes;
     }
-    public NSArray reportStyles(){
+    public NSArray reportStyles() {
         return _reportStyles;
     }
 
@@ -92,10 +95,19 @@ public class WRReport extends WOComponent  {
         _showPresentationControls = null;
         //[_currentZCriteria removeAllObjects];
         if(!_initializedDimensionArrayFromBindings) {
-            initializeDimensionArrayFromBindings("H");
-            initializeDimensionArrayFromBindings("V");
-            initializeDimensionArrayFromBindings("Z");
-            _initializedDimensionArrayFromBindings = true;
+            if(model() != null) {
+                initializeDimensionArrayFromBindings("H");
+                initializeDimensionArrayFromBindings("V");
+                initializeDimensionArrayFromBindings("Z");
+                _initializedDimensionArrayFromBindings = true;
+                if(log.isDebugEnabled()) {
+                    log.debug("V :" + model().vList());
+                    log.debug("H :" + model().hList());
+                    log.debug("Z :" + model().zList());
+                }
+            } else {
+                log.error("Model is null!");
+            }
         }
     }
 
@@ -181,7 +193,7 @@ public class WRReport extends WOComponent  {
         if (_recordGroupTotalFormat == null) {
             _recordGroupTotalFormat = (String)this.valueForBinding("recordGroupTotalFormat");
             if (_recordGroupTotalFormat == null) {
-                _recordGroupTotalFormat = "#,####.00";
+                _recordGroupTotalFormat = "#,###0.00;;-#,###0.00";
             }
         }
         return _recordGroupTotalFormat;
@@ -269,7 +281,7 @@ public class WRReport extends WOComponent  {
         if(_showEditing == null){
             _showEditing = booleanValueForBinding("showEditing");
         }
-        return _showNavigation.booleanValue();
+        return _showEditing.booleanValue();
     }
 
     public boolean showNavigation() {
@@ -332,12 +344,11 @@ public class WRReport extends WOComponent  {
 
 
     public NSArray topHorzGroupCriteriaList() {
-        NSArray arr = this.model().hList();
-        if (arr.count() > 0) {
-            DRGroup grp = (DRGroup)arr.objectAtIndex(0);
-            NSArray arr2 = grp.sortedCriteriaList();
-            //log.debug( "arr2:"+arr2);
-            return arr2;
+        NSArray hList = this.model().hList();
+        if (hList.count() > 0) {
+            DRGroup group = (DRGroup)hList.objectAtIndex(0);
+            NSArray sortedCriteriaList = group.sortedCriteriaList();
+            return sortedCriteriaList;
         }
         return NSArray.EmptyArray;
     }
@@ -379,7 +390,6 @@ public class WRReport extends WOComponent  {
 
 
     public DRCriteria topCriteria() {
-        //log.debug( "_topCriteria:"+_topCriteria);
         return _topCriteria;
     }
     public void setTopCriteria(DRCriteria c) {
@@ -440,9 +450,6 @@ public class WRReport extends WOComponent  {
                     log.warn("Criteria not found: " + keypath);
                 }
             }
-            log.info("V :" + model().vList());
-            log.info("H :" + model().hList());
-            log.info("Z :" + model().zList());
         }
     }
 
@@ -474,7 +481,15 @@ public class WRReport extends WOComponent  {
         return dict;
     }
 
-
+    public boolean shouldGetColorsFromParent() {
+        if (_shouldGetColorsFromParent == null) {
+            boolean shouldGetColorsFromParent = hasBinding("currentCoordinates") && canSetValueForBinding("currentCoordinates");
+            shouldGetColorsFromParent = shouldGetColorsFromParent & hasBinding("colorForCoordinates") & canGetValueForBinding("colorForCoordinates");
+                _shouldGetColorsFromParent = shouldGetColorsFromParent ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _shouldGetColorsFromParent.booleanValue();
+    }
+    
     public NSDictionary currentCoordinates() {
         NSDictionary dict = this.addCoordsFrom(_currentZCriteria);
         return dict;
@@ -482,11 +497,8 @@ public class WRReport extends WOComponent  {
 
 
     public DRRecordGroup recordGroupTest() {
-        //log.debug( "entered");
         NSDictionary crds = this.currentCoordinates();
-        //log.debug( "crds:"+crds);
         DRRecordGroup drg =  this.model().recordGroupForCoordinates(crds);
-        //log.debug( "drg:"+drg);
         return drg;
     }
 
@@ -495,7 +507,7 @@ public class WRReport extends WOComponent  {
         return _topCriteriaV;
     }
     public void setTopCriteriaV(DRCriteria c) {
-        if(c != null){
+        if(c != null) {
             String ky = c.masterCriteria().label();
             if (ky != null) {
                 _currentZCriteria.setObjectForKey(c, ky);
@@ -705,20 +717,24 @@ public class WRReport extends WOComponent  {
 
 
     public String colorForCoords() {
-        int totalCount = this.totalCount();
-        int maxColorsConfigured = this.colorDict().count();
+        if(shouldGetColorsFromParent()) {
+            setValueForBinding(currentCoordinates(), "currentCoordinates");
+            return (String)valueForBinding("colorForCoordinates");
+        } else {
+            int totalCount = this.totalCount();
+            int maxColorsConfigured = this.colorDict().count();
 
-        if (totalCount == maxColorsConfigured) {
-            return "eeeeee";
+            if (totalCount == maxColorsConfigured) {
+                return "eeeeee";
+            }
+
+            if (totalCount > maxColorsConfigured) {
+                return "ffffff";
+            }
+            return (String)this.colorDict().objectAtIndex(totalCount);
         }
-
-        if (totalCount > maxColorsConfigured) {
-            return "ffffff";
-        }
-
-        return (String)this.colorDict().objectAtIndex(totalCount);
     }
-
+    
 
     public String bgcolorColSpanTd() {
         return this.colorForCoords();
@@ -776,4 +792,14 @@ public class WRReport extends WOComponent  {
     }
 
 
+    public boolean showTopCriteriaLabel() {
+        if(_showTopCriteriaLabel == null) {
+            if(!hasBinding("showTopCriteriaLabel")) {
+                _showTopCriteriaLabel = Boolean.TRUE;
+            } else {
+                _showTopCriteriaLabel = booleanValueForBinding("showTopCriteriaLabel");
+            }
+        }
+        return _showTopCriteriaLabel.booleanValue();
+    }
 }
