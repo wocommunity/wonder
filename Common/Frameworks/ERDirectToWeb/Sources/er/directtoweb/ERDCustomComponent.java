@@ -15,11 +15,11 @@ import er.extensions.*;
 
 /**
  * Base class of many custom components.<br />
- * Has alot of nifty features including resolving bindings against the rule system and inherits all the value pulling methods from {@link ERXNonSychronizingComponent}.
+ * Has alot of nifty features including resolving bindings against the rule system and inherits all the value pulling methods from {@link ERXNonSynchronizingComponent}.
  * Subclasses should be able to run standalone without a D2W context. This is achieved by pulling values first from the bindings, then from the d2wContext and finally from an "extraBindings" binding.
  */
 
-public abstract class ERDCustomComponent extends ERXNonSychronizingComponent implements ERXExceptionHolder {
+public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent implements ERXExceptionHolder {
 
     public static interface Keys {
         public static final String key = "key";
