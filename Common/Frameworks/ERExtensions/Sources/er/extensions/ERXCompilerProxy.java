@@ -290,6 +290,10 @@ public class ERXCompilerProxy {
                                 app.setDefaultRequestHandler(handler);
                             log.info("WODirectAction loaded: "+ cacheEntry.className());
                         }
+                        if(WOComponent.class.isAssignableFrom(class_)) {
+                            WOContext context = new WOContext(new WORequest("GET", "/", "1.0", null, null, null));
+                            WOApplication.application().pageWithName(cacheEntry.className(), context)._componentDefinition().componentInstanceInContext(context); // mark an instance as locked
+                        }
                         if(EOEnterpriseObject.class.isAssignableFrom(class_) && !didResetModelGroup) {
                             EOModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
                             didResetModelGroup = true;
