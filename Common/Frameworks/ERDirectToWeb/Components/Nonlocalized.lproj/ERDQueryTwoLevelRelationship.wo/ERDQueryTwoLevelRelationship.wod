@@ -1,0 +1,12 @@
+ERXJSPopUpRelationPicker1: ERXJSPopUpRelationPicker {
+	childDisplayValueName = ^secondaryKeyWhenRelationship;
+	childLabel = ^displayNameForSecondaryKey;
+	childPopUpStringForAll = "- all -";
+	parentDisplayValueName = ^keyWhenRelationship;
+	parentEntitiesList = restrictedChoiceList;
+	parentLabel = ^displayNameForDestinationEntity;
+	parentPopUpStringForAll = "- all -";
+	parentToChildrenRelationshipName = ^secondaryKey;
+	selectedChild = secondaryDisplayGroupQueryMatchValue;
+	selectedParent = displayGroupQueryMatchValue;
+}
