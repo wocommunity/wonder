@@ -17,8 +17,10 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSharedEditingContext;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -30,6 +32,9 @@ import com.webobjects.foundation.NSMutableArray;
  */
 public class ERXEOControlUtilities {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOControlUtilities.class);
+    
     /**
      * Turns a given enterprise object back into a fault.
      * @param eo enterprise object to refault
@@ -120,5 +125,43 @@ public class ERXEOControlUtilities {
             return (Number)row.objectForKey(attribute.name());
         }
         return null;
-    }    
+    }
+
+    /**
+     * Finds an object  in the shared editing context matching a key
+     * and value. This has the benifit of not requiring a database
+     * round trip if the entity is shared.
+     * @param entityName name of the shared entity
+     * @param key to match against
+     * @param value value to match
+     * @return matching shared object
+     */
+    public static EOEnterpriseObject sharedObjectMatchingKeyAndValue(String entityName, String key, Object value) {
+        NSArray filtered = sharedObjectsMatchingKeyAndValue(entityName, key, value);
+        if (filtered.count() > 1)
+            log.warn("Found multiple shared objects for entityName: " + entityName + " matching key: "
+                     + key + " value: " + value + " matched against: " + filtered);
+        return filtered.count() > 0 ? (EOEnterpriseObject)filtered.lastObject() : null;
+    }
+
+    /**
+     * Finds objects in the shared editing context matching a key
+     * and value. This has the benifit of not requiring a database
+     * round trip if the entity is shared.
+     * @param entityName name of the shared entity
+     * @param key to match against
+     * @param value value to match
+     * @return array of shared objects matching key and value
+     */
+    public static NSArray sharedObjectsMatchingKeyAndValue(String entityName, String key, Object value) {
+        NSArray filtered = null;
+        EOKeyValueQualifier qualifier = new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, value);
+        NSArray sharedEos = (NSArray)EOSharedEditingContext.defaultSharedEditingContext().objectsByEntityName().objectForKey(entityName);
+        if (sharedEos != null) {
+            filtered = EOQualifier.filteredArrayWithQualifier(sharedEos, qualifier);
+        } else {
+            log.warn("Unable to find any shared objects for entity name: " + entityName);
+        }
+        return filtered != null ? filtered : NSArray.EmptyArray;
+    }
 }
