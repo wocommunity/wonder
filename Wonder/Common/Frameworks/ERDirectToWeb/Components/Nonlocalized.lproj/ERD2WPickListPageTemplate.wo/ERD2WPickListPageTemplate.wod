@@ -19,7 +19,7 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-AttributeSorter: ERXSortOrder {
+AttributeSorter2: ERXSortOrder {
 	displayGroup = displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
@@ -50,13 +50,29 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-ERXNonNullConditional1: WOConditional {
-	condition = d2wContext.branchChoices.count;
+Conditional1: WOConditional {
+	condition = isListEmpty;
 	negate = true;
 }
 
-ERXNonNullConditional2: ERXNonNullConditional {
-	condition = d2wContext.branchChoices;
+Conditional2: WOConditional {
+	condition = isListEmpty;
+}
+
+ERDBannerComponent2: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
+	framework = "JavaDirectToWeb";
+}
+
+ERXNonNullConditional1: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+ERXNonNullConditional2: WOConditional {
+	condition = hasBranchChoices;
 }
 
 EmptyMessageComponent: WOSwitchComponent {
@@ -71,6 +87,15 @@ EntityRepetition: WORepetition {
 
 Form1: WOForm {
 	multipleSubmit = true;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
 HiddenField: WOHiddenField {
@@ -95,11 +120,6 @@ InspectImage: WOActiveImage {
 	filename = "magglass-btn.gif";
 	framework = "JavaDirectToWeb";
 	action = inspectObjectAction;
-}
-
-IsEntityNotWritable: WOConditional {
-	_unroll = true;
-	condition = isEntityInspectable;
 }
 
 IsPropertySortable: WOConditional {
@@ -136,13 +156,14 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-NavBar: ERXBatchNavigationBarInForm {
-	bgcolor = backgroundColorForTable;
+NavBar1: WOSwitchComponent {   
+//	bgcolor = "#ff0000"; // backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
-	textColor = d2wContext.textColor;
-	width = 550;
+//	textColor = d2wContext.textColor;
         d2wContext = d2wContext;
+	bgcolor = d2wContext.backgroundColorForTable;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
 NumberOfItems: WOString {
@@ -161,8 +182,8 @@ PropertyName: WOString {
 }
 
 Repetition1: WORepetition {
-	item = aBranch;
-	list = d2wContext.branchChoices;
+	item = branch;
+	list = branchChoices;
 }
 
 ReturnButton2: WOImage {
@@ -181,6 +202,10 @@ ShowCancel2: WOConditional {
 	condition = showCancel;
 }
 
+ShowCancel3: WOConditional {
+	condition = d2wContext.showActions;
+}
+
 SubmitButton1: WOSubmitButton {
 	action = backAction;
 	value = d2wContext.pickButtonLabel;
@@ -193,6 +218,16 @@ SubmitButton2: WOSubmitButton {
 
 SubmitButton3: WOSubmitButton {
 	action = backAction;
-	value = aBranch.displayName;
+	value = branch.branchButtonLabel;
+}
+
+SubmitButton4: WOSubmitButton {
+	action = selectAll;
+	value = "Select All";
+}
+
+SubmitButton5: WOSubmitButton {
+	action = unselectAll;
+	value = "Select None";
 }
 

@@ -31,4 +31,5 @@
     "ERDInspect.clear" = "Clear";
     "ERDList.create" = "Add";
     "ERDQueryTwoLevelRelationship.all" = "- all -";
+    "ERD2W.pickButtonLabel" = "Select";
 }
