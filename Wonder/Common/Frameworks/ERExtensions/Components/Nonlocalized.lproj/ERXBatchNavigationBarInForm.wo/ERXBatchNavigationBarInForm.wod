@@ -12,7 +12,7 @@ Conditional1: WOConditional {
 Content: WOComponentContent {
 }
 
-DGHasQualifier: NonNullConditional {
+DGHasQualifier: ERXNonNullConditional {
 	condition = displayGroup.qualifier;
 }
 
