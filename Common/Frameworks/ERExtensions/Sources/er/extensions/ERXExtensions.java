@@ -142,11 +142,11 @@ public class ERXExtensions {
                 ERXLogger.configureLogging(System.getProperties());
 
                 log().debug("Initializing framework: ERXExtensions");
-
-                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-
+                if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
+                    NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+                    NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                    NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+                }
                 ERXArrayUtilities.initialize();
                 
                 // False by default

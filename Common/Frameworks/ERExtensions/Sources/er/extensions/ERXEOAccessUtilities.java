@@ -46,7 +46,7 @@ public class ERXEOAccessUtilities {
                 result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
             } else if (possibleEntities.count() > 1) {
                 ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
-                if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
+                if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.lastObject()).length())
                     log.warn("Found multiple entities of the same length for string: " + string
                              + " possible entities: " + possibleEntities);
                 result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());

@@ -151,7 +151,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     // TestListener implementation
     //////////////////////////////////////
     public synchronized void addError(Test test, Throwable t) {
-        log.error ("[E] " + test.toString() + " : " + t.getMessage());
+        log.error ("[E] " + test.toString() + " : " + t.getMessage(), t);
     }
 
     public synchronized void addFailure(Test test, AssertionFailedError t) {
