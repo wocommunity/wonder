@@ -295,6 +295,7 @@
 				413BE5AB0463315E00000102,
 				413BE5AD0463315E00000102,
 				41600221046856BD00000102,
+				41E8155A04F05D5B00A88C3C,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1089,6 +1090,7 @@
 				F59C570402C4560D01000102,
 				F59C570602C4560D01000102,
 				F59C570A02C4560D01000102,
+				41E8155904F05D5B00A88C3C,
 				F59C570802C4560D01000102,
 				F59C570502C4560D01000102,
 				F59C570702C4560D01000102,
@@ -1452,6 +1454,19 @@
 		};
 		416B00E5040EC20100000106 = {
 			fileRef = 416B00DD040EC20100000106;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41E8155904F05D5B00A88C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Navigation.html;
+			path = Documentation/Navigation.html;
+			refType = 4;
+		};
+		41E8155A04F05D5B00A88C3C = {
+			fileRef = 41E8155904F05D5B00A88C3C;
 			isa = PBXBuildFile;
 			settings = {
 			};
