@@ -4,6 +4,7 @@
 //
 // Created by bposokho on Mon Jan 13 2003
 //
+package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
