@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		013357CCFF5DD5F011CD2B9D = {
 			buildStyles = (
@@ -27,7 +27,6 @@
 				013357D6FF5DD68111CD2B9D,
 				15D0BC7BFF5EC4B811CD2B9D,
 				15D0BC79FF5EC47311CD2B9D,
-				01D74EAA00210ABC11CD2B8D,
 				096CB46EFF7BFC8111CD2B9D,
 				2123FDFDFFD467417F000001,
 				013357CEFF5DD64811CD2B9D,
@@ -57,11 +56,11 @@
 		};
 		013357DEFF5DD7CD11CD2B9D = {
 			children = (
-				2123FDF6FFD467417F000001,
-				2123FDF7FFD467417F000001,
-				2123FDF8FFD467417F000001,
-				F5ACD1A000D4FEFA01000001,
-				F518E39D00D5375701000001,
+				F558FC4702F3CE6301000103,
+				F558FC4802F3CE6301000103,
+				F558FC4902F3CE6301000103,
+				F558FC4A02F3CE6301000103,
+				F558FC4B02F3CE6301000103,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -87,17 +86,6 @@
 			isa = PBXBuildStyle;
 			name = WebServer;
 		};
-		016FA8CAFFE5B8A311CD2B8D = {
-			isa = PBXFolderReference;
-			path = Main.wo;
-			refType = 4;
-		};
-		016FA8CBFFE5B8A311CD2B8D = {
-			fileRef = 016FA8CAFFE5B8A311CD2B8D;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		0171C3300017AA3E11CD2B8D = {
 			buildActionMask = 2147483647;
 			files = (
@@ -105,7 +93,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -192,42 +179,38 @@
 		017C60B5FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
-				2123FDFEFFD467417F000001,
-				2123FDFFFFD467417F000001,
-				2123FE00FFD467417F000001,
-				2123FE01FFD467417F000001,
-				F5ACD1A100D4FEFA01000001,
-				F5ACD1AD00D5010201000001,
-				F518E37700D50E7C01000001,
-				F518E39A00D5262001000001,
-				F518E39E00D5375701000001,
+				F558FC4C02F3CE6301000103,
+				F558FC4D02F3CE6301000103,
+				F558FC4E02F3CE6301000103,
+				F558FC4F02F3CE6301000103,
+				F558FC5002F3CE6301000103,
+				F558FC5F02F3CE8A01000103,
+				F558FC6E02F3CEAE01000103,
+				F558FC7002F3CEC001000103,
+				F558FC7F02F3CEDE01000103,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		017C60C6FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
-				2123FE02FFD467417F000001,
-				016FA8CBFFE5B8A311CD2B8D,
-				C65E1ED90072974704CD2B8D,
-				F5ACD19F00D4FEBE01000001,
-				F5ACD1AE00D5010201000001,
-				F5ACD1AF00D5010201000001,
-				F518E37800D50E7C01000001,
-				F518E37900D50E7C01000001,
-				F518E39B00D5262001000001,
-				F518E39C00D5262001000001,
+				F558FC5C02F3CE7D01000103,
+				F558FC5D02F3CE7D01000103,
+				F558FC6B02F3CE9F01000103,
+				F558FC6C02F3CE9F01000103,
+				F558FC7C02F3CECF01000103,
+				F558FC7D02F3CECF01000103,
+				F558FC8B02F3CEEC01000103,
+				F558FC8C02F3CEEC01000103,
+				F558FC8E02F3CF1801000103,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		017C60D3FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXJavaArchiveBuildPhase;
-			name = "Java Archive Files";
 		};
 		017C60D4FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -242,7 +225,6 @@
 				F5DAF64601722EA301000001,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		017C60D6FFD2F2BB7F000001 = {
 			buildPhases = (
@@ -310,21 +292,18 @@
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		017C60D8FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		017C60EBFFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXJavaArchiveBuildPhase;
-			name = "Java Archive Files";
 		};
 		017C60ECFFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -338,7 +317,6 @@
 				022D13080059B68211CD2978,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		017C60FFFFD43DA37F000001 = {
 			isa = PBXApplicationReference;
@@ -452,28 +430,24 @@
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		017C6104FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		017C6105FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXJavaArchiveBuildPhase;
-			name = "Java Archive Files";
 		};
 		017C6106FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		017C6107FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
@@ -482,7 +456,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -495,7 +468,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -507,7 +479,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -532,19 +504,10 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
-		};
-		01D74EAA00210ABC11CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Interfaces;
-			path = "";
-			refType = 4;
 		};
 //010
 //011
@@ -756,8 +719,7 @@
 		};
 		15D0BC7BFF5EC4B811CD2B9D = {
 			children = (
-				F5ACD19E00D4FEBE01000001,
-				C65E1ED80072974704CD2B8D,
+				F558FC8D02F3CF1801000103,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -781,7 +743,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -797,39 +758,14 @@
 //212
 //213
 //214
-		2123FDF6FFD467417F000001 = {
-			isa = PBXFileReference;
-			path = Application.java;
-			refType = 4;
-		};
-		2123FDF7FFD467417F000001 = {
-			isa = PBXFileReference;
-			path = Session.java;
-			refType = 4;
-		};
-		2123FDF8FFD467417F000001 = {
-			isa = PBXFileReference;
-			path = DirectAction.java;
-			refType = 4;
-		};
 		2123FDF9FFD467417F000001 = {
 			children = (
-				2123FDFBFFD467417F000001,
-				016FA8CAFFE5B8A311CD2B8D,
-				2123FDFCFFD467417F000001,
+				F558FC5102F3CE7D01000103,
+				F558FC5202F3CE7D01000103,
+				F558FC5E02F3CE8A01000103,
 			);
 			isa = PBXGroup;
 			name = Main;
-			refType = 4;
-		};
-		2123FDFBFFD467417F000001 = {
-			isa = PBXFileReference;
-			path = Main.java;
-			refType = 4;
-		};
-		2123FDFCFFD467417F000001 = {
-			isa = PBXFileReference;
-			path = Main.api;
 			refType = 4;
 		};
 		2123FDFDFFD467417F000001 = {
@@ -839,70 +775,11 @@
 			name = Documentation;
 			refType = 4;
 		};
-		2123FDFEFFD467417F000001 = {
-			fileRef = 2123FDF6FFD467417F000001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		2123FDFFFFD467417F000001 = {
-			fileRef = 2123FDF8FFD467417F000001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		2123FE00FFD467417F000001 = {
-			fileRef = 2123FDF7FFD467417F000001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		2123FE01FFD467417F000001 = {
-			fileRef = 2123FDFBFFD467417F000001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		2123FE02FFD467417F000001 = {
-			fileRef = 2123FDFCFFD467417F000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 //210
 //211
 //212
 //213
 //214
-//C60
-//C61
-//C62
-//C63
-//C64
-		C65E1ED80072974704CD2B8D = {
-			isa = PBXFileReference;
-			path = WOAfile.icns;
-			refType = 4;
-		};
-		C65E1ED90072974704CD2B8D = {
-			fileRef = C65E1ED80072974704CD2B8D;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-//C60
-//C61
-//C62
-//C63
-//C64
 //F50
 //F51
 //F52
@@ -910,172 +787,259 @@
 //F54
 		F518E37300D50E7C01000001 = {
 			children = (
-				F518E37400D50E7C01000001,
-				F518E37500D50E7C01000001,
-				F518E37600D50E7C01000001,
+				F558FC6F02F3CEC001000103,
+				F558FC7102F3CECF01000103,
+				F558FC7202F3CECF01000103,
 			);
 			isa = PBXGroup;
 			name = AllTogetherPage;
 			refType = 4;
 		};
-		F518E37400D50E7C01000001 = {
-			isa = PBXFileReference;
-			path = AllTogetherPage.java;
-			refType = 4;
-		};
-		F518E37500D50E7C01000001 = {
-			isa = PBXFolderReference;
-			path = AllTogetherPage.wo;
-			refType = 4;
-		};
-		F518E37600D50E7C01000001 = {
-			isa = PBXFileReference;
-			path = AllTogetherPage.api;
-			refType = 4;
-		};
-		F518E37700D50E7C01000001 = {
-			fileRef = F518E37400D50E7C01000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F518E37800D50E7C01000001 = {
-			fileRef = F518E37500D50E7C01000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F518E37900D50E7C01000001 = {
-			fileRef = F518E37600D50E7C01000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F518E39600D5262001000001 = {
 			children = (
-				F518E39700D5262001000001,
-				F518E39800D5262001000001,
-				F518E39900D5262001000001,
+				F558FC7E02F3CEDE01000103,
+				F558FC8002F3CEEB01000103,
+				F558FC8102F3CEEC01000103,
 			);
 			isa = PBXGroup;
 			name = Footer;
 			refType = 4;
 		};
-		F518E39700D5262001000001 = {
+		F558FC4702F3CE6301000103 = {
 			isa = PBXFileReference;
-			path = Footer.java;
+			name = Application.java;
+			path = Sources/Application.java;
 			refType = 4;
 		};
-		F518E39800D5262001000001 = {
+		F558FC4802F3CE6301000103 = {
+			isa = PBXFileReference;
+			name = CustomRule.java;
+			path = Sources/CustomRule.java;
+			refType = 4;
+		};
+		F558FC4902F3CE6301000103 = {
+			isa = PBXFileReference;
+			name = DirectAction.java;
+			path = Sources/DirectAction.java;
+			refType = 4;
+		};
+		F558FC4A02F3CE6301000103 = {
+			isa = PBXFileReference;
+			name = Session.java;
+			path = Sources/Session.java;
+			refType = 4;
+		};
+		F558FC4B02F3CE6301000103 = {
+			isa = PBXFileReference;
+			name = User.java;
+			path = Sources/User.java;
+			refType = 4;
+		};
+		F558FC4C02F3CE6301000103 = {
+			fileRef = F558FC4702F3CE6301000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC4D02F3CE6301000103 = {
+			fileRef = F558FC4802F3CE6301000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC4E02F3CE6301000103 = {
+			fileRef = F558FC4902F3CE6301000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC4F02F3CE6301000103 = {
+			fileRef = F558FC4A02F3CE6301000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC5002F3CE6301000103 = {
+			fileRef = F558FC4B02F3CE6301000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC5102F3CE7D01000103 = {
+			isa = PBXFileReference;
+			name = Main.api;
+			path = Components/Main.api;
+			refType = 4;
+		};
+		F558FC5202F3CE7D01000103 = {
+			includeInIndex = 1;
 			isa = PBXFolderReference;
-			path = Footer.wo;
+			name = Main.wo;
+			path = Components/Main.wo;
 			refType = 4;
 		};
-		F518E39900D5262001000001 = {
+		F558FC5C02F3CE7D01000103 = {
+			fileRef = F558FC5102F3CE7D01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC5D02F3CE7D01000103 = {
+			fileRef = F558FC5202F3CE7D01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC5E02F3CE8A01000103 = {
 			isa = PBXFileReference;
-			path = Footer.api;
+			name = Main.java;
+			path = Sources/Main.java;
 			refType = 4;
 		};
-		F518E39A00D5262001000001 = {
-			fileRef = F518E39700D5262001000001;
+		F558FC5F02F3CE8A01000103 = {
+			fileRef = F558FC5E02F3CE8A01000103;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-		F518E39B00D5262001000001 = {
-			fileRef = F518E39800D5262001000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F518E39C00D5262001000001 = {
-			fileRef = F518E39900D5262001000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F518E39D00D5375701000001 = {
+		F558FC6002F3CE9F01000103 = {
 			isa = PBXFileReference;
-			path = CustomRule.java;
+			name = SeparatePage.api;
+			path = Components/SeparatePage.api;
 			refType = 4;
 		};
-		F518E39E00D5375701000001 = {
-			fileRef = F518E39D00D5375701000001;
+		F558FC6102F3CE9F01000103 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = SeparatePage.wo;
+			path = Components/SeparatePage.wo;
+			refType = 4;
+		};
+		F558FC6B02F3CE9F01000103 = {
+			fileRef = F558FC6002F3CE9F01000103;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-		F5ACD19E00D4FEBE01000001 = {
-			isa = PBXFileReference;
-			path = ValidityExample.eomodeld;
-			refType = 4;
-		};
-		F5ACD19F00D4FEBE01000001 = {
-			fileRef = F5ACD19E00D4FEBE01000001;
+		F558FC6C02F3CE9F01000103 = {
+			fileRef = F558FC6102F3CE9F01000103;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-		F5ACD1A000D4FEFA01000001 = {
+		F558FC6D02F3CEAE01000103 = {
 			isa = PBXFileReference;
-			path = User.java;
+			name = SeparatePage.java;
+			path = Sources/SeparatePage.java;
 			refType = 4;
 		};
-		F5ACD1A100D4FEFA01000001 = {
-			fileRef = F5ACD1A000D4FEFA01000001;
+		F558FC6E02F3CEAE01000103 = {
+			fileRef = F558FC6D02F3CEAE01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC6F02F3CEC001000103 = {
+			isa = PBXFileReference;
+			name = AllTogetherPage.java;
+			path = Sources/AllTogetherPage.java;
+			refType = 4;
+		};
+		F558FC7002F3CEC001000103 = {
+			fileRef = F558FC6F02F3CEC001000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC7102F3CECF01000103 = {
+			isa = PBXFileReference;
+			name = AllTogetherPage.api;
+			path = Components/AllTogetherPage.api;
+			refType = 4;
+		};
+		F558FC7202F3CECF01000103 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = AllTogetherPage.wo;
+			path = Components/AllTogetherPage.wo;
+			refType = 4;
+		};
+		F558FC7C02F3CECF01000103 = {
+			fileRef = F558FC7102F3CECF01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC7D02F3CECF01000103 = {
+			fileRef = F558FC7202F3CECF01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC7E02F3CEDE01000103 = {
+			isa = PBXFileReference;
+			name = Footer.java;
+			path = Sources/Footer.java;
+			refType = 4;
+		};
+		F558FC7F02F3CEDE01000103 = {
+			fileRef = F558FC7E02F3CEDE01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC8002F3CEEB01000103 = {
+			isa = PBXFileReference;
+			name = Footer.api;
+			path = Components/Footer.api;
+			refType = 4;
+		};
+		F558FC8102F3CEEC01000103 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Footer.wo;
+			path = Components/Footer.wo;
+			refType = 4;
+		};
+		F558FC8B02F3CEEC01000103 = {
+			fileRef = F558FC8002F3CEEB01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC8C02F3CEEC01000103 = {
+			fileRef = F558FC8102F3CEEC01000103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558FC8D02F3CF1801000103 = {
+			isa = PBXFileReference;
+			name = ValidityExample.eomodeld;
+			path = Resources/ValidityExample.eomodeld;
+			refType = 4;
+		};
+		F558FC8E02F3CF1801000103 = {
+			fileRef = F558FC8D02F3CF1801000103;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
 		F5ACD1A900D5010201000001 = {
 			children = (
-				F5ACD1AA00D5010201000001,
-				F5ACD1AB00D5010201000001,
-				F5ACD1AC00D5010201000001,
+				F558FC6002F3CE9F01000103,
+				F558FC6102F3CE9F01000103,
+				F558FC6D02F3CEAE01000103,
 			);
 			isa = PBXGroup;
 			name = SeparatePage;
 			path = "";
 			refType = 4;
 		};
-		F5ACD1AA00D5010201000001 = {
-			isa = PBXFileReference;
-			path = SeparatePage.java;
-			refType = 4;
-		};
-		F5ACD1AB00D5010201000001 = {
-			isa = PBXFolderReference;
-			path = SeparatePage.wo;
-			refType = 4;
-		};
-		F5ACD1AC00D5010201000001 = {
-			isa = PBXFileReference;
-			path = SeparatePage.api;
-			refType = 4;
-		};
-		F5ACD1AD00D5010201000001 = {
-			fileRef = F5ACD1AA00D5010201000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5ACD1AE00D5010201000001 = {
-			fileRef = F5ACD1AB00D5010201000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5ACD1AF00D5010201000001 = {
-			fileRef = F5ACD1AC00D5010201000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5DAF64501722EA301000001 = {
 			isa = PBXFrameworkReference;
-			name = Validity.framework;
-			path = /Library/Frameworks/Validity.framework;
-			refType = 0;
+			path = Validity.framework;
+			refType = 3;
 		};
 		F5DAF64601722EA301000001 = {
 			fileRef = F5DAF64501722EA301000001;
