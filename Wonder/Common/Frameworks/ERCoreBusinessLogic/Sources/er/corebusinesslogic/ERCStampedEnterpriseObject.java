@@ -62,7 +62,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             String relationshipName = ((ERCLogEntryInterface)this).relationshipNameForLogEntry();
             EOEnterpriseObject logType = ((ERCLogEntryInterface)this).logEntryType();
             if (relationshipName != null && logType != null) {
-                insertionLogEntry=ERCoreBusinessLogic.createLogEntryLinkedToEO(logType,
+                insertionLogEntry=ERCLogEntry.createLogEntryLinkedToEO(logType,
                                                                                null,
                                                                                this,
                                                                                relationshipName);
