@@ -1,4 +1,4 @@
-ERStringWithLineBreaks1: ERStringWithLineBreaks {
+ERStringWithLineBreaks1: ERXStringWithLineBreaks {
 	value = objectPropertyValue;
 	valueWhenEmpty = localContext.valueWhenEmpty;
 }

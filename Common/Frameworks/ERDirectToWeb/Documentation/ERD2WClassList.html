@@ -2,6 +2,8 @@
 <body bgcolor=white>
 <h2>Class List for ERDirectToWeb</h2>
 
+
+
 <h3>Principal Class</h3>
 <dt>ERDirectToWeb<dd>Has a boatload of utility methods as well as sets up the framework.  Look in the static initialize() method to see what happens when you link in this framework.</dd></dt>
 
@@ -15,7 +17,7 @@
 <dt>ERDBranchInterface<dd>Implemented by templates that need to have a branching behaviour.  A good example is the D2WPick which can offer n choices to the user.  In this case each choice is mapped to a branch name that corresponds to a method on the branch delegate.</dd></dt>
 <dt>ERDComputingAssignmentInterface<dd>In the new rule caching system the significant keys are built on the fly.  For custom assignments that explicitly depend on other keys this interface needs to be implemented so the caching system can take them in to account.</dd></dt>
 <dt>ERDEditPageInterface<dd>Small improvements to the EditPageInterface.</dd></dt>
-<dt>#EREditTabInterface<dd>Used to identify tab edit pages, not requiring common superclass.</dd></dt>
+<dt>ERDEditTabInterface<dd>Used to identify tab edit pages, not requiring common superclass.</dd></dt>
 <dt>ERDObjectSaverInterface<dd>Nice interface implemented by all ER edit pages.  In a next page delegate you can ask the sender if the object was saved.  Useful for determining which button the user hit, ie save or cancel.</dd></dt>
 <dt>ERDFollowPageInterface<dd>Interface used for follow page configurations, ie the first page config is an edit and we want an inspect to follow, maybe for the user to look at it before saving.</dd></dt>
 <dt>ERDMessagePageInterface<dd>Super set of all D2W message interfaces, confirm and error.</dd></dt>
@@ -35,7 +37,7 @@
 <dt>ERDDelayedBooleanAssignment<dd>Takes a condition and evalutaes this condition everytime the rule is asked for.</dd></dt>
 <dt>ERDDelayedConditionalAssignment<dd>More generic then the boolean assignment.  Specify a qualifer format and the arguments and this assignment will evaulte the qualifier and return either a true or false value.</dd></dt>
 <dt>ERDKeyValueAssignment<dd>A key-value assignment that will never be cached.</dd></dt>
-<dt>ERDDelayedNonNullConditional<dd>A non-null conditional assignment that will never be cached.</dd></dt>
+<dt>ERDDelayedNonNullConditionalAssignment <dd>A non-null conditional assignment that will never be cached.</dd></dt>
 <dt>ERDDelayedRuleAssignment<dd>Evaluates an array of rules using the first non-null result it finds.</dd></dt>
 <dt>ERDAssignment<dd>Superclass of most assignments.  Uses reflection so that if an assignment is mapped to a rhs of say foo, then the method foo(D2WContext) will be called instead of fire(D2WContext).</dd></dt>
 <dt>ERDConfigurationAssignment<dd>Used to generate pageConfigutation names for the current object, ie CreateFoo.</dd></dt>
@@ -50,6 +52,10 @@
 <dt>ERDTabSectionsContentsAssignment<dd>Used to generate tab and section containers.</dd></dt>
 <dt>ERDRelationshipSortAssignment<dd>Used to determine which sort key to use for a propertyKey that corresponds to a relatioship.</dd></dt>
 <dt>ERDUnitResolverAssignment<dd>Used to resolve units off of EOAttributes.  Will resolve paths with "@foo" off of the object itself.</dd></dt>
+<dt>ERDSmartRelationshipAssignment<dd>Description forthcoming.</dd></dt>
+<dt>ERDSmartAttributeAssignment<dd>Description forthcoming.</dd></dt>
+<dt>ERDDelayedKeyValueAssignment<dd>KeyValueAssignment implemented as a delayed assignment.</dd></dt>
+
 
 <h3>D2W Qualifiers</h3>
 <dt>ERDIsKindOfEntityQualifier<dd>Tests if an object is a kind of an entity.</dd></dt>
@@ -124,7 +130,7 @@
 
 <h3>D2W Embedded Components</h3>
 <dt>ERD2WPick<dd>Used to select multiple items from a list.</dd></dt>
-<dt>ERDInspect<dd>Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName.</dd></dt>
+<dt>ERD2WInspect<dd>Embedded component that can be used for nesting page configurations, ie ERD2WInspect can be a customComponentName.</dd></dt>
 <dt>ERD2WList<dd>Embedded component that can be used for nesting page configurations, ie have a list D2W list appear for one propertyKey in say an inspect page.</dd></dt>
 <dt>ERXD2WPick<dd>Embedded component that can be used for nesting a pick inside another page configuration.</dd></dt>
 <dt>ERXD2WInspect<dd>Uses a the ERD2WSwitchComponent so that this component won't cache the d2w context.  Useful for reusing of pages.</dd></dt>
@@ -147,7 +153,8 @@
 <dt>ERD2WDisplayYesNo<dd>Displays a boolean as Yes or No.</dd></dt>
 <dt>ERD2WEditAllowRestrict<dd>Edits a boolean with the string Allow/Restrict.  Should use ERD2WCustomEditBoolean instead.</dd></dt>
 <dt>ERD2WEditNumberWithUnit<dd>Edits a number displaying the unit off of the EOAttributes userInfo.</dd></dt>
-<dt>#D2WEditString2<dd>Allows specifing the maxLength for a WOTextField.</dd></dt>
+<dt>ERD2WEditString<dd>Allows specifing the maxLength for a WOTextField.</dd></dt>
+<dt>ERD2WDisplayStringWithLineBreaks<dd>Displays string with line breaks.</dd></dt>
 <dt>ERDEditStringWithChoices<dd>Provides a toOne relationship-like component except the value is pushed in as a string.</dd></dt>
 <dt>ERD2WEditURL<dd>Used for editing urls.</dd></dt>
 <dt>ERD2WEditYesNo<dd>Edits a boolean with radio buttons and Yes/No</dd></dt>
@@ -174,13 +181,13 @@
 <dt>ERD2WDisplayToManyList<dd>Improved toMany display compononent, uses ERListDisplay.</dd></dt>
 <dt>ERD2WPickFromEntities<dd>Custom query component that let's the user select from a set of shared eos.</dd></dt>
 <dt>ERD2WPickFromList<dd>Custom query component that let's the user select from an arbitrary list.</dd></dt>
-<dt>#ERDQueryDataRangeJavascript<dd>Used for building date queries with javascript.</dd></dt>
 <dt>ERD2WXMLDisplayNumber<dd>xml display component for numbers</dd></dt>
 <dt>ERD2WXMLDisplayString<dd>xml display component for strings</dd></dt>
 <dt>ERD2WXMLDisplayToMany<dd>xml display component for to many relationships</dd></dt>
 
 <h3>D2W Property Level Custom Components (subclass WOComponent)</h3>
 
+<dt>ERDEditList<dd>Description forthcoming.</dd></dt>
 <dt>ERD2WDisplayAddress<dd>Displays an address.  Needs some cleanup to be more generic.</dd></dt>
 <dt>ERDDHTMLComponent<dd>Rich text edit component.</dd></dt>
 <dt>ERDEditDateJavascript<dd>Crazy cool little date picker that uses javascript to pick the date from a little calendar.  Need to remove image refs.</dd></dt>
@@ -199,5 +206,6 @@
 <dt>ERDLinkToViewList<dd>Generic link component used to view a list.</dd></dt>
 <dt>ERDListPicker<dd>Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.</dd></dt>
 <dt>ERDMassModifyButton<dd>Button used to apply one modification to a bunch of objects.</dd></dt>
+<dt>ERDQueryDataRangeJavascript<dd>Used for building date queries with javascript.</dd></dt>
 </body>
 </html>

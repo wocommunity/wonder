@@ -40,7 +40,7 @@ public class ERXValidation {
                                                      String displayPropertyKeyPath,
                                                      ERXLocalizer localizer
                                                      ) {
-        validationFailedWithException(e,value,keyPath,errorMessages,displayPropertyKeyPath,null);
+        validationFailedWithException(e,value,keyPath,errorMessages,displayPropertyKeyPath,localizer,null);
     }
 
     public static void validationFailedWithException(Throwable e,
@@ -48,20 +48,20 @@ public class ERXValidation {
                                                      String keyPath,
                                                      NSMutableDictionary errorMessages,
                                                      String displayPropertyKeyPath,
-                                                     EOEntity entity,
-                                                     ERXLocalizer localizer
-                                                     ) {
-        validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, entity, localizer, pushChangesDefault);
-    }
-
-    public static void validationFailedWithException(Throwable e,
-                                                     Object value,
-                                                     String keyPath,
-                                                     NSMutableDictionary errorMessages,
-                                                     String displayPropertyKeyPath,
-                                                     EOEntity entity,
                                                      ERXLocalizer localizer,
-                                                     boolean pushChanges
+                                                     EOEntity entity
+                                                     ) {
+        validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, localizer, entity, pushChangesDefault);
+    }
+
+    public static void validationFailedWithException(Throwable e,
+                                                     Object value,
+                                                     String keyPath,
+                                                     NSMutableDictionary errorMessages,
+                                                     String displayPropertyKeyPath,
+                                                     ERXLocalizer localizer,
+                                                     EOEntity entity,
+                                                      boolean pushChanges
                                                      ) {
         if (cat.isDebugEnabled())
             cat.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
