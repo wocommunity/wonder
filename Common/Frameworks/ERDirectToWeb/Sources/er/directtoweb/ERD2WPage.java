@@ -41,6 +41,28 @@ OR with the alternate syntax, which ist most useful with the WebAssistant
 
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
 
+    /** interface for all the keys used in this pages code */
+    public static interface Keys {
+        public static final String object = "object";
+        public static final String localContext = "localContext";
+        public static final String keyPathsWithValidationExceptions = "keyPathsWithValidationExceptions";
+        public static final String shouldPropagateExceptions = "shouldPropagateExceptions";
+        public static final String shouldCollectValidationExceptions = "shouldCollectValidationExceptions";
+        public static final String shouldSetFailedValidationValue = "shouldSetFailedValidationValue";
+        public static final String errorMessages = "errorMessages";
+        public static final String componentName = "componentName";
+        public static final String customComponentName = "customComponentName";
+        public static final String pageConfiguration = "pageConfiguration";
+        public static final String propertyKey = "propertyKey";
+        public static final String sectionKey = "sectionKey";
+        public static final String sectionsContents = "sectionsContents";
+        public static final String tabKey = "tabKey";
+        public static final String displayNameForTabKey = "displayNameForTabKey";
+        public static final String displayPropertyKeys = "displayPropertyKeys";
+        public static final String tabSectionsContents = "tabSectionsContents";
+        public static final String alternateKeyInfo = "alternateKeyInfo";
+    }
+    
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WPage.class);
     public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WPage");    
@@ -71,7 +93,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setObject(EOEnterpriseObject eo) {
         _context = (eo != null) ? eo.editingContext() : null;
         // for SmartAssignment
-        d2wContext().takeValueForKey(eo, "object");
+        d2wContext().takeValueForKey(eo, Keys.object);
         super.setObject(eo);
     }
 
@@ -80,8 +102,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @returns d2wContext
      */
     public D2WContext d2wContext() {
-        if(hasBinding("localContext") && super.d2wContext()==null) {
-            setLocalContext((D2WContext)valueForBinding("localContext"));
+        if(hasBinding(Keys.localContext) && super.d2wContext()==null) {
+            setLocalContext((D2WContext)valueForBinding(Keys.localContext));
         }
         return super.d2wContext();
     }
@@ -96,11 +118,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             // D2WComponent.setLocalContext, which holds on to the first non null value it gets.
             // I swear if I could get my hands on the person who did that.. :-)
             _localContext=newValue;
-            log.debug("SetLocalContext:"+newValue);
+            log.debug("SetLocalContext: " + newValue);
         }
         super.setLocalContext(newValue);
         if(newValue != null)
-            newValue.takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
+            newValue.takeValueForKey(keyPathsWithValidationExceptions, Keys.keyPathsWithValidationExceptions);
         else
             log.warn("D2WContext was null!");
     }
@@ -122,10 +144,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setErrorMessage(String message) { errorMessage = message; }
 
     /** Should exceptions be propagated through to the parent page. If false, the validation errors are not shown at all. */
-    public boolean shouldPropagateExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldPropogateExceptions")); }
+    public boolean shouldPropagateExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldPropagateExceptions)); }
     
     /** Should exceptions also be handled here or only handled by the parent.*/
-    public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
+    public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldCollectValidationExceptions)); }
 
     /** Clears all of the collected validation exceptions. Implementation of the {@see ERXExceptionHolder} interface. */
     public void clearValidationFailed() {
@@ -136,7 +158,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Should incorrect values still be set into the EO. If not set, then the user must re-enter them. */
     public boolean shouldSetFailedValidationValue() {
-        return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldSetFailedValidationValue"));
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldSetFailedValidationValue));
     }
 
     /** Used to hold a cleaned-up validation key and message. */
@@ -161,12 +183,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 errorKeyOrder.addObjectsFromArray(_temp.allKeys());
                 errorMessages.addEntriesFromDictionary(_temp);
             }
-            d2wContext().takeValueForKey(errorMessages, "errorMessages");
+            d2wContext().takeValueForKey(errorMessages, Keys.errorMessages);
             if (keyPath != null) {
                 // this is set when you have multiple keys failing
                 // your keyPath should look like "foo,bar.baz"
                 if(keyPath.indexOf(",") > 0) {
-                    keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString(keyPath,","));
+                    keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString(keyPath, ","));
                 } else {
                     keyPathsWithValidationExceptions.addObject(keyPath);
                 }
@@ -199,16 +221,16 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Helper to return the actual current component name, even when wrapped in a custom component. */
     public String d2wCurrentComponentName() {
-        String name = (String)d2wContext().valueForKey("componentName");
+        String name = (String)d2wContext().valueForKey(Keys.componentName);
         if(name.indexOf("CustomComponent")>=0) {
-            name = (String)d2wContext().valueForKey("customComponentName");
+            name = (String)d2wContext().valueForKey(Keys.customComponentName);
         }
         return name;
     }
 
     /** This will allow d2w pages to be listed on a per configuration basis in stats collecting. */
     public String descriptionForResponse(WOResponse aResponse, WOContext aContext) {
-        String descriptionForResponse = (String)d2wContext().valueForKey("pageConfiguration");
+        String descriptionForResponse = (String)d2wContext().valueForKey(Keys.pageConfiguration);
         /*
          if (descriptionForResponse == null)
          log.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
@@ -220,7 +242,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         // Need to make sure that we have a clean plate, every time 
         clearValidationFailed();
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             super.takeValuesFromRequest(r, c);
         } finally {
@@ -231,7 +253,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Overridden from the parent for better logging. */
     public WOActionResults invokeAction(WORequest r, WOContext c) {
         WOActionResults result=null;
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             result= super.invokeAction(r, c);
         } finally {
@@ -242,7 +264,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Overridden from the parent for better logging. Reports exceptions in the console for easier debugging. */
     public void appendToResponse(WOResponse r, WOContext c) {
-        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey("pageConfiguration")) : ""));
+        NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
             super.appendToResponse(r,c);
         } catch(Exception ex) {
@@ -318,9 +340,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setCurrentSection(ERD2WContainer value) {
         _currentSection = value;
         if (value != null) {
-            d2wContext().takeValueForKey(value.name, "sectionKey");
+            d2wContext().takeValueForKey(value.name, Keys.sectionKey);
             // we can fire rules from the WebAssistant when we push it the -remangled sectionName into the context
-            d2wContext().takeValueForKey( "(" + value.name +")", "propertyKey");
+            d2wContext().takeValueForKey( "(" + value.name +")", Keys.propertyKey);
             if (log.isDebugEnabled())
                 log.debug("Setting sectionKey: " + value.name);
         }
@@ -333,7 +355,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public NSArray currentSectionKeys() {
         if (log.isDebugEnabled())
             log.debug("currentSectionKeys()");
-        NSArray keys = (NSArray)d2wContext().valueForKey("alternateKeyInfo");
+        NSArray keys = (NSArray)d2wContext().valueForKey(Keys.alternateKeyInfo);
         if (log.isDebugEnabled())
             log.debug("currentSectionKeys (from alternateKeyInfo):" +
                       keys);
@@ -352,9 +374,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     public NSArray sectionsContents() {
         if (_sectionsContents ==null) {
-            NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
+            NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey(Keys.sectionsContents);
             if (sectionsContentsFromRule==null) {
-                sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
+                sectionsContentsFromRule=(NSArray)d2wContext().valueForKey(Keys.displayPropertyKeys);
             }
             if (sectionsContentsFromRule == null)
                 throw new RuntimeException("Could not find sectionsContents or displayPropertyKeys in "+d2wContext());
@@ -376,23 +398,23 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         if (_tabSectionsContents ==null) {
             NSArray tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("tabSectionsContents");
             if (tabSectionContentsFromRule==null)
-                tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
+                tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey(Keys.displayPropertyKeys);
 
             if (tabSectionContentsFromRule==null)
                 throw new RuntimeException("Could not find tabSectionsContents in "+d2wContext());
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
             // Once calculated we then determine any displayNameForTabKey
-            String currentTabKey = (String)d2wContext().valueForKey("tabKey");
+            String currentTabKey = (String)d2wContext().valueForKey(Keys.tabKey);
             for (Enumeration e = _tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
                 ERD2WContainer c = (ERD2WContainer)e.nextElement();
                 if (c.name.length() > 0) {
-                    d2wContext().takeValueForKey(c.name, "tabKey");
-                    c.displayName = (String)d2wContext().valueForKey("displayNameForTabKey");
+                    d2wContext().takeValueForKey(c.name, Keys.tabKey);
+                    c.displayName = (String)d2wContext().valueForKey(Keys.displayNameForTabKey);
                 }
                 if (c.displayName == null)
                     c.displayName = c.name;
             }
-            d2wContext().takeValueForKey(currentTabKey, "tabKey");
+            d2wContext().takeValueForKey(currentTabKey, Keys.tabKey);
         }
         return _tabSectionsContents;
     }
@@ -413,7 +435,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setCurrentTab(ERD2WContainer value) {
         _currentTab = value;
         if (value != null && value.name != null && !value.name.equals("")) {
-            d2wContext().takeValueForKey(value.name, "tabKey");
+            d2wContext().takeValueForKey(value.name, Keys.tabKey);
             if (log.isDebugEnabled()) log.debug("Setting tabKey: " + value.name);
         }
     }
