@@ -1,4 +1,6 @@
 package er.extensions;
+import java.net.*;
+
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
@@ -191,5 +193,27 @@ public  class ERXRequest extends WORequest {
             }
         }
         return sessionID;
+    }
+    
+    public String remoteHost() {
+        String host = null;
+        if (WOApplication.application().isDirectConnectEnabled()) {
+            InetAddress hostAdd = _originatingAddress();
+            if (hostAdd != null) {
+                host = hostAdd.getHostAddress();
+                return host;
+            }
+        }
+        if (host == null) {
+            host = headerForKey("remote_host");
+            if (host != null) return host;
+            
+            host= headerForKey("remote_addr");
+            if (host != null) return host;
+            
+            host = headerForKey("remote_user");
+            if (host != null) return host;
+        }
+        return "UNKNOWN";
     }
 }
