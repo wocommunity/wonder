@@ -1,12 +1,8 @@
 package com.webobjects.jdbcadaptor;
 
-import java.sql.*;
-
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-
-import er.extensions.*;
 
 /**
  * Postgres needs special handling of NSData conversion, special
@@ -18,7 +14,6 @@ import er.extensions.*;
  * @author Arturo Perez: JOIN clauses
  */
 public class PostgresqlExpression extends JDBCExpression {
-    public static final ERXLogger log = ERXLogger.getERXLogger(PostgresqlExpression.class);
     
     static private final String _DEFERRABLE_MODIFIER = " INITIALLY DEFERRED";
 
