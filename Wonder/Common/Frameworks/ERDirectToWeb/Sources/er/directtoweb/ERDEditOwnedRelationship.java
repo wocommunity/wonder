@@ -62,7 +62,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
                                           objectKeyPathValue());
         NSArray result = null;
         if (initialArray != null) {
-            localContext=((ERXGenericRecord)object()).isNewEO() ?
+            localContext=((ERXGenericRecord)object()).isNewObject() ?
             ERXExtensions.newEditingContext(object().editingContext(), false) :
             ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
             result = EOUtilities.localInstancesOfObjects(localContext, initialArray);
