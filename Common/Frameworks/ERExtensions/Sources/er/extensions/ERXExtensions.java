@@ -94,7 +94,6 @@ public class ERXExtensions {
          */
         public void finishedLaunchingApp(NSNotification n) {
             ERXLog4j.configureRapidTurnAround(); // Will only enable if WOCaching is off.
-            ERXExtensions.warmUpRuleCache();
             ERXSession.registerNotifications();
  	    // initialize compiler proxy
 	    ERXCompilerProxy.defaultProxy().initialize();
@@ -1615,14 +1614,6 @@ public class ERXExtensions {
             cat().warn("not adding sid: url="+url+" session="+s);
         }
         return result;
-    }
-
-    // DELETEME: Need a better system
-    public static void warmUpRuleCache() {
-        if (WOApplication.application() instanceof ERXApplication) {
-            ((ERXApplication)WOApplication.application()).resetSignificantKeys();
-            ((ERXApplication)WOApplication.application()).warmUpRuleCache();
-        }
     }
 
     /**

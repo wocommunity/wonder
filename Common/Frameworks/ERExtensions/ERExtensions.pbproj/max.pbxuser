@@ -10,13 +10,13 @@
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{973, 605}";
 				LeftSlideOut = {
-					ActiveTab = 0;
+					ActiveTab = 3;
 					Frame = "{{0, 23}, {973, 582}}";
 					Split0 = {
 						ActiveTab = 2;
-						Frame = "{{310, 0}, {663, 582}}";
+						Frame = "{{224, 0}, {749, 582}}";
 						Split0 = {
-							Frame = "{{0, 237}, {663, 345}}";
+							Frame = "{{0, 237}, {749, 345}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -52,9 +52,9 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {665, 143}}";
-							BuildTranscriptFrame = "{{0, 152}, {665, 63}}";
-							Frame = "{{0, 0}, {663, 213}}";
+							BuildMessageFrame = "{{0, 0}, {751, 143}}";
+							BuildTranscriptFrame = "{{0, 152}, {751, 63}}";
+							Frame = "{{0, 0}, {749, 213}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {689, 220}}";
@@ -72,15 +72,15 @@
 						OptionsSetName = "Hierarchy, all classes";
 					};
 					Tab2 = {
-						Frame = "{{0, 0}, {200, 100}}";
+						Frame = "{{0, 0}, {200, 582}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 567}}";
+						Frame = "{{0, 0}, {200, 582}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 267}}";
+							Frame = "{{0, 0}, {200, 274}}";
 						};
 						Split1 = {
-							Frame = "{{0, 276}, {200, 291}}";
+							Frame = "{{0, 283}, {200, 299}}";
 						};
 						SplitCount = 2;
 					};

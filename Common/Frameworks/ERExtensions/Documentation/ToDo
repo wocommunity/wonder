@@ -1,9 +1,7 @@
 ToDo list:
 
-Things to Remove:
-ERXKeyValueCoding - Not needed now with WO 5. The one extra utility method can be moved to a utility class.
-
 Stuff to correct:
+All the FIXMEs, CHECKMEs and MOVEMEs in the code
 
 Misc Components
 ERXRadioButtonMatrix: Need to expose ERXTable api as well as add sorting like ERXCheckboxMatrix.
