@@ -108,6 +108,7 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -229,6 +230,7 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -336,6 +338,8 @@
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/WebObjects/Applications";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
+				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_DEBUGGER = jdb;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -351,7 +355,7 @@
 				WEBSERVER_INSTALL_DIR = "$(WEBSERVER_INSTALL_DIR_APPLICATION)";
 				WEBSERVER_RESOURCES_DIR = "$(CONTENTS_DIR)/WebServerResources";
 				WEBSERVER_RESOURCES_JAVA_DIR = "$(WEBSERVER_RESOURCES_DIR)/Java";
-				WOAPPLICATION_CLASS_NAME = Application;
+				WOAPPLICATION_CLASS_NAME = er.javamail.mailer.Application;
 				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_DIR = "$(INSTALL_PATH_FOR_STYLE)/$(WRAPPER_NAME)";
 				WRAPPER_EXTENSION = woa;
@@ -490,6 +494,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -767,7 +773,7 @@
 		2123FDFBFFD467417F000001 = {
 			isa = PBXFileReference;
 			name = Main.java;
-			path = Sources/Main.java;
+			path = Sources/er/javamail/mailer/Main.java;
 			refType = 4;
 		};
 		2123FDFCFFD467417F000001 = {
@@ -900,19 +906,19 @@
 		F5283C740366156C01CF0E76 = {
 			isa = PBXFileReference;
 			name = Application.java;
-			path = Sources/Application.java;
+			path = Sources/er/javamail/mailer/Application.java;
 			refType = 4;
 		};
 		F5283C750366156C01CF0E76 = {
 			isa = PBXFileReference;
 			name = DirectAction.java;
-			path = Sources/DirectAction.java;
+			path = Sources/er/javamail/mailer/DirectAction.java;
 			refType = 4;
 		};
 		F5283C770366156C01CF0E76 = {
 			isa = PBXFileReference;
 			name = Session.java;
-			path = Sources/Session.java;
+			path = Sources/er/javamail/mailer/Session.java;
 			refType = 4;
 		};
 		F5283C780366156C01CF0E76 = {

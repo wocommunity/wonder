@@ -4,6 +4,7 @@
 //
 // Created by Max Muller on Tue Oct 22 2002
 //
+package er.javamail.mailer;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
@@ -20,9 +21,6 @@ import er.corebusinesslogic.ERCMailDelivery;
 import er.corebusinesslogic.ERCMailMessage;
 
 import er.javamail.ERJavaMail;
-
-import er.javamail.mailer.ERMailer;
-import er.javamail.mailer.ERMailerTimerTask;
 
 import java.util.Timer;
 import java.util.TimerTask;
