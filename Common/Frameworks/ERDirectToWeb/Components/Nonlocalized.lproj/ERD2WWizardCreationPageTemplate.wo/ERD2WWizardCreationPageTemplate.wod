@@ -39,6 +39,7 @@ InspectPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = d2wContext;
 	object = object;
+	displayPropertyKeys = currentTab.keys;
 }
 
 InspectTableHeaderRow: WOGenericContainer {
@@ -102,7 +103,7 @@ ShowSave: WOConditional {
 }
 
 StepName: WOString {
-    value=currentTab.name;
+    value=currentTab.displayName;
 }
 
 Steps: ERXLocalizedString {
