@@ -14,6 +14,8 @@ import er.extensions.*;
 
 public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
 
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditSortedToManyFault.class);
+
     public ERD2WEditSortedToManyFault(WOContext context) {
         super(context);
     }
@@ -52,7 +54,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
         if(showIndex()){
             Integer index = (Integer)browserItem.valueForKey(indexKey());
             if(index != null){
-                result = index.intValue()". "result;
+                result = index.intValue() + ". " + result;
             }
         }
         return result;
@@ -71,7 +73,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
             try {
                 browserSize = Integer.parseInt(contextSize);
             } catch(NumberFormatException nfe) {
-                log.error("browserSize not a number: "  browserSize);
+                log.error("browserSize not a number: " + browserSize);
             }
         }
         String maxContextSize = (String)d2wContext().valueForKey("maxBrowserSize");
@@ -79,7 +81,7 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
             try {
                 maxBrowserSize = Integer.parseInt(maxContextSize);
             } catch(NumberFormatException nfe) {
-                log.error("maxBrowserSize not a number: "  maxBrowserSize);
+                log.error("maxBrowserSize not a number: " + maxBrowserSize);
             }
         }
 
