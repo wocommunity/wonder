@@ -102,7 +102,7 @@ public class ERXFileUtilities {
     }
     
     /**
-        * Returns a string from the file using the default
+     * Returns a string from the file using the default
      * encoding.
      * @param f file to read
      * @return string representation of that file.
@@ -110,8 +110,9 @@ public class ERXFileUtilities {
     public static String stringFromFile(File f) throws IOException {
         return new String(bytesFromFile(f));
     }
+
     /**
-        * Returns a string from the file using the specified
+     * Returns a string from the file using the specified
      * encoding.
      * @param f file to read
      * @param encoding to be used, null will use the default
@@ -120,8 +121,6 @@ public class ERXFileUtilities {
     public static String stringFromFile(File f, String encoding) throws IOException {
         return new String(bytesFromFile(f), encoding);
     }
-
-
 
     /**
      * Determines the path of the specified Resource. This is done
@@ -135,7 +134,6 @@ public class ERXFileUtilities {
     public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
        return WOApplication.application().resourceManager().pathForResourceNamed(fileName, frameworkName, languages);
     }
-    
 
     /**
      * Determines the last modification date for a given file
@@ -151,7 +149,7 @@ public class ERXFileUtilities {
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         long lastModified = 0;
         String filePath = pathForResourceNamed(fileName, frameworkName, null);
-        if (filePath!=null) {
+        if (filePath != null) {
             lastModified = new File(filePath).lastModified();
         }
         return lastModified;
@@ -192,9 +190,9 @@ public class ERXFileUtilities {
             File file = new File(filePath);
             try {
                 try {
-                    result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
+                    result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
                 } catch (IllegalArgumentException iae) {
-                    result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
+                    result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
                 }
             } catch (IOException ioe) {
                 log.error("ConfigurationManager: Error reading "+filePath);
@@ -310,7 +308,7 @@ public class ERXFileUtilities {
                     File srcFile = srcFiles[i];
                     if (srcFile.exists() && srcFile.isFile()) {
                         in = new FileInputStream(srcFile);
-                        File dstFile = new File(dstDirectory.getAbsolutePath() + File.pathSeparator + srcFile.getName());
+                        File dstFile = new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
                         out = new FileOutputStream(dstFile);
                         int c;
                         while ((c = in.read()) != -1) {
