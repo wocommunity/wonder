@@ -169,4 +169,14 @@ public class ERXMessageEncoding implements Serializable {
                     "@value@ isn't a supported @target@. (Not listed under @listingMethod@)", null, d, null);
         return new IllegalArgumentException(message);
     }
+
+    private String _toString;
+    public String toString() {
+        if (_toString == null) {
+            _toString = "<" + getClass().getName() 
+                        + " encoding: " + _encoding
+                        + ">";
+        }
+        return _toString;
+    }
 }
