@@ -1,15 +1,8 @@
 package er.grouping;
 
-import java.lang.*;
 import java.util.*;
-import java.io.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 
-/* DRGroup.h created by Administrator on Sun 01-Nov-1998 */
-//#import <WebObjects/WebObjects.h>
 public class DRGroup extends Object  {
 
     protected DRReportModel _reportModel;
@@ -44,7 +37,6 @@ public class DRGroup extends Object  {
         return recGrpDict;
     }
 
-
     public NSMutableDictionary groupBy(NSArray recs, DRMasterCriteria amc) {
         DRRecord rec;
         NSMutableDictionary recGrpDict;
@@ -63,7 +55,6 @@ public class DRGroup extends Object  {
 
         return recGrpDict;
     }
-
 
     static public NSArray drillDownListForMasterCriteriaList(DRMasterCriteria mc, NSArray mcList) {
         int i;
@@ -85,12 +76,10 @@ public class DRGroup extends Object  {
         return arr;
     }
 
-
     static public DRGroup withReportModelMasterCriteria(DRReportModel aMod, DRMasterCriteria amc) {
         DRGroup grp = new DRGroup(aMod, amc);
         return grp;
     }
-
 
     public DRGroup(DRReportModel aMod, DRMasterCriteria amc) {
         super();
@@ -98,31 +87,22 @@ public class DRGroup extends Object  {
         _masterCriteria = amc;
         _useGroupTotal = _masterCriteria.shouldTotal();
         this.resetDefaults();
-        //OWDebug.println(1, "about to pre group");
         _recordGroupDict = this.groupBy(_reportModel.records(), _masterCriteria);
-        //OWDebug.println(1, "recordGroupDict:" + _recordGroupDict);
-        //OWDebug.println(1, "about to build master drill down list");
-        //OWDebug.println(1, "[reportModel criteriaList]:" + _reportModel.criteriaList());
         _masterCriteriaDrillDownList = DRGroup.drillDownListForMasterCriteriaList(_masterCriteria, _reportModel.criteriaList());
-        //OWDebug.println(1, "masterCriteriaDrillDownList:" + _masterCriteriaDrillDownList);
         _ordering = new NSArray(new EOSortOrdering("score", EOSortOrdering.CompareAscending));
     }
-
 
     public NSArray recordGroupList() {
         return _recordGroupDict.allValues();
     }
 
-
     public NSDictionary recordGroupDict() {
         return _recordGroupDict;
     }
 
-
     public DRReportModel reportModel() {
         return _reportModel;
     }
-
 
     public NSArray criteriaList() {
         //OWDebug.println(1, "_recordGroupDict.allKeys(): "+_recordGroupDict.allKeys());
@@ -130,34 +110,27 @@ public class DRGroup extends Object  {
         return _masterCriteria.criteriaLookupDict().allValues();
     }
 
-
     public DRMasterCriteria masterCriteria() {
         return _masterCriteria;
     }
-
 
     public NSArray masterCriteriaDrillDownList() {
         return _masterCriteriaDrillDownList;
     }
 
-
+    /** Loops over each RecordGroup and group it. Init each new sub RecordGroup with empty record groups for each record group in the parent */
+    
     public void groupSubRecordGroupsWithMasterCriteriaLookupDict(NSDictionary groupLookUpDict) {
-        // loop over each RecordGroup and group it. Init each new sub RecordGroup 
-        // with empty record groups for each record group in the parent
-        //OWDebug.println(1, "entered");
         Enumeration anEnum = this.recordGroupList().objectEnumerator();
 
         while (anEnum.hasMoreElements()) {
             DRRecordGroup recGrp = (DRRecordGroup)anEnum.nextElement();
             NSMutableArray arr = new NSMutableArray(this.masterCriteriaDrillDownList());
             arr.removeObjectAtIndex(0);
-            //OWDebug.println(1, "about to tell recGrp to groupSubRecordGroup: recGrp:"+ recGrp);
-            //OWDebug.println(1, "about to tell recGrp to groupSubRecordGroup: arr:"+ arr);
             recGrp.groupSubRecordGroupGroupLookUpDict(arr, groupLookUpDict);
         }
 
     }
-
 
     public NSArray sortedCriteriaList() {
         if (_sortedArray == null) {
@@ -174,12 +147,10 @@ public class DRGroup extends Object  {
         return _sortedArrayBase;
     }
 
-
     public NSArray sortedCriteriaListBase() {
         this.sortedCriteriaList();
         return _sortedArrayBase;
     }
-
 
     public boolean useGroupTotal() {
         return _useGroupTotal;
@@ -195,6 +166,5 @@ public class DRGroup extends Object  {
         }
         return _keyDesc;
     }
-
 
 }
