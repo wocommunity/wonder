@@ -32,8 +32,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     /** corresponds to a model thrown 'mandatory toOne relationship' exception */
     public static final String MandatoryToOneRelationshipException = "MandatoryToOneRelationshipException";
 
-    /** corresponds to a model thrown 'manditory relationship' exception */
-    public static final String MandatoryRelationshipException = "MandatoryRelationshipException";
+    /** corresponds to a model thrown 'manditory toMany relationship' exception */
+    public static final String MandatoryToManyRelationshipException = "MandatoryToManyRelationshipException";
 
     /** corresponds to a model thrown 'object removal' exception */    
     public static final String ObjectRemovalException = "ObjectRemovalException";
@@ -41,7 +41,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     /** corresponds to a model thrown 'objects removal' exception */
     public static final String ObjectsRemovalException = "ObjectsRemovalException";
 
-    /** corresponds to a custom thrown exception */
+    /** corresponds to a custom method exception */
     public static final String CustomMethodException = "CustomMethodException";
 
     /**
@@ -114,7 +114,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     }
 
     /**
-     * Implementation of key value implementation.
+     * Implementation of key value coding.
      * Uses the default implementation.
      * @param key to look up
      * @return result of the lookup on the object
@@ -124,7 +124,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     }
 
     /**
-     * Implementation of the key value implementation
+     * Implementation of the key value coding.
      * Uses the default implementation.
      * @param obj value to be set on this exception
      * @param key to be set
@@ -144,7 +144,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public boolean isCustomMethodException() { return type() == CustomMethodException; }
 
     /**
-     * Method name. The method name is only set if the validation
+     * Returns method name. The method name is only set if the validation
      * exception is a custom validation exception.
      * @return custom method name.
      */
@@ -191,7 +191,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public void setType(String aType) { type = aType; }
 
     /**
-     * The value that failed validation.
+     * Returns the value that failed validation.
      * @return failed validation value.
      */
     public Object value() { return value; }
@@ -203,7 +203,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public void setValue(Object aValue) { value = aValue; }
 
     /**
-     * The target language to display the validation message in.
+     * Returns the target language to display the validation message in.
      * If a target language is not set then the current default
      * language for the current thread is used.
      * @return target language if one is set.
@@ -332,7 +332,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     }
 
     /**
-     * Formatted description of the validation exception
+     * Returns the formatted description of the validation exception
      * without calling <code>getMessage</code>.
      * @return description of the validation exception
      */
