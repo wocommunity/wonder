@@ -1,7 +1,5 @@
 package er.reporting;
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 
 /**
  * Class for Wonder Component WRNestedCellsLayout.

@@ -1,14 +1,10 @@
 package er.excel;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringBufferInputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 /**
@@ -108,8 +104,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 				response.setHeader("inline; filename=" + fileName, "content-disposition");
 				response.setHeader("application/msexcel", "content-type");
 			}
-		} 
-		else {
+		} else {
 			super.appendToResponse(response, context);
 		}
     }
