@@ -85,8 +85,7 @@ public abstract class ERXApplication extends WOApplication {
         if (! ERXConfigurationManager.defaultManager().isDeployedAsServlet()  &&  
             ! _wasERXApplicationMainInvoked) {
             _displayMainMethodWarning();
-        }
-        
+        }        
         installPatches();
 
         ERXModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
@@ -109,7 +108,8 @@ public abstract class ERXApplication extends WOApplication {
                         null);
 
         NSNotificationCenter.defaultCenter().addObserver(this,
-                                                         new NSSelector("didFinishLaunching",  ERXConstant.NotificationClassArray),
+                                                         new NSSelector("didFinishLaunching",
+                                                                        ERXConstant.NotificationClassArray),
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
                                                          null);        
     }
