@@ -1,9 +1,3 @@
-/*
-  $Id$
-
-  ERJavaMail.java - Camille Troillard - tuscland@mac.com
-*/
-
 package er.javamail;
 
 import java.util.Properties;
@@ -26,6 +20,7 @@ import java.util.Enumeration;
  * <code>ERJavaMail</code> is the prinicpal class for the ERJavaMail framework.
  *
  * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
+ * @author <a href="mailto:maxmuller@mac.com">Max Muller</a>
  * @version $Id$
  */
 public class ERJavaMail extends ERXFrameworkPrincipal {
