@@ -32,6 +32,10 @@ Conditional15: WOConditional {
 	condition = entity.subEntities.count;
 }
 
+Conditional16: WOConditional {
+	condition = attributeHasRelationships;
+}
+
 Conditional2: WOConditional {
 	condition = attribute.columnName.length;
 	negate = true;
@@ -126,6 +130,10 @@ String10: WOString {
 
 String11: WOString {
 	value = subEntity.name;
+}
+
+String13: WOString {
+	value = attributePrototype.name;
 }
 
 String2: WOString {
