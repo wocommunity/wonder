@@ -13,7 +13,7 @@ CheckBoxRepetition: ERXTable {
 	item = currentItem;
 	list = maybeSortedList;
 	maxColumns = ^maxColumns;
-	tableWidth = 0;
+	tableWidth = ^width;
 	border = 0;
 	goingVertically = ^goingVertically;
 }
