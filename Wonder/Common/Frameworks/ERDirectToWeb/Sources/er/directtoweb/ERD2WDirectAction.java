@@ -99,6 +99,8 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         try {
             return super.performActionNamed(anActionName);
         } catch(Exception ex) {
+            if(log.isDebugEnabled())
+                ex.printStackTrace();
             try {
                 newPage = D2W.factory().pageForConfigurationNamed(anActionName, session());
                 String entityName = (String)newPage.valueForKeyPath("d2wContext.entity.name");
@@ -153,7 +155,9 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 ErrorPageInterface epf=D2W.factory().errorPage(session());
                 epf.setMessage(ex1.toString());
                 epf.setNextPage(previousPageFromRequest());
-                cat.error("Error with action " + anActionName + ":" + ex1 + ", formValues:" + context().request().formValues());
+                log.error("Error with action " + anActionName + ":" + ex1 + ", formValues:" + context().request().formValues());
+                if(log.isDebugEnabled())
+                    ex1.printStackTrace();
                 newPage = (WOComponent)epf;
             }
         }
