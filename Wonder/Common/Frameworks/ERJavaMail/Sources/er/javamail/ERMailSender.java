@@ -284,6 +284,15 @@ public class ERMailSender extends Thread {
 	private void incrementMailCount () {
 	    mailCount++;
 	}
+        
+        /** @return a string representation of the Stats object. */
+        public String toString() {
+            return "<" + getClass ().getName () 
+                + " mailCount: " + mailCount ()
+                + ", errorCount: " + errorCount ()
+                + ", currentQueueSize: " + currentQueueSize ()
+                + ">";
+        }
     }
 
 }
