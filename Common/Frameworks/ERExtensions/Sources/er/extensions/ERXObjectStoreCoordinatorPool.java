@@ -149,6 +149,10 @@ public void sessionDidCreate(NSNotification n) {
             ec.setSharedEditingContext(sec);
             return ec;
         }
+
+        protected EOEditingContext _createEditingContext(EOObjectStore parent) {
+            return new ERXEC(parent == null ? EOEditingContext.defaultParentObjectStore() : parent);
+        }
     }
 
     private void _initObjectStores() {
@@ -158,8 +162,11 @@ public void sessionDidCreate(NSNotification n) {
             objectStores[i] = new ObjectStoreCoordinator();
         }
         log.info("initializing Pool finished");
+
+
     }
 
+    
     /** subclass to store additional stuff like the shared EC, and in future times maybe the useage count, locking etc. */
 
     public static class ObjectStoreCoordinator extends EOObjectStoreCoordinator {
@@ -263,7 +270,7 @@ public void sessionDidCreate(NSNotification n) {
 
     /** Synchronizes the different EOF stacks with the use of the ProcessChangesQueue
         */
-    private static class ObjectStoreCoordinatorSynchronizer {
+    public static class ObjectStoreCoordinatorSynchronizer {
 
         private static ObjectStoreCoordinatorSynchronizer sharedInstance = new ObjectStoreCoordinatorSynchronizer();
         private NSMutableArray oscs;
