@@ -25,245 +25,82 @@ public class ERXUtilities {
     public static ERXLogger log = ERXLogger.getERXLogger(ERXUtilities.class);
 
     /**
-     * Adds an object to another objects relationship. Has
-     * the advantage of ensuring that the added object is
-     * in the same editing context as the reference object.
-     * @param addedObject object to be added to the relationship
-     * @param referenceObject object that has the relationship
-     * @param key relationship key
+     * @deprecated use ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject,EOEnterpriseObject,String)
      */
-    public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject,
-                                                                         EOEnterpriseObject referenceObject,
-                                                                         String key) {
-        EOEditingContext referenceEc = referenceObject.editingContext();
-        EOEditingContext ec = addedObject.editingContext();
-        EOEnterpriseObject copy = addedObject;
-        if (referenceEc != ec) {
-            copy = EOUtilities.localInstanceOfObject(referenceEc, addedObject);
-        }
-        referenceObject.addObjectToBothSidesOfRelationshipWithKey(copy, key);
+    public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject, EOEnterpriseObject referenceObject, String key) {
+        ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(addedObject, referenceObject, key);
     }
 
     /**
-     * Creates an enterprise object for the given entity
-     * name by first looking up the class description
-     * of the entity to create the enterprise object.
-     * The object is then inserted into the editing context
-     * and returned.
-     * @param entityName name of the entity to be
-     *		created.
-     * @param editingContext editingContext to insert
-     *		the created object into
-     * @return created and inserted enterprise object
+     * @deprecated use ERXEOControlUtilities.createAndInsertObject(EOEditingContext,String)
      */
-    public static EOEnterpriseObject createEO(String entityName,
-                                              EOEditingContext editingContext) {
-        return ERXUtilities.createEO(entityName,
-                                    editingContext,
-                                    null);
+    public static EOEnterpriseObject createEO(String entityName, EOEditingContext editingContext) {
+        return ERXUtilities.createEO(entityName, editingContext, null);
     }
     
     /**
-     * Creates an enterprise object for the given entity
-     * name by first looking up the class description
-     * of the entity to create the enterprise object.
-     * The object next has the values pushed onto it
-     * from the objectInfo dictionary before being
-     * inserted into the editing context. The advantage
-     * of this is that you can have values already set
-     * on the object when awakeFromInsertion is called
-     * on the object.
-     * @param entityName name of the entity to be
-     *		created.
-     * @param editingContext editingContext to insert
-     *		the created object into
-     * @param objectInfo dictionary of values pushed onto
-     *		the object before being inserted into the
-     *		editing context.
-     * @return created and inserted enterprise object
+     * @deprecated use  createAndInsertObject(EOEditingContext,String, NSDictionary)
      */    
     public static EOEnterpriseObject createEO(String entityName,
                                               EOEditingContext editingContext,
                                               NSDictionary objectInfo) {
-        if (log.isDebugEnabled())
-            log.debug("Creating object of type: " + entityName);
-        EOClassDescription cd=EOClassDescription.classDescriptionForEntityName(entityName);
-        if (cd==null)
-            throw new RuntimeException("Could not find class description for entity named "+entityName);
-        EOEnterpriseObject newEO=cd.createInstanceWithEditingContext(editingContext,null);
-        if (objectInfo != null)
-            newEO.takeValuesFromDictionary(objectInfo);
-        editingContext.insertObject(newEO);
-        return newEO;
+        return ERXEOControlUtilities.createAndInsertObject(editingContext, entityName, objectInfo);
     }
 
     /**
-     * Creates an object using the utility method <code>createEO</code>
-     * from this utility class. After creating the enterprise object it
-     * is added to the relationship of the enterprise object passed in.
-     * For instance:<br/>
-     * <code>createEOLinkedToEO("Bar", ec, "toBars", foo);</code><br/>
-     * <br/>
-     * will create an instance of Bar, insert it into an editing context
-     * and then add it to both sides of the realtionship "toBars" off of
-     * the enterprise object foo.
-     *
-     * @param entityName name of the entity of the object to be created.
-     * @param editingContext editing context to create the object in
-     * @param relationshipName relationship name of the enterprise object
-     *		that is passed in to which the newly created eo should be
-     *		added.
-     * @param eo enterprise object to whose relationship the newly created
-     *		object will be added.
-     * @return the newly created enterprise object
+     * @deprecated use ERXEOControlUtilities.createAndAddObjectToRelationship(EOEditingContext,EOEnterpriseObject,String,String,NSDictionary);
      */
     public static EOEnterpriseObject createEOLinkedToEO(String entityName,
                                                         EOEditingContext editingContext,
                                                         String relationshipName,
                                                         EOEnterpriseObject eo) {
-        return ERXUtilities.createEOLinkedToEO(entityName,
-                                              editingContext,
-                                              relationshipName,
-                                              eo,
-                                              null);
+        return ERXEOControlUtilities.createAndAddObjectToRelationship(editingContext,eo,relationshipName,entityName,null);
     }
 
     /**
-     * Creates an object using the utility method <code>createEO</code>
-     * from this utility class. After creating the enterprise object it
-     * is added to the relationship of the enterprise object passed in.
-     * For instance:<br/>
-     * <code>createEOLinkedToEO("Bar", ec, "toBars", foo, dictValues);</code><br/>
-     * <br/>
-     * will create an instance of Bar, set all of the key-value pairs
-     * from the dictValues dictionary, insert it into an editing context
-     * and then add it to both sides of the realtionship "toBars" off of
-     * the enterprise object foo.
-     *
-     * @param entityName name of the entity of the object to be created.
-     * @param editingContext editing context to create the object in
-     * @param relationshipName relationship name of the enterprise object
-     *		that is passed in to which the newly created eo should be
-     *		added.
-     * @param eo enterprise object to whose relationship the newly created
-     *		object will be added.
-     * @param objectInfo dictionary of values to be set on the newly created
-     *		object before it is inserted into the editing context.
-     * @return the newly created enterprise object
+     * @deprecated use ERXEOControlUtilities.createAndAddObjectToRelationship(EOEditingContext,EOEnterpriseObject,String,String,NSDictionary);
      */
     public static EOEnterpriseObject createEOLinkedToEO(String entityName,
                                                         EOEditingContext editingContext,
                                                         String relationshipName,
                                                         EOEnterpriseObject eo,
                                                         NSDictionary objectInfo) {
-        EOEnterpriseObject newEO=createEO(entityName, editingContext, objectInfo);
-        EOEnterpriseObject eoBis = editingContext!=eo.editingContext() ?
-            EOUtilities.localInstanceOfObject(editingContext,eo) : eo;
-        eoBis.addObjectToBothSidesOfRelationshipWithKey(newEO, relationshipName);
-        return newEO;
+        return ERXEOControlUtilities.createAndAddObjectToRelationship(editingContext,eo,relationshipName,entityName,objectInfo);
     }
 
     /**
-     * This has one advantage over the standard EOUtilites
-     * method of first checking if the editingcontexts are
-     * equal before creating a fault for the object in the
-     * editing context.
-     * @param ec editing context to get a local instance of the object in
-     * @param eo object to get a local copy of 
-     * @return enterprise object local to the passed in editing contex
+     * @deprecated use ERXEOControlUtilities.localInstanceOfObject(EOEditingContext,EOEnterpriseObject);
      */
     public static EOEnterpriseObject localInstanceOfObject(EOEditingContext ec, EOEnterpriseObject eo) {
-        return eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext()) ?
-        EOUtilities.localInstanceOfObject(ec, eo) : eo;
+        return ERXEOControlUtilities.localInstanceOfObject(ec, eo);
     }
 
     /**
-     * Provides the same functionality as the equivalent method
-     * in {@link com.webobjects.eoaccess.EOUtilities EOUtilities} 
-     * except it will use the localInstanceOfObject
-     * method from this utilities class which has a few enhancements.
-     *
-     * @param ec editing context to pull local object copies
-     * @param eos array of enterprise objects
-     * @return an array of copies of local objects
+     * @deprecated use ERXEOControlUtilities.localInstancesOfObjects(EOEditingContext,NSArray);
      */
     public static NSArray localInstancesOfObjects(EOEditingContext ec, NSArray eos) {
-        if (eos == null)
-            throw new RuntimeException("ERXUtilites: localInstancesOfObjects: Array is null");
-        if (ec == null)
-            throw new RuntimeException("ERXUtilites: localInstancesOfObjects: EditingContext is null");
-        NSMutableArray localEos = new NSMutableArray();
-        for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
-            localEos.addObject(localInstanceOfObject(ec, (EOEnterpriseObject)e.nextElement()));
-        }
-        return localEos;
+        return ERXEOControlUtilities.localInstancesOfObjects(ec, eos);
     }    
 
     /**
-     * Fetches a shared enterprise object for a given fetch
-     * specification from the default shared editing context.
-     * @param fetchSpec name of the fetch specification on the
-     *		shared object.
-     * @param entityName name of the shared entity
-     * @return the shared enterprise object fetch by the fetch spec named.
+     * @deprecated use ERXEOControlUtilities.sharedObjectWithPrimaryKey(String, object)
      */
     public static EOEnterpriseObject sharedObjectWithFetchSpec(String fetchSpec, String entityName) {
-        return EOUtilities.objectWithFetchSpecificationAndBindings(EOSharedEditingContext.defaultSharedEditingContext(),
-                                                                   entityName,
-                                                                   fetchSpec,
-                                                                   null);
+        return ERXEOControlUtilities.sharedObjectWithFetchSpec(entityName, fetchSpec);
     }
 
     /**
-     * Gets the shared enterprise object with the given primary
-     * from the default shared editing context. This has the
-     * advantage of not requiring a roundtrip to the database to
-     * lookup the object.
-     * @param pk primary key of object to be found
-     * @param entityName name of the entity
-     * @return the shared object registered in the default shared editing context
+     * @deprecated use ERXEOControlUtilities.sharedObjectWithPrimaryKey(String, object)
      */
     public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
         return ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName, pk);
     }
     
     /**
-     * Utility method to generate a new primary key dictionary using
-     * the adaptor for a given entity. This is can be handy if you
-     * need to have a primary key for an object before it is saved to
-     * the database. This method uses the same method that EOF uses
-     * by default for generating primary keys. See
-     * {@link ERXGeneratesPrimaryKeyInterface} for more information
-     * about using a newly created dictionary as the primary key for
-     * an enterprise object.
-     * @param ec editing context
-     * @param entityName name of the entity to generate the primary
-     *		key dictionary for.
-     * @return a dictionary containing a new primary key for the given
-     *		entity.
+     * @deprecated use ERXEOAccessUtilities.primaryKeyDictionaryForEntity(EOEditingContext, String)
      */
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
-        // FIXME: Should use the modelgroup for the root object store of the
-        //	  editing context.
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        NSDictionary primaryKey = null;
-        try {
-            dbContext.lock();
-            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-            if (!adaptorChannel.isOpen())
-                adaptorChannel.openChannel();
-            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
-            if(arr != null)
-                primaryKey = (NSDictionary)arr.lastObject();
-            else
-                log.warn("Could not get primary key for entity: " + entityName + " exception");
-            dbContext.unlock();
-        } catch (Exception e) {
-            dbContext.unlock();
-            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
-        }
-        return primaryKey;
+        return ERXEOAccessUtilities.primaryKeyDictionaryForEntity(ec,entityName);
     }
 
     /**
@@ -348,16 +185,6 @@ public class ERXUtilities {
     }
     
     /**
-     * This is protected utility method from JavaWOExtensions.
-     * All it does is sort a mutable array using a single key.
-     * The sort is performed using the selector:
-     * {@link com.webobjects.eocontrol.EOSortOrdering#CompareCaseInsensitiveAscending 
-     * EOSortOrdering.CompareCaseInsensitiveAscending}
-     * Note: if you want to return a new array of sorted eos
-     * you can use 'sort' {@link NSArray.Operator} found in
-     * {@link ERXArrayUtilities}. 
-     * @param eos mutable array to be sorted
-     * @param key key to be sorted on.
      * @deprecated use ERXArrayUtilities.sortArrayWithKey(NSMutableArray,String) instead
      */
     public static void sortEOsUsingSingleKey(NSMutableArray eos, String key) {
@@ -365,12 +192,6 @@ public class ERXUtilities {
     }
 
     /**
-     * This is protected utility method from JavaWOExtensions.
-     * All it does is sort a mutable array using a single key
-     * and a selector.
-     * @param eos mutable array to be sorted
-     * @param key key to be sorted on.
-     * @param selector sort selector.
      * @deprecated use ERXArrayUtilities.sortArrayWithKey(NSMutableArray,String,NSSelector) instead
      */
     public static void sortEOsUsingSingleKey(NSMutableArray eos, String key, NSSelector selector) {
@@ -378,49 +199,21 @@ public class ERXUtilities {
     }
 
     /**
-     * This method resolves bindings from WOComponents to
-     * boolean values. The added benifit (and this might not
-     * still be the case) is that when <code>false</code> is
-     * bound to a binding will pass through null. This makes
-     * it difficult to handle the case where a binding should
-     * default to true but false was actually bound to the
-     * binding.<br/>
-     * Note: This is only needed for non-syncronizing components
-     * @param binding name of the binding
-     * @param component to resolve binding request
-     * @param def default value if binding is not set
-     * @return boolean resolution of the object returned from the
-     *		valueForBinding request.
+     * @deprecated use ERXValueUtilities.booleanValueForBindingOnComponentWithDefault(String,WOComponent,boolean) instead
      */
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
         return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault(binding,component,def);
     }
     
     /**
-     * Basic utility method for determining if an object
-     * represents either a true or false value. The current
-     * implementation tests if the object is an instance of
-     * a String or a Number. Numbers are false if they equal
-     * <code>0</code>, Strings are false if they equal (case insensitive)
-     * 'no', 'false' or parse to 0.
-     * @param obj object to be evaluated
-     * @return boolean evaluation of the given object
+     * @deprecated use ERXValueUtilities.booleanValue(Object)
      */
     public static boolean booleanValue(Object obj) {
         return ERXValueUtilities.booleanValue(obj);
     }
 
     /**
-     * Basic utility method for determining if an object
-     * represents either a true or false value. The current
-     * implementation tests if the object is an instance of
-     * a String or a Number. Numbers are false if they equal
-     * <code>0</code>, Strings are false if they equal (case insensitive)
-     * 'no', 'false' or parse to 0. The default value is used if
-     * the object is null.
-     * @param obj object to be evaluated
-     * @param def default value if object is null
-     * @return boolean evaluation of the given object
+     * @deprecated use ERXValueUtilities.booleanValueWithDefault(Object,boolean)
      */
     public static boolean booleanValueWithDefault(Object obj, boolean def) {
         return ERXValueUtilities.booleanValueWithDefault(obj,def);
@@ -689,52 +482,17 @@ public class ERXUtilities {
     }
 
     /**
-     * Simply utility method to create a concreate
-     * set object from an array
-     * @param array of elements
-     * @return concreate set.
+     * @deprecated use ERXArrayUtilities.setFromArray(NSArray)
      */
-    // MOVEME: Should move to ERXArrayUtilities
-    // CHECKME: Is this a value add?
     public static NSSet setFromArray(NSArray array) {
-        if (array == null || array.count() == 0)
-            return NSSet.EmptySet;
-        else {
-            Object [] objs = new Object[array.count()];
-            objs = array.objects();
-            return new NSSet(objs);
-        }
+        return ERXArrayUtilities.setFromArray(array);
     }
 
-    /** Caches sort orderings for given keys */
-    private final static NSDictionary _selectorsByKey=new NSDictionary(new NSSelector [] {
-        EOSortOrdering.CompareAscending,
-        EOSortOrdering.CompareCaseInsensitiveAscending,
-        EOSortOrdering.CompareCaseInsensitiveDescending,
-        EOSortOrdering.CompareDescending,        
-    }, new String [] {
-        "compareAscending",
-        "compareCaseInsensitiveAscending",
-        "compareCaseInsensitiveDescending",
-        "compareDescending",
-    });
-
     /**
-     * The qualifiers EOSortOrdering.CompareAscending.. and friends are
-     * actually 'special' and processed in a different/faster way when
-     * sorting than a selector that would be created by
-     * new NSSelector("compareAscending", ObjectClassArray). This method
-     * eases the pain on creating those selectors from a string.
-     * @param key sort key
+     * @deprecated use ERXArrayUtilities.sortSelectorWithKey(String)
      */
-    // MOVEME: Should move to ERXArrayUtilities
     public static NSSelector sortSelectorWithKey(String key) {
-        NSSelector result=null;
-        if (key!=null) {
-            result=(NSSelector)_selectorsByKey.objectForKey(key);
-            if (result==null) result=new NSSelector(key, ERXConstant.ObjectClassArray);
-        }
-        return result;
+        return ERXArrayUtilities.sortSelectorWithKey(key);
     }
 
     /** Copies values from one EO to another using an array of Attributes */

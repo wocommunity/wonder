@@ -98,12 +98,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         return nextPage(false);
     }    
 
-    public boolean shouldRenderBorder() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldRenderBorder")); }
-    public boolean shouldShowActionButtons() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowActionButtons")); }
-    public boolean shouldShowCancelButton() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowCancelButton")); }
-    public boolean shouldShowSubmitButton() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowSubmitButton")); }
+    public boolean shouldRenderBorder() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldRenderBorder")); }
+    public boolean shouldShowActionButtons() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowActionButtons")); }
+    public boolean shouldShowCancelButton() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowCancelButton")); }
+    public boolean shouldShowSubmitButton() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSubmitButton")); }
     public boolean showCancel() { return super.showCancel() && shouldShowCancelButton(); }
-    public boolean doesNotHaveForm() { return !ERXUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
+    public boolean doesNotHaveForm() { return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
     public void awake() {
         super.awake();
@@ -171,10 +171,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         return displayNameForProperty!=null && displayNameForProperty.length()>0;
     }
 
-    public boolean shouldRevertChanges() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldRevertChanges")); }
-    public boolean shouldSaveChanges() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChanges")); }
-    public boolean shouldValidateBeforeSave() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
-    public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
+    public boolean shouldRevertChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldRevertChanges")); }
+    public boolean shouldSaveChanges() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChanges")); }
+    public boolean shouldValidateBeforeSave() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
+    public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
     public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {

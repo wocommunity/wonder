@@ -10,8 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXLogger;
+import er.extensions.*;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Stepchild of DelayedConditionalAssignment
@@ -73,7 +72,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
         NSDictionary booleanConditions = (NSDictionary)value();
         if (log.isDebugEnabled())
             log.debug("Resolving delayed fire for boolean conditions: " + booleanConditions);
-        return ERXUtilities.booleanValue(c.valueForKeyPath((String)booleanConditions.objectForKey("conditionKey"))) ?
+        return ERXValueUtilities.booleanValue(c.valueForKeyPath((String)booleanConditions.objectForKey("conditionKey"))) ?
             booleanConditions.objectForKey("trueValue") : booleanConditions.objectForKey("falseValue");
 
     }

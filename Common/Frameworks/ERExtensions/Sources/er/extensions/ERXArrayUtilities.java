@@ -18,7 +18,54 @@ public class ERXArrayUtilities extends Object {
 
     /** caches if array utilities have been initialized */
     private static boolean initialized = false;
-    
+
+    /** Caches sort orderings for given keys */
+    private final static NSDictionary _selectorsByKey=new NSDictionary(new NSSelector [] {
+        EOSortOrdering.CompareAscending,
+        EOSortOrdering.CompareCaseInsensitiveAscending,
+        EOSortOrdering.CompareCaseInsensitiveDescending,
+        EOSortOrdering.CompareDescending,
+    }, new String [] {
+        "compareAscending",
+        "compareCaseInsensitiveAscending",
+        "compareCaseInsensitiveDescending",
+        "compareDescending",
+    });
+
+    /**
+     * Simply utility method to create a concreate
+     * set object from an array
+     * @param array of elements
+     * @return concreate set.
+     */
+    // CHECKME: Is this a value add?
+    public static NSSet setFromArray(NSArray array) {
+        if (array == null || array.count() == 0)
+            return NSSet.EmptySet;
+        else {
+            Object [] objs = new Object[array.count()];
+            objs = array.objects();
+            return new NSSet(objs);
+        }
+    }
+
+    /**
+        * The qualifiers EOSortOrdering.CompareAscending.. and friends are
+     * actually 'special' and processed in a different/faster way when
+     * sorting than a selector that would be created by
+     * new NSSelector("compareAscending", ObjectClassArray). This method
+     * eases the pain on creating those selectors from a string.
+     * @param key sort key
+     */
+    public static NSSelector sortSelectorWithKey(String key) {
+        NSSelector result=null;
+        if (key!=null) {
+            result=(NSSelector)_selectorsByKey.objectForKey(key);
+            if (result==null) result=new NSSelector(key, ERXConstant.ObjectClassArray);
+        }
+        return result;
+    }
+
     /**
      * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
@@ -207,8 +254,8 @@ public class ERXArrayUtilities extends Object {
     // FIXME: This has the side effect of removing any duplicate elements from
     //		the main array as well as not preserving the order of the array
     public static NSArray arrayMinusArray(NSArray main, NSArray minus){
-        NSSet result = ERXUtilities.setFromArray(main);
-        return result.setBySubtractingSet(ERXUtilities.setFromArray(minus)).allObjects();
+        NSSet result = ERXArrayUtilities.setFromArray(main);
+        return result.setBySubtractingSet(ERXArrayUtilities.setFromArray(minus)).allObjects();
     }
 
     /**

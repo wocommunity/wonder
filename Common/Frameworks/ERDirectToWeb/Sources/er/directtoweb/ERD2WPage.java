@@ -152,10 +152,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setErrorMessage(String message) { errorMessage = message; }
 
     /** Should exceptions be propagated through to the parent page. If false, the validation errors are not shown at all. */
-    public boolean shouldPropagateExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldPropagateExceptions)); }
+    public boolean shouldPropagateExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldPropagateExceptions)); }
     
     /** Should exceptions also be handled here or only handled by the parent.*/
-    public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldCollectValidationExceptions)); }
+    public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldCollectValidationExceptions)); }
 
     /** Clears all of the collected validation exceptions. Implementation of the {@link ERXExceptionHolder} interface. */
     public void clearValidationFailed() {

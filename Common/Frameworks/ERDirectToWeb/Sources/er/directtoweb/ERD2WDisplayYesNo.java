@@ -8,7 +8,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayBoolean;
-import er.extensions.ERXUtilities;
+import er.extensions.*;
 
 /**
  * Displays a boolean as Yes or No.<br />
@@ -20,6 +20,6 @@ public class ERD2WDisplayYesNo extends D2WDisplayBoolean {
     public ERD2WDisplayYesNo(WOContext context) { super(context); }
 
     public boolean isYes() {
-        return ERXUtilities.booleanValue(objectPropertyValue());
+        return ERXValueUtilities.booleanValue(objectPropertyValue());
     }
 }

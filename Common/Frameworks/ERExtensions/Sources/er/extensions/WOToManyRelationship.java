@@ -129,7 +129,7 @@ public class WOToManyRelationship extends WOComponent {
 
     public void setIsMandatory(Object aValue) {
         try {
-            _isMandatory = ERXUtilities.booleanValue(aValue);
+            _isMandatory = ERXValueUtilities.booleanValue(aValue);
         } catch (Throwable e) {
             String error = "WOToOneRelationship (setIsMandatory) - unable to set isMandatory value "+e.getMessage();
             NSLog.err.appendln(error);
@@ -415,12 +415,12 @@ public class WOToManyRelationship extends WOComponent {
         return _privateList();
     }
 
-    public static boolean localizeDisplayKeysDefault = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.WOToManyRelationship.localizeDisplayKeysDefault"), false);
+    public static boolean localizeDisplayKeysDefault = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.WOToManyRelationship.localizeDisplayKeysDefault"), false);
     boolean _localizeDisplayKeys;
     public boolean localizeDisplayKeys() {
         if(!_localizeDisplayKeysRead) {
             _localizeDisplayKeysRead = true;
-            _localizeDisplayKeys = ERXUtilities.booleanValueForBindingOnComponentWithDefault("localizeDisplayKeys", this, localizeDisplayKeysDefault);
+            _localizeDisplayKeys = ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("localizeDisplayKeys", this, localizeDisplayKeysDefault);
         }
         return _localizeDisplayKeys;
     }

@@ -52,7 +52,7 @@ public class ERXEOEncodingUtilities {
             EntityNameSeparator = entityNameSep;
 
         // Specify separator in link ?
-        SpecifySeparatorInURL = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL"), true);
+        SpecifySeparatorInURL = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL"), true);
     }        
     
     public NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
