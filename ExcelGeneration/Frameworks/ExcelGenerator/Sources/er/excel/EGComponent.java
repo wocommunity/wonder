@@ -1,10 +1,8 @@
 package er.excel;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+
 import er.extensions.*;
-import org.apache.poi.hssf.usermodel.*;
 
 /**
  * Class for Excel Component EGComponent.

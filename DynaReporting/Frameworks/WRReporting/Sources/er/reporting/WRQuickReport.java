@@ -1,14 +1,11 @@
 package er.reporting;
 
-import er.grouping.*;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
+import er.grouping.*;
 
 /**
  * Provides a quick way to set up a {@link WRReport}. Instead of binding all those keys,

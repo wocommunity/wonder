@@ -1,8 +1,9 @@
 package er.grouping;
 
 import java.util.*;
-import com.webobjects.foundation.*;
+
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 public class DRGroup extends Object  {
 

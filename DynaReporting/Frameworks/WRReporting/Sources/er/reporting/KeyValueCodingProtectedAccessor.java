@@ -1,8 +1,10 @@
 package er.reporting;
 
 import java.lang.reflect.*;
+
+import org.apache.log4j.*;
+
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
 
 /** This class exists so {@link NSKeyValueCoding} can access protected instance variables and methods.*/
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {

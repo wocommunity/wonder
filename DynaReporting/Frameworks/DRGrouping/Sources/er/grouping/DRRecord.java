@@ -1,7 +1,7 @@
 package er.grouping;
 
-import java.lang.*;
 import java.util.*;
+
 import com.webobjects.foundation.*;
 
 public class DRRecord extends Object  {

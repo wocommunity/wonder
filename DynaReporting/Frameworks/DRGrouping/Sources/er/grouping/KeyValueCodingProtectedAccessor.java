@@ -7,8 +7,10 @@
 package er.grouping;
 
 import java.lang.reflect.*;
+
+import org.apache.log4j.*;
+
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
