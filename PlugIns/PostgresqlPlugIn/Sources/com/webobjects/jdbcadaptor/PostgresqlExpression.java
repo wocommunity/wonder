@@ -1,5 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
+import java.sql.Timestamp;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOJoin;
@@ -72,6 +74,24 @@ public class PostgresqlExpression extends JDBCExpression {
         super(entity);
     }
     
+    /**
+     * Overridden to fix an issue with NStimestamp classes and "T" value-typed attributes. 
+     */
+    public NSMutableDictionary bindVariableDictionaryForAttribute(EOAttribute eoattribute, Object obj) {
+        NSMutableDictionary result =  super.bindVariableDictionaryForAttribute(eoattribute, obj);
+        if((obj instanceof NSTimestamp) && (isTimestampAttribute(eoattribute))) {
+            NSTimestamp nstimestamp = (NSTimestamp)obj;
+            long millis = nstimestamp.getTime();
+            // AK: since NSTimestamp places fractional millis in the getTime,
+            // the driver is getting very confused and refuses to update the columns as 
+            // they get translated to 0 as the fractional values.
+            Timestamp timestamp = new Timestamp(millis);
+            timestamp.setNanos(timestamp.getNanos()+nstimestamp.getNanos());
+            result.setObjectForKey(timestamp, "BindVariableValue");
+         }
+        return result;
+    }
+
     /**
      * Overriden to not call the super implementation.
      * 
@@ -310,7 +330,7 @@ public class PostgresqlExpression extends JDBCExpression {
         String value;
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
-        } else if(obj instanceof NSTimestamp && isTimestampAttribute(eoattribute)) {
+        } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
             value = "'" + _TIMESTAMP_FORMATTER.format(obj) + "'";
         } else {
             value = ((obj == null || obj == NSKeyValueCoding.NullValue) ? "NULL" : obj.toString());
@@ -318,28 +338,13 @@ public class PostgresqlExpression extends JDBCExpression {
         return value;
     }
     
+    /**
+     * Helper to check for timestamp columns that have a "T" value type.
+     * @param eoattribute
+     * @return
+     */
     private boolean isTimestampAttribute(EOAttribute eoattribute) {
         return "T".equals(eoattribute.valueType());
-    }
-    
-    /**
-     * Overridden to exclude timestamp attributes.
-     */
-    public boolean mustUseBindVariableForAttribute(EOAttribute eoattribute) {
-        if(isTimestampAttribute(eoattribute)) {
-            return false;
-        }
-        return super.mustUseBindVariableForAttribute(eoattribute);
-    }
-
-    /**
-     * Overridden to exclude timestamp attributes.
-     */
-    public boolean shouldUseBindVariableForAttribute(EOAttribute eoattribute) {
-        if(isTimestampAttribute(eoattribute)) {
-            return false;
-        }
-        return super.shouldUseBindVariableForAttribute(eoattribute);
     }
 
     /**
