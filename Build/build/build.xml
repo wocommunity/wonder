@@ -86,7 +86,6 @@
                 description="initialize properties">
         <property name="wo.system.root" value="${wo.woroot}/Library/Frameworks" />
         <property name="wo.local.root" value="${wo.localroot}/Library/Frameworks" />
-        <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
         <property name="wonder.root" value="${basedir}" />
     </target>
 
