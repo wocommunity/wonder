@@ -117,7 +117,7 @@ public class ERXDirectAction extends WODirectAction {
         return result;
     }
 
-    public WOComponent logoutAction() {
+    public WOActionResults logoutAction() {
         if (existingSession()!=null) {
             existingSession().terminate();
         }
