@@ -39,6 +39,12 @@ public class Session extends ERXSession {
         return (WOComponent)qpi;
     }
 
+    public WOComponent findAnActor() {
+        QueryPageInterface qpi = (QueryPageInterface)D2W.factory().pageForConfigurationNamed("FindTalent",
+                                                                                             this);
+        return (WOComponent)qpi;
+    }
+
     public WOComponent listAllMovies() {
         ListPageInterface lpi = (ListPageInterface)D2W.factory().pageForConfigurationNamed("ListAllMovies",
                                                                                            this);
