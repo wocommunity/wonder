@@ -406,18 +406,30 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
                 }
             }
             extraInfo.setObjectForKey(context.request().uri(), "uri");
-            /* Nice information to have if you are a d2w application,
-                however ERExtensions does not link D2W.
-                if (context.page() instanceof D2WComponent) {
-                    D2WContext c=((D2WComponent)context.page()).d2wContext();
-                    String pageConfiguration=(String)c.valueForKey("pageConfiguration");
-                    if (pageConfiguration!=null)
-                        extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
+            NSSelector d2wSelector = new NSSelector("d2wContext");
+                if (d2wSelector.implementedByObject(context.page())) {
+                    try {
+                       NSKeyValueCoding c = (NSKeyValueCoding)d2wSelector.invoke(context.page());
+                        if(c != null) {
+                            String pageConfiguration=(String)c.valueForKey("pageConfiguration");
+                            if (pageConfiguration!=null) {
+                                extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
+                            }
+                            String propertyKey=(String)c.valueForKey("propertyKey");
+                            if (propertyKey!=null) {
+                                extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
+                            }
+                            NSArray displayPropertyKeys=(NSArray)c.valueForKey("displayPropertyKeys");
+                            if (displayPropertyKeys != null) {
+                            	extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
+                            }
+                        }
+                    } catch(Exception ex) {
+                    }
                 }
-            */
-            if (context.hasSession())
-                if (context.session().statistics() != null)
+                if (context.hasSession() && context.session().statistics() != null) {
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
+                }
         }
         return extraInfo;
     }
@@ -435,9 +447,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     public WOResponse reportException(Throwable exception, NSDictionary extraInfo) {
         Throwable t = exception instanceof NSForwardException ? ((NSForwardException) exception).originalException() : exception;
         
-        log.error("Exception caught, " + exception.getMessage() + " extra info: "
-                  + extraInfo, t);
-        t.printStackTrace();
+        log.error("Exception caught: " + exception.getMessage() + "\nExtra info: " + extraInfo + "\n", t);
         return null;
     }
 
@@ -605,7 +615,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     public WOContext createContextForRequest(WORequest request) {
         WOContext context = super.createContextForRequest(request);
         // We only want to push in the context the first time it is
-        // created, ie we don't want to loose the current context
+        // created, ie we don't want to lose the current context
         // when we create a context for an error page.
         if (ERXThreadStorage.valueForKey("wocontext") == null) {
             ERXThreadStorage.takeValueForKey(context, "wocontext");
