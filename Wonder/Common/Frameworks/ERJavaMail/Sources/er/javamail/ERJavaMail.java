@@ -489,7 +489,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      */
     protected EOOrQualifier qualifierArrayForEmailPatterns (NSArray emailPatterns) {
         NSMutableArray patternQualifiers = new NSMutableArray ();
-        for (Enumeration patternEnumerator = emailPatterns.objectEnumerator ()
+        for (Enumeration patternEnumerator = emailPatterns.objectEnumerator();
                  patternEnumerator.hasMoreElements();) {
             String pattern = (String) patternEnumerator.nextElement ();
             patternQualifiers.addObject
