@@ -323,14 +323,14 @@ public class DRMasterCriteria extends Object  {
     }
 
     private String _keyDesc = null;
-    public String keyDesc(){
-        if(_keyDesc == null){
+    public String keyDesc() {
+        if(_keyDesc == null) {
             _keyDesc = super.toString();
         }
         return _keyDesc;
     }
 
     public String toString() {
-        return "<DRMasterCriteria label: \"" + label() + "\"; subCriterias: " + subCriteriaList() + " >";
+        return "<DRMasterCriteria label: \"" + label() + "\"; shouldTotal: " + shouldTotal() + "; subCriterias: " + subCriteriaList() + " >";
     }
 }
