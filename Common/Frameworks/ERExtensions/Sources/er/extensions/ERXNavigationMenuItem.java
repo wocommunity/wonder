@@ -132,6 +132,9 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
                     if (!_meetsDisplayConditions.booleanValue()) break;
                 }
             }
+            if(_meetsDisplayConditions.booleanValue() && navigationItem().qualifier() != null) {
+                _meetsDisplayConditions = navigationItem().qualifier().evaluateWithObject(this) ? Boolean.TRUE : Boolean.FALSE;
+            }
         }
         return _meetsDisplayConditions.booleanValue();
     }
