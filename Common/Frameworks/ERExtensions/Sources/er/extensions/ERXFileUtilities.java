@@ -238,6 +238,9 @@ public class ERXFileUtilities {
      * @return string representation of the file.
      */
     public static String stringFromFile(File f, String encoding) throws IOException {
+        if (encoding == null) {
+            return new String(bytesFromFile(f));
+        }
         return new String(bytesFromFile(f), encoding);
     }
 
@@ -389,7 +392,20 @@ public class ERXFileUtilities {
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
-        return readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding") );
+        Object plist = null;
+        try {
+            plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding") ); 
+        } catch (IllegalArgumentException e) {
+            try {
+                // BUGFIX: we didnt use an encoding before, so java tried to guess the encoding. Now some Localizable.strings plists
+                // are encoded in MacRoman whereas others are UTF-16.
+                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-16" );
+            } catch (IllegalArgumentException e1) {
+                // OK, whatever it is, try to parse it!
+                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, null );
+            }
+        }
+        return plist;
     }
 
     /**
@@ -414,7 +430,8 @@ public class ERXFileUtilities {
         if (filePath!=null) {
             File file = new File(filePath);
             try {
-                result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, encoding));
+                String stringFromFile = stringFromFile(file, encoding);
+                result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
             } catch (IOException ioe) {
                 log.error("ConfigurationManager: Error reading file <"+filePath+">");
             }
