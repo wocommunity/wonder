@@ -1,7 +1,7 @@
 FavIconLink: WOGenericElement {
-    elementName="Link";
-    REL="SHORTCUT ICON";
-    HREF= favIconLink;
+    elementName="link";
+    rel="SHORTCUT ICON";
+    href= favIconLink;
 }
 
 NonNullConditional1: ERXNonNullConditional {
@@ -9,8 +9,8 @@ NonNullConditional1: ERXNonNullConditional {
 }
 
 StyleSheetLink: WOGenericElement {
-    elementName="Link";
-    REL="stylesheet";
-    TYPE="text/css";
-    HREF=styleSheetUrl;
+    elementName="link";
+    rel="stylesheet";
+    type="text/css";
+    href=styleSheetUrl;
 }
