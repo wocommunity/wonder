@@ -9,7 +9,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 
-/* DREditing.h created by Administrator on Mon 30-Nov-1998 */
 public interface DRAttributeEditing  {
 
     public void moveSubAttributeUp(DRAttribute subAtt, boolean up);
