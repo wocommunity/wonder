@@ -13,17 +13,52 @@ import com.webobjects.appserver.*;
 import java.util.*;
 import org.apache.log4j.Category;
 
+/**
+ * Default editing context delegate. This delegate
+ * augments the regular transaction process by adding
+ * the calling of willInsert, willUpdate or willDelete
+ * on enterprise objects that are of type ERXGenericRecord
+ * after saveChanges is called on the editing context, but
+ * before validateForSave is called on the object. These
+ * methods can give the object a last chance to modify itself
+ * before validation occurs. The second enhancement is a built
+ * in flushing of caches on subclasses of ERXGenericRecords
+ * when objects have changes merged in or are invalidated.
+ * Being able to maintain caches on enterprise objects that
+ * are flushed when the underlying values change can be very
+ * handy.
+ */
 public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate {
 
-    ///////////////////////////////////////////  log4j category  /////////////////////////////////////////////////
+    /** logging support */
     public static final Category cat = Category.getInstance(ERXDefaultEditingContextDelegate.class);
+    /** logging support for modified objects */
     public static final Category catMod = Category.getInstance("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
-    
+
+    /**
+     * flag that can tell if the editing context is in
+     * the middle of a will save changes call.
+     */
     // FIXME inherently single threaded
     private boolean _isInWillSaveChanges=false;
+    /**
+     * Can tell if the delegate is in the middle of a
+     * call to will save changes.
+     * @return if the delegate is already processing
+     * 		a request at the time when another request
+     *		comes in.
+     */
     public boolean isInWillSaveChanges() { return _isInWillSaveChanges; }
     
-    // Enumerates through all changes/inserts/updates calling will* if they are of instance tyep ERXGenericRecords.
+    /**
+     * Enumerates through all of the objects that have been
+     * changed, inserted and deleted calling the appropriate
+     * will* method, willInsert, etc. on each of the objects
+     * if they are of type ERXGenericRecord. Note that this
+     * method is called before validateForSave is called on
+     * any of the objects.
+     * @param ec editing context that is about to be saved.
+     */
     public void editingContextWillSaveChanges(EOEditingContext ec) throws Throwable {
         try {
             if (cat.isDebugEnabled()) cat.debug("EditingContextWillSaveChanges: start calling will*");            
@@ -61,7 +96,6 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
                     if (ec.deletedObjects()!=null) catMod.debug("** Deleted Objects "+ec.deletedObjects().count()+" - "+ec.deletedObjects());
                 }
             }
-            
         } catch (Throwable e) {
             if (cat.isDebugEnabled()) // i want this stack trace shown in one of the two categories, but not both
                 cat.debug("Stack Trace:\n" + ERXUtilities.stackTrace(e));
@@ -95,9 +129,16 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
         } finally {
             _isInWillSaveChanges=false;
         }
-
     }
 
+    /**
+     * Returns a string of a verbose look a the given
+     * enterprise object. Also includes the primary key.
+     * @param eo enterprise object to create the debug string
+     * 		for.
+     * @return verbose description of the object.
+     */
+    // MOVEME: If this is usedful then it might be worth putting in EOGenericRecordClazz or ERXEOFUtilities
     private static String toDebugString(EOEnterpriseObject eo) {
         String result=null;
         if (eo!=null) {
@@ -110,7 +151,16 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
         }
         return result;
     }
-
+    /**
+     * When invalidating an object their local
+     * cache is flushed by calling the method: <code>
+     * flushCaches</code> on the enterprise object if
+     * it is an instance of ERXGenericRecord.
+     * @param anEditingContext current editing context
+     * @param anObject enterprise object to be invlidated
+     * @param anEOGlobalID global id to be invalidated
+     * @return true
+     */
     public boolean editingContextShouldInvalidateObject(EOEditingContext anEOEditingContext,
                                                         EOEnterpriseObject anObject,
                                                         EOGlobalID anEOGlobalID) {
@@ -120,7 +170,16 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
         return true;
     }
 
-
+    /**
+     * When merging changes into an object their local
+     * cache is flushed by calling the method: <code>
+     * flushCaches</code> on the enterprise object if
+     * it is an instance of ERXGenericRecord.
+     * @param anEditingContext current editing context
+     * @param object enterprise object to have changes
+     *		merged into it.
+     * @return true
+     */
     public boolean editingContextShouldMergeChangesForObject(EOEditingContext anEditingContext,
                                                              EOEnterpriseObject object) {
         if (object instanceof ERXGenericRecord) {
@@ -128,5 +187,4 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
         }
         return true;
     }
-
 }
