@@ -84,7 +84,7 @@ public class ERXFakeRelationship extends WOComponent {
 	theCurrentItem = aValue;
     }
 
-    public static setFakeRelationshipForKey(EOEnterpriseObject sourceObject, NSArray objects, String relationshipKey, String destinationEntityName, String delimiter) {
+    public static void setFakeRelationshipForKey(EOEnterpriseObject sourceObject, NSArray objects, String relationshipKey, String destinationEntityName, String delimiter) {
 	if(objects.count() > 0) {
 	    EOEntityClassDescription cd = (EOEntityClassDescription)EOClassDescription.classDescriptionForEntityName(destinationEntityName);
 	    EOAttribute pk = (EOAttribute)cd.entity().primaryKeyAttributes().objectAtIndex(0);
@@ -143,13 +143,13 @@ public class ERXFakeRelationship extends WOComponent {
 
     public NSArray selections() {
 	if(selections == null) {
-	    selections = fakeRelationshipForKey(sourceObject(), relationshipKey(), destinationEntityName(), delimiter());
+	    selections = ERXFakeRelationship.fakeRelationshipForKey(sourceObject(), relationshipKey(), destinationEntityName(), delimiter());
 	}
 	return selections;
     }
 
     public void setSelections(NSArray aValue)  {
-	setFakeRelationshipForKey(sourceObject(), aValue, relationshipKey(), destinationEntityName(), delimiter());
+	ERXFakeRelationship.setFakeRelationshipForKey(sourceObject(), aValue, relationshipKey(), destinationEntityName(), delimiter());
 	selections = aValue;
     }
 
