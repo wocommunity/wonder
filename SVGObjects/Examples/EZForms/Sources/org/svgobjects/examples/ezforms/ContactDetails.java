@@ -5,8 +5,8 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 
 public class ContactDetails extends WOComponent  {
-    protected Applicant contact;
-    protected EOEnterpriseObject spouse;
+    public Applicant contact;
+    public EOEnterpriseObject spouse;
     
     public ContactDetails(WOContext context) {
         super(context);
