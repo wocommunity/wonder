@@ -69,10 +69,23 @@ public class ERXMutableArray extends NSMutableArray implements List {
         return dd;
     }
 
+    public static ERXMutableArray fromPropertyList(String arrayAsString) {
+        NSArray a = (NSArray)NSPropertyListSerialization.propertyListFromString(arrayAsString);
+        return new ERXMutableArray(a);
+    }
+
+    public static String toPropertyList(ERXMutableArray array) {
+        return array.toString();
+    }
+
     public NSData toBlob() throws Exception {
         return toBlob(this);
     }
 
+    public String toPropertyList() {
+        return toPropertyList(this);
+    }
+    
     public NSMutableArray mutableClone() {
         return new ERXMutableArray((NSArray)this);
     }
@@ -860,6 +873,11 @@ public class ERXMutableArray extends NSMutableArray implements List {
      * ignored.
      */
     protected transient int modCount = 0;
+
+    public String[] toStringArray() {
+        return ERXArrayUtilities.toStringArray(this);
+    }
+
 }
 
 class SubList extends ERXMutableArray {
@@ -946,7 +964,7 @@ class SubList extends ERXMutableArray {
         modCount++;
         return true;
     }
-
+    
     public Iterator iterator() {
         return listIterator();
     }
