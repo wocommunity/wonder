@@ -141,6 +141,16 @@ public class ERXProperties {
     }
 
     /**
+     * Quick covience method used to determine if the current
+     * webobjects version is 5.2 or higher.
+     * @return if the version of webobjects is 5.2 or better
+     */
+    public static boolean webObjectsVersionIs52OrHigher() {
+        return webObjectsVersionAsDouble() >= 5.2d;
+    }
+
+    
+    /**
      * Cover method for returning an NSArray for a
      * given system property.
      * @param s system property
