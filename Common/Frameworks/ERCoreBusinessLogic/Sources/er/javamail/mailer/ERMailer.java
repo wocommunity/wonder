@@ -58,6 +58,13 @@ public class ERMailer {
     }
 
     //	===========================================================================
+    //	Instance Variable(s)
+    //	---------------------------------------------------------------------------
+
+    /** Caches the message title prefix */
+    protected String messageTitlePrefix;
+
+    //	===========================================================================
     //	Instance Method(s)
     //	---------------------------------------------------------------------------    
     
@@ -189,11 +196,25 @@ public class ERMailer {
             mail.setXMailerHeader(message.xMailer());
 
         // Set the content
-        mail.setSubject(message.title());
+        mail.setSubject(messageTitlePrefix() + message.title());
         mail.setHTMLContent(message.text());
         
         if (message.plainText() != null)
             mail.setHiddenPlainTextContent(message.plainText());
         return mail;
+    }
+
+    /**
+     * The message title prefix is used to distiguish emails generated in different environments.
+     * @return message title prefix
+     */
+    public String messageTitlePrefix() {
+        if (messageTitlePrefix == null) {
+            messageTitlePrefix = ERCoreBusinessLogic.staticStoredValueForKey("ERMailTitleEnvironmentPrefix");
+            if (messageTitlePrefix == null) {
+                messageTitlePrefix = "";
+            }
+        }
+        return messageTitlePrefix;
     }
 }
