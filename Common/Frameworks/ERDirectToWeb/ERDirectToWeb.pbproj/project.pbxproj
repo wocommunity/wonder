@@ -5313,6 +5313,31 @@
 			path = Components/Nonlocalized.lproj/ERDEditStringWithChoices.wo;
 			refType = 2;
 		};
+		F56D7B8B036D945701AD0D07 = {
+			buildArgumentsString = "-emacs -Dproject.name=\"ERDirectToWeb\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml generic.$ACTION";
+			buildPhases = (
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Ant;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = /usr/local/ant/bin/ant;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = Ant;
+			productName = Ant;
+			settingsToExpand = 6;
+			settingsToPassInEnvironment = 287;
+			settingsToPassOnCommandLine = 280;
+			shouldUseHeadermap = 0;
+		};
 		F57E9BF402E3398401CF0E76 = {
 			isa = PBXFileReference;
 			name = ERDQualifierTraversal.java;
@@ -6825,6 +6850,7 @@
 				F5A1454D01FF7F8801A80106,
 				F5A1454F01FF7F8801A80106,
 				F5A146EB01FF7F8801A80106,
+				F56D7B8B036D945701AD0D07,
 			);
 		};
 		F5A143A001FF7F8801A80106 = {
