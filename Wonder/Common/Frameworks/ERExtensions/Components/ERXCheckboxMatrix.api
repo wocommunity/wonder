@@ -16,6 +16,8 @@
 		<binding name="cellpadding"/>
 		<binding name="cellspacing"/>
 		<binding name="cellWidth"/>
+		<binding name="relationshipName"/>
+		<binding name="relationshipOwner"/>
 		<binding name="tableOtherTagString"/>
 
 		<validation message="&apos;list&apos; is a required binding">
