@@ -5,6 +5,52 @@
 	};
 	objectVersion = 38;
 	objects = {
+		4114918A04477CE900000102 = {
+			isa = PBXFrameworkReference;
+			path = ERPrototypes.framework;
+			refType = 3;
+		};
+		4114918B04477CE900000102 = {
+			fileRef = 4114918A04477CE900000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4114918C04477D0200000102 = {
+			buildArgumentsString = "-emacs -Dproject.name=\"BTBusinessLogic\" -Dproject.type=\"framework\" -f ../../../../../Build/build/generic.xml generic.$ACTION";
+			buildPhases = (
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Ant;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = /usr/local/ant/bin/ant;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = Ant;
+			passBuildSettingsInEnvironment = 1;
+			productName = Ant;
+			settingsToExpand = 6;
+			settingsToPassInEnvironment = 287;
+			settingsToPassOnCommandLine = 280;
+		};
+//410
+//411
+//412
+//413
+//414
+//650
+//651
+//652
+//653
+//654
 		650D49AC0206202A00A801E6 = {
 			isa = PBXFrameworkReference;
 			path = ERExtensions.framework;
@@ -43,6 +89,7 @@
 				66DC300F02038090000C9FB2,
 				66DC301002038090000C9FB2,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 66DC2FC502038090000C9FB2;
 			productRefGroup = 66DC2FDE02038090000C9FB2;
@@ -51,6 +98,7 @@
 				66DC2FE202038090000C9FB2,
 				66DC2FE402038090000C9FB2,
 				66DC2FF902038090000C9FB2,
+				4114918C04477D0200000102,
 			);
 		};
 		66DC2FC502038090000C9FB2 = {
@@ -77,6 +125,7 @@
 		};
 		66DC2FD402038090000C9FB2 = {
 			children = (
+				4114918A04477CE900000102,
 				66DC2FD602038090000C9FB2,
 				66DC2FD702038090000C9FB2,
 				66DC2FD802038090000C9FB2,
@@ -231,7 +280,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		66DC2FE302038090000C9FB2 = {
 			isa = PBXTargetDependency;
@@ -250,6 +298,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)BTBusinessLogic";
@@ -300,7 +349,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		66DC2FE502038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -366,6 +414,7 @@
 				66DC2FF502038090000C9FB2,
 				66DC2FF602038090000C9FB2,
 				F5A318A10283953801000104,
+				4114918B04477CE900000102,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,6 +487,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)BTBusinessLogic";
@@ -479,7 +529,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		66DC2FFA02038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -643,6 +692,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -695,6 +746,7 @@
 			refType = 3;
 		};
 		F55AF25402C4D89001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = d2w.d2wmodel;
 			path = Resources/d2w.d2wmodel;
@@ -783,136 +835,163 @@
 			refType = 4;
 		};
 		F55AF29102C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Bug.java;
 			refType = 4;
 		};
 		F55AF29202C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Component.java;
 			refType = 4;
 		};
 		F55AF29302C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Difficulty.java;
 			refType = 4;
 		};
 		F55AF29402C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Framework.java;
 			refType = 4;
 		};
 		F55AF29502C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _People.java;
 			refType = 4;
 		};
 		F55AF29602C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Priority.java;
 			refType = 4;
 		};
 		F55AF29702C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Release.java;
 			refType = 4;
 		};
 		F55AF29802C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _Requirement.java;
 			refType = 4;
 		};
 		F55AF29902C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _RequirementSubType.java;
 			refType = 4;
 		};
 		F55AF29A02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _RequirementType.java;
 			refType = 4;
 		};
 		F55AF29B02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _State.java;
 			refType = 4;
 		};
 		F55AF29C02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _TestItem.java;
 			refType = 4;
 		};
 		F55AF29D02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _TestItemState.java;
 			refType = 4;
 		};
 		F55AF29E02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = BTBusinessLogic.java;
 			refType = 4;
 		};
 		F55AF29F02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Bug.java;
 			refType = 4;
 		};
 		F55AF2A002C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Component.java;
 			refType = 4;
 		};
 		F55AF2A102C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Difficulty.java;
 			refType = 4;
 		};
 		F55AF2A202C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Framework.java;
 			refType = 4;
 		};
 		F55AF2A302C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = People.java;
 			refType = 4;
 		};
 		F55AF2A402C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Priority.java;
 			refType = 4;
 		};
 		F55AF2A502C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Release.java;
 			refType = 4;
 		};
 		F55AF2A602C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Requirement.java;
 			refType = 4;
 		};
 		F55AF2A702C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RequirementSubType.java;
 			refType = 4;
 		};
 		F55AF2A802C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RequirementType.java;
 			refType = 4;
 		};
 		F55AF2A902C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = State.java;
 			refType = 4;
 		};
 		F55AF2AA02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TestItem.java;
 			refType = 4;
 		};
 		F55AF2AB02C4D92601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TestItemState.java;
 			refType = 4;
@@ -1102,18 +1181,21 @@
 			refType = 4;
 		};
 		F5B4426802C5088601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Japanese;
 			path = Resources/Japanese.lproj/Localizable.strings;
 			refType = 2;
 		};
 		F5B4426902C5088701000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/Localizable.strings;
 			refType = 2;
 		};
 		F5B4426A02C5088701000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = Resources/English.lproj/Localizable.strings;
