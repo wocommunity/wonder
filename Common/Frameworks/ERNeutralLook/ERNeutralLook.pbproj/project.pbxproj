@@ -141,8 +141,6 @@
 				9DC9079A0351F85B10CF0E7D,
 				F550BFB703B2535801CCC668,
 				F550BFBA03B253CD01CCC668,
-				94B1A60A067D620200DE641E,
-				94B1A60C067D622B00DE641E,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +269,8 @@
 				946A96BA0468773B00CF0E7D,
 				946A96BB0468773B00CF0E7D,
 				946A96BC0468773B00CF0E7D,
+				9458A8750682254000C57317,
+				9458A8760682254100C57317,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -833,6 +833,18 @@
 //942
 //943
 //944
+		9458A8750682254000C57317 = {
+			fileRef = 94B1A609067D620200DE641E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9458A8760682254100C57317 = {
+			fileRef = 94B1A60B067D622B00DE641E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		946A96B50468773B00CF0E7D = {
 			isa = PBXFileReference;
 			name = down.gif;
@@ -887,23 +899,11 @@
 			path = WebServerResources/top.gif;
 			refType = 4;
 		};
-		94B1A60A067D620200DE641E = {
-			fileRef = 94B1A609067D620200DE641E;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		94B1A60B067D622B00DE641E = {
 			isa = PBXFileReference;
 			name = bottom.gif;
 			path = WebServerResources/bottom.gif;
 			refType = 4;
-		};
-		94B1A60C067D622B00DE641E = {
-			fileRef = 94B1A60B067D622B00DE641E;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 //940
 //941
