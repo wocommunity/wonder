@@ -292,6 +292,7 @@ public class ERXCompilerProxy {
                 CompilerClassLoader cl = null;
 		log.debug("classFiles="+classFiles);
                 e = classFiles.objectEnumerator();
+                NSMutableDictionary kvcAccessors = new NSMutableDictionary();
                 while(e.hasMoreElements()) {
                     cacheEntry = (CacheEntry)e.nextElement();
                     String className = cacheEntry.classNameWithPackage();
@@ -300,6 +301,7 @@ public class ERXCompilerProxy {
 			    cl = new CompilerClassLoader(_destinationPath, activeLoader);
                         //   Object o = Class.forName(className).newInstance();
                         Class class_ = cl.loadClass(className, true);
+
                         // the whole magic is in these lines
                         Class oldClass_ = classForName(cacheEntry.className());
                         setClassForName(class_, className);
@@ -313,6 +315,26 @@ public class ERXCompilerProxy {
                             NSKeyValueCoding.ValueAccessor._flushCaches();
                             didReset = true;
                         }
+
+                        if(cacheEntry.packageName().length() > 0 ) {
+                            Object kvc = kvcAccessors.objectForKey(cacheEntry.packageName());
+                            if(kvc == null) {
+                                try {
+                                    Class kvcAccessor = cl.reloadClass(cacheEntry.packageName() + ".KeyValueCodingProtectedAccessor");
+                                    log.info("KVC for " + cacheEntry.packageName() + ": " + kvcAccessor);
+                                    if(kvcAccessor != null) {
+                                        log.info("Classloaders :" + kvcAccessor.getClassLoader() + " vs " + class_.getClassLoader());
+                                        kvcAccessors.setObjectForKey(kvcAccessor, cacheEntry.packageName());
+                                        NSKeyValueCoding.ValueAccessor.setProtectedAccessorForPackageNamed((NSKeyValueCoding.ValueAccessor)kvcAccessor.newInstance(), cacheEntry.packageName());
+                                    } else {
+                                        kvcAccessors.setObjectForKey("<no entry>", cacheEntry.packageName());
+                                    }
+                                } catch(Exception kvcException) {
+                                    log.info("Error setting KVC accessor:" + kvcException);
+                                }
+                            }
+                        }
+                        
                         if(WODirectAction.class.isAssignableFrom(class_)) {
                             WOApplication app = WOApplication.application();
                             WORequestHandler currentDAHandler = app.requestHandlerForKey(app.directActionRequestHandlerKey());
@@ -421,6 +443,10 @@ public class ERXCompilerProxy {
             return _path;
         }
 
+        public String packageName() {
+            return _packageName;
+        }
+        
         public boolean needsRefresh() {
             if(_sourceFile.exists()) {
                 if(classFile() != null && classFile().lastModified() < _sourceFile.lastModified()) {
@@ -560,17 +586,17 @@ public class ERXCompilerProxy {
 	    //this checks if the name from the class is one of the files that were
 	    //compiled. if not, then this findClass method will fail, we must use the
 	    //normal class loader to find the class.
-	    boolean contains = false;
-	    Enumeration e = classFiles.objectEnumerator();
-	    while (e.hasMoreElements()) {
-		CacheEntry ce = (CacheEntry)e.nextElement();
-		if (name.startsWith(ce.classNameWithPackage())) {
+            boolean contains = false;
+            Enumeration e = classFiles.objectEnumerator();
+            while (e.hasMoreElements()) {
+                CacheEntry ce = (CacheEntry)e.nextElement();
+                if (name.startsWith(ce.classNameWithPackage())) {
                     classLoaderLog.debug("CompilerClassLoader.findClass:" + name + " is in array");
-		    contains = true;
-		    break;
-		}
-	    }
-	    
+                    contains = true;
+                    break;
+                }
+            }
+            
 	    if (contains) {
 		byte buffer[] = null;
 		Class newClass;
@@ -599,11 +625,13 @@ public class ERXCompilerProxy {
 		    throw new RuntimeException(t.getMessage());
 		}
 		return newClass;
-	    } else {
-		//this class is a class that must be accessable with the normal classloader
-		//it cannot be found in the filesystem because it was not compiled by CP
-		Class clazz = Class.forName(name);
-		if (clazz != null) {
+            } else {
+                //this class is a class that must be accessable with the normal classloader
+                //it cannot be found in the filesystem because it was not compiled by CP
+                Class clazz = null;
+                clazz = Class.forName(name);
+
+                if (clazz != null) {
 		    return clazz;
 		} else {
 		    throw new IllegalStateException("could not get class "+name+" with classForName method!");
@@ -615,7 +643,37 @@ public class ERXCompilerProxy {
         public URL getResource(String name) {
             return ClassLoader.getSystemResource(name);
         }
+        /** Tries to re-load the given class into the current class loader. It is used to push the KeyValueCodingProtectedAccessor class back into the system.*/
+        public Class reloadClass(String className) {
+            Class c = null;
+            try {
+                byte buffer[] = null;
+                String fileName = className.replace('.', '/') + ".class";
+                InputStream in = null;
+                File classFile = findClassFile(className);
+                if(classFile != null) {
+                    in = new FileInputStream(classFile);
+                } else {
+                    in = getResource(fileName).openStream();
+                }
+                int length = in.available();
+                if (length != 0) {
+                    buffer = new byte[length];
+                    in.read(buffer);
+                    in.close();
+                }
+                if(buffer != null) {
+                    log.info(className + ":" + buffer.length + "," + buffer);
+                    c = defineClass(className, buffer, 0, buffer.length);
+                }
+            } catch (Throwable t) {
+                log.warn("Error relaoding class "+className+": " + t);
+            }
+            return c;
+        }
+
     }
+
 
     private static URL[] mangleClasspathForClassLoader(String s) {
 	String s1 = File.pathSeparatorChar != ';' ? "file://" : "file:///";
