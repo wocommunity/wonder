@@ -203,9 +203,11 @@ public abstract class ERXApplication extends WOApplication {
      */
     public String rawName() { return super.name(); }
 
+
+
     /**
-     *  Adds a bunch of useful information relative to the current state when the exception
-     *  occurried. Potentially added information:<br/>
+        *  Puts together a dictionary with a bunch of useful information relative to the current state when the exception
+     *  occurred. Potentially added information:<br/>
      * <ol>
      * <li>the current page name</li>
      * <li>the current component</li>
@@ -217,7 +219,7 @@ public abstract class ERXApplication extends WOApplication {
      * <br/>
      * @return the WOResponse of the generated exception page.
      */
-    public WOResponse handleException(Exception exception, WOContext context) {
+    public NSDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
         NSMutableDictionary extraInfo=new NSMutableDictionary();
         if (context!=null && context.page()!=null) {
             extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
@@ -235,18 +237,28 @@ public abstract class ERXApplication extends WOApplication {
             }
             extraInfo.setObjectForKey(context.request().uri(), "uri");
             /* Nice information to have if you are a d2w application,
-               however ERExtensions does not link D2W.
-            if (context.page() instanceof D2WComponent) {
-                D2WContext c=((D2WComponent)context.page()).d2wContext();
-                String pageConfiguration=(String)c.valueForKey("pageConfiguration");
-                if (pageConfiguration!=null)
-                    extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
-            }
-             */
+                however ERExtensions does not link D2W.
+                if (context.page() instanceof D2WComponent) {
+                    D2WContext c=((D2WComponent)context.page()).d2wContext();
+                    String pageConfiguration=(String)c.valueForKey("pageConfiguration");
+                    if (pageConfiguration!=null)
+                        extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
+                }
+            */
             if (context.hasSession())
                 if (context.session().statistics() != null)
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
         }
+        return extraInfo;
+    }
+
+    
+    /**
+     *  Logs extra information about the current state
+     * @return the WOResponse of the generated exception page.
+     */
+    public WOResponse handleException(Exception exception, WOContext context) {
+        NSDictionary extraInfo=extraInformationForExceptionInContext(exception, context);
         log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
         return super.handleException(exception, context);
     }    
