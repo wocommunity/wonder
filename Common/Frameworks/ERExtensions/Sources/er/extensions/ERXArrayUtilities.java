@@ -779,13 +779,8 @@ public class ERXArrayUtilities extends Object {
             StringBuffer buffer = new StringBuffer();
             for(int i = 0; i < count; i++) {
                 String attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i)).toString();
-                if (i == 0) {
-                    buffer.append(attributeValue);
-                } else if  (i == (count - 1)) {
-                    buffer.append(finalSeparator + attributeValue);
-                } else {
-                    buffer.append(separator + attributeValue);
-                }
+                if (i>0) buffer.append(i == (count - 1) ? finalSeparator : separator);
+                buffer.append(attributeValue);
             }
             result=buffer.toString();
         }
