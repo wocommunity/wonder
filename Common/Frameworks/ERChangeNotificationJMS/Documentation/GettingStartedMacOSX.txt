@@ -87,14 +87,18 @@ Shutting down the OpenJMS Server
 12. To stop the server, type: 
 
 cd $OPENJMS_HOME/bin
-admin.sh -config ../config/rmi_jms.xml & 
-
-Then choose, Actions -> Shutdown OpenJMSServer from the OpenJMS Administration tool. 
+admin.sh -config ../config/rmi_jms_jdbm.xml -stopServer 
 
 
 Optional: Startup and Shutdown the OpenJMS Server Automatically
 ----------------------------------------------------------------
-Put OpenJMS folder under Support/StartupItemsMacOSX folder into /Library/StartupItems folder. 
+Put OpenJMS folder under Support/StartupItemsMacOSX folder into /Library/StartupItems folder. Now OpenJMS server will be automatically started when Mac OS X system starts up, and will be stopped when the system shuts down. 
+
+Also, now you can manually start, stop, restart the OpenJMS server by the following way:
+
+sudo SystemStarter start OpenJMS
+sudo SystemStarter stop OpenJMS
+sudo SystemStarter restart OpenJMS
 
 
 Optional: Improving Performance with MySQL, PostgreSQL, FrontBase, Oracle, etc.
