@@ -24,7 +24,7 @@ import java.io.*;
  * if javascript has been enabled, and enhanced localization
  * support has been added.
  */
-public class ERXSession extends WOSession {
+public class ERXSession extends WOSession implements Serializable {
 
     /** logging support */
     public static ERXLogger log = ERXLogger.getERXLogger(ERXSession.class);
@@ -63,10 +63,69 @@ public class ERXSession extends WOSession {
     /** flag to indicate if java script has been set */
     protected boolean _javaScriptInitialized=false;
 
-    /** 
-     * holds a debugging store for a given session. 
-     */
+    /** holds a debugging store for a given session. */
     protected NSMutableDictionary _debuggingStore;
+
+    /** the receiver of the variours notifications */
+    transient private Observer _observer;
+    
+    /** 
+     * returns the observer object for this session. 
+     * If it doesn't ever exist, one will be created. 
+     * 
+     * @return the observer
+     */ 
+    public Observer observer() {
+        if (_observer == null) 
+            _observer = new Observer(this);
+        return _observer;
+    }
+
+    /** 
+     * The Observer inner class encapsulates functions 
+     * to handle various notifications. 
+     */ 
+    public static class Observer {
+
+        /** the parent session */ 
+        transient protected ERXSession session; 
+        
+        /** private constructor; prevents instantiation in this way */ 
+        private Observer() { super(); }
+        
+        /** creates observer object which works with the given session */ 
+        public Observer(ERXSession session) {
+            super();
+            this.session = session;
+        }
+    
+        /** 
+         * resets the reference to localizer when localization 
+         * templates or localizer class itself is updated. 
+         */
+        public void localizationDidReset(NSNotification n) {
+            if (session._localizer == null)   return; 
+            
+            String currentLanguage = session._localizer.language();
+            session._localizer = ERXLocalizer.localizerForLanguage(currentLanguage);
+            if (log.isDebugEnabled()) {
+                log.debug("Detected changes in the localizers. Reset reference to " + currentLanguage 
+                            + " localizer for session " + session.sessionID());
+            }
+        }
+
+        /** 
+         * registers this observer object for 
+         * {@link ERXLocalizer.LocalizationDidResetNotification} 
+         */ 
+        private void registerForLocalizationDidResetNotification() {
+            NSNotificationCenter.defaultCenter().addObserver(
+                    this, 
+                    new NSSelector("localizationDidReset", ERXConstant.NotificationClassArray), 
+                    ERXLocalizer.LocalizationDidResetNotification, 
+                    null);
+        }
+    }
 
     /**
      * Method to get the current localizer for this
@@ -79,23 +138,10 @@ public class ERXSession extends WOSession {
     public ERXLocalizer localizer() {
         if (_localizer == null) {
             _localizer = ERXLocalizer.localizerForLanguages(languages());
+            if(! WOApplication.application().isCachingEnabled()) 
+                observer().registerForLocalizationDidResetNotification();
         }
         return _localizer;
-    }
-
-    /**
-     * Cover method to set the current localizer
-     * to the localizer for that language.
-     * @param language to set the current localizer
-     *		for.
-     */
-    public void setLanguage(String language) {
-        ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguage(language);
-        if (! newLocalizer.equals(_localizer)) {
-            _localizer = newLocalizer;
-            ERXLocalizer.setCurrentLocalizer(_localizer);
-            _messageEncoding = new ERXMessageEncoding(_localizer.language());
-        }
     }
 
     /**
@@ -107,6 +153,54 @@ public class ERXSession extends WOSession {
      */
     public String language() {
         return localizer().language();
+    }
+
+    /**
+     * Cover method to set the current localizer
+     * to the localizer for that language.
+     * <p>
+     * Also updates languages list with the new single language. 
+     * 
+     * @param language to set the current localizer for.
+     * @see #language, #setLanguages
+     */
+    public void setLanguage(String language) {
+        ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguage(language);
+        if (! newLocalizer.equals(_localizer)) {
+            if (_localizer == null  &&  ! WOApplication.application().isCachingEnabled()) 
+                observer().registerForLocalizationDidResetNotification();
+
+            _localizer = newLocalizer;
+            ERXLocalizer.setCurrentLocalizer(_localizer);
+            _messageEncoding = new ERXMessageEncoding(_localizer.language());
+
+            setLanguages(new NSArray(_localizer.language()));
+        }
+    }
+
+    /** 
+     * Sets the languages list for which the session is localized. 
+     * The ordering of language strings in the array determines 
+     * the order in which the application will search .lproj 
+     * directories for localized strings, images, and component 
+     * definitions.
+     * <p>
+     * Also updates localizer and messageEncodings. 
+     * 
+     * @param languageList  the array of languages for the session
+     * @see #language, #setLanguage
+     */ 
+    public void setLanguages(NSArray languageList) {
+        super.setLanguages(languageList);
+        ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguages(languageList);
+        if (! newLocalizer.equals(_localizer)) {
+            if (_localizer == null  &&  ! WOApplication.application().isCachingEnabled()) 
+                observer().registerForLocalizationDidResetNotification();
+
+            _localizer = newLocalizer;
+            ERXLocalizer.setCurrentLocalizer(_localizer);
+            _messageEncoding = new ERXMessageEncoding(_localizer.language());
+        }
     }
 
     /**
@@ -163,13 +257,8 @@ public class ERXSession extends WOSession {
      * @return the session's default editing context with
      * 		the default delegate set.
      */
-    // FIXME: This check should move to the session constructor
-    //		also should use the ec factory methods to just
+    // FIXME: Should use the ec factory methods to just
     //		create and set the editing context.
-    // (tatsuya) But if this is moved to the constructor, 
-    //           will loose the ability to setDefaultEditingContext 
-    //           since it throws exception after  
-    //           super.dafaultEditingContext() is invoked. 
     public EOEditingContext defaultEditingContext() {
         EOEditingContext ec = super.defaultEditingContext();
         if (ec.delegate() == null)
@@ -358,6 +447,8 @@ public class ERXSession extends WOSession {
         // WOFIX: 5.1.2
         // work around a bug in WO 5.1.2 where the sessions EC will keep a lock on the SEC
         defaultEditingContext().setSharedEditingContext(null);
+        if (_observer != null) 
+            NSNotificationCenter.defaultCenter().removeObserver(_observer);
         if (_browser != null) 
             ERXBrowserFactory.factory().releaseBrowser(_browser);
         super.terminate();
