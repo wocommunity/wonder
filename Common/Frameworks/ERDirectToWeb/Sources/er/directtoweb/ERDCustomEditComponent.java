@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 // A VERY USEFUL COMPONENT - has some crusty stuff in it, but look mainly at valueForBinding and hasBinding.
 // 	this guy works in conjunction with D2WCustomComponentWithArgs
@@ -22,8 +21,8 @@ public abstract class ERDCustomEditComponent extends WOComponent {
         super(context);
     }
 
-    /////////////////////////////////  log4j category  ////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERDCustomEditComponent.class);
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomEditComponent.class);
 
     //////////////////////////////////////// Static Methods //////////////////////////////////////////////////////////////
     protected static Integer TRUE = ERXConstant.OneInteger;
@@ -146,40 +145,40 @@ public abstract class ERDCustomEditComponent extends WOComponent {
 
     public Object valueForBinding(String binding) {
         Object value=null;
-        if (cat.isDebugEnabled()) {
-            cat.debug("***** CustomEditComponent.valueForBinding(binding = "+binding+")");
-            cat.debug("***** CustomEditComponent: parent(): + (" + ((parent() == null) ? "null" : parent().getClass().getName()) + ")");
-            cat.debug("                           " + parent());
-            cat.debug("***** CustomEditComponent: parent() instanceof CustomEditComponent == " + (parent() instanceof ERDCustomEditComponent));
-            cat.debug("***** CustomEditComponent: parent() instanceof D2WCustomComponentWithArgs == " + (parent() instanceof ERD2WCustomComponentWithArgs));
-            cat.debug("***** CustomEditComponent: parent() instanceof D2WStatelessCustomComponentWithArgs == " + (parent() instanceof ERD2WStatelessCustomComponentWithArgs));
-            cat.debug("***** CustomEditComponent: parent() instanceof D2WCustomQueryComponentWithArgs == " + (parent() instanceof ERDCustomQueryComponentWithArgs));
+        if (log.isDebugEnabled()) {
+            log.debug("***** CustomEditComponent.valueForBinding(binding = "+binding+")");
+            log.debug("***** CustomEditComponent: parent(): + (" + ((parent() == null) ? "null" : parent().getClass().getName()) + ")");
+            log.debug("                           " + parent());
+            log.debug("***** CustomEditComponent: parent() instanceof CustomEditComponent == " + (parent() instanceof ERDCustomEditComponent));
+            log.debug("***** CustomEditComponent: parent() instanceof D2WCustomComponentWithArgs == " + (parent() instanceof ERD2WCustomComponentWithArgs));
+            log.debug("***** CustomEditComponent: parent() instanceof D2WStatelessCustomComponentWithArgs == " + (parent() instanceof ERD2WStatelessCustomComponentWithArgs));
+            log.debug("***** CustomEditComponent: parent() instanceof D2WCustomQueryComponentWithArgs == " + (parent() instanceof ERDCustomQueryComponentWithArgs));
         }
         if (super.hasBinding(binding)) {
-            cat.debug("***** CustomEditComponent: super.hasBinding(binding) == true");
+            log.debug("***** CustomEditComponent: super.hasBinding(binding) == true");
             value = super.valueForBinding(binding);
-            cat.debug("***** CustomEditComponent: value = " + value);
+            log.debug("***** CustomEditComponent: value = " + value);
         } else {
             WOComponent parent=parent();
             if (parent instanceof ERDCustomEditComponent ||
                 parent instanceof ERD2WCustomComponentWithArgs ||
                 parent instanceof ERD2WStatelessCustomComponentWithArgs ||
                 parent instanceof ERDCustomQueryComponentWithArgs) {
-                cat.debug("***** CustomEditComponent: inside the parent instanceof branch");
+                log.debug("***** CustomEditComponent: inside the parent instanceof branch");
                 // this will eventually bubble up to a D2WCustomComponentWithArgs, where it will (depending on the actual binding)
                 // go to the d2wContext
                 value = parent.valueForBinding(binding);
             }
         }
         if (value == null && binding != null && extraBindings() != null) {
-            cat.debug("***** CustomEditComponent: inside the extraBindings branch");
+            log.debug("***** CustomEditComponent: inside the extraBindings branch");
             value = extraBindings().objectForKey(binding);
         }
-        if (cat.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             if (value != null)
-                cat.debug("***** CustomEditComponent: returning value: (" + value.getClass().getName() + ")" + value);
+                log.debug("***** CustomEditComponent: returning value: (" + value.getClass().getName() + ")" + value);
             else
-                cat.debug("***** CustomEditComponent: returning value: null");
+                log.debug("***** CustomEditComponent: returning value: null");
         }
         return value;
     }

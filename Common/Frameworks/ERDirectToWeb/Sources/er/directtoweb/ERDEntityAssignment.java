@@ -10,8 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
 import er.extensions.ERXUtilities;
+import er.extensions.ERXLogger;
 import java.util.Enumeration;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
     public static final NSArray _DEPENDENT_KEYS=new NSArray("pageConfiguration");
 
     /** logging support */
-    public final static Category cat = Category.getInstance("er.directtoweb.rules.ERDefaultEntityAssignment");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDefaultEntityAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -84,12 +84,12 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
             } else if (possibleEntities.count() > 1) {
                 ERXUtilities.sortEOsUsingSingleKey(possibleEntities, "length");
                 if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
-                    cat.warn("Found multiple entities of the same length for pageConfiguration: " + c.valueForKey("pageConfiguration")
+                    log.warn("Found multiple entities of the same length for pageConfiguration: " + c.valueForKey("pageConfiguration")
                              + " possible entities: " + possibleEntities);
                 result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
             }
-            if (cat.isDebugEnabled())
-                cat.debug("Found possible entities: " + possibleEntities + " for pageConfiguration: " + c.valueForKey("pageConfiguration")
+            if (log.isDebugEnabled())
+                log.debug("Found possible entities: " + possibleEntities + " for pageConfiguration: " + c.valueForKey("pageConfiguration")
                           + " result: " + result);
             return result;
         }

@@ -16,14 +16,13 @@ import java.util.*;
 import java.io.*;
 import java.lang.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 // new caching scheme, plus log4j integration.
 public class ERD2WModel extends D2WModel {
 
-    /////////////////////////////////////  log4j category  ////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERD2WModel.class);
-    public static final Category ruleDecodeCat = Category.getInstance("er.directtoweb.rules.decode");
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WModel.class);
+    public static final ERXLogger ruleDecodeLog = ERXLogger.getERXLogger("er.directtoweb.rules.decode");
 
     ///////////////////////////////////// Notification Titles /////////////////////////////////
     // Register for this notification to have the hook in place to load non-d2wmodel based rules
@@ -60,22 +59,22 @@ public class ERD2WModel extends D2WModel {
     
     protected void sortRules() {
         // This allows other non-d2wmodel file based rules to be loaded.
-        cat.debug("posting WillSortRules.");
+        log.debug("posting WillSortRules.");
         NSNotificationCenter.defaultCenter().postNotification(WillSortRules, this);
-        cat.debug("posted WillSortRules.");
+        log.debug("posted WillSortRules.");
         // We don't want dynamically loaded rules to cause rapid-turnaround to not work.
         setDirty(false);
             //uniqueRuleAssignments();
             //uniqueQualifiers(rules());
             super.sortRules();
-        cat.debug("called super sortRules.");
+        log.debug("called super sortRules.");
         /*
          the following sort call was to attempt to make assistant generated files more CVS compatible
          by preserving the rule order better. Commenting out since it's very memory hungry (calling description on every rule)
          and we are not using the Assistant
         EOSortOrdering.sortArrayUsingKeyOrderArray((NSMutableArray)rules(),
                                                    _ruleSortOrderingKeyVector);
-        cat.debug("Finished sorting.");
+        log.debug("Finished sorting.");
         */
         if (rules() !=null && rules().count() > 0) prepareDataStructures();
     }
@@ -127,7 +126,7 @@ public class ERD2WModel extends D2WModel {
     protected static ERD2WModel _defaultModel;
     public static ERD2WModel defaultERModel() { return _defaultModel; }
 
-    public static final Category ruleTraceEnabledCat = Category.getInstance("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
+    public static final ERXLogger ruleTraceEnabledLog = ERXLogger.getERXLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
     protected Object fireRuleForKeyPathInContext(String keyPath, D2WContext context) {
         String[] significantKeys=(String[])_significantKeysPerKey.get(keyPath);
         if (significantKeys==null) return null;
@@ -142,35 +141,35 @@ public class ERD2WModel extends D2WModel {
         Object result=_cache.get(k);
         if (result==null) {
             boolean resetTraceRuleFiring = false;
-            Category ruleFireCat=null;
-            if (ruleTraceEnabledCat.isDebugEnabled()) {
-                Category ruleCandidatesCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".candidates");
-                ruleFireCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".fire");
-                if (ruleFireCat.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
+            ERXLogger ruleFireLog=null;
+            if (ruleTraceEnabledLog.isDebugEnabled()) {
+                ERXLogger ruleCandidatesLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".candidates");
+                ruleFireLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".fire");
+                if (ruleFireLog.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
                     NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
                     resetTraceRuleFiring = true;
                 }
-                if (ruleCandidatesCat.isDebugEnabled()) {
-                    ruleFireCat.debug("CANDIDATES for keyPath: " + keyPath + "\n" +
+                if (ruleCandidatesLog.isDebugEnabled()) {
+                    ruleFireLog.debug("CANDIDATES for keyPath: " + keyPath + "\n" +
                                       descriptionForRuleSet(canidateRuleSetForRHSInContext(keyPath, context)));
                 }
             }
             result=super.fireRuleForKeyPathInContext(keyPath,context);
             _cache.put(k,result==null ? NULL_VALUE : result);
-            if (ruleTraceEnabledCat.isDebugEnabled()) {
-                if (ruleFireCat.isDebugEnabled())
-                ruleFireCat.debug("FIRE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: " + new NSArray(significantKeys)
+            if (ruleTraceEnabledLog.isDebugEnabled()) {
+                if (ruleFireLog.isDebugEnabled())
+                ruleFireLog.debug("FIRE: " + keyPath + " for propertyKey: " + context.propertyKey() + " depends on: " + new NSArray(significantKeys)
                               + " value: " + (result==null ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
             if (resetTraceRuleFiring) {
                 NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
             }
         } else {
-            if (ruleTraceEnabledCat.isDebugEnabled()) {
-                Category ruleCat = Category.getInstance("er.directtoweb.rules." + keyPath + ".cache");
-                if (ruleCat.isDebugEnabled())
-                    ruleCat.debug("CACHE: " + keyPath +  " for propertyKey: " + context.propertyKey() + " depends on: "
+            if (ruleTraceEnabledLog.isDebugEnabled()) {
+                ERXLogger ruleLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".cache");
+                if (ruleLog.isDebugEnabled())
+                    ruleLog.debug("CACHE: " + keyPath +  " for propertyKey: " + context.propertyKey() + " depends on: "
                                   + new NSArray(significantKeys) + " value: " + (result==NULL_VALUE ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));
             }
             if (result==NULL_VALUE)
@@ -230,7 +229,7 @@ public class ERD2WModel extends D2WModel {
     }
 
     public void prepareDataStructures() {
-        cat.debug("prepareDataStructures");
+        log.debug("prepareDataStructures");
         boolean localizationEnabled = ERXLocalizer.isLocalizationEnabled();
         // is a dictionary which will contain for each rhs key, which other keys it depends
         // on, for single rule hops
@@ -299,7 +298,7 @@ public class ERD2WModel extends D2WModel {
             c.keys=new NSMutableArray();
         }
         // we then reduce the graph
-        cat.debug("reducing graph");
+        log.debug("reducing graph");
         boolean touched=true;
         while (touched) {
             touched=false;
@@ -344,7 +343,7 @@ public class ERD2WModel extends D2WModel {
     }
 
     protected void invalidateCaches() {
-        cat.info("Invalidating cache");
+        log.info("Invalidating cache");
         if (_cache!=null)
             _cache.clear();
         if (_systemCache!=null)
@@ -355,7 +354,7 @@ public class ERD2WModel extends D2WModel {
     }
 
     public void resetModel() {
-        cat.info("Resetting Model");
+        log.info("Resetting Model");
         if (_filePathRuleTraceCache!=null)
             _filePathRuleTraceCache.clear();
         NSNotificationCenter.defaultCenter().postNotification(ModelWillReset, this);
@@ -368,12 +367,12 @@ public class ERD2WModel extends D2WModel {
     protected File currentFile() { return _currentFile; }
 
     protected void mergeFile(File modelFile) {
-        if(cat.isDebugEnabled()) cat.debug("Merging rule file: "+modelFile.getPath());
+        if(log.isDebugEnabled()) log.debug("Merging rule file: "+modelFile.getPath());
         setCurrentFile(modelFile);
-        if(ruleDecodeCat.isDebugEnabled()) {
+        if(ruleDecodeLog.isDebugEnabled()) {
             try {
                 NSDictionary dic = Services.dictionaryFromFile(modelFile);
-                ruleDecodeCat.info("Got dictionary for file: " + modelFile + "\n\n");
+                ruleDecodeLog.info("Got dictionary for file: " + modelFile + "\n\n");
                 for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
                     NSDictionary aRule = (NSDictionary)e.nextElement();
                     NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
@@ -381,11 +380,11 @@ public class ERD2WModel extends D2WModel {
                     try {
                         addRule((Rule)archiver.decodeObjectForKey("rule"));
                     } catch (Exception ex) {
-                        ruleDecodeCat.error("Bad rule: " + aRule);
+                        ruleDecodeLog.error("Bad rule: " + aRule);
                     }
                 }
             } catch (IOException except) {
-                ruleDecodeCat.error("Could not load rule file: " + except.getMessage());
+                ruleDecodeLog.error("Could not load rule file: " + except.getMessage());
             }
         }
         super.mergeFile(modelFile);
@@ -398,12 +397,12 @@ public class ERD2WModel extends D2WModel {
     protected void uniqueRuleAssignments(NSArray rules) {
         if (rules != null && rules.count() > 0) {
             int uniquedRules = 0;
-            if (cat.isDebugEnabled()) cat.debug("Starting Assignment uniquing for " + rules.count() + " rules");
+            if (log.isDebugEnabled()) log.debug("Starting Assignment uniquing for " + rules.count() + " rules");
             //Vector uniqueAssignments = new Vector();
             //Hashtable _uniqueAssignments=new Hashtable();
             for (int c = 0; c < rules.count() - 1; c++) {
                 //if (c % 100 == 0)
-                //    cat.debug("Out of : " + c + " rules, duplicates: " + uniquedRules);
+                //    log.debug("Out of : " + c + " rules, duplicates: " + uniquedRules);
                 Rule r = (Rule)rules.objectAtIndex(c);
                 if (r != null && r.rhs() != null) {
                     Vector v = (Vector)_uniqueAssignments.get(r.rhs().keyPath());
@@ -421,13 +420,13 @@ public class ERD2WModel extends D2WModel {
                         _uniqueAssignments.put(r.rhs().keyPath(), m);
                     }
                 } else {
-                    cat.warn("Rule is null: " + r + " or rhs: " + (r != null ? r.rhs() : null));
+                    log.warn("Rule is null: " + r + " or rhs: " + (r != null ? r.rhs() : null));
                 }
             }
             //h = null;
             //if (uniquedRules > 0)
             //    ERXExtensions.forceGC(0);
-            if (cat.isDebugEnabled()) cat.debug("Finished Assignment uniquing, got rid of " + uniquedRules + " duplicate assignment(s)");
+            if (log.isDebugEnabled()) log.debug("Finished Assignment uniquing, got rid of " + uniquedRules + " duplicate assignment(s)");
         }
     }
 
@@ -449,12 +448,12 @@ public class ERD2WModel extends D2WModel {
             uniquedQualifiers = 0;
             totalQualifiers = 0;
             int replacedQualifiers = 0;
-            if (cat.isDebugEnabled()) cat.debug("Starting Qualifier uniquing for " + rules.count() + " rules");
+            if (log.isDebugEnabled()) log.debug("Starting Qualifier uniquing for " + rules.count() + " rules");
             //Vector uniqueAssignments = new Vector();
             //Hashtable _uniqueAssignments=new Hashtable();
             for (int c = 0; c < rules.count() - 1; c++) {
                 if (c % 100 == 0)
-                    cat.debug("Out of : " + c + " rules, qualifiers: " + totalQualifiers + " duplicates: "
+                    log.debug("Out of : " + c + " rules, qualifiers: " + totalQualifiers + " duplicates: "
                               + uniquedQualifiers + " replaced: " + replacedQualifiers);
                 Rule r = (Rule)rules.objectAtIndex(c);
                 if (r != null && r.lhs() != null) {
@@ -468,14 +467,14 @@ public class ERD2WModel extends D2WModel {
                             //uniquedQualifiers++;
                         }
                     } catch (NullPointerException npe) {
-                        cat.warn("Caught NPE for rule: " + r);
+                        log.warn("Caught NPE for rule: " + r);
                     }
                 }
             }
             flushUniqueCache();
             if (uniquedQualifiers > 0)
                 ERXExtensions.forceGC(0);
-            if (cat.isDebugEnabled()) cat.debug("Finished Qualifier uniquing, for: " + totalQualifiers
+            if (log.isDebugEnabled()) log.debug("Finished Qualifier uniquing, for: " + totalQualifiers
                                                 + " got rid of " + uniquedQualifiers + " duplicate qualifiers, replaced: " + replacedQualifiers);
         }
     }
@@ -487,15 +486,15 @@ public class ERD2WModel extends D2WModel {
             String extraModelFilePath = System.getProperty("ERExtraD2WModelFile");
             // it appears super cache's the Vector, so only add the extraModelFile if we haven't already done it
             if (extraModelFilePath != null) {
-                if (cat.isDebugEnabled()) cat.debug("ERExtraD2WModelFile = \"" + extraModelFilePath + "\"");
+                if (log.isDebugEnabled()) log.debug("ERExtraD2WModelFile = \"" + extraModelFilePath + "\"");
                 File extraModelFile = new java.io.File(extraModelFilePath);
                 if (extraModelFile.exists() && extraModelFile.isFile() && extraModelFile.canRead()) {
                     extraModelFilePath = extraModelFile.getAbsolutePath();
-                    if (cat.isDebugEnabled()) cat.debug("ERExtraD2WModelFile (absolute) = \"" + extraModelFilePath + "\"");
+                    if (log.isDebugEnabled()) log.debug("ERExtraD2WModelFile (absolute) = \"" + extraModelFilePath + "\"");
                     modelFiles.addElement(extraModelFile);
                     _hasAddedExtraModelFile = true;
                 } else
-                    cat.warn("Can't read the ERExtraD2WModelFile file.");
+                    log.warn("Can't read the ERExtraD2WModelFile file.");
             }
         }
         return modelFiles;
@@ -526,10 +525,10 @@ public class ERD2WModel extends D2WModel {
             } else if (q instanceof EOOrQualifier) {
                 cacheQualifier = orQualifierInCache((EOOrQualifier)q);
             } else {
-                cat.warn("Unknown qualifier type: " + q.getClass().getName());
+                log.warn("Unknown qualifier type: " + q.getClass().getName());
             }
         } else {
-            cat.warn("Asking caceh for a null qualifier.");
+            log.warn("Asking caceh for a null qualifier.");
         }
         return cacheQualifier;
     }
@@ -558,7 +557,7 @@ public class ERD2WModel extends D2WModel {
                         qualifiers.addObjectsFromArray(q.qualifiers());
                     }
                     if (cache == q1)
-                        cat.warn("Found sub-qualifier: " + cache + " in cache when parent qualifier is not?!?!");
+                        log.warn("Found sub-qualifier: " + cache + " in cache when parent qualifier is not?!?!");
                     else
                         qualifiers.replaceObjectAtIndex(cache, c);
                 }
@@ -598,7 +597,7 @@ public class ERD2WModel extends D2WModel {
                         qualifiers.addObjectsFromArray(q.qualifiers());
                     }
                     if (cache == q1)
-                        cat.warn("Found sub-qualifier: " + cache + " in cache when parent qualifier is not?!?!");
+                        log.warn("Found sub-qualifier: " + cache + " in cache when parent qualifier is not?!?!");
                     else
                         qualifiers.replaceObjectAtIndex(cache, c);
                 }
@@ -631,7 +630,7 @@ public class ERD2WModel extends D2WModel {
             EOQualifier cache = qualifierInCache(q.qualifier());
             if (cache != null) {
                 if (cache == q.qualifier()) {
-                    cat.warn("Found sub-qualifier in cache: " + cache + " when qualifier not in cache?!?! " + q);
+                    log.warn("Found sub-qualifier in cache: " + cache + " when qualifier not in cache?!?! " + q);
                     v.addElement(q);                    
                 } else {
                     // Need to construct a new EONotQualifier with the cached value..

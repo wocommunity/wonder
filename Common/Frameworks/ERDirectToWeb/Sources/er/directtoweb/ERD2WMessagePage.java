@@ -11,12 +11,12 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDBranchInterface {
 
     /** logging support */
-    public final static Category cat = Category.getInstance("er.directtoweb.templates.ERD2WMessagePage");
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WMessagePage");
     
     protected String _message;
     protected String _title;

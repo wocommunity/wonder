@@ -9,12 +9,12 @@ package er.directtoweb;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    public static final Category cat = Category.getInstance("er.directtoweb.rules.ERDImageNameAssignment");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDImageNameAssignment");
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "baseImageDirectory", "sectionKey", "tabKey"});
@@ -68,9 +68,9 @@ public class ERDImageNameAssignment extends ERDAssignment implements ERDLocaliza
         String sectionKey = (String)(c.valueForKey("sectionKey"));
         String baseImageDirectory = (String)(c.valueForKey("baseImageDirectory"));
         if (sectionKey == null)
-            cat.warn("SectionKey is null for pageConfiguration: " + c.valueForKey("pageConfiguration"));
+            log.warn("SectionKey is null for pageConfiguration: " + c.valueForKey("pageConfiguration"));
         if (baseImageDirectory == null)
-            cat.warn("BaseImageDirectory is null for sectionKey: " + sectionKey + " and pageConfiguration: " +
+            log.warn("BaseImageDirectory is null for sectionKey: " + sectionKey + " and pageConfiguration: " +
                      c.valueForKey("pageConfiguration"));        
         return imageNameForKey(sectionKey, baseImageDirectory, "section");
     }

@@ -11,13 +11,13 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.*;
 import er.extensions.*;
+import org.apache.log4j.NDC;
 
 public abstract class ERD2WListPage extends D2WListPage {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERD2WListPage.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WListPage.class);
 
     /**
      * Public constructor
@@ -53,7 +53,7 @@ public abstract class ERD2WListPage extends D2WListPage {
         String descriptionForResponse = (String)d2wContext().valueForKey("pageConfiguration");
         /*
         if (descriptionForResponse == null)
-            cat.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
+            log.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
          */
         return descriptionForResponse != null ? descriptionForResponse : super.descriptionForResponse(aResponse, aContext);
     }
@@ -79,12 +79,12 @@ public abstract class ERD2WListPage extends D2WListPage {
                 String key=ERXExtensions.userPreferencesKeyFromContext("batchSize", d2wContext());
                 // batchSize prefs are expected in the form vfk batchSize.<pageConfigName>
                 Number batchSizePref = (Number)userPreferences.valueForKey(key);
-                if (cat.isDebugEnabled()) cat.debug("batchSize User Prefererence: " + batchSizePref);
+                if (log.isDebugEnabled()) log.debug("batchSize User Prefererence: " + batchSizePref);
                 if (batchSizePref!=null) _batchSize = ERXConstant.integerForInt(batchSizePref.intValue());
             }
             if (_batchSize == null) {
-                if (cat.isDebugEnabled()) {
-                    cat.debug("No userPrefs...  Using default values: batchSize = " + d2wContext().valueForKey("defaultBatchSize"));
+                if (log.isDebugEnabled()) {
+                    log.debug("No userPrefs...  Using default values: batchSize = " + d2wContext().valueForKey("defaultBatchSize"));
                 }
                 _batchSize = ERXConstant.integerForString((String)d2wContext().valueForKey("defaultBatchSize"));
             }
@@ -102,7 +102,7 @@ public abstract class ERD2WListPage extends D2WListPage {
                 String key=ERXExtensions.userPreferencesKeyFromContext("sortOrdering", d2wContext());
                 // sort ordering prefs are expected in the form vfk sortOrdering.<pageConfigName>
                 sortOrderings=(NSArray)userPreferences.valueForKey(key);
-                if (cat.isDebugEnabled()) cat.debug("Found sort Orderings in user prefs "+ sortOrderings);
+                if (log.isDebugEnabled()) log.debug("Found sort Orderings in user prefs "+ sortOrderings);
             }
         }
         if (sortOrderings==null) {
@@ -117,7 +117,7 @@ public abstract class ERD2WListPage extends D2WListPage {
                     so.addObject(sortOrdering);
                 }
                 sortOrderings=so;
-                if (cat.isDebugEnabled()) cat.debug("Found sort Orderings in rules "+ sortOrderings);
+                if (log.isDebugEnabled()) log.debug("Found sort Orderings in rules "+ sortOrderings);
             }
         }
         return sortOrderings;
@@ -140,7 +140,7 @@ public abstract class ERD2WListPage extends D2WListPage {
             // D2WComponent.setLocalContext, which holds on to the first non null value it gets.
             // I swear if I could get my hands on the person who did that.. :-)
             _localContext=newValue;
-            if (cat.isDebugEnabled()) cat.debug("SetLocalContext "+newValue);
+            if (log.isDebugEnabled()) log.debug("SetLocalContext "+newValue);
         }
         super.setLocalContext(newValue);
     }
@@ -182,7 +182,7 @@ public abstract class ERD2WListPage extends D2WListPage {
         WODisplayGroup dg=displayGroup();
         if (dg!=null) {
             if (!_hasBeenInitialized) {
-                cat.debug("Initializing display group");
+                log.debug("Initializing display group");
                 String fetchspecName = (String)d2wContext().valueForKey("restrictingFetchSpecification");
                 if(fetchspecName != null) {
                     EODataSource ds = dataSource();
@@ -198,7 +198,7 @@ public abstract class ERD2WListPage extends D2WListPage {
             }
             // this will have the side effect of resetting the batch # to sth correct, in case
             // the current index if out of range
-            cat.debug("dg.currentBatchIndex() "+dg.currentBatchIndex());
+            log.debug("dg.currentBatchIndex() "+dg.currentBatchIndex());
             dg.setCurrentBatchIndex(dg.currentBatchIndex());
             if (dg.allObjects().count() > 0)
                 d2wContext().takeValueForKey(dg.allObjects().objectAtIndex(0), "object");

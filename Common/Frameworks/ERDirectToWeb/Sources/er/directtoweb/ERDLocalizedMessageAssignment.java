@@ -17,7 +17,7 @@ import er.extensions.*;
 public class ERDLocalizedMessageAssignment extends ERDDelayedAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging supprt */
-    static final ERXLogger log = ERXLogger.getLogger(ERDLocalizedMessageAssignment.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDLocalizedMessageAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

@@ -13,7 +13,7 @@ import com.webobjects.directtoweb.D2WEditBoolean;
 import er.extensions.*;
 
 public class ERD2WEditYesNo extends D2WEditBoolean {
-    public static ERXLogger log = ERXLogger.getLogger(ERD2WEditYesNo.class);
+    public static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditYesNo.class);
 
     public ERD2WEditYesNo(WOContext context) { super(context); }
 

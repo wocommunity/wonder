@@ -11,7 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 import java.util.Enumeration;
 import er.extensions.ERXConstant;
 
@@ -19,8 +19,8 @@ public class ERD2WEditOrDefault extends D2WComponent {
 
     public ERD2WEditOrDefault(WOContext context) {super(context);}
     
-    /////////////////////////////////////////// log4j category /////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERD2WEditOrDefault.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditOrDefault.class);
     
     public String radioButtonGroupName() { return name() +"_"+d2wContext().propertyKey(); }
     

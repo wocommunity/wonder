@@ -11,7 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 import er.extensions.ERXConstant;
 
 // For now this simply 
@@ -19,8 +19,8 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
 
     public ERDConfirmMessage(WOContext context) { super(context); }
     
-    //////////////////////////////////////////////  log4j category  /////////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERDConfirmMessage.class);
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDConfirmMessage.class);
     
     public String message;
     
@@ -50,11 +50,11 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
             } else if (hasBinding("dataSource")) {
                 _list = er.extensions.ERXExtensions.arrayFromDataSource((EODataSource)valueForBinding("dataSource"));
             } else {
-                cat.warn("ERConfirmMessage being used without the proper bindings");
+                log.warn("ERConfirmMessage being used without the proper bindings");
                 _list = ERXConstant.EmptyArray;
             }
             if (_list.count() == 0)
-                cat.warn("ERConfirmMessage: list set to zero");
+                log.warn("ERConfirmMessage: list set to zero");
         }
         return _list;
     }
@@ -116,15 +116,15 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
             } else if (message != null && !message.equals("")){
                 if (confirmMessageKey() == null)
                     throw new RuntimeException("You must specify a confirmMessageKey for this pageConfiguration!");
-                if (cat.isDebugEnabled())
-                    cat.debug("Setting message: " + message + " for key: " + confirmMessageKey() + " on eos: " + list());
+                if (log.isDebugEnabled())
+                    log.debug("Setting message: " + message + " for key: " + confirmMessageKey() + " on eos: " + list());
                 for (Enumeration e = list().objectEnumerator(); e.hasMoreElements();) {
                     EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                     eo.takeValueForKeyPath(message, confirmMessageKey());
                 }
             }
         } else {
-            cat.warn("List is zero.  If used in a confirm page template, need to set the object or datasource");
+            log.warn("List is zero.  If used in a confirm page template, need to set the object or datasource");
         }
     }
 }

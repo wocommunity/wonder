@@ -8,7 +8,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class ERCMessageAttachment extends _ERCMessageAttachment {
-    static final ERXLogger log = ERXLogger.getLogger(ERCMessageAttachment.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERCMessageAttachment.class);
 
     public ERCMessageAttachment() {
         super();
