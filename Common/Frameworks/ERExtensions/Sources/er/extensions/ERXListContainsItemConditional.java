@@ -10,18 +10,43 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Conditional component that tests if a given item is contained
+ * in an {@link NSArray}.
+ * <br/>
+ * Synopsis:<br/>
+ * item=<i>anItem</i>;list=<i>aList</i>;[negate=<i>aBoolean</i>;]
+ * 
+ * @binding list array of objects
+ * @binding item object to test inclusion in the list
+ * @binding negate inverts the sense of the conditional.
+ */
+
 public class ERXListContainsItemConditional extends WOComponent {
 
+    /**
+     * Public constructor.
+     * @param aContext a context
+     */
     public ERXListContainsItemConditional(WOContext aContext) {
         super(aContext);
     }
 
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    /**
+     * Component is stateless
+     * @return true
+     */
     public boolean isStateless() { return true; }
 
+    /**
+     * Tests if the bound item is contained within the
+     * bound list.
+     * @return result of comparision
+     */
+    // ENHANCEME: Should support the List interface
     public boolean listContainsItem() {
         NSArray list=(NSArray)valueForBinding("list");
         Object item=valueForBinding("item");
-        return(list.containsObject(item));
+        return item != null && list.containsObject(item);
     }
 }
