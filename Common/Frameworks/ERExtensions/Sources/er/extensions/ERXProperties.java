@@ -234,6 +234,17 @@ public class ERXProperties {
     }
 
     /**
+     * Cover method for returning an int for a
+     * given system property with a default value.
+     * @param s system property
+     * @param defaultValue default value
+     * @return int value of the system property or the default value
+     */
+    public static int intForKeyWithDefault(String s, int defaultValue) {
+        return ERXValueUtilities.intValueWithDefault(System.getProperty(s), defaultValue);
+    }
+    
+    /**
      * Returning an string for a given system 
      * property. This is a cover method of 
      * {@link java.lang.System#getProperty}

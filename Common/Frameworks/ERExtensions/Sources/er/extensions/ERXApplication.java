@@ -12,6 +12,8 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
+import java.lang.reflect.*;
+
 import org.apache.log4j.*;
 
 /**
@@ -413,26 +415,35 @@ public abstract class ERXApplication extends WOApplication {
     public WOResponse genericHandleException(Exception exception, WOContext context) {
         return super.handleException(exception, context);
     }
-    
+
     /**
-     * Handles the potentially fatal OutOfMemoryError by quiting the
+        * Handles the potentially fatal OutOfMemoryError by quiting the
      * application ASAP. Broken out into a separate method to make
      * custom error handling easier, ie generating your own error
      * pages in production, etc.
      * @param exception to check if it is a fatal exception.
      */
     public void handlePotentiallyFatalException(Exception exception) {
-        if( exception instanceof NSForwardException ) {
-            Throwable t = ((NSForwardException) exception).originalException();
-            if( t instanceof OutOfMemoryError ) {
+        Throwable throwable = null;
+        if (exception instanceof InvocationTargetException) {
+            throwable = ((InvocationTargetException)exception).getTargetException();
+        } else if (exception instanceof NSForwardException ) {
+            throwable = ((NSForwardException)exception).originalException();
+        }
+        if (throwable instanceof Error) {
+            if (throwable instanceof OutOfMemoryError) {
                 // We first log just in case the log4j call puts us in a bad state.
                 NSLog.err.appendln("Ran out of memory, killing this instance");
                 log.error("Ran out of memory, killing this instance");
-                Runtime.getRuntime().exit( 1 );
+            } else {
+                // We first log just in case the log4j call puts us in a bad state.
+                NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + " occurried. Can't recover killing this instance.");
+                log.error("java.lang.Error \"" + throwable.getClass().getName() + " occurried. Can't recover killing this instance.");
             }
+            Runtime.getRuntime().exit( 1 );
         }
     }
-
+    
     /**
      * Simple hook to null out the thread local storage so
      * we don't hold a reference to the context object.
