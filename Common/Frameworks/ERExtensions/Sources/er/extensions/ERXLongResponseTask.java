@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSForwardException;
 public interface ERXLongResponseTask extends Runnable {
 	
 	/** Sets the ERXLongResponse that pulls info from this task */
-	public void setRefreshPage(ERXLongResponse sender);
+	public void setLongResponse(ERXLongResponse sender);
 	
 	/** @return true if the task is still running */
 	public boolean isDone();
@@ -38,7 +38,7 @@ public interface ERXLongResponseTask extends Runnable {
 		public ERXLogger log = ERXLogger.getERXLogger(ERXUtilities.class);
 		
 		/** Refresh page that controls this task */
-		protected ERXLongResponse _refreshPage;
+		protected ERXLongResponse _longResponse;
 		
 		/** Status code */
 		protected Object _status;
@@ -84,16 +84,16 @@ public interface ERXLongResponseTask extends Runnable {
 		/**
 		 * Sets the long response that controls this task.
 		 */
-		public void setRefreshPage(ERXLongResponse sender) {
-			_refreshPage = sender;
+		public void setLongResponse(ERXLongResponse sender) {
+			_longResponse = sender;
 		}
 		
 		/**
-		 * Returns the refresh page for this task.
+		 * Returns the long response for this task.
 		 * @return
 		 */
-		public ERXLongResponse refreshPage() {
-			return _refreshPage;
+		public ERXLongResponse longResponse() {
+			return _longResponse;
 		}
 		
 		/**
@@ -238,7 +238,7 @@ public interface ERXLongResponseTask extends Runnable {
 		 * @return
 		 */
 		protected WOComponent refreshPageForStatus(Object aStatus)  {
-			return refreshPage().context().page();
+			return longResponse().context().page();
 		}
 
 		/**
@@ -250,7 +250,7 @@ public interface ERXLongResponseTask extends Runnable {
 		 * @return result page for successfu completion
 		 */
 		protected WOComponent pageForResult(Object aResult)  {
-			return refreshPage().context().page();
+			return longResponse().context().page();
 		}
 
 		/**
