@@ -650,7 +650,8 @@ public class ERXArrayUtilities extends Object {
 		int i1 = keypath.indexOf(".");
 		int i2 = keypath.indexOf("-");
 		if ( i1 == -1 || i2 == -1 ) {
-		    throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
+                    throw new IllegalArgumentException("SubarrayWithRange must be used like '@subarrayWithRange.start-length' current key path:\""
+                                                       + keypath + "\"");
 		}
 		int start = Integer.parseInt(keypath.substring(i1, i2));
 		int length = Integer.parseInt(keypath.substring(i2, keypath.length()));
