@@ -126,7 +126,6 @@ public class ERD2WContextDictionary {
         }
         path = "components." + dict.valueForKeyPath("componentLevelKeys." + propertyKey + ".componentName") + ".supports";
         keys = (NSArray)allKeys.valueForKeyPath(path);
-        log.info(keys);
         if(keys != null) {
             for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
                 String key = (String)e.nextElement();
