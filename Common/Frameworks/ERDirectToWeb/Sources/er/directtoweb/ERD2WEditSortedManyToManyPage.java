@@ -33,7 +33,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     protected int _state = QUERY;
 
-    public EODataSource selectDataSource = null;
+    public EODataSource queryDataSource = null;
+    public EOArrayDataSource selectDataSource = null;
 
     protected EOEnterpriseObject _eoToAddToRelationship;
     protected EOEnterpriseObject _newEOInRelationship;
@@ -132,6 +133,10 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     // Switch to query view
     public WOComponent queryAction() {
         _state = LIST;
+        NSArray results = queryDataSource.fetchObjects();
+        selectDataSource = new EOArrayDataSource(destinationEntity().classDescriptionForInstances(),
+                                                      queryDataSource.editingContext());
+        selectDataSource.setArray(results);
         return null;
     }
 
