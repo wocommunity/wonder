@@ -158,4 +158,38 @@ public  class ERXRequest extends WORequest {
             return NSDictionary.EmptyDictionary;
         }
     }    
+
+    public boolean isSessionIDInRequest() {
+        ERXApplication app = (ERXApplication)WOApplication.application();
+        
+        if (app.isStreamingRequestHandlerKey(requestHandlerKey())) {
+            return false;
+        } else {
+            return super.isSessionIDInRequest();
+        }
+    }
+
+    protected String _getSessionIDFromValuesOrCookie(boolean inCookiesFirst) {
+        ERXApplication app = (ERXApplication)WOApplication.application();
+
+        boolean wis = WOApplication.application().streamActionRequestHandlerKey().equals(requestHandlerKey());
+        boolean alternateStreaming = app.isStreamingRequestHandlerKey(requestHandlerKey());
+        boolean streaming = wis || alternateStreaming;
+        
+        String sessionID = null;
+        if(inCookiesFirst) {
+            sessionID = cookieValueForKey("wosid");
+            if(sessionID == null && !streaming) {
+                sessionID = stringFormValueForKey("wosid");
+            }
+        } else {
+            if(!streaming) {
+                sessionID = stringFormValueForKey("wosid");
+            }
+            if(sessionID == null) {
+                sessionID = cookieValueForKey("wosid");
+            }
+        }
+        return sessionID;
+    }
 }
