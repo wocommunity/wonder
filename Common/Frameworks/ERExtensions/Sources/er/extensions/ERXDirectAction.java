@@ -114,4 +114,33 @@ public class ERXDirectAction extends WODirectAction {
         return actionResult;
     }
     
+    /**
+        * Sets a System property. This is also active in deployment mode because one might want to change a System property
+     * at runtime.
+     * @param key the System property key
+     * @param value the System property value, can be null or empty
+     * @param password must be equal to the password set by the System property er.extensions.ERXDirectAction.ChangeSystemPropertyPassword
+     * @return either null when the password is wrong or the key is missing or a new page showing the System properties
+     */
+    public WOActionResults systemPropertyAction() {
+        if (ERXStringUtilities.stringIsNullOrEmpty(System.getProperty("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword"))) {
+            //returns null, do not give any feedback like password wrong or disabled
+            return null;
+        }
+        String key = request().stringFormValueForKey("key");
+        String value = request().stringFormValueForKey("value");
+        String password = request().stringFormValueForKey("password");
+        if (!System.getProperty("er.extensions.ERXDirectAction.ChangeSystemPropertyPassword").equals(password)) {
+            return null;
+        }
+        WOResponse r = new WOResponse();
+        if (ERXStringUtilities.stringIsNullOrEmpty(key) ) {
+            r.appendContentString("key cannot be null or empty old System properties:\n"+System.getProperties());
+        } else {
+            value = ERXStringUtilities.stringIsNullOrEmpty(value) ? "" : value;
+            System.setProperty(key, value);
+            r.appendContentString("new System properties:\n"+System.getProperties());
+        }
+        return r;
+    }
 }
