@@ -147,11 +147,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          */
         public void prepareEntityForRegistration(EOEntity eoentity) {
             String className = eoentity.className();
-            if(className.equals("EOGenericRecord")) {
+            String alternateClassName = System.getProperty("er.extensions.ERXEntityClassDescription."
+                                                           + eoentity.name() + ".ClassName");
+            if (alternateClassName != null) {
+                log.info(eoentity.name() + ": setting class from: " + className + " to: " + alternateClassName);
+                eoentity.setClassName(alternateClassName);
+            } else if (className.equals("EOGenericRecord")) {
                 className = ERXGenericRecord.class.getName();
                 eoentity.setClassName(className);
                 log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
-            }
+            } 
             //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
         }
 
