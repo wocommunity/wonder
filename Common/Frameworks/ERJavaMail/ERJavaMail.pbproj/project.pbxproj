@@ -116,6 +116,7 @@
 		017C7B31FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
+				F54ECDF9033CEF3101000102,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +137,7 @@
 				F5251D8B032D49E1019C4BA9,
 				F5251D8F032D4AD5019C4BA9,
 				F5251D94032D5C42019C4BA9,
+				F54ECDF7033CEEC501000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -633,10 +635,10 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
+				F54ECDF8033CEF3101000102,
 			);
 			isa = PBXGroup;
-			name = Resources;
-			path = "";
+			path = Resources;
 			refType = 4;
 		};
 		40B5828CFFD5E91B7F000001 = {
@@ -760,6 +762,7 @@
 				F5251D7E032D49E1019C4BA9,
 				F5251D7F032D49E1019C4BA9,
 				F5251D7D032D49E1019C4BA9,
+				F54ECDF6033CEEC501000102,
 				F5251D73032D48A3019C4BA9,
 			);
 			isa = PBXGroup;
@@ -998,6 +1001,28 @@
 		};
 		F53788AA0335AE3A01000010 = {
 			fileRef = F53788A50335ADF401000010;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54ECDF6033CEEC501000102 = {
+			isa = PBXFileReference;
+			path = ERMimetypesMapper.java;
+			refType = 4;
+		};
+		F54ECDF7033CEEC501000102 = {
+			fileRef = F54ECDF6033CEEC501000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54ECDF8033CEF3101000102 = {
+			isa = PBXFileReference;
+			path = mime.types;
+			refType = 4;
+		};
+		F54ECDF9033CEF3101000102 = {
+			fileRef = F54ECDF8033CEF3101000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
