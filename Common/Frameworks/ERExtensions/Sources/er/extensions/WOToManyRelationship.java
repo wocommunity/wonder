@@ -238,7 +238,8 @@ public class WOToManyRelationship extends WOComponent {
         EOEntity result=entity;
         while (keysEnumerator.hasMoreElements()) {
             key = (String)keysEnumerator.nextElement();
-            result = result.relationshipNamed(key).destinationEntity();                   }
+            if(result.relationshipNamed(key)!=null)
+                result = result.relationshipNamed(key).destinationEntity();                   }
         return result;
     }
 
