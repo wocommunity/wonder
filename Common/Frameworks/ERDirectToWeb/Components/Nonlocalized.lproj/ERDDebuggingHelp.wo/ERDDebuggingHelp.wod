@@ -17,6 +17,10 @@ Conditional3: WOConditional {
 	condition = d2wComponentNameDebuggingEnabled;
 }
 
+Conditional4: WOConditional {
+	condition = hasEditingContext;
+}
+
 Form1: WOForm {
 }
 
@@ -26,6 +30,11 @@ Hyperlink1: WOHyperlink {
 
 Hyperlink2: WOHyperlink {
 	action = toggleComponentNameDebugging;
+}
+
+Hyperlink3: WOHyperlink {
+	action = showEditingContext;
+	target = "_inspector";
 }
 
 String1: WOString {
@@ -59,6 +68,10 @@ String3: WOString {
 
 String4: WOString {
 	value = ^d2wContext.entity.name;
+}
+
+String5: WOString {
+	value = editingContext;
 }
 
 String6: WOString {
