@@ -1,23 +1,7 @@
 <project name="common" default="all" basedir="../..">
 
-    <!-- don't touch from here on -->
-    <property name="build.compiler" value="jikes" />
-    <property name="build.compiler.emacs" value="true" />
-    <property name="build.compiler.fulldepend" value="false" />
-
-    <property file="Build/build/build.properties" />
-    <property file="${user.home}/build.properties" />
-    <property file="Build/build/default.properties" />
-    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
-
-    <property name="wo.system.root" value="/System/Library/Frameworks" />
-    <property name="wo.local.root" value="/Library/Frameworks" />
-    <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
-    <property name="wonder.root" value="${basedir}" />
-
     <target name="properties">
         <property name="framework.name" value="${project.name}.framework" />
-        <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="build.framework.dir" value="${build.root}/${framework.name}" />
         <property name="build.jar.file" value="${build.framework.dir}/Resources/Java/${project.name}.jar" />
@@ -108,17 +92,9 @@
             </wsresources>
         </woframework>
 
-        <copy todir="${dist}/Documentation/${project.name}">
-            <fileset dir="${project.dir}/Documentation">
-                <exclude name="**/CVS" />
-            </fileset>
-        </copy>
-
-        <copy todir="${dist}/Support/${project.name}">
-            <fileset dir="${project.dir}/Support">
-                <exclude name="**/CVS" />
-            </fileset>
-        </copy>
+        <echo message="-------------------------------------" />
+        <echo message="${project.name}.framework" />
+        <echo message="-------------------------------------" />
 
     </target>
 
@@ -160,7 +136,7 @@
             </frameworks>
         </woapplication>
         <echo message="-------------------------------------" />
-        <echo message="${build.root}" />
+        <echo message="${project.name}.woa" />
         <echo message="-------------------------------------" />
     </target>
 
@@ -253,5 +229,5 @@
 
     <target name="all" depends="WOPayPal.all, Validity.all" />
 	
-    <target name="all.clean" depends="WOPayPal.clean,Validity.framework.clean,Validity.application.clean,Validity.example.clean" />
+    <target name="all.clean" depends="WOPayPal.clean, Validity.framework.clean, Validity.application.clean, Validity.example.clean" />
 </project>

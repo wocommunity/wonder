@@ -1,18 +1,7 @@
 <project name="common" default="all" basedir="../..">
-	<!-- don't touch from here on -->
-        <property name="build.compiler" value="jikes" />
-        <property name="build.compiler.emacs" value="true" />
-        <property name="build.compiler.fulldepend" value="false" />
 
-        <property name="wo.system.root" value="/System/Library/Frameworks" />
-        <property name="wo.local.root" value="/Library/Frameworks" />
-        <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
-        <property name="wonder.root" value="${basedir}" />
-
-	<target name="properties">
-
+    <target name="properties">
         <property name="framework.name" value="${project.name}.framework" />
-        <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="build.framework.dir" value="${build.root}/${framework.name}" />
         <property name="build.jar.file" value="${build.framework.dir}/Resources/Java/${project.name}.jar" />
@@ -29,423 +18,429 @@
                 <exclude name="JavaWOExtensions.framework"/>
             </fileset>
         </path>
-	</target>
+    </target>
 
-	<target name="usage">
-		<echo message="-------------------------------------" />
-		<echo message="Valid target-commands" />
-		<echo message="---------------------" />
-		<echo message="  all       --> create framework in ${build.root} " />
-		<echo message="  install   --> copy framework to ${wo.local.root} " />
-		<echo message="  web       --> copy framework to ${wo.server.root} " />
-		<echo message="  clean     --> remove .classes and .framework" />
-		<echo message="  allclean  --> remove .classes and .framework and installed framework" />
-		<echo message="--------------------------------------" />
-	</target>
-	<target name="prepare" depends="properties">
-		<mkdir dir="${project.dir}/Libraries" />
-		<mkdir dir="${project.dir}/Sources" />
-		<mkdir dir="${project.dir}/Resources" />
-		<mkdir dir="${project.dir}/Components" />
-		<mkdir dir="${project.dir}/WebServerResources" />
-		<mkdir dir="${build.root}" />
-		<mkdir dir="${build.classes}" />
-	</target>
-	<target name="checkupdate">
-		<uptodate property="no.changes" targetfile="${build.jar.file}">
-			<srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
-		</uptodate>
-	</target>
-	<target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
-		<mkdir dir="${build.classes}" />
-		<javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on" optimize="off" deprecation="on">
-			<classpath> 
+    <target name="usage">
+        <echo message="-------------------------------------" />
+        <echo message="Valid target-commands" />
+        <echo message="---------------------" />
+        <echo message="  all       --> create framework in ${build.root} " />
+        <echo message="  install   --> copy framework to ${wo.local.root} " />
+        <echo message="  web       --> copy framework to ${wo.server.root} " />
+        <echo message="  clean     --> remove .classes and .framework" />
+        <echo message="  allclean  --> remove .classes and .framework and installed framework" />
+        <echo message="--------------------------------------" />
+    </target>
+
+    <target name="prepare" depends="properties">
+        <mkdir dir="${project.dir}/Libraries" />
+        <mkdir dir="${project.dir}/Sources" />
+        <mkdir dir="${project.dir}/Resources" />
+        <mkdir dir="${project.dir}/Components" />
+        <mkdir dir="${project.dir}/WebServerResources" />
+        <mkdir dir="${build.root}" />
+        <mkdir dir="${build.classes}" />
+    </target>
+
+    <target name="checkupdate">
+        <uptodate property="no.changes" targetfile="${build.jar.file}">
+            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
+        </uptodate>
+    </target>
+    
+    <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
+        <mkdir dir="${build.classes}" />
+        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on" optimize="off" deprecation="on">
+            <classpath> 
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
                 </fileset>
                 <path refid="project.class.path" />
-			</classpath>
-		</javac>
-	</target>
+            </classpath>
+        </javac>
+    </target>
 
-	<target name="framework" depends="properties,compile" description="Default compile target">
-		<mkdir dir="${build.framework.dir}" />
-		<taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
-			<classpath refid="project.class.path" />
-		</taskdef>
-		<woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
-			<lib dir="${project.dir}/Libraries">
-				<include name="**/*.jar" />
-			</lib>
-			<classes dir="${build.classes}">
-				<include name="**/*.class" />
-			</classes>
-			<resources dir="${project.dir}/Components">
-				<include name="**.api" />
-				<include name="**/*.wo/**" />
-			</resources>
-			<resources dir="${project.dir}/Resources">
-				<include name="*.eomodeld/**" />
-				<include name="**/*.plist" />
-				<include name="**/*.d2wmodel" />
-				<include name="**/*.strings" />
-				<include name="**/*.sh" />
-			</resources>
-			<wsresources dir="${project.dir}/WebServerResources">
-				<include name="**/*.gif" />
-				<include name="**/*.jpeg" />
-				<include name="**/*.js" />
-				<include name="**/*.css" />
-			</wsresources>
-		</woframework>
-	</target>
+    <target name="framework" depends="properties,compile" description="Default compile target">
+        <mkdir dir="${build.framework.dir}" />
+        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+            <classpath refid="project.class.path" />
+        </taskdef>
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+            <lib dir="${project.dir}/Libraries">
+                <include name="**/*.jar" />
+            </lib>
+            <classes dir="${build.classes}">
+                <include name="**/*.class" />
+            </classes>
+            <resources dir="${project.dir}/Components">
+                <include name="**.api" />
+                <include name="**/*.wo/**" />
+            </resources>
+            <resources dir="${project.dir}/Resources">
+                <include name="*.eomodeld/**" />
+                <include name="**/*.plist" />
+                <include name="**/*.d2wmodel" />
+                <include name="**/*.strings" />
+                <include name="**/*.sh" />
+            </resources>
+            <wsresources dir="${project.dir}/WebServerResources">
+                <include name="**/*.gif" />
+                <include name="**/*.jpeg" />
+                <include name="**/*.js" />
+                <include name="**/*.css" />
+            </wsresources>
+            </woframework>
+            <echo message="-------------------------------------" />
+            <echo message="${project.name}.framework" />
+            <echo message="-------------------------------------" />
+    </target>
 
-	<target name="application" depends="properties,compile" description="Default compile target">
-		<taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
-			<classpath refid="project.class.path" />
-		</taskdef>
-		<woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
-			<classes dir="${build.classes}">
-				<include name="**/*.class" />
-			</classes>
-			<resources dir="${project.dir}/Components">
-				<include name="**.api" />
-				<include name="**/*.wo/**" />
-			</resources>
-			<resources dir="${project.dir}/Resources">
-				<include name="*.eomodeld/**" />
-				<include name="**/*.plist" />
-				<include name="**/*.d2wmodel" />
-				<include name="**/*.strings" />
-				<include name="**/*.sh" />
-			</resources>
-			<wsresources dir="${project.dir}/WebServerResources">
-				<include name="**/*.gif" />
-				<include name="**/*.jpeg" />
-				<include name="**/*.js" />
-				<include name="**/*.css" />
-			</wsresources>
-			<frameworks root="${build.root}">
-				<include name="JavaWO*.framework"/>
-				<include name="ER*.framework"/>
-				<exclude name="ERNeutralLook.framework"/>
-				<include name="BT*.framework"/>
-			</frameworks>
-			<frameworks root="${wo.local.root}">
-				<include name="Mysql*.framework"/>
-			</frameworks>
-			<frameworks root="${wo.system.root}">
-				<include name="Java*.framework"/>
-				<exclude name="Java*Cocoa.framework"/>
-				<exclude name="JavaOpen*.framework"/>
-				<exclude name="JavaWOExtensions.framework"/>
-				<exclude name="JavaEOGeneration*.framework"/>
-				<exclude name="JavaEOInterface.framework"/>
-				<exclude name="JavaEODistribution.framework"/>
-			</frameworks>
-    	</woapplication>
-		<echo message="-------------------------------------" />
-		<echo message="${build.root}" />
-		<echo message="-------------------------------------" />
-	</target>
+    <target name="application" depends="properties,compile" description="Default compile target">
+        <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
+            <classpath refid="project.class.path" />
+        </taskdef>
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+            <classes dir="${build.classes}">
+                <include name="**/*.class" />
+            </classes>
+            <resources dir="${project.dir}/Components">
+                <include name="**.api" />
+                <include name="**/*.wo/**" />
+            </resources>
+            <resources dir="${project.dir}/Resources">
+                <include name="*.eomodeld/**" />
+                <include name="**/*.plist" />
+                <include name="**/*.d2wmodel" />
+                <include name="**/*.strings" />
+                <include name="**/*.sh" />
+            </resources>
+            <wsresources dir="${project.dir}/WebServerResources">
+                <include name="**/*.gif" />
+                <include name="**/*.jpeg" />
+                <include name="**/*.js" />
+                <include name="**/*.css" />
+            </wsresources>
+            <frameworks root="${build.root}">
+                <include name="JavaWO*.framework"/>
+                <include name="ER*.framework"/>
+                <exclude name="ERNeutralLook.framework"/>
+                <include name="BT*.framework"/>
+            </frameworks>
+            <frameworks root="${wo.local.root}">
+                <include name="Mysql*.framework"/>
+            </frameworks>
+            <frameworks root="${wo.system.root}">
+                <include name="Java*.framework"/>
+                <exclude name="Java*Cocoa.framework"/>
+                <exclude name="JavaOpen*.framework"/>
+                <exclude name="JavaWOExtensions.framework"/>
+                <exclude name="JavaEOGeneration*.framework"/>
+                <exclude name="JavaEOInterface.framework"/>
+                <exclude name="JavaEODistribution.framework"/>
+            </frameworks>
+        </woapplication>
+        <echo message="-------------------------------------" />
+        <echo message="${project.name}.woa" />
+        <echo message="-------------------------------------" />
+    </target>
 
-	<target name="stepwiseApplication" depends="properties,compile" description="Default compile target">
-		<taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
-			<classpath refid="project.class.path" />
-		</taskdef>
-		<woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
-			<classes dir="${build.classes}">
-				<include name="**/*.class" />
-			</classes>
-			<resources dir="${project.dir}/Components">
-				<include name="**.api" />
-				<include name="**/*.wo/**" />
-			</resources>
-			<resources dir="${project.dir}/Resources">
-				<include name="*.eomodeld/**" />
-				<include name="**/*.plist" />
-				<include name="**/*.d2wmodel" />
-				<include name="**/*.strings" />
-				<include name="**/*.sh" />
-			</resources>
-			<wsresources dir="${project.dir}/WebServerResources">
-				<include name="**/*.gif" />
-				<include name="**/*.jpeg" />
-				<include name="**/*.js" />
-				<include name="**/*.css" />
-			</wsresources>
-			<frameworks root="${wo.system.root}">
-				<include name="Java*.framework"/>
-				<exclude name="Java*Cocoa.framework"/>
-				<exclude name="JavaOpen*.framework"/>
-				<exclude name="JavaEOGeneration*.framework"/>
-				<exclude name="JavaEOInterface.framework"/>
-				<exclude name="JavaEODistribution.framework"/>
-			</frameworks>
-    	</woapplication>
-		<echo message="-------------------------------------" />
-		<echo message="${build.root}" />
-		<echo message="-------------------------------------" />
-	</target>
+    <target name="stepwiseApplication" depends="properties,compile" description="Default compile target">
+        <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
+            <classpath refid="project.class.path" />
+        </taskdef>
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+            <classes dir="${build.classes}">
+                <include name="**/*.class" />
+            </classes>
+            <resources dir="${project.dir}/Components">
+                <include name="**.api" />
+                <include name="**/*.wo/**" />
+            </resources>
+            <resources dir="${project.dir}/Resources">
+                <include name="*.eomodeld/**" />
+                <include name="**/*.plist" />
+                <include name="**/*.d2wmodel" />
+                <include name="**/*.strings" />
+                <include name="**/*.sh" />
+            </resources>
+            <wsresources dir="${project.dir}/WebServerResources">
+                <include name="**/*.gif" />
+                <include name="**/*.jpeg" />
+                <include name="**/*.js" />
+                <include name="**/*.css" />
+            </wsresources>
+            <frameworks root="${wo.system.root}">
+                <include name="Java*.framework"/>
+                <exclude name="Java*Cocoa.framework"/>
+                <exclude name="JavaOpen*.framework"/>
+                <exclude name="JavaEOGeneration*.framework"/>
+                <exclude name="JavaEOInterface.framework"/>
+                <exclude name="JavaEODistribution.framework"/>
+            </frameworks>
+        </woapplication>
+    <echo message="-------------------------------------" />
+    <echo message="${project.name}.woa" />
+    <echo message="-------------------------------------" />
+    </target>
 
-	<target name="install" depends="all">
-		<copy todir="${wo.local.root}/${framework.name}">
-			<fileset dir="${build.framework.dir}" />
-		</copy>
-	</target>
+    <target name="install" depends="all">
+        <copy todir="${wo.local.root}/${framework.name}">
+            <fileset dir="${build.framework.dir}" />
+        </copy>
+    </target>
 
-	<target name="web" depends="framework">
-		<copy todir="${wo.server.root}/${framework.name}/WebServerResources">
-			<fileset dir="${build.framework.dir}/WebServerResources" />
-		</copy>
-	</target>
+    <target name="web" depends="framework">
+        <copy todir="${wo.server.root}/${framework.name}/WebServerResources">
+            <fileset dir="${build.framework.dir}/WebServerResources" />
+        </copy>
+    </target>
 	
-	<target name="clean" depends="properties">
-		<echo message="-------------------------------------" />
-		<echo message="${project.dir}" />
-		<echo message="-------------------------------------" />
-		<delete dir="${build.classes}" />
-		<delete dir="${build.framework.dir}" />
-	</target>
-	
-	<!-- ERJars -->
-	<target name="ERJars.all">
-		<antcall target="framework" >
+    <target name="clean" depends="properties">
+        <echo message="-------------------------------------" />
+        <echo message="${project.dir}" />
+        <echo message="-------------------------------------" />
+        <delete dir="${build.classes}" />
+        <delete dir="${build.framework.dir}" />
+    </target>
+    
+    <!-- ERJars -->
+    <target name="ERJars.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERJars" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJars" />
-		</antcall>
-	</target>
-	<target name="ERJars.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERJars.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERJars" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJars" />
-		</antcall>
-	</target>
-	
-	<!-- JavaWOExtensions -->
-	<target name="JavaWOExtensions.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- JavaWOExtensions -->
+    <target name="JavaWOExtensions.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="JavaWOExtensions" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/JavaWOExtensions" />
-		</antcall>
-	</target>
-	<target name="JavaWOExtensions.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="JavaWOExtensions.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="JavaWOExtensions" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/JavaWOExtensions" />
-		</antcall>
-	</target>
+        </antcall>
+    </target>
 
-	<!-- ERExtensions -->
-	<target name="ERExtensions.all">
-		<antcall target="framework" >
+    <!-- ERExtensions -->
+    <target name="ERExtensions.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERExtensions" />
-		</antcall>
-	</target>
-	<target name="ERExtensions.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERExtensions.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERExtensions" />
-		</antcall>
-	</target>
-	
-	<!-- ERDirectToWeb -->
-	<target name="ERDirectToWeb.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- ERDirectToWeb -->
+    <target name="ERDirectToWeb.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="er.directtoweb.ERDirectToWeb" />
             <param name="project.name" value="ERDirectToWeb" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERDirectToWeb" />
-		</antcall>
-	</target>
-	<target name="ERDirectToWeb.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERDirectToWeb.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="er.directtoweb.ERDirectToWeb" />
             <param name="project.name" value="ERDirectToWeb" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERDirectToWeb" />
-		</antcall>
-	</target>
-	
-	<!-- ERCoreBusinessLogic -->
-	<target name="ERCoreBusinessLogic.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- ERCoreBusinessLogic -->
+    <target name="ERCoreBusinessLogic.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
             <param name="project.name" value="ERCoreBusinessLogic" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERCoreBusinessLogic" />
-		</antcall>
-	</target>
-	<target name="ERCoreBusinessLogic.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERCoreBusinessLogic.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
             <param name="project.name" value="ERCoreBusinessLogic" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERCoreBusinessLogic" />
-		</antcall>
-	</target>
-	
-	<!-- ERJavaMail -->
-	<target name="ERJavaMail.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- ERJavaMail -->
+    <target name="ERJavaMail.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERJavaMail" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJavaMail" />
-		</antcall>
-	</target>
-	<target name="ERJavaMail.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERJavaMail.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="ERJavaMail" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJavaMail" />
-		</antcall>
-	</target>
-	
-	<!-- ERNeutralLook -->
-	<target name="ERNeutralLook.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- ERNeutralLook -->
+    <target name="ERNeutralLook.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERNeutralLook" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERNeutralLook" />
-		</antcall>
-	</target>
-	<target name="ERNeutralLook.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERNeutralLook.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERNeutralLook" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERNeutralLook" />
-		</antcall>
-	</target>
-	
-	<!-- WOOgnl -->
-	<target name="WOOgnl.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- WOOgnl -->
+    <target name="WOOgnl.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/WOOgnl" />
-		</antcall>
-	</target>
-	<target name="WOOgnl.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="WOOgnl.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/WOOgnl" />
-		</antcall>
-	</target>
+        </antcall>
+    </target>
 
-	<!-- BTBusinessLogic -->
-	<target name="BTBusinessLogic.all">
-		<antcall target="framework" >
+    <!-- BTBusinessLogic -->
+    <target name="BTBusinessLogic.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
             <param name="project.name" value="BTBusinessLogic" />
             <param name="project.dir" value="${wonder.root}/Common/Applications/BugTracker/Frameworks/BTBusinessLogic" />
-		</antcall>
-	</target>
-	<target name="BTBusinessLogic.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="BTBusinessLogic.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
             <param name="project.name" value="BTBusinessLogic" />
             <param name="project.dir" value="${wonder.root}/Common/Applications/BugTracker/Frameworks/BTBusinessLogic" />
-		</antcall>
-	</target>
+        </antcall>
+    </target>
 
-	<!-- BugTracker -->
-	<target name="BugTracker.all">
-		<antcall target="application" >
+    <!-- BugTracker -->
+    <target name="BugTracker.all">
+        <antcall target="application" >
             <param name="project.principal.class" value="er.bugtracker.Application" />
             <param name="project.name" value="BugTracker" />
             <param name="project.dir" value="${wonder.root}/Common/Applications/BugTracker" />
-		</antcall>
-	</target>
-	<target name="BugTracker.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="BugTracker.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="er.bugtracker.Application" />
             <param name="project.name" value="BugTracker" />
             <param name="project.dir" value="${wonder.root}/Common/Applications/BugTracker" />
-		</antcall>
-	</target>
+        </antcall>
+    </target>
 
-	<!-- D2WInspectExample -->
-	<target name="D2WInspectExample.all">
-		<antcall target="stepwiseApplication" >
+    <!-- D2WInspectExample -->
+    <target name="D2WInspectExample.all">
+        <antcall target="stepwiseApplication" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WInspectExample" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Stepwise/D2WInspectExample" />
-		</antcall>
-	</target>
-	<target name="D2WInspectExample.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="D2WInspectExample.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WInspectExample" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Stepwise/D2WInspectExample" />
-		</antcall>
-	</target>
+        </antcall>
+    </target>
 
-	<!-- D2WListExample -->
-	<target name="D2WListExample.all">
-		<antcall target="stepwiseApplication" >
+    <!-- D2WListExample -->
+    <target name="D2WListExample.all">
+        <antcall target="stepwiseApplication" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WListExample" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Stepwise/D2WListExample" />
-		</antcall>
-	</target>
-	<target name="D2WListExample.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="D2WListExample.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WListExample" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Stepwise/D2WListExample" />
-		</antcall>
-	</target>
+        </antcall>
+    </target>
 
 
-	<!-- NetStruxrCaseStudy -->
-	<target name="NetStruxrCaseStudy.all">
-		<antcall target="application" >
+    <!-- NetStruxrCaseStudy -->
+    <target name="NetStruxrCaseStudy.all">
+        <antcall target="application" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="NetStruxrCaseStudy" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Wrox/NetStruxrCaseStudy" />
-		</antcall>
-	</target>
-	<target name="NetStruxrCaseStudy.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="NetStruxrCaseStudy.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="NetStruxrCaseStudy" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Wrox/NetStruxrCaseStudy" />
-		</antcall>
-	</target>
-	
-	<!-- ERMiniUglyLook -->
-	<target name="ERMiniUglyLook.all">
-		<antcall target="framework" >
+        </antcall>
+    </target>
+    
+    <!-- ERMiniUglyLook -->
+    <target name="ERMiniUglyLook.all">
+        <antcall target="framework" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERMiniUglyLook" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Wrox/ERMiniUglyLook" />
-		</antcall>
-	</target>
-	<target name="ERMiniUglyLook.clean">
-		<antcall target="clean" >
+        </antcall>
+    </target>
+    <target name="ERMiniUglyLook.clean">
+        <antcall target="clean" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="ERMiniUglyLook" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Wrox/ERMiniUglyLook" />
-		</antcall>
-	</target>
-	
-	<target name="core.all" depends="ERJars.all,JavaWOExtensions.all,ERExtensions.all,ERDirectToWeb.all" />
-	<target name="frameworks.all" depends="core.all,ERNeutralLook.all,WOOgnl.all,ERCoreBusinessLogic.all,ERJavaMail.all" />
+        </antcall>
+    </target>
+    
+    <target name="core.all" depends="ERJars.all,JavaWOExtensions.all,ERExtensions.all,ERDirectToWeb.all" />
+    <target name="frameworks.all" depends="core.all,ERNeutralLook.all,WOOgnl.all,ERCoreBusinessLogic.all,ERJavaMail.all" />
 
-	<target name="bugtracker.all" depends="frameworks.all,BTBusinessLogic.all,BugTracker.all" />
-	<target name="applications.all" depends="frameworks.all,bugtracker.all" />
+    <target name="bugtracker.all" depends="frameworks.all,BTBusinessLogic.all,BugTracker.all" />
+    <target name="applications.all" depends="frameworks.all,bugtracker.all" />
 
-	<target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all,NetStruxrCaseStudy.all" />
-	<target name="stepwise.all" depends="D2WListExample.all,D2WInspectExample.all" />
-	<target name="examples.all" depends="frameworks.all,wrox.all,stepwise.all" />
+    <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all,NetStruxrCaseStudy.all" />
+    <target name="stepwise.all" depends="D2WListExample.all,D2WInspectExample.all" />
+    <target name="examples.all" depends="frameworks.all,wrox.all,stepwise.all" />
 
-	<target name="common.all" depends="frameworks.all,examples.all,applications.all" />
-	
-	<target name="all" depends="common.all" />
-	
-	<target name="all.clean" depends="ERJars.clean,JavaWOExtensions.clean,ERExtensions.clean,ERDirectToWeb.clean,ERNeutralLook.clean,WOOgnl.clean,ERCoreBusinessLogic.clean" />
+    <target name="common.all" depends="frameworks.all,examples.all,applications.all" />
+    
+    <target name="all" depends="common.all" />
+    
+    <target name="all.clean" depends="ERJars.clean,JavaWOExtensions.clean,ERExtensions.clean,ERDirectToWeb.clean,ERNeutralLook.clean,WOOgnl.clean,ERCoreBusinessLogic.clean" />
 </project>
