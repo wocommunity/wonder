@@ -135,12 +135,12 @@
 <UL>
 	<LI>Reads the <SPAN CLASS="path">.woa/Contents/MacOS/MacOSClassPath.txt</SPAN> file to discover all of the .woa's referenced frameworks.
 	<LI>Creates a new directory, "Frameworks", inside <SPAN CLASS="path">.woa/Contents</SPAN> (if one didn't exist before)
-	<LI>Copies all referenced nonsystem frameworks (those are frameworks referenced with paths beginning with "/", ".." or "LOCALROOT") into the <SPAN CLASS="path">..woa/Contents/Frameworks</SPAN> directory if:
+	<LI>Copies all referenced nonsystem frameworks (those are frameworks referenced with paths beginning with <SPAN CLASS="path">/</SPAN>, <SPAN CLASS="path">..</SPAN> or <SPAN CLASS="path">LOCALROOT</SPAN>) into the <SPAN CLASS="path">..woa/Contents/Frameworks</SPAN> directory if:
 		<UL>
 		<LI>it didn't already exist <B>-or-</B>
 		<LI>the original referenced framework is newer than the local copy
 		</UL>
-	<LI>Rewrites <SPAN CLASS="path">..woa/Contents/MacOS/MacOSClassPath.txt</SPAN> and its evil twin, .woa/Contents/Unix/UnixClassPath.txt, to point to the freshly copied internal frameworks.
+	<LI>Rewrites <SPAN CLASS="path">..woa/Contents/MacOS/MacOSClassPath.txt</SPAN> and its evil twin, <SPAN CLASS="path">.woa/Contents/Unix/UnixClassPath.txt</SPAN>, to point to the freshly copied internal frameworks.
 </UL>
 
 <H1>Why would you want to do <I>that</I>?</H1>
