@@ -29,7 +29,7 @@ public class ERXGraph extends WOComponent {
     
     public NSData newImage() {
         GIFPlot plot = new GIFPlot();
-        String path = application().resourceManager().pathForResourceNamed("erDefault.graph", "ERExtensions", null);
+        String path = ERXFileUtilities.pathForResourceNamed("erDefault.graph", "ERExtensions", null);
         plot.addContentsOfFile(path);
         if(hasBinding("extraBindings"))
             plot.addContentsOfDictionary((NSDictionary)valueForBinding("extraBindings"));

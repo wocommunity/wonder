@@ -7,7 +7,6 @@
 package er.extensions;
 
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
@@ -365,14 +364,12 @@ public class ERXProperties {
         NSMutableArray propertiesPaths = new NSMutableArray();
         NSMutableArray projectsInfo = new NSMutableArray();
         String projectPath, aPropertiesPath;
-        WOApplication applicaiton = WOApplication.application();
-        if (applicaiton == null) {
+        WOApplication application = WOApplication.application();
+        if (application == null) {
             log.warn("The application is not yet initialized. Returning an empty array.");
             return NSArray.EmptyArray;
         }
-        
-        WOResourceManager resourceManager = applicaiton.resourceManager();
-        
+                
         /* *** Properties for frameworks *** */
         NSArray frameworkNames = (NSArray)NSBundle.frameworkBundles().valueForKey("name");
         Enumeration e = frameworkNames.objectEnumerator();
@@ -397,7 +394,7 @@ public class ERXProperties {
             
             if (aPropertiesPath == null) {
                 // The framework project is not opened from PBX, use the one in the bundle. 
-                aPropertiesPath = resourceManager.pathForResourceNamed("Properties", frameworkName, null);
+                aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", frameworkName, null);
                 if (aPropertiesPath != null) {
                     aPropertiesPath = getActualPath(aPropertiesPath);
                     projectsInfo.addObject("Framework:   " + frameworkName 
@@ -434,7 +431,7 @@ public class ERXProperties {
 
         if (aPropertiesPath == null) {
             // The application project is not opened from PBX, use the one in the bundle. 
-            aPropertiesPath = resourceManager.pathForResourceNamed("Properties", "app", null);
+            aPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties", "app", null);
             if (aPropertiesPath != null) {
                aPropertiesPath = getActualPath(aPropertiesPath);
                projectsInfo.addObject("Application: " + mainBundleName 

@@ -301,9 +301,7 @@ public class ERXConfigurationManager {
                         NSArray a=NSArray.componentsSeparatedByString(path," ");
                         //System.out.println("found "+a);
                         if (a.count()==2) {
-                            path =WOApplication.application().resourceManager().pathForResourceNamed((String)a.objectAtIndex(0),
-                                                                                                    (String)a.objectAtIndex(1),
-                                                                                                     null);
+                            path = ERXFileUtilities.pathForResourceNamed((String)a.objectAtIndex(0),                                                                                                     (String)a.objectAtIndex(1), null);
                             //System.out.println("path= "+path);
                         }
                     }
