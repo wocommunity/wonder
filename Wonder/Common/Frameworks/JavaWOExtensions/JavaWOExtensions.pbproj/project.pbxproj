@@ -103,7 +103,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B30FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -376,7 +375,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B37FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -635,6 +633,7 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -778,7 +777,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		40B58283FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -1077,265 +1075,308 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F53C009702C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSValidatedField.api;
 			path = Components/JSValidatedField.api;
 			refType = 2;
 		};
 		F53C009802C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSAlertPanel.api;
 			path = Components/JSAlertPanel.api;
 			refType = 2;
 		};
 		F53C009902C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSConfirmPanel.api;
 			path = Components/JSConfirmPanel.api;
 			refType = 2;
 		};
 		F53C009A02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSImageFlyover.api;
 			path = Components/JSImageFlyover.api;
 			refType = 2;
 		};
 		F53C009B02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSModalWindow.api;
 			path = Components/JSModalWindow.api;
 			refType = 2;
 		};
 		F53C009C02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSTextFlyover.api;
 			path = Components/JSTextFlyover.api;
 			refType = 2;
 		};
 		F53C009D02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAggregateEventRow.api;
 			path = Components/WOAggregateEventRow.api;
 			refType = 2;
 		};
 		F53C009E02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAnyField.api;
 			path = Components/WOAnyField.api;
 			refType = 2;
 		};
 		F53C009F02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAppleScript.api;
 			path = Components/WOAppleScript.api;
 			refType = 2;
 		};
 		F53C00A002C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAssociationEventRow.api;
 			path = Components/WOAssociationEventRow.api;
 			refType = 2;
 		};
 		F53C00A102C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOBatchNavigationBar.api;
 			path = Components/WOBatchNavigationBar.api;
 			refType = 2;
 		};
 		F53C00A202C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOCheckboxMatrix.api;
 			path = Components/WOCheckboxMatrix.api;
 			refType = 2;
 		};
 		F53C00A302C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOCollapsibleComponentContent.api;
 			path = Components/WOCollapsibleComponentContent.api;
 			refType = 2;
 		};
 		F53C00A402C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOCompletionBar.api;
 			path = Components/WOCompletionBar.api;
 			refType = 2;
 		};
 		F53C00A502C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WODictionaryRepetition.api;
 			path = Components/WODictionaryRepetition.api;
 			refType = 2;
 		};
 		F53C00A602C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventDisplayPage.api;
 			path = Components/WOEventDisplayPage.api;
 			refType = 2;
 		};
 		F53C00A702C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventRow.api;
 			path = Components/WOEventRow.api;
 			refType = 2;
 		};
 		F53C00A802C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventSetupPage.api;
 			path = Components/WOEventSetupPage.api;
 			refType = 2;
 		};
 		F53C00A902C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOExceptionPage.api;
 			path = Components/WOExceptionPage.api;
 			refType = 2;
 		};
 		F53C00AA02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOIFrame.api;
 			path = Components/WOIFrame.api;
 			refType = 2;
 		};
 		F53C00AB02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOKeyValueConditional.api;
 			path = Components/WOKeyValueConditional.api;
 			refType = 2;
 		};
 		F53C00AC02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOMetaRefresh.api;
 			path = Components/WOMetaRefresh.api;
 			refType = 2;
 		};
 		F53C00AD02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOPageRestorationError.api;
 			path = Components/WOPageRestorationError.api;
 			refType = 2;
 		};
 		F53C00AE02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WORadioButtonMatrix.api;
 			path = Components/WORadioButtonMatrix.api;
 			refType = 2;
 		};
 		F53C00AF02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSessionCreationError.api;
 			path = Components/WOSessionCreationError.api;
 			refType = 2;
 		};
 		F53C00B002C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSessionRestorationError.api;
 			path = Components/WOSessionRestorationError.api;
 			refType = 2;
 		};
 		F53C00B102C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSimpleArrayDisplay.api;
 			path = Components/WOSimpleArrayDisplay.api;
 			refType = 2;
 		};
 		F53C00B202C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSimpleArrayDisplay2.api;
 			path = Components/WOSimpleArrayDisplay2.api;
 			refType = 2;
 		};
 		F53C00B302C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSortOrder.api;
 			path = Components/WOSortOrder.api;
 			refType = 2;
 		};
 		F53C00B402C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSortOrderManyKey.api;
 			path = Components/WOSortOrderManyKey.api;
 			refType = 2;
 		};
 		F53C00B502C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOStatsPage.api;
 			path = Components/WOStatsPage.api;
 			refType = 2;
 		};
 		F53C00B602C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOTable.api;
 			path = Components/WOTable.api;
 			refType = 2;
 		};
 		F53C00B702C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOTableString.api;
 			path = Components/WOTableString.api;
 			refType = 2;
 		};
 		F53C00B802C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOTabPanel.api;
 			path = Components/WOTabPanel.api;
 			refType = 2;
 		};
 		F53C00B902C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOThresholdColoredNumber.api;
 			path = Components/WOThresholdColoredNumber.api;
 			refType = 2;
 		};
 		F53C00BA02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOToManyRelationship.api;
 			path = Components/WOToManyRelationship.api;
 			refType = 2;
 		};
 		F53C00BB02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOToOneRelationship.api;
 			path = Components/WOToOneRelationship.api;
 			refType = 2;
 		};
 		F53C00BC02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXAccessControl.api;
 			path = Components/WXAccessControl.api;
 			refType = 2;
 		};
 		F53C00BD02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXBar.api;
 			path = Components/WXBar.api;
 			refType = 2;
 		};
 		F53C00BE02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXOutlineControl.api;
 			path = Components/WXOutlineControl.api;
 			refType = 2;
 		};
 		F53C00BF02C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXOutlineEntry.api;
 			path = Components/WXOutlineEntry.api;
 			refType = 2;
 		};
 		F53C00C002C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXOutlineRepetition.api;
 			path = Components/WXOutlineRepetition.api;
 			refType = 2;
 		};
 		F53C00C102C7BBB8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXSortOrder.api;
 			path = Components/WXSortOrder.api;
@@ -2546,336 +2587,392 @@
 			};
 		};
 		F53C043702C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = _ClassNameComparator.java;
 			path = Sources/com/webobjects/woextensions/_ClassNameComparator.java;
 			refType = 2;
 		};
 		F53C043802C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = _EventComparator.java;
 			path = Sources/com/webobjects/woextensions/_EventComparator.java;
 			refType = 2;
 		};
 		F53C043902C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = _WOJExtensionsUtil.java;
 			path = Sources/com/webobjects/woextensions/_WOJExtensionsUtil.java;
 			refType = 2;
 		};
 		F53C043A02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSAlertPanel.java;
 			path = Sources/com/webobjects/woextensions/JSAlertPanel.java;
 			refType = 2;
 		};
 		F53C043B02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSComponent.java;
 			path = Sources/com/webobjects/woextensions/JSComponent.java;
 			refType = 2;
 		};
 		F53C043C02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSConfirmPanel.java;
 			path = Sources/com/webobjects/woextensions/JSConfirmPanel.java;
 			refType = 2;
 		};
 		F53C043D02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSImageFlyover.java;
 			path = Sources/com/webobjects/woextensions/JSImageFlyover.java;
 			refType = 2;
 		};
 		F53C043E02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSModalWindow.java;
 			path = Sources/com/webobjects/woextensions/JSModalWindow.java;
 			refType = 2;
 		};
 		F53C043F02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSTextFlyover.java;
 			path = Sources/com/webobjects/woextensions/JSTextFlyover.java;
 			refType = 2;
 		};
 		F53C044002C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = JSValidatedField.java;
 			path = Sources/com/webobjects/woextensions/JSValidatedField.java;
 			refType = 2;
 		};
 		F53C044102C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAggregateEventRow.java;
 			path = Sources/com/webobjects/woextensions/WOAggregateEventRow.java;
 			refType = 2;
 		};
 		F53C044202C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAnyField.java;
 			path = Sources/com/webobjects/woextensions/WOAnyField.java;
 			refType = 2;
 		};
 		F53C044302C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAppleScript.java;
 			path = Sources/com/webobjects/woextensions/WOAppleScript.java;
 			refType = 2;
 		};
 		F53C044402C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOAssociationEventRow.java;
 			path = Sources/com/webobjects/woextensions/WOAssociationEventRow.java;
 			refType = 2;
 		};
 		F53C044502C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOBatchNavigationBar.java;
 			path = Sources/com/webobjects/woextensions/WOBatchNavigationBar.java;
 			refType = 2;
 		};
 		F53C044602C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOCheckboxMatrix.java;
 			path = Sources/com/webobjects/woextensions/WOCheckboxMatrix.java;
 			refType = 2;
 		};
 		F53C044702C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOCollapsibleComponentContent.java;
 			path = Sources/com/webobjects/woextensions/WOCollapsibleComponentContent.java;
 			refType = 2;
 		};
 		F53C044802C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOCompletionBar.java;
 			path = Sources/com/webobjects/woextensions/WOCompletionBar.java;
 			refType = 2;
 		};
 		F53C044902C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WODictionaryRepetition.java;
 			path = Sources/com/webobjects/woextensions/WODictionaryRepetition.java;
 			refType = 2;
 		};
 		F53C044A02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventDisplay.java;
 			path = Sources/com/webobjects/woextensions/WOEventDisplay.java;
 			refType = 2;
 		};
 		F53C044B02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventDisplayPage.java;
 			path = Sources/com/webobjects/woextensions/WOEventDisplayPage.java;
 			refType = 2;
 		};
 		F53C044C02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventPage.java;
 			path = Sources/com/webobjects/woextensions/WOEventPage.java;
 			refType = 2;
 		};
 		F53C044D02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventRow.java;
 			path = Sources/com/webobjects/woextensions/WOEventRow.java;
 			refType = 2;
 		};
 		F53C044E02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventSetup.java;
 			path = Sources/com/webobjects/woextensions/WOEventSetup.java;
 			refType = 2;
 		};
 		F53C044F02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOEventSetupPage.java;
 			path = Sources/com/webobjects/woextensions/WOEventSetupPage.java;
 			refType = 2;
 		};
 		F53C045002C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOExceptionPage.java;
 			path = Sources/com/webobjects/woextensions/WOExceptionPage.java;
 			refType = 2;
 		};
 		F53C045102C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOExceptionParser.java;
 			path = Sources/com/webobjects/woextensions/WOExceptionParser.java;
 			refType = 2;
 		};
 		F53C045202C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOIFrame.java;
 			path = Sources/com/webobjects/woextensions/WOIFrame.java;
 			refType = 2;
 		};
 		F53C045302C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOKeyValueConditional.java;
 			path = Sources/com/webobjects/woextensions/WOKeyValueConditional.java;
 			refType = 2;
 		};
 		F53C045402C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOLongResponsePage.java;
 			path = Sources/com/webobjects/woextensions/WOLongResponsePage.java;
 			refType = 2;
 		};
 		F53C045502C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOMetaRefresh.java;
 			path = Sources/com/webobjects/woextensions/WOMetaRefresh.java;
 			refType = 2;
 		};
 		F53C045602C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOMethodInvocation.java;
 			path = Sources/com/webobjects/woextensions/WOMethodInvocation.java;
 			refType = 2;
 		};
 		F53C045702C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOPageRestorationError.java;
 			path = Sources/com/webobjects/woextensions/WOPageRestorationError.java;
 			refType = 2;
 		};
 		F53C045802C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOParsedErrorLine.java;
 			path = Sources/com/webobjects/woextensions/WOParsedErrorLine.java;
 			refType = 2;
 		};
 		F53C045902C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOProjectBuilderAction.java;
 			path = Sources/com/webobjects/woextensions/WOProjectBuilderAction.java;
 			refType = 2;
 		};
 		F53C045A02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WORadioButtonMatrix.java;
 			path = Sources/com/webobjects/woextensions/WORadioButtonMatrix.java;
 			refType = 2;
 		};
 		F53C045B02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSessionCreationError.java;
 			path = Sources/com/webobjects/woextensions/WOSessionCreationError.java;
 			refType = 2;
 		};
 		F53C045C02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSessionRestorationError.java;
 			path = Sources/com/webobjects/woextensions/WOSessionRestorationError.java;
 			refType = 2;
 		};
 		F53C045D02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSimpleArrayDisplay.java;
 			path = Sources/com/webobjects/woextensions/WOSimpleArrayDisplay.java;
 			refType = 2;
 		};
 		F53C045E02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSimpleArrayDisplay2.java;
 			path = Sources/com/webobjects/woextensions/WOSimpleArrayDisplay2.java;
 			refType = 2;
 		};
 		F53C045F02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSortOrder.java;
 			path = Sources/com/webobjects/woextensions/WOSortOrder.java;
 			refType = 2;
 		};
 		F53C046002C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOSortOrderManyKey.java;
 			path = Sources/com/webobjects/woextensions/WOSortOrderManyKey.java;
 			refType = 2;
 		};
 		F53C046102C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOStats.java;
 			path = Sources/com/webobjects/woextensions/WOStats.java;
 			refType = 2;
 		};
 		F53C046202C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOStatsPage.java;
 			path = Sources/com/webobjects/woextensions/WOStatsPage.java;
 			refType = 2;
 		};
 		F53C046302C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOTable.java;
 			path = Sources/com/webobjects/woextensions/WOTable.java;
 			refType = 2;
 		};
 		F53C046402C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOTableString.java;
 			path = Sources/com/webobjects/woextensions/WOTableString.java;
 			refType = 2;
 		};
 		F53C046502C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOTabPanel.java;
 			path = Sources/com/webobjects/woextensions/WOTabPanel.java;
 			refType = 2;
 		};
 		F53C046602C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOThresholdColoredNumber.java;
 			path = Sources/com/webobjects/woextensions/WOThresholdColoredNumber.java;
 			refType = 2;
 		};
 		F53C046702C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOToManyRelationship.java;
 			path = Sources/com/webobjects/woextensions/WOToManyRelationship.java;
 			refType = 2;
 		};
 		F53C046802C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOToOneRelationship.java;
 			path = Sources/com/webobjects/woextensions/WOToOneRelationship.java;
 			refType = 2;
 		};
 		F53C046902C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXAccessControl.java;
 			path = Sources/com/webobjects/woextensions/WXAccessControl.java;
 			refType = 2;
 		};
 		F53C046A02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXBar.java;
 			path = Sources/com/webobjects/woextensions/WXBar.java;
 			refType = 2;
 		};
 		F53C046B02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXOutlineControl.java;
 			path = Sources/com/webobjects/woextensions/WXOutlineControl.java;
 			refType = 2;
 		};
 		F53C046C02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXOutlineEntry.java;
 			path = Sources/com/webobjects/woextensions/WXOutlineEntry.java;
 			refType = 2;
 		};
 		F53C046D02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXOutlineRepetition.java;
 			path = Sources/com/webobjects/woextensions/WXOutlineRepetition.java;
 			refType = 2;
 		};
 		F53C046E02C7BBF8016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WXSortOrder.java;
 			path = Sources/com/webobjects/woextensions/WXSortOrder.java;
@@ -3704,12 +3801,14 @@
 			};
 		};
 		F53C04FD02C7BC41016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Fixes;
 			path = Documentation/Fixes;
 			refType = 2;
 		};
 		F53C04FE02C7BC41016C705A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = README.html;
 			path = Documentation/README.html;
