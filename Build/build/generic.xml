@@ -257,11 +257,11 @@ There are many ways to use this script:
                 <include name="ERExtensions.framework" />
                 <include name="ERDirectToWeb.framework" />
             </frameworks>
-            <frameworks root="${wonder.lib.root}" if="use.wonder.logic"> 
-                <include name="ERCoreBusinessLogic.framework" />
-            </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.wonder.mail"> 
                 <include name="ERJavaMail.framework" />
+            </frameworks>
+            <frameworks root="${wonder.lib.root}" if="use.wonder.logic"> 
+                <include name="ERCoreBusinessLogic.framework" />
             </frameworks>
             <frameworks root="${wonder.lib.root}" if="use.wonder.changenotification"> 
                 <include name="ERChangeNotificationJMS.framework" />
