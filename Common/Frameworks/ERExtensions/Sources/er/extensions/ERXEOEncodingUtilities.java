@@ -34,27 +34,49 @@ public class ERXEOEncodingUtilities {
      * that is used when objects are encoded into urls.
      * Default value is: _
      */
-    public static String EntityNameSeparator = "_";
+    private static String EntityNameSeparator = "_";
 
     /** Key used in EOModeler to specify the encoded (or abbreviated) entity 
      * named used when encoding an enterprise-object is an url. 
      */
     public final static String EncodedEntityNameKey = "EncodedEntityName";
 
-    public static boolean SpecifySeparatorInURL = true;
+    private static boolean SpecifySeparatorInURL = true;
+    
+    private static boolean initialized;
     
     /** Class initialization */
-    static {
+    public synchronized static void init() {
         // Find out if the user has set properties different than the defaults
         // EntityNameSeparator
         String entityNameSep = System.getProperty("er.extensions.ERXEOEncodingUtilities.EntityNameSeparator");
         if ((entityNameSep != null) && (entityNameSep.length() > 0))
-            EntityNameSeparator = entityNameSep;
+            setEntityNameSeparator(entityNameSep);
 
         // Specify separator in link ?
-        SpecifySeparatorInURL = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL", true);
-    }        
+        setSpecifySeparatorInURL(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL", true));
+        initialized = true;
+    }
     
+    public static void setSpecifySeparatorInURL(boolean specifySeparatorInURL) {
+        SpecifySeparatorInURL = specifySeparatorInURL;
+    }
+
+    public static boolean isSpecifySeparatorInURL() {
+        return SpecifySeparatorInURL;
+    }
+
+    public static void setEntityNameSeparator(String entityNameSeparator) {
+        EntityNameSeparator = entityNameSeparator;
+    }
+
+    public static String entityNameSeparator() {
+        if (!initialized) {
+            init();
+        }
+        return EntityNameSeparator;
+    }
+
     public static NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
         if (ec == null)
             throw new RuntimeException("Attempting to decode enterprise objects with null editing context.");
@@ -235,10 +257,10 @@ public class ERXEOEncodingUtilities {
 
         // If the separator is not specified, default to the one given at class init
         if (separator == null)
-            separator = EntityNameSeparator;
+            separator = entityNameSeparator();
 
         // Add the separator if needed
-        if (SpecifySeparatorInURL)
+        if (isSpecifySeparatorInURL())
             encoded.addObject ("sep=" + separator);
 
         int c = 1;
@@ -293,7 +315,7 @@ public class ERXEOEncodingUtilities {
         if(temp != null && temp.count() > 1)
             log.warn("Found multiple separators in form values: " + temp);
         if(separator == null)
-            separator = EntityNameSeparator;
+            separator = entityNameSeparator();
 
             for(Enumeration e = values.keyEnumerator(); e.hasMoreElements();) {
                 String key =(String)e.nextElement();
