@@ -87,6 +87,24 @@ public class ERXPatcher  {
                 appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
             }
 
+            /**
+             * Appends the attribute "value" to the response.
+             * First tries to get a localized version and if that fails, uses the
+             * supplied value as the default
+             */
+            protected void _appendValueAttributeToResponse(WOResponse response,
+                                                           WOContext context) {
+                if (_value != null) {
+                    Object object = _value.valueInComponent(context.component());
+                    Object object1 = null;
+                    if (object != null) {
+                        String string = object.toString();
+                        string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
+                        response._appendTagAttributeAndValue("value", string, true);
+                    }
+                }
+            }
+
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
                 int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
@@ -106,6 +124,24 @@ public class ERXPatcher  {
             protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
                 super._appendNameAttributeToResponse(woresponse, wocontext);
                 appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+            }
+
+            /**
+             * Appends the attribute "value" to the response.
+             * First tries to get a localized version and if that fails, uses the
+             * supplied value as the default
+             */
+            protected void _appendValueAttributeToResponse(WOResponse response,
+                                                           WOContext context) {
+                if (_value != null) {
+                    Object object = _value.valueInComponent(context.component());
+                    Object object1 = null;
+                    if (object != null) {
+                        String string = object.toString();
+                        string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
+                        response._appendTagAttributeAndValue("value", string, true);
+                    }
+                }
             }
 
             public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -425,7 +461,12 @@ public class ERXPatcher  {
             }
         }
 
-        /** Fixing up the response for XHTML and adding the element to the array of generated element IDs, so we can use JavaScript later on. If the given element is an input element, it adds a dictionary {type=element.class, name=element.elementID}  to context().userInfo().elementArray() */
+        /**
+         * Fixing up the response for XHTML and adding the element to the array of generated element IDs,
+         * so we can use JavaScript later on. If the given element is an input element,
+         * it adds a dictionary {type=element.class, name=element.elementID}
+         * to context().userInfo().elementArray()
+         */
         public static void processResponse(WODynamicElement element, WOResponse response, WOContext context, int priorOffset, String name) {
             if(cleanupXHTML)
                 correctResponse(response, priorOffset);
