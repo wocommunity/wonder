@@ -18,9 +18,11 @@ import com.webobjects.foundation.*;
  * the base localization support.
  */
 public class ERXStringUtilities {
-
+    
     /** Holds the default display language, which is English */
     private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
+    /** Holds the chars for hex enconding */
+    public static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     /** 
      * Holds the array of default display languages. Holds
      * a single entry for English.
@@ -679,16 +681,13 @@ public class ERXStringUtilities {
      * @return hex string
      */
     public static String byteArrayToHexString(byte[] block) {
-        char[] hexChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
         StringBuffer buf = new StringBuffer();
-
         int len = block.length;
         for (int i = 0; i < len; i++) {
             int high = ((block[i] & 0xf0) >> 4);
             int low  =  (block[i] & 0x0f);
-            buf.append(hexChars[high]);
-            buf.append(hexChars[low]);
+            buf.append(HEX_CHARS[high]);
+            buf.append(HEX_CHARS[low]);
         }
         return buf.toString();
     }
