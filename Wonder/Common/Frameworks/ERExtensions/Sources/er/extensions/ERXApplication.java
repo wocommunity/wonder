@@ -327,9 +327,10 @@ public abstract class ERXApplication extends WOApplication {
      */
     public WOResponse handleException(Exception exception, WOContext context) {
         NSDictionary extraInfo=extraInformationForExceptionInContext(exception, context);
-        log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
+        log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo, exception instanceof NSForwardException? ((NSForwardException) exception).originalException() : exception);
         if( exception instanceof NSForwardException ) {
-            if( ((NSForwardException) exception).originalException() instanceof Error ) {
+            Throwable t = ((NSForwardException) exception).originalException();
+            if( t instanceof OutOfMemoryError ) {
                 log.error("Ran out of memory, killing this instance");
                 Runtime.getRuntime().exit( 1 );
             }
