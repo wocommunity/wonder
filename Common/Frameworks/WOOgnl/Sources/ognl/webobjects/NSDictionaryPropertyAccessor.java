@@ -1,0 +1,39 @@
+/*
+ * Copyright (C) NetStruxr, Inc. All rights reserved.
+ *
+ * This software is published under the terms of the NetStruxr
+ * Public Software License version 0.5, a copy of which has been
+ * included with this distribution in the LICENSE.NPL file.  */
+
+/* DictionaryPropertyAccessor.java created by max on Fri 28-Sep-2001 */
+package ognl.webobjects;
+
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.*;
+import ognl.*;
+
+public class NSDictionaryPropertyAccessor implements PropertyAccessor {
+
+    public Object getProperty(Object target, Object name) throws OgnlException {
+        Object property = null;
+        try {
+            NSDictionary dictionary = (NSDictionary)target;
+            property = dictionary.objectForKey(name);
+        } catch (Exception ex) {
+            throw new OgnlException(name.toString(), ex);
+        }
+        return property;
+    }
+
+    // Note that NSDictionary is read only.
+    public void setProperty(Object target, Object name, Object value) throws OgnlException {
+        try {
+            NSMutableDictionary dictionary = (NSMutableDictionary)target;
+            dictionary.setObjectForKey(value, name);
+        } catch (Exception ex) {
+            throw new OgnlException(name.toString(), ex);
+        }
+    }
+}
