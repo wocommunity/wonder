@@ -4,9 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXApplication.java created by max on Fri 29-Sep-2000 */
-
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -115,6 +112,37 @@ public abstract class ERXApplication extends WOApplication {
 
     public static ERXApplication erxApplication() { return (ERXApplication)WOApplication.application(); }
 
+    public WOResponse handleException(Exception exception, WOContext context) {
+        NSMutableDictionary extraInfo=new NSMutableDictionary();
+        if (context!=null && context.page()!=null) {
+            extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
+            if (context.component() != null) {
+                extraInfo.setObjectForKey(context.component().name(), "CurrentComponent");
+                if (context.component().parent() != null) {
+                    WOComponent component = context.component();
+                    NSMutableArray hierarchy = new NSMutableArray(component.name());
+                    while (component.parent() != null) {
+                        component = component.parent();
+                        hierarchy.addObject(component.name());
+                    }
+                    extraInfo.setObjectForKey(hierarchy, "CurrentComponentHierarchy");
+                }
+            }
+            extraInfo.setObjectForKey(context.request().uri(), "uri");
+            if (context.page() instanceof D2WComponent) {
+                D2WContext c=((D2WComponent)context.page()).d2wContext();
+                String pageConfiguration=(String)c.valueForKey("pageConfiguration");
+                if (pageConfiguration!=null)
+                    extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
+            }
+            if (context.hasSession())
+                if (context.session().statistics() != null)
+                    extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
+        }
+        cat.warn("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
+        return super.handleException(exception, context);
+    }    
+    
     // backstop wrapper for notifications
     public String mailWrapperName() { return "PageWrapper"; }
 
