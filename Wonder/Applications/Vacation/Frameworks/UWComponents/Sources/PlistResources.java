@@ -28,10 +28,6 @@ public class PlistResources extends Object implements NSKeyValueCoding {
         return resources;
     }
 
-    public NSDictionary dictionary() {
-        return dictionary;
-    }
-
     public PlistResources(String plistName) throws Exception {
         super();
         // get the path to the file named settings.plist
@@ -42,9 +38,17 @@ public class PlistResources extends Object implements NSKeyValueCoding {
             dictionary = (NSDictionary) NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
     }
 
+    public NSDictionary rootDictionary() {
+        return dictionary;
+    }
+    
     // load settings from a text file
     public Object valueForKey(String key) {
         return dictionary.objectForKey(key);
+    }
+
+    public NSDictionary dictionaryForKey(String key) {
+        return (NSDictionary) valueForKey(key);
     }
 
     public void takeValueForKey(Object object, String Key) {
