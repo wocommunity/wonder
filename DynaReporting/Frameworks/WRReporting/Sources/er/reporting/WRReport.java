@@ -118,6 +118,7 @@ public class WRReport extends WOComponent  {
         _showPresentationControls = null;
         _showRecordGroupHeadings = null;
         _showTopCriteriaLabel = null;
+        _recordGroupTotalToShow = null;
         _currentZCriteria.removeAllObjects();
         //_initializedDimensionArrayFromBindings = false;
         initializeDimensionArrayFromBindings();
