@@ -3,11 +3,12 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import com.webobjects.foundation.*;
 
 
 public class ERXRuntimeUtilities {
-
-
+    public static ERXLogger log = ERXLogger.getERXLogger(ERXRuntimeUtilities.class);
+    
 
     /** Excecutes the specified command line commands. If envp is not null the  environment variables are set
     * before executing the command.
@@ -21,8 +22,8 @@ public class ERXRuntimeUtilities {
      *
      * @exception IOException if something went wrong
      */
-    public final static String[] executeCommandLineCommandsWithEnvVarsInWorkingDir(String[] commands, String[] envp, File dir) throws IOException {
-        String[] results = new String[commands.length];
+    public final static Result[] executeCommandLineCommandsWithEnvVarsInWorkingDir(String[] commands, String[] envp, File dir) throws IOException {
+        Result[] results = new Result[commands.length];
 
         for (int i = 0; i < commands.length; i++) {
             results[i] = executeCommandLineCommandWithEnvVarsInWorkingDir(commands[i], envp, dir);
@@ -43,11 +44,17 @@ public class ERXRuntimeUtilities {
      *
      * @exception IOException if something went wrong
      */
-    public final static String executeCommandLineCommandWithEnvVarsInWorkingDir(String command, String[] envp, File dir) throws IOException {
+    public final static Result executeCommandLineCommandWithEnvVarsInWorkingDir(String command, String[] envp, File dir) throws IOException {
 
         Runtime rt = Runtime.getRuntime();
         Process p = null;
+        StringBuffer response = new StringBuffer();
+        String input = "";
+        String error = "";
         try {
+            if (log.isDebugEnabled()) {
+                log.debug("will execute command "+command);
+            }
             if (dir == null && envp == null) {
                 p = rt.exec(command);
 
@@ -71,18 +78,27 @@ public class ERXRuntimeUtilities {
 
             int len = 0;
             InputStream is = p.getInputStream();
-            StringBuffer sb = new StringBuffer();
 
             while ((len = is.read(b)) != -1) {
                 byte[] res = new byte[len];
                 System.arraycopy(b, 0, res, 0, len);
                 String s = new String(res);
-                sb.append(s);
+                response.append(s);
             }
-            return sb.toString();
+            
         } finally {
+            InputStream is = p.getInputStream();
+            if (is!=null) input = ERXFileUtilities.stringFromInputStream(is);
+            is = p.getErrorStream();
+            if (is!=null) error = ERXFileUtilities.stringFromInputStream(is);
+            
+            if (log.isDebugEnabled()) {
+                log.debug("input = "+input);
+                log.debug("error = "+error);
+            }
             freeProcessResources(p);
         }
+        return new Result(response.toString(), input, error);
 
     }
 
@@ -102,5 +118,18 @@ public class ERXRuntimeUtilities {
         }
     }
 
-    
+    public static String escapePath(String path) {
+        path = ERXStringUtilities.replaceStringByStringInString(" ", "\\ ", path);
+        return path;
+    }
+
+    public static class Result {
+        public String response, input, error;
+        
+        public Result(String response, String input, String error) {
+            this.response = response;
+            this.input = input;
+            this.error = error;
+        }
+    }
 }
