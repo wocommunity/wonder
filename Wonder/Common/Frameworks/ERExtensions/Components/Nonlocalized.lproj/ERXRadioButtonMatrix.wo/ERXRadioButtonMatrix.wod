@@ -1,14 +1,4 @@
-RadioButtonRepetition: ERXTable {
-	cellpadding = cellpadding;
-	cellspacing = cellspacing;
-	index = index;
-	item = currentItem;
-	list = ^list;
-	maxColumns = ^maxColumns;
-	tableWidth = ^width;
-	cellWidth = ^cellWidth;
-	cellVAlign = ^cellVAlign;
-	cellAlign = ^cellAlign;
+Content: WOComponentContent {
 }
 
 
@@ -20,6 +10,16 @@ RadioButton: WOGenericElement {
 	value = index;
 }
 
-Content: WOComponentContent {
+RadioButtonRepetition: ERXTable {
+	cellpadding = cellpadding;
+	cellspacing = cellspacing;
+	index = index;
+	item = currentItem;
+	list = ^list;
+	maxColumns = ^maxColumns;
+	tableWidth = ^width;
+	cellWidth = ^cellWidth;
+	cellVAlign = ^cellVAlign;
+	cellAlign = ^cellAlign;
 }
 
