@@ -31,8 +31,8 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
         // however, if the form does not have to be submitted AND javascript is enabled, no need for a form
         if (result && !shouldSubmitForm() &&
             ((ERXSession)session()).javaScriptEnabled() &&
-            !((ERXSession)session()).browserIsNetscape() &&
-            !((ERXSession)session()).browserIsOmniweb())
+            !((ERXSession)session()).browser().isNetscape() &&
+            !((ERXSession)session()).browser().isOmniweb())
             result=false;
         return result;
     }
