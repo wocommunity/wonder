@@ -5,6 +5,50 @@
 	};
 	objectVersion = 38;
 	objects = {
+		416649FE04476AAB00000102 = {
+			isa = PBXFrameworkReference;
+			path = ERPrototypes.framework;
+			refType = 3;
+		};
+		416649FF04476AAB00000102 = {
+			fileRef = 416649FE04476AAB00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41664A0004476ACA00000102 = {
+			buildArgumentsString = "-emacs -Dproject.name=\"ERCoreBusinessLogic\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml generic.$ACTION";
+			buildPhases = (
+			);
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Ant;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = /usr/local/ant/bin/ant;
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = Ant;
+			passBuildSettingsInEnvironment = 1;
+			productName = Ant;
+			settingsToExpand = 6;
+			settingsToPassInEnvironment = 287;
+			settingsToPassOnCommandLine = 280;
+		};
+//410
+//411
+//412
+//413
+//414
+//F50
+//F51
+//F52
+//F53
+//F54
 		F533017C037B1A6501CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -72,6 +116,7 @@
 				F5C403DE02022B0501A801D4,
 				F5C403E002022B0501A801D4,
 				F5C4040B02022B0501A801D4,
+				41664A0004476ACA00000102,
 			);
 		};
 		F5C403A802022B0501A801D4 = {
@@ -109,6 +154,7 @@
 		};
 		F5C403CB02022B0501A801D4 = {
 			children = (
+				416649FE04476AAB00000102,
 				F55598E70283348A01000104,
 				F5C403CC02022B0501A801D4,
 				F5C403CD02022B0501A801D4,
@@ -428,6 +474,7 @@
 				F5C4042B02022BDD01A801D4,
 				F5C4042F02022C8601A801D4,
 				F55598E9028334B101000104,
+				416649FF04476AAB00000102,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
