@@ -125,7 +125,7 @@ public class ERXUtilities {
             EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
             if (!adaptorChannel.isOpen())
                 adaptorChannel.openChannel();
-            primaryKey = adaptorChannel.primaryKeyForNewRowWithEntity(entity);
+            primaryKey = (NSDictionary)adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity).lastObject();
             dbContext.unlock();
         } catch (Exception e) {
             dbContext.unlock();
@@ -274,9 +274,13 @@ public class ERXUtilities {
     // This will return a list of all the framework names loaded into the application.
     public static NSArray allFrameworkNames() {
         NSMutableSet frameworkNames = new NSMutableSet();
-        for (Enumeration e = NSBundle.allFrameworks().objectEnumerator(); e.hasMoreElements();) {
-            String frameworkName = D2WModel.nameFromFrameworkBundle((NSBundle)e.nextElement());
-            frameworkNames.addObject(frameworkName);
+        for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
+            NSBundle bundle = (NSBundle)e.nextElement();
+            String frameworkName = D2WModel.nameFromFrameworkBundle(bundle);
+            if (frameworkName != null)
+                frameworkNames.addObject(frameworkName);
+            else
+                cat.warn("Null framework name for bundle: " + bundle);
         }
         return frameworkNames.allObjects();
     }
@@ -441,13 +445,8 @@ public class ERXUtilities {
             return new NSSet();
         else {
             Object [] objs = new Object[array.count()];
-            array.getObjects(objs);
+            objs = array.objects();
             return new NSSet(objs);
         }
     }
-
-
-
-
-
 }

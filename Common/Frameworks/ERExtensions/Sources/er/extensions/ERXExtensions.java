@@ -363,7 +363,7 @@ public class ERXExtensions {
                         return true;
                     else if (e.toString().indexOf("ORA-01041")!=-1) {
                         // just returning true here does not seem to do the trick. why !?!?
-                        WOApplication.application().logString("ORA-01041 detecting -- forcing reconnect");
+                        NSLog.err.appendln("ORA-01041 detecting -- forcing reconnect");
                         dbc2.database().handleDroppedConnection();
                         return false;
                     } else if (e.toString().indexOf("EOGeneralAdaptorException")!=-1 &&

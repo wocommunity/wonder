@@ -76,17 +76,14 @@ public class ERXConfigurationManager {
      return the single instance of this class
      */
     public static ERXConfigurationManager defaultManager() {
-        if (defaultManager==null) {
+        if (defaultManager==null)
             defaultManager=new ERXConfigurationManager();
-        }
         return defaultManager;
     }
-
-  
+    
     public String stringForKey(String key) {
         return NSProperties.stringForKey(key);
     }
-
 
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());

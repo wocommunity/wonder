@@ -17,10 +17,6 @@ import java.io.PrintStream;
 import java.util.*;
 
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
-
-    public ERXWOTestInterface(WOContext context) {
-        super(context);
-    }
     
     //////////////////////////////////////  log4j category  /////////////////////////////////////
     public static final Category cat = Category.getInstance(ERXWOTestInterface.class);
@@ -35,9 +31,9 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     protected ERXTestRunner aTestRunner;
     protected ERXTestResult testResult;
     protected long runTime;
-
-    public ERXWOTestInterface() {
-        super();
+    
+    public ERXWOTestInterface(WOContext context) {
+        super(context);
         showExceptions = Boolean.FALSE;
         theTest = "";
         runTime = 0;

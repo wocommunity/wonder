@@ -613,7 +613,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             ((ERXValidationException)e).setEoObject(this);
             throw e;
         } catch (NSValidation.ValidationException e) {
-            NSMutableDictionary newUserInfo=new NSMutableDictionary((NSDictionary)e.userInfo());
+            NSMutableDictionary newUserInfo=((NSDictionary)e.userInfo()).mutableClone();
             if (newUserInfo.objectForKey(NSValidation.ValidationException.ValidatedKeyUserInfoKey)==null) {
                 newUserInfo.setObjectForKey(key,NSValidation.ValidationException.ValidatedKeyUserInfoKey);
             }
@@ -623,8 +623,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             validationException.debug("Exception raised while validating object: " + this + " class: " + getClass() + " pKey: " + primaryKey() + newUserInfo + "\n" + e);
             throw new NSValidation.ValidationException(e.toString(), newUserInfo );
         } catch (RuntimeException e) {
-            WOApplication.application().logString("**** During validateValueForKey "+key);
-            WOApplication.application().logString("**** caught "+e);
+            NSLog.err.appendln("**** During validateValueForKey "+key);
+            NSLog.err.appendln("**** caught "+e);
             throw e;
         }
         return result;
