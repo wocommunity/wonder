@@ -37,51 +37,59 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         if (log.isDebugEnabled ())
 	    log.debug ("Initializing Framework.");
 
-	Perl5Compiler compiler	= new Perl5Compiler ();
-	_matcher = new Perl5Matcher ();
-
-	try {
-	    _pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
-	} catch (MalformedPatternException e) {
-	    throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
-	}
-
-	this.initializeFrameworkFromSystemProperties ();
-	log.info ("ERJavaMail: finished initialization");
+		Perl5Compiler compiler	= new Perl5Compiler ();
+		_matcher = new Perl5Matcher ();
+	
+		try {
+			_pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
+		} catch (MalformedPatternException e) {
+			throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
+		}
+	
+		this.initializeFrameworkFromSystemProperties ();
+		log.info ("ERJavaMail: finished initialization");
     }
 
     public void initializeFrameworkFromSystemProperties () {
-        String adminEmail = System.getProperty ("er.javamail.adminEmail");
-	if ((adminEmail == null) || (adminEmail.length () == 0))
+		// Admin Email
+		String adminEmail = System.getProperty ("er.javamail.adminEmail");
+		if ((adminEmail == null) || (adminEmail.length () == 0))
             throw new RuntimeException ("ERJavaMail: the property er.javamail.adminEmail is not specified!");
         this.setAdminEmail (adminEmail);
-	log.debug ("er.javamail.adminEmail: " + _adminEmail);
+		log.debug ("er.javamail.adminEmail: " + _adminEmail);
 
-        boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
+		// JavaMail Debug Enabled ?
+		boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
         this.setDebugEnabled (debug);
-	log.debug ("er.javamail.debugEnabled: " + debug);
+		log.debug ("er.javamail.debugEnabled: " + debug);
 
+		// Centralize mails ?
         boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
-        this.setCentralize (centralize);
-	log.debug ("er.javamail.centralize: " + centralize);
+		this.setCentralize (centralize);
+		log.debug ("er.javamail.centralize: " + centralize);
 
-        int milliswait = ERXProperties.intForKey ("er.javamail.milliSecondsWaitIfSenderOverflowed");
+		// Time to wait when sender if overflowed
+		int milliswait = ERXProperties.intForKey ("er.javamail.milliSecondsWaitIfSenderOverflowed");
         if (milliswait > 1000)
-            this.setMilliSecondsWaitIfSenderOverflowed (milliswait);
-	log.debug ("er.javamail.milliSecondsWaitIfSenderOverflowed: " + milliswait);
+			this.setMilliSecondsWaitIfSenderOverflowed (milliswait);
+		log.debug ("er.javamail.milliSecondsWaitIfSenderOverflowed: " + milliswait);
 
-        // Finish intialization
-        String smtpHost = System.getProperty ("er.javamail.smtpHost");
+		// Smtp host
+		String smtpHost = System.getProperty ("er.javamail.smtpHost");
         if ((smtpHost == null) || (smtpHost.length () == 0))
             throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
-	log.debug ("er.javamail.smtpHost: " + smtpHost);
+		log.debug ("er.javamail.smtpHost: " + smtpHost);
 
+		// With the smtp-host, we can setup the session
         Properties props = new Properties ();
         props.put ("mail.smtp.host", smtpHost);
         this.setDefaultProperties (props);
-
         javax.mail.Session session = javax.mail.Session.getDefaultInstance (this.defaultProperties (), null);
-        this.setDefaultSession (session);
+		this.setDefaultSession (session);
+
+		// Default X-Mailer header
+		this.setDefaultXMailerHeader (System.getProperty ("er.javamail.XMailerHeader"));
+		log.debug ("er.javamail.smtpHost: " + smtpHost);
     }
 
 
@@ -133,6 +141,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	    _adminEmail = adminEmail;
     }
 
+	
     protected boolean _debugEnabled = true;
 
     public boolean debugEnabled () {
@@ -144,6 +153,24 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     }
 
 
+	/** This property sets the default header for the X-Mailer property */
+	protected String _defaultXMailerHeader = null;
+
+	/**
+	 * Gets the default X-Mailer header to use for
+     * sending mails. Pulls the value out of the
+     * property: er.javamail.XMailerHeader
+     * @return default X-Mailer header
+     */
+	public String defaultXMailerHeader () {
+		return _defaultXMailerHeader;
+	}
+
+	public void setDefaultXMailerHeader (String header) {
+		_defaultXMailerHeader = header;
+	}
+
+	
     /** Used to send mail to adminEmail only.  Useful for debugging issues */
     protected boolean _centralize = true;
 
@@ -170,10 +197,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
     // MAIL VALIDATION
     /** Validates an enterprise object's attribute (accessed via key).
-	@param object the object to be validated
-	@param key the attribute's name
-	@param email the email value
-	@return the email if correct */
+		@param object the object to be validated
+		@param key the attribute's name
+		@param email the email value
+		@return the email if correct */
     public String validateEmail (EOEnterpriseObject object, String key, String email) {
         if (email != null) {
             if (!isValidEmail(email))
@@ -193,6 +220,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 
     /** Define a standard ERJavMail exception */
     public static class Exception extends java.lang.Exception {
-	public Exception (String message) { super (message); }
+		public Exception (String message) { super (message); }
     }
 }
