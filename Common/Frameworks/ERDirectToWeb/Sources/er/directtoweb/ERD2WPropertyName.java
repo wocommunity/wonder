@@ -50,7 +50,7 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
 
     public String d2wComponentName() {
         String name = (String)d2wContext().valueForKey("componentName");
-        if(name.indexOf("CustomComponent")>=0) {
+        if(name != null && name.indexOf("CustomComponent")>=0) {
             name = (String)d2wContext().valueForKey("customComponentName");
         }
         return name;
