@@ -670,9 +670,8 @@
 		412B651C041D30E200000103 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			name = Properties;
-			path = Resources.BBC/Properties;
-			refType = 2;
+			path = Properties;
+			refType = 4;
 		};
 		412B651E041D30E200000103 = {
 			fileRef = 412B651C041D30E200000103;
@@ -798,11 +797,30 @@
 //D72
 //D73
 //D74
+		D7B7D726044AF2D300F5222D = {
+			children = (
+				D7B7D727044AF2F800F5222D,
+				D7B7D728044AF30500F5222D,
+			);
+			isa = PBXGroup;
+			path = Resources;
+			refType = 4;
+		};
+		D7B7D727044AF2F800F5222D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = Properties;
+			refType = 4;
+		};
+		D7B7D728044AF30500F5222D = {
+			isa = PBXFileReference;
+			path = Vacation.eomodeld;
+			refType = 4;
+		};
 		D7BE005C0427247800000164 = {
 			isa = PBXFileReference;
-			name = Vacation.eomodeld;
-			path = Resources.BBC/Vacation.eomodeld;
-			refType = 2;
+			path = Vacation.eomodeld;
+			refType = 4;
 		};
 		D7BE005D0427247800000164 = {
 			fileRef = D7BE005C0427247800000164;
@@ -850,6 +868,7 @@
 				412B63A6041D308200000103,
 				F8763CF503772B8B01A31911,
 				F5D2080F02B17BE101A318C2,
+				D7B7D726044AF2D300F5222D,
 				F5D2081A02B17BE101A318C2,
 				F5D2083002B17BE101A318C2,
 				F5D2078302B17BE101A318C2,
@@ -1421,7 +1440,7 @@
 				D7BE005C0427247800000164,
 			);
 			isa = PBXGroup;
-			path = Resources;
+			path = Resources.BBC;
 			refType = 4;
 		};
 		F5D2081A02B17BE101A318C2 = {
