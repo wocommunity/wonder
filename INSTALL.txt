@@ -35,13 +35,16 @@ wo.wolocalroot=/
 wo.dir.system=/System
 
 ==== END wobuild.properties ====
-- delete the Apple JavaWOExtensions:
-  sudo rm -Rf  /Library/Frameworks/JavaWOExtensions.framework
 
 - then call up
 
-  ant install
-at the top-level folder. The final products will end up in ~/Roots.
+  sudo ant all
+
+or
+
+ ant compile; sudo ant install web
+
+at the top-level folder. 
 
 Also, please take a look at the 'GettingStarted' document.
 
