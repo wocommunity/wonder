@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/ERExtensions/ERJars/ExcelGenerator/JavaWOExtensions/JavaFoundation/JavaWebObjects/JavaWebServicesSupport/JavaXML"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/ERExtensions/ERJars/ExcelGenerator/JavaWOExtensions/JavaEOAccess/JavaEOControl/JavaFoundation/JavaWebObjects/JavaWebServicesSupport/JavaXML"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
