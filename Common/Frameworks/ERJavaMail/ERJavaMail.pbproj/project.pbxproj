@@ -776,18 +776,6 @@
 			settings = {
 			};
 		};
-		F52009810393A42801000104 = {
-			fileRef = 4E16E64A0392AC7300CF0E72;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F52009830393A42A01000104 = {
-			fileRef = 4E16E64B0392AC7300CF0E72;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5251D70032D489A019C4BA9 = {
 			children = (
 				F5251D71032D489E019C4BA9,
@@ -1007,12 +995,6 @@
 				);
 			};
 		};
-		F53788AA0335AE3A01000010 = {
-			fileRef = F53788A50335ADF401000010;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F54ECDF6033CEEC501000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1042,9 +1024,6 @@
 			dstPath = Java;
 			dstSubfolderSpec = 7;
 			files = (
-				F53788AA0335AE3A01000010,
-				F52009810393A42801000104,
-				F52009830393A42A01000104,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
