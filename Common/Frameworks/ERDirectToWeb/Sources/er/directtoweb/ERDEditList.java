@@ -23,7 +23,7 @@ public class ERDEditList extends ERDCustomEditComponent {
 
     public ERDEditList(WOContext context) { super(context); }
 
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.EditList");
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDEditList.class);
     
     public String choices;
     public String choiceDisplayKey;
