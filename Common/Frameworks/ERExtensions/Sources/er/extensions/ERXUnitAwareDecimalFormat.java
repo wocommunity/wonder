@@ -29,25 +29,26 @@ import java.io.Serializable;
  * NumberFormat formatter = new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
  * formatter.setMaximumFractionDigits(2);
  * 
- * // Will display "123.45" bytes
+ * // Will display "123.45 bytes"
  * System.out.println(formatter.format(doubleSmallValue); 
  * 
  * // Will display "1.14 GB"
  * System.out.println(formatter.format(doubleLargeValue);
  * 
+ * </pre>
  */
 public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneable, Serializable {
 
-    /** Predefined size unit; supports bytes, KB, MB, GB, TB */
+    /** Predefined size unit; supports: bytes, KB, MB, GB, TB */
     public static final String BYTE = "byte";
 
-    /** Predefined length unit; supports nm, micrometer, mm, cm, m, km */
+    /** Predefined length unit; supports: nm, micrometer, mm, cm, m, km */
     public static final String METER = "meter";
 
-    /** Predefined weight unit; supports g, kg, ton, kiloton */
+    /** Predefined weight unit; supports: mg, g, kg, ton, kiloton */
     public static final String GRAM = "gram";
 
-    /** Predefined unit; supports ps, ns, microsecond, ms, sec, min, hour, day  */
+    /** Predefined unit; supports: ps, ns, microsecond, ms, sec, min, hour, day  */
     public static final String SECOND = "second";
 
     /** UnitPrefix is an inner class */
@@ -114,6 +115,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
             } else if (GRAM.equals(unitName)) {
                 if (_gramPrefixArray == null) 
                     _gramPrefixArray = new NSArray(new Object[] {
+                            new UnitPrefix("mg", "miligram", 1.0d / 1000.0d), 
                             new UnitPrefix("g", "gram", 1.0d), 
                             new UnitPrefix("kg", "kilogram", 1000.0d), 
                             // strictly, ton is not a part of the International System  
@@ -123,7 +125,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
 
             } else if (SECOND.equals(unitName)) {
                 if (_secondPrefixArray == null) 
-                    unitPrefixArray = _secondPrefixArray = new NSArray(new Object[] {
+                    _secondPrefixArray = new NSArray(new Object[] {
                             new UnitPrefix("ps", "picosecond", 1.0d / 1000.0d / 1000.0d / 1000.0d / 1000.0d),
                             new UnitPrefix("ns", "nanosecond", 1.0d / 1000.0d / 1000.0d / 1000.0d),
                             new UnitPrefix("microsecond", "microsecond", 1.0d / 1000.0d / 1000.0d),
