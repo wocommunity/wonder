@@ -141,7 +141,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
             return unitPrefixArray;
         }
 
-        public static UnitPrefix findAppropiatePrefix(double number, NSArray unitPrefixArray) {
+        public static UnitPrefix findAppropriatePrefix(double number, NSArray unitPrefixArray) {
             UnitPrefix unitPrefix = null;
             Enumeration e = unitPrefixArray.reverseObjectEnumerator();
             while (e.hasMoreElements()) {
@@ -205,7 +205,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
 
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
         StringBuffer result = toAppendTo;
-        UnitPrefix unitPrefix = UnitPrefix.findAppropiatePrefix(number, unitPrefixArray);
+        UnitPrefix unitPrefix = UnitPrefix.findAppropriatePrefix(number, unitPrefixArray);
         if (unitPrefix == null) {
             result = super.format(number, toAppendTo, fieldPosition);
         } else {
