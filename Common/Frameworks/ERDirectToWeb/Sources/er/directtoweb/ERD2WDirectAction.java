@@ -187,6 +187,10 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     protected void prepareListPage(D2WContext context, ListPageInterface lpi, String entityName) {
         EOEditingContext ec = session().defaultEditingContext();
+        //ak: this check could be better...but anyway, as we edit, we should get a peer context
+        if(lpi instanceof ERD2WEditableListPage) {
+            ec = ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
+        }
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EODataSource ds = relationshipArrayFromRequest(ec, entity.classDescriptionForInstances());
         if(ds == null) {
