@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 public class ERXCloneableThreadLocal extends InheritableThreadLocal {
 
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getLogger(ERXClonableThreadLocal.class);
+    protected static final ERXLogger log = ERXLogger.getLogger(ERXCloneableThreadLocal.class);
 
     /**
      * Clones a copy of the parent object for the child thread.
