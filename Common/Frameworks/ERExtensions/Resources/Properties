@@ -16,11 +16,15 @@ CPRaiseOnError = false
 #########################################################################
 # Localizer
 #########################################################################
+er.extensions.ERXLocalizer.isLocalizationEnabled = true
+
 er.extensions.ERXLocalizer.frameworkSearchPath = app,ERDirectToWeb,ERExtensions
+
+er.extensions.ERXLocalizer.fileNamesToWatch = Localizable.strings,ValidationTemplate.strings
 
 er.extensions.ERXLocalizer.defaultLanguage = English
 er.extensions.ERXLocalizer.availableLanguages = English,German,Japanese
-#er.extensions.ERXLocalizer.availableLanguages = English, German, French, Norwegian, Japanese
+#er.extensions.ERXLocalizer.availableLanguages = English,German,French,Norwegian,Japanese
 
 #er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
 #er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.ERXNonPluralFormLocalizer
