@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.*;
 import java.lang.*;
 import java.util.*;
 import java.io.File;
@@ -187,6 +188,23 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             log.debug("CompilerProxyDidCompileClasses: " + n);
             reset();
        }
+
+        /**
+        * Method called by the {@link com.webobjects.appserver.WOApplication WOApplication}
+         * has finished launching.
+         */
+        public void applicationDidFinishLaunching(NSNotification n) {
+            log.debug("ApplicationDidFinishLaunching: " + n);
+            for (Enumeration ge = EOModelGroup.defaultGroup().models().objectEnumerator(); ge.hasMoreElements();) {
+                for (Enumeration ee = ((EOModel)ge.nextElement()).entities().objectEnumerator(); ee.hasMoreElements();) {
+                    EOEntity entity = (EOEntity)ee.nextElement();
+                    EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entity.name());
+                    defaultLog.debug("Reading defaults for: " + entity.name());
+                    if(cd instanceof ERXEntityClassDescription)
+                        ((ERXEntityClassDescription)cd).readDefaultValues();
+                }
+            }
+        }
 
         /**
          * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}   
@@ -424,8 +442,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 observer=new Factory();
             ERXRetainer.retain(observer);
             // Need to be able to preempt the model registering descriptions.
-            NSNotificationCenter.defaultCenter().addObserver(observer,                                                              new NSSelector("modelWasAddedNotification", ERXConstant.NotificationClassArray),                                                              EOModelGroup.ModelAddedNotification,                                                              null);
-            NSNotificationCenter.defaultCenter().addObserver(observer,                                                              new NSSelector("classDescriptionNeededForEntityName",                                                                              ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("modelWasAddedNotification", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
+            NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
             NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
             NSNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("compilerProxyDidCompileClasses", new Class[] { NSNotification.class } ), ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, null);
             _registered = true;
@@ -440,10 +459,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         super(entity);
         _validationInfo = ERXValueUtilities.dictionaryValue(entity.userInfo().objectForKey("ERXValidation"));
         _validationQualiferCache = new NSMutableDictionary();
-        _initialDefaultValues = new NSMutableDictionary();
-	// FIXME commenting this out as a quick fix as it seems to break app launching as
-	// soon as you have several models with cross model relationships
-        //readDefaultValues();
     }
 
     /**
@@ -700,17 +715,27 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
         public void setValueInObject(EOEnterpriseObject eo) {
             Object defaultValue = this.stringValue;
-            if(adaptorType == AdaptorDateType) {
-                defaultValue = ERXTimestampUtilities.timestampForString(stringValue);
-            } else if (adaptorType == AdaptorNumberType) {
-                NSTimestamp temp = ERXTimestampUtilities.timestampForString(stringValue);
-                if(temp != null) {
-                    defaultValue = ERXTimestampUtilities.unixTimestamp(temp);
-                } else {
-                    defaultValue = new Integer(Integer.parseInt(stringValue));
+            if(stringValue.startsWith("@threadStorage.")) {
+                String keyPath = stringValue.substring("@threadStorage.".length());
+                defaultValue = ERXThreadStorage.valueForKey(keyPath);
+                if(keyPath.indexOf(".") > 0) {
+                    keyPath = stringValue.substring(keyPath.indexOf(".")+1);
+                    defaultValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(defaultValue, keyPath);
                 }
             } else {
                 // nothing for strings so far...
+            }
+            if(defaultValue != null) {
+                if(adaptorType == AdaptorDateType) {
+                    defaultValue = ERXTimestampUtilities.timestampForString(defaultValue.toString());
+                } else if (adaptorType == AdaptorNumberType) {
+                    NSTimestamp temp = ERXTimestampUtilities.timestampForString(defaultValue.toString());
+                    if(temp != null) {
+                        defaultValue = ERXTimestampUtilities.unixTimestamp(temp);
+                    } else {
+                        defaultValue = new Integer(Integer.parseInt(defaultValue.toString()));
+                    }
+                }
             }
             eo.takeValueForKey(defaultValue, key);
         }
@@ -742,14 +767,20 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 } else if(stringValue.startsWith("@threadStorage.")) {
                     String keyPath = stringValue.substring("@threadStorage.".length());
                     Object o = ERXThreadStorage.valueForKey(keyPath);
+                    if(keyPath.indexOf(".") > 0) {
+                        keyPath = stringValue.substring(keyPath.indexOf(".")+1);
+                        o = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keyPath);
+                    }
                     if(o != null) {
                         if(o instanceof EOEnterpriseObject) {
-                            ERXUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(eo,(EOEnterpriseObject)o, keyPath);
+                            ERXUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey((EOEnterpriseObject)o, eo, key);
                         } else if(o instanceof NSArray) {
                             NSArray newObjects = (NSArray)o;
                             for(Enumeration e = newObjects.objectEnumerator(); e.hasMoreElements();) {
-                                ERXUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(eo,(EOEnterpriseObject)e.nextElement(),keyPath);
+                                ERXUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey((EOEnterpriseObject)e.nextElement(), eo, key);
                             }
+                        } else {
+                            defaultLog.warn("setValueInObject: Object is neither an EO nor an array");
                         }
                     }
                 }
@@ -765,36 +796,40 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     }
 
     public void readDefaultValues() {
-        EOEntity entity = entity();
-        NSMutableDictionary dict = new NSMutableDictionary();
-        NSDictionary entityInfo = (NSDictionary)entity.userInfo().objectForKey("ERXDefaultValues");
+        if(_initialDefaultValues == null) {
+            _initialDefaultValues = new NSMutableDictionary();
 
-        for( Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
-            EOAttribute attr = (EOAttribute)e.nextElement();
-            String defaultValue = null;
-            
-            if(attr.userInfo() != null)
-                defaultValue = (String)attr.userInfo().objectForKey(defaultKey);
-            
-            if(defaultValue == null && entityInfo != null) {
-                defaultValue = (String)entityInfo.objectForKey(attr.name());
-            }
-            if(defaultValue != null)
-                setDefaultAttributeValue(attr, defaultValue);
-        }
+            EOEntity entity = entity();
+            NSMutableDictionary dict = new NSMutableDictionary();
+            NSDictionary entityInfo = (NSDictionary)entity.userInfo().objectForKey("ERXDefaultValues");
 
-        for( Enumeration e = entity.relationships().objectEnumerator(); e.hasMoreElements();) {
-            EORelationship rel = (EORelationship)e.nextElement();
-            String defaultValue = null;
-            
-            if(rel.userInfo() != null)
-                defaultValue = (String)rel.userInfo().objectForKey(defaultKey);
-            
-            if(defaultValue == null && entityInfo != null) {
-                defaultValue = (String)entityInfo.objectForKey(rel.name());
+            for( Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
+                EOAttribute attr = (EOAttribute)e.nextElement();
+                String defaultValue = null;
+
+                if(attr.userInfo() != null)
+                    defaultValue = (String)attr.userInfo().objectForKey(defaultKey);
+
+                if(defaultValue == null && entityInfo != null) {
+                    defaultValue = (String)entityInfo.objectForKey(attr.name());
+                }
+                if(defaultValue != null)
+                    setDefaultAttributeValue(attr, defaultValue);
             }
-            if(defaultValue != null)
-                setDefaultRelationshipValue(rel, defaultValue);
+
+            for( Enumeration e = entity.relationships().objectEnumerator(); e.hasMoreElements();) {
+                EORelationship rel = (EORelationship)e.nextElement();
+                String defaultValue = null;
+
+                if(rel.userInfo() != null)
+                    defaultValue = (String)rel.userInfo().objectForKey(defaultKey);
+
+                if(defaultValue == null && entityInfo != null) {
+                    defaultValue = (String)entityInfo.objectForKey(rel.name());
+                }
+                if(defaultValue != null)
+                    setDefaultRelationshipValue(rel, defaultValue);
+            }
         }
     }
 
