@@ -17,6 +17,21 @@ import com.webobjects.eocontrol.*;
 public class ERXEOAccessUtilities {
 
     /**
+     * Method used to determine if a given entity is a shared entity.
+     * @param ec editing context
+     * @param entityName name of the entity
+     * @return if the entity is a shared entity
+     */
+    public static boolean entityWithNamedIsShared(EOEditingContext ec, String entityName) {
+        if (ec == null)
+            throw new IllegalStateException("Editing context argument is null for method: entityWithNamedIsShared");
+        if (entityName == null)
+            throw new IllegalStateException("Entity name argument is null for method: entityWithNamedIsShared");
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        return entity.sharedObjectFetchSpecificationNames().count() > 0;
+    }
+    
+    /**
     * Convenience method to get the next unique ID from a sequence.
      * @param ec editing context
      * @param modelNamed name of the model which connects to the database
@@ -302,8 +317,6 @@ public class ERXEOAccessUtilities {
             }
             entities = ar;
         }
-
-
         return sf.schemaCreationScriptForEntities(entities, optionsCreate);
     }
 
