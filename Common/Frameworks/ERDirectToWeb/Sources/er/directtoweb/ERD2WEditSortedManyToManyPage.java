@@ -497,4 +497,33 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         }
         super.appendToResponse(r,c);
     }
+
+    public int browserSize() {
+        int browserSize = 10;  // reasonable default value
+        int maxBrowserSize = 20;
+
+        String contextSize = (String)d2wContext().valueForKey("browserSize");
+        if(contextSize != null) {
+            try {
+                browserSize = Integer.parseInt(contextSize);
+            } catch(NumberFormatException nfe) {
+                log.error("browserSize not a number: "  browserSize);
+            }
+        }
+        String maxContextSize = (String)d2wContext().valueForKey("maxBrowserSize");
+        if(maxContextSize != null) {
+            try {
+                maxBrowserSize = Integer.parseInt(maxContextSize);
+            } catch(NumberFormatException nfe) {
+                log.error("maxBrowserSize not a number: "  maxBrowserSize);
+            }
+        }
+
+        NSArray sortedBrowserList = sortedBrowserList();
+        if(sortedBrowserList != null) {
+            int count = sortedBrowserList.count();
+            browserSize = (count > browserSize && count < maxBrowserSize) ? count : browserSize;
+        }
+        return browserSize;
+    }    
 }
