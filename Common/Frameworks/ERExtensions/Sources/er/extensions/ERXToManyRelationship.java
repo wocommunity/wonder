@@ -159,15 +159,8 @@ public class ERXToManyRelationship extends WOToManyRelationship {
             anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(((EOEnterpriseObject)sourceObject()).editingContext(), aDataSource.fetchObjects());
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
-            /* WO5
-            try {
-                _RelationshipSupport._sortEOsUsingSingleKey(aSortedArray, _localSortKey());
-            } catch (NSComparator.ComparisonException e) {
-                throw new NSForwardException(e);
-            }
-            */
-            if (_localSortKey() != null && _localSortKey().length() > 0)
-                ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localSortKey());
+
+            ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localSortKey());
 
             // if there is a value on the EO, then we need to make sure that the list's EOs are in the same EC
             // otherwise the popup selection will be wrong (will default to the first element)

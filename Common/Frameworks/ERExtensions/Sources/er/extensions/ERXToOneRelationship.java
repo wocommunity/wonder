@@ -116,7 +116,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     protected String _localSortKey() {
         if (destinationSortKey() == null) {
             setDestinationSortKey((String)valueForBinding("destinationSortKey"));
-            if (destinationSortKey() == null)
+            if (destinationSortKey() == null || destinationSortKey().length() == 0)
                 setDestinationSortKey(_localDestinationDisplayKey());
         }
         return destinationSortKey();
@@ -250,17 +250,9 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 		ec = session().defaultEditingContext();
 	    
 	    anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
-            // 81398 sort contents
+
             aSortedArray = new NSMutableArray(anUnsortedArray);
-            /* WO5
-                try {
-                    _RelationshipSupport._sortEOsUsingSingleKey(aSortedArray, _localSortKey());
-                } catch (NSComparator.ComparisonException e) {
-                    throw new NSForwardException(e);
-                }
-            */
-            if (_localSortKey()!=null && _localSortKey().length()>0)
-                ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localSortKey());
+            ERXArrayUtilities.sortArrayWithKey(aSortedArray, _localSortKey());
 
             // if there is a value on the EO, then we need to make sure that the list's EOs are in the same EC
             // otherwise the popup selection will be wrong (will default to the first element)
