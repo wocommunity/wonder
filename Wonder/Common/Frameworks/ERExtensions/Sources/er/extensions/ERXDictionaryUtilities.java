@@ -101,4 +101,24 @@ public class ERXDictionaryUtilities extends Object {
         }
         return d;
     }    
+
+    /**
+     * Creates a dictionary from an objects and an array of key paths
+     * @param object object to pull the values from
+     * @param keys array of keys
+     * @return NSDictionary containing all of the object-key pairs.
+     */
+    public static NSDictionary dictionaryFromObjectWithKeys(Object object, NSArray keys) {
+        NSMutableDictionary result = new NSMutableDictionary();
+        if(object != null && keys != null) {
+            for (Enumeration e = keys.objectEnumerator(); e.hasMoreElements();) {
+                String key = (String)e.nextElement();
+                Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, key);
+                if(value != null) {
+                    result.setObjectForKey(value, key);
+                }
+            }
+        }
+        return result.immutableClone();
+    }
 }
