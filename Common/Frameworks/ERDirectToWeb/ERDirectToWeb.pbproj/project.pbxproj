@@ -5,6 +5,28 @@
 	};
 	objectVersion = 38;
 	objects = {
+		9D2E0C6F032FFE0A10CF0CA3 = {
+			isa = PBXFileReference;
+			name = French;
+			path = Resources/French.lproj/ValidationTemplate.strings;
+			refType = 4;
+		};
+		9D2E0C70032FFE2310CF0CA3 = {
+			isa = PBXFileReference;
+			name = French;
+			path = Resources/French.lproj/Localizable.strings;
+			refType = 4;
+		};
+//9D0
+//9D1
+//9D2
+//9D3
+//9D4
+//F50
+//F51
+//F52
+//F53
+//F54
 		F518014F02022C9C01A80106 = {
 			isa = PBXFrameworkReference;
 			path = ERExtensions.framework;
@@ -1192,6 +1214,7 @@
 				F542046D02C4672F01000102,
 				F542047002C4672F01000102,
 				F542047202C4672F01000102,
+				9D2E0C6F032FFE0A10CF0CA3,
 			);
 			isa = PBXVariantGroup;
 			name = ValidationTemplate.strings;
@@ -1209,6 +1232,7 @@
 				F542046F02C4672F01000102,
 				F542047102C4672F01000102,
 				F542047302C4672F01000102,
+				9D2E0C70032FFE2310CF0CA3,
 			);
 			isa = PBXVariantGroup;
 			name = Localizable.strings;
