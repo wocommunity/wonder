@@ -50,7 +50,9 @@ public class ERXTable extends WOTable {
         } else {
             index = currentCol+maxColumns()*currentRow;
         }
-        Object item = aList.objectAtIndex(index);
+        // WO 5.1 guarding against OOB index
+        // WORepetition count=x seems to go to x+1 in 5.1, even though it is not displayed
+        Object item = index < aList.count() ? aList.objectAtIndex(index) :  null;
         setValueForBinding(item, "item");
         if (canSetValueForBinding("row"))
             setValueForBinding(ERXConstant.integerForInt(currentRow), "row");
