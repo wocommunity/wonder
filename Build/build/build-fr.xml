@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================== -->
+<!--            WONDER *Frameworks* Ant build file            -->
+<!--                                                          -->
+<!-- Called from "build.xml", normally shouldn't be used as   --> 
+<!-- a standalone buildfile.                                  -->
+<!-- ======================================================== -->
+<project name="wonder-fr" default="frameworks" basedir="..">  
+  
+    <!-- ==================================================== -->
+    <!--              CLASSPATH settings                      -->
+    <!-- ==================================================== -->
+    <path id="classpath">
+        <fileset dir="lib">
+            <include name="woproject.jar"/>
+            <include name="cayenne.jar"/>
+            <include name="log4j*.jar"/>
+        </fileset>
+    </path>
+        
+    <!-- ==================================================== -->
+    <!-- Sets up build and distribution directories.          -->
+    <!-- ==================================================== -->
+    <target name="prepare">
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${dist}/Frameworks"/>
+    </target>
+
+
+    <!-- ==================================================== -->
+    <!-- Compile and install Frameworks with WOProject.       -->
+    <!-- ==================================================== -->
+    <target name="frameworks" depends="prepare">
+        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+            <classpath refid="classpath"/>
+        </taskdef>
+        
+		<woframework name="ERJarsJava" destDir="${dist}/Frameworks">
+			<lib dir="Frameworks/ERJarsJava">
+				<include name="*.jar"/>
+			</lib>
+		</woframework>
+    </target>
+</project>
