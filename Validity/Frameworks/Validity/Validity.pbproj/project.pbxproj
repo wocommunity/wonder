@@ -51,6 +51,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)Validity";
@@ -102,7 +103,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B30FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -188,6 +188,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)Validity";
@@ -230,7 +231,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B37FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -445,6 +445,7 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 40B5827FFFD5E7DB7F000001;
 			productRefGroup = 40B58280FFD5E8187F000001;
@@ -576,7 +577,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		40B58283FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -704,6 +704,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -722,24 +724,28 @@
 //F53
 //F54
 		F56C47A802F383FC01000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVAttribute.java;
 			path = Sources/com/gammastream/validity/GSVAttribute.java;
 			refType = 4;
 		};
 		F56C47A902F383FC01000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVEntity.java;
 			path = Sources/com/gammastream/validity/GSVEntity.java;
 			refType = 4;
 		};
 		F56C47AA02F383FC01000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVModel.java;
 			path = Sources/com/gammastream/validity/GSVModel.java;
 			refType = 4;
 		};
 		F56C47AB02F383FC01000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVRule.java;
 			path = Sources/com/gammastream/validity/GSVRule.java;
@@ -770,24 +776,28 @@
 			};
 		};
 		F56C47B002F3843301000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVDateMethods.java;
 			path = Sources/com/gammastream/validity/GSVDateMethods.java;
 			refType = 4;
 		};
 		F56C47B102F3843301000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVNumberMethods.java;
 			path = Sources/com/gammastream/validity/GSVNumberMethods.java;
 			refType = 4;
 		};
 		F56C47B202F3843301000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVOtherMethods.java;
 			path = Sources/com/gammastream/validity/GSVOtherMethods.java;
 			refType = 4;
 		};
 		F56C47B302F3843301000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVStringMethods.java;
 			path = Sources/com/gammastream/validity/GSVStringMethods.java;
@@ -818,18 +828,21 @@
 			};
 		};
 		F56C47B802F3847401000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVEOAttribute.java;
 			path = Sources/com/gammastream/validity/GSVEOAttribute.java;
 			refType = 4;
 		};
 		F56C47B902F3847401000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVEOEntity.java;
 			path = Sources/com/gammastream/validity/GSVEOEntity.java;
 			refType = 4;
 		};
 		F56C47BA02F3847401000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVEOModel.java;
 			path = Sources/com/gammastream/validity/GSVEOModel.java;
@@ -854,24 +867,28 @@
 			};
 		};
 		F56C47BE02F384A901000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVCustomObject.java;
 			path = Sources/com/gammastream/validity/GSVCustomObject.java;
 			refType = 4;
 		};
 		F56C47BF02F384A901000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVEngine.java;
 			path = Sources/com/gammastream/validity/GSVEngine.java;
 			refType = 4;
 		};
 		F56C47C002F384A901000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVExceptionableComponent.java;
 			path = Sources/com/gammastream/validity/GSVExceptionableComponent.java;
 			refType = 4;
 		};
 		F56C47C102F384A901000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVGenericRecord.java;
 			path = Sources/com/gammastream/validity/GSVGenericRecord.java;
@@ -927,6 +944,7 @@
 			};
 		};
 		F56C47D302F384EA01000103 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVExceptionViewer.java;
 			path = Sources/com/gammastream/validity/GSVExceptionViewer.java;
@@ -1065,6 +1083,7 @@
 			refType = 4;
 		};
 		F64EBEE4035B49700193E08E = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GSVExceptionRepetition.java;
 			path = Sources/com/gammastream/validity/GSVExceptionRepetition.java;

@@ -12,7 +12,7 @@ import com.webobjects.eoaccess.*;
  *
  *	@author GammaStream Technologies, Inc.
  */
-public class GSVGenericRecord extends er.extensions.ERXGenericRecord {
+public class GSVGenericRecord extends EOGenericRecord {
 
     public void validateForDelete(){
         try{
