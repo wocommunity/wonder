@@ -1,0 +1,169 @@
+PARSER_BEGIN(GSVUtilityParser)
+
+package com.gammastream.validity._private;
+
+
+public class GSVUtilityParser {
+
+  public static void main(String args[]) throws ParseException {
+    GSVUtilityParser parser = new GSVUtilityParser(System.in);
+    parser.validateEmailAddress();
+  }
+
+}
+
+PARSER_END(GSVUtilityParser)
+
+TOKEN [IGNORE_CASE] : /* Email */
+{
+
+	<email_address: <word> ("." <word>)* "@" <hostport>>
+|	<word: ["a"-"z","A"-"Z","_"] ( ["a"-"z","A"-"Z","_", ".", "-","0"-"9"] )*>
+
+}
+
+TOKEN [IGNORE_CASE] : /* URL */
+{
+    
+    /*
+	// The generic form of a URL is
+	<generic_url: <scheme> ":" <scheme_part>>
+    */
+    
+	// Specific predefined schemes are defined here; new schemes
+	//may be registered with IANA
+    /*
+|	<url: <http_url> | <https_url> | <ftp_url> | <news_url> | <nntp_url> | <telnet_url> |
+		<gopher_url> | <wais_url> | <mailto_url> | <file_url> | <prospero_url> | <other_url>>
+    */
+	<url: <http_url> | <https_url> | <ftp_url> | <news_url> | <telnet_url> | <gopher_url> | <mailto_url> | <file_url> >
+
+    /*
+	// new schemes follow the general syntax
+|	<other_url: <generic_url>>
+    */
+    
+    /*
+	// the scheme is in lower case; interpreters should use case-ignore
+|	<scheme: ( <lowalpha> | <digit> | "+" | "-" | "." )+>
+|	<scheme_part: (<xchar>)* | <ip_schemepart>>
+    
+	// URL schemeparts for ip based protocols:
+|	<ip_schemepart: "//" <login> ("/" <urlpath>)?>
+    */
+    
+|	<login: (<user> ( ":" <password> )? "@" )? <hostport>>
+|	<hostport: <host> ( ":" <port> )?>
+|	<host: ( <hostname> | <hostnumber> ) >
+|	<hostname: ( <domainlabel> "." )* <toplabel>>
+|	<domainlabel: <alphadigit> | ( <alphadigit> ( <alphadigit> | "-" )* <alphadigit> ) >
+|	<toplabel: <alpha> | ( <alpha> ( <alphadigit> | "-" )* <alphadigit> ) >
+|	<alphadigit: ( <alpha> | <digit> ) >
+|	<hostnumber: <digits> "." <digits> "." <digits> "." <digits>>
+|	<port: <digits>>
+|	<user: ( <uchar> | ";" | "?" | "&" | "=" )* >
+|	<password: ( <uchar> | ";" | "?" | "&" | "=" )* >
+|	<urlpath: ( <xchar> )* >
+
+	//The predefined schemes:
+
+	//FTP (see also RFC959)
+|	<ftp_url: "ftp://" <login> ( "/" <fpath> ( ";type=" <ftptype> )?)?>
+|	<fpath: <fsegment> ( "/" <fsegment> )* >
+|	<fsegment: ( <uchar> | "?" | ":" | "@" | "&" | "=" )* >
+|	<ftptype: "A" | "I" | "D" | "a" | "i" | "d">
+
+	// FILE
+|	<file_url: "file://" ( <host> | "localhost" ) "/" <fpath>>
+
+	// HTTP
+|	<http_url: "http://" <hostport> ( "/" <hpath> ( "?" <search> )?)?>
+|	<hpath: <hsegment> ( "/" <hsegment> )*>
+|	<hsegment: ( <uchar> | ";" | ":" | "@" | "&" | "=" | "~" )*>
+|	<search: ( <uchar> | ";" | ":" | "@" | "&" | "=" | "~")*>
+
+	// HTTPS
+|	<https_url: "https://" <hostport> ( "/" <hpath> ( "?" <search> )?)?>
+
+	// GOPHER (see also RFC1436)
+|	<gopher_url: "gopher://" <hostport> ( "/" ( <gtype> ( <selector> ( "%09" <search> ( "%09" <gopher_and_string> ) ) ) ) )>
+|	<gtype: <xchar>>
+|	<selector: (<xchar>)*>
+|	<gopher_and_string: (<xchar>)*>
+
+	//MAILTO (see also RFC822)
+|	<mailto_url: "mailto:" <encoded822addr>>
+|	<encoded822addr: (<xchar>)+> 	// further defined in RFC822
+
+	//NEWS (see also RFC1036)
+|	<news_url: "news:" <grouppart>>
+|	<grouppart: "*" | <group> | <article>>
+|	<group: <alpha> (<alpha> | <digit> | "-" | "." | "+" | "_" )*>
+|	<article: ( <uchar> | ";" | "/" | "?" | ":" | "&" | "=" )+ "@" <host>>
+
+    /*
+	// NNTP (see also RFC977)
+|   <nntp_url: "nntp://" <hostport> "/" <group> ( "/" <digits> )>
+    */
+    
+    // TELNET
+|   <telnet_url: "telnet://" <login> ( "/" )>
+    /*
+    // WAIS (see also RFC1625)
+|	<wais_url: <waisdatabase> | <waisindex> | <waisdoc>>
+|	<waisdatabase: "wais://" <hostport> "/" <database>>
+|	<waisindex: "wais://" <hostport> "/" <database> "?" <search>>
+|	<waisdoc: "wais://" <hostport> "/" <database> "/" <wtype> "/" <wpath>>
+|	<database: (<uchar>)*>
+|	<wtype: (<uchar>)*>
+|	<wpath: (<uchar>)*>
+    */
+    
+    /*
+	// PROSPERO
+|	<prospero_url: "prospero://" <hostport> "/" <ppath> ( <fieldspec> )*>
+|	<ppath: <psegment> ( "/" <psegment> )* >
+|	<psegment: ( <uchar> | "?" | ":" | "@" | "&" | "=" )*>
+|	<fieldspec: ";" <fieldname> "=" <fieldvalue>>
+|	<fieldname: ( <uchar> | "?" | ":" | "@" | "&" )*>
+|	<fieldvalue: ( <uchar> | "?" | ":" | "@" | "&" )*>
+    */
+    
+	//Miscellaneous definitions
+
+|	<lowalpha: "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z">
+|	<hialpha: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z">
+
+|	<alpha: <lowalpha> | <hialpha>>
+|	<digit: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9">
+|	<safe: "$" | "-" | "_" | "." | "+">
+|	<extra: "!" | "*" | "'" | "(" | ")" | ",">
+|	<national: "{" | "}" | "|" | "\\" | "^" | "~" | "[" | "]" | "`">
+|	<punctuation: "<" | ">" | "#" | "%" | "\"">
+
+|	<reserved: ";" | "/" | "?" | ":" | "@" | "&" | "=">
+|	<hex: <digit> | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f">
+|	<escape: "%" <hex> <hex>>
+
+|	<unreserved: <alpha> | <digit> | <safe> | <extra>>
+|	<uchar: <unreserved> | <escape>>
+|	<xchar:	<unreserved> | <reserved> | <escape>>
+|	<digits: (<digit>)+>
+
+}
+
+void validateEmailAddress() :
+{}
+{
+  <email_address> <EOF>
+}
+
+void validateURL() :
+{}
+{
+  <url> <EOF>
+}
+
+
+
+

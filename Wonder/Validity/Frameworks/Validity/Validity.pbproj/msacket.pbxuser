@@ -1,0 +1,113 @@
+// !$*UTF8*$!
+{
+	017C7B2FFFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	017C7B36FFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	40B5827EFFD5E7DB7F000001 = {
+		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
+		activeTarget = 40B58282FFD5E8187F000001;
+		addToTargets = (
+			017C7B2FFFD7144B7F000001,
+		);
+		breakpoints = (
+		);
+		perUserDictionary = {
+			PBXWorkspaceConfiguration = {
+				ContentSize = "{1242, 797}";
+				LeftSlideOut = {
+					ActiveTab = 0;
+					Frame = "{{0, 23}, {1242, 774}}";
+					Split0 = {
+						ActiveTab = 3;
+						Frame = "{{256, 0}, {986, 774}}";
+						Split0 = {
+							Frame = "{{0, 251}, {986, 523}}";
+						};
+						SplitCount = 1;
+						Tab0 = {
+							Debugger = {
+								Frame = "{{0, 0}, {484, 208}}";
+								Split0 = {
+									Frame = "{{0, 25}, {484, 183}}";
+									Split0 = {
+										Frame = "{{0, 0}, {236, 183}}";
+									};
+									Split1 = {
+										Frame = "{{245, 0}, {239, 183}}";
+									};
+									SplitCount = 2;
+								};
+								SplitCount = 1;
+								Tab0 = {
+									Frame = "{{0, 0}, {100, 50}}";
+								};
+								Tab1 = {
+									Frame = "{{0, 0}, {100, 50}}";
+								};
+								TabCount = 2;
+							};
+							Frame = "{{0, 0}, {484, 208}}";
+							LauncherConfigVersion = 4;
+						};
+						Tab1 = {
+							Frame = "{{0, 0}, {484, 208}}";
+							LauncherConfigVersion = 3;
+							Runner = {
+								Frame = "{{0, 0}, {484, 208}}";
+							};
+						};
+						Tab2 = {
+							BuildMessageFrame = "{{0, 0}, {1053, 97}}";
+							BuildTranscriptFrame = "{{0, 106}, {1053, 70}}";
+							Frame = "{{0, 0}, {1051, 174}}";
+						};
+						Tab3 = {
+							Frame = "{{0, 0}, {986, 227}}";
+						};
+						TabCount = 4;
+					};
+					SplitCount = 1;
+					Tab0 = {
+						Frame = "{{0, 0}, {232, 774}}";
+					};
+					Tab1 = {
+						ClassesFrame = "{{0, 0}, {202, 56}}";
+						Frame = "{{0, 0}, {200, 100}}";
+						MembersFrame = "{{0, 65}, {202, 35}}";
+						OptionsSetName = "Hierarchy, all classes";
+					};
+					Tab2 = {
+						Frame = "{{0, 0}, {200, 100}}";
+					};
+					Tab3 = {
+						Frame = "{{0, 0}, {200, 100}}";
+						Split0 = {
+							Frame = "{{0, 0}, {200, 45}}";
+						};
+						Split1 = {
+							Frame = "{{0, 54}, {200, 46}}";
+						};
+						SplitCount = 2;
+					};
+					Tab4 = {
+						Frame = "{{0, 0}, {250, 100}}";
+					};
+					TabCount = 5;
+				};
+			};
+		};
+		wantsIndex = 1;
+		wantsSCM = -1;
+	};
+	40B58282FFD5E8187F000001 = {
+		activeExec = 0;
+	};
+	F5FBE7F700C878EA01000001 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{15, 95}, {750, 502}}";
+		};
+	};
+}
