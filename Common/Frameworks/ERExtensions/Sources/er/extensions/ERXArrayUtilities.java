@@ -136,6 +136,49 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
+     * Groups an array of objects by a given to-many key path, where every
+     * single item in the to-many will put the object in the corresponding group. 
+     * The dictionary that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'users' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'users.name'
+     * of 'users.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param includeNulls determines if keyPaths that resolve to null
+     *      should be allowed into the group.
+     * @return a dictionary where the keys are the grouped values and the
+     *      objects are arrays of the objects that have the grouped
+     *      characteristic. Note that if the key path returns null
+     *      then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
+            String keyPath,
+            boolean includeNulls) {
+        NSMutableDictionary result=new NSMutableDictionary();
+        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+            Object eo = e.nextElement();
+            Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
+            boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
+            if (!isNullKey || includeNulls) {
+                if (isNullKey) key=NULL_GROUPING_KEY;
+                NSArray array = (NSArray)key;
+                for(Enumeration keys = array.objectEnumerator(); keys.hasMoreElements(); ) {
+                    key = keys.nextElement();
+                    NSMutableArray existingGroup=(NSMutableArray)result.objectForKey(key);
+                    if (existingGroup==null) {
+                        existingGroup=new NSMutableArray();
+                        result.setObjectForKey(existingGroup,key);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Simple comparision method to see if two array
      * objects are identical sets.
      * @param a1 first array
