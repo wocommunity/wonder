@@ -2247,7 +2247,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXArrayChooser.java;
+			name = ERXArrayChooser.java;
+			path = er/extensions/ERXArrayChooser.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2255,7 +2256,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXDatabaseDataSource.java;
+			name = ERXDatabaseDataSource.java;
+			path = er/extensions/ERXDatabaseDataSource.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2263,7 +2265,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXFile.java;
+			name = ERXFile.java;
+			path = er/extensions/ERXFile.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2271,7 +2274,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXItalianLocalizer.java;
+			name = ERXItalianLocalizer.java;
+			path = er/extensions/ERXItalianLocalizer.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2279,7 +2283,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXObjectStoreCoordinator.java;
+			name = ERXObjectStoreCoordinator.java;
+			path = er/extensions/ERXObjectStoreCoordinator.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2287,7 +2292,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXRecursiveBatchFetching.java;
+			name = ERXRecursiveBatchFetching.java;
+			path = er/extensions/ERXRecursiveBatchFetching.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2295,7 +2301,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXSystem.java;
+			name = ERXSystem.java;
+			path = er/extensions/ERXSystem.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2303,7 +2310,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.java;
-			path = ERXWORepetition.java;
+			name = ERXWORepetition.java;
+			path = er/extensions/ERXWORepetition.java;
 			refType = 4;
 			sourceTree = "<group>";
 		};
