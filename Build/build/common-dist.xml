@@ -135,6 +135,22 @@
         </antcall>
     </target>
 
+    <!-- ERPlot -->
+    <target name="ERPlot.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERPlot" />
+            <param name="project.dir" value="Common/Frameworks/ERPlot" />
+        </antcall>
+    </target>
+
+    <!-- ERExcelLook -->
+    <target name="ERExcelLook.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERExcelLook" />
+            <param name="project.dir" value="Common/Frameworks/ERExcelLook" />
+        </antcall>
+    </target>
+
     <!-- ERChangeNotificationJMS -->
     <target name="ERChangeNotificationJMS.all">
         <antcall target="copy.framework" >
@@ -217,7 +233,7 @@
 
 	
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all" />
 
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />

@@ -78,7 +78,23 @@
     </target>
 
 
-    <!-- DynaReporting Framework -->
+     <!-- ExcelGeneration Framework -->
+    <target name="ExcelGeneration.framework.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ExcelGenerator" />
+            <param name="project.dir" value="ExcelGeneration/Frameworks/ExcelGenerator" />
+        </antcall>
+    </target>
+
+    <!-- ExcelGeneration Example Applications -->
+    <target name="ExcelGeneration.example.all">
+        <antcall target="copy.application" >
+            <param name="project" value="EGSampleApp" />
+            <param name="project.dir" value="ExcelGeneration/Examples/EGSampleApp" />
+        </antcall>
+    </target>
+
+   <!-- DynaReporting Framework -->
     <target name="DynaReporting.framework.all">
         <antcall target="copy.framework" >
             <param name="project" value="DRGrouping" />
@@ -178,10 +194,11 @@
         </copy>
     </target>
     
+    <target name="ExcelGeneration.all" depends="ExcelGeneration.framework.all, ExcelGeneration.example.all" />
     <target name="DynaReporting.all" depends="DynaReporting.framework.all, DynaReporting.example.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all, SVGObjects.example.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
-    <target name="dist.prebuilt" depends="DynaReporting.all, SVGObjects.all, Validity.all, WOPayPal.all" />
+    <target name="dist.prebuilt" depends="DynaReporting.all, SVGObjects.all, Validity.all, WOPayPal.all, ExcelGeneration.all" />
 
     <target name="all" depends="dist.prebuilt" />
 	
