@@ -149,8 +149,9 @@ public class EGSimpleTableParser {
     		document = builder.parse(stream);
     		
     		_workbook = new HSSFWorkbook();
-    		
-    		log.info(document.getDocumentElement());
+
+                if (log.isDebugEnabled())
+                    log.debug(document.getDocumentElement());
     		
     		NodeList nodes = document.getDocumentElement().getChildNodes();
     		for (int i = 0; i < nodes.getLength(); i++) {
