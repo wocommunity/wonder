@@ -65,7 +65,7 @@ ERBlowfishCipherKey = DefaultBlowfishCipherKey
 # Direct Action Passwords
 #er.extensions.ERXJUnitPassword = pw
 #er.extensions.ERXLog4JPassword = pw
-
+#er.extensions.ERXDirectAction.ChangeSystemPropertyPassword = pw
 #########################################################################
 # Log4j Configuration
 #########################################################################
