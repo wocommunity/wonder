@@ -89,6 +89,7 @@ public class ERXFileUtilities {
     }
 
 
+    
     /**
         * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
      */
@@ -781,7 +782,23 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Generate an MD5 hash from a file.
+     * Generate an MD5 hash from an input stream.
+     *
+     * @param in the input stream to sum
+     * @return the MD5 sum of the bytes in file
+     * @exception IOException
+     */
+    public static byte[] md5(InputStream in) throws IOException {
+        try {
+            java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");
+            return md5.digest(bytesFromInputStream(in));
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new NSForwardException(e);
+        }
+    }
+    
+    /**
+     * Generate an MD5 hash from a file.
      *
      * @param file the file to sum
      * @return the hex encoded MD5 sum of the bytes in file
@@ -791,6 +808,17 @@ public class ERXFileUtilities {
         return ERXStringUtilities.byteArrayToHexString(md5(file));
     }
 
+    /**
+     * Generate an MD5 hash from an input stream.
+     *
+     * @param in the input stream to sum
+     * @return the hex encoded MD5 sum of the bytes in file
+     * @exception IOException
+     */
+    public static String md5Hex(InputStream in) throws IOException {
+        return ERXStringUtilities.byteArrayToHexString(md5(in));
+    }    
+    
     public static long length(File f) {
         if (!f.isDirectory()) {
             return f.length();
