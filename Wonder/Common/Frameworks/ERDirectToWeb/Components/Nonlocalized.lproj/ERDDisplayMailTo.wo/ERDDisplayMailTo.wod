@@ -1,0 +1,12 @@
+Conditional1: WOConditional {
+	condition = showBrackets;
+}
+
+Conditional2: WOConditional {
+	condition = showBrackets;
+}
+
+MailHyperlink: WOHyperlink {
+   href=mailToHref;
+	string = email;
+}

@@ -1,0 +1,181 @@
+AttributeCell: WOGenericContainer {
+	_unroll = true;
+	align = d2wContext.justification;
+	elementName = "td";
+	valign = "middle";
+}
+
+AttributeDisplay: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	localContext = d2wContext;
+	object = object;
+}
+
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+AttributeSorter: EXRSortOrder {
+	displayGroup = displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
+        d2wContext = d2wContext;
+	unsortedImageSrc = "/nsi/sortUnsorted.gif";
+	sortedAscendingImageSrc = "/nsi/sortAscending.gif";
+	sortedDescendingImageSrc = "/nsi/sortDescending.gif";
+}
+
+BackButton: WOHyperlink {
+	action = backAction;
+}
+
+BackLink2: WOHyperlink {
+	action = backAction;
+}
+
+BackgroundColor: WOString {
+	_unroll = true;
+	value = d2wContext.backgroundColorForTable;
+}
+
+CheckBox2: WOSwitchComponent {
+    WOComponentName = selectionWidgetName;
+	checked = checked;
+}
+
+ColumnLabelRepetition: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+EntityRepetition: WORepetition {
+	item = object;
+	list = displayGroup.displayedObjects;
+}
+
+Form1: WOForm {
+}
+
+HiddenField: WOHiddenField {
+	value = dummy;
+}
+
+HideReturnOnSelect2: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+HideReturnOnSelect3: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+InspectImage: WOActiveImage {
+	alt = "Inspect that Object";
+	border = "0";
+	filename = "magglass-btn.gif";
+	framework = "JavaDirectToWeb";
+	action = inspectObjectAction;
+}
+
+IsEntityNotWritable: WOConditional {
+	_unroll = true;
+	condition = isEntityInspectable;
+}
+
+IsPropertySortable: WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+}
+
+ListEmpty: WOConditional {
+	condition = isListEmpty;
+}
+
+ListNotEmpty: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+ListTable: WOGenericContainer {
+	_unroll = true;
+	bgcolor = d2wContext.backgroundColorForTable;
+	border = 0;
+	cellpadding = 1;
+	cellspacing = 0;
+	elementName = "Table";
+}
+
+ListTableHeaderRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = "#ffffff";
+	elementName = "tr";
+}
+
+ListTableRow: WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+}
+
+NavBar: ERXBatchNavigationBarInForm {
+	bgcolor = backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	textColor = d2wContext.textColor;
+	width = 550;
+        d2wContext = d2wContext;
+}
+
+NumberOfItems: WOString {
+	value = listSize;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+PropertyName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForProperty;
+}
+
+ReturnButton2: WOImage {
+	alt = "Returns to the previous page";
+	border = 0;
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	name = "Returns to the previous page";
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+ShowCancel2: WOConditional {
+	condition = showCancel;
+}
+
+SubmitButton1: WOSubmitButton {
+	action = backAction;
+	value = d2wContext.pickButtonLabel;
+}
+
+SubmitButton2: WOSubmitButton {
+	action = nextPage;
+	value = "Cancel";
+}
+

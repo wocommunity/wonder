@@ -1,0 +1,9 @@
+Conditional1: WOConditional {
+	condition = objectPropertyValue;
+}
+
+Conditional2: WOConditional {
+	condition = objectPropertyValue;
+	negate = true;
+}
+

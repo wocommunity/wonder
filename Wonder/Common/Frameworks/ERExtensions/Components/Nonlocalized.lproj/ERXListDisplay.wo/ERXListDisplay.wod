@@ -1,0 +1,5 @@
+String1: WOString {
+	value = displayString;
+        escapeHTML = escapeHTML;
+}
+

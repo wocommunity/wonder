@@ -1,0 +1,8 @@
+AttributeDisplay: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	localContext = d2wContext;
+	object = object;
+}
+

@@ -1,0 +1,5 @@
+Edit: ERXEditURL {
+    value=value;
+    size = d2wContext.length;
+    maxlength = d2wContext.maxLength;
+}

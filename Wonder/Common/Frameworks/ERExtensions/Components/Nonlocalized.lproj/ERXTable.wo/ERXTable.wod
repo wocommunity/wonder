@@ -1,0 +1,57 @@
+CellContainer:  WOGenericContainer {
+    elementName = "td";
+    bgcolor = ^cellBackgroundColor;
+    align = ^cellAlign;
+    valign = ^cellVAlign;
+	width = ^cellWidth;
+}
+
+ColRepetition: WORepetition {
+    count = colCount;
+    index = currentCol;
+}
+
+Content: WOComponentContent {
+}
+
+HasHeaders: WOConditional {
+    condition=hasHeaders;
+}
+
+HeaderRepetition: WORepetition {
+    list=^headerImages;
+    item=header;
+}
+
+Image1: WOImage {
+	src = header;
+}
+
+PushItem: WOMethodInvocation {
+    invoke = pushItem;
+}
+
+RowRepetition: WORepetition {
+    count = rowCount;
+    index = currentRow;
+}
+
+TableContainer: WOGenericContainer {
+    elementName = "table";
+    bgcolor = ^tableBackgroundColor;
+    border = ^border;
+    cellpadding = ^cellpadding;
+    cellspacing = ^cellspacing;
+	width = ^tableWidth;
+}
+
+TableHeaderRow: WOGenericContainer {
+    elementName = "tr";
+    bgcolor = ^headerRowBackgroundColor;
+
+}
+
+TableRow: WOGenericContainer {
+    elementName = "tr";
+    bgcolor = ^rowBackgroundColor;
+}

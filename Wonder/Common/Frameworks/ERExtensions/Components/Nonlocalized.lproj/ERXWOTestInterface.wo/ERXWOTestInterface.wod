@@ -1,0 +1,27 @@
+CheckBox1: WOCheckBox {
+	checked = showExceptions;
+}
+
+ERWOTestResult: ERXWOTestResult {
+	showExceptions = showExceptions;
+	errorMessage = errorMessage;
+	testResult = testResult;
+	test = theTest;
+	runTime = runTime;
+}
+
+Form1: WOForm {
+	multipleSubmit = true;
+	action = performTest;
+}
+
+SubmitButton1: WOSubmitButton {
+	action = performTest;
+	value = "Run";
+}
+
+testCaseTextField: WOTextField {
+	size = 40;
+	value = theTest;
+}
+

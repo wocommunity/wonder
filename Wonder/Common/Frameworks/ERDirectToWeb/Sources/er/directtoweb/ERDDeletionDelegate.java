@@ -1,0 +1,63 @@
+/*
+ * Copyright (C) NetStruxr, Inc. All rights reserved.
+ *
+ * This software is published under the terms of the NetStruxr
+ * Public Software License version 0.5, a copy of which has been
+ * included with this distribution in the LICENSE.NPL file.  */
+
+package er.directtoweb;
+
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import org.apache.log4j.*;
+
+public class ERDDeletionDelegate implements NextPageDelegate {
+
+    /////////////////////////////////////////////  log4j category  ///////////////////////////////////////////
+    public final static Category cat = Category.getInstance("er.directtoweb.delegates.ERDDeletionDelegate");
+
+    private EOEditingContext _ec;
+    private EOEnterpriseObject _object;
+    private EODataSource _dataSource;
+    private WOComponent _followPage;
+
+    // Can be overridden in subclasses to provide different followPages.
+    protected WOComponent followPage(WOComponent sender) {
+        cat.info("In FollowPage");
+        return _followPage;
+    }
+    
+    public ERDDeletionDelegate(EOEnterpriseObject object, WOComponent nextPage) {
+        this(object, null, nextPage);
+    }
+    
+    public ERDDeletionDelegate(EOEnterpriseObject object, EODataSource dataSource,WOComponent nextPage) {
+        _object=object; _dataSource=dataSource; _followPage=nextPage;
+        if (_object != null)
+            _ec = _object.editingContext();
+    }
+    public WOComponent nextPage(WOComponent sender) {
+        if (_object!=null && _object.editingContext()!=null) {
+            EOEditingContext editingContext=_object.editingContext();
+            try {
+                if (_dataSource != null)
+                    _dataSource.deleteObject(_object);
+                editingContext.deleteObject(_object);
+                editingContext.saveChanges();
+                _object=null;
+            } catch (NSValidation.ValidationException e) {
+                cat.info("Validation Exception: " + e.getMessage());
+                editingContext.revert();
+                String errorMessage = " Could not save your changes: "+e.getMessage()+" ";
+                ErrorPageInterface epf=D2W.factory().errorPage(sender.session());
+                epf.setMessage(errorMessage);
+                epf.setNextPage(followPage(sender));
+                return (WOComponent)epf;
+            }
+        }
+        return followPage(sender);
+    }
+}

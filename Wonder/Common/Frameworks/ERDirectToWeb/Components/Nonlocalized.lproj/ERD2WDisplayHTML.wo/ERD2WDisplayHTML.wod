@@ -1,0 +1,7 @@
+String1: WOString {
+	escapeHTML = false;
+	value = htmlString;
+	WODebug = false;
+}
+
+

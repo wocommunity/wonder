@@ -1,0 +1,72 @@
+/*
+ * Copyright (C) NetStruxr, Inc. All rights reserved.
+ *
+ * This software is published under the terms of the NetStruxr
+ * Public Software License version 0.5, a copy of which has been
+ * included with this distribution in the LICENSE.NPL file.  */
+
+/* ERD2WUtilities.java created by max on Wed 08-Nov-2000 */
+package  com.webobjects.directtoweb;
+
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.*;
+//import com.webobjects.directtoweb.*;
+
+
+// This is needed because pageFinalized is a protected method.
+public class ERD2WUtilities {
+
+    public static void finalizeContext(D2WContext context) {
+        if (context != null)
+            context.pageFinalized();
+    }
+
+    public static void resetContextCache(D2WContext context) {
+        if (context != null)
+            context._localValues.clear();
+    }
+
+    public static String displayNameForKey(String key) {
+        StringBuffer finalString = new StringBuffer();
+        if (key != null) {
+            NSArray keys=NSArray.componentsSeparatedByString(key,".");
+            String lastHop=(String)keys.objectAtIndex(keys.count()-1);
+            StringBuffer tempString = new StringBuffer();
+            char[] originalArray = lastHop.toCharArray();
+            originalArray[0] = Character.toUpperCase(originalArray[0]);
+            Character tempChar = null;
+            Character nextChar = null;
+            for(int i=0;i<(originalArray.length-1);i++){
+                tempChar = new Character(originalArray[i]);
+                nextChar = new Character(originalArray[i+1]);
+                if(Character.isUpperCase(originalArray[i]) &&
+                   Character.isLowerCase(originalArray[i+1])) {
+                    finalString.append(tempString);
+                    if (i>0) finalString.append(' ');
+                    tempString = new StringBuffer();
+                }
+                tempString.append(tempChar.toString());
+            }
+            finalString.append(tempString);
+            finalString.append(nextChar);
+        }
+        return finalString.toString();
+    }
+
+    // This will return the value of value() of the assignment. Useful if say you
+    // want to know what the string or dictionary of the Assignment is, not what
+    // it resolves to.
+    public static Object valueForAssignmentWithoutFire(Assignment assignment) {
+        return assignment != null ? assignment.value() : null;
+    }
+
+    public static boolean assignmentsAreEqual(Assignment a1, Assignment a2) {
+        boolean areEqual = false;
+        if (a1.getClass().equals(a2.getClass()) && a1.keyPath() != null && a2.keyPath() != null && a1.value() != null && a2.value() != null) {
+            areEqual = a1.keyPath().equals(a2.keyPath()) && a1.value().equals(a2.value());
+        }
+        return areEqual;
+    }
+}
