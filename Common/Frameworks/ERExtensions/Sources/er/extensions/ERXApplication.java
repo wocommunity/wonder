@@ -196,6 +196,18 @@ public abstract class ERXApplication extends WOApplication {
         return worequest;
     }
 
+    /** Used to instanciate a WOComponent when no context is available,
+        * typically ouside of a session
+        *
+        * @param pageName - The name of the WOComponent that must be instanciated.
+        */
+    public static WOComponent instantiatePage (String pageName) {
+        // Create a context from a fake request
+        WOContext context = new WOContext
+        (new WORequest ("GET", "", "HTTP/1.1", null, null, null));
+        return WOApplication.application ().pageWithName (pageName, context);
+    }
+
     /**
      *  Stops the application from handling any new requests. Will still handle
      *  requests from existing sessions. Also registers a kill timer that will
