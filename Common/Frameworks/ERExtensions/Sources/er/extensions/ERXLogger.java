@@ -61,6 +61,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
                 log.debug("makeNewLoggerInstance: " + name);
             return new ERXLogger(name);
         }
+        
+        /**
+         * Override this in your own subclass to do somthing after the logging config did change.
+         * 
+         */
+        public void loggingConfigurationDidChange() {
+            // default is to do nothing
+        }
     }
 
     /**
@@ -168,9 +176,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
         
         PropertyConfigurator.configure(properties);
         
-        if (log == null) 
+        if (log == null) {
             log = Logger.getLogger(ERXLogger.class.getName(), factory);
-        
+        }
         log.info("Updated the logging configuration with the current system properties.");
         if(log.isDebugEnabled()) {
             log.debug("log4j.loggerFactory: " + System.getProperty("log4j.loggerFactory"));
@@ -179,6 +187,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
         }
         //PropertyPrinter printer = new PropertyPrinter(new PrintWriter(System.out));
         //printer.print(new PrintWriter(System.out));
+        if(factory != null) {
+            factory.loggingConfigurationDidChange();
+        }
     }
 
     /**
