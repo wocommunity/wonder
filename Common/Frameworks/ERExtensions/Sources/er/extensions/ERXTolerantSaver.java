@@ -211,6 +211,7 @@ public class ERXTolerantSaver {
             ec.saveChanges();
         } catch(NSValidation.ValidationException eov) {
             log.info("TolerantSaver: Caught EOValidationException: " + eov.getMessage());
+            throw eov;
         } catch(EOGeneralAdaptorException e) {
             EOEnterpriseObject failedEO;
             NSDictionary userInfo = (NSDictionary)e.userInfo();
