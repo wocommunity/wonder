@@ -90,11 +90,11 @@ public class ERXSortOrder extends WOSortOrder {
         boolean hasCustomImage = false;
         switch(currentState()) {
             case Unsorted:
-                hasCustomImage = ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("unsortedImageName")); break;
+                hasCustomImage = !ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("unsortedImageName")); break;
             case SortedAscending:
-                hasCustomImage = ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedAscendingImageName")); break;
+                hasCustomImage = !ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedAscendingImageName")); break;
             case SortedDescending:
-                hasCustomImage = ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedDescendingImageName")); break;
+                hasCustomImage = !ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedDescendingImageName")); break;
         }
         return hasCustomImage;
     }
