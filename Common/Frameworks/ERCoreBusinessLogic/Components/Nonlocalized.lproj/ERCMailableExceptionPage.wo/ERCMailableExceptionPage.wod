@@ -3,6 +3,10 @@ ApplicationNameString: WOString {
     escapeHTML = false;
 }
 
+Conditional1: ERXNonNullConditional {
+	condition = actor;
+}
+
 ExceptionNameString: WOString {
     value = exception.name;
     escapeHTML = false;
