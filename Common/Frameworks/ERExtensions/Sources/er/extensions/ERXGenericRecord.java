@@ -213,7 +213,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
-            for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.clone() : objects;
+            for (Enumeration e = objectsSafe.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 removeObjectFromBothSidesOfRelationshipWithKey(eo, key);
              }
@@ -229,7 +230,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void removeObjectsFromPropertyWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
-            for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.clone() : objects;
+            for (Enumeration e = objectsSafe.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 removeObjectFromPropertyWithKey(eo, key);
             }
