@@ -20,7 +20,7 @@
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F57D5EBE02E53C1101000102;
+									bookmark = F56E187B02E6A63701000102;
 									history = (
 										F581686A02E3220C01000102,
 										F581686C02E3220C01000102,
@@ -34,15 +34,12 @@
 										F581687602E3220C01000102,
 										F581687702E3220C01000102,
 										F581687A02E3220C01000102,
-										F581687C02E3220C01000102,
-										F581687D02E3220C01000102,
 										F581687E02E3220C01000102,
 										F581687F02E3220C01000102,
 										F581688002E3220C01000102,
 										F581688402E3220C01000102,
 										F57E9C0802E3410201CF0E76,
 										F57E9C0A02E3410201CF0E76,
-										F561E81A02E38B3F01CF0E76,
 										F561E81B02E38B3F01CF0E76,
 										F561E81D02E38B3F01CF0E76,
 										F561E81E02E38B3F01CF0E76,
@@ -64,7 +61,6 @@
 										F57059C502E3F6AB01000102,
 										F57059C702E3F6AB01000102,
 										F57059C802E3F6AB01000102,
-										F585D64402E48C3101CF0E76,
 										F584E56A02E52DB201000102,
 										F584E56B02E52DB201000102,
 										F584E56C02E52DB201000102,
@@ -74,15 +70,22 @@
 										F584E57002E52DB201000102,
 										F584E57102E52DB201000102,
 										F584E57202E52DB201000102,
-										F53102FC02E530EC01000102,
 										F53102FD02E530EC01000102,
 										F57D5EAF02E53C1101000102,
 										F57D5EB002E53C1101000102,
 										F57D5EB102E53C1101000102,
 										F57D5EB202E53C1101000102,
 										F57D5EB302E53C1101000102,
-										F57D5EB402E53C1101000102,
-										F57D5EB502E53C1101000102,
+										F56E185E02E6A63701000102,
+										F56E185F02E6A63701000102,
+										F56E186002E6A63701000102,
+										F56E186102E6A63701000102,
+										F56E186202E6A63701000102,
+										F56E186302E6A63701000102,
+										F56E186402E6A63701000102,
+										F56E186502E6A63701000102,
+										F56E186602E6A63701000102,
+										F56E186702E6A63701000102,
 									);
 									prevStack = (
 										F581688702E3220C01000102,
@@ -192,11 +195,30 @@
 										F57D5EBB02E53C1101000102,
 										F57D5EBC02E53C1101000102,
 										F57D5EBD02E53C1101000102,
+										F56E186802E6A63701000102,
+										F56E186902E6A63701000102,
+										F56E186A02E6A63701000102,
+										F56E186B02E6A63701000102,
+										F56E186C02E6A63701000102,
+										F56E186D02E6A63701000102,
+										F56E186E02E6A63701000102,
+										F56E186F02E6A63701000102,
+										F56E187002E6A63701000102,
+										F56E187102E6A63701000102,
+										F56E187202E6A63701000102,
+										F56E187302E6A63701000102,
+										F56E187402E6A63701000102,
+										F56E187502E6A63701000102,
+										F56E187602E6A63701000102,
+										F56E187702E6A63701000102,
+										F56E187802E6A63701000102,
+										F56E187902E6A63701000102,
+										F56E187A02E6A63701000102,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {805, 279}}";
+									Frame = "{{0, 0}, {805, 326}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -241,7 +263,7 @@
 							Collapsed = NO;
 							Frame = "{{337, 0}, {805, 554}}";
 							Split0 = {
-								Frame = "{{0, 275}, {805, 279}}";
+								Frame = "{{0, 228}, {805, 326}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -287,9 +309,9 @@
 								};
 							};
 							Tab2 = {
-								BuildMessageFrame = "{{0, 0}, {807, 90}}";
-								BuildTranscriptFrame = "{{0, 99}, {807, 154}}";
-								Frame = "{{0, 0}, {805, 251}}";
+								BuildMessageFrame = "{{0, 0}, {807, 197}}";
+								BuildTranscriptFrame = "{{0, 206}, {807, 0}}";
+								Frame = "{{0, 0}, {805, 204}}";
 							};
 							Tab3 = {
 								Frame = "{{0, 0}, {805, 189}}";
@@ -375,17 +397,15 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{6, 97}";
+					WindowLocation = "{4, 104}";
 				},
 			);
 			PBXWorkspaceStateSaveDate = 48661279;
 		};
 		perUserProjectItems = {
-			F53102FC02E530EC01000102 = F53102FC02E530EC01000102;
 			F53102FD02E530EC01000102 = F53102FD02E530EC01000102;
 			F53102FF02E530EC01000102 = F53102FF02E530EC01000102;
 			F531030002E530EC01000102 = F531030002E530EC01000102;
-			F561E81A02E38B3F01CF0E76 = F561E81A02E38B3F01CF0E76;
 			F561E81B02E38B3F01CF0E76 = F561E81B02E38B3F01CF0E76;
 			F561E81D02E38B3F01CF0E76 = F561E81D02E38B3F01CF0E76;
 			F561E81E02E38B3F01CF0E76 = F561E81E02E38B3F01CF0E76;
@@ -413,6 +433,36 @@
 			F561E83702E38B3F01CF0E76 = F561E83702E38B3F01CF0E76;
 			F568885402E3BA6101CF0E76 = F568885402E3BA6101CF0E76;
 			F568885602E3BA6101CF0E76 = F568885602E3BA6101CF0E76;
+			F56E185E02E6A63701000102 = F56E185E02E6A63701000102;
+			F56E185F02E6A63701000102 = F56E185F02E6A63701000102;
+			F56E186002E6A63701000102 = F56E186002E6A63701000102;
+			F56E186102E6A63701000102 = F56E186102E6A63701000102;
+			F56E186202E6A63701000102 = F56E186202E6A63701000102;
+			F56E186302E6A63701000102 = F56E186302E6A63701000102;
+			F56E186402E6A63701000102 = F56E186402E6A63701000102;
+			F56E186502E6A63701000102 = F56E186502E6A63701000102;
+			F56E186602E6A63701000102 = F56E186602E6A63701000102;
+			F56E186702E6A63701000102 = F56E186702E6A63701000102;
+			F56E186802E6A63701000102 = F56E186802E6A63701000102;
+			F56E186902E6A63701000102 = F56E186902E6A63701000102;
+			F56E186A02E6A63701000102 = F56E186A02E6A63701000102;
+			F56E186B02E6A63701000102 = F56E186B02E6A63701000102;
+			F56E186C02E6A63701000102 = F56E186C02E6A63701000102;
+			F56E186D02E6A63701000102 = F56E186D02E6A63701000102;
+			F56E186E02E6A63701000102 = F56E186E02E6A63701000102;
+			F56E186F02E6A63701000102 = F56E186F02E6A63701000102;
+			F56E187002E6A63701000102 = F56E187002E6A63701000102;
+			F56E187102E6A63701000102 = F56E187102E6A63701000102;
+			F56E187202E6A63701000102 = F56E187202E6A63701000102;
+			F56E187302E6A63701000102 = F56E187302E6A63701000102;
+			F56E187402E6A63701000102 = F56E187402E6A63701000102;
+			F56E187502E6A63701000102 = F56E187502E6A63701000102;
+			F56E187602E6A63701000102 = F56E187602E6A63701000102;
+			F56E187702E6A63701000102 = F56E187702E6A63701000102;
+			F56E187802E6A63701000102 = F56E187802E6A63701000102;
+			F56E187902E6A63701000102 = F56E187902E6A63701000102;
+			F56E187A02E6A63701000102 = F56E187A02E6A63701000102;
+			F56E187B02E6A63701000102 = F56E187B02E6A63701000102;
 			F57059BB02E3F6AB01000102 = F57059BB02E3F6AB01000102;
 			F57059BC02E3F6AB01000102 = F57059BC02E3F6AB01000102;
 			F57059BD02E3F6AB01000102 = F57059BD02E3F6AB01000102;
@@ -450,8 +500,6 @@
 			F57D5EB102E53C1101000102 = F57D5EB102E53C1101000102;
 			F57D5EB202E53C1101000102 = F57D5EB202E53C1101000102;
 			F57D5EB302E53C1101000102 = F57D5EB302E53C1101000102;
-			F57D5EB402E53C1101000102 = F57D5EB402E53C1101000102;
-			F57D5EB502E53C1101000102 = F57D5EB502E53C1101000102;
 			F57D5EB602E53C1101000102 = F57D5EB602E53C1101000102;
 			F57D5EB702E53C1101000102 = F57D5EB702E53C1101000102;
 			F57D5EB802E53C1101000102 = F57D5EB802E53C1101000102;
@@ -460,7 +508,6 @@
 			F57D5EBB02E53C1101000102 = F57D5EBB02E53C1101000102;
 			F57D5EBC02E53C1101000102 = F57D5EBC02E53C1101000102;
 			F57D5EBD02E53C1101000102 = F57D5EBD02E53C1101000102;
-			F57D5EBE02E53C1101000102 = F57D5EBE02E53C1101000102;
 			F57E9C0802E3410201CF0E76 = F57E9C0802E3410201CF0E76;
 			F57E9C0A02E3410201CF0E76 = F57E9C0A02E3410201CF0E76;
 			F57E9C0C02E3410201CF0E76 = F57E9C0C02E3410201CF0E76;
@@ -478,8 +525,6 @@
 			F581687602E3220C01000102 = F581687602E3220C01000102;
 			F581687702E3220C01000102 = F581687702E3220C01000102;
 			F581687A02E3220C01000102 = F581687A02E3220C01000102;
-			F581687C02E3220C01000102 = F581687C02E3220C01000102;
-			F581687D02E3220C01000102 = F581687D02E3220C01000102;
 			F581687E02E3220C01000102 = F581687E02E3220C01000102;
 			F581687F02E3220C01000102 = F581687F02E3220C01000102;
 			F581688002E3220C01000102 = F581688002E3220C01000102;
@@ -548,7 +593,6 @@
 			F584E57C02E52DB201000102 = F584E57C02E52DB201000102;
 			F584E57D02E52DB201000102 = F584E57D02E52DB201000102;
 			F584E57E02E52DB201000102 = F584E57E02E52DB201000102;
-			F585D64402E48C3101CF0E76 = F585D64402E48C3101CF0E76;
 			F585D64502E48C3101CF0E76 = F585D64502E48C3101CF0E76;
 		};
 		projectwideBuildSettings = {
@@ -558,16 +602,6 @@
 	};
 	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
-	};
-	F53102FC02E530EC01000102 = {
-		fRef = F59C57B902C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXLocalizer.java: 84";
-		rLen = 0;
-		rLoc = 3315;
-		rType = 0;
-		vrLen = 351;
-		vrLoc = 3146;
 	};
 	F53102FD02E530EC01000102 = {
 		fRef = F59C57D502C4565701000102;
@@ -598,16 +632,6 @@
 		rType = 0;
 		vrLen = 648;
 		vrLoc = 1536;
-	};
-	F561E81A02E38B3F01CF0E76 = {
-		fRef = F59C57F202C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXValidation.java: 41";
-		rLen = 0;
-		rLoc = 1425;
-		rType = 0;
-		vrLen = 1172;
-		vrLoc = 0;
 	};
 	F561E81B02E38B3F01CF0E76 = {
 		fRef = F59C570402C4560D01000102;
@@ -678,7 +702,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXValidation.java: 41";
 		rLen = 0;
-		rLoc = 1425;
+		rLoc = 1188;
 		rType = 0;
 		vrLen = 1172;
 		vrLoc = 0;
@@ -692,7 +716,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 95";
 		rLen = 0;
-		rLoc = 4000;
+		rLoc = 2400;
 		rType = 0;
 		vrLen = 1153;
 		vrLoc = 2646;
@@ -782,7 +806,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 95";
 		rLen = 0;
-		rLoc = 4000;
+		rLoc = 2400;
 		rType = 0;
 		vrLen = 1182;
 		vrLoc = 627;
@@ -812,7 +836,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 95";
 		rLen = 0;
-		rLoc = 4000;
+		rLoc = 2400;
 		rType = 0;
 		vrLen = 1452;
 		vrLoc = 1809;
@@ -986,6 +1010,303 @@
 		name = EOSQLQualifier.jad;
 		path = /Users/max/Source/EOSQLQualifier.jad;
 		refType = 0;
+	};
+	F56E185E02E6A63701000102 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: 780";
+		rLen = 0;
+		rLoc = 35066;
+		rType = 0;
+		vrLen = 1388;
+		vrLoc = 33139;
+	};
+	F56E185F02E6A63701000102 = {
+		fRef = F59C57F102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXUtilities.java: sharedObjectWithPrimaryKey";
+		rLen = 0;
+		rLoc = 10911;
+		rType = 0;
+		vrLen = 1807;
+		vrLoc = 9734;
+	};
+	F56E186002E6A63701000102 = {
+		fRef = F59C57CF02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXPrimaryKeyListQualifier.java: 27";
+		rLen = 0;
+		rLoc = 889;
+		rType = 0;
+		vrLen = 897;
+		vrLoc = 824;
+	};
+	F56E186102E6A63701000102 = {
+		fRef = F57D5EAD02E538B901000102;
+		isa = PBXTextBookmark;
+		name = "ERXInQualifier.java: 23";
+		rLen = 0;
+		rLoc = 723;
+		rType = 0;
+		vrLen = 827;
+		vrLoc = 530;
+	};
+	F56E186202E6A63701000102 = {
+		fRef = F59C57D102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXQualifierInSubquery.java: 13";
+		rLen = 0;
+		rLoc = 442;
+		rType = 0;
+		vrLen = 1126;
+		vrLoc = 1843;
+	};
+	F56E186302E6A63701000102 = {
+		fRef = F59C57E302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXStringUtilities.java: displayNameForKey";
+		rLen = 17;
+		rLoc = 6391;
+		rType = 0;
+		vrLen = 898;
+		vrLoc = 6015;
+	};
+	F56E186402E6A63701000102 = {
+		fRef = F59C577702C4565601000102;
+		isa = PBXTextBookmark;
+		name = "EOGenericRecordClazz.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1056;
+		vrLoc = 0;
+	};
+	F56E186502E6A63701000102 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: displayNameForKey";
+		rLen = 36;
+		rLoc = 17345;
+		rType = 0;
+		vrLen = 749;
+		vrLoc = 17192;
+	};
+	F56E186602E6A63701000102 = {
+		fRef = F59C57B902C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXLocalizer.java: localizedStringForKey";
+		rLen = 21;
+		rLoc = 13215;
+		rType = 0;
+		vrLen = 829;
+		vrLoc = 13037;
+	};
+	F56E186702E6A63701000102 = {
+		fRef = F59C57F202C4565701000102;
+		isa = PBXTextBookmark;
+		rLen = 1;
+		rLoc = 106;
+		rType = 1;
+	};
+	F56E186802E6A63701000102 = {
+		fRef = F57D5EAD02E538B901000102;
+		isa = PBXTextBookmark;
+		name = "ERXInQualifier.java: 20";
+		rLen = 0;
+		rLoc = 572;
+		rType = 0;
+		vrLen = 1073;
+		vrLoc = 0;
+	};
+	F56E186902E6A63701000102 = {
+		fRef = F59C57CF02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXPrimaryKeyListQualifier.java: 116";
+		rLen = 0;
+		rLoc = 4023;
+		rType = 0;
+		vrLen = 1030;
+		vrLoc = 3181;
+	};
+	F56E186A02E6A63701000102 = {
+		fRef = F57D5EAD02E538B901000102;
+		isa = PBXTextBookmark;
+		name = "ERXInQualifier.java: 20";
+		rLen = 0;
+		rLoc = 572;
+		rType = 0;
+		vrLen = 1497;
+		vrLoc = 2427;
+	};
+	F56E186B02E6A63701000102 = {
+		fRef = F59C57CF02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXPrimaryKeyListQualifier.java: 26";
+		rLen = 0;
+		rLoc = 877;
+		rType = 0;
+		vrLen = 1131;
+		vrLoc = 386;
+	};
+	F56E186C02E6A63701000102 = {
+		fRef = F57D5EAD02E538B901000102;
+		isa = PBXTextBookmark;
+		name = "ERXInQualifier.java: 42";
+		rLen = 0;
+		rLoc = 1010;
+		rType = 0;
+		vrLen = 1119;
+		vrLoc = 475;
+	};
+	F56E186D02E6A63701000102 = {
+		fRef = F59C57CF02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXPrimaryKeyListQualifier.java: 27";
+		rLen = 0;
+		rLoc = 889;
+		rType = 0;
+		vrLen = 897;
+		vrLoc = 824;
+	};
+	F56E186E02E6A63701000102 = {
+		fRef = F57D5EAD02E538B901000102;
+		isa = PBXTextBookmark;
+		name = "ERXInQualifier.java: 23";
+		rLen = 0;
+		rLoc = 723;
+		rType = 0;
+		vrLen = 827;
+		vrLoc = 530;
+	};
+	F56E186F02E6A63701000102 = {
+		fRef = F59C57D102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXQualifierInSubquery.java: 13";
+		rLen = 0;
+		rLoc = 442;
+		rType = 0;
+		vrLen = 1126;
+		vrLoc = 1843;
+	};
+	F56E187002E6A63701000102 = {
+		fRef = F59C57E302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXStringUtilities.java: displayNameForKey";
+		rLen = 17;
+		rLoc = 6391;
+		rType = 0;
+		vrLen = 955;
+		vrLoc = 6015;
+	};
+	F56E187102E6A63701000102 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: displayNameForKey";
+		rLen = 0;
+		rLoc = 17387;
+		rType = 0;
+		vrLen = 890;
+		vrLoc = 17019;
+	};
+	F56E187202E6A63701000102 = {
+		fRef = F59C57E302C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXStringUtilities.java: displayNameForKey";
+		rLen = 17;
+		rLoc = 6391;
+		rType = 0;
+		vrLen = 898;
+		vrLoc = 6015;
+	};
+	F56E187302E6A63701000102 = {
+		fRef = F59C577702C4565601000102;
+		isa = PBXTextBookmark;
+		name = "EOGenericRecordClazz.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1056;
+		vrLoc = 0;
+	};
+	F56E187402E6A63701000102 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: registerDescriptionForEntitiesInModel";
+		rLen = 0;
+		rLoc = 7091;
+		rType = 0;
+		vrLen = 1259;
+		vrLoc = 6265;
+	};
+	F56E187502E6A63701000102 = {
+		fRef = F59C57F202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidation.java: validationFailedWithException";
+		rLen = 0;
+		rLoc = 5774;
+		rType = 0;
+		vrLen = 1274;
+		vrLoc = 5211;
+	};
+	F56E187602E6A63701000102 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: displayNameForKey";
+		rLen = 17;
+		rLoc = 17298;
+		rType = 0;
+		vrLen = 704;
+		vrLoc = 17237;
+	};
+	F56E187702E6A63701000102 = {
+		fRef = F59C57F202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidation.java: validationFailedWithException";
+		rLen = 0;
+		rLoc = 5774;
+		rType = 0;
+		vrLen = 1253;
+		vrLoc = 5211;
+	};
+	F56E187802E6A63701000102 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: displayNameForKey";
+		rLen = 36;
+		rLoc = 17345;
+		rType = 0;
+		vrLen = 749;
+		vrLoc = 17192;
+	};
+	F56E187902E6A63701000102 = {
+		fRef = F59C57F202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidation.java: 111";
+		rLen = 0;
+		rLoc = 5774;
+		rType = 0;
+		vrLen = 1214;
+		vrLoc = 5377;
+	};
+	F56E187A02E6A63701000102 = {
+		fRef = F59C57B902C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXLocalizer.java: localizedStringForKey";
+		rLen = 21;
+		rLoc = 13215;
+		rType = 0;
+		vrLen = 829;
+		vrLoc = 13037;
+	};
+	F56E187B02E6A63701000102 = {
+		fRef = F59C57F202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXValidation.java: 12";
+		rLen = 0;
+		rLoc = 419;
+		rType = 0;
+		vrLen = 866;
+		vrLoc = 60;
 	};
 	F57059BB02E3F6AB01000102 = {
 		fRef = F59C56F202C455BF01000102;
@@ -1262,7 +1583,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: toString";
 		rLen = 0;
-		rLoc = 4211;
+		rLoc = 4023;
 		rType = 0;
 		vrLen = 1030;
 		vrLoc = 3181;
@@ -1369,23 +1690,6 @@
 		vrLen = 1417;
 		vrLoc = 0;
 	};
-	F57D5EB402E53C1101000102 = {
-		fRef = F59C57CF02C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXPrimaryKeyListQualifier.java: 116";
-		rLen = 0;
-		rLoc = 4211;
-		rType = 0;
-		vrLen = 636;
-		vrLoc = 0;
-	};
-	F57D5EB502E53C1101000102 = {
-		fRef = F57D5EAD02E538B901000102;
-		isa = PBXTextBookmark;
-		rLen = 1;
-		rLoc = 27;
-		rType = 1;
-	};
 	F57D5EB602E53C1101000102 = {
 		fRef = F59C577002C4565601000102;
 		isa = PBXTextBookmark;
@@ -1441,7 +1745,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 116";
 		rLen = 0;
-		rLoc = 4211;
+		rLoc = 4023;
 		rType = 0;
 		vrLen = 1346;
 		vrLoc = 2361;
@@ -1461,20 +1765,10 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 116";
 		rLen = 0;
-		rLoc = 4211;
+		rLoc = 4023;
 		rType = 0;
 		vrLen = 636;
 		vrLoc = 0;
-	};
-	F57D5EBE02E53C1101000102 = {
-		fRef = F57D5EAD02E538B901000102;
-		isa = PBXTextBookmark;
-		name = "ERXInQualifier.java: 28";
-		rLen = 0;
-		rLoc = 949;
-		rType = 0;
-		vrLen = 703;
-		vrLoc = 475;
 	};
 	F57E9C0802E3410201CF0E76 = {
 		fRef = F59C57BB02C4565701000102;
@@ -1645,26 +1939,6 @@
 		rType = 0;
 		vrLen = 894;
 		vrLoc = 1140;
-	};
-	F581687C02E3220C01000102 = {
-		fRef = F59C57E302C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXStringUtilities.java: lastPropertyKeyInKeyPath";
-		rLen = 0;
-		rLoc = 5763;
-		rType = 0;
-		vrLen = 850;
-		vrLoc = 5136;
-	};
-	F581687D02E3220C01000102 = {
-		fRef = F59C57F102C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXUtilities.java: lastKey";
-		rLen = 0;
-		rLoc = 24008;
-		rType = 0;
-		vrLen = 1324;
-		vrLoc = 22819;
 	};
 	F581687E02E3220C01000102 = {
 		fRef = F59C57A102C4565701000102;
@@ -2241,7 +2515,7 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 105";
 		rLen = 0;
-		rLoc = 4008;
+		rLoc = 2400;
 		rType = 0;
 		vrLen = 941;
 		vrLoc = 3270;
@@ -2341,20 +2615,10 @@
 		isa = PBXTextBookmark;
 		name = "ERXPrimaryKeyListQualifier.java: 116";
 		rLen = 0;
-		rLoc = 4211;
+		rLoc = 4023;
 		rType = 0;
 		vrLen = 591;
 		vrLoc = 3214;
-	};
-	F585D64402E48C3101CF0E76 = {
-		fRef = F59C579A02C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXExtensions.java: PropertyKeyWithoutLastProperty";
-		rLen = 0;
-		rLoc = 62324;
-		rType = 0;
-		vrLen = 1593;
-		vrLoc = 3000;
 	};
 	F585D64502E48C3101CF0E76 = {
 		fRef = F59C579A02C4565701000102;
