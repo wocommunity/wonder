@@ -40,10 +40,22 @@ public class ERXProperties {
      *		the system properties
      */
     public static NSArray arrayForKey(String s) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? (NSArray)NSPropertyListSerialization.propertyListFromString(s1) : null;
+        return arrayForKeyWithDefault(s, null);
     }
 
+    /**
+     * Cover method for returning an NSArray for a
+     * given system property and set a default value if not given.
+     * @param s system property
+     * @param defaultValue default value
+     * @return array de-serialized from the string in
+     *		the system properties or default value
+     */
+    public static NSArray arrayForKeyWithDefault(String s, NSArray defaultValue) {
+        String s1 = System.getProperty(s);
+        return s1 != null ? (NSArray)NSPropertyListSerialization.propertyListFromString(s1) : defaultValue;
+    }
+    
     /**
      * Cover method for returning a boolean for a
      * given system property. This method uses the
@@ -54,9 +66,23 @@ public class ERXProperties {
      *		system properties.
      */    
     public static boolean booleanForKey(String s) {
-        return ERXUtilities.booleanValue(System.getProperty(s));
+        return booleanForKeyWithDefault(s, false);
     }
 
+    /**
+     * Cover method for returning a boolean for a
+     * given system property or a default value. This method uses the
+     * method <code>booleanValue</code> from
+     * {@link ERXUtilities}.
+     * @param s system property
+     * @param defaultValue default value
+     * @return boolean value of the string in the
+     *		system properties.
+     */
+    public static boolean booleanForKeyWithDefault(String s, boolean defaultValue) {
+        return ERXUtilities.booleanValue(System.getProperty(s)) ? true : defaultValue;
+    }
+    
     /**
      * Cover method for returning an NSDictionary for a
      * given system property.
@@ -65,8 +91,20 @@ public class ERXProperties {
      *		the system properties
      */    
     public static NSDictionary dictionaryForKey(String s) {
+        return dictionaryForKeyWithDefault(s, null);
+    }
+
+    /**
+     * Cover method for returning an NSDictionary for a
+     * given system property or the default value.
+     * @param s system property
+     * @param defaultValue default value
+     * @return dictionary de-serialized from the string in
+     *		the system properties
+     */
+    public static NSDictionary dictionaryForKeyWithDefault(String s, NSDictionary defaultValue) {
         String s1 = System.getProperty(s);
-        return s1 != null ? (NSDictionary)NSPropertyListSerialization.propertyListFromString(s1) : null;
+        return s1 != null ? (NSDictionary)NSPropertyListSerialization.propertyListFromString(s1) : defaultValue;
     }
 
     /**
@@ -87,7 +125,21 @@ public class ERXProperties {
      * @param s system property
      * @return string value of the system propery or null
      */
-    public static String stringForKey(String s) { return System.getProperty(s); }
+    public static String stringForKey(String s) {
+        return stringForKeyWithDefault(s, null);
+    }
+
+    /**
+     * Returning an string for a given system
+     * property. This is a cover method of
+     * {@link java.lang.System#getProperty}
+     * @param s system property
+     * @return string value of the system propery or null
+     */
+    public static String stringForKeyWithDefault(String s, String defaultValue) {
+        String s1 = System.getProperty(s);
+        return s1 != null ? s1 : defaultValue;
+    }
 
     /**
      * Sets an array in the System properties for
