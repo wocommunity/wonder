@@ -1428,6 +1428,7 @@
 				F542071702C467E001000102,
 				F542072202C467E001000102,
 				F6A30E2C02F8BFCB0FCF0E72,
+				F6B41515032D7E020FCF0E72,
 			);
 			isa = PBXGroup;
 			path = directtoweb;
@@ -6940,10 +6941,12 @@
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERDirectToWeb";
 				SERVER_UNIQUIFIER = Server;
+				SRCROOT = Sources;
 				WRAPPER_EXTENSION = tmp;
 			};
 			dependencies = (
@@ -7450,6 +7453,8 @@
 				F57E9BF502E3398401CF0E76,
 				F639B99E02EF369F0FCF0E72,
 				F6A30E2D02F8BFCB0FCF0E72,
+				F6B41516032D7E020FCF0E72,
+				F686D4E5033285420FCF0E72,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7559,6 +7564,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)ERDirectToWeb";
@@ -7893,6 +7899,18 @@
 			settings = {
 			};
 		};
+		F686D4E4033285420FCF0E72 = {
+			isa = PBXFileReference;
+			name = ERDSortedManyToManyAssignment.java;
+			path = er/directtoweb/ERDSortedManyToManyAssignment.java;
+			refType = 4;
+		};
+		F686D4E5033285420FCF0E72 = {
+			fileRef = F686D4E4033285420FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F6A30E2C02F8BFCB0FCF0E72 = {
 			isa = PBXFileReference;
 			path = ERD2WEditRelationshipPage.java;
@@ -7900,6 +7918,17 @@
 		};
 		F6A30E2D02F8BFCB0FCF0E72 = {
 			fileRef = F6A30E2C02F8BFCB0FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6B41515032D7E020FCF0E72 = {
+			isa = PBXFileReference;
+			path = ERD2WEditSortedManyToManyPage.java;
+			refType = 4;
+		};
+		F6B41516032D7E020FCF0E72 = {
+			fileRef = F6B41515032D7E020FCF0E72;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7940,6 +7969,7 @@
 				F542071602C467E001000102,
 				F542071902C467E001000102,
 				F542071C02C467E001000102,
+				F686D4E4033285420FCF0E72,
 			);
 			isa = PBXGroup;
 			name = "D2W Assignments";
