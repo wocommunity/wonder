@@ -160,7 +160,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
             if (getBufferSize() == -1 || currentBufferSize == getBufferSize()) {
                 editingContext().saveChanges();
                 // Clean out the ec.
-                editingContext().refaultObjects();
+                editingContext().revert();
                 currentBufferSize = 1;
             } else {
                 currentBufferSize++;
