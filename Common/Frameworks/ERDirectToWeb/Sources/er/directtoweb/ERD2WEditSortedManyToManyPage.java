@@ -250,8 +250,10 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 int i = 0;
                 for(Enumeration e = hiddenFieldValues.objectEnumerator(); e.hasMoreElements();){
                     String objectForHashCode = (String)e.nextElement();
-                    if(log.isDebugEnabled()) log.debug("objectForHashCode = "+objectForHashCode);
                     EOEnterpriseObject eo = objectForHashCode(objectForHashCode);
+                    if(log.isDebugEnabled()){
+                        log.debug("objectForHashCode objectForHashCode "+objectForHashCode+":"+eo);
+                    } 
                     if(eo!=null){
                         eo.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
                     }else{
@@ -456,7 +458,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public void appendToResponse(WOResponse r, WOContext c){
-        if(sortedObjects == null && ((ERXSession)session()).javaScriptEnabled()){
+        if(((ERXSession)session()).javaScriptEnabled()){
             StringBuffer result = new StringBuffer();
             for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
                 e.hasMoreElements();){
