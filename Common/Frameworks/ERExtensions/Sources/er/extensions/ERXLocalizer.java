@@ -316,7 +316,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public String localizedTemplateStringForKeyWithObjectOtherObject(String key, Object o1, Object o2) {
         String template = localizedStringForKey(key);
-        return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
+        if(template != null)
+            return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
+        return key;
     }
 
     private String _plurify(String s, int howMany) {
