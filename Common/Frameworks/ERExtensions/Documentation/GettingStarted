@@ -37,7 +37,7 @@ this class requires that you have JCE (javax.crypto and the sun provider) instal
 JCE is standard in the 1.4 JDK
 For 1.3 you can find it at http://java.sun.com/products/jce/index-121.html
 All, you will have to put the 4 JCE jars in your extensions directory
-(/Library/Java/Home/lib/ext on X) for ERExtensionsJava to build..
+(/Library/Java/Extentions on X) for ERExtensionsJava to build..
 And edit /Library/Java/Home/lib/security/java.security, add the following line
 security.provider.4=com.sun.crypto.provider.SunJCE
 
