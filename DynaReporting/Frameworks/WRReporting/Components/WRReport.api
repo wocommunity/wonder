@@ -11,8 +11,12 @@
 		<binding name="showPresentationControls"/>
 		<binding name="showRecordGroupAsTable"/>
 		<binding name="showRecordGroupHeadings"/>
+		<binding name="recordGroupTotalFormat"/>
+		<binding name="keysInZ"/>
+		<binding name="keysInV"/>
+		<binding name="keysInH"/>
 
-		<validation message="'model' is a required binding">
+		<validation message="&apos;model&apos; is a required binding">
 			<unbound name="model"/>
 		</validation>
 	</wo>
