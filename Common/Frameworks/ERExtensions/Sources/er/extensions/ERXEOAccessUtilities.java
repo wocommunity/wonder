@@ -6,11 +6,10 @@
 //
 package er.extensions;
 
+import java.util.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.jdbcadaptor.*;
-import java.util.*;
 
 /**
  * Collection of EOAccess related utilities.
@@ -133,9 +132,8 @@ public class ERXEOAccessUtilities {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(new EOEditingContext(),
                                                                         modelName);
         EOAdaptorContext ac = dc.adaptorContext();
-        JDBCAdaptor a = (JDBCAdaptor) ac.adaptor();
-        JDBCPlugIn plugin = a.plugIn();
-        EOSynchronizationFactory sf = plugin.createSynchronizationFactory();
+        //ak: stupid trick to get around having to link to JDBCAdaptor
+        EOSynchronizationFactory sf = (EOSynchronizationFactory)NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac, "adaptor.plugIn.createSynchronizationFactory");
         EOModel m = EOModelGroup.defaultGroup().modelNamed(modelName);
         Enumeration e = m.entities().objectEnumerator();
         entities = entities == null ? new NSMutableArray() : entities;
