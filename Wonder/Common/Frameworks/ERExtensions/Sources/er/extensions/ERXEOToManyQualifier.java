@@ -30,7 +30,7 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
     private int _minCount = 0;
 
     ///// Fix for EOSQLQualifier ///
-    public _isEmpty(){
+    public boolean _isEmpty(){
         return false;
     }
     
