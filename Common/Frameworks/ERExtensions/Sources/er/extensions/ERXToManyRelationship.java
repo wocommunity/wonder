@@ -14,12 +14,15 @@ import java.util.Enumeration;
 
 public class ERXToManyRelationship extends WOToManyRelationship {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXToManyRelationship.class);
+
+    /** caches the destination sort key */
+    protected String _destinationSortKey;
+    
     public ERXToManyRelationship(WOContext context) {
         super(context);
     }
-
-    ////////////////////////////////////////////// log4j category //////////////////////////////////////////////////
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXToManyRelationship.class);
 
     public boolean isStateless() { return true; }
 
@@ -28,8 +31,6 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         _destinationSortKey = null;
     }
     
-    protected String _destinationSortKey;
-
     public NSArray selections() {
         if (_privateSelections() == null && canGetValueForBinding("selectedObjects")) {
             NSArray selectedObjects = (NSArray)valueForBinding("selectedObjects");
