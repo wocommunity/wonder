@@ -11,6 +11,7 @@ public class EditConfiguration extends WOComponent {
 
     protected Application app = (Application)WOApplication.application();
     protected boolean showPassword;
+    protected boolean showFontList;
     protected boolean showQuickRules;
     protected boolean showRecent;
     protected GSVRule currentRule;
@@ -23,6 +24,7 @@ public class EditConfiguration extends WOComponent {
         showQuickRules = false;
         showRecent = true;
         showBlank = false;
+        showFontList = false;
         return null;
     }
 
@@ -31,6 +33,7 @@ public class EditConfiguration extends WOComponent {
         showQuickRules = true;
         showRecent = false;
         showBlank = false;
+        showFontList = false;
         return null;
     }
 
@@ -39,6 +42,16 @@ public class EditConfiguration extends WOComponent {
         showQuickRules = false;
         showRecent = false;
         showBlank = false;
+        showFontList = false;
+        return null;
+    }
+
+    public WOComponent displayFontsAction() {
+        showPassword = false;
+        showQuickRules = false;
+        showRecent = false;
+        showBlank = false;
+        showFontList = true;
         return null;
     }
 
