@@ -1,187 +1,384 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<body bgcolor=white>
+<head>
+  <title></title>
+</head>
+<body bgcolor="white">
 <h2>Class List for ERExtensions</h2>
-
-* or # - Indictates that these might not be used any more.
-
+* or # - Indictates that these might not be used any more. 
 <h3>Principal Class</h3>
-<dt>ERXExtensions<dd>Has a boatload of utility methods as well as sets up the framework.  Look in the static initialize() method to see what happens when you link in this framework.</dd></dt>
-
+<dt>ERXExtensions</dt>
+<dd>Has a boatload of utility methods as well as sets up the framework. 
+Look in the static initialize() method to see what happens when you link
+in this framework.</dd>
 <h3>Workarounds/Bugfixes</h3>
-<dt>ERXCheckboxMatrix<dd>Works around a webscript bug.</dd></dt>
-<dt>ERXRadioButtonMatrix<dd>Works around a webscript bug.</dd></dt>
-<dt>ERXSharedEOLoader<dd>Java port of Kelly Hawk's shared EO loader.  Works around a bug with shared eos and multiple models.</dd></dt>
-
+<dt>ERXCheckboxMatrix</dt>
+<dd>Works around a webscript bug.</dd>
+<dt>ERXRadioButtonMatrix</dt>
+<dd>Works around a webscript bug.</dd>
+<dt>ERXSharedEOLoader</dt>
+<dd>Java port of Kelly Hawk's shared EO loader.  Works around a bug with
+shared eos and multiple models.</dd>
 <h3>Qualifiers</h3>
-<dt>ERXEOToManyQualifier<dd>Kickass qualifer ;)  Really nice when you want to find all the eos that have say five of the ten eos in their toMany relationship. </dd></dt>
-<dt>ERXPrimaryKeyListQualifier<dd>Very useful qualifier for prefetching relationships given a list of primary keys.</dd></dt>
-<dt>ERXQualifierInSubquery<dd>this class can be used to work around the EOF bug where OR queries involving many-to-manies are incorrectly generated</dd></dt>
-<dt>ERXQualifierTraversal<dd>Simple class to traverse a network of qualifiers.</dd></dt>
-<dt>ERXQualifierTraversalCallback<dd>Better achived with Categories.  Logic for continuing to traverse the network.</dd></dt>
-
+<dt>ERXEOToManyQualifier</dt>
+<dd>Kickass qualifer ;)  Really nice when you want to find all the eos that
+have say five of the ten eos in their toMany relationship. </dd>
+<dt>ERXPrimaryKeyListQualifier</dt>
+<dd>Very useful qualifier for prefetching relationships given a list of primary
+keys.</dd>
+<dt>ERXQualifierInSubquery</dt>
+<dd>this class can be used to work around the EOF bug where OR queries involving
+many-to-manies are incorrectly generated</dd>
 <h3>Utilities</h3>
-<dt>ERXConfigurationManager<dd>Utility for loading Java property list configurations.  Can also control stuff like WOCachingEnabled as well as changing the connection dictionary of all models.</dd></dt>
-<dt>ERXCrypto<dd>crypto utilities</dd></dt>
-<dt>ERXSimpleTemplateParser<dd>Will parse templates and resolve key paths off of a given object.</dd></dt>
-<dt>#ERWebLint<dd>Java port of Bill Bumgarner's WebLint framework.  </dd></dt>
-<dt>ERXFileNotificationCenter<dd>Useful in developement when you want to be able to reload files at runtime.  This is basically a notification center for files.</dd></dt>
-<dt>ERXMacBinarySwissArmyKnife<dd>Useful for extracting files from binhexed files, ie when a Mac user uploads a file.</dd></dt>
-<dt>ERXNumberFormatter<dd>An extension to the simple number formatter that will ignore characters ($%)</dd></dt>
-<dt>ERXTimestampUtility<dd>A simle utility for providing deprecated functionality for NSTimestamps</dd></dt>
-
+<dt>ERXConfigurationManager</dt>
+<dd>Utility for loading Java property list configurations.  Can also control
+stuff like WOCachingEnabled as well as changing the connection dictionary
+of all models.</dd>
+<dt>ERXCrypto</dt>
+<dd>crypto utilities</dd>
+<dt>ERXSimpleTemplateParser</dt>
+<dd>Will parse templates and resolve key paths off of a given object.</dd>
+<dt>ERXFileNotificationCenter</dt>
+<dd>Useful in developement when you want to be able to reload files at runtime.
+ This is basically a notification center for files.</dd>
+<dt>ERXMacBinarySwissArmyKnife</dt>
+<dd>Useful for extracting files from binhexed files, ie when a Mac user uploads
+a file.</dd>
+<dt>ERXNumberFormatter</dt>
+<dd>An extension to the simple number formatter that will ignore characters
+($%)</dd>
+<dt>ERXTimestampUtility</dt>
+<dd>A simle utility for providing deprecated functionality for NSTimestamps</dd>
+<dd>ERXLocalizer</dd>
+<dd>localization utility</dd>
+<br>
+ERXNonPluralFormLocalizer<br>
+localitzer for languages that don't have plural forms<br>
+<dd>ERXCompilerProxy</dd>
+<dd>used for dynamic re-compilation of java files<br>
+</dd>
 <h3>Log4j Additions</h3>
-<dt>ERXLog4j<dd>Configures and manages the log4j logging system.  Will also configure the system for rapid turn around, ie when WOCaching is disabled when the conf file changes it will get reloaded.</dd></dt>
-<dt>ERXEOFAppender<dd>log4j Appender used to log events using EOF.</dd></dt>
-<dt>ERXEOFLogEntryInterface<dd>Interface implemented by EnterpriseObjects used for logging events.</dd></dt>
-<dt>ERXPatternLayout<dd>Adds the Application process id as well as the application name as pattern variables.</dd></dt>
-<dt>ERXLog4JConfiguration<dd>WOComponent that can dynamicly re-configure the log4j system (lists all categories).</dd></dt>
-<dt>#ProcessIdApplicationCategory<dd>Category that returns the processId for use of the Java side of things.</dd></dt>
-
+<dt>ERXLog4j</dt>
+<dd>Configures and manages the log4j logging system.  Will also configure
+the system for rapid turn around, ie when WOCaching is disabled when the
+conf file changes it will get reloaded.</dd>
+<dt>ERXEOFAppender</dt>
+<dd>log4j Appender used to log events using EOF.</dd>
+<dt>ERXEOFLogEntryInterface</dt>
+<dd>Interface implemented by EnterpriseObjects used for logging events.</dd>
+<dt>ERXPatternLayout</dt>
+<dd>Adds the Application process id as well as the application name as pattern
+variables.</dd>
+<dt>ERXLog4JConfiguration</dt>
+<dd>WOComponent that can dynamicly re-configure the log4j system (lists all
+categories).</dd>
+<dt>ERXLogger</dt>
+<dt>Category subclass</dt>
 <h3>JUnit Additions</h3>
-<dt>ERXBatchTestInterface<dd>Used for running a batch of tests.</dd></dt>
-<dt>ERXTestListener<dd>template listner interface.</dd></dt>
-<dt>ERXTestResult<dd>extensions to hold multiple errors and failures.</dd></dt>
-<dt>ERXTestRunner<dd>runs tests with ERTestListeners.</dd></dt>
-<dt>ERXWOTestResult<dd>WOComponent display of an ERTestResult.</dd></dt>
-<dt>ERXWOTestInterface<dd>component for ineractively running tests.</dd></dt>
-
+<dt>ERXBatchTestInterface</dt>
+<dd>Used for running a batch of tests.</dd>
+<dt>ERXTestListener</dt>
+<dd>template listner interface.</dd>
+<dd>ERXTestCase</dd>
+<dd>abstract test case<br>
+</dd>
+<dt>ERXTestResult</dt>
+<dd>extensions to hold multiple errors and failures.</dd>
+<dt>ERXTestRunner</dt>
+<dd>runs tests with ERTestListeners.</dd>
+<dt>ERXWOTestResult</dt>
+<dd>WOComponent display of an ERTestResult.</dd>
+<dt>ERXWOTestInterface</dt>
+<dd>component for ineractively running tests.</dd>
 <h3>Foundation Additions</h3>
-<dt>ERXArrayUtilities<dd>Utility methods for NSArray.</dd></dt>
-<dt>ERXDictionaryUtilities<dd>Utility methods for Dictionary.</dd></dt>
-<dt>ERXStringUtilities<dd>Utility methods for String.</dd></dt>
-<dt>ERXTimestampUtilities<dd>Utility methods for NSTimestamp.</dd></dt>
-<dt>ERXGraphUtilities<dd>Utility methods useful when using GifPlot.</dd></dt>
-<dt>ERXKeyValueCoding<dd>Poor man's key value coding.</dd></dt>
-<dt>ERXKeyValuePair<dd>Holds one key-value pair, more light-wieght than a dictionary.</dd></dt>
-<dt>ERXMultiKey<dd>Used as a key in a Java hastable to represent a collection of keys.</dd></dt>
-<dt>ERXProperties<dd>Implements propertyList setting on System properties, ie setBooleanForKey.</dd></dt>
-<dt>ERXRetainer<dd>Retainer for Java objects.  Useful for pure Java notification observers as this retains them on the objC side fo things.</dd></dt>
-<dt>ERXConstant<dd>Nice set of constants that kept showing up all over the place.</dd></dt>
-<dt>ERXLinlyn<dd>Can upload and download files from ftp servers</dd></dt>
-<dt>ERXSimpleHTMLFormatter<dd>NSFormatter subclass that provides HTML formatting.</dd></dt>
-
+<dt>ERXArrayUtilities</dt>
+<dd>Utility methods for NSArray.</dd>
+<dt>ERXDictionaryUtilities</dt>
+<dd>Utility methods for Dictionary.</dd>
+<dt>ERXStringUtilities</dt>
+<dd>Utility methods for String.</dd>
+<dt>ERXTimestampUtilities</dt>
+<dd>Utility methods for NSTimestamp.</dd>
+<dt>ERXGraphUtilities</dt>
+<dd>Utility methods useful when using GifPlot.</dd>
+<dt>ERXKeyValueCoding</dt>
+<dd>Poor man's key value coding.</dd>
+<dt>ERXKeyValuePair</dt>
+<dd>Holds one key-value pair, more light-wieght than a dictionary.</dd>
+<dt>ERXMultiKey</dt>
+<dd>Used as a key in a Java hastable to represent a collection of keys.</dd>
+<dt>ERXProperties</dt>
+<dd>Implements propertyList setting on System properties, ie setBooleanForKey.</dd>
+<dt>ERXRetainer</dt>
+<dd>Retainer for Java objects.  Useful for pure Java notification observers
+as this retains them on the objC side fo things.</dd>
+<dt>ERXConstant</dt>
+<dd>Nice set of constants that kept showing up all over the place.</dd>
+<dt>ERXLinlyn</dt>
+<dd>Can upload and download files from ftp servers</dd>
+<dt>ERXSimpleHTMLFormatter</dt>
+<dd>NSFormatter subclass that provides HTML formatting.</dd>
+<dd>ERXCloneableThreadLocal</dd>
+<dd>Used for cloning objects when the thread inherits the thread local</dd>
+<dd>ERXFrameworkPrincipal</dd>
+<dd>Useful for subclasses that need to be the principal class of a framework<br>
+</dd>
 <h3>EOF Interfaces</h3>
-<dt>ERXGeneratesPrimaryKeyInterface<dd>Implemented by eos if they want to be able to generate their own primary keys.</dd></dt>
-<dt>ERXGuardedObjectInterface<dd>Implemented by eos to give the eo the chance to say that it shouldn't be deleted or edited.</dd></dt>
-
+<dt>ERXGeneratesPrimaryKeyInterface</dt>
+<dd>Implemented by eos if they want to be able to generate their own primary
+keys.</dd>
+<dt>ERXGuardedObjectInterface</dt>
+<dd>Implemented by eos to give the eo the chance to say that it shouldn't
+be deleted or edited.</dd>
 <h3>EOF Delegates</h3>
-<dt>ERXDatabaseContextDelegate<dd>Default delegate used to handle database connection failures that the Oracle Adaptor doesn't quite handle correctly.  Also handles the case where eos want to generate there own pks.</dd></dt>
-<dt>ERXECNoValidationDelegate<dd>Default editingcontext delegate that has validation turned off.</dd></dt>
-<dt>ERXDefaultEditingContextDelegate<dd>Default editingcontext delegate.  Gives eos subclassing ERXGenericRecord a few nice methods willInsert, willUpdate and willDelete.  Likewise subclasses of ERXGenericRecord also get didInsert, didUpdate and didDelete.</dd></dt>
-<dt>ERXEditingContextDelegate<dd>Default editing context delegate's superclass.</dd></dt>
-
+<dt>ERXDatabaseContextDelegate</dt>
+<dd>Default delegate used to handle database connection failures that the
+Oracle Adaptor doesn't quite handle correctly.  Also handles the case where
+eos want to generate there own pks.</dd>
+<dt>ERXECNoValidationDelegate</dt>
+<dd>Default editingcontext delegate that has validation turned off.</dd>
+<dt>ERXDefaultEditingContextDelegate</dt>
+<dd>Default editingcontext delegate.  Gives eos subclassing ERXGenericRecord
+a few nice methods willInsert, willUpdate and willDelete.  Likewise subclasses
+of ERXGenericRecord also get didInsert, didUpdate and didDelete.</dd>
+<dt>ERXEditingContextDelegate</dt>
+<dd>Default editing context delegate's superclass.</dd>
 <h3>EOF Additions</h3>
-<dt>ERXEntityClassDescription<dd>Used to throw customizable validation exceptions.</dd></dt>
-<dt>ERXGenericRecord<dd>Extensions of EOGenericRecord.  Has alot of really nice convience methods like committedSnapshotValueForKey.</dd></dt>
-<dt>ERXQualifierUtilities<dd>Added a bunch of EOQualifier comparision utility methods.</dd></dt>
-<dt>ERXUtilities<dd>More EOUtility-like methods.</dd></dt>
-<dt>ERXTolerantSaver<dd>David Neumann's tolerant editingContext saver.</dd></dt>
-<dt>ERXValidation<dd>Nice cleanup/make-it-look-good for generic validation exceptions.</dd></dt>
-<dt>ERXValidationException<dd>Template based validation exception.  Thrown by EREntityClassDescriptions.</dd></dt>
-<dt>ERXValidationFactory<dd>Controls the loading of validation templates.  Supports multiple languages.  Still a work in progress.</dd></dt>
-<dt>ERXEventRecordingDefaultHandler<dd>Default implementation of event handler interface.</dd></dt>
-<dt>ERXFuzzyMatchCleaner<dd>Generic interface used in conjunction with fuzzy searching abilitiies.</dd></dt>
-<dt>ERXReadStateTrackedInterface<dd>Used as a generic interface for when a user views/reads an object.</dd></dt>
-
+<dt>ERXEntityClassDescription</dt>
+<dd>Used to throw customizable validation exceptions.</dd>
+<dt>ERXGenericRecord</dt>
+<dd>Extensions of EOGenericRecord.  Has alot of really nice convience methods
+like committedSnapshotValueForKey.</dd>
+<dt>ERXQualifierUtilities</dt>
+<dd>Added a bunch of EOQualifier comparision utility methods.</dd>
+<dt>ERXUtilities</dt>
+<dd>More EOUtility-like methods.</dd>
+<dt>ERXTolerantSaver</dt>
+<dd>David Neumann's tolerant editingContext saver.</dd>
+<dt>ERXValidation</dt>
+<dd>Nice cleanup/make-it-look-good for generic validation exceptions.</dd>
+<dt>ERXValidationException</dt>
+<dd>Template based validation exception.  Thrown by EREntityClassDescriptions.</dd>
+<dt>ERXValidationFactory</dt>
+<dd>Controls the loading of validation templates.  Supports multiple languages.
+ Still a work in progress.</dd>
+<dt>ERXEventRecordingDefaultHandler</dt>
+<dd>Default implementation of event handler interface.</dd>
+<dt>ERXFuzzyMatchCleaner</dt>
+<dd>Generic interface used in conjunction with fuzzy searching abilitiies.</dd>
+<dt>ERXModelGroup</dt>
+<dt>Better handling of prototypes<br>
+</dt>
 <h3>WOF Interfaces</h3>
-<dt>ERXExceptionHolder<dd>Used to denote if the current WOComponent holds throw exceptions.</dd></dt>
-<dt>ERXSessionAdditionInterface<dd>Used for implementing a SessionAddition.</dd></dt>
-
-<h3>WOF Delegates</h3>
-<dt>ERXNextPageDelegate<dd>Accepts WOActionResults as a nextPage action.</dd></dt>
-<dt>ERXObjectSaveDelegate<dd>Nice for determining if an object was saved do this, if not do that.</dd></dt>
-<dt>ERXObjectWasCreatedDelegate<dd>Nice for determining if an object was created, ie do this if not do that.</dd></dt>
-
+<dt>ERXExceptionHolder</dt>
+<dd>Used to denote if the current WOComponent holds throw exceptions.</dd>
+<dt>ERXSessionAdditionInterface</dt>
+<dd>Used for implementing a SessionAddition.</dd>
+<dd>ERXMutableUserInfoHolderInterface</dd>
+<dd>Used for WOComponents to have mutable user infos.<br>
+</dd>
 <h3>WOF Additions</h3>
-<dt>ERXApplication<dd>Extension of WOApplication.  Adds some good stuff, like being able to change the apps name, set a time to live and change the adaptor prefix.</dd></dt>
-<dt>ERXDirectAction<dd>Adds support for web-based re-configuration of log4j.</dd></dt>
-<dt>ERXNavigation<dd>Not very generic right now, but will be in the future.  Nice for mantaining a stack based navigation system, ie drilling down pushes nav state onto the stack and backing up pops state off the stack.</dd></dt>
-<dt>ERXSession<dd>Extension of WOSession.  Adds notifications when awake and sleep occur.  Plus adds a fair amount in terms of browser knowledge.</dd></dt>
-<dt>ERXSessionAddition<dd>Added the concept of a singleton that has knowledge of the current session and can be reached through binding in the ui, ie session.additions.myAddition.myMethod.  Useful for partitioning logic at the session level.</dd></dt>
-<dt>ERXStatelessComponent<dd>Generic stateless component with some useful binding methods.</dd></dt>
-<dt>#ERSSLUtilities<dd>Used to move between https and http within the same site.*</dd></dt>
-<dt>#SSLContainer<dd>Any links inside the container will be https.*</dd></dt>
-<dt>#WebServerUtil<dd>Found on the webobjects-dev list.  A few useful utility methods for getting the current webservers document root.</dd></dt>
-
+<dt>ERXApplication</dt>
+<dd>Extension of WOApplication.  Adds some good stuff, like being able to
+change the apps name, set a time to live and change the adaptor prefix.</dd>
+<dt>ERXDirectAction</dt>
+<dd>Adds support for web-based re-configuration of log4j.</dd>
+<dt>ERXNavigation</dt>
+<dd>Not very generic right now, but will be in the future.  Nice for mantaining
+a stack based navigation system, ie drilling down pushes nav state onto the
+stack and backing up pops state off the stack.</dd>
+<dt>ERXSession</dt>
+<dd>Extension of WOSession.  Adds notifications when awake and sleep occur.
+ Plus adds a fair amount in terms of browser knowledge.</dd>
+<dt>ERXSessionAddition</dt>
+<dd>Added the concept of a singleton that has knowledge of the current session
+and can be reached through binding in the ui, ie session.additions.myAddition.myMethod.
+ Useful for partitioning logic at the session level.</dd>
+<dt>ERXStatelessComponent</dt>
+<dd>Generic stateless component with some useful binding methods.</dd>
+<dt>ERXRequest</dt>
+<dt>WORequest subclass, handles languages better</dt>
+<dt>ERXMessageEncoding</dt>
+<dt>Handles language encoding better</dt>
+<dt>ERXWOForm</dt>
+<dt>localization support</dt>
+<dt>ERXWOContext</dt>
+<dt>better support for languages and encoding</dt>
 <h3>Conditional WOComponents</h3>
-<dt>ERXEqualConditional<dd>Given two values will display if they are equal (or can negate).</dd></dt>
-<dt>ERXInstanceOfConditional<dd>Given an object and a class name tests if the object is an instanceof the class.</dd></dt>
-<dt>ERXListContainsItemConditional<dd>Given a list and an object evaluates to true if the object is found in the list.</dd></dt>
-<dt>ERXNonNullConditional<dd>Given an object if it is not null then it will evaluate to true.</dd></dt>
-<dt>ERXNonZeroConditional<dd>Given a condition binding if the condition evaluates to non-zero then the condition will evaluate to true.</dd></dt>
-<dt>ERXOncePerRequestConditional<dd>Renders it's embedded content only once during the RR loop. Useful for JavaScript code or stylesheets that should be included only once</dd></dt>
-
+<dt>ERXEqualConditional</dt>
+<dd>Given two values will display if they are equal (or can negate).</dd>
+<dt>ERXInstanceOfConditional</dt>
+<dd>Given an object and a class name tests if the object is an instanceof
+the class.</dd>
+<dt>ERXListContainsItemConditional</dt>
+<dd>Given a list and an object evaluates to true if the object is found in
+the list.</dd>
+<dt>ERXNonNullConditional</dt>
+<dd>Given an object if it is not null then it will evaluate to true.</dd>
+<dt>ERXNonZeroConditional</dt>
+<dd>Given a condition binding if the condition evaluates to non-zero then
+the condition will evaluate to true.</dd>
+<dt>ERXOncePerRequestConditional</dt>
+<dd>Renders it's embedded content only once during the RR loop. Useful for
+JavaScript code or stylesheets that should be included only once</dd>
 <h3>Javascript WOComponents</h3>
-<dt>ERXCheckCookies<dd>Javascript implementation to check different cookies.</dd></dt>
-<dt>ERXDHTMLComponent<dd>Covers a textarea with a DHTMLEdit control (IE,PC only).</dd></dt>
-<dt>ERXFormForTarget<dd>Useful for creating a javascript target for a form submit</dd></dt>
-<dt>ERXOpenJSWindowHyperlink<dd>Given an action opens the action in a new window.</dd></dt>
-<dt>ERXOpenJSWindowSubmitButton<dd>Submit button to open a new window with an action.</dd></dt>
-<dt>ERXJSConfirmPanel<dd>Stateless implementation of JSConfirmPanel.*</dd></dt>
-<dt>ERXJSCloseWindow<dd>Closes a javascript window.</dd></dt>
-<dt>ERXJSPopUpRelationPicker<dd>Very, very cool js component.  Implements master-detail with js in two popups, ie the first popup could be say states and depending on which state is picked the second popup might reflect all of the cities of that state.</dd></dt>
-<dt>ERXJSPopupSelector<dd>Nice guy for performing actions when a popup item is selected.</dd></dt>
-<dt>ERXJSTwoLevelEditToOneRelationship<dd>Uses JSPopUpRelationPicker to edit a toOne relationship.</dd></dt>
-
+<dt>ERXJSCookiesConditional</dt>
+<dd>Javascript implementation to check different cookies.</dd>
+<dd>ERXJSAutoClosePage</dd>
+<dd>Automatically closes via js.<br>
+</dd>
+<dt>ERXDHTMLComponent</dt>
+<dd>Covers a textarea with a DHTMLEdit control (IE,PC only).</dd>
+<dt>ERXJSFormForTarget</dt>
+<dd>Useful for creating a javascript target for a form submit</dd>
+<dt>ERXJSOpenWindowHyperlink</dt>
+<dd>Given an action opens the action in a new window.</dd>
+<dt>ERXJSOpenWindowSubmitButton</dt>
+<dd>Submit button to open a new window with an action.</dd>
+<dt>ERXJSConfirmPanel</dt>
+<dd>Stateless implementation of JSConfirmPanel.*</dd>
+<dt>ERXJSCloseWindow</dt>
+<dd>Closes a javascript window.</dd>
+<dt>ERXJSPopUpRelationPicker</dt>
+<dd>Very, very cool js component.  Implements master-detail with js in two
+popups, ie the first popup could be say states and depending on which state
+is picked the second popup might reflect all of the cities of that state.</dd>
+<dt>ERXJSPopupSelector</dt>
+<dd>Nice guy for performing actions when a popup item is selected.</dd>
+<dt>ERXJSTwoLevelEditToOneRelationship</dt>
+<dd>Uses JSPopUpRelationPicker to edit a toOne relationship.</dd>
 <h3>Misc WOComponents</h3>
-<dt>ERXAutoClosePage<dd>Simple component that automaticly closes, good for having return actions close the current window.</dd></dt>
-<dt>ERXCheckedIfEqual<dd>Given two values displays a checkbox checked or not.</dd></dt>
-<dt>ERXDebugMarker<dd>Given an object displays a link to show information about the editing context of that object.*</dd></dt>
-<dt>ERXDisplayDataAsString<dd>Displays a byte array of data as a String.</dd></dt>
-<dt>ERXDisplayHTML<dd>Displays a String with escape html set to false.</dd></dt>
-<dt>ERXEditURL<dd>Used to edit urls with a default value.</dd></dt>
-<dt>ERXEditingContextInspector<dd>Inspects an eo's editing context.*</dd></dt>
-<dt>ERXBatchNavigationBar<dd>Better navigation bar</dd></dt>
-<dt>ERXBatchNavigationBarInForm<dd>Better navigation bar without a form.</dd></dt>
-<dt>ERXCollapsibleComponentContent<dd>Better collapsible component content.</dd></dt>
-<dt>ERXColoredTabPanel<dd>Tab panel with color backgrounds.</dd></dt>
-<dt>ERXEmptyComponent<dd>Simple component, useful for WOSwitchComponents that shouldn't show anything.</dd></dt>
-<dt>ERXFakeRelationship<dd>UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.</dd></dt>
-<dt>ERXGroupingRepetition<dd>Crazy cool repetition that takes a list and a key and will enumerate through grouped lists.</dd></dt>
-<dt>ERXGroupingTable<dd>Table implementation of a grouping repetition.</dd></dt>
-<dt>ERXImageTabPanel<dd>Tab panel using images.</dd></dt>
-<dt>ERXListDisplay<dd>Useful for displaying a list of eos.  Ex. a list of person eos could be displayed as "Fred, Mark and Max".</dd></dt>
-<dt>ERXMandatoryFieldMarker<dd>Displays a mandatory field marker.  Extended in look frameworks to provide custom images.</dd></dt>
-<dt>ERXOptionalForm<dd>Given a binding displays the WOComponentContent in a form.</dd></dt>
-<dt>ERXRepeatingTable<dd>Useful when given a list of n items and you want to display m keys.  This will construct a table nxm and push the current indexes up though the bindings.</dd></dt>
-<dt>ERXErrorDictionaryPanel<dd>Useful for displaying a dictionary of caught exception messages.</dd></dt>
-<dt>ERXSingleButton<dd>A stand alone submit button to be used as an action button.</dd></dt>
-<dt>ERXStringWithLineBreaks<dd>Displays a String, converting return characters to <br> tags.</dd></dt>
-<dt>ERXSortOrder<dd>Better sort order changer.  Useful for providing custom sort order images and remembering the sort orderings.</dd></dt>
-<dt>ERXSuccess<dd>"Success" string</dd></dt>
-<dt>ERXStyleSheet<dd>Useful for adding style sheet support as well as that oh so wonderful favicon thingy.</dd></dt>
-<dt>ERXGroupingTable<dd>Extension of WOTable.  Allows more options.</dd></dt>
-<dt>ERXTableWithBorder<dd>Allows turning the border on and off of a table.  Useful for Netscape which doesn't handle nested tables very well.</dd></dt>
-<dt>ERXTabPanel<dd>Better tab panel.  Allows denial of tab switching.  Useful when validation failures occur.</dd></dt>
-<dt>ERXJSTwoLevelEditToOneRelationship<dd>Ton of additions.  Now will handle all sorts of cases.  Very useful.</dd></dt>
-<dt>ERXUnreadMarker<dd>Nice for denoting that something has not been viewed.  Extended in look frameworks.</dd></dt>
-<dt>ERXDirectActionHyperlink<dd>Cool class in that when it renders the link you can specify the application host url, plus eo serializing.</dd></dt>
-<dt>ERXFixedLengthString<dd>Displays a string padded with spaces at the end if it is not of the fixed length.</dd></dt>
-<dt>ERXGraph<dd>Nice component wrapper around GifPlot, just bind arrays and strings</dd></dt>
-<dt>ERXHyperlinkKeyValueSetter<dd>Sets a key value when the hyperlink is clicked.</dd></dt>
-<dt>ERXLongResponsePage<dd>Java port of WOLongResponsePage, now uses Java threads.</dd></dt>
-<dt>ERXMailTo<dd>Displays a mailto link.</dd></dt>
-<dt>ERXPluralString<dd>Given a count and a string pluralizes the string if count > 1.</dd></dt>
-<dt>ERXQueryRecentDates<dd>Nice for adjusting the query specs for dates on a display group.</dd></dt>
-<dt>ERXRenameObject<dd>Renames an object.*</dd></dt>
-<dt>ERXStringListPicker<dd>Useful for picking a String from a list.</dd></dt>
-<dt>ERXNoHelpAvailableHelp<dd>"No help available" page</dd></dt>
-<dt>ERXAddObjectWithName<dd>description forthcoming!</dd></dt>
-<dt>ERXDirectActionImage<dd>description forthcoming!</dd></dt>
-<dt>ERXTable<dd>description forthcoming!</dd></dt>
-<dt>ERXToOneRelationship<dd>description forthcoming!</dd></dt>
-<dt>ERXToManyRelationship<dd>description forthcoming!</dd></dt>
-<dt>ERXLinkRandomizer<dd>simple javascript to go to random links</dd></dt>
-
-<dt>WOToManyRelationship<dd>Only useful in that it uses ERXRadioButtonMatrix and ERChackboxMatrix components.</dd></dt>
-
+<dt>ERXCheckedIfEqual</dt>
+<dd>Given two values displays a checkbox checked or not.</dd>
+<dt>ERXDebugMarker</dt>
+<dd>Given an object displays a link to show information about the editing
+context of that object.*</dd>
+<dt>ERXDisplayDataAsString</dt>
+<dd>Displays a byte array of data as a String.</dd>
+<dt>ERXDisplayHTML</dt>
+<dd>Displays a String with escape html set to false.</dd>
+<dt>ERXEditURL</dt>
+<dd>Used to edit urls with a default value.</dd>
+<dt>ERXEditingContextInspector</dt>
+<dd>Inspects an eo's editing context.*</dd>
+<dt>ERXBatchNavigationBar</dt>
+<dd>Better navigation bar</dd>
+<dt>ERXBatchNavigationBarInForm</dt>
+<dd>Better navigation bar without a form.</dd>
+<dt>ERXCollapsibleComponentContent</dt>
+<dd>Better collapsible component content.</dd>
+<dt>ERXColoredTabPanel</dt>
+<dd>Tab panel with color backgrounds.</dd>
+<dt>ERXEmptyComponent</dt>
+<dd>Simple component, useful for WOSwitchComponents that shouldn't show anything.</dd>
+<dt>ERXFakeRelationship</dt>
+<dd>UI and support methods to edit "relations" to objects flattened into
+a text field (e.g. languages = "-de-en-"). Useful when you don't need referential
+integrity but only a quick place to store flags and the like.</dd>
+<dt>ERXGroupingRepetition</dt>
+<dd>Crazy cool repetition that takes a list and a key and will enumerate
+through grouped lists.</dd>
+<dt>ERXGroupingTable</dt>
+<dd>Table implementation of a grouping repetition.</dd>
+<dt>ERXImageTabPanel</dt>
+<dd>Tab panel using images.</dd>
+<dt>ERXListDisplay</dt>
+<dd>Useful for displaying a list of eos.  Ex. a list of person eos could
+be displayed as "Fred, Mark and Max".</dd>
+<dt>ERXMandatoryFieldMarker</dt>
+<dd>Displays a mandatory field marker.  Extended in look frameworks to provide
+custom images.</dd>
+<dt>ERXOptionalForm</dt>
+<dd>Given a binding displays the WOComponentContent in a form.</dd>
+<dt>ERXRepeatingTable</dt>
+<dd>Useful when given a list of n items and you want to display m keys. 
+This will construct a table nxm and push the current indexes up though the
+bindings.</dd>
+<dt>ERXErrorDictionaryPanel</dt>
+<dd>Useful for displaying a dictionary of caught exception messages.</dd>
+<dt>ERXSingleButton</dt>
+<dd>A stand alone submit button to be used as an action button.</dd>
+<dt>ERXStringWithLineBreaks</dt>
+<dd>Displays a String, converting return characters to <br>
+ tags.</dd>
+<dt>ERXSortOrder</dt>
+<dd>Better sort order changer.  Useful for providing custom sort order images
+and remembering the sort orderings.</dd>
+<dt>ERXSuccess</dt>
+<dd>"Success" string</dd>
+<dt>ERXStyleSheet</dt>
+<dd>Useful for adding style sheet support as well as that oh so wonderful
+favicon thingy.</dd>
+<dt>ERXGroupingTable</dt>
+<dd>Extension of WOTable.  Allows more options.</dd>
+<dt>ERXTableWithBorder</dt>
+<dd>Allows turning the border on and off of a table.  Useful for Netscape
+which doesn't handle nested tables very well.</dd>
+<dt>ERXTabPanel</dt>
+<dd>Better tab panel.  Allows denial of tab switching.  Useful when validation
+failures occur.</dd>
+<dt>ERXJSTwoLevelEditToOneRelationship</dt>
+<dd>Ton of additions.  Now will handle all sorts of cases.  Very useful.</dd>
+<dt>ERXUnreadMarker</dt>
+<dd>Nice for denoting that something has not been viewed.  Extended in look
+frameworks.</dd>
+<dt>ERXDirectActionHyperlink</dt>
+<dd>Cool class in that when it renders the link you can specify the application
+host url, plus eo serializing.</dd>
+<dt>ERXFixedLengthString</dt>
+<dd>Displays a string padded with spaces at the end if it is not of the fixed
+length.</dd>
+<dt>ERXGraph</dt>
+<dd>Nice component wrapper around GifPlot, just bind arrays and strings</dd>
+<dt>ERXHyperlinkKeyValueSetter</dt>
+<dd>Sets a key value when the hyperlink is clicked.</dd>
+<dt>ERXLongResponsePage</dt>
+<dd>Java port of WOLongResponsePage, now uses Java threads.</dd>
+<dt>ERXMailTo</dt>
+<dd>Displays a mailto link.</dd>
+<dt>ERXPluralString</dt>
+<dd>Given a count and a string pluralizes the string if count &gt; 1.</dd>
+<dt>ERXQueryRecentDates</dt>
+<dd>Nice for adjusting the query specs for dates on a display group.</dd>
+<dt>ERXRenameObject</dt>
+<dd>Renames an object.*</dd>
+<dt>ERXStringListPicker</dt>
+<dd>Useful for picking a String from a list.</dd>
+<dt>ERXNoHelpAvailableHelp</dt>
+<dd>"No help available" page</dd>
+<dt>ERXAddObjectWithName</dt>
+<dd>description forthcoming!</dd>
+<dt>ERXDirectActionImage</dt>
+<dd>description forthcoming!</dd>
+<dt>ERXTable</dt>
+<dd>description forthcoming!</dd>
+<dt>ERXToOneRelationship</dt>
+<dd>description forthcoming!</dd>
+<dt>ERXToManyRelationship</dt>
+<dd>description forthcoming!</dd>
+<dt>ERXLinkRandomizer</dt>
+<dd>simple javascript to go to random links</dd>
+<dt>WOToManyRelationship</dt>
+<dd>Only useful in that it uses ERXRadioButtonMatrix and ERChackboxMatrix
+components.</dd>
+<dd>ERXLocalizedString</dd>
+<dd>localized string additions<br>
+</dd>
 <h3>Backport from WOExtensions</h3>
-<dt>WOSortOrder<dd>(Back port from WO 5 WOExtensions)</dd></dt>
-<dt>WOTabPanel<dd>(Back port from WO 5 WOExtensions)</dd></dt>
-<dt>WOCollapsibleComponentContent<dd>(Back port from WO 5 WOExtensions)</dd></dt>
-<dt>WOToManyRelationship<dd>(Back port from WO 5 WOExtensions)</dd></dt>
-<dt>WOToOneRelationship<dd>(Back port from WO 5 WOExtensions)</dd></dt>
-<dt>WOTable<dd>(Back port from WO 5 WOExtensions)</dd></dt>
-<dt>WXOutlineControl<dd>(Back port from WO 5 WOExtensions)</dd></dt>
+<dt>WOSortOrder</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt>WOTabPanel</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt>WOCollapsibleComponentContent</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt>WOToManyRelationship</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt>WOToOneRelationship</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt>WOTable</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<dt>WXOutlineControl</dt>
+<dd>(Back port from WO 5 WOExtensions)</dd>
+<br>
 </body>
 </html>
