@@ -7,6 +7,7 @@
 		<binding name="keyPath"/>
 		<binding name="valueWhenEmpty"/>
 		<binding name="templateString"/>
+		<binding name="escapeHTML" defaults="Boolean"/>
 
 		<validation message="&quot;You must bind at least one of object, value or keyPath&quot;">
 			<and>
