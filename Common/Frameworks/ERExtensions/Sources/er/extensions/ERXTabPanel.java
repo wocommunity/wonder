@@ -91,7 +91,7 @@ public class ERXTabPanel extends WOTabPanel  {
 
     public Object submitString() {
         String formName = ERXWOForm.formName(context(), "EditForm");
-        return "document."+formName+".action=this.href; document."+formName+".submit(); return false;";
+        return "document."+formName+"."+currentTabNameWithoutSpaces()+".click(); return false;";
     }
 
     public Object currentTabNameWithoutSpaces() {
