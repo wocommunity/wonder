@@ -26,13 +26,19 @@ import java.util.*;
  * implementation.
  */
 public class EOGenericRecordClazz extends Object {
-    /** logging support */
+    /**
+     * logging support
+     */
     public static final ERXLogger log = ERXLogger.getERXLogger(EOGenericRecordClazz.class);
     
-    /** caches the clazz objects */
+    /**
+     * caches the clazz objects
+     */
     private static NSMutableDictionary allClazzes = new NSMutableDictionary();
 
-    /** caches the count attribute */
+    /**
+     * caches the count attribute
+     */
     private static EOAttribute _objectCountAttribute = null;
 
     /**
@@ -54,6 +60,9 @@ public class EOGenericRecordClazz extends Object {
         return _objectCountAttribute;
     }
 
+    /**
+     * @param foo 
+     */
     protected static EOAttribute objectCountUniqueAttribute(EOAttribute foo) {
         EOAttribute tmp = new EOAttribute();
 
@@ -65,7 +74,9 @@ public class EOGenericRecordClazz extends Object {
         return tmp;
     }
 
-    /** caches the entity name */
+    /**
+     * caches the entity name
+     */
     private String _entityName;
 
     /**
@@ -107,7 +118,7 @@ public class EOGenericRecordClazz extends Object {
     
     /**
      * Method used to get a clazz object for a given entity name.
-     * This method will cache the generated clazz object so that 
+     * This method will cache the generated clazz object so that
      * for a given entity name only one clazz object will be created.
      * @param entityName name of the entity to get the Clazz object for
      * @return clazz object for the given entity
@@ -140,7 +151,6 @@ public class EOGenericRecordClazz extends Object {
      * Generates an array of primary key values for
      * the clazz's entity. Uses the database context
      * for the entity's model and the given editingcontext.
-     *
      * @param ec am editing context
      * @param i number of primary keys to generate
      * @return array of new primary keys
@@ -174,6 +184,12 @@ public class EOGenericRecordClazz extends Object {
         return EOUtilities.objectFromRawRow(ec, entityNameFromRawRow(ec, dict), dict);
     }
 
+    /**
+     * Utility method to get the entity name from a raw row dictionary, taking subclasses and restricting qualifiers into account.
+     * @param ec an editing context
+     * @param dict raw row dictionary
+     * @return entity name, if any
+     */
     protected String entityNameFromRawRow(EOEditingContext ec, NSDictionary dict) {
         String entityName = entityName();
         EOEntity entity = entity(ec);
@@ -195,13 +211,12 @@ public class EOGenericRecordClazz extends Object {
     }
 
     /**
-     * Fetches the enterprise object for the specified 
+     * Fetches the enterprise object for the specified
      * primary key value and corresponding to the clazz's
      * entity name.
      * @param ec editing context to fetch into
      * @param pk primary key value
-     * @return enterprise object for the specified primary
-     *		key value.
+     * @return enterprise object for the specified primary key value.
      */
     public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
         return EOUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk);
@@ -209,13 +224,13 @@ public class EOGenericRecordClazz extends Object {
 
     /**
      * Fetches all of the objects matching the given qualifer
-     * format corresponding to the clazz's entity using the 
+     * format corresponding to the clazz's entity using the
      * given editing context.
      * @param ec editing context
-     * @param qualifer format string
+     * @param qualifier qualifier string
      * @param args qualifier format arguments
-     * @return array of objects corresponding to the passed in
-     *		parameters.
+     * @param qualifer format string
+     * @return array of objects corresponding to the passed in parameters.
      */
     public NSArray objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
         return EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
@@ -227,8 +242,8 @@ public class EOGenericRecordClazz extends Object {
      * off of the entity corresponding to the current clazz.
      * @param ec editing content to fetch into
      * @param name fetch specification name
-     * @param bindings used to resolve binding keys within the fetch
-     *		specification
+     * @param bindings used to resolve binding keys within the fetch 
+     *     specification
      * @return array of objects fetched using the given fetch specification
      */
     public NSArray objectsWithFetchSpecificationAndBindings(EOEditingContext ec, String name, NSDictionary bindings) {
@@ -259,6 +274,7 @@ public class EOGenericRecordClazz extends Object {
     /**
      * Gets the entity corresponding to the entity
      * name of the clazz.
+     * @param ec an editing context
      * @return entity for the clazz
      */
     public EOEntity entity(EOEditingContext ec) {
@@ -268,8 +284,8 @@ public class EOGenericRecordClazz extends Object {
     /**
      * Gets a fetch specification for a given name.
      * @param name of the fetch specification
-     * @return fetch specification for the given name
-     *		and the clazz's entity name
+     * @return fetch specification for the given name and the clazz's entity 
+     *     name
      */
     public EOFetchSpecification fetchSpecificationNamed(String name) {
         return fetchSpecificationNamed(null,name);
@@ -279,8 +295,8 @@ public class EOGenericRecordClazz extends Object {
      * Gets a fetch specification for a given name.
      * @param ec editing context to use for finding the model group
      * @param name of the fetch specification
-     * @return fetch specification for the given name
-     *		and the clazz's entity name
+     * @return fetch specification for the given name and the clazz's entity 
+     *     name
      */
     public EOFetchSpecification fetchSpecificationNamed(EOEditingContext ec, String name) {
         return entity(ec).fetchSpecificationNamed(name);
@@ -290,7 +306,7 @@ public class EOGenericRecordClazz extends Object {
      * Returns the number of objects matching the given
      * qualifier for the clazz's entity name. Implementation
      * wise this method will generate the correct sql to only
-     * perform a count, i.e. all of the objects wouldn't be 
+     * perform a count, i.e. all of the objects wouldn't be
      * pulled into memory.
      * @param ec editing context to use for the count qualification
      * @param qualifier to find the matching objects
@@ -327,13 +343,13 @@ public class EOGenericRecordClazz extends Object {
      * specification and bindings for the clazz's entity
      * name. Implementation wise the sql generated will
      * only return the count of the query, not all of the
-     * rows matching the qualification. 
+     * rows matching the qualification.
      * @param ec ec used to perform the count in
      * @param fetchSpecName name of the fetch specification
-     * @param bindings dictionary of bindings for the fetch
-     *		specification
-     * @return number of objects matching the given fetch 
-     *		specification and bindings
+     * @param bindings dictionary of bindings for the fetch 
+     *     specification
+     * @return number of objects matching the given fetch  specification and 
+     *     bindings
      */
     public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
         String entityName = entityName();
@@ -353,12 +369,12 @@ public class EOGenericRecordClazz extends Object {
      * keys for a given qualifier.
      * @param ec editing context, not used
      * @param eoqualifier to construct the fetch spec with
-     * @param sortOrderings array of sort orderings to sort the result set
-     *		with.
-     * @param additionalKeys array of additional key paths to construct the
-     *		raw rows key paths to fetch.
-     * @return fetch specification that can be used to fetch primary keys for
-     * 		a given qualifier and sort orderings.
+     * @param sortOrderings array of sort orderings to sort the result 
+     *     set with.
+     * @param additionalKeys array of additional key paths to construct
+     *      the raw rows key paths to fetch.
+     * @return fetch specification that can be used to fetch primary keys for 
+     *     a given qualifier and sort orderings.
      */
     // FIXME: The ec parameter is not needed, nor used.
     public EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings, NSArray additionalKeys) {
@@ -402,10 +418,10 @@ public class EOGenericRecordClazz extends Object {
      * Fetches an array of primary keys matching the values
      * in a given dictionary.
      * @param ec editing context to fetch into
-     * @param nsdictionary dictionary of key value pairs to match
-     *		against.
-     * @param sortOrderings array of sort orders to sort the result
-     *		set by.
+     * @param nsdictionary dictionary of key value pairs to match 
+     *     against.
+     * @param sortOrderings array of sort orders to sort the result set
+     *      by.
      * @return array of primary keys matching the given criteria.
      */
     public NSArray primaryKeysMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
@@ -419,8 +435,7 @@ public class EOGenericRecordClazz extends Object {
      * the clazz's entity.
      * @param ec editing context to construct the faults in
      * @param nsarray array of primary key dictionaries
-     * @return array of faults for an array of primary key
-     *		dictionaries.
+     * @return array of faults for an array of primary key dictionaries.
      */
     public NSArray faultsFromRawRows(EOEditingContext ec, NSArray nsarray) {
         String entityName = entityName();
@@ -434,11 +449,10 @@ public class EOGenericRecordClazz extends Object {
     
     /**
      * Fetches an array of faults matching a given qualifier.
-     *
      * @param ec editing context to use to fetch into
      * @param eoqualifier qualifier to match against
      * @return array of faults that match the given qualifier
-     */    
+     */
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier) {
         String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, null);
@@ -448,7 +462,6 @@ public class EOGenericRecordClazz extends Object {
     /**
      * Fetches an array of faults matching a given qualifier
      * and sorted by an array of sort orderings.
-     *
      * @param ec editing context to use to fetch into
      * @param eoqualifier qualifier to match against
      * @param sortOrderings array of sort orderings to order the faults
@@ -462,7 +475,6 @@ public class EOGenericRecordClazz extends Object {
 
     /**
      * Fetches an array of faults for a given set of criteria.
-     *
      * @param ec editing context to use to fetch into
      * @param nsdictionary key value criteria to match against
      * @param sortOrderings array of sort orderings to order the faults
