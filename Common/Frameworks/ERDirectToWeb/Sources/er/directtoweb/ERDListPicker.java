@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 
 /**
  * Used to pick a string from a list.  Should use ERPickTypePageTemplate with D2W instead.<br />

@@ -6,14 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.helpers.FormattingInfo;
-import org.apache.log4j.helpers.PatternConverter;
-import org.apache.log4j.helpers.PatternParser;
-import org.apache.log4j.spi.LoggingEvent;
-import java.util.Enumeration;
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOAdaptor;
+import java.util.*;
+
+import org.apache.log4j.*;
+import org.apache.log4j.helpers.*;
+import org.apache.log4j.spi.*;
+
+import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 /**

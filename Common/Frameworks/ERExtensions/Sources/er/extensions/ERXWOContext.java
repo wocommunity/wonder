@@ -6,8 +6,8 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /** Replacement of WOContext.
  *  This subclass is installed when the frameworks loads.

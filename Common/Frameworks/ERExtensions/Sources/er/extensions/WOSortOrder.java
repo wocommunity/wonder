@@ -23,10 +23,11 @@
  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import java.util.Enumeration;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 // Almost direct port of WOSortOrder from WO 5's WOExtensions.
 /**

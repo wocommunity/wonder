@@ -6,9 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import java.util.StringTokenizer;
 
 /**
  * This stateless component is useful for displaying a

@@ -30,7 +30,6 @@ package er.extensions;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-import java.util.*;
 
 /**
  * (Back port from WO 5 WOExtensions)<br />

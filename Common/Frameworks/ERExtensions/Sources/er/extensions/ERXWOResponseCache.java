@@ -6,9 +6,9 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
 import java.util.*;
+
+import com.webobjects.appserver.*;
 
 /**
  * The response cache is a way to cache WOResponse

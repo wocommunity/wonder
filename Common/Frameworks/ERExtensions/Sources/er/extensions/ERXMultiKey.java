@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.lang.*;
 import java.util.*;
-import com.webobjects.foundation.*;
+
 import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 
 /**
  * Simple class to use multiple objects as

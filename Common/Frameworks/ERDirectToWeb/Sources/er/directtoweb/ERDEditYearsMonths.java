@@ -6,12 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.math.*;
-import er.extensions.ERXConstant;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * Used to edit a number as if it where a number of years and a number of months.<br />

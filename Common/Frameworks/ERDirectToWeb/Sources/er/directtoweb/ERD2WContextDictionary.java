@@ -6,12 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
 import java.util.*;
+
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * Converts given entries of a D2WContext with a specified page configuration to a dictionary and to rules again.<br />

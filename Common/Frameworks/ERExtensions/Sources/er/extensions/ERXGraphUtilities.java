@@ -8,12 +8,10 @@
 /* ERGraphUtilities.java created by angela on Thu 01-Nov-2001 */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
+import java.awt.*;
 import java.util.*;
-import java.awt.*; //for pie charts
+
+import com.webobjects.foundation.*;
 
 /**
  * Utility methods useful when using GifPlot.<br />

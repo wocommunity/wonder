@@ -7,10 +7,9 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.directtoweb.ERD2WUtilities;
-import er.extensions.ERXLogger;
+
+import er.extensions.*;
 
 // This works around the following bug: if you switch the pageConfiguration and refresh the page,
 // the context is not regenerated.  This is only used for nested configurations.

@@ -6,10 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXLogger;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * The delayed non-null conditional is a way to provide a 

@@ -6,9 +6,10 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
 import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 public class ERXWOResponseCacheKeyPolicy implements ERXWOResponseCache.Policy {
 

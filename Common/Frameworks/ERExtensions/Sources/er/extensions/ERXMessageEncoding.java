@@ -6,10 +6,11 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import java.io.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import java.util.Enumeration;
-import java.io.Serializable;
+import com.webobjects.foundation.*;
 
 /**
  * Holds encoding related settings and methods for {@link WOMessage} 

@@ -1,7 +1,5 @@
 package er.extensions;
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 
 /**
  * Use this to return a string from direct actions.

@@ -6,12 +6,13 @@
 //
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
-
 import java.lang.reflect.*;
+
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * Assignment used to create objects on the fly. This assignment

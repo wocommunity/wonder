@@ -7,12 +7,14 @@
 
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
 import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRelationshipPageInterface {

@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package com.webobjects.directtoweb;
 
-import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 

@@ -6,10 +6,7 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 
 public class ERXImage extends ERXStatelessComponent {
 

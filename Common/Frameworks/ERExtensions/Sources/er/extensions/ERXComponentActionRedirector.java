@@ -1,11 +1,7 @@
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
+import com.webobjects.foundation.*;
 
 /**
 Allows you to develop your app using component actions while still providing bookmarkable URLs.
