@@ -18,22 +18,28 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
         super(context);
     }
 
-    public NSArray sortedBrowserList()
-{
-        NSArray result = null;
+
+    private static D2WContext _context=new D2WContext();
+    public NSArray sortedBrowserList() {
+        NSArray result = browserList();
+        String indexKey=null;
         EORelationship relationship = entity().relationshipNamed(propertyKey());
-        EOEntity destinationEntity = relationship.destinationEntity();
-        if(destinationEntity.userInfo().valueForKey("isSortedJoinEntity") != null &&
-           ((String)destinationEntity.userInfo().valueForKey("isSortedJoinEntity")).equals("true")){
-            D2WContext d2wContext = new D2WContext();
-            d2wContext.setEntity(destinationEntity);
-            String indexKey = (String)d2wContext.valueForKey("indexKey");
-            result =   ERXArrayUtilities.sortedArraySortedWithKey(browserList(),
-                                                                  indexKey,
-                                                               null);
-        }else{
-            result = browserList();
+        if (relationship!=null) {
+            EOEntity destinationEntity = relationship.destinationEntity();
+            if(destinationEntity!=null &&
+               destinationEntity.userInfo().valueForKey("isSortedJoinEntity") != null &&
+               ((String)destinationEntity.userInfo().valueForKey("isSortedJoinEntity")).equals("true")) {
+                synchronized (_context) {
+                    _context.setEntity(destinationEntity);
+                    indexKey = (String)_context.valueForKey("indexKey");
+                }
+            } 
         }
+        if (indexKey!=null)
+            result =   ERXArrayUtilities.sortedArraySortedWithKey(result,
+                                                                  indexKey,
+                                                                  null);
+        
         return result;
 }
 
