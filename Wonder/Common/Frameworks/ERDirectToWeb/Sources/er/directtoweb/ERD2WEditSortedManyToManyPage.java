@@ -507,7 +507,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             try {
                 browserSize = Integer.parseInt(contextSize);
             } catch(NumberFormatException nfe) {
-                log.error("browserSize not a number: "  browserSize);
+                log.error("browserSize not a number: " + browserSize);
             }
         }
         String maxContextSize = (String)d2wContext().valueForKey("maxBrowserSize");
@@ -515,15 +515,11 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             try {
                 maxBrowserSize = Integer.parseInt(maxContextSize);
             } catch(NumberFormatException nfe) {
-                log.error("maxBrowserSize not a number: "  maxBrowserSize);
+                log.error("maxBrowserSize not a number: " + maxBrowserSize);
             }
         }
-
-        NSArray sortedBrowserList = sortedBrowserList();
-        if(sortedBrowserList != null) {
-            int count = sortedBrowserList.count();
-            browserSize = (count > browserSize && count < maxBrowserSize) ? count : browserSize;
-        }
+        int count = relationshipDisplayGroup.displayedObjects().count();
+        browserSize = (count > browserSize && count < maxBrowserSize) ? count : browserSize;
         return browserSize;
-    }    
+    }
 }
