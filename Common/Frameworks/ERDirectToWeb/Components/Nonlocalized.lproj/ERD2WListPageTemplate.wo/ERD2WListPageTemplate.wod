@@ -98,7 +98,7 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
-Help: ERDDebuggingHelp {
+Help: er.directtoweb.ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
