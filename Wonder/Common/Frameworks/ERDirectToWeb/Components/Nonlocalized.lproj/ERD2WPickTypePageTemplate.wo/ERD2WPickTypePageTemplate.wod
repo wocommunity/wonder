@@ -27,6 +27,10 @@ Form1: WOForm {
 	multipleSubmit = true;
 }
 
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
 KeyValueConditional1: ERXEqualConditional {
 	value1 = d2wContext.uiStyle;
 	value2 = "radio";
@@ -50,6 +54,10 @@ NonNullConditional2: ERXNonNullConditional {
 	condition = cancelPage;
 }
 
+NonNullConditional3: ERXNonNullConditional {
+	condition = d2wContext.explanationString;
+}
+
 PopUpButton1: WOPopUpButton {
 	displayString = displayName;
 	item = item;
@@ -58,12 +66,15 @@ PopUpButton1: WOPopUpButton {
 	selection = selection;
 }
 
-RadioButtonList1: WORadioButtonList {
-	list = choices;
+RadioButton1: WORadioButton {
+	value = item;
+	name = "TypeSelection";
 	selection = selection;
-	suffix = "<BR>";
-	displayString = displayName;
+}
+
+Repetition2: WORepetition {
 	item = item;
+	list = choices;
 }
 
 RightArrow: WOImageButton {
@@ -75,6 +86,14 @@ RightArrow: WOImageButton {
     alt = "next step";    
 	filename = "NextMetalBtn.gif";
 	framework = "ERExtensions";
+}
+
+String1: WOString {
+	value = displayName;
+}
+
+String2: WOString {
+	value = d2wContext.explanationString;
 }
 
 SwitchComponent1: WOSwitchComponent {
