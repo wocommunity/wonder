@@ -164,7 +164,7 @@ public class ERXCheckboxMatrix extends WOComponent {
     public NSArray maybeSortedList() {
         if (hasBinding("sortKey")) {
             NSMutableArray sortedList = new NSMutableArray((NSArray)valueForBinding("list"));
-            ERXUtilities.sortEOsUsingSingleKey(sortedList, (String)valueForBinding("sortKey"));
+            ERXArrayUtilities.sortedArraySortedWithKey(sortedList, (String)valueForBinding("sortKey"));
             return sortedList;
         } else
             return (NSArray)valueForBinding("list");
