@@ -46,11 +46,7 @@ public class ERMessage extends Object {
      * <code>Message.RecipientType.BCC</code>
      */
     public Address[] recipients (Message.RecipientType recipientType) throws MessagingException{
-        if (message == null)  return null;
-        
-        Address[] recipients = null;
-        recipients = message.getRecipients (recipientType);
-        return recipients;
+        return message == null ?  null : message.getRecipients (recipientType);
     }
     
     public String recipientsAsString (Message.RecipientType recipientType) 
@@ -61,9 +57,9 @@ public class ERMessage extends Object {
     public String recipientsAsString (Message.RecipientType recipientType, int maxAddresses) 
             throws MessagingException, AddressException {
         Address[] allAddresses = recipients (recipientType);
-        if (allAddresses == null  ||  allAddresses.length == 0)  return null;
-        
         Address[] limitteredAddresses = null;
+
+        if (allAddresses == null  ||  allAddresses.length == 0)  return null;
 
         if (maxAddresses > 0) {
             limitteredAddresses = new Address[maxAddresses];
@@ -81,7 +77,6 @@ public class ERMessage extends Object {
             result.append (allAddresses.length - maxAddresses);
             result.append (" other recipients");
         }
-        
         return result.toString ();
     }
 
