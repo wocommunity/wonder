@@ -150,38 +150,17 @@ public class ERXUtilities {
     }
 
     /**
-     * Simple utility method that will convert an array
-     * of enterprise objects into an EOArrayDataSource.<br/>
-     * <br/>
-     * Note that the datasource that is constructed uses the
-     * class description and editing context of the first object
-     * of the array.
-     * @param array collection of objects to be turned into a
-     *		datasource
-     * @return an array datasource corresponding to the array
-     *		of objects passed in.
+     * deprecated see {@link ERXEOControlUtilities.dataSourceForArray(NSArray)}
      */
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
-        EOArrayDataSource dataSource = null;
-        if (array != null && array.count() > 0) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            dataSource = new EOArrayDataSource(eo.classDescription(), eo.editingContext());
-            dataSource.setArray(array);
-        }
-        return dataSource;
+        return ERXEOControlUtilities.dataSourceForArray(array);
     }
 
     /**
-     * Converts a datasource into an array.
-     * @param dataSource data source to be converted
-     * @return array of objects that the data source represents
+     * deprecated see {@link ERXEOControlUtilities.arrayFromDataSource(EODataSource)}
      */
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
-        // FIXME: Now in WO 5 we can use fetchObjects() off of the dataSource and it should work (unlike 4.5).
-        WODisplayGroup dg = new WODisplayGroup();
-        dg.setDataSource(dataSource);
-        dg.fetch(); // Have to fetch in the array, go figure.
-        return dg.allObjects();
+        return ERXEOControlUtilities.arrayFromDataSource(dataSource);
     }
     
     /**

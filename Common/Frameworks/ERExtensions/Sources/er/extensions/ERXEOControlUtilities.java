@@ -7,6 +7,7 @@
 package er.extensions;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -41,6 +42,63 @@ public class ERXEOControlUtilities {
             localEos.addObject(localInstanceOfObject(ec, (EOEnterpriseObject)e.nextElement()));
         }
         return localEos;
+    }
+
+    /**
+     * Simple utility method that will convert an array
+     * of enterprise objects into an EOArrayDataSource.<br/>
+     * <br/>
+     * Note that the datasource that is constructed uses the
+     * class description and editing context of the first object
+     * of the array.
+     * @param array collection of objects to be turned into a
+     *		datasource
+     * @return an array datasource corresponding to the array
+     *		of objects passed in.
+     */
+    public static EOArrayDataSource dataSourceForArray(NSArray array) {
+        EOArrayDataSource dataSource = null;
+        if (array != null && array.count() > 0) {
+            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
+            dataSource = new EOArrayDataSource(eo.classDescription(), eo.editingContext());
+            dataSource.setArray(array);
+        }
+        return dataSource;
+    }
+
+    /**
+     * Converts a datasource into an array.
+     * @param dataSource data source to be converted
+     * @return array of objects that the data source represents
+     */
+    public static NSArray arrayFromDataSource(EODataSource dataSource) {
+        // FIXME: Now in WO 5 we can use fetchObjects() off of the dataSource and it should work (unlike 4.5).
+        WODisplayGroup dg = new WODisplayGroup();
+        dg.setDataSource(dataSource);
+        dg.fetch(); // Have to fetch in the array, go figure.
+        return dg.allObjects();
+    }
+
+    /**
+     * Creates a detail data source for a given enterprise
+     * object and a relationship key. These types of datasources
+     * can be very handy when you are displaying a list of objects
+     * a la D2W style and then some objects are added or removed
+     * from the relationship. If an array datasource were used
+     * then the list would not reflect the changes made, however
+     * the detail data source will reflect changes made to the
+     * relationship.<br/>
+     * Note: the relationship key does not have to be an eo
+     * relationship, instead it just has to return an array of
+     * enterprise objects.
+     * @param object that has the relationship
+     * @param key relationship key
+     * @return detail data source for the given object-key pair.
+     */
+    public static EODetailDataSource dataSourceForObjectAndKey(EOEnterpriseObject object, String key) {
+        EODetailDataSource eodetaildatasource = new EODetailDataSource(EOClassDescription.classDescriptionForEntityName(object.entityName()), key);
+        eodetaildatasource.qualifyWithRelationshipKey(key, object);
+        return eodetaildatasource;
     }
 
     /**
