@@ -63,7 +63,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
     private static NSArray paddedValues(NSArray values, final int padToSize) {
         final int count = values.count();
         if (count > 1) {
-            final int paddedSize = ((count / padToSize) + 1) * padToSize;
+            final int paddedSize = (((count - 1) / padToSize) + 1) * padToSize;
             final NSMutableArray paddedValues = new NSMutableArray(values);
             int padCount = paddedSize - count;
             // We pad with the last element repeated padCount times.  Do not pad with null
