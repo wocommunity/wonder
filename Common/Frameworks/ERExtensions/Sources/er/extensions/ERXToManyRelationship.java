@@ -205,14 +205,21 @@ public class ERXToManyRelationship extends WOToManyRelationship {
             _eo = (EOEnterpriseObject)_eo.valueForKeyPath(partialKeyPath);
             masterKey = ERXStringUtilities.lastPropertyKeyInKeyPath(masterKey);
         }
-        NSMutableArray currentValues = (NSMutableArray)NSKeyValueCoding.Utility.valueForKey(_eo, masterKey);
-        int count = currentValues.count();
+        NSArray currentValues = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(_eo, masterKey);
+        NSMutableArray mutableCurrentValues;
+        if(currentValues instanceof NSMutableArray) {
+            mutableCurrentValues = (NSMutableArray)currentValues;
+        } else {
+            mutableCurrentValues = currentValues.mutableClone();
+            NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(_eo, mutableCurrentValues, masterKey);
+        }
+        int count = mutableCurrentValues.count();
         EOEnterpriseObject o;
         for (int i = count - 1; i >= 0; i--) {
-            o = (EOEnterpriseObject)currentValues.objectAtIndex(i);
+            o = (EOEnterpriseObject)mutableCurrentValues.objectAtIndex(i);
             if ((null==newValues) || (newValues.indexOfIdenticalObject(o) == NSArray.NotFound)) { // not found
                 if (isDictionary) {
-                    currentValues.removeObject(o);
+                    mutableCurrentValues.removeObject(o);
                 }
                 else {
                     _eo.removeObjectFromBothSidesOfRelationshipWithKey(o, masterKey);
@@ -220,15 +227,15 @@ public class ERXToManyRelationship extends WOToManyRelationship {
             }
         }
         count = newValues.count();
-        if ((isDictionary) && (currentValues==null)) {
-            currentValues = new NSMutableArray(count);
+        if ((isDictionary) && (mutableCurrentValues==null)) {
+            mutableCurrentValues = new NSMutableArray(count);
             _dictionary.setObjectForKey(currentValues, masterKey);
         }
         for (int i = count - 1; i >= 0; i--) {
             o = (EOEnterpriseObject)newValues.objectAtIndex(i);
-            if ((null==currentValues) || (currentValues.indexOfIdenticalObject(o) == NSArray.NotFound)) {  // not found
+            if ((null==mutableCurrentValues) || (mutableCurrentValues.indexOfIdenticalObject(o) == NSArray.NotFound)) {  // not found
                 if (isDictionary) {
-                    currentValues.addObject(o);
+                    mutableCurrentValues.addObject(o);
                 } else {
                     _eo.addObjectToBothSidesOfRelationshipWithKey(o, masterKey);
                 }
