@@ -70,7 +70,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         if(!_coordinators.contains(osc)) {
             _coordinators.add(osc);
             NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class } );
-            NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+            NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStore.ObjectsChangedInStoreNotification, osc);
         } else {
             log.error("Adding same coodinator twice!");
         }
@@ -80,7 +80,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         synchronized(_coordinators) {
             if(_coordinators.contains(osc)) {
                 _coordinators.remove(osc);
-                NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+                NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStore.ObjectsChangedInStoreNotification, osc);
             } else {
                 log.error("Coordinator not found!");
             }

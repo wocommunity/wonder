@@ -84,7 +84,7 @@ public class ERXTimestampUtilities extends Object {
          * @return day of the week as an int.
          */
         public int dayOfWeek() {
-            return _calendar.get(GregorianCalendar.DAY_OF_WEEK);
+            return _calendar.get(Calendar.DAY_OF_WEEK);
         }
 
         /**
@@ -93,7 +93,7 @@ public class ERXTimestampUtilities extends Object {
          * @return day of the month as an int.
          */
         public int dayOfMonth() {
-            return _calendar.get(GregorianCalendar.DATE);
+            return _calendar.get(Calendar.DATE);
         }
         
         /**
@@ -102,7 +102,7 @@ public class ERXTimestampUtilities extends Object {
          * @return day of the year as an int.
          */
         public int dayOfYear() {
-            return _calendar.get(GregorianCalendar.DAY_OF_YEAR);
+            return _calendar.get(Calendar.DAY_OF_YEAR);
         }
 
         /**
@@ -111,7 +111,7 @@ public class ERXTimestampUtilities extends Object {
          * @return hour of the day as an int.
          */        
         public int hourOfDay() {
-            return _calendar.get(GregorianCalendar.HOUR_OF_DAY);
+            return _calendar.get(Calendar.HOUR_OF_DAY);
         }
 
         /**
@@ -120,7 +120,7 @@ public class ERXTimestampUtilities extends Object {
          * @return minute of the hour as an int.
          */
         public int minuteOfHour() {
-            return _calendar.get(GregorianCalendar.MINUTE);
+            return _calendar.get(Calendar.MINUTE);
         }
 
         /**
@@ -129,7 +129,7 @@ public class ERXTimestampUtilities extends Object {
          * @return seconds of the minute as an int.
          */
         public int secondOfMinute() {
-            return _calendar.get(GregorianCalendar.SECOND);
+            return _calendar.get(Calendar.SECOND);
         }
 
         /**
@@ -138,7 +138,7 @@ public class ERXTimestampUtilities extends Object {
          * @return month of the year as an int.
          */
         public int monthOfYear() {
-            return _calendar.get(GregorianCalendar.MONTH);
+            return _calendar.get(Calendar.MONTH);
         }
 
         /**
@@ -147,7 +147,7 @@ public class ERXTimestampUtilities extends Object {
          * @return year of the common era as an int.
          */
         public int yearOfCommonEra() {
-            return _calendar.get(GregorianCalendar.YEAR);
+            return _calendar.get(Calendar.YEAR);
         }
     }
 
