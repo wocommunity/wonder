@@ -3,36 +3,37 @@ CHANGES FROM 1.0
 
 General
 -------
-- Added ERPlot framework (based on JFreechart) Doesn't do to much but will get 
-  very useful with DynaGrouping.
-- Added ExcelGenerator framework (based on POI)
+- Added ERPlot framework, based on JFreechart. Doesn't do to much but will get 
+  very useful with DynaGrouping. (Anjo Krank)
+- Added ExcelGenerator framework, based on POI. (Anjo Krank)
 - Refactored code from ERMailer to ERCoreBusinessLogic
-- Ant Builds based in property files
-- Eclipse support for most projects
+- Ant Builds based in property files (Anjo Krank)
+- Eclipse support for most projects (Anjo Krank)
 
 ERExtensions
 ------------
 - Tons of fixes and localization improvements
 - ERExtensions and ERUtilities cleaned up, moved and deprecated stuff 
   to the respective Utilities. There's more to do in this venue, but 
-  it should be done before the release.
-- Autolocking Editing context, very useful for debugging
-- Autounlocking of ECs after the app finished handling the request
+  it should be done before the release. (Anjo Krank)
+- Autolocking Editing context, very useful for debugging (David Teran)
+- Autounlocking of ECs after the app finished handling the request (Anjo Krank)
 - Primary key improvements (string<->pk) for easier DA apps, now handles
-  compound, non-integer PKs
-- Session store deadlock detection
-- Assertions
-- Navigation improvements
+  compound, non-integer PKs (Anjo Krank)
+- Session store deadlock detection (Anjo Krank)
+- Assertions (Anjo Krank)
+- Navigation improvements (Anjo Krank)
 - More utilities (compression, runtime)
-- XML support for the dynamic elements
-- Improved validation (more EOF exceptions are caught and transformed)
-- Component action redirector
-- PK batching display group, result batching display group
-- Multiple on-the-fly object store coordinators, inter-instance change notification
-- RPC via javascript made easy, cool validation using it
-- Dictionaries and arrays as EOF custom value types
-- Automatic localization of formatters in WOStrings and WOTextFields
-- Scaling Numberformatter subclass (displays value * xx)
+- XML support for the dynamic elements (David Teran)
+- Improved validation, more EOF exceptions are caught and transformed (Anjo Krank)
+- Component action redirector (Anjo Krank)
+- PK batching display group, result batching display group (David Teran)
+- Multiple on-the-fly object store coordinators, inter-instance change notification (David Teran+Anjo Krank)
+- RPC via javascript made easy, cool validation using it (Anjo Krank+David Teran)
+- Dictionaries and arrays as EOF custom value types (David Teran)
+- Automatic localization of formatters in WOStrings and WOTextFields (Anjo Krank)
+- Added a WORepetition replacement that can deal with Arrays and Lists (Anjo Krank)
+- Scaling Numberformatter subclass (displays value * xx) (David Teran+Anjo Krank)
 - Path-based request handlers. (Max Muller) See RSS feed generation in the music store for an example:
 http://phobos.apple.com/WebObjects/MZSearch.woa/wa/MRSS/rssGenerator
 - Graceful shutdown via signal handling (Max Muller)
@@ -43,23 +44,23 @@ http://phobos.apple.com/WebObjects/MZSearch.woa/wa/MRSS/rssGenerator
 - Added utility methods for getting the md5 hash of files (Wilfredo Sanchez)
 - Corrected a bug in ERXInQualifier where prefetched relationships would not generate the correct SQL (Patrice Gautier)
 - Added utility methods to get a BigDecimal from the  System Properties (Thomas Burkholder)
-- New Log4J MailAppender that can send components as mails.
+- New Log4J MailAppender that can send components as mails. (Anjo Krank)
 
 ERDirectToWeb
 -------------
-- Assignments cleaned up, you will get deprecation warnings if you use them
-- Complex HTML factored out: the repetitions are now separate components
-- Action buttons: easy to add your own functions to repetitions
-- Embedding made easy
-- Much better project structure in PBX
-- Better ruleset factoring
-- Calendar page now works
-- Grouping page now works
-- New QueryAll page, EditRelationshipPage, ProgressPage
-- Message pages structured more sensibly
-- Better support for the WebAssistant
-- Much better debugging display in the property names
-- Fixed rule system priority handling
+- Assignments cleaned up, you will get deprecation warnings if you use them (Anjo Krank)
+- Complex HTML factored out: the repetitions are now separate components (Anjo Krank)
+- Action buttons: easy to add your own functions to repetitions (Anjo Krank)
+- Embedding made easy (Anjo Krank)
+- Much better project structure in PBX (Anjo Krank)
+- Better ruleset factoring (Anjo Krank)
+- Calendar page now works (Anjo Krank)
+- Grouping page now works (Anjo Krank)
+- New QueryAll page, EditRelationshipPage, ProgressPage (Anjo Krank)
+- Message pages structured more sensibly (Anjo Krank)
+- Better support for the WebAssistant (Anjo Krank)
+- Much better debugging display in the property names (Anjo Krank)
+- Fixed rule system priority handling (Anjo Krank)
 - Refinement of D2W page for handling a sorted toMany relationship (Bruno Posokhow)
 - Addition of ERD2WQueryStringOperator for custom query operators (Bruno Posokhow)
 
@@ -75,10 +76,10 @@ ERCoreBusinessLogic
 
 DynaReporting
 -------------
-- Custom value conversion (allows you to step in and transform a Timestamp->NSTimestamp)
-- Style sheet support for reports
-- Easier, propertyList based WRQuickReport
-- Better WOOgnl integration
+- Custom value conversion (allows you to step in and transform a Timestamp->NSTimestamp) (Anjo Krank)
+- Style sheet support for reports (Anjo Krank)
+- Easier, propertyList based WRQuickReport (Anjo Krank)
+- Better WOOgnl integration (Anjo Krank)
 
 Updating from 1.0
 -----------------
@@ -88,7 +89,8 @@ although we tried to break as few things as possible.
 
 - if you use embedded property level components (ERDList+ERDInspect), you should contact the list.
 - if you use the Page templates in ERD2W (not ERNeutralLook) you will have to check
-  your app thoroughly. 
+  your app thoroughly. They have changed a great deal and inheritance is pretty much
+  revamped.
 - if you use sections, you should convert them from 
   "('Some Section', (someKey, someOtherKey))" to
   "('(someSection)', someKey, someOtherKey)" and let the localizer handle it.
@@ -96,3 +98,5 @@ although we tried to break as few things as possible.
   allow for @count and the like. The old one should still work, but spews out a warning.
 - ERD2W is not compatible with the WebServiceAssistant and JavaClient. Both use custom
   D2W model subclasses. Do not use them together in one application.
+- if you used EOGenericRecordClazz, change all references to EOEnterpriseObjectClazz. You
+  can now use the Clazz-Pattern with EOCustomObject too.
