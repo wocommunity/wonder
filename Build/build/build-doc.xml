@@ -6,8 +6,23 @@
 <!-- Called from "build.xml", normally shouldn't be used as   --> 
 <!-- a standalone buildfile.                                  -->
 <!-- ======================================================== -->
-<project name="wonder-doc" default="doc" basedir="../..">
+<project name="wonder-doc" default="api" basedir="../..">
 
+    <property file="Build/build/build.properties" />
+    <property file="${user.home}/build.properties" />
+    <property file="Build/build/default.properties" />
+
+    <property name="wo.system.root" value="/System/Library/Frameworks" />
+    <property name="build.root" value="${user.home}/Roots" />
+    <property name="wonder.root" value="${basedir}" />
+
+    <!-- ==================================================== -->
+    <!--              Derived Properties.                     -->
+    <!-- These properties are derived from other properties.  -->
+    <!-- Normally, these should not be redefined.             -->
+    <!-- ==================================================== -->
+    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+    
     <!-- ==================================================== -->
     <!--              CLASSPATH settings                      -->
     <!-- ==================================================== -->
@@ -16,6 +31,21 @@
             <include name="cayenne.jar"/>
             <include name="jdom*.jar"/>
         </fileset>
+            <fileset dir="${wo.system.root}">
+                <include name="Java**/Resources/Java/*.jar" />
+                <exclude name="JavaWOExtensions.framework"/>
+                <exclude name="Java*Cocoa.framework"/>
+                <exclude name="JavaOpen*.framework"/>
+                <exclude name="JavaEOGeneration*.framework"/>
+                <exclude name="JavaEOInterface.framework"/>
+                <exclude name="JavaEODistribution.framework"/>
+            </fileset>
+            <fileset dir="${build.root}">
+                <include name="ER*.framework/Resources/Java/*.jar" />
+            </fileset>
+            <fileset dir="${build.root}">
+                <include name="BT*.framework/Resources/Java/*.jar" />
+            </fileset>
     </path>
     
     <!-- ==================================================== -->
@@ -39,7 +69,7 @@
     <!-- ==================================================== -->
     <!-- Build Wonder documenatation.                         -->
     <!-- ==================================================== -->
-    <target name="doc" depends="prepare">
+    <target name="doc" depends="prepare, api">
         <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
             <classpath refid="classpath"/>
         </taskdef>
@@ -65,4 +95,34 @@
             </fileset>
         </copy>
     </target>
+
+    <!-- ========================================== -->
+    <!-- Builds API documenatation.                 -->
+    <!-- ========================================== -->
+    <target name="api" depends="prepare">
+        <!--<copy todir="${dist}/doc">
+            <fileset dir="doc">
+                <include name="**/LICENSE*"/>
+            </fileset>
+        </copy>-->
+
+        <javadoc   packagenames="er.*"
+                   defaultexcludes="yes"
+                   destdir="${dist}/doc/api"
+                   author="true"
+                   version="true"
+                   use="true"
+                   windowtitle="Project Wonder API">
+
+        <classpath refid="classpath"/>
+        <sourcepath>
+            <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
+            <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
+        </sourcepath>
+        <doctitle><![CDATA[<h2>Project Wonder API Documentation</h2>]]></doctitle>
+        <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
+        <link href="http://developer.apple.com/techpubs/webobjects/Reference/Javadoc/"/>
+        </javadoc>
+    </target>
+
 </project>
