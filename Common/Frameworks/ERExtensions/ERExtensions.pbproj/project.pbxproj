@@ -518,6 +518,7 @@
 				505EFE77060143D200121B55,
 				505EFE79060143FF00121B55,
 				4147F4FE060F30A500EE490C,
+				4188B867061D98B6006A7425,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1662,6 +1663,19 @@
 		};
 		416E92DD05E4BD7000F3D01E = {
 			fileRef = 416E92DC05E4BD7000F3D01E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4188B866061D98B6006A7425 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXToManyQualifier.java;
+			path = er/extensions/ERXToManyQualifier.java;
+			refType = 4;
+		};
+		4188B867061D98B6006A7425 = {
+			fileRef = 4188B866061D98B6006A7425;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -8443,6 +8457,7 @@
 				F59C579502C4565701000102,
 				F57D5EAD02E538B901000102,
 				F59C57CF02C4565701000102,
+				4188B866061D98B6006A7425,
 				F59C57D102C4565701000102,
 			);
 			isa = PBXGroup;
