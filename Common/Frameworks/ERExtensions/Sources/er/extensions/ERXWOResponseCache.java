@@ -50,6 +50,11 @@ public class ERXWOResponseCache {
     protected static ERXWOResponseCache sharedInstance;
 
     /**
+     * Header key you can set in the response when creating an error page you don't want to get cached.
+     */
+    public static String NO_CACHE_KEY = "ERXDirectActionRequestHandler.DontCache";
+
+    /**
      * Gets the shared instance
      * @return the shared instance
      */ 
@@ -124,9 +129,13 @@ public class ERXWOResponseCache {
     }
 
     public void cacheResponseForRequest(Class actionClass, String actionName, WORequest request, WOResponse response) {
-        ERXMultiKey cacheKey = policy().cacheKeyForRequest(actionClass, actionName, request);
-        if (cacheKey != null) {
-            cache.put(cacheKey, response);
+        if(response.headerForKey(NO_CACHE_KEY) == null) {
+            ERXMultiKey cacheKey = policy().cacheKeyForRequest(actionClass, actionName, request);
+            if (cacheKey != null) {
+                cache.put(cacheKey, response);
+            }
+        } else {
+            response.removeHeadersForKey(NO_CACHE_KEY);
         }
     }
 }
