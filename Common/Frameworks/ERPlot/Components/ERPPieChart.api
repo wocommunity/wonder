@@ -9,15 +9,19 @@
 		<binding name="nameKey"/>
 		<binding name="valueKey"/>
 		<binding name="dataset"/>
+		<binding name="orientation"/>
+		<binding name="showUrls"/>
+		<binding name="showLegend"/>
+		<binding name="showToolTips"/>
 
 		<validation message="Either items, nameKey and valueKey or dataset must be bound">
 			<or>
 				<and>
 					<unbound name="items"/>
 					<unbound name="nameKey"/>
-						<unbound name="valueKey"/>
+					<unbound name="valueKey"/>
 				</and>
-						<unbound name="dataset"/>
+				<unbound name="dataset"/>
 			</or>
 		</validation>
 	</wo>
