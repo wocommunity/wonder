@@ -367,8 +367,11 @@ public class ERXStringUtilities {
      */
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
         String path = null;
-        if(bundle != null) {
-            path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
+        if(bundle == null) {
+            bundle = NSBundle.mainBundle();
+        }
+        path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
+        if(path != null) {
             try {
                 InputStream stream = bundle.inputStreamForResourcePath(path);
                 byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
@@ -376,8 +379,6 @@ public class ERXStringUtilities {
             } catch (IOException e) {
                 log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
             }
-        } else {
-            log.warn("Not found: " + name + "." + extension + " in bundle " + bundle.name());
         }
         return null;
     }
