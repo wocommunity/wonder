@@ -234,9 +234,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             throw new IllegalStateException("You cannot create new instances of " + entity().name() + "; it is read-only.");
         } else {
             _state = NEW;
-            EOEditingContext childEC = ERXExtensions.newEditingContext(editingContext());
             EOEnterpriseObject eo = ERXUtilities.createEO(destinationEntity().name(),
-                                                          childEC);
+                                                          editingContext());
             EditPageInterface epi = D2W.factory().editPageForEntityNamed(destinationEntity().name(),
                                                                          session());
             epi.setObject(eo);
