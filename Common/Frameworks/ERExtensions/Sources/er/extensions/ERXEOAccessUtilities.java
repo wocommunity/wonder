@@ -550,7 +550,7 @@ public class ERXEOAccessUtilities {
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
         StringBuffer sb=new StringBuffer();
-        sb.append(key);
+        sb.append(e.sqlStringForAttributeNamed(key));
         sb.append(" IN ");
         sb.append("(");
         for (int i = 0; i < valueArray.count(); i++ ) {
