@@ -442,7 +442,23 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * Computes the current set of changes that this object has from the
+     * Returns an EO in the same editing context as the caller.
+     * @return an EO in the same editing context as the caller.
+     */
+    public EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo) {
+        return ERXUtilities.localInstanceOfObject(editingContext(), eo);
+    }
+
+    /**
+     * Returns an array of EOs in the same editing context as the caller.
+     * @return  array of EOs in the same editing context as the caller.
+     */
+    public NSArray localInstancesOf(NSArray eos) {
+        return ERXUtilities.localInstancesOfObjects(editingContext(), eos);
+    }
+
+    /**
+        * Computes the current set of changes that this object has from the
      * currently committed snapshot.
      * @return a dictionary holding the changed values from the currently
      *         committed snapshot.
