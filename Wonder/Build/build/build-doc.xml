@@ -126,6 +126,7 @@
                 <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS/Sources/"/>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
