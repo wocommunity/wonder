@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXSession.java created by patrice on Sat 19-Feb-2000 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -16,176 +14,213 @@ import com.webobjects.foundation.*;
 import org.apache.log4j.Category;
 import java.util.Enumeration;
 
+/**
+ * The ERXSession aguments the regular WOSession object
+ * by adding a few nice additions. Of interest, notifications
+ * are now posted when a session when a session
+ * goes to sleep, David Neumann's browser backtracking detection
+ * has been added from his security framework, a somewhat
+ * comprehensive user-agent parsing is provided to know what type
+ * of browser is being used, flags have also been added to tell
+ * if javascript has been enabled, and enhanced localization
+ * support has been added.
+ */
 public class ERXSession extends WOSession {
 
-    ////////////////////////////////////  log4j category  /////////////////////////////////////////////////
+    /** logging support */
     public static Category cat = Category.getInstance(ERXSession.class);
 
-    ///////////////////////////////////// Notification Methods ////////////////////////////////////////////
+    /** Notification name that is posted after a session wakes up. */
+    // DELETEME: Now we can use SessionDidRestoreNotification
     public static final String SessionWillAwakeNotification = "SessionWillAwakeNotification";
+    /**
+     * Notification name that is posted when a session is about to sleep.
+     */
     public static final String SessionWillSleepNotification = "SessionWillSleepNotification";
+
+    /** cookie name that if set it means that the user has cookies enabled */
+    // FIXME: This should be configurable
     public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
-
-    private static NSMutableDictionary _classAdditions = new NSMutableDictionary();
-    public static NSDictionary sessionAdditions() { return _classAdditions; }
-    public static void registerSessionAddition(ERXSessionAdditionInterface addition) {
-        registerSessionAdditionForName(addition, addition.sessionAdditionName());
-    }
-
-    public ERXSessionAdditionInterface additionForName(String name) {
-        return (ERXSessionAdditionInterface)_classAdditions.objectForKey(name);
-    }
-
-    // Useful for registering a session addition for multiple names.
-    public static void registerSessionAdditionForName(ERXSessionAdditionInterface addition, String name) {
-        if (addition != null && name != null) {
-            if (_classAdditions.objectForKey(name) != null) {
-                cat.warn("Registering multiple session additions for the same name: " + name+" -- "+ addition + " and "+_classAdditions.objectForKey(name));
-                _classAdditions.removeObjectForKey(name);
-            }
-            _classAdditions.setObjectForKey(addition, name);
-            cat.debug("Registered session addition: " + addition + " for name: " + name);
-        } else {
-            cat.error("Attempting to register null session addition or under null name");
-        }
-    }
-
-    public static class Observer {
-        public void sessionWillAwake(NSNotification n) {
-            ERXSession.sessionWillAwake((ERXSession)n.object());
-        }
-        public void sessionWillSleep(NSNotification n) {
-            ERXSession.sessionWillSleep((ERXSession)n.object());
-        }
-    }
-
+    
+    /** holds a reference to the current localizer used for this session */
     private ERXLocalizer localizer;
+
+    /** flag for if java script is enabled, defaults to true */
+    protected boolean _javaScriptEnabled=true; // most people have JS by now
+    /** flag to indicate if java script has been set */
+    protected boolean _javaScriptInitialized=false;
+
+    /** holder for the browser name */
+    protected String _browser;
+    /** flag if the browser is IE */
+    protected boolean isIE;
+    /** flag if the browser is Netscape */
+    protected boolean isNetscape;
+    /** flag if the browser is iCab */
+    protected boolean isICab;
+    /** flag if the browser is Omniweb */
+    protected boolean isOmniweb;
+    /** flag if the browser platform is Mac */    
+    protected boolean isMac;
+    /** flag if the browser platform is Windows */    
+    protected boolean isWindows;
+    /** flag if the browser platform is Linux */    
+    protected boolean isLinux;
+    /** flag if the browser is version 3 */
+    protected boolean isVersion3;
+    /** flag if the browser is version 4 */    
+    protected boolean isVersion4;
+    /** flag if the browser is version 5 */    
+    protected boolean isVersion5;
+    // ENHANCEME: Need a version6 test
+    /** holds the platform string */
+    protected String platform;
+    /** holds the version string */    
+    protected String version;
+
+    /** holds a debugging store for a given session. */
+    protected NSMutableDictionary _debuggingStore;
+
+    /**
+     * Method to get the current localizer for this
+     * session. If local instance variable is null
+     * then a localizer is fetched for the session's
+     * <code>languages</code> array. See {@link ERXLocalizer}
+     * for more information about using a localizer.
+     * @return the current localizer for this session
+     */
     public ERXLocalizer localizer() {
-        if(localizer == null) {
+        if (localizer == null) {
             localizer = ERXLocalizer.localizerForLanguages(languages());
         }
         return localizer;
     }
 
+    /**
+     * Cover method to set the current localizer
+     * to the localizer for that language.
+     * @param language to set the current localizer
+     *		for.
+     */
     public void setLanguage(String language) {
         localizer = ERXLocalizer.localizerForLanguage(language);
     }
+
+    /**
+     * Returns the primary language of the current
+     * session's localizer. This method is just a
+     * cover for calling the method
+     * <code>localizer().language()</code>.
+     * @return primary language
+     */
     public String language() {
         return localizer().language();
     }
-    
-    private static boolean registered = false;
-    public static void registerNotifications() {
-        if (!registered) {
-            Observer observer = new Observer();
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("sessionWillAwake", ERXConstant.NotificationClassArray),
-                                                             ERXSession.SessionWillAwakeNotification,
-                                                             null);
 
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("sessionWillSleep", ERXConstant.NotificationClassArray),
-                                                             ERXSession.SessionWillSleepNotification,
-                                                             null);
-        }
-    }
-
-    // WARNING: Not MT-safe
-    // This isn't thread safe.  If we want it to be thread safe we should have a dictionary to hold a different set of
-    // session additions for each thread, then restrict the notification to the session additions for that thread.
-    protected static void sessionWillAwake(ERXSession session) {
-        for (Enumeration e = _classAdditions.allValues().objectEnumerator(); e.hasMoreElements();) {
-            ERXSessionAdditionInterface sai = (ERXSessionAdditionInterface)e.nextElement();
-            sai.setSession(session);
-        }
-    }
-
-    // Need to do this to avoid cyclic retain cycles.
-    protected static void sessionWillSleep(ERXSession session) {
-        for (Enumeration e = _classAdditions.allValues().objectEnumerator(); e.hasMoreElements();) {
-            ERXSessionAdditionInterface sai = (ERXSessionAdditionInterface)e.nextElement();
-            sai.setSession(null);
-        }
-    }
-
-    // Used to bind up things in the UI, ie session.additions.someAddition.foo might return a WOComponent.
-    public NSDictionary additions() { return _classAdditions; }
-
-    private boolean _javaScriptEnabled=true; // most people have JS by now
-    private boolean _javaScriptInitialized=false;
-    private String _browser;
-    protected boolean isIE;
-    protected boolean isNetscape;
-    protected boolean isICab;
-    protected boolean isOmniweb;
-    protected boolean isMac;
-    protected boolean isWindows;
-    protected boolean isLinux;
-    protected boolean isVersion4;
-    protected boolean isVersion5;
-    protected boolean isVersion3;
-    protected String platform;
-    protected String version;
-
-    protected ERXNavigation _navigation;
-
-    // FIXME this dictionary can be used for debugging -- e.g. put repetitions in components
-    // and store the item without having to re-start
-    // not necessary in deployment
-
-    private NSMutableDictionary _debuggingStore;
+    /**
+     * Simple mutable dictionary that can be used at
+     * runtime to stash objects that can be useful for
+     * debugging.
+     * @return debugging store dictionary
+     */
+    // ENHANCEME: Should perform a check to make sure that the app is not in production mode when this is being used.
     public NSMutableDictionary debuggingStore() {
-        if (_debuggingStore==null) {
-            _debuggingStore=new NSMutableDictionary();
-        }
+        if (_debuggingStore==null)
+            _debuggingStore = new NSMutableDictionary();
         return _debuggingStore;
     }
 
-    // Instance Methods
-
-    public ERXSession() {
-        // Setting the default editing context delegate
-        _navigation = createNavigation();
-        _navigation.setIsDisabled(false);
-    }
-
+    /**
+     * Ensures that the editing context has a delegate
+     * set, if not it will set one via the
+     * <code>setDefaultDelegate</code> method.
+     * @return the session's default editing context with
+     * 		the default delegate set.
+     */
+    // FIXME: This check should move to the session constructor
+    //		also should use the ec factory methods to just
+    //		create and set the editing context.
     public EOEditingContext defaultEditingContext() {
         EOEditingContext ec = super.defaultEditingContext();
-        if(ec.delegate() == null)
+        if (ec.delegate() == null)
             ERXExtensions.setDefaultDelegate(ec);
         return ec;
     }
 
-    public boolean javaScriptEnabled() {
-        return _javaScriptEnabled;
-    }
+    /**
+     * Returns if this user has javascript enabled.
+     * @return if js is enabled, defaults to true.
+     */
+    public boolean javaScriptEnabled() { return _javaScriptEnabled; }
 
+    /**
+     * Sets if javascript is enabled for this session.
+     * crafty entry pages can set form values via
+     * javascript to test if it is enabled.
+     * @param newValue says if javascript is enabled
+     */
     public void setJavaScriptEnabled(boolean newValue) {
         _javaScriptEnabled=newValue;
         _javaScriptInitialized=true;
     }
+
+    // MOVEME: All of this browser stuff should move to it's own class ERXBrowser
+    /**
+     * Browser string
+     * @return what type of browser
+     */
     public String browser() { return _browser; }
 
+    /**
+     * browser is IE?
+     * @return if browser is IE.
+     */
     public boolean browserIsIE() { return isIE; }
+    /**
+     * browser is Omniweb?
+     * @return if browser is Omniweb.
+     */
     public boolean browserIsOmniweb() { return isOmniweb; }
+    /**
+     * browser is Netscape?
+     * @return if browser is Netscape.
+     */
     public boolean browserIsNetscape() { return isNetscape;  }
+    /**
+     * browser is not Netscape?
+     * @return if browser is not Netscape.
+     */
     public boolean browserIsNotNetscape() { return !isNetscape; }
 
+    /**
+     * browser is not netscape or is a version 5
+     * browser.
+     * @return if this browser can handle nested tables
+     */
     public boolean browserRenderNestedTablesFast() {
         return browserIsNotNetscape() || isVersion5;
     }
 
+    /**
+     * Does the browser support IFramew?
+     * @return if the browser is IE.
+     */
     public boolean browserSupportsIFrames() { return browserIsIE(); }
 
+    /**
+     * Overridden to provide all the browser checking for
+     * the current User-Agent. Also performs a few checks to
+     * see if javascript is enabled.
+     */
     public void awake() {
-        // FIXME: this probably ought to be replaced for deployment
-        // by a few well chosen entry points
-        // too early in ExtendedSession.ExtendedSession
         super.awake();
         ERXExtensions.setSession(this);
         NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
         WORequest request=context()!=null ? context().request() : null;
+        // ENHANCEME: Should pull all of this browser detection out into it's own object with a factory
+        //		so that others can return their own subclasses of the browser object or parse the
+        //		the user-agent in a different manner. The factory could also maintain a cache of the
+        //		user-agent to browser object.
         if (_browser==null && request!=null) {
             String userAgent=(String)request.headerForKey("User-Agent");
             isOmniweb=isICab=isIE=isNetscape=false;
@@ -236,10 +271,10 @@ public class ERXSession extends WOSession {
             if (cat.isDebugEnabled()) cat.debug("Browser="+_browser+" platform="+platform+" Version="+version);
         }
         if (request!=null && cat.isDebugEnabled()) cat.debug("Form values "+request.formValues());
+        // FIXME: Shouldn't be hardcoded form value.
         if (request!=null && request.formValueForKey("javaScript")!=null) {
             String js=(String)request.formValueForKey("javaScript");
             if (cat.isDebugEnabled()) cat.debug("Received javascript form value "+js);
-            //System.out.println("context().request().formValues() ==== " + context().request().formValues());
             setJavaScriptEnabled(js!=null && js.equals("1") && (_browser==null || _browser.indexOf("Netscape3.")==-1));
         }
         if (request!=null && /* !_javaScriptInitialized */true) {
@@ -251,17 +286,10 @@ public class ERXSession extends WOSession {
         }
     }
 
-    // CHECKME: Should be removed
-    public ERXNavigation createNavigation() { return new ERXNavigation(); }
-    // CHECKME: Should be removed
-    public ERXNavigation erxNavigation() { return _navigation; }
-    // CHECKME: Should be removed
-    protected boolean _hideHelp=false;
-    // CHECKME: Should be removed
-    public boolean hideHelp() { return _hideHelp; }
-    // CHECKME: Should be removed
-    public void setHideHelp(boolean newValue) { _hideHelp=newValue; }
-
+    /**
+     * Overridden to post the notification that
+     * the session will sleep.
+     */
     public void sleep() {
         NSNotificationCenter.defaultCenter().postNotification(SessionWillSleepNotification, this);
         super.sleep();
@@ -272,7 +300,16 @@ public class ERXSession extends WOSession {
      * Backtrack detection - Pulled from David Neuman's wonderful security framework.
      */
 
-    public boolean didBackTrack = false;
+    /**
+     * flag to indicate if the user is currently backtracking,
+     * meaning they hit the back button and then clicked on a
+     * link.
+     */
+     public boolean didBackTrack = false;
+    /** flag to indicate if the last action was a direct action */
+    // FIXME: Need to be setting this in ERXDirectAction or maybe we can be smart and set it when the
+    //		direct action handler picks it up so that everything won't have to subclass one
+    //		direct action class
     public boolean lastActionWasDA = false;
     /**
      * Utility method that gets the context ID string
@@ -280,6 +317,7 @@ public class ERXSession extends WOSession {
      * @param aRequest request to get the context id from
      * @return the context id as a string
      */
+    // MOVEME: ERXWOUtilities
     public String requestsContextID(WORequest aRequest){
         String uri = aRequest.uri();
         String eID = NSPathUtilities.lastPathComponent(uri);
@@ -349,22 +387,125 @@ public class ERXSession extends WOSession {
         super. takeValuesFromRequest (aRequest, aContext);
     }
 
+    /**
+     * Overridden to display debugging information when a
+     * user backtracks.
+     * @param r current response object
+     * @param c current context object
+     */
     public void appendToResponse(WOResponse r, WOContext c) {
         if (didBackTrack) cat.debug("User backtracking in appendToResponse.");
         super.appendToResponse(r, c);
     }
-
-    // CHECKME: Should remove.
-    public String wrapperPageName() { return "PageWrapper"; }
 
     /**
      * Ovverrides terminate to set the shared editing context of the default
      * editing context to null to avoid a locking problem in WO 5.1.1.
      */
     public void terminate() {
-        // WOFIX: 5.1.1
-        // work around a bug in WO 5.1.1 where the sessions EC will keep a lock on the SEC
+        // WOFIX: 5.1.2
+        // work around a bug in WO 5.1.2 where the sessions EC will keep a lock on the SEC
         defaultEditingContext().setSharedEditingContext(null);
         super.terminate();
     }
+
+    //// Below this point is all the stuff to be deleted ///////
+
+    // DELETEME: don't need navigation
+    public ERXSession() {
+        // Setting the default editing context delegate
+        _navigation = createNavigation();
+        _navigation.setIsDisabled(false);
+    }
+
+    // DELETEME: Should be removed
+    public ERXNavigation createNavigation() { return new ERXNavigation(); }
+    // DELETEME: Should be removed
+    public ERXNavigation erxNavigation() { return _navigation; }
+    // DELETEME: Should be removed
+    protected boolean _hideHelp=false;
+    // DELETEME: Should be removed
+    public boolean hideHelp() { return _hideHelp; }
+    // DELETEME: Should be removed
+    public void setHideHelp(boolean newValue) { _hideHelp=newValue; }
+    
+    // DELETEME: Should remove.
+    public String wrapperPageName() { return "PageWrapper"; }
+
+    // DELETEME: Not needed with ERXThreadStorage
+    private static NSMutableDictionary _classAdditions = new NSMutableDictionary();
+    // DELETEME: Not needed with ERXThreadStorage
+    public static NSDictionary sessionAdditions() { return _classAdditions; }
+    // DELETEME: Not needed with ERXThreadStorage
+    public static void registerSessionAddition(ERXSessionAdditionInterface addition) {
+        registerSessionAdditionForName(addition, addition.sessionAdditionName());
+    }
+    // DELETEME: Not needed with ERXThreadStorage
+    public ERXSessionAdditionInterface additionForName(String name) {
+        return (ERXSessionAdditionInterface)_classAdditions.objectForKey(name);
+    }
+
+    // DELETEME: not needed
+    public NSDictionary additions() { return _classAdditions; }
+
+    // DELETEME: Not needed with ERXThreadStorage
+    public static void registerSessionAdditionForName(ERXSessionAdditionInterface addition, String name) {
+        if (addition != null && name != null) {
+            if (_classAdditions.objectForKey(name) != null) {
+                cat.warn("Registering multiple session additions for the same name: " + name+" -- "+ addition + " and "+_classAdditions.objectForKey(name));
+                _classAdditions.removeObjectForKey(name);
+            }
+            _classAdditions.setObjectForKey(addition, name);
+            cat.debug("Registered session addition: " + addition + " for name: " + name);
+        } else {
+            cat.error("Attempting to register null session addition or under null name");
+        }
+    }
+
+    // DELETEME: Not needed with ERXThreadStorage
+    public static class Observer {
+        public void sessionWillAwake(NSNotification n) {
+            ERXSession.sessionWillAwake((ERXSession)n.object());
+        }
+        public void sessionWillSleep(NSNotification n) {
+            ERXSession.sessionWillSleep((ERXSession)n.object());
+        }
+    }
+    // DELETEME: Not needed with ERXThreadStorage
+    private static boolean registered = false;
+    // DELETEME: Not needed with ERXThreadStorage
+    public static void registerNotifications() {
+        if (!registered) {
+            Observer observer = new Observer();
+            ERXRetainer.retain(observer); // has to be retained on the objC side!!
+            NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                             new NSSelector("sessionWillAwake", ERXConstant.NotificationClassArray),
+                                                             ERXSession.SessionWillAwakeNotification,
+                                                             null);
+
+            NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                             new NSSelector("sessionWillSleep", ERXConstant.NotificationClassArray),
+                                                             ERXSession.SessionWillSleepNotification,
+                                                             null);
+        }
+    }
+
+    // DELETEME: Not needed with ERXThreadStorage
+    protected static void sessionWillAwake(ERXSession session) {
+        for (Enumeration e = _classAdditions.allValues().objectEnumerator(); e.hasMoreElements();) {
+            ERXSessionAdditionInterface sai = (ERXSessionAdditionInterface)e.nextElement();
+            sai.setSession(session);
+        }
+    }
+
+    // DELETEME: Not needed with ERXThreadStorage
+    protected static void sessionWillSleep(ERXSession session) {
+        for (Enumeration e = _classAdditions.allValues().objectEnumerator(); e.hasMoreElements();) {
+            ERXSessionAdditionInterface sai = (ERXSessionAdditionInterface)e.nextElement();
+            sai.setSession(null);
+        }
+    }
+    // DELETEME: Need to get rid of navigation refs
+    protected ERXNavigation _navigation;
+
 }

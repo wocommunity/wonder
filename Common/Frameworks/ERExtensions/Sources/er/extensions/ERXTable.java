@@ -6,35 +6,92 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
+/**
+ * Enhanced table component that adds the ability to have the
+ * table layed out in a vertical orientation and adds the
+ * ability to specify an array of header images that appear
+ * in the header cells of the table. Corrects a bug intorduced
+ * in WO 5.1 where OutOfBounds exceptions are thrown. Note that
+ * this component subclasses WOTable from this framework, not
+ * the WOTable in com.webobjects.woextensions. The reason for
+ * this is that all of the instance variables are private in
+ * JavaWOExtensions WOTable.<br/>
+ * <br/>
+ * Synopsis:<br/>
+ * list=<i>anArray</i>;item=<i>aSettableObject</i>;[col=<i>aSettableNumber</i>;][index=<i>aSettableNumber</i>;][row=<i>aSettableNumber</i>;]
+ * [maxColumns=<i>aNumber</i>;][tableBackgroundColor=<i>aString</i>;][border=<i>aNumber</i>;][cellpadding=<i>aNumber</i>;][cellspacing=<i>aNumber</i>;]
+ * [rowBackgroundColor=<i>aString</i>;][cellBackgroundColor=<i>aString</i>;][cellAlign=<i>aNumber</i>;][cellVAlign=<i>aNumber</i>;]
+ * [cellWidth=<i>aNumber</i>;][tableWidth=<i>aNumber</i>;]
+ * [goingVertically=<i>aBoolean</i>;][headerImages=<i>anArray</i>;]
+ *
+ * @binding col pushed to the parent with the current
+ *		column number
+ * @binding index pushed to the parent indicating
+ *		the current index
+ * @binding list of objects to construct the table for
+ * @binding maxColumns maximum number of columns
+ * @binding row pushed to the parent with the current
+ *		row number
+ * @binding item pushed to the parent with the
+ *		current object from the list
+ * @binding tableBackgroundColor background color for table
+ * @binding border table border
+ * @binding cellpadding cell padding
+ * @binding cellspacing cell spacing
+ * @binding rowBackgroundColor background color to be
+ *		used for the rows of the table
+ * @binding cellBackgroundColor background color for the cell
+ * @binding cellAlign cell's alignment
+ * @binding cellVAlign cell's vertical alignment
+ * @binding cellWidth cell's width
+ * @binding tableWidth table width
+ * @binding goingVertically boolean if the list should be
+ *		layed out horizontally or vertically.
+ * @binding headerImages array of images to be displayed
+ *		in the header cells of the table
+ */
 public class ERXTable extends WOTable {
 
+    /** used in the repetition for header images */
+    protected String header;
+    /** caches the value from the binding goingVertical */
+    protected Boolean _goingVertically;
+    
+    /**
+     * Public constructor
+     * @param context the context
+     */
     public ERXTable(WOContext context) {
         super(context);
     }
 
-    public boolean isStateless() {
-        return true;
-    }
+    /**
+     * Component is stateless.
+     * @return true
+     */
+    // CHECKME: This shouldn't be needed, although for some strange reason it was needed at one point.
+    public boolean isStateless() { return true; }
 
-    ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXTable.class);
-
-    protected String header;
-
-       
+    /**
+     * resets the cached variables
+     */
     protected void _resetInternalCaches() {
         super._resetInternalCaches();
         _goingVertically = null;
     }
-    
-    protected Boolean _goingVertically;
+
+    /**
+     * Denotes if the list should be layed out vertically
+     * or horizontally. This is the boolean value from the
+     * binding: <b>goingVertically</b>
+     * @return if the list of items should be layed out
+     *		vertically.
+     */
     public boolean goingVertically() {
         if (_goingVertically == null) {
             _goingVertically=ERXUtilities.booleanValue(valueForBinding("goingVertically")) ?
@@ -43,7 +100,13 @@ public class ERXTable extends WOTable {
         return _goingVertically.booleanValue();
     }
 
-
+    /**
+     * Overridden to account for when goingVertical is
+     * enabled. Also corrects a bug from the WO 5.1
+     * release that would throw OutOfBoundsExceptions.
+     * This method pushs the current item up to the
+     * parent component.
+     */
     public void pushItem() {
         NSArray aList = list();
         int index;
@@ -67,5 +130,10 @@ public class ERXTable extends WOTable {
         currentItemIndex++;
     }
 
+    /**
+     * Conditional to determine if the binding: <b>headerImages</b>
+     * is present.
+     * @return if the component has the binding headerImages.
+     */
     public boolean hasHeaders() { return hasBinding("headerImages"); }
 }
