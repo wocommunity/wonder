@@ -1,0 +1,3 @@
+{
+    FetchAll = {class = EOFetchSpecification; entityName = TestItemState; fetchLimit = 0; }; 
+}

@@ -1,0 +1,124 @@
+<!--
+  -- WOEventDisplayPage.html
+  -- [JavaWOExtensions Project]
+  --
+  -- Copyright: © Copyright 2001 Apple Computer, Inc. All rights reserved.
+  --
+  -- Disclaimer:
+  --      IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc.
+  --      ("Apple") in consideration of your agreement to the following terms, and your
+  --      use, installation, modification or redistribution of this Apple software
+  --      constitutes acceptance of these terms.  If you do not agree with these terms,
+  --      please do not use, install, modify or redistribute this Apple software.
+  --
+  --      In consideration of your agreement to abide by the following terms, and subject
+  --      to these terms, Apple grants you a personal, non-exclusive license, under AppleUs
+  --      copyrights in this original Apple software (the "Apple Software"), to use,
+  --      reproduce, modify and redistribute the Apple Software, with or without
+  --      modifications, in source and/or binary forms; provided that if you redistribute
+  --      the Apple Software in its entirety and without modifications, you must retain
+  --      this notice and the following text and disclaimers in all such redistributions of
+  --      the Apple Software.  Neither the name, trademarks, service marks or logos of
+  --      Apple Computer, Inc. may be used to endorse or promote products derived from the
+  --      Apple Software without specific prior written permission from Apple.  Except as
+  --      expressly stated in this notice, no other rights or licenses, express or implied,
+  --      are granted by Apple herein, including but not limited to any patent rights that
+  --      may be infringed by your derivative works or by other works in which the Apple
+  --      Software may be incorporated.
+  --
+  --      The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
+  --      WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
+  --      WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  --      PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
+  --      COMBINATION WITH YOUR PRODUCTS.
+  --
+  --      IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
+  --      CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  --      GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  --      ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION
+  --      OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT
+  --      (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN
+  --      ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+	<head>
+		<TITLE>WOEvent Display Page</TITLE>
+	</head>
+	<body bgcolor=#FFFFFF>
+		<WEBOBJECT NAME=Conditional3><h2 ALIGN=CENTER><FONT COLOR=#ff0000>This Request Requires A User Login</FONT></h2><BR><CENTER><WEBOBJECT NAME=Form1>
+			<TABLE border=1 cellPadding=2 cellSpacing=0 bgcolor="#f6ffff">
+						<TR>
+							<TD>
+								<TABLE BORDER=0 WIDTH="80%">
+									<TR align=CENTER>
+										<TD> User </TD>
+										<TD>
+											<WEBOBJECT NAME="USERNAME"></WEBOBJECT>
+										</TD>
+									</TR>
+									<TR align=CENTER>
+										<TD> Password </TD>
+										<TD>
+											<WEBOBJECT NAME="PASSWORD"></WEBOBJECT>
+										</TD>
+									</TR>
+									<TR>
+										<TD></TD>
+										<TD><WEBOBJECT NAME=SUBMIT></WEBOBJECT></TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+					</TABLE>
+			<BR>
+		</WEBOBJECT></CENTER></WEBOBJECT>
+		<WEBOBJECT NAME=Conditional4>
+			<P><WEBOBJECT NAME=Hyperlink1>Set up logging</WEBOBJECT></P>
+			<WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=DisplayModeForm><WEBOBJECT NAME=ShowAllRoot></WEBOBJECT>
+					Show all root events<BR>
+					<WEBOBJECT NAME=ShowAggregated></WEBOBJECT>
+					Show aggregated hierarchical events<BR>
+					<WEBOBJECT NAME=ShowByPageComponent></WEBOBJECT>
+					Show events grouped by page, then by component<BR>
+					<WEBOBJECT NAME=ShowByPage></WEBOBJECT>
+					Show events grouped by page<BR>
+					<WEBOBJECT NAME=ShowByPageAssoc></WEBOBJECT>
+					Show events grouped by page, associations only<BR>
+					<P>
+						<WEBOBJECT NAME=ChangeLoggingButton></WEBOBJECT>&nbsp;&nbsp;&nbsp;<WEBOBJECT NAME=ResetLogging></WEBOBJECT></WEBOBJECT>
+				<P ALIGN=LEFT><FONT SIZE=5><U>Current Event Log:<BR>
+					</U></FONT><FONT SIZE=2>based on
+					<WEBOBJECT NAME=String1></WEBOBJECT>
+					events -- spent
+					<WEBOBJECT NAME=String2></WEBOBJECT>
+					ms in
+					<WEBOBJECT NAME=String4></WEBOBJECT>
+					events in EOF,
+					<WEBOBJECT NAME=String3></WEBOBJECT>
+					ms in
+					<WEBOBJECT NAME=String5></WEBOBJECT>
+					events in WOF<BR>
+					</FONT></P>
+				<TABLE CELLSPACING=1 WIDTH=100% BGCOLOR=#eeeeee>
+					<TR>
+						<TD BGCOLOR=#888888><B>Title</B></TD>
+						<TD BGCOLOR=#cccccc><B>Comment</B></TD>
+						<TD ALIGN=right BGCOLOR=#cccccc><B>Time</B></TD>
+						<TD ALIGN=right BGCOLOR=#cccccc><B>Calls</B></TD>
+						<TD ALIGN=left BGCOLOR=#cccccc><B>Relative</B></TD>
+					</TR>
+					<WEBOBJECT NAME=Outline>
+						<WEBOBJECT NAME=RowSwitch>
+						</WEBOBJECT>
+					</WEBOBJECT>
+				</TABLE>
+				<P></P>
+			</WEBOBJECT><WEBOBJECT NAME=Conditional2>The event log is empty.</WEBOBJECT>
+			<HR>
+			<P><WEBOBJECT NAME=Hyperlink2>Set up logging</WEBOBJECT></P>
+			<P></P>
+		</WEBOBJECT>
+	</body>
+</html>

@@ -1,0 +1,8 @@
+Hyperlink1: WOHyperlink {
+	href = href;
+}
+
+String1: WOString {
+	value = objectKeyPathValue;
+}
+

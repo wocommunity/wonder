@@ -27,7 +27,7 @@ public abstract class ERXFrameworkPrincipal {
     
     public static void setUpFrameworkPrincipalClass(Class c) {
         try {
-            if (initializedFrameworks.objectForKey(c.getName()) != null) {
+            if (initializedFrameworks.objectForKey(c.getName()) == null) {
                 cat.debug("Starting up: " + c.getName());
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
                 ERXRetainer.retain(principal);
