@@ -1,16 +1,14 @@
-
 Welcome to the ER Frameworks!
 
 Introduction
 
 Requirements
-	These frameworks will only work with WebObjects 4.5 right now.  We are currently working on porting these to WO 5.
+	These frameworks work with both WO 5.1 and WO 5.2.
 	
 The Frameworks and Dependencies
 
-
-ERDirectToWeb - This framework is a great extension of the DirectToWeb framework.  See the ClassList.txt file in the Documentation diectory 
-	for a short one sentence description of the classes.  This framework depends on both ERExtensions and Log4j.
+ERDirectToWeb - This framework is a great extension of the DirectToWeb framework.  
+See the ERD2WClassList.html file in the Documentation diectory for a short one sentence description of the classes.  This framework depends on both ERExtensions and ERJars.
 
 
 Installation Instructions
@@ -36,15 +34,6 @@ Installing Jikes
          http://www.xanthippe.ping.de/jikes/
 
 *** To use Jikes, select IBM Jikes as your compiler in the Project Inspector.
-
-Known Issues
-
-This should definitely be considered an alpha release, not because the code is buggy but because the documentation is sorely lacking.  We have been working hard to remove all of the dependencies between these frameworks and the applications and other NetStruxr specific frameworks that are built upon them.  So if you stumble across a "/nsi" image ref or a component that doesn't exist please report it to us (I have already spotted a few image references myself).  We would definitely like to see other people contributing to these frameworks, please let us know of any way we can help.  Most of all, please send us feedback about what you like, don't like, suggestions, movies you have seen recently ....
-  
-Contacting Us:
-website: http://www.netstruxr.com/developer
-email: developer@netstruxr.com
-
 
 
 
