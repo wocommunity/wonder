@@ -206,12 +206,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     		}
     		
      		newValue = performFormat(newValue);
-
-    		if(value instanceof BigInteger && !(value instanceof BigDecimal)) {
-    			value = new BigInteger("" + newValue.intValue());
-    		} else {
-    			value = newValue;       		
-    		}
+     		value = newValue;       		
     	}
     	return super.format(value, buffer, position);
     }
