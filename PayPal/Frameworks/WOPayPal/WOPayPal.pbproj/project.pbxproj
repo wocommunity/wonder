@@ -1,0 +1,1252 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 34;
+	objects = {
+		01735AADFFDED26B11CD2B8D = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				INSTALL_MODE_FLAG = "a+rX";
+				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
+				SPLIT_INSTALL = YES;
+				WEBSERVER_DOCROOT = "$(DSTROOT)$(LOCAL_LIBRARY_DIR)/WebServer/Documents";
+				WEBSERVER_INSTALL_DIR_APPLICATION = "$(WEBSERVER_INSTALL_ROOT)";
+				WEBSERVER_INSTALL_DIR_FRAMEWORK = "$(WEBSERVER_INSTALL_ROOT)/Frameworks";
+				WEBSERVER_INSTALL_ROOT = "$(WEBSERVER_DOCROOT)/WebObjects";
+				WEBSERVER_RESOURCES_DIR = "$(WEBSERVER_CONTENTS_DIR)/WebServerResources";
+				WEBSERVER_RESOURCES_JAVA_DIR = "$(WEBSERVER_INSTALL_ROOT)/Java";
+				WEBSERVER_WRAPPER_DIR = "$(WEBSERVER_INSTALL_DIR)/$(WRAPPER_NAME)";
+			};
+			isa = PBXBuildStyle;
+			name = WebServer;
+		};
+		017C7B2CFFD7144B7F000001 = {
+			isa = PBXFrameworkReference;
+			path = "_WO$(SERVER_UNIQUIFIER)WOPayPal.tmp";
+			refType = 3;
+		};
+		017C7B2DFFD7144B7F000001 = {
+			isa = PBXFrameworkReference;
+			path = "_WO$(CLIENT_UNIQUIFIER)WOPayPal.tmp";
+			refType = 3;
+		};
+		017C7B2EFFD7144B7F000001 = {
+			isa = PBXTargetDependency;
+			target = 017C7B2FFFD7144B7F000001;
+		};
+		017C7B2FFFD7144B7F000001 = {
+			buildPhases = (
+				017C7B30FFD7144B7F000001,
+				017C7B31FFD7144B7F000001,
+				017C7B32FFD7144B7F000001,
+				017C7B33FFD7144B7F000001,
+				017C7B34FFD7144B7F000001,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
+				FRAMEWORK_VERSION = TMP;
+				JAVA_ARCHIVE_CLASSES = YES;
+				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
+				OTHER_JAVA_CLASS_PATH = "";
+				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)WOPayPal";
+				SERVER_UNIQUIFIER = Server;
+				WO_TEMPLATE_VERSION = 5;
+				WRAPPER_EXTENSION = tmp;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = "Application Server";
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = Server;
+			productReference = 017C7B2CFFD7144B7F000001;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>_WO$(SERVER_UNIQUIFIER)WOPayPal</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>webo</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>NSJavaNeeded</key>
+	<string>YES</string>
+	<key>NSJavaPath</key>
+	<array>
+		<string>_WO$(SERVER_UNIQUIFIER)WOPayPal.jar</string>
+	</array>
+	<key>NSJavaRoot</key>
+	<string>Versions/A/Resources/Java</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		017C7B30FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		017C7B31FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5F1F892021A70200116EB0C,
+				F5F1F893021A70200116EB0C,
+				F5F1F895021A71BA0116EB0C,
+				F5F9F566021B21A601B9794E,
+				F5F9F567021B21A601B9794E,
+				F5F9F568021B21A601B9794E,
+				F5F9F569021B21A601B9794E,
+				F5F9F56A021B21A601B9794E,
+				F5F9F56B021B21A601B9794E,
+				F5F9F56C021B21A601B9794E,
+				F5F9F56D021B21A601B9794E,
+				F747DBA4028666F801290464,
+				F747DBA802866D5B01290464,
+				F747DBAC02866E2401290464,
+				F747DBAD02866E2401290464,
+				F747DBB20286841801290464,
+				F747DBB90286850901290464,
+				F747DBBA0286850901290464,
+				F747DBBB0286850901290464,
+				F747DBBC0286850901290464,
+				F747DBBD0286850901290464,
+				F747DBC30286863601290464,
+				F747DBC70286897901290464,
+				F747DBC80286897901290464,
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		017C7B32FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5F1F887021A68C30116EB0C,
+				F5F1F889021A68C30116EB0C,
+				F5F1F88A021A68C30116EB0C,
+				F5F1F88B021A68C30116EB0C,
+				F5F9F556021B20C801B9794E,
+				F5F9F56E021B21A601B9794E,
+				F5F9F56F021B21A601B9794E,
+				F5F9F570021B21A601B9794E,
+				F5F9F571021B21A601B9794E,
+				F747063E0276CC1C014CDFE2,
+				F747DBA6028666F801290464,
+				F747DBAE02866E2401290464,
+				F747DBB40286841901290464,
+				F747DBC90286897901290464,
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		017C7B33FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+				017C7B4CFFD714AF7F000001,
+				017C7B4DFFD714AF7F000001,
+				017C7B4EFFD714AF7F000001,
+				017C7B50FFD714AF7F000001,
+				017C7B51FFD714AF7F000001,
+				022D130C0059B6D611CD2978,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		017C7B34FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		017C7B35FFD7144B7F000001 = {
+			isa = PBXTargetDependency;
+			target = 017C7B36FFD7144B7F000001;
+		};
+		017C7B36FFD7144B7F000001 = {
+			buildPhases = (
+				017C7B37FFD7144B7F000001,
+				017C7B38FFD7144B7F000001,
+				017C7B39FFD7144B7F000001,
+				017C7B3AFFD7144B7F000001,
+				017C7B3BFFD7144B7F000001,
+			);
+			buildSettings = {
+				CLIENT_UNIQUIFIER = Client;
+				COMPILE_JAVA_SOURCES_IN_NIB_FILES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
+				FRAMEWORK_VERSION = TMP;
+				JAVA_ARCHIVE_CLASSES = BOTH;
+				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
+				OTHER_JAVA_CLASS_PATH = "";
+				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)WOPayPal";
+				WO_TEMPLATE_VERSION = 5;
+				WRAPPER_EXTENSION = tmp;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = "Web Server";
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = Client;
+			productReference = 017C7B2DFFD7144B7F000001;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>_WO$(CLIENT_UNIQUIFIER)WOPayPal</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>webo</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		017C7B37FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		017C7B38FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5B6D52C021B27310118DAF1,
+				F747DBBE0286850901290464,
+				F747DBBF0286850901290464,
+				F747DBC00286850901290464,
+				F747DBC10286850901290464,
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		017C7B39FFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		017C7B3AFFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+				04B9D3C4FFD8653E11CD2B8D,
+				04B9D3C5FFD8653E11CD2B8D,
+				04B9D3C6FFD8653E11CD2B8D,
+				04B9D3C8FFD8653E11CD2B8D,
+				04B9D3C9FFD8653E11CD2B8D,
+				022D130D0059B6D611CD2978,
+				F5F1F88D021A68C30116EB0C,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		017C7B3BFFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		017C7B3CFFD7144B7F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			name = "Shell Script";
+			neededFileNames = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
+		};
+		017C7B4CFFD714AF7F000001 = {
+			fileRef = 40B5828DFFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		017C7B4DFFD714AF7F000001 = {
+			fileRef = 40B5828EFFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		017C7B4EFFD714AF7F000001 = {
+			fileRef = 40B5828FFFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		017C7B50FFD714AF7F000001 = {
+			fileRef = 40B58291FFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		017C7B51FFD714AF7F000001 = {
+			fileRef = 40B58292FFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		01CC6D580020D11E11CD2B8D = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			name = "Shell Script";
+			neededFileNames = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
+		};
+//010
+//011
+//012
+//013
+//014
+//020
+//021
+//022
+//023
+//024
+		022D130B0059B6D511CD2978 = {
+			isa = PBXFrameworkReference;
+			name = JavaXML.framework;
+			path = /System/Library/Frameworks/JavaXML.framework;
+			refType = 0;
+		};
+		022D130C0059B6D611CD2978 = {
+			fileRef = 022D130B0059B6D511CD2978;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		022D130D0059B6D611CD2978 = {
+			fileRef = 022D130B0059B6D511CD2978;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//020
+//021
+//022
+//023
+//024
+//040
+//041
+//042
+//043
+//044
+		04B9D382FFD85E7B11CD2B8D = {
+			children = (
+				F747DBB50286850901290464,
+				F5F9F573021B244D01B9794E,
+				F747DBB60286850901290464,
+				F747DBB70286850901290464,
+				F747DBB80286850901290464,
+			);
+			isa = PBXGroup;
+			name = "Web Server Resources";
+			path = "";
+			refType = 4;
+		};
+		04B9D3C4FFD8653E11CD2B8D = {
+			fileRef = 40B5828DFFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		04B9D3C5FFD8653E11CD2B8D = {
+			fileRef = 40B5828EFFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		04B9D3C6FFD8653E11CD2B8D = {
+			fileRef = 40B5828FFFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		04B9D3C8FFD8653E11CD2B8D = {
+			fileRef = 40B58291FFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		04B9D3C9FFD8653E11CD2B8D = {
+			fileRef = 40B58292FFD5E91B7F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//040
+//041
+//042
+//043
+//044
+//0B0
+//0B1
+//0B2
+//0B3
+//0B4
+		0B4F248C0022200711CD2B8D = {
+			children = (
+				017C7B2CFFD7144B7F000001,
+				017C7B2DFFD7144B7F000001,
+			);
+			isa = PBXGroup;
+			name = Intermediates;
+			refType = 4;
+		};
+//0B0
+//0B1
+//0B2
+//0B3
+//0B4
+//400
+//401
+//402
+//403
+//404
+		40B5827EFFD5E7DB7F000001 = {
+			buildStyles = (
+				40B5829AFFD5EB0D7F000001,
+				40B5829BFFD5EB0D7F000001,
+				01735AADFFDED26B11CD2B8D,
+			);
+			isa = PBXProject;
+			mainGroup = 40B5827FFFD5E7DB7F000001;
+			productRefGroup = 40B58280FFD5E8187F000001;
+			projectDirPath = "";
+			targets = (
+				40B58282FFD5E8187F000001,
+				017C7B2FFFD7144B7F000001,
+				017C7B36FFD7144B7F000001,
+			);
+		};
+		40B5827FFFD5E7DB7F000001 = {
+			children = (
+				40B58288FFD5E82B7F000001,
+				40B58289FFD5E91B7F000001,
+				40B5828AFFD5E91B7F000001,
+				04B9D382FFD85E7B11CD2B8D,
+				40B5828CFFD5E91B7F000001,
+				40B58293FFD5E91B7F000001,
+				40B58280FFD5E8187F000001,
+			);
+			isa = PBXGroup;
+			refType = 4;
+		};
+		40B58280FFD5E8187F000001 = {
+			children = (
+				40B58281FFD5E8187F000001,
+				0B4F248C0022200711CD2B8D,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		40B58281FFD5E8187F000001 = {
+			isa = PBXFrameworkReference;
+			path = WOPayPal.framework;
+			refType = 3;
+		};
+		40B58282FFD5E8187F000001 = {
+			buildPhases = (
+				40B58283FFD5E8187F000001,
+				40B58284FFD5E8187F000001,
+				40B58285FFD5E8187F000001,
+				40B58286FFD5E8187F000001,
+				40B58287FFD5E8187F000001,
+				017C7B3CFFD7144B7F000001,
+				01CC6D580020D11E11CD2B8D,
+			);
+			buildSettings = {
+				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
+				CLIENT_UNIQUIFIER = Client;
+				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_SYMLINK = "$(VERSIONS_DIR)/Current";
+				FRAMEWORK_VERSION = A;
+				INFO_FILE_NAME = Info.plist;
+				INSTALL_MODE_FLAG = "a+rX";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				JAVA_COMPILER = jikes;
+				PRODUCT_NAME = WOPayPal;
+				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
+				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
+				RESOURCES_SYMLINK = "$(WRAPPER_DIR)/Resources";
+				SERVER_UNIQUIFIER = Server;
+				SPLIT_INSTALL = NO;
+				VERSIONS_DIR = "$(WRAPPER_DIR)/Versions";
+				WEBSERVER_BUILD_VERSION_DIR = "$(WEBSERVER_VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
+				WEBSERVER_CONTENTS_DIR = "$(WEBSERVER_BUILD_VERSION_DIR)";
+				WEBSERVER_CURRENT_SYMLINK = "$(WEBSERVER_VERSIONS_DIR)/Current";
+				WEBSERVER_INSTALL_DIR = "$(WEBSERVER_INSTALL_DIR_FRAMEWORK)";
+				WEBSERVER_RESOURCES_DIR = "$(CONTENTS_DIR)/WebServerResources";
+				WEBSERVER_RESOURCES_JAVA_DIR = "$(WEBSERVER_RESOURCES_DIR)/Java";
+				WEBSERVER_RESOURCES_SYMLINK = "$(WEBSERVER_WRAPPER_DIR)/WebServerResources";
+				WEBSERVER_VERSIONS_DIR = "$(WEBSERVER_WRAPPER_DIR)/Versions";
+				WEBSERVER_WRAPPER_DIR = "$(WRAPPER_DIR)";
+				WO_TEMPLATE_VERSION = 5;
+				WRAPPER_DIR = "$(INSTALL_PATH_FOR_STYLE)/$(WRAPPER_NAME)";
+				WRAPPER_EXTENSION = framework;
+				WRAPPER_NAME = "$(PRODUCT_NAME).$(WRAPPER_EXTENSION)";
+			};
+			dependencies = (
+				017C7B2EFFD7144B7F000001,
+				017C7B35FFD7144B7F000001,
+			);
+			isa = PBXFrameworkTarget;
+			name = WOPayPal;
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = WOFramework;
+			productReference = 40B58281FFD5E8187F000001;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>WOPayPal</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>webo</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>Has_WOComponents</key>
+	<true/>
+	<key>NSExecutable</key>
+	<string>WOPayPal</string>
+	<key>NSJavaClientRoot</key>
+	<string>WebServerResources/Java</string>
+	<key>NSJavaPathClient</key>
+	<string>WOPayPal.jar</string>
+	<key>NSPrincipalClass</key>
+	<string>er.wopaypal.WOPayPal</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		40B58283FFD5E8187F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		40B58284FFD5E8187F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		40B58285FFD5E8187F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		40B58286FFD5E8187F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		40B58287FFD5E8187F000001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		40B58288FFD5E82B7F000001 = {
+			children = (
+				F5F9F55A021B21A601B9794E,
+				F5F1F87B021A668E0116EB0C,
+				F747DBA1028666F801290464,
+				F747DBC40286897901290464,
+				F747DBAF0286841801290464,
+				F5F1F87C021A668E0116EB0C,
+				F5F1F87D021A668E0116EB0C,
+				F747063D0276CC1C014CDFE2,
+				F5F9F55E021B21A601B9794E,
+				F5F9F562021B21A601B9794E,
+				F5F9F555021B20C801B9794E,
+				F747DBA902866E2301290464,
+				F5F9F564021B21A601B9794E,
+				F571ED9402190F6F01E36ADA,
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
+		};
+		40B58289FFD5E91B7F000001 = {
+			children = (
+				F5F9F559021B21A601B9794E,
+				F747DBA702866D5B01290464,
+				F747DBC50286897901290464,
+				F747DBC20286863601290464,
+				F5F9F55D021B21A601B9794E,
+				F5F9F561021B21A601B9794E,
+				F5F9F565021B21A601B9794E,
+				F747DBAA02866E2301290464,
+			);
+			isa = PBXGroup;
+			name = "Web Components";
+			refType = 4;
+		};
+		40B5828AFFD5E91B7F000001 = {
+			children = (
+				F5B6D52B021B26960118DAF1,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			path = "";
+			refType = 4;
+		};
+		40B5828CFFD5E91B7F000001 = {
+			children = (
+				022D130B0059B6D511CD2978,
+				40B5828DFFD5E91B7F000001,
+				40B5828EFFD5E91B7F000001,
+				40B5828FFFD5E91B7F000001,
+				40B58291FFD5E91B7F000001,
+				40B58292FFD5E91B7F000001,
+			);
+			isa = PBXGroup;
+			name = Frameworks;
+			refType = 4;
+		};
+		40B5828DFFD5E91B7F000001 = {
+			isa = PBXFrameworkReference;
+			name = JavaEOAccess.framework;
+			path = /System/Library/Frameworks/JavaEOAccess.framework;
+			refType = 0;
+		};
+		40B5828EFFD5E91B7F000001 = {
+			isa = PBXFrameworkReference;
+			name = JavaEOControl.framework;
+			path = /System/Library/Frameworks/JavaEOControl.framework;
+			refType = 0;
+		};
+		40B5828FFFD5E91B7F000001 = {
+			isa = PBXFrameworkReference;
+			name = JavaFoundation.framework;
+			path = /System/Library/Frameworks/JavaFoundation.framework;
+			refType = 0;
+		};
+		40B58291FFD5E91B7F000001 = {
+			isa = PBXFrameworkReference;
+			name = JavaWebObjects.framework;
+			path = /System/Library/Frameworks/JavaWebObjects.framework;
+			refType = 0;
+		};
+		40B58292FFD5E91B7F000001 = {
+			isa = PBXFrameworkReference;
+			name = JavaWOExtensions.framework;
+			path = /System/Library/Frameworks/JavaWOExtensions.framework;
+			refType = 0;
+		};
+		40B58293FFD5E91B7F000001 = {
+			children = (
+				F5F1F890021A6AFC0116EB0C,
+				F5F1F88E021A6A260116EB0C,
+				F5F1F894021A71BA0116EB0C,
+			);
+			isa = PBXGroup;
+			name = Documentation;
+			refType = 4;
+		};
+		40B5829AFFD5EB0D7F000001 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				INSTALL_MODE_FLAG = "a+rX";
+				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				SPLIT_INSTALL = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		40B5829BFFD5EB0D7F000001 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				INSTALL_MODE_FLAG = "a+rX";
+				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
+				SPLIT_INSTALL = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//400
+//401
+//402
+//403
+//404
+//F50
+//F51
+//F52
+//F53
+//F54
+		F571ED9402190F6F01E36ADA = {
+			isa = PBXFileReference;
+			path = WOPayPal.java;
+			refType = 4;
+		};
+		F5B6D52B021B26960118DAF1 = {
+			children = (
+				F5F9F558021B21A601B9794E,
+				F747DBA3028666F801290464,
+				F747DBC60286897901290464,
+				F747DBB10286841801290464,
+				F5F9F55C021B21A601B9794E,
+				F5F9F560021B21A601B9794E,
+				F747DBAB02866E2301290464,
+				F5F9F563021B21A601B9794E,
+			);
+			isa = PBXGroup;
+			name = "API files";
+			refType = 4;
+		};
+		F5B6D52C021B27310118DAF1 = {
+			fileRef = F5F9F573021B244D01B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F87B021A668E0116EB0C = {
+			isa = PBXFileReference;
+			path = PayPalAction.java;
+			refType = 4;
+		};
+		F5F1F87C021A668E0116EB0C = {
+			isa = PBXFileReference;
+			path = PayPalEmailURLUTF8Encoder.java;
+			refType = 4;
+		};
+		F5F1F87D021A668E0116EB0C = {
+			isa = PBXFileReference;
+			path = PayPalNotificationListener.java;
+			refType = 4;
+		};
+		F5F1F887021A68C30116EB0C = {
+			fileRef = F571ED9402190F6F01E36ADA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F889021A68C30116EB0C = {
+			fileRef = F5F1F87B021A668E0116EB0C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F88A021A68C30116EB0C = {
+			fileRef = F5F1F87C021A668E0116EB0C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F88B021A68C30116EB0C = {
+			fileRef = F5F1F87D021A668E0116EB0C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F88D021A68C30116EB0C = {
+			fileRef = 40B58281FFD5E8187F000001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F88E021A6A260116EB0C = {
+			isa = PBXFileReference;
+			path = README.txt;
+			refType = 4;
+		};
+		F5F1F890021A6AFC0116EB0C = {
+			isa = PBXFileReference;
+			path = ClassList.txt;
+			refType = 4;
+		};
+		F5F1F892021A70200116EB0C = {
+			fileRef = F5F1F88E021A6A260116EB0C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F893021A70200116EB0C = {
+			fileRef = F5F1F890021A6AFC0116EB0C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F1F894021A71BA0116EB0C = {
+			isa = PBXFileReference;
+			path = Single_Item_IPN_Reference.txt;
+			refType = 4;
+		};
+		F5F1F895021A71BA0116EB0C = {
+			fileRef = F5F1F894021A71BA0116EB0C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F555021B20C801B9794E = {
+			isa = PBXFileReference;
+			path = PayPalSingleItemLinkBase.java;
+			refType = 4;
+		};
+		F5F9F556021B20C801B9794E = {
+			fileRef = F5F9F555021B20C801B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F558021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = CancelledPayPalTransaction.api;
+			refType = 4;
+		};
+		F5F9F559021B21A601B9794E = {
+			isa = PBXFolderReference;
+			path = CancelledPayPalTransaction.wo;
+			refType = 4;
+		};
+		F5F9F55A021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = CancelledPayPalTransaction.java;
+			refType = 4;
+		};
+		F5F9F55C021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = PayPalSingleItemFormLink.api;
+			refType = 4;
+		};
+		F5F9F55D021B21A601B9794E = {
+			isa = PBXFolderReference;
+			path = PayPalSingleItemFormLink.wo;
+			refType = 4;
+		};
+		F5F9F55E021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = PayPalSingleItemFormLink.java;
+			refType = 4;
+		};
+		F5F9F560021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = PayPalSingleItemHyperlink.api;
+			refType = 4;
+		};
+		F5F9F561021B21A601B9794E = {
+			isa = PBXFolderReference;
+			path = PayPalSingleItemHyperlink.wo;
+			refType = 4;
+		};
+		F5F9F562021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = PayPalSingleItemHyperlink.java;
+			refType = 4;
+		};
+		F5F9F563021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = SuccessfulPayPalTransaction.api;
+			refType = 4;
+		};
+		F5F9F564021B21A601B9794E = {
+			isa = PBXFileReference;
+			path = SuccessfulPayPalTransaction.java;
+			refType = 4;
+		};
+		F5F9F565021B21A601B9794E = {
+			isa = PBXFolderReference;
+			path = SuccessfulPayPalTransaction.wo;
+			refType = 4;
+		};
+		F5F9F566021B21A601B9794E = {
+			fileRef = F5F9F558021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F567021B21A601B9794E = {
+			fileRef = F5F9F559021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F568021B21A601B9794E = {
+			fileRef = F5F9F55C021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F569021B21A601B9794E = {
+			fileRef = F5F9F55D021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F56A021B21A601B9794E = {
+			fileRef = F5F9F560021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F56B021B21A601B9794E = {
+			fileRef = F5F9F561021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F56C021B21A601B9794E = {
+			fileRef = F5F9F563021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F56D021B21A601B9794E = {
+			fileRef = F5F9F565021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F56E021B21A601B9794E = {
+			fileRef = F5F9F55A021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F56F021B21A601B9794E = {
+			fileRef = F5F9F55E021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F570021B21A601B9794E = {
+			fileRef = F5F9F562021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F571021B21A601B9794E = {
+			fileRef = F5F9F564021B21A601B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5F9F573021B244D01B9794E = {
+			isa = PBXFileReference;
+			name = buynow.gif;
+			path = images/buynow.gif;
+			refType = 4;
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F70
+//F71
+//F72
+//F73
+//F74
+		F747063D0276CC1C014CDFE2 = {
+			isa = PBXFileReference;
+			path = PayPalNotificationLogger.java;
+			refType = 4;
+		};
+		F747063E0276CC1C014CDFE2 = {
+			fileRef = F747063D0276CC1C014CDFE2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBA1028666F801290464 = {
+			isa = PBXFileReference;
+			path = PayPalAddToCartHyperlink.java;
+			refType = 4;
+		};
+		F747DBA3028666F801290464 = {
+			isa = PBXFileReference;
+			path = PayPalAddToCartHyperlink.api;
+			refType = 4;
+		};
+		F747DBA4028666F801290464 = {
+			fileRef = F747DBA3028666F801290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBA6028666F801290464 = {
+			fileRef = F747DBA1028666F801290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBA702866D5B01290464 = {
+			isa = PBXFolderReference;
+			path = PayPalAddToCartHyperlink.wo;
+			refType = 4;
+		};
+		F747DBA802866D5B01290464 = {
+			fileRef = F747DBA702866D5B01290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBA902866E2301290464 = {
+			isa = PBXFileReference;
+			path = PayPalViewShoppingCartHyperlink.java;
+			refType = 4;
+		};
+		F747DBAA02866E2301290464 = {
+			isa = PBXFolderReference;
+			path = PayPalViewShoppingCartHyperlink.wo;
+			refType = 4;
+		};
+		F747DBAB02866E2301290464 = {
+			isa = PBXFileReference;
+			path = PayPalViewShoppingCartHyperlink.api;
+			refType = 4;
+		};
+		F747DBAC02866E2401290464 = {
+			fileRef = F747DBAB02866E2301290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBAD02866E2401290464 = {
+			fileRef = F747DBAA02866E2301290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBAE02866E2401290464 = {
+			fileRef = F747DBA902866E2301290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBAF0286841801290464 = {
+			isa = PBXFileReference;
+			path = PayPalDonateHyperlink.java;
+			refType = 4;
+		};
+		F747DBB10286841801290464 = {
+			isa = PBXFileReference;
+			path = PayPalDonateHyperlink.api;
+			refType = 4;
+		};
+		F747DBB20286841801290464 = {
+			fileRef = F747DBB10286841801290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBB40286841901290464 = {
+			fileRef = F747DBAF0286841801290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBB50286850901290464 = {
+			isa = PBXFileReference;
+			name = add_to_cart.gif;
+			path = images/add_to_cart.gif;
+			refType = 4;
+		};
+		F747DBB60286850901290464 = {
+			isa = PBXFileReference;
+			name = donate.gif;
+			path = images/donate.gif;
+			refType = 4;
+		};
+		F747DBB70286850901290464 = {
+			isa = PBXFileReference;
+			name = subscribe.gif;
+			path = images/subscribe.gif;
+			refType = 4;
+		};
+		F747DBB80286850901290464 = {
+			isa = PBXFileReference;
+			name = view_cart.gif;
+			path = images/view_cart.gif;
+			refType = 4;
+		};
+		F747DBB90286850901290464 = {
+			fileRef = F747DBB80286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBBA0286850901290464 = {
+			fileRef = F747DBB70286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBBB0286850901290464 = {
+			fileRef = F747DBB60286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBBC0286850901290464 = {
+			fileRef = F747DBB50286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBBD0286850901290464 = {
+			fileRef = F5F9F573021B244D01B9794E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBBE0286850901290464 = {
+			fileRef = F747DBB50286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBBF0286850901290464 = {
+			fileRef = F747DBB60286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBC00286850901290464 = {
+			fileRef = F747DBB70286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBC10286850901290464 = {
+			fileRef = F747DBB80286850901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBC20286863601290464 = {
+			isa = PBXFolderReference;
+			path = PayPalDonateHyperlink.wo;
+			refType = 4;
+		};
+		F747DBC30286863601290464 = {
+			fileRef = F747DBC20286863601290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBC40286897901290464 = {
+			isa = PBXFileReference;
+			path = PayPalDonateFormLink.java;
+			refType = 4;
+		};
+		F747DBC50286897901290464 = {
+			isa = PBXFolderReference;
+			path = PayPalDonateFormLink.wo;
+			refType = 4;
+		};
+		F747DBC60286897901290464 = {
+			isa = PBXFileReference;
+			path = PayPalDonateFormLink.api;
+			refType = 4;
+		};
+		F747DBC70286897901290464 = {
+			fileRef = F747DBC60286897901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBC80286897901290464 = {
+			fileRef = F747DBC50286897901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F747DBC90286897901290464 = {
+			fileRef = F747DBC40286897901290464;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 40B5827EFFD5E7DB7F000001;
+}
