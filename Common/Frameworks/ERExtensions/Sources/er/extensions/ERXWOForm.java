@@ -33,17 +33,21 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
-        if(context != null && context instanceof ERXMutableUserInfoHolderInterface && _formName != null) {
+        if(context != null && context instanceof ERXMutableUserInfoHolderInterface) {
             NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
-            String formName = (String)_formName.valueInComponent(context.component());
-            if(formName != null) {
-                ui.setObjectForKey(formName, "formName");
-                response._appendTagAttributeAndValue("name", formName, false);
+            if(_formName != null) {
+                String formName = (String)_formName.valueInComponent(context.component());
+                if(formName != null) {
+                    ui.setObjectForKey(formName, "formName");
+                    response._appendTagAttributeAndValue("name", formName, false);
+                }
             }
-            String enctype = (String)_enctype.valueInComponent(context.component());
-            if(enctype != null) {
-                ui.setObjectForKey(enctype.toLowerCase(), "enctype");
-                response._appendTagAttributeAndValue("enctype", enctype, false);
+            if(_enctype != null) {
+                String enctype = (String)_enctype.valueInComponent(context.component());
+                if(enctype != null) {
+                    ui.setObjectForKey(enctype.toLowerCase(), "enctype");
+                    response._appendTagAttributeAndValue("enctype", enctype, false);
+                }
             }
         }
         super.appendAttributesToResponse(response, context);
