@@ -174,11 +174,20 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Handles validation errors. */
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
-        if (validationLog.isDebugEnabled())
-            validationLog.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
+        if (validationLog.isDebugEnabled()) {
+        	validationLog.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
+        }
         if (shouldCollectValidationExceptions()) {
             if (e instanceof ERXValidationException) {
                 ERXValidationException erv = (ERXValidationException)e;
+
+                //DT: if we are using the ERXValidation dictionary in the EOModel to define validation rules AND
+                //if we are using keyPaths like person.firstname instead of firstname because we have something like:
+                //user <<-> person and are editing an user instance then without this fix here the ERD2WPropertyKey
+                //would not recognize that 'his' value failed.
+                if (keyPath.equals("value")) {
+                	keyPath = ""+d2wContext().valueForKey("propertyKey");
+                }
                 erv.setContext(d2wContext());
                 errorKeyOrder.addObject(d2wContext().displayNameForProperty());
                 errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
@@ -277,7 +286,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         clearValidationFailed();
         NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
-            super.takeValuesFromRequest(r, c);
+        	super.takeValuesFromRequest(r, c);
+        }catch(RuntimeException e) {
+        	log.error(e, e);
+        	throw e;
         } finally {
             NDC.pop();
         }
