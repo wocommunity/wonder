@@ -485,6 +485,7 @@
 				63C4CD0F04AA445700A83704,
 				63DF10BB04AAD68D00A83704,
 				413B78DF04AB575F00000102,
+				4150A86F050324B700000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1382,6 +1383,19 @@
 		};
 		413BE5AD0463315E00000102 = {
 			fileRef = 413BE5A50463315E00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4150A86E050324B700000102 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXAssert.java;
+			path = er/extensions/ERXAssert.java;
+			refType = 4;
+		};
+		4150A86F050324B700000102 = {
+			fileRef = 4150A86E050324B700000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7811,6 +7825,7 @@
 		};
 		F6E798CC02C8799401AD0D07 = {
 			children = (
+				4150A86E050324B700000102,
 				F59C578002C4565601000102,
 				F59C578102C4565601000102,
 				F59C578302C4565701000102,
