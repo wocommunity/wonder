@@ -19,7 +19,7 @@ public class ERXListContainsItemConditional extends WOComponent {
     public boolean synchronizesBindingsWithVariables() { return false; }
     public boolean isStateless() { return true; }
 
-    protected boolean listContainsItem() {
+    public boolean listContainsItem() {
         NSArray list=(NSArray)valueForBinding("list");
         Object item=valueForBinding("item");
         return(list.containsObject(item));
