@@ -71,8 +71,10 @@ public class ERXDirectAction extends WODirectAction {
     public WOComponent log4jAction() {
         WOComponent result=null;
         if (!WOApplication.application().isCachingEnabled() ||
-            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXLog4JPassword")))
-            result=pageWithName("ERXLog4JConfiguration");
+            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXLog4JPassword"))) {
+            	result=pageWithName("ERXLog4JConfiguration");
+            	session().setObjectForKey(Boolean.TRUE, "ERXLog4JConfiguration.enabled");
+        }
         return result;
     }
 
