@@ -11,13 +11,13 @@ import com.webobjects.appserver.*;
 import java.io.*;
 
 /**
- * Collection of handy {java.io.File} utilities.
+* Collection of handy {java.io.File} utilities.
  */
 public class ERXFileUtilities {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileUtilities.class);
-    
+
     /**
     * Returns the byte array for a given file.
      * @param f file to get the bytes from
@@ -38,7 +38,22 @@ public class ERXFileUtilities {
     }
 
     /**
-    * Returns a string from the file using the default
+     * Writes the contents of an InputStream to a specified file.
+     * @param file to write to
+     * @param stream to pull data from
+     */
+    public static void writeInputStreamToFile(File file, InputStream stream) throws IOException {
+        if (file == null)
+            throw new IOException("Attempting to write to a null file!");
+        FileOutputStream out = new FileOutputStream(file);
+        
+        for (int b = stream.read(); b != -1; b = stream.read()) {
+            out.write(b);
+        }
+    }
+    
+    /**
+        * Returns a string from the file using the default
      * encoding.
      * @param f file to read
      * @return string representation of that file.
@@ -47,7 +62,7 @@ public class ERXFileUtilities {
         return new String(bytesFromFile(f));
     }
     /**
-    * Returns a string from the file using the specified
+        * Returns a string from the file using the specified
      * encoding.
      * @param f file to read
      * @param encoding to be used, null will use the default
@@ -58,7 +73,7 @@ public class ERXFileUtilities {
     }
 
     /**
-    * Determines the last modification date for a given file
+        * Determines the last modification date for a given file
      * in a framework. Note that this method will only test for
      * the global resource not the localized resources.
      * @param fileName name of the file
@@ -80,7 +95,7 @@ public class ERXFileUtilities {
     }
 
     /**
-    * Reads a file in from the file system and then parses
+        * Reads a file in from the file system and then parses
      * it as if it were a property list.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
@@ -93,7 +108,7 @@ public class ERXFileUtilities {
     }
 
     /**
-    * Reads a file in from the file system for the given set
+        * Reads a file in from the file system for the given set
      * of languages and then parses the file as if it were a
      * property list.
      * @param fileName name of the file
@@ -128,7 +143,7 @@ public class ERXFileUtilities {
     }
 
     /**
-     * Deletes all of the files in a given directory with the option to
+        * Deletes all of the files in a given directory with the option to
      * recursively delete all of the directories in the given directory.
      * @param directory to delete all of the files from
      * @param recurseIntoDirectories determines if the delete is recursive
@@ -154,7 +169,7 @@ public class ERXFileUtilities {
     }
 
     /**
-     * Creates a symlink for a given file. Note this only works on
+        * Creates a symlink for a given file. Note this only works on
      * civilized OSs which support symbolic linking.
      * @param file to create the link to
      * @param symlinkPath file to create the link to
@@ -165,32 +180,32 @@ public class ERXFileUtilities {
     public static boolean createSymbolicLink(File file, File symlink, boolean deleteSymlinkIfExists)
         throws IOException {
             boolean linkSuccessfullyCreated = false;
-        if (file == null || symlink == null)
-            throw new RuntimeException("Both file and symlink path must be non-null. File: "
-                                       + file + " symlink path: " + symlink);
-        if (!file.exists())
-            throw new RuntimeException("Attempting to link to a file that does not exist: " + file);
-        String shellCommand = "ln -s " + file.getAbsolutePath() + " " + symlink.getAbsolutePath();
-        Process linkProcess = null;
-        try {
-            linkProcess = Runtime.getRuntime().exec(shellCommand);
-            linkProcess.waitFor();
-            if (linkProcess.exitValue() != 0) {
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(linkProcess.getErrorStream()));
-                log.error("Link process error message: " + buffer.readLine());
-            } else {
-                linkSuccessfullyCreated = true;
+            if (file == null || symlink == null)
+                throw new RuntimeException("Both file and symlink path must be non-null. File: "
+                                           + file + " symlink path: " + symlink);
+            if (!file.exists())
+                throw new RuntimeException("Attempting to link to a file that does not exist: " + file);
+            String shellCommand = "ln -s " + file.getAbsolutePath() + " " + symlink.getAbsolutePath();
+            Process linkProcess = null;
+            try {
+                linkProcess = Runtime.getRuntime().exec(shellCommand);
+                linkProcess.waitFor();
+                if (linkProcess.exitValue() != 0) {
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(linkProcess.getErrorStream()));
+                    log.error("Link process error message: " + buffer.readLine());
+                } else {
+                    linkSuccessfullyCreated = true;
+                }
+            } catch (InterruptedException e) {
+                log.error("Caught InterruptedException when linking: " + file + " to " + symlink, e);
+            } finally {
+                ERXExtensions.freeProcessResources(linkProcess);
             }
-        } catch (InterruptedException e) {
-            log.error("Caught InterruptedException when linking: " + file + " to " + symlink, e);
-        } finally {
-            ERXExtensions.freeProcessResources(linkProcess);
+            return linkSuccessfullyCreated;
         }
-        return linkSuccessfullyCreated;
-    }
 
     /**
-     * Copys all of the files in a given directory to another directory.
+        * Copys all of the files in a given directory to another directory.
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files
@@ -198,13 +213,13 @@ public class ERXFileUtilities {
     // ENHANCEME: Should support recursive directory copying.
     public static void copyFilesFromDirectory(File srcDirectory, File dstDirectory, boolean deleteOriginals)
         throws FileNotFoundException, IOException {
-        if (!srcDirectory.exists() || !dstDirectory.exists())
-            throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
-                                       + " Dst: " + dstDirectory);
-        File srcFiles[] = srcDirectory.listFiles();
-        if (srcFiles != null && srcFiles.length > 0) {
-            FileInputStream in;
-            FileOutputStream out;
+            if (!srcDirectory.exists() || !dstDirectory.exists())
+                throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
+                                           + " Dst: " + dstDirectory);
+            File srcFiles[] = srcDirectory.listFiles();
+            if (srcFiles != null && srcFiles.length > 0) {
+                FileInputStream in;
+                FileOutputStream out;
 
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];
@@ -220,8 +235,8 @@ public class ERXFileUtilities {
                         in.close();
                         if (deleteOriginals)
                             srcFile.delete();
-                    }                    
+                    }
                 }
+            }
         }
-    }
 }
