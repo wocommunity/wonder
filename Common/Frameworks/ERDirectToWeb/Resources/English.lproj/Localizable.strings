@@ -17,4 +17,6 @@
     "ERDEditList.saveLabel" = "Save @@pluralCount@@ @@pluralString@@?";
     "ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time";
     "ERDDatePopup.monthList" = ( "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    "ERDEditDatePopupOrNull.none" = "None";
+    "ERDEditDatePopupOrNull.or" = "- or -";
 }
