@@ -84,6 +84,16 @@ Hyperlink1: WOHyperlink {
 Hyperlink2: WOHyperlink {
 }
 
+Image1: WOImage {
+	filename = "upArrow.gif";
+	border = 0;
+}
+
+Image2: WOImage {
+	filename = "downArrow.gif";
+	border = 0;
+}
+
 InspectComponent: D2WEdit {
 	action = saveAction;
 	entityName = destinationEntity.name;
