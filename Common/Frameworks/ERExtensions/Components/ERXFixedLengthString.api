@@ -4,6 +4,7 @@
 
 		<binding name="value"/>
 		<binding name="shouldPadToLength" defaults="Boolean"/>
+		<binding name="escapeHTML" defaults="Boolean"/>
 		<binding name="length"/>
 		<binding name="suffixWhenTrimmed"/>
 
