@@ -17,8 +17,7 @@ import org.apache.log4j.*;
  * ERXLog4j.configureLogging() will cause the log4j configuration
  * file to be loaded.  The file path is specified in the 
  * property ERConfigurationPath or the WebObjects.properties found
- * in the current users home directory. ConfigureLogging can be called many
- * times as it will only be configured the first time.
+ * in the current users home directory. 
  */
 // CHECKME: Some of this (if not all) can go away now that we are in WO 5 and the property system is
 //	    actually integrated into the runtime.
@@ -87,23 +86,41 @@ public class ERXLog4j {
     }
 
     /**
-     * <p>The entry point for setting up the logging system.
-     * This method should be called as early as possible. </p>
-     * <p>ERXExtensions class will call this method twice 
-     * during the initialization process: <br> 
+     * Sets up the logging system from the configuration file 
+     * specified by <code>ERConfigurationPath</code> launch argument, or 
+     * if it is not specified, sets up from the default 
+     * configuration file which is <code>WebObjects.properties</code> under 
+     * user's home directory. If none of these files actually 
+     * exist on the file system, the logging system will be 
+     * configured by Log4j's built-in configurator called 
+     * {@link org.apache.log4j.BasicConfigurator#configure() 
+     * BasicConfigurator.configure()}. 
+     * <p>
+     * This method should be called as early as possible, and 
+     * <code>ERExtensions</code> framework handles all this initialization 
+     * process. You will not have to call this method from your 
+     * application codes. 
+     * <p>
+     * The framework principal class {@link ERXExtensions} will 
+     * call this method twice during the initialization process: <br> 
      * - At the very beginning of loading ERExtensions framework <br>
-     * - When the application class posts finishedLaunchingApp
-     * notification </p>
-     * <p>The second one is necessary to reconfigure the logging 
-     * system when ERConfigurationPath is specified as a launch 
-     * argument. </p>
-     * <p>Calling this method multiple times will have 
-     * no effect unless the configuration file path (not the file 
-     * contents) has changed from the last call. (This will be 
-     * the case when ERConfigurationPath is specified.)</p>
-     * <p>ERXLogger will also call this method when it's initialized, 
-     * for just in case the logging system has never been 
-     * configured. </p>
+     * - Right after the application class posts 
+     * {@link com.webobjects.WOApplication#ApplicationDidFinishLaunching 
+     * ApplicationDidFinishLaunching} notification 
+     * <p>
+     * The second stage is necessary to reconfigure the logging 
+     * system when <code>ERConfigurationPath</code> is specified as a launch 
+     * argument since the argument will not be accessible at the 
+     * first stage. 
+     * <p>
+     * Calling this method multiple times will have no effect 
+     * unless the configuration file path (not the file 
+     * contents) has changed from the last call. This will be 
+     * the case when <code>ERConfigurationPath</code> is specified.</p>
+     * <p>
+     * Note that {@link ERXLogger} will also call this method 
+     * when it is initialized, for just in case the logging 
+     * system has never been configured. </p>
      */
     public static void configureLogging() {
         String originalConfigFilePath = configurationFilePath(); // Note: This can be null.
@@ -166,7 +183,7 @@ public class ERXLog4j {
                                                                                      ERXConstant.NotificationClassArray),
                                                                       configurationFilePath());
                 } catch (Exception ex) {
-                    log.error("An exception occured while registering an observer for the "
+                    log.error("An exception occured while registering the observer for the "
                             + "logging configuration file: " + ex.getMessage());
                     ERXRetainer.release(o);
                 }
