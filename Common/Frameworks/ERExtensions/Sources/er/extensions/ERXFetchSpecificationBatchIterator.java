@@ -211,6 +211,8 @@ public class ERXFetchSpecificationBatchIterator {
                 fetchSpec.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
             nextBatch = editingContext().objectsWithFetchSpecification(fetchSpec);
 
+            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + fetchSpec);
+            
             currentObjectFetchCount += length;
             currentBatchIndex++;
         }
@@ -252,5 +254,12 @@ public class ERXFetchSpecificationBatchIterator {
             String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
             primaryKeys = (NSArray)primaryKeyDictionaries.valueForKey(pkAttributeName);
         }
+    }
+
+    /**
+     * Resets the batch iterator so it will refetch it's primary keys again.
+     */
+    public void reset() {
+        primaryKeys = null;
     }
 }
