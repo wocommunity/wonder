@@ -179,7 +179,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      */
     public Object object() {
         if(object == null)
-            object = super.object();
+        	object = super.object();
         return object;
     }
 
@@ -285,6 +285,9 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * is set as the current context on the exceptions. If a context
      * is not set then the <code>contextForException</code> is called
      * off of the default {@link ERXValidationFactory ERXValidationFactory}.
+     * When this also returns null, then the exception will be used as its context.
+     * This is needed because of some of the templates in ERDirectToWeb which use
+     * <code>context.propertyKey</code> and will display <b>?</b> if none is given. 
      * <p>
      * @return current context for the validation exception.
      */
@@ -292,6 +295,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public NSKeyValueCoding context() {
         if (_context == null)
             _context = ERXValidationFactory.defaultFactory().contextForException(this);
+        if (_context == null)
+        	return this;
         return _context;
     }
 

@@ -89,6 +89,9 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                 editingContext.revert();
                 String errorMessage = " Could not save your changes: "+e.getMessage()+" ";
                 ErrorPageInterface epf=D2W.factory().errorPage(sender.session());
+                if(epf instanceof ERDErrorPageInterface) {
+                	((ERDErrorPageInterface)epf).setException(e);
+                }
                 epf.setMessage(errorMessage);
                 epf.setNextPage(followPage(sender));
                 return (WOComponent)epf;
