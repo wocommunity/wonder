@@ -1,0 +1,4 @@
+TextString: WOString {
+	value = ^text;
+}
+
