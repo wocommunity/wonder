@@ -186,7 +186,7 @@ public class ERXArrayUtilities extends Object {
      * @return result of comparison
      */
     public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
-        boolean result=false;
+        boolean result=true;
         for (Enumeration e=a1.objectEnumerator();e.hasMoreElements();) {
             Object i=e.nextElement();
             if (!a2.containsObject(i)) {
