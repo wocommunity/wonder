@@ -76,7 +76,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     public String entityNameSeparator() {
         String separator = (String)this.valueForBinding("entityNameSeparator");
         if (separator == null)
-            separator = ERXEOEncodingUtilities.EntityNameSeparator;
+            separator = ERXEOEncodingUtilities.entityNameSeparator();
         return separator;
     }
 
