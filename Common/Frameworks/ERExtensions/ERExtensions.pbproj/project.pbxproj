@@ -433,6 +433,8 @@
 				F5E3B46903480557016A5D3F,
 				F5E3B46B034823BF016A5D3F,
 				F50C03940354549D014B9BC9,
+				F5E99BB00354DE4F01CF0E76,
+				F56937BD03561CDA01CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1191,6 +1193,18 @@
 		};
 		F54C4C5E02C4E2F101000102 = {
 			fileRef = F54C4C5D02C4E2F101000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F56937BC03561CDA01CF0E76 = {
+			isa = PBXFileReference;
+			name = ERXCloneableEnterpriseObject.java;
+			path = er/extensions/ERXCloneableEnterpriseObject.java;
+			refType = 4;
+		};
+		F56937BD03561CDA01CF0E76 = {
+			fileRef = F56937BC03561CDA01CF0E76;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -5811,6 +5825,18 @@
 			settings = {
 			};
 		};
+		F5E99BAF0354DE4F01CF0E76 = {
+			isa = PBXFileReference;
+			name = ERXEOControlUtilities.java;
+			path = er/extensions/ERXEOControlUtilities.java;
+			refType = 4;
+		};
+		F5E99BB00354DE4F01CF0E76 = {
+			fileRef = F5E99BAF0354DE4F01CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //F50
 //F51
 //F52
@@ -5994,6 +6020,7 @@
 				F59C57F202C4565701000102,
 				F59C57F302C4565701000102,
 				F59C57F402C4565701000102,
+				F5E99BAF0354DE4F01CF0E76,
 			);
 			isa = PBXGroup;
 			name = "EOF Additions";
@@ -6015,6 +6042,7 @@
 				F59C57A002C4565701000102,
 				F59C57A602C4565701000102,
 				9DFF48B402E7404E10CF0CA3,
+				F56937BC03561CDA01CF0E76,
 			);
 			isa = PBXGroup;
 			name = "EOF Interfaces";
