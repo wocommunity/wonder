@@ -29,11 +29,9 @@ public class NSDictionaryPropertyAccessor implements PropertyAccessor {
         return property;
     }
 
-    // Note that NSDictionary is read only.
     public void setProperty(Object target, Object name, Object value) throws OgnlException {
         try {
-            NSMutableDictionary dictionary = (NSMutableDictionary)target;
-            dictionary.setObjectForKey(value, name);
+            ((NSMutableDictionary)target).setObjectForKey(value, name);
         } catch (Exception ex) {
             throw new OgnlException(name.toString(), ex);
         }
