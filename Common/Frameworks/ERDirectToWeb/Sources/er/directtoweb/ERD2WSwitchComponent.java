@@ -52,8 +52,12 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent  {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        maybeResetCaches();
-        super.appendToResponse(r, c);
+        try {
+            maybeResetCaches();
+            super.appendToResponse(r,c);
+        } catch(Exception ex) {
+            ERDirectToWeb.reportException(ex, subContext());
+        }
     }
 
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {

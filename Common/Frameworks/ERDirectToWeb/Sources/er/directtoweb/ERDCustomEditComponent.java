@@ -116,11 +116,15 @@ public abstract class ERDCustomEditComponent extends WOComponent {
 
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        // in the case where we are non-synchronizing but not stateless, make sure we pull again
-        if (!synchronizesVariablesWithBindings() && !isStateless()) {
-            reset();
+        try {
+            // in the case where we are non-synchronizing but not stateless, make sure we pull again
+            if (!synchronizesVariablesWithBindings() && !isStateless()) {
+                reset();
+            }
+            super.appendToResponse(r,c);
+        } catch(Exception ex) {
+            ERDirectToWeb.reportException(ex, d2wContext());
         }
-        super.appendToResponse(r,c);
     }
 
     
