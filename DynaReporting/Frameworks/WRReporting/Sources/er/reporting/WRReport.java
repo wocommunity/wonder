@@ -134,11 +134,11 @@ public class WRReport extends WOComponent  {
 
 
     public void rebuildModel(NSNotification notification) {
-        if(_model == notification.object()) {
+        if(_model != null && _model == notification.object()) {
+            log.debug("rebuildModel: " + notification.object().hashCode() + ": " + _model.hashCode());
             _currentZCriteria.removeAllObjects();
             _initializedDimensionArrayFromBindings = false;
             _model = null;
-            log.info("Rebuild model");
         }
     }
     
