@@ -1,3 +1,17 @@
+AttributeRepetition: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+AttributeValue: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	_componentUnroll = true;
+	_unroll = true;
+	localContext = localContext;
+	object = object;
+}
+
 Conditional1: WOConditional {
 	condition = hasBranchChoices;
 	negate = true;
@@ -15,9 +29,19 @@ Conditional4: WOConditional {
 	condition = hasBranchChoices;
 }
 
+Conditional5: ERXNonZeroConditional {
+	condition = d2wContext.displayPropertyKeys.count;
+}
+
 ERSingleButton1: ERXSingleButton {
 	action = nextPageAction;
 	value = "OK";
+	doNotUseForm = true;
+}
+
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
 }
 
 Form1: WOForm {
@@ -32,9 +56,23 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+InspectTable: WOGenericContainer {
+	_unroll = true;
+	border = 0;
+	cellpadding = 2;
+	cellspacing = 1;
+	elementName = "Table";
+}
+
 NoTitleAvailable: ERXNonNullConditional {
 	condition = title;
 	negate = true;
+}
+
+QueryRow: WOGenericContainer {
+	_unroll = true;
+	bgcolor = d2wContext.backgroundColorForTable;
+	elementName = "tr";
 }
 
 Repetition1: WORepetition {
@@ -54,6 +92,11 @@ String3: WOString {
 SubmitButton1: WOSubmitButton {
 	action = nextPageAction;
 	value = branch.branchButtonLabel;
+}
+
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
 }
 
 SwitchComponent3: WOSwitchComponent {
