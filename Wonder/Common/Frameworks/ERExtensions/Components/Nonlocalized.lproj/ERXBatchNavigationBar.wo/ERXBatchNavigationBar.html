@@ -1,20 +1,31 @@
-<WEBOBJECT NAME=NavigationTable><tr><td colspan=6><WEBOBJECT NAME=Image1></WEBOBJECT></td></tr>
-        <TR>
-                        <WEBOBJECT NAME=EntityNameConditional>
-                            <TD ALIGN=left VALIGN=baseline class="ListHeader"><WEBOBJECT NAME=DGHasQualifier><WEBOBJECT NAME=String1></WEBOBJECT> <WEBOBJECT NAME=String2></WEBOBJECT> </WEBOBJECT><WEBOBJECT NAME=EntityName3></WEBOBJECT></TD>
-                        </WEBOBJECT>
-                        <WEBOBJECT NAME=SortKeyListConditional>
-                            <WEBOBJECT NAME=KeyForm>
-                                <TD ALIGN=center VALIGN=middle>
-                                    <WEBOBJECT NAME=SortComponent></WEBOBJECT>
-                                </TD>
-                            </WEBOBJECT>
-                        </WEBOBJECT>
-                        <TD><WEBOBJECT NAME=Content></WEBOBJECT></TD><WEBOBJECT NAME=BatchForm>
-                            <TD ALIGN=center VALIGN=middle class=small> <WEBOBJECT NAME=String3></WEBOBJECT> <WEBOBJECT NAME=ItemsPerBatch></WEBOBJECT> <WEBOBJECT NAME=String4></WEBOBJECT></TD>
-                        </WEBOBJECT>
-                        <WEBOBJECT NAME=BatchNumberForm>
-                            <TD ALIGN=right VALIGN=middle class=small><WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=PreviousBatchLink><WEBOBJECT NAME=LeftArrow></WEBOBJECT></WEBOBJECT>&nbsp;<WEBOBJECT NAME=String5></WEBOBJECT><WEBOBJECT NAME=BatchNumber></WEBOBJECT> <WEBOBJECT NAME=String6></WEBOBJECT> <WEBOBJECT NAME=TotalBatches></WEBOBJECT>&nbsp;<WEBOBJECT NAME=NextBatchLink><WEBOBJECT NAME=RightArrow></WEBOBJECT></WEBOBJECT></WEBOBJECT></TD>
-                        </WEBOBJECT>
-                   </TR>
-    </WEBOBJECT>
+<webobject name=NavigationTable>
+	<tr>
+		<td colspan=6><webobject name=Image1></webobject></td>
+	</tr>
+	<tr>
+		<webobject name=EntityNameConditional>
+			<td align=left valign=baseline class="ListHeader"><webobject name=DGHasQualifier><webobject name=filteredObjectsCount></webobject>
+					<webobject name=of></webobject>
+				</webobject><webobject name=EntityName3></webobject></td>
+		</webobject>
+		<webobject name=SortKeyListConditional>
+			<webobject name=KeyForm>
+				<td align=center valign=middle>
+					<webobject name=SortComponent></webobject>
+				</td>
+			</webobject>
+		</webobject>
+		<td><webobject name=Content></webobject></td>
+		<webobject name=BatchForm>
+			<td align=center valign=middle class=small>
+				<webobject name=show></webobject>
+				<webobject name=ItemsPerBatch></webobject>
+				<webobject name=items_per_page></webobject></td>
+		</webobject>
+		<webobject name=BatchNumberForm>
+			<td align=right valign=middle class=small><webobject name=Conditional1><webobject name=PreviousBatchLink><webobject name=LeftArrow></webobject></webobject>&nbsp;<webobject name=page></webobject><webobject name=BatchNumber></webobject>
+					<webobject name=of></webobject>
+					<webobject name=TotalBatches></webobject>&nbsp;<webobject name=NextBatchLink><webobject name=RightArrow></webobject></webobject></webobject></td>
+		</webobject>
+	</tr>
+</webobject>
