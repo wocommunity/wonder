@@ -105,7 +105,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B30FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -138,7 +137,6 @@
 				F5251D8A032D49E1019C4BA9,
 				F5251D8B032D49E1019C4BA9,
 				F5251D8F032D4AD5019C4BA9,
-				F5251D94032D5C42019C4BA9,
 				F54ECDF7033CEEC501000102,
 				F5109A3003816A5701000107,
 				F5109A3103816A5701000107,
@@ -233,7 +231,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B37FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -451,6 +448,7 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 40B5827FFFD5E7DB7F000001;
 			productRefGroup = 40B58280FFD5E8187F000001;
@@ -594,7 +592,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		40B58283FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -839,7 +836,6 @@
 				F5251D76032D49E1019C4BA9,
 				F5251D79032D49E1019C4BA9,
 				F5251D77032D49E1019C4BA9,
-				F5251D93032D5C42019C4BA9,
 				F5251D74032D49E1019C4BA9,
 				F5251D7A032D49E1019C4BA9,
 				F5251D7C032D49E1019C4BA9,
@@ -1009,18 +1005,6 @@
 		};
 		F5251D8F032D4AD5019C4BA9 = {
 			fileRef = F5251D8E032D4AD5019C4BA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5251D93032D5C42019C4BA9 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = ERMailDeliveryJapanesePlainText.java;
-			refType = 4;
-		};
-		F5251D94032D5C42019C4BA9 = {
-			fileRef = F5251D93032D5C42019C4BA9;
 			isa = PBXBuildFile;
 			settings = {
 			};
