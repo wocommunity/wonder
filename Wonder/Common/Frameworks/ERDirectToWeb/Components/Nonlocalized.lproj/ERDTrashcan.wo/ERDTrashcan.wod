@@ -9,10 +9,11 @@ Conditional2: WOConditional {
 
 DeleteEO2: WOHyperlink {
 	action = deleteObjectAction;
+	title = ^displayNameForConfirmDeleteConfiguration;
 }
 
 DeleteImage2: WOImage {
-	alt = "Delete that Object";
+	alt = ^displayNameForConfirmDeleteConfiguration;
 	border = 0;
 	filename = "trashcan-btn.gif";
 	framework = "JavaDirectToWeb";
