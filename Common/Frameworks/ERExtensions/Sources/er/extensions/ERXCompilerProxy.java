@@ -316,7 +316,7 @@ public class ERXCompilerProxy {
                             didReset = true;
                         }
 
-                        if(cacheEntry.packageName().length() > 0 ) {
+                        if(cacheEntry.packageName().length() > 0 && false) {
                             Object kvc = kvcAccessors.objectForKey(cacheEntry.packageName());
                             if(kvc == null) {
                                 try {
