@@ -50,6 +50,15 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
+ERXNonNullConditional1: ERXNonNullConditional {
+	condition = d2wContext.branchChoices;
+	negate = true;
+}
+
+ERXNonNullConditional2: ERXNonNullConditional {
+	condition = d2wContext.branchChoices;
+}
+
 EmptyMessageComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.emptyListComponentName;
 	d2wContext = d2wContext;
@@ -61,6 +70,7 @@ EntityRepetition: WORepetition {
 }
 
 Form1: WOForm {
+	multipleSubmit = true;
 }
 
 HiddenField: WOHiddenField {
@@ -150,6 +160,11 @@ PropertyName: WOString {
 	value = d2wContext.displayNameForProperty;
 }
 
+Repetition1: WORepetition {
+	item = aBranch;
+	list = d2wContext.branchChoices;
+}
+
 ReturnButton2: WOImage {
 	alt = "Returns to the previous page";
 	border = 0;
@@ -174,5 +189,10 @@ SubmitButton1: WOSubmitButton {
 SubmitButton2: WOSubmitButton {
 	action = nextPage;
 	value = "Cancel";
+}
+
+SubmitButton3: WOSubmitButton {
+	action = backAction;
+	value = aBranch.displayName;
 }
 
