@@ -94,10 +94,15 @@ public class ERCNSubscriber implements MessageListener {
             processInsertions(snapshot.shapshotsForInsertionGroupedByEntity());
             processDeletions(snapshot.globalIDsForDeletionGroupedByEntity());
             processUpdates(snapshot.shapshotsForUpdateGroupedByEntity());
-            message.acknowledge();
             log.debug("Finished processing changes.");
         } catch (JMSException ex) {
             log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+        } finally {
+            try {
+                message.acknowledge();
+            } catch (JMSException ex) {
+                log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            }
         }
     }
 
