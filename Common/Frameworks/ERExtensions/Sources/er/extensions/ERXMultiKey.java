@@ -34,6 +34,14 @@ public class ERXMultiKey {
     }
 
     /**
+     * Constructs a multi-key.
+     */
+    public ERXMultiKey() {
+        _keyCount=0;
+        _keys=new Object[0];
+    }
+
+    /**
      * Constructs a multi-key for a given
      * object array.
      * @param keys object array
@@ -115,9 +123,11 @@ public class ERXMultiKey {
         StringBuffer result=new StringBuffer("(");
         for (short i=0; i<_keys.length; i++) {
             Object o=_keys[i];
-            result.append(o instanceof EOEntity ? ((EOEntity)o).name() : o.toString());
+            result.append(o instanceof EOEntity ? ((EOEntity)o).name() : o != null ? o.toString() : "<NULL>");
+            if(i != _keys.length-1)
+                result.append(", ");
         }
         result.append(")");
         return result.toString();
-    }    
+    }
 }
