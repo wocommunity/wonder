@@ -8,7 +8,6 @@ package er.extensions;
 
 import java.util.*;
 
-import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -80,12 +79,7 @@ public class ERXEOControlUtilities {
      * @return array of objects that the data source represents
      */
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
-        // FIXME: Now in WO 5 we can use fetchObjects() off of the dataSource
-        // and it should work (unlike 4.5).
-        WODisplayGroup dg = new WODisplayGroup();
-        dg.setDataSource(dataSource);
-        dg.fetch(); // Have to fetch in the array, go figure.
-        return dg.allObjects();
+        return dataSource.fetchObjects();
     }
 
     /**
