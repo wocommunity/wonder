@@ -133,8 +133,11 @@ public class ERMailer {
                         if (shouldDeleteSentMail()) {
                             if (mailMessage.shouldArchiveSentMailAsBoolean()) {
                                 mailMessage.archive();
-                            } 
-                            mailMessage.editingContext().deleteObject(mailMessage);
+                            }
+                            // FIXME: Nasty stack overflow bug
+                            if (!mailMessage.hasAttachments()) {
+                                mailMessage.editingContext().deleteObject(mailMessage);                                
+                            }
                         }
                     } else {
                         log.warn("Unable to create mail delivery for mail message: " + mailMessage);
