@@ -1,141 +1,24 @@
 // !$*UTF8*$!
 {
-	6503BD8E02076D1300A801E6 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{15, 495}, {750, 502}}";
-		};
+	017C7B2FFFD7144B7F000001 = {
+		activeExec = 0;
 	};
-	F57EA5C001FF59BF019E57DA = {
-		activeBuildStyle = F57EA84F01FF59C0019E57DA;
-		activeTarget = F57EA70101FF59C0019E57DA;
-		addToTargets = (
-			F57EA70101FF59C0019E57DA,
-		);
+	017C7B36FFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	40B5827EFFD5E7DB7F000001 = {
+		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
+		activeTarget = 40B58282FFD5E8187F000001;
 		perUserDictionary = {
-			PBXWorkspaceConfiguration = {
-				ContentSize = "{1152, 867}";
-				LeftSlideOut = {
-					ActiveTab = 0;
-					Frame = "{{0, 23}, {1152, 844}}";
-					Split0 = {
-						ActiveTab = 3;
-						Frame = "{{286, 0}, {866, 844}}";
-						Split0 = {
-							Frame = "{{0, 301}, {866, 543}}";
-						};
-						SplitCount = 1;
-						Tab0 = {
-							Debugger = {
-								Frame = "{{0, 0}, {484, 208}}";
-								Split0 = {
-									Frame = "{{0, 24}, {484, 184}}";
-									Split0 = {
-										Frame = "{{0, 0}, {236, 184}}";
-									};
-									Split1 = {
-										Frame = "{{245, 0}, {239, 184}}";
-									};
-									SplitCount = 2;
-								};
-								SplitCount = 1;
-								Tab0 = {
-									Frame = "{{0, 0}, {100, 50}}";
-								};
-								Tab1 = {
-									Frame = "{{0, 0}, {100, 50}}";
-								};
-								TabCount = 2;
-							};
-							Frame = "{{0, 0}, {484, 208}}";
-							LauncherConfigVersion = 4;
-						};
-						Tab1 = {
-							Frame = "{{0, 0}, {484, 208}}";
-							LauncherConfigVersion = 3;
-							Runner = {
-								Frame = "{{0, 0}, {484, 208}}";
-							};
-						};
-						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {948, 155}}";
-							BuildTranscriptFrame = "{{0, 164}, {948, 151}}";
-							Frame = "{{0, 0}, {946, 313}}";
-						};
-						Tab3 = {
-							Frame = "{{0, 0}, {866, 277}}";
-						};
-						TabCount = 4;
-					};
-					SplitCount = 1;
-					Tab0 = {
-						Frame = "{{0, 0}, {262, 844}}";
-					};
-					Tab1 = {
-						ClassesFrame = "{{0, 0}, {202, 473}}";
-						Frame = "{{0, 0}, {200, 779}}";
-						MembersFrame = "{{0, 482}, {202, 297}}";
-						OptionsSetName = "Hierarchy, all classes";
-					};
-					Tab2 = {
-						Frame = "{{0, 0}, {200, 779}}";
-					};
-					Tab3 = {
-						Frame = "{{0, 0}, {182, 844}}";
-						Split0 = {
-							Frame = "{{0, 0}, {182, 408}}";
-						};
-						Split1 = {
-							Frame = "{{0, 417}, {182, 427}}";
-						};
-						SplitCount = 2;
-					};
-					Tab4 = {
-						Frame = "{{0, 0}, {250, 100}}";
-					};
-					TabCount = 5;
-				};
-			};
+			PBXPerProjectTemplateStateSaveDate = 48536310;
+			PBXWorkspaceStateSaveDate = 48536310;
+		};
+		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
-	F57EA5C701FF59BF019E57DA = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{15, 495}, {750, 502}}";
-		};
-	};
-	F57EA5CD01FF59BF019E57DA = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{38, 474}, {750, 502}}";
-		};
-	};
-	F57EA5D501FF59BF019E57DA = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{107, 411}, {750, 502}}";
-		};
-	};
-	F57EA5FF01FF59BF019E57DA = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{84, 432}, {750, 502}}";
-		};
-	};
-	F57EA60001FF59BF019E57DA = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{15, 181}, {959, 816}}";
-		};
-	};
-	F57EA61101FF59BF019E57DA = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{15, 495}, {750, 502}}";
-		};
-	};
-	F57EA70101FF59C0019E57DA = {
-		activeExec = 0;
-	};
-	F57EA70301FF59C0019E57DA = {
-		activeExec = 0;
-	};
-	F57EA81C01FF59C0019E57DA = {
+	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
 	};
 }
