@@ -66,13 +66,13 @@ public class ERD2WEditNumber extends D2WEditNumber {
         }
         return super.validateTakeValueForKeyPath(convertNumber(number), aPath);
     }
-
+/*
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
         // This is for number formatting exceptions
         String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
         parent().validationFailedWithException(theException, convertNumber(numberFormatValueForString((String)theValue)), keyPath);
     }
-
+*/
     /* following needed because we do not want to leave control over our (light) numberFormatter to WebObjects, which needs a full fledged NSNumberFormatter */
     public String stringValue() {
         String stringValue;
