@@ -1,8 +1,21 @@
 <project name="ERCorebusinessLogic" default="all" basedir="..">
     <property name="project.principal.class" value="er.corebusinesslogic.ERCorebusinessLogic" />
 
+    <!-- dont touch from here on -->
     <property name="project.name" value="${ant.project.name}" />
     <property name="project.dir" value="${basedir}" />
+
+    <target name="clean">
+        <ant antfile="../../../Build/build/common.xml" target="clean" />
+    </target>
+
+    <target name="install">
+        <ant antfile="../../../Build/build/common.xml" target="install" />
+    </target>
+
+    <target name="usage">
+        <ant antfile="../../../Build/build/common.xml" target="usage" />
+    </target>
 
     <target name="all">
         <ant antfile="../../../Build/build/common.xml" />

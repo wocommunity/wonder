@@ -1,109 +1,23 @@
 <project name="ERDirectToWeb" default="all" basedir="..">
     <property name="project.principal.class" value="er.directtoweb.ERDirectToWeb" />
 
-    <!-- don't touch from here on -->
+    <!-- dont touch from here on -->
     <property name="project.name" value="${ant.project.name}" />
-
     <property name="project.dir" value="${basedir}" />
-    <property name="build.compiler" value="jikes" />
-    <property name="build.compiler.emacs" value="true" />
-    <property name="wo.system.root" value="/System/Library/Frameworks" />
-    <property name="wo.local.root" value="/Library/Frameworks" />
-    <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
-    
-    <property name="framework.name" value="${project.name}.framework" />
-    
-    <property name="build.root" value="${user.home}/Roots" />
-    <property name="build.classes" value="${build.root}/${project.name}.classes" />
-    <property name="build.framework.dir" value="${build.root}/${framework.name}" />
-    <property name="build.jar.file" value="${build.framework.dir}/Resources/Java/${project.name}.jar" />
-    <!--property name="framework.dir" value="${wo.local.root}" if="env.INSTALL"/-->
-    
-    <path id="project.class.path">
-        <fileset dir="${build.root}">
-            <include name="ER*.framework/Resources/Java/*.jar" />
-        </fileset>
-        <fileset dir="${wo.system.root}">
-            <include name="Java**/Resources/Java/*.jar" />
-        </fileset>
-        <!--pathelement location="${tmp}" /-->
-    </path>
-    
+
+    <target name="clean">
+        <ant antfile="../../../Build/build/common.xml" target="clean" />
+    </target>
+
+    <target name="install">
+        <ant antfile="../../../Build/build/common.xml" target="install" />
+    </target>
+
     <target name="usage">
-        <echo message="-------------------------------------"/>
-        <echo message="Valid target-commands" />
-        <echo message="---------------------" />
-        <echo message="  all       --> create framework in ${build.root} "/>
-        <echo message="  install   --> copy framework to ${wo.local.root} "/>
-        <echo message="  web       --> copy framework to ${wo.server.root} "/>
-        <echo message="  clean     --> remove .classes and .framework"/>
-        <echo message="  allclean  --> remove .classes and .framework and installed framework"/>
-        <echo message="--------------------------------------"/>
-    </target>
-    
-	  <target name="prepare">
-		<mkdir dir="${build.root}"/>
-		<mkdir dir="${build.framework.dir}"/>
-	  </target>
-    
-      <target name="checkupdate">
-        <uptodate property="no.changes" targetfile="${build.jar.file}">
-            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
-        </uptodate>
-      </target>
-    <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
-		<mkdir dir="${build.classes}"/>
-        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on"
-             optimize="off" deprecation="on">
-            <classpath refid="project.class.path" />
-        </javac>
-    </target>
-    <target name="framework" depends="compile" description="Default compile target">
-        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
-            <classpath refid="project.class.path" />
-        </taskdef>
-        <woframework name="${project.name}" destDir="${build.root}" 
-                principalClass="${project.principal.class}" jarName="${project.name}">
-            <lib dir="${project.dir}/Libraries">
-                <include name="**/*.jar" />
-            </lib>
-            <classes dir="${build.classes}">
-                <include name="**/*.class" />
-            </classes>
-            <resources dir="${project.dir}/Components">
-                <include name="**.api" />
-                <include name="**/*.wo/**" />
-            </resources>
-            <resources dir="${project.dir}/Resources">
-                <include name="*.eomodeld/**" />
-                <include name="**/*.plist" />
-                <include name="**/*.d2wmodel" />
-                <include name="**/*.strings" />
-            </resources>
-            <wsresources dir="${project.dir}/WebServerResources">
-                <include name="**/*.gif" />
-                <include name="**/*.js" />
-            </wsresources>
-        </woframework>
-    </target>
-    
-	<target name="install" depends="all">
-     <copy todir="${wo.local.root}/${framework.name}">
-		<fileset dir="${build.framework.dir}" />
-     </copy>
+        <ant antfile="../../../Build/build/common.xml" target="usage" />
     </target>
 
-	<target name="web" depends="framework">
-     <copy todir="${wo.server.root}/${framework.name}/WebServerResources">
-		<fileset dir="${build.framework.dir}/WebServerResources" />
-     </copy>
+    <target name="all">
+        <ant antfile="../../../Build/build/common.xml" />
     </target>
-
-  <target name="clean">
-    <delete dir="${build.classes}"/>
-    <delete dir="${build.framework.dir}"/>
-  </target>
-
-  <target name="all" depends="framework"/>
-
 </project>
