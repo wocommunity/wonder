@@ -248,8 +248,8 @@ public class WRReport extends WOComponent  {
 
     public String componentName() {
         if(_componentName == null) {
-            _componentName = selectedRecordGroupDisplayType();
-            if(recordGroupDisplayTypes().containsObject(_componentName)) {
+            _componentName = (String)valueForBinding("recordGroupComponentName");
+            if(_componentName == null) {
                 _componentName = "WRRecordGroup";
             }
         }
