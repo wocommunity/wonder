@@ -128,6 +128,9 @@ There are many ways to use this script:
             <!-- set this if you want to use WOOgnl, or leave out if not -->
             <param name="use.woognl" value="true" />
 
+            <!-- set this if you want to use ExcelGenerator, or leave out if not -->
+            <param name="use.excel" value="true" />
+
             <!-- set this if you want to use MySQL, or leave out if not -->
             <param name="use.mysql" value="true" />
         </antcall>
@@ -236,6 +239,7 @@ There are many ways to use this script:
          <taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile">
             <classpath refid="ant.classpath"/>
         </taskdef>
+        <echo message="${project.dir}/Sources" />
         <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on">
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
@@ -269,6 +273,9 @@ There are many ways to use this script:
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOgnl.framework" />
+            </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.excel"> 
+                <include name="ExcelGenerator.framework" />
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.grouping"> 
                 <include name="DRGrouping.framework" />
@@ -653,6 +660,25 @@ There are many ways to use this script:
        </antcall>
     </target>
     
+    <target name="ERPlot.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="er.plot.ERPlot" />
+            <param name="project.name" value="ERPlot" />
+            <param name="project.dir" value="Common/Frameworks/ERPlot" />
+            <param name="use.wonder.core" value="true" />
+       </antcall>
+    </target>
+    
+    <target name="ERExcelLook.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="er.directtoweb.excel.ERExcelLook" />
+            <param name="project.name" value="ERExcelLook" />
+            <param name="project.dir" value="Common/Frameworks/ERExcelLook" />
+            <param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+       </antcall>
+    </target>
+    
     <target name="ERCoreBusinessLogic.all">
         <antcall target="global.framework" >
             <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
@@ -1020,7 +1046,7 @@ There are many ways to use this script:
     
 
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all" />
+    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all" />
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
     <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
@@ -1066,6 +1092,12 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERJavaMail" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="ERPlot" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="ERExcelLook" />
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERChangeNotificationJMS" />
@@ -1191,6 +1223,12 @@ There are many ways to use this script:
             <param name="project.name" value="ERJavaMail" />
         </antcall>
         <antcall target="global.web.framework" >
+            <param name="project.name" value="ERPlot" />
+        </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="ERExcelLook" />
+        </antcall>
+        <antcall target="global.web.framework" >
             <param name="project.name" value="ERChangeNotificationJMS" />
         </antcall>
         <antcall target="global.web.framework" >
@@ -1301,6 +1339,12 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERPrototypes" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="ERPlot" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="ERExcelLook" />
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERCoreBusinessLogic" />
