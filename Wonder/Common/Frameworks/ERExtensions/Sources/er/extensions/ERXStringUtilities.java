@@ -23,12 +23,21 @@ public class ERXStringUtilities {
     private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
     /** Holds the chars for hex enconding */
     public static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    /** Holds the distance key */
+    private static final String _DISTANCE = "distance";
+    /** Holds the ascending <code>EOSortOrdering</code>s */
+    public static final NSArray SORT_ASCENDING = 
+        new NSArray(new Object [] { new EOSortOrdering(_DISTANCE, EOSortOrdering.CompareAscending) });
+    /** Holds the ascending <code>EOSortOrdering</code>s */
+    public static final NSArray SORT_DESCENDING = 
+        new NSArray(new Object [] { new EOSortOrdering(_DISTANCE, EOSortOrdering.CompareDescending) });
+    
     /** 
      * Holds the array of default display languages. Holds
      * a single entry for English.
      */
     private static NSArray _defaultTargetDisplayLanguages = new NSArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
-
+    
     /**
      * Java port of the distance algorithm.
      *
@@ -83,11 +92,11 @@ public class ERXStringUtilities {
      *  exchange operation has a cost of 1 if a[x] and b[y] are different, and
      *  0 otherwise.
      *
-     *  After calculating these costs, we choose the least one of them (since
-                                                                        *                                                          we want to use the best solution.)
+     *  After calculating these costs, we choose the least one of them
+     * (since we want to use the best solution.)
      *
-     *  Instead of doing this recursively (i.e. calculating ourselves "back"
-                                           *                             from the final value), we build a cost-matrix c containing the optimal
+     *  Instead of doing this recursively, i.e. calculating ourselves "back"
+     *  from the final value, we build a cost-matrix c containing the optimal
      *  costs, so we can reuse them when calculating the later values. The
      *  costs c[i,0] (from string of length n to empty string) are all i, and
      *  correspondingly all c[0,j] (from empty string to string of length j)
@@ -157,30 +166,37 @@ public class ERXStringUtilities {
      * @param ec context to fetch data in
      * @param cleaner object used to clean a string, for example the cleaner might
      *		strip out the words 'The' and 'Inc.'
-     * @param comparisonString can be either 'asc' or 'desc' to tell how the results
-     *		should be sorted. Bad design, this will change.
+     * @param orderings can be either <code>SORT_ASCENDING</code> or <code>SORT_DESCENDING</code> 
+     *          to tell how the results should be sorted.
      * @return an array of objects that match in a fuzzy manner the name passed in.
      */
-    // FIXME: This needs to be made more generic, i.e. right now it depends on having a field 'distance' on the
-    //	      enterprise object. Also right now it fetches *all* of the attributes for *all* of the entities.
-    //	      that is very costly. Should only be getting the attribute and pk.
-    // FIXME: Bad api design with the comparisonString, should just pass in an EOSortOrdering
-    // MOVEME: Not sure, maybe it's own class and put the interface as a static inner interface
+    // FIXME: Should move all of fuzzy matching stuff in ERXFuzzyMatchCleaner and then add a static inner inerface
+    // IMPROVEME: too many parameters.
     public static NSArray fuzzyMatch(String name,
                                      String entityName,
                                      String propertyKey,
                                      String synonymsKey,
                                      EOEditingContext ec,
                                      ERXFuzzyMatchCleaner cleaner,
-                                     String comparisonString){
+                                     NSArray sortOrderings ){
+        String eoKey = "eo";
         NSMutableArray results = new NSMutableArray();
-        NSArray rawRows = EOUtilities.rawRowsMatchingValues( ec, entityName, null);
+        EOFetchSpecification fs = new EOFetchSpecification( entityName, null, null );
+        fs.setFetchesRawRows( true );
+        NSArray pks = EOUtilities.entityNamed( ec, entityName ).primaryKeyAttributeNames();
+        NSMutableArray keyPaths = new NSMutableArray(pks);
+        keyPaths.addObject( propertyKey );
+        if( synonymsKey != null ) 
+            keyPaths.addObject( synonymsKey );
+        //we use only the strictly necessary keys.
+        fs.setRawRowKeyPaths( keyPaths );
+        NSArray rawRows = ec.objectsWithFetchSpecification( fs );
         if(name == null)
             name = "";
         name = name.toUpperCase();
         String cleanedName = cleaner.cleanStringForFuzzyMatching(name);
         for(Enumeration e = rawRows.objectEnumerator(); e.hasMoreElements(); ){
-            NSDictionary dico = (NSDictionary)e.nextElement();
+            NSMutableDictionary dico = ((NSDictionary)e.nextElement()).mutableClone();
             Object value = dico.valueForKey(propertyKey);
             boolean trySynonyms = true;
             //First try to match with the name of the eo
@@ -191,9 +207,10 @@ public class ERXStringUtilities {
                      Math.min((double)name.length(), (double)comparedString.length())*adjustement ) ||
                     (distance(cleanedName, cleanedComparedString) <=
                      Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
-                    ERXGenericRecord object = (ERXGenericRecord)EOUtilities.objectFromRawRow( ec, entityName, dico);
-                    object.takeValueForKey(new Double(distance(name, comparedString)), "distance");
-                    results.addObject(object);
+                    dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
+                    NSDictionary pkValues = new NSDictionary( dico.objectsForKeys( pks, NSKeyValueCoding.NullValue ), pks );
+                    dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
+                    results.addObject( dico );
                     trySynonyms = false;
                 }
             }
@@ -209,28 +226,41 @@ public class ERXStringUtilities {
                             Math.min((double)name.length(), (double)comparedString.length())*adjustement) ||
                            (distance(cleanedName, comparedString) <=
                             Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
-                            ERXGenericRecord object = (ERXGenericRecord)EOUtilities.objectFromRawRow( ec, entityName, dico);
-                            object.takeValueForKey(new Double(distance(name, comparedString)), "distance");
-                            results.addObject(object);
+                            dico.setObjectForKey( new Double(distance(name, comparedString)), _DISTANCE );
+                            NSDictionary pkValues = new NSDictionary( dico.objectsForKeys( pks, NSKeyValueCoding.NullValue ), pks );
+                            dico.setObjectForKey( EOUtilities.faultWithPrimaryKey( ec, entityName, pkValues ), eoKey );
+                            results.addObject( dico );
                             break;
                         }
                     }
                 }
-
             }
         }
-        if(comparisonString != null){
-            NSArray sortOrderings = new NSArray();
-            if(comparisonString.equals("asc")){
-                sortOrderings = new NSArray(new Object [] { new EOSortOrdering("distance",
-                                                                               EOSortOrdering.CompareAscending) });
-            }else if(comparisonString.equals("desc")){
-                sortOrderings = new NSArray(new Object [] { new EOSortOrdering("distance",
-                                                                               EOSortOrdering.CompareDescending) });
-            }
+        if( sortOrderings != null ) {
             results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)results, sortOrderings);
         }
-        return results;
+        return (NSArray) results.valueForKey( eoKey );        
+    }
+    
+    /** @deprecated use 
+        <code>fuzzyMatch(String name, String entityName, String propertyKey,
+                         String synonymsKey, EOEditingContext ec,
+                         ERXFuzzyMatchCleaner cleaner, NSArray sortOrderings )</code>
+        instead*/
+    public static NSArray fuzzyMatch(String name,
+                                     String entityName,
+                                     String propertyKey,
+                                     String synonymsKey,
+                                     EOEditingContext ec,
+                                     ERXFuzzyMatchCleaner cleaner,
+                                     String comparisonString){
+        NSArray sortOrderings = null;
+            if("asc".equals(comparisonString)){
+                sortOrderings = SORT_ASCENDING;
+            }else if ("desc".equals(comparisonString)){
+                sortOrderings = SORT_DESCENDING;
+            }
+        return fuzzyMatch( name, entityName, propertyKey, synonymsKey, ec, cleaner, sortOrderings );
     }
 
     /**
