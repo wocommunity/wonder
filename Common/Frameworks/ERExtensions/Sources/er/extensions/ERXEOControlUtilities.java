@@ -12,13 +12,16 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaulting;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -509,5 +512,36 @@ public class ERXEOControlUtilities {
         if (result != null)
             result.addObjectsFromArray(fromDb);
         return result != null ? result : fromDb;
-    }    
+    }
+
+    /**
+     * Refaults a relationship off of an enterprise object.
+     * @param sourceObject eo to refault the relationship off of
+     * @param relationshipName relationship to refault
+     */
+    public static void refaultRelationshipForObject(EOGenericRecord sourceObject, String relationshipName) {
+        
+        if (!sourceObject.isFault()) {
+            EOEditingContext ec = sourceObject.editingContext();
+            EOGlobalID aGlobalID = ec.globalIDForObject(sourceObject);
+
+            // Don't want to refault the source object because I will lose any
+            // any changes to it.
+            //ec.refaultObject(sourceObject);
+
+            EOModel model = EOUtilities.entityForObject(ec, sourceObject).model();
+            
+            EODatabaseContext dc = EOUtilities.databaseContextForModelNamed (ec,
+                                                                             model.name());
+            
+            // Clear out the existing snapshot
+            dc.database().recordSnapshotForSourceGlobalID(null, aGlobalID, relationshipName);
+
+            EOFaulting toManyArray = (EOFaulting)sourceObject.storedValueForKey(relationshipName);
+            if (!toManyArray.isFault()) {
+                EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(aGlobalID, relationshipName, ec);
+                toManyArray.turnIntoFault(tmpToManyArray.faultHandler());
+            }
+        }
+    }
 }
