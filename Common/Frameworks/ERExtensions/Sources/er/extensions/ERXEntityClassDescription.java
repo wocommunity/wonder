@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* EREntityClassDescription.java created by max on Wed 21-Mar-2001 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -21,24 +19,26 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     public static final Category cat = Category.getInstance("er.validation.EREntityClassDescription");
 
+    public static class Observer {
+        public void modelWasAddedNotification(NSNotification n) {
+            // Don't want this guy getting in our way.
+            NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
+            ERXEntityClassDescription.registerDescriptionForEntitiesInModel((EOModel)n.object());
+        }
+        public void classDescriptionNeededForEntityName(NSNotification n) {
+            String name = (String)n.object();
+            EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get
+            ERXEntityClassDescription.registerDescriptionForEntity(e);
+        }
+        public void classDescriptionNeededForClass(NSNotification n) {
+            ERXEntityClassDescription.registerDescriptionForClass((Class)n.object());
+        }
+    }
+    
     private static boolean _registered = false;
     public static void registerDescription() {
         if (!_registered) {
-            Object observer=new Object() {
-                public void modelWasAddedNotification(NSNotification n) {
-                    // Don't want this guy getting in our way.
-                    NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
-                    ERXEntityClassDescription.registerDescriptionForEntitiesInModel((EOModel)n.object());
-                }
-                public void classDescriptionNeededForEntityName(NSNotification n) {
-                    String name = (String)n.object();
-                    EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get 
-                    ERXEntityClassDescription.registerDescriptionForEntity(e);
-                }
-                public void classDescriptionNeededForClass(NSNotification n) {
-                    ERXEntityClassDescription.registerDescriptionForClass((Class)n.object());
-                }
-            };
+            Observer observer=new Observer();
             ERXRetainer.retain(observer);
             // Need to be able to preempt the model registering descriptions.
             NSNotificationCenter.defaultCenter().addObserver(observer,
