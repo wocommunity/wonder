@@ -20,11 +20,11 @@ Count2: WOString {
 }
 
 EntityName: WOString {
-	value = ^objectName;
+	value = entityLabel;
 }
 
 EntityName2: WOString {
-	value = ^objectName;
+	value = entityLabel;
 }
 
 EntityNameConditional: WOConditional {

@@ -31,6 +31,9 @@ public class WOTable extends WOComponent {
     public NSArray list()  {
         if (_list==null) {
             _list = (NSArray)_WOJExtensionsUtil.valueForBindingOrNull("list",this);
+            if (_list == null) {
+                _list = NSArray.EmptyArray;
+            }
         }
         return _list;
     }
@@ -100,9 +103,15 @@ public class WOTable extends WOComponent {
         int index = currentCol+maxColumns()*currentRow;
         Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
         setValueForBinding(item, "item");
-        setValueForBinding(new Integer(currentRow), "row");
-        setValueForBinding(new Integer(currentCol), "col");
-        setValueForBinding(new Integer(index), "index");
+        if (canSetValueForBinding("row")) {
+            setValueForBinding(new Integer(currentRow), "row");
+        }
+        if (canSetValueForBinding("col")) {
+            setValueForBinding(new Integer(currentCol), "col");
+        }
+        if (canSetValueForBinding("index")) {
+            setValueForBinding(new Integer(index), "index");
+        }
     }
 
     public void setCurrentCol(Number newValue){

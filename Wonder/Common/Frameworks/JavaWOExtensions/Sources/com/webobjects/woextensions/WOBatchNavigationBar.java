@@ -57,4 +57,29 @@ public class WOBatchNavigationBar extends WOComponent {
 
         ((WODisplayGroup)valueForBinding("displayGroup")).setCurrentBatchIndex(_batchIndex);       
     }
+
+    protected String _singularName() {
+        String name = (String) valueForBinding("objectName");
+        if (name == null || name.length() == 0) {
+            name = "item";
+        }
+        return name;
+    }
+
+    protected String _pluralName() {
+        String name = (String) valueForBinding("pluralName");
+        if (name == null || name.length() == 0) {
+            name = _singularName() + "s";
+        }
+        return name;
+    }
+        
+    public String entityLabel() {
+        WODisplayGroup dg = (WODisplayGroup)valueForBinding("displayGroup");
+        if (dg.allObjects().count() == 1) {
+            return _singularName();
+        } else {
+            return _pluralName();
+        }
+    }
 }

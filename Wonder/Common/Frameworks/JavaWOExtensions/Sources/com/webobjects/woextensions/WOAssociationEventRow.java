@@ -29,8 +29,12 @@ public class WOAssociationEventRow extends WOEventRow {
         binding = ((WOAssociation.Event)event).bindingName();
         keyPath = ((WOAssociation.Event)event).keyPath();
         isPush = ((WOAssociation.Event)event).isPush();
-
-        return keyPath+" = "+binding+" : "+((isPush) ? "push" : "pull");
+        String pushText = ((isPush) ? "push" : "pull");
+        if (!keyPath.equals(binding)) {
+            return keyPath+" = "+binding+" : "+ pushText;
+        } else {
+            return keyPath + " : "+ pushText;
+        }
     }
 
     public String hyperlinkTitle()

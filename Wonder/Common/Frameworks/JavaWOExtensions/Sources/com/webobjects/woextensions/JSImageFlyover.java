@@ -18,11 +18,17 @@ public class JSImageFlyover extends JSComponent {
         super(aContext);
     }
 
-    public void awake() {
+    public void appendToResponse(WOResponse response, WOContext context) {
         // We need to give each image a unique name, with considerations that there might be
-        // more than ImageFlyover per page.Be sure it is apositive number otherwise
-        // we could create var names with "-" on them. 
-        uniqueID = "Image"+Math.abs((new Random()).nextInt());
+        // more than one ImageFlyover per page.
+
+        StringBuffer uniqueIDBuffer = new StringBuffer("ImageFlyover");
+        uniqueIDBuffer.append(context.contextID());
+        uniqueIDBuffer.append("_");
+        uniqueIDBuffer.append(context.elementID().replace('.', '_'));
+        uniqueID = uniqueIDBuffer.toString();
+        super.appendToResponse(response, context);
+
     }
 
     protected String _url(String binding) {
