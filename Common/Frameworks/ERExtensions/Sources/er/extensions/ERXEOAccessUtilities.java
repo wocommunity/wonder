@@ -64,4 +64,46 @@ public class ERXEOAccessUtilities {
         EOSQLExpressionFactory factory=adaptorChannel.adaptorContext().adaptor().expressionFactory();
         adaptorChannel.evaluateExpression(factory.expressionForString(exp));
     }
+
+    /**
+     * Creates an aggregate attribute for a given function name. These can then be
+     * used to query on when using raw rows.
+     * @param ec editing context used to locate the model group
+     * @param function name of the function MAX, MIN, etc
+     * @param attributeName name of the attribute
+     * @param entityName name of the entity
+     * @return aggregate function attribute
+     */
+    public static EOAttribute createAggregateAttribute(EOEditingContext ec,
+                                                       String function,
+                                                       String attributeName,
+                                                       String entityName) {
+        if (ec == null)
+            throw new IllegalStateException("EditingContext is null. Required to know which model group to use.");
+        if (function == null)
+            throw new IllegalStateException("Function is null.");
+        if (attributeName == null)
+            throw new IllegalStateException("Attribute name is null.");
+        if (entityName == null)
+            throw new IllegalStateException("Entity name is null.");
+        
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+
+        if (entity == null)
+            throw new IllegalStateException("Unable find entity named: " + entityName);
+        
+        EOAttribute attribute = entity.attributeNamed(attributeName);
+
+        if (attribute == null)
+            throw new IllegalStateException("Unable find attribute named: " + attributeName
+                                            + " for entity: " + entityName);
+        
+        EOAttribute aggregate = new EOAttribute();
+        aggregate.setName("p_object" + function + "Attribute");
+        aggregate.setColumnName("p_object" + function + "Attribute");
+        aggregate.setClassName("java.lang.Number");
+        aggregate.setValueType("i");
+        aggregate.setReadFormat(function + "(t0." + attribute.columnName() + ")");
+        return aggregate;
+    }
 }
