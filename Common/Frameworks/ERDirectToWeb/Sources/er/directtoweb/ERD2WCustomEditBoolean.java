@@ -4,21 +4,19 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 
 public class ERD2WCustomEditBoolean extends D2WEditBoolean {
 
-public ERD2WCustomEditBoolean(WOContext context) {
+    public ERD2WCustomEditBoolean(WOContext context) {
         super(context);
     }
-    
+
     protected NSArray _choicesNames;
 
     public void reset(){
@@ -37,9 +35,8 @@ public ERD2WCustomEditBoolean(WOContext context) {
     }
 
     public NSArray choicesNames(){
-        if(_choicesNames == null){
+        if(_choicesNames == null)
             _choicesNames = (NSArray)d2wContext().valueForKey("choicesNames");
-        }
         return _choicesNames;
     }
 
@@ -62,9 +59,5 @@ public ERD2WCustomEditBoolean(WOContext context) {
         } catch (NSValidation.ValidationException e) {
             validationFailedWithException(e, objectPropertyValue(), propertyKey());
         }
-
     }
-
-
-
 }
