@@ -14,7 +14,7 @@ import com.webobjects.appserver.*;
  * 
  */
 
-public class ERD2WConfirmPageTemplate extends ERD2WConfirmPage {
+public class ERD2WConfirmPageTemplate extends ERD2WMessagePage {
 
     public ERD2WConfirmPageTemplate(WOContext context) { super(context); }
 }

@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 
+import er.extensions.ERXDictionaryUtilities;
 import er.extensions.ERXLogger;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXStringUtilities;
@@ -66,6 +67,19 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     }
     
     /**
+     * Utility to build branch choice dictionaries in code.
+     * @param method name of the method in question
+     * @param label label for the button, a beautified method name will be used if set to null.
+     * @return NSDictionary suitable as a branch choice.
+     */
+    protected NSDictionary branchChoiceDictionary(String method, String label) {
+    	if(label == null) {
+    		label = ERXStringUtilities.displayNameForKey(method);
+    	}
+    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, "branchName", label, "branchButtonLabel"});
+    }
+    
+    /**
      * Calculates which branches to show in the display first
      * asking the context for the key <b>branchChoices</b> if
      * this returns null then using reflection all of the 
@@ -84,10 +98,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                     Method method = (Method)e.nextElement();
                     if (method.getParameterTypes().length == 1 && 
                     method.getParameterTypes()[0] == WOComponent.class && !method.getName().equals("nextPage")) {
-                        NSMutableDictionary branch = new NSMutableDictionary();
-                        branch.setObjectForKey(method.getName(), "branchName");
-                        branch.setObjectForKey(ERXStringUtilities.displayNameForKey(method.getName()),
-                                                                "branchButtonLabel");
+                        NSDictionary branch = branchChoiceDictionary(method.getName(), null);
                         methodChoices.addObject(branch);        
                     }
                 }

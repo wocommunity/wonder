@@ -1,5 +1,24 @@
+Conditional1: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
+Conditional4: WOConditional {
+	condition = hasBranchChoices;
+}
+
+ERSingleButton1: ERXSingleButton {
+	action = nextPageAction;
+	value = "OK";
+	doNotUseForm = true;
+}
+
 Form:WOForm {
 	multipleSubmit = true;
+}
+
+HasNextPage: WOConditional {
+	condition = hasNextPage;
 }
 
 Image1: WOImage {
@@ -7,14 +26,19 @@ Image1: WOImage {
 	framework = "JavaDirectToWeb";
 }
 
+Repetition1: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
 String1: WOString {
 	value = message;
 	escapeHTML = false;
 }
 
-SubmitButton3: WOSubmitButton {
-	action = nextPageClicked;
-	value = "Ok";
+SubmitButton1: WOSubmitButton {
+	action = nextPageAction;
+	value = branch.branchButtonLabel;
 }
 
 Wrapper: WOSwitchComponent {

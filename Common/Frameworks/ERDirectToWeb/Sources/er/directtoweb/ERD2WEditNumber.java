@@ -55,7 +55,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
                 throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
             }
         } catch(NSValidation.ValidationException ex) {
-            //validationFailedWithException(ex, anObject, propertyKey());
+            validationFailedWithException(ex, anObject, propertyKey());
             throw ex;
         }
         return super.validateTakeValueForKeyPath(convertNumber(number), propertyKey());
@@ -63,6 +63,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath)  {
         // This is for number formatting exceptions
         String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
+        // the following is needed because we might
         Number formatValue = null;
         try {
         	if (theValue != null)
