@@ -87,16 +87,18 @@ public class ERXRuntimeUtilities {
             }
             
         } finally {
-            InputStream is = p.getInputStream();
-            if (is!=null) input = ERXFileUtilities.stringFromInputStream(is);
-            is = p.getErrorStream();
-            if (is!=null) error = ERXFileUtilities.stringFromInputStream(is);
-            
-            if (log.isDebugEnabled()) {
-                log.debug("input = "+input);
-                log.debug("error = "+error);
+            if (p != null) {
+                InputStream is = p.getInputStream();
+                if (is!=null) input = ERXFileUtilities.stringFromInputStream(is);
+                is = p.getErrorStream();
+                if (is!=null) error = ERXFileUtilities.stringFromInputStream(is);
+
+                if (log.isDebugEnabled()) {
+                    log.debug("input = "+input);
+                    log.debug("error = "+error);
+                }
+                freeProcessResources(p);
             }
-            freeProcessResources(p);
         }
         return new Result(response.toString(), input, error);
 
