@@ -160,10 +160,27 @@ There are three ways to use this script:
         <property file="Build/build/${os.name}.properties" />
         <property file="Build/build/default-os.properties" />
 
+        <!-- default values. can be overridden by *.properties files of -D options. -->
         <property name="wo.woroot" value="/System" />
         <property name="wo.localroot" value="/Local" />
         <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
+        <property name="wonder.development" value="true" />
+        
+        <!-- if project.type is application and wonder.development is false, use installed frameworks, 
+             otherwise use development frameworks. --> 
+        <condition property="wonder.lib.root" value="${wo.localroot}/Library/Frameworks">
+            <and>
+                <equals arg1="${project.type}" arg2="application" />
+                <isfalse value="${wonder.development}"/>
+            </and>
+        </condition>
+        <condition property="wonder.lib.root" value="${user.home}/Roots">
+            <or>
+                <not><equals arg1="${project.type}" arg2="application" /></not>
+                <istrue value="${wonder.development}" />
+            </or>
+        </condition>
     </target>
 
     <target name="global.properties" depends="global.environment">
@@ -190,49 +207,46 @@ There are three ways to use this script:
                 </fileset>
             </classpath>
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
-            <frameworks root="${build.root}" if="use.wonder.core"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.core"> 
                 <include name="ERJars.framework" />
                 <include name="ERExtensions.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.d2w"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.d2w"> 
                 <include name="ERJars.framework" />
                 <include name="ERExtensions.framework" />
                 <include name="ERDirectToWeb.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.logic"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.logic"> 
                 <include name="ERCoreBusinessLogic.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.mail"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.mail"> 
                 <include name="ERJavaMail.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.changenotification"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.changenotification"> 
                 <include name="ERChangeNotificationJMS.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.svgobjects"> 
+            <frameworks root="${wonder.lib.root}" if="use.svgobjects"> 
                 <include name="SVGObjects.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.validity"> 
+            <frameworks root="${wonder.lib.root}" if="use.validity"> 
                 <include name="Validity.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.woognl"> 
+            <frameworks root="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOngl.framework" />
             </frameworks>
            <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
                 <include name="Mysql*.framework"/>
            </frameworks>
-           <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
-                <include name="Mysql*.framework"/>
-           </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.1">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.1">
                 <include name="${use.additional.framework.1}"/>
            </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.2">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.2">
                 <include name="${use.additional.framework.2}"/>
            </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.3">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.3">
                 <include name="${use.additional.framework.3}"/>
            </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.4">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.4">
                 <include name="${use.additional.framework.4}"/>
            </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks"> 
@@ -245,7 +259,7 @@ There are three ways to use this script:
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
             </frameworks>
-            <frameworks root="${build.root}"> 
+            <frameworks root="${wonder.lib.root}"> 
                 <include name="JavaWOExtensions.framework" />
             </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks" if="use.webobjects.d2w"> 
@@ -327,49 +341,46 @@ There are three ways to use this script:
                 <include name="**/*.css" />
             </wsresources>
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
-            <frameworks root="${build.root}" if="use.wonder.core"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.core"> 
                 <include name="ERJars.framework" />
                 <include name="ERExtensions.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.d2w"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.d2w"> 
                 <include name="ERJars.framework" />
                 <include name="ERExtensions.framework" />
                 <include name="ERDirectToWeb.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.logic"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.logic"> 
                 <include name="ERCoreBusinessLogic.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.mail"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.mail"> 
                 <include name="ERJavaMail.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.wonder.changenotification"> 
+            <frameworks root="${wonder.lib.root}" if="use.wonder.changenotification"> 
                 <include name="ERChangeNotificationJMS.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.svgobjects"> 
+            <frameworks root="${wonder.lib.root}" if="use.svgobjects"> 
                 <include name="SVGObjects.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.validity"> 
+            <frameworks root="${wonder.lib.root}" if="use.validity"> 
                 <include name="Validity.framework" />
             </frameworks>
-            <frameworks root="${build.root}" if="use.woognl"> 
+            <frameworks root="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOngl.framework" />
             </frameworks>
            <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
                 <include name="Mysql*.framework"/>
            </frameworks>
-           <frameworks root="${wo.localroot}/Library/Frameworks" if="use.mysql">
-                <include name="Mysql*.framework"/>
-           </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.1">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.1">
                 <include name="${use.additional.framework.1}"/>
            </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.2">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.2">
                 <include name="${use.additional.framework.2}"/>
            </frameworks>
            <frameworks root="${build.root}" if="use.additional.framework.3">
                 <include name="${use.additional.framework.3}"/>
            </frameworks>
-           <frameworks root="${build.root}" if="use.additional.framework.4">
+           <frameworks root="${wonder.lib.root}" if="use.additional.framework.4">
                 <include name="${use.additional.framework.4}"/>
            </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks"> 
@@ -382,7 +393,7 @@ There are three ways to use this script:
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
             </frameworks>
-            <frameworks root="${build.root}"> 
+            <frameworks root="${wonder.lib.root}"> 
                 <include name="JavaWOExtensions.framework" />
             </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks" if="use.webobjects.d2w"> 
@@ -476,6 +487,7 @@ There are three ways to use this script:
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="Common/Frameworks/ERExtensions" />
+
             <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
@@ -557,6 +569,7 @@ There are three ways to use this script:
 
     <target name="BugTracker.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.bugtracker.Application" />
             <param name="project.name" value="BugTracker" />
             <param name="project.dir" value="Common/Applications/BugTracker" />
@@ -571,6 +584,7 @@ There are three ways to use this script:
 
     <target name="ERMailer.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="ERMailer" />
             <param name="project.dir" value="Common/Applications/ERMailer" />
@@ -583,6 +597,7 @@ There are three ways to use this script:
 
     <target name="D2WInspectExample.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WInspectExample" />
             <param name="project.dir" value="Common/Examples/Stepwise/D2WInspectExample" />
@@ -593,6 +608,7 @@ There are three ways to use this script:
 
     <target name="D2WListExample.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WListExample" />
             <param name="project.dir" value="Common/Examples/Stepwise/D2WListExample" />
@@ -603,6 +619,7 @@ There are three ways to use this script:
 
     <target name="NetStruxrCaseStudy.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="NetStruxrCaseStudy" />
             <param name="project.dir" value="Common/Examples/Wrox/NetStruxrCaseStudy" />
@@ -642,6 +659,7 @@ There are three ways to use this script:
 
     <target name="Validity.application.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityModeler" />
             <param name="project.dir" value="Validity/Applications/ValidityModeler" />
@@ -652,6 +670,7 @@ There are three ways to use this script:
 
     <target name="Validity.example.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityExample" />
             <param name="project.dir" value="Validity/Examples/ValidityExample" />
@@ -670,6 +689,7 @@ There are three ways to use this script:
 
     <target name="SVGObjects.ComponentTour.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.componenttour.Application" />
             <param name="project.name" value="SVGObjectsComponentTour" />
             <param name="project.dir" value="SVGObjects/Examples/ComponentTour" />
@@ -680,6 +700,7 @@ There are three ways to use this script:
 	
     <target name="SVGObjects.eCards.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.ecard.Application" />
             <param name="project.name" value="SVGObjectsECards" />
             <param name="project.dir" value="SVGObjects/Examples/eCards" />
@@ -690,6 +711,7 @@ There are three ways to use this script:
 	
     <target name="SVGObjects.EZForms.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.ezforms.Application" />
             <param name="project.name" value="SVGObjectsEZForms" />
             <param name="project.dir" value="SVGObjects/Examples/EZForms" />
@@ -700,6 +722,7 @@ There are three ways to use this script:
 	
     <target name="SVGObjects.Hello.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.hello.Application" />
             <param name="project.name" value="SVGObjectsHello" />
             <param name="project.dir" value="SVGObjects/Examples/Hello" />
@@ -710,6 +733,7 @@ There are three ways to use this script:
 	
     <target name="SVGObjects.PopIdol.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.popidol.Application" />
             <param name="project.name" value="SVGObjectsPopIdol" />
             <param name="project.dir" value="SVGObjects/Examples/PopIdol" />
@@ -720,6 +744,7 @@ There are three ways to use this script:
 	
     <target name="DevStudio.all">
         <antcall target="global.application" >
+            <param name="project.type" value="application" />
             <param name="project.principal.class" value="ag.kcmedia.Application" />
             <param name="project.name" value="DevStudio" />
             <param name="project.dir" value="Experimental/DevStudio" />
@@ -939,7 +964,7 @@ There are three ways to use this script:
         </antcall>
      </target>
 
-    <target name="all.install">
+    <target name="frameworks.all.install">
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERJars" />
         </antcall>
@@ -985,7 +1010,9 @@ There are three ways to use this script:
         <antcall target="global.install.framework" >
             <param name="project.name" value="ERCalendar" />
         </antcall>
+    </target>
 
+    <target name="applications.all.install">
         <antcall target="global.install.application" >
             <param name="project.name" value="BugTracker" />
         </antcall>
@@ -1029,6 +1056,8 @@ There are three ways to use this script:
             <param name="project.name" value="DevStudio" />
         </antcall>
      </target>
+
+    <target name="all.install" depends="frameworks.all.install, applications.all.install" />
 
     <target name="all" depends="all.compile" />
     <target name="install" depends="all.compile, all.install" />
