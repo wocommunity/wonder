@@ -1,9 +1,10 @@
 EditEO: WOHyperlink {
 	action = inspectObjectAction;
+	title = ^displayNameForInspectConfiguration;
 }
 
 EditImage: WOImage {
-	alt = "Edit that Object";
+	alt = ^displayNameForInspectConfiguration;
 	border = "0";
 	filename = "magglass-btn.gif";
 	framework = "JavaDirectToWeb";
