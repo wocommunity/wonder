@@ -1254,6 +1254,124 @@
 			settings = {
 			};
 		};
+		41C5F49605D8EBBE00F59489 = {
+			children = (
+				41C5F49705D8EBBE00F59489,
+				41C5F49805D8EBBE00F59489,
+				41C5F49E05D8EBBE00F59489,
+			);
+			isa = PBXGroup;
+			name = ERDFlyOver;
+			path = "";
+			refType = 2;
+		};
+		41C5F49705D8EBBE00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDFlyOver.api;
+			path = Components/ERDFlyOver.api;
+			refType = 4;
+		};
+		41C5F49805D8EBBE00F59489 = {
+			children = (
+				41C5F49905D8EBBE00F59489,
+			);
+			isa = PBXVariantGroup;
+			name = ERDFlyOver.wo;
+			path = "";
+			refType = 4;
+		};
+		41C5F49905D8EBBE00F59489 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDFlyOver.wo;
+			refType = 4;
+		};
+		41C5F49E05D8EBBE00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDFlyOver.java;
+			path = Sources/er/directtoweb/ERDFlyOver.java;
+			refType = 4;
+		};
+		41C5F49F05D8EBBE00F59489 = {
+			fileRef = 41C5F49705D8EBBE00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5F4A005D8EBBE00F59489 = {
+			fileRef = 41C5F49805D8EBBE00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5F4A105D8EBBE00F59489 = {
+			fileRef = 41C5F49E05D8EBBE00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5F51205D9066F00F59489 = {
+			children = (
+				41C5F51305D9066F00F59489,
+				41C5F51405D9066F00F59489,
+				41C5F51A05D9066F00F59489,
+			);
+			isa = PBXGroup;
+			name = ERD2WFlyOverCustomComponent;
+			path = "";
+			refType = 2;
+		};
+		41C5F51305D9066F00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WFlyOverCustomComponent.api;
+			path = Components/ERD2WFlyOverCustomComponent.api;
+			refType = 4;
+		};
+		41C5F51405D9066F00F59489 = {
+			children = (
+				41C5F51505D9066F00F59489,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WFlyOverCustomComponent.wo;
+			path = "";
+			refType = 4;
+		};
+		41C5F51505D9066F00F59489 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WFlyOverCustomComponent.wo;
+			refType = 4;
+		};
+		41C5F51A05D9066F00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WFlyOverCustomComponent.java;
+			path = Sources/er/directtoweb/ERD2WFlyOverCustomComponent.java;
+			refType = 4;
+		};
+		41C5F51B05D9066F00F59489 = {
+			fileRef = 41C5F51305D9066F00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5F51C05D9066F00F59489 = {
+			fileRef = 41C5F51405D9066F00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5F51D05D9066F00F59489 = {
+			fileRef = 41C5F51A05D9066F00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41D6409705C92B2B00BB3C39 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -9414,6 +9532,10 @@
 				41C5E53B05D0EFFC00F59489,
 				41C5E76005D11C6D00F59489,
 				41C5E76105D11C6D00F59489,
+				41C5F49F05D8EBBE00F59489,
+				41C5F4A005D8EBBE00F59489,
+				41C5F51B05D9066F00F59489,
+				41C5F51C05D9066F00F59489,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9658,6 +9780,8 @@
 				41C5E53C05D0EFFC00F59489,
 				41C5E74E05D11B9900F59489,
 				41C5E76205D11C6D00F59489,
+				41C5F4A105D8EBBE00F59489,
+				41C5F51D05D9066F00F59489,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11131,6 +11255,8 @@
 		};
 		F6E7967D02C877AF01AD0D07 = {
 			children = (
+				41C5F51205D9066F00F59489,
+				41C5F49605D8EBBE00F59489,
 				F6E7966602C877AF01AD0D07,
 				F6E7966E02C877AF01AD0D07,
 				F6E7966B02C877AF01AD0D07,
