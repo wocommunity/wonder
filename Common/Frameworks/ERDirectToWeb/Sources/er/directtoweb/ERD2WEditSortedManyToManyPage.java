@@ -194,8 +194,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 object.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
                                                                     destinationRelationship().name());
                 object().removeObjectFromBothSidesOfRelationshipWithKey(object,
-                                                                      relationshipKey());                                                                    
-                editingContext().deleteObject(object);
+                                                                      relationshipKey());
+                if(object instanceof ERXGuardedObjectInterface){
+                    ((ERXGuardedObjectInterface)object).delete();
+                }else{
+                    editingContext().deleteObject(object);
+                }
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
             if(isSortedRelationship()){
@@ -209,6 +213,27 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 }
             }
         }
+        return null;
+    }
+
+    public WOComponent removeAllFromToManyRelationship(){
+        if(((ERXSession)session()).javaScriptEnabled())
+            updateEOsOrdering();
+        for (Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator(); e.hasMoreElements();) {
+            EOEnterpriseObject object=(EOEnterpriseObject)e.nextElement();
+            EOEnterpriseObject _localEoToRremoveFromRelationship =
+                (EOEnterpriseObject)object.valueForKey(destinationRelationship().name());
+            object.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
+                                                                  destinationRelationship().name());
+            object().removeObjectFromBothSidesOfRelationshipWithKey(object,
+                                                                    relationshipKey());
+            if(object instanceof ERXGuardedObjectInterface){
+                ((ERXGuardedObjectInterface)object).delete();
+            }else{
+                editingContext().deleteObject(object);
+            }
+        }
+        relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
         return null;
     }
 
