@@ -8,15 +8,15 @@
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{919, 670}";
+				ContentSize = "{951, 714}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {919, 647}}";
+					Frame = "{{0, 23}, {951, 691}}";
 					Split0 = {
-						ActiveTab = 2;
-						Frame = "{{261, 0}, {658, 647}}";
+						ActiveTab = 1;
+						Frame = "{{261, 0}, {690, 691}}";
 						Split0 = {
-							Frame = "{{0, 250}, {658, 397}}";
+							Frame = "{{0, 269}, {690, 422}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -45,16 +45,16 @@
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {895, 147}}";
+							Frame = "{{0, 0}, {690, 245}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {895, 147}}";
+								Frame = "{{0, 0}, {690, 245}}";
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {660, 219}}";
-							BuildTranscriptFrame = "{{0, 228}, {660, 0}}";
-							Frame = "{{0, 0}, {658, 226}}";
+							BuildMessageFrame = "{{0, 0}, {692, 201}}";
+							BuildTranscriptFrame = "{{0, 210}, {692, 6}}";
+							Frame = "{{0, 0}, {690, 214}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {738, 295}}";
@@ -63,7 +63,7 @@
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {237, 647}}";
+						Frame = "{{0, 0}, {237, 691}}";
 					};
 					Tab1 = {
 						ClassesFrame = "{{0, 0}, {202, 56}}";
@@ -75,12 +75,12 @@
 						Frame = "{{0, 0}, {200, 100}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {181, 647}}";
+						Frame = "{{0, 0}, {181, 691}}";
 						Split0 = {
-							Frame = "{{0, 0}, {181, 315}}";
+							Frame = "{{0, 0}, {181, 334}}";
 						};
 						Split1 = {
-							Frame = "{{0, 324}, {181, 323}}";
+							Frame = "{{0, 343}, {181, 348}}";
 						};
 						SplitCount = 2;
 					};
@@ -97,11 +97,6 @@
 	6CA8E86B0168DA0900A801D4 = {
 		uiCtxt = {
 			sepNavWindowFrame = "{{100, 218}, {750, 502}}";
-		};
-	};
-	6CA8E87D0168DA0900A801D4 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{77, 239}, {750, 502}}";
 		};
 	};
 	6CA8E8BB0168DA0900A801D4 = {
