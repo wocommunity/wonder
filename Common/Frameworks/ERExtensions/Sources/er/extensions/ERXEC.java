@@ -149,12 +149,17 @@ public class ERXEC {
          * See static method for documentation.
          */        
         public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled) {
-            EOEditingContext ec = new EOEditingContext(objectStore);
+            EOEditingContext ec = _createEditingContext(objectStore);
             int levelsOfUndo = ERXValueUtilities.intValueWithDefault(System.getProperty("WODefaultUndoStackLimit"), 10);
             ec.undoManager().setLevelsOfUndo(levelsOfUndo < 0 ? 10 : levelsOfUndo);
             setDefaultDelegateOnEditingContext(ec, validationEnabled);
             NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
             return ec;
+        }
+
+        /** Actual EC creation bottleneck. Override this to return other subclasses. */
+        protected EOEditingContext _createEditingContext(EOObjectStore parent) {
+            return new EOEditingContext(parent == null ? EOEditingContext.defaultParentObjectStore() : parent);
         }
 
     }
