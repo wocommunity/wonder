@@ -57,7 +57,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     public WOComponent directActionRedirect() {
         WOComponent page = pageWithName("WORedirect");
         String url = context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
-        ((WORedirect)page).setURL(url);
+        ((WORedirect)page).setUrl(url);
         
         return page;
     }
