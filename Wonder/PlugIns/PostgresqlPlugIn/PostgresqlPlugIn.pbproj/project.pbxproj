@@ -6,8 +6,6 @@
 	objectVersion = 39;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a+rX";
@@ -26,16 +24,14 @@
 		};
 		017C7B2CFFD7144B7F000001 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)PostgresqlPlugIn.tmp";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2DFFD7144B7F000001 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)PostgresqlPlugIn.tmp";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -390,8 +386,7 @@
 		};
 		40B58281FFD5E8187F000001 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = PostgresqlPlugIn.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -546,8 +541,7 @@
 			sourceTree = "<group>";
 		};
 		40B5828DFFD5E91B7F000001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
@@ -555,8 +549,7 @@
 			sourceTree = "<absolute>";
 		};
 		40B5828EFFD5E91B7F000001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
@@ -564,8 +557,7 @@
 			sourceTree = "<absolute>";
 		};
 		40B5828FFFD5E91B7F000001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
@@ -583,8 +575,6 @@
 			sourceTree = "<group>";
 		};
 		40B5829AFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -600,8 +590,6 @@
 			name = Development;
 		};
 		40B5829BFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
@@ -688,8 +676,7 @@
 			sourceTree = "<group>";
 		};
 		41C004A60522D12900000102 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
