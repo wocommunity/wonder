@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-import er.extensions.ERXLogger;
 
 import javax.jms.*;
 
@@ -34,9 +33,6 @@ import javax.jms.*;
  */ 
 public class ERCNSubscriber implements MessageListener {
 
-    /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCNSubscriber.class);
-
     private static NSKeyValueCoding _delegate;
 
     private ERCNNotificationCoordinator _coordinator;
@@ -55,7 +51,7 @@ public class ERCNSubscriber implements MessageListener {
         try {
             _topicSession = _coordinator.connection().createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
         } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
             return;
         }
@@ -69,7 +65,7 @@ public class ERCNSubscriber implements MessageListener {
                 _topicSubscriber = _topicSession.createSubscriber(_coordinator.topic(), selector, noLocal);
             }
         } catch (Exception ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -89,19 +85,19 @@ public class ERCNSubscriber implements MessageListener {
     public void onMessage(Message message) {
         try {
             ERCNSnapshot snapshot = (ERCNSnapshot) ((ObjectMessage)message).getObject();
-            if (log.isDebugEnabled())
-                log.debug("Received a message with snapshot: " + snapshot);
+            if (NSLog.debug.isEnabled())
+                NSLog.debug.appendln("Received a message with snapshot: " + snapshot);
             processInsertions(snapshot.shapshotsForInsertionGroupedByEntity());
             processDeletions(snapshot.globalIDsForDeletionGroupedByEntity());
             processUpdates(snapshot.shapshotsForUpdateGroupedByEntity());
-            log.debug("Finished processing changes.");
+            NSLog.debug.appendln("Finished processing changes.");
         } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
         } finally {
             try {
                 message.acknowledge();
             } catch (JMSException ex) {
-                log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             }
         }
     }
@@ -133,8 +129,8 @@ public class ERCNSubscriber implements MessageListener {
             Enumeration snapshotsEnumerator = snapshots.objectEnumerator();
             while (snapshotsEnumerator.hasMoreElements()) {
                 NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
-                if (log.isDebugEnabled())
-                    log.debug("snapshot: " + snapshot);
+                if (NSLog.debug.isEnabled())
+                    NSLog.debug.appendln("snapshot: " + snapshot);
                 if (snapshot != null) {
                     EOGlobalID globalID = entity.globalIDForRow(snapshot);
                     dbContext.lock();
@@ -157,7 +153,7 @@ public class ERCNSubscriber implements MessageListener {
                 _topicSession.unsubscribe(_coordinator.id());
             }
         } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
         }
     }
 
