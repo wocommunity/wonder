@@ -153,12 +153,6 @@ public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInte
         return descriptionForResponse != null ? descriptionForResponse : super.descriptionForResponse(aResponse, aContext);
     }
     
-    // for SmartAttributeAssignment we need object in the context
-    public void setObject(EOEnterpriseObject eo) {
-        super.setObject(eo);
-        d2wContext().takeValueForKey(eo,"object");
-    }
-
     private boolean _hasBeenInitialized=false;
 
     private Integer _batchSize = null;
