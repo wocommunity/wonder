@@ -93,6 +93,7 @@ public class ERXExtensions {
          * @param n notification posted when the app is done launching
          */
         public void finishedLaunchingApp(NSNotification n) {
+            ERXProperties.populateSystemProperties();
             ERXConfigurationManager.defaultManager().configureRapidTurnAround();
             //ERXLog4j.configureLogging(); // Call this again to update configuration from ERConfigurationPath
             //ERXLog4j.configureRapidTurnAround(); // Will only be enabled if WOCaching is off.
