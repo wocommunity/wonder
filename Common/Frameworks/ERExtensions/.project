@@ -11,19 +11,13 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<name>org.objectstyle.wolips.antbuilder</name>
 			<arguments>
-				<dictionary>
-					<key>LaunchConfigHandle</key>
-					<value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;launchConfiguration local=&quot;true&quot; path=&quot;ERExtensionsCompile.launch&quot;/&gt;
-</value>
-				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.objectstyle.wolips.frameworknature</nature>
+		<nature>org.objectstyle.wolips.antframeworknature</nature>
 	</natures>
 </projectDescription>
