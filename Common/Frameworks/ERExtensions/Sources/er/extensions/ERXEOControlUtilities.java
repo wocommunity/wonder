@@ -102,6 +102,51 @@ public class ERXEOControlUtilities {
         return eodetaildatasource;
     }
 
+    /** 
+     * Creates a new, editable instance of the supplied object. Takes into account if the object is
+     * newly inserted, lives in a shared context and can either create a peer or nested context.
+     *
+     * @param eo object for the new instance
+     * @param useNestedContext true, if we should use a nested context (otherwise we create a peer context)
+     *
+     * @return new EO in new editing context
+     */
+     public static EOEnterpriseObject editableInstanceOfObject(EOEnterpriseObject eo, 
+     		boolean createNestedContext) {
+     	
+     	if(eo == null) throw new IllegalArgumentException("EO can't be null");
+     	EOEditingContext ec = eo.editingContext();
+     	
+     	if(ec == null) throw new IllegalArgumentException("EO must live in an EC");
+     	
+     	EOEnterpriseObject localObject = eo;
+     	
+     	// Check for old EOF bug and do nothing as we can't localInstance anything here
+     	if(!(ERXProperties.webObjectsVersionAsDouble() < 5.21d 
+     			&& ERXExtensions.isNewObject(localObject))) {
+     		// create either peer or nested context
+     		EOEditingContext newEc = ERXEC.newEditingContext(createNestedContext 
+     				? ec : ec.parentObjectStore());
+     		ec.lock();
+     		try {
+     			newEc.lock();
+     			try {
+     				if(ec instanceof EOSharedEditingContext 
+     	     				|| ec.sharedEditingContext() == null) {
+     	     			newEc.setSharedEditingContext(null);
+     	     		}
+     	     		localObject = EOUtilities.localInstanceOfObject(newEc, eo);
+     				localObject.willRead();
+     			} finally {
+     				newEc.unlock();
+     			}
+     		} finally {
+     			ec.unlock();
+     		}
+     	}
+      	return localObject;
+     }
+
     /**
      * This has one advantage over the standard EOUtilites
      * method of first checking if the editingcontexts are

@@ -49,8 +49,10 @@ public class ERDList extends ERDCustomEditComponent {
     			epi.setMasterObjectAndRelationshipKey(object(), key());
     			epi.setNextPage(context().page());
     		} else if(nextPage instanceof EditPageInterface) {
-    			EOEnterpriseObject object = ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
-    			EOEditingContext ec = object.editingContext();
+    	    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+    	    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+    	    	EOEnterpriseObject object = ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
+	 			EOEditingContext ec = object.editingContext();
     			ec.lock();
     			try {
     				EOEnterpriseObject eo = ERXEOControlUtilities.createAndAddObjectToRelationship(ec, object, key(), (String)valueForBinding("destinationEntityName"), null);
