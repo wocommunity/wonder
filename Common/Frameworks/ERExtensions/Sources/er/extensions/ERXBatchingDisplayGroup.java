@@ -108,7 +108,9 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
                     return ((Number)value).intValue();
                 } else {
                     try {
-                        return Integer.parseInt(value.toString());
+                        int c = Integer.parseInt(value.toString());
+                        setObjectArray(new ERFakeNSArray(c));
+                        return c;
                     } catch (NumberFormatException e) {
                         throw new IllegalStateException("sql "+sql+" returned a wrong result, could not convert "+value+" into an int!");
                     }
@@ -148,5 +150,22 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         NSMutableArray objects = objectsInRange(start, end).mutableClone();
 
         return objects;
+    }
+
+    public static class ERFakeNSArray extends NSArray {
+        int count = 0;
+
+        public ERFakeNSArray(int count) {
+            this.count = count;
+        }
+        private ERFakeNSArray(){}
+
+        public int count() {
+            return count;
+        }
+
+        public void insertObjectAtIndex(Object o, int i) {
+            //do nothing
+        }
     }
 }
