@@ -161,8 +161,7 @@ public class ERXProperties {
      *		the system properties or default value
      */
     public static NSArray arrayForKeyWithDefault(String s, NSArray defaultValue) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? (NSArray)NSPropertyListSerialization.propertyListFromString(s1) : defaultValue;
+        return ERXValueUtilities.arrayValueWithDefault(System.getProperty(s), defaultValue);
     }
     
     /**
@@ -189,7 +188,7 @@ public class ERXProperties {
      *		system properties.
      */
     public static boolean booleanForKeyWithDefault(String s, boolean defaultValue) {
-        return ERXUtilities.booleanValueWithDefault(System.getProperty(s), defaultValue);
+        return ERXValueUtilities.booleanValueWithDefault(System.getProperty(s), defaultValue);
     }
     
     /**
@@ -212,8 +211,7 @@ public class ERXProperties {
      *		the system properties
      */
     public static NSDictionary dictionaryForKeyWithDefault(String s, NSDictionary defaultValue) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? (NSDictionary)NSPropertyListSerialization.propertyListFromString(s1) : defaultValue;
+        return ERXValueUtilities.dictionaryValueWithDefault(System.getProperty(s), defaultValue);
     }
 
     /**
@@ -223,8 +221,7 @@ public class ERXProperties {
      * @return int value of the system property or 0
      */
     public static int intForKey(String s) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? NSPropertyListSerialization.intForString(s1) : 0;
+        return ERXValueUtilities.intValueWithDefault(System.getProperty(s), 0);
     }
 
     /**
