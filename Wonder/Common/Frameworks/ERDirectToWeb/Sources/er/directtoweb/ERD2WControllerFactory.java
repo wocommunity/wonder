@@ -273,7 +273,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
 
         public WOComponent cancelChangesAction(WOComponent sender) {
             if(editingContext().hasChanges()) {
-                this.log.info("Reverting changes: " + object());
+                log.info("Reverting changes: " + object());
                 editingContext().revert();
             }
             return returnPage();
@@ -281,7 +281,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
 
         public WOComponent saveChangesAction(WOComponent sender) {
             if(editingContext().hasChanges()) {
-                this.log.info("Has changes: " + object());
+                log.info("Has changes: " + object());
                 editingContext().saveChanges();
             }
             return returnPage();
@@ -317,7 +317,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         public WOComponent searchAction(WOComponent currentPage) {
             D2WContext d2wContext = ((D2WComponent)currentPage.parent()).d2wContext();
             EODataSource ds = ((QueryPageInterface)currentPage.parent()).queryDataSource();
-            this.log.info("searchAction: " + ds);
+            log.info("searchAction: " + ds);
             ListPageInterface listpageinterface = null;
             String listConfigurationName=(String)d2wContext.valueForKey("listConfigurationName");
             if(listConfigurationName==null) {
