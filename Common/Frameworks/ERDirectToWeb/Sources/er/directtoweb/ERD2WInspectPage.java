@@ -48,6 +48,11 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         return (nextPageDelegate() != null) ? nextPageDelegate().nextPage(this) : super.nextPage();
     }
 
+    public boolean isEntityReadOnly() {
+        Integer isEntityEditable=(Integer)d2wContext().valueForKey("isEntityEditable");
+        return  isEntityEditable!=null ? isEntityEditable.intValue()==0 : super.isEntityReadOnly();
+    }
+
     public WOComponent editAction() {
         WOComponent returnPage = null;
         if (previousPage() == null) {
@@ -296,3 +301,5 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
 */
     public NSTimestamp now() { return new NSTimestamp(); }
     }
+
+
