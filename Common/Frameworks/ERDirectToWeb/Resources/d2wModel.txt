@@ -163,6 +163,7 @@
     10 : *true* => displayNameForDestinationEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForEditConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForInspectConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForKeyPath = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForPageConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForProperty = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForSectionKey = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
