@@ -64,7 +64,10 @@ public abstract class ERXApplication extends WOApplication {
      */
     public ERXApplication() {
         super();
-        if (! _wasERXApplicationMainInvoked)  _displayWarningAboutTheMainMethod();
+        if (! ERXConfigurationManager.defaultManager().isDeployedAsServlet()  &&  
+            ! _wasERXApplicationMainInvoked) {
+            _displayMainMethodWarning();
+        }
         
         installPatches();
 
@@ -400,7 +403,7 @@ public abstract class ERXApplication extends WOApplication {
      * Logs the warning message if the main method was not called 
      * during the startup.
      */
-    private void _displayWarningAboutTheMainMethod() {
+    private void _displayMainMethodWarning() {
         log.warn("\n\nIt seems that your applicaiton class " 
             + application().getClass().getName() + " did not call "   
             + ERXApplication.class.getName()
