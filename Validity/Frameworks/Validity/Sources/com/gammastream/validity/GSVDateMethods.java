@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.gammastream.validity._private.*;
 
 /**
  *	This class provides a set of predefined rules for performing
