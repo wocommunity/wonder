@@ -1,10 +1,17 @@
 {
-    ERXArrayChooser.noneString = "- keine Auswahl -";
     "Could not save your changes: " = "Konnte nicht speichern: ";
+    ERXArrayChooser.noneString = "- keine Auswahl -";
+    ERXBatchNavigationBar.items_per_page = "pro Seite";
+    ERXBatchNavigationBar.of = "von";
+    ERXBatchNavigationBar.page = "Seite";
+    ERXBatchNavigationBar.show = "Zeige";
     ERXCheckboxMatrix.deselectAll = "Keine";
     ERXCheckboxMatrix.selectAll = "Alle";
-    ERXBatchNavigationBar.of = "von";
-    ERXBatchNavigationBar.show = "Zeige";
-    ERXBatchNavigationBar.items_per_page = "pro Seite";
-    ERXBatchNavigationBar.page = "Seite";
+    "Test message for unit test" = "FAIL - app and ERD comes before this";
+    "Test message for unit test in ERX framework" = "SUCCESS - ERX is unique";
+    "Test message for unit test in framework" = "FAIL - ERD comes before this";
+    "Test message for unit test in last framework" = "SUCCESS - not overridden in other frameworks is unique";
+    "unittest" = {"key" = { "path" = { "as" = {"dict"="SUCCESS";};};};};
+    "unittest.key.path.as.string" = "SUCCESS";
+    WOToOneRelationship.noneString = "- none -";
 }
