@@ -76,8 +76,7 @@ public class ERXFileUtilities {
      * @return byte array of the file.
      */
     public static byte[] bytesFromFile(File f) throws IOException {
-        if (f == null)
-            throw new IllegalStateException("null file");
+        if (f == null) throw new IllegalArgumentException("null file");
         int size = (int)f.length();
         FileInputStream fis = new FileInputStream(f);
         byte[] data = new byte[size];
@@ -94,7 +93,7 @@ public class ERXFileUtilities {
      * @param stream to pull data from
      */
     public static void writeInputStreamToFile(File file, InputStream stream) throws IOException {
-        if (file == null) throw new IllegalStateException("Attempting to write to a null file!");
+        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
         FileOutputStream out = new FileOutputStream(file);
         byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
         int read = -1;
