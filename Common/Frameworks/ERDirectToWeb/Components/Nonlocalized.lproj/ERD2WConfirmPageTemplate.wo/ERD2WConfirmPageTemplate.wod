@@ -93,7 +93,7 @@ SwitchComponent3: WOSwitchComponent {
 }
 
 SwitchComponent4: WOSwitchComponent {
-	WOComponentName = d2wContext.explanationComponent;
+	WOComponentName = d2wContext.explanationComponentName;
 	dataSource = dataSource;
 	object = object;
 	pageConfiguration = d2wContext.explanationConfigurationName;
