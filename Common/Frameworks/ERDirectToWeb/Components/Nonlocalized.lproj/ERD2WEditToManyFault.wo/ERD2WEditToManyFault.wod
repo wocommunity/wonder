@@ -19,6 +19,6 @@ Values: WOBrowser {
 	item = browserItem;
 	list = browserList;
 	multiple = true;
-	size = 4;
+	size = d2wContext.size;
 	displayString = browserStringForItem;
 }
