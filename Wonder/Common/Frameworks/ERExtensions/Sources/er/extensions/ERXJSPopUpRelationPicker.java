@@ -228,7 +228,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         } else {
             returnString.append("<input type=\"hidden\" name=\""+selectedChildId+"\" value=\"\">\n");
         }
-
+        returnString.append("<script>setSelectToArrayOfEntities(window.document.forms[0]." + childSelectName + ",allChildren(),childPopUpStringForAll)</script>\n");
         return returnString.toString();
     }
 
