@@ -46,7 +46,7 @@ TODO: chaining of Localizers
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     protected static final ERXLogger log = ERXLogger.getERXLogger(ERXLocalizer.class);
-    protected static final ERXLogger createdKeysLog = (ERXLogger)ERXLogger.getLogger(ERXLocalizer.class.getClass().getName() + ".createdKeys");
+    protected static final ERXLogger createdKeysLog = (ERXLogger)ERXLogger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
     private static boolean isLocalizationEnabled = false;
     private static boolean isInitialized = false;
     
@@ -54,6 +54,15 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     
     public static class Observer {
         public void fileDidChange(NSNotification n) {
+            ERXLocalizer.resetCache();
+            NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
+        }
+
+        public void compilerProxyDidCompileClasses(NSNotification n) {
+            // ENHANCEME: Should deal with ERXLocalizer subclasses too. 
+            if (! ERXCompilerProxy.isClassContainedBySet("er.extensions.ERXLocalizer", (NSSet)n.object())) {
+                return;
+            }
             ERXLocalizer.resetCache();
             NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
         }
@@ -67,6 +76,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             observer = new Observer();
             monitoredFiles = new NSMutableArray();
             isLocalizationEnabled = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLocalizer.isLocalizationEnabled"), true);
+            if (isLocalizationEnabled) {
+                // To detect ERXLocalizer and its subclasses are recompiled at run-time. 
+                NSNotificationCenter.defaultCenter().addObserver(
+                        observer, 
+                        new NSSelector("compilerProxyDidCompileClasses", ERXConstant.NotificationClassArray), 
+                        ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, 
+                        null);
+            }
             isInitialized = true;
         }
     }
@@ -103,7 +120,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
     
     public static ERXLocalizer localizerForLanguages(NSArray languages) {
-        if(languages == null || languages.count() == 0) return localizerForLanguage(defaultLanguage());
+        if (! isLocalizationEnabled)   
+            return createLocalizerForLanguage("Nonlocalized", false);
+
+        if (languages == null || languages.count() == 0)  return localizerForLanguage(defaultLanguage());
         ERXLocalizer l = null;
         Enumeration e = languages.objectEnumerator();
         while(e.hasMoreElements()) {
@@ -122,6 +142,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     private static NSArray _languagesWithoutPluralForm = new NSArray(new Object [] {"Japanese"});
     
     public static ERXLocalizer localizerForLanguage(String language) {
+        if (! isLocalizationEnabled)   
+            return createLocalizerForLanguage("Nonlocalized", false);
+            
         ERXLocalizer l = null;
         l = (ERXLocalizer)localizers.objectForKey(language);
         if(l == null) {
@@ -258,7 +281,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                     }
                     try {
                         framework = "app".equals(framework) ? null : framework;
-                        log.debug("Loading: " + fileName + " - " + framework + " - " + languages + WOApplication.application().resourceManager().pathForResourceNamed(fileName, framework, languages));
+                        log.debug("Loading: " + fileName + " - " 
+                            + (framework == null ? "app" : framework) + " - " 
+                            + languages + WOApplication.application().resourceManager()
+                                                .pathForResourceNamed(fileName, framework, languages));
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                         cache.addEntriesFromDictionary(dict);
                     } catch(Exception ex) {
@@ -410,7 +436,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return _plurify(name, count);
     }
     
-    public String toString() { return "<ERXLocalizer "+language+">"; }
+    public String toString() { return "<" + getClass().getName() + " " + language + ">"; }
 
     public static String defaultLanguage() {
         if (defaultLanguage == null) {
