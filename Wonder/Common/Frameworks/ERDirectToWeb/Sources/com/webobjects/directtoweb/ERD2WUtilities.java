@@ -104,6 +104,7 @@ public class ERD2WUtilities {
             newEc.lock();
             try {
                 localObject = EOUtilities.localInstanceOfObject(newEc, eo);
+                localObject.willRead();
             } finally {
                 ec.unlock();
                 newEc.unlock();
