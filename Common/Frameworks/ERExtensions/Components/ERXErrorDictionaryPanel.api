@@ -6,6 +6,7 @@
 		<binding name="extraErrorMessage"/>
 		<binding name="shouldShowNewLineAbove" defaults="Boolean"/>
 		<binding name="errorKeyOrder"/>
+		<binding name="shouldShowNewLineBelow" defaults="Boolean"/>
 
 		<validation message="You need to bind at least errorMessages or extraErrorMessage">
 			<and>
