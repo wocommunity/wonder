@@ -13,12 +13,15 @@ There are three ways to use this script:
 		web     --> copy to ${wo.server.root}
 		clean   --> remove .classes, .framework or .woa
 
-2) from the command line to build specific parts of WONDER, for example
-        ant -emacs -f ~/Wonder/Build/generic.xml ERExtensions.all
+2) to have clickable targets in PBX for specific parts of WONDER, for example
+        ant -emacs -f ~/Wonder/Build/build/generic.xml \
+            -Dproject.name=ERExtensions \
+            -Dproject.type=framework \
+            generic.$ACTION
 
-3) to build your own clickable targets in PBX.
+3) to build clickable targets in PBX for your own projects.
    You need to define a custom build target in Project Builder like this:
-        ant -emacs -f ~/Wonder/Build/generic.xml  \
+        ant -emacs -f ~/Wonder/Build/build/generic.xml  \
 		-Dproject.type=application \
 		-Dproject.name=SomeProject \
 		-Dproject.principal.class=com.company.Application \
@@ -51,7 +54,7 @@ There are three ways to use this script:
     </target>
 
     <!-- When you add another sub-project, use this as a template
-         We (I actually) strongly encourage you to use on of the provided 
+         We (I actually) strongly encourage you to use one of the provided 
          templates or mimic the structure
              SomeProject/
                 Sources/
@@ -118,7 +121,8 @@ There are three ways to use this script:
         <antcall target="generic.all" />
     </target>
     <target name="generic."><!-- the "." is intentional to facilitate running from PBX buttons -->
-        <antcall target="generic.all" />
+        <antcall target="${project.name}.all" >
+        </antcall>
     </target>
     <target name="generic.all">
         <antcall target="global.${project.type}" >
@@ -142,7 +146,6 @@ There are three ways to use this script:
             <param name="project.name" value="${project.name}" />
         </antcall>
     </target>
-
 
 
     <target name="global.environment">
