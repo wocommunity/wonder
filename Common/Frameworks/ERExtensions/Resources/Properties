@@ -227,7 +227,7 @@ er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
 # ERXEC 
 #########################################################################
 ## decides if new ECs use the shared editing context
-er.extensions.ERXEC.useSharedEditingContext=true
+# er.extensions.ERXEC.useSharedEditingContext=true
 
 ## Specifies if new ECs should lock/unlock automatically. Use with care...
 # er.extensions.ERXEC.defaultAutomaticLockUnlock = true
@@ -237,13 +237,13 @@ er.extensions.ERXEC.useSharedEditingContext=true
 #########################################################################
 ## decides if locked editing contexts should be unlocked after the RR-loop.
 ## If you use D2W, it is *strongly* recommended to enable this feature!
-er.extensions.ERXApplication.useEditingContextUnlocker=false
+# er.extensions.ERXApplication.useEditingContextUnlocker=false
 
 ## decides if the session store deadlock detection (session can't get 
 ## checked out because it already was) should be enabled. This is useful 
 ## for debugging, experimental and doesn't work when concurrent request
 ## handling is enabled
-er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
+# er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
 
 ## Base directory for statistics logging
 # er.extensions.ERXApplication.StatisticsBaseLogPath = 
@@ -302,7 +302,7 @@ dbMinConnectionsGLOBAL=1
 # if set to true the following conventions are mandatory:
 # 1) all entities must have only one PK value whose external type is 
 #    comparable to java.lang.Long, for example int8 with Postgresql
-ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
+# ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
 
 #########################################################################
 # ERXWOResponseCache 
