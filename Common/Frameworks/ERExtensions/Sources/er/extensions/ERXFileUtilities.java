@@ -259,16 +259,19 @@ public class ERXFileUtilities {
     public static void linkFiles(File source, File destination,
                                  boolean symbolic,
                                  boolean allowUnlink,
-                                 boolean doNotFollowSymbolicLinks) throws IOException {
+                                 boolean followSymbolicLinks) throws IOException {
         if (destination == null || source == null)
             throw new IllegalArgumentException("null source or destination not allowed");
 
-        String cmd = "ln "                       +
-            (allowUnlink ? "-f " : "")  +
-            (symbolic    ? "-s " : "")  +
-            (doNotFollowSymbolicLinks ? "-h " : "") +
-            source.getPath() + " "      +
-            destination.getPath();
+        String[] cmd = new String[5];
+
+        int i = 0;
+        cmd[i++] = "ln";
+        if (allowUnlink         ) cmd[i++] = "-f";
+        if (symbolic            ) cmd[i++] = "-s";
+        if (!followSymbolicLinks) cmd[i++] = "-h";
+        cmd[i++] = source.getPath();
+        cmd[i++] = destination.getPath();
 
         Process task = null;
         try {
@@ -285,8 +288,8 @@ public class ERXFileUtilities {
             ERXExtensions.freeProcessResources(task);
         }
     }
-    
 
+    
     /**
         * Copys all of the files in a given directory to another directory.
      * @param srcDirectory source directory
