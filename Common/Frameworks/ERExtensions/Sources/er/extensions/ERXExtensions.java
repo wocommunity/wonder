@@ -17,7 +17,7 @@ import java.io.*;
 import org.apache.log4j.Category;
 
 /**
- * Principle class of the ERExtensions framework. This class
+ * Principal class of the ERExtensions framework. This class
  * will be loaded at runtime when the ERExtensions bundle is
  * loaded (even before the Application construcor is called)
  * This class has a boat-load of stuff in it that will hopefully
@@ -939,135 +939,47 @@ public class ERXExtensions {
     /**
      * Recursively flattens an array of arrays into a single
      * array of elements.<br/>
-     * @depreceated use {$link  ERXArrayUtilities.flatten} instead.
+     * @deprecated use {$link  ERXArrayUtilities.flatten} instead.
      */
     public static NSArray flatten(NSArray array) {
         return ERXArrayUtilities.flatten(array);
     }
 
     /**
-     * Holds the null grouping key for use when grouping objects
-     * based on a key that might return null and nulls are allowed
-     */  
-    public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
-
-    /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. This means that the object pointed to by the key
-     * path must be a cloneable object. For instance using the key path
-     * 'company' would not work because enterprise objects are not
-     * cloneable. Instead you might choose to use the key path 'company.name'
-     * of 'company.primaryKey', if your enterprise objects support this
-     * see {@link ERXGenericRecord} if interested.
-     * @param eos array of objects to be grouped
-     * @param keyPath path used to group the objects.
-     * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * Groups an array of objects by a given key path.
+     * @deprecated use {@link ERXArrayUtilities.arrayGroupedByKeyPath}
      */
-    // ENHANCEME: Doesn't have to be just eos ...
-    // MOVEME: ERXDictionaryUtilities or ERXArrayUtilities
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos, String keyPath) {
         return eosInArrayGroupedByKeyPath(eos,keyPath,true,null);
     }
 
     /**
-     * Groups an array of objects by a given key path. The dictionary
-     * that is returned contains keys that correspond to the grouped
-     * keys values. This means that the object pointed to by the key
-     * path must be a cloneable object. For instance using the key path
-     * 'company' would not work because enterprise objects are not
-     * cloneable. Instead you might choose to use the key path 'company.name'
-     * of 'company.primaryKey', if your enterprise objects support this
-     * see {@link ERXGenericRecord} if interested.
-     * @param eos array of objects to be grouped
-     * @param keyPath path used to group the objects.
-     * @param includeNulls determines if keyPaths that resolve to null
-     *		should be allowed into the group.
-     * @param extraKeyPathForValues allows a selected object to include
-     *		more objects in the group. This is going away in the
-     *		future.
-     * @return a dictionary where the keys are the grouped values and the
-     * 		objects are arrays of the objects that have the grouped
-     *		characteristic. Note that if the key path returns null
-     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     * Groups an array of objects by a given key path.
+     * @deprecated use {@link ERXArrayUtilities.arrayGroupedByKeyPath}
      */
-    // ENHANCEME: Doesn't have to be just eos ...
-    // MOVEME: ERXDictionaryUtilities or ERXArrayUtilities
-    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos,
                                                           String keyPath,
                                                           boolean includeNulls,
                                                           String extraKeyPathForValues) {
-        NSMutableDictionary result=new NSMutableDictionary();
-        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
-            EOEnterpriseObject eo=(EOEnterpriseObject)e.nextElement();
-            Object key=eo.valueForKeyPath(keyPath);
-            boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
-            if (!isNullKey || includeNulls) {
-                if (isNullKey) key=NULL_GROUPING_KEY;
-                NSMutableArray existingGroup=(NSMutableArray)result.objectForKey(key);
-                if (existingGroup==null) {
-                    existingGroup=new NSMutableArray();
-                    result.setObjectForKey(existingGroup,key);
-                }
-                if (extraKeyPathForValues!=null) {
-                    Object value=((EOEnterpriseObject)eo).valueForKeyPath(extraKeyPathForValues);
-                    if (value!=null) existingGroup.addObject(value);
-                } else
-                    existingGroup.addObject(eo);
-            }
-        }
-        return result;
+        return ERXArrayUtilities.arrayGroupedByKeyPath(eos,keyPath,includeNulls,extraKeyPathForValues);
     }
 
     /**
      * Simple comparision method to see if two array
      * objects are identical sets.
-     * @param a1 first array
-     * @param a2 second array
-     * @return result of comparison
+     * @deprecated use {@link ERXArrayUtilities.arraysAreIdenticalSets}
      */
     // MOVEME: ERXArrayUtilities
     public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
-        boolean result=false;
-        for (Enumeration e=a1.objectEnumerator();e.hasMoreElements();) {
-            Object i=e.nextElement();
-            if (!a2.containsObject(i)) {
-                result=false; break;
-            }
-        }
-        if (result) {
-            for (Enumeration e=a2.objectEnumerator();e.hasMoreElements();) {
-                Object i=e.nextElement();
-                if (!a1.containsObject(i)) {
-                    result=false; break;
-                }
-            }
-        }
-        return result;
+        return ERXArrayUtilities.arraysAreIdenticalSets(a1,a2);
     }
 
     /**
      * Filters an array using the {@link EOQualifierEvaluation} interface.
-     * @param a array to be filtered
-     * @param q qualifier to do the filtering
-     * @return array of filtered results.
+     * @deprecated use {@link ERXArrayUtilities.filteredArrayWithQualifierEvaluation}
      */
-    // CHECKME: Is this a value add? EOQualifier has filteredArrayWithQualifier
-    // MOVEME: ERXArrayUtilities
     public static NSArray filteredArrayWithQualifierEvaluation(NSArray a, EOQualifierEvaluation q) {
-        NSMutableArray result=null;
-        if (a!=null) {
-            result=new NSMutableArray();
-            for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
-                Object o=e.nextElement();
-                if (q.evaluateWithObject(o)) result.addObject(o);
-            }
-        }
-        return result;
+        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(a,q);
     }
 
     /**
@@ -1385,102 +1297,45 @@ public class ERXExtensions {
     /**
      * Filters out all of the duplicate objects in
      * a given array.<br/>
-     * Note: The current implementation does not preserve
-     * 		the order of elements in the array.
-     * @param anArray to be filtered
-     * @return filtered array.
+     * @deprecated use {@link ERXArrayUtilities.arrayWithoutDuplicates}
      */
-    // FIXME: Does not preserve array order
-    // MOVEME: ERXArrayUtilities
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
-        NSMutableSet aSet = new NSMutableSet();
-        aSet.addObjectsFromArray(anArray);
-        return aSet.allObjects();
+        return ERXArrayUtilities.arrayWithoutDuplicates(anArray);
     }
 
     /**
      * Filters out duplicates of an array of enterprise objects
      * based on the value of the given key off of those objects.
-     * Note: Current implementation depends on the key returning a
-     * cloneable object. Also the order is not preseved from the
-     * original array.
-     * @param eos array of enterprise objects
-     * @param key key path to be evaluated off of every enterprise
-     *		object
-     * @return filter array of objects based on the value of a key-path.
+     * @deprecated use {@link ERXArrayUtilities.arrayWithoutDuplicateKeyValue}
      */
-    // FIXME: Broken implementation, relies on the value returned by the key to be Cloneable
-    //		also doesn't handle the case of the key returning null or an actual keyPath
-    //		and has the last object in the array winning the duplicate tie.
-    // FIXME: Does not preserve order.
-    // ENHANCEME: Doesn't need to be eo specific.
-    // MOVEME: ERXArrayUtilities
     public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
-        NSMutableDictionary dico = new NSMutableDictionary();
-        for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements(); ){
-            EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-            Object value = eo.valueForKey(key);
-            if(value != null){
-                dico.setObjectForKey(eo, value);
-            }
-        }
-        return dico.allValues();
+        return ERXArrayUtilities.arrayWithoutDuplicateKeyValue(eos,key);
     }
 
     /**
      * Subtracts the contents of one array from another.
-     * Note: Current implementation does not preserve order.
-     * @param main array to have values removed from it.
-     * @param minus array of values to remove from the main array
-     * @param result array after performing subtraction.
+     * @deprecated use {@link ERXArrayUtilities.arrayMinusArray}
      */
-    // FIXME: This has the side effect of removing any duplicate elements from
-    //		the main array as well as not preserving the order of the array
-    // MOVEME: ERXArrayUtilities
     public static NSArray arrayMinusArray(NSArray main, NSArray minus){
-        NSSet result = ERXUtilities.setFromArray(main);
-        return result.setBySubtractingSet(ERXUtilities.setFromArray(minus)).allObjects();
+        return ERXArrayUtilities.arrayMinusArray(main,minus);
     }
 
     /**
      * Creates an array preserving order by adding all of the
      * non-duplicate values from the second array to the first.
-     * @param a1 first array
-     * @param a2 second array
-     * @return array containing all of the elements of the first
-     *		array and all of the non-duplicate elements of
-     *		the second array.
+     * @deprecated use {@link ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates}
      */
-    // MOVEME: ERXArrayUtilities
     public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
-        // FIXME this is n2 -- could be made n lg n
-        NSArray result=null;
-        if (a2.count()==0)
-            result=a1;
-        else {
-            NSMutableArray mutableResult=new NSMutableArray(a1);
-            for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
-                Object elt=e.nextElement();
-                if (!mutableResult.containsObject(elt)) mutableResult.addObject(elt);
-            }
-            result=mutableResult;
-        }
-        return result;
+        return ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(a1,a2);
     }
 
     /**
      * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
-     * @param a1 mutable array where non-duplicate objects are
-     *		added
-     * @param a2 array to be added to a1
+     * @deprecated use {@link ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates}
      */
-    // MOVEME: ERXArrayUtilities
     public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
-        for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
-            Object elt=e.nextElement();
-            if (!a1.containsObject(elt)) a1.addObject(elt);
-        }
+        ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(a1,a2);
     }
 
     // DELETEME: duplicate method friendlyEOArrayDisplayForKey
@@ -1616,211 +1471,6 @@ public class ERXExtensions {
         return result;
     }
 
-    /** holds the base adjustment for fuzzy matching */
-    // FIXME: Not thread safe
-    // MOVEME: Needs to go with the fuzzy matching stuff
-    protected static double adjustement = 0.5;
-
-    /**
-     * Sets the base adjustment used for fuzzy matching
-     * @param newAdjustment factor to be used.
-     */
-    // FIXME: Not thread safe.
-    // MOVEME: fuzzy matching stuff
-    public static void setAdjustement(double newAdjustement) {
-        adjustement = newAdjustement;
-    }
-
-    /**
-     * Fuzzy matching is useful for catching user entered typos. For example
-     * if a user is search for a company named 'Aple' within your application
-     * they aren't going to find it. Thus the idea of fuzzy matching, meaning you
-     * can define a threshold of 'how close can they be' type of thing.
-     * 
-     * @param name to be matched against
-     * @param entityName name of the entity to perform the match against.
-     * @param proertyKey to be matched against
-     * @param synonymsKey allows objects to have additional values to be matched
-     * 		against in addition to just the value of the propertyKey
-     * @param ec context to fetch data in
-     * @param cleaner object used to clean a string, for example the cleaner might
-     *		strip out the words 'The' and 'Inc.'
-     * @param comparisonString can be either 'asc' or 'desc' to tell how the results
-     *		should be sorted. Bad design, this will change.
-     * @return an array of objects that match in a fuzzy manner the name passed in.
-     */
-    // FIXME: This needs to be made more generic, i.e. right now it depends on having a field 'distance' on the
-    //	      enterprise object. Also right now it fetches *all* of the attributes for *all* of the entities.
-    //	      that is very costly. Should only be getting the attribute and pk.
-    // FIXME: Bad api design with the comparisonString, should just pass in an EOSortOrdering
-    // MOVEME: Not sure, maybe it's own class and put the interface as a static inner interface
-    public static NSArray fuzzyMatch(String name,
-                                     String entityName,
-                                     String propertyKey,
-                                     String synonymsKey,
-                                     EOEditingContext ec,
-                                     ERXFuzzyMatchCleaner cleaner,
-                                     String comparisonString){
-        NSMutableArray results = new NSMutableArray();
-        NSArray rawRows = EOUtilities.rawRowsMatchingValues( ec, entityName, null);
-        if(name == null)
-            name = "";
-        name = name.toUpperCase();
-        String cleanedName = cleaner.cleanStringForFuzzyMatching(name);
-        for(Enumeration e = rawRows.objectEnumerator(); e.hasMoreElements(); ){
-            NSDictionary dico = (NSDictionary)e.nextElement();
-            Object value = dico.valueForKey(propertyKey);
-            boolean trySynonyms = true;
-            //First try to match with the name of the eo
-            if( value!=null && value instanceof String){
-                String comparedString = ((String)value).toUpperCase();
-                String cleanedComparedString = cleaner.cleanStringForFuzzyMatching(comparedString);
-                if( (distance(name, comparedString) <=
-                     Math.min((double)name.length(), (double)comparedString.length())*adjustement ) ||
-                    (distance(cleanedName, cleanedComparedString) <=
-                     Math.min((double)cleanedName.length(), (double)cleanedComparedString.length())*adjustement)){
-                    ERXGenericRecord object = (ERXGenericRecord)EOUtilities.objectFromRawRow( ec, entityName, dico);
-                    object.takeValueForKey(new Double(distance(name, comparedString)), "distance");
-                    results.addObject(object);
-                    trySynonyms = false;
-                }
-            }
-            //Then try to match using the synonyms vector
-            if(trySynonyms && synonymsKey != null){
-                Object synonymsString = dico.valueForKey(synonymsKey);
-                if(synonymsString != null && synonymsString instanceof String){
-                    Object plist  = NSPropertyListSerialization.propertyListFromString((String)synonymsString);
-                    Vector v = (Vector)plist;
-                    for(int i = 0; i< v.size(); i++){
-                        String comparedString = ((String)v.elementAt(i)).toUpperCase();
-                        if((distance(name, comparedString) <=
-                            Math.min((double)name.length(), (double)comparedString.length())*adjustement) ||
-                           (distance(cleanedName, comparedString) <=
-                            Math.min((double)cleanedName.length(), (double)comparedString.length())*adjustement)){
-                            ERXGenericRecord object = (ERXGenericRecord)EOUtilities.objectFromRawRow( ec, entityName, dico);
-                            object.takeValueForKey(new Double(distance(name, comparedString)), "distance");
-                            results.addObject(object);
-                            break;
-                        }
-                    }
-                }
-
-            }
-        }
-        if(comparisonString != null){
-            NSArray sortOrderings = new NSArray();
-            if(comparisonString.equals("asc")){
-                sortOrderings = new NSArray(new Object [] { new EOSortOrdering("distance",
-                                                                               EOSortOrdering.CompareAscending) });
-            }else if(comparisonString.equals("desc")){
-                sortOrderings = new NSArray(new Object [] { new EOSortOrdering("distance",
-                                                                               EOSortOrdering.CompareDescending) });
-            }
-            results = (NSMutableArray)EOSortOrdering.sortedArrayUsingKeyOrderArray((NSArray)results, sortOrderings);
-        }
-        return results;
-    }
-
-    /**
-     * Java port of the distance algorithm.
-     *
-     * The code below comes from the following post on http://mail.python.org
-     * Fuzzy string matching
-     *   Magnus L. Hetland mlh@idt.ntnu.no
-     *   27 Aug 1999 15:51:03 +0200
-     *
-     *  Explanation of the distance algorithm...
-     *
-     *  The algorithm:
-     *
-     *  def distance(a,b):
-     *   c = {}
-     *  n = len(a); m = len(b)
-     *
-     *  for i in range(0,n+1):
-     *  c[i,0] = i
-     *  for j in range(0,m+1):
-     *  c[0,j] = j
-     *
-     *  for i in range(1,n+1):
-     *  for j in range(1,m+1):
-     *  x = c[i-1,j]+1
-     *  y = c[i,j-1]+1
-     *  if a[i-1] == b[j-1]:
-     *    z = c[i-1,j-1]
-     *  else:
-     *    z = c[i-1,j-1]+1
-     *  c[i,j] = min(x,y,z)
-     *  return c[n,m]
-     *
-     *  It calculates the following: Given two strings, a and b, and three
-     *  operations, adding, subtracting and exchanging single characters, what
-     *  is the minimal number of steps needed to translate a into b?
-     *
-     *  The method is based on the following idea:
-     *
-     *  We want to find the distance between a[:x] and b[:y]. To do this, we
-     *  first calculate
-     *
-     *  1) the distance between a[:x-1] and b[:y], adding the cost of a
-     *  subtract-operation, used to get from a[:x] to a[:z-1];
-     *
-     *  2) the distance between a[:x] and b[:y-1], adding the cost of an
-     *  addition-operation, used to get from b[:y-1] to b[:y];
-     *
-     *  3) the distance between a[:x-1] and b[:y-1], adding the cost of a
-     *  *possible* exchange of the letter b[y] (with a[x]).
-     *
-     *  The cost of the subtraction and addition operations are 1, while the
-     *  exchange operation has a cost of 1 if a[x] and b[y] are different, and
-     *  0 otherwise.
-     *
-     *  After calculating these costs, we choose the least one of them (since
-     *                                                          we want to use the best solution.)
-     *
-     *  Instead of doing this recursively (i.e. calculating ourselves "back"
-     *                             from the final value), we build a cost-matrix c containing the optimal
-     *  costs, so we can reuse them when calculating the later values. The
-     *  costs c[i,0] (from string of length n to empty string) are all i, and
-     *  correspondingly all c[0,j] (from empty string to string of length j)
-     *  are j.
-     *
-     *  Finally, the cost of translating between the full strings a and b
-     *  (c[n,m]) is returned.
-     *
-     *  I guess that ought to cover it...
-     * --------------------------
-     * @param a first string
-     * @param b second string
-     * @return the distance between the two strings
-     */
-    // MOVEME: ERXStringUtilities
-     public static double distance( String a, String b){
-        int n = a.length();
-        int m = b.length();
-        int c[][] = new int[n+1][m+1];
-        for(int i = 0; i<=n; i++){
-            c[i][0] = i;
-        }
-        for(int j = 0; j<=m; j++){
-            c[0][j] = j;
-        }
-        for(int i = 1; i<=n; i++){
-            for(int j = 1; j<=m; j++){
-                int x = c[i-1][j] + 1;
-                int y = c[i][j-1] + 1;
-                int z = 0;
-                if(a.charAt(i-1) == b.charAt(j-1))
-                    z = c[i-1][j-1];
-                else
-                    z = c[i-1][j-1] + 1;
-                int temp = Math.min(x,y);
-                c[i][j] = Math.min(z, temp);
-            }
-        }
-        return c[n][m];
-    }
-
     /**
      * Uses the <code>setObjectForKey</code> off of the {@link WOSession}
      * class to push a Boolean object onto the session for a given key.
@@ -1858,33 +1508,22 @@ public class ERXExtensions {
                                                                 boolean defaultValue) {
         return s.objectForKey(key) != null ? ERXUtilities.booleanValue(s.objectForKey(key)) : defaultValue;
     }
-    /** Holds a session-thread name relationship. Better achived using a thread local */
-    private static NSMutableDictionary _sessionsPerThread=new NSMutableDictionary();
+
     /**
      * Sets the current session for this thread. This is called
      * from {@link ERXSession}'s awake and sleep methods.
      * @param session that is currently active for this thread.
      */
-    // FIXME: Should use weak references as well as an InheritableThreadLocal for all of this type
-    //		of stuff.
-    // this should be thread-safe
-    // even though we don't intend to run with full MT on at this point
-    public synchronized static void setSession(WOSession session) {
-        Object key=Thread.currentThread().getName();
-        if (session!=null)
-            _sessionsPerThread.setObjectForKey(session,key);
-        else
-            _sessionsPerThread.removeObjectForKey(key);
+    public synchronized static void setSession(ERXSession session) {
+        ERXThreadStorage.takeValueForKey(session, "session");
     }
 
     /**
      * Returns the current session object for this thread.
      * @return current session object for this thread
      */
-    // ENHANCEME: Better done using a WeakHashMap and a ThreadLocal
-    public synchronized static WOSession session() {
-        Object key=Thread.currentThread().getName();
-        return (WOSession)_sessionsPerThread.objectForKey(key);
+    public synchronized static ERXSession session() {
+        return (ERXSession)ERXThreadStorage.valueForKey("session");
     }
 
     /**

@@ -16,6 +16,208 @@ import java.util.Enumeration;
  */
 public class ERXArrayUtilities extends Object {
     /**
+    * Holds the null grouping key for use when grouping objects
+     * based on a key that might return null and nulls are allowed
+     */
+    public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
+
+    /**
+    * Groups an array of objects by a given key path. The dictionary
+     * that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'company' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'company.name'
+     * of 'company.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @return a dictionary where the keys are the grouped values and the
+     * 		objects are arrays of the objects that have the grouped
+     *		characteristic. Note that if the key path returns null
+     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    // ENHANCEME: Doesn't have to be just eos ...
+    public static NSDictionary arrayGroupedByKeyPath(NSArray eos, String keyPath) {
+        return arrayGroupedByKeyPath(eos,keyPath,true,null);
+    }
+
+    /**
+        * Groups an array of objects by a given key path. The dictionary
+     * that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'company' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'company.name'
+     * of 'company.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param includeNulls determines if keyPaths that resolve to null
+     *		should be allowed into the group.
+     * @param extraKeyPathForValues allows a selected object to include
+     *		more objects in the group. This is going away in the
+     *		future.
+     * @return a dictionary where the keys are the grouped values and the
+     * 		objects are arrays of the objects that have the grouped
+     *		characteristic. Note that if the key path returns null
+     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
+    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+                                                     String keyPath,
+                                                     boolean includeNulls,
+                                                     String extraKeyPathForValues) {
+        NSMutableDictionary result=new NSMutableDictionary();
+        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+            Object eo = e.nextElement();
+            Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
+            boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
+            if (!isNullKey || includeNulls) {
+                if (isNullKey) key=NULL_GROUPING_KEY;
+                NSMutableArray existingGroup=(NSMutableArray)result.objectForKey(key);
+                if (existingGroup==null) {
+                    existingGroup=new NSMutableArray();
+                    result.setObjectForKey(existingGroup,key);
+                }
+                if (extraKeyPathForValues!=null) {
+                    Object value=NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,extraKeyPathForValues);
+                    if (value!=null) existingGroup.addObject(value);
+                } else
+                    existingGroup.addObject(eo);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+    * Simple comparision method to see if two array
+     * objects are identical sets.
+     * @param a1 first array
+     * @param a2 second array
+     * @return result of comparison
+     */
+    public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
+        boolean result=false;
+        for (Enumeration e=a1.objectEnumerator();e.hasMoreElements();) {
+            Object i=e.nextElement();
+            if (!a2.containsObject(i)) {
+                result=false; break;
+            }
+        }
+        if (result) {
+            for (Enumeration e=a2.objectEnumerator();e.hasMoreElements();) {
+                Object i=e.nextElement();
+                if (!a1.containsObject(i)) {
+                    result=false; break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+    * Filters an array using the {@link EOQualifierEvaluation} interface.
+     * @param a array to be filtered
+     * @param q qualifier to do the filtering
+     * @return array of filtered results.
+     */
+    // CHECKME: Is this a value add? EOQualifier has filteredArrayWithQualifier
+    public static NSArray filteredArrayWithQualifierEvaluation(NSArray a, EOQualifierEvaluation q) {
+        NSMutableArray result=null;
+        if (a!=null) {
+            result=new NSMutableArray();
+            for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
+                Object o=e.nextElement();
+                if (q.evaluateWithObject(o)) result.addObject(o);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+    * Filters out duplicates of an array of enterprise objects
+     * based on the value of the given key off of those objects.
+     * Note: Current implementation depends on the key returning a
+     * cloneable object. Also the order is not preseved from the
+     * original array.
+     * @param eos array of enterprise objects
+     * @param key key path to be evaluated off of every enterprise
+     *		object
+     * @return filter array of objects based on the value of a key-path.
+     */
+    // FIXME: Broken implementation, relies on the value returned by the key to be Cloneable
+    //		also doesn't handle the case of the key returning null or an actual keyPath
+    //		and has the last object in the array winning the duplicate tie.
+    // FIXME: Does not preserve order.
+    public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
+        NSMutableDictionary dico = new NSMutableDictionary();
+        for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements(); ){
+            NSKeyValueCoding eo = (NSKeyValueCoding)e.nextElement();
+            Object value = eo.valueForKey(key);
+            if(value != null){
+                dico.setObjectForKey(eo, value);
+            }
+        }
+        return dico.allValues();
+    }
+
+    /**
+    * Subtracts the contents of one array from another.
+     * Note: Current implementation does not preserve order.
+     * @param main array to have values removed from it.
+     * @param minus array of values to remove from the main array
+     * @param result array after performing subtraction.
+     */
+    // FIXME: This has the side effect of removing any duplicate elements from
+    //		the main array as well as not preserving the order of the array
+    public static NSArray arrayMinusArray(NSArray main, NSArray minus){
+        NSSet result = ERXUtilities.setFromArray(main);
+        return result.setBySubtractingSet(ERXUtilities.setFromArray(minus)).allObjects();
+    }
+
+    /**
+    * Creates an array preserving order by adding all of the
+     * non-duplicate values from the second array to the first.
+     * @param a1 first array
+     * @param a2 second array
+     * @return array containing all of the elements of the first
+     *		array and all of the non-duplicate elements of
+     *		the second array.
+     */
+    public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
+        // FIXME this is n2 -- could be made n lg n
+        NSArray result=null;
+        if (a2.count()==0)
+            result=a1;
+        else {
+            NSMutableArray mutableResult=new NSMutableArray(a1);
+            for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
+                Object elt=e.nextElement();
+                if (!mutableResult.containsObject(elt)) mutableResult.addObject(elt);
+            }
+            result=mutableResult;
+        }
+        return result;
+    }
+
+    /**
+    * Adds all of the non-duplicate elements from the second
+     * array to the mutable array.
+     * @param a1 mutable array where non-duplicate objects are
+     *		added
+     * @param a2 array to be added to a1
+     */
+    public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
+        for (Enumeration e=a2.objectEnumerator(); e.hasMoreElements();) {
+            Object elt=e.nextElement();
+            if (!a1.containsObject(elt)) a1.addObject(elt);
+        }
+    }
+
+    /**
     * Recursively flattens an array of arrays into a single
      * array of elements.<br/>
      * <br/>
