@@ -441,7 +441,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         _validationInfo = ERXValueUtilities.dictionaryValue(entity.userInfo().objectForKey("ERXValidation"));
         _validationQualiferCache = new NSMutableDictionary();
         _initialDefaultValues = new NSMutableDictionary();
-        readDefaultValues();
+	// FIXME commenting this out as a quick fix as it seems to break app launching as
+	// soon as you have several models with cross model relationships
+        //readDefaultValues();
     }
 
     /**
