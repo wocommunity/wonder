@@ -178,13 +178,7 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
                 for(int i = 0; i < pKeys.count(); i++) {
                     
                     Object key = pKeys.objectAtIndex(i);
-                    String keyString = null;
-                    if(key instanceof NSData) {
-                        //ak: This is a fix for Postgres NSData PKs, note that you need the correct plugin for this to work
-                        keyString = e.sqlStringForData((NSData)key);
-                    } else {
-                        keyString = key.toString();
-                    }
+                    String keyString = e.formatValueForAttribute(key, pk);
                     result.append(keyString);
                     if(i < pKeys.count()-1) {
                         result.append(",");
