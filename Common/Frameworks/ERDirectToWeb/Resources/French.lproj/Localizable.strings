@@ -8,11 +8,13 @@
         confirmLabel = "Confirmation du mot de passe.";
         confirmNewLabel = "Confirmation du nouveau mot de passe.";
     };
+    "CouldNotSave" = "Could not save your changes: @@message@@"; 
+    "CouldNotSavePleaseReapply" = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them."; 
     "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of  @@tabSectionsContents.count@@";
     "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
     "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
     "ERD2W.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
-     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
+    "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</b><br /><br />Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
     "ERDEditListButton.editButtonName" = "Edition de la liste de @@displayNameForProperty@@";
     "ERDEmptyListMessage.emptyListMessage" = "<b>Aucune valeurs trouvée pour @@displayNameForEntity@@.</b>";
     "ERDTrashcan.confirmDeletionMessage" = "<b>Etes-vous sur de vouloir éliminer ce @@displayNameForEntity@@?</b>";

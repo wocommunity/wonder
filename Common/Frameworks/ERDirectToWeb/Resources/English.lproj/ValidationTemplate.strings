@@ -1,5 +1,4 @@
 {
-    "Test validation message for unit test" = "SUCCESS";
     NullPropertyException = "Please provide @@indefiniteArticleForProperty@@ <b>@@displayNameForProperty@@</b>.";
     MandatoryToOneRelationshipException = "A <b>@@displayNameForEntity@@</b> must have a <b>@@displayNameForProperty@@</b>.";
     MandatoryToManyRelationshipException = "A <b>@@displayNameForEntity@@</b> must have a least one <b>@@displayNameForDestinationEntity@@</b>.";
@@ -13,4 +12,5 @@
 
     PasswordsFillBothFieldsException = "Please fill in both <b>password</b> fields";
     PasswordsDontMatchException = "The <b>passwords</b> you entered don't match";
+    "Test validation message for unit test" = "SUCCESS";
 }
