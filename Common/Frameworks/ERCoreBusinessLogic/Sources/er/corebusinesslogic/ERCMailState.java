@@ -37,11 +37,19 @@ public class ERCMailState extends _ERCMailState {
         }
         
         public void initializeSharedData() {
-            ERCMailState.EXCEPTION_STATE = sharedMailStateForKey("xcpt");
-            ERCMailState.READY_TO_BE_SENT_STATE = sharedMailStateForKey("rtbs");
-            ERCMailState.SENT_STATE = sharedMailStateForKey("sent");
-            ERCMailState.RECEIVED_STATE = sharedMailStateForKey("rcvd");
-            ERCMailState.WAIT_STATE = sharedMailStateForKey("wait");
+            // this default allows you not to have to create the table if you don't use the mail facility
+            boolean usesMail=ERXUtilities.booleanValueWithDefault(System.getProperty("ERCUseMailFacility"),
+                                                                  true);
+            if (usesMail) {
+                ERCMailState.EXCEPTION_STATE = sharedMailStateForKey("xcpt");
+                ERCMailState.READY_TO_BE_SENT_STATE = sharedMailStateForKey("rtbs");
+                ERCMailState.SENT_STATE = sharedMailStateForKey("sent");
+                ERCMailState.RECEIVED_STATE = sharedMailStateForKey("rcvd");
+                ERCMailState.WAIT_STATE = sharedMailStateForKey("wait");
+            } else {
+                // make ERCMailState non-shared so it does not get loaded
+                ERXUtilities.makeEditableSharedEntityNamed("ERCMailState");
+            }
         }
     }
 
