@@ -144,7 +144,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             Number lastIndex=ERXConstant.ZeroInteger;
             if (sortedObjects!=null && sortedObjects.count()>0) {
                 EOEnterpriseObject lastObject=(EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();
-                lastIndex=(Number)lastIndex.valueForKey(indexKey());
+                lastIndex=(Number)lastObject.valueForKey(indexKey());
             }
             int newIndex=lastIndex!=null ? lastIndex.intValue() : 0;
             joinEO.takeValueForKey(ERXConstant.integerForInt(newIndex),indexKey());
