@@ -127,10 +127,10 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isNotNetscape();
 
     /**
-     * Browser is Omniweb?
-     * @return true if browser is Omniweb.
+     * Browser is OmniWeb?
+     * @return true if browser is OmniWeb.
      */
-    public abstract boolean isOmniweb();
+    public abstract boolean isOmniWeb();
 
     /**
      * Browser is Opera?
