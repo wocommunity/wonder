@@ -76,12 +76,16 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
 
    // a fake entity that can be used for tasks such as error/confirm..
     private EOEntity _dummyEntity;
-    public Object entity(D2WContext c) {
+    public EOEntity dummyEntity() {
         if (_dummyEntity==null) {
             _dummyEntity=new EOEntity();
             _dummyEntity.setName("__Dummy__");
         }
         return _dummyEntity;
+    }
+
+    public Object entity(D2WContext c) {
+        return dummyEntity();
     }
 
     /**
