@@ -6,42 +6,84 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-/* ERStyleSheet.java created by patrice on Thu 10-Aug-2000 */
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import org.apache.log4j.Category;
 
+/**
+ * Simple stateless component used for adding a style sheet
+ * and/or a favicon link to a page. Note the way this component
+ * currently works all of the urls are cached for the life of the
+ * application. This will be configurable in the future.
+ * <br/>
+ * Synopsis:<br/>
+ * styleSheetName=<i>aString</i>;[styleSheetFrameworkName=<i>aString</i>;][favIconLink=<i>aBoolean</i>;]
+ *
+ * @binding styleSheetName name of the style sheet
+ * @binding styleSheetFrameworkName name of the framework for the style sheet
+ * @binding favIconLink url to the fav icon used for bookmarking
+ */
+// ENHANCEME: Should support having the favIcon as a WebServerResource, like we do for the style sheet
+// ENHANCEME: Should support direct binding of a styleSheetLink
+// CHECKME: Might want to think about having an ERXFavIcon component so people know it is here.
 public class ERXStyleSheet extends WOComponent {
 
+    /** logging support */
+    public static final Category cat = Category.getInstance(ERXStyleSheet.class);
+
+    /** holds the calculated style sheet url */
+    private String _styleSheetUrl;
+    /** holds the style sheet framework name */
+    private String _styleSheetFrameworkName;
+    /** flags if the framework name has been initialized */
+    private boolean _frameworkNameInitialized = false;
+    /** holds the name of the style sheet */
+    private String _styleSheetName;
+    /** flags if the style sheet name has been initialized */
+    private boolean _styleSheetNameInitialized = false;
+    /** holds the url of the fav icon */
+    private String _favIconLink;
+
+    /**
+     * Public constructor
+     * @param aContext a context
+     */
     public ERXStyleSheet(WOContext aContext) {
         super(aContext);
     }
-
-    /////////////////////////////////////  log4j category  ////////////////////////////////////
-    public static Category cat = Category.getInstance(ERXStyleSheet.class);
-    
+        
+    /**
+     * Component is stateless
+     * @return true
+     */
     public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBinding() { return false; }
 
     // no reset
     // since this is cached for the life of the app..
+    // FIXME: This should be controlled by a system property
     /* public void reset(){
         super.reset();
         _styleSheetUrl = null;
     } */
-    
-    private String _styleSheetUrl;
+
+    /**
+     * returns the complete url to the style sheet.
+     * @return style sheet url
+     */
     public String styleSheetUrl() {
         if (_styleSheetUrl==null) {
-            _styleSheetUrl=application().resourceManager().urlForResourceNamed(styleSheetName(), styleSheetFrameworkName(),null,context().request());
+            _styleSheetUrl=application().resourceManager().urlForResourceNamed(styleSheetName(),
+                                                                               styleSheetFrameworkName(),null,context().request());
         }
         return _styleSheetUrl;
     }
-
-    // ASSUME: This is cached for the life of the app.  If you want to change style sheets mid-app you will want to place this ivar in the reset
-    //		method and change the check.
-    private String _styleSheetFrameworkName;
-    private boolean _frameworkNameInitialized = false;
+    /**
+     * Returns the style sheet framework name either resolved
+     * via the binding <b>styleSheetFrameworkName</b> or by
+     * calling <code>configurationForKey</code> off
+     * of {@link ERXExtensions}.
+     * @return style sheet framework name
+     */
     public String styleSheetFrameworkName() {
         if (!_frameworkNameInitialized) {
             _styleSheetFrameworkName = (String)(hasBinding("styleSheetFrameworkName") ? valueForBinding("styleSheetFrameworkName") :
@@ -53,10 +95,13 @@ public class ERXStyleSheet extends WOComponent {
         return _styleSheetFrameworkName;
     }
 
-    // ASSUME: This is cached for the life of the app.  If you want to change style sheet's name mid-app you will want to place this ivar in the reset
-    //		method and change the check.
-    private String _styleSheetName;
-    private boolean _styleSheetNameInitialized = false;
+    /**
+     * Returns the style sheet name either resolved
+     * via the binding <b>styleSheetName</b> or by
+     * calling <code>configurationForKey</code> off
+     * of {@link ERXExtensions}.
+     * @return style sheet name
+     */
     public String styleSheetName() {
         if (!_styleSheetNameInitialized) {
             _styleSheetName = (String)(hasBinding("styleSheetName") ? valueForBinding("styleSheetName") :
@@ -68,11 +113,13 @@ public class ERXStyleSheet extends WOComponent {
         return _styleSheetName;
     }
 
-    private String _favIconLink;
+    /**
+     * Returns the favIcon url link.
+     * @return favIcon url
+     */
     public String favIconLink() {
-        if (_favIconLink == null) {
+        if (_favIconLink == null)
             _favIconLink = (String)valueForBinding("favIconLink");
-        }
         return _favIconLink;
     }    
 }

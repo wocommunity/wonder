@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ObjectSaveDelegate.java created by max on Fri 27-Apr-2001 */
 package er.extensions;
 
 import com.webobjects.directtoweb.*;
@@ -14,8 +12,26 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 
-// All this guy does is save the editing context of the object and return the next page.
-// Useful for confirm pages.
+/**
+ * Simple {@link com.webobjects.directtoweb.NextPageDelegate}
+ * implementation that saves the editing context of an enterprise
+ * object before returning the next page. This can be particularly
+ * handy for example if you want a user to confirm an action before
+ * the editing context is committed, for example:<br/>
+ * Assume that you have a User object that has been editinged in
+ * a peer context and now you want the user to confirm that they
+ * really should save the changes to the editing context, you
+ * could have this method:<br/><code>
+ * public WOComponent confirmSave() {
+ *      ConfirmPageInterface cpi = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed("ConfirmSaveUserChanges", session());
+ *      cpi.setConfirmDelegate(new ERXObjectSaveDelegate(user, context().page()));
+ *      cpi.setCancelDelegate(someCancelDelegate);
+ *	return (WOComponent)cpi;
+ * }</code>
+ * This way if the user selects the confirm button the editing context
+ * will be saved and they will be brought back to the current page.
+ */
+// MOVEME: Might be better suited in ERD2W with the other delegates
 public class ERXObjectSaveDelegate implements NextPageDelegate {
     /** holds the object */
     private EOEnterpriseObject _object;
@@ -28,18 +44,37 @@ public class ERXObjectSaveDelegate implements NextPageDelegate {
     private WOComponent _nextPage;
 
     /**
-     * returns the object
+     * Public constructor
+     * @param object to be saved
+     * @param nextPage to be returned
      */
-    protected EOEnterpriseObject object() { return _object; }
-    protected EOEditingContext editingContext() { return _context; }
-    
     public ERXObjectSaveDelegate(EOEnterpriseObject object, WOComponent nextPage) {
         _object = object;
         if (_object != null)
             _context = _object.editingContext();
         _nextPage = nextPage;
     }
+    
+    /**
+     * returns the object. Useful for subclasses
+     * @return the object
+     */
+    protected EOEnterpriseObject object() { return _object; }
+    /**
+     * returns the editing context of the object.
+     * Useful for subclasses
+     * @return the editing context
+     */
+    protected EOEditingContext editingContext() { return _context; }
 
+    /**
+     * Implementation of the NextPageDelegate interface
+     * First saves the changes in the object's editing
+     * context and then returns the nextPage.
+     * @param sender component calling the delegate
+     * @return the nextPage component passed in via the
+     *		constructor.
+     */
     public WOComponent nextPage(WOComponent sender) {
         if (_context != null && _context.hasChanges())
             _context.saveChanges();

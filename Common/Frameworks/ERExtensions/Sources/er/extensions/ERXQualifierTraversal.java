@@ -14,13 +14,24 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 
+/**
+ * Contains a single method for traversing
+ * a network of qualifiers.
+ */
 public class ERXQualifierTraversal {
 
-    ///////////////////////////  log4j category  ///////////////////////////
+    /** logging support */
     public static final Category cat = Category.getInstance(ERXQualifierTraversal.class);
-    
-    // a simple class that traverses a network of qualifiers; this would be better achieved with categories
-    static public boolean traverseQualifier(EOQualifierEvaluation q, ERXQualifierTraversalCallback cb) {
+
+    /**
+     * Simple method to traverse a network of qualifiers
+     * using a callback.
+     * @param q qualifier to traverse
+     * @param cb call back
+     * @return if the traversal was successful
+     */
+    // MOVEME: ERXQualifierUtilities
+    public static boolean traverseQualifier(EOQualifierEvaluation q, ERXQualifierTraversalCallback cb) {
         Boolean result=null;
         if (q==null)
             result=Boolean.TRUE;
@@ -49,6 +60,7 @@ public class ERXQualifierTraversal {
                 result=cb.traverseKeyValueQualifier((EOKeyValueQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof EOKeyComparisonQualifier) {
                 result=cb.traverseKeyComparisonQualifier((EOKeyComparisonQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
+                // FIXME: Should continue to traverse a Not qualifier.
             } else if (q instanceof EONotQualifier) {
                 result=cb.traverseNotQualifier((EONotQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof BooleanQualifier) {
