@@ -12,6 +12,10 @@ import com.webobjects.directtoweb.*;
 
 public class ERDTabDictionaryComputer extends TabDictionaryComputer implements ERDComputingAssignmentInterface {
 
+    public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        return new ERDTabDictionaryComputer(eokeyvalueunarchiver);
+    }
+
     public ERDTabDictionaryComputer (EOKeyValueUnarchiver u) { super(u); }
     public ERDTabDictionaryComputer (String key, Object value) { super(key,value); }
 

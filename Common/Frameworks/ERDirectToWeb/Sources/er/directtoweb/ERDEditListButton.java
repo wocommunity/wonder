@@ -86,7 +86,7 @@ public class ERDEditListButton extends ERDCustomEditComponent {
     public WOComponent editList() {
         if (parent() instanceof ERXExceptionHolder)
             ((ERXExceptionHolder)parent()).clearValidationFailed();
-        WOComponent result = pageWithName(choicePageName()) /* JC_WARNING - Please check: since WO4.5, using pageWithName on the application or session instance requires two parameters (the name of the page and a WOContext). If this pageWithName is in a component or direct action instance, it is valid as is. */;
+        WOComponent result = pageWithName(choicePageName());
         result.takeValueForKey(object(), "object");
         result.takeValueForKey(key(), "key");
         result.takeValueForKey(choices(), "choices");
