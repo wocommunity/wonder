@@ -171,11 +171,25 @@ public class ERXExtensions {
         }
     }
 
+    /** logging support for the adaptor channel */
     public static Category adaptorCategory;
+    /** logging support for shared object loading */
     public static Category sharedEOAdaptorCategory;
+    /** flag to indicate if adaptor channel logging is enabled */
     private static Boolean adaptorEnabled;
-
+    /** 
+     * flag to inidicate if rapid turn around is enabled for the
+     * adaptor channel logging. 
+     */
     private static boolean _isConfigureAdaptorContextRapidTurnAround = false;
+    /**
+     * Configures the passed in observer to register a call back 
+     * when the configuration file is changed. This allows one to 
+     * change a logger category and have that changed value change
+     * the NSLog setting to log the generated SQL. This method is
+     * called as part of the framework initialization process.
+     * @param observer object to register the call back with.
+     */
     // FIXME: This shouldn't be enabled when the application is in production.
     // FIXME: Now that all of the logging has been centralized, we should just be able
     //		to do something like this, but much more generic, i.e. have a mapping
