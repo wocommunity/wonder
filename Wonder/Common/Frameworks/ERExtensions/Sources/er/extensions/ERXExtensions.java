@@ -68,6 +68,8 @@ public class ERXExtensions {
             // SimpleHTMLFormatter used in one of our eos.  Very, very strange.  This works around the issue
             //ERXExtensions.configureAdaptorContextRapidTurnAround();
             EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+            ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
+
 	    ERXEntityClassDescription.registerDescription();
             // This patches shared eo loading so cross model relationships to shared eos work.
             //ERXSharedEOLoader.patchSharedEOLoading();
