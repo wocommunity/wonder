@@ -64,6 +64,10 @@ Conditional3: WOConditional {
 	condition = session.browser.isIE;
 }
 
+Conditional5: WOConditional {
+	condition = d2wContext.useFocus;
+}
+
 Conditional8: WOConditional {
 	condition = session.browser.isIE;
 	negate = true;
@@ -156,6 +160,11 @@ IsEditingConditional3: WOConditional {
 	condition = isEditing;
 }
 
+IsEditingConditional5: WOConditional {
+	_unroll = true;
+	condition = isEditing;
+}
+
 IsEntityWritable: WOConditional {
 	_unroll = true;
 	condition = d2wContext.isEntityDeletable;
@@ -217,6 +226,10 @@ ReturnButton: WOImage {
 
 ReturnLink: WOHyperlink {
 	action = nextPage;
+}
+
+Script: WOJavaScript{	scriptString = tabScriptString;
+	hideInComment = true;
 }
 
 
