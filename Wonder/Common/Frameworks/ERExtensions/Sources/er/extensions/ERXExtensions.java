@@ -44,6 +44,7 @@ public class ERXExtensions {
             ERXSession.registerNotifications();
  	    // initialize compiler proxy
 	    ERXCompilerProxy.defaultProxy().initialize();
+            ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
             //ERWebLint.configureWebLint();
         }
