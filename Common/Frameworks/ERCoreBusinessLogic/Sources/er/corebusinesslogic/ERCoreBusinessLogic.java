@@ -233,7 +233,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * @param extraInfo dictionary of extra information about what was
      *		happening when the exception was thrown.
      */
-    public void reportException(Throwable exception, NSDictionary extraInfo) {
+    public synchronized void reportException(Throwable exception, NSDictionary extraInfo) {
         if (exception instanceof NSForwardException) {
             exception = ((NSForwardException)exception).originalException();
         }
@@ -280,26 +280,31 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     standardExceptionPage.setActor(actor());
                     standardExceptionPage.setExtraInfo(extraInfo);
 
-                    EOEditingContext ec = ERXExtensions.newEditingContext();
+                    // we want a complete channel to the DB
+                    EOEditingContext ec = ERXExtensions.newEditingContext(new EOObjectStoreCoordinator());
+                    try {
+                        ec.lock();
+                        String shortExceptionName;
+                        Throwable exceptionForTitle = exception;
+                        if (exception instanceof InvocationTargetException) {
+                            exceptionForTitle = ((InvocationTargetException)exception).getTargetException();
+                        }
+                        shortExceptionName = ERXStringUtilities.lastPropertyKeyInKeyPath(exceptionForTitle.getClass().getName());
 
-                    String shortExceptionName;
-                    Throwable exceptionForTitle = exception;
-                    if (exception instanceof InvocationTargetException) {
-                        exceptionForTitle = ((InvocationTargetException)exception).getTargetException();
-                    } 
-                    shortExceptionName = ERXStringUtilities.lastPropertyKeyInKeyPath(exceptionForTitle.getClass().getName());                        
-                    
-                    String hostName = ERXConfigurationManager.defaultManager().hostName();
+                        String hostName = ERXConfigurationManager.defaultManager().hostName();
 
-                    ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
-                                                                  emailsForProblemRecipients(),
-                                                                  null,
-                                                                  null,
-                                                                  WOApplication.application().name() + ": " + shortExceptionName
-                                                                  + ": " + exceptionForTitle.getMessage(),
-                                                                  standardExceptionPage.generateResponse().contentString(),
-                                                                  ec);
-                    ec.saveChanges();
+                        ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
+                                                                      emailsForProblemRecipients(),
+                                                                      null,
+                                                                      null,
+                                                                      WOApplication.application().name() + ": " + shortExceptionName
+                                                                      + ": " + exceptionForTitle.getMessage(),
+                                                                      standardExceptionPage.generateResponse().contentString(),
+                                                                      ec);
+                        ec.saveChanges();
+                    } finally {
+                        ec.unlock();
+                    }
                 }                
             }
         } catch (Throwable u) {
