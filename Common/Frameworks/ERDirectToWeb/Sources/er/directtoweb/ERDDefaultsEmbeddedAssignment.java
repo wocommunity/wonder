@@ -101,7 +101,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
             // FIXME: Should try for the 'object' in the context and use the
             //		model group from the object's ec.
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
-            log.warn("embeddedEntityName = " + entityName);
+            log.debug("embeddedEntityName = " + entityName);
             NSMutableArray classProperties = e.classPropertyNames().mutableClone();
             NSArray relationships = (NSArray)e.relationships().valueForKey("name");
             classProperties.removeObjectsInArray(relationships);
