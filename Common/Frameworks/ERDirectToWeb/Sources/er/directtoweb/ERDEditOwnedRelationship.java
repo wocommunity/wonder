@@ -226,6 +226,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
                 cat.warn("Newly created object is in an editing context that will not save to the database");
             }
             localContext = er.extensions.ERXExtensions.newEditingContext(object.editingContext().parentObjectStore());
+            if (cat.isDebugEnabled()) cat.debug("Creating "+entityNameForNewInstances);
             EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
             localContext.insertObject(newEO);
             // If the object already exists, then hookup the relationship, if not do it after the object is saved.
