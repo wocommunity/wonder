@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.ant.AntBuilderLaunchConfigurationType">
+    <stringAttribute
+        key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="${container_loc}"/>
+    <stringAttribute
+        key="org.eclipse.ui.externaltools.ATTR_REFRESH_SCOPE" value="${working_set}"/>
+    <stringAttribute
+        key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${resource_loc:/ERDirectToWeb}"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="/Volumes/Home/Wonder/Build/build/generic.xml"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_TARGETS" value="BTBusinessLogic.all,BugTracker.all,D2WInspectExample.all,D2WListExample.all,DRGrouping.all,DRGroupingTest.all,DevStudio.all,DocsByExample.all,DynaReporter.all,DynaReporting.all,DynaReporting.base,ERCalendar.all,ERChangeNotificationJMS.all,ERCoreBusinessLogic.all,ERDirectToWeb.all,ERExtensions.all,ERJars.all,ERJavaMail.all,ERMailer.all,ERMiniUglyLook.all,ERNeutralLook.all,JavaWOExtensions.all,NetStruxrCaseStudy.all,SVGObjects.ComponentTour.all,SVGObjects.EZForms.all,SVGObjects.Hello.all,SVGObjects.PopIdol.all,SVGObjects.all,SVGObjects.eCards.all,SVGObjects.example.all,SVGObjects.framework.all,SomeNewProject.all,Validity.all,Validity.application.all,Validity.base,Validity.example.all,Validity.framework.all,WOOgnl.all,WOPayPal.all,WRReporting.all,all,all.clean,all.compile,all.install,all.web,applications.all,applications.all.install,bugtracker.all,clean,common.all,core.all,examples.all,experimental.all,frameworks.all,frameworks.all.install,generic,generic.,generic.all,generic.clean,generic.install,generic.web,global.application,global.clean.application,global.clean.framework,global.compile,global.environment,global.framework,global.install.application,global.install.framework,global.prepare,global.properties,global.web.application,global.web.framework,install,specific.validity.application,stepwise.all,subprojects.all,usage,web,wrox.all,ERDirectToWeb.all,"/>
+    <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="perspective_none"/>
+</launchConfiguration>
