@@ -1,0 +1,21 @@
+# *** ERJavaMail settings
+# *** Defaults to 'safe' settings:
+# ***
+
+# * Enables ERJavaMail to send all the mails to only one destination
+# This is useful when debugging
+er.javamail.centralize = true
+
+# * Prints javamail debug infos
+# It is recommended to activate this switch when there are problems
+# with smtp configuration
+er.javamail.debugEnabled = false
+
+# * The admin email, this is where "centralized" mails will go
+#er.javamail.adminEmail = user@domain.com
+
+# * SMTP outbound host
+#er.javamail.smtpHost = smtp.domain.com
+
+# * Time to wait when mail sender queue is overflowed
+er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
