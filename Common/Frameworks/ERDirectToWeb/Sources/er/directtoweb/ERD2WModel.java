@@ -226,7 +226,7 @@ public class ERD2WModel extends D2WModel {
 
     public void prepareDataStructures() {
         cat.debug("prepareDataStructures");
-
+        boolean localizationEnabled = ERXLocalizer.isLocalizationEnabled();
         // is a dictionary which will contain for each rhs key, which other keys it depends
         // on, for single rule hops
         Hashtable dependendKeysPerKey=new Hashtable();
@@ -287,6 +287,9 @@ public class ERD2WModel extends D2WModel {
                 addKeyToVector("task", dependendantKeys);
                 addKeyToVector("entity", dependendantKeys);
                 addKeyToVector("propertyKey", dependendantKeys);
+            }
+            if(localizationEnabled && r.rhs() instanceof ERDLocalizableAssignmentInterface) {
+                addKeyToVector("session.localizer", dependendantKeys);
             }
             c.keys=new NSMutableArray();
         }

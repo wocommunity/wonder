@@ -15,6 +15,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import org.apache.log4j.Category;
 import er.extensions.ERXUtilities;
+import er.extensions.ERXLocalizer;
 
 public abstract class ERDAssignment extends Assignment implements ERDComputingAssignmentInterface {
 
@@ -27,6 +28,32 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
     public ERDAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDAssignment(String key, Object value) { super(key,value); }
 
+    // this one normally belongs to ERDLocaizableInterface, but we can't have implementations in interfaces..
+    public ERXLocalizer localizerForContext(D2WContext c) {
+        return (ERXLocalizer) c.valueForKeyPath("session.localizer");
+    }
+    public Object localizedValueForKeyWithDefaultInContext(String key, D2WContext c) {
+        if(key != null && ERXLocalizer.isLocalizationEnabled()) {
+            return localizerForContext(c).localizedStringForKeyWithDefault(key);
+        } else {
+            return key;
+        }
+    }
+    public Object localizedValueForKeyInContext(String key, D2WContext c) {
+        if(key != null && ERXLocalizer.isLocalizationEnabled()) {
+            return localizerForContext(c).valueForKeyPath(key);
+        } else {
+            return key;
+        }
+    }
+    
+    public Object localizedTemplateStringForKeyInContext(String key, D2WContext c) {
+        if( key != null && ERXLocalizer.isLocalizationEnabled()) {
+            return localizerForContext(c).localizedTemplateStringForKeyWithObject(key, c);
+        } else {
+            return key;
+        }
+    }
     // there are basically two choices to lookup the method
     // use they keypath, in which case you can use the value of the rule to provide a parameter to your assignment method
     // use the value, which gives you the flexibility to have several methods for the same key path..
