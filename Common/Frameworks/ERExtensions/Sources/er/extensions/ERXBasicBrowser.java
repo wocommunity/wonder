@@ -61,6 +61,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final String _mozillaVersion;
     private final String _platform;
     private final String _cpu;
+    private final String _geckoRevision;
     private final NSDictionary _userInfo;
 
     private final boolean _isICab;
@@ -69,6 +70,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean _isOmniWeb;
     private final boolean _isOpera;
     private final boolean _isSafari;
+    private final boolean _isMozilla;
     private final boolean _isUnknownBrowser;
 
     private final boolean _isMozillaVersion50;
@@ -109,12 +111,15 @@ public class ERXBasicBrowser extends ERXBrowser {
         String tempCpu 		= userInfo	!= null ?  (String)userInfo.objectForKey("cpu") : UNKNOWN_CPU;
         _cpu      		= tempCpu	!= null ?  tempCpu : UNKNOWN_CPU;
         
+        _geckoRevision 		= userInfo	!= null ?  (String)userInfo.objectForKey("geckoRevision") : null;
+        
         _isICab			= _browserName.equals(ICAB);
         _isIE			= _browserName.equals(IE);
         _isNetscape		= _browserName.equals(NETSCAPE);
         _isOmniWeb		= _browserName.equals(OMNIWEB);
         _isOpera		= _browserName.equals(OPERA);
         _isSafari		= _browserName.equals(SAFARI);
+        _isMozilla		= _browserName.equals(MOZILLA);
         _isUnknownBrowser	= _browserName.equals(UNKNOWN_BROWSER);
 
         _isMozillaVersion50	= -1 < _mozillaVersion.indexOf("5.0");
@@ -180,6 +185,7 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     public boolean isSafari() { return _isSafari; }
 
+    public boolean isMozilla() { return _isMozilla; }
 
     public boolean isMozilla50Compatible() { return _isMozillaVersion50; }
 
@@ -210,6 +216,12 @@ public class ERXBasicBrowser extends ERXBrowser {
     public boolean isMacOS() { return _isMacOS; }
     public boolean isWindows() { return _isWindows; }
     public boolean isLinux() { return _isLinux; }
+
+    /** Returns the gecko revision of the browser or {@link ERXBrowser#NO_GECKO}.
+      *
+      * @return the gecko revision of the browser or {@link ERXBrowser#NO_GECKO}. 
+      */
+    public String geckoRevision() { return _geckoRevision; }
 
     /**
      * Does the browser support IFrames?
