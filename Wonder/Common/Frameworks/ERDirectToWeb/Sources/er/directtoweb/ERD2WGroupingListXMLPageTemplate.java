@@ -12,13 +12,13 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
 import er.extensions.*;
-import org.apache.log4j.*;
 
 public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
 
     public ERD2WGroupingListXMLPageTemplate(WOContext context) {super(context);}
-    //////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERD2WGroupingListXMLPageTemplate.class);
+    
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WGroupingListXMLPageTemplate.class);
 
     private final static String NULL="N/A";
     
@@ -35,8 +35,8 @@ public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
     public String valueForGroup(){
         String result = "";
         String groupingKeyDisplayKey = (String)d2wContext().valueForKey("groupingKeyDisplayKey");
-        if(cat.isDebugEnabled()) cat.debug("groupingKeyDisplayKey = "+groupingKeyDisplayKey);
-        if(cat.isDebugEnabled()) cat.debug("sublistSection = "+sublistSection);
+        if(log.isDebugEnabled()) log.debug("groupingKeyDisplayKey = "+groupingKeyDisplayKey);
+        if(log.isDebugEnabled()) log.debug("sublistSection = "+sublistSection);
         if (sublistSection != null){
         if (groupingKeyDisplayKey!=null && !groupingKeyDisplayKey.equals("")){
                 if (sublistSection instanceof EOGenericRecord) {

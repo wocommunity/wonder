@@ -10,7 +10,7 @@ import java.util.Enumeration;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.BooleanQualifier;
 import com.webobjects.directtoweb.NonNullQualifier;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 /**
  * Contains a single method for traversing
@@ -19,7 +19,7 @@ import org.apache.log4j.Category;
 public class ERDQualifierTraversal {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERDQualifierTraversal.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDQualifierTraversal.class);
     
     /**
      * Simple method to traverse a network of qualifiers
@@ -68,7 +68,7 @@ public class ERDQualifierTraversal {
             }
         }
         if (result==null) {
-            cat.error("Found unknown qualifier type:"+q.getClass().getName());
+            log.error("Found unknown qualifier type:"+q.getClass().getName());
             throw new RuntimeException("Found unknown qualifier type:"+q.getClass().getName());            
         }
         return result.booleanValue();

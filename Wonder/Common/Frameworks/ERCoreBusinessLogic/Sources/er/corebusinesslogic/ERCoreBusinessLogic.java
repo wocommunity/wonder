@@ -15,7 +15,7 @@ import er.extensions.*;
 import java.util.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
-    public static final ERXLogger log = ERXLogger.getLogger(ERCoreBusinessLogic.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreBusinessLogic.class);
 
     static {
         setUpFrameworkPrincipalClass(ERCoreBusinessLogic.class);

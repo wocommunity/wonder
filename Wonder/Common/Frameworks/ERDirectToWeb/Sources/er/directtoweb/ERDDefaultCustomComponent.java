@@ -8,14 +8,14 @@ package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 public class ERDDefaultCustomComponent extends WOComponent {
 
     public ERDDefaultCustomComponent(WOContext context) { super(context); }
 
-    //////////////////////////////////////////  log4j category  /////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERDDefaultCustomComponent.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultCustomComponent.class);
 
     public boolean isStateless() { return true; }
 
@@ -23,7 +23,7 @@ public class ERDDefaultCustomComponent extends WOComponent {
     public String key() { return (String)valueForBinding("key"); }
 
     public void appendToResponse(WOResponse response, WOContext context) {
-        cat.warn("Using default custom component for object: " + object() + " and key: " + key());
+        log.warn("Using default custom component for object: " + object() + " and key: " + key());
         super.appendToResponse(response, context);
     }
 

@@ -9,13 +9,13 @@ package er.directtoweb;
 import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
 import java.lang.reflect.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 import er.extensions.ERXUtilities;
 
 public class ERDBranchDelegate implements NextPageDelegate {
 
-    ///////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.delegates.ERDBranchDelegate");
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.delegates.ERDBranchDelegate");
 
     public final static Class[] WOComponentClassArray = new Class[] { WOComponent.class };
     
@@ -27,13 +27,13 @@ public class ERDBranchDelegate implements NextPageDelegate {
                 Method m = getClass().getMethod(branchName, WOComponentClassArray);
                 nextPage = (WOComponent)m.invoke(this, new Object[] { sender });
             } catch (InvocationTargetException ite) {
-                cat.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " backtrace: " +
+                log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " backtrace: " +
                           ERXUtilities.stackTrace(ite.getTargetException()) + " for branch name: " + branchName);
             } catch (Exception e) {
-                cat.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
+                log.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
             }
         } else {
-            cat.warn("Branch delegate being used with a component that does not implement the ERBranchInterface");
+            log.warn("Branch delegate being used with a component that does not implement the ERBranchInterface");
         }
         return nextPage;
     }

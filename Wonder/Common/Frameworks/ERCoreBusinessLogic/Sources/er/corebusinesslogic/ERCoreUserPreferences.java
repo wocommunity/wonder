@@ -10,14 +10,13 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import er.extensions.*;
 import java.util.Enumeration;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 
-    ///////////////////////////////////////////  log4j category  /////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERCoreUserPreferences.class);
+    /** Logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreUserPreferences.class);
 
     private final static String VALUE="_V";
 
@@ -33,7 +32,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     /////////////////////////////////////////// Instance Methods /////////////////////////////////////////////
     // Here is where we register the handlers.
     public void registerHandlers() {
-        cat.debug("Registering preference handlers");
+        log.debug("Registering preference handlers");
         _UserPreferenceHandler handler = new _UserPreferenceHandler();
         ERXRetainer.retain(handler);
         NSNotificationCenter.defaultCenter().addObserver(handler,
@@ -86,7 +85,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             EOKeyValueUnarchiver u=new EOKeyValueUnarchiver(d);
             result=u.decodeObjectForKey(VALUE);
         }
-        if (cat.isDebugEnabled()) cat.debug("Prefs vfk "+key+" = "+result);
+        if (log.isDebugEnabled()) log.debug("Prefs vfk "+key+" = "+result);
         return result;
     }
 
@@ -111,13 +110,13 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             if (value!=null) {
                 String encodedValue=encodedValue(value);
                 if (ERXExtensions.safeDifferent(encodedValue,pref.valueForKey("value"))) {
-                    if (cat.isDebugEnabled())
-                        cat.debug("Updating preference "+u+": "+key+"="+encodedValue);
+                    if (log.isDebugEnabled())
+                        log.debug("Updating preference "+u+": "+key+"="+encodedValue);
                     pref.takeValueForKey(encodedValue,"value");
                 }
             } else {
-                if (cat.isDebugEnabled())
-                    cat.debug("Removing preference "+u+": "+key);
+                if (log.isDebugEnabled())
+                    log.debug("Removing preference "+u+": "+key);
                 pref.editingContext().deleteObject(pref);
             }
         } else if (value!=null) {
@@ -128,8 +127,8 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             pref.takeValueForKey(ERXExtensions.rawPrimaryKeyForObject((EOEnterpriseObject)u),"userID");
             pref.takeValueForKey(key,"key");
             pref.takeValueForKey(encodedValue(value),"value");
-            if (cat.isDebugEnabled())
-                cat.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
+            if (log.isDebugEnabled())
+                log.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
         }
         preferencesEditingContext().saveChanges();
         NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification, new NSDictionary(value,key));
@@ -157,7 +156,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             if (ERCoreBusinessLogic.actor()!=null) {
                 NSKeyValueCoding context=(NSKeyValueCoding)n.userInfo().objectForKey("d2wContext");
                 WODisplayGroup dg=(WODisplayGroup)n.object();
-                if (cat.isDebugEnabled()) cat.debug("handleSortOrderingChange "+context);
+                if (log.isDebugEnabled()) log.debug("handleSortOrderingChange "+context);
                 if (context!=null) {
                     ERCoreUserPreferences.userPreferences().takeValueForKey(dg.sortOrderings(),
                                                                           ERXExtensions.userPreferencesKeyFromContext("sortOrdering", context));
@@ -171,7 +170,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         public void handleBatchSizeChange(NSNotification n) {
             if (ERCoreBusinessLogic.actor() != null) {
                 NSKeyValueCoding context=(NSKeyValueCoding)n.userInfo().objectForKey("d2wContext");
-                if (cat.isDebugEnabled()) cat.debug("handleBatchSizeChange "+context);
+                if (log.isDebugEnabled()) log.debug("handleBatchSizeChange "+context);
                 if (context!=null) {
                     ERCoreUserPreferences.userPreferences().takeValueForKey(n.object(),
                                                                           ERXExtensions.userPreferencesKeyFromContext("batchSize", context));

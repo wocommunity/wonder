@@ -14,7 +14,7 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 public class ERDEditDateJavascript extends ERDCustomEditComponent {
-    static final ERXLogger log = ERXLogger.getLogger(ERDEditDateJavascript.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDEditDateJavascript.class);
 
     public ERDEditDateJavascript(WOContext context) {super(context);}
 

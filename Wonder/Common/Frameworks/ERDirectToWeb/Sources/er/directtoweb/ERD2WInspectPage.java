@@ -12,7 +12,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
 import er.extensions.*;
 
 public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, EditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface {
@@ -24,8 +23,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public ERD2WInspectPage(WOContext context) { super(context); }
     
     /** logging support */
-    public static final Category cat = Category.getInstance("er.directtoweb.templates.ERD2WInspectPage");
-    public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERInspectPage");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WInspectPage");
+    public static final ERXLogger validationCat = ERXLogger.getERXLogger("er.directtoweb.validation.ERInspectPage");
     
     private boolean _objectWasSaved;
     public boolean objectWasSaved() { return _objectWasSaved; }
@@ -128,21 +127,21 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         _currentSection = value;
         if (value != null) {
             d2wContext().takeValueForKey(value.name, "sectionKey");
-            if (cat.isDebugEnabled())
-                cat.debug("Setting sectionKey: " + value.name);
+            if (log.isDebugEnabled())
+                log.debug("Setting sectionKey: " + value.name);
         }
     }
 
     public NSArray currentSectionKeys() {
-        if (cat.isDebugEnabled())
-            cat.debug("currentSectionKeys()");
+        if (log.isDebugEnabled())
+            log.debug("currentSectionKeys()");
         NSArray keys = (NSArray)d2wContext().valueForKey("alternateKeyInfo");
-        if (cat.isDebugEnabled())
-            cat.debug("currentSectionKeys (from alternateKeyInfo):" +
+        if (log.isDebugEnabled())
+            log.debug("currentSectionKeys (from alternateKeyInfo):" +
                       keys);
         keys = keys == null ? (NSArray)this.currentSection().keys : keys;
-        if (cat.isDebugEnabled())
-            cat.debug("Setting sectionKey and keys: " + _currentSection.name + keys);
+        if (log.isDebugEnabled())
+            log.debug("Setting sectionKey and keys: " + _currentSection.name + keys);
         return keys;
     }
 
@@ -185,8 +184,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public void performAdditionalValidations() {
         NSArray validationKeys = (NSArray)d2wContext().valueForKey("validationKeys");
         if (validationKeys != null && validationKeys.count() > 0) {
-            if (cat.isDebugEnabled())
-                cat.debug("Validating Keys: " + validationKeys + " on eo: " + object());
+            if (log.isDebugEnabled())
+                log.debug("Validating Keys: " + validationKeys + " on eo: " + object());
             for (Enumeration e = validationKeys.objectEnumerator(); e.hasMoreElements();) {
                 String validationKey = (String)e.nextElement();
                 try {
@@ -215,7 +214,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
-        validationCat.debug("ERInspectPage in tryToSaveChanges calling validateForSave");
+        validationLog.debug("ERInspectPage in tryToSaveChanges calling validateForSave");
         boolean saved = false;
         try {
             if (object()!=null && validateObject && shouldValidateBeforeSave()) {
@@ -231,7 +230,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 ERXValidationException ex = (ERXValidationException)e;
                 ex.setContext(d2wContext());
                 ex.setTargetLanguage((String)session().valueForKeyPath("language"));
-                cat.info("Target language:" + session().valueForKeyPath("language"));
+                log.info("Target language:" + session().valueForKeyPath("language"));
                 Object o = ex.object();
                 if(o instanceof EOEnterpriseObject) {
                     EOEnterpriseObject eo = (EOEnterpriseObject)o;

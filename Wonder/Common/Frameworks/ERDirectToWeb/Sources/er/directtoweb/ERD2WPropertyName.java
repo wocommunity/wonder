@@ -16,7 +16,7 @@ import er.extensions.ERXConstant;
 import er.extensions.ERXLogger;
 
 public class ERD2WPropertyName extends D2WStatelessComponent {
-    ERXLogger cat = ERXLogger.getLogger(ERD2WPropertyName.class);
+    ERXLogger log = ERXLogger.getERXLogger(ERD2WPropertyName.class);
     
     public ERD2WPropertyName(WOContext context) { super(context); }
 

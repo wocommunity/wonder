@@ -11,15 +11,14 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 import java.util.Enumeration;
 
 public class ERDEditStringWithChoices extends ERDCustomEditComponent {
 
     public ERDEditStringWithChoices(WOContext context) {super(context);}
     
-    ////////////////////////////////////////////  log4j category  ///////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERDEditStringWithChoices.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDEditStringWithChoices.class);
     
     public String entityForReportName;
     public ERXKeyValuePair currentElement;
@@ -31,13 +30,13 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     protected NSArray _availableElements;
     public NSArray availableElements(){
         if(_availableElements==null){
-            if(cat.isDebugEnabled()) cat.debug("key ="+key());
+            if(log.isDebugEnabled()) log.debug("key ="+key());
             String keyForAvailableObjects = key()+"Available";
             entityForReportName = (String)valueForBinding("entityNameForReport");
             _availableElements =
                 ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
                                                               entityForReportName, ERXLocalizer.localizerForSession(session()).language());
-            if(cat.isDebugEnabled()) cat.debug("availableElements = "+_availableElements);
+            if(log.isDebugEnabled()) log.debug("availableElements = "+_availableElements);
         }
         return _availableElements;
     }
@@ -62,14 +61,14 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public void appendToResponse(WOResponse r, WOContext c) {
         entityForReportName = (String)object().valueForKey("entityForReportName");
         String chosenKey = (String)objectPropertyValue();
-        if(cat.isDebugEnabled()) cat.debug("chosenKey = "+chosenKey);
+        if(log.isDebugEnabled()) log.debug("chosenKey = "+chosenKey);
         if(chosenKey!=null){
             for(Enumeration e = availableElements().objectEnumerator(); e.hasMoreElements();){
                 ERXKeyValuePair keyValue = (ERXKeyValuePair)e.nextElement();
                 if(keyValue.key().equals(chosenKey))
                    selectedElement = keyValue;
             }
-            if(cat.isDebugEnabled()) cat.debug("selectedElement = "+selectedElement.key()+" , "+selectedElement.value());
+            if(log.isDebugEnabled()) log.debug("selectedElement = "+selectedElement.key()+" , "+selectedElement.value());
         }
         super.appendToResponse(r,c);
     }

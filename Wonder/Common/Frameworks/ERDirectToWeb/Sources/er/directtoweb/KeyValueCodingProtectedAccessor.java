@@ -8,33 +8,34 @@ package er.directtoweb;
 
 import java.lang.reflect.*;
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
-    public static final Category cat = Category.getInstance(KeyValueCodingProtectedAccessor.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(KeyValueCodingProtectedAccessor.class);
 
     public KeyValueCodingProtectedAccessor() { super(); }
 
     public Object fieldValue(Object object, Field field) throws IllegalArgumentException, IllegalAccessException {
-        //cat.warn("FieldValue, field: " + field.toString() + " object: " + object.toString());
+        //log.warn("FieldValue, field: " + field.toString() + " object: " + object.toString());
         return field.get(object);
     }
 
     public void setFieldValue(Object object, Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
-        //cat.warn("SetFieldValue, field: " + field.toString() + " value: " + value + " object: " + object.toString());
+        //log.warn("SetFieldValue, field: " + field.toString() + " value: " + value + " object: " + object.toString());
         field.set(object, value);
     }
 
     public Object methodValue(Object object, Method method) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
-            //cat.warn("MethodValue, method: " + method.toString() + " object: " + object.toString());
+            //log.warn("MethodValue, method: " + method.toString() + " object: " + object.toString());
             return method.invoke(object, null);
         }
 
     public void setMethodValue(Object object, Method method, Object value) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
-            //cat.warn("SetMethodValue, method: " + method.toString() + " value: " + value + " object: " + object.toString());
+            //log.warn("SetMethodValue, method: " + method.toString() + " value: " + value + " object: " + object.toString());
             method.invoke(object, new Object[] {value});
         }
 }

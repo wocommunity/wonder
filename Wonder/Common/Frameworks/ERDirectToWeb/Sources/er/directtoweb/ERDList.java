@@ -13,7 +13,10 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class ERDList extends ERDCustomEditComponent {
-    static final ERXLogger log = ERXLogger.getLogger(ERDList.class);
+
+    /* logging support */
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDList.class);
+    
     NSArray list;
 
     public ERDList(WOContext context) { super(context); }

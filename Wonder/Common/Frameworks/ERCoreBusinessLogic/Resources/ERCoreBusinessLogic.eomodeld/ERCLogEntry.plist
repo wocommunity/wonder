@@ -2,13 +2,13 @@
     attributes = (
         {columnName = CREATED; name = created; prototypeName = dateTime; }, 
         {columnName = ID; name = id; prototypeName = id; }, 
-        {columnName = "TEXT_"; name = text; prototypeName = varcharLarge; }, 
-        {columnName = "USER_ID"; name = userID; prototypeName = id; }
+        {columnName = TEXT_; name = text; prototypeName = varcharLarge; }, 
+        {columnName = USER_ID; name = userID; prototypeName = id; }
     ); 
     attributesUsedForLocking = (id, userID, text); 
-    className = "er.corebusinesslogic.ERCLogEntry"; 
+    className = er.corebusinesslogic.ERCLogEntry; 
     classProperties = (created, userID, text); 
-    externalName = "ERCLOG_ENTRY"; 
+    externalName = ERCLOG_ENTRY; 
     fetchSpecificationDictionary = {}; 
     name = ERCLogEntry; 
     primaryKeyAttributes = (id); 

@@ -17,7 +17,7 @@ import java.util.Enumeration;
 public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getLogger(ERD2WDirectAction.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERD2WDirectAction.class);
 
     /**
      * Public constructor

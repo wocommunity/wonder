@@ -45,7 +45,7 @@
             columnName = ""; 
             externalType = NUMBER; 
             name = id; 
-            serverTimeZone = "Europe/Berlin"; 
+            serverTimeZone = Europe/Berlin; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSNumber; 
             valueType = i; 
@@ -174,7 +174,7 @@
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 
     internalInfo = {
-        "_clientClassPropertyNames" = (
+        _clientClassPropertyNames = (
             shortString, 
             longText, 
             date, 

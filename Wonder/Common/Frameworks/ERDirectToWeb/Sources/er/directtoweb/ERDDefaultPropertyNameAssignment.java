@@ -15,7 +15,7 @@ import er.extensions.*;
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getLogger(ERDDefaultPropertyNameAssignment.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultPropertyNameAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("propertyKey");

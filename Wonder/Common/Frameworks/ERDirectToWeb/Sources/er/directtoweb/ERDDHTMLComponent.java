@@ -11,20 +11,19 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 public class ERDDHTMLComponent extends ERDCustomEditComponent {
-    static final Category cat = Category.getInstance(ERDDHTMLComponent.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERDDHTMLComponent.class);
 
     String varName = null;
 
     public Object objectKeyPathValue() {
-//        cat.warn("current:" + super.objectKeyPathValue());
+//        log.warn("current:" + super.objectKeyPathValue());
        return super.objectKeyPathValue();
     }
     public void setObjectKeyPathValue(Object newValue) {
         super.setObjectKeyPathValue(newValue);
-//        cat.warn("new:" + newValue + " - "  + object() + " - " + key());
+//        log.warn("new:" + newValue + " - "  + object() + " - " + key());
     }
 
     public ERDDHTMLComponent(WOContext context) {
@@ -48,7 +47,7 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
 	if(varName == null) {
 	    varName = ERXExtensions.replaceStringByStringInString("-", "_", "dhtml-" + context().elementID().hashCode() + "-" + key());
 	    varName = ERXExtensions.replaceStringByStringInString(".", "_", varName);
-	    cat.debug(varName);
+	    log.debug(varName);
 	}
 	return varName;
     }

@@ -10,8 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
 import er.extensions.ERXUtilities;
+import er.extensions.ERXLogger;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Stepchild of DelayedConditionalAssignment
@@ -23,7 +23,7 @@ import er.extensions.ERXUtilities;
 public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
 
     /** logging support */
-    public static final Category cat = Category.getInstance("er.directtoweb.rules.DelayedBooleanAssignment");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.DelayedBooleanAssignment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -66,8 +66,8 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
 
     public Object fireNow(D2WContext c) {
         NSDictionary booleanConditions = (NSDictionary)value();
-        if (cat.isDebugEnabled())
-            cat.debug("Resolving delayed fire for boolean conditions: " + booleanConditions);
+        if (log.isDebugEnabled())
+            log.debug("Resolving delayed fire for boolean conditions: " + booleanConditions);
         return ERXUtilities.booleanValue(c.valueForKeyPath((String)booleanConditions.objectForKey("conditionKey"))) ?
             booleanConditions.objectForKey("trueValue") : booleanConditions.objectForKey("falseValue");
 

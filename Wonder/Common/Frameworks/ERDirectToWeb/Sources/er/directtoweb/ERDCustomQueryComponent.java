@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.Category;
+import er.extensions.ERXLogger;
 
 public class ERDCustomQueryComponent extends ERDCustomEditComponent {
 
@@ -19,8 +19,8 @@ public class ERDCustomQueryComponent extends ERDCustomEditComponent {
         super(context);
     }
     
-    //////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERDCustomQueryComponent.class);    
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomQueryComponent.class);    
     
     private WODisplayGroup _displayGroup;
     public WODisplayGroup displayGroup() {

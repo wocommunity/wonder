@@ -78,7 +78,7 @@ public class ERCProblemMailMessageAppender extends AppenderSkeleton {
                                                           ERCoreBusinessLogic.emailsForProblemRecipients(),
                                                           null,
                                                           null,
-                                                          event.priority.toString() + ": " + WOApplication.application().name() + ": " +
+                                                          event.getLevel().toString() + ": " + WOApplication.application().name() + ": " +
                                                           event.getRenderedMessage(),
                                                           this.layout.format(event),
                                                           ec);

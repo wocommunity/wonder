@@ -14,21 +14,20 @@ import com.webobjects.directtoweb.*;
 
 import java.util.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 public class ERDListOrganizer extends ERDCustomEditComponent {
 
     public ERDListOrganizer(WOContext context) { super(context); }
     
-    ////////////////////////////////////////////  log4j category  ///////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERDListOrganizer.class);
+    /* logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDListOrganizer.class);
 
     protected String availableObject;
     protected NSMutableArray selectedObjects;   
     public NSMutableArray selectedChosenObjects;
     public NSArray chosenObjects;
     public Object chosenObject;    
-    protected String chosenKeyPathes;
+    protected String chosenKeyPaths;
     public String entityForReportName;
 
     private final static String DASH="-";
@@ -37,9 +36,9 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     private final static NSArray DEFAULT_ARRAY=new NSArray(DEFAULT_PAIR);
 
     
-    public void reset(){
+    public void reset() {
         super.reset();
-        chosenKeyPathes = null;
+        chosenKeyPaths = null;
         entityForReportName = null;
         selectedChosenObjects = null;
         selectedObjects = null;
@@ -51,9 +50,9 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
 
-    public NSArray availableElements(){
-        if(cat.isDebugEnabled())
-            cat.debug("availableElements = "
+    public NSArray availableElements() {
+        if(log.isDebugEnabled())
+            log.debug("availableElements = "
                       +ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(key()+"Available"),
                                                                      entityForReportName,
                                                                      ERXLocalizer.localizerForSession(session()).language()));
@@ -65,13 +64,13 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
 
     
     public void appendToResponse(WOResponse r, WOContext c){
-        if(chosenKeyPathes == null){
-            chosenKeyPathes = "";
+        if(chosenKeyPaths == null){
+            chosenKeyPaths = "";
             entityForReportName = (String)valueForBinding("entityNameForReport");
             String keyPathesFromDatabase = (String)objectPropertyValue();
             if(keyPathesFromDatabase!=null){
                 NSArray keyPathsArray = (NSArray)NSPropertyListSerialization.propertyListFromString(keyPathesFromDatabase);
-                if(cat.isDebugEnabled()) cat.debug("keyPathsArray = "+keyPathsArray);
+                if(log.isDebugEnabled()) log.debug("keyPathsArray = "+keyPathsArray);
                 if(keyPathsArray!=null){
                     chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray,
                                                                                   entityForReportName,
@@ -82,11 +81,11 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                         tmp.addObjectsFromArray(chosenObjects);
                         chosenObjects = (NSArray)tmp;
                     }
-                    chosenKeyPathes = keyPathsArray.componentsJoinedByString ( "," );
+                    chosenKeyPaths = keyPathsArray.componentsJoinedByString ( "," );
                 }else {
                     chosenObjects = ERXConstant.EmptyArray;
                 }
-                if(cat.isDebugEnabled()) cat.debug("chosenObjects = "+chosenObjects);
+                if(log.isDebugEnabled()) log.debug("chosenObjects = "+chosenObjects);
             } else if(((ERXSession)session()).browser().isNetscape()) {
                 chosenObjects = DEFAULT_ARRAY;
             }
@@ -97,16 +96,16 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
         NSMutableArray result = new NSMutableArray();
-        NSArray hiddenFieldValues = NSArray.componentsSeparatedByString(chosenKeyPathes, ",");
-        if(cat.isDebugEnabled()) cat.debug("hiddenFieldValues = "+hiddenFieldValues);
+        NSArray hiddenFieldValues = NSArray.componentsSeparatedByString(chosenKeyPaths, ",");
+        if(log.isDebugEnabled()) log.debug("hiddenFieldValues = "+hiddenFieldValues);
         if(hiddenFieldValues != null){
             for(Enumeration e = hiddenFieldValues.objectEnumerator(); e.hasMoreElements();){
                 String keyPath = (String)e.nextElement();
-                if(cat.isDebugEnabled()) cat.debug("keyPath = "+keyPath);
+                if(log.isDebugEnabled()) log.debug("keyPath = "+keyPath);
                 if(keyPath.length()>0)
                     result.addObject(keyPath);
             }
-            if(cat.isDebugEnabled()) cat.debug("result = "+result);
+            if(log.isDebugEnabled()) log.debug("result = "+result);
             String value = NSPropertyListSerialization.stringFromPropertyList((NSArray)result);
             try{
                 object().validateTakeValueForKeyPath(value, key());

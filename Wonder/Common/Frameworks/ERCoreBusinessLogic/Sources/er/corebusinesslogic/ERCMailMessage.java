@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import er.extensions.*;
 
 public class ERCMailMessage extends _ERCMailMessage implements /*ERXReadStateTrackedInterface, */ ERXGeneratesPrimaryKeyInterface {
-    static final ERXLogger log = ERXLogger.getLogger(ERCMailMessage.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERCMailMessage.class);
 
     public ERCMailMessage() {
         super();

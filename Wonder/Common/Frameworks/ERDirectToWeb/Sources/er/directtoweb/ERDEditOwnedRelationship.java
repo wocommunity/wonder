@@ -13,7 +13,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:
@@ -23,7 +22,7 @@ import org.apache.log4j.Category;
 //	additionalRelationshipKeys - key-value pairs of additional relationships that need to be set after the eo is created.
 //	uiStyle - list style will use a D2WList, popup/radio/browser will use an ERToOneRelationship FIXME: add in ERToManyRelationship
 //	listConfigurationNameForEntity - optional key that is for the list configuration of the D2W component.
-//	destinatrionDisplayKey - key used to denote what to display in the ERToOneRelationship
+//	destinationDisplayKey - key used to denote what to display in the ERToOneRelationship
 //	selectionListKey - key that denotes what to use as the dataSource for the ERToOneRelationship.
 //	permissionToEdit - key that determines if the add and/or edit button are shown.
 //	postCreateNextPageDelegateKey - key that allows you to get your own nextPageDelegate into the fray.
@@ -32,8 +31,8 @@ import org.apache.log4j.Category;
 public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
 
 
-    ////////////////////////////////////////////  log4j category  //////////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.components.ERDEditOwnedRelationship");
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDEditOwnedRelationship");
 
     protected EOEditingContext localContext;
 
@@ -186,8 +185,8 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             //entityNameForNewInstances = (String)sender.valueForKey("entityNameForNewInstances");
             entityNameForNewInstances =
             ((EOCreationMultipleChoice)((ERDPickPageInterface)sender).selectedObjects().objectAtIndex(0)).entityName;
-            if (cat.isDebugEnabled())
-                cat.debug("Creating "+entityNameForNewInstances);
+            if (log.isDebugEnabled())
+                log.debug("Creating "+entityNameForNewInstances);
             if (postCreateNextPageDelegateKey != null) {
                 postCreateNextPageDelegate = (NextPageDelegate)sender.valueForKeyPath(postCreateNextPageDelegateKey);
             }
@@ -200,8 +199,8 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             String createPageConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("createConfigurationNameForEntity",
                                                                                              entityNameForNewInstances,
                                                                                              extraValues);
-            if (cat.isDebugEnabled())
-                cat.debug("Create Page Config: " + createPageConfigurationName + " for entity: " + entityNameForNewInstances+" - "+extraValues);
+            if (log.isDebugEnabled())
+                log.debug("Create Page Config: " + createPageConfigurationName + " for entity: " + entityNameForNewInstances+" - "+extraValues);
             EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(createPageConfigurationName,followPage.session());
             epi.setObject(newEO);
             if (postCreateNextPageDelegate == null) {
@@ -223,10 +222,10 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entityNameForNewInstances);
             // The relationship will be set in the PostSaveDelegate if object is a new eo, ie ok to use a peer context.
             if (object!=null && !(object.editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator)) {
-                cat.warn("Newly created object is in an editing context that will not save to the database");
+                log.warn("Newly created object is in an editing context that will not save to the database");
             }
             localContext = er.extensions.ERXExtensions.newEditingContext(object.editingContext().parentObjectStore());
-            if (cat.isDebugEnabled()) cat.debug("Creating "+entityNameForNewInstances);
+            if (log.isDebugEnabled()) log.debug("Creating "+entityNameForNewInstances);
             EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
             localContext.insertObject(newEO);
             // If the object already exists, then hookup the relationship, if not do it after the object is saved.

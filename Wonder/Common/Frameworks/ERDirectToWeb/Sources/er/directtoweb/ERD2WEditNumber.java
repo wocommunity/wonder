@@ -12,15 +12,14 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.math.BigDecimal;
-import org.apache.log4j.Category;
 import er.extensions.*;
 
 public class ERD2WEditNumber extends D2WEditNumber {
 
     public ERD2WEditNumber(WOContext context) { super(context); }
     
-    ////////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERD2WEditNumber.class);
+    /** Logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditNumber.class);
 
     public void reset() {
         super.reset();
@@ -58,11 +57,11 @@ public class ERD2WEditNumber extends D2WEditNumber {
             try {
                 number = (Number)numberFormatter().parseObject((String)anObject);
             } catch (Exception e) {
-                cat.warn("Unable to parse number: " + anObject + " + " + propertyKey());
+                log.warn("Unable to parse number: " + anObject + " + " + propertyKey());
                 throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "IllegalCharacterInNumberException");
             }
         } else if (anObject!=null && !(anObject instanceof Number)) {
-            cat.warn("Unable to read number: " + anObject);
+            log.warn("Unable to read number: " + anObject);
             throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
         }
         return super.validateTakeValueForKeyPath(convertNumber(number), aPath);

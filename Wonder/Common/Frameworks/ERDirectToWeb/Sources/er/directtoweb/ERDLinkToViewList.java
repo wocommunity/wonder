@@ -10,14 +10,13 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXExtensions;
-import org.apache.log4j.Category;
+import er.extensions.*;
 
 public class ERDLinkToViewList extends ERDCustomEditComponent {
 
     public ERDLinkToViewList(WOContext context) { super(context); }
     
-    public static final Category cat = Category.getInstance("er.directtoweb.components.ERDLinkToViewList");
+    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDLinkToViewList");
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
