@@ -1,0 +1,26 @@
+
+
+* Log4j initialization
+
+To get Log4j going, you will need something akin to the following in your WebObjects.properties (in your home directory under 5.1)
+
+
+log4j.rootCategory=DEBUG, A1
+log4j.appender.A1=org.apache.log4j.ConsoleAppender
+log4j.appender.A1.layout=er.extensions.ERXPatternLayout
+log4j.appender.A1.layout.ConversionPattern=%-5p %d{HH:mm:ss} (%-20c:%L) %x -%m%n
+log4j.category.er=INFO
+
+
+* ERCrypto
+
+using ERCrypto's methods will require a little bit of setup with JDK 1.3
+
+this class requires that you have JCE (javax.crypto and the sun provider) installed
+JCE is standard in the 1.4 JDK
+for 1.3 you can find it at http://java.sun.com/products/jce/index-121.html
+All,
+you will have to put the 4 JCE jars in your extensions directory
+(/Library/Java/Home/lib/ext on X) for ERExtensionsJava to build..
+And edit /Library/Java/Home/lib/security/java.security, add the following line
+security.provider.4=com.sun.crypto.provider.SunJCE
