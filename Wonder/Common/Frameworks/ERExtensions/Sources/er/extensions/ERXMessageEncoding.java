@@ -152,7 +152,7 @@ public class ERXMessageEncoding implements Serializable {
             throw createIllegalArgumentException(encoding, "encoding", "availableEncodings()");
 
         request.setDefaultFormValueEncoding (encoding); 
-        request.setFormValueEncodingDetectionEnabled (true);
+        // request.setFormValueEncodingDetectionEnabled (true);
     }
 
     public void setDefaultFormValueEncodingToRequest(WORequest request) {
