@@ -39,8 +39,8 @@ public class ERCMailState extends _ERCMailState {
         
         public void initializeSharedData() {
             // this default allows you not to have to create the table if you don't use the mail facility
-            boolean usesMail=ERXUtilities.booleanValueWithDefault(System.getProperty("ERCUseMailFacility"),
-                                                                  true);
+            // this defaults to false.
+            boolean usesMail = ERXProperties.booleanForKey("er.corebusinesslogic.ERCUseMailFacility");
             if (usesMail) {
                 ERCMailState.EXCEPTION_STATE = sharedMailStateForKey("xcpt");
                 ERCMailState.READY_TO_BE_SENT_STATE = sharedMailStateForKey("rtbs");
