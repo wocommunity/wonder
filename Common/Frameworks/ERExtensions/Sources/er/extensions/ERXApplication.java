@@ -339,13 +339,6 @@ public abstract class ERXApplication extends WOApplication {
             if (context.hasSession())
                 if (context.session().statistics() != null)
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
-            if(MDC.get("user")!=null){
-                EOEnterpriseObject user = (EOEnterpriseObject)MDC.get("user");
-                extraInfo.setObjectForKey(user.userPresentableDescription(), "user");
-            }
-            if(MDC.get("ip")!=null){
-                extraInfo.setObjectForKey(MDC.get("ip"), "ip");
-            }
         }
         return extraInfo;
     }
