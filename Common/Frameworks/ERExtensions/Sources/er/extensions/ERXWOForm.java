@@ -14,8 +14,6 @@ import com.webobjects.appserver.*;
  *  It adds the Forms name to the ERXContext's mutableUserInfo as as "formName" key,
  *  which makes writing JavaScript elements a bit easier.
  *  Also, it warns you when you have one Form embedded inside another.
- *  Should be fixed to skip writing out the Form tag, which would make the
- *  ERXOptionalForm obsolete.
  *  Additionally, it pushes the <code>enctype</code> into the userInfo, so that {@link ERXWOFileUpload}
  *  can check if it is set correctly.
  *  This subclass is installed when the frameworks loads. 
@@ -53,14 +51,24 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         super.appendAttributesToResponse(response, context);
     }
 
-    public void appendToResponse(WOResponse response, WOContext context) {
-        if(context.isInForm())
-            log.warn("This Form is embedded in another Form.");
-        super.appendToResponse(response, context);
-        if(context instanceof ERXMutableUserInfoHolderInterface) {
-            NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
-            ui.removeObjectForKey("formName");
-            ui.removeObjectForKey("enctype");
-        }
-    }
+	public void appendToResponse(WOResponse response, WOContext context) {
+		boolean inForm = context.isInForm ();
+		context.setInForm(true);
+
+		if (context != null && response != null) {
+
+			String elementName = elementName();
+			boolean shouldAppendFormTags = !inForm  && (elementName != null);
+
+			if (shouldAppendFormTags)
+				_appendOpenTagToResponse(response, context);
+
+			this.appendChildrenToResponse(response, context);
+
+			if (shouldAppendFormTags)
+				_appendCloseTagToResponse(response, context);
+		}
+
+		context.setInForm(false);
+	}
 }
