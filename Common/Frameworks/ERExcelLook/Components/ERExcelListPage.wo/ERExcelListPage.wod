@@ -2,6 +2,8 @@ AttributeCell: WOGenericContainer {
 	class = d2wContext.excelClassForProperty;
 	elementName = "td";
 	cellType = d2wContext.excelCellTypeForProperty;
+        width = d2wContext.excelCellWidth;
+        height = d2wContext.excelCellHeight;
 }
 
 AttributeDisplay: WOSwitchComponent {
@@ -14,23 +16,18 @@ AttributeLabelCell: WOGenericContainer {
 	class = d2wContext.excelClassForPropertyName;
 	elementName = "td";
 	cellType = d2wContext.excelCellTypeForPropertyName;
+        width = d2wContext.excelCellWidth;
+        height = d2wContext.excelCellHeight;
 }
 
 AttributeRepetition: WORepetition {
 	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
+	list = currentSection.keys;
 }
 
 ColumnLabelRepetition: WORepetition {
 	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
-}
-
-EGWrapper: EGWrapper {
-	enabled = "true";
-	styles = styles.Styles;
-	fonts = styles.Fonts;
-	fileName = d2wContext.excelFileName;
+	list = currentSection.keys;
 }
 
 EntityRepetition: WORepetition {
@@ -39,14 +36,28 @@ EntityRepetition: WORepetition {
 }
 
 ListTable: WOGenericContainer {
-	name = d2wContext.excelSheetName;
-	elementName = "Table";
+        name = d2wContext.excelSheetName;
+	elementName = "table";
 	cellFormat = d2wContext.excelCellFormatForSheet;
 	class = d2wContext.excelClassForSheet;
 	cellType = d2wContext.excelCellTypeForSheet;
+        defaultColumnWidth = d2wContext.excelDefaultColumnWidthForSheet;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.excelPageWrapperName;
+	enabled = "true";
+	styles = styles.Styles;
+	fonts = styles.Fonts;
+	fileName = d2wContext.excelFileName;
 }
 
 PropertyNameComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
+}
+
+Repetition1: WORepetition {
+	item = currentSection;
+	list = sectionsContents;
 }
