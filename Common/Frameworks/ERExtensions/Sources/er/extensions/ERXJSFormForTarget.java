@@ -37,7 +37,7 @@ public class ERXJSFormForTarget extends WOComponent {
             buffer.append( (targetDictionary.valueForKey("scrollbars")!=null && targetDictionary.valueForKey("scrollbars")== "NO")?
                            " " : "scrollbars");
             buffer.append(", {(isResizable)?'resizable':''}, status");
-            System.out.println("buffer = "+buffer.toString());
+            //System.out.println("buffer = "+buffer.toString());
             result = buffer.toString();
         }else{
             result = "foobar:width={window.screen.width/2}, height={myHeight}, scrollbars, {(isResizable)?'resizable':''}, status";
