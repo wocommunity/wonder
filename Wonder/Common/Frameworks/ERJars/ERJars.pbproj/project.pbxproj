@@ -419,7 +419,7 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>Has_WOComponents</key>
-	<true/>
+	<string>YES</string>
 	<key>NSExecutable</key>
 	<string>ERJars</string>
 	<key>NSJavaClientRoot</key>

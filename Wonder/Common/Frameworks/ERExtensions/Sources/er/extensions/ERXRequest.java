@@ -10,6 +10,7 @@ import com.webobjects.eocontrol.*;
  * The request is created via ${link ERXApplication$createRequest()}.
  */
 public  class ERXRequest extends WORequest {
+    static final ERXLogger log = ERXLogger.getLogger(ERXRequest.class);
     /** Simply call superclass constructor */
     public ERXRequest(String string, String string0, String string1,
                       NSDictionary nsdictionary, NSData nsdata,
@@ -72,4 +73,14 @@ public  class ERXRequest extends WORequest {
         }
         return nsmutablearray;
     }
+
+    public NSDictionary cookieValues() {
+        try {
+            return super.cookieValues();
+        } catch (Throwable t) {
+            log.warn(t + ":" + this);
+            log.warn(t);
+            return new NSDictionary();
+        }
+    }    
 }

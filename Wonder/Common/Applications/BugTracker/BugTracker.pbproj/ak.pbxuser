@@ -13,22 +13,16 @@
 			F59C855002350F2801000102,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 46470793;
+			PBXPerProjectTemplateStateSaveDate = 46859699;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F5CCEFB102C62B9C01000102;
+									bookmark = F637893E02CB05C401AD0D07;
 									history = (
 										F6F0214C02ACE56101AD0D07,
-										F5B36A1402AFFD5701000102,
-										F5B36A1502AFFD5701000102,
-										F5B36A1602AFFD5701000102,
-										F5B36A1702AFFD5701000102,
-										F5B36A1802AFFD5701000102,
-										F5A6A17102B29A9801000104,
 										F5A6A17202B29A9801000104,
 										F54C4E3F02C502BC01000102,
 										F54C4E4002C502BC01000102,
@@ -61,14 +55,11 @@
 										F5CCEFA802C62B9C01000102,
 										F5CCEFA902C62B9C01000102,
 										F5CCEFAA02C62B9C01000102,
-										F5B443A602C5153701000102,
+										F5CCEFB102C62B9C01000102,
 									);
 									prevStack = (
 										F6F0215002ACE56101AD0D07,
 										F5B369B802AEA53B01000102,
-										F5B36A5402AFFD5701000102,
-										F5B36A5502AFFD5701000102,
-										F5A6A17402B29A9801000104,
 										F5A6A17502B29A9801000104,
 										F54C4E5D02C502BC01000102,
 										F54C4E5E02C502BC01000102,
@@ -220,10 +211,12 @@
 						Tab0 = {
 							Frame = "{{0, 0}, {260, 620}}";
 							GroupTreeTableConfiguration = (
+								SCMStatusColumn,
+								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								227,
+								205,
 							);
 						};
 						Tab1 = {
@@ -295,7 +288,7 @@
 					WindowLocation = "{187, 41}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 46470793;
+			PBXWorkspaceStateSaveDate = 46859699;
 		};
 		perUserProjectItems = {
 			F54C4E3F02C502BC01000102 = F54C4E3F02C502BC01000102;
@@ -354,19 +347,9 @@
 			F54C4E7A02C502BC01000102 = F54C4E7A02C502BC01000102;
 			F54C4E7B02C502BC01000102 = F54C4E7B02C502BC01000102;
 			F54C4E7C02C502BC01000102 = F54C4E7C02C502BC01000102;
-			F5A6A17102B29A9801000104 = F5A6A17102B29A9801000104;
 			F5A6A17202B29A9801000104 = F5A6A17202B29A9801000104;
-			F5A6A17402B29A9801000104 = F5A6A17402B29A9801000104;
 			F5A6A17502B29A9801000104 = F5A6A17502B29A9801000104;
 			F5B369B802AEA53B01000102 = F5B369B802AEA53B01000102;
-			F5B36A1402AFFD5701000102 = F5B36A1402AFFD5701000102;
-			F5B36A1502AFFD5701000102 = F5B36A1502AFFD5701000102;
-			F5B36A1602AFFD5701000102 = F5B36A1602AFFD5701000102;
-			F5B36A1702AFFD5701000102 = F5B36A1702AFFD5701000102;
-			F5B36A1802AFFD5701000102 = F5B36A1802AFFD5701000102;
-			F5B36A5402AFFD5701000102 = F5B36A5402AFFD5701000102;
-			F5B36A5502AFFD5701000102 = F5B36A5502AFFD5701000102;
-			F5B443A602C5153701000102 = F5B443A602C5153701000102;
 			F5B443A802C5153701000102 = F5B443A802C5153701000102;
 			F5B443A902C5153701000102 = F5B443A902C5153701000102;
 			F5B443AA02C5153701000102 = F5B443AA02C5153701000102;
@@ -384,6 +367,7 @@
 			F5CCEFAF02C62B9C01000102 = F5CCEFAF02C62B9C01000102;
 			F5CCEFB002C62B9C01000102 = F5CCEFB002C62B9C01000102;
 			F5CCEFB102C62B9C01000102 = F5CCEFB102C62B9C01000102;
+			F637893E02CB05C401AD0D07 = F637893E02CB05C401AD0D07;
 			F6F0214C02ACE56101AD0D07 = F6F0214C02ACE56101AD0D07;
 			F6F0215002ACE56101AD0D07 = F6F0215002ACE56101AD0D07;
 		};
@@ -1005,16 +989,6 @@
 		sourceDirectories = (
 		);
 	};
-	F5A6A17102B29A9801000104 = {
-		fRef = F5A6A17702B29A9901000104;
-		isa = PBXTextBookmark;
-		name = "PortForwarder.java: 1";
-		rLen = 23059;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1456;
-		vrLoc = 7914;
-	};
 	F5A6A17202B29A9801000104 = {
 		fRef = F5A6A17802B29A9901000104;
 		isa = PBXTextBookmark;
@@ -1024,16 +998,6 @@
 		rType = 0;
 		vrLen = 1828;
 		vrLoc = 5113;
-	};
-	F5A6A17402B29A9801000104 = {
-		fRef = F5A6A17A02B29A9901000104;
-		isa = PBXTextBookmark;
-		name = "PortForwarder.java: 1";
-		rLen = 23059;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1456;
-		vrLoc = 7914;
 	};
 	F5A6A17502B29A9801000104 = {
 		fRef = F5A6A17902B29A9901000104;
@@ -1045,12 +1009,6 @@
 		vrLen = 1828;
 		vrLoc = 5113;
 	};
-	F5A6A17702B29A9901000104 = {
-		isa = PBXFileReference;
-		name = PortForwarder.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/PortForwarder.java;
-		refType = 0;
-	};
 	F5A6A17802B29A9901000104 = {
 		isa = PBXFileReference;
 		name = WebObjects.properties;
@@ -1061,12 +1019,6 @@
 		isa = PBXFileReference;
 		name = WebObjects.properties;
 		path = /Volumes/Home/WebObjects.properties;
-		refType = 0;
-	};
-	F5A6A17A02B29A9901000104 = {
-		isa = PBXFileReference;
-		name = PortForwarder.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/PortForwarder.java;
 		refType = 0;
 	};
 	F5B369B802AEA53B01000102 = {
@@ -1084,128 +1036,6 @@
 		name = WebObjects.properties;
 		path = /Volumes/Home/WebObjects.properties;
 		refType = 0;
-	};
-	F5B36A1402AFFD5701000102 = {
-		fRef = F5B36A6D02AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "Connection.java: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1241;
-		vrLoc = 0;
-	};
-	F5B36A1502AFFD5701000102 = {
-		fRef = F5B36A5A02AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "ConnectionStats.java: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1146;
-		vrLoc = 0;
-	};
-	F5B36A1602AFFD5701000102 = {
-		fRef = F5B36A6002AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "SocketEventListener.java: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1060;
-		vrLoc = 0;
-	};
-	F5B36A1702AFFD5701000102 = {
-		fRef = F5B36A5B02AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "PortMap.java: 35";
-		rLen = 0;
-		rLoc = 1120;
-		rType = 0;
-		vrLen = 1021;
-		vrLoc = 510;
-	};
-	F5B36A1802AFFD5701000102 = {
-		fRef = F5B36A5C02AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "PortListener.java: 47";
-		rLen = 0;
-		rLoc = 1518;
-		rType = 0;
-		vrLen = 1135;
-		vrLoc = 2258;
-	};
-	F5B36A5402AFFD5701000102 = {
-		fRef = F5B36A6A02AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "Connection.java: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1241;
-		vrLoc = 0;
-	};
-	F5B36A5502AFFD5701000102 = {
-		fRef = F5B36A6B02AFFD5701000102;
-		isa = PBXTextBookmark;
-		name = "ConnectionStats.java: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1146;
-		vrLoc = 0;
-	};
-	F5B36A5A02AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = ConnectionStats.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/ConnectionStats.java;
-		refType = 0;
-	};
-	F5B36A5B02AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = PortMap.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/PortMap.java;
-		refType = 0;
-	};
-	F5B36A5C02AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = PortListener.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/PortListener.java;
-		refType = 0;
-	};
-	F5B36A6002AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = SocketEventListener.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/SocketEventListener.java;
-		refType = 0;
-	};
-	F5B36A6A02AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = Connection.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/Connection.java;
-		refType = 0;
-	};
-	F5B36A6B02AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = ConnectionStats.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/ConnectionStats.java;
-		refType = 0;
-	};
-	F5B36A6D02AFFD5701000102 = {
-		isa = PBXFileReference;
-		name = Connection.java;
-		path = /Volumes/Home/Desktop/proxy/portforwarder/Connection.java;
-		refType = 0;
-	};
-	F5B443A602C5153701000102 = {
-		fRef = F54C4B2F02C4DF3A01000102;
-		isa = PBXTextBookmark;
-		name = "MenuHeader.java: 161";
-		rLen = 17;
-		rLoc = 7461;
-		rType = 0;
-		vrLen = 1497;
-		vrLoc = 6553;
 	};
 	F5B443A802C5153701000102 = {
 		fRef = F55BB81B02C4DCDF01000102;
@@ -1368,6 +1198,16 @@
 		vrLoc = 2475;
 	};
 	F5CCEFB102C62B9C01000102 = {
+		fRef = F54C4B2F02C4DF3A01000102;
+		isa = PBXTextBookmark;
+		name = "MenuHeader.java: 147";
+		rLen = 0;
+		rLoc = 6666;
+		rType = 0;
+		vrLen = 1209;
+		vrLoc = 0;
+	};
+	F637893E02CB05C401AD0D07 = {
 		fRef = F54C4B2F02C4DF3A01000102;
 		isa = PBXTextBookmark;
 		name = "MenuHeader.java: 147";
