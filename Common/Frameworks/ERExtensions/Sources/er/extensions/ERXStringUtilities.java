@@ -13,10 +13,10 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Collection of {@lin String} utilities. Contains
+ * Collection of {@link java.lang.String String} utilities. Contains
  * the base localization support.
  */
-public class ERXStringUtilities extends Object {
+public class ERXStringUtilities {
 
     /** Holds the default display language, which is English */
     private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
@@ -428,4 +428,21 @@ public class ERXStringUtilities extends Object {
         return pos;
     }
 
+    /**
+     * Utility method to append a character to a
+     * StringBuffer is the last character is not
+     * a certain character. Useful for determining
+     * if you need to add an '&' to the end of a
+     * form value string.
+     * @param separator character to add to potentially
+     *		add to the StringBuffer.
+     * @param not character to test if the given
+     *		StringBuffer ends in it.
+     * @param sb StringBuffer to test and potentially
+     *		append to.
+     */
+    public static void appendSeparatorIfLastNot(char separator, char not, StringBuffer sb) {
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
+            sb.append(separator);
+    }
 }
