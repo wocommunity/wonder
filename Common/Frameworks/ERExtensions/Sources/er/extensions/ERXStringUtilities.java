@@ -732,4 +732,18 @@ public class ERXStringUtilities {
         }
         return capitalize != null ? capitalize : value;
     }
+
+    /**
+     * Null-safe wrapper for java.lang.String.trim
+     * @param s string to trim
+     * @return trimmed string or null if s was null
+     */
+    public static String trimString(String s) {
+        if (s == null) {
+            return s;
+        } else {
+            return s.trim();
+        }
+    }
+    
 }
