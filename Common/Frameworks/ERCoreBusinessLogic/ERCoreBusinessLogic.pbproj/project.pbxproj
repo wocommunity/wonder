@@ -311,10 +311,10 @@
 				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
+				JAVA_SOURCE_SUBDIR = Sources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERCoreBusinessLogic";
 				SERVER_UNIQUIFIER = Server;
-				SRCROOT = Sources;
 				WRAPPER_EXTENSION = tmp;
 			};
 			dependencies = (
