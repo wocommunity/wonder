@@ -1,4 +1,5 @@
 {
+    "Test validation message for unit test" = "SUCCESS";
     "NullPropertyException" = "Please provide @indefiniteArticleForProperty@ <b>@displayNameForProperty@</b>.";
     "InvalidNumberException" = "The value is an invalid number.";
     "MandatoryRelationshipException" = "The object must has a mandatory relationship which is not being satisfied.";
