@@ -144,6 +144,12 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     public ERXNavigationItem navigationItem() {
         if (_navigationItem==null) {
             _navigationItem = (ERXNavigationItem)valueForBinding("navigationItem");
+            if(_navigationItem == null) {
+                String name = (String)valueForBinding("navigationItemName");
+                if(name != null) {
+                    _navigationItem = ERXNavigationManager.manager().navigationItemForName(name);
+                }
+            }
         }
         return _navigationItem;
     }
