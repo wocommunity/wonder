@@ -32,7 +32,7 @@ public class ERXFileNotificationCenter {
     private static ERXFileNotificationCenter _defaultCenter;
     public static ERXFileNotificationCenter defaultCenter() {
         if (_defaultCenter == null)
-        _defaultCenter = new ERXFileNotificationCenter();
+            _defaultCenter = new ERXFileNotificationCenter();
         return _defaultCenter;
     }
 
@@ -46,7 +46,8 @@ public class ERXFileNotificationCenter {
             ERXRetainer.retain(this);
             cat.debug("Caching disabled.  Registering for notification: " + ERXApplication.WORequestHandlerDidHandleRequestNotification);
             NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("checkIfFilesHaveChanged", ERXConstant.NotificationClassArray),
+                                                             new NSSelector("checkIfFilesHaveChanged",
+                                                                            ERXConstant.NotificationClassArray),
                                                              ERXApplication.WORequestHandlerDidHandleRequestNotification,
                                                              null);            
             cachingEnabled = false;
@@ -69,7 +70,7 @@ public class ERXFileNotificationCenter {
             throw new RuntimeException("Attempting to register a null file. " + (file != null ? " File path: " + file.getAbsolutePath() : null));
         if (observer == null)
             throw new RuntimeException("Attempting to register null observer for file: " + file);
-        if (observer == null)
+        if (selector == null)
             throw new RuntimeException("Attempting to register null selector for file: " + file);
         if (cachingEnabled)
             cat.warn("Registering an observer when WOCaching is enabled.  This observer will not ever by default be called: " + file);
@@ -110,7 +111,7 @@ public class ERXFileNotificationCenter {
                 try {
                     holder.selector.invoke(holder.observer, notification);
                 } catch (Exception ex) {
-                    cat.error("Catching exception when invoking method on observer: " + ex.toString());
+                    cat.error("Catching exception when invoking method on observer: " + ex.toString()+" - "+ERXUtilities.stackTrace(ex));
                 }
             }
             registerLastModifiedDateForFile(file);            
@@ -130,9 +131,9 @@ public class ERXFileNotificationCenter {
     public static class _ObserverSelectorHolder {
         public Object observer;
         public NSSelector selector;
-        public _ObserverSelectorHolder(Object observer, NSSelector selector) {
-            observer = observer;
-            selector = selector;
+        public _ObserverSelectorHolder(Object obs, NSSelector sel) {
+            observer = obs;
+            selector = sel;            
         }
 
         public boolean equals(Object osh) {
