@@ -87,7 +87,7 @@ public class ERCMailMessage extends _ERCMailMessage implements /*ERXReadStateTra
 
     public Object validateEmptyStringForKey(Object value, String field) {
         if(value == null || "".equals(value) || ((String)value).length() == 0) {
-            throw new ERXValidationException(this, field, value, "null");
+            throw ERXValidationFactory.defaultFactory().createCustomException(this, field, value, "null");
         }
         return value;
     }
