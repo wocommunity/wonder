@@ -1,8 +1,17 @@
-EditDateJavascript: ERXEditDateJavascript {
-	dateString = minValue;
+DateMaxField: WOTextField {
+	dateformat = formatter;
+	size = length;
+	value = maxValue;
 }
 
-EditDateJavascript2: ERXEditDateJavascript {
-	dateString = maxValue;
+DateMinField: WOTextField {
+	dateformat = formatter;
+	size = length;
+	value = minValue;
+}
+
+DateReadableDescription: WOString {
+	_unroll = true;
+	value = dateReadableDescription;
 }
 
