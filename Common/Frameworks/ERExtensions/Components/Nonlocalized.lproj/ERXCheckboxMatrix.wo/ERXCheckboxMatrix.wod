@@ -22,6 +22,7 @@ CheckBoxRepetition: ERXTable {
 	cellWidth = ^cellWidth;
 	cellVAlign = ^cellVAlign;
 	cellAlign = ^cellAlign;
+	otherTagString = ^tableOtherTagString;
 }
 
 CheckBox: WOGenericElement {
