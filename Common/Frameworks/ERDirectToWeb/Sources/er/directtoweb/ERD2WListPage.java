@@ -46,18 +46,25 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     /** Returns the display group, creating one if there is none present. */
     public WODisplayGroup displayGroup() {
         if(_displayGroup == null) {
-            boolean useBatchingDisplayGroup = ERXValueUtilities.booleanValue(d2wContext().valueForKey("useBatchingDisplayGroup"));
-            if(useBatchingDisplayGroup) {
-                _displayGroup = new ERXBatchingDisplayGroup();
-            } else {
-                _displayGroup = new WODisplayGroup();
-            }
+            createDisplayGroup();
             _displayGroup.setSelectsFirstObjectAfterFetch(false);
             if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
                 _displayGroup.setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
             }
         }
         return _displayGroup;
+    }
+
+    /**
+     * Creates the display group and sets the _displayGroup instance variable
+     */
+    protected void createDisplayGroup() {
+        boolean useBatchingDisplayGroup = ERXValueUtilities.booleanValue(d2wContext().valueForKey("useBatchingDisplayGroup"));
+        if(useBatchingDisplayGroup) {
+            _displayGroup = new ERXBatchingDisplayGroup();
+        } else {
+            _displayGroup = new WODisplayGroup();
+        }
     }
 
     /** Called when an {@link EOditingContext} has changed. Sets {@link #_hasToUpdate} which in turn lets the group refetch on the next display. */
