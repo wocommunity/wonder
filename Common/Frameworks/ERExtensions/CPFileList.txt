@@ -1,4 +1,6 @@
 ./ConfigurationManager.java:er.extensions
+./ERXLocalizer.java:er.extensions
+./EOGenericRecordClazz.java:er.extensions
 ./ERExtensions.java:er.extensions
 ./ERLog4j.java:er.extensions
 ./ERPatternLayout.java:er.extensions
