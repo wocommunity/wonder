@@ -14,9 +14,41 @@ import com.webobjects.appserver.*;
 import java.util.*;
 import org.apache.log4j.Category;
 
+/**
+ * This component can be used for two things:<br/>
+ * 1) Generating direct action urls for use in
+ * components that are being e-mailed to people.
+ * 2) Support for encoding enterprise objects in
+ * the form values of generated urls.
+ * At the moment this component still contains some
+ * custy code that needs to be cleaned up before it
+ * can really be used, like adding the .wo and .api files ;0.<br/>
+ * <br/>
+ * Synopsis:<br/>
+ * actionClass=<i>anActionClass</i>;directActionName=<i>aDirectActionName</i>;[entityNameSeparator=<i>aSeparator</i>;]
+ * [shouldEncryptObjectFormValues=<i>aBoolean</i>;][objectsForFormValues=<i>anArray</i>;]
+ * [bindingDictionary=<i>aDictionary</i>;][unencryptedBindingDictionary=<i>aDictionary</i>;]
+ *
+ * @binding actionClass direct action class to be used
+ * @binding directActionName direct action name
+ * @binding entityNameSeparator string to use as the separator when encoding
+ *		the enterprise objects
+ * @binding shouldEncryptObjectFormValues boolean flag that tells if the primary keys
+ *		of the enterprise objects should be encrypted using blowfish
+ * @binding objectForFormValue an enterprise object to be encoded in the url
+ * @binding objectsForFormValues array of enterprise objects to be encoded in the url
+ * @binding bindingDictionary adds the key-value pairs to generated url as
+ * 		form values, encrypting the values with blowfish.
+ * @binding unencryptedBindingDictionary adds the key-value pairs to generated url as
+ * 		form values
+ */
 public class ERXDirectActionHyperlink extends WOComponent {
 
+    /** Key used to denote an adaptor prefix for a generated url string */
+    // MOVEME: ERXWOUtilities
     public final static String ADAPTOR_PREFIX_MARKER="**ADAPTOR_PREFIX**";
+    /** Key used to denote a suffix for a generated url string */ 
+    // MOVEME: ERXWOUtilities
     public final static String SUFFIX_MARKER="**SUFFIX**";
 
     /** logging support */
@@ -36,8 +68,6 @@ public class ERXDirectActionHyperlink extends WOComponent {
         super(aContext);
     }
 
-    // DELETEME: Not needed
-    protected String oneTime;
     /**
      * Component is stateless
      * @return true
@@ -78,12 +108,18 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return (EOEnterpriseObject)valueForBinding("objectForFormValue");
     }
 
-    // MOVEME: This stuff might be better served if it was off of ERXApplication
     /** Holds the application host url */
+    // MOVEME: This stuff might be better served if it was off of ERXApplication
     private static String _applicationHostUrl;
     /**
-     *
+     * This returns the value stored in the system properties:
+     * <b>ERApplicationHostURL</b> if this isn't set then a
+     * runtime exception is thrown. This property should be of
+     * the form: http://mymachine.com
+     * @return the application host url that should be used when
+     *		complete urls are generated.
      */
+    // MOVEME: This stuff might be better served if it was off of ERXApplication
     public static String applicationHostUrl() {
         if (_applicationHostUrl ==null) {
             // FIXME: Should be: er.extensions.ERXApplicationHostURL
@@ -94,6 +130,24 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return _applicationHostUrl;
     }
 
+    /**
+     * This method is useful for completing urls that are being generated
+     * in components that are going to be e-mailed to users. This method
+     * has the ability to substitute different application names which
+     * can be helpful if one application is generating the component, but
+     * the action of the url points to a different application on the
+     * same host.
+     * @param s href string to be completed
+     * @param c current context
+     * @param applicationName to be substituted if ADAPTOR_PREFIX_MARKER
+     *		is present
+     * @param relative flag to indicate if the generated url should be
+     *		relative or absolute in which case the applicationHostUrl
+     * 		will be used
+     * @param suffix string to be substitued if the SUFFIX_MARKER string
+     *		is present
+     * @return complete url after substitutions have been made
+     */
     // MOVEME: ERXWOUtilities
     public static String completeURLFromString(String s,
                                                WOContext c,
@@ -136,24 +190,72 @@ public class ERXDirectActionHyperlink extends WOComponent {
             sb.append(separator);
     }
 
-    // MOVEME: All of this encrypting and decrypting should move to either ERXEOFUtilities or ERXGenericRecordClazz
-    
+    /**
+     * Constructs the form values dictionary by first calling
+     * the method <code>encodeEnterpriseObjectsPrimaryKeyForUrl</code>
+     * and then using the results of that to construct the dictionary.
+     * @param eos array of enterprise objects to be encoded in the url
+     * @param separator to be used to separate entity names
+     * @param encrypt flag to determine if the primary key
+     *		of the objects should be encrypted.
+     * @return dictionary containing all of the key value pairs where
+     * 		the keys denote the entity names and the values denote
+     *		the possibly encrypted primary keys.
+     */
+    // MOVEME: All of this encrypting and decrypting should move to either ERXEOFUtilities or EOGenericRecordClazz
     public static NSDictionary dictionaryOfFormValuesForEnterpriseObjects(NSArray eos, String separator, boolean encrypt){
         String base = encodeEnterpriseObjectsPrimaryKeyForUrl(eos, separator, encrypt);
         NSArray elements = NSArray.componentsSeparatedByString (base, "&");
         return (NSDictionary)NSPropertyListSerialization.propertyListFromString("{"+elements.componentsJoinedByString(";")+"}");
     }
-    
-    // Constructs a simple key-value pair for a url like: sep=_&BuyerUser_1=56 || sep=_&BuyerUser_E1=8T67H
+
+    /**
+     * Simple cover method that calls the method: <code>
+     * encodeEnterpriseObjectsPrimaryKeyForUrl</code> with
+     * an array containing the single object passed in.
+     * @param eo enterprise object to encode in a url.
+     * @param seperator to be used for the entity name.
+     * @param encrypt flag to determine if the primary key
+     *		of the object should be encrypted.
+     * @return url string containing the encoded enterprise
+     * 		object plus the entity name seperator used.
+     */
+    // MOVEME: EOGenericRecordClazz
     public static String encodeEnterpriseObjectPrimaryKeyForUrl(EOEnterpriseObject eo, String seperator, boolean encrypt) {
         return encodeEnterpriseObjectsPrimaryKeyForUrl(new NSArray(eo), seperator, encrypt);
     }
 
     /**
-     * Encodes an array of enterprise objects
+     * Encodes an array of enterprise objects for use in a url. The
+     * basic idea is is to have an entity name to primary key map that
+     * makes it easy to retrieve at a later date. In addition the entity
+     * name key will be able to tell if the value is an encrypted key or
+     * not. In this way given a key value pair the object can be fetched
+     * from an editing context given that at point you will know the entity
+     * name and the primary key.<br/>
+     * <br/>
+     * For example imagine that an array containing two User objects (pk 13 and 24)
+     * and one Company object (pk 56) are passed to this method, null is passed in
+     * for the separator which means the default seperator will be used which is
+     * '_' and false is passed for encryption. Then the url that would be generated
+     * would be: sep=_&User_1=13&User_2=24&Company_3=56<br/>
+     * <br/>
+     * If on the other hand let's say you use the _ character in entity names and you
+     * want the primary keys encrypted then passing in the same array up above but with
+     * "##" specified as the separator and true for the encrypt boolean would yield:
+     * sep=##&User##E1=SOMEGARBAGE8723&User##E2=SOMEGARBAGE23W&Company##E3=SOMEGARBAGE8723
+     * <br/>
+     * Note that in the above encoding the seperator is always passed and the upper case
+     * E specifies if the corresponding value should be decrypted.
+     * Note: At the moment this method does not handle compound primary keys
+     * @param eos array of enterprise objects to be encoded in the url
+     * @param separator to be used between the entity name and a sequence number
+     * @param encrypt indicates if the primary keys of the objects should be encrypted
+     * @return encoding of the objects passed that can be used as parameters in a url.
      */
     // ENHANCEME: Could also place a sha hash of the blowfish key in the form values so we can know if we are using
     //		  the correct key for decryption.
+    // MOVEME: EOGenericRecordClazz
     public static String encodeEnterpriseObjectsPrimaryKeyForUrl(NSArray eos, String separator, boolean encrypt) {
         if (separator == null) separator = DefaultEntityNameSeparator;
         NSMutableArray encoded = new NSMutableArray("sep=" + separator);
@@ -175,13 +277,13 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return encoded.componentsJoinedByString("&");
     }
 
-    /** @deprecated -- bad spelling */
-    // DELETEME:
-    public static NSArray deccodeEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary values) {
-        return decodeEnterpriseObjectsFromFormValues(ec, values);
-    }
     /**
-     *
+     * Decodes all of the objects for a given set of form values in
+     * the given editing context. The object encoding is very simple,
+     * just a generic entity name primary key pair where the key is
+     * potentially encrypted using blowfish. The specific encoding is
+     * specified in the method: <code>encodeEnterpriseObjectsPrimaryKeyForUrl
+     * </code>.
      * @param ec editingcontext to fetch the objects from
      * @param values form value dictionary where the values are an
      *		NSArray containing the primary key of the object in either
@@ -189,6 +291,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
      * @return array of enterprise objects corresponding to the passed
      *		in form value array.
      */
+    // MOVEME: EOGenericRecordClazz
     public static NSArray decodeEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary values) {
         if (cat.isDebugEnabled()) cat.debug("values = "+values);
         NSMutableArray encoded = new NSMutableArray();
@@ -196,7 +299,10 @@ public class ERXDirectActionHyperlink extends WOComponent {
         String separator = temp != null && temp.count() > 0 ? (String)temp.lastObject() : null;
         if (temp != null && temp.count() > 1)
             cat.warn("Found multiple separators in form values: " + temp);
-        if (separator == null) separator = DefaultEntityNameSeparator;
+        if (separator == null) {
+            cat.warn("Form value: sep not found, using default entity name separator: " + DefaultEntityNameSeparator);
+            separator = DefaultEntityNameSeparator;  
+        } 
         for (Enumeration e = values.keyEnumerator(); e.hasMoreElements();) {
             String key = (String)e.nextElement();
             if (key.indexOf(separator) != -1) {
@@ -271,6 +377,16 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return v!=null ? v.toString() : null;
     }
 
+    /**
+     * Generates an href for the given direct action based
+     * on all of the bindings. Currently it generates an
+     * absolute url starting with the key: ADAPTOR_PREFIX_MARKER.
+     * Before this href can be really useful it needs to
+     * be cleaned up.
+     * @return href containing all of the specification from
+     *		the bindings.
+     */
+    // FIXME: Lots of stuff to be fixed here.
     public String href() {
         //FIXME: Need to make this optional
         StringBuffer result=new StringBuffer(ADAPTOR_PREFIX_MARKER);
@@ -310,57 +426,6 @@ public class ERXDirectActionHyperlink extends WOComponent {
                     result.append(value);
                 }
             }
-        }
-        // FIXME: Ditch this
-        if(hasBinding("id")){
-            String v= stringForBinding ("id");
-            if (v!=null && v.length()>0) {
-               appendSeparatorIfLastNot('&', '?', result);
-                result.append("id=");
-                String eId = ERXCrypto.blowfishEncode(v).toString();
-                result.append(eId);
-            } else
-                cat.error("Invalid id specified "+v);
-        }
-        // FIXME: Ditch this
-        if (hasBinding("id2")) { // We should have a better way of passing args than id and id2!!
-            //result.append('&'); // target=_top;
-            String v= stringForBinding ("id2");
-            if (v!=null && v.length()>0) {
-                appendSeparatorIfLastNot('&', '?', result);
-                result.append("id2=");
-                String eId2 = ERXCrypto.blowfishEncode(v).toString();
-                result.append(eId2);
-            } else cat.error("Invalid id2 "+v);
-        }
-        // FIXME: Ditch this
-        if (hasBinding("c") && canGetValueForBinding("c")) {
-            appendSeparatorIfLastNot('&', '?', result);
-            result.append("c=");
-            String eCode = ERXCrypto.blowfishEncode((valueForBinding("c")).toString());
-            result.append(eCode);
-        }
-        // FIXME: Ditch this
-        if (hasBinding("loginMessageName") && canGetValueForBinding("loginMessageName")){
-            appendSeparatorIfLastNot('&', '?', result);
-            result.append("loginMessageName=");
-            result.append(valueForBinding("loginMessageName"));
-        }
-        // FIMXE: Bad, need to get rid of this oneTime stuff.
-        //If the OneTime is turned on, then add code and dateCreated keyValue pairs in the href.
-        if( hasBinding("oneTime") && ((Integer)valueForBinding("oneTime")).intValue()==1){
-            EOEditingContext ec = ERXExtensions.newEditingContext();
-            EOClassDescription cd=EOClassDescription.classDescriptionForEntityName("OneTimeCode");
-            ERXGenericRecord code=(ERXGenericRecord)cd.createInstanceWithEditingContext(ec,null);
-            ec.insertObject(code);
-            String expirationDate = (String)valueForBinding("expirationDate");
-            if (expirationDate!=null) {
-                code.takeValueForKey(valueForBinding("expirationDate"), "expirationDate");
-            }
-            ec.saveChanges();
-            appendSeparatorIfLastNot('&', '?', result);
-            result.append("oneTimeCode=");
-            result.append(((Integer)code.valueForKey("code")).intValue());
         }
         if (allObjectsForFormValues().count() > 0) {
             appendSeparatorIfLastNot('&', '?', result);
