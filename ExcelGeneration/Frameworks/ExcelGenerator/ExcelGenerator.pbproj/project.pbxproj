@@ -128,6 +128,7 @@
 				41E14E5705F5F5BB00DE10B6,
 				4153A57805F75CD700A59891,
 				4153A57905F75CD700A59891,
+				41F602CC05FC740900C8E792,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -614,6 +615,7 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
+				41F602CB05FC740900C8E792,
 				41E573E70522BA7000000102,
 			);
 			isa = PBXGroup;
@@ -1209,6 +1211,19 @@
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
+		};
+		41F602CB05FC740900C8E792 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Codes.plist;
+			path = Resources/Codes.plist;
+			refType = 4;
+		};
+		41F602CC05FC740900C8E792 = {
+			fileRef = 41F602CB05FC740900C8E792;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 //410
 //411
