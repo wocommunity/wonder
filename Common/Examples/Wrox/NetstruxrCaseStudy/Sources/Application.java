@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 import er.directtoweb.ERDirectToWeb;
 import er.extensions.*;
-import er.wrox.eo.User;
+import er.wrox.User;
 import java.util.Enumeration;
 
 public class Application extends WOApplication { 
@@ -28,7 +28,7 @@ public class Application extends WOApplication {
         statisticsStore().setPassword("4AppStats");
         // Make direct actions be the default request handler.
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
-        er.wrox.eo.User.registerUserPreferenceHandler();
+        User.registerUserPreferenceHandler();
         //ERXEntityClassDescription.registerDescription();
         //ERXValidationFactory.defaultFactory().configureFactory();
     }

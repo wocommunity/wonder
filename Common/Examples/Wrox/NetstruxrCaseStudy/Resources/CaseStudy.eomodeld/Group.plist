@@ -17,7 +17,7 @@
         }
     ); 
     attributesUsedForLocking = (id, name); 
-    className = er.wrox.eo.Group; 
+    className = er.wrox.Group; 
     classProperties = (name, users); 
     externalName = group; 
     fetchSpecificationDictionary = {}; 

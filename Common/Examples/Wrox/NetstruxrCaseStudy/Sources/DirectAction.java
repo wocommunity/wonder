@@ -9,7 +9,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import er.wrox.eo.User;
+//import er.wrox.User;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXObjectWasCreatedDelegate;
 import er.extensions.ERXExtensions;
@@ -59,7 +59,7 @@ public class DirectAction extends WODirectAction {
     public WOActionResults signUpAction() {
         EOEditingContext peer = ERXExtensions.newEditingContext();
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed("EditSignUpUser", session());
-        User user = (User)ERXUtilities.createEO("User", peer);
+        er.wrox.User user = (er.wrox.User)ERXUtilities.createEO("User", peer);
         epi.setObject(user);
         epi.setNextPageDelegate(new ERXObjectWasCreatedDelegate(user,
                                                              new SignUpHomePageDelegate(user),
@@ -68,9 +68,9 @@ public class DirectAction extends WODirectAction {
     }
 
     public static class SignUpHomePageDelegate implements NextPageDelegate {
-        protected User user;
+        protected er.wrox.User user;
         protected EOEditingContext ec;
-        public SignUpHomePageDelegate(User u) {
+        public SignUpHomePageDelegate(er.wrox.User u) {
             user = u;
             if (user != null)
                 ec = user.editingContext();
