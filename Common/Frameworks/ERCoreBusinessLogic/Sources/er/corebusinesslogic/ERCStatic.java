@@ -29,11 +29,27 @@ public class ERCStatic extends _ERCStatic {
                 if (arr.count() > 1)
                     throw new IllegalStateException("Found " + arr.count() + " rows for key " + key);
                 result = arr.count() == 1 ? arr.objectAtIndex(0) : NSKeyValueCoding.NullValue;
-                _staticsPerKey.setObjectForKey(result, key);
+                if (result instanceof EOEnterpriseObject) {
+                    privateEditingContext().lock();
+                    try {
+                        _staticsPerKey.setObjectForKey(ERXEOControlUtilities.localInstanceOfObject(privateEditingContext(),
+                                                                                                   (ERCStatic)result),
+                                                       key);                        
+                    } finally {
+                        privateEditingContext().unlock();
+                    }
+                }
                 result = result == NSKeyValueCoding.NullValue ? null : result;
+            } else if (result instanceof EOEnterpriseObject) {
+                privateEditingContext().lock();
+                try {
+                    result = ERXEOControlUtilities.localInstanceOfObject(ec, (ERCStatic)result);
+                } finally {
+                    privateEditingContext().unlock();
+                }                
+            } else if (result.equals(NSKeyValueCoding.NullValue)) {
+                result = null;
             }
-            result = result != null && !result.equals(NSKeyValueCoding.NullValue) ? ERXEOControlUtilities.localInstanceOfObject(ec,
-(ERCStatic)result) : null;
             return (ERCStatic)result;
         }
 
@@ -44,7 +60,12 @@ public class ERCStatic extends _ERCStatic {
             if (_privateEditingContext == null) {
                 if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStatic.UseSeparateChannel", true)) {
                     _privateEditingContext = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
-                    _privateEditingContext.setSharedEditingContext(null);
+                    _privateEditingContext.lock();
+                    try {
+                        _privateEditingContext.setSharedEditingContext(null);
+                    } finally {
+                        _privateEditingContext.unlock();
+                    }
                 } else {
                     _privateEditingContext = ERXEC.newEditingContext();
                 }                
@@ -78,8 +99,8 @@ public class ERCStatic extends _ERCStatic {
 
         public static String staticStoredValueForKey(String key, boolean noCache) {
             String value = null;
+            privateEditingContext().lock();
             try {
-                privateEditingContext().lock();
                 value = staticStoredValueForKey(privateEditingContext(), key, noCache);
             } finally {
                 privateEditingContext().unlock();
@@ -97,8 +118,8 @@ public class ERCStatic extends _ERCStatic {
 
         public static int staticStoredIntValueForKey(String key, boolean noCache) {
             int value = 0;
+            privateEditingContext().lock();
             try {
-                privateEditingContext().lock();
                 value = staticStoredIntValueForKey(privateEditingContext(), key, noCache);
             } finally {
                 privateEditingContext().unlock();
@@ -108,8 +129,8 @@ public class ERCStatic extends _ERCStatic {
         
         public static void takeStaticStoredValueForKey(String value,
                                                        String key) {
+            privateEditingContext().lock();
             try {
-                privateEditingContext().lock();
                 takeStaticStoredValueForKey(privateEditingContext(), value, key);
                 // Clear out the stacks.
                 privateEditingContext().saveChanges();
