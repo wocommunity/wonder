@@ -30,4 +30,23 @@ public class ERCLogEntry extends _ERCLogEntry {
     }
 
     public static ERCLogEntryClazz logEntryClazz() { return (ERCLogEntryClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCLogEntry"); }
+
+    // Logging support
+    public static ERCLogEntry createLogEntryLinkedToEO(EOEnterpriseObject type,
+                                                       String text,
+                                                       EOEnterpriseObject eo,
+                                                       String relationshipKey) {
+        EOEditingContext editingContext=eo.editingContext();
+        ERCLogEntry logEntry = (ERCLogEntry)ERCLogEntry.logEntryClazz().createAndInsertObject(editingContext);
+        if(type != null) {
+            // CHECKME: (ak) what's type supposed to do??
+            // logEntry.addObjectToBothSidesOfRelationshipWithKey(type,"type");
+        }
+        if(relationshipKey != null) {
+            // CHECKME: (ak) what's relationshipKey supposed to do??
+            // logEntry.addObjectToBothSidesOfRelationshipWithKey(eo,relationshipKey);
+        }
+        logEntry.setText(text);
+        return logEntry;
+    }    
 }
