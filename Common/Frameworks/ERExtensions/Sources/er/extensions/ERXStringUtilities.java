@@ -430,7 +430,7 @@ public class ERXStringUtilities {
      */
     public static String displayNameForKey(String key) {
         StringBuffer finalString = null;
-        if (!stringIsNullOrEmpty(key)) {
+        if (!stringIsNullOrEmpty(key) && !key.trim().equals("")) {
             finalString = new StringBuffer();
             String lastHop=key.indexOf(".") == -1 ? key : key.endsWith(".") ? "" : key.substring(key.lastIndexOf(".") + 1);
             StringBuffer tempString = new StringBuffer();
@@ -781,4 +781,5 @@ public class ERXStringUtilities {
         }
         return capitalize != null ? capitalize : value;
     }
+    
 }
