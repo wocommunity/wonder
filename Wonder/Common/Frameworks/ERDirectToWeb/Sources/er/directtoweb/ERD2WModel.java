@@ -206,17 +206,27 @@ public class ERD2WModel extends D2WModel {
         return result;
     }
 
-    /** Means to get at the cache. You shouldn't use this unless you know what you are doing. */
-    public Hashtable cache() {
+    /** Means to dump the cache. You shouldn't use this unless you know what you are doing. */
+    public void dumpCache(String fileName) {
+        fileName = fileName == null ? "dmp.cache": fileName;
         synchronized(this) {
-            return _cache;
+            try {
+                ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(cacheToBytes(_cache)), new File(fileName));
+            } catch(IOException ex) {
+                log.error(ex);
+            }
         }
     }
 
-    /** Means to set the cache. You shouldn't use this unless you know what you are doing. */
-    public void setCache(Hashtable value) {
+    /** Means to restore the cache. You shouldn't use this unless you know what you are doing. */
+    public void restoreCache(String fileName) {
+        fileName = fileName == null ? "dmp.cache": fileName;
         synchronized(this) {
-            _cache = value;
+            try {
+                _cache = cacheFromBytes(ERXFileUtilities.bytesFromFile(new File(fileName)));
+            } catch(IOException ex) {
+                log.error(ex);
+            }
         }
     }
     
@@ -713,5 +723,127 @@ public class ERD2WModel extends D2WModel {
         stringObjects.addObjectsFromArray(set.allObjects());
         ERXArrayUtilities.sortArrayWithKey(stringObjects, "description");
         return stringObjects.componentsJoinedByString(".");
+    }
+
+
+    // stuff to dump and restore the cache. This should increase the experience
+    // for the first folks after an app needed to be restarted and the rules have not been fired yet
+    // the schema is very simplicistic, though, and needs improvement
+
+    protected static final String ENTITY_PREFIX = "::ENTITY::";
+    protected static final String RELATIONSHIP_PREFIX = "::RELATIONSHIP::";
+    protected static final String ATTRIBUTE_PREFIX = "::ATTRIBUTE::";
+
+    protected Object encodeObject(Object o) {
+        if(o instanceof EOEntity) {
+            o = ENTITY_PREFIX + ((EOEntity)o).name();
+        } else if(o instanceof EORelationship) {
+            o = RELATIONSHIP_PREFIX + ((EORelationship)o).name() + ENTITY_PREFIX + ((EORelationship)o).entity().name();
+        } else if(o instanceof EOAttribute) {
+            o = ATTRIBUTE_PREFIX + ((EOAttribute)o).name() + ENTITY_PREFIX + ((EOAttribute)o).entity().name();
+        }
+        return o;
+    }
+    protected Object decodeObject(Object o) {
+        if(o instanceof String) {
+            String s = (String)o;
+            if(s.indexOf(ENTITY_PREFIX) == 0) {
+                String entityName = s.substring(ENTITY_PREFIX.length());
+                o = EOModelGroup.defaultGroup().entityNamed(entityName);
+            } else if(s.indexOf(RELATIONSHIP_PREFIX) == 0) {
+                int entityOffset = s.indexOf(ENTITY_PREFIX);
+                String entityName = s.substring(entityOffset + ENTITY_PREFIX.length());
+                String relationshipName = s.substring(RELATIONSHIP_PREFIX.length(), entityOffset);
+                EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+                o = entity.relationshipNamed(relationshipName);
+            } else if(s.indexOf(ATTRIBUTE_PREFIX) == 0) {
+                int entityOffset = s.indexOf(ENTITY_PREFIX);
+                String entityName = s.substring(entityOffset + ENTITY_PREFIX.length());
+                String attributeName = s.substring(ATTRIBUTE_PREFIX.length(), entityOffset);
+                EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+                o = entity.attributeNamed(attributeName);
+            }
+        }
+        return o;
+    }
+
+    protected boolean writeEntry(ERXMultiKey key, Object value, ObjectOutputStream out)  throws IOException {
+        value=encodeObject(value);
+        if((value != null) && !(value instanceof Serializable)) {
+            return false;
+        }
+        Object keyKeys[] = key.keys();
+        Object keys[]=new Object[keyKeys.length];
+        for (short i=0; i<keys.length; i++) {
+            Object o=keyKeys[i];
+            o=encodeObject(o);
+            if((o != null) && !(o instanceof Serializable)) {
+                return false;
+            }
+            keys[i]=o;
+        }
+        out.writeObject(keys);
+        out.writeObject(value);
+        return true;
+    }
+
+    protected ERXMultiKey readEntry(Hashtable cache, ObjectInputStream in) throws IOException, ClassNotFoundException {
+        Object keys[]=(Object[])in.readObject();
+        Object value = decodeObject(in.readObject());
+        for (short i=0; i<keys.length; i++) {
+            Object o=decodeObject(keys[i]);
+            keys[i]=o;
+        }
+        ERXMultiKey key = new ERXMultiKey(keys);
+        cache.put(key,value);
+        return key;
+    }
+
+    protected byte[] cacheToBytes(Hashtable cache) {
+        try {
+            ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(ostream);
+            for(Enumeration keys = cache.keys(); keys.hasMoreElements();) {
+                ERXMultiKey key = (ERXMultiKey)keys.nextElement();
+                Object o = cache.get(key);
+                if(writeEntry(key,o,out)) {
+                    if(log.isDebugEnabled()) {
+                        log.debug("Wrote: " + key + " -- " + o);
+                    }
+                } else {
+                    log.info("Can't write: " + key + " -- " + o);
+                }
+            }
+            out.flush();
+            ostream.close();
+            return ostream.toByteArray();
+        } catch(Exception ex) {
+            log.error(ex,ex);
+        }
+        return null;
+    }
+
+    protected Hashtable cacheFromBytes(byte[] bytes) {
+        try {
+            ByteArrayInputStream istream = new ByteArrayInputStream(bytes);
+            ObjectInputStream in = new ObjectInputStream(istream);
+            Hashtable newCache = new Hashtable(10000);
+            try {
+                //FIXME ak how do I do without the EOFException?
+                for(;;) {
+                    ERXMultiKey key = readEntry(newCache,in);
+                    Object o = newCache.get(key);
+                    if(log.isDebugEnabled()) {
+                        log.debug("Read: " + key + " -- " + o);
+                    }
+                }
+            } catch(EOFException ex) {
+            }
+            istream.close();
+            return newCache;
+        } catch(Exception ex) {
+            log.error(ex,ex);
+        }
+        return null;
     }
 }
