@@ -1,16 +1,17 @@
 {
-    "Validation message test for unit test" =  "Validierungsmeldung für unit test";
-    // Validation Template samples
-    // Note the use of ** KEY_MARKER **.
-    // Uncomment if not using ERDirectToWeb
-    "NullPropertyException" = "Please provide <b>** KEY_MARKER **</b>.";
+    ExceedsMaximumLengthException = "The value entered for <b>@@displayNameForProperty@@</b> exceeds the length of <b>@@attribute.width@@</b>.";
     "InvalidNumberException" = "Please check <b>** KEY_MARKER **</b> as @@value@@ is an invalid number.";
     "MandatoryToManyRelationshipException" = "The <b>@@object.entityName@@</b> must has a mandatory relationship which is not being satisfied.";
+    MandatoryToOneRelationshipException = "A <b>@@displayNameForEntity@@</b> must have a <b>@@displayNameForProperty@@</b>.";
+    "NullPropertyException" = "Please provide <b>** KEY_MARKER **</b>.";
     "ObjectRemovalException" = "Cannot delete this <b>@@object.entityName@@</b>. You should first delete the item in its <b>@@propertyKey@@</b>.";
     "ObjectsRemovalException" = "Cannot delete this <b>@@displayNameForEntity@@</b>. You should first delete the items in its <b>@@propertyKey@@</b>.";
-    
-    ExceedsMaximumLengthException = "The value entered for <b>@@displayNameForProperty@@</b> exceeds the length of <b>@@attribute.width@@</b>.";
+    "Test validation message for unit test" =  "Validierungsmeldung für unit test";
+    "Test validation message for unit test in ERX" = "SUCCESS - ERD comes before this";
     ValueConversionException = "The value entered for <b>@@displayNameForProperty@@</b> is not a valid <b>@@attribute.valueClass@@</b>.";
+    // Validation Template samples
+    // Note the use of ** KEY_MARKER **.
+    // Uncomment if not using ERDirectToWeb    
     // User.name.NullPropertyException = "Hi @@displayNameForProperty@@, don't do that!";
     // firstName.NullPropertyException = "Hi @@propertyKey@@, really don't do that!";
     // User.validateBirthdayBeforeToday = "Oops, @@value@@ is not before today!";
