@@ -236,7 +236,7 @@ public class ERMailUtils extends Object {
 
             if (anAddress instanceof InternetAddress) 
                 emailAddress = ((InternetAddress) anAddress).toUnicodeString ();
-            else  // anAddress will instanceof Address 
+            else  // anAddress will be a instance of Address
                 emailAddress = anAddress.toString ();
 
             addresses.addObject (emailAddress);
