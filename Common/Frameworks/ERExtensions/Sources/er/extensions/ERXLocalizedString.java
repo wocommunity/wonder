@@ -62,9 +62,9 @@ public class ERXLocalizedString extends ERXStatelessComponent {
         String stringToLocalize = null, localizedString = null;
         if(!hasBinding("templateString")) {
             if(hasBinding("object") || hasBinding("keyPath")) {
-                Object value = null;
+                Object value = object();
                 if(hasBinding("keyPath"))
-                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object(), (String)valueForBinding("keyPath"));
+                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, (String)valueForBinding("keyPath"));
                 stringToLocalize = objectToString(value);
             } else if(hasBinding("value")) {
                 stringToLocalize = (String)valueForBinding("value");
