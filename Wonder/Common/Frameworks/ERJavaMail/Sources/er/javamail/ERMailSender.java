@@ -293,7 +293,7 @@ public class ERMailSender extends Thread {
         // FIXME: We need to refactor this to use NSNotificationCenter !!!
         try {
             Class c = Class.forName (ERMailDelivery.callBackClassName);
-            Class[] parameterTypes = new Class[] {callbackObject.getClass(), invalidEmails.getClass()};
+            Class[] parameterTypes = new Class[] {callbackObject.getClass(), NSArray.class};
             Method m = c.getMethod (ERMailDelivery.callBackMethodName, parameterTypes);
             Object[] args = new Object[] {callbackObject, invalidEmails};
             m.invoke (c.newInstance(), args);
