@@ -132,7 +132,12 @@
                 <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERCalendar/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERCoreBusinessLogic/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERWorkerChannel/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/WOOgnl/Sources/"/>
+                <pathelement path="${wonder.root}/PlugIns/PostgresqlPlugIn/Sources/"/>
+                <pathelement path="${wonder.root}/ExcelGeneration/Frameworks/ExcelGenerator/Sources/"/>
                 <!--pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
                 <pathelement path="${wonder.root}/Validity/Frameworks/Validity/Sources"/>
                 <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/-->
