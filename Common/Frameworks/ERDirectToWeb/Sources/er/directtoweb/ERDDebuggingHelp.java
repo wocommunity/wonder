@@ -7,6 +7,12 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.eocontrol.EOCooperatingObjectStore;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+
 import er.extensions.*;
 
 /**
@@ -35,7 +41,33 @@ public class ERDDebuggingHelp extends WOComponent {
     }
 
     public String key;
-
+    protected EOEditingContext editingContext;
+    protected boolean didSearchEditingContext;
+    
+    public EOEditingContext editingContext() {
+    	if(editingContext == null && !didSearchEditingContext) {
+    		WOComponent parent = parent();
+    		while(parent != null && editingContext == null) {
+    			if(parent instanceof ERD2WPage) {
+    				editingContext = ((ERD2WPage)parent).editingContext();
+    			}
+    			parent = parent.parent();
+    		}
+    		didSearchEditingContext = true;
+    	}
+    	return editingContext;
+    }
+    
+    public WOComponent showEditingContext() {
+    	WOComponent nextPage = pageWithName("ERXEditingContextInspector");
+    	nextPage.takeValueForKey(editingContext(), "object");
+    	return nextPage;
+    }
+    
+    public boolean hasEditingContext() {
+    	return editingContext() != null;
+    }
+    
     public Object debugValueForKey() {
         if(key != null && !"".equals(key))
             return parent().valueForKeyPath("d2wContext."+key);
