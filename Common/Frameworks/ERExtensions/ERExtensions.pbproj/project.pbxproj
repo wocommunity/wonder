@@ -324,12 +324,6 @@
 			settings = {
 			};
 		};
-		66F39C2E021A475800CD2933 = {
-			fileRef = F57EA62701FF59BF019E57DA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		66F39C2F021A475800CD2933 = {
 			fileRef = F57EA61401FF59BF019E57DA;
 			isa = PBXBuildFile;
@@ -1141,7 +1135,7 @@
 		};
 		F57EA5C401FF59BF019E57DA = {
 			isa = PBXFileReference;
-			path = ERXAutoClosePage.java;
+			path = ERXJSAutoClosePage.java;
 			refType = 4;
 		};
 		F57EA5C501FF59BF019E57DA = {
@@ -1602,11 +1596,6 @@
 		F57EA62601FF59BF019E57DA = {
 			isa = PBXFileReference;
 			path = ERXInstanceOfConditional.java;
-			refType = 4;
-		};
-		F57EA62701FF59BF019E57DA = {
-			isa = PBXFileReference;
-			path = ERXJSCloseWindow.java;
 			refType = 4;
 		};
 		F57EA62801FF59BF019E57DA = {
@@ -2240,8 +2229,6 @@
 				F587FFD8020636A701A801D4,
 				F587FFDC020636D901A801D4,
 				F587FFDD020636D901A801D4,
-				F587FFE10206370201A801D4,
-				F587FFE20206370201A801D4,
 				F587FFE60206372F01A801D4,
 				F587FFE70206372F01A801D4,
 				F587FFEB0206376201A801D4,
@@ -2270,7 +2257,6 @@
 				F5FEEADC02063CB201A801D4,
 				F5FEEAE002063CE801A801D4,
 				F5FEEAE102063CE801A801D4,
-				F5FEEAE502063D1201A801D4,
 				F5FEEAE602063D1201A801D4,
 				F5FEEAEA02063D4501A801D4,
 				F5FEEAEB02063D4501A801D4,
@@ -2344,6 +2330,7 @@
 				F61422F30253620001AD0D07,
 				F641B2FE026AF07D014E589E,
 				F7CC3073027B365801A8010C,
+				F7BA9418027F9A7201A8010C,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -2422,7 +2409,6 @@
 				66F39C2B021A475800CD2933,
 				66F39C2C021A475800CD2933,
 				66F39C2D021A475800CD2933,
-				66F39C2E021A475800CD2933,
 				66F39C2F021A475800CD2933,
 				66F39C30021A475800CD2933,
 				66F39C31021A475800CD2933,
@@ -3414,28 +3400,6 @@
 			settings = {
 			};
 		};
-		F587FFDF0206370201A801D4 = {
-			isa = PBXFolderReference;
-			path = ERXJSCloseWindow.wo;
-			refType = 4;
-		};
-		F587FFE00206370201A801D4 = {
-			isa = PBXFileReference;
-			path = ERXJSCloseWindow.api;
-			refType = 4;
-		};
-		F587FFE10206370201A801D4 = {
-			fileRef = F587FFDF0206370201A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F587FFE20206370201A801D4 = {
-			fileRef = F587FFE00206370201A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F587FFE40206372E01A801D4 = {
 			isa = PBXFolderReference;
 			path = ERXDebugMarker.wo;
@@ -3919,21 +3883,11 @@
 			settings = {
 			};
 		};
-		F5FEEAE302063D1101A801D4 = {
-			isa = PBXFolderReference;
-			path = ERXAutoClosePage.wo;
-			refType = 4;
-		};
 		F5FEEAE402063D1101A801D4 = {
 			isa = PBXFileReference;
-			path = ERXAutoClosePage.api;
-			refType = 4;
-		};
-		F5FEEAE502063D1201A801D4 = {
-			fileRef = F5FEEAE302063D1101A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
+			name = ERXJSAutoClosePage.api;
+			path = /Users/max/Developement/ProjectWonder/Frameworks/ERExtensions/ERXJSAutoClosePage.api;
+			refType = 0;
 		};
 		F5FEEAE602063D1201A801D4 = {
 			fileRef = F5FEEAE402063D1101A801D4;
@@ -4517,7 +4471,7 @@
 				F645C8800247899001AD0D07,
 				F645C8810247899001AD0D07,
 				F645C8820247899001AD0D07,
-				F645C8830247899001AD0D07,
+				F7BA9415027F9A7201A8010C,
 				F645C8840247899001AD0D07,
 				FB13D999F9BE5AD29792D4FB,
 				F645C8850247899001AD0D07,
@@ -4557,16 +4511,6 @@
 			);
 			isa = PBXGroup;
 			name = ERXFormForTarget;
-			refType = 4;
-		};
-		F645C8830247899001AD0D07 = {
-			children = (
-				F587FFE00206370201A801D4,
-				F57EA62701FF59BF019E57DA,
-				F587FFDF0206370201A801D4,
-			);
-			isa = PBXGroup;
-			name = ERXJSCloseWindow;
 			refType = 4;
 		};
 		F645C8840247899001AD0D07 = {
@@ -4624,7 +4568,6 @@
 		};
 		F645C8890247899001AD0D07 = {
 			children = (
-				F645C88A0247899001AD0D07,
 				F645C88B0247899001AD0D07,
 				F645C88C0247899001AD0D07,
 				F645C8BC0247899001AD0D07,
@@ -4670,16 +4613,6 @@
 			);
 			isa = PBXGroup;
 			name = "Misc WOComponents";
-			refType = 4;
-		};
-		F645C88A0247899001AD0D07 = {
-			children = (
-				F5FEEAE402063D1101A801D4,
-				F57EA5C401FF59BF019E57DA,
-				F5FEEAE302063D1101A801D4,
-			);
-			isa = PBXGroup;
-			name = ERXAutoClosePage;
 			refType = 4;
 		};
 		F645C88B0247899001AD0D07 = {
@@ -5363,6 +5296,33 @@
 //F72
 //F73
 //F74
+		F7BA9415027F9A7201A8010C = {
+			children = (
+				F7BA9417027F9A7201A8010C,
+				F57EA5C401FF59BF019E57DA,
+				F7BA9416027F9A7201A8010C,
+			);
+			isa = PBXGroup;
+			name = ERXJSAutoClosePage;
+			path = "";
+			refType = 4;
+		};
+		F7BA9416027F9A7201A8010C = {
+			isa = PBXFolderReference;
+			path = ERXJSAutoClosePage.wo;
+			refType = 4;
+		};
+		F7BA9417027F9A7201A8010C = {
+			isa = PBXFileReference;
+			path = ERXJSAutoClosePage.api;
+			refType = 4;
+		};
+		F7BA9418027F9A7201A8010C = {
+			fileRef = F7BA9416027F9A7201A8010C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F7CC3072027B365701A8010C = {
 			isa = PBXFileReference;
 			path = ERXJSConfirmPanel.api;
