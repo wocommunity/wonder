@@ -46,8 +46,8 @@ typedef int WOInstanceHandle;
 #define AC_INVALID_HANDLE (-1)
 
 /* These are actually ShmemArray * */
-void *apps;
-void *instances;
+extern void *apps;
+extern void *instances;
 
 /*
  * Macros to check out/in or lock/unlock app or instance array elements.
