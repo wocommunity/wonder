@@ -76,7 +76,7 @@ public class ERXLocalizedString extends ERXStatelessComponent {
                 localizedString = localizer.localizedStringForKeyWithDefault(stringToLocalize);
             }
         } else {
-            localizedString = localizer.localizedTemplateStringForKeyWithObjectOtherObject((String)valueForBinding("keyPath"), object(),valueForBinding("otherObject"));
+            localizedString = localizer.localizedTemplateStringForKeyWithObjectOtherObject((String)valueForBinding("templateString"), object(),valueForBinding("otherObject"));
         }
         return localizedString;
     }
