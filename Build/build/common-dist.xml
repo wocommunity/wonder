@@ -13,7 +13,8 @@
             <fileset dir="${build.root}/${framework.name}" />
         </copy>
 
-        <copy todir="${dist}/WebServerResources/Frameworks/${framework.name}">
+        <mkdir dir="${build.root}/${framework.name}/WebServerResources" />
+        <copy todir="${dist}/WebServerResources/Frameworks/${framework.name}" includeEmptyDirs="false">
             <fileset dir="${build.root}/${framework.name}/WebServerResources" />
         </copy>
 
@@ -52,11 +53,8 @@
         
         <chmod file="${dist}/Applications/${application.name}/${project}" perm="ugo+rx"/>
 
-        <copy todir="${dist}/Applications/${application.name}" overwrite="true">
-            <fileset dir="${project.source.dir}/Support/ForDistribution" />
-        </copy>
-
-        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources" flatten="true" includeEmptyDirs="false">
+        <mkdir dir="${build.root}/${application.name}/Contents/WebServerResources" />
+        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources" includeEmptyDirs="false">
             <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
         </copy>
 
@@ -110,6 +108,14 @@
         <antcall target="copy.framework" >
             <param name="project" value="ERDirectToWeb" />
             <param name="project.dir" value="Common/Frameworks/ERDirectToWeb" />
+        </antcall>
+    </target>
+	
+    <!-- ERCalendar -->
+    <target name="ERCalender.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERCalendar" />
+            <param name="project.dir" value="Common/Frameworks/ERCalendar" />
         </antcall>
     </target>
 	
@@ -169,6 +175,14 @@
         </antcall>
     </target>
 
+    <!-- ERMailer -->
+    <target name="ERMailer.all">
+        <antcall target="copy.application" >
+            <param name="project" value="ERMailer" />
+            <param name="project.dir" value="Common/Applications/ERMailer" />
+        </antcall>
+    </target>
+
     <!-- D2WInspectExample -->
     <target name="D2WInspectExample.all">
         <antcall target="copy.application" >
@@ -203,10 +217,10 @@
 
 	
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all" />
 
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
-    <target name="applications.all" depends="frameworks.all, bugtracker.all" />
+    <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
 
     <target name="wrox.all" depends="frameworks.all, ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
     <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
