@@ -91,7 +91,7 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
                     
                     // Sections have to be copiable objects -- no EOs!!
                     Object section=valueForBinding("sectionForItem");
-                    if (section==EOKeyValueCoding.NullValue) section=null;
+                    if (section==NSKeyValueCoding.NullValue) section=null;
                     Object sectionKey;
 
                     if(section == null) {
