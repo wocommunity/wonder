@@ -37,6 +37,7 @@ public class ERCStatic extends _ERCStatic {
                 _staticsPerKey.setObjectForKey(result,key);
                 result= result == NSKeyValueCoding.NullValue ? null : result;
             }
+            result= result!=null ? EOUtilities.localInstanceOfObject(ec, (ERCStatic)result) : null;
             return (ERCStatic)result;
         }
 
