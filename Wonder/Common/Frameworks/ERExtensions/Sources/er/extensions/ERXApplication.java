@@ -366,10 +366,11 @@ public abstract class ERXApplication extends WOApplication {
      * the normal exception handling earlier than usual.
      * @see com.webobjects.appserver.WOApplication#handleActionRequestError(WORequest, Exception, String, WORequestHandler, String, String, Class, WOAction)
      */
+    // NOTE: if you use WO 5.1, comment out this method, otherwise it won't compile. 
     public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
         return handleException(exception, actionInstance.context());
     }
-
+    
     /**
      * Logs extra information about the current state.
      * @param exception to be handled
