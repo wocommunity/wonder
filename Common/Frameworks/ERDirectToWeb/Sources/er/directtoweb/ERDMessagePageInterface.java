@@ -31,6 +31,6 @@ public interface ERDMessagePageInterface extends ConfirmPageInterface, ErrorPage
 
     public EOEnterpriseObject object();
 
-    public com.webobjects.eocontrol.EODataSource dataSource();
+    public EODataSource dataSource();
     public void setDataSource(EODataSource ds);
 }
