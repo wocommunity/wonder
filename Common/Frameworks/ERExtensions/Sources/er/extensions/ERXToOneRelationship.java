@@ -29,7 +29,6 @@ import java.util.Enumeration;
  * @binding popupName
  * @binding size
  * @binding maxColumns
- * @binding displayGroup
  * @binding localizeDisplayKeys" defaults="Boolean
  */
 
