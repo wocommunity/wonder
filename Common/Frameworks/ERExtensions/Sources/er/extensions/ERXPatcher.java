@@ -60,6 +60,11 @@ public class ERXPatcher  {
         ERXPatcher.setClassForName(DynamicElementsPatches.PasswordField.class, "WOPasswordField");
         ERXPatcher.setClassForName(DynamicElementsPatches.RadioButton.class, "WORadioButton");
         ERXPatcher.setClassForName(DynamicElementsPatches.RadioButtonList.class, "WORadioButtonList");
+
+        // AK This is needed so we get our versions of the WOToXXRelationships installed vene if the
+        // ones from WOExtensions are before us in the classpath
+        ERXPatcher.setClassForName(WOToManyRelationship.class, "WOToManyRelationship");
+        ERXPatcher.setClassForName(WOToOneRelationship.class, "WOToOneRelationship");
     }
 
     /** This class holds patches for WebObjects dynamic elements, which have always a closing tag and all
