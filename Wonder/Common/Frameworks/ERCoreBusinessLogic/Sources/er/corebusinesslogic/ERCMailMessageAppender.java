@@ -33,7 +33,7 @@ import er.extensions.*;
  *	Title - Title of the email messages, if not specified the title will be a
  *		truncated version of the log message.
  */
-public class ERCProblemMailMessageAppender extends AppenderSkeleton {
+public class ERCMailMessageAppender extends AppenderSkeleton {
 
     /** caches the no-op editing context delegate */
     protected static ERXEditingContextDelegate _delegate=new ERXEditingContextDelegate();
@@ -71,7 +71,7 @@ public class ERCProblemMailMessageAppender extends AppenderSkeleton {
     /**
      * Public constructor.
      */
-    public ERCProblemMailMessageAppender() {
+    public ERCMailMessageAppender() {
         closed = false;
     }
 
