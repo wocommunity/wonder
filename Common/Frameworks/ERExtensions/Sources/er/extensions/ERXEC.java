@@ -18,8 +18,11 @@ public class ERXEC extends EOEditingContext {
     public static final ERXLogger lockLoggerTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLoggerTrace");
     /** name of the notification that is posted after editing context is created */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
+
     private boolean automaticLockUnlock = false;
     private boolean automaticLockUnlockSet = false;
+    private int lockCount = 0;
+    private boolean isFinalizing;
     
     public static interface Factory {
         public Object defaultEditingContextDelegate();
@@ -58,7 +61,6 @@ public class ERXEC extends EOEditingContext {
         automaticLockUnlockSet = true;
     }
     
-    private int lockCount = 0;
     public int lockCount() { return lockCount; }
     public void lock() {
         lockCount++;
@@ -80,7 +82,7 @@ public class ERXEC extends EOEditingContext {
         if (lockCount == 0 && automaticLockUnlock()) {
             unlock = true;
             lock();
-            if (!autoLocked) {
+            if (!autoLocked && !isFinalizing) {
                 if(lockLoggerTrace.isDebugEnabled()) {
                     lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
                 } else {
@@ -89,6 +91,11 @@ public class ERXEC extends EOEditingContext {
             }
         }
         return unlock;
+    }
+
+    public void finalize() throws Throwable {
+        isFinalizing = true;
+        super.finalize();
     }
     
     public void reset() {
