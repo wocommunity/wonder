@@ -45,15 +45,6 @@ public class ERXErrorDictionaryPanel extends WOComponent {
         return result;
     }
 
-    public void takeValuesFromRequest(WORequest r, WOContext c) {
-        if (errorMessages != null)
-            errorMessages.removeAllObjects();
-        if (errorKeyOrder != null)
-            errorKeyOrder.removeAllObjects();
-        extraErrorMessage=null;
-        super.takeValuesFromRequest(r,c);
-    }
-
     private final static String eliminable = "Could not save your changes: null";
     public static String massageErrorMessage(String initialMessage, String displayErrorKey) {
         String result=ERXExtensions.substituteStringByStringInString("EOValidationException:",
