@@ -1,34 +1,16 @@
-/*
- * Copyright (C) NetStruxr, Inc. All rights reserved.
- *
- * This software is published under the terms of the NetStruxr
- * Public Software License version 0.5, a copy of which has been
- * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSKeyValueCoding;
-import er.extensions.*;
+import com.webobjects.appserver.*;
 
 /**
  * Used to display sections as text.<br />
  * 
- * @binding d2wContext
+ * @binding displayNameforSectionKey
  */
 
-public class ERDSectionText extends ERXStatelessComponent {
-    String sectionText;
-
+public class ERDSectionText extends ERDCustomComponent {
     public ERDSectionText(WOContext context) { super(context); }
 
-    public void reset() { sectionText = null; }
-    
-    public String sectionText() {
-        if(sectionText == null) {
-            sectionText = (String)((NSKeyValueCoding)valueForBinding("d2wContext")).valueForKey("sectionKey");
-            sectionText = ERXLocalizer.localizerForSession(session()).localizedStringForKeyWithDefault(sectionText);
-        }
-        return sectionText;
-    }
+    public boolean isStateless() { return true; }
+    public boolean synchronizesVariablesWithBindings() { return false; }
 }
