@@ -11,6 +11,7 @@
 				01A3BF70FFB0C37D11CD2B9D,
 				015E5C37FFDDB4DD11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 013357CDFF5DD5F011CD2B9D;
 			productRefGroup = 013357CEFF5DD64811CD2B9D;
@@ -162,7 +163,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C60B5FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -173,7 +173,6 @@
 				F5283C7B0366156C01CF0E76,
 				F5283C9B0366226301CF0E76,
 				F5283C9D036623E001CF0E76,
-				F5283CB203664A2B01CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,7 +273,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C60D7FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -413,7 +411,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C6101FFD43DA37F000001 = {
 			isa = PBXTargetDependency;
@@ -771,12 +768,14 @@
 			refType = 4;
 		};
 		2123FDFBFFD467417F000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.java;
 			path = Sources/er/javamail/mailer/Main.java;
 			refType = 4;
 		};
 		2123FDFCFFD467417F000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.api;
 			path = Components/Main.api;
@@ -904,18 +903,21 @@
 			refType = 4;
 		};
 		F5283C740366156C01CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Application.java;
 			path = Sources/er/javamail/mailer/Application.java;
 			refType = 4;
 		};
 		F5283C750366156C01CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DirectAction.java;
 			path = Sources/er/javamail/mailer/DirectAction.java;
 			refType = 4;
 		};
 		F5283C770366156C01CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Session.java;
 			path = Sources/er/javamail/mailer/Session.java;
@@ -953,6 +955,7 @@
 			};
 		};
 		F5283C8203661CCD01CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Properties;
 			path = Resources/Properties;
@@ -965,6 +968,7 @@
 			};
 		};
 		F5283C9A0366226301CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERMailerTimerTask.java;
 			path = Sources/er/javamail/mailer/ERMailerTimerTask.java;
@@ -977,6 +981,7 @@
 			};
 		};
 		F5283C9C036623E001CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERMailer.java;
 			path = Sources/er/javamail/mailer/ERMailer.java;
@@ -988,23 +993,10 @@
 			settings = {
 			};
 		};
-		F5283CB103664A2B01CF0E76 = {
-			isa = PBXFileReference;
-			name = ERMailerUtilities.java;
-			path = Sources/er/javamail/mailer/ERMailerUtilities.java;
-			refType = 4;
-		};
-		F5283CB203664A2B01CF0E76 = {
-			fileRef = F5283CB103664A2B01CF0E76;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5283CB303664A6C01CF0E76 = {
 			children = (
 				F5283C9C036623E001CF0E76,
 				F5283C9A0366226301CF0E76,
-				F5283CB103664A2B01CF0E76,
 			);
 			isa = PBXGroup;
 			name = Mailer;
