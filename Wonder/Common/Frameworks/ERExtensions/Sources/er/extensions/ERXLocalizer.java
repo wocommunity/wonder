@@ -214,6 +214,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return new NSDictionary(new Object[] {localizer,localizer.language()}, new Object[] {"localizer", "language"} );
     }
 
+    public static ERXLocalizer currentLocalizer() {
+        return (ERXLocalizer)ERXThreadStorage.valueForKey("localizer");
+    }
+    public static void setCurrentLocalizer(ERXLocalizer currentLocalizer) {
+        ERXThreadStorage.takeValueForKey(currentLocalizer, "localizer");
+    }
+
     public static ERXLocalizer localizerForSession(Object session) {
         if(session instanceof ERXSession) return ((ERXSession)session).localizer();
         if(session instanceof WOSession) return localizerForLanguages(((WOSession)session).languages());
