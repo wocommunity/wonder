@@ -21,6 +21,7 @@ public class ERXConstant {
     public static final Object EmptyObject = new Object();
     public static final NSArray EmptyArray = NSArray.EmptyArray;
     public static final NSDictionary EmptyDictionary = NSDictionary.EmptyDictionary;
+    public static final Integer MinusOneInteger = new Integer(-1);
     public static final Integer OneInteger = integerForInt(1);
     public static final Integer ZeroInteger = integerForInt (0);
     public static final Integer TwoInteger = integerForInt (2);
