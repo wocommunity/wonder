@@ -145,7 +145,7 @@ public class ERXCompilerProxy {
      * Registers for ApplicationWillDispatchRequest notification.
      */
     public void initialize() {
-        if(WOApplication.application().isCachingEnabled()) {
+        if(WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
             log.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
             _filesToWatch = new NSMutableDictionary();
             return;
