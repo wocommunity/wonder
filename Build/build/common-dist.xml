@@ -232,7 +232,7 @@
     <!-- Create Wonder Source Destribution.                   -->
     <!-- ==================================================== -->
     <target name="dist.source">
-        <copy todir="${dist.base}/${project.name}-src-${project.version}" includeEmptyDirs="false">
+        <copy todir="${dist.base}/${project.name}-src-${project.version}" includeEmptyDirs="false" preservelastmodified="true">
             <fileset dir="${wonder.root}">
                 <exclude name="**/CVS/*" />
              	<exclude name="**/dist/**"/> 
