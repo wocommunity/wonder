@@ -166,7 +166,7 @@ public class ERXComponentActionRedirector {
                     ERXComponentActionRedirector r = new ERXComponentActionRedirector((Restorable)component);
                     ERXComponentActionRedirector.storeRedirector(r);
                 } else {
-                    log.info("Not restorable: " + context.request().uri() + ", " + component);
+                    log.debug("Not restorable: " + context.request().uri() + ", " + component);
                 }
             }
         }
@@ -185,7 +185,11 @@ public class ERXComponentActionRedirector {
         url = r.urlForCurrentState();
         String argsChar = url.indexOf("?") >= 0? "&" : "?";
         if(url.indexOf("wosid=") < 0) {
-            url = url + argsChar + "wosid=" +sessionID + "&wocid=" + context.contextID();
+            url = url + argsChar + "wosid=" +sessionID;
+            argsChar = "&";
+        }
+        if(url.indexOf("wocid=") < 0) {
+            url = url + argsChar + "wocid=" + context.contextID();
         }
         redirectionResponse = WOApplication.application().createResponseInContext(context);
         redirectionResponse.setHeader(url, "location");
