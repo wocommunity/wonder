@@ -169,7 +169,7 @@ public class ERXSimpleTemplateParser {
             if (deriveElement) {
                 if (! isLoggingDisabled)  log.debug("Deriving value ...");
                 if (element.length() == 0)
-                    throw new RuntimeException("\"\" is not a valid keypath");
+                    throw new RuntimeException("\"\" is not a valid keypath in template: " + template);
                 Object obj;
                 try {
                     obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element); 
