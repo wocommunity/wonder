@@ -100,27 +100,41 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSArray args = (NSArray)conditionAssignment.objectForKey("args");
+        if (args != null && args.count() > 0) {
+            // Need to resolve the args from the context.
+            NSMutableArray argHolder = new NSMutableArray(args.count());
+            for (Enumeration argEnumerator = args.objectEnumerator(); argEnumerator.hasMoreElements();) {
+                Object arg = argEnumerator.nextElement();
+                if (arg instanceof String && arg.length() > 1 && arg.charAt(0).equals('^')) {
+                    Object value = c.valueForKeyPath(arg.substring(1, arg.length()));
+                    if (value == null)
+                        value = NSKeyValueCoding.NullValue;
+                    argHolder.addObject(value);
+                } else {
+                    argHolder.addObject(arg);
+                }
+            }
+        }
         if (log.isDebugEnabled()) {
-            log.debug("Entity: " + c.entity().name());
+            log.debug("Entity \"" + c.entity().name() + "\"");
             log.debug("Object " + c.valueForKey("object"));
-            log.debug("qualifierFormat "+qualFormat);
-            log.debug("ardgs "+args);
+            log.debug("qualifierFormat " + qualFormat);
+            log.debug("ardgs " + args);
         }
-        EOQualifier qualifier = 
-           EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
+        EOQualifier qualifier = EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
         if (log.isDebugEnabled()) {
-            System.err.println("Qualifier keys: " + qualifier.allQualifierKeys());
-            System.err.println("Qualifier : " + qualifier);
-
-        }
-        if (log.isDebugEnabled())
+            log.debug("Qualifier keys: " + qualifier.allQualifierKeys());
+            log.debug("Qualifier : " + qualifier);
             log.debug("DelayedConditonalQualifier: " + qualifier);
+        }
         if (qualifier.evaluateWithObject(c)) {
             result = conditionAssignment.objectForKey("trueValue");
-            log.debug("trueValue = " + result);
+            if (log.isDebugEnabled())
+                log.debug("trueValue = " + result);
         } else {
             result = conditionAssignment.objectForKey("falseValue");
-            log.debug("falseValue = " + result);
+            if (log.isDebugEnabled())
+                log.debug("falseValue = " + result);
         }
         return result;
     }
