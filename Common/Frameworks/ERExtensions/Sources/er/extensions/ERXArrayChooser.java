@@ -284,7 +284,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         if (theCurrentItem==NO_SELECTION_STRING) {
             currentValue = noneString();
         } else {
-            currentValue = NSKeyValueCoding.Utility.valueForKey(theCurrentItem, destinationDisplayKey());
+            currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theCurrentItem, destinationDisplayKey());
         }
         if(localizeDisplayKeys() && currentValue != null) {
             currentValue = localizer().localizedStringForKeyWithDefault(currentValue.toString());

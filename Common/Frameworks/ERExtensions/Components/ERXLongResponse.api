@@ -3,6 +3,7 @@
 	<wo class="ERXLongResponse" wocomponentcontent="false">
 
 		<binding name="task"/>
+		<binding name="resfreshInterval"/>
 
 		<validation message="&apos;task&apos; is a required binding">
 			<unbound name="task"/>
