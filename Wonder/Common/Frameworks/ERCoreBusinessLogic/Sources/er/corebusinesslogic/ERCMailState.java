@@ -35,7 +35,7 @@ public class ERCMailState extends _ERCMailState {
     
     public static class ERCMailStateClazz extends _ERCMailStateClazz {
         public ERCMailState sharedMailStateForKey(String key) {
-            return (ERCMailState)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
+            return (ERCMailState)ERXEOControlUtilities.sharedObjectWithPrimaryKey("ERCMailState", key);
         }
         
         public void initializeSharedData() {
