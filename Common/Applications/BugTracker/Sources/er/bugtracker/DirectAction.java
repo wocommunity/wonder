@@ -155,7 +155,7 @@ public class DirectAction extends ERD2WDirectAction {
         return page;
     }
 
-    public WOComponent logoutAction() {
+    public WOActionResults logoutAction() {
         WORedirect redirectPage=(WORedirect)pageWithName("WORedirect");
         redirectPage.setUrl("/");
         if (existingSession()!=null) existingSession().terminate();
