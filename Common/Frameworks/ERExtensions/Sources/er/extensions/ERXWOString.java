@@ -71,10 +71,10 @@ public class ERXWOString extends WODynamicElement {
     			if(format == null) {
     				if(_dateFormat != null) {
     					String formatString = (String)_dateFormat.valueInComponent(component);
-    					format = ERXLocalizer.currentLocalizer().localizedDateFormatForKey(formatString);
+    					format = ERXTimestampFormatter.dateFormatterForPattern(formatString);
     				} else if(_numberFormat != null) {
     					String formatString = (String)_numberFormat.valueInComponent(component);
-    					format = ERXLocalizer.currentLocalizer().localizedNumberFormatForKey(formatString);
+    					format = ERXNumberFormatter.numberFormatterForPattern(formatString);
     				}
     			}
     			if(format != null) {
