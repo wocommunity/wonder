@@ -56,11 +56,11 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                 Method m = getClass().getMethod(branchName, WOComponentClassArray);
                 nextPage = (WOComponent)m.invoke(this, new WOComponent[] { sender });
             } catch (InvocationTargetException ite) {
-                // CHECKME ak: don't we need to raise here??
                 log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
+                throw ite.getTargetException();
             } catch (Exception e) {
-                // CHECKME ak: don't we need to raise here??
                 log.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
+                throw e;
             }
         } else {
             log.warn("Branch delegate being used with a component that does not implement the ERBranchInterface");
