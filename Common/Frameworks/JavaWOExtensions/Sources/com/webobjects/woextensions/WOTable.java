@@ -98,13 +98,11 @@ public class WOTable extends WOComponent {
     public void pushItem()  {
         NSArray aList = list();
         int index = currentCol+maxColumns()*currentRow;
-        if (index < aList.count()) {
-            Object item = aList.objectAtIndex(index);
-            setValueForBinding(item, "item");
-            setValueForBinding(new Integer(currentRow), "row");
-            setValueForBinding(new Integer(currentCol), "col");
-            setValueForBinding(new Integer(index), "index");
-        }
+        Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
+        setValueForBinding(item, "item");
+        setValueForBinding(new Integer(currentRow), "row");
+        setValueForBinding(new Integer(currentCol), "col");
+        setValueForBinding(new Integer(index), "index");
     }
 
     public void setCurrentCol(Number newValue){
