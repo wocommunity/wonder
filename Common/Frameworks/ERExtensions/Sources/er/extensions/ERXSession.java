@@ -47,38 +47,41 @@ public class ERXSession extends WOSession {
     /** holds a reference to the current message encoding used for this session */
     private ERXMessageEncoding messageEncoding;
 
+    /** holds a reference to the current browser used for this session */
+    private ERXBrowser browser;
+
     /** flag for if java script is enabled, defaults to true */
     protected boolean _javaScriptEnabled=true; // most people have JS by now
     /** flag to indicate if java script has been set */
     protected boolean _javaScriptInitialized=false;
 
-    /** holder for the browser name */
-    protected String _browser;
-    /** flag if the browser is IE */
-    protected boolean isIE;
-    /** flag if the browser is Netscape */
-    protected boolean isNetscape;
-    /** flag if the browser is iCab */
-    protected boolean isICab;
-    /** flag if the browser is Omniweb */
-    protected boolean isOmniweb;
-    /** flag if the browser platform is Mac */    
-    protected boolean isMac;
-    /** flag if the browser platform is Windows */    
-    protected boolean isWindows;
-    /** flag if the browser platform is Linux */    
-    protected boolean isLinux;
-    /** flag if the browser is version 3 */
-    protected boolean isVersion3;
-    /** flag if the browser is version 4 */    
-    protected boolean isVersion4;
-    /** flag if the browser is version 5 */    
-    protected boolean isVersion5;
+    /* holder for the browser name */
+    //protected String _browser;
+    /* flag if the browser is IE */
+    //protected boolean isIE;
+    /* flag if the browser is Netscape */
+    //protected boolean isNetscape;
+    /* flag if the browser is iCab */
+    //protected boolean isICab;
+    /* flag if the browser is Omniweb */
+    //protected boolean isOmniweb;
+    /* flag if the browser platform is Mac */    
+    //protected boolean isMac;
+    /* flag if the browser platform is Windows */    
+    //protected boolean isWindows;
+    /* flag if the browser platform is Linux */    
+    //protected boolean isLinux;
+    /* flag if the browser is version 3 */
+    //protected boolean isVersion3;
+    /* flag if the browser is version 4 */    
+    //protected boolean isVersion4;
+    /* flag if the browser is version 5 */    
+    //protected boolean isVersion5;
     // ENHANCEME: Need a version6 test
-    /** holds the platform string */
-    protected String platform;
-    /** holds the version string */    
-    protected String version;
+    /* holds the platform string */
+    //protected String platform;
+    /* holds the version string */    
+    //protected String version;
 
     /** holds a debugging store for a given session. */
     protected NSMutableDictionary _debuggingStore;
@@ -135,6 +138,27 @@ public class ERXSession extends WOSession {
     }
 
     /**
+     * Returns the browser object representing the web 
+     * browser's "user-agent" string. You can obtain 
+     * browser name, version, platform and Mozilla version, etc. 
+     * through this object. <br>
+     * Good for WOConditional's condition binding to deal 
+     * with different browser versions. 
+     * @return browser object
+     */
+    public ERXBrowser browser() { 
+        if (browser == null  &&  context() != null) {
+            WORequest request = context().request();
+            if (request != null) {
+                ERXBrowserFactory browserFactory = ERXBrowserFactory.factory();
+                browser = browserFactory.browserMatchingRequest(request);
+                browserFactory.retainBrowser(browser);
+            }
+        }
+        return browser; 
+    }
+
+    /**
      * Simple mutable dictionary that can be used at
      * runtime to stash objects that can be useful for
      * debugging.
@@ -182,47 +206,49 @@ public class ERXSession extends WOSession {
     }
 
     // MOVEME: All of this browser stuff should move to it's own class ERXBrowser
-    /**
+    /*
      * Browser string
      * @return what type of browser
      */
-    public String browser() { return _browser; }
+    //public String browser() { return _browser; }
 
-    /**
+    /*
      * browser is IE?
      * @return if browser is IE.
      */
-    public boolean browserIsIE() { return isIE; }
-    /**
+    //public boolean browserIsIE() { return isIE; }
+    /*
      * browser is Omniweb?
      * @return if browser is Omniweb.
      */
-    public boolean browserIsOmniweb() { return isOmniweb; }
-    /**
+    //public boolean browserIsOmniweb() { return isOmniweb; }
+    /*
      * browser is Netscape?
      * @return if browser is Netscape.
      */
-    public boolean browserIsNetscape() { return isNetscape;  }
-    /**
+    //public boolean browserIsNetscape() { return isNetscape;  }
+    /*
      * browser is not Netscape?
      * @return if browser is not Netscape.
      */
-    public boolean browserIsNotNetscape() { return !isNetscape; }
+    //public boolean browserIsNotNetscape() { return !isNetscape; }
 
-    /**
+    /*
      * browser is not netscape or is a version 5
      * browser.
      * @return if this browser can handle nested tables
      */
+    /*
     public boolean browserRenderNestedTablesFast() {
         return browserIsNotNetscape() || isVersion5;
     }
-
-    /**
+    */
+    
+    /*
      * Does the browser support IFramew?
      * @return if the browser is IE.
      */
-    public boolean browserSupportsIFrames() { return browserIsIE(); }
+    //public boolean browserSupportsIFrames() { return browserIsIE(); }
 
     /**
      * Overridden to provide all the browser checking for
@@ -239,6 +265,7 @@ public class ERXSession extends WOSession {
         //		so that others can return their own subclasses of the browser object or parse the
         //		the user-agent in a different manner. The factory could also maintain a cache of the
         //		user-agent to browser object.
+        /*
         if (_browser==null && request!=null) {
             String userAgent=(String)request.headerForKey("User-Agent");
             isOmniweb=isICab=isIE=isNetscape=false;
@@ -288,12 +315,16 @@ public class ERXSession extends WOSession {
             if (_browser==null) _browser="Unknown";
             if (cat.isDebugEnabled()) cat.debug("Browser="+_browser+" platform="+platform+" Version="+version);
         }
+        */
         if (request!=null && cat.isDebugEnabled()) cat.debug("Form values "+request.formValues());
         // FIXME: Shouldn't be hardcoded form value.
         if (request!=null && request.formValueForKey("javaScript")!=null) {
             String js=(String)request.formValueForKey("javaScript");
             if (cat.isDebugEnabled()) cat.debug("Received javascript form value "+js);
-            setJavaScriptEnabled(js!=null && js.equals("1") && (_browser==null || _browser.indexOf("Netscape3.")==-1));
+            setJavaScriptEnabled(js != null  &&  js.equals("1")  
+                                    && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) 
+                                        ||  browser().isMozilla40Compatible()  
+                                        ||  browser().isMozilla50Compatible()) );
         }
         if (request!=null && /* !_javaScriptInitialized */true) {
             String js=null;
@@ -304,7 +335,10 @@ public class ERXSession extends WOSession {
             }
             if (js!=null) { // a friend sent us a cookie!
                 if (cat.isDebugEnabled()) cat.debug("Got JAVASCRIPT_ENABLED_COOKIE from a friend "+js);
-                setJavaScriptEnabled(js.equals("1") && (_browser==null || _browser.indexOf("Netscape3.")==-1));
+                setJavaScriptEnabled(js.equals("1") 
+                                    && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) 
+                                        ||  browser().isMozilla40Compatible()  
+                                        ||  browser().isMozilla50Compatible()) );
             }
         }
     }
