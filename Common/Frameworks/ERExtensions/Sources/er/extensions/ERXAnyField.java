@@ -6,11 +6,7 @@ import com.webobjects.woextensions.*;
 
 /**
  * Class for Wonder Component ERXAnyField.
- *
- * @binding sample sample binding explanation
- *
  * @created ak on Thu Feb 27 2003
- * @project ERExtensions
  */
 
 public class ERXAnyField extends WOAnyField {

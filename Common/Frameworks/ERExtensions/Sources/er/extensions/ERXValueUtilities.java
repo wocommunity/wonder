@@ -231,7 +231,7 @@ public class ERXValueUtilities {
 
     /**
      * Basic utility method for reading BigDecimal values which works also with Strings.
-     * The current implementation uses {@link #bigDecimalValueWithDefault(Object, NSDictionary)}
+     * The current implementation uses {@link #bigDecimalValueWithDefault(Object, BigDecimal)}
      * with a default of <code>null</code>.
      * @param obj object to be evaluated
      * @return BigDecimal evaluation of the given object

@@ -140,7 +140,7 @@ public class ERXEOControlUtilities {
     /**
      * Returns an {@link NSArray} containing the objects from the resulting rows starting
      * at start and stopping at end using a custom SQL, derived from the SQL
-     * which the {@link EOFetchSpecification} would use normally {@link EOFetchSpecification.setHints}
+     * which the {@link EOFetchSpecification} would use normally {@link EOFetchSpecification#setHints(NSDictionary)}
      *
      * @param ec editingcontext to fetch objects into
      * @param spec fetch specification for the fetch

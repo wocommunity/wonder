@@ -462,7 +462,6 @@ public class ERXMacBinarySwissArmyKnife {
      ** In most cases, you will find finishHeader() more useful since it finishes
      ** all the assembly for a particular header-format you select.
      **
-     ** @see #finishHeader
      */
     public void setCRC() {  putShortAt( (short) calcCRC(), CRC_AT );  }
 
