@@ -86,19 +86,49 @@ import java.util.*;
  *
  * </pre>
  */
-
 public class ERXBrowserFactory {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXBrowserFactory.class);
 
+    /** holds the default browser class name */
     private static final String _DEFAULT_BROWSER_CLASS_NAME = "er.extensions.ERXBasicBrowser";
-    
-    private static ERXBrowserFactory _factory = new ERXBrowserFactory();
-    public static ERXBrowserFactory factory() { return _factory; }
+
+    /** Caches a reference to the browser factory */
+    private static ERXBrowserFactory _factory;
+
+    /**
+     * Gets the singleton browser factory object.
+     * @return browser factory
+     */
+    public static ERXBrowserFactory factory() {
+        if (_factory == null) {
+            String browserFactoryClass = System.getProperty("er.extensions.ERXBrowserFactory.FactoryClassName");
+            if (browserFactoryClass != null && !browserFactoryClass.equals("er.extensions.ERXBrowserFactory")) {
+                log.debug("Creating browser factory for class name: " + browserFactoryClass);
+                try {
+                    Class browserClass = Class.forName(browserFactoryClass);
+                    _factory = (ERXBrowserFactory)browserClass.newInstance();
+                } catch (Exception e) {
+                    log.error("Unable to create browser factory for class name \"" + browserFactoryClass + "\"", e);
+                }
+            }
+            if (_factory == null) {
+                log.info("Factory null creating default browser factory. " + browserFactoryClass);
+                _factory = new ERXBrowserFactory();
+            }
+        }
+        return _factory;
+    }
+
+    /**
+     * Sets the browser factory used to create browser objects.
+     * @param newFactory new browser factory
+     */
     public static void setFactory(ERXBrowserFactory newFactory) { _factory = newFactory; }
 
-    private String _browserClassName;
+    /** Caches the browser class name */
+    protected String _browserClassName;
 
     /**
      * Returns the name of the {@link ERXBrowser} subclass. 
@@ -122,9 +152,13 @@ public class ERXBrowserFactory {
             _browserClassName = name; 
     }
 
+    /**
+     * Public browser constructor.
+     */
     public ERXBrowserFactory() {
         // ENHANCEME: (tk) to arrow to set the class name from property files and launch arguments. 
-        setBrowserClassName(_DEFAULT_BROWSER_CLASS_NAME);
+        setBrowserClassName(System.getProperty("er.extensions.ERXBrowserFactory.BrowserClassName",
+                                               _DEFAULT_BROWSER_CLASS_NAME));
     }
 
     /** 
@@ -201,10 +235,10 @@ public class ERXBrowserFactory {
                                                 String platform, NSDictionary userInfo) {
         ERXBrowser browser = null;
         try {
-            browser = _createBrowserWithClassName(browserClassName(), 
+            browser = _createBrowserWithClassName(browserClassNameForBrowserNamed(browserName),
                                         browserName, version, mozillaVersion, platform, userInfo);
         } catch (Exception ex) {
-            log.error("Unable to create a browser for class name: " + browserClassName() 
+            log.error("Unable to create a browser for class name: " + browserClassNameForBrowserNamed(browserName) 
                             + " with exception: " + ex.getMessage() + ".  Will use default classes."
                             + " Please ensure that the fully-qualified name for the class is specified"
                             + " if it is in a different package.");
@@ -243,12 +277,21 @@ public class ERXBrowserFactory {
     }
         
 
+    /**
+     * Retains a given browser object.
+     * @param browser to be retained
+     */
     public synchronized void retainBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
 	_browserPool().setObjectForKey(browser, key);
         _incrementReferenceCounterForKey(key);
     }
 
+    /**
+     * Decrements the retain count for a given
+     * browser object.
+     * @param browser to be released
+     */
     public synchronized void releaseBrowser(ERXBrowser browser) {
         String key = _computeKey(browser);
         ERXMutableInteger count = _decrementReferenceCounterForKey(key);
@@ -259,6 +302,16 @@ public class ERXBrowserFactory {
             _browserPool().removeObjectForKey(key);
             _referenceCounters().removeObjectForKey(key);
         } 
+    }
+
+    /**
+     * Adds the option to use multiple different ERXBrowser subclasses
+     * depending on the name of the browser.
+     * @param browserName name of the browser
+     * @return ERXBrowser subclass class name
+     */
+    public String browserClassNameForBrowserNamed(String browserName) {
+        return browserClassName();
     }
 
     public String parseBrowserName(String userAgent) {
