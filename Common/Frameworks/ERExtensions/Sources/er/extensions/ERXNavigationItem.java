@@ -20,6 +20,7 @@ public class ERXNavigationItem {
     protected String _action;
     protected NSArray _conditions;
     protected String _directActionName;
+    protected String _directActionClass;
     protected String _name;
     protected String _pageName;
     protected String _displayName;
@@ -27,6 +28,7 @@ public class ERXNavigationItem {
     protected NSArray _children, _childrenConditions;
     protected String _childrenBinding;
     protected NSDictionary _childrenChoices;
+    protected NSDictionary _queryBindings;
 
     protected int _height;
     protected int _width;
@@ -45,6 +47,7 @@ public class ERXNavigationItem {
                 _conditions=NSArray.componentsSeparatedByString((String)values.valueForKey("conditions"),",");
             }
             _directActionName=(String)values.valueForKey("directActionName");
+            _directActionClass=(String)values.valueForKey("directActionClass");
             if (values.valueForKey("height")!=null)
                 _height=Integer.valueOf((String)values.valueForKey("height")).intValue();
             if (values.valueForKey("width")!=null)
@@ -66,6 +69,11 @@ public class ERXNavigationItem {
             } else {
                 _childrenChoices = NSDictionary.EmptyDictionary;
             }
+            if (values.valueForKey("queryBindings") != null) {
+                _queryBindings = (NSDictionary)values.valueForKey("queryBindings");
+            } else {
+                _queryBindings = NSDictionary.EmptyDictionary;
+            }
             if (values.valueForKey("childrenConditions") == null || ((String)values.valueForKey("childrenConditions")).equals("")) {
                 _childrenConditions = NSArray.EmptyArray;
             } else {
@@ -80,9 +88,11 @@ public class ERXNavigationItem {
     public String childrenBinding() { return _childrenBinding; }
     public NSArray childrenConditions() { return _childrenConditions; }
     public NSDictionary childrenChoices() { return _childrenChoices; }
+    public NSDictionary queryBindings() { return _queryBindings; }
     public String action() { return _action; }
     public NSArray conditions() { return _conditions; }
-    public String directActionName() { return _directActionName; }
+    public String directActionName() { return directActionClass() == null ? _directActionName : directActionClass() + "/" + _directActionName; }
+    public String directActionClass() { return _directActionClass; }
     public int height() { return _height; }
     public int width() { return _width; }
     public String name() { return _name; }
