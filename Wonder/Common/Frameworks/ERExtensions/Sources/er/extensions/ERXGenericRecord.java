@@ -428,7 +428,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return primary key for the given object as a String
      */
     public String primaryKey() {
-        return ERXExtensions.primaryKeyForObject(this);
+        return ERXEOControlUtilities.primaryKeyStringForObject(this);
     }
 
     /**
@@ -445,18 +445,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         Object result = rawPrimaryKey();
         if (result == null) {
             NSDictionary pk = primaryKeyDictionary(false);
-            if (log.isDebugEnabled()) log.debug("pk: " + pk);
             NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
-            if (primaryKeyAttributeNames.count()>1)
-                throw new RuntimeException("rawPrimaryKeyInTransaction does not support compound primary keys");
-            result=pk.objectForKey(primaryKeyAttributeNames.lastObject());
+            result = ERXArrayUtilities.valuesForKeyPaths(pk, primaryKeyAttributeNames);
+            if(((NSArray)result).count() == 0) result = ((NSArray)result).lastObject();
         }
         return result;
     }
 
     /**
      * Calling this method will return the primary key of the
-     * given enterprise object or if one has not been asigned
+     * given enterprise object or if one has not been assigned
      * to it yet, then it will have the adaptor channel generate
      * one for it, cache it and then use that primary key when it
      * is saved to the database. This method returns the string
@@ -467,8 +465,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		object.
      */
     public String primaryKeyInTransaction() {
-        Object rpk=rawPrimaryKeyInTransaction();
-        return rpk!=null ? rpk.toString() : null;
+        Object pk=rawPrimaryKeyInTransaction();
+        if(pk == null)
+            return null;
+        if(pk instanceof String || pk instanceof Number) {
+            return pk.toString();
+        }
+        return NSPropertyListSerialization.stringFromPropertyList(pk);
     }
 
     /**
@@ -476,7 +479,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * an NSData to a BigDecimal.
      * @return the raw primary key of this object.
      */
-    public Object rawPrimaryKey() { return ERXExtensions.rawPrimaryKeyForObject(this); }
+    public Object rawPrimaryKey() {
+        return ERXEOControlUtilities.primaryKeyObjectForObject(this);
+    }
 
     /**
      * Takes the primary key of the object and encrypts it
@@ -484,7 +489,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return blowfish encrypted primary key
      */
     public String encryptedPrimaryKey() {
-        String pk = ERXExtensions.primaryKeyForObject(this);
+        String pk = ERXEOControlUtilities.primaryKeyStringForObject(this);
         return pk==null ? null : ERXCrypto.blowfishEncode(pk);
     }
         
@@ -528,26 +533,19 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		a primary key assigned yet and is not in the middle of a transaction then
      *		a new primary key dictionary is created, cached and returned.
      */
-    // FIXME: This should work for compound pks as well, ie don't try to gen a new pk
-    //		if they have a compound pk.
     // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
     public NSDictionary primaryKeyDictionary(boolean inTransaction) {
         if(_primaryKeyDictionary == null) {
             if (!inTransaction) {
-                NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
-                if (primaryKeyAttributeNames.count()>1) {
-                    if(true) // ak:testing
-                        return null;
-                    else
-                        throw new RuntimeException("primaryKeyDictionary does not support compound primary keys");
-                }
-                if (rawPrimaryKey() != null) {
-                    if (log.isDebugEnabled()) log.debug("Got raw key: "+ rawPrimaryKey());
-                   //FIXME: Should be getting primaryKey name from the entity of the enterprise object.
-                    _primaryKeyDictionary = new NSDictionary(rawPrimaryKey(), primaryKeyAttributeNames.lastObject());
-                } else
+                Object rawPK = rawPrimaryKey();
+                if (rawPK != null) {
+                    if (log.isDebugEnabled()) log.debug("Got raw key: "+ rawPK);
+                    NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
+                    _primaryKeyDictionary = new NSDictionary(rawPK instanceof NSArray ? (NSArray)rawPK : new NSArray(rawPK), primaryKeyAttributeNames);
+                } else {
                     if (log.isDebugEnabled()) log.debug("No raw key, trying single key");
-                    _primaryKeyDictionary = ERXUtilities.primaryKeyDictionaryForEntity(editingContext(), entityName());
+                    _primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+                }
             }
         }
         return _primaryKeyDictionary;
