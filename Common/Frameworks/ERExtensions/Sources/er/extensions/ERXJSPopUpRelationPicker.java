@@ -101,7 +101,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     protected void updateVarNames() {
         String elementID = context().elementID();
         elementID = ERXStringUtilities.replaceStringByStringInString(".", "_", elementID);
-        elementID = "foo";
         pickerName = "picker_"+ elementID;
         parentSelectName = "parent_" + elementID;
         childSelectName = "child_" + elementID;
