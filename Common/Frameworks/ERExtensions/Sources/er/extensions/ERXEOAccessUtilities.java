@@ -652,24 +652,40 @@ public class ERXEOAccessUtilities {
         return dbc;
     }
 
-    /** Closes the (JDBC) Connection from all database channels for the specified EOObjectStoreCoordinator
+    /**
+     * Closes the (JDBC) Connection from all database channels for the specified
+     * EOObjectStoreCoordinator
      * 
-     * @param osc, the EOObjectStoreCoordinator from which the (JDBC)Connections should be closed
+     * @param osc,
+     *            the EOObjectStoreCoordinator from which the (JDBC)Connections
+     *            should be closed
      */
-    public static void closeDatabaseConnections(EOObjectStoreCoordinator osc) {
-        int i, contextCount, j, channelCount;
-        NSArray databaseContexts;
-        databaseContexts = osc.cooperatingObjectStores();
-        contextCount = databaseContexts.count();
-        for (i = contextCount; i-- > 0;) {
-            NSArray channels = ((EODatabaseContext)databaseContexts.objectAtIndex(i)).registeredChannels();
-            channelCount = channels.count();
-            for (j = channelCount; j-- > 0;) {
-                EODatabaseChannel dbch = (EODatabaseChannel)channels.objectAtIndex(j);
-                if (!dbch.adaptorChannel().adaptorContext().hasOpenTransaction()) {
-                    dbch.adaptorChannel().closeChannel();
+    public static boolean closeDatabaseConnections(EOObjectStoreCoordinator osc) {
+        boolean couldClose = true;
+        try {
+            int i, contextCount, j, channelCount;
+            NSArray databaseContexts;
+            databaseContexts = osc.cooperatingObjectStores();
+            contextCount = databaseContexts.count();
+            for (i = contextCount; i-- > 0;) {
+                NSArray channels = ((EODatabaseContext) databaseContexts.objectAtIndex(i)).registeredChannels();
+                channelCount = channels.count();
+                for (j = channelCount; j-- > 0;) {
+                    EODatabaseChannel dbch = (EODatabaseChannel) channels.objectAtIndex(j);
+                    if (!dbch.adaptorChannel().adaptorContext().hasOpenTransaction()) {
+                        dbch.adaptorChannel().closeChannel();
+                        
+                    } else {
+                        log.warn("could not close Connection from " + dbch + " because its EOAdaptorContext "
+                                + dbch.adaptorChannel().adaptorContext() + " had open Transactions");
+                        couldClose = false;
+                    }
                 }
             }
+        } catch (Exception e) {
+            log.error("could not close all Connections, reason:", e);
+            couldClose = false;
         }
+        return couldClose;
     }
 }
