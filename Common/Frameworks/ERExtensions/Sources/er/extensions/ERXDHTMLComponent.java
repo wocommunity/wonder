@@ -23,15 +23,33 @@ public class ERXDHTMLComponent extends ERXStatelessComponent {
         super(context);
     }
 
+    public void reset() {
+        super.reset();
+        varName = null;
+    }
+
     public String spanName() {
 	return "span_" + varName();
     }
-    
+    String varName;
     public String varName()  {
-	String varName = (String)valueForBinding("varName");
 	if(varName == null) {
-	    varName = "dhtml_" + ERXExtensions.replaceStringByStringInString("-", "_", "" + context().elementID().hashCode());
+            varName = (String)valueForBinding("varName");
+            if(varName == null)
+                varName = "dhtml_" + ERXExtensions.replaceStringByStringInString("-", "_", "" + context().elementID().hashCode());
+            varName = ERXExtensions.replaceStringByStringInString(".", "_", varName);
 	}
 	return varName;
+    }
+    
+    private static String _dhtmlJavaScriptUrl;
+    public String dhtmlJavaScriptUrl() {
+        if (_dhtmlJavaScriptUrl==null) {
+            _dhtmlJavaScriptUrl= application().resourceManager().urlForResourceNamed("dhtml.js",
+                                                                                     "ERExtensions",
+                                                                                     null,
+                                                                                     context().request());
+        }
+        return _dhtmlJavaScriptUrl;
     }
 }
