@@ -88,7 +88,7 @@ ERToOneRelationship - Java port, now subclasses WOToOneRelationship.
 ERUtilities - More utilities for create eos and datasources as well as printing stack traces.
 ERValidation - Added boolean to determine if the value failing validation should be pushed anyway onto the object.
 ERXSession - Better browser detection.
-ERXValidationFactory - Rapid turn-around changed validation templates in developement.
+ERXValidationFactory - Rapid turn-around changed validation templates in developement
 
 Java Ports
 - Ported ERSortOrder.m -> ERSortOrder.java (now subclasses WOSortOrder.java)
