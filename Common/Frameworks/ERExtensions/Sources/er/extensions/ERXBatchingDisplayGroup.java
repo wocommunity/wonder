@@ -45,29 +45,6 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         _isBatching = null;
         super.setDataSource(eodatasource);
     }
-    /**
-     * Returns an {@link NSArray} containing the objects from the resulting rows starting
-     * at start and stopping at end using a custom SQL, derived from the SQL
-     * which the {@link EOFetchSpecification} would use normally {@link EOFetchSpecification.setHints}
-     *
-     * @param start 
-     * @param end
-     *
-     * @return
-     */
-    public NSArray objectsInRange(int start, int end) {
-        //uses the original fetch specification and adds a top(start,(end - start)) to the query sql
-        EOFetchSpecification spec = databaseDataSource().fetchSpecificationForFetch();
-        //sortOrderings from the WODisplayGroup is only used in Memory: painful slow...
-        spec.setSortOrderings(sortOrderings());
-
-        EOEditingContext ec = databaseDataSource().editingContext();
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, start, end);
-        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
-        spec.setHints(hints);
-        
-        return ec.objectsWithFetchSpecification(spec);
-    }
 
     /**
       * Overridden in order to use a custom method which determines the number of Objects / rows
@@ -98,36 +75,8 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         if(_rowCount == -1) {
             EOFetchSpecification spec = databaseDataSource().fetchSpecificationForFetch();
             EOEditingContext ec = databaseDataSource().editingContext();
-            EOModel model = ERXEOAccessUtilities.modelForFetchSpecificationAndEditingContext(spec, ec);
-            EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, 0, -1);
-            String statement = sql.statement();
-            int index = statement.toLowerCase().indexOf(" from");
-            statement = "select count(*) " + statement.substring(index, statement.length());
-            sql.setStatement(statement);
-            NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
-
-            if (result.count() > 0) {
-                NSDictionary dict = (NSDictionary)result.objectAtIndex(0);
-                NSArray values = dict.allValues();
-                if (values.count() > 0) {
-                    Object value = values.objectAtIndex(0);
-                    if (value instanceof Number) {
-                        return ((Number)value).intValue();
-                    } else {
-                        try {
-                            int c = Integer.parseInt(value.toString());
-                            setObjectArray(new FakeArray(c));
-                            _rowCount = c;
-                        } catch (NumberFormatException e) {
-                            throw new IllegalStateException("sql "+sql+" returned a wrong result, could not convert "+value+" into an int!");
-                        }
-                    }
-                } else {
-                    throw new IllegalStateException("sql "+sql+" returned no result!");
-                }
-            } else {
-                throw new IllegalStateException("sql "+sql+" returned no result!");
-            }
+            _rowCount = ERXEOAccessUtilities.rowCountForFetchSpecificationAndEditingContext(spec, ec);
+            setObjectArray(new FakeArray(_rowCount));
         }
         return _rowCount;
     }
@@ -168,8 +117,12 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
                     start = 0;
                     end = rowCount();
                 }
+                EOFetchSpecification spec = databaseDataSource().fetchSpecificationForFetch();
+                //sortOrderings from the WODisplayGroup is only used in Memory: painful slow...
+                spec.setSortOrderings(sortOrderings());
 
-                _displayedObjects = objectsInRange(start, end).mutableClone();
+                EOEditingContext ec = databaseDataSource().editingContext();
+                _displayedObjects = ERXEOControlUtilities.objectsInRange(ec, spec, start, end).mutableClone();
             }
         }
         return _displayedObjects;
