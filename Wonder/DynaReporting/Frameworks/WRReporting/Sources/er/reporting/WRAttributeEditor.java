@@ -50,10 +50,10 @@ public class WRAttributeEditor extends WOComponent implements DRAttributeEditing
     }
 
 
+    // CHECKME ak This can not be working!! We will mess seriously when we have several users and one edits this item
     public void resetAttributes() {
-        NSNotificationCenter.defaultCenter().postNotification("DRReportModelUpdate", null, null);
+        NSNotificationCenter.defaultCenter().postNotification(DRReportModel.DRReportModelUpdateNotification, null, null);
     }
-
 
     public void deleteSubAttribute(DRAttribute subAtt) {
         _attribute.attributes().removeObject(subAtt);
