@@ -391,9 +391,10 @@ public class ERD2WModel extends D2WModel {
     protected File currentFile() { return _currentFile; }
 
     protected void mergeFile(File modelFile) {
-        if(log.isDebugEnabled()) log.debug("Merging rule file: "+modelFile.getPath());
+        if (log.isDebugEnabled()) log.debug("Merging rule file \"" + modelFile.getPath()
+                                            + "\"");
         setCurrentFile(modelFile);
-        if(ruleDecodeLog.isDebugEnabled()) {
+        if (ruleDecodeLog.isDebugEnabled()) {
             try {
                 NSDictionary dic = Services.dictionaryFromFile(modelFile);
                 ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
@@ -413,8 +414,6 @@ public class ERD2WModel extends D2WModel {
         }
         super.mergeFile(modelFile);
         setCurrentFile(null);
-        // CHECKME: Don't think this is needed anymore
-        ERXExtensions.forceGC(1);
     }
 
     protected Hashtable _uniqueAssignments = new Hashtable();
