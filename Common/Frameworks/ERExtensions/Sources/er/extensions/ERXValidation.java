@@ -149,7 +149,10 @@ public class ERXValidation {
             String localDisplayName = localizer != null ? localizer.localizedStringForKey(niceDisplay) : niceDisplay;
             errorMessages.setObjectForKey(newErrorMessage, localDisplayName != null ? localDisplayName : niceDisplay);
         } else {
-            errorMessages.setObjectForKey(newErrorMessage, key);
+            if(key != null)
+                errorMessages.setObjectForKey(newErrorMessage, key);
+            else
+                log.warn("NULL key for message:'"+newErrorMessage+"'", e);
         }
     }
 }
