@@ -77,12 +77,6 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
         return result;
     }
 
-    public String tabScriptString() {
-        return "var elem = document.EditForm.elements[0];"+
-        "if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
-    }
-
-
     public WOComponent cancelAction() {
         WOComponent result=null;
         if (_currentStep>1 && ERXExtensions.isNewObject(object())) { // only show this if we've been through more than one page
