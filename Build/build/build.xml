@@ -30,6 +30,68 @@
     
 
     <!-- ==================================================== -->
+    <!-- Sets up base properties                              -->
+    <!-- ==================================================== -->
+
+    <target name="macosx">
+        <condition property="is-macosx">
+            <and>
+                <os family="mac" />
+                <os family="unix" />
+            </and>
+        </condition>
+    </target>
+
+    <target name="windows">
+        <condition property="is-windows">
+            <os family="windows" />
+        </condition>
+    </target>
+
+    <target name="unix">
+        <condition property="is-unix">
+            <and>
+                <os family="unix" />
+                <not><os family="mac" /></not>
+            </and>
+        </condition>
+    </target>
+
+    <target name="check-macosx" if="is-macosx" depends="macosx">
+        <echo message="is Mac OS X ..." />
+        <property name="next.root" value="/System" />
+        <property name="wo.woroot" value="${next.root}" />
+        <property name="wo.localroot" value="/" />
+        <property name="build.root" value="${user.home}/Roots" />
+    </target>
+
+    <target name="check-windows" if="is-windows" depends="windows">
+        <echo message="is Windows ..." />
+        <property environment="env" />
+        <property name="next.root" value="${env.NEXT_ROOT}" />
+        <property name="wo.woroot" value="${next.root}" />
+        <property name="wo.localroot" value="${next.root}/Local" />
+        <property name="build.root" value="C:/Roots" />
+    </target>
+   
+    <target name="check-unix" if="is-unix" depends="unix">
+        <echo message="is Unix ..." />
+        <property name="next.root" value="/" />
+        <property name="wo.woroot" value="${next.root}" />
+        <property name="wo.localroot" value="${next.root}/Local" />
+        <property name="build.root" value="${user.home}/Roots" />
+    </target>
+
+    <target name="init" depends="check-macosx, check-windows, check-unix" unless="init"
+                description="initialize properties">
+        <property name="wo.system.root" value="${wo.woroot}/Library/Frameworks" />
+        <property name="wo.local.root" value="${wo.localroot}/Library/Frameworks" />
+        <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
+        <property name="wonder.root" value="${basedir}" />
+    </target>
+
+
+    <!-- ==================================================== -->
     <!-- Sets up build and distribution directories.          -->
     <!-- ==================================================== -->
     <target name="prepare">
@@ -48,35 +110,36 @@
     <!-- ==================================================== -->
     <!-- Main "build-all" target.                             -->
     <!-- ==================================================== -->
-    <target name="all" depends="prepare,common,subprojects"/>
+    <target name="all" depends="init, common, subprojects"/>
     
     
     <!-- ==================================================== -->
     <!-- Build Wonder documenatation.                         -->
     <!-- ==================================================== -->
-    <target name="doc">
+    <target name="doc" depends="init, prepare">
         <ant antfile="Build/build/build-doc.xml"/>
     </target>
     
     <!-- ==================================================== -->
     <!-- Build Wonder Common.                             -->
     <!-- ==================================================== -->
-    <target name="common">
+    <target name="common" depends="init">
         <ant antfile="Build/build/common.xml"/>
     </target>
 
     <!-- ==================================================== -->
-    <!-- Build Wonder Sub Projects.                           -->
+    <!-- Build Wonder sub projects.                           -->
     <!-- ==================================================== -->
-    <target name="subprojects">
+    <target name="subprojects" depends="init">
         <ant antfile="Build/build/subprojects.xml"/>
     </target>
 
-   <!-- ==================================================== -->
+    <!-- ==================================================== -->
     <!-- Create Wonder Destribution.                          -->
     <!-- ==================================================== -->
-    <target name="dist" depends="prepare,common,subprojects,doc">
+    <target name="dist" depends="init, prepare, common, subprojects, doc">
         <ant antfile="Build/build/common-dist.xml"/>
+        <ant antfile="Build/build/subprojects-dist.xml"/>
     </target>
 
 </project>
