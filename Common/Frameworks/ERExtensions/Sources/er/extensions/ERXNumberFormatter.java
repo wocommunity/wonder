@@ -142,7 +142,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
         	
         	newValue = performParse(newValue);
         	
-        	if(result instanceof BigInteger) {
+        	if(result instanceof BigInteger && !(result instanceof BigDecimal)) {
         		result = new BigInteger("" + newValue.intValue());
         	} else {
         		result = newValue;       		
@@ -164,9 +164,16 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     			newValue = new BigDecimal(((Number)value).doubleValue());
     		}
     		
-    		newValue = performFormat(newValue);
+    		// HACK ak: if we get an integer, we add a few digits to the right, 
+    		// because the BigDecimal constructor will have a scale of zero
+    		// FIXME: we should actually find out how many digits we need to display
+    		if(newValue.scale() == 0) {
+    			newValue = newValue.setScale(4);
+    		}
+    		
+     		newValue = performFormat(newValue);
 
-    		if(value instanceof BigInteger) {
+    		if(value instanceof BigInteger && !(value instanceof BigDecimal)) {
     			value = new BigInteger("" + newValue.intValue());
     		} else {
     			value = newValue;       		
