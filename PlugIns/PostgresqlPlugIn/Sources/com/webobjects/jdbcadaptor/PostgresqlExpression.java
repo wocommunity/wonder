@@ -32,6 +32,11 @@ public class PostgresqlExpression extends JDBCExpression {
     private boolean disableOuterJoins = false;
     
     /**
+     * if true, don't use typecasting. 
+     */
+    private boolean _disableTypeCasting = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting");
+    
+    /**
      * Holds array of join clauses.
      */
     private NSMutableArray _alreadyJoined = new NSMutableArray();    
@@ -179,7 +184,8 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     /**
-     * Overriden to handle correct placements of join conditions.
+     * Overriden to handle correct placements of join conditions and 
+     * to handle DISTINCT fetches with compareCaseInsensitiveA(De)scending sort orders.
      *
      * @param attributes    the attributes to select
      * @param lock  flag for locking rows in the database
@@ -207,17 +213,30 @@ public class PostgresqlExpression extends JDBCExpression {
         StringBuffer sb = new StringBuffer();
         sb.append(selectString);
         sb.append(columnList);
-        sb.append(" FROM ");
-        
-        if (disableOuterJoins) 
-            sb.append(tableList);
-        else {
-            if (_alreadyJoined.count() > 0) {
-                sb.append(joinClauseString());
-            } else {
-                sb.append(tableList);
+        // AK: using DISTINCT with ORDER BY UPPER(foo) is an error if it is not also present in the columns list...
+        // This implementation sucks, but should be good enough for the normal case
+        if(selectString.indexOf(" DISTINCT") != -1) {
+            String [] columns = orderByClause.split(",");
+            for(int i = 0; i < columns.length; i++) {
+                String column = columns[i].replaceFirst("\\s+(ASC|DESC)\\s*", "");
+                if(columnList.indexOf(column) == -1) {
+                    sb.append(", ");
+                    sb.append(column);
+                }
             }
         }
+        sb.append(" FROM ");
+        String fieldString;
+        if (disableOuterJoins) {
+            fieldString = tableList;
+        } else {
+            if (_alreadyJoined.count() > 0) {
+                fieldString = joinClauseString();
+            } else {
+                fieldString = tableList;
+            }
+        }
+        sb.append(fieldString);
         if ((whereClause != null && whereClause.length() > 0) ||
             (disableOuterJoins && (joinClause != null && joinClause.length() > 0))) {
             sb.append(" WHERE ");
@@ -445,14 +464,19 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overrides the parent implementation to add typecasts after the value, i.e. '2'::char,
      * which is required with certain PostgreSQL versions (<=7.4.x) for the correct query processing, 
-     * particularly with index usage.
+     * particularly with index usage. 
      * Also contains a bugfix to handle milli seconds in timestamps
-     * NULL values are excluded from casting.
-     * 
+     * NULL values are excluded from casting. 
+     * You can set the System default <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting</code>
+     * to true to disable both fixes (the former you might want to disable when PG says it can't cast a certain value and
+     * the second when you have values with a greater resolution already in the DB).
      * @param v the value
      * @param kp    the keypath associated with the value
      */
     public String sqlStringForValue(Object v, String kp) {
+        if(_disableTypeCasting) {
+            return super.sqlStringForValue(v,kp);
+        }
         EOAttribute attribute;
         int lastDotIdx = kp.lastIndexOf(".");
         if (lastDotIdx == -1) {
@@ -462,7 +486,7 @@ public class PostgresqlExpression extends JDBCExpression {
             EOEntity kpEntity = entityForKeyPath(kp);
             attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
         }
-        if(attribute != null && v != null && v != NSKeyValueCoding.NullValue ) {
+        if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
             String s = columnTypeStringForAttribute(attribute);
             if( v instanceof NSTimestamp ) {
                 return "'"+_TIMESTAMP_FORMATTER.format((NSTimestamp)v) + "'::"+ s;
