@@ -622,4 +622,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	public void setLocale(Locale value) {
 		locale = value;
 	}
+
+	/**
+	 * @param formatter
+	 * @param pattern
+	 */
+	public void setLocalizedDateFormatForKey(NSTimestampFormatter formatter, String pattern) {
+		_dateFormatters.put(pattern, formatter);
+	}
 }

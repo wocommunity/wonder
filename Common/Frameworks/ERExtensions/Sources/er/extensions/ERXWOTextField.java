@@ -1,0 +1,140 @@
+package er.extensions;
+
+import com.webobjects.appserver.*;
+import com.webobjects.appserver._private.*;
+import com.webobjects.foundation.*;
+import java.math.BigDecimal;
+import java.text.Format;
+import java.text.ParseException;
+
+/**
+ * Replacement for WOTextField. Works around the missing end tag and also provides for localized 
+ * formatters. Never use this directly, rather use WOTextField and let the ERXPatcher handle the
+ * replacement of classes.
+ * @author ak
+ */
+public class ERXWOTextField extends WOTextField {
+
+	protected WOAssociation _formatter;
+	protected WOAssociation _dateFormat;
+	protected WOAssociation _numberFormat;
+	protected WOAssociation _useDecimalNumber;
+
+	public ERXWOTextField(String s, NSDictionary nsdictionary, WOElement woelement) {
+		super("input", nsdictionary, woelement);
+		if(_value == null || !_value.isValueSettable())
+			throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'value' attribute not present or is a constant");
+		
+		_formatter = (WOAssociation)_associations.removeObjectForKey("formatter");
+		_dateFormat = (WOAssociation)_associations.removeObjectForKey("dateformat");
+		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
+		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
+		
+		if(_dateFormat != null && _numberFormat != null) {
+			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
+		}
+	}
+
+	protected String type() {
+		return "text";
+	}
+
+	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+		WOComponent component = wocontext.component();
+		if(!disabledInComponent(component) && wocontext._wasFormSubmitted()) {
+			String name = nameInContext(wocontext, component);
+			if(name != null) {
+				String stringValue = worequest.stringFormValueForKey(name);
+				Object result = stringValue;
+				if(stringValue != null) {
+					Format format = null;
+					if(stringValue.length() != 0) {
+						if(_formatter != null) {
+							format = (Format)_formatter.valueInComponent(component);
+						}
+						if(format == null) {
+							if(_dateFormat != null) {
+								String formatString = (String)_dateFormat.valueInComponent(component);
+								format = ERXTimestampFormatter.dateFormatterForPattern(formatString);
+							} else if(_numberFormat != null) {
+								String formatString = (String)_numberFormat.valueInComponent(component);
+								format = ERXNumberFormatter.numberFormatterForPattern(formatString);
+							}
+						}
+					}
+					if(format != null) {
+						try {
+							Object parsedObject = format.parseObject(stringValue);
+							String reformatedObject = format.format(parsedObject);
+							result = format.parseObject(reformatedObject);
+						} catch(ParseException parseexception) {
+							String keyPath = _value.keyPath();
+							NSValidation.ValidationException validationexception = new NSValidation.ValidationException(parseexception.getMessage(), stringValue, keyPath);
+							component.validationFailedWithException(validationexception, stringValue, keyPath);
+							return;
+						}
+						if(result != null && _useDecimalNumber != null && _useDecimalNumber.booleanValueInComponent(component)) {
+							result = new BigDecimal(result.toString());
+						}
+					} else if(result.toString().length() == 0) {
+						result = null;
+					}
+				}
+				_value.setValue(result, component);
+			}
+		}
+	}
+
+	protected void _appendValueAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
+		WOComponent component = wocontext.component();
+		Object valueInComponent = _value.valueInComponent(component);
+		if(valueInComponent != null) {
+			String stringValue = null;
+			Format format = null;
+			if(_formatter != null) {
+				format = (Format)_formatter.valueInComponent(component);
+			}
+			if(format == null) {
+				if(_dateFormat != null) {
+					String formatString = (String)_dateFormat.valueInComponent(component);
+					format = ERXTimestampFormatter.dateFormatterForPattern(formatString);
+				} else if(_numberFormat != null) {
+					String formatString = (String)_numberFormat.valueInComponent(component);
+					format = ERXNumberFormatter.numberFormatterForPattern(formatString);
+				}
+			}
+			if(format != null)
+				try {
+					String formatedValue = format.format(valueInComponent);
+					Object reparsedObject = format.parseObject(formatedValue);
+					stringValue = format.format(reparsedObject);
+				} catch(IllegalArgumentException illegalargumentexception) {
+					NSLog._conditionallyLogPrivateException(illegalargumentexception);
+					stringValue = null;
+				} catch(ParseException parseexception) {
+					NSLog._conditionallyLogPrivateException(parseexception);
+					stringValue = null;
+				}
+				if(stringValue == null) {
+					stringValue = valueInComponent.toString();
+				}
+				woresponse._appendTagAttributeAndValue("value", stringValue, true);
+		}
+	}
+
+	protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
+		woresponse.appendContentString("</input>");
+	}
+
+	public String toString() {
+		StringBuffer stringbuffer = new StringBuffer();
+		stringbuffer.append("<");
+		stringbuffer.append(getClass().getName());
+		stringbuffer.append(" formatter=" + _formatter);
+		stringbuffer.append(" dateFormat=" + _dateFormat);
+		stringbuffer.append(" numberFormat=" + _numberFormat);
+		stringbuffer.append(" useDecimalNumber=" + _useDecimalNumber);
+		stringbuffer.append(">");
+		return stringbuffer.toString();
+	}
+}
