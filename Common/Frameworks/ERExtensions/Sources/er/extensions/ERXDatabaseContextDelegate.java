@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.io.*;
+import java.sql.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
@@ -130,5 +132,105 @@ public class ERXDatabaseContextDelegate {
         if (dbLog.isDebugEnabled()) {
             dbLog.debug("databaseContextDidSelectObjects "+fs);
         }
+    }
+
+    /**
+        Delegate method. Will switch the connection to read write.
+     **/
+    public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt,NSArray adaptorOps,EOAdaptorChannel adChannel) {
+        log.debug("databaseContextWillPerformAdaptorOperations.. Setting it to ReadWrite");
+        if (adaptorOps.count() != 0) {
+            setReadWriteForConnectionInDatabaseContext(true, dbCtxt);
+        }
+        return adaptorOps;
+    }
+
+    /**
+        Delegate method. Will switch the connection to read only.
+     **/
+    public boolean databaseContextShouldFetchObjectFault(EODatabaseContext dbCtxt, Object obj) {
+        log.debug("databaseContextShouldFetchObjectFault.. Setting it to ReadOnly");
+        setReadWriteForConnectionInDatabaseContext(false, dbCtxt);
+        return true;
+    }
+
+    /**
+        Delegate method. Will switch the connection to read only.
+     **/
+    public  boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
+        log.debug("databaseContextShouldFetchArrayFault.. Setting it to ReadOnly");
+        setReadWriteForConnectionInDatabaseContext(false, eodatabasecontext);
+        return true;
+    }
+
+    /**
+        Delegate method. Will switch the connection to read only.
+     **/
+    public  NSArray databaseContextShouldFetchObjects(EODatabaseContext eodatabasecontext, EOFetchSpecification
+                                                      eofetchspecification, EOEditingContext eoeditingcontext) {
+        log.debug("databaseContextShouldFetchObjects.. Setting it to ReadOnly");
+        setReadWriteForConnectionInDatabaseContext(false, eodatabasecontext);
+        return null;
+    }
+
+    /**
+        Switch the connection to read/write mode.
+
+     @param isReadWrite true if the connection should be set to read/write, false if it should be set to read only
+     @param dbc the EODatabaseContext to use to get the java.sql.Connection object
+
+     FIXME: should support per-model sql statements in order to support different databases
+     **/
+    public void setReadWriteForConnectionInDatabaseContext(boolean isReadWrite, EODatabaseContext dbc) {
+        if (_readOnlySessionProperties() != null && _readWriteSessionProperties() != null) {
+            log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
+            try {
+
+                Connection connection = _getConnection(dbc);
+                if (connection != null) {
+                    if (isReadWrite) {
+                        _configureReadWrite(connection);
+                    } else {
+                        _configureReadOnly(connection);
+                    }
+                } else {
+                    log.warn("Cannot change readoonly/readwrite level since the connection for the editing context is null!!");
+                }
+
+            } catch (java.sql.SQLException e) {
+                log.error("Cannot change transaction level for databse, received " + e.getMessage(), e);
+            } 
+        }
+    }
+    
+    public Connection _getConnection(EODatabaseContext dbc) {
+        return ((com.webobjects.jdbcadaptor.JDBCContext) dbc.adaptorContext()).connection();
+    }
+
+    
+    public void _configureReadWrite(Connection aConnection) throws SQLException {
+        log.debug("Setting the JDBC connection to read/write");
+        aConnection.createStatement().executeUpdate(_readWriteSessionProperties());
+    }
+
+    public void _configureReadOnly(Connection aConnection) throws SQLException {
+        log.debug("Setting the JDBC connection to read only");
+        aConnection.createStatement().executeUpdate(_readOnlySessionProperties());
+    }
+
+    private String _readOnlySessionProperties;
+    public String _readOnlySessionProperties() {
+        if (_readOnlySessionProperties == null) {
+            _readOnlySessionProperties = System.getProperty("er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties");
+        }
+        return _readOnlySessionProperties;
+    }
+
+    private String _readWriteSessionProperties;
+    public String _readWriteSessionProperties() {
+        if (_readWriteSessionProperties == null) {
+            _readWriteSessionProperties = System.getProperty("er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties");
+        }
+        return _readWriteSessionProperties;
     }
 }
