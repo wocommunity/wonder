@@ -164,7 +164,7 @@ IsListing2: WOConditional {
 
 IsPropertySortable: WOConditional {
 	_unroll = true;
-	condition = isPropertyAnAttribute;
+	condition = d2wContext.propertyIsSortable;
 }
 
 IsSelecting: WOConditional {
