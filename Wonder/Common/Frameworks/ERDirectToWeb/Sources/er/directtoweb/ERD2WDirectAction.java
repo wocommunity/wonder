@@ -155,53 +155,56 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             context = new D2WContext(session());
             context.setDynamicPage(anActionName);
         }
-        entityName = ((EOEntity)context.entity()).name();
+        EOEntity entity = (EOEntity)context.entity();
         taskName = (String)context.task();
         
-        if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
-            EditPageInterface epi=(EditPageInterface)newPage;
-            EOEditingContext ec = newEditingContext();
-            EOEnterpriseObject eo = null;
+        if(entity != null) {
+            entityName = ((EOEntity)context.entity()).name();
 
-            ec.lock();
-            try {
-                if(anActionName.startsWith(createPrefix)) {
-                    eo = EOUtilities.createAndInsertInstance(ec,entityName);
-                } else {
-                    eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
+            if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
+                EditPageInterface epi=(EditPageInterface)newPage;
+                EOEditingContext ec = newEditingContext();
+                EOEnterpriseObject eo = null;
+
+                ec.lock();
+                try {
+                    if(anActionName.startsWith(createPrefix) || primaryKeyFromRequest() == null) {
+                        eo = EOUtilities.createAndInsertInstance(ec,entityName);
+                    } else {
+                        eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
+                    }
+                } finally {
+                    ec.unlock();
                 }
-            } finally {
-                ec.unlock();
-            }
-            epi.setObject(eo);
-            epi.setNextPage(previousPageFromRequest());
-        } else if(newPage instanceof InspectPageInterface) {
-            InspectPageInterface ipi=(InspectPageInterface)newPage;
-            EOEditingContext ec = session().defaultEditingContext();
-            EOEnterpriseObject eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
-            ipi.setObject(eo);
-            ipi.setNextPage(previousPageFromRequest());
-        } else if(newPage instanceof QueryPageInterface) {
-            QueryPageInterface qpi=(QueryPageInterface)newPage;
-            EOEditingContext ec = session().defaultEditingContext();
-            EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
-            if(qpi instanceof ERD2WQueryPageWithFetchSpecification) {
-                if(fs != null)
-                    ((ERD2WQueryPageWithFetchSpecification)qpi).setFetchSpecification(fs);
-            }
-        } else if(newPage instanceof ListPageInterface) {
-            ListPageInterface lpi=(ListPageInterface)newPage;
-            EOEditingContext ec = session().defaultEditingContext();
-            EOEntity entity = context.entity();
-            EODataSource ds = relationshipArrayFromRequest(ec, entity.classDescriptionForInstances());
-            if(ds == null) {
-                ds = new EODatabaseDataSource(ec, entityName);
+                epi.setObject(eo);
+                epi.setNextPage(previousPageFromRequest());
+            } else if(newPage instanceof InspectPageInterface) {
+                InspectPageInterface ipi=(InspectPageInterface)newPage;
+                EOEditingContext ec = session().defaultEditingContext();
+                EOEnterpriseObject eo = EOUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyFromRequest());
+                ipi.setObject(eo);
+                ipi.setNextPage(previousPageFromRequest());
+            } else if(newPage instanceof QueryPageInterface) {
+                QueryPageInterface qpi=(QueryPageInterface)newPage;
+                EOEditingContext ec = session().defaultEditingContext();
                 EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
-                if(fs != null)
-                    ((EODatabaseDataSource)ds).setFetchSpecification(fs);
+                if(qpi instanceof ERD2WQueryPageWithFetchSpecification) {
+                    if(fs != null)
+                        ((ERD2WQueryPageWithFetchSpecification)qpi).setFetchSpecification(fs);
+                }
+            } else if(newPage instanceof ListPageInterface) {
+                ListPageInterface lpi=(ListPageInterface)newPage;
+                EOEditingContext ec = session().defaultEditingContext();
+                EODataSource ds = relationshipArrayFromRequest(ec, entity.classDescriptionForInstances());
+                if(ds == null) {
+                    ds = new EODatabaseDataSource(ec, entityName);
+                    EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
+                    if(fs != null)
+                        ((EODatabaseDataSource)ds).setFetchSpecification(fs);
+                }
+                lpi.setDataSource(ds);
+                lpi.setNextPage(previousPageFromRequest());
             }
-            lpi.setDataSource(ds);
-            lpi.setNextPage(previousPageFromRequest());
         }
         return (WOActionResults)newPage;
     }
