@@ -74,30 +74,6 @@ public class WRRecordGroup extends WOComponent  {
         return _formatDict;
     }
 
-    /**
-     * Pushes a custom formatter into the dictionary of formatters.
-     * You'd use this to implement special display that can't be achieved
-     * with a simple {@link NSNumberFormatter} by using a unique format string.
-     */
-    static public void setFormatterForFormat(NSNumberFormatter v, String frmt) {
-        synchronized(_formatDict) {
-            formatDict().setObjectForKey(v, frmt);
-        }
-    }
-
-    /** Retreives the formatter for the given format, creating and caching one if needed. */
-    static public NSNumberFormatter formatterForFormat(String frmt) {
-        synchronized(_formatDict) {
-            if(frmt == null) frmt = "#,###0.00";
-            NSNumberFormatter v = (NSNumberFormatter)formatDict().objectForKey(frmt);
-            if(v == null) {
-                v = ERXNumberFormatter.numberFormatterForPattern(frmt);
-                setFormatterForFormat(v, frmt);
-            }
-            return v;
-        }
-    }
-
     /** Component does not synchronize with bindings, and your subclasses should be doing so, too. */
     public final boolean synchronizesVariablesWithBindings() {
         return false;
@@ -332,7 +308,8 @@ public class WRRecordGroup extends WOComponent  {
             }
         }
         Number nm = new Double(doubleValue);
-        NSNumberFormatter formatter = WRRecordGroup.formatterForFormat((String)valueForBinding("formatForSingleTotal"));
+        String formatString = (String)valueForBinding("formatForSingleTotal");
+        NSNumberFormatter formatter = ERXNumberFormatter.numberFormatterForPattern(formatString);
         return formatter.format(nm);
     }
 
