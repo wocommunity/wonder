@@ -16,6 +16,7 @@
 		<binding name="size"/>
 		<binding name="destinationSortKey"/>
 		<binding name="goingVertically"/>
+		<binding name="localizeDisplayKeys" defaults="Boolean"/>
 
 		<validation message="&apos;sourceEntityName&apos; is a required binding">
 			<unbound name="sourceEntityName"/>

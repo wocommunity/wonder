@@ -30,7 +30,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     public String destinationSortKey() { return _destinationSortKey; }
     public void setDestinationSortKey(String aValue) { _destinationSortKey = aValue; }
 
-    public String noSelectionString() { return _noSelectionString != null ? _noSelectionString : _noneString; }
+    public String noSelectionString() { return _noSelectionString != null ? _noSelectionString : noneString(); }
     public void setNoSelectionString(String aValue) { _noSelectionString = aValue; }
 
     protected void _invalidateCaches() {
@@ -259,8 +259,9 @@ public class ERXToOneRelationship extends WOToOneRelationship {
     }
 
     public Object theCurrentValue() {
-        // handle the case where it's the - none - string
-        return theCurrentItem==noSelectionString() ?
-                theCurrentItem : NSKeyValueCoding.Utility.valueForKey(theCurrentItem, _localDestinationDisplayKey());
+        if (theCurrentItem==noSelectionString()) {
+            return theCurrentItem;
+        }
+        return super.theCurrentValue();
     }
 }
