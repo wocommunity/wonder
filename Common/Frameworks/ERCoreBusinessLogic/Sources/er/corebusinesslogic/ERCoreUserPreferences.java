@@ -161,7 +161,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                     ec.deleteObject(pref);
                 }
             } else if (value!=null) {
-                pref = ERXUtilities.createEO("ERCPreference", ec);
+                pref = ERXEOControlUtilities.createAndInsertObject(ec, "ERCPreference");
                 u.newPreference(pref);
                 // done this way to not force you to sub-class our User entity
                 pref.takeValueForKey(ERXExtensions.rawPrimaryKeyForObject((EOEnterpriseObject)u),"userID");

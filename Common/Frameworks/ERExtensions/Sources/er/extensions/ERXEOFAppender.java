@@ -84,7 +84,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
     protected EOEditingContext editingContext() {
         if (ec == null) {
             if (safeToCreateEditingContext()) {
-                ec = ERXExtensions.newEditingContext();
+                ec = ERXEC.newEditingContext();
             }
         }
         return ec;
