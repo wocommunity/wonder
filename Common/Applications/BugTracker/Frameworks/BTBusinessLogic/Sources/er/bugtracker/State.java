@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class State extends _State {
-    static final ERXLogger log = ERXLogger.getLogger(State.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(State.class);
 
     public static State ANALYZE;
     public static State BUILD;

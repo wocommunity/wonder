@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class TestItem extends _TestItem {
-    static final ERXLogger log = ERXLogger.getLogger(TestItem.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(TestItem.class);
 
     public TestItem() {
         super();

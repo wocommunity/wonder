@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class Priority extends _Priority {
-    static final ERXLogger log = ERXLogger.getLogger(Priority.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(Priority.class);
 
     public static Priority CRITICAL;
     public static Priority HIGH;
