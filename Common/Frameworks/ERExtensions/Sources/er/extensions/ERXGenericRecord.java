@@ -45,6 +45,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static final ERXLogger validation = ERXLogger.getERXLogger("er.eo.validation.ERXGenericRecord");
     /** logging support for validation exceptions */
     public static final ERXLogger validationException = ERXLogger.getERXLogger("er.eo.validationException.ERXGenericRecord");
+    /** logging support for insertion tracking */
+    public static final ERXLogger insertionTrackingLog = ERXLogger.getERXLogger("er.extensions.ERXGenericRecord.insertion");
     /** general logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger("er.eo.ERXGenericRecord");
 
@@ -93,7 +95,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
     }
 
-       /** This methods checks if we already have created an ERXLogger for this class
+    public String insertionStackTrace = null;
+    
+    /** This methods checks if we already have created an ERXLogger for this class
         * If not, one will be created, stored and returned on next request.
         * This method eliminates individual static variables for ERXLogger's in all
         * subclasses. We use an NSDictionary here because static fields are class specific
@@ -384,6 +388,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void awakeFromInsertion(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
+        if (insertionTrackingLog.isDebugEnabled()) {
+            insertionStackTrace = ERXUtilities.stackTrace();
+            insertionTrackingLog.debug("inserted "+getClass().getName()+" at "+insertionStackTrace);
+        } else if (insertionTrackingLog.isInfoEnabled()) {
+            insertionStackTrace = ERXUtilities.stackTrace();
+        }            
         super.awakeFromInsertion(editingContext);
     }
     /**
@@ -917,25 +927,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-private Method[] validityMethods() {
-    if (validityMethods == null) {
-        validityMethods = new Method[4];
-        Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
-        validityMethods[0] = m;
-        
-        m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
-        validityMethods[1] = m;
-
-        m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
-        validityMethods[2] = m;
-
-        m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
-        validityMethods[3] = m;
+    private Method[] validityMethods() {
+        if (validityMethods == null) {
+            validityMethods = new Method[4];
+            Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
+            validityMethods[0] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
+            validityMethods[1] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
+            validityMethods[2] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
+            validityMethods[3] = m;
+        }
+        return validityMethods;
     }
-    return validityMethods;
-}
-
-private static Method methodInSharedGSVEngineInstanceWithName(String name) {
+    
+    private static Method methodInSharedGSVEngineInstanceWithName(String name) {
         try {
             return sharedGSVEngineInstance().getClass().getMethod(name, new Class[]{EOEnterpriseObject.class});
         } catch (IllegalArgumentException e2) {
@@ -946,7 +956,7 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
             throw new NSForwardException(e4);
         }
     }
-
+    
     private static Object sharedGSVEngineInstance() {
         if (sharedGSVEngineInstance == null) {
             try {
@@ -966,9 +976,10 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
         }
         return sharedGSVEngineInstance;
     }
-
+    
+    
     /**
-     * Debugging method that will be called on an object before it is
+        * Debugging method that will be called on an object before it is
      * saved to the database if the property key: <b>ERDebuggingEnabled</b>
      * is enabled. This allows for adding in a bunch of expensive validation
      * checks that should only be enabled in developement and testing
@@ -977,9 +988,9 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
      */
     // CHECKME: This method was very useful at NS, might not be as useful here.
     public void checkConsistency() throws NSValidation.ValidationException {}
-
+    
     /**
-     * This method is very similiar to the <code>checkConsistency</code> method
+        * This method is very similiar to the <code>checkConsistency</code> method
      * except that this method is only called from an outside process, usually
      * a batch process, to verify that the data this object holds is consistent.
      * JUnit tests are great for testing that all of the methods of a single
@@ -991,11 +1002,13 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
      */
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
     
+    
+    
     // Debugging aids -- turn off during production
     // These methods are used to catch the classic mistake of:
     // public String foo() { return (String)valueForKey("foo"); }
     // where foo is not a property key
-
+    
     /*
      public Object storedValueForKey(String key) {
          // FIXME: turn this off during production
@@ -1004,7 +1017,7 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
          Object value = super.storedValueForKey(key);
          return value;
      }
-
+     
      public void takeStoredValueForKey(Object value, String key) {
          // FIXME: turn this off during production
          if (!allPropertyKeys().containsObject(key)) {
@@ -1012,8 +1025,7 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
          }
          super.takeStoredValueForKey(value,key);
      }
-
+     
      */
-
-
+    
 }
