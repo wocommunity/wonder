@@ -157,9 +157,10 @@ public class ERXConfigurationManager {
         if (! _isInitialized) {
             _isInitialized = true;
             NSNotificationCenter.defaultCenter().addObserver(this,
-                    new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
-                    EOModelGroup.ModelAddedNotification,
-                    null);
+                                                             new NSSelector("modelAddedHandler",
+                                                                            ERXConstant.NotificationClassArray),
+                                                             EOModelGroup.ModelAddedNotification,
+                                                             null);
             loadOptionalConfigurationFiles();
         }
     }
