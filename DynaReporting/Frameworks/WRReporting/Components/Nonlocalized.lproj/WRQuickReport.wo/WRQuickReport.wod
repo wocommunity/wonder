@@ -1,0 +1,14 @@
+
+
+report: WRReport { 
+	model = model; 
+	recordGroupTotalToShow = ^recordGroupTotalToShow; 
+	selectedRecordGroupDisplayType = ^selectedRecordGroupDisplayType; 
+	selectedReportStyle = ^selectedReportStyle; 
+	showCustomReportStyle = ^showCustomReportStyle; 
+	showNavigation = ^showNavigation; 
+	showPresentationControls = ^showPresentationControls; 
+	showRecordGroupAsTable = ^showRecordGroupAsTable; 
+	showRecordGroupHeadings = ^showRecordGroupHeadings; 
+	colors=^colors;
+}

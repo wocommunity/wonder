@@ -1,0 +1,20 @@
+depthList:WORepetition{
+	count = depthCount;
+	index = depth;
+}
+attribs:WORepetition{
+	list = attributeListAtDepth;
+	item = attrib;
+}
+td:WOGenericContainer{
+	elementName = "TD";
+	colspan = colSpan;
+	rowspan = rowSpan;
+	bgcolor = ^bgcolor;
+}
+attribLabel:WOString{
+	value= attribLabel;
+}
+groupDepth:WORepetition{
+	count=groups.count;
+}
