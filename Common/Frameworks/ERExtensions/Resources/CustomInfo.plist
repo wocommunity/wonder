@@ -1,5 +1,5 @@
 {
     NSJavaAware=YES;
     NSJavaNeeded=YES;
-    NSPrincipalClass = er/extensions/ERExtensions;
+    NSPrincipalClass = er/extensions/ERXExtensions;
 }
