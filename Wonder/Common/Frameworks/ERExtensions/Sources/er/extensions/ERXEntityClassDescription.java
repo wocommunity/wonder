@@ -16,7 +16,8 @@ import org.apache.log4j.Category;
 /**
  * The main purpose of the ERXClassDescription class is
  * to throw {@link ERXValidationException}s instead of the
- * usual NSValidation.ValidationException objects. See the
+ * usual {@link com.webobjects.foundation.NSValidation.ValidationException 
+ * NSValidation.ValidationException} objects. See the
  * ERXValidationException and ERXValidationFactory class
  * for more information about localized and templatized
  * validation exceptions. This class is configured to
@@ -54,8 +55,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         /**
-         * Method called by the {@link NSNotificationCenter} when
-         * an ERXCompilerProxy did reset.
+         * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter} 
+         * when an ERXCompilerProxy did reset.
          */
         public void compilerProxyDidCompileClasses(NSNotification n) {
             cat.debug("compilerProxyDidCompileClasses: " + n);
@@ -63,9 +64,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
        }
 
         /**
-         * Method called by the {@link NSNotificationCenter} when
-         * an EOModel is loaded. This method just calls the method
+         * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}   
+         * when an EOModel is loaded. 
+         * This method just calls the method
          * <code>registerDescriptionForEntitiesInModel</code>
+         * 
          * @param n notification that has the EOModel that was loaded.
          */
         public void modelWasAddedNotification(NSNotification n) {
@@ -77,12 +80,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         /**
-         * Method called by the {@link NSNotificationCenter} when
-         * a class description is needed for a given entity. Usually
-         * this method isn't needed seeing as we preempt the on demand
-         * loading of class descriptions by loading all of them when
-         * the EOModel is loaded. This method just calls the method
+         * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter} 
+         * when a class description is needed 
+         * for a given entity. Usually this method isn't needed seeing 
+         * as we preempt the on demand loading of class descriptions 
+         * by loading all of them when the EOModel is loaded.  
+         * This method just calls the method
          * <code>registerDescriptionForEntity</code>
+         *
          * @param n notification that has the name of the entity
          * 	that needs the class description.
          */
@@ -95,11 +100,12 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         /**
-         * Method called by the {@link NSNotificationCenter} when
-         * a class description is needed for a given Class. Usually
-         * this method isn't needed seeing as we preempt the on demand
-         * loading of class descriptions by loading all of them when
-         * the EOModel is loaded. This method just calls the method
+         * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter} 
+         * when a class description is needed 
+         * for a given Class. Usually this method isn't needed seeing 
+         * as we preempt the on demand loading of class descriptions 
+         * by loading all of them when the EOModel is loaded.  
+         * This method just calls the method
          * <code>registerDescriptionForClass</code>
          * @param n notification that has the Class object
          * 	that needs a class description.

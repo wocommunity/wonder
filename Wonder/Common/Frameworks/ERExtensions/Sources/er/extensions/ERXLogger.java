@@ -52,7 +52,8 @@ public class ERXLogger extends org.apache.log4j.Category {
 
     /**
      * Main entry point for getting an ERXLogger for a given name.
-     * This works identical to {@link org.apache.log4j.Category$getInstance}
+     * This works identical to 
+     * {@link org.apache.log4j.Category#getInstance log4.Category.getInstance}
      * except that an ERXLogger is returned instead of a Category.
      * Note that if the log4j system has not been setup correctly, meaning
      * the LoggerFactory subclass has not been correctly put in place, then

@@ -319,7 +319,8 @@ public class ERXExtensions {
 
     /**
      * Utility method used to execute arbitrary SQL. This
-     * has the advantage over the {@link EOUtilities}
+     * has the advantage over the 
+     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
      * <code>rawRowsForSQL</code> in that it can be used with
      * other statements besides just SELECT without throwing
      * exceptions.
@@ -756,7 +757,8 @@ public class ERXExtensions {
     /**
      * Gives the primary key array for a given enterprise
      * object. This has the advantage of not firing the
-     * fault of the object, unlike the method in {@link EOUtilities}.
+     * fault of the object, unlike the method in 
+     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
      * @param obj enterprise object to get the primary key array from.
      * @return array of all the primary key values for the object.
      */
