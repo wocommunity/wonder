@@ -62,3 +62,8 @@ log4j.loggerFactory = er.extensions.ERXLogger$Factory
 # Navigation 
 #########################################################################
 er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
+
+#########################################################################
+# Shared EO loading patching 
+#########################################################################
+er.extensions.ERXSharedEOLoader.PatchSharedEOLoading=false
