@@ -837,7 +837,10 @@ public class ERXExtensions {
         return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(a,q);
     }
 
-    /** holds the array of hex values */
+    /**
+     * holds the array of hex values
+     * @deprecated
+     */
     private static final char hex[] = {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
@@ -847,6 +850,7 @@ public class ERXExtensions {
      * Converts an array of bytes to a hex string
      * @param data array of bytes
      * @return hex representation of the byte array
+     * @deprecated use <code>ERXStringUtilities.byteArrayToHexString</code> instead
      */
     // MOVEME: ERXStringUtilities
     public static String byteArrayToHexString (final byte data[]) {
@@ -866,6 +870,7 @@ public class ERXExtensions {
      * Converts a hex string into an array of bytes
      * @param s string
      * @return byte array
+     * @deprecated <CODE>ERXStringUtilities.hexStringToByteArray<CODE> instead
      */
     // MOVEME: ERXStringUtilities
     public static byte[] hexStringToByteArray(String s) {
