@@ -106,4 +106,84 @@ public class ERXEOAccessUtilities {
         aggregate.setReadFormat(function + "(t0." + attribute.columnName() + ")");
         return aggregate;
     }
+
+    /** creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method to
+    * create the tables.
+    *
+    * @param entities a NSArray containing the entities for which create table statements should be generated or null
+    * if all entitites in the model should be used.
+    * @param modelName the name of the EOModel
+    * @param optionsCreate a NSDictionary containing the different options. Possible keys are
+    * <ol><li>DropTablesKey</li>
+    * <ol><li>DropPrimaryKeySupportKey</li>
+    * <ol><li>CreateTablesKey</li>
+    * <ol><li>CreatePrimaryKeySupportKey</li>
+    * <ol><li>PrimaryKeyConstraintsKey</li>
+    * <ol><li>ForeignKeyConstraintsKey</li>
+    * <ol><li>CreateDatabaseKey</li>
+    * <ol><li>DropDatabaseKey</li>
+    *<br/><br>Possible values are <code>YES</code> and <code>NO</code>
+    *
+    * @return a <code>String</code> containing SQL statements to create tables
+    */
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
+        //get the JDBCAdaptor
+        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(new EOEditingContext(),
+                                                                        modelName);
+        EOAdaptorContext ac = dc.adaptorContext();
+        JDBCAdaptor a = (JDBCAdaptor) ac.adaptor();
+        JDBCPlugIn plugin = a.plugIn();
+        log.debug("plugin name = "+plugin.databaseProductName());
+        EOSynchronizationFactory sf = plugin.createSynchronizationFactory();
+        EOModel m = EOModelGroup.defaultGroup().modelNamed(modelName);
+        Enumeration e = m.entities().objectEnumerator();
+        entities = entities == null ? new NSMutableArray() : entities;
+
+        if (entities == null) {
+            NSMutableArray ar = new NSMutableArray();
+            while (e.hasMoreElements()) {
+                EOEntity currentEntity = (EOEntity) e.nextElement();
+                if (!(currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
+                    //we do not want to add EOXXXPrototypes entities
+                    ar.addObject(currentEntity);
+                }
+            }
+            entities = ar;
+        }
+
+
+        return sf.schemaCreationScriptForEntities(entities, optionsCreate);
+    }
+
+    /** creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method to
+    * create the tables.
+    *
+    * @param entities a NSArray containing the entities for which create table statements should be generated or null
+    * if all entitites in the model should be used.
+    * @param modelName the name of the EOModel
+    * <br/><br/>This method uses the following defaults options:
+    * <ol><li>DropTablesKey=YES</li>
+    * <ol><li>DropPrimaryKeySupportKey=YES</li>
+    * <ol><li>CreateTablesKey=YES</li>
+    * <ol><li>CreatePrimaryKeySupportKey=YES</li>
+    * <ol><li>PrimaryKeyConstraintsKey=YES</li>
+    * <ol><li>ForeignKeyConstraintsKey=YES</li>
+    * <ol><li>CreateDatabaseKey=NO</li>
+    * <ol><li>DropDatabaseKey=NO</li>
+    *<br/><br>Possible values are <code>YES</code> and <code>NO</code>
+    *
+    * @return a <code>String</code> containing SQL statements to create tables
+    */
+    public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
+        NSMutableDictionary optionsCreate = new NSMutableDictionary();
+        optionsCreate.setObjectForKey("YES", "DropTablesKey");
+        optionsCreate.setObjectForKey("YES", "DropPrimaryKeySupportKey");
+        optionsCreate.setObjectForKey("YES", "CreateTablesKey");
+        optionsCreate.setObjectForKey("YES", "CreatePrimaryKeySupportKey");
+        optionsCreate.setObjectForKey("YES", "PrimaryKeyConstraintsKey");
+        optionsCreate.setObjectForKey("YES", "ForeignKeyConstraintsKey");
+        optionsCreate.setObjectForKey("NO", "CreateDatabaseKey");
+        optionsCreate.setObjectForKey("NO", "DropDatabaseKey");
+        return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    }
 }
