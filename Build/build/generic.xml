@@ -1406,8 +1406,8 @@ There are many ways to use this script:
     <target name="all.install" depends="frameworks.all.install, applications.all.install" />
 
     <target name="all" depends="all.compile" />
-    <target name="install" depends="all.compile, all.install" />
-    <target name="web" depends="all.compile, all.web" />
+    <target name="install" depends="all.install" />
+    <target name="web" depends="all.web" />
     <target name="clean" depends="all.clean" />
 
 </project>
