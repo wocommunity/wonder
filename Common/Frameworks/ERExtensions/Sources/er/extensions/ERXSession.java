@@ -67,6 +67,12 @@ public class ERXSession extends WOSession implements Serializable {
     /** the receiver of the variours notifications */
     transient private Observer _observer;
     
+    /**
+     * _originalThreadName holds the original name from the WorkerThread whic
+     * is the value before executing <code>awake()</code>
+     */
+    public String _originalThreadName;
+    
     /** 
      * returns the observer object for this session. 
      * If it doesn't ever exist, one will be created. 
@@ -385,6 +391,9 @@ public class ERXSession extends WOSession implements Serializable {
             else
                 log.debug("Multipart Form values found");
         }
+        _originalThreadName = Thread.currentThread().getName();
+        Thread.currentThread().setName(threadName());
+        
     }
 
     /**
@@ -398,8 +407,18 @@ public class ERXSession extends WOSession implements Serializable {
         ERXExtensions.setSession(null);
         // reset backtracking
         _didBacktrack = null;
+        Thread.currentThread().setName(_originalThreadName);
+        removeObjectForKey("ERXActionLogging");
     }
 
+    /** override this method in order to provide a different name for the WorkerThread for this rr loop
+     * very useful for logging stuff: assign a log statement to a log entry. Something useful could be:
+     * <code>return session().sessionID() + valueForKeyPath("user.username");
+     * @return
+     */
+    public String threadName() {
+        return Thread.currentThread().getName();
+    }
     /*
      * Backtrack detection - Pulled from David Neumann's wonderful security framework.
      */
