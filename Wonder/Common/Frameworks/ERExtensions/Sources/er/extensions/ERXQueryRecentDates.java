@@ -20,8 +20,8 @@ public class ERXQueryRecentDates extends WOComponent {
     ////////////////////////////////////  log4j category  ////////////////////////////////////////
     public final static Category cat = Category.getInstance(ERXQueryRecentDates.class);
     
-    protected WODisplayGroup displayGroup;
-    protected String key;
+    public WODisplayGroup displayGroup;
+    public String key;
 
     static final int[] daysAgoArray={ 0,1,3,7,30,90,180 };
     static final String[] daysAgoString={
@@ -33,7 +33,7 @@ public class ERXQueryRecentDates extends WOComponent {
         "3 months",
         "6 months"
     };
-    private final static Integer[] indices={ERXConstant.ZeroInteger, ERXConstant.OneInteger, ERXConstant.TwoInteger, new Integer(3), new Integer(4), new Integer(5), new Integer(6) };
+    private final static Integer[] indices={ERXConstant.ZeroInteger, ERXConstant.OneInteger, ERXConstant.TwoInteger, ERXConstant.integerForInt(3), ERXConstant.integerForInt(4), ERXConstant.integerForInt(5), ERXConstant.integerForInt(6) };
     final NSArray indexes=new NSArray(indices);
     Integer dateItem;
 
