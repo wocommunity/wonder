@@ -1249,6 +1249,7 @@
 				F57EA64301FF59BF019E57DA,
 				F57EA64401FF59BF019E57DA,
 				F57EA64501FF59BF019E57DA,
+				F5A49CE4021F18C901A801D4,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -2178,7 +2179,7 @@
 				F57EA6F401FF59C0019E57DA,
 			);
 			isa = PBXGroup;
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			refType = 4;
 		};
 		F57EA6EE01FF59C0019E57DA = {
@@ -2738,6 +2739,7 @@
 				66F39C79021A475800CD2933,
 				66F39C7A021A475800CD2933,
 				66F39C7B021A475800CD2933,
+				F5A49CE5021F18CA01A801D4,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -3796,6 +3798,17 @@
 			isa = PBXFileReference;
 			path = ERXTimestampUtility.java;
 			refType = 4;
+		};
+		F5A49CE4021F18C901A801D4 = {
+			isa = PBXFileReference;
+			path = KeyValueCodingProtectedAccessor.java;
+			refType = 4;
+		};
+		F5A49CE5021F18CA01A801D4 = {
+			fileRef = F5A49CE4021F18C901A801D4;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5A720070219D3DA01A801D4 = {
 			isa = PBXFileReference;
