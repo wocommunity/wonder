@@ -50,8 +50,8 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 #########################################################################
 # Cryptgraphy
 #########################################################################
-ERBlowfishCipherKey = DefaultBlowfishCipherKey
-#er.extensions.ERXBlowfishCipherKey = DefaultBlowfishCipherKey
+#ERBlowfishCipherKey = DefaultBlowfishCipherKey
+er.extensions.ERXBlowfishCipherKey = DefaultCipherKey
 
 #########################################################################
 # Browser
