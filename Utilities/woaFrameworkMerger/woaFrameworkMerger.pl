@@ -15,7 +15,7 @@
 #						TODO: Handle Windows (somebody else will have to implement this)
 
 use Cwd 'cwd', 'chdir', 'abs_path';
-
+%paths = ();
 foreach $woa ( @ARGV[0..$#ARGV] ) {
 	$woa = abs_path( $woa );
 	
@@ -36,7 +36,7 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 		# fix up ant-generated paths
 		$inputPath =~ s#^/System#WOROOT# if($inputPath =~ m#^/System#);
 
-		if( $inputPath =~ m#^(/|\.\.|LOCALROOT).+\.jar$# ) {
+		if( $inputPath =~ m#^(/|\.\.|LOCALROOT|HOMEROOT).+\.jar$# ) {
 			if( $madeFrameworkDir == 0 ) {
 				if ( -e $frameworksPath ) {
 					print  "removing $frameworksPath\n";
@@ -47,6 +47,7 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 				}
 				$madeFrameworkDir = 1;
 			}
+			$inputPath =~ s|Versions/./||;
 			my @pathArray = split( /\//, $inputPath );
 			my $pathCount = $#pathArray;
 			
@@ -55,26 +56,30 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 			# To:
 			# /Volumes/Island/wolf/code/Log4JFramework/build/Log4J.framework
 			my $copyFromPath = join( '/', @pathArray[ 0..($pathCount-3) ] );
+			$copyFromPath = join( '/', @pathArray[ 0..($pathCount-3) ] ) if();
 
 			# LOCALROOT is redundant on X, delete it.
 			$copyFromPath =~ s/^LOCALROOT//;
+			$copyFromPath =~ s/^HOMEROOT/~/;
 			
 			my $frameworkClassPath = 'APPROOT/Frameworks/' . join( '/', @pathArray[ ($pathCount-3)..$pathCount ] );
-			#print "frameworkClassPath = $frameworkClassPath\n";
+#			print "frameworkClassPath = $frameworkClassPath\n";
 			my $frameworkName = $pathArray[ ($pathCount-3) ];
 			
 			my $currentFrameworkPath = $frameworksPath . '/' . $frameworkName;
-			if( -e $currentFrameworkPath && (modDate($copyFromPath) > modDate($currentFrameworkPath)) ) {
+			if(( -e $currentFrameworkPath) && (modDate($copyFromPath) > modDate($currentFrameworkPath)) ) {
 				print "deleting outdated $frameworkName copy...\n";
 				system( "cd $cpCWD;rm -rf $currentFrameworkPath" ) == 0 or die 'failed to delete outdated framework copy';
 			}
 			if( !-e $currentFrameworkPath ) {
 				print "copying $frameworkName...\n";
-				system( "cd $cpCWD; cp -R $copyFromPath $frameworksPath" ) == 0 or die 'failed to copy framework';
+				system( "cd $cpCWD; cp -Rp $copyFromPath $frameworksPath" ) == 0 or die 'failed to copy framework';
 			}
-			push @outputPaths, $frameworkClassPath;
+			push @outputPaths, $frameworkClassPath if(!defined($paths{$frameworkClassPath}));
+			$paths{$frameworkClassPath} = $frameworkClassPath;
 		} else {
-			push @outputPaths, $inputPath;
+			push @outputPaths, $inputPath if(!defined($paths{$inputPath}));
+			$paths{$inputPath} = $inputPath;
 		}
 	}
 	$macOS = join( "\n", @outputPaths ) . "\n";
@@ -112,5 +117,5 @@ sub burp {
 
 sub modDate {
 	my ($path) = @_;
-	return (stat($path))[9];
+	return (-e $path ? (stat($path))[9] : 0 );
 }
