@@ -233,6 +233,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                                 
                 for (Enumeration ee = model.entities().objectEnumerator(); ee.hasMoreElements();) {
                     EOEntity entity = (EOEntity)ee.nextElement();
+                    checkForeignKeys(entity);
                     EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entity.name());
                     defaultLog.debug("Reading defaults for: " + entity.name());
                     if(cd instanceof ERXEntityClassDescription) {
@@ -430,7 +431,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     String className = eoentity.className();
 
                     prepareEntityForRegistration(eoentity);
-                    checkForeignKeys(eoentity);
 
                     NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(className);
                     if(array == null) {
