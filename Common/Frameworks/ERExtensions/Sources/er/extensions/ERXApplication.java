@@ -614,7 +614,7 @@ public abstract class ERXApplication extends WOApplication {
             + "}\n\n");
     }
 
-    public void registerStreamingRequesHandlerKey(String s) {
+    public void registerStreamingRequestHandlerKey(String s) {
         if (!_streamingRequestHandlerKeys.containsObject(s)) _streamingRequestHandlerKeys.addObject(s);
     }
 
