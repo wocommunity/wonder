@@ -312,6 +312,7 @@ public class ERMailSender extends Thread {
             errorCount = 0;
             mailCount = 0;
             _peakMemoryUsage = 0.0d;
+            updateMemoryUsage();
             lastResetTime = new NSTimestamp ();
             if (log.isDebugEnabled()) 
                 log.debug(savedStatsString + " has been reset to initial value.");
