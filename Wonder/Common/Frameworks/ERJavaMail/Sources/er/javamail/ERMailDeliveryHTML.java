@@ -49,7 +49,7 @@ public class ERMailDeliveryHTML extends ERMailDelivery {
     }
 
     /** Pre-processes the mail before it gets sent.
-        @see ERMailDelivery.prepareMail */
+        @see ERMailDelivery#prepareMail */
     protected DataHandler prepareMail () {
         MimeMultipart multipart = null;
         MimeBodyPart textPart = null;
