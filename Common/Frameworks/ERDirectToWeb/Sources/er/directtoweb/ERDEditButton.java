@@ -18,22 +18,18 @@ import er.extensions.*;
  * 
  */
 
-public class ERDEditButton extends ERDCustomEditComponent {
-
-   public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDEditButton");
-
+public class ERDEditButton extends ERDActionButton {
+    /** logging support */
+    private static final ERXLogger log = ERXLogger.getLogger(ERDEditButton.class,"components");
 
     public ERDEditButton(WOContext context) {super(context);}
     
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
     protected EOEnterpriseObject localInstanceOfObject() {
         return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
     }
     
     // Assuming that object() is the eo
-    public WOComponent edit() {
+    public WOComponent editObjectAction() {
         EOEnterpriseObject localObject = localInstanceOfObject();
         String configuration = (String)valueForBinding("editConfigurationNameForEntity");
         if(log.isDebugEnabled()){
