@@ -56,6 +56,7 @@
 		};
 		F52DE9D60237AA1601AD0D0C = {
 			children = (
+				F6AC07A60276DE2D01AD0D07,
 				F5A143CB01FF7F8801A80106,
 				F5A143CC01FF7F8801A80106,
 				F5A1444301FF7F8801A80106,
@@ -88,6 +89,7 @@
 		};
 		F52DE9D70237AA1601AD0D0C = {
 			children = (
+				F6AC07A40276DDD701AD0D07,
 				F5A143D501FF7F8801A80106,
 				F615AD2E026F045101F77686,
 				F5A143DD01FF7F8801A80106,
@@ -640,6 +642,8 @@
 		};
 		F52DEA070237AA1601AD0D0C = {
 			children = (
+				F6AC07A70276DE6C01AD0D07,
+				F52DEA3D0237AA1601AD0D0C,
 				F61FDB10026D762901D8A50F,
 				F61422DB02535F7701AD0D07,
 				F52DEA080237AA1601AD0D0C,
@@ -1033,7 +1037,6 @@
 				F52DEA3B0237AA1601AD0D0C,
 				F634BADC026F0A5D012617F5,
 				F52DEA3C0237AA1601AD0D0C,
-				F52DEA3D0237AA1601AD0D0C,
 				F52DEA3E0237AA1601AD0D0C,
 				F52DEA3F0237AA1601AD0D0C,
 			);
@@ -1228,6 +1231,7 @@
 			);
 			isa = PBXGroup;
 			name = ERDList;
+			path = "";
 			refType = 4;
 		};
 		F52DEA3E0237AA1601AD0D0C = {
@@ -3939,6 +3943,8 @@
 				F634BAE0026F0A5E012617F5,
 				F634BAE1026F0A5E012617F5,
 				F71C11CB02720BF501A8010C,
+				F6AC07AB0276DE6C01AD0D07,
+				F6AC07AC0276DE6C01AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -4368,6 +4374,8 @@
 				F615AD3B026F07AE01F77686,
 				F634BADB026F0986012617F5,
 				F634BAE2026F0A5E012617F5,
+				F6AC07A50276DDDA01AD0D07,
+				F6AC07AD0276DE6C01AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -7164,6 +7172,66 @@
 		};
 		F6970DF0024A570501AD0D07 = {
 			fileRef = F6970DED024A570501AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6AC07A40276DDD701AD0D07 = {
+			isa = PBXFileReference;
+			path = ERD2WDirectAction.java;
+			refType = 4;
+		};
+		F6AC07A50276DDDA01AD0D07 = {
+			fileRef = F6AC07A40276DDD701AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6AC07A60276DE2D01AD0D07 = {
+			isa = PBXFileReference;
+			path = ERDDefaultsEmbeddedAssignment.java;
+			refType = 4;
+		};
+		F6AC07A70276DE6C01AD0D07 = {
+			children = (
+				F6AC07A80276DE6C01AD0D07,
+				F6AC07A90276DE6C01AD0D07,
+				F6AC07AA0276DE6C01AD0D07,
+			);
+			isa = PBXGroup;
+			name = ERDInspect;
+			path = "";
+			refType = 4;
+		};
+		F6AC07A80276DE6C01AD0D07 = {
+			isa = PBXFileReference;
+			path = ERDInspect.api;
+			refType = 4;
+		};
+		F6AC07A90276DE6C01AD0D07 = {
+			isa = PBXFileReference;
+			path = ERDInspect.java;
+			refType = 4;
+		};
+		F6AC07AA0276DE6C01AD0D07 = {
+			isa = PBXFolderReference;
+			path = ERDInspect.wo;
+			refType = 4;
+		};
+		F6AC07AB0276DE6C01AD0D07 = {
+			fileRef = F6AC07A80276DE6C01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6AC07AC0276DE6C01AD0D07 = {
+			fileRef = F6AC07AA0276DE6C01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6AC07AD0276DE6C01AD0D07 = {
+			fileRef = F6AC07A90276DE6C01AD0D07;
 			isa = PBXBuildFile;
 			settings = {
 			};
