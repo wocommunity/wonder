@@ -69,9 +69,23 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     }
 
     public boolean isCustomMethodException() { return type() == CustomMethodException; }
-    
-    protected NSMutableDictionary _userInfo() { return (NSMutableDictionary)super.userInfo(); }
 
+    //FIXME: (ak) this is probably a stupid way to work around super.userInfo() returning NSDictionary, but it should work for now...please someone check if userInfo is really required to be mutable
+    protected NSMutableDictionary _mutableUserInfo;
+    protected NSMutableDictionary _userInfo() {
+        if(_mutableUserInfo == null) {
+            Object info = super.userInfo();
+            if(info == null) {
+                _mutableUserInfo = new NSMutableDictionary();
+            } else if(info.getClass() == NSDictionary.class) {
+                _mutableUserInfo = new NSMutableDictionary((NSDictionary)info);
+            } else if(info instanceof NSMutableDictionary) {
+                _mutableUserInfo = (NSMutableDictionary)info;
+            }
+        }
+        return _mutableUserInfo;
+    }
+    
     // Done to make template parsing easier.
     public Object valueForKey(String key) {
         Object value = null;
