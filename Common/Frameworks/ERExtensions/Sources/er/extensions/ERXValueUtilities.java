@@ -7,7 +7,10 @@ import java.math.BigDecimal;
  * ERXValueUtilities has usefull conversion methods for
  * reading and transforming <code>boolean</code>,
  * <code>int</code> and <code>float</code>values.
- *
+ * Unless otherwise stated, when an empty string
+ * (or one containing only whitespace) is given, then
+ * the string is assumed to be null. This is because
+ * D2W is not able to give back null values anymore.
  * @created ak on Mon Oct 28 2002
  * @project ERExtensions
  */
@@ -83,7 +86,7 @@ public class ERXValueUtilities {
                     flag = true;
                 else
                     try {
-                        if (Integer.parseInt(s) == 0)
+                        if (s.length() > 0 && Integer.parseInt(s) == 0)
                             flag = false;
                     } catch(NumberFormatException numberformatexception) {
                         throw new RuntimeException("Error parsing boolean from value \"" + s + "\"");
@@ -145,10 +148,11 @@ public class ERXValueUtilities {
                 value = ((Number)obj).intValue();
             } else if(obj instanceof String) {
                 try {
-                    String stringValue = ((String)obj).trim(); // Need to trim trailing space
-                    value = Integer.parseInt(stringValue);
+                    String s = ((String)obj).trim(); // Need to trim trailing space
+                    if(s.length() > 0)
+                        value = Integer.parseInt(s);
                 } catch(NumberFormatException numberformatexception) {
-                    throw new IllegalStateException("Error parsing integer from value " + obj);
+                    throw new IllegalStateException("Error parsing integer from value : <" + obj + ">");
                 }
             } else if (obj instanceof Boolean)
                 value = ((Boolean)obj).booleanValue() ? 1 : def;
@@ -249,7 +253,9 @@ public class ERXValueUtilities {
             if (obj instanceof BigDecimal) {
                 value =(BigDecimal)obj;
             } else if(obj instanceof String) {
-                value = new BigDecimal((String)obj);
+                String s = ((String)obj).trim();
+                if(s.length() > 0)
+                    value = new BigDecimal(s);
             } else if(obj instanceof Number) {
                 value = new BigDecimal(((Number)obj).doubleValue());
             } else if(obj instanceof Boolean) {
