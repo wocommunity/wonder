@@ -31,7 +31,6 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
      */
     protected NSMutableDictionary errorMessages=new NSMutableDictionary();
     protected String errorMessage;
-    protected Integer index;
     private NSArray _errorMessagesDictionaries;
     
     protected NSArray errorMessagesDictionaries(){
@@ -46,7 +45,9 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     }
 
     public NSMutableDictionary currentErrorDictionary() {
-        return ((index==null) ? (NSMutableDictionary) new NSMutableDictionary() : (NSMutableDictionary)errorMessagesDictionaries().objectAtIndex(index.intValue()));
+        Object o = d2wContext().valueForKey("object");
+        int index = displayGroup().allObjects().indexOfObject(o);
+        return ((index==0) ? (NSMutableDictionary) new NSMutableDictionary() : (NSMutableDictionary)errorMessagesDictionaries().objectAtIndex(index));
     }
     
     public String dummy;
@@ -120,7 +121,6 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         // Need to make sure that we have a clean slate, every time
         clearValidationFailed();
         _errorMessagesDictionaries = null;
-        index=null;
         super.takeValuesFromRequest(r, c);
     }
 
