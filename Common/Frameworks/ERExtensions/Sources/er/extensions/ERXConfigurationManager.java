@@ -99,8 +99,19 @@ public class ERXConfigurationManager {
     /** 
      * Notification posted when the configuration is updated.  
      * The Java system properties is the part of the configuration.
-     */ 
-    public static final String ConfigurationDidChangeNotification = "ConfigurationDidChangeNotification";        
+     */
+    public static final String ConfigurationDidChangeNotification = "ConfigurationDidChangeNotification";
+
+    public static final String dbConnectServerGLOBAL   = "dbConnectServerGLOBAL";
+    public static final String dbConnectPathGLOBAL     = "dbConnectPathGLOBAL";
+    public static final String dbConnectDatabaseGLOBAL = "dbConnectDatabaseGLOBAL";
+    public static final String dbConnectHostNameGLOBAL = "dbConnectHostNameGLOBAL";
+    public static final String dbConnectURLGLOBAL      = "dbConnectURLGLOBAL";
+    public static final String dbConnectUserGLOBAL     = "dbConnectUserGLOBAL";
+    public static final String dbConnectPasswordGLOBAL = "dbConnectPasswordGLOBAL";
+    public static final String dbConnectDriverGLOBAL   = "dbConnectDriverGLOBAL";
+    public static final String dbConnectJDBCInfoGLOBAL = "dbConnectJDBCInfoGLOBAL";
+    public static final String dbConnectPluginGLOBAL   = "dbConnectPluginGLOBAL";
 
     /** Configuration manager singleton */ 
     static ERXConfigurationManager defaultManager = null;
@@ -291,7 +302,15 @@ public class ERXConfigurationManager {
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());
     }
-    
+
+    private String _getProperty (String propertyName, String optionalSuffix) {
+        String property = System.getProperty(propertyName + "." + optionalSuffix);
+        if (property == null) {
+            property = System.getProperty(propertyName);
+        }
+        return property;
+    }
+
     /**
      * Resets the connection dictionary to the specified values that are in the defaults.
      * This method will look for defaults in the form 
@@ -319,11 +338,11 @@ public class ERXConfigurationManager {
             }
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
                 String serverName= System.getProperty(aModelName + ".DBServer");
-                serverName=serverName==null ? System.getProperty("dbConnectServerGLOBAL") : serverName;
+                serverName=serverName==null ? System.getProperty(ERXConfigurationManager.dbConnectServerGLOBAL) : serverName;
                 String userName= System.getProperty(aModelName + ".DBUser");
-                userName= userName ==null ? System.getProperty("dbConnectUserGLOBAL") : userName;
+                userName= userName ==null ? System.getProperty(ERXConfigurationManager.dbConnectUserGLOBAL) : userName;
                 String passwd= System.getProperty(aModelName + ".DBPassword");
-                passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
+                passwd= passwd ==null ? System.getProperty(ERXConfigurationManager.dbConnectPasswordGLOBAL) : passwd;
 
                 if((serverName!=null) || (userName!=null) || (passwd!=null)) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
@@ -335,8 +354,8 @@ public class ERXConfigurationManager {
                 
             } else if (aModel.adaptorName().indexOf("Flat")!=-1) {
                 String path= System.getProperty(aModelName + ".DBPath");
-                path = path ==null ? System.getProperty("dbConnectPathGLOBAL") : path;
-                if (path!=null) {                    
+                path = path ==null ? System.getProperty(ERXConfigurationManager.dbConnectPathGLOBAL) : path;
+                if (path!=null) {
                     if (path.indexOf(" ")!=-1) {
                         NSArray a=NSArray.componentsSeparatedByString(path," ");
                         if (a.count()==2) {
@@ -356,26 +375,30 @@ public class ERXConfigurationManager {
                 aModel.setConnectionDictionary(newConnectionDictionary);
             } else if (aModel.adaptorName().indexOf("OpenBase")!=-1) {
                 String db= System.getProperty(aModelName + ".DBDatabase");
-                db = db ==null ? System.getProperty("dbConnectDatabaseGLOBAL") : db;
+                db = db ==null ? System.getProperty(ERXConfigurationManager.dbConnectDatabaseGLOBAL) : db;
                 String h= System.getProperty(aModelName + ".DBHostName");
-                h = h ==null ? System.getProperty("dbConnectHostNameGLOBAL") : h;
+                h = h ==null ? System.getProperty(ERXConfigurationManager.dbConnectHostNameGLOBAL) : h;
                 if (h!=null || db!=null) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
                     if (db!=null) newConnectionDictionary.setObjectForKey(db, "databaseName");
                     if (h!=null) newConnectionDictionary.setObjectForKey(h, "hostName");
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
-            } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
+            } else if (aModel.adaptorName().indexOf("JDBC") != -1) {
+                // Note: to allow for application-specific overrides of the dbConnectXXX properties,
+                // each of these properties may have an optional applicationName tacked onto the end.
+                // for example:  dbConnectURLGLOBAL.MyApp takes precedence over dbConnectURLGLOBAL
                 NSDictionary jdbcInfoDictionary = null;
-                String url= System.getProperty(aModelName + ".URL");
-                url = url ==null ? System.getProperty("dbConnectURLGLOBAL") : url;
+                String applicationName = WOApplication.application().name();
+                String url = System.getProperty(aModelName + ".URL");
+                url = url == null ? _getProperty(ERXConfigurationManager.dbConnectURLGLOBAL, applicationName) : url;
                 String userName= System.getProperty(aModelName + ".DBUser");
-                userName= userName ==null ? System.getProperty("dbConnectUserGLOBAL") : userName;
-                String passwd= System.getProperty(aModelName + ".DBPassword");
-                passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
+                userName = userName == null ? _getProperty(ERXConfigurationManager.dbConnectUserGLOBAL, applicationName) : userName;
+                String passwd = System.getProperty(aModelName + ".DBPassword");
+                passwd = passwd == null ? _getProperty(ERXConfigurationManager.dbConnectPasswordGLOBAL, applicationName) : passwd;
                 String driver= System.getProperty(aModelName + ".DBDriver");
-                driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
-                String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
+                driver = driver == null ? _getProperty(ERXConfigurationManager.dbConnectDriverGLOBAL, applicationName) : driver;
+                String jdbcInfo = System.getProperty(aModelName + ".DBJDBCInfo");
                 if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
                     String modelName = jdbcInfo.substring(1, jdbcInfo.length());
                     EOModel modelForCopy = aModel.modelGroup().modelNamed(modelName);
@@ -386,10 +409,10 @@ public class ERXConfigurationManager {
                         jdbcInfo = null;
                     }
                 }
-                
-                jdbcInfo= jdbcInfo ==null ? System.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
+
+                jdbcInfo = jdbcInfo == null ? _getProperty(ERXConfigurationManager.dbConnectJDBCInfoGLOBAL, applicationName) : jdbcInfo;
                 String plugin= System.getProperty(aModelName + ".DBPlugin");
-                plugin= plugin ==null ? System.getProperty("dbConnectPluginGLOBAL") : plugin;
+                plugin = plugin == null ? _getProperty(ERXConfigurationManager.dbConnectPluginGLOBAL, applicationName) : plugin;
                 if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
                     if (url!=null) newConnectionDictionary.setObjectForKey(url, "URL");
@@ -437,7 +460,7 @@ public class ERXConfigurationManager {
             }
             String e = System.getProperty(aModelName + ".EOPrototypesEntity");
             // global prototype setting not supported yet
-            //e = e ==null ? System.getProperty("EOPrototypesEntityGLOBAL") : e;
+            //e = e ==null ? System._getProperty("EOPrototypesEntityGLOBAL") : e;
             if(e != null) {
                 // we look for the entity globally so we can have one prototype entity
                 EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
