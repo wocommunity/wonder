@@ -273,7 +273,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 		ec = session().defaultEditingContext();
 	    ec.lock();
 	    try {
-	    	anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
+	        anUnsortedArray = ERXEOControlUtilities.localInstancesOfObjects(ec, aDataSource.fetchObjects());
 
             aSortedArray = ERXArrayUtilities.sortedArraySortedWithKeys(anUnsortedArray, _localSortKeys(), null).mutableClone();
 
@@ -281,18 +281,27 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             // otherwise the popup selection will be wrong (will default to the first element)
             // this happens for ex on a wizard page with a popup. Select sth in the popup, but leave a mandatory field blank
             // click next --> the page comes back with the error, but the popup lost the selection you made
+            EOEditingContext oldEc = ec;
             if (_localSourceObjectIsEO() &&
                 ((EOEnterpriseObject)_localSourceObject()).valueForKeyPath(_localRelationshipKey()) != null) {
                 NSMutableArray localArray= new NSMutableArray();
                 EOEnterpriseObject eo;
                 ec = ((EOEnterpriseObject)_localSourceObject()).editingContext();
-                for (Enumeration e = aSortedArray.objectEnumerator(); e.hasMoreElements();) {
-                    eo = (EOEnterpriseObject)e.nextElement();
-                    localArray.addObject((ec != eo.editingContext() && ERXEOControlUtilities.localInstanceOfObject(ec, eo) != null ?
-                                          ERXEOControlUtilities.localInstanceOfObject(ec, eo) : eo));
+                if (ec != null) {
+                    try {
+                        ec.lock();
+                        for (Enumeration e = aSortedArray.objectEnumerator(); e.hasMoreElements();) {
+                            eo = (EOEnterpriseObject)e.nextElement();
+                            localArray.addObject((ec != eo.editingContext() && ERXEOControlUtilities.localInstanceOfObject(ec, eo) != null ?
+                                                  ERXEOControlUtilities.localInstanceOfObject(ec, eo) : eo));
+                        }
+                    } finally {
+                        ec.unlock();
+                    }
+                    aSortedArray=localArray;
                 }
-                aSortedArray=localArray;
             }
+            ec = oldEc;
             
             // dt: we also must ensure that the value on the EO is in this list. This may not be the case if
             // one just created a new relationship in a childEc. Therefore we also must set _privateList to null
@@ -317,8 +326,14 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                     aSortedArray.insertObjectAtIndex(noSelectionString(), 0);
             }
             set_privateList(aSortedArray);
+	    } catch (Exception e) {
+	        log.error(e, e);
 	    } finally {
-	    	ec.unlock();
+	        try {
+	            ec.unlock();
+	        } catch (Exception e) {
+	            log.error(e,e);
+	        }
 	    }
         }
         return _privateList();
