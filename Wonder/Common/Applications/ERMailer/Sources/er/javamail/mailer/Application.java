@@ -84,7 +84,6 @@ public class Application extends ERXApplication {
                                                           "This is a test",
                                                           "This is the body",
                                                           ec);
-            log.info("Got message: " + message);
             ec.saveChanges();
         } catch (Exception e) {
             log.error("Caught exception: " + e.getMessage() + " stack: " + ERXUtilities.stackTrace(e));
