@@ -80,7 +80,6 @@
 ./Sources/er/extensions/ERXMultiKey.java:er.extensions
 ./Sources/er/extensions/ERXMutableUserInfoHolderInterface.java:er.extensions
 ./Sources/er/extensions/ERXNavigation.java:er.extensions
-./Sources/er/extensions/ERXNoHelpAvailableHelp.java:er.extensions
 ./Sources/er/extensions/ERXNonNullConditional.java:er.extensions
 ./Sources/er/extensions/ERXNonPluralFormLocalizer.java:er.extensions
 ./Sources/er/extensions/ERXNonZeroConditional.java:er.extensions

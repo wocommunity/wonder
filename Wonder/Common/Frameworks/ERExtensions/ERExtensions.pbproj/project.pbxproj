@@ -154,7 +154,6 @@
 				F59C542F02C4555D01000102,
 				F59C543002C4555D01000102,
 				F59C543102C4555D01000102,
-				F59C543202C4555D01000102,
 				F59C543302C4555D01000102,
 				F59C543402C4555D01000102,
 				F59C543502C4555D01000102,
@@ -215,7 +214,6 @@
 				F59C56D802C4557A01000102,
 				F59C56D902C4557A01000102,
 				F59C56DA02C4557A01000102,
-				F59C56DB02C4557A01000102,
 				F59C56DC02C4557A01000102,
 				F59C56DD02C4557A01000102,
 				F59C56DE02C4557A01000102,
@@ -361,7 +359,6 @@
 				F59C584F02C4565701000102,
 				F59C585002C4565701000102,
 				F59C585102C4565701000102,
-				F59C585302C4565701000102,
 				F59C585402C4565701000102,
 				F59C585502C4565701000102,
 				F59C585602C4565701000102,
@@ -1520,12 +1517,6 @@
 			path = Components/ERXMandatoryFieldMarker.api;
 			refType = 2;
 		};
-		F59C53F602C4555D01000102 = {
-			isa = PBXFileReference;
-			name = ERXNoHelpAvailableHelp.api;
-			path = Components/ERXNoHelpAvailableHelp.api;
-			refType = 2;
-		};
 		F59C53F702C4555D01000102 = {
 			isa = PBXFileReference;
 			name = ERXNonNullConditional.api;
@@ -1876,12 +1867,6 @@
 		};
 		F59C543102C4555D01000102 = {
 			fileRef = F59C53F502C4555D01000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C543202C4555D01000102 = {
-			fileRef = F59C53F602C4555D01000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -2636,22 +2621,6 @@
 			path = Components/Nonlocalized.lproj/ERXMandatoryFieldMarker.wo;
 			refType = 2;
 		};
-		F59C553202C4557A01000102 = {
-			children = (
-				F59C553302C4557A01000102,
-			);
-			isa = PBXVariantGroup;
-			name = ERXNoHelpAvailableHelp.wo;
-			path = "";
-			refType = 2;
-		};
-		F59C553302C4557A01000102 = {
-			includeInIndex = 1;
-			isa = PBXFolderReference;
-			name = Nonlocalized;
-			path = Components/Nonlocalized.lproj/ERXNoHelpAvailableHelp.wo;
-			refType = 2;
-		};
 		F59C553802C4557A01000102 = {
 			children = (
 				F59C553902C4557A01000102,
@@ -3234,12 +3203,6 @@
 		};
 		F59C56DA02C4557A01000102 = {
 			fileRef = F59C552C02C4557A01000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C56DB02C4557A01000102 = {
-			fileRef = F59C553202C4557A01000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -4658,12 +4621,6 @@
 			path = Sources/er/extensions/ERXNavigation.java;
 			refType = 2;
 		};
-		F59C57C402C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXNoHelpAvailableHelp.java;
-			path = Sources/er/extensions/ERXNoHelpAvailableHelp.java;
-			refType = 2;
-		};
 		F59C57C502C4565701000102 = {
 			isa = PBXFileReference;
 			name = ERXNonNullConditional.java;
@@ -5474,12 +5431,6 @@
 			settings = {
 			};
 		};
-		F59C585302C4565701000102 = {
-			fileRef = F59C57C402C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F59C585402C4565701000102 = {
 			fileRef = F59C57C502C4565701000102;
 			isa = PBXBuildFile;
@@ -6283,16 +6234,6 @@
 			name = ERXMandatoryFieldMarker;
 			refType = 4;
 		};
-		F6E798B802C8799401AD0D07 = {
-			children = (
-				F59C53F602C4555D01000102,
-				F59C57C402C4565701000102,
-				F59C553202C4557A01000102,
-			);
-			isa = PBXGroup;
-			name = ERXNoHelpAvailableHelp;
-			refType = 4;
-		};
 		F6E798B902C8799401AD0D07 = {
 			children = (
 				F59C53FA02C4555D01000102,
@@ -6481,7 +6422,6 @@
 				F584E53802E529E601000102,
 				F6E798B602C8799401AD0D07,
 				F6E798B702C8799401AD0D07,
-				F6E798B802C8799401AD0D07,
 				F6E798B902C8799401AD0D07,
 				F6E798BA02C8799401AD0D07,
 				F6E798BB02C8799401AD0D07,
