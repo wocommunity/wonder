@@ -1,5 +1,6 @@
 package er.directtoweb;
 
+import java.util.Enumeration;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
@@ -23,6 +24,8 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
         new NSArray(new Object[] {"entity", "object.entityName"}), "displayNameForEntity",
         new NSArray(new Object[] {"sectionKey"}), "displayNameForSectionKey",
         new NSArray(new Object[] {"tabKey"}), "displayNameForTabKey",
+        new NSArray(new Object[] {"propertyKey"}), "displayNameForProperty",
+        new NSArray(new Object[] {"propertyKey"}), "displayNameForKeyPath",
         new NSArray(new Object[] {"destinationEntity"}), "displayNameForDestinationEntity",
         new NSArray(new Object[] {"smartRelationship.destinationEntity"}), "displayNameForDestinationEntity",
         new NSArray(new Object[] {"editConfigurationName"}), "displayNameForEditConfiguration",
@@ -81,6 +84,24 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
     /** @return a beautified, localized display name for the current <code>propertyKey</code> */
     public Object displayNameForProperty(D2WContext c) {
         return localizedValueForDisplayNameOfKeyPath("propertyKey", c);
+    }
+
+    /** @return a beautified, localized display name for the key path of the current <code>propertyKey</code> */
+    public Object displayNameForKeyPath(D2WContext c) {
+        String keyPath = (String)c.valueForKey("propertyKey");
+        if(keyPath != null) {
+            String result = "";
+            for(Enumeration parts = NSArray.componentsSeparatedByString(keyPath, ".").objectEnumerator(); parts.hasMoreElements(); ) {
+                String key = (String)parts.nextElement();
+                String displayName = ERXStringUtilities.displayNameForKey(key);
+                if(displayName != null)
+                    result += displayName;
+                if(parts.hasMoreElements())
+                    result += " ";
+            }
+            return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
+        }
+        return null;
     }
 
     /** @return a beautified, localized display name for the current <code>entity.name</code> */
