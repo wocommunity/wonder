@@ -93,6 +93,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     	if(context instanceof ERXMutableUserInfoHolderInterface) {
         	formName = (String) ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().objectForKey("formName");
         }
-    	return defaultName;
+    	return formName;
     }
 }
