@@ -1,7 +1,16 @@
+IsEditingConditional3: WOConditional {
+	_unroll = true;
+	condition = isEditing;
+}
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
+}
+
+Conditional6: WOConditional {
+	condition = session.browser.isIE;
 }
 
 AttributeValue: WOSwitchComponent {
@@ -10,6 +19,11 @@ AttributeValue: WOSwitchComponent {
 	_unroll = true;
 	localContext = localContext;
 	object = object;
+}
+
+SubmitButton3: WOSubmitButton {
+	action = submitAction;
+	value = "Save";
 }
 
 Banner: WOImage {
@@ -21,6 +35,22 @@ Banner: WOImage {
 BannerConditional: WOConditional {
 	_unroll = true;
 	condition = showBanner;
+}
+
+Conditional4: WOConditional {
+	condition = session.browser.isIE;
+	negate = true;
+}
+
+SubmitChanges2: WOImageButton {
+	action = submitAction;
+	alt = "Saves your changes";
+	border = 0;
+	filename = "SaveMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = 31;
+	name = "Saves your changes";
+	width = 88;
 }
 
 CancelButton: WOImage {
@@ -155,7 +185,7 @@ IsEditingConditional2: WOConditional {
 	condition = isEditing;
 }
 
-IsEditingConditional3: WOConditional {
+IsEditingConditional4: WOConditional {
 	_unroll = true;
 	condition = isEditing;
 }
