@@ -6,7 +6,7 @@
 <!-- "basedir" is wonder project directory, not "build" where -->
 <!-- this files is located.                                   --> 
 <!-- ======================================================== -->
-<project name="wonder" default="all" basedir="..">
+<project name="wonder" default="all" basedir="../..">
 	
     <!-- ==================================================== -->
     <!--              Import properties.                      -->
@@ -16,9 +16,9 @@
     <!-- VARIOUS "build.properties" FILEA ARE LOCAL TO        -->
     <!-- THE DEVELOPER MACHINE AND ALLOW BUILD CUSTOMIZATION. -->                       
     <!-- ==================================================== -->
-    <property file="build/build.properties" />
+    <property file="Build/build/build.properties" />
     <property file="${user.home}/build.properties" />
-    <property file="build/default.properties" />
+    <property file="Build/build/default.properties" />
     
     
     <!-- ==================================================== -->
@@ -55,13 +55,13 @@
     <!-- Build Wonder documenatation.                         -->
     <!-- ==================================================== -->
     <target name="doc">
- 		<ant antfile="build/build-doc.xml"/>
+ 		<ant antfile="Build/build/build-doc.xml"/>
     </target>
     
     <!-- ==================================================== -->
     <!-- Build Wonder Frameworks.                             -->
     <!-- ==================================================== -->
     <target name="frameworks">
- 		<ant antfile="build/build-fr.xml"/>
+ 		<ant antfile="Build/build/build-fr.xml"/>
     </target>
 </project>
