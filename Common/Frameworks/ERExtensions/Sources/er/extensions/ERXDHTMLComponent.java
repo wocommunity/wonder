@@ -11,13 +11,11 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
-import org.apache.log4j.Category;
 
 /** ERXDHTMLComponent covers a textarea with a DHTMLEdit control (IE,PC only)
   * It is pretty cool as it can be used as a replacement for WOText, since it works no matter is JS is enabled or not.
   */
 public class ERXDHTMLComponent extends ERXStatelessComponent {
-    static final Category cat = Category.getInstance(ERXDHTMLComponent.class);
     
     public ERXDHTMLComponent(WOContext context) {
         super(context);
