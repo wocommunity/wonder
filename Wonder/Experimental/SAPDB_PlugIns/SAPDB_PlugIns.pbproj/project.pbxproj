@@ -27,11 +27,13 @@
 			refType = 4;
 		};
 		E905D5290393149D030000AE = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = plugin.txt;
 			refType = 4;
 		};
 		E905D537039315AD030000AE = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = README;
 			refType = 4;
@@ -76,6 +78,7 @@
 				E912BBFE0392DD6D030000AE,
 				E912BBFF0392DD6D030000AE,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = E912BBFC0392DD6D030000AE;
 			productRefGroup = E912BC220392E672030000AE;
@@ -97,12 +100,14 @@
 			refType = 4;
 		};
 		E912BC0F0392E2CA030000AE = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SAPDBPlugIn.java;
 			path = Bridged/SAPDBPlugIn.java;
 			refType = 4;
 		};
 		E912BC100392E2F5030000AE = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = main.c;
 			path = Bridged/main.c;
@@ -126,12 +131,14 @@
 			refType = 4;
 		};
 		E912BC190392E43C030000AE = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = InfoPlist.strings;
 			path = Bridged/InfoPlist.strings;
 			refType = 4;
 		};
 		E912BC1A0392E5F0030000AE = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SAPDBPlugIn.java;
 			path = Pure/SAPDBPlugIn.java;
@@ -232,14 +239,13 @@
 	<string>YES</string>
 	<key>NSJavaPath</key>
 	<array>
-		<string>SAPDBPlugInBridged.jar</string>
+		<string>SAPDBPlugIn.jar</string>
 	</array>
 	<key>NSJavaRoot</key>
 	<string>Contents/Resources/Java</string>
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		E912BC210392E672030000AE = {
 			isa = PBXBundleReference;
@@ -378,7 +384,6 @@
 			productInstallPath = /usr/local/lib;
 			productName = "SAPDB PlugIn Pure Java";
 			productReference = E9F800A00392EEF6030000AE;
-			shouldUseHeadermap = 0;
 		};
 		E999C5E50392ED7B030000AE = {
 			fileRef = E912BC1A0392E5F0030000AE;
