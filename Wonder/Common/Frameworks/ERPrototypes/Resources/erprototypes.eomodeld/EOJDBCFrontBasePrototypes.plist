@@ -10,6 +10,16 @@
         }, 
         {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
         {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = boolean; 
+            valueClassName = "java.lang.Boolean"; 
+            valueFactoryMethodName = valueOf; 
+            width = 5; 
+        }, 
+        {
             columnName = ""; 
             externalType = VARCHAR; 
             name = charFlag; 
@@ -185,7 +195,7 @@
             width = 10000000; 
         }
     ); 
-    attributesUsedForLocking = (id); 
+    attributesUsedForLocking = (id, boolean); 
     className = EOGenericRecord; 
     classProperties = (
         shortString, 
@@ -208,7 +218,8 @@
         charFlag, 
         blob, 
         mutableArray, 
-        mutableDictionary
+        mutableDictionary, 
+        boolean
     ); 
     externalName = eofrontbaseprototypes; 
     fetchSpecificationDictionary = {}; 
