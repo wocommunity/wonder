@@ -21,6 +21,12 @@ public class ERD2WEditLargeString extends D2WEditLargeString {
     // address2 is not mandatory, which means it often ends up as null in the DB
     // WOText however transforms this into "". WOTextField does not do this.
 
+    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
+        // This is for number formatting exceptions
+        String keyPath = theKeyPath.equals("value") ? propertyKey() : theKeyPath;
+        parent().validationFailedWithException(theException, theValue, keyPath);
+    }
+
     public Object validateTakeValueForKeyPath(Object newValue, String keyPath) {
         return super.validateTakeValueForKeyPath((newValue!=null && ((String)newValue).length()==0) ? null : newValue, keyPath);
     }
