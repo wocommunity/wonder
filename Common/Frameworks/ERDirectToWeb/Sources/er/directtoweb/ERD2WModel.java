@@ -279,9 +279,11 @@ public class ERD2WModel extends D2WModel {
                     }                    
                 }
                 NSArray extraKeys=((ERDComputingAssignmentInterface)r.rhs()).dependentKeys(rhsKey);
-                for (Enumeration e6=extraKeys.objectEnumerator(); e6.hasMoreElements(); ) {
-                    String k=(String)e6.nextElement();
-                    addKeyToVector(k, recipientForNewKeys);
+                if (extraKeys!=null) {
+                    for (Enumeration e6=extraKeys.objectEnumerator(); e6.hasMoreElements(); ) {
+                        String k=(String)e6.nextElement();
+                        addKeyToVector(k, recipientForNewKeys);
+                    }
                 }
             } else if (r.rhs() instanceof DefaultAssignment) {
                 // special treatment for the only custom assignment coming for the D2W default rule set
