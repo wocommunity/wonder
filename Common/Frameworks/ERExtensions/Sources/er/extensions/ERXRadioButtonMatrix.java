@@ -27,8 +27,8 @@ import com.webobjects.foundation.*;
 
 public class ERXRadioButtonMatrix extends ERXStatelessComponent {
 
-    private static final Integer DEFAULT_PADDING = new Integer(0);
-    private static final Integer DEFAULT_SPACING = new Integer(0);
+    private static final Integer DEFAULT_PADDING = ERXConstant.ZeroInteger;
+    private static final Integer DEFAULT_SPACING = ERXConstant.ZeroInteger;
 
     public ERXRadioButtonMatrix(WOContext aContext) {
         super(aContext);
