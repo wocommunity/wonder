@@ -830,5 +830,18 @@ public class ERXStringUtilities {
         
         return result;
     }
+
+    /** checks if the specified String contains only digits. 
+     * 
+     * @param name
+     * @return
+     */
+    public static boolean isDigitsOnly(String name) {
+        for (int i = name.length(); i-- > 0;) {
+            char c = name.charAt(i);
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
+    }
     
 }
