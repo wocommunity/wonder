@@ -81,8 +81,8 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         NSArray result = null;
         if (initialArray != null) {
             localContext=((ERXGenericRecord)object()).isNewObject() ?
-            ERXExtensions.newEditingContext(object().editingContext(), false) :
-            ERXExtensions.newEditingContext(object().editingContext().parentObjectStore());
+            ERXEC.newEditingContext(object().editingContext(), false) :
+            ERXEC.newEditingContext(object().editingContext().parentObjectStore());
             result = EOUtilities.localInstancesOfObjects(localContext, initialArray);
         }
         return result != null ? result : ERXConstant.EmptyArray;
