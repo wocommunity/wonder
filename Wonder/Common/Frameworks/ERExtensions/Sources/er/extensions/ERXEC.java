@@ -57,19 +57,10 @@ public class ERXEC extends EOEditingContext {
     /** key for the thread storage used by the unlocker. */
     private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
     
-    /** 
-     * Sets up the automatic unlocking of left-over EC locks after the request-response loop.
-     * @param doInstall true if you want to install the unlocking
-	 */
+    public static void setUseUnlocker(boolean value) {
+    	useUnlocker = value;
+    }
     
-	public static void installContextUnlocker(boolean doInstall) {
-		if(doInstall) {
-			NSSelector sel = new NSSelector("applicationDidDispatchRequest", new Class[] { NSNotification.class } );
-			NSNotificationCenter.defaultCenter().addObserver( new Unlocker(), sel, WOApplication.ApplicationDidDispatchRequestNotification, null);
-		}
-		useUnlocker = doInstall;
-	}
-	
 	/** 
 	 * Pushes the given EC to the array of locked ECs in the current thread. The ECs left over
 	 * after the RR-loop will be automagically unlocked.
@@ -109,7 +100,8 @@ public class ERXEC extends EOEditingContext {
      */
     public static void unlockAllContextsForCurrentThread() {
     	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
-    	if(ecs != null) {
+    	log.info("unlockAllContextsForCurrentThread: " + Thread.currentThread().getName() + ", ecs: " + ecs);
+    	if(ecs != null && ecs.size() > 0) {
     		ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey);
     		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
     		for (int i = ecs.size() - 1; i >= 0; i--) {
@@ -120,15 +112,6 @@ public class ERXEC extends EOEditingContext {
     	}
     }
 
-    /** 
-     * Handles the unlocking after the application has finished handling the request.
-     */
-    public static class Unlocker {
-    	public void applicationDidDispatchRequest(NSNotification n) {
-    		unlockAllContextsForCurrentThread();
-    	}
-    }
-    
     public static interface Factory {
         public Object defaultEditingContextDelegate();
         public void setDefaultEditingContextDelegate(Object delegate);
