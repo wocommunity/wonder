@@ -129,7 +129,7 @@ public class ERXEOAccessUtilities {
     */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
         //get the JDBCAdaptor
-        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(new EOEditingContext(),
+        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(),
                                                                         modelName);
         EOAdaptorContext ac = dc.adaptorContext();
         //ak: stupid trick to get around having to link to JDBCAdaptor
