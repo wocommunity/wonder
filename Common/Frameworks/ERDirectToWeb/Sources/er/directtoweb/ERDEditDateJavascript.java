@@ -14,8 +14,8 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 /**
- * Crazy cool little date picker that uses javascript to pick the date from a little calendar.  Need to remove image refs.<br />
- * 
+ * Crazy cool little date picker that uses javascript to pick the date from a little calendar. <br />
+ * Uses ERXEditDateJavascript.
  */
 
 public class ERDEditDateJavascript extends ERDCustomEditComponent {
@@ -23,51 +23,39 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
 
     public ERDEditDateJavascript(WOContext context) {super(context);}
 
-    protected static final NSTimestampFormatter DATE_FORMAT = new NSTimestampFormatter("%m/%d/%Y");
-    protected static final NSTimestampFormatter DATE_FORMAT_YEAR_TWO_DIGITS = new NSTimestampFormatter("%m/%d/%y");
     public String dateString;
-
+    protected String _formatter;
+    protected NSTimestampFormatter _dateFormatter;
+    
     public void appendToResponse(WOResponse r, WOContext c){
         if(dateString == null){
             NSTimestamp date = (NSTimestamp)objectPropertyValue();
             if(date != null)
                 try {
-                    dateString = DATE_FORMAT.format(date);
-                } catch(IllegalArgumentException nsfe){ }
+                    dateString = dateFormatter().format(date);
+                } catch(IllegalArgumentException nsfe){ 
+                }
         }
         super.appendToResponse(r,c);
     }
-    public Object value() {return dateString;}
+    
+    public Object value() {
+    	return dateString;
+    }
+    
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
         NSTimestamp date = null;
         try {
-            if(dateString!=null) {
-                boolean dateIsValid = false;
-                NSMutableArray components = new NSMutableArray(NSArray.componentsSeparatedByString(dateString, "/"));
-                if (components.count() == 3) {
-                    String monthString = (String)components.objectAtIndex(0);
-                    if (monthString.length() == 1)
-                        components.replaceObjectAtIndex("0" + monthString, 0);
-                    String dayString = (String)components.objectAtIndex(1);
-                    if (dayString.length() == 1)
-                        components.replaceObjectAtIndex("0" +dayString, 1);
-                    String yearString = (String)components.objectAtIndex(2);
-                    //String yearString = dateString.substring(dateString.lastIndexOf("/")+1, dateString.length());
-                    String modifiedDateString = components.componentsJoinedByString("/");
-                    java.text.Format formatter=yearString.length()==2 ? DATE_FORMAT_YEAR_TWO_DIGITS : DATE_FORMAT;
-                    date = (NSTimestamp) formatter.parseObject(modifiedDateString);
-                    String reformattedDate=formatter.format(date);
-                    dateIsValid = reformattedDate.equals(modifiedDateString);
-                }
-                if (!dateIsValid) {
-                    throw ERXValidationFactory.defaultFactory().createException(object(), key(), dateString, "InvalidDateFormatException");
-                }
+            if(dateString != null) {
+            	date = (NSTimestamp)dateFormatter().parseObject(dateString);
             }
-            if (object()!=null) object().validateTakeValueForKeyPath(date, key());
+            if(object() != null) {
+            	object().validateTakeValueForKeyPath(date, key());
+            }
         } catch (java.text.ParseException npse) {
             log.debug("java.text.ParseException:" + npse);
-            ERXValidationException v = ERXValidationFactory.defaultFactory().createException(object(), key(),dateString, "InvalidDateFormatException");
+            ERXValidationException v = ERXValidationFactory.defaultFactory().createException(object(), key(), dateString, "InvalidDateFormatException");
             parent().validationFailedWithException( v, date, key());
         } catch (NSValidation.ValidationException v) {
             log.debug("NSValidation.ValidationException:" + v);
@@ -78,4 +66,25 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
         }
     }
 
-}
+    
+    protected NSTimestampFormatter dateFormatter() {
+    	if(_dateFormatter == null) {
+    		_dateFormatter = new NSTimestampFormatter(formatter());
+    	}
+    	return _dateFormatter;
+    }
+
+	public String formatter() {
+		if(_formatter == null) {
+			_formatter = (String)valueForBinding("formatter");
+		}
+		if(_formatter == null || _formatter.length() == 0) {
+			_formatter = "%m/%d/%Y";
+		}
+		return _formatter;
+	}
+
+	public void setFormatter(String formatter) {
+		_formatter = formatter;
+	}
+ }
