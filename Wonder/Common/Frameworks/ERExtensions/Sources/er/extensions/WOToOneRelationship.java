@@ -54,8 +54,6 @@ public class WOToOneRelationship extends ERXArrayChooser {
     }
     
     public void setSelection(Object value) {
-        Object aValue = null;
-        
         if ((value!=null) && (value instanceof NSArray)) {
             log.warn("We were passed an array but expected an EO. Compensating by choosing first element");
             NSArray array = (NSArray)value;
@@ -66,12 +64,13 @@ public class WOToOneRelationship extends ERXArrayChooser {
             }
         }
         
+        _selection = value;
+        
         if (value==NO_SELECTION_STRING) {
             value = null;
         }
         
-        _selection = value;
-        updateSourceObject(_selection);
+        updateSourceObject(value);
     }
 
     public Object selection() {
