@@ -13,11 +13,12 @@ import com.webobjects.appserver.*;
 import java.util.*;
 import java.io.*;
 import org.apache.log4j.*;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This class is used to configure the log4j system.  By calling ERXLog4j.configureLogging() will cause the log4j
 // configuration file to be loaded.  The file path is specified in a defaults write of ERConfigurationPath.
 // ConfigureLogging can be called many times as it will only be configured the first time.
+// ATTENTION: to use ERXLogger.getLogger(), you must add to your config file
+//    log4j.categoryFactory=er.extensions.ERXLog4j$Factory
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ERXLog4j {
 
@@ -54,13 +55,14 @@ public class ERXLog4j {
             loadConfiguration();
             cat.info("Log4j configured.");
             setIsLoggingConfigured(true);
-            Category.defaultHierarchy.setCategoryFactory(new ERXFactory());
             _isInitialized = true;
         }
     }
 
-    static class ERXFactory implements org.apache.log4j.spi.CategoryFactory {
+    public static class Factory implements org.apache.log4j.spi.CategoryFactory {
         public Category makeNewCategoryInstance(String name) {
+            if(cat.isDebugEnabled())
+                cat.debug("makeNewCategoryInstance: " + name);
             return new ERXLogger(name);
         }
     }

@@ -10,6 +10,9 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
+// ATTENTION: to use ERXLogger.getLogger(), you must add to your config file
+//    log4j.categoryFactory=er.extensions.ERXLog4j$Factory
+
 public class ERXLogger extends org.apache.log4j.ERXLog4JCategory {
     public ERXLogger(String name) {
         super(name);
