@@ -117,6 +117,14 @@
             <param name="project.dir" value="Common/Frameworks/ERJavaMail" />
         </antcall>
     </target>
+
+    <!-- ERChangeNotificationJMS -->
+    <target name="ERChangeNotificationJMS.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERChangeNotificationJMS" />
+            <param name="project.dir" value="Common/Frameworks/ERChangeNotificationJMS" />
+        </antcall>
+    </target>
 	
     <!-- ERNeutralLook -->
     <target name="ERNeutralLook.all">
@@ -183,17 +191,17 @@
     </target>
 
 	
-    <target name="core.all" depends="ERJars.all,JavaWOExtensions.all,ERExtensions.all,ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all,ERNeutralLook.all,WOOgnl.all,ERCoreBusinessLogic.all,ERJavaMail.all" />
+    <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
+    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all" />
 
-    <target name="bugtracker.all" depends="frameworks.all,BTBusinessLogic.all,BugTracker.all" />
-    <target name="applications.all" depends="frameworks.all,bugtracker.all" />
+    <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
+    <target name="applications.all" depends="frameworks.all, bugtracker.all" />
 
-    <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all,NetStruxrCaseStudy.all" />
-    <target name="stepwise.all" depends="D2WListExample.all,D2WInspectExample.all" />
-    <target name="examples.all" depends="frameworks.all,wrox.all,stepwise.all" />
+    <target name="wrox.all" depends="frameworks.all, ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
+    <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
+    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all" />
 
-    <target name="dist.prebuilt" depends="frameworks.all,examples.all,applications.all" />
+    <target name="dist.prebuilt" depends="frameworks.all, applications.all, examples.all" />
 
     <!-- ==================================================== -->
     <!-- Create Wonder Source Destribution.                   -->
