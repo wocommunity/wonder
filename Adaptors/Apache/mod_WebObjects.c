@@ -89,6 +89,11 @@ module WebObjects_module;
 #define WebObjectsLog				"WebObjectsLog"
 #define WebObjectsOptions			"WebObjectsOptions"
 
+/*
+ *	This we call custom header that will be transformed into an env var
+ */
+static const char *WO_customEnv = "x-webobjects-customenv";
+
 typedef struct _WebObjects_config {
    const char *root;				/* normally Documents/WebObjects or htdocs/WebObjects */
    const char *WebObjects_alias;	/* normally "WebObjects" */
@@ -461,12 +466,6 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
     */
    ap_send_http_header(r);
 
-   /* The following is Rentsch's version */
-//    if (! r->header_only) {
-//       ap_send_mmap(resp->content, r, 0, resp->content_length);
-//    }
-
-   /* The following is Apple's 5.2 version */
    /* resp->content_valid will be 0 for HEAD requests and empty responses */
    if ( (!r->header_only) && (resp->content_valid) ) {
        while (resp->content_read < resp->content_length)
@@ -480,7 +479,6 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
        ap_rwrite(resp->content, resp->content_valid, r);
        ap_kill_timeout(r);
    }
-   
    return;
 }
 
@@ -629,6 +627,13 @@ static int WebObjects_handler(request_rec *r) {
    resp = tr_handleRequest(req, r->uri, &wc, r->protocol, docroot);
    ap_kill_timeout(r);
    if (resp != NULL) {
+        //Move special header into env, if present
+        char* tmpCustomEnvValue = (char*)st_valueFor(resp->headers,WO_customEnv);
+   	if (tmpCustomEnvValue != NULL) {
+                //Note we need to clone the value, because the app response gets freed before logging
+		ap_table_setn(r->subprocess_env, WO_customEnv, 	ap_pstrdup( r->pool, tmpCustomEnvValue ) );
+		st_removeKey(resp->headers,WO_customEnv);
+        }
       sendResponse(r, resp);
       resp_free(resp);
       retval = OK;
