@@ -8,14 +8,12 @@ package er.neutral;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.directtoweb.*;
 
-public class ERNEUQueryAllPage extends D2WQueryAllEntitiesPage {
+public class ERNEUQueryAllPage extends ERD2WQueryEntitiesPage {
 
     public ERNEUQueryAllPage(WOContext context) {
         super(context);
     }
-
 }
