@@ -362,9 +362,9 @@ public abstract class ERXApplication extends WOApplication {
 
     /**
      * Workaround for WO 5.2 DirectAction lock-ups.
-     * @param exception to be handled
-     * @param context current context
-     * @return the WOResponse of the generated exception page.
+     * As the super-implementation is empty, it is fairly safe to override here to call
+     * the normal exception handling earlier than usual.
+     * @see com.webobjects.appserver.WOApplication#handleActionRequestError(WORequest, Exception, String, WORequestHandler, String, String, Class, WOAction)
      */
     public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
         return handleException(exception, actionInstance.context());
