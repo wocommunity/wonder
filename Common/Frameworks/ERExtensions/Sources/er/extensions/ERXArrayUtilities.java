@@ -577,4 +577,26 @@ public class ERXArrayUtilities extends Object {
         }
         return arrayContainsAllObjects;        
     }
+
+    /**
+     * Intersects the elements of two arrays. This has the effect of
+     * stripping out duplicates.
+     * @param array1 the first array
+     * @param array2 the second array
+     * @return the intersecting elements
+     */
+    public static NSArray intersectingElements(NSArray array1, NSArray array2) {
+        NSMutableArray intersectingElements = null;
+        if (array1 != null && array1.count() > 0 && array2 != null && array2.count() > 0) {
+            intersectingElements = new NSMutableArray();
+            NSArray bigger = array1.count() > array2.count() ? array1 : array2;
+            NSArray smaller = array1.count() > array2.count() ? array2 : array1;
+            for (Enumeration e = smaller.objectEnumerator(); e.hasMoreElements();) {
+                Object object = e.nextElement();
+                if (bigger.containsObject(object) && !intersectingElements.containsObject(object))
+                    intersectingElements.addObject(object);
+            }
+        }
+        return intersectingElements != null ? intersectingElements : NSArray.EmptyArray;
+    }
 }
