@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="windows-1252" standalone="yes"?>
+<wodefinitions>
+	<wo class="SOUse" wocomponentcontent="YES">
+
+		<binding name="href"/>
+		<binding name="style"/>
+		<binding name="class"/>
+		<binding name="transform"/>
+
+		<validation message="&apos;href&apos; is a required binding">
+			<unbound name="href"/>
+		</validation>
+	</wo>
+</wodefinitions>
