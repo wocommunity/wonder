@@ -34,7 +34,7 @@
             allowsNull = Y; 
             columnName = "PLAIN_TEXT_"; 
             name = plainText; 
-            prototypeName = varchar1000; 
+            prototypeName = varcharLarge; 
         }, 
         {
             allowsNull = Y; 
@@ -61,8 +61,7 @@
         title, 
         xMailer, 
         isRead, 
-        exceptionReason, 
-        plainText
+        exceptionReason
     ); 
     className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
