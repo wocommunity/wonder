@@ -15,7 +15,7 @@ import er.extensions.*;
 import java.util.*;
 
 // FIXME: Need a formal protocol for cancel vs. selection.
-public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterface, ERDPickPageInterface {
+public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPickListPage.class);
@@ -94,56 +94,5 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
 
     public String selectionWidgetName() {
         return singleSelection() ? "WORadioButton" : "WOCheckBox";
-    }
-
-    //---------------- Branch Delegate Support --------------------//
-    /** holds the chosen branch */
-    protected NSDictionary _branch;
-
-    /**
-        * Cover method for getting the choosen branch.
-     * @return user choosen branch.
-     */
-    public NSDictionary branch() { return _branch; }
-
-    /**
-        * Sets the user choosen branch.
-     * @param branch choosen by user.
-     */
-    public void setBranch(NSDictionary branch) { _branch = branch; }
-
-    /**
-     * Implementation of the {@link ERDBranchDelegate ERDBranchDelegate}.
-     * Gets the user selected branch name.
-     * @return user selected branch name.
-     */
-    // ENHANCEME: Should be localized
-    public String branchName() { return (String)branch().valueForKey("branchName"); }
-
-    /**
-     * Calculates the branch choices for the current
-     * poage. This method is just a cover for calling
-     * the method <code>branchChoicesForContext</code>
-     * on the current {@link ERDBranchDelegate ERDBranchDelegate}.
-     * @return array of branch choices
-     */
-    public NSArray branchChoices() {
-        NSArray branchChoices = null;
-        if (nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface) {
-            branchChoices = ((ERDBranchDelegateInterface)nextPageDelegate()).branchChoicesForContext(d2wContext());
-        } else {
-            log.error("Attempting to call branchChoices on a page with a delegate: " + nextPageDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
-        }
-        return branchChoices;
-    }
-
-    /**
-     * Determines if this message page should display branch choices.
-     * @return if the current delegate supports branch choices.
-     */
-    public boolean hasBranchChoices() {
-        return nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface;
-    }
-    //---------------- End Branch Delegate Support --------------------//
-        
+    }        
 }
