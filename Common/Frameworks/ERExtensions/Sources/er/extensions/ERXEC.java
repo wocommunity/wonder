@@ -5,25 +5,127 @@
 //  Created by Max Muller on Sun Feb 23 2003.
 //
 package er.extensions;
+import java.util.Iterator;
+import java.util.Vector;
+
 import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.*;
 
 /**
-* Factory for creating editing contexts.
+ * Subclass that has every publich method overridden to support automatic 
+ * lock/unlock handling for you. This is very useful, as is is potentially very dangerous to rely on EOFs 
+ * automatic lock handling - it will invariably lead into deadlocks. As you will need to
+ * use this class and its subclasses exclusively as your ECs, it also contains a factory class to create
+ * editing contexts. The Factory also sets a default delegate for you and is used everywhere in 
+ * ERExtensions and ERDirectToWeb.
+ * The Factory is actually and interface and you would create a new EC by using:
+ *  <code>ERXEC.newEditingContext()</code>
+ * You can also install your own Factory classes. It is recommended to subclass ERXEC.DefaultFactory and
+ * override <code>_createEditingContext()</code>
  */
 public class ERXEC extends EOEditingContext {
-    /** logging support */
+    /** general logging */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEC.class);
+    
+    /** logs a message when set to DEBUG, autoLocking is enabled and an EC is used without a lock. */
     public static final ERXLogger lockLogger = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLogger");
+    
+    /** logs a message with a stack trace when set to DEBUG and an EC is locked/unlocked. */
     public static final ERXLogger lockLoggerTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLoggerTrace");
+    
+    /** logs a message when set to DEBUG and an EC is locked/unlocked. */
     public static final ERXLogger lockTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockTrace");
-    /** name of the notification that is posted after editing context is created */
+    
+    /** name of the notification that is posted after editing context is created. */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
 
-    private boolean automaticLockUnlock = false;
-    private boolean automaticLockUnlockSet = false;
+    /** decides whether to lock/unlock automatically when used without a lock. */
+    private Boolean automaticLockUnlock;
+    
+    /** how many times has the EC been locked. */
     private int lockCount = 0;
+    
+    /** holds a flag if the EC is in finalize(). This is needed because we can't autolock then. */
     private boolean isFinalizing;
+    
+    /** holds a flag if locked ECs should be unlocked after the request-response loop. */
+    private static boolean useUnlocker;
+    
+    /** key for the thread storage used by the unlocker. */
+    private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
+    
+    /** 
+     * Sets up the automatic unlocking of left-over EC locks after the request-response loop.
+     * @param doInstall true if you want to install the unlocking
+	 */
+    
+	public static void installContextUnlocker(boolean doInstall) {
+		if(doInstall) {
+			NSSelector sel = new NSSelector("applicationDidDispatchRequest", new Class[] { NSNotification.class } );
+			NSNotificationCenter.defaultCenter().addObserver( new Unlocker(), sel, WOApplication.ApplicationDidDispatchRequestNotification, null);
+		}
+		useUnlocker = doInstall;
+	}
+	
+	/** 
+	 * Pushes the given EC to the array of locked ECs in the current thread. The ECs left over
+	 * after the RR-loop will be automagically unlocked.
+	 * @param ec locked EOEditingContext
+	 */
+    public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
+    	if(useUnlocker && ec != null) {
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
+    		if(ecs == null) {
+    			ecs = new Vector();
+    		}
+    		ecs.add(ec);
+    		ERXThreadStorage.takeValueForKey(ecs, LockedContextsForCurrentThreadKey);
+    	}
+    }
+    
+    /**
+     * Pops the given EC from the array of contexts to unlock. The ECs left over
+	 * after the RR-loop will be automagically unlocked.
+     * @param ec unlocked EOEditingContext
+     */
+    public static void popLockedContextForCurrentThread(EOEditingContext ec) {
+    	if(useUnlocker &&  ec != null) {
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
+    		if(ecs != null) {
+    			int index = ecs.lastIndexOf(ec);
+    			if(index >= 0) {
+    				ecs.remove(index);
+    			}
+    		}
+    	}
+    }
+    
+    /** 
+     * Unlocks all remaining locked contexts in the current thread.
+     * You shouldn't call this yourself, but let the Unlocker handle it for you.
+     */
+    public static void unlockAllContextsForCurrentThread() {
+    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
+    	if(ecs != null) {
+    		ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey);
+    		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
+    		for (int i = ecs.size() - 1; i >= 0; i--) {
+    			EOEditingContext ec = (EOEditingContext) ecs.get(i);
+    			log.error("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
+    			ec.unlock();
+    		}
+    	}
+    }
+
+    /** 
+     * Handles the unlocking after the application has finished handling the request.
+     */
+    public static class Unlocker {
+    	public void applicationDidDispatchRequest(NSNotification n) {
+    		unlockAllContextsForCurrentThread();
+    	}
+    }
     
     public static interface Factory {
         public Object defaultEditingContextDelegate();
@@ -37,10 +139,12 @@ public class ERXEC extends EOEditingContext {
         public EOEditingContext _newEditingContext(EOObjectStore objectStore);
         public EOEditingContext _newEditingContext(EOObjectStore objectStore, boolean validationEnabled);
     }
+    
     /** default constructor */
     public ERXEC() {
         super();
     }
+    
     /** alternative constructor */
     public ERXEC(EOObjectStore os) {
         super(os);
@@ -63,15 +167,13 @@ public class ERXEC extends EOEditingContext {
     }
 
     public boolean automaticLockUnlock() {
-        if (!automaticLockUnlockSet) {
-            automaticLockUnlock = defaultAutomaticLockUnlock();
-            automaticLockUnlockSet = true;
+        if (automaticLockUnlock == null) {
+            automaticLockUnlock = defaultAutomaticLockUnlock() ? Boolean.TRUE : Boolean.FALSE;
         }
-        return automaticLockUnlock;
+        return automaticLockUnlock.booleanValue();
     }
     public void setAutomaticLockUnlock(boolean value) {
-        automaticLockUnlock = value;
-        automaticLockUnlockSet = true;
+        automaticLockUnlock = value ? Boolean.TRUE : Boolean.FALSE;
     }
     
     public int lockCount() { return lockCount; }
@@ -85,7 +187,9 @@ public class ERXEC extends EOEditingContext {
                 lockLogger.debug("locked "+this);
             }
         }
+        pushLockedContextForCurrentThread(this);
     }
+ 
     public void unlock() {
         super.unlock();
         if (!autoLocked && lockLogger.isDebugEnabled()) {
@@ -96,6 +200,7 @@ public class ERXEC extends EOEditingContext {
             }
         }
         lockCount--;
+        popLockedContextForCurrentThread(this);
     }
 
     public boolean autoLock(String method) {
