@@ -21,6 +21,10 @@ import com.webobjects.directtoweb.*;
 // WOApplication that can be found in the file: ProcessIdApplicationCategory.m.  Need a better solution for 5.0
 public class ERXPatternLayout extends PatternLayout {
 
+    /**
+     * Default constructor. Uses the default conversion
+     * pattern.
+     */
     public ERXPatternLayout() {
         this(DEFAULT_CONVERSION_PATTERN);
     }

@@ -13,16 +13,37 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import org.apache.log4j.Category;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// This class is pulled directly out of David Neumann's ChangeNotification framework.  The only changes made are
-// to use log4j instead of System.out.println.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * This class is pulled directly out of David Neumann's
+ * ChangeNotification framework.  The only changes made are
+ * to use log4j instead of System.out.println.<br/>
+ * <br/>
+ * The tolerant saver provides a way to save an editing context in
+ * a tolerant fashion. By tolerant we mean that you can have the
+ * option to save an editing context and have the exception ignored,
+ * hvae the changes merged from the database or stomp all the changes
+ * the database regardless of locking. The entry point for using this
+ * class is the <code>save</code> method.
+ */
+// MOVEME: All of these methods could move to something like ERXEOFUtilities
 public class ERXTolerantSaver {
 
-    ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.utilities.ERTolerantSaver");
+    /** logging support */
+    public final static Category cat = Category.getInstance(ERXTolerantSaver.class);
 
-    public static NSArray relationshipsForAttribute(EOAttribute attrib, NSArray rels){
+    /**
+     * Filters a list of relationships for only the ones that
+     * have a given EOAttribute as a source attribute. This
+     * implementation igonores relationships that have compound
+     * keys.
+     * @param attrib EOAttribute to filter source attributes of
+     *		relationships.
+     * @param rels array of EORelationship objects.
+     * @return filtered array of EORelationship objects that have
+     * 		the given attribute as the source attribute.
+     */
+    // MOVEME: ERXEOFUtilities
+    public static NSArray relationshipsForAttribute(EOAttribute attrib, NSArray rels) {
         int i;
         NSMutableArray arr = new NSMutableArray();
         int cnt = rels.count();
@@ -40,6 +61,16 @@ public class ERXTolerantSaver {
         return arr;
     }
 
+    /**
+     * Constructs a primary key dictionary given a
+     * value and an entity. This implementation ignores
+     * entities that have multiple primary keys.
+     * @param val primary key to be the value in the dictionary.
+     * @param destEnt entity to construct the primary key dictionary
+     *		for.
+     * @return primary key dictionary for the given value and entity
+     */
+    // MOVEME: ERXEOFUtilities
     public static NSDictionary primaryKeyFor(Object val, EOEntity destEnt){
         NSArray keys = destEnt.primaryKeyAttributes();
         int cnt = keys.count();

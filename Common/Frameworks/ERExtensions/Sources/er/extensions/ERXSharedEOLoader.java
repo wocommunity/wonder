@@ -39,6 +39,7 @@ import org.apache.log4j.Category;
 // identified by key 'someRelationship.someAttribute' was not reachable from
 // from entity 'someEntity'
 
+// CHECKME: I believe this bug has been fixed, should be removed if this is the case.
 public class ERXSharedEOLoader {
     /////////////////////////////////////////  log4j category  ///////////////////////////////////////
     public static final Category cat = Category.getInstance("er.extensions.fixes.ERSharedEOLoader");
