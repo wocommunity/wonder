@@ -25,12 +25,18 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     protected NSMutableDictionary mutableUserInfo;
     public NSMutableDictionary mutableUserInfo() {
         if(mutableUserInfo == null) {
-            mutableUserInfo = new NSMutableDictionary();
+            if(request().userInfo() == null)
+                mutableUserInfo = new NSMutableDictionary();
+            else
+                mutableUserInfo = request().userInfo().mutableClone();                
         }
         return mutableUserInfo;
     }
     public void setMutableUserInfo(NSMutableDictionary userInfo) {
         mutableUserInfo = userInfo;
+    }
+    public NSDictionary userInfo() {
+        return mutableUserInfo();
     }
     
     /**
