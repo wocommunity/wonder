@@ -33,12 +33,8 @@ public class Application extends ERXApplication {
     public Application() {
         setContextClassName("er.extensions.ERXWOContext");
         setPageRefreshOnBacktrackEnabled(true);
-        statisticsStore().setPassword("4Stats");
         // http://myhost:aPort/cgi-bin/WebObjects/MyApp.woa/wa/WOEventSetup
-        EOEventCenter.setPassword("4Events");
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
-        ERXLocalizer.setFrameworkSearchPath(new NSArray(new Object [] {
-            "app", "BTBusinessLogic", "ERDirectToWeb", "ERExtensions"} ));
         setTimeOut(8*60*60); //set the timeout to 8 hours.
         Class core = er.corebusinesslogic.ERCoreBusinessLogic.class;
         Class bug = er.bugtracker.BTBusinessLogic.class;
@@ -62,36 +58,31 @@ public class Application extends ERXApplication {
         try {
             databaseName=(String)model.connectionDictionary().objectForKey("databaseName");
         } catch (Exception ex) {
-
             NSLog.err.appendln("Original exception : "+ex);
         }
     }
 
+
+    /** we run over all people in the DB and send them a summary email if they have unread bugs */
     public void runBatchReport() {
-        // we run over all people in the DB and send them a summary email if they have unread bugs
-        EOEditingContext ec=new EOEditingContext();
-        NSArray everybody=EOUtilities.objectsForEntityNamed(ec,"People");
-        for (Enumeration e=everybody.objectEnumerator(); e.hasMoreElements();) {
-            EOEnterpriseObject person=(EOEnterpriseObject)e.nextElement();
-            NSDictionary bindings = new NSDictionary(new Object[] {person}, new Object[] {"user"});
-            NSArray unreadBugs=EOUtilities.objectsWithFetchSpecificationAndBindings (ec,
-                                                                                     "Bug",
-                                                                                     "MyUnreadBugs",
-                                                                                     bindings);
-            String email=(String)person.valueForKey("email");
-           if (unreadBugs.count()>0 && email!=null && email.length()!=0) {
-                WOComponent emailBody = pageWithName("BugReportEmail",
-                                                     new WOContext(new WORequest(null,null,null,null,null,null)));
-                emailBody.takeValueForKey(unreadBugs,"unreadBugs");
-                emailBody.takeValueForKey(person,"owner");
-                WOMailDelivery.sharedInstance().composeComponentEmail("bugtracker@netstruxr.com",
-                                                                      new NSArray(person.valueForKey("email")),
-                                                                      null,
-                                                                      "You have "+unreadBugs.count()+" unread bug(s)",
-                                                                      emailBody,
-                                                                      true);
-                NSLog.debug.appendln("Sending report to "+email+": "+unreadBugs.count()+" unread bugs");
+        EOEditingContext ec=ERXEC.newEditingContext();
+        try {
+            NSArray everybody=People.clazz.allObjects(ec);
+            for (Enumeration e=everybody.objectEnumerator(); e.hasMoreElements();) {
+                People person=(People)e.nextElement();
+                NSDictionary bindings = new NSDictionary(new Object[] {person}, new Object[] {"user"});
+                NSArray unreadBugs=person.unreadBugs();
+                String email=person.email();
+                if (unreadBugs.count()>0 && email!=null && email.length()!=0) {
+                    WOComponent emailBody = pageWithName("BugReportEmail", ERXWOContext.newContext());
+                    emailBody.takeValueForKey(unreadBugs,"unreadBugs");
+                    emailBody.takeValueForKey(person,"owner");
+                    WOMailDelivery.sharedInstance().composeComponentEmail("bugtracker@netstruxr.com", new NSArray(email), null, "You have "+unreadBugs.count()+" unread bug(s)", emailBody, true);
+                    NSLog.debug.appendln("Sending report to "+email+": "+unreadBugs.count()+" unread bugs");
+                }
             }
+        } finally {
+            ec.unlock();
         }
     }
 }

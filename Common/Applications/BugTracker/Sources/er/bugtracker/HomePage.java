@@ -14,6 +14,7 @@ public class HomePage extends WOComponent {
         super(aContext);
     }
 
-    public NSDictionary createdKeys() {return ((Session)session()).localizer().createdKeys();
+    public NSDictionary createdKeys() {
+        return ((Session)session()).localizer().createdKeys();
     }
 }

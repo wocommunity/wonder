@@ -17,14 +17,10 @@ import er.corebusinesslogic.ERCoreBusinessLogic;
 public class Session extends ERXSession {
     public Session() {
         super();
-        /* ** Put your per-session initialization code here ** */
-        ERXExtensions.setDefaultDelegate(defaultEditingContext());
-        //defaultEditingContext().setTimestamp();
     }
 
     public void  setDefaultEditingContext(EOEditingContext newEc) {
         super.setDefaultEditingContext(newEc);
-        log.debug("Set default EditingContext: " + newEc.getClass().getName());
     }
 
     
