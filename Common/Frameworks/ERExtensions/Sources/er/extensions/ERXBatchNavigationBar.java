@@ -125,10 +125,6 @@ public class ERXBatchNavigationBar extends WOComponent {
     
 
     public int objectCount() {
-        if (displayGroup() instanceof ERXBatchingDisplayGroup) {
-            return ((ERXBatchingDisplayGroup)displayGroup()).rowCount();
-        } else {
-            return displayGroup().allObjects().count();
-        }
+        return displayGroup().allObjects().count();
     }
 }
