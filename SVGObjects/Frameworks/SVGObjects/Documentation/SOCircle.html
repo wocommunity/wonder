@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+	<TITLE>Documentation - SOCircle</TITLE>
+</HEAD>
+	
+<BODY bgcolor=#ffffff>
+<h1><FONT COLOR=\"#000066\"><a name="//svgobjects_ref/SOCircle">SOCircle</a></FONT></h1></a>
+<br>
+<br>
+
+<h2>Element Description</h2>
+<p>A SOCircle represents a circle - a primitive shape - in an SVG document. </p>
+
+<p><i>Additional bindings prefixed with "<code>$</code>" get appended to the style attribute. </i></p>
+
+<br><h2>Synopsis</h2>
+
+<tt>SOCircle { 
+[cx=<em>inInt</em>; ]
+[cy=<em>inInt</em>; ]
+r=<em>anInt</em>;
+[style=<em>styleString</em>; ]
+[transform=<em>transformString</em>; ]
+[class=<em>aClassName</em>; ]...
+};</tt>
+
+<br><h2>Bindings</h2>
+
+<dl><dt>r</dt>
+<dd>Radius of the circle. </dd></dl>
+
+<dl><dt>cx</dt>
+<dd>Horizontal offset of circle from the orgin.
+(The upper left hand corner of the screen. </dd></dl>
+
+<dl><dt>cy</dt>
+<dd>Vertical offset from the orgin. </dd></dl>
+
+<dl><dt>style</dt>
+<dd><p>A string that specifies the style applied to the circle. 
+This is mutually exclusive to setting one or more of the tags: opacity, strokeWidth, fill.
+<br>An example would be:</p>
+<blockquote><pre>style = &quot;fill:#00FF00 stroke:#00FF00&quot;;</pre></blockquote>
+</dd></dl>
+
+<dl><dt>class</dt>
+<dd>CSS class. </dd></dl>
+
+<dl><dt>transform</dt>
+<dd>You may apply various transforms to the text: <i>rotate</i>, <i>scale</i>, <i>translate</i>, or <i>matrix</i>. </dd></dl>
+
+<br>
+<a href="SVGObjectsTOC.html">[Table of Contents]</a> 
+
+</BODY>
+</HTML>

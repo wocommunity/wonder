@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="windows-1252" standalone="yes"?>
+<wodefinitions>
+	<wo class="SVGGroup" wocomponentcontent="YES">
+
+		<binding name="class"/>
+		<binding name="style"/>
+		<binding name="transform"/>
+	</wo>
+</wodefinitions>

@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+	<TITLE>Documentation - SOTextSpan</TITLE>
+</HEAD>
+	
+<BODY bgcolor=#ffffff>
+<h1><FONT COLOR=\"#000066\"><a name="//svgobjects_ref/SOTextSpan">SOTextSpan</a></FONT></h1></a>
+<br>
+<br>
+<h2>Element Description</h2>
+<p>A SOTextSpan represents <code>&lt;tspan&gt;</code>. It can be used to adjust text properties within a  <code>&lt;text&gt;</code> element.</p>
+
+<p><i>Additional bindings prefixed with "<code>$</code>" get appended to the style attribute. </i></p>
+
+<br><h2>Synopsis</h2>
+
+<tt>SOTextSpan { 
+[x=<em>positionInt</em>; ]
+[y=<em>positionInt </em>; ]
+[style=<em>styleString</em>; ]
+[class=<em>aClassName</em>; ]...};
+</tt>
+
+<br><h2>Bindings</h2>
+
+<dl><dt>x</dt>
+<dd>Absolute or relative x coordinate of text. </dd></dl>
+
+<dl><dt>y</dt>
+<dd>Absolute or relative y coordinate of text.  </dd></dl>
+
+<dl><dt>style</dt>
+<dd><p>A string that specifies the style applied to the text. 
+This is mutually exclusive to setting one or more of the tags: fontFamily, fontSize, stroke, strokeWidth, fill.
+<br>An example would be:</p>
+<blockquote><pre>style = &quot;font-family:Times-BoldItalic; font-size:48 fill:#00FF00 stroke:#00FF00&quot;;</pre></blockquote>
+</dd></dl>
+
+<dl><dt>class</dt>
+<dd>CSS class. </dd></dl>
+
+<br>
+<a href="SVGObjectsTOC.html">[Table of Contents]</a> 
+
+</BODY>
+</HTML>
