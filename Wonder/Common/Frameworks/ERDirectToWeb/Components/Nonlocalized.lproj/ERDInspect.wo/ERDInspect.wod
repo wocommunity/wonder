@@ -1,6 +1,6 @@
 Inspect: ERXD2WInspect { 	
-	pageConfiguration = ^embeddedPageConfiguration;
-	entityName = ^embeddedEntityName;
-	displayKeys = ^embeddedDisplayPropertyKeys;
+	pageConfiguration = ^inspectConfigurationName;
+	entityName = ^destinationEntity.name;
+//	displayKeys = ^embeddedDisplayPropertyKeys;
 	object = objectKeyPathValue;
 }

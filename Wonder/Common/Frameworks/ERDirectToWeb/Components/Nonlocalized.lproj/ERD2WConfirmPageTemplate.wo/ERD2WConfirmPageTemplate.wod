@@ -78,6 +78,6 @@ SwitchComponent4: WOSwitchComponent {
 	WOComponentName = d2wContext.explanationComponent;
 	dataSource = dataSource;
 	object = object;
-	pageConfiguration = d2wContext.embeddedPageConfiguration;
+	pageConfiguration = d2wContext.inspectConfigurationName;
 }
 

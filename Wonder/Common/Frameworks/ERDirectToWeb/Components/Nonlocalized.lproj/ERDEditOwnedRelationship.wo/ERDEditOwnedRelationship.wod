@@ -73,7 +73,7 @@ HasNextPage: ERXNonNullConditional {
 }
 
 List1: D2WList {
-    pageConfiguration = ^listConfigurationNameForEntity;
+    pageConfiguration = ^listConfigurationName;
     entityName = relationshipEntityName;
 //    list = list;
     dataSource=detailDataSource;

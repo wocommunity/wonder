@@ -2,7 +2,7 @@ D2WPick1: ERXD2WPick {
 	branchDelegate = branchDelegate;
 	dataSource = datasource;
 	entityName = entityName;
-	pageConfiguration = embeddedPageConfiguration;
+	pageConfiguration = ^listConfigurationName;
 }
 
 GenericContainer1: WOGenericContainer {
