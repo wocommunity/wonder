@@ -663,6 +663,8 @@
 		F5C4041F02022B0501A801D4 = {
 			buildActionMask = 2147483647;
 			files = (
+				F5E37250036F43E501CF0E76,
+				F5E37251036F43F201CF0E76,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1156,10 +1158,29 @@
 		F5DD888C02C4D5B001000102 = {
 			children = (
 				F5DD888B02C4D5AC01000102,
+				F5E3724F036F43E501CF0E76,
 			);
 			isa = PBXGroup;
 			name = "Support Files";
 			refType = 4;
+		};
+		F5E3724F036F43E501CF0E76 = {
+			isa = PBXFileReference;
+			name = "schema-oracle.sql";
+			path = "Support/schema-oracle.sql";
+			refType = 4;
+		};
+		F5E37250036F43E501CF0E76 = {
+			fileRef = F5E3724F036F43E501CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E37251036F43F201CF0E76 = {
+			fileRef = F5DD888B02C4D5AC01000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5F37BCF036E0CE601CF0E76 = {
 			isa = PBXFileReference;
