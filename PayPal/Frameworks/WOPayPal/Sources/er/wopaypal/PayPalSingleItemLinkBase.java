@@ -30,6 +30,10 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
     /** cost of the item
      */
     public String amount;
+    /** currency of transaction; Currently supported are: USD (US Dollars), CAD (Canadian Dollars),
+     *  GBP (British Pounds Sterling), EUR (Euros), JPY (Japanese Yen).  Defaults to USD.
+     */
+    public String currencyCode;
     /** a string to represent the item's plain language name (up to 127 char), e.g. "Cool Widget";
      */
     public String itemName;
@@ -87,6 +91,7 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
 			    "itemName",
 			    "itemNumber",
 			    "amount",
+                            "currencyCode",
 			    "collectShippingAddress",
 			    "allowCustomerNote",
 			    "logoURL",
@@ -114,8 +119,8 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
 
 	//check if we're in directConnect mode
 	if (app.isDirectConnectEnabled()) {
-	    // we're running in development mode; try to get the i.p. address; if it's not 127.0.0.1, we'll include the notify_url parameter
-	    if (app.host().equals("localhost")) {
+            // we're running in development mode; try to get the i.p. address; if it's not 127.0.0.1, we'll include the notify_url parameter; .local. means we're running locally under rendezvous
+	    if (app.host().equals("localhost") || app.host().indexOf(".local.") != -1) {
 		if (app.hostAddress().getHostAddress().equals("127.0.0.1")) {
 		    // probably not connected to internet
 		    return "testing_mode"; //just so we can see this method working
