@@ -33,7 +33,7 @@ public class ERD2WEditToManyFault extends com.webobjects.directtoweb.D2WEditToMa
     public WOComponent editValues() {
         WOComponent editPage = null;
         String editRelationshipPageConfiguration = (String)d2wContext().valueForKey("editRelationshipPageConfiguration");
-        if (editRelationshipPageConfiguration != null) {
+        if (editRelationshipPageConfiguration != null && editRelationshipPageConfiguration.length() > 0) {
             editPage = D2W.factory().pageForConfigurationNamed(editRelationshipPageConfiguration, session());
             if (editPage instanceof EditRelationshipPageInterface) {
                 ((EditRelationshipPageInterface)editPage).setMasterObjectAndRelationshipKey(object(),propertyKey());
