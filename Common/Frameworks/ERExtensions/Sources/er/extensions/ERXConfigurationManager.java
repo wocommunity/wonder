@@ -50,7 +50,6 @@ public class ERXConfigurationManager {
     /////////////////////////////////////  log4j category  ////////////////////////////////////
     public static final Category cat = Category.getInstance("er.extensions.ConfigurationManager");
 
-    Properties _configurationInfo=null;
     static ERXConfigurationManager defaultManager=null;
     
     public static void initializeDefaults() {

@@ -22,10 +22,6 @@ public class ERXDirectAction extends WODirectAction {
 
     public ERXDirectAction(WORequest r) { super(r); }
 
-    public WOComponent markReadAction() {
-        return null;
-    }
-
     public WOComponent testAction() {
         // FIXME: password protection?
         WOComponent result=null;

@@ -10,6 +10,7 @@
 		<binding name="visibility"/>
 		<binding name="framework" defaults="Frameworks"/>
 		<binding name="submitActionName"/>
+		<binding name="wrapLabelWithHTMLTag" defaults="Boolean"/>
 
 		<validation message="&apos;visibility&apos; must be bound to a settable value">
 			<unsettable name="visibility"/>

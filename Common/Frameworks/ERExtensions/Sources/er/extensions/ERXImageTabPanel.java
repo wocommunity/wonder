@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.appserver.*;
 
 /*
- This component takes a list of tabs, the same as ERTabPanel
+ This component takes a list of tabs, the same as ERXTabPanel
  to find images, the naming convention is:
 
  /nsi/tab<tabName>.gif : tab is not selected

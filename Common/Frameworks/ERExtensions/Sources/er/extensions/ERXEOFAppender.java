@@ -19,7 +19,7 @@ import org.apache.log4j.helpers.LogLog;
 //	Very basic appender, useful for logging events to a database using EOF.			
 //  Manditory Fields
 //	LogEntity - Entity for creating logging events.  The class mapped to this entity must
-//		implement the interface: EREOFLogEntryInterface
+//		implement the interface: ERXEOFLogEntryInterface
 //  Optional Fields
 //	BufferSize - Number of Events to catch before calling ec.saveChanges()
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +28,8 @@ public class ERXEOFAppender extends AppenderSkeleton {
     // FIXME:  Here we assume that the Log4j system is configured before the first CooperatingObjectStore
     //		is created.  We need a way to determine if it is ok to create an editing context and insert
     //		objects.
+    //	Max: Should use EOCooperatingObjectStore.defaultCoordinator().cooperatingObjectStores().count()
+    
     public ERXEOFAppender() {
         ERXRetainer.retain(this);
         NSNotificationCenter.defaultCenter().addObserver(this,
