@@ -1,130 +1,24 @@
 <project name="DevStudio" default="all" basedir="..">
-    <property name="project.name" value="${ant.project.name}" />
-    <property name="project.principal.class" value="ag.kcmedia.Application" />
+    <property name="wonder.root" value="${user.home}/Wonder" />
+    <property name="wo.localroot" value="/" />
 
-    <!-- don't touch from here on -->
-
-    <property name="project.dir" value="${basedir}" />
-    <property name="build.compiler" value="jikes" />
-    <property name="build.compiler.emacs" value="true" />
-    <property name="wo.system.root" value="/System/Library/Frameworks" />
-    <property name="wo.local.root" value="/Library/Frameworks" />
-    <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
-    
-    <property name="application.name" value="${project.name}.woa" />
-    
-    <property name="build.root" value="${user.home}/Roots" />
-    <property name="build.classes" value="${build.root}/classes/${project.name}" />
-    <property name="build.application.dir" value="${build.root}/${application.name}" />
-    <property name="build.jar.file" value="${build.application.dir}/Contents/Resources/Java/${project.name}.jar" />
-    <!--property name="application.dir" value="${wo.local.root}" if="env.INSTALL"/-->
-    
-    <path id="project.class.path">
-        <fileset dir="${build.root}">
-            <include name="ER*.framework/Resources/Java/*.jar" />
-        </fileset>
-        <fileset dir="${wo.system.root}">
-            <include name="Java**/Resources/Java/*.jar" />
-        </fileset>
-         <fileset dir="Libraries">
-            <include name="*.jar" />
-        </fileset>
-       <!--pathelement location="${tmp}" /-->
-    </path>
-    
-    <target name="usage">
-        <echo message="-------------------------------------"/>
-        <echo message="Valid target-commands" />
-        <echo message="---------------------" />
-        <echo message="  all       --> create framework in ${build.root} "/>
-        <echo message="  install   --> copy framework to ${wo.local.root} "/>
-        <echo message="  web       --> copy framework to ${wo.server.root} "/>
-        <echo message="  clean     --> remove .classes and .framework"/>
-        <echo message="  allclean  --> remove .classes and .framework and installed framework"/>
-        <echo message="--------------------------------------"/>
+    <!-- DevStudio -->
+    <target name="all">
+        <ant antFile="${wonder.root}/Build/build/generic.xml" target="generic.all" >
+            <property name="project.name" value="DevStudio" />
+            <property name="project.type" value="application" />
+            <property name="project.principal.class" value="ag.kcmedia.Application" />
+            <property name="project.dir" value="${wonder.root}/experimental/DevStudio" />
+            <property name="use.webobjects.d2w" value="true" />
+            <property name="use.wonder.core" value="true" />
+            <property name="use.wonder.d2w" value="true" />
+            <property name="use.mysql" value="true" />
+        </ant>
     </target>
-    
-	  <target name="prepare">
-		<mkdir dir="${build.root}"/>
-		<mkdir dir="${build.application.dir}"/>
-		<mkdir dir="${build.classes}"/>
-	  </target>
-    
-      <target name="checkupdate">
-        <uptodate property="no.changes" targetfile="${build.jar.file}">
-            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
-        </uptodate>
-      </target>
-    <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
-		<mkdir dir="${build.classes}"/>
-        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on"
-             optimize="off" deprecation="on">
-            <classpath refid="project.class.path" />
-        </javac>
+    <target name="clean">
+        <ant antFile="${wonder.root}/Build/build/generic.xml" target="generic.clean" >
+            <property name="project.name" value="DevStudio" />
+            <property name="project.type" value="application" />
+        </ant>
     </target>
-    <target name="application" depends="compile" description="Default compile target">
-		<taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
-			<classpath refid="project.class.path" />
-		</taskdef>
-		<woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
-			<classes dir="${build.classes}">
-				<include name="**/*.class" />
-			</classes>
-			<resources dir="${project.dir}/Components">
-				<include name="**.api" />
-				<include name="**/*.wo/**" />
-			</resources>
-			<resources dir="${project.dir}/Resources">
-				<include name="*.eomodeld/**" />
-				<include name="**/*.plist" />
-				<include name="**/*.d2wmodel" />
-				<include name="**/*.strings" />
-				<include name="**/*.sh" />
-			</resources>
-			<lib dir="${project.dir}/Libraries">
-				<include name="**.jar" />
-			</lib>
-			<frameworks root="${build.root}">
-				<include name="JavaWO*.framework"/>
-				<include name="ER*.framework"/>
-				<exclude name="ERNeutralLook.framework"/>
-			</frameworks>
-			<frameworks root="${wo.local.root}">
-				<include name="Mysql*.framework"/>
-			</frameworks>
-			<frameworks root="${wo.system.root}">
-				<include name="Java*.framework"/>
-				<exclude name="Java*Cocoa.framework"/>
-				<exclude name="JavaOpen*.framework"/>
-				<exclude name="JavaWOExtensions.framework"/>
-				<exclude name="JavaEOGeneration*.framework"/>
-				<exclude name="JavaEOApplication*.framework"/>
-				<exclude name="JavaEO*Interface*.framework"/>
-				<exclude name="JavaEODistribution.framework"/>
-			</frameworks>
-    	</woapplication>
-	<exec dir="${build.application.dir}" executable="chmod">
-  		<arg line="a+x ${project.name} Contents/MacOS/${project.name}"/>
-	</exec>
-    </target>
-    
-	<target name="install" depends="all">
-     <copy todir="${wo.local.root}/${application.name}">
-		<fileset dir="${build.application.dir}" />
-     </copy>
-    </target>
-
-	<target name="web" depends="application">
-     <copy todir="${wo.server.root}/${application.name}/WebServerResources">
-		<fileset dir="${build.application.dir}/WebServerResources" />
-     </copy>
-    </target>
-
-  <target name="clean">
-    <delete dir="${build.classes}"/>
-    <delete dir="${build.application.dir}"/>
-  </target>
-
-  <target name="all" depends="application"/>
-
 </project>
