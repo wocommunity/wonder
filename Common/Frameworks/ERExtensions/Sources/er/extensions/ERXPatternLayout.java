@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * The ERXPatternLayout adds two additional (and needed) layout options. The
+ * The ERXPatternLayout adds some additional (and needed) layout options. The
  * first is by specifing an '@' character a full backtrace will be logged as part
  * of the log event. The second is by specifing an '$' char the current application
  * name of the WOApplication will be logged as part of the log event.
@@ -35,6 +35,14 @@ import com.webobjects.foundation.NSMutableDictionary;
  * i: pid (process ID, provided through Java system property "com.webobjects.pid") 
  * p: primary adaptor's port number
  * s: active session count
+ * 
+ * Java VM (Virtual Machine) Info Patterns
+ * Example: %V{u used/f free} -- 75.22 MB used/12.86 MB free
+ * 
+ * t: total memory
+ * u: used memory 
+ * f: free memory in the current heap size (not max)
+ * 
  * </pre>
  * 
  */
@@ -107,6 +115,10 @@ class ERXPatternParser extends PatternParser {
                 break;
             case 'W':
                 addConverter(new AppInfoPatternConverter(formattingInfo, extractOption()));
+                currentLiteral.setLength(0);
+                break;
+            case 'V':
+                addConverter(new JavaVMInfoPatternConverter(formattingInfo, extractOption()));
                 currentLiteral.setLength(0);
                 break;
             default: 
@@ -251,7 +263,7 @@ class ERXPatternParser extends PatternParser {
          * The constant values are the part of application info that 
          * shouldn't change during the application's life span. 
          */
-        private boolean _isConstantsInitialized = false;
+        private boolean _constantsInitialized = false;
         
         /** Holds the values for the application info. Used by the template parser */ 
         private NSMutableDictionary _appInfo;
@@ -295,7 +307,7 @@ class ERXPatternParser extends PatternParser {
             WOApplication app = WOApplication.application();
             if (app != null) {
                 
-                if (! _isConstantsInitialized) {
+                if (! _constantsInitialized) {
                     String pid = System.getProperty("com.webobjects.pid");
                     if (pid != null)
                         _appInfo.setObjectForKey(pid, "pid");
@@ -313,12 +325,96 @@ class ERXPatternParser extends PatternParser {
                             _appInfo.setObjectForKey(portNumber, "portNumber");
                     }
                     _template = _templateParser.parseTemplateWithObject(_template, "@", _appInfo, _defaultLabels);
-                    _isConstantsInitialized = true;
+                    _constantsInitialized = true;
                 }
                 
                 _appInfo.setObjectForKey(String.valueOf(app.activeSessionsCount()), "sessionCount");
             }
             return _templateParser.parseTemplateWithObject(_template, "@", _appInfo);
+        }
+    }
+
+    /**
+     * The <code>JavaVMInfoPatternConverter</code> is useful for logging
+     * various info about the Java runtime and Virtual Machine that 
+     * is running the application instance. 
+     * See {@link ERXPatternLayout} for example/supported partterns. 
+     */
+    private class JavaVMInfoPatternConverter extends PatternConverter {
+
+        /** */
+        private Runtime _runtime;
+
+        /** */
+        private ERXUnitAwareDecimalFormat _decimalFormatter;
+
+        /** Template parser to format logging events */
+        private ERXSimpleTemplateParser _templateParser;
+
+        /** Template used by _templateParser */
+        private String _template;
+        
+        /** 
+         * Flag to indicate if the constant values are set. 
+         * The constant values are the part of application info that 
+         * shouldn't change during the application's life span. 
+         */
+        private boolean _constantsInitialized = false;
+        
+        /** Holds the values for the JavaVM info. Used by the template parser */ 
+        private NSMutableDictionary _jvmInfo;
+        
+        /** 
+         * Holds the default labels for the values. 
+         * Note that the template parser will put "-" for undefined 
+         * values by defauilt. 
+         */
+        private final NSDictionary _defaultLabels = null;
+        
+        /**
+         * Default package level constructor
+         * 
+         * @param  formattingInfo current pattern formatting information
+         * @param  format  string for the logging event format 
+         */
+        // FIXME: Work in progress - fixed template; format parameter will be ignored for now. 
+        JavaVMInfoPatternConverter(FormattingInfo formattingInfo, String format) {
+            super(formattingInfo);
+            _runtime = Runtime.getRuntime();
+            _decimalFormatter = new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
+            _decimalFormatter.setMaximumFractionDigits(2);
+            _templateParser = new ERXSimpleTemplateParser("-");
+            // This will prevent the convert method to get into an infinite loop 
+            // when debug level logging is enabled for the perser. 
+            _templateParser.isLoggingDisabled = true;
+            _jvmInfo = new NSMutableDictionary();
+            // work in progress; this is the fixed template.
+            _template = "@usedMemory@ used/@freeMemory@ free";
+        }
+        
+        /**
+         * Returns ...
+         * <p> 
+         * 
+         * ... has not been created yet then "-" is logged.
+         * 
+         * @param event a given logging event
+         * @return the current application name
+         */
+        public String convert(LoggingEvent event) {
+            if (! _constantsInitialized) {
+                // Initialize constants here
+                _constantsInitialized = true;
+            }
+            
+            long totalMemory = _runtime.totalMemory();
+            long freeMemory  = _runtime.freeMemory();
+            long usedMemory  = totalMemory - freeMemory;
+            _jvmInfo.setObjectForKey(_decimalFormatter.format(totalMemory), "totalMemory");
+            _jvmInfo.setObjectForKey(_decimalFormatter.format(freeMemory),  "freeMemory" );
+            _jvmInfo.setObjectForKey(_decimalFormatter.format(usedMemory),  "usedMemory" );
+
+            return _templateParser.parseTemplateWithObject(_template, "@", _jvmInfo);
         }
     }
 
