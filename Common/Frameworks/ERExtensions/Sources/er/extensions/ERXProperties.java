@@ -38,6 +38,9 @@ public class ERXProperties {
     /** WebObjects version number as double */ 
     private static double _webObjectsVersionDouble;
 
+    /** Internal cache of type converted values to avoid reconverting attributes that are asked for frequently */
+    private static Map _cache = Collections.synchronizedMap(new HashMap());
+
     private static boolean retainDefaultsEnabled() {
         if (RetainDefaultsEnabled == null) {
             final String propertyValue = System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
@@ -223,6 +226,10 @@ public class ERXProperties {
      */
     private static String getApplicationSpecificPropertyName(final String propertyName) {
         synchronized(AppSpecificPropertyNames) {
+            if (AppSpecificPropertyNames.size() > 128) {
+                AppSpecificPropertyNames.clear();
+            }
+            
             String appSpecificPropertyName = (String)AppSpecificPropertyNames.get(propertyName);
             if (appSpecificPropertyName == null) {
                 final WOApplication application = WOApplication.application();
@@ -253,11 +260,21 @@ public class ERXProperties {
      */
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
+
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof NSArray) {
+            return (NSArray)value;
+        }
+        
         final String propertyValue = System.getProperty(propertyName);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             setArrayForKey(array == null ? NSArray.EmptyArray : array, propertyName);
         }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : array);
         return array;
     }
     
@@ -286,12 +303,22 @@ public class ERXProperties {
      */
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
+        
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof Boolean) {
+            return ((Boolean)value).booleanValue();
+        }
+        
         String propertyValue = System.getProperty(propertyName);
         final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Boolean.toString(booleanValue);
             System.setProperty(propertyName, propertyValue);
         }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : Boolean.valueOf(booleanValue));
         return booleanValue;
     }
     
@@ -316,11 +343,21 @@ public class ERXProperties {
      */
     public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
+
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof NSDictionary) {
+            return (NSDictionary)value;
+        }
+        
         final String propertyValue = System.getProperty(propertyName);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, propertyName);
         }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : dictionary);
         return dictionary;
     }
 
@@ -369,12 +406,22 @@ public class ERXProperties {
      */
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
+
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof BigDecimal) {
+            return (BigDecimal)value;
+        }
+        
         String propertyValue = System.getProperty(propertyName);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = bigDecimal.toString();
             System.setProperty(propertyName, propertyValue);
         }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : bigDecimal);
         return bigDecimal;
     }
 
@@ -387,12 +434,22 @@ public class ERXProperties {
      */    
     public static int intForKeyWithDefault(final String s, final int defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
+
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof Integer) {
+            return ((Integer)value).intValue();
+        }
+        
         String propertyValue = System.getProperty(propertyName);
         final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Integer.toString(intValue);
             System.setProperty(propertyName, propertyValue);
         }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : ERXConstant.integerForInt(intValue));
         return intValue;
     }
 
@@ -405,12 +462,22 @@ public class ERXProperties {
      */    
     public static long longForKeyWithDefault(final String s, final long defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
+        
+        Object value = _cache.get(propertyName);
+        if (value == UndefinedMarker) {
+            return defaultValue;
+        }
+        if (value instanceof Long) {
+            return ((Long)value).longValue();
+        }
+
         String propertyValue = System.getProperty(propertyName);
         final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Long.toString(longValue);
             System.setProperty(propertyName, propertyValue);
         }
+        _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : new Long(longValue));
         return longValue;
     }
     
@@ -471,6 +538,7 @@ public class ERXProperties {
     // DELETEME: Really not needed anymore
     public static void setStringForKey(String string, String key) {
         System.setProperty(key, string);
+        _cache.remove(key);
     }
     
     /** 
@@ -480,8 +548,12 @@ public class ERXProperties {
      * @param dest  properties copied to
      */
     public static void transferPropertiesFromSourceToDest(Properties source, Properties dest) {
-        if (source != null)
+        if (source != null) {
             dest.putAll(source);
+            if (dest == System.getProperties()) {
+                systemPropertiesChanged();
+            }
+        }
     }
     
     /**
@@ -760,6 +832,13 @@ public class ERXProperties {
                 + ex.getClass().getName() + ": " + ex.getMessage());
         }
         return actualPath;
+    }
+    
+    public static void systemPropertiesChanged() {
+        synchronized (AppSpecificPropertyNames) {
+            AppSpecificPropertyNames.clear();
+        }
+        _cache.clear();
     }
 
 }

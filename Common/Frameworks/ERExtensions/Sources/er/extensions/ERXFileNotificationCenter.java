@@ -43,13 +43,21 @@ public class ERXFileNotificationCenter {
             _defaultCenter = new ERXFileNotificationCenter();
         return _defaultCenter;
     }
+    
+    /** In seconds.  0 means we will not regularly check files. */
+    private static int checkFilesPeriod() {
+        return ERXProperties.intForKeyWithDefault("er.extensions.ERXFileNotificationCenter.CheckFilesPeriod", 0);
+    }
 
     /** collections of observers by file path */
     private NSMutableDictionary _observersByFilePath = new NSMutableDictionary();
     /** cache for last modified dates of files by file path */
     private NSMutableDictionary _lastModifiedByFilePath = new NSMutableDictionary();
     /** flag to tell if caching is enabled, set in the object constructor */
-    private boolean cachingEnabled = true;
+    private boolean cachingEnabled;
+    /** The last time we checked files.  We only check if !WOCachingEnabled or if there is a CheckFilesPeriod set */
+    private long lastCheckMillis = System.currentTimeMillis();
+    
     /**
      * Default constructor. If WOCaching is disabled (we take this to mean we are in developement)
      * then this object will register for the notification 
@@ -59,11 +67,12 @@ public class ERXFileNotificationCenter {
      * warning messages if observers are registered with caching enabled.
      */
     public ERXFileNotificationCenter() {
-        if (!WOApplication.application().isCachingEnabled()) {
+        cachingEnabled = WOApplication.application().isCachingEnabled();
+
+        if (!cachingEnabled || checkFilesPeriod() > 0) {
             ERXRetainer.retain(this);
             log.debug("Caching disabled.  Registering for notification: " + WOApplication.ApplicationWillDispatchRequestNotification);
             NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("checkIfFilesHaveChanged", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillDispatchRequestNotification, null);            
-            cachingEnabled = false;
         }
     }
 
@@ -105,8 +114,11 @@ public class ERXFileNotificationCenter {
             throw new RuntimeException("Attempting to register null observer for file: " + file);
         if (selector == null)
             throw new RuntimeException("Attempting to register null selector for file: " + file);
-        if (cachingEnabled)
-            log.info("Registering an observer when WOCaching is enabled.  This observer will not ever by default be called: " + file);
+        if (cachingEnabled && checkFilesPeriod() == 0) {
+            log.info("Registering an observer when file checking is disabled (WOCaching must be " +
+                     "disabled or the er.extensions.ERXFileNotificationCenter.CheckFilesPeriod " +
+                     "property must be set).  This observer will not ever by default be called: " + file);
+        }
         String filePath = file.getAbsolutePath();
         if (log.isDebugEnabled())
             log.debug("Registering Observer for file at path: " + filePath);
@@ -173,6 +185,14 @@ public class ERXFileNotificationCenter {
      * @param NSNotification notification posted from the NSNotificationCenter.
      */
     public void checkIfFilesHaveChanged(NSNotification n) {
+        int checkPeriod = checkFilesPeriod();
+        
+        if (cachingEnabled && (checkPeriod == 0 || System.currentTimeMillis() - lastCheckMillis < 1000 * checkPeriod)) {
+            return;
+        }
+        
+        lastCheckMillis = System.currentTimeMillis();
+        
         if (log.isDebugEnabled()) log.debug("Checking if files have changed");
         for (Enumeration e = _lastModifiedByFilePath.keyEnumerator(); e.hasMoreElements();) {
             File file = new File((String)e.nextElement());

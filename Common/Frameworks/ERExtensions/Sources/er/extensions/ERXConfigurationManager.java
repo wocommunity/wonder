@@ -187,11 +187,6 @@ public class ERXConfigurationManager {
 
         _isRapidTurnAroundInitialized = true;
         
-        if (WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
-            log.info("WOCachingEnabled is true. Disabling the rapid turnaround for Properties files");
-            return;
-        }
-        
         NSArray propertyPaths = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
         _monitoredProperties = new NSMutableArray();
 
