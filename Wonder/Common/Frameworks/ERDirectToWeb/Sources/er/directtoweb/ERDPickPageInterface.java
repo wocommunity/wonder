@@ -14,7 +14,10 @@ import com.webobjects.eocontrol.EODataSource;
 // PickPageInterface - Used for selecting multiple objects from a select page.
 public interface ERDPickPageInterface {
 
-    // Data source
+    /**
+     * Sets the datasource for the pick page.
+     * @param source datasource to select objects from
+     */
     public void setDataSource(EODataSource source);
 
     public NextPageDelegate nextPageDelegate();
