@@ -205,7 +205,7 @@ public class ERXTolerantSaver {
     // FIXME: returning those strings for error conditions is not very good
     // we should probably return ints for status and re-throw the original exception
     // in some cases
-    public static String save(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
+    public static String _save(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
         if (log.isDebugEnabled()) log.debug("TolerantSaver: save...");
         try {
             //if (log.isDebugEnabled()) log.debug("about to save changes...");
@@ -260,7 +260,7 @@ public class ERXTolerantSaver {
                             }
                             if (writeAnyWay) {
                                 if (log.isDebugEnabled()) log.debug("TolerantSaver: about to save changes again");
-                                ec.saveChanges();
+                                save(ec, writeAnyWay, merge);                                    
                             }
                             return "EOAdaptorOptimisticLockingFailure";
                         } else {
@@ -268,15 +268,42 @@ public class ERXTolerantSaver {
                         }
                     }                    
                 } else {
-                    log.error("TolerantSaver: No EOAdaptorFailureKey Exception:" + e);
-                    return "Error: No EOAdaptorFailureKey";
+//                    log.error("TolerantSaver: No EOAdaptorFailureKey Exception:" + e);
+                    String error = "Error: No EOAdaptorFailureKey, reason ";
+                    error += errorFromException(e);
+                    return error;
                 }
             } else {
-                log.error("TolerantSaver: No UserInfo: "+e);
+                log.error("TolerantSaver: No UserInfo: ", e);
                 return "Error: No UserInfo";
             }
         }
         if (log.isDebugEnabled()) log.debug("TolerantSaver: save... done");
         return null;
+    }
+
+    public static String save(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
+        int tries = 0;
+        String re = "";
+        while (tries++ < 20) {
+            re = _save(ec, writeAnyWay, merge);
+            if (re == null || re.indexOf("deadlock") == -1) {
+                break;
+            } else {
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+                log.error("got deadlock, trying to save again");
+            }
+        }
+        return re;
+    }
+
+    public static String errorFromException(Exception e) {
+        String stackTrace = NSLog.throwableAsString(e);
+        //this works for frontbase, add other indexOf statements for db's like oracle, ...
+        if (stackTrace.indexOf("multiple transaction conflict detected") != -1) {
+            return "deadlock";
+        } else {
+            return "";
+        }
     }
 }
