@@ -298,9 +298,9 @@ public class ERXArrayUtilities extends Object {
     public static NSArray arrayMinusArray(NSArray main, NSArray minus) {
 		NSSet minusSet = new NSSet(minus);
 		NSMutableArray mutableResult = new NSMutableArray(main.count()); 
-		Enumeration enum = main.objectEnumerator();
-		while (enum.hasMoreElements()) {
-			Object obj = enum.nextElement();
+		Enumeration e = main.objectEnumerator();
+		while (e.hasMoreElements()) {
+			Object obj = e.nextElement();
 			if (! minusSet.containsObject(obj)) 
 				mutableResult.addObject(obj);
 		}
@@ -553,15 +553,17 @@ public class ERXArrayUtilities extends Object {
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKey("@sort.firstName");</code><br/>
+     * <code>myArray.valueForKey("@sort.lastName,firstName");</code><br/>
      * <br/>
-     * Which in this case would return myArray sorted ascending by first name.
+     * Which in the first case would return myArray sorted ascending by first name and the second case
+     * by lastName and then by firstName.
      */
     static class SortOperator implements NSArray.Operator
     {
         private NSSelector selector;
         
         /** public empty constructor */
-	public SortOperator(NSSelector selector) {
+        public SortOperator(NSSelector selector) {
             this.selector = selector;
         }
 
@@ -572,16 +574,14 @@ public class ERXArrayUtilities extends Object {
          * @return immutable sorted array.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                if (array.count() < 2)
-                    return array;
-                if (keypath != null && keypath.indexOf(",") != -1) {
-                    return sortedArraySortedWithKeys(array,
-                                                     NSArray.componentsSeparatedByString(keypath, ","),
-                                                     selector);
-                } else {
-                    return sortedArraySortedWithKey(array, keypath, selector);
-                }
+            if (array.count() < 2)
+                return array;
+            if (keypath != null && keypath.indexOf(",") != -1) {
+                return sortedArraySortedWithKeys(array,
+                        NSArray.componentsSeparatedByString(keypath, ","),
+                        selector);
+            } else {
+                return sortedArraySortedWithKey(array, keypath, selector);
             }
         }
     }
@@ -594,28 +594,27 @@ public class ERXArrayUtilities extends Object {
      * <code>myArray.valueForKey("@fetchSpec.fetchUsers");</code><br/>
      * <br/>
      * Which in this case would return myArray filtered and sorted by the
-     * EOFetchSpecification named fetchUsers.
+     * EOFetchSpecification named "fetchUsers" which must be a model-based fetchspec in the
+     * first object's entity.
      */
     static class FetchSpecOperator implements NSArray.Operator
     {
         /** public empty constructor */
-	public FetchSpecOperator() {}
-
-    /**
-     * Filters and sorts the given array by the named fetchspecification.
-     * @param array array to be filtered.
-     * @param keypath name of fetch specification.
-     * @return immutable filtered array.
-     */
-	public Object compute(NSArray array, String keypath) {
-	    synchronized(array) {
-		if(array.count() == 0) {
-		    return array;
-		}
-		EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-		return filteredArrayWithFetchSpecificationNamedEntityNamed(array, keypath, eo.entityName());
-	    }
-	}
+        public FetchSpecOperator() {}
+        
+        /**
+         * Filters and sorts the given array by the named fetchspecification.
+         * @param array array to be filtered.
+         * @param keypath name of fetch specification.
+         * @return immutable filtered array.
+         */
+        public Object compute(NSArray array, String keypath) {
+            if(array.count() == 0) {
+                return array;
+            }
+            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
+            return filteredArrayWithFetchSpecificationNamedEntityNamed(array, keypath, eo.entityName());
+        }
     }
 
     /**
@@ -625,7 +624,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * <code>myArray.valueForKey("@flatten");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened.
+     * Which in this case would return myArray flattened if myArray is an NSArray of NSArrays (of NSArrays etc).
      */
     static class FlattenOperator extends BaseOperator {
         /** public empty constructor */
@@ -663,9 +662,7 @@ public class ERXArrayUtilities extends Object {
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
         public Object compute(NSArray array, String keypath) {
-	    synchronized (array) {
-		return array.count() == 0 ? Boolean.TRUE : Boolean.FALSE;
-	    }
+            return array.count() == 0 ? Boolean.TRUE : Boolean.FALSE;
         }
     }
 
@@ -689,16 +686,14 @@ public class ERXArrayUtilities extends Object {
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
         public Object compute(NSArray array, String keypath) {
-	    synchronized (array) {
-		int i1 = keypath.indexOf(".");
-		int i2 = keypath.indexOf("-");
-		if ( i1 == -1 || i2 == -1 ) {
-		    throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
-		}
-		int start = Integer.parseInt(keypath.substring(i1, i2));
-		int length = Integer.parseInt(keypath.substring(i2, keypath.length()));
-		return array.subarrayWithRange(new NSRange(start, length));
-	    }
+            int i1 = keypath.indexOf(".");
+            int i2 = keypath.indexOf("-");
+            if ( i1 == -1 || i2 == -1 ) {
+                throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
+            }
+            int start = Integer.parseInt(keypath.substring(i1, i2));
+            int length = Integer.parseInt(keypath.substring(i2, keypath.length()));
+            return array.subarrayWithRange(new NSRange(start, length));
         }
     }
 
@@ -711,7 +706,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened.
+     * Which in this case would return only those objects which are unique in myArray.
      */
     static class UniqueOperator extends BaseOperator {
         /** public empty constructor */
@@ -719,7 +714,7 @@ public class ERXArrayUtilities extends Object {
         }
 
         /**
-         * Flattens the given array.
+         * Removes duplicates.
          * 
          * @param array
          *            array to be filtered.
@@ -728,23 +723,21 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                array = contents(array, keypath);
-                if (array != null) array = arrayWithoutDuplicates(array);
-                return array;
-            }
+            array = contents(array, keypath);
+            if (array != null) array = arrayWithoutDuplicates(array);
+            return array;
         }
     }
 
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>removeNullValues</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
+     * <code>myArray.valueForKeyPath("@removeNullValues.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened.
+     * Which in this case would return myArray without the occurrences of NSKeyValueCoding.Null.
      */
     static class RemoveNullValuesOperator extends BaseOperator {
         /** public empty constructor */
@@ -752,7 +745,7 @@ public class ERXArrayUtilities extends Object {
         }
 
         /**
-         * Flattens the given array.
+         * Removes null values from the given array.
          * 
          * @param array
          *            array to be filtered.
@@ -761,11 +754,9 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                array = contents(array, keypath);
-                if (array != null) array = removeNullValues(array);
-                return array;
-            }
+            array = contents(array, keypath);
+            if (array != null) array = removeNullValues(array);
+            return array;
         }
     }
 
@@ -789,17 +780,15 @@ public class ERXArrayUtilities extends Object {
          * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value otherwise.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                int end = keypath.indexOf(".");
-                int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
-                Object value = null;
-                if(index < array.count() )
-                    value = array.objectAtIndex(index);
-                if(end != -1 && value != null) {
-                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keypath.substring(end+1));
-                }
-                return value;
+            int end = keypath.indexOf(".");
+            int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
+            Object value = null;
+            if(index < array.count() )
+                value = array.objectAtIndex(index);
+            if(end != -1 && value != null) {
+                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keypath.substring(end+1));
             }
+            return value;
         }
     }
 
@@ -823,22 +812,20 @@ public class ERXArrayUtilities extends Object {
          * @return computed average as double or <code>NULL</code>.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                BigDecimal result = new BigDecimal(0L);
-                int count = 0;
-                
-                for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
-                    Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
-                    if(value != null && value != NSKeyValueCoding.NullValue) {
-                        count = count+1;
-                        result = result.add(ERXValueUtilities.bigDecimalValue(value));
-                    }
+            BigDecimal result = new BigDecimal(0L);
+            int count = 0;
+            
+            for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
+                Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
+                if(value != null && value != NSKeyValueCoding.NullValue) {
+                    count = count+1;
+                    result = result.add(ERXValueUtilities.bigDecimalValue(value));
                 }
-                if(count == 0) {
-                    return null;
-                }
-                return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
             }
+            if(count == 0) {
+                return null;
+            }
+            return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
         }
     }
 
@@ -862,11 +849,9 @@ public class ERXArrayUtilities extends Object {
          * @return reversed array for keypath.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                array = reverse(array);
-                array = contents(array, keypath);
-                return array;
-            }
+            array = reverse(array);
+            array = contents(array, keypath);
+            return array;
         }
     }
     /** 
@@ -875,10 +860,10 @@ public class ERXArrayUtilities extends Object {
      * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b> and <b>fetchSpec</b> 
      */
     public static void initialize() {
-	if (initialized) {
-	    return;
-	}
-	initialized = true;
+        if (initialized) {
+            return;
+        }
+        initialized = true;
         if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayUtilities.ShouldRegisterOperators", true)) {
             NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
             NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
@@ -905,13 +890,12 @@ public class ERXArrayUtilities extends Object {
      * @return filtered array.
      */
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
-        String dummy = "DUMMY";
         NSMutableArray result = new NSMutableArray();
-        NSMutableDictionary already = new NSMutableDictionary();
+        NSMutableSet already = new NSMutableSet();
         for(Enumeration e = anArray.objectEnumerator(); e.hasMoreElements();){
             Object object = e.nextElement();
-            if(already.valueForKey(""+object.hashCode())==null){
-                already.takeValueForKey(dummy, ""+object.hashCode());
+            if(!already.containsObject(object)){
+                already.addObject(object);
                 result.addObject(object);
             }
         }
@@ -1042,7 +1026,8 @@ public class ERXArrayUtilities extends Object {
         if (array != null && objects != null && array.count() > 0 && objects.count() > 0) {
             for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
                 if (array.containsObject(e.nextElement())) {
-                    arrayContainsAnyObject = true; break;
+                    arrayContainsAnyObject = true; 
+                    break;
                 }
             }
         }
