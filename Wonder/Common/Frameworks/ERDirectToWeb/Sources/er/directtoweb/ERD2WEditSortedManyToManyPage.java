@@ -339,7 +339,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     public EOEnterpriseObject browserSelection(){
         EOEnterpriseObject result = null;
-        if (browserSelections != null) {
+        if (browserSelections != null && browserSelections.count()!=0) {
             if(browserSelections.count()>1){
                 throw new RuntimeException("Please choose only one element");
             }else
