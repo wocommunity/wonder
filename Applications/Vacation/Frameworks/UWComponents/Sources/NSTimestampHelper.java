@@ -18,4 +18,10 @@ public class NSTimestampHelper extends Object {
         return deltaTime / 1000 / 60 / 60 / 24;
     }
 
+    public static int minusDaysRounded(NSTimestamp first, NSTimestamp second) {
+
+        return new Long(minusDays(first, second)).intValue();
+
+}
+
 }
