@@ -8,8 +8,7 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
