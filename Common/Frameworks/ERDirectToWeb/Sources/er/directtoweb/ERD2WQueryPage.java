@@ -52,13 +52,21 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
     protected NSDictionary branch;
     public String branchName() { return (String)branch.valueForKey("branchName"); }
 
-    public boolean showResults = false;
-
+    protected Boolean showResults = null;
+    public boolean showResults() {
+        if(showResults == null)
+            return false;
+        return showResults.booleanValue();
+    }
+    public void setShowResults(boolean value) {
+        showResults = value ? Boolean.TRUE : Boolean.FALSE;
+    }
+    
     public WOComponent queryAction() {
         WOComponent nextPage = null;
         if(nextPageDelegate() == null) {
             if(ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
-                showResults = true;
+                setShowResults(true);
             } else {
                 String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
                 ListPageInterface listpageinterface = null;
