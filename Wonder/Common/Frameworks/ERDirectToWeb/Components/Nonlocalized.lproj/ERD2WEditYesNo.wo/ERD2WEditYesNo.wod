@@ -1,3 +1,11 @@
+ERXLocalizedString1: ERXLocalizedString {
+	value = "Yes";
+}
+
+ERXLocalizedString2: ERXLocalizedString {
+	value = "No";
+}
+
 RadioButton1: WORadioButton {
 	value = 1;
 	selection = yesNoBoolean;
