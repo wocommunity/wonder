@@ -74,13 +74,14 @@ public class ERMailer {
                     delivery.sendMail(true);
                     mailMessage.setState(ERCMailState.SENT_STATE);
                     mailMessage.setDateSent(new NSTimestamp());
-                } catch (ERMailSender.ForwardException e) {
-                    log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.forwardException()));
+                } catch (NSForwardException e) {
+                    log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.originalException()));
                     // ENHANCEME: Need to implement a waiting state to retry sending mails.
                     mailMessage.setState(ERCMailState.EXCEPTION_STATE);
-                    mailMessage.setExceptionReason(e.forwardException().getMessage());
+                    mailMessage.setExceptionReason(e.originalException().getMessage());
                     // Report the mailing error
-                    ERMailerUtilities.reportExceptionForMessage(e.forwardException(), mailMessage);
+                    if (e.originalException() instanceof Exception)
+                        ERMailerUtilities.reportExceptionForMessage((Exception)e.originalException(), mailMessage);
                 } finally {
                     try {
                         mailMessage.editingContext().saveChanges();
