@@ -7,7 +7,6 @@ AreThereReferenceEO: ERXNonNullConditional {
 }
 
 AttributeCell: WOGenericContainer {
-	_unroll = true;
 	align = d2wContext.justification;
 	elementName = "td";
 	valign = "middle";
@@ -15,14 +14,11 @@ AttributeCell: WOGenericContainer {
 
 AttributeDisplay: WOSwitchComponent {
 	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
 	localContext = localContext;
 	object = object;
 }
 
 AttributeRepetition: WORepetition {
-	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
 }
@@ -40,7 +36,6 @@ BackLink2: WOHyperlink {
 }
 
 BackgroundColor: WOString {
-	_unroll = true;
 	value = d2wContext.backgroundColorForTable;
 }
 
@@ -51,14 +46,20 @@ Banner: WOImage {
 }
 
 BannerConditional: WOConditional {
-	_unroll = true;
 	condition = showBanner;
 }
 
+ColSpanNumber: WOString {
+	value = colSpan;
+}
+
 ColumnLabelRepetition: WORepetition {
-	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
+}
+
+Conditional1: WOConditional {
+	condition = isEntityEditable;
 }
 
 ERXNonNullConditional1: ERXNonNullConditional {
