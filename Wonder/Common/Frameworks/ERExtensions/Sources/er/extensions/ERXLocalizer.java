@@ -47,6 +47,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
     static final ERXLogger createdKeysLog = ERXLogger.getLogger(ERXLocalizer.class, "createdKeys");
     private static boolean isLocalizationEnabled = false;
+    private static boolean isInitialized = false;
     public static final String LocalizationDidResetNotification = "LocalizationDidReset";
     
     public static class Observer {
@@ -58,13 +59,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     private static Observer observer;
     private static NSMutableArray monitoredFiles;
-    
-    public static void initialize() {
-        observer = new Observer();
-        monitoredFiles = new NSMutableArray();
-        isLocalizationEnabled = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLocalizer.isLocalizationEnabled"), true);
-    }
 
+    public static void initialize() {
+        if(!isInitialized) {
+            observer = new Observer();
+            monitoredFiles = new NSMutableArray();
+            isLocalizationEnabled = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLocalizer.isLocalizationEnabled"), true);
+            isInitialized = true;
+        }
+    }
+    
     public static boolean isLocalizationEnabled() { return isLocalizationEnabled; }
     public static void setIsLocalizationEnabled(boolean value) { isLocalizationEnabled = value; }
     
@@ -81,6 +85,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     private String NOT_FOUND = "**NOT_FOUND**";
 
     public static void resetCache() {
+        initialize();
         if(WOApplication.application().isCachingEnabled()) {
             Enumeration e = localizers.objectEnumerator();
             while(e.hasMoreElements()) {
