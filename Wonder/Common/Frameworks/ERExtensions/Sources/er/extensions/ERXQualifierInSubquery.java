@@ -65,20 +65,20 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
     // ENHANCEME: Should be able to just use a relationship key instead of both.
     public ERXQualifierInSubquery(EOQualifier q, String entityName, String attributeName) {
         super();
-        this.qualifier = q;
-        this.entityName = entityName;
-        this.attributeName = attributeName;
+        qualifier = q;
+        entityName = entityName;
+        attributeName = attributeName;
     }
 
     //	===========================================================================
     //	EOQualifier method(s)
     //	---------------------------------------------------------------------------
-    // FIXME: Shoudl do something here ...
+    // FIXME: Should do something here ...
     public void addQualifierKeysToSet(NSMutableSet aSet) {
     }
 
     public EOQualifier qualifierWithBindings(NSDictionary someBindings, boolean requiresAll) {
-        return (EOQualifier)this.clone();
+        return (EOQualifier)clone();
     }
 
     // FIXME: Should do something here ...
@@ -96,12 +96,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
             sb.append(e.sqlStringForAttribute(pk));            
         }
         sb.append(" IN ( ");
-        EOEntity entity;
-        if (entityName == null) {
-            entity = e.entity();
-        } else {
-            entity = e.entity().model().entityNamed(entityName);
-        }
+        EOEntity entity=entityName == null ? e.entity() : e.entity().model().entityNamed(entityName);
         EOFetchSpecification fs=new EOFetchSpecification(entity.name(),
                                                          qualifier,
                                                          null,
@@ -111,7 +106,8 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
         // ASSUME: This makes a few assumptions, if anyone can figure out a full proof way that would be nice to get the model
         //	   Note you can't use: EOAdaptor.adaptorWithModel(e.entity().model()).expressionFactory(); as this creates a
         //
-        EODatabaseContext context = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), EOObjectStoreCoordinator.defaultCoordinator());
+        EODatabaseContext context = EODatabaseContext.registeredDatabaseContextForModel(entity.model(),
+                                                                                        EOObjectStoreCoordinator.defaultCoordinator());
         EOSQLExpressionFactory factory = context.database().adaptor().expressionFactory();
         EOSQLExpression expression=factory.selectStatementForAttributes(entity.primaryKeyAttributes(),
                                            false,
@@ -124,11 +120,11 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
     }
 
     public EOQualifier schemaBasedQualifierWithRootEntity(EOEntity anEntity) {
-        return (EOQualifier)this.clone();
+        return (EOQualifier)clone();
     }
 
     public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOEntity anEntity, String aPath) {
-        return (EOQualifier)this.clone();
+        return (EOQualifier)clone();
     }    
     
     public String toString() { return " <" + getClass().getName() +"> '" + qualifier.toString() + "'"; }
