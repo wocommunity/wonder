@@ -7,7 +7,7 @@ CollapseContainer: D2WCollapsibleComponentContent {
 
 SubmitButton1: WOSubmitButton {
 	action = editValues;
-	value = "Edit";
+	value = " Edit ";
 }
 
 Values: WOBrowser {
