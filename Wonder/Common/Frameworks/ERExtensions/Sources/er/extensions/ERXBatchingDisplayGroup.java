@@ -41,6 +41,9 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
     public NSArray objectsInRange(int start, int end) {
         //uses the original fetch specification and adds a top(start,(end - start)) to the query sql
         EOFetchSpecification spec = databaseDataSource().fetchSpecificationForFetch();
+        //sortOrderings from the WODisplayGroup is only used in Memory: painful slow...
+        spec.setSortOrderings(sortOrderings());
+
         EOEditingContext ec = databaseDataSource().editingContext();
         String sql = ERXEOAccessUtilities.sqlForFetchSpecificationAndEditingContext(spec, ec);
         
@@ -96,10 +99,10 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         sql = "select count(*) " + sql.substring(index, sql.length());
         NSArray result = EOUtilities.rawRowsForSQL(ec, model.name(), sql);
 
-        if (result.rowCount() > 0) {
+        if (result.count() > 0) {
             NSDictionary dict = (NSDictionary)result.objectAtIndex(0);
             NSArray values = dict.allValues();
-            if (values.rowCount() > 0) {
+            if (values.count() > 0) {
                 Object value = values.objectAtIndex(0);
                 if (value instanceof Number) {
                     return ((Number)value).intValue();
