@@ -399,4 +399,34 @@ public class ERXStringUtilities extends Object {
         }
         return finalString.toString();
     }
+
+    /** 
+     * Locate the the first numeric character in the given string. 
+     * @param string to scan
+     * @return position in int. -1 for not found. 
+     */ 
+    public static int indexOfNumericInString(String str) {
+        return indexOfNumericInString(str, 0);
+    }
+        
+    /** 
+     * Locate the the first numeric character 
+     * after <code>fromIndex</code> in the given string. 
+     * @param string to scan
+     * @return position in int. -1 for not found. 
+     */ 
+    public static int indexOfNumericInString(String str, int fromIndex) {
+        if (str == null)  throw new IllegalArgumentException("String cannot be null.");
+    
+        int pos = -1;
+        for (int i = fromIndex; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if ('0' <= c  &&  c <= '9') {
+                pos = i;
+                break;
+            }
+        }
+        return pos;
+    }
+
 }
