@@ -10,12 +10,16 @@ package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
 
+    private String _relationshipKey;
+
     /**
-    * Public constructor
+     * Public constructor
      * @param c current context
      */
     public ERD2WEditRelationshipPage(WOContext c) {
@@ -34,6 +38,34 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
             result = (WOComponent)epi;
         }
         return result;
+    }
+    
+    public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
+        EOEditingContext ec = ERXExtensions.newEditingContext(eo.editingContext(), false); // no validation;
+        setEditingContext(ec);
+        EOEnterpriseObject localEO = EOUtilities.localInstanceOfObject(ec, eo);
+        setObject(localEO);
+        _relationshipKey = relationshipKey; 
+        if (object().isToManyKey(relationshipKey))
+            isRelationshipToMany = true;
+        else
+            relationshipDisplayGroup.setSelectsFirstObjectAfterFetch(true);
+        EODetailDataSource ds = new EODetailDataSource(object().classDescription(), _relationshipKey);
+        ds.qualifyWithRelationshipKey(_relationshipKey, localEO);
+        setDataSource(ds);
+        relationshipDisplayGroup.setDataSource(ds);
+        relationshipDisplayGroup.fetch();
+        setPropertyKey(displayKey());
+    }
+
+    public String displayNameForRelationshipKey() {
+        return Services.capitalize(_relationshipKey);
+    }
+
+    public WOComponent removeFromToOneRelationshipAction() {
+        dataSource().deleteObject((EOEnterpriseObject) object().valueForKeyPath(_relationshipKey));
+        relationshipDisplayGroup.fetch();
+        return null;
     }
     
 }
