@@ -123,7 +123,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
                 taskName = pageConfiguration.substring(2,pageConfiguration.indexOf("__",3));
             }
             String entityName = (String)c.valueForKeyPath("entity.name");
-            log.info(pageConfiguration + ": task=" + taskName +  ", entity=" + entityName);
+            log.debug(pageConfiguration + ": task=" + taskName +  ", entity=" + entityName);
             pageConfiguration = taskName.substring(0,1).toUpperCase() + taskName.substring(1) + (entityName != null ? entityName : "");
         }
         String value = pageConfiguration;
