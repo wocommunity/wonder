@@ -14,8 +14,41 @@ public class DRAttribute extends Object  {
     protected DRAttributeGroup _attributeGroup;
     protected boolean _isPlaceHolderTotal;
     protected boolean _isTotal;
-    protected NSArray _emptyArray;
+    protected NSArray _emptyArray = NSArray.EmptyArray;
     private NSMutableArray __attributes = new NSMutableArray();
+
+    static public DRAttribute withAttributeGroup(DRAttributeGroup attributeGroup) {
+        DRAttribute attribute = new DRAttribute(attributeGroup);
+        return attribute;
+    }
+
+    static public DRAttribute withKeyPathFormatLabelTotalUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSDictionary userInfo) {
+        DRAttribute attribute = new DRAttribute(keyPath, format, label, shouldTotal, userInfo);
+        return attribute;
+    }
+
+    public DRAttribute(String keyPath, String format, String label, boolean shouldTotal, NSDictionary userInfo) {
+        this();
+        setKeyPath(keyPath);
+        setFormat(format);
+        setLabel(label);
+        setShouldTotal(shouldTotal);
+        setUserInfo(userInfo);
+    }
+
+    public DRAttribute(DRAttributeGroup attributeGroup) {
+        this();
+        setAttributeGroup(attributeGroup);
+        setIsPlaceHolderTotal(true);
+        setLabel("Total");
+    }
+    
+    public DRAttribute() {
+        super();
+        _userInfo = new NSMutableDictionary();
+        //_emptyArray = new NSMutableArray();
+        this.resetDefaults();
+    }
 
     public void resetDefaults() {
         _shouldTotal = false;
@@ -30,48 +63,18 @@ public class DRAttribute extends Object  {
         this.setAttributeGroup(null);
     }
 
-    static public DRAttribute withAttributeGroup(DRAttributeGroup attg) {
-        DRAttribute aAtt = new DRAttribute();
-        aAtt.setAttributeGroup(attg);
-        aAtt.setIsPlaceHolderTotal(true);
-        aAtt.setKeyPath(attg.keyPath());
-        aAtt.setFormat(attg.format());
-        aAtt.setLabel("Total");
-        aAtt.setShouldTotal(attg.shouldTotal());
-        aAtt.setUserInfo(attg.userInfo());
-        return aAtt;
-    }
-
-    static public DRAttribute withKeyPathFormatLabelTotalUserInfo(String ap, String af, String al, boolean at, NSDictionary ui) {
-        DRAttribute aAtt = new DRAttribute();
-        aAtt.setKeyPath(ap);
-        aAtt.setFormat(af);
-        aAtt.setLabel(al);
-        aAtt.setShouldTotal(at);
-        aAtt.setUserInfo(ui);
-        return aAtt;
-    }
-
-    public DRAttribute() {
-        super();
-        _userInfo = new NSMutableDictionary();
-        _emptyArray = new NSMutableArray();
-        this.resetDefaults();
-        return;
-    }
-
     public String keyPath() {
         return _keyPath;
     }
-    public void setKeyPath(String aval) {
-        _keyPath = aval;
+    public void setKeyPath(String value) {
+        _keyPath = value;
     }
 
     public String format() {
         return _format;
     }
-    public void setFormat(String aval) {
-        _format = aval;
+    public void setFormat(String value) {
+        _format = value;
     }
 
     public boolean showTotal() {
@@ -81,39 +84,39 @@ public class DRAttribute extends Object  {
     public boolean shouldTotal() {
         return _shouldTotal;
     }
-    public void setShouldTotal(boolean aval) {
-        _shouldTotal = aval;
+    public void setShouldTotal(boolean value) {
+        _shouldTotal = value;
     }
     
     public boolean shouldSort() {
         return _shouldSort;
     }
-    public void setShouldSort(boolean aval) {
-        _shouldSort = aval;
+    public void setShouldSort(boolean value) {
+        _shouldSort = value;
     }
 
     public boolean shouldRestrictToFirstRow() {
         return _shouldRestrictToFirstRow;
     }
-    public void setShouldRestrictToFirstRow(boolean aval) {
-        _shouldRestrictToFirstRow = aval;
+    public void setShouldRestrictToFirstRow(boolean value) {
+        _shouldRestrictToFirstRow = value;
     }
 
     public String label() {
         return _label;
     }
-    public void setLabel(String aval) {
-        _label = aval;
+    public void setLabel(String value) {
+        _label = value;
     }
 
     public NSDictionary userInfo() {
         return _userInfo;
     }
-    public void setUserInfo(NSDictionary aval) {
-        if(aval == null) {
-            aval = new NSMutableDictionary();
+    public void setUserInfo(NSDictionary value) {
+        if(value == null) {
+            value = new NSMutableDictionary();
         }
-        _userInfo = aval;
+        _userInfo = value;
     }
 
     public boolean isGroup() {
@@ -129,12 +132,18 @@ public class DRAttribute extends Object  {
     public NSArray flatAttributesTotal() {
         return _emptyArray;
     }
-    public NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
+    protected NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
         return _emptyArray;
     }
 
-    public void setAttributeGroup(DRAttributeGroup atg) {
-        _attributeGroup = atg;
+    public void setAttributeGroup(DRAttributeGroup attributeGroup) {
+        _attributeGroup = attributeGroup;
+        if(attributeGroup != null) {
+            setKeyPath(attributeGroup.keyPath());
+            setFormat(attributeGroup.format());
+            setShouldTotal(attributeGroup.shouldTotal());
+            setUserInfo(attributeGroup.userInfo());
+        }
     }
     public DRAttributeGroup attributeGroup() {
         return _attributeGroup;
@@ -143,8 +152,8 @@ public class DRAttribute extends Object  {
     public boolean isPlaceHolderTotal() {
         return _isPlaceHolderTotal;
     }
-    public void setIsPlaceHolderTotal(boolean aval) {
-        _isPlaceHolderTotal = aval;
+    public void setIsPlaceHolderTotal(boolean value) {
+        _isPlaceHolderTotal = value;
     }
 
     public String toString() {
