@@ -178,13 +178,19 @@ public class ERXProperties {
      */
     public static boolean webObjectsVersionIs522OrHigher() {
         String webObjectsVersion = webObjectsVersion();
+        if(log.isDebugEnabled()){
+            log.debug("webObjectsVersion:"+webObjectsVersion());
+        }
         if("5.2".equals(webObjectsVersion)) {
             String sourceVersion = sourceVersionString();
+            if(log.isDebugEnabled()){
+                log.debug("sourceVersionString:"+sourceVersionString());
+            }
             if("9260000".equals(sourceVersion)) {
                 return true;
             }
         }
-        return false;
+        return webObjectsVersionAsDouble() >= 5.22d;
     }
 
     
