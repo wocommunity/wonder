@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.lang.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -47,10 +48,36 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /** general logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger("er.eo.ERXGenericRecord");
 
+    /** holds validity Methods */
+    private static Method[] validityMethods = null;
+
+    /** index of validity save method */ 
+    private static int VALIDITY_SAVE = 0;
+
+    /** index of validity delete method */ 
+    private static int VALIDITY_DELETE = 1;
+
+    /** index of validity insert method */
+    private static int VALIDITY_INSERT = 2;
+
+    /** index of validity update method */
+    private static int VALIDITY_UPDATE = 3;
+
+    /** the shared validity engine instance as Object to eliminate compile errors
+        * if validity is not linked and should not be used
+        */ 
+    private static Object sharedGSVEngineInstance;
+
+    /** Boolean that gets initialized on first use to indicate if validity should
+        * be used or not, remember that the call System.getProperty acts synchronized
+        * so this saves some time in multithreaded apps.
+        */
+    private static Boolean useValidity;
+    
     /** holds all subclass related ERXLogger's */
     public static NSMutableDictionary classLogs = new NSMutableDictionary();
     public static final Object lock = new Object();
-
+    
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
     }
@@ -84,7 +111,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
         return log;
     }
-    
+
     /**
         * self is usefull for directtoweb purposes
      */
@@ -775,12 +802,135 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (editingContext() != null && editingContext().deletedObjects().containsObject(this)) {
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
+        if (useValidity()) {
+            invokeValidityMethodWithType(VALIDITY_SAVE);
+        }
+        
         super.validateForSave();
         // FIXME: Should move all of the keys into on central place for easier management.
         // 	  Also might want to have a flag off of ERXApplication is debugging is enabled.
         // FIXME: Should have a better flag than just ERDebuggingEnabled
         if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
             checkConsistency();
+    }
+
+    /**
+        * This method uses Validity if the property key
+     * <b>er.extensions.ERXGenericRecord</b> is set to true
+     * @throws NSValidation.ValidationException if the object does not
+     *		pass validation for saving to the database.
+     */
+    public void validateForInsert() throws NSValidation.ValidationException {
+        if (useValidity()) {
+            invokeValidityMethodWithType(VALIDITY_INSERT);
+        }
+        super.validateForInsert();
+    }
+
+    /**
+        * This method uses Validity if the property key
+     * <b>er.extensions.ERXGenericRecord</b> is set to true
+     * @throws NSValidation.ValidationException if the object does not
+     *		pass validation for saving to the database.
+     */
+    public void validateForUpdate() throws NSValidation.ValidationException {
+        if (useValidity()) {
+            invokeValidityMethodWithType(VALIDITY_UPDATE);
+        }
+        super.validateForUpdate();
+    }
+
+    /**
+        * This method uses Validity if the property key
+     * <b>er.extensions.ERXGenericRecord</b> is set to true
+     * @throws NSValidation.ValidationException if the object does not
+     *		pass validation for saving to the database.
+     */
+    public void validateForDelete() throws NSValidation.ValidationException {
+        if (useValidity()) {
+            invokeValidityMethodWithType(VALIDITY_DELETE);
+        }
+        super.validateForDelete();
+    }
+
+    private static boolean useValidity() {
+        if (useValidity == null) {
+            useValidity = "true".equals(System.getProperty("er.extensions.ERXGenericRecord.useValidity")) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return useValidity.booleanValue();
+    }
+
+
+    private void invokeValidityMethodWithType(int type) throws NSValidation.ValidationException{
+        try {
+            Object dummy = null;
+            Method m = validityMethods()[type];
+            m.invoke(sharedGSVEngineInstance(), new Object[]{this});
+        } catch (IllegalAccessException e1) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e1);
+        } catch (IllegalArgumentException e2) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e2);
+        } catch (NullPointerException e3) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e3);
+        } catch (InvocationTargetException e4) {
+            Throwable targetException = e4.getTargetException();
+            if (targetException instanceof NSValidation.ValidationException) {
+                throw (NSValidation.ValidationException)targetException;
+            } else {
+                log.error("an exception occured in validityValidateEOObjectOnSave", e4);
+            }
+        }
+    }
+
+private Method[] validityMethods() {
+    if (validityMethods == null) {
+        validityMethods = new Method[4];
+        Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
+        validityMethods[0] = m;
+        
+        m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
+        validityMethods[1] = m;
+
+        m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
+        validityMethods[2] = m;
+
+        m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
+        validityMethods[3] = m;
+    }
+    return validityMethods;
+}
+
+private static Method methodInSharedGSVEngineInstanceWithName(String name) {
+        try {
+            return sharedGSVEngineInstance().getClass().getMethod(name, new Class[]{EOEnterpriseObject.class});
+        } catch (IllegalArgumentException e2) {
+            throw new NSForwardException(e2);
+        } catch (NullPointerException e3) {
+            throw new NSForwardException(e3);
+        } catch (NoSuchMethodException e4) {
+            throw new NSForwardException(e4);
+        }
+    return null;
+    }
+
+    private static Object sharedGSVEngineInstance() {
+        if (sharedGSVEngineInstance == null) {
+            try {
+                Class gsvEngineClass = Class.forName("com.gammastream.validity.GSVEngine");
+                Method m = gsvEngineClass.getMethod("sharedValidationEngine", new Class[]{});
+                Object dummy = null;
+                sharedGSVEngineInstance = m.invoke(dummy, new Object[]{});
+            } catch (ClassNotFoundException e1) {
+                throw new NSForwardException(e1);
+            } catch (NoSuchMethodException e2) {
+                throw new NSForwardException(e2);
+            } catch (IllegalAccessException e3) {
+                throw new NSForwardException(e3);
+            } catch (InvocationTargetException e4) {
+                throw new NSForwardException(e4);
+            }
+        }
+        return sharedGSVEngineInstance;
     }
 
     /**
