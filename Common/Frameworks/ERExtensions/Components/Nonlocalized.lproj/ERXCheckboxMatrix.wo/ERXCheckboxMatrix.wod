@@ -1,12 +1,9 @@
-CheckBoxWrapper: WOGenericContainer {
-	elementID = wrapperElementID;
-	formValues = selections;
-	name = context.elementID;
-}
-
-Conditional2: WOConditional {
-	condition = isListEmpty;
-	negate = true;
+CheckBox: WOGenericElement {
+	elementName = "input";
+	name = wrapperElementID;
+	otherTagString = isCurrentItemChecked;
+	type = "checkbox";
+	value = index;
 }
 
 CheckBoxRepetition: ERXTable {
@@ -25,12 +22,23 @@ CheckBoxRepetition: ERXTable {
 	otherTagString = ^tableOtherTagString;
 }
 
-CheckBox: WOGenericElement {
-	elementName = "input";
-	name = wrapperElementID;
-	otherTagString = isCurrentItemChecked;
-	type = "checkbox";
-	value = index;
+CheckBoxWrapper: WOGenericContainer {
+	elementID = wrapperElementID;
+	formValues = selections;
+	name = context.elementID;
+	elementName = "span";
+}
+
+Conditional1: WOConditional {
+	condition = ^shouldShowSelectAllButtons;
+}
+
+Conditional2: WOConditional {
+	condition = isListEmpty;
+	negate = true;
+}
+
+Content: WOComponentContent {
 }
 
 GenericContainer1: WOGenericContainer {
@@ -40,9 +48,22 @@ GenericContainer1: WOGenericContainer {
 	valign = "TOP";
 }
 
-Content: WOComponentContent {
+GenericElement1: WOGenericElement {
+	elementName = "INPUT";
+	name = "SelectAll";
+	onclick = selectOnClick;
+	type = "BUTTON";
+	value = session.localizer.ERXCheckboxMatrix.selectAll;
 }
 
-Conditional1: WOConditional {
-	condition = ^shouldShowSelectAllButtons;
+GenericElement2: WOGenericElement {
+	elementName = "INPUT";
+	name = "DeselectAll";
+	onclick = deselectOnClick;
+	type = "BUTTON";
+	value = session.localizer.ERXCheckboxMatrix.deselectAll;
+}
+
+OnlyOnce: ERXOncePerRequestConditional {
+	keyName = "erxcheckboxmatrix";
 }
