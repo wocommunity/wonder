@@ -76,13 +76,16 @@ public class ERD2WContextDictionary {
         for(Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements(); ) {
             NSBundle bundle = (NSBundle)e.nextElement();
             NSDictionary dict;
-            dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wClientConfiguration", bundle);
-            if(dict != null) {
-                if(dict.objectForKey("components") != null) {
-                    components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
-                }
-                if(dict.objectForKey("editors") != null) {
-                    editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
+            String path = bundle.pathForResource("d2wClientConfiguration", "plist", null);
+            if(path != null) {
+                dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wClientConfiguration", bundle);
+                if(dict != null) {
+                    if(dict.objectForKey("components") != null) {
+                        components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
+                    }
+                    if(dict.objectForKey("editors") != null) {
+                        editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
+                    }
                 }
             }
         }
