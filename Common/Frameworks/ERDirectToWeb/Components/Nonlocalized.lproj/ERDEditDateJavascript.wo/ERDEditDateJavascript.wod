@@ -2,6 +2,7 @@ Image1: WOImage {
 	border = 0;
 	filename = "calendar.gif";
 	framework = "ERExtensions";
+	key = "calendar.gif";
 }
 
 JavaScript1: WOJavaScript {

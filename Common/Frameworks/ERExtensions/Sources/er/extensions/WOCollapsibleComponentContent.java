@@ -125,7 +125,6 @@ public class WOCollapsibleComponentContent extends WOComponent {
         } else {
             aLabel = (String)valueForBinding("closedLabel");
         }
-
         return aLabel;
     }
 
