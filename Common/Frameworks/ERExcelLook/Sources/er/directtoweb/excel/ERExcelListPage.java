@@ -9,14 +9,21 @@ package er.directtoweb.excel;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 import er.directtoweb.*;
+import er.extensions.*;
 
 public class ERExcelListPage extends ERD2WListPage {
 
+    public int index;
+
+    protected ERXFetchSpecificationBatchIterator batchIterator;
+    protected NSArray objects;
+    
     public ERExcelListPage(WOContext context) {
         super(context);
     }
-
+    
     public NSDictionary styles() { return ERExcelLook.styles(); }
 
     public NSArray objectsForSheet() {
@@ -27,4 +34,38 @@ public class ERExcelListPage extends ERD2WListPage {
         }
         return objectsForSheet;
     }
+
+    /**
+        * Sets the data source to the specified data source.
+     * Also sets the data source of the display group and fetches.
+     *
+     * @param dataSource  instance of EODataSource
+     * @see D2WPage#setDataSource
+     * @see #displayGroup
+     */
+    public void setDataSource(EODataSource dataSource) {
+        if (dataSource instanceof EODatabaseDataSource) {
+            EODatabaseDataSource ds = (EODatabaseDataSource)dataSource;
+            setBatchIterator(new ERXFetchSpecificationBatchIterator(ds.fetchSpecificationForFetch(),
+                                                                    ds.editingContext(),
+                                                                    100));
+        } else {
+            objects = dataSource.fetchObjects();
+        }
+    }    
+
+    public int batchCount() {
+        return hasBatchIterator() ? batchIterator().batchCount() : 1;
+    }
+
+    public NSArray currentBatch() {
+        log.info("Current batch, index: " + index);
+        return hasBatchIterator() ? batchIterator().batchWithIndex(index) : objects;
+    }
+    
+    public boolean hasBatchIterator() { return batchIterator() != null; }
+    
+    public ERXFetchSpecificationBatchIterator batchIterator() { return batchIterator; }
+    public void setBatchIterator(ERXFetchSpecificationBatchIterator value) { batchIterator = value; }
+    
 }

@@ -30,9 +30,14 @@ ColumnLabelRepetition: WORepetition {
 	list = currentSection.keys;
 }
 
-EntityRepetition: WORepetition {
+BatchRepetition:  WORepetition {
+	count = batchCount;
+	index = index;
+}
+
+ObjectRepetition: WORepetition {
 	item = object;
-	list = objectsForSheet;
+	list = currentBatch;
 }
 
 ListTable: WOGenericContainer {
