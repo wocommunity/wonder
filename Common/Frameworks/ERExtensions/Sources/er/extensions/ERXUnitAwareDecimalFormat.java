@@ -16,24 +16,27 @@ import java.text.FieldPosition;
 import java.io.Serializable;
 
 /**
- * <code>ERXUnitAwareDecimalFormat</code> extends {@link java.io.DecimalFormat} 
+ * <code>ERXUnitAwareDecimalFormat</code> extends {@link java.text.DecimalFormat} 
  * to add an automatic unit conversion feature for 
  * the given unit. Convenient to display friendly values 
  * for file size, elaps time, etc.
  * 
+ * <strong>Examples:</strong>
  * <pre>
- * Examples: 
  * 
- * double doubleSmallValue = 123.4567d;
- * double doubleLargeValue = 1234567890.1234d;
+ * import java.text.NumberFormat;
+ * import er.extensions.ERXUnitAwareDecimalFormat
+ * 
+ * double smallValue = 123.0d;
+ * double largeValue = 1234567890.0d;
  * NumberFormat formatter = new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
  * formatter.setMaximumFractionDigits(2);
  * 
- * // Will display "123.45 bytes"
- * System.out.println(formatter.format(doubleSmallValue); 
+ * // Will display "123 bytes"
+ * System.out.println(formatter.format(smallValue)); 
  * 
- * // Will display "1.14 GB"
- * System.out.println(formatter.format(doubleLargeValue);
+ * // Will display "1.15 GB"
+ * System.out.println(formatter.format(largeValue));
  * 
  * </pre>
  */
@@ -52,7 +55,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
     public static final String SECOND = "second";
 
     /** UnitPrefix is an inner class */
-    public static class UnitPrefix {
+    public static class UnitPrefix implements NSKeyValueCoding {
 
         private static NSArray _bytePrefixArray;
         private static NSArray _meterPrefixArray;
@@ -138,7 +141,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
             return unitPrefixArray;
         }
 
-        public static UnitPrefix findAppropiatePrifix(double number, NSArray unitPrefixArray) {
+        public static UnitPrefix findAppropiatePrefix(double number, NSArray unitPrefixArray) {
             UnitPrefix unitPrefix = null;
             Enumeration e = unitPrefixArray.reverseObjectEnumerator();
             while (e.hasMoreElements()) {
@@ -152,6 +155,13 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
             return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
         }
         
+        public void takeValueForKey(Object value, String key) {
+            throw new NSKeyValueCoding.UnknownKeyException("Can't take the value " + value 
+                        + " for the key " + key 
+                        + " since " + this.getClass().getName() + " is immutable.", 
+                        value, key);
+        }
+
         private String _toString;
         public String toString() {
             if (_toString == null)
@@ -195,7 +205,7 @@ public class ERXUnitAwareDecimalFormat extends DecimalFormat implements Cloneabl
 
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition fieldPosition) {
         StringBuffer result = toAppendTo;
-        UnitPrefix unitPrefix = UnitPrefix.findAppropiatePrifix(number, unitPrefixArray);
+        UnitPrefix unitPrefix = UnitPrefix.findAppropiatePrefix(number, unitPrefixArray);
         if (unitPrefix == null) {
             result = super.format(number, toAppendTo, fieldPosition);
         } else {
