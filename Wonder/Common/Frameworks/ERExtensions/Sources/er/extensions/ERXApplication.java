@@ -62,8 +62,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         if(contextClassName().equals("WOServletContext")
            || contextClassName().equals("com.webobjects.appserver.WOServletContext"))
             setContextClassName("er.extensions.ERXWOServletContext");
+        
         ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
         ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
+        ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition");
         
         // use our localizing string class
         // works around #3574558  
