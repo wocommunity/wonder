@@ -11,11 +11,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.ERXApplication;
-import er.extensions.ERXExtensions;
-import er.extensions.ERXLogger;
-import er.extensions.ERXProperties;
-import er.extensions.ERXUtilities;
+import er.extensions.*;
 
 import er.corebusinesslogic.ERCMailDelivery;
 import er.corebusinesslogic.ERCMailMessage;
@@ -58,8 +54,9 @@ public class Application extends ERXApplication {
      * <b>er.javamail.mailer.ERBatchMailerDaemonFrequency</b>
      */
     public void didFinishLaunching() {
-        //if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail"));
-        //    testSendingMail();
+        if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail")) {
+            testSendingMail();
+        }
         int frequency = ERXProperties.intForKey("er.javamail.mailer.ERBatchMailerDaemonFrequency");
         if (frequency > 0) {
             log.debug("Scheduling timer for frequency: " + frequency + "(s)");
@@ -75,15 +72,15 @@ public class Application extends ERXApplication {
     public void testSendingMail() {
         log.info("Sending test mail");
         try {
-            EOEditingContext ec = ERXExtensions.newEditingContext();
-            
+            EOEditingContext ec = ERXEC.newEditingContext();
+
             ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
-                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
-                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
-                                                          null,
-                                                          "This is a test",
-                                                          "This is the body",
-                                                          ec);
+                                                                                   new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                                                                                   new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                                                                                   null,
+                                                                                   "This is a test",
+                                                                                   "This is the body",
+                                                                                   ec);
             ec.saveChanges();
         } catch (Exception e) {
             log.error("Caught exception: " + e.getMessage() + " stack: " + ERXUtilities.stackTrace(e));
