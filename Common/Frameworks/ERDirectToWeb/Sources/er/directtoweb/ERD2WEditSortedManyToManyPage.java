@@ -42,7 +42,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public WODisplayGroup relationshipDisplayGroup = new WODisplayGroup();
     public EOEnterpriseObject browserItem;
     public NSArray browserSelections;
-
+    public String sortedObjects;
 
 
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
@@ -183,6 +183,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public WOComponent removeFromToManyRelationshipAction() {
+        if(((ERXSession)session()).javaScriptEnabled())
+            updateEOsOrdering();	   
         if (browserSelections != null) {
             for (Enumeration e = browserSelections.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject object=(EOEnterpriseObject)e.nextElement();
@@ -216,8 +218,35 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return null;
     }
 
+    public Integer itemHashCode(){
+        return new Integer(browserItem.hashCode());
+    }
+
+    public void updateEOsOrdering(){
+        //If the session uses javascript then we need to update the EOs according
+        //to what has been changed by the javascript in the WOBrowser
+        NSArray hiddenFieldValues = NSArray.componentsSeparatedByString(sortedObjects, ",");
+        if(log.isDebugEnabled()) log.debug("hiddenFieldValues = "+hiddenFieldValues);
+        if(hiddenFieldValues != null){
+            int i = 0;
+            for(Enumeration e = hiddenFieldValues.objectEnumerator(); e.hasMoreElements();){
+                String objectForHashCode = (String)e.nextElement();
+                if(log.isDebugEnabled()) log.debug("objectForHashCode = "+objectForHashCode);
+                EOEnterpriseObject eo = objectForHashCode(objectForHashCode);
+                if(eo!=null){
+                    eo.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
+                }else{
+                    log.error("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
+                }
+                i++;
+            }
+        }        
+    }
+
 
     public WOComponent returnAction() {
+        if(((ERXSession)session()).javaScriptEnabled())
+            updateEOsOrdering();	   
         editingContext().saveChanges();
         WOComponent result = nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : super.nextPage();
         if (result != null) {
@@ -370,7 +399,26 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             }
             if( ((Integer)indexObject.valueForKey(indexKey())).intValue() == index){
                 result = indexObject;
-                //break;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public EOEnterpriseObject objectForHashCode(String hashCode){
+        EOEnterpriseObject result = null;
+        if(log.isDebugEnabled()){
+            log.debug("looking for hashCode "+hashCode+".");
+        }
+        for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
+            e.hasMoreElements();){
+            EOEnterpriseObject indexObject = (EOEnterpriseObject)e.nextElement();
+            if(log.isDebugEnabled()){
+                log.debug("object's hashCode is "+indexObject.hashCode());
+            }
+            if( (new Integer(indexObject.hashCode())).toString().equals(hashCode)){
+                result = indexObject;
+                break;
             }
         }
         return result;
@@ -385,5 +433,17 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 result = (EOEnterpriseObject)browserSelections.objectAtIndex(0);
         }
         return result;
-    }    
+    }
+
+    public void appendToResponse(WOResponse r, WOContext c){
+        if(sortedObjects == null && ((ERXSession)session()).javaScriptEnabled()){
+            StringBuffer result = new StringBuffer();
+            for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
+                e.hasMoreElements();){
+                result.append(e.nextElement().hashCode()+",");
+            }
+            sortedObjects = result.toString();
+        }
+        super.appendToResponse(r,c);
+    }
 }
