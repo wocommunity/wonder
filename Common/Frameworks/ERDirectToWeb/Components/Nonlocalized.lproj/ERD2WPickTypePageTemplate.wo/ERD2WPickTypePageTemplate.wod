@@ -20,6 +20,8 @@ CheckBoxList1: WOCheckBoxList {
 
 ErrorDictionaryPanel1: ERXErrorDictionaryPanel {
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 Form1: WOForm {

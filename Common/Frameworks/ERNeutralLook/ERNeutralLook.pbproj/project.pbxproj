@@ -1245,7 +1245,7 @@
 			refType = 4;
 		};
 		F689B34C02F870250FCF0E72 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUErrorPage.wo;
