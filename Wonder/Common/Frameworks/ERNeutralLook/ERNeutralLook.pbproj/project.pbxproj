@@ -138,6 +138,8 @@
 				F63B71D4031FEB010FCF0E72,
 				F5ED7ADA0340E2F201CF0E76,
 				F5ED7AE30340E46B01CF0E76,
+				9DC907910351F7AD10CF0E7D,
+				9DC9079A0351F85B10CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -155,6 +157,7 @@
 				F689B35502F870510FCF0E72,
 				F61767B0031FE9D10FCF0E72,
 				F5ED7ADC0340E2F201CF0E76,
+				9DC907930351F7AD10CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,6 +649,7 @@
 				F689B35602F870540FCF0E72,
 				F61767B3031FE9F40FCF0E72,
 				F5ED7AD20340E2F201CF0E76,
+				9DC907890351F7AD10CF0E7D,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -858,6 +862,62 @@
 		};
 		9D2B3D7A02EE2A7710CF0CA3 = {
 			fileRef = 9D2B3D7402EE2A7710CF0CA3;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9DC907890351F7AD10CF0E7D = {
+			children = (
+				9DC9078A0351F7AD10CF0E7D,
+				9DC907900351F7AD10CF0E7D,
+				9DC907940351F85B10CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERNEUPickListPage;
+			refType = 4;
+		};
+		9DC9078A0351F7AD10CF0E7D = {
+			isa = PBXFileReference;
+			name = ERNEUPickListPage.api;
+			path = Resources/ERNEUPickListPage.api;
+			refType = 4;
+		};
+		9DC907900351F7AD10CF0E7D = {
+			isa = PBXFileReference;
+			name = ERNEUPickListPage.java;
+			path = Sources/er/neutral/ERNEUPickListPage.java;
+			refType = 4;
+		};
+		9DC907910351F7AD10CF0E7D = {
+			fileRef = 9DC9078A0351F7AD10CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9DC907930351F7AD10CF0E7D = {
+			fileRef = 9DC907900351F7AD10CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9DC907940351F85B10CF0E7D = {
+			children = (
+				9DC907950351F85B10CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERNEUPickListPage.wo;
+			path = "";
+			refType = 4;
+		};
+		9DC907950351F85B10CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERNEUPickListPage.wo;
+			refType = 4;
+		};
+		9DC9079A0351F85B10CF0E7D = {
+			fileRef = 9DC907940351F85B10CF0E7D;
 			isa = PBXBuildFile;
 			settings = {
 			};
