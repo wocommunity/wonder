@@ -45,14 +45,13 @@ a file.</dd>
 ($%)</dd>
 <dt>ERXTimestampUtility</dt>
 <dd>A simle utility for providing deprecated functionality for NSTimestamps</dd>
-<dd>ERXLocalizer</dd>
+<dt>ERXLocalizer</dt>
 <dd>localization utility</dd>
-<br>
-ERXNonPluralFormLocalizer<br>
-localitzer for languages that don't have plural forms<br>
-<dd>ERXCompilerProxy</dd>
-<dd>used for dynamic re-compilation of java files<br>
-</dd>
+<dt>
+ERXNonPluralFormLocalizer</dt>
+<dd>localitzer for languages that don't have plural forms</dd>
+<dt>ERXCompilerProxy</dt>
+<dd>used for dynamic re-compilation of java files</dd>
 <h3>Log4j Additions</h3>
 <dt>ERXLog4j</dt>
 <dd>Configures and manages the log4j logging system.  Will also configure
@@ -69,15 +68,14 @@ variables.</dd>
 <dd>WOComponent that can dynamicly re-configure the log4j system (lists all
 categories).</dd>
 <dt>ERXLogger</dt>
-<dt>Category subclass</dt>
+<dd>Category subclass</dd>
 <h3>JUnit Additions</h3>
 <dt>ERXBatchTestInterface</dt>
 <dd>Used for running a batch of tests.</dd>
 <dt>ERXTestListener</dt>
 <dd>template listner interface.</dd>
-<dd>ERXTestCase</dd>
-<dd>abstract test case<br>
-</dd>
+<dt>ERXTestCase</dt>
+<dd>abstract test case</dd>
 <dt>ERXTestResult</dt>
 <dd>extensions to hold multiple errors and failures.</dd>
 <dt>ERXTestRunner</dt>
@@ -114,11 +112,11 @@ as this retains them on the objC side fo things.</dd>
 <dd>Can upload and download files from ftp servers</dd>
 <dt>ERXSimpleHTMLFormatter</dt>
 <dd>NSFormatter subclass that provides HTML formatting.</dd>
-<dd>ERXCloneableThreadLocal</dd>
+<dt>ERXCloneableThreadLocal</dt>
 <dd>Used for cloning objects when the thread inherits the thread local</dd>
-<dd>ERXFrameworkPrincipal</dd>
+<dt>ERXFrameworkPrincipal</dt>
 <dd>Useful for subclasses that need to be the principal class of a framework</dd>
-<dd>ERXThreadStorage</dd>
+<dt>ERXThreadStorage</dt>
 <dd>Storage on a per thread basis<br>
 </dd>
 <h3>EOF Interfaces</h3>
@@ -165,14 +163,13 @@ like committedSnapshotValueForKey.</dd>
 <dt>ERXFuzzyMatchCleaner</dt>
 <dd>Generic interface used in conjunction with fuzzy searching abilitiies.</dd>
 <dt>ERXModelGroup</dt>
-<dt>Better handling of prototypes<br>
-</dt>
+<dd>Better handling of prototypes</dd>
 <h3>WOF Interfaces</h3>
 <dt>ERXExceptionHolder</dt>
 <dd>Used to denote if the current WOComponent holds throw exceptions.</dd>
 <dt>ERXSessionAdditionInterface</dt>
 <dd>Used for implementing a SessionAddition.</dd>
-<dd>ERXMutableUserInfoHolderInterface</dd>
+<dt>ERXMutableUserInfoHolderInterface</dt>
 <dd>Used for WOComponents to have mutable user infos.<br>
 </dd>
 <h3>WOF Additions</h3>
@@ -195,13 +192,11 @@ and can be reached through binding in the ui, ie session.additions.myAddition.my
 <dt>ERXStatelessComponent</dt>
 <dd>Generic stateless component with some useful binding methods.</dd>
 <dt>ERXRequest</dt>
-<dt>WORequest subclass, handles languages better</dt>
-<dt>ERXMessageEncoding</dt>
-<dt>Handles language encoding better</dt>
-<dt>ERXWOForm</dt>
-<dt>localization support</dt>
+<dd>Handles language encoding better, fixes a bug in 5.1.3 with localization support</dd>
+<dt>ERXWOForm</dt><dd>Checks wheter it is embedded inside another form, sets "formName" on the context's userInfo</dd>
+<dt>ERXMessageEncoding</dt><dd>Encoding support for UTF and Japanese</dd>
 <dt>ERXWOContext</dt>
-<dt>better support for languages and encoding</dt>
+<dd>better support for languages and encoding, adds a per-request storage</dd>
 <h3>Conditional WOComponents</h3>
 <dt>ERXEqualConditional</dt>
 <dd>Given two values will display if they are equal (or can negate).</dd>
@@ -222,9 +217,8 @@ JavaScript code or stylesheets that should be included only once</dd>
 <h3>Javascript &amp; DHTML WOComponents</h3>
 <dt>ERXJSCookiesConditional</dt>
 <dd>Javascript implementation to check different cookies.</dd>
-<dd>ERXJSAutoClosePage</dd>
-<dd>Automatically closes via js.<br>
-</dd>
+<dt>ERXJSAutoClosePage</dt>
+<dd>Automatically closes via js.</dd>
 <dt>ERXDHTMLComponent</dt>
 <dd>Covers a textarea with a DHTMLEdit control (IE,PC only).</dd>
 <dt>ERXJSFormForTarget</dt>
@@ -359,10 +353,8 @@ length.</dd>
 <dt>WOToManyRelationship</dt>
 <dd>Only useful in that it uses ERXRadioButtonMatrix and ERCheckboxMatrix
 components.</dd>
-<dd>ERXLocalizedString</dd>
-<dd>localized string additions</dd>
-<dd><br>
-</dd>
+<dt>ERXLocalizedString</dt>
+<dd>localized string class with many options</dd>
 <dt>ERXCheckboxMatrix</dt>
   <dd>Works around a webscript bug.</dd>
   <dt>ERXRadioButtonMatrix</dt>
