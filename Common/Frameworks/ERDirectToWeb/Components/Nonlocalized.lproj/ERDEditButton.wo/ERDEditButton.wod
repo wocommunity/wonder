@@ -9,10 +9,11 @@ Conditional2: WOConditional {
 
 EditEO: WOHyperlink {
 	action = editObjectAction;
+	title = ^displayNameForEditConfiguration;
 }
 
 EditImage: WOImage {
-	alt = "Edit that Object";
+	alt = ^displayNameForEditConfiguration;
 	border = "0";
 	filename = "write-btn.gif";
 	framework = "JavaDirectToWeb";
