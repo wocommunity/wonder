@@ -85,4 +85,24 @@ public class ERDList extends ERDCustomEditComponent {
     public boolean erD2WListOmitCenterTag() {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
+    
+    public Object valueForKey(String key) {
+        Object o = super.valueForKey(key);
+        if (key.indexOf("emptyListMessage")!=-1) {
+            log.info("key = emptyListMessage, value = "+o);
+        } 
+        return o;
+    }
+    public Object valueForBinding(String key) {
+        Object o = super.valueForBinding(key);
+        if (key.indexOf("emptyListMessage")!=-1) {
+            log.info("key = emptyListMessage, value = "+o);
+        } 
+        return o;
+    }
+    public String emptyListMessage() {
+        log.info("asked for emptyListMessage");
+        return "nix";
+    }
+    
 }
