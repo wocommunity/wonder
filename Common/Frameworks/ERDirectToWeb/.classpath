@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
     <classpathentry kind="src" path="Sources"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaFoundation.framework/Resources/Java/javafoundation.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaXML.framework/Resources/Java/javaxml.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaWOExtensions.framework/Resources/Java/JavaWOExtensions.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaWebObjects.framework/Resources/Java/javawebobjects.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaEOAccess.framework/Resources/Java/javaeoaccess.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaEOControl.framework/Resources/Java/javaeocontrol.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaPlot.framework/Resources/Java/javaplot.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaDirectToWeb.framework/Resources/Java/javadirecttoweb.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaDTWGeneration.framework/Resources/Java/javadtwgeneration.jar"/>
-    <classpathentry kind="var" path="NEXT_ROOT/Library/Frameworks/JavaEOProject.framework/Resources/Java/javaeoproject.jar"/>
-    <classpathentry kind="lib" path="/Library/Frameworks/ERExtensions.framework/Resources/Java/ERExtensions.jar"/>
-    <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/djava.jar"/>
-    <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/junit.jar"/>
-    <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/log4j.jar"/>
-    <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/NSProjectSearchPath.jar"/>
-    <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/Tidy.jar"/>
-    <classpathentry kind="lib" path="/Library/Java/Extensions/jce1_2_1.jar"/>
-    <classpathentry kind="lib" path="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.1/Classes/classes.jar"/>
-    <classpathentry kind="src" path="/ERExtensions"/>
+    <classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
+    <classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaDTWGeneration/JavaDirectToWeb/JavaFoundation/JavaWOExtensions/JavaWOJSPServlet/JavaWebObjects/JavaXML/JavaEOAccess/JavaEOControl/JavaEOProject/JavaJDBCAdaptor/ERJars/ERExtensions"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>
