@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.io.*;
 import java.math.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.*;
 import java.util.*;
 
 import com.webobjects.appserver.*;
@@ -27,6 +29,9 @@ public class ERXProperties extends Properties {
     /** default string */
     public static final String DefaultString = "Default";
     
+    private static final boolean RetainDefaultsEnabled =
+            "true".equals(System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false"));
+
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
 
@@ -54,8 +59,8 @@ public class ERXProperties extends Properties {
      * a trimmed version of the value. 
      * 
      * @return version number as string; can be a null-string when 
-     * 			the applicaiton doesn't have the value of 
-     *			<code>CFBundleShortVersionString</code> 
+     *          the applicaiton doesn't have the value of
+     *          <code>CFBundleShortVersionString</code>
      *                  in its <code>info.plist</code> resource. 
      * @see #versionStringForFrameworkNamed
      * @see #webObjectsVersion
@@ -75,10 +80,10 @@ public class ERXProperties extends Properties {
      * 
      * @param  frameworkName name
      * @return version number as string; can be null-string when 
-     * 			the framework is not found or the framework 
-     *			doesn't have the value of 
-     *                 	<code>CFBundleShortVersionString</code> in its 
-     *                 	<code>info.plist</code> resource. 
+     *          the framework is not found or the framework
+     *          doesn't have the value of
+     *                  <code>CFBundleShortVersionString</code> in its
+     *                  <code>info.plist</code> resource.
      * @see #versionStringForApplication
      * @see #webObjectsVersion
      * @see ERXStringUtilities#removeExtraDotsFromVersionString
@@ -99,10 +104,10 @@ public class ERXProperties extends Properties {
      * a trimmed version of the value.
      *
      * @return version number as string; can be null-string when
-     * 			the framework is not found or the framework
-     *			doesn't have the value of
-     *                 	<code>SourceVersion</code> in its
-     *                 	<code>info.plist</code> resource.
+     *          the framework is not found or the framework
+     *          doesn't have the value of
+     *                  <code>SourceVersion</code> in its
+     *                  <code>info.plist</code> resource.
      * @see #versionStringForApplication
      * @see #webObjectsVersion
      */
@@ -192,7 +197,7 @@ public class ERXProperties extends Properties {
      * given system property.
      * @param s system property
      * @return array de-serialized from the string in
-     *		the system properties
+     *      the system properties
      */
     public static NSArray arrayForKey(String s) {
         return arrayForKeyWithDefault(s, null);
@@ -204,10 +209,15 @@ public class ERXProperties extends Properties {
      * @param s system property
      * @param defaultValue default value
      * @return array de-serialized from the string in
-     *		the system properties or default value
+     *      the system properties or default value
      */
-    public static NSArray arrayForKeyWithDefault(String s, NSArray defaultValue) {
-        return ERXValueUtilities.arrayValueWithDefault(System.getProperty(s), defaultValue);
+    public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
+        final String propertyValue = System.getProperty(s);
+        final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            setArrayForKey(array == null ? NSArray.EmptyArray : array, s);
+        }
+        return array;
     }
     
     /**
@@ -217,7 +227,7 @@ public class ERXProperties extends Properties {
      * {@link ERXUtilities}.
      * @param s system property
      * @return boolean value of the string in the
-     *		system properties.
+     *      system properties.
      */    
     public static boolean booleanForKey(String s) {
         return booleanForKeyWithDefault(s, false);
@@ -231,10 +241,16 @@ public class ERXProperties extends Properties {
      * @param s system property
      * @param defaultValue default value
      * @return boolean value of the string in the
-     *		system properties.
+     *      system properties.
      */
-    public static boolean booleanForKeyWithDefault(String s, boolean defaultValue) {
-        return ERXValueUtilities.booleanValueWithDefault(System.getProperty(s), defaultValue);
+    public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
+        String propertyValue = System.getProperty(s);
+        final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            propertyValue = Boolean.toString(booleanValue);
+            System.setProperty(s, propertyValue);
+        }
+        return booleanValue;
     }
     
     /**
@@ -242,7 +258,7 @@ public class ERXProperties extends Properties {
      * given system property.
      * @param s system property
      * @return dictionary de-serialized from the string in
-     *		the system properties
+     *      the system properties
      */    
     public static NSDictionary dictionaryForKey(String s) {
         return dictionaryForKeyWithDefault(s, null);
@@ -254,10 +270,15 @@ public class ERXProperties extends Properties {
      * @param s system property
      * @param defaultValue default value
      * @return dictionary de-serialized from the string in
-     *		the system properties
+     *      the system properties
      */
-    public static NSDictionary dictionaryForKeyWithDefault(String s, NSDictionary defaultValue) {
-        return ERXValueUtilities.dictionaryValueWithDefault(System.getProperty(s), defaultValue);
+    public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
+        final String propertyValue = System.getProperty(s);
+        final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, s);
+        }
+        return dictionary;
     }
 
     /**
@@ -287,10 +308,10 @@ public class ERXProperties extends Properties {
      * {@link ERXValueUtilities}.
      * @param s system property
      * @return bigDecimal value of the string in the
-     *		system properties.  Scale is controlled by the string, ie "4.400" will have a scale of 3.
+     *      system properties.  Scale is controlled by the string, ie "4.400" will have a scale of 3.
      */
     public static BigDecimal bigDecimalForKey(String s) {
-	return bigDecimalForKeyWithDefault(s,null);
+        return bigDecimalForKeyWithDefault(s,null);
     }
 
     /**
@@ -301,10 +322,16 @@ public class ERXProperties extends Properties {
      * @param s system property
      * @param defaultValue default value
      * @return BigDecimal value of the string in the
-     *		system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
+     *      system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
      */
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
-	return ERXValueUtilities.bigDecimalValueWithDefault(System.getProperty(s), defaultValue);
+        String propertyValue = System.getProperty(s);
+        final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            propertyValue = bigDecimal.toString();
+            System.setProperty(s, propertyValue);
+        }
+        return bigDecimal;
     }
 
     /**
@@ -314,8 +341,14 @@ public class ERXProperties extends Properties {
      * @param defaultValue default value
      * @return int value of the system property or the default value
      */    
-    public static int intForKeyWithDefault(String s, int defaultValue) {
-        return ERXValueUtilities.intValueWithDefault(System.getProperty(s), defaultValue);        
+    public static int intForKeyWithDefault(final String s, final int defaultValue) {
+        String propertyValue = System.getProperty(s);
+        final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            propertyValue = Integer.toString(intValue);
+            System.setProperty(s, propertyValue);
+        }
+        return intValue;
     }
     
     /**
@@ -325,8 +358,14 @@ public class ERXProperties extends Properties {
      * @param defaultValue default value
      * @return long value of the system property or the default value
      */    
-    public static long longForKeyWithDefault(String s, long defaultValue) {
-        return ERXValueUtilities.longValueWithDefault(System.getProperty(s), defaultValue);        
+    public static long longForKeyWithDefault(final String s, final long defaultValue) {
+        String propertyValue = System.getProperty(s);
+        final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            propertyValue = Long.toString(longValue);
+            System.setProperty(s, propertyValue);
+        }
+        return longValue;
     }
     
     /**
@@ -347,9 +386,13 @@ public class ERXProperties extends Properties {
      * @param s system property
      * @return string value of the system propery or null
      */
-    public static String stringForKeyWithDefault(String s, String defaultValue) {
-        String s1 = System.getProperty(s);
-        return s1 != null ? s1 : defaultValue;
+    public static String stringForKeyWithDefault(final String s, final String defaultValue) {
+        final String propertyValue = System.getProperty(s);
+        final String stringValue = propertyValue == null ? defaultValue : propertyValue;
+        if (RetainDefaultsEnabled && propertyValue == null) {
+            System.setProperty(s, stringValue == null ? "" : stringValue);
+        }
+        return stringValue;
     }
 
     /**
@@ -432,7 +475,7 @@ public class ERXProperties extends Properties {
 
     /**
      * Gets the properties for a given file.
-     * @param properties file
+     * @param file the properties file
      * @return properties from the given file
      */
     public static Properties propertiesFromFile(File file) throws IOException {
