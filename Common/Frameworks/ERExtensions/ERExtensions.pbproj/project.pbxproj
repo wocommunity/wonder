@@ -2825,8 +2825,8 @@
 			};
 		};
 		F510755F02C453E501000102 = {
-			explicitFileType = wrapper.framework;
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
