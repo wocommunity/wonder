@@ -80,18 +80,27 @@ public class ERXFileUtilities {
      * @return byte array of the file.
      */
     public static byte[] bytesFromFile(File f) throws IOException {
+        return bytesFromFile(f, (int)f.length());
+    }
+
+    /**
+        * Returns an array of the first n bytes for a given file.
+     * @param f file to get the bytes from
+     * @param n number of bytes to read from input file
+     * @throws IOException if things go wrong
+     * @return byte array of the file.
+     */
+    public static byte[] bytesFromFile(File f, int n) throws IOException {
         if (f == null) throw new IllegalArgumentException("null file");
-        int size = (int)f.length();
         FileInputStream fis = new FileInputStream(f);
-        byte[] data = new byte[size];
+        byte[] data = new byte[n];
         int bytesRead = 0;
-        while (bytesRead < size)
-            bytesRead += fis.read(data, bytesRead, size - bytesRead);
+        while (bytesRead < n)
+            bytesRead += fis.read(data, bytesRead, n - bytesRead);
         fis.close();
         return data;
     }
-
-
+    
     
     /**
         * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
