@@ -247,7 +247,7 @@ public abstract class ERXApplication extends WOApplication {
                 if (context.session().statistics() != null)
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
         }
-        log.warn("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
+        log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
         return super.handleException(exception, context);
     }    
 
