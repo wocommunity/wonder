@@ -666,24 +666,59 @@ public class ERXArrayUtilities extends Object {
      */
     static class UniqueOperator extends BaseOperator {
         /** public empty constructor */
-        public UniqueOperator() {}
+        public UniqueOperator() {
+        }
 
         /**
-        * Flattens the given array.
-         * @param array array to be filtered.
-         * @param keypath name of fetch specification.
+         * Flattens the given array.
+         * 
+         * @param array
+         *            array to be filtered.
+         * @param keypath
+         *            name of fetch specification.
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-	    synchronized (array) {
+            synchronized (array) {
                 array = contents(array, keypath);
-                if(array != null)
-                    array = arrayWithoutDuplicates(array);
+                if (array != null) array = arrayWithoutDuplicates(array);
                 return array;
-	    }
+            }
         }
     }
 
+
+    /**
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
+     * <br/>
+     * Which in this case would return myArray flattened.
+     */
+    static class RemoveNullValuesOperator extends BaseOperator {
+        /** public empty constructor */
+        public RemoveNullValuesOperator() {
+        }
+
+        /**
+         * Flattens the given array.
+         * 
+         * @param array
+         *            array to be filtered.
+         * @param keypath
+         *            name of fetch specification.
+         * @return immutable filtered array.
+         */
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                array = contents(array, keypath);
+                if (array != null) array = removeNullValues(array);
+                return array;
+            }
+        }
+    }
 
     /**
      * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>objectAtIndex</b>.<br/>
@@ -809,6 +844,7 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
             NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
             NSArray.setOperatorForKey("reverse", new ReverseOperator());
+            NSArray.setOperatorForKey("removeNullValues", new RemoveNullValuesOperator());
         }
     }
 
@@ -1061,5 +1097,21 @@ public class ERXArrayUtilities extends Object {
             result=buffer.toString();
         }
         return result;
+    }
+    
+    /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
+     * @param a the array from which the NullValue should be removed
+     * @return a new NSArray with the same order than the original array but 
+     * without NSKeyValueCoding.NullValue objects
+     */
+    public static NSArray removeNullValues(NSArray a) {
+        NSMutableArray aa = new NSMutableArray();
+        for (int i = 0; i < a.count(); i++) {
+            Object o = a.objectAtIndex(i);
+            if (!(o instanceof NSKeyValueCoding.Null)) {
+                aa.addObject(o);
+            }
+        }
+        return aa;
     }
 }
