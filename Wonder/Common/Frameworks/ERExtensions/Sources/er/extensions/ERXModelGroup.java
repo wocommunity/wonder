@@ -23,7 +23,7 @@ import java.util.Enumeration;
 public class ERXModelGroup extends EOModelGroup {
 
     /** logging support */
-    static ERXLogger log  = ERXLogger.getERXLogger(ERXModelGroup.class);
+    public static ERXLogger log  = ERXLogger.getERXLogger(ERXModelGroup.class);
 
     /**
      * Default public constructor
@@ -41,6 +41,9 @@ public class ERXModelGroup extends EOModelGroup {
         EOModelGroup eomodelgroup = new ERXModelGroup();
         NSArray nsarray = NSBundle.frameworkBundles();
         int i = nsarray.count() + 1;
+
+        log.debug("Loading bundles" + nsarray.valueForKey("name"));
+
         NSMutableArray nsmutablearray = new NSMutableArray(i);
         nsmutablearray.addObject(NSBundle.mainBundle());
         nsmutablearray.addObjectsFromArray(nsarray);
@@ -64,6 +67,8 @@ public class ERXModelGroup extends EOModelGroup {
                          + eomodel.path() + "\"");
             }
         }
+        // correcting an EOF Inheritance bug
+        ((ERXModelGroup)eomodelgroup).checkInheritanceRelationships();
         return eomodelgroup;
     }
 
@@ -107,4 +112,32 @@ public class ERXModelGroup extends EOModelGroup {
         NSNotificationCenter.defaultCenter()
             .postNotification("EOModelAddedNotification", eomodel);
     }
+
+    /**
+     * Corrects a strange EOF inheritance issue where if a model
+     * gets loaded and an entity that has children located in a
+     * different model that hasn't been loaded yet will not be
+     * setup correctly. Specifically when those child entities
+     * are loaded they will not have their parentEntity relationship
+     * set correctly.
+     */
+    public void checkInheritanceRelationships() {
+        if (_subEntitiesCache != null && _subEntitiesCache.count() > 0) {
+            for (Enumeration parentNameEnumerator = _subEntitiesCache.keyEnumerator(); parentNameEnumerator.hasMoreElements();) {
+                String parentName = (String)parentNameEnumerator.nextElement();
+                NSArray children = (NSArray)_subEntitiesCache.objectForKey(parentName);
+                EOEntity parent = entityNamed(parentName);
+                for (Enumeration childrenEnumerator = children.objectEnumerator(); childrenEnumerator.hasMoreElements();) {
+                    String childName = (String)childrenEnumerator.nextElement();
+                    EOEntity child = entityNamed(childName);
+                    
+                    if (child.parentEntity() != parent && !parent.subEntities().containsObject(child)) {
+                        log.debug("Found entity: " + child.name() + " which should have: " + parent.name() + " as it's parent.");
+                        parent.addSubEntity(child);
+                    }
+                }
+            }
+        }
+    }
+    
 }
