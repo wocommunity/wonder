@@ -341,7 +341,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * Calling this method will return the primary of the
+     * Calling this method will return the primary key of the
      * given enterprise object or if one has not been asigned
      * to it yet, then it will have the adaptor channel generate
      * one for it, cache it and then use that primary key when it
@@ -362,7 +362,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * Calling this method will return the primary of the
+     * Calling this method will return the primary key of the
      * given enterprise object or if one has not been asigned
      * to it yet, then it will have the adaptor channel generate
      * one for it, cache it and then use that primary key when it
@@ -471,7 +471,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * Simple method that will return if the parent object store of this object's editing
      * context is an instance of {@link EOObjectStoreCoordinator}. The reason this is important
      * is because if this condition evaluates to true then when changes are saved in this
-     * editing context they will be propogated to the database.
+     * editing context they will be propagated to the database.
      * @return if the parent object store of this object's editing context is an EOObjectStoreCoordinator.
      */
     public boolean parentObjectStoreIsObjectStoreCoordinator() {
