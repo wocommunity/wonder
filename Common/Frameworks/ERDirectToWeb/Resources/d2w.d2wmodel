@@ -240,7 +240,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = XMLDisplayToMany; 
+                value = ERD2WXMLDisplayToMany; 
             }; 
         }, 
         {
@@ -272,7 +272,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WCustomDisplayBoolean; 
+                value = ERD2WCustomDisplayBoolean; 
             }; 
         }, 
         {
@@ -347,7 +347,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = XMLDisplayNumber; 
+                value = ERD2WXMLDisplayNumber; 
             }; 
         }, 
         {
@@ -462,7 +462,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = XMLDisplayString; 
+                value = ERD2WXMLDisplayString; 
             }; 
         }, 
         {
@@ -497,7 +497,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = XMLDisplayString; 
+                value = ERD2WXMLDisplayString; 
             }; 
         }, 
         {
@@ -621,7 +621,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WDisplayNumberWithUnit; 
+                value = ERD2WDisplayNumberWithUnit; 
             }; 
         }, 
         {
@@ -647,7 +647,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WEditURL; 
+                value = ERD2WEditURL; 
             }; 
         }, 
         {
@@ -739,7 +739,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WDisplayYesNo; 
+                value = ERD2WDisplayYesNo; 
             }; 
         }, 
         {
@@ -785,7 +785,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WEditNumberWithUnit; 
+                value = ERD2WEditNumberWithUnit; 
             }; 
         }, 
         {
@@ -871,7 +871,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WEditYesNo; 
+                value = ERD2WEditYesNo; 
             }; 
         }, 
         {
@@ -903,7 +903,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = EREditLargeString; 
+                value = ERD2WEditLargeString; 
             }; 
         }, 
         {
@@ -1004,7 +1004,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WDisplayURL; 
+                value = ERD2WDisplayURL; 
             }; 
         }, 
         {
@@ -1064,7 +1064,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WDisplayDateOrNull; 
+                value = ERD2WDisplayDateOrNull; 
             }; 
         }, 
         {
@@ -1165,7 +1165,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = ERDisplayToManyTable; 
+                value = ERD2WDisplayToManyTable; 
             }; 
         }, 
         {
@@ -1229,7 +1229,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = componentName; 
-                value = D2WEditString2; 
+                value = ERD2WEditString; 
             }; 
         }, 
         {
@@ -1631,7 +1631,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = customComponentName; 
-                value = EditPasswordConfirm; 
+                value = ERDEditPasswordConfirm; 
             }; 
         }, 
         {
@@ -1660,7 +1660,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = customComponentName; 
-                value = DisplayYearsMonths; 
+                value = ERDDisplayYearsMonths; 
             }; 
         }, 
         {
@@ -1750,7 +1750,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = customComponentName; 
-                value = D2WEditDatePopup; 
+                value = ERDEditDatePopup; 
             }; 
         }, 
         {
@@ -1793,7 +1793,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = customComponentName; 
-                value = D2WEditDateJavascript; 
+                value = ERDEditDateJavascript; 
             }; 
         }, 
         {
@@ -2968,7 +2968,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERGroupingListXMLPageTemplate; 
+                value = ERD2WGroupingListXMLPageTemplate; 
             }; 
         }, 
         {
@@ -2994,7 +2994,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERListXMLPageTemplate; 
+                value = ERD2WListXMLPageTemplate; 
             }; 
         }, 
         {
@@ -3054,7 +3054,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERPrinterFriendlyTemplateInspectPage; 
+                value = ERD2WPrinterFriendlyTemplateInspectPage; 
             }; 
         }, 
         {
@@ -3091,7 +3091,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERPrinterFriendlyInspectPageTemplate; 
+                value = ERD2WPrinterFriendlyInspectPageTemplate; 
             }; 
         }, 
         {
@@ -3134,7 +3134,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERGroupingPrinterFriendlyListPageTemplate; 
+                value = ERD2WGroupingPrinterFriendlyListPageTemplate; 
             }; 
         }, 
         {
@@ -3171,7 +3171,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERPrinterFriendlyListTemplate; 
+                value = ERD2WPrinterFriendlyListTemplate; 
             }; 
         }, 
         {
@@ -3197,7 +3197,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = EREditableListTemplate; 
+                value = ERD2WEditableListTemplate; 
             }; 
         }, 
         {
@@ -3229,7 +3229,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERCSVGroupingListPageTemplate; 
+                value = ERD2WCSVGroupingListPageTemplate; 
             }; 
         }, 
         {
@@ -3277,7 +3277,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERCompactInspectPageTemplate; 
+                value = ERD2WCompactInspectPageTemplate; 
             }; 
         }, 
         {
@@ -3325,7 +3325,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERCompactListPageTemplate; 
+                value = ERD2WCompactListPageTemplate; 
             }; 
         }, 
         {
@@ -3373,7 +3373,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERGroupingPickListPageTemplate; 
+                value = ERD2WGroupingPickListPageTemplate; 
             }; 
         }, 
         {
@@ -3410,7 +3410,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERPickListPageTemplate; 
+                value = ERD2WPickListPageTemplate; 
             }; 
         }, 
         {
@@ -3447,7 +3447,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERTabInspectPageTemplate; 
+                value = ERD2WTabInspectPageTemplate; 
             }; 
         }, 
         {
@@ -3484,7 +3484,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERWizardCreationPageTemplate; 
+                value = ERD2WWizardCreationPageTemplate; 
             }; 
         }, 
         {
@@ -3510,7 +3510,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERCalendarPage; 
+                value = ERD2WCalendarPage; 
             }; 
         }, 
         {
@@ -3536,7 +3536,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERListComparePageTemplate; 
+                value = ERD2WListComparePageTemplate; 
             }; 
         }, 
         {
@@ -3562,7 +3562,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERCSVListPageTemplate; 
+                value = ERD2WCSVListPageTemplate; 
             }; 
         }, 
         {
@@ -3588,7 +3588,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERGroupingListPageTemplate; 
+                value = ERD2WGroupingListPageTemplate; 
             }; 
         }, 
         {
@@ -3614,7 +3614,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERQueryPageWithFetchSpecification; 
+                value = ERD2WQueryPageWithFetchSpecification; 
             }; 
         }, 
         {
@@ -3640,7 +3640,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERPickTypePageTemplate; 
+                value = ERD2WPickTypePageTemplate; 
             }; 
         }, 
         {
@@ -3666,7 +3666,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERInspectPageTemplate; 
+                value = ERD2WInspectPageTemplate; 
             }; 
         }, 
         {
@@ -3692,7 +3692,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERListPageTemplate; 
+                value = ERD2WListPageTemplate; 
             }; 
         }, 
         {
@@ -3707,7 +3707,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERConfirmPageTemplate; 
+                value = ERD2WConfirmPageTemplate; 
             }; 
         }, 
         {
@@ -3722,7 +3722,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERRecoverableErrorPage; 
+                value = ERD2WRecoverableErrorPage; 
             }; 
         }, 
         {
@@ -3737,7 +3737,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERQueryPageTemplate; 
+                value = ERD2WQueryPageTemplate; 
             }; 
         }, 
         {
