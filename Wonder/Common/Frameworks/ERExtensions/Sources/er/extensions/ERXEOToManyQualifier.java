@@ -15,19 +15,24 @@ import org.apache.log4j.Category;
 
 // Optimized toMany qualifier, much, much better SQL than the Apple provided qualifier.
 
+// FIXME: Should rename ERXToManyQualifier
 public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
 
-    ////////////////////////////////////////////////  log4j category  ///////////////////////////////////////////
+    /** logging support */
     public static final Category cat = Category.getInstance(ERXEOToManyQualifier.class);
 
+    /** holds the entity */
     private EOEntity _entity;
+    /** holds the to many key */    
     private String _toManyKey;
+    /** holds the array of elements */    
     private NSArray _elements;
+    /** holds the min count to match against, defaults to 0 */
     private int _minCount = 0;
     
-    public ERXEOToManyQualifier (EOEntity e,
-                              String toManyKey,
-                              NSArray elements) {
+    public ERXEOToManyQualifier(EOEntity e,
+                                String toManyKey,
+                                NSArray elements) {
         super(e,null,null);
         _entity=e;
         _toManyKey=toManyKey;
@@ -46,18 +51,22 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
     }
     
     public static void appendColumnForAttributeToStringBuffer(EOAttribute attribute,
-                                                               StringBuffer sb) {
+                                                              StringBuffer sb) {
         sb.append(attribute.entity().externalName());
         sb.append('.');
         sb.append(attribute.columnName());
 
     }
 
+    /**
+     * Creates an array containing all of the primary
+     * keys of the given objects.
+     * @param eos array of enterprise objects
+     */
+    // MOVEME: ERXEOFUtilities
     public static NSArray primaryKeysForObjectsFromSameEntity(NSArray eos) {
         NSMutableArray result=new NSMutableArray();
         if (eos.count()>0) {
-            String entityName=((EOEnterpriseObject)eos.objectAtIndex(0)).entityName();
-            EOEntity entity=EOModelGroup.defaultGroup().entityNamed(entityName);
             for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject target=(EOEnterpriseObject)e.nextElement();
                 NSDictionary pKey=EOUtilities.primaryKeyForObject(target.editingContext(),target);
@@ -67,11 +76,17 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
         return result;           
     }
 
+    /**
+     * 
+     */
+    // MOVEME: ERXEOFUtilities
+    // FIXME: Misnamed
     public static NSArray primaryKeysForObjectsFromSameEntity(String relKey, NSArray eos) {
         NSMutableArray result=new NSMutableArray();
         if (eos.count()>0) {
             String entityName=((EOEnterpriseObject)eos.objectAtIndex(0)).entityName();
             EOEditingContext ec = ((EOEnterpriseObject)eos.objectAtIndex(0)).editingContext();
+            // FIXME: Bad way to get the model group
             EOEntity entity=EOModelGroup.defaultGroup().entityNamed(entityName);
             EORelationship relationship = entity.relationshipNamed(relKey);
             EOAttribute attribute = (EOAttribute)relationship.sourceAttributes().objectAtIndex(0);
@@ -181,10 +196,12 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
         return description();
     }
 
-    /*
-     EOF seems to be wanting to clone qualifiers when the are inside an and-or qualifier
-     without this method, EOToManyQualifier is cloned into an EOSQLQualifier and the generated SQL is incorrect..
-        */
+    /**
+     * EOF seems to be wanting to clone qualifiers when
+     * the are inside an and-or qualifier without this
+     * method, ERXToManyQualifier is cloned into an
+     * EOSQLQualifier and the generated SQL is incorrect..
+     */
     public Object clone() {
         return new ERXEOToManyQualifier(_entity, _toManyKey, _elements, _minCount);
     }

@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXValidationFactory.java created by max on Sun 22-Apr-2001 */
 package er.extensions;
 
 import com.webobjects.directtoweb.*;
@@ -18,25 +16,76 @@ import org.apache.log4j.Category;
 import java.util.*;
 import java.lang.reflect.*;
 
+// FIXME: Now that ERXLocalizer is handling all of the loading of localized files this class no longer needs
+//	  to worry about loading all of those files.
 public class ERXValidationFactory {
 
-    ////////////////////////////////////////////  log4j category  //////////////////////////////////////////////
+    /** logging support */
     public final static Category cat = Category.getInstance("er.validation.ERXValidationFactory");
-
+    /** holds the default validation template file name */
     private static final String DEFAULT_VALIDATION_FILE_NAME = "ValidationTemplate.strings";
-
+    /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
+    /** holds a reference to the default validation delegate */
+    // FIXME: This should be a weak reference
+    private static Object _defaultValidationDelegate = null;
+    /** holds the default mappings that map model thrown validation strings to exception types */
+    private static NSDictionary _mappings;
+
+    /** holds the method name 'messageForException' */
+    // FIXME: This is better done with an NSSelector and using the method: implementedByObject
+    private static final String EDI_MFE_METHOD_NAME = "messageForException";
+    /** holds the method name 'templateForException' */
+    private static final String EDI_TFE_METHOD_NAME = "templateForException";
+    /** holds the class argument array for delegate validation exception messages */    
+    private static final Class[] EDI_FE_ARGS = new Class[] {ERXValidationException.class};
+
+    /** NSValidation.ValidationException exception constructor paramaters */
+    private static Class[] _exceptionConstructor = new Class[] { String.class, NSDictionary.class };
+    /** Regular ERXValidationException constructor parameters */
+    private static Class[] _regularConstructor = new Class[] { EOEnterpriseObject.class, String.class, Object.class, String.class };
+    /** Custom ERXValidationException constructor parameters */
+    private static Class[] _customConstructor = new Class[] { EOEnterpriseObject.class, String.class };
+    
+    /**
+     * Sets the default factory to be used for converting
+     * model thrown exceptions.
+     * @param aFactory new factory
+     */
     public static void setDefaultFactory(ERXValidationFactory aFactory) { _defaultFactory = aFactory; }
+    /**
+     * Returns the default factory. If one has not
+     * been set then a factory is created of type
+     * ERXValidationFactory.
+     * @return the default validation factory
+     */
     public static ERXValidationFactory defaultFactory() {
         if (_defaultFactory == null)
             setDefaultFactory(new ERXValidationFactory());
         return _defaultFactory;
     }
-
-    private static Object _defaultValidationDelegate = null;
+    /**
+     * Returns the default validation delegate that will
+     * be set on all validation exceptions created. At the
+     * moment delegates should implement the ExceptionDelegateInterface.
+     * This will change to an informal implementation soon.
+     * @return the default validation exception delegate.
+     */
     public static Object defaultDelegate() { return _defaultValidationDelegate; }
+    /**
+     * Sets the default validation delegate that
+     * will be set on all validation exceptions that
+     * are created by the factory. At the moment the
+     * delegate set needs to implement the interface
+     * ExceptionDelegateInterface.
+     * @param obj default validation delegate
+     */
     public static void setDefaultDelegate(Object obj) { _defaultValidationDelegate = obj; }
 
+    /**
+     * The validation factory interface. This interface
+     * is currently not being used.
+     */
     public interface FactoryInterface {
         public Class validationExceptionClass();
         public void setValidationExceptionClass(Class class1);
@@ -50,11 +99,10 @@ public class ERXValidationFactory {
         public NSKeyValueCoding contextForException(ERXValidationException erv);
     }
 
-    private static final String EDI_MFE_METHOD_NAME = "messageForException";
-    private static final String EDI_TFE_METHOD_NAME = "templateForException";
-    private static final Class[] EDI_FE_ARGS = new Class[] {ERXValidationException.class};
-
-    private static NSDictionary _mappings;
+    /**
+     * In the static initializer the mapping dictionary is
+     * created.
+     */
     static {
         Object keys[] = {				// MESSAGE LIST:
             "to be null", 				// "The 'xxxxx' property is not allowed to be NULL"
@@ -64,7 +112,6 @@ public class ERXValidationFactory {
             "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
             "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
         };
-
         Object objects[] = {
             ERXValidationException.NullPropertyException,
             ERXValidationException.InvalidNumberException,
@@ -76,32 +123,41 @@ public class ERXValidationFactory {
         _mappings = new NSDictionary( objects, keys );
     }
 
-    // Useful in developement for re-loading templates when they change.
+    // DELETEME: don't need file observing once we have templates being managed by ERXLocalizer
     private static FileObserver _defaultFileObserver;
+    // DELETEME: don't need file observing once we have templates being managed by ERXLocalizer
     public static FileObserver defaultFileObserver() {
         if (_defaultFileObserver == null)
             _defaultFileObserver = new FileObserver();
         return _defaultFileObserver;
     }
 
+    // DELETEME: Once all file observing is removed
     public static class FileObserver {
         public void fileDidChange(NSNotification n) {
             ERXValidationFactory.defaultFactory().loadTemplates();
         }
     }
-    
+    /** holds the validation exception class */
     private Class _validationExceptionClass;
+    /**
+     * Sets the validation class to be used when
+     * creating validation exceptions.
+     * @param class1 validation exception class
+     */
     public void setValidationExceptionClass(Class class1) { _validationExceptionClass = class1; }
+    /**
+     * Returns the validation exception class to use
+     * when creating exceptions. If none is specified
+     * {@link ERXValidationException} is used.
+     * @return class object of validation exceptions to
+     *		be used.
+     */
     public Class validationExceptionClass() {
-        if (_validationExceptionClass == null) {
+        if (_validationExceptionClass == null)
             _validationExceptionClass = ERXValidationException.class;
-        }
         return _validationExceptionClass;
     }
-
-    private static Class[] _exceptionConstructor = new Class[] { String.class, NSDictionary.class };
-    private static Class[] _regularConstructor = new Class[] { EOEnterpriseObject.class, String.class, Object.class, String.class };
-    private static Class[] _customConstructor = new Class[] { EOEnterpriseObject.class, String.class };
 
     public ERXValidationException createException(EOEnterpriseObject eo, String property, Object value, String type) {
         ERXValidationException erve = null;
@@ -132,7 +188,7 @@ public class ERXValidationFactory {
     }
 
     // Not very eligant, but until we have a way of throwing our own class of validation exception this is the only way.
-    // Note that this is only used to convert model thrown exceptions in EREntityClassDescription.
+    // Note that this is only used to convert model thrown exceptions in ERXEntityClassDescription.
     public ERXValidationException convertException(NSValidation.ValidationException eov) { return convertException(eov, null); }
     public ERXValidationException convertException(NSValidation.ValidationException eov, Object value) {
         ERXValidationException erve = null;
@@ -229,18 +285,52 @@ public class ERXValidationFactory {
         return context;
     }
 
+    /** holds the default template delimiter, "@" */
     private String _delimiter = "@";
+    /**
+     * returns the template delimiter, the
+     * default delimiter is "@".
+     * @return template delimiter
+     */
     public String templateDelimiter() { return _delimiter; }
+    /**
+     * sets the template delimiter to be used
+     * when parsing templates for creating validation
+     * exception messages.
+     * @param delimiter to be set.
+     */
+    // FIXME: Should be setTemplateDelimiter, what was I thinking
     public void setDelimiter(String delimiter) { _delimiter = delimiter; }
 
+    /** flags if template caching is enabled */
     private boolean _cachingEnabled = true;
+    /**
+     * Sets if template caching is enabled.
+     * @param cachingEnabled if caching is enabled
+     */
     public void setCachingEnabled(boolean cachingEnabled) { _cachingEnabled = cachingEnabled; }
+    /**
+     * Tells if caching is enabled. This determines if the
+     * validation templates will be reloaded if they change.
+     * This flag defaults to the value of the caching flag off
+     * of WOApplication.
+     * @return if caching is enabled
+     */
     public boolean cachingEnabled() { return _cachingEnabled; }
-    
+
+    /**
+     * Method used to configure the validation factory
+     * for operation. This method is called on the default
+     * factory from an observer when the application is
+     * finished launching. This method loads the templates
+     * and enables or disables caching.
+     */
     public void configureFactory() {
         // If caching is not enabled then we want to enable dynamic reloading of validation templates.
         setCachingEnabled(WOApplication.application().isCachingEnabled());
         loadTemplates();
+        // CHECKME: This might be better configured in a static init block of ERXValidation.
+        
         ERXValidation.setPushChangesDefault(ERXUtilities.booleanValueWithDefault(System.getProperties().getProperty("er.extensions.ERXValidationShouldPushChangesToObject"), ERXValidation.DO_NOT_PUSH_INCORRECT_VALUE_ON_EO));
     }
     
