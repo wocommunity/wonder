@@ -7,6 +7,15 @@ AreThereChoices2: ERXNonZeroConditional {
 	negate = true;
 }
 
+AreThereChoices3: ERXNonZeroConditional {
+	condition = d2wContext.noChoiceAvailableMessage.length;
+	negate = true;
+}
+
+AreThereChoices4: ERXNonZeroConditional {
+	condition = d2wContext.noChoiceAvailableMessage.length;
+}
+
 CollapseContainer: D2WCollapsibleComponentContent {
 	_unroll = true;
 	allowCollapsing = d2wContext.allowCollapsing;
@@ -29,6 +38,10 @@ EditToManyRelationship: ERXToManyRelationship {
 	destinationSortKey = d2wContext.sortKey;
 	shouldShowSelectAllButtons = shouldShowSelectAllButtons;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+}
+
+String1: WOString {
+	value = d2wContext.noChoiceAvailableMessage;
 }
 
 noChoiceAvaliable: ERXLocalizedString {
