@@ -8,12 +8,15 @@ package er.extensions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Utilities for use with key value coding. You could instantiate one of these in your app-startup:
@@ -45,7 +48,7 @@ public class ERXKeyValueCodingUtilities {
     /**
      * Extends key-value coding to a class. You can currently only
      * get the static fields of the class, not method results.
-     * Java arrays are morphed into NSArrays. The implementation is pretty slow,
+     * Java arrays and collections are morphed into NSArrays. The implementation is pretty slow,
      * but I didn't exactly want to re-implement all of NSKeyValueCoding here.
      * @param clazz
      * @param key
@@ -84,8 +87,16 @@ public class ERXKeyValueCodingUtilities {
             } catch (Exception e) {
                 throw new NSForwardException(e);
             }
-            if(result != null && result.getClass().getComponentType() != null) {
-                result = new NSArray((Object[])result);
+            if(result != null) {
+                if(result.getClass().getComponentType() != null) {
+                    result = new NSArray((Object[])result);
+                } else if(result instanceof Collection) {
+                    NSMutableArray array = new NSMutableArray();
+                    for (Iterator iter = ((Collection)result).iterator(); iter.hasNext();) {
+                        array.addObject(iter.next());
+                    }
+                    result = array;
+                }
             }
         }
         return result;

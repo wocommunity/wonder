@@ -14,8 +14,8 @@ import com.webobjects.eocontrol.*;
 import er.extensions.*;
 
 /**
- * Same as the first except that it uses ERToManyRelationship to work around the webscript bug in the *Matrix components.<br />
- * 
+ * Improves superclass by adding restrictions on the choices and uses ERXToManyRelationship, thus can handle localization
+ * and has better layout options.
  */
 
 public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
