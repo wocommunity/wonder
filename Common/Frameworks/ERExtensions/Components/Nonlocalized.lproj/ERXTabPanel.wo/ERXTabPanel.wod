@@ -94,17 +94,8 @@ MainTableContainer: WOGenericContainer {
 	otherTagString = "nowrap";
 }
 
-NoBorder: WOConditional {
-condition=true; // renderBorder;
-negate=true;
-}
-
 NotSelectedTabConditional: WOConditional {
 	condition = isCellShaded;
-}
-
-RenderBorder: WOConditional {
-condition=true; // renderBorder;
 }
 
 RenderTop: WOConditional {
@@ -174,19 +165,6 @@ TabImageContainer2: WOGenericContainer {
 	bgcolor = tabBgColor;
 	elementName = "TD";
 	valign = "top";
-}
-
-TabImageHidden: WOSubmitButton {
-	action = switchSubmitTab;
-	align = "absmiddle";
-	alt = "switch to this tab";
-	border = "0";
-	filename = "scrollDown.gif";
-	framework = "JavaWOExtensions";
-	height = "15";
-	width = "13";
-	name = currentTabNameWithoutSpaces;
-	value = "";
 }
 
 TabLink: WOHyperlink {
