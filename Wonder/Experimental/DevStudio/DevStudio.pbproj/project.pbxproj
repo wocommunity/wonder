@@ -11,6 +11,7 @@
 				01A3BF70FFB0C37D11CD2B9D,
 				015E5C37FFDDB4DD11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -122,6 +123,7 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -175,7 +177,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C60B5FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -274,6 +275,7 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -317,7 +319,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C60D7FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -456,7 +457,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C6101FFD43DA37F000001 = {
 			isa = PBXTargetDependency;
@@ -537,6 +537,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -1582,11 +1584,11 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 	};
 	rootObject = 013357CCFF5DD5F011CD2B9D;
