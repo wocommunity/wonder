@@ -199,8 +199,12 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 if(ds == null) {
                     ds = new EODatabaseDataSource(ec, entityName);
                     EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
-                    if(fs != null)
-                        ((EODatabaseDataSource)ds).setFetchSpecification(fs);
+                    if(fs == null) {
+                        fs = new EOFetchSpecification(entityName, null, null);
+                    }
+                    int fetchLimit = ERXValueUtilities.intValueWithDefault(context.valueForKey("fetchLimit"), 200);
+                    fs.setFetchLimit(fetchLimit);
+                    ((EODatabaseDataSource)ds).setFetchSpecification(fs);
                 }
                 lpi.setDataSource(ds);
                 lpi.setNextPage(previousPageFromRequest());
