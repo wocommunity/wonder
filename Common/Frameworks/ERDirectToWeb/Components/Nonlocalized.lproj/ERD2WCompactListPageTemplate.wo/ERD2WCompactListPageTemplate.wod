@@ -11,6 +11,10 @@ EmptyMessageComponent: WOSwitchComponent {
 	d2wContext = d2wContext;
 }
 
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
 HideReturnOnSelect1: WOConditional {
 	_unroll = true;
 	condition = isSelectingNotTopLevel;

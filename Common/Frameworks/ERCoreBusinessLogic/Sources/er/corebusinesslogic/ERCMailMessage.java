@@ -64,6 +64,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     public void awakeFromInsertion(EOEditingContext anEditingContext) {
         super.awakeFromInsertion(anEditingContext);
         setState(ERCMailState.READY_TO_BE_SENT_STATE);
+        setReadAsBoolean(false);
     }
         
     /** log entry support is disabled */

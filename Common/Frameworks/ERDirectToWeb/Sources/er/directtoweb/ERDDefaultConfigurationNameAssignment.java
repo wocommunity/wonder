@@ -124,6 +124,17 @@ public class ERDDefaultConfigurationNameAssignment extends ERDAssignment {
     }
 
     /**
+     * Generates a default edit relationship page configuration
+     * based on the current entity name. Default format
+     * is 'EditRelationship' + entity name.
+     * @param c current D2W context
+     * @return default edit relationship page configuration name
+     */
+    public Object editRelationshipConfigurationName(D2WContext c) {
+        return "EditRelationship" + entityNameForContext(c);
+    }
+
+    /**
      * Generates a default embedded edit page configuration
      * based on the current entity name. Default format
      * is 'Edit' + entity name.
