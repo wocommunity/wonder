@@ -226,41 +226,46 @@ public class ERXEOAccessUtilities {
         EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
         
         NSArray attributes = spec.rawRowKeyPaths();
-        log.info(attributes);
-        if (attributes == null || attributes.count() == 0) attributes = entity.attributesToFetch();
+        if (attributes == null || attributes.count() == 0) {
+            attributes = entity.attributesToFetch();
+        }
         
         EOQualifier qualifier = spec.qualifier();
-        if(qualifier != null)
+        if(qualifier != null) {
             qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity);
+        }
         if(qualifier != spec.qualifier()) {
             spec = (EOFetchSpecification)spec.clone();
             spec.setQualifier(qualifier);
         }
-        
+        if(spec.fetchLimit() > 0) {
+            spec = (EOFetchSpecification)spec.clone();
+            spec.setFetchLimit(0);
+            spec.setPromptsAfterFetchLimit(false);
+        }
         EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
         String sql = sqlExpr.statement();
         if (end >= 0) {
             String url = (String) model.connectionDictionary().objectForKey("URL");
             if (url != null) {
-                if (url.toLowerCase().indexOf("frontbase") != -1) {
+                String lowerCaseURL= url.toLowerCase();
+                if (lowerCaseURL.indexOf("frontbase") != -1) {
                     //add TOP(start, (end - start)) after the SELECT word
                     int index = sql.indexOf("select");
                     if (index == -1) {
                         index = sql.indexOf("SELECT");
                     }
                     index += 6;
-
-                    //FIXME: this works for frontbase, might need to be
-                    // adjusted for other db servers!
-                    StringBuffer buf = new StringBuffer();
-                    buf.append(sql.substring(0, index)).append(" TOP(").append(start).append(",").append(end - start).append(") ").append(
-                            sql.substring(index + 1, sql.length()));
-                    sql = buf.toString();
-
-                } else if (url.toLowerCase().indexOf("openbase") != -1) { // Openbase support for limiting result set
+                    sql += sql.substring(0, index) 
+                        + " TOP(" + start + ", " + (end-start) + ")" 
+                        + sql.substring(index + 1, sql.length());
+                } else if (lowerCaseURL.indexOf("openbase") != -1) {
+                    // Openbase support for limiting result set
                     sql += " return results " + start + " to " + end;
-                } else if (url.toLowerCase().indexOf("mysql") != -1) {
+                } else if (lowerCaseURL.indexOf("mysql") != -1 ) {
                     sql += " LIMIT " + start + ", " + (end - start);
+                } else if (lowerCaseURL.indexOf("postgresql") != -1 ) {
+                    sql += " LIMIT " + (end - start) + " OFFSET " + start;
                 }
             }
             sqlExpr.setStatement(sql);
