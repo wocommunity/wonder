@@ -23,7 +23,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
 
     /** caches if automatic message encoding is enabled, defaults to true */
     protected static Boolean automaticMessageEncodingEnabled;
-
+    
     /**
      * Allows the disabling of automatic message encoding. Useful for
      * backend services where you want to just use the default encoding.
@@ -79,7 +79,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
             registerWillHandleActionRequest();
             registerDidHandleActionRequestWithActionNamed(actionName);
         }
-        if (shouldCacheResult) {
+        if (shouldCacheResult && response != null) {
             try {
                 ERXWOResponseCache.sharedInstance().cacheResponseForRequest(actionClass, actionName, request, response);
             } catch (Exception e) {
