@@ -14,12 +14,10 @@ import com.webobjects.appserver.WOContext;
  * <br/>
  * Synopsis:<br/>
  * value1=<i>anObject1</i>;value2=<i>anObject2</i>;[negate=<i>aBoolean</i>;] 
- * <br/>
- * Bindings:<br/>
- * <b>value1</b> first object to compare
- * <b>value2</b> second object to compare
- * <b>negate</b><br/> Inverts the sense of the conditional.
- * <br/>
+ *
+ * @binding value1 first object to compare
+ * @binding value2 second object to compare
+ * @binding negate Inverts the sense of the conditional.
  */
 public class ERXEqualConditional extends WOComponent {
 

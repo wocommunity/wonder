@@ -9,14 +9,36 @@ package er.extensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * Conditional component that tests if a given object 
+ * is null.
+ * <br/>
+ * Synopsis:<br/>
+ * condition=<i>aCondition</i>;[negate=<i>aBoolean</i>;]
+ * 
+ * @binding list array of objects
+ * @binding negate inverts the sense of the conditional.
+ */
 public class ERXNonNullConditional extends WOComponent {
 
+    /**
+     * Public constructor
+     * @param aContext a context
+     */
     public ERXNonNullConditional(WOContext aContext) {
         super(aContext);
     }
     
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    /**
+     * Component is stateless
+     * @return true
+     */
     public boolean isStateless() { return true; }
     
+    /**
+     * tests if the object returned from the binding 
+     * condition is not null.
+     * @return result of comparison.
+     */
     public boolean isNonNull() { return valueForBinding("condition") != null; }
 }
