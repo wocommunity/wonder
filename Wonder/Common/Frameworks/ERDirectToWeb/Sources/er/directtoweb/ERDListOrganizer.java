@@ -65,7 +65,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                 if(cat.isDebugEnabled()) cat.debug("keyPathsArray = "+keyPathsArray);
                 if(keyPathsArray!=null){
                     chosenObjects = ERDirectToWeb.displayableArrayForKeyPathArray(keyPathsArray, entityForReportName, ERXLocalizer.localizerForSession(session()).language());
-                    if(((ERXSession)session()).browserIsNetscape()){
+                    if(((ERXSession)session()).browser().isNetscape()){
                         NSMutableArray tmp = new NSMutableArray();
                         ERXKeyValuePair defaultObject =
                         new ERXKeyValuePair(new String("-"),
@@ -79,7 +79,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
                     chosenObjects = new NSArray();
                 }
                 if(cat.isDebugEnabled()) cat.debug("chosenObjects = "+chosenObjects);
-            }else if(((ERXSession)session()).browserIsNetscape()){
+            }else if(((ERXSession)session()).browser().isNetscape()){
                 ERXKeyValuePair defaultObject =
                 new ERXKeyValuePair(new String("-"),
                                    new String("--------------------------------------------------------"));
