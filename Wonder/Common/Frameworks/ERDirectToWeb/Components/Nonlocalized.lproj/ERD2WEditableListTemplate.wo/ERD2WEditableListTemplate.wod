@@ -1,11 +1,8 @@
 ActiveImage1: WOActiveImage {
-	action = saveAction;
-	src = "/nsi/buttonSave.gif";
-}
-
-ActiveImage2: WOActiveImage {
 	action = update;
-	src = "/nsi/buttonUpdate.gif";
+	alt = "Updates the current values.";
+	filename = "UpdateMetalBtn.gif";
+	framework = "ERDirectToWeb";
 }
 
 AttributeCell: WOGenericContainer {
@@ -33,13 +30,16 @@ BackButton: WOHyperlink {
 	action = backAction;
 }
 
-BackLink2: WOHyperlink {
-	action = backAction;
-}
-
 BackgroundColor: WOString {
 	_unroll = true;
 	value = d2wContext.backgroundColorForTable;
+}
+
+CancelActiveImage: WOActiveImage {
+	action = cancel;
+	alt = "Cancels your changes";
+	filename = "CancelMetalBtn.gif";
+	framework = "JavaDirectToWeb";
 }
 
 ColumnLabelRepetition: WORepetition {
@@ -119,15 +119,6 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
-Hyperlink1: WOHyperlink {
-	action = cancel;
-}
-
-Image1: WOImage {
-	border = 0;
-	src = "/nsi/buttonCancel.gif";
-}
-
 InspectImage: WOActiveImage {
 	alt = "Inspect that Object";
 	border = "0";
@@ -200,11 +191,18 @@ PropertyName: WOString {
 	value = d2wContext.displayNameForProperty;
 }
 
-ReturnButton2: WOImage {
-	alt = "Returns to the previous page";
-	border = 0;
-	name = "Returns to the previous page";
-	src = "/nsi/buttonReturn.gif";
+ReturnActiveImage: WOActiveImage {
+	filename = "ReturnMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	action = backAction;
+	alt = "Returns to the previous task.";
+}
+
+SaveActiveImage: WOActiveImage {
+	action = saveAction;
+	alt = "Saves your changes";
+	filename = "SaveMetalBtn.gif";
+	framework = "JavaDirectToWeb";
 }
 
 ShowCancel2: WOConditional {
