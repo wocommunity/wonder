@@ -784,6 +784,17 @@ public class DRReportModel extends Object  {
         return (DRGroup)_groupDict.objectForKey(mc.keyDesc());
     }
 
+    public DRMasterCriteria masterCriteriaForKeyPath(String keypath) {
+        Enumeration anEnum = criteriaList().objectEnumerator();
+
+        while (anEnum.hasMoreElements()) {
+            DRMasterCriteria amc = (DRMasterCriteria)anEnum.nextElement();
+            if(amc.label().startsWith(keypath))
+                return amc;
+        }
+        return null;
+    }
+    
 
     public NSArray rawRecords() {
         return _rawRecords;
