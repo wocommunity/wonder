@@ -30,6 +30,14 @@ public class WOExceptionPage extends WOComponent {
         error = new WOExceptionParser(newException);
         exception = newException;
     }
+
+    public WOResponse generateResponse() {
+        WOResponse response = super.generateResponse();
+        // we don't need the exception to stick around if we leave the page
+        error = null;
+        errorline = null;
+        return response;
+    }
     
     public boolean showDetails() {
         return WOApplication.application().isDebuggingEnabled();

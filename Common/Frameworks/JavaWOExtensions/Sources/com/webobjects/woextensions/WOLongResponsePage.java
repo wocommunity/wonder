@@ -21,6 +21,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
     protected boolean _performingAction;
     protected boolean _cancelled;
     protected boolean _done;
+    protected boolean _doneAndRefreshed;
 
     protected void _finishInitialization() {
         if (!WOApplication.application().adaptorsDispatchRequestsConcurrently()) {
@@ -30,6 +31,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         _status = null;
         _result = null;
         _done = false;
+        _doneAndRefreshed = false;
         _exception = null;
         _cancelled = false;
         _refreshInterval = 0;
@@ -99,6 +101,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         setResult(null);
 
         _done = false;
+        _doneAndRefreshed = false;
 
         String name = getClass().getName();
 
@@ -145,6 +148,15 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
             String header = "" +_refreshInterval+ ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
 
             aResponse.setHeader(header, "Refresh");
+        } else if ( (_refreshInterval!=0) && _done && ! _doneAndRefreshed ) {
+            // If the response is done and finished quickly (before the first branch of this conditional is invoked),
+            // make sure to refresh the page immediately.
+            String modifiedDynamicUrl = aContext.urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), null, null);
+
+            String header = "0;url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
+
+            aResponse.setHeader(header, "Refresh");
+            _doneAndRefreshed = true;
         }
 
         super.appendToResponse(aResponse, aContext);

@@ -1,8 +1,6 @@
 /*
  * WOAnyField.java
- * © Copyright 2001 Apple Computer, Inc. All rights reserved.
- * This a modified version.
- * Original license: http://www.opensource.apple.com/apsl/
+ * [JavaWOExtensions Project]
  */
 
 package com.webobjects.woextensions;
@@ -17,14 +15,15 @@ public class WOAnyField extends WOComponent {
     protected static String DEFAULT_DATE_FORMAT = "YYYY/MM/DD";
     protected static String DEFAULT_NUMBER_FORMAT = "0";
 
-    protected String _relationshipKey;
-    protected String _selectedKey;
-    protected String _selectedOperator;
+    private String _relationshipKey;
+    private String _selectedKey;
+    private String _selectedOperator;
+    private Object _value;
+    private String _textFieldValue;
+    private WODisplayGroup _displayGroup;
     // ivars for PopUp
     public String selectedKeyItem;
     public String selectedOperatorItem;
-    protected Object _value;
-    protected WODisplayGroup _displayGroup;
 
     public WOAnyField(WOContext aContext)  {
         super(aContext);
@@ -35,15 +34,16 @@ public class WOAnyField extends WOComponent {
     }
 
     public String relationshipKey() {
-        if (null==_relationshipKey) {
-            _relationshipKey = (String) _WOJExtensionsUtil.valueForBindingOrNull("relationshipKey",this);            
+        if (_relationshipKey == null) {
+            _relationshipKey = (String) _WOJExtensionsUtil.valueForBindingOrNull("relationshipKey", this);
         }
         return _relationshipKey;
     }
 
     public String selectedKey() {
-        if (null==_selectedKey)
-            _selectedKey = (String)_WOJExtensionsUtil.valueForBindingOrNull("selectedKey",this);
+        if (_selectedKey == null) {
+            _selectedKey = (String) _WOJExtensionsUtil.valueForBindingOrNull("selectedKey", this);
+        }
         return _selectedKey;
     }
 
@@ -52,16 +52,17 @@ public class WOAnyField extends WOComponent {
     }
 
     public String valueClassNameForKey(String key) {
-        String entityName = (String)_WOJExtensionsUtil.valueForBindingOrNull("sourceEntityName",this);
+        String entityName = (String) _WOJExtensionsUtil.valueForBindingOrNull("sourceEntityName", this);
         EOModelGroup modelGroup = EOModelGroup.defaultGroup();
         EOEntity entity = modelGroup.entityNamed(entityName);
         EOAttribute selectedAttribute = null;
-        if (relationshipKey()!=null) {
+        if (relationshipKey() != null) {
             EORelationship relationship = entity.relationshipNamed(relationshipKey());
             EOEntity destinationEntity = relationship.destinationEntity();
             selectedAttribute = destinationEntity.attributeNamed(key);
-        } else
+        } else {
             selectedAttribute = entity.attributeNamed(key);
+        }
         return selectedAttribute.className();
     }
 
@@ -69,21 +70,23 @@ public class WOAnyField extends WOComponent {
         String formatter = null;
         if (hasBinding("formatter")) {
             setValueForBinding(key, "key");
-            formatter = (String)_WOJExtensionsUtil.valueForBindingOrNull("formatter",this);
+            formatter = (String) _WOJExtensionsUtil.valueForBindingOrNull("formatter", this);
         }
-        if (null==formatter) {
-            String className=valueClassNameForKey(key);
-            if (className.equals("com.webobjects.foundation.NSTimestamp"))
-                formatter=DEFAULT_DATE_FORMAT;
-            else if (className.equals("java.lang.Number") || className.equals("java.math.BigDecimal"))
-                formatter=DEFAULT_NUMBER_FORMAT;
+        if (formatter == null) {
+            String className = valueClassNameForKey(key);
+            if (className.equals("com.webobjects.foundation.NSTimestamp")) {
+                formatter = DEFAULT_DATE_FORMAT;
+            } else if (className.equals("java.lang.Number") || className.equals("java.math.BigDecimal")) {
+                formatter = DEFAULT_NUMBER_FORMAT;
+            }
         }
         return formatter;
     }
 
     public WODisplayGroup displayGroup() {
-        if (null==_displayGroup)
-            _displayGroup = (WODisplayGroup) _WOJExtensionsUtil.valueForBindingOrNull("displayGroup",this);
+        if (_displayGroup == null) {
+            _displayGroup = (WODisplayGroup) _WOJExtensionsUtil.valueForBindingOrNull("displayGroup", this);
+        }
         return _displayGroup;
     }
 
@@ -92,84 +95,83 @@ public class WOAnyField extends WOComponent {
     }
 
     public void setSelectedOperator(String anOperator) {
-        if (anOperator.equals("="))
-            _selectedOperator="";
-        else _selectedOperator=anOperator;
+        _selectedOperator = (anOperator.equals("=")) ? "": anOperator;
     }
 
     public Object value() {
-        if (null==_value)
-            _value=valueForBinding("value");
+        if (_value == null) {
+            _value = _WOJExtensionsUtil.valueForBindingOrNull("value", this);
+        }
         return _value;
     }
 
     public void setValue(Object newValue) {
-        WODisplayGroup displayGroup=displayGroup();
-        if (displayGroup!=null) {
-            if (relationshipKey()!=null) {
-                displayGroup.queryMatch().takeValueForKey(newValue, relationshipKey()+"."+selectedKey());
-                if (newValue!=null) {
-                   displayGroup.queryOperator().takeValueForKey( selectedOperator(), relationshipKey()+"."+selectedKey());
+        _value = newValue;
+        WODisplayGroup displayGroup = displayGroup();
+        if (displayGroup != null) {
+            displayGroup.queryMatch().removeAllObjects();
+            if (relationshipKey() != null) {
+                displayGroup.queryMatch().takeValueForKey(newValue, relationshipKey() + "." + selectedKey());
+                if (newValue != null) {
+                    displayGroup.queryOperator().takeValueForKey(selectedOperator(), relationshipKey() + "." + selectedKey());
                 }
             } else {
                 displayGroup.queryMatch().takeValueForKey(newValue, selectedKey());
-                if (newValue!=null) {
-                    displayGroup.queryOperator().takeValueForKey( selectedOperator(), selectedKey());
+                if (newValue != null) {
+                    displayGroup.queryOperator().takeValueForKey(selectedOperator(), selectedKey());
                 }
             }
         }
     }
 
     public String textFieldValue() {
-        if (value()!=null) {
-            java.text.Format formatter=null;
+        if (_textFieldValue != null) {
+            return _textFieldValue;
+        }
+        Object value = value();
+        setValue(value);
+        if (value == null) {
+            return null;
+        } else if (value instanceof String) {
+            return (String) value;
+        } else {
+            java.text.Format formatter = null;
             String className = valueClassNameForKey(selectedKey());
-
             if (className.equals("com.webobjects.foundation.NSTimestamp")) {
-               String dateFormatterString = formatterForKey(selectedKey());
-                String errorMessage = "";
-                Object objectValue;
-
+                String dateFormatterString = formatterForKey(selectedKey());
                 formatter = new NSTimestampFormatter(dateFormatterString);
             } else if (className.equals("java.lang.Number") || className.equals("java.math.BigDecimal")) {
-                String numberFormatterString= formatterForKey(selectedKey());
-                formatter= new NSNumberFormatter(numberFormatterString);
+                String numberFormatterString = formatterForKey(selectedKey());
+                formatter = new NSNumberFormatter(numberFormatterString);
             }
-            
-            return (formatter!=null) ? formatter.format(value()) : value().toString();
-        } else
-            return null;
+            return (formatter != null) ? formatter.format(value) : value.toString();
+        }
     }
 
     public void setTextFieldValue(String value) {
-        String className= valueClassNameForKey
-        (selectedKey());
+        String className = valueClassNameForKey(selectedKey());
         if (className.equals("com.webobjects.foundation.NSTimestamp")) {
             String dateFormatterString = formatterForKey(selectedKey());
-            NSTimestampFormatter dateFormatter;
-            String errorMessage = "";
-            Object objectValue;
-
-            dateFormatter = new NSTimestampFormatter(dateFormatterString);
+            NSTimestampFormatter dateFormatter = new NSTimestampFormatter(dateFormatterString);
+            Object objectValue = null;
             try {
-                objectValue = dateFormatter.parseObject((value!=null)?value.toString():"");
+                objectValue = dateFormatter.parseObject((value != null) ? value.toString() : "");
             } catch (ParseException e) {
-                objectValue = null;
-                errorMessage = e.getMessage();
+                if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupWebObjects)) {
+                    NSLog.debug.appendln(e);
+                }
             }
             setValue(objectValue);
         } else if (className.equals("java.lang.Number") || className.equals("java.math.BigDecimal")) {
-            String numberFormatterString= formatterForKey(selectedKey());
-            NSNumberFormatter numberFormatter;
-            String errorMessage = "";
-            Object objectValue;
-
-            numberFormatter= new NSNumberFormatter(numberFormatterString);
+            String numberFormatterString = formatterForKey(selectedKey());
+            NSNumberFormatter numberFormatter = new NSNumberFormatter(numberFormatterString);
+            Object objectValue = null;
             try {
-                objectValue = numberFormatter.parseObject((value!=null)?value.toString():"");
+                objectValue = numberFormatter.parseObject((value != null) ? value.toString() : "");
             } catch (ParseException e) {
-                objectValue = null;
-                errorMessage = e.getMessage();
+                if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupWebObjects)) {
+                    NSLog.debug.appendln(e);
+                }
             }
             setValue(objectValue);
         } else {
@@ -186,16 +188,16 @@ public class WOAnyField extends WOComponent {
         _selectedKey = null;
         _selectedOperator = null;
         _value = null;
+        _textFieldValue = null;
         _displayGroup = null;
     }
 
     public void finalize() throws Throwable {
         super.finalize();
-        invalidateCaches();	
+        invalidateCaches();
     }
 
-
     public void reset() {
-        invalidateCaches();	
+        invalidateCaches();
     }
 }
