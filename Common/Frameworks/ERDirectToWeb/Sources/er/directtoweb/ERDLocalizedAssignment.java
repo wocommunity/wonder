@@ -36,15 +36,16 @@ public class ERDLocalizedAssignment extends ERDAssignment implements ERDLocaliza
         return localizerForContext(c).valueForKeyPath((String)value());
     }
     public Object displayNameForProperty(D2WContext c) {
-        String value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("propertyKey"));
-        return localizedValueForKeyWithDefaultInContext(value, c);
+        return localizedValueForKeyWithDefaultInContext((String)value(), c);
     }
-
+    public Object displayNameForEntity(D2WContext c) {
+        return localizedValueForKeyWithDefaultInContext((String)value(), c);
+    }
     public ERXLocalizer localizerForContext(D2WContext c) {
         return (ERXLocalizer) c.valueForKeyPath("session.localizer");
     }
     
     public Object fire(D2WContext c) {
-        return localizerForContext(c).valueForKeyPath((String)value());
+        return localizerForContext(c).localizedValueForKeyWithDefault((String)value());
     }
 }

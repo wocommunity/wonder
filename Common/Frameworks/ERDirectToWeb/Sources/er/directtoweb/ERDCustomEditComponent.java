@@ -150,7 +150,7 @@ public abstract class ERDCustomEditComponent extends WOComponent {
             cat.debug("***** CustomEditComponent: parent() instanceof CustomEditComponent == " + (parent() instanceof ERDCustomEditComponent));
             cat.debug("***** CustomEditComponent: parent() instanceof D2WCustomComponentWithArgs == " + (parent() instanceof ERD2WCustomComponentWithArgs));
             cat.debug("***** CustomEditComponent: parent() instanceof D2WStatelessCustomComponentWithArgs == " + (parent() instanceof ERD2WStatelessCustomComponentWithArgs));
-            cat.debug("***** CustomEditComponent: parent() instanceof D2WCustomQueryComponentWithArgs == " + (parent() instanceof ERD2WCustomQueryComponentWithArgs));
+            cat.debug("***** CustomEditComponent: parent() instanceof D2WCustomQueryComponentWithArgs == " + (parent() instanceof ERDCustomQueryComponentWithArgs));
         }
         if (super.hasBinding(binding)) {
             cat.debug("***** CustomEditComponent: super.hasBinding(binding) == true");
@@ -161,7 +161,7 @@ public abstract class ERDCustomEditComponent extends WOComponent {
             if (parent instanceof ERDCustomEditComponent ||
                 parent instanceof ERD2WCustomComponentWithArgs ||
                 parent instanceof ERD2WStatelessCustomComponentWithArgs ||
-                parent instanceof ERD2WCustomQueryComponentWithArgs) {
+                parent instanceof ERDCustomQueryComponentWithArgs) {
                 cat.debug("***** CustomEditComponent: inside the parent instanceof branch");
                 // this will eventually bubble up to a D2WCustomComponentWithArgs, where it will (depending on the actual binding)
                 // go to the d2wContext
