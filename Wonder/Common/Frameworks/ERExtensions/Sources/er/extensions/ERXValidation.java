@@ -26,6 +26,11 @@ public class ERXValidation {
     public final static boolean PUSH_INCORRECT_VALUE_ON_EO=true;
     public final static boolean DO_NOT_PUSH_INCORRECT_VALUE_ON_EO=false;
 
+    private static boolean pushChangesDefault = DO_NOT_PUSH_INCORRECT_VALUE_ON_EO;
+    public static void setPushChangesDefault(boolean val) {
+        pushChangesDefault = val;
+    }
+    
     private static D2WContext propertyNameContext = new D2WContext();
 
     public static void validationFailedWithException(Throwable e,
@@ -42,7 +47,7 @@ public class ERXValidation {
                                                      NSMutableDictionary errorMessages,
                                                      String displayPropertyKeyPath,
                                                      EOEntity entity) {
-        validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, entity, PUSH_INCORRECT_VALUE_ON_EO);
+        validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, entity, pushChangesDefault);
     }
 
     public static void validationFailedWithException(Throwable e,
@@ -90,6 +95,7 @@ public class ERXValidation {
                 propertyNameContext.setEntity(entity);
         }
         // Leveraging the power of D2WContext to generate great looking error messages.
+        cat.debug(propertyNameContext.entity() );
         if (propertyNameContext.entity() != null && key != null) {
             propertyNameContext.setPropertyKey(key);
             errorMessages.setObjectForKey(newErrorMessage, propertyNameContext.displayNameForProperty());
