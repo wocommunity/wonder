@@ -16,21 +16,28 @@ import org.apache.log4j.NDC;
 
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
 
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WPage.class);
+    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WPage");    
+    
+    /**
+     * Default public constructor.
+     * @param c current context.
+     */
     public ERD2WPage(WOContext c) {
         super(c);
     }    
     
-    /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WPage.class);
-    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WPage");
-
     public NSMutableDictionary errorMessages() { return errorMessages; }
     public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
     
     protected NSMutableDictionary errorMessages = new NSMutableDictionary();
     protected NSMutableArray errorKeyOrder = new NSMutableArray();
     protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
-    public String errorMessage="";
+
+    protected String errorMessage = "";
+    public String errorMessage() { return errorMessage; }
+    public void setErrorMessage(String message) { errorMessage = message; }
     
     protected EOEditingContext _context;
     public void setObject(EOEnterpriseObject eo) {
