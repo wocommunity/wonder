@@ -2,17 +2,22 @@ package com.webobjects.jdbcadaptor;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 
 /**
  * Postgres needs special handling of NSData conversion, special
  * escape char, has a regex query selector and handles JOIN clauses correctly.
- * @author ak: Regex, NSData
+ * In addition to that, it attaches a LIMIT clause if a fetch spec has a limit set,
+ * which can greatly speed up some queries.
+ * @author ak: Regex, NSData, fetch limit
  * @author Giorgio Valito: refactoring, typecasting, schema building
  * @author Arturo Perez: JOIN clauses
  */
 public class PostgresqlExpression extends JDBCExpression {
 
     static private final String _DEFERRABLE_MODIFIER = " INITIALLY DEFERRED";
+
+    static private final boolean enableJoinHandling = Boolean.getBoolean(PostgresqlExpression.class + ".enableJoinHandling");
 
     /**
     * Lookup table for conversion of bytes -> hex.
@@ -23,8 +28,21 @@ public class PostgresqlExpression extends JDBCExpression {
     };
     static private final char _SQL_ESCAPE_CHAR = '|';
 
+
+    private int _fetchLimit;
+    
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
+    }
+
+    /**
+     * Overridden so we can get the fetch limit from the fetchSpec.
+     */
+    public void prepareSelectExpressionWithAttributes(NSArray nsarray, boolean flag, EOFetchSpecification eofetchspecification) {
+        if(!eofetchspecification.promptsAfterFetchLimit()) {
+            _fetchLimit = eofetchspecification.fetchLimit();
+        }
+        super.prepareSelectExpressionWithAttributes(nsarray, flag, eofetchspecification);
     }
 
     /**
@@ -90,20 +108,24 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Overridden to add typecasts after the value. I.e. '2'::char. This is
      * done because Postgres can be very strict regarding type conversions.
+     * NULL values are excluded from casting.
      */
     public String sqlStringForValue(Object v, String kp) {
-        EOAttribute attribute;
-        int lastDotIdx = kp.lastIndexOf(".");
-        if (lastDotIdx == -1) {
-            attribute = entity().attributeNamed(kp);
-        } else {
-            EOEntity kpEntity = entityForKeyPath(kp);
-            attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
+        String result = super.sqlStringForValue(v,kp);
+        if(v != null && v != NSKeyValueCoding.NullValue) {
+            EOAttribute attribute;
+            int lastDotIdx = kp.lastIndexOf(".");
+            if (lastDotIdx == -1) {
+                attribute = entity().attributeNamed(kp);
+            } else {
+                EOEntity kpEntity = entityForKeyPath(kp);
+                attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
+            }
+            if(attribute != null) {
+                result = result + "::" + columnTypeStringForAttribute(attribute);
+            }
         }
-        if(attribute != null) {
-            return super.sqlStringForValue(v,kp) + "::" + columnTypeStringForAttribute(attribute);
-        }
-        return super.sqlStringForValue(v,kp);
+        return result;
     }
     
     /** Helper class to store a join definition */
@@ -136,29 +158,41 @@ public class PostgresqlExpression extends JDBCExpression {
                                                         String orderByClause,
                                                         String lockClause) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT ");
-        sb.append(columnList);
-        sb.append(" FROM ");
+        if(enableJoinHandling) {
+            sb.append("SELECT ");
+            sb.append(columnList);
+            sb.append(" FROM ");
 
-        if (_alreadyJoined.count() > 0) {
-            sb.append(" ");
-            sb.append(joinClauseString());
+            if (_alreadyJoined.count() > 0) {
+                sb.append(" ");
+                sb.append(joinClauseString());
+            } else {
+                sb.append(tableList);
+            }
+            if (whereClause != null && whereClause.length() > 0) {
+                sb.append(" WHERE ");
+                sb.append(whereClause);
+            }
+            if (orderByClause != null && orderByClause.length() > 0) {
+                sb.append(" ORDER BY ");
+                sb.append(orderByClause);
+            }
+            if (_fetchLimit != 0) {
+                sb.append(" LIMIT ");
+                sb.append(_fetchLimit);
+            }
+            if (lockClause != null && lockClause.length() > 0) {
+                sb.append(" ");
+                sb.append(lockClause);
+            }
         } else {
-            sb.append(tableList);
+            sb.append(super.assembleSelectStatementWithAttributes(attributes, lock, qualifier, fetchOrder, selectString, columnList, tableList, whereClause, joinClause, orderByClause, lockClause));
+            if (_fetchLimit != 0) {
+                sb.append(" LIMIT ");
+                sb.append(_fetchLimit);
+            }
         }
-        if (whereClause != null && whereClause.length() > 0) {
-            sb.append(" WHERE ");
-            sb.append(whereClause);
-        }
-        if (orderByClause != null && orderByClause.length() > 0) {
-            sb.append(" ORDER BY ");
-            sb.append(orderByClause);
-        }
-        if (lockClause != null && lockClause.length() > 0) {
-            sb.append(" ");
-            sb.append(lockClause);
-        }
-
+        
         return sb.toString();
     }
 
@@ -167,51 +201,62 @@ public class PostgresqlExpression extends JDBCExpression {
      * from the array we constructed previously.
      */
     public String joinClauseString() {
-        NSMutableDictionary seenIt = new NSMutableDictionary();
-        StringBuffer sb = new StringBuffer();
+        if(enableJoinHandling) {
+            NSMutableDictionary seenIt = new NSMutableDictionary();
+            StringBuffer sb = new StringBuffer();
 
-        for (int i = 0; i < _alreadyJoined.count(); i++) {
-            JoinClause jc = (JoinClause)_alreadyJoined.objectAtIndex(i);
-            boolean seenTable1 = seenIt.objectForKey(jc.table1) != null;
-            boolean seenTable2 = seenIt.objectForKey(jc.table2) != null;
+            for (int i = 0; i < _alreadyJoined.count(); i++) {
+                JoinClause jc = (JoinClause)_alreadyJoined.objectAtIndex(i);
+                boolean seenTable1 = seenIt.objectForKey(jc.table1) != null;
+                boolean seenTable2 = seenIt.objectForKey(jc.table2) != null;
 
-            if (!seenTable1 && !seenTable2) {
-                sb.append(jc.table1);
-                sb.append(jc.op);
-                sb.append(jc.table2);
-            } else if (!seenTable2) {
-                sb.append(jc.op);
-                sb.append(jc.table1);
-            } else {
-                sb.append(jc.op);
-                sb.append(jc.table2);
+                if (!seenTable1 && !seenTable2) {
+                    sb.append(jc.table1);
+                    sb.append(jc.op);
+                    sb.append(jc.table2);
+                } else if (!seenTable2) {
+                    sb.append(jc.op);
+                    sb.append(jc.table1);
+                } else {
+                    sb.append(jc.op);
+                    sb.append(jc.table2);
+                }
+                sb.append(jc.joinCondition);
+                sb.append(" ");
+
+                seenIt.setObjectForKey(jc.table1, jc.table1);
+                seenIt.setObjectForKey(jc.table2, jc.table2);
             }
-            sb.append(jc.joinCondition);
-            sb.append(" ");
-
-            seenIt.setObjectForKey(jc.table1, jc.table1);
-            seenIt.setObjectForKey(jc.table2, jc.table2);
+            return sb.toString();
+        } else {
+            return super.joinClauseString();
         }
-        return sb.toString();
     }
-
+    
     /**
      * Overriden to not call the super implementation.
      */
     public void addJoinClause(String leftName,
                               String rightName,
                               int semantic) {
-        JoinClause clause = createJoinClause(leftName, rightName, semantic);
-        _alreadyJoined.insertObjectAtIndex(clause, 0);
+        if(enableJoinHandling) {
+            JoinClause clause = createJoinClause(leftName, rightName, semantic);
+            _alreadyJoined.insertObjectAtIndex(clause, 0);
+        } else {
+            super.addJoinClause(leftName, rightName, semantic);
+        }
     }
 
-
+    
     /**
      * Overriden to construct a valid SQL92 JOIN clause as opposed to
      * the Oracle-like SQL the superclass produces.
      */
     public String assembleJoinClause(String leftName, String rightName, int semantic) {
-        return createJoinClause(leftName, rightName, semantic).toString();
+        if(enableJoinHandling) {
+            return createJoinClause(leftName, rightName, semantic).toString();
+        }
+        return super.assembleJoinClause(leftName, rightName, semantic);
     }
 
     /**
