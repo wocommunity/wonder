@@ -63,7 +63,7 @@
             externalType = INT; 
             name = intBoolean; 
             valueClassName = NSNumber; 
-            valueType = i; 
+            valueType = c; 
         }, 
         {
             allowsNull = Y; 
