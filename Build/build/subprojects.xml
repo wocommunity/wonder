@@ -43,13 +43,13 @@
         
     <target name="checkupdate">
         <uptodate property="no.changes" targetfile="${build.jar.file}">
-            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
+            <srcfiles dir="${project.dir}/Sources" />
         </uptodate>
     </target>
 
     <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
         <mkdir dir="${build.classes}" />
-        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on" optimize="off" deprecation="on">
+        <javac srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on">
             <classpath> 
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
