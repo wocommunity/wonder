@@ -58,7 +58,7 @@ public class WRRecordGroup extends WOComponent  {
      * You'd use this to implement special display that can't be achieved
      * with a simple {@link NSNumberFormatter} by using a unique format string.
      */
-    static public setFormatterForFormat(NSNumberFormatter frmt, String frmt) {
+    static public void setFormatterForFormat(NSNumberFormatter v, String frmt) {
         synchronized(_formatDict) {
             formatDict().setObjectForKey(v, frmt);
         }
