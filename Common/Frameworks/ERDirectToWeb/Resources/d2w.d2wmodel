@@ -3796,7 +3796,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageName; 
-                value = ERD2WRecoverableErrorPage; 
+                value = ERDRecoverableErrorPage; 
             }; 
         }, 
         {
