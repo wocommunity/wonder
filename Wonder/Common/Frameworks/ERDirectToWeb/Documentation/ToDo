@@ -28,6 +28,7 @@
 - get all of the image names in line with the rest of the name schemes.
 - Move a lot of the functionality of ERDCustomEditComponent up to something like ERXComponent so that some of the strange 
     sub-classing in this framework can be straightened out.
+    - General pass over all api files of components that can be used in and out of D2W.
 
 Property-Level components
 ERDEditDatePopupCommon: Localization support for dates and date format.
