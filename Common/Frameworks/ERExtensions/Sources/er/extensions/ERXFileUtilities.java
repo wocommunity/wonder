@@ -279,6 +279,23 @@ public class ERXFileUtilities {
     }
     
     /**
+     * Determines if a given resource exists. This is done
+     * to get a single entry point due to the deprecation of pathForResourceNamed
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *      for the application bundle
+     * @return the absolutePath method off of the
+     *      file object
+     */
+    public static boolean resourceExists(String fileName, String frameworkName, NSArray languages) {
+        URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
+        return url != null;
+    }
+    
+    
+   
+    
+    /**
      * Get the input stream from the specified Resource. 
      * @param fileName name of the file
      * @param frameworkName name of the framework, null or "app"

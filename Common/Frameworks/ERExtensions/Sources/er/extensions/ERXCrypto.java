@@ -13,7 +13,6 @@ import java.util.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
-import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
 /* Compilation problems? READ THIS
@@ -57,7 +56,7 @@ public class ERXCrypto {
      * used when generating the blowfish cipher.
      * @return a secret key for the blowfish cipher
      */
-    private static SecretKey secretKey() throws NoSuchAlgorithmException {
+    private static Key secretBlowfishKey() throws NoSuchAlgorithmException {
         String blowfishKey = System.getProperty("er.extensions.ERXBlowfishCipherKey");
         if (blowfishKey == null) {
             log.warn("er.extensions.ERXBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
@@ -83,9 +82,11 @@ public class ERXCrypto {
         Cipher cipher=null;
         try {
             cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
-            cipher.init(mode, secretKey());
+            cipher.init(mode, secretBlowfishKey());
+        } catch (java.security.NoSuchAlgorithmException ex) {
+            throw new NSForwardException(ex, "Couldn't find the Blowfish algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         } catch (Exception e) {
-            log.error("Caught exception trying to create cipher "+e);
+            throw new NSForwardException(e);
         }
         return cipher;
     }
@@ -142,13 +143,11 @@ public class ERXCrypto {
         MessageDigest md;
         try {
             md= MessageDigest.getInstance("SHA");
-        } catch (NoSuchAlgorithmException e) {
-            log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
-            throw new NSForwardException(e);
+        } catch (java.security.NoSuchAlgorithmException ex) {
+            throw new NSForwardException(ex, "Couldn't find the SHA algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         }
         md.update(buf);
         return ERXStringUtilities.byteArrayToHexString(md.digest());
-//        return bytesToString(md.digest());
     }
     
     /**
@@ -185,7 +184,6 @@ public class ERXCrypto {
             try {
                 encryptedBytes=encryptCipher().doFinal(bytesToEncrypt);
             } catch (Exception e) {
-                log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
                 throw new NSForwardException(e);
             }
             for (k=0; k<BLOCK_SIZE; k++) {
@@ -229,7 +227,6 @@ public class ERXCrypto {
                 try {
                     clearText=decryptCipher().doFinal(encryptedBytes);
                 } catch (Exception e) {
-                    log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
                     throw new NSForwardException(e);
                 }
                 for (int k=0; k<BLOCK_SIZE;k++) {
@@ -245,7 +242,6 @@ public class ERXCrypto {
             try {
                 clearText=decryptCipher().doFinal(encryptedBytes);
             } catch (Exception e) {
-                log.fatal("Caught "+e+" - "+ERXUtilities.stackTrace(e));
                 throw new NSForwardException(e);
             }        
             for (int k=0; k<BLOCK_SIZE;k++) {
@@ -280,27 +276,11 @@ public class ERXCrypto {
     
 
     private static String _secretKeyPathFramework;
-    public static String secretKeyPathFramework(){
-        return _secretKeyPathFramework;
-    }
     public static void setSecretKeyPathFramework(String v){
         _secretKeyPathFramework = v;
     }
 
-
     private static String _secretKeyPath;
-    public static String secretKeyPath(){
-        if(_secretKeyPath == null){
-            String fn = "SecretKey.ser";
-            //ENHANCEME: we should avoid calling the WOApplication.application() if not strictly required (giorgio_v)
-            if( WOApplication.application() != null && WOApplication.application().resourceManager() != null ) {
-                _secretKeyPath = (String)WOApplication.application().resourceManager().pathForResourceNamed
-                ( fn, secretKeyPathFramework(), null );
-            }
-            if(_secretKeyPath == null) _secretKeyPath = fn;
-        }
-        return _secretKeyPath;
-    }
     public static void setSecretKeyPath(String v){
         _secretKeyPath = v;
     }
@@ -309,90 +289,90 @@ public class ERXCrypto {
     /*
      * Hashing and encryption methods
      */
-
+    
     /**
-        * Uses the SHA hash algorithm found in the Sun JCE to hash the
+     * Uses the SHA hash algorithm found in the Sun JCE to hash the
      * passed in String. This String is then base64 encoded and
      * returned.
      */
-    public static String base64HashedString(String v){
+    public static String base64HashedString(String v) {
         String base64HashedPassword = null;
         try{
             MessageDigest md = MessageDigest.getInstance("SHA");
             md.update(v.getBytes());
             String hashedPassword = new String(md.digest());
             sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
-                base64HashedPassword = enc.encode(hashedPassword.getBytes());
-        }catch(java.security.NoSuchAlgorithmException e){
-            log.error("Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+            base64HashedPassword = enc.encode(hashedPassword.getBytes());
+        } catch(java.security.NoSuchAlgorithmException e) {
+            throw new NSForwardException(e, "Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         }
         return base64HashedPassword;
     }
 
     /**
-        * Returns the File object holding the secret key used by this class's
-     * DES encryption routines. The secret key is located in a file called
-     * "SecretKey.ser"
-     */
-    public static File secretKeyFile(){
-        File f = new File( secretKeyPath() );
-        return f;
-    }
-
-    /**
-        * Returns the DES java.security.Key found in the key file. The Key is
+     * Returns the DES java.security.Key found in the key file. The Key is
      * cached once it's found so further hits to the disk are unnecessary.
      * If the key file cannot be found, the method creates a
      * key and writes out a key file.
      */
-    private static Key _secretKey = null;
-    public static Key secretKey(File skFile){
-        if(_secretKey == null){
-            log.info("About to try to recover key");
-            try{
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(skFile));
-                try{
-                    _secretKey = (Key)in.readObject();
-                }catch(ClassNotFoundException e){
-                    log.error("Couldn't get class being decoded from file");
+    private static Key _secretDESKey = null;
+    private static Key secretDESKey() {
+        _secretDESKey = null;
+        if(_secretDESKey == null){
+            InputStream is = null;
+            if(_secretKeyPath != null) {
+                try {
+                    is = new FileInputStream(new File(_secretKeyPath));
+                } catch (FileNotFoundException e) {
+                    log.warn("Couldn't recover Secret key file, generating new");
+                    try {
+                        KeyGenerator gen = KeyGenerator.getInstance("DES");
+                        gen.init(new SecureRandom());
+                        _secretDESKey = gen.generateKey();
+                        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(_secretKeyPath)));
+                        out.writeObject(_secretDESKey);
+                        out.close();
+                        is = new FileInputStream(new File(_secretKeyPath));
+                    } catch (java.security.NoSuchAlgorithmException ex) {
+                        throw new NSForwardException(ex, "Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+                    } catch (Exception ex) {
+                        throw NSForwardException._runtimeExceptionForThrowable(ex);
+                    }
                 }
-                in.close();
-            }catch(FileNotFoundException e){
-                log.error("Couldn't recover Secret key file");
-                try{
-                    KeyGenerator gen = KeyGenerator.getInstance("DES");
-                    gen.init(new SecureRandom());
-                    _secretKey = gen.generateKey();
-                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(skFile));
-                    out.writeObject(_secretKey);
-                    out.close();
-                }catch(java.security.NoSuchAlgorithmException noSuchE){
-                    log.error("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
-                }catch(FileNotFoundException outputFileNotFoundE){
-                    log.error("e:"+outputFileNotFoundE);
-                }catch(IOException ioe){
-                    log.error("e:"+ioe);
+            } else {
+                String fn = "SecretKey.ser";
+                is = ERXFileUtilities.inputStreamForResourceNamed(fn, _secretKeyPathFramework, null);
+            }
+            if(is != null) {
+                log.debug("About to try to recover key");
+                
+                try {
+                    ObjectInputStream in = new ObjectInputStream(is);
+                    _secretDESKey = (Key)in.readObject();
+                    in.close();
+                } catch(Exception e) {
+                    throw NSForwardException._runtimeExceptionForThrowable(e);
                 }
-            }catch(IOException e){
-                log.error("e:"+e);
+            } else {
+                throw new RuntimeException("No secret key found. You should add a 'Secret.ser' file into your app's resources or use setSecretKeyPath(String aPath)");
             }
         }
-        return _secretKey;
+        return _secretDESKey;
     }
-
-
+    
+    
     /**
-        * DES Encrypts and then base64 encodes the passed in String using the
+     * DES Encrypts and then base64 encodes the passed in String using the
      * secret key returned by <code>secretKey</code>. The base64 encoding is
      * performed to ensure that the encrypted string can be stored in places
      * that don't support extended character sets.
      */
     public static String base64EncryptedString(String v){
-        return base64EncryptedString(v, secretKey(secretKeyFile()));
+        return base64EncryptedString(v, secretDESKey());
     }
-
+    
     /**
-        * DES Encrypts and then base64 encodes the passed in String using the
+     * DES Encrypts and then base64 encodes the passed in String using the
      * passed in secret key. The base64 encoding is
      * performed to ensure that the encrypted string can be stored in places
      * that don't support extended character sets.
@@ -409,33 +389,25 @@ public class ERXCrypto {
             byte[] raw = cipher.doFinal(stringBytes);
             sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
             encBase64String = enc.encode(raw);
-        }catch(java.security.NoSuchAlgorithmException e){
-            log.error("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
-        }catch(javax.crypto.NoSuchPaddingException e){
-            log.error("e:"+e);
-        }catch(java.security.InvalidKeyException e){
-            log.error("e:"+e);
-        }catch(java.io.UnsupportedEncodingException e){
-            log.error("e:"+e);
-        }catch(javax.crypto.IllegalBlockSizeException e){
-            log.error("e:"+e);
-        }catch(javax.crypto.BadPaddingException e){
-            log.error("e:"+e);
+        } catch(java.security.NoSuchAlgorithmException ex) {
+            throw new NSForwardException(ex, "Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+        } catch(Exception ex) {
+            throw new NSForwardException(ex);
         }
         return encBase64String;
     }
-
-
+    
+    
     /**
-        * Base64 decodes and then DES decrypts the passed in string using the
+     * Base64 decodes and then DES decrypts the passed in string using the
      * secret key returned by <code>secretKey</code>.
      */
     public static String decryptedBase64String(String v){
-        return decryptedBase64String(v, secretKey(secretKeyFile()));
+        return decryptedBase64String(v, secretDESKey());
     }
-
+    
     /**
-        * Base64 decodes and then DES decrypts the passed in string using the
+     * Base64 decodes and then DES decrypts the passed in string using the
      * passed in secret key.
      */
     public static String decryptedBase64String(String v, Key sKey){
@@ -444,32 +416,17 @@ public class ERXCrypto {
         String decString = null;
         try{
             Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey(secretKeyFile()));
+            cipher.init(Cipher.DECRYPT_MODE, secretDESKey());
             sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
             byte[] raw = enc.decodeBuffer(v);
             byte[] stringBytes = cipher.doFinal(raw);
             stringBytes = ERXCompressionUtilities.inflateByteArray(stringBytes);
             decString = new String(stringBytes, "UTF8");
-        }catch(java.security.NoSuchAlgorithmException e){
-            log.error("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
-        }catch(javax.crypto.NoSuchPaddingException e){
-            log.error("String="+v+"\ne:");
-            e.printStackTrace();
-        }catch(java.io.IOException e){
-            log.error("String="+v+"\ne:");
-            e.printStackTrace();
-        }catch(javax.crypto.IllegalBlockSizeException e){
-            log.error("String="+v+"\ne:");
-            e.printStackTrace();
-        }catch(javax.crypto.BadPaddingException e){
-            log.error("String="+v+"\ne:");
-            e.printStackTrace();
-        }catch(java.security.InvalidKeyException e){
-            log.error("String="+v+"\ne:");
-            e.printStackTrace();
+        } catch(java.security.NoSuchAlgorithmException ex) {
+            throw new NSForwardException(ex, "Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+        } catch(Exception ex) {
+            throw new NSForwardException(ex);
         }
         return decString;
     }
-
-    
 }
