@@ -78,7 +78,6 @@ public class ERCMailMessage extends _ERCMailMessage {
 
     // IMPLEMENTME: MarkReadInterface
     public void markReadBy(EOEnterpriseObject by) {
-        // this will be useful for marketing to track who opens the emails
        setReadAsBoolean(true);
     }
 
