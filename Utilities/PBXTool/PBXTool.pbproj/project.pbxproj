@@ -63,6 +63,7 @@
 		};
 		08FB7794FE84155DC02AAC07 = {
 			children = (
+				F5307A0802376A0301AD0D0C,
 				08FB7795FE84155DC02AAC07,
 				08FB779DFE84155DC02AAC07,
 				1AB674ADFE9D54B511CA2CBB,
@@ -212,6 +213,29 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+//650
+//651
+//652
+//653
+//654
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5307A0802376A0301AD0D0C = {
+			children = (
+				F5307A7602376B0301AD0D0C,
+			);
+			isa = PBXGroup;
+			name = helper;
+			refType = 4;
+		};
+		F5307A7602376B0301AD0D0C = {
+			isa = PBXFileReference;
+			path = fix_from_html.pl;
+			refType = 4;
 		};
 	};
 	rootObject = 08FB7793FE84155DC02AAC07;
