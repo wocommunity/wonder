@@ -9,6 +9,8 @@ AttributeValue: WOBrowser {
 	multiple = false;
 	selections = browserSelections;
 	size = d2wContext.browserSize;
+	name = "list2";
+	value = itemHashCode;
 }
 
 Banner: WOImage {
@@ -19,6 +21,26 @@ Banner: WOImage {
 	height = "34";
 	name = "Currently...";
 	width = "550";
+}
+
+Conditional1: WOConditional {
+	condition = session.javaScriptEnabled;
+}
+
+Conditional2: WOConditional {
+	condition = session.javaScriptEnabled;
+	negate = true;
+}
+
+Conditional3: WOConditional {
+	condition = session.javaScriptEnabled;
+	negate = true;
+}
+
+Conditional4: WOConditional {
+	condition = session.javaScriptEnabled;
+	negate = false;
+	WODebug = true;
 }
 
 DisplayArrows: WOConditional {
@@ -52,6 +74,17 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
+HiddenField1: WOHiddenField {
+	name = "resultHiddenField";
+	value = sortedObjects;
+}
+
+Hyperlink1: WOHyperlink {
+}
+
+Hyperlink2: WOHyperlink {
+}
+
 InspectComponent: D2WEdit {
 	action = saveAction;
 	entityName = destinationEntity.name;
@@ -68,6 +101,12 @@ InspectTable: WOGenericContainer {
 }
 
 IsEntityWritable: WOConditional {
+	_unroll = true;
+	condition = isEntityReadOnly;
+	negate = true;
+}
+
+IsEntityWritable2: WOConditional {
 	_unroll = true;
 	condition = isEntityReadOnly;
 	negate = true;
@@ -159,6 +198,22 @@ SubmitButton2: WOSubmitButton {
 	value = "Down";
 }
 
+SubmitButton3: WOSubmitButton {
+	action = returnAction;
+	value = "Return";
+}
+
+SubmitButton4: WOSubmitButton {
+	action = displayQueryAction;
+	value = "Search DB";
+}
+
+SubmitButton5: WOSubmitButton {
+	action = newObjectAction;
+	value = "New";
+}
+
 ToManyForm: WOForm {
 	multipleSubmit = true;
+	name = "EditForm";
 }
