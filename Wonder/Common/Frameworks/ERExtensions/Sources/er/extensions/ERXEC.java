@@ -15,6 +15,7 @@ public class ERXEC extends EOEditingContext {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEC.class);
     public static final ERXLogger lockLogger = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLogger");
+    public static final ERXLogger lockLoggerTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLoggerTrace");
     /** name of the notification that is posted after editing context is created */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
     private boolean automaticLockUnlock = false;
@@ -62,69 +63,56 @@ public class ERXEC extends EOEditingContext {
     public void lock() {
         lockCount++;
         super.lock();
-        if (!_autoLocked && lockLogger.isDebugEnabled()) {
+        if (!autoLocked && lockLogger.isDebugEnabled()) {
             lockLogger.debug("locked "+this);
         }
     }
     public void unlock() {
         super.unlock();
-        if (!_autoLocked && lockLogger.isDebugEnabled()) {
+        if (!autoLocked && lockLogger.isDebugEnabled()) {
             lockLogger.debug("unlocked "+this);
         }
         lockCount--;
     }
-    public void reset() {
+
+    public boolean autoLock(String method) {
         boolean unlock = false;
         if (lockCount == 0 && automaticLockUnlock()) {
             unlock = true;
             lock();
-            if (!_autoLocked) lockLogger.warn("called method reset without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
+            if (!autoLocked) {
+                if(lockLoggerTrace.isDebugEnabled()) {
+                    lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
+                } else {
+                    lockLogger.warn("called method " + method + " without a lock, ec="+this);
+                }
             }
         }
+        return unlock;
+    }
+    
+    public void reset() {
+        boolean unlock = autoLock("reset");
         try {
             super.reset();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void recordObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method recordObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("recordObject");
         try {
             super.recordObject(eoenterpriseobject, eoglobalid);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void forgetObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method forgetObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("forgetObject");
         try {
             super.forgetObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void _undoUpdate(Object obj) {
@@ -134,633 +122,283 @@ public class ERXEC extends EOEditingContext {
         //eoenterpriseobject.updateFromSnapshot(nsdictionary);
     }
     public void processRecentChanges() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method processRecentChanges without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("processRecentChanges");
         try {
             super.processRecentChanges();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray updatedObjects() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method updatedObjects without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("updatedObjects");
         try {
             return super.updatedObjects();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray registeredObjects() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method registeredObjects without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("registeredObjects");
         try {
             return super.registeredObjects();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray insertedObjects() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method insertedObjects without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("insertedObjects");
         try {
             return super.insertedObjects();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray deletedObjects() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method deletedObjects without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("deletedObjects");
         try {
             return super.deletedObjects();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void setSharedEditingContext(EOSharedEditingContext eosharededitingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method setSharedEditingContext without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("setSharedEditingContext");
         try {
             super.setSharedEditingContext(eosharededitingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public EOEnterpriseObject objectForGlobalID(EOGlobalID eoglobalid) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method objectForGlobalID without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("objectForGlobalID");
         try {
             return super.objectForGlobalID(eoglobalid);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public EOGlobalID globalIDForObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method globalIDForObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("globalIDForObject");
         try {
             return super.globalIDForObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSDictionary committedSnapshotForObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method committedSnapshotForObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("committedSnapshotForObject");
         try {
             return super.committedSnapshotForObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSDictionary currentEventSnapshotForObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method currentEventSnapshotForObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("currentEventSnapshotForObject");
         try {
             return super.currentEventSnapshotForObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void objectWillChange(Object obj) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method objectWillChange without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("objectWillChange");
         try {
             super.objectWillChange(obj);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void insertObjectWithGlobalID(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method insertObjectWithGlobalID without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("insertObjectWithGlobalID");
         try {
             super.insertObjectWithGlobalID(eoenterpriseobject, eoglobalid);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void insertObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method insertObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("insertObject");
         try {
             super.insertObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void deleteObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method deleteObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("deleteObject");
         try {
             super.deleteObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public boolean hasChanges() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method hasChanges without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("hasChanges");
         try {
             return super.hasChanges();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void saveChanges() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method saveChanges without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("saveChanges");
         try {
             super.saveChanges();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public EOEnterpriseObject faultForGlobalID(EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method faultForGlobalID without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("faultForGlobalID");
         try {
             return super.faultForGlobalID(eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray arrayFaultWithSourceGlobalID(EOGlobalID eoglobalid, String s, EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method arrayFaultWithSourceGlobalID without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("arrayFaultWithSourceGlobalID");
         try {
             return super.arrayFaultWithSourceGlobalID(eoglobalid, s, eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void initializeObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method initializeObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("initializeObject");
         try {
             super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void editingContextDidForgetObjectWithGlobalID(EOEditingContext eoeditingcontext, EOGlobalID eoglobalid) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method editingContextDidForgetObjectWithGlobalID without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("editingContextDidForgetObjectWithGlobalID");
         try {
             super.editingContextDidForgetObjectWithGlobalID(eoeditingcontext, eoglobalid);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray objectsForSourceGlobalID(EOGlobalID eoglobalid, String s, EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method objectsForSourceGlobalID without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("objectsForSourceGlobalID");
         try {
             return super.objectsForSourceGlobalID(eoglobalid, s, eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void refaultObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method refaultObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("refaultObject");
         try {
             super.refaultObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void refaultObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method refaultObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("refaultObject");
         try {
             super.refaultObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public NSArray objectsWithFetchSpecification(EOFetchSpecification eofetchspecification, EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method objectsWithFetchSpecification without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("objectsWithFetchSpecification");
         try {
             return super.objectsWithFetchSpecification(eofetchspecification, eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void saveChangesInEditingContext(EOEditingContext eoeditingcontext) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method saveChangesInEditingContext without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("saveChangesInEditingContext");
         try {
             super.saveChangesInEditingContext(eoeditingcontext);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void refaultAllObjects() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method refaultAllObjects without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("refaultAllObjects");
         try {
             super.refaultAllObjects();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void invalidateObjectsWithGlobalIDs(NSArray nsarray) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method invalidateObjectsWithGlobalIDs without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("invalidateObjectsWithGlobalIDs");
         try {
             super.invalidateObjectsWithGlobalIDs(nsarray);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void invalidateAllObjects() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method invalidateAllObjects without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("invalidateAllObjects");
         try {
             super.invalidateAllObjects();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void lockObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method lockObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("lockObject");
         try {
             super.lockObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void revert() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method revert without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("revert");
         try {
             super.revert();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void saveChanges(Object obj) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method saveChanges without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("saveChanges");
         try {
             super.saveChanges(obj);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void refreshObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method refreshObject without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("refreshObject");
         try {
             super.refreshObject(eoenterpriseobject);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void undo() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method undo without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("undo");
         try {
             super.undo();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void redo() {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method redo without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("redo");
         try {
             super.redo();
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public Object invokeRemoteMethod(EOEditingContext eoeditingcontext, EOGlobalID eoglobalid, String s, Class aclass[], Object aobj[]) {
-        boolean unlock = false;
-        if (lockCount == 0 && automaticLockUnlock()) {
-            unlock = true;
-            lock();
-            if (!_autoLocked) lockLogger.warn("called method invokeRemoteMethod without a lock, ec="+this);
-            if (!_autoLocked && lockLogger.isDebugEnabled()) {
-                lockLogger.debug(ERXUtilities.stackTrace());
-            }
-        }
+        boolean unlock = autoLock("invokeRemoteMethod");
         try {
             return super.invokeRemoteMethod(eoeditingcontext, eoglobalid, s, aclass, aobj);
         } finally {
-            if (unlock) {
-                unlock();
-            }
+            if (unlock) unlock();
         }
     }
     public void setDelegate(Object d) {
@@ -771,12 +409,12 @@ public class ERXEC extends EOEditingContext {
         super.setDelegate(d);
     }
 
-    public boolean _autoLocked = false;
+    public boolean autoLocked = false;
     public void setAutoLocked(boolean v) {
-        _autoLocked = v;
+        autoLocked = v;
     }
     public boolean isAutoLocked() {
-        return _autoLocked;
+        return autoLocked;
     }
         public static class DefaultFactory implements Factory {
             /** logging support */
