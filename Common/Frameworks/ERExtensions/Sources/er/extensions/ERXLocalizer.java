@@ -68,11 +68,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
 
-    private static Observer observer = new Observer();
-    private static NSMutableArray monitoredFiles = new NSMutableArray();
+    private static Observer observer;
+    private static NSMutableArray monitoredFiles;
 
     public static void initialize() {
         if(!isInitialized) {
+            observer = new Observer();
+            monitoredFiles = new NSMutableArray();
             isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
             if (isLocalizationEnabled) {
                 // To detect ERXLocalizer and its subclasses are recompiled at run-time. 
@@ -125,8 +127,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         ERXLocalizer l = null;
         Enumeration e = languages.objectEnumerator();
         while(e.hasMoreElements()) {
-            Object o = e.nextElement();
-            String language = (String)o;
+            String language = (String)e.nextElement();
             l = (ERXLocalizer)localizers.objectForKey(language);
             if(l != null) {
                 return l;
@@ -211,7 +212,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
      * @return localized string for the given key
      */
     public Object valueForKey(String key) {
-        return localizedValueForKey(key);
+        return valueForKeyPath(key);
     }
     
     public Object valueForKeyPath(String key) {
@@ -420,7 +421,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public String localizedTemplateStringForKeyWithObjectOtherObject(String key, Object o1, Object o2) {
-        String template = localizedStringForKeyWithDefault(key);
+        String template = (String)valueForKeyPath(key);
         if (template != null)
             return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o1, o2);
         return key;
