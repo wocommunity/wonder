@@ -140,7 +140,7 @@ public abstract class ERD2WListPage extends D2WListPage {
     public void setD2wContext(D2WContext newValue) {}
     
     public void setLocalContext(D2WContext newValue) {
-        if (ERXExtensions.safeDifferent(newValue,localContext())) {
+        if (ERXExtensions.safeDifferent(newValue,d2wContext())) {
             _hasBeenInitialized=false;
             _batchSize=null;
             // HACK ALERT: this next line is made necessary by the brain-damageness of
@@ -249,27 +249,43 @@ public abstract class ERD2WListPage extends D2WListPage {
     public WOComponent editObjectAction() {
         WOComponent result = null;
         String editConfigurationName=(String)d2wContext().valueForKey("editConfigurationName");
-        if(editConfigurationName!=null){
+
+        if(editConfigurationName != null){
             EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
-            epi.setObject(object());
+
+            epi.setObject(localInstance());
             epi.setNextPage(context().page());
-            return (WOComponent)epi;
-        }else{result = super.editObjectAction();}
+            result = (WOComponent)epi;
+        } else {
+            EditPageInterface editpageinterface = D2W.factory().editPageForEntityNamed(localInstance().entityName(), session());
+            editpageinterface.setObject(localInstance());
+            editpageinterface.setNextPage(context().page());
+            result = (WOComponent)editpageinterface;
+        }
         return result;
     }
 
     public WOComponent inspectObjectAction() {
         WOComponent result = null;
         String inspectConfigurationName=(String)d2wContext().valueForKey("inspectConfigurationName");
-        if(inspectConfigurationName!=null){
+
+        if(inspectConfigurationName!=null) {
             InspectPageInterface ipi=(InspectPageInterface)D2W.factory().pageForConfigurationNamed(inspectConfigurationName,session());
-            ipi.setObject(object());
+            ipi.setObject(localInstance());
             ipi.setNextPage(context().page());
             return (WOComponent)ipi;
-        }else{result = super.inspectObjectAction();}
-        return result;
+        } else {
+            InspectPageInterface inspectpageinterface = D2W.factory().inspectPageForEntityNamed(localInstance().entityName(), session());
+            inspectpageinterface.setObject(localInstance());
+            inspectpageinterface.setNextPage(context().page());
+            return (WOComponent)inspectpageinterface;
+        }
     }
 
+    private EOEnterpriseObject localInstance() {
+        return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
+    }
+    
     public boolean showCancel() { return nextPage()!=null; }
 
     public boolean isSelectingNotTopLevel(){
