@@ -182,6 +182,10 @@ public class ERCMailMessage extends _ERCMailMessage {
         return sb.toString();
     }
 
+    public String toLongString() {
+        return toString();
+    }
+    
     public ERCMailMessage archive() {
         return (ERCMailMessage)ERXEOControlUtilities.createAndInsertObject(editingContext(),
                                                                            "ERCMailMessageArchive",
