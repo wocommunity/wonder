@@ -527,4 +527,23 @@ public class ERXStringUtilities {
             return new String(chars);
         }
     }
+    
+    /** 
+     * Crean-ups version string by removing extra dots(.), 
+     * for example, 5.1.3 becomes 5.13, so that the string 
+     * can be converted to a double or BigDecimal type. 
+     * 
+     * @return version string that contains only first dot(.) 
+     *           as the floating point indicator. 
+     */
+    public static String removeExtraDotsFromVersionString(String version) {
+        int floatingPointIndex = version.indexOf("."); 
+        if (floatingPointIndex >= 0  &&  floatingPointIndex + 1 < version.length()) {
+            String minorVersion = ERXStringUtilities.replaceStringByStringInString(".", "", 
+                                        version.substring(floatingPointIndex + 1));
+            version = version.substring(0, floatingPointIndex + 1) + minorVersion;
+        }
+        return version;
+    }
+    
 }
