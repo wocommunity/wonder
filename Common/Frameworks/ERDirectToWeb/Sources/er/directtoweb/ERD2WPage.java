@@ -83,13 +83,26 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             validationCat.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
         if (shouldCollectValidationExceptions()) {
             if (e instanceof ERXValidationException) {
-                ((ERXValidationException)e).setContext(d2wContext());
-                ((ERXValidationException)e).setTargetLanguage(ERXLocalizer.localizerForSession(session()).language());
+                ERXValidationException erv = (ERXValidationException)e;
+                erv.setContext(d2wContext());
+                errorKeyOrder.addObject(d2wContext().displayNameForProperty());
+                errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
+                if (erv.eoObject() != null && erv.propertyKey() != null &&
+                    ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false)) {
+                    erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
+                }   
+            } else {
+                _temp.removeAllObjects();
+                ERXValidation.validationFailedWithException(e,
+                                                        value,
+                                                        keyPath,
+                                                        _temp,
+                                                        propertyKey(),
+                                                        ERXLocalizer.localizerForSession(session()),d2wContext().entity(),
+                                                        ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
+                errorKeyOrder.addObjectsFromArray(_temp.allKeys());
+                errorMessages.addEntriesFromDictionary(_temp);
             }
-            _temp.removeAllObjects();
-            ERXValidation.validationFailedWithException(e,value,keyPath,_temp,propertyKey(),ERXLocalizer.localizerForSession(session()),d2wContext().entity(),ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
-            errorKeyOrder.addObjectsFromArray(_temp.allKeys());
-            errorMessages.addEntriesFromDictionary(_temp);
             d2wContext().takeValueForKey(errorMessages, "errorMessages");
             if (keyPath != null)
                 keyPathsWithValidationExceptions.addObject(keyPath);

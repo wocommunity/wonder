@@ -91,6 +91,7 @@ public class ERD2WEditableListPage extends ERD2WListPageTemplate implements ERXE
     }
 
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
+        // Should be cleaned up.
         er.extensions.ERXValidation.validationFailedWithException(e,
                                                                   value,
                                                                   keyPath,
