@@ -21,7 +21,9 @@ import java.lang.reflect.*;
     needed in WebObjects because if sending 20 mails takes 40 seconds,
     then the user must wait 40 seconds before attempting to use
     the application.
-    @author Camille Troillard <tuscland@mac.com> */
+    @author Camille Troillard <tuscland@mac.com>
+    @author Tatsuya Kawano <tatsuyak@mac.com>
+    @author Max Muller <maxmuller@mac.com> */ 
 public class ERMailSender extends Thread {
 
     static ERXLogger log = ERXLogger.getERXLogger (ERMailSender.class);
@@ -49,13 +51,13 @@ public class ERMailSender extends Thread {
         super ("ERMailSender");
         this.setPriority (Thread.MIN_PRIORITY);
         stats = new Stats ();
-        messages = new ERQueue (ERJavaMail.sharedInstance().senderQueueSize());
+        messages = new ERQueue (ERJavaMail.sharedInstance ().senderQueueSize ());
 
         if (WOApplication.application ().isDebuggingEnabled ())
             milliSecondsWaitRunLoop = 2000;
         
         if (log.isDebugEnabled())
-            log.debug("ERMailSender initialized (JVM heap size: " + stats.formattedUsedMemory() + ")");
+            log.debug("ERMailSender initialized (JVM heap size: " + stats.formattedUsedMemory () + ")");
     }
 
     /** @return the shared instance of the singleton ERMailSender object */
@@ -144,14 +146,15 @@ public class ERMailSender extends Thread {
 	used when sendMessageNow is used, the MessagingException is
 	encapsulated in a ERMailSender.ForwardException, and thrown to
 	the user. */
-    protected void _sendMessageNow (ERMessage message, Transport transport) throws MessagingException {
+    protected void _sendMessageNow (ERMessage message, Transport transport)
+        throws MessagingException {
+        boolean debug = log.isDebugEnabled ();
 	MimeMessage aMessage  = message.mimeMessage ();
 	Object callbackObject = message.callbackObject ();
 	MessagingException exception = null;
 
 	// Send the message
 	try {
-	    boolean debug = log.isDebugEnabled ();
 	    if (debug) log.debug ("Sending a message ...");
 	    transport.sendMessage (aMessage, aMessage.getAllRecipients ());
             stats.updateMemoryUsage ();
@@ -166,9 +169,10 @@ public class ERMailSender extends Thread {
                 log.debug ("(" + stats.formattedUsedMemory() + ") Message sent: " + allRecipientsString);
             }
 	} catch (SendFailedException e) {	
-	    if (log.isDebugEnabled ())
-		log.debug ("Failed to send message: \n" + message.allRecipientsAsString() 
-                                + e.getMessage ());
+	    if (debug)
+		log.debug ("Failed to send message: \n" +
+                           message.allRecipientsAsString() +
+                           e.getMessage ());
 	    stats.incrementErrorCount ();
 
 	    if (callbackObject != null) {
