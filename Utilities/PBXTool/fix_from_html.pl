@@ -11,7 +11,7 @@ To use:
 EOF
 
 my ($proj, $desc) = (@ARGV);
-$pbxtool = "../../Utilities/PBXTool/build/PBXTool";
+$pbxtool = "~/Roots/PBXTool";
 
 die($usage) if(!$proj || !$desc);
 
