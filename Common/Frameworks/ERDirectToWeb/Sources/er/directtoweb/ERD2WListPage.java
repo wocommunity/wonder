@@ -111,12 +111,17 @@ public abstract class ERD2WListPage extends D2WListPage {
             NSArray sortOrderingDefinition=(NSArray)d2wContext().valueForKey("defaultSortOrdering");
             if (sortOrderingDefinition!=null) {
                 NSMutableArray so=new NSMutableArray();
+                NSArray displayPropertyKeys = (NSArray)d2wContext().valueForKey("displayPropertyKeys");
                 for (int i=0; i< sortOrderingDefinition.count();) {
                     String sortKey=(String)sortOrderingDefinition.objectAtIndex(i++);
                     String sortSelectorKey=(String)sortOrderingDefinition.objectAtIndex(i++);
-                    EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
-                                                                   ERXUtilities.sortSelectorWithKey(sortSelectorKey));
-                    so.addObject(sortOrdering);
+                    if(displayPropertyKeys.containsObject(sortKey)) {
+                        EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
+                                                                       ERXUtilities.sortSelectorWithKey(sortSelectorKey));
+                        so.addObject(sortOrdering);
+                    } else {
+                        log.warn("Sort key '"+sortKey+"' is not in display keys");
+                    }
                 }
                 sortOrderings=so;
                 if (log.isDebugEnabled()) log.debug("Found sort Orderings in rules "+ sortOrderings);
