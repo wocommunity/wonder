@@ -281,6 +281,8 @@
 				F5E3A83803708BED013FACDE,
 				F5E3A83C03708C27013FACDE,
 				F5E3A84303708C4D013FACDE,
+				9419AD2F03D792BD00CF0E7D,
+				9419AD3A03D7938200CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -452,6 +454,7 @@
 				F59BE09503A5883C01CF0E76,
 				500D40B903CDFC7100CF0E76,
 				7752CFA603D67F4D00257492,
+				9419AD3003D792BD00CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1140,6 +1143,74 @@
 //772
 //773
 //774
+//940
+//941
+//942
+//943
+//944
+		9419AD2703D792BD00CF0E7D = {
+			children = (
+				9419AD2803D792BD00CF0E7D,
+				9419AD2903D792BD00CF0E7D,
+				9419AD3403D7938200CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERXEditDateJavascript;
+			refType = 4;
+		};
+		9419AD2803D792BD00CF0E7D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXEditDateJavascript.api;
+			path = Components/ERXEditDateJavascript.api;
+			refType = 2;
+		};
+		9419AD2903D792BD00CF0E7D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXEditDateJavascript.java;
+			path = er/extensions/ERXEditDateJavascript.java;
+			refType = 4;
+		};
+		9419AD2F03D792BD00CF0E7D = {
+			fileRef = 9419AD2803D792BD00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9419AD3003D792BD00CF0E7D = {
+			fileRef = 9419AD2903D792BD00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9419AD3403D7938200CF0E7D = {
+			children = (
+				9419AD3503D7938200CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERXEditDateJavascript.wo;
+			path = "";
+			refType = 4;
+		};
+		9419AD3503D7938200CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXEditDateJavascript.wo;
+			refType = 2;
+		};
+		9419AD3A03D7938200CF0E7D = {
+			fileRef = 9419AD3403D7938200CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//940
+//941
+//942
+//943
+//944
 //9D0
 //9D1
 //9D2
@@ -7079,6 +7150,7 @@
 				FB1D3BECDADD387139FB5274,
 				F6E798A602C8799401AD0D07,
 				F6E798A702C8799401AD0D07,
+				9419AD2703D792BD00CF0E7D,
 				F6E798A802C8799401AD0D07,
 				F6E798A902C8799401AD0D07,
 				F6E798AA02C8799401AD0D07,
