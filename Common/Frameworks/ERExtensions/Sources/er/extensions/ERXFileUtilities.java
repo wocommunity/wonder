@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.*;
 import java.util.zip.*;
 
+import com.openbase.jdbc.*;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -1002,6 +1003,33 @@ public class ERXFileUtilities {
             File currentFile = (File) filesToDelete.objectAtIndex(i);
             deleteDirectory(currentFile);
         }
+    }
+
+    /** Lists all directories in the specified directory, is desired recursive.
+     *  
+     * @param baseDir, the dir from which to list the child directories
+     * @param recursive, if true this methods works recursively
+     * @return an array of files which are directories
+     */
+    public static File[] listDirectories(File baseDir, boolean recursive) {
+        File[] files = baseDir.listFiles(new FileFilter() {
+
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+        });
+        if (recursive) {
+            ERXMutableArray a = new ERXMutableArray(files);
+            for (int i = files.length; i-- > 0;) {
+                File currentDir = files [i];
+                File[] currentDirs = listDirectories(currentDir, true);
+                a.addObjects(currentDirs);
+            }
+            Object[] objects = a.toArray();
+            files = new File[objects.length];
+            System.arraycopy(objects, 0, files, 0, objects.length);
+        }
+        return files;
     }
     
 }
