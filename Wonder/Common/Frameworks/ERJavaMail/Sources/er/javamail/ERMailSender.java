@@ -165,7 +165,8 @@ public class ERMailSender extends Thread {
 	    if (!transport.isConnected())
 		transport.connect();
 	} catch (MessagingException e) {
-	    log.error ("Unable to connect to SMTP Transport.", e);
+            log.error ("Unable to connect to SMTP Transport. MessagingException: "
+                       + e.getMessage (), e);
 	}
 
 	return transport;
