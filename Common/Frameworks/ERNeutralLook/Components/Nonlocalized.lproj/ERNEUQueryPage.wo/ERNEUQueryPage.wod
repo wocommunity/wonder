@@ -119,10 +119,6 @@ ResourceRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-String1: WOString {
-	value = d2wContext.showListInSamePage;
-}
-
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
