@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.directtoweb.*;
@@ -17,7 +16,6 @@ import er.extensions.*;
 
 
 public class ERD2WFactory extends D2W {
-
 
     private D2WContext _privateContext;
     public D2WContext privateContext(WOSession s) {
@@ -100,8 +98,6 @@ public class ERD2WFactory extends D2W {
         }
         return newPage;
     }    
-
-    
 
 }
 
