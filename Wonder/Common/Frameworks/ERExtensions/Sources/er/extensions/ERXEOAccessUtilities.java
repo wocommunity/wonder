@@ -144,27 +144,10 @@ public class ERXEOAccessUtilities {
         EODatabase db = new EODatabase(adaptor);
         EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
 
-        //NSArray attributes = spec.rawRowKeyPaths();
-        NSArray attributesFromEntity = entity.attributesToFetch();
-        /*EOQualifier qualifier = spec.qualifier();
-        if (qualifier != null)
-            qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity.rootEntity());
-        if (qualifier != spec.qualifier()) {
-            spec = (EOFetchSpecification) spec.clone();
-            spec.setQualifier(qualifier);
-        }*/
-
-        EOSQLExpression ex = sqlFactory.expressionForEntity(entity);
-        ex.setUseAliases(true);
-        ex.setUseBindVariables(true);
-        ex.prepareSelectExpressionWithAttributes(attributesFromEntity, false, spec);
-        System.out.println(" ex.statement():" +  ex.statement());
-        //EOSQLExpression expression=factory.selectStatementForAttributes(entity.primaryKeyAttributes(),
-        //                                   false,
-        //                                   fs,
-        //                                   entity);
-
-        EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributesFromEntity, false, spec, entity);
+        NSArray attributes = spec.rawRowKeyPaths();
+        if(attributes == null || attributes.count() == 0)
+            attributes = entity.attributesToFetch();
+        EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
         String sql = sqlExpr.statement();
         if(end >= 0) {
             String url = (String)model.connectionDictionary().objectForKey("URL");
@@ -191,6 +174,41 @@ public class ERXEOAccessUtilities {
 
         return sqlExpr;
     }
+
+    public static int rowCountForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
+        int rowCount = -1;
+        EOModel model = ERXEOAccessUtilities.modelForFetchSpecificationAndEditingContext(spec, ec);
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, 0, -1);
+        String statement = sql.statement();
+        int index = statement.toLowerCase().indexOf(" from ");
+        statement = "select count(*) " + statement.substring(index, statement.length());
+        sql.setStatement(statement);
+        NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
+
+        if (result.count() > 0) {
+            NSDictionary dict = (NSDictionary)result.objectAtIndex(0);
+            NSArray values = dict.allValues();
+            if (values.count() > 0) {
+                Object value = values.objectAtIndex(0);
+                if (value instanceof Number) {
+                    return ((Number)value).intValue();
+                } else {
+                    try {
+                        int c = Integer.parseInt(value.toString());
+                        rowCount = c;
+                    } catch (NumberFormatException e) {
+                        throw new IllegalStateException("sql "+sql+" returned a wrong result, could not convert "+value+" into an int!");
+                    }
+                }
+            } else {
+                throw new IllegalStateException("sql "+sql+" returned no result!");
+            }
+        } else {
+            throw new IllegalStateException("sql "+sql+" returned no result!");
+        }
+        return rowCount;
+    }
+    
 
     public static EOModel modelForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
         EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator)ec.rootObjectStore();
