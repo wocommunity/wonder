@@ -71,6 +71,10 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
     protected String hostName;
 
     protected String formatAsError;
+
+    protected String titleIncludesPriorityLevel;
+
+    protected String titleIncludesApplicationName;
     
     /** holds the flag if all the conditions for logging have been checked */
     protected boolean conditionsChecked = false;
@@ -263,11 +267,38 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
     public String formatAsError() {
         return formatAsError;
     }
-
+    
     public void setFormatAsError(String value) {
         formatAsError = value;
     }
+
+    public boolean formatAsErrorAsBoolean() {
+        return ERXValueUtilities.booleanValueWithDefault(formatAsError(), false);
+    }    
     
+    public String titleIncludesPriorityLevel() {
+        return titleIncludesPriorityLevel;
+    }
+
+    public void setTitleIncludesPriorityLevel(String value) {
+        titleIncludesPriorityLevel = value;
+    }
+
+    public boolean titleIncludesPriorityLevelAsBoolean() {
+        return ERXValueUtilities.booleanValueWithDefault(titleIncludesPriorityLevel(), true);
+    }
+
+    public String titleIncludesApplicationName() {
+        return titleIncludesApplicationName;
+    }
+
+    public void setTitleIncludesApplicationName(String value) {
+        titleIncludesApplicationName = value;
+    }
+
+    public boolean titleIncludesApplicationNameAsBoolean() {
+        return ERXValueUtilities.booleanValueWithDefault(titleIncludesApplicationName(), true);
+    }
     
     /**
      * We want the ability to warn if we are going to be
@@ -351,8 +382,15 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
             if (getTitle() != null) {
                 title = getTitle();
             } else {
-                title =  event.getLevel().toString() + ": " + WOApplication.application().name() + ": " +
-                event.getRenderedMessage();
+                StringBuffer temp = new StringBuffer();
+                if (titleIncludesPriorityLevelAsBoolean()) {
+                    temp.append(event.getLevel().toString() + ": ");                    
+                }
+                if (titleIncludesApplicationNameAsBoolean()) {
+                    temp.append(WOApplication.application().name() + ": ");
+                }
+                temp.append(event.getRenderedMessage());
+                title = temp.toString();
             }
             ERCMailMessage message = null;
             if (ERXValueUtilities.booleanValue(formatAsError())) {
@@ -366,7 +404,7 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
                 standardExceptionPage.setErrorMessage(title);
                 standardExceptionPage.setActor(ERCoreBusinessLogic.sharedInstance().actor());
                 standardExceptionPage.setExtraInfo(extraInformation);
-
+                
                 NSArray parts = NSArray.componentsSeparatedByString(ERXUtilities.stackTrace(), "\n\t");
                 NSMutableArray subParts = new NSMutableArray();
                 boolean first = true;
@@ -379,7 +417,7 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
                     else
                         first = false;
                 }                
-
+                
                 standardExceptionPage.setReasonLines(subParts);
                 standardExceptionPage.setFormattedMessage(this.layout.format(event));
                 message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
