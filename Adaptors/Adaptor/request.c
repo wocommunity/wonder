@@ -67,7 +67,21 @@ void req_free(HTTPRequest *req)
    WOFREE(req);
 }
 
-
+void req_allocateContent(HTTPRequest *req, unsigned content_length, int allowStreaming)
+{
+   if (req) {
+      req->content_buffer_size = content_length;
+      if (allowStreaming && req->content_buffer_size > REQUEST_STREAMED_THRESHOLD)
+      {
+         req->content_buffer_size = REQUEST_STREAMED_THRESHOLD;
+         WOLog(WO_DBG, "req_allocateContent(): content will be streamed. content length = %d", content_length);
+      }
+      req->content = WOMALLOC(req->content_buffer_size);
+      if (!req->content)
+         req->content_buffer_size = 0;
+   }
+}
+      
 const char *req_validateMethod(HTTPRequest *req)
 {
    if (req->method == HTTP_NO_METHOD) {
@@ -232,9 +246,35 @@ int req_sendRequest(HTTPRequest *req, net_fd socket)
       bufferCount++;
       bufferIterator++;
       bufferIterator->iov_base = req->content;
-      bufferIterator->iov_len = req->content_length;
+      bufferIterator->iov_len = req->content_buffer_size;
    }
    result = transport->sendBuffers(socket, buffers, bufferCount);
+
+   /* If we are streaming the content data, continue until we have sent everything. */
+   /* Note that we reuse buffers, and the existing content-data buffer. */
+   if (req->content_length > req->content_buffer_size)
+   {
+      int total_sent = req->content_buffer_size;
+      int len_read, amount_to_read;
+      req->haveReadStreamedData = 1;
+      while (total_sent < req->content_length && result == 0)
+      {
+         amount_to_read = req->content_length - total_sent;
+         if (amount_to_read > req->content_buffer_size)
+            amount_to_read = req->content_buffer_size;
+         len_read = req->getMoreContent(req, req->content, amount_to_read, 0);
+         if (len_read > 0)
+         {
+            buffers[0].iov_base = req->content;
+            buffers[0].iov_len = len_read;
+            result = transport->sendBuffers(socket, buffers, 1);
+            total_sent += len_read;
+         } else if (len_read < 0) {
+            WOLog(WO_ERR, "Failed to read streamed content.");
+            result = -1;
+         }
+      }
+   }
    WOFREE(buffers);
    if (result == 0)
       result = transport->flush_connection(socket);
@@ -350,7 +390,7 @@ static const char *customHeaderFor(const char *svrhdr)
     *	major optimization - since all of our keys are uppercase,
     *	only look in the table if the hdr is upper
     */
-   if (isupper(*svrhdr))
+   if (isupper((int)*svrhdr))
       xlate = bsearch(svrhdr, headerTable, CUST_HDR_COUNT, sizeof(hdrpair), compareKey);
    else
       xlate = NULL;

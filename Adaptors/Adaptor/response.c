@@ -38,7 +38,7 @@ int strcasecmp(const char *, const char *);
 
 static const char * const apple = "Apple";
 
-HTTPResponse *resp_new(char *statusStr)
+HTTPResponse *resp_new(char *statusStr, WOInstanceHandle instHandle, WOConnection *instanceConnection)
 {
    HTTPResponse *resp;
    char *status = statusStr;
@@ -47,8 +47,8 @@ HTTPResponse *resp_new(char *statusStr)
     *	reformat the status line from
     *	"HTTP/1.0 200 OK Apple WebObjects" to "OK Apple..."
     */
-   while (status && *status && !isspace(*status))	status++;
-   while (*status && !isdigit(*status))	status++;
+   while (status && *status && !isspace((int)*status))	status++;
+   while (*status && !isdigit((int)*status))	status++;
    if ( !(status && *status) ) {
       WOLog(WO_ERR,"Invalid response!");
       return NULL;
@@ -66,6 +66,8 @@ HTTPResponse *resp_new(char *statusStr)
    }
 
    resp->headers = st_new(10);
+   resp->instanceConnection = instanceConnection;
+   resp->instHandle = instHandle;
 
    return resp;
 }
@@ -87,7 +89,7 @@ HTTPResponse *resp_errorResponse(const char *msg, int status)
    html_msg = str_create(errorRespTextBegin, sizeof(errorRespTextBegin) + sizeof(errorRespTextEnd) + strlen(msg));
    str_append(html_msg, msg);
    str_append(html_msg, errorRespTextEnd);
-   resp->content_length = html_msg->length;
+   resp->content_length = resp->content_valid = resp->content_read = html_msg->length;
    resp->content = html_msg->text;
    resp_addStringToResponse(resp, html_msg);
    resp->flags |= RESP_DONT_FREE_CONTENT;
@@ -124,6 +126,8 @@ void resp_free(HTTPResponse *resp)
       WOFREE(resp->statusMsg);
    if (resp->content && !(resp->flags & RESP_DONT_FREE_CONTENT))
       WOFREE(resp->content);
+   if (resp->instanceConnection && (resp->flags & RESP_CLOSE_CONNECTION))
+      tr_close(resp->instanceConnection, resp->instHandle, resp->keepConnection);
    WOFREE(resp);
 }
 
@@ -143,12 +147,12 @@ void resp_addHeader(HTTPResponse *resp, String *rawhdr)
     *   is freed, in resp_free().
     */
    for (key = rawhdr->text, value = key; *value != ':'; value++) {
-      if (isupper(*value))
-         *value = tolower(*value);				/* ... and change to lowercase. */
+      if (isupper((int)*value))
+         *value = tolower((int)*value);				/* ... and change to lowercase. */
    }
    if (*value == ':') {
       *value++ = '\0';			/* terminate key string */
-      while (*value && isspace(*value))	value++;
+      while (*value && isspace((int)*value))	value++;
    } else {
       return;			/* Zounds ! something wrong with header... */
    }
@@ -167,7 +171,7 @@ void resp_addHeader(HTTPResponse *resp, String *rawhdr)
 }
 
 
-HTTPResponse *resp_getResponseHeaders(net_fd socket)
+HTTPResponse *resp_getResponseHeaders(WOConnection *instanceConnection, WOInstanceHandle instHandle)
 {
    HTTPResponse *resp;
    String *response;
@@ -175,21 +179,21 @@ HTTPResponse *resp_getResponseHeaders(net_fd socket)
    /*
     *	get the status
     */
-   response = transport->recvline(socket);
+   response = transport->recvline(instanceConnection->fd);
    if (!response)
       return NULL;
 
    WOLog(WO_INFO,"New response: %s", response->text);
-   resp = resp_new(response->text);
+   resp = resp_new(response->text, instHandle, instanceConnection);
 
    str_free(response);
    if (resp == NULL)
       return NULL;
-
+   
    /*
     *	followed by the headers...
     */
-   while ((response = transport->recvline(socket)) != NULL) {
+   while ((response = transport->recvline(instanceConnection->fd)) != NULL) {
       if (response->length == 0)
          break;
       resp_addHeader(resp, response);
@@ -205,28 +209,33 @@ HTTPResponse *resp_getResponseHeaders(net_fd socket)
    return resp;
 }
 
-HTTPResponse *resp_getResponseContent(HTTPResponse *resp, net_fd socket)
+int resp_getResponseContent(HTTPResponse *resp, int allowStreaming)
 {
-   /*
-    *	get any content...
-    */
+   int ret = 0;
    if (resp->content_length) {
-      char *buffer;
-      int count;
+      int count, amountToRead;
 
-      buffer = WOMALLOC(resp->content_length);
-      count = transport->recvbytes(socket, buffer, resp->content_length);
-      if (count != resp->content_length) {
-         WOLog(WO_ERR, "Error receiving content (expected %d bytes, got %d) - response dropped", resp->content_length, count);
-         WOFREE(buffer);
-         resp_free(resp);
-         return NULL;
+      if (resp->content == NULL)
+      {
+         resp->content_buffer_size = resp->content_length;
+         if (allowStreaming && (resp->content_buffer_size > RESPONSE_STREAMED_SIZE))
+            resp->content_buffer_size = RESPONSE_STREAMED_SIZE;
+         resp->content = WOMALLOC(resp->content_buffer_size);
+      }
+      amountToRead = resp->content_length - resp->content_read;
+      if (amountToRead > resp->content_buffer_size)
+         amountToRead = resp->content_buffer_size;
+      count = transport->recvbytes(resp->instanceConnection->fd, resp->content, amountToRead);
+      if (count != amountToRead) {
+         WOLog(WO_ERR, "Error receiving content (expected %d bytes, got %d)", amountToRead, count);
+         resp->content_valid = 0;
+         ret = -1;
       } else {
-         resp->content = buffer;
+         resp->content_read += amountToRead;
+         resp->content_valid = amountToRead;
       }
    }
-
-   return resp;
+   return ret;
 }
 
 
@@ -246,7 +255,7 @@ String *resp_packageHeaders(HTTPResponse *resp)
 {
    String *result;
 
-   result = str_create(NULL, 0);
+   result = str_create(NULL, 1000);
    if (result)
       st_perform(resp->headers, (st_perform_callback)resp_appendHeader, result);
    return result;

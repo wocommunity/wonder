@@ -115,6 +115,7 @@ String *str_create(const char *initialText, int sizeHint)
       if (s->bufferSize > 0)
          s->text[0] = 0;
       s->next = NULL;
+      s->cached = 0;
       if (sizeHint && sizeHint > s->bufferSize)
          str_ensureCapacity(s, sizeHint);
       if (initialText)
@@ -137,6 +138,7 @@ void str_free(String *s)
    {
       str = s;
       do {
+         str->cached = 1;
          if (str->bufferSize > MAX_BUFFER_SIZE_TO_CACHE)
          {
             //WOLog(WO_DBG, "str_free(): freeing string buffer (size = %d)", str->bufferSize);
@@ -144,7 +146,7 @@ void str_free(String *s)
             str->bufferSize = 0;
             str->text = NULL;
          }
-         if (!str->next)
+         if (!str->next || (str->next && str->next->cached))
          {
             /* got to the end of the list; chain to the cache */
             WA_lock(str_lock);

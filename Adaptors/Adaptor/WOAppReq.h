@@ -32,6 +32,7 @@ typedef	enum {
 	err_connect,		/* can't connect */
 	err_send,		/* error occured while sending request */
 	err_response,		/* invalid response recieved */
+        err_read,               /* error reading content data from browser */
 } RequestError;
 
 /*

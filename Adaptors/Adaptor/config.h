@@ -84,10 +84,21 @@ and limitations under the License.
 #define	DEADAPPINTERVAL		30		/* if connect() fails, ignore the instance for this many seconds */
 #define	RETRIES			10		/* if your app can failover between instances, this is how many times to retry */
 #ifdef FORKING_WEBSERVER
-#define	CONNECTION_POOL_SZ	1		/* set to 1 for Apache */
+#define	CONNECTION_POOL_SZ	0		/* set to 0 for Apache 1.x, because of failure to scale */
 #else
 #define CONNECTION_POOL_SZ	8		/* a pretty low number is 4; 32 is probably big */
 #endif
+
+/* Threshold for streaming request data. Requests which specify content length greater than these values will be streamed. */
+/* REQUEST_STREAMED_THRESHOLD is relatively large so we can collect data without bothering the instance, to preserve historic */
+/* behavior for most requests, and to give some chance of redirecting the request if there is a problem. (Once we read some streamed */
+/* data we can no longer redirect the request to a new instance.) */
+#define REQUEST_STREAMED_THRESHOLD	(1024 * 1024)
+
+/* Buffer size for streaming response data back to the client. */
+/* RESPONSE_STREAMED_SIZE is relatively small, as there is no advantage in buffering large chunks of response content data. */
+/* Choose a value compatible with the network socket buffer sizes. */
+#define RESPONSE_STREAMED_SIZE	(SEND_BUF_SIZE < RECV_BUF_SIZE ? SEND_BUF_SIZE : RECV_BUF_SIZE)
 
 /*
  *	to retain x-webobjects- style header keys, enable this
@@ -234,6 +245,7 @@ int strcasecmp(const char *, const char *);
 #define CONTENT_TYPE    "content-type"		/* ditto */
 #define	CONNECTION	"connection"
 #define	HTTP_KEEP_ALIVE	"keep-alive"
+#define	HTTP_CLOSE	"close"
 #define WEBOBJECTS	"WebObjects"		/* the ubiquitous magic moniker */
 #define	INST_COOKIE	"woinst="		/* WO 4.0 instance number cookie */
 #define	COOKIE		"cookie"

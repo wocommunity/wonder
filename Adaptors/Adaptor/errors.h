@@ -64,10 +64,12 @@ and limitations under the License.
 #define	INV_METHOD	\
 	"Unknown HTTP method, or HTTP PUT method not supported."
 #define	NOT_FOUND_APP	\
-	"The requested application was not found on this server"
+	"The requested application was not found on this server."
 #define	INV_FORM_DATA	\
     "The request contained fewer content data than specified by the content-length header"
 #define	NO_FORM_DATA	\
     "Error whilst reading content data for request"
+#define ALLOCATION_FAILURE   \
+    "Memory allocation failure."
 
 #endif

@@ -33,6 +33,7 @@ typedef struct _String {
    unsigned int length;		/* the length of the string */
    struct _String *next;	/* used to chain several Strings together */
    char *text;			/* the string data, null terminated */
+   char cached;			/* true if this is a free String which is in (or being added to) the cache */
 } String;
 
 

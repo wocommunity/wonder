@@ -6,7 +6,7 @@ ADAPTOR_BUILD_TARGET = adaptors
 endif
 
 
-# By default, only bulid CGI adaptor.
+# By default, only build CGI adaptor.
 ifeq "" "$(ADAPTORS)"
 ADAPTORS = CGI
 endif
@@ -36,6 +36,9 @@ CGI::
 
 Apache::
 	cd Apache ; make
+
+Apache2::
+	cd Apache2 ; make
 
 IIS::
 	cd IIS ; make

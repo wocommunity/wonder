@@ -40,6 +40,8 @@ typedef	enum {
 	HTTP_PUT_METHOD,
 } RequestMethod;
 
+typedef int (*req_getMoreContentCallback)(void *handle, void *buffer, int bufferSize, int mustFill);
+
 /*
  *	an API independent definition of a request
  */
@@ -50,11 +52,24 @@ typedef struct _HTTPRequest {
 	void *api_handle;			/* api specific pointer */
 	unsigned content_length;
 	void *content;
+        unsigned content_buffer_size;
+        req_getMoreContentCallback getMoreContent;
+        int haveReadStreamedData;
+#ifdef IIS
+        /* for IIS we have to keep track of how much we have read */
+        int total_len_read;
+#endif
 } HTTPRequest;
 
 
 HTTPRequest *req_new(const char *method, char *uri);
 void req_free(HTTPRequest *req);
+
+/* Allocates the buffer holding content data (HTTPReauest.content). */
+/* If allowStreaming is 0, the buffer will be the size specified by content_length. */
+/* If allowStreaming is 1, the buffer may be smaller than content_length. */
+/* Sets content, and content_buffer_size. Either of these should be checked in case the allocation fails. */
+void req_allocateContent(HTTPRequest *req, unsigned content_length, int allowStreaming);
 
 /*
  *	convenience for all adaptors, returns error string or null
@@ -88,7 +103,10 @@ void req_removeHeader(HTTPRequest *req,const char *key);
 /*
  *	request handling:
  *	sends the request to the application via the open'd socket
- *	returns '0' if successful, '-1' otherwise
+ *	returns:
+ *         0 if successful
+ *         a TR_* error code if there was an error sending data to the instance
+ *         -1 if there was a failure reading streamed content data for the request
  */
 int req_sendRequest(HTTPRequest *req, net_fd socket);
 

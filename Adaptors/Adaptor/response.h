@@ -32,12 +32,20 @@ typedef struct _HTTPResponse {
 	unsigned status;
 	char *statusMsg;
 	struct _strtbl *headers;
-	unsigned content_length;
-	void *content;
         int flags;
         /* List of Strings that contain data associated with this response */
         /* These Strings get freed along with the response. */
         String *responseStrings;
+        void *content;
+        unsigned content_length;
+        unsigned content_buffer_size;
+        unsigned content_read; /* total amount of data read from the instance */
+        unsigned content_valid; /* amount of valid data in content buffer */
+        int (*getMoreContent)(struct _HTTPResponse *resp, void *buffer, int bufferSize);
+        
+        WOConnection *instanceConnection;
+        WOInstanceHandle instHandle;
+        int keepConnection;
 } HTTPResponse;
 
 
@@ -45,9 +53,9 @@ typedef struct _HTTPResponse {
 #define RESP_DONT_FREE_CONTENT 	1	/* don't free the content data (typically if it is owned by a String) */
 #define RESP_HTTP10		2	/* set if the response was HTTP/1.0 */
 #define RESP_HTTP11		4	/* set if the response was HTTP/1.1 */
+#define RESP_CLOSE_CONNECTION	8	/* set if instanceConnection should be closed */
 
-
-HTTPResponse *resp_new(char *status);
+HTTPResponse *resp_new(char *status, WOInstanceHandle instHandle, WOConnection *instanceConnection);
 
 void resp_free(HTTPResponse *resp);
 
@@ -57,12 +65,20 @@ void resp_free(HTTPResponse *resp);
  *	Constructor: retrieves the response from the web app
  *      Reads response headers, but not content.
  */
-HTTPResponse *resp_getResponseHeaders(net_fd socket);
+HTTPResponse *resp_getResponseHeaders(WOConnection *instanceConnection, WOInstanceHandle instHandle);
+
 
 /*
  *      Reads response content.
+ *      This function sets up the following response fields: content, content_buffer_size, content_read, content_valid
+ *      It should be called repeatedly to read response content data from the instance. The data is read into content
+ *      (which is allocated the first time this function is called). The amount of valid data in content is returned in
+ *      content_valid. This data should be sent back to the client. This function should be called in a loop to sent the
+ *      entire response content back to the client.
+ *	However, if allowStreaming is 0, then the entire content is read in one go.
+ *	Returns 0 on success, -1 on error.
  */
-HTTPResponse *resp_getResponseContent(HTTPResponse *resp, net_fd socket);
+int resp_getResponseContent(HTTPResponse *resp, int allowStreaming);
 
 /*
  *	generate an error response 
