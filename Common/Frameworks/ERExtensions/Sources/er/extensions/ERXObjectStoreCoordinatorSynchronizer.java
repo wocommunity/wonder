@@ -40,11 +40,11 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         return _synchronizer;
     }
     
-    private NSMutableArray _coordinators;
+    private Vector _coordinators;
     private ProcessChangesQueue _queueThread;
     
     private ERXObjectStoreCoordinatorSynchronizer() {
-        _coordinators = new NSMutableArray();
+        _coordinators = new Vector();
         _queueThread = new ProcessChangesQueue();
         new Thread(_queueThread).start();
         NSNotificationCenter.defaultCenter().addObserver(
@@ -68,8 +68,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
     }
     
     public void addObjectStore(EOObjectStoreCoordinator osc) {
-        if(!_coordinators.containsObject(osc)) {
-            _coordinators.addObject(osc);
+        if(!_coordinators.contains(osc)) {
+            _coordinators.add(osc);
             NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class } );
             NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
         } else {
@@ -78,23 +78,25 @@ public class ERXObjectStoreCoordinatorSynchronizer {
     }
     
     public void removeObjectStore(EOObjectStoreCoordinator osc) {
-        if(_coordinators.containsObject(osc)) {
-            _coordinators.removeObject(osc);
-            NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
-        } else {
-            log.error("Coordinator not found!");
+        synchronized(_coordinators) {
+            if(_coordinators.contains(osc)) {
+                _coordinators.remove(osc);
+                NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+            } else {
+                log.error("Coordinator not found!");
+            }
         }
     }
     
     public void publishChange(NSNotification n) {
-        if (_coordinators.count() >= 2) {
+        if (_coordinators.size() >= 2) {
             Change changes = new Change((EOObjectStoreCoordinator)n.object(), n.userInfo());
             _queueThread.addChange(changes);
         }
     }
     
-    private NSArray coordinators() {
-        return _coordinators;
+    private Enumeration coordinators() {
+        return _coordinators.elements();
     }
     
     /** 
@@ -109,20 +111,26 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         private class DeleteProcessor extends SnapshotProcessor {
             public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.forgetSnapshotForGlobalID(globalID);
-                log.info("forget: " + globalID);
+                if(log.isDebugEnabled()) {
+                    log.debug("forget: " + globalID);
+                }
             }
         }
         private class UpdateProcessor extends SnapshotProcessor {
             public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.forgetSnapshotForGlobalID(globalID);
                 database.recordSnapshotForGlobalID(snapshot, globalID);
-                log.info("update: " + globalID);
+                if(log.isDebugEnabled()) {
+                    log.debug("update: " + globalID);
+                }
             }
         }
         private class InsertProcessor extends SnapshotProcessor {
             public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.recordSnapshotForGlobalID(snapshot, globalID);
-                log.info("insert: " + globalID);
+                if(log.isDebugEnabled()) {
+                    log.debug("insert: " + globalID);
+                }
             }
         }
         
@@ -156,7 +164,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
                         }
                     } catch (InterruptedException e) {
                         run = false;
-                        log.info("Interrupted: " + e, e);
+                        log.warn("Interrupted: " + e, e);
                     }
                 }
                 if(changes != null) {
@@ -173,45 +181,39 @@ public class ERXObjectStoreCoordinatorSynchronizer {
          * @param dictionary
          * @param sender
          */
-        private synchronized void process(EOObjectStoreCoordinator sender, SnapshotProcessor processor, NSDictionary changesByEntity) {
+        private void process(EOObjectStoreCoordinator sender, SnapshotProcessor processor, NSDictionary changesByEntity) {
             for(Enumeration entityNames = changesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
                 String entityName = (String)entityNames.nextElement();
                 EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
                 NSArray snapshots = (NSArray)changesByEntity.objectForKey(entityName);
                 NSMutableDictionary dbcs = new NSMutableDictionary();
-                for (Enumeration oscs = _synchronizer.coordinators().objectEnumerator(); oscs.hasMoreElements(); ) {
+                for (Enumeration oscs = _synchronizer.coordinators(); oscs.hasMoreElements(); ) {
                     EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) oscs.nextElement();
-                    if (osc == sender) {
-                        continue;
-                    }
-                    EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
-                    if(dbc == null) {
-                        dbc = databaseContextForEntityNamed(entityName, osc);
-                        dbcs.setObjectForKey(dbc, entityName);
-                    }
-                    EODatabase database = dbc.database();
-                    Enumeration snapshotsEnumerator = snapshots.objectEnumerator();
-                    while (snapshotsEnumerator.hasMoreElements()) {
-                        NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
-                        if (snapshot != null) {
-                            EOGlobalID globalID = entity.globalIDForRow(snapshot);
-                            EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
-                            dbc.lock();
-                            try {
-                                processor.processSnapshotForGlobalID(dbc, snapshot, globalID);
-                            } finally {
-                                dbc.unlock();
+                    if (osc != sender) {
+                        EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
+                        if(dbc == null) {
+                            dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc,entityName);
+                            dbcs.setObjectForKey(dbc, entityName);
+                        }
+                        EODatabase database = dbc.database();
+                        Enumeration snapshotsEnumerator = snapshots.objectEnumerator();
+                        while (snapshotsEnumerator.hasMoreElements()) {
+                            NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
+                            if (snapshot != null) {
+                                EOGlobalID globalID = entity.globalIDForRow(snapshot);
+                                EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
+                                dbc.lock();
+                                try {
+                                    processor.processSnapshotForGlobalID(dbc, snapshot, globalID);
+                                } finally {
+                                    dbc.unlock();
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        
-        private EODatabaseContext databaseContextForEntityNamed(String entityName, EOObjectStoreCoordinator osc) {
-            return Change.databaseContextForEntityNamed(entityName, osc);
-        }
-        
     }
     
     /**
@@ -250,7 +252,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
                 
                 EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
                 if(dbc == null) {
-                    dbc = databaseContextForEntityNamed(entityName, osc);
+                    dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc, entityName);
                     dbcs.setObjectForKey(dbc, entityName);
                 }
                 NSMutableArray snapshotsForEntity = (NSMutableArray)result.objectForKey(entityName);
@@ -282,12 +284,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         
         public EOObjectStoreCoordinator coordinator() {
             return _coordinator;
-        }
-        
-        private static synchronized EODatabaseContext databaseContextForEntityNamed(String entityName, EOObjectStoreCoordinator osc) {
-            EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
-            EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
-            return dbc;
         }
     }    
 }

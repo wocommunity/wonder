@@ -517,6 +517,7 @@
 				505EFE750601436C00121B55,
 				505EFE77060143D200121B55,
 				505EFE79060143FF00121B55,
+				4147F4FE060F30A500EE490C,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1517,6 +1518,19 @@
 			settings = {
 			};
 		};
+		4147F4FD060F30A500EE490C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXObjectStoreCoordinatorSynchronizer.java;
+			path = er/extensions/ERXObjectStoreCoordinatorSynchronizer.java;
+			refType = 4;
+		};
+		4147F4FE060F30A500EE490C = {
+			fileRef = 4147F4FD060F30A500EE490C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4150A86E050324B700000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1722,6 +1736,7 @@
 				4105E4A705C7CBA9003BA93B,
 				F69DF13F02C76B3F01AD0D07,
 				63BE1727048D10E200A83704,
+				4147F4FD060F30A500EE490C,
 				F59C57ED02C4565701000102,
 				F6E7989802C8799401AD0D07,
 				F6E7989902C8799401AD0D07,
