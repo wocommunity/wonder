@@ -44,10 +44,19 @@ public class WRQuickReport extends WOComponent  {
 
     public void synchModel(NSNotification notification) {
         if(_model == notification.object()) {
+            DRReportModel model = _model;
             reset();
+            model.initWithRawRecords(objects(), criteriaArray(), attributeArray());
+            log.info("Model was re-set.");
+            //reset();
         }
     }
 
+    public void awake() {
+        super.awake();
+        _objects = null;
+        _model = null;
+    }
     public void reset() {
         super.reset();
         _model = null;
@@ -154,8 +163,14 @@ public class WRQuickReport extends WOComponent  {
         if (_model == null) {
             if(super.hasBinding("model")) {
                 _model = (DRReportModel)super.valueForBinding("model");
-            } else {
+            }
+            if(_model == null) {
                 _model = DRReportModel.withRawRecordsCriteriaListAttributeList(objects(), criteriaArray(), attributeArray());
+            }
+            if(super.hasBinding("model")) {
+                if(super.canSetValueForBinding("model")) {
+                    super.setValueForBinding(_model, "model");
+                }
             }
             if(log.isDebugEnabled()) {
                 log.debug( "_model:"+_model.hList());
