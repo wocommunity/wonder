@@ -151,12 +151,16 @@ public class ERXSimpleTemplateParser {
             throw new RuntimeException("Attempting to parse null template!");
         if (object == null)
             throw new RuntimeException("Attempting to parse template with null object!");
-        if(delimiter == null) delimiter = "@@";
+        if (delimiter == null) delimiter = "@@";
         if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
             log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
             log.debug("Template: " + template);
             log.debug("Delim: " + delimiter);
             log.debug("otherObject: " + otherObject);
+        }
+        if (delimiter.equals("@@") && template.indexOf(delimiter) < 0 && template.indexOf("@") >= 0) {
+            log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
+            delimiter = "@";
         }
         StringBuffer buffer = new StringBuffer();
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
