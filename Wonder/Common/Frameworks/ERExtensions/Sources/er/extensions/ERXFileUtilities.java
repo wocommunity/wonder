@@ -1041,5 +1041,18 @@ public class ERXFileUtilities {
         }
         return files;
     }
+
+    /** moves a file from one location to another one. This works different
+     * than java.io.File.renameTo as renameTo does not work across partitions
+     * 
+     * @param source
+     * @param destination
+     * @throws IOException
+     * @throws FileNotFoundException
+     */
+    public static void renameTo(File source, File destination) throws FileNotFoundException, IOException {
+        if (!source.renameTo(destination)) 
+            copyFileToFile(source, destination, true, true);
+    }
     
 }
