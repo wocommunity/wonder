@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXConstants.java created by max on Fri 27-Apr-2001 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
@@ -21,8 +19,8 @@ public class ERXConstant {
     }
 
     public static final Object EmptyObject = new Object();
-    public static final NSArray EmptyArray = new NSArray();
-    public static final NSDictionary EmptyDictionary = new NSDictionary();
+    public static final NSArray EmptyArray = NSArray.EmptyArray;
+    public static final NSDictionary EmptyDictionary = NSDictionary.EmptyDictionary;
     public static final Integer OneInteger = integerForInt(1);
     public static final Integer ZeroInteger = integerForInt (0);
     public static final Integer TwoInteger = integerForInt (2);
@@ -42,5 +40,4 @@ public class ERXConstant {
     public static Integer integerForString(String s) throws NumberFormatException {
         return integerForInt(Integer.parseInt(s));
     }
-    
 }
