@@ -325,7 +325,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
             localizer = ERXLocalizer.currentLocalizer();
         }
         if (localizer != null) {
-            displayName = localizer.localizedStringForKey(displayName);
+            displayName = localizer.localizedStringForKeyWithDefault(displayName);
         }
         return displayName;
     }
