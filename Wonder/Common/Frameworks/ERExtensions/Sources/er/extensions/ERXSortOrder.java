@@ -6,9 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.*;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERSortOrder is an extension of WOSortOrder.  It adds two main abilities to WOSortOrder.
@@ -76,11 +77,11 @@ public class ERXSortOrder extends WOSortOrder {
         boolean hasCustomImage = false;
         switch(currentState()) {
             case Unsorted:
-                hasCustomImage = hasBinding("unsortedImageSrc"); break;
+                hasCustomImage = !ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("unsortedImageSrc")); break;
             case SortedAscending:
-                hasCustomImage = hasBinding("sortedAscendingImageSrc"); break;
+                hasCustomImage = !ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedAscendingImageSrc")); break;
             case SortedDescending:
-                hasCustomImage = hasBinding("sortedDescendingImageSrc"); break;
+                hasCustomImage = !ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedAscendingImageSrc")); break;
         }
         return hasCustomImage;
     }
@@ -89,11 +90,11 @@ public class ERXSortOrder extends WOSortOrder {
         boolean hasCustomImage = false;
         switch(currentState()) {
             case Unsorted:
-                hasCustomImage = hasBinding("unsortedImageName"); break;
+                hasCustomImage = ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("unsortedImageName")); break;
             case SortedAscending:
-                hasCustomImage = hasBinding("sortedAscendingImageName"); break;
+                hasCustomImage = ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedAscendingImageName")); break;
             case SortedDescending:
-                hasCustomImage = hasBinding("sortedDescendingImageName"); break;
+                hasCustomImage = ERXStringUtilities.stringIsNullOrEmpty((String)valueForBinding("sortedDescendingImageName")); break;
         }
         return hasCustomImage;
     }
