@@ -745,17 +745,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     
     
     /**
-     * Called by an observer after an editing context has
-     * successfully saved changes to a database. This method
-     * enumerates through all of the objects that were inserted,
-     * updated and deleted calling <code>didInsert</code>, <code>
-     * didUpdate</code> and <code>didDelete</code> on the objects
-     * respectively.
-     * @param n notifcation posted after an editing context has
-     *		successfully saved changes to the database.
+     * @deprecated use {@link ERXEC$Factory#didSave} instead.
      */
-    // MOVEME: ERXECFactory move it onto the default factory so subclasses can provide different implementations
     public static void didSave(NSNotification n) {
+        NSNotificationCenter.defaultCenter().postNotification(new NSNotification("DID_SAVE", null));
         EOEditingContext ec=(EOEditingContext)n.object();
         // Changed objects
         NSArray updatedObjects=(NSArray)n.userInfo().objectForKey("updated");
