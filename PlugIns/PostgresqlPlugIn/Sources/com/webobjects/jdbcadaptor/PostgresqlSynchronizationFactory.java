@@ -1,7 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 
 public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory implements EOSchemaGeneration, EOSchemaSynchronization {
 

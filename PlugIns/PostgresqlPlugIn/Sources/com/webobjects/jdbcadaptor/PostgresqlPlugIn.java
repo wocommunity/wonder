@@ -1,8 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.jdbcadaptor.*;
+import com.webobjects.foundation.*;
 
 /**
  * WO runtime plugin with support for Postgresql.
