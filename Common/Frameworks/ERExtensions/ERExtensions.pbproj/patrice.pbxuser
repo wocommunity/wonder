@@ -10,28 +10,37 @@
 		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
 		activeTarget = 40B58282FFD5E8187F000001;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 49403896;
+			PBXPerProjectTemplateStateSaveDate = 50449239;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F6A36B0102F0A3670FCF0E72;
+									bookmark = F6B529CC030199190FCF0E72;
 									history = (
 										F666DC3F02E49BE20FCF0E72,
 										F633473E02E624FF0FCF0E72,
 										F633473F02E624FF0FCF0E72,
 										F620B96502E74E030FCF0E72,
-										F6C146C402EF1A060FCF0E72,
-										F6C146C502EF1A060FCF0E72,
 										F6C146C602EF1A060FCF0E72,
 										F6C146C702EF1A060FCF0E72,
 										F6C146C802EF1A060FCF0E72,
-										F6C146C902EF1A060FCF0E72,
 										F67C8B1E02EF32740FCF0E72,
 										F6A36AFE02F0A3670FCF0E72,
-										F6A36AFF02F0A3670FCF0E72,
+										F618FBCB02F5EC1F0FCF0E72,
+										F618FBCC02F5EC1F0FCF0E72,
+										F618FBCE02F5EC1F0FCF0E72,
+										F618FBCF02F5EC1F0FCF0E72,
+										F618FBD002F5EC1F0FCF0E72,
+										F655572902F868320FCF0E72,
+										F6E16B7402F86FE10FCF0E72,
+										F6E16B7502F86FE10FCF0E72,
+										F6E16B7602F86FE10FCF0E72,
+										F6171A0B02F9F5080FCF0E72,
+										F6B529C7030199190FCF0E72,
+										F6B529C8030199190FCF0E72,
+										F6B529C9030199190FCF0E72,
 									);
 									prevStack = (
 										F633474102E624FF0FCF0E72,
@@ -47,11 +56,33 @@
 										F6C146D102EF1A060FCF0E72,
 										F67C8B2002EF32740FCF0E72,
 										F6A36B0002F0A3670FCF0E72,
+										F63EE20202F5A92E0FCF0E72,
+										F63EE20302F5A92E0FCF0E72,
+										F6C1DF7B02F5B8950FCF0E72,
+										F6C1DF7C02F5B8950FCF0E72,
+										F618FBD202F5EC1F0FCF0E72,
+										F618FBD302F5EC1F0FCF0E72,
+										F618FBD402F5EC1F0FCF0E72,
+										F618FBD502F5EC1F0FCF0E72,
+										F618FBD702F5EC1F0FCF0E72,
+										F618FBD802F5EC1F0FCF0E72,
+										F618FBD902F5EC1F0FCF0E72,
+										F655572B02F868320FCF0E72,
+										F6E16B7802F86FE10FCF0E72,
+										F6E16B7902F86FE10FCF0E72,
+										F6E16B7A02F86FE10FCF0E72,
+										F6E16B7B02F86FE10FCF0E72,
+										F6171A0E02F9F5080FCF0E72,
+										F6171A0F02F9F5080FCF0E72,
+										F6AB1B7C02FF20C10FCF0E72,
+										F6AB1B7D02FF20C10FCF0E72,
+										F6B529CA030199190FCF0E72,
+										F6B529CB030199190FCF0E72,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {840, 488}}";
+									Frame = "{{0, 0}, {899, 488}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -77,10 +108,7 @@
 						Tab1 = {
 							OptionsSetName = "Hierarchy, all classes";
 						};
-						Tab3 = {
-							SplitCount = 2;
-						};
-						TabCount = 6;
+						TabCount = 5;
 					};
 				},
 			);
@@ -94,9 +122,9 @@
 						Split0 = {
 							ActiveTab = 3;
 							Collapsed = NO;
-							Frame = "{{284, 0}, {840, 777}}";
+							Frame = "{{225, 0}, {899, 777}}";
 							Split0 = {
-								Frame = "{{0, 289}, {840, 488}}";
+								Frame = "{{0, 289}, {899, 488}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -147,19 +175,19 @@
 								Frame = "{{0, 0}, {840, 161}}";
 							};
 							Tab3 = {
-								Frame = "{{0, 0}, {840, 265}}";
+								Frame = "{{0, 0}, {899, 265}}";
 							};
 							TabCount = 4;
 							TabsVisible = YES;
 						};
 						SplitCount = 1;
 						Tab0 = {
-							Frame = "{{0, 0}, {260, 777}}";
+							Frame = "{{0, 0}, {201, 777}}";
 							GroupTreeTableConfiguration = (
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								227,
+								168,
 							);
 						};
 						Tab1 = {
@@ -184,56 +212,49 @@
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {191, 777}}";
-							Split0 = {
-								Frame = "{{0, 0}, {191, 373}}";
-								TargetTreeTableConfiguration = (
-									ActiveTarget,
-									16,
-									TargetName,
-									159,
-								);
-							};
-							Split1 = {
-								BuildStyleTreeTableConfiguration = (
-									IsActive,
-									16,
-									Name,
-									160,
-								);
-								Frame = "{{0, 382}, {191, 395}}";
-							};
-							SplitCount = 2;
+							TargetTableConfiguration = (
+								ActiveObject,
+								16,
+								ObjectNames,
+								202.296,
+							);
 						};
 						Tab4 = {
-							ExecutableTreeTableConfiguration = (
-								ActiveExecutable,
-								16,
-								ExecutableName,
-								158,
-							);
-							Frame = "{{0, 0}, {191, 549}}";
-						};
-						Tab5 = {
 							BreakpointsTreeTableConfiguration = (
 								breakpointColumn,
-								197,
+								138,
 								enabledColumn,
 								31,
 							);
-							Frame = "{{0, 0}, {250, 549}}";
+							Frame = "{{0, 0}, {191, 549}}";
 						};
-						TabCount = 6;
+						TabCount = 5;
 						TabsVisible = YES;
 					};
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{44, 67}";
+					WindowLocation = "{118, 117}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 49403896;
+			PBXWorkspaceStateSaveDate = 50449239;
 		};
 		perUserProjectItems = {
+			F6171A0B02F9F5080FCF0E72 = F6171A0B02F9F5080FCF0E72;
+			F6171A0E02F9F5080FCF0E72 = F6171A0E02F9F5080FCF0E72;
+			F6171A0F02F9F5080FCF0E72 = F6171A0F02F9F5080FCF0E72;
+			F618FBCB02F5EC1F0FCF0E72 = F618FBCB02F5EC1F0FCF0E72;
+			F618FBCC02F5EC1F0FCF0E72 = F618FBCC02F5EC1F0FCF0E72;
+			F618FBCE02F5EC1F0FCF0E72 = F618FBCE02F5EC1F0FCF0E72;
+			F618FBCF02F5EC1F0FCF0E72 = F618FBCF02F5EC1F0FCF0E72;
+			F618FBD002F5EC1F0FCF0E72 = F618FBD002F5EC1F0FCF0E72;
+			F618FBD202F5EC1F0FCF0E72 = F618FBD202F5EC1F0FCF0E72;
+			F618FBD302F5EC1F0FCF0E72 = F618FBD302F5EC1F0FCF0E72;
+			F618FBD402F5EC1F0FCF0E72 = F618FBD402F5EC1F0FCF0E72;
+			F618FBD502F5EC1F0FCF0E72 = F618FBD502F5EC1F0FCF0E72;
+			F618FBD702F5EC1F0FCF0E72 = F618FBD702F5EC1F0FCF0E72;
+			F618FBD802F5EC1F0FCF0E72 = F618FBD802F5EC1F0FCF0E72;
+			F618FBD902F5EC1F0FCF0E72 = F618FBD902F5EC1F0FCF0E72;
 			F620B96502E74E030FCF0E72 = F620B96502E74E030FCF0E72;
 			F620B96702E74E030FCF0E72 = F620B96702E74E030FCF0E72;
 			F633473E02E624FF0FCF0E72 = F633473E02E624FF0FCF0E72;
@@ -241,19 +262,26 @@
 			F633474102E624FF0FCF0E72 = F633474102E624FF0FCF0E72;
 			F633474202E624FF0FCF0E72 = F633474202E624FF0FCF0E72;
 			F633474302E624FF0FCF0E72 = F633474302E624FF0FCF0E72;
+			F63EE20202F5A92E0FCF0E72 = F63EE20202F5A92E0FCF0E72;
+			F63EE20302F5A92E0FCF0E72 = F63EE20302F5A92E0FCF0E72;
+			F655572902F868320FCF0E72 = F655572902F868320FCF0E72;
+			F655572B02F868320FCF0E72 = F655572B02F868320FCF0E72;
 			F666DC3F02E49BE20FCF0E72 = F666DC3F02E49BE20FCF0E72;
 			F67C8B1E02EF32740FCF0E72 = F67C8B1E02EF32740FCF0E72;
 			F67C8B2002EF32740FCF0E72 = F67C8B2002EF32740FCF0E72;
 			F6A36AFE02F0A3670FCF0E72 = F6A36AFE02F0A3670FCF0E72;
-			F6A36AFF02F0A3670FCF0E72 = F6A36AFF02F0A3670FCF0E72;
 			F6A36B0002F0A3670FCF0E72 = F6A36B0002F0A3670FCF0E72;
-			F6A36B0102F0A3670FCF0E72 = F6A36B0102F0A3670FCF0E72;
-			F6C146C402EF1A060FCF0E72 = F6C146C402EF1A060FCF0E72;
-			F6C146C502EF1A060FCF0E72 = F6C146C502EF1A060FCF0E72;
+			F6AB1B7C02FF20C10FCF0E72 = F6AB1B7C02FF20C10FCF0E72;
+			F6AB1B7D02FF20C10FCF0E72 = F6AB1B7D02FF20C10FCF0E72;
+			F6B529C7030199190FCF0E72 = F6B529C7030199190FCF0E72;
+			F6B529C8030199190FCF0E72 = F6B529C8030199190FCF0E72;
+			F6B529C9030199190FCF0E72 = F6B529C9030199190FCF0E72;
+			F6B529CA030199190FCF0E72 = F6B529CA030199190FCF0E72;
+			F6B529CB030199190FCF0E72 = F6B529CB030199190FCF0E72;
+			F6B529CC030199190FCF0E72 = F6B529CC030199190FCF0E72;
 			F6C146C602EF1A060FCF0E72 = F6C146C602EF1A060FCF0E72;
 			F6C146C702EF1A060FCF0E72 = F6C146C702EF1A060FCF0E72;
 			F6C146C802EF1A060FCF0E72 = F6C146C802EF1A060FCF0E72;
-			F6C146C902EF1A060FCF0E72 = F6C146C902EF1A060FCF0E72;
 			F6C146CB02EF1A060FCF0E72 = F6C146CB02EF1A060FCF0E72;
 			F6C146CC02EF1A060FCF0E72 = F6C146CC02EF1A060FCF0E72;
 			F6C146CD02EF1A060FCF0E72 = F6C146CD02EF1A060FCF0E72;
@@ -261,6 +289,15 @@
 			F6C146CF02EF1A060FCF0E72 = F6C146CF02EF1A060FCF0E72;
 			F6C146D002EF1A060FCF0E72 = F6C146D002EF1A060FCF0E72;
 			F6C146D102EF1A060FCF0E72 = F6C146D102EF1A060FCF0E72;
+			F6C1DF7B02F5B8950FCF0E72 = F6C1DF7B02F5B8950FCF0E72;
+			F6C1DF7C02F5B8950FCF0E72 = F6C1DF7C02F5B8950FCF0E72;
+			F6E16B7402F86FE10FCF0E72 = F6E16B7402F86FE10FCF0E72;
+			F6E16B7502F86FE10FCF0E72 = F6E16B7502F86FE10FCF0E72;
+			F6E16B7602F86FE10FCF0E72 = F6E16B7602F86FE10FCF0E72;
+			F6E16B7802F86FE10FCF0E72 = F6E16B7802F86FE10FCF0E72;
+			F6E16B7902F86FE10FCF0E72 = F6E16B7902F86FE10FCF0E72;
+			F6E16B7A02F86FE10FCF0E72 = F6E16B7A02F86FE10FCF0E72;
+			F6E16B7B02F86FE10FCF0E72 = F6E16B7B02F86FE10FCF0E72;
 		};
 		projectwideBuildSettings = {
 		};
@@ -269,6 +306,156 @@
 	};
 	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
+	};
+	F6171A0B02F9F5080FCF0E72 = {
+		fRef = F59C57CD02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXPatternLayout.java: finalizeConverter";
+		rLen = 26;
+		rLoc = 2791;
+		rType = 0;
+		vrLen = 1099;
+		vrLoc = 2226;
+	};
+	F6171A0E02F9F5080FCF0E72 = {
+		fRef = F59C57CD02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXPatternLayout.java: finalizeConverter";
+		rLen = 26;
+		rLoc = 2791;
+		rType = 0;
+		vrLen = 1099;
+		vrLoc = 2226;
+	};
+	F6171A0F02F9F5080FCF0E72 = {
+		fRef = F59C57A102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXGenericRecord.java: willUpdate";
+		rLen = 31;
+		rLoc = 6695;
+		rType = 0;
+		vrLen = 1497;
+		vrLoc = 6138;
+	};
+	F618FBCB02F5EC1F0FCF0E72 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: modelWasAddedNotification";
+		rLen = 11;
+		rLoc = 2863;
+		rType = 0;
+		vrLen = 1545;
+		vrLoc = 2245;
+	};
+	F618FBCC02F5EC1F0FCF0E72 = {
+		fRef = F59C57DC02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXSharedEOLoader.java: ERXSharedEOLoader";
+		rLen = 358;
+		rLoc = 3812;
+		rType = 0;
+		vrLen = 1708;
+		vrLoc = 3179;
+	};
+	F618FBCE02F5EC1F0FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: dataSourceForArray";
+		rLen = 10;
+		rLoc = 21807;
+		rType = 0;
+		vrLen = 1480;
+		vrLoc = 21038;
+	};
+	F618FBCF02F5EC1F0FCF0E72 = {
+		fRef = F59C579E02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXFrameworkPrincipal.java: setUpFrameworkPrincipalClass";
+		rLen = 205;
+		rLoc = 1441;
+		rType = 0;
+		vrLen = 1524;
+		vrLoc = 618;
+	};
+	F618FBD002F5EC1F0FCF0E72 = {
+		fRef = F59C57F102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXUtilities.java: rootParentEntityForEntity";
+		rLen = 25;
+		rLoc = 29256;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 29019;
+	};
+	F618FBD202F5EC1F0FCF0E72 = {
+		fRef = F59C57F102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXUtilities.java: addObjectToObjectOnBothSidesOfRelationshipWithKey";
+		rLen = 60;
+		rLoc = 1751;
+		rType = 0;
+		vrLen = 1590;
+		vrLoc = 786;
+	};
+	F618FBD302F5EC1F0FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: dataSourceForArray";
+		rLen = 10;
+		rLoc = 21807;
+		rType = 0;
+		vrLen = 1481;
+		vrLoc = 21038;
+	};
+	F618FBD402F5EC1F0FCF0E72 = {
+		fRef = F59C579202C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXEntityClassDescription.java: modelWasAddedNotification";
+		rLen = 11;
+		rLoc = 2863;
+		rType = 0;
+		vrLen = 1545;
+		vrLoc = 2245;
+	};
+	F618FBD502F5EC1F0FCF0E72 = {
+		fRef = F59C57DC02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXSharedEOLoader.java: ERXSharedEOLoader";
+		rLen = 358;
+		rLoc = 3812;
+		rType = 0;
+		vrLen = 1708;
+		vrLoc = 3179;
+	};
+	F618FBD702F5EC1F0FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: dataSourceForArray";
+		rLen = 10;
+		rLoc = 21807;
+		rType = 0;
+		vrLen = 1480;
+		vrLoc = 21038;
+	};
+	F618FBD802F5EC1F0FCF0E72 = {
+		fRef = F59C579E02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXFrameworkPrincipal.java: setUpFrameworkPrincipalClass";
+		rLen = 205;
+		rLoc = 1441;
+		rType = 0;
+		vrLen = 1524;
+		vrLoc = 618;
+	};
+	F618FBD902F5EC1F0FCF0E72 = {
+		fRef = F59C57F102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXUtilities.java: rootParentEntityForEntity";
+		rLen = 25;
+		rLoc = 29256;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 29019;
 	};
 	F620B96502E74E030FCF0E72 = {
 		fRef = F620B96A02E74E030FCF0E72;
@@ -352,6 +539,46 @@
 		vrLen = 1519;
 		vrLoc = 0;
 	};
+	F63EE20202F5A92E0FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: stringFromFile";
+		rLen = 22;
+		rLoc = 46465;
+		rType = 0;
+		vrLen = 1457;
+		vrLoc = 45063;
+	};
+	F63EE20302F5A92E0FCF0E72 = {
+		fRef = F59C57A102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXGenericRecord.java: awakeFromClientUpdate";
+		rLen = 0;
+		rLoc = 14327;
+		rType = 0;
+		vrLen = 2239;
+		vrLoc = 0;
+	};
+	F655572902F868320FCF0E72 = {
+		fRef = F59C57ED02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXTolerantSaver.java: qual";
+		rLen = 69;
+		rLoc = 6449;
+		rType = 0;
+		vrLen = 1479;
+		vrLoc = 5674;
+	};
+	F655572B02F868320FCF0E72 = {
+		fRef = F59C57ED02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXTolerantSaver.java: qual";
+		rLen = 69;
+		rLoc = 6449;
+		rType = 0;
+		vrLen = 1479;
+		vrLoc = 5674;
+	};
 	F666DC3F02E49BE20FCF0E72 = {
 		fRef = F59C56F502C455BF01000102;
 		isa = PBXTextBookmark;
@@ -392,13 +619,6 @@
 		vrLen = 1329;
 		vrLoc = 2037;
 	};
-	F6A36AFF02F0A3670FCF0E72 = {
-		fRef = F59C579A02C4565701000102;
-		isa = PBXTextBookmark;
-		rLen = 11;
-		rLoc = 45597;
-		rType = 0;
-	};
 	F6A36B0002F0A3670FCF0E72 = {
 		fRef = F59C578902C4565701000102;
 		isa = PBXTextBookmark;
@@ -409,35 +629,82 @@
 		vrLen = 1329;
 		vrLoc = 2037;
 	};
-	F6A36B0102F0A3670FCF0E72 = {
-		fRef = F59C579A02C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXExtensions.java: stringFromFile";
-		rLen = 22;
-		rLoc = 45597;
-		rType = 0;
-		vrLen = 1178;
-		vrLoc = 45063;
-	};
-	F6C146C402EF1A060FCF0E72 = {
-		fRef = F59C578102C4565601000102;
-		isa = PBXTextBookmark;
-		name = "ERXConfigurationManager.java: resetConnectionDictionaryInModel";
-		rLen = 0;
-		rLoc = 9662;
-		rType = 0;
-		vrLen = 2388;
-		vrLoc = 8102;
-	};
-	F6C146C502EF1A060FCF0E72 = {
+	F6AB1B7C02FF20C10FCF0E72 = {
 		fRef = F59C578602C4565701000102;
 		isa = PBXTextBookmark;
-		name = "ERXDefaultEditingContextDelegate.java: editingContextWillSaveChanges";
-		rLen = 26;
-		rLoc = 5250;
+		name = "ERXDefaultEditingContextDelegate.java: 134";
+		rLen = 0;
+		rLoc = 7033;
 		rType = 0;
-		vrLen = 2322;
-		vrLoc = 4136;
+		vrLen = 1250;
+		vrLoc = 6673;
+	};
+	F6AB1B7D02FF20C10FCF0E72 = {
+		fRef = F59C57A102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXGenericRecord.java: willUpdate";
+		rLen = 10;
+		rLoc = 6711;
+		rType = 0;
+		vrLen = 1613;
+		vrLoc = 6014;
+	};
+	F6B529C7030199190FCF0E72 = {
+		fRef = F59C578602C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXDefaultEditingContextDelegate.java: 31";
+		rLen = 32;
+		rLoc = 1202;
+		rType = 0;
+		vrLen = 1400;
+		vrLoc = 0;
+	};
+	F6B529C8030199190FCF0E72 = {
+		fRef = F59C578402C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXDatabaseContextDelegate.java: databaseContextDidSelectObjects";
+		rLen = 31;
+		rLoc = 6756;
+		rType = 0;
+		vrLen = 1970;
+		vrLoc = 2273;
+	};
+	F6B529C9030199190FCF0E72 = {
+		fRef = F59C57A102C4565701000102;
+		isa = PBXTextBookmark;
+		rLen = 9;
+		rLoc = 15814;
+		rType = 0;
+	};
+	F6B529CA030199190FCF0E72 = {
+		fRef = F59C578602C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXDefaultEditingContextDelegate.java: 31";
+		rLen = 32;
+		rLoc = 1202;
+		rType = 0;
+		vrLen = 1400;
+		vrLoc = 0;
+	};
+	F6B529CB030199190FCF0E72 = {
+		fRef = F59C578402C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXDatabaseContextDelegate.java: databaseContextDidSelectObjects";
+		rLen = 31;
+		rLoc = 6756;
+		rType = 0;
+		vrLen = 1970;
+		vrLoc = 2273;
+	};
+	F6B529CC030199190FCF0E72 = {
+		fRef = F59C57A102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXGenericRecord.java: addObjectToBothSidesOfRelationshipWithKey";
+		rLen = 103;
+		rLoc = 15798;
+		rType = 0;
+		vrLen = 1931;
+		vrLoc = 14962;
 	};
 	F6C146C602EF1A060FCF0E72 = {
 		fRef = F59C577702C4565601000102;
@@ -468,16 +735,6 @@
 		rType = 0;
 		vrLen = 1432;
 		vrLoc = 3175;
-	};
-	F6C146C902EF1A060FCF0E72 = {
-		fRef = F59C57A102C4565701000102;
-		isa = PBXTextBookmark;
-		name = "ERXGenericRecord.java: 245";
-		rLen = 73;
-		rLoc = 11452;
-		rType = 0;
-		vrLen = 2397;
-		vrLoc = 10429;
 	};
 	F6C146CB02EF1A060FCF0E72 = {
 		fRef = F59C578102C4565601000102;
@@ -548,5 +805,95 @@
 		rType = 0;
 		vrLen = 2397;
 		vrLoc = 10429;
+	};
+	F6C1DF7B02F5B8950FCF0E72 = {
+		fRef = F59C579A02C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXExtensions.java: stringFromFile";
+		rLen = 22;
+		rLoc = 46465;
+		rType = 0;
+		vrLen = 1114;
+		vrLoc = 45063;
+	};
+	F6C1DF7C02F5B8950FCF0E72 = {
+		fRef = F59C57A102C4565701000102;
+		isa = PBXTextBookmark;
+		name = "ERXGenericRecord.java: willUpdate";
+		rLen = 31;
+		rLoc = 6695;
+		rType = 0;
+		vrLen = 1497;
+		vrLoc = 6138;
+	};
+	F6E16B7402F86FE10FCF0E72 = {
+		fRef = F69DF13F02C76B3F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "ERXModelGroup.java: 19";
+		rLen = 7;
+		rLoc = 674;
+		rType = 0;
+		vrLen = 1120;
+		vrLoc = 0;
+	};
+	F6E16B7502F86FE10FCF0E72 = {
+		fRef = F59C578102C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXConfigurationManager.java: e";
+		rLen = 19;
+		rLoc = 11100;
+		rType = 0;
+		vrLen = 1765;
+		vrLoc = 10352;
+	};
+	F6E16B7602F86FE10FCF0E72 = {
+		fRef = F59C57F802C4565701000102;
+		isa = PBXTextBookmark;
+		name = "WOToManyRelationship.java: 412";
+		rLen = 128;
+		rLoc = 14731;
+		rType = 0;
+		vrLen = 1536;
+		vrLoc = 13951;
+	};
+	F6E16B7802F86FE10FCF0E72 = {
+		fRef = F59C578102C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXConfigurationManager.java: resetConnectionDictionaryInModel";
+		rLen = 23;
+		rLoc = 8557;
+		rType = 0;
+		vrLen = 2534;
+		vrLoc = 7402;
+	};
+	F6E16B7902F86FE10FCF0E72 = {
+		fRef = F69DF13F02C76B3F01AD0D07;
+		isa = PBXTextBookmark;
+		name = "ERXModelGroup.java: 19";
+		rLen = 7;
+		rLoc = 674;
+		rType = 0;
+		vrLen = 1120;
+		vrLoc = 0;
+	};
+	F6E16B7A02F86FE10FCF0E72 = {
+		fRef = F59C578102C4565601000102;
+		isa = PBXTextBookmark;
+		name = "ERXConfigurationManager.java: e";
+		rLen = 19;
+		rLoc = 11100;
+		rType = 0;
+		vrLen = 1765;
+		vrLoc = 10352;
+	};
+	F6E16B7B02F86FE10FCF0E72 = {
+		fRef = F59C57F802C4565701000102;
+		isa = PBXTextBookmark;
+		name = "WOToManyRelationship.java: 412";
+		rLen = 128;
+		rLoc = 14731;
+		rType = 0;
+		vrLen = 1536;
+		vrLoc = 13951;
 	};
 }
