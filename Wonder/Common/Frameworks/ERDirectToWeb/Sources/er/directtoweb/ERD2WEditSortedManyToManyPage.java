@@ -120,7 +120,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             ((String)entity().userInfo().valueForKey("isSortedJoinEntity")).equals("true")){
             isSorted = true;
         }
-        log.info("Sorted relationship entity: " + entity().name() + " is sorted? " + isSorted);
+        if(log.isDebugEnabled()){
+            log.debug("Sorted relationship entity: " + entity().name() + " is sorted? " + isSorted);
+        }
         return isSorted;
     }
 
@@ -218,15 +220,35 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public WOComponent newObjectAction() {
+        WOComponent result;
         if (isEntityReadOnly()) {
             throw new IllegalStateException("You cannot create new instances of " + entity().name() + "; it is read-only.");
         } else {
             _state = NEW;
-            _newEOInRelationship = (EOEnterpriseObject) dataSource().createObject();
-            editingContext().insertObject(_newEOInRelationship);
-            dataSource().insertObject(_newEOInRelationship);
+            EOEditingContext childEC = ERXExtensions.newEditingContext(editingContext());
+            EOEnterpriseObject eo = ERXUtilities.createEO(destinationEntity().name(),
+                                                          childEC);
+            EditPageInterface epi = D2W.factory().editPageForEntityNamed(destinationEntity().name(),
+                                                                         session());
+            epi.setObject(eo);
+            CreateNewEODelegate delegate = new CreateNewEODelegate();
+            delegate.editRelationshipPage = this;
+            delegate.createdEO = eo;
+            epi.setNextPageDelegate(delegate);
+            result = (WOComponent)epi;
         }
-        return null;
+        return result;
+    }
+
+    public static class CreateNewEODelegate implements NextPageDelegate {
+        public WOComponent editRelationshipPage;
+        public EOEnterpriseObject createdEO;
+        public WOComponent nextPage(WOComponent sender){
+            ((ERD2WEditSortedManyToManyPage)editRelationshipPage)._eoToAddToRelationship = createdEO;
+            ((ERD2WEditSortedManyToManyPage)editRelationshipPage).selectAction();
+            ((ERD2WEditSortedManyToManyPage)editRelationshipPage)._state = ERD2WEditSortedManyToManyPage.QUERY; 
+            return editRelationshipPage;
+        }
     }
     
     public EOEnterpriseObject newObjectInRelationship() {
