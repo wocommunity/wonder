@@ -180,7 +180,7 @@ public class ERXValidationFactory {
             try {
                 regularConstructor = validationExceptionClass().getConstructor(_regularConstructor);
             } catch (Exception e) {
-                log.error("Exception looking up regular constructor. Exception: " + e.getMessage());
+                log.error("Exception looking up regular constructor.", e);
             }
         }
         return regularConstructor;
@@ -442,7 +442,13 @@ public class ERXValidationFactory {
      * @param targetLanguage target language name
      * @return a templaet for the given set of parameters
      */
-    protected String templateForEntityPropertyType(String entityName, String property, String type, String targetLanguage) {
+    protected String templateForEntityPropertyType(String entityName,
+                                                   String property,
+                                                   String type,
+                                                   String targetLanguage) {
+        if (log.isDebugEnabled())
+            log.debug("Looking up template for entity named \"" + entityName + "\" property \"" + property
+                      + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"");
         // 1st try the whole string.
         String template = templateForKeyPath(entityName + "." + property + "." + type, targetLanguage);
         // 2nd try everything minus the type.
@@ -458,8 +464,8 @@ public class ERXValidationFactory {
         if (template == null)
             template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
-            log.error("Unable to find template for entity: " + entityName + " property: " + property + " type: "
-                      + type + " targetLanguage: " + targetLanguage);
+            log.error("Unable to find template for entity \"" + entityName + "\" property \"" + property + "\" type \""
+                      + type + "\" target language \"" + targetLanguage + "\"");
             template = UNDEFINED_VALIDATION_TEMPLATE;
         }
         return template;
