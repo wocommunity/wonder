@@ -20,8 +20,6 @@ import er.extensions.*;
 public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";
-    public static String IMAGE_TAB_COMPONENT_NAME = "ERXImageTabPanel";
-    public static String TEXT_TAB_COMPONENT_NAME = "ERXTabPanel";
 
     public ERD2WTabInspectPage(WOContext c) {
         super(c);
@@ -156,12 +154,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         tabSectionsContents().lastObject().equals(currentTab()) : false;
     }
 
-    /** Used to compute the name of the "tab" component used to render the tabs;
-     *  There are basically 2 choices: image tabs or text tabs.  This lets you switch
-     *  between them using the d2w rule system: 'useTabImages' => true or false
-     *  depending on which component you want.  false = TEXT_TAB_COMPONENT_NAME
-     */
     public String tabComponentName() {
-	return useTabImages() ? IMAGE_TAB_COMPONENT_NAME : TEXT_TAB_COMPONENT_NAME;
+    	return (String)d2wContext().valueForKey("tabComponentName");
     }
 }
