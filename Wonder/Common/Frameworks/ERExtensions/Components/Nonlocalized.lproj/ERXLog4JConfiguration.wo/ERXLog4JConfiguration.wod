@@ -183,3 +183,20 @@ TextFieldRuleKey: WOTextField {
 	value = ruleKey;
 }
 
+
+Form7: WOForm {
+       multipleSubmit = true;
+}
+
+ 
+TextFieldFilterString2: WOTextField {
+       value = conversionPattern;
+       size = 70;
+}
+
+SubmitButtonFilter2: WOSubmitButton {
+       action = updateConversionPattern;
+       value = "Update";
+}
+
+

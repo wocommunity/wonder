@@ -152,7 +152,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
                 NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
             }
-        }
+        } else {
+	    LogManager.resetConfiguration();
+	}
         PropertyConfigurator.configure(properties);
         
         if (log == null) 
