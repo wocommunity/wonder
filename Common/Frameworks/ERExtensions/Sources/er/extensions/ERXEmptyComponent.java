@@ -14,13 +14,10 @@ import com.webobjects.appserver.WOContext;
  * simple component is useful for having WOSwitchComponents no return
  * anything.
  */
-public class ERXEmptyComponent extends WOComponent {
+public class ERXEmptyComponent extends ERXStatelessComponent {
 
     /** Public constructor */
     public ERXEmptyComponent(WOContext aContext) {
         super(aContext);
     }
-    
-    /** component is stateless */
-    public boolean isStateless() { return true; }
 }
