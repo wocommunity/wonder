@@ -38,6 +38,7 @@ EditToManyRelationship: ERXToManyRelationship {
 	destinationSortKey = d2wContext.sortKey;
 	shouldShowSelectAllButtons = shouldShowSelectAllButtons;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+	destitationEntityName = d2wContext.destinationEntityName;
 }
 
 String1: WOString {
