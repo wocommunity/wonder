@@ -104,9 +104,11 @@ public class ERXLog4JConfiguration extends WOComponent {
     public Integer warnLevel() { return ERXConstant.integerForInt(Priority.WARN.toInt()); }
     public Integer errorLevel() { return ERXConstant.integerForInt(Priority.ERROR.toInt()); }
     public Integer fatalLevel() { return ERXConstant.integerForInt(Priority.FATAL.toInt()); }
+    public Integer unsetLevel() { return ERXConstant.MinusOneInteger; }
 
-    public int categoryPriorityValue() {
-        return category()!=null && category().getPriority()!=null ? category().getPriority().toInt() : -1;
+    public Integer categoryPriorityValue() {
+        return category()!=null && category().getPriority()!=null ?
+        ERXConstant.integerForInt(category().getPriority().toInt()) : ERXConstant.MinusOneInteger;
     }
 
     public boolean categoryIsNotDebug() { return category()!=null && category().getPriority()!=Priority.DEBUG; }
@@ -116,11 +118,11 @@ public class ERXLog4JConfiguration extends WOComponent {
     public boolean categoryIsNotFatal() { return category()!=null && category().getPriority()!=Priority.FATAL; }
 
     
-    public void setCategoryPriorityValue(String newValue) {
-        int pr=Integer.parseInt(newValue);
+    public void setCategoryPriorityValue(Integer newValue) {
+        int pr=newValue!=null ? newValue.intValue() : -1;
         category().setPriority(pr!=-1 ? Priority.toPriority(pr) : null);
     }
-
+    
     private final static NSDictionary BG_COLORS=new NSDictionary(
                                                                  new Object[] {
                                                                      "#ffbbbb",
@@ -137,7 +139,7 @@ public class ERXLog4JConfiguration extends WOComponent {
                                                                      ERXConstant.integerForInt(Priority.FATAL.toInt()),
                                                                  });
     public String bgColor() {
-        return (String)BG_COLORS.objectForKey(ERXConstant.integerForInt(categoryPriorityValue()));
+        return (String)BG_COLORS.objectForKey(categoryPriorityValue());
     }
 
     public int indentLevel() {
