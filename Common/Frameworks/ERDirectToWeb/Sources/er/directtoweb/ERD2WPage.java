@@ -77,6 +77,47 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }    
 
     /**
+     * Overridden to lock the page's editingContext, if there is any present.
+     */
+    public void awake() {
+    	super.awake();
+    	if (_context!=null) {
+    		_context.lock();
+    	}
+    }
+    
+    /**
+     * Overridden to unlock the page's editingContext, if there is any present.
+     */
+    public void sleep() {
+    	if (_context!=null) {
+    		_context.unlock();
+    	}
+    	super.sleep();
+    }
+
+    
+    /**
+     * Sets the page's editingContext, automatically locking/unlocking it.
+     * @param newEditingContext new EOEditingContext
+     */
+    public void setEditingContext(EOEditingContext newEditingContext) {
+    	if (newEditingContext != _context) { 
+    		if (_context != null) {
+    			_context.unlock();
+    		}
+    		_context = newEditingContext;
+    		if (_context != null) {
+    			_context.lock();
+    		}
+    	}
+    }
+
+    public EOEditingContext editingContext() {
+    	return _context;
+    }
+    
+    /**
      * Implementation of the {@link ERXComponentActionRedirector$Restorable} interface.
      * This implementation creates an URL with the name of the current pageConfiguration as a direct action,
      * which assumes a {@link ERD2WDirectAction} as the default direct action.
@@ -92,12 +133,17 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /** Implementation of the {@link InspectPageInterface} */
     public void setObject(EOEnterpriseObject eo) {
-        _context = (eo != null) ? eo.editingContext() : null;
-        // for SmartAssignment
+    	setEditingContext((eo != null) ? eo.editingContext() : null);
+         // for SmartAssignment
         d2wContext().takeValueForKey(eo, Keys.object);
         super.setObject(eo);
     }
-
+    public void setDataSource(EODataSource eodatasource) {
+    	if(eodatasource.editingContext() != null) {
+    		setEditingContext(eodatasource.editingContext());
+    	}
+    	super.setDataSource(eodatasource);
+    }
     /** Can be used to get this instance into KVC */
     public final WOComponent self() {
         return this;

@@ -37,22 +37,16 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     protected EOEnterpriseObject _eoToAddToRelationship;
     protected EOEnterpriseObject _newEOInRelationship;
-    protected EOEditingContext _editingContext;
     private String _relationshipKey;
     public String relationshipKey(){ return _relationshipKey; }
     public WODisplayGroup relationshipDisplayGroup = new WODisplayGroup();
     public EOEnterpriseObject browserItem;
     public NSArray browserSelections;
     public String sortedObjects;
-    public int awakesMinusSleeps = 0;
-
-    public static boolean shouldLockEditingContext(){
-        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERD2WEditSortedManyToManyPage.shouldLockEditingContext", true);
-    }
 
     public void setMasterObjectAndRelationshipKey(EOEnterpriseObject eo, String relationshipKey) {
-        setEditingContext(ERXExtensions.newEditingContext(eo.editingContext(), false)); // a non-validating context
-        EOEnterpriseObject newObject=(EOEnterpriseObject)EOUtilities.localInstanceOfObject(editingContext(),eo);
+    	EOEditingContext ec = ERXExtensions.newEditingContext(eo.editingContext(), false);  // a non-validating context
+        EOEnterpriseObject newObject=(EOEnterpriseObject)EOUtilities.localInstanceOfObject(ec,eo);
         setObject(newObject);
         _relationshipKey = relationshipKey;
 
@@ -74,46 +68,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         relationshipDisplayGroup.fetch();
         setPropertyKey(displayKey());
       }
-
-    public void awake() {
-        super.awake();
-        awakesMinusSleeps++;
-        if (editingContext() != null) {
-            if(log.isDebugEnabled()){
-                log.debug("awakesMinusSleeps:"+awakesMinusSleeps);
-            }
-            if(shouldLockEditingContext()){
-                editingContext().lock();
-            }
-        }
-    }
-
-    public void sleep() {
-        awakesMinusSleeps--;
-        if (editingContext() != null && shouldLockEditingContext()) {
-           editingContext().unlock();
-        }
-        super.sleep();
-    }
-    
-    public EOEditingContext editingContext() {
-        return _editingContext;
-    }
-
-    protected void setEditingContext(EOEditingContext newEditingContext) {
-        if(log.isDebugEnabled()){
-            log.debug(ERXUtilities.stackTrace());
-        }
-        if (newEditingContext != editingContext()) {
-            if (editingContext() != null && shouldLockEditingContext()) {
-                editingContext().unlock();
-            }
-            _editingContext = newEditingContext;
-            if (editingContext() != null && shouldLockEditingContext()) {
-                editingContext().lock();
-            }
-        }
-    } 
 
     public String displayKey() {
         String displayKeyFromD2W = (String)d2wContext().valueForKey("displayKey");
