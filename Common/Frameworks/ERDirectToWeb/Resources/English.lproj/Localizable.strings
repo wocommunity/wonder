@@ -16,7 +16,7 @@
     "ERDEditListButton.editButtonName" = "Edit @@displayNameForProperty@@ List";
     "ERDEmptyListMessage.emptyListMessage" = "<b>No matching @@displayNameForEntity@@ records found.</b>";
     "ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>No matching @@displayNameForEntity@@ records found.</b>";
-    "ERDTrashcan.confirmDeletionMessage" = "<B>Are you sure you want to delete the following @@displayNameForEntity@@</B>:<br> @@object.userPresentableDescription@@";
+    "ERDTrashcan.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b>";
     "ERDEditList.saveLabel" = "Save @@pluralCount@@ @@pluralString@@?";
     "ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time";
     "ERDDatePopup.monthList" = ( "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
