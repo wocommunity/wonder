@@ -7,8 +7,11 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
+import java.util.GregorianCalendar;
 
 public class ERXTimestampUtilities extends Object {
+    protected static GregorianCalendar _calendar = (GregorianCalendar)GregorianCalendar.getInstance();
+
     public static NSTimestamp timestampForString(String defaultValue) {
         NSTimestamp value =  null;
         if(defaultValue.equals("now")) {
@@ -26,51 +29,104 @@ public class ERXTimestampUtilities extends Object {
         }
         return value;
     }
-    
+
+    class ERXTimestamp {
+        NSTimestamp ts;
+
+        ERXTimestamp(NSTimestamp value) {
+            ts = value;
+        }
+
+        public int dayOfCommonEra() {
+            return yearOfCommonEra()*365 + dayOfYear();
+        }
+
+        public int dayOfWeek() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.DAY_OF_WEEK);
+        }
+
+        public int dayOfYear() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.DAY_OF_YEAR);
+        }
+
+        public int hourOfDay() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.HOUR_OF_DAY);
+        }
+
+        public int minuteOfHour() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.MINUTE);
+        }
+
+        public int secondOfMinute() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.SECOND);
+        }
+
+        public int monthOfYear() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.MONTH);
+        }
+
+        public int yearOfCommonEra() {
+            _calendar.setTime(ts);
+            return _calendar.get(GregorianCalendar.YEAR);
+        }
+    }
+
+    static ERXTimestamp getInstance() {
+        return getInstance(new NSTimestamp());
+    }
+
+    static ERXTimestamp getInstance(NSTimestamp ts) {
+        return getInstance(ts);
+    }
 
     public static NSTimestamp unixDate(Number helpedNSNumber) {
         return ERXTimestampUtilities.epoch().timestampByAddingGregorianUnits(0, 0, 0, 0, 0, (int)helpedNSNumber.longValue()+60*60);
     }
 
     public static Integer unixTimestamp(NSTimestamp ts) {
-        int seconds = 0;
-        seconds = (int)ts.timeIntervalSinceTimestamp(ERXTimestampUtilities.epoch());
-        return (new Integer(seconds-60*60));
+        long seconds = 0;
+        seconds = ts.getTime() - epoch().getTime();
+        return (new Integer((int)((seconds-60*60)/1000L)));
     }
 
     public static NSTimestamp today() {
-        NSTimestamp today = new NSTimestamp();
-        return today.timestampByAddingGregorianUnits(0, 0, 0, -today.hourOfDay(), -today.minuteOfHour(), -today.secondOfMinute());
+        ERXTimestamp now = getInstance();
+        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
 
     public static NSTimestamp tomorrow() {
-        NSTimestamp tomorrow = new NSTimestamp();
-        return tomorrow.timestampByAddingGregorianUnits(0, 0, 1, -tomorrow.hourOfDay(), -tomorrow.minuteOfHour(), -tomorrow.secondOfMinute());
+        ERXTimestamp now = getInstance();
+        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
 
     public static NSTimestamp yesterday() {
-        NSTimestamp yesterday = new NSTimestamp();
-        return yesterday.timestampByAddingGregorianUnits(0, 0, -1, -yesterday.hourOfDay(), -yesterday.minuteOfHour(), -yesterday.secondOfMinute());
+        ERXTimestamp now = getInstance();
+        return (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, -1, -now.hourOfDay(), -now.minuteOfHour(), -now.secondOfMinute());
     }
 
     public static NSTimestamp distantPast() {
-        NSTimestamp distantPast = new NSTimestamp();
-        return distantPast.timestampByAddingGregorianUnits(-2000, 0, -1, 0, 0, 0);
+       return NSTimestamp.DistantPast;
     }
 
     public static NSTimestamp distantFuture() {
-        NSTimestamp distantPast = new NSTimestamp();
-        return distantPast.timestampByAddingGregorianUnits(+2000, 0, -1, 0, 0, 0);
+        return NSTimestamp.DistantFuture;
     }
 
-     
-    public static NSTimestamp dateByAddingTime(NSTimestamp ts, NSTimestamp time) {
+    public static NSTimestamp dateByAddingTime(NSTimestamp ts, NSTimestamp t1) {
+        ERXTimestamp time = getInstance(t1);
         return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
     }
 
-    public static NSTimestamp timestampByAddingTime(NSTimestamp ts, NSTimestamp time) {
+    public static NSTimestamp timestampByAddingTime(NSTimestamp ts, NSTimestamp t1) {
+        ERXTimestamp time = getInstance(t1);
         return ts.timestampByAddingGregorianUnits(0, 0, 0, time.hourOfDay(), time.minuteOfHour(), time.secondOfMinute());
     }
 
