@@ -1,0 +1,10 @@
+<project name="ERCorebusinessLogic" default="all" basedir="..">
+    <property name="project.principal.class" value="er.corebusinesslogic.ERCorebusinessLogic" />
+
+    <property name="project.name" value="${ant.project.name}" />
+    <property name="project.dir" value="${basedir}" />
+
+    <target name="all">
+        <ant antfile="../../../Build/build/common.xml" />
+    </target>
+</project>
