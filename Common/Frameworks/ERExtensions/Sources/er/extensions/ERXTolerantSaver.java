@@ -214,11 +214,11 @@ public class ERXTolerantSaver {
         } catch(EOGeneralAdaptorException e) {
             EOEnterpriseObject failedEO;
             NSDictionary userInfo = (NSDictionary)e.userInfo();
-            //if (log.isDebugEnabled()) log.debug("TolerantSaver: Exception occurred name: "+ eName);
-            //if (log.isDebugEnabled()) log.debug("Exception occurred e: -------------------------");
-            //if (log.isDebugEnabled()) log.debug("Exception occurred e: "+e);
-            //if (log.isDebugEnabled()) log.debug("Exception occurred userInfo: "+ userInfo);
-            //if (log.isDebugEnabled()) log.debug("Exception occurred e: ^^^^^^^^^^^^^^^^^^^^^^^^^");
+            log.warn("TolerantSaver: Exception occurred: "+ e);
+            log.warn("Exception occurred e: -------------------------");
+//            if (log.isDebugEnabled()) log.debug("Exception occurred e: "+e);
+            log.warn("Exception occurred userInfo: "+ userInfo);
+            log.warn("Exception occurred e: ^^^^^^^^^^^^^^^^^^^^^^^^^");
             if(!(userInfo == null)) {
                 String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
                 if (!(eType == null)) {
@@ -258,7 +258,7 @@ public class ERXTolerantSaver {
                                 failedEO = null;
                             }
                             if (writeAnyWay) {
-                                if (log.isDebugEnabled()) log.debug("TolerantSaver: about to save changes again");
+                                log.warn("TolerantSaver: about to save changes again");
                                 save(ec, writeAnyWay, merge);                                    
                             }
                             return "EOAdaptorOptimisticLockingFailure";
