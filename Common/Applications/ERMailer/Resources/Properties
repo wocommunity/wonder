@@ -2,7 +2,7 @@
 ## We want to use the mail facility
 ERCUseMailFacility = true
 
-er.mailer.ERBatchMailerDaemonFrequency = 0
+er.javamail.mailer.ERBatchMailerDaemonFrequency = 0
 
 # If you want to test creating a test email in the database and sending it, set
 # this flag to true
