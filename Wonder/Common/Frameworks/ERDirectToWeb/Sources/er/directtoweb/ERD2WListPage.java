@@ -322,4 +322,29 @@ public String pageTitle() {
         //default implementation does nothing
     }
 
+    public String colorForRow(){
+        String result = null;
+        if(d2wContext().valueForKey("referenceRelationshipForBackgroupColor")!=null){
+            String path = (String)d2wContext().valueForKey("referenceRelationshipForBackgroupColor")+".backgroundColor";
+            result = (String)object().valueForKeyPath(path);
+        }
+        return result;
+    }
+
+    public EOEnterpriseObject referenceEO;
+    private NSArray _referenceEOs;
+    public NSArray referenceEOs(){
+        if(_referenceEOs==null){
+            String relationshipName = (String)d2wContext().valueForKey("referenceRelationshipForBackgroupColor");
+            if(relationshipName!=null){
+                EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName());
+                EORelationship relationship = entity.relationshipNamed(relationshipName);
+                _referenceEOs = EOUtilities.objectsForEntityNamed( EOSharedEditingContext.defaultSharedEditingContext(),
+                                                                   relationship.destinationEntity().name());
+                _referenceEOs = ERXArrayUtilities.sortedArraySortedWithKey(_referenceEOs, "ordering", EOSortOrdering.CompareAscending);
+            }
+        }
+        return _referenceEOs;
+    }
+
 }
