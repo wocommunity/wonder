@@ -1,13 +1,22 @@
 {
-    "HomePage.ListForOpenBugs" = "Liste von @pluralCount@ offenen @pluralString@ für Dich";
-    "HomePage.ListForUnreadBugs" = "Liste von @pluralCount@ ungelesenen @pluralString@ für Dich";
-    "List @user.openTestItems.count@ open TestItem(s) assigned to you" = "Liste von @user.openTestItems.count@ offenen Testfällen(s) für Dich";
-    "List @user.openRequirements.count@ open Requirements(s) assigned to you" = "Liste von @user.openRequirements.count@ offenen Anforderung(en) für Dich";
-    "List @user.allRequirements.count@ total Requirements(s) assigned to you" = "Liste von @user.allRequirements.count@ Anforderung(en) insgesamt für Dich";
-    "CreateTestItemFromReq.templateString" = "[Von Anfoderung #@primaryKey@]";
-    "CreateTestItem.templateString" = "[Von Anfoderung #@primaryKey@]";
 
-    "Is Open" = "Ist offen";
+"HomePage.closedOpenBug" = "Du hast @pluralCount@ offene @pluralString@";
+"HomePage.openedOpenBug" = "Alle deine offenen Bugs";
+"HomePage.noOpenBug" = "Du hast keine offenen Bugs";
+
+"HomePage.closedTestItem" = "Du hast @pluralCount@ @pluralString@";
+"HomePage.openedTestItem" = "Alle deine Testfälle";
+"HomePage.noTestItem" = "Du hast keine offenen Testfälle";
+
+"HomePage.closedUnreadBug" = "Du hast @pluralCount@ ungelesene @pluralString@";
+"HomePage.openedUnreadBug" = "Alle deine ungelesenen Bugs";
+"HomePage.noUnreadBug" = "Du hast keine ungelesenen Bugs";
+
+"HomePage.closedRequirement" = "Du hast @pluralCount@ offenen @pluralString@";
+"HomePage.openedRequirement" = "Alle deine offenen Anforderungen";
+"HomePage.noRequirement" = "Du hast keine ungelesenen Anforderungen";
+
+"Is Open" = "Ist offen";
     "Text Description" = "Text Beschreibung";
     "Subject" = "Betreff";
     "Date Submitted" = "Eingereicht am";
