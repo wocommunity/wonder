@@ -19,14 +19,11 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-AttributeSorter: EXRSortOrder {
+AttributeSorter: ERXSortOrder {
 	displayGroup = displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
         d2wContext = d2wContext;
-	unsortedImageSrc = "/nsi/sortUnsorted.gif";
-	sortedAscendingImageSrc = "/nsi/sortAscending.gif";
-	sortedDescendingImageSrc = "/nsi/sortDescending.gif";
 }
 
 BackButton: WOHyperlink {
