@@ -29,7 +29,8 @@ import org.apache.log4j.Logger;
  * for creating editing contexts with the default delegates set.
  */
 public class ERXExtensions {
-
+    public static Observer observer;
+    
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
     
@@ -156,8 +157,7 @@ public class ERXExtensions {
                 e.printStackTrace();
             }
 
-            Observer observer = new Observer();
-            ERXRetainer.retain(observer); // has to be retained
+            observer = new Observer();
 
             try {
                 ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
@@ -658,11 +658,12 @@ public class ERXExtensions {
      * @return true or false depending on if the object is a
      *		new object.
      */
-    // ENHANCEME: Should be able to differentiate between a deleted eo and a new eo by looking
-    //		  at the EOGlobalID
     // MOVEME: ERXEOFUtilities (when we have them)
     public static boolean isNewObject(EOEnterpriseObject eo) {
-        return eo.editingContext()==null || eo.editingContext().insertedObjects().containsObject(eo);
+        if (eo.editingContext() == null) return true;
+        
+        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
+        return gid.isTemporary();
     }
 
     /**
@@ -1262,9 +1263,11 @@ public class ERXExtensions {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static String randomizeDirectActionURL(String daURL) {
-        int r=_random.nextInt();
-        char c=daURL.indexOf('?')==-1 ? '?' : '&';
-        return  daURL+c+"r="+r;
+	synchronized(_random) {
+	    int r=_random.nextInt();
+	    char c=daURL.indexOf('?')==-1 ? '?' : '&';
+	    return  daURL+c+"r="+r;
+	}
     }
     /**
      * This method can be used with Direct Action URLs to make sure
@@ -1275,16 +1278,18 @@ public class ERXExtensions {
      */
     // FIXME: Should check to make sure that the key 'r' isn't already present in the url.
     public static void addRandomizeDirectActionURL(StringBuffer daURL) {
-        int r=_random.nextInt();
-        char c='?';
-        for (int i=0; i<daURL.length(); i++) {
-            if (daURL.charAt(i)=='?') {
-                c='&'; break;
-            }
-        }
-        daURL.append(c);
-        daURL.append("r=");
-        daURL.append(r);
+	synchronized(_random) {
+	    int r=_random.nextInt();
+	    char c='?';
+	    for (int i=0; i<daURL.length(); i++) {
+		if (daURL.charAt(i)=='?') {
+		    c='&'; break;
+		}
+	    }
+	    daURL.append(c);
+	    daURL.append("r=");
+	    daURL.append(r);
+	}
     }
     /**
      * Adds the wosid for a given session to a given url. 
