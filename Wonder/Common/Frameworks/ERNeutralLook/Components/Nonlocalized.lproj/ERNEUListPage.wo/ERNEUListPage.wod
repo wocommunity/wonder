@@ -188,7 +188,8 @@ ListTableRow: WOGenericContainer {
 	BGCOLOR = colorForRow;
 }
 
-NavBar: ERXBatchNavigationBar {
+NavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
