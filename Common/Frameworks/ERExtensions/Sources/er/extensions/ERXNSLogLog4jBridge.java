@@ -37,7 +37,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
                     log.info(obj.toString());
                     break;
                 case ERR:
-                    log.info(obj.toString());
+                    log.error(obj.toString());
                     break;
                 case DEBUG:
                     log.debug(obj.toString());
