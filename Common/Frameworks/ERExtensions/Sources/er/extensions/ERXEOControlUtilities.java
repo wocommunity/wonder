@@ -804,5 +804,38 @@ public class ERXEOControlUtilities {
         if (result != null)
             result.addObjectsFromArray(fromDb);
         return result != null ? result : fromDb;
+    }
+
+    /** faults every EO in the qualifiers into the specified editingContext. This is important for 
+     * in memory filtering and eo comparision
+     * @param ec
+     * @param q
+     */
+    public static EOQualifier localInstancesInQualifier(EOEditingContext ec, EOQualifier q) {
+        if (q instanceof EOKeyValueQualifier) {
+            EOKeyValueQualifier q1 = (EOKeyValueQualifier)q;
+            if (q1.value() instanceof EOEnterpriseObject) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)q1.value();
+                if (eo.editingContext() != ec && !ERXExtensions.isNewObject(eo)) {
+                    eo = EOUtilities.localInstanceOfObject(ec, eo);
+                    EOKeyValueQualifier qual = new EOKeyValueQualifier(q1.key(), q1.selector(), eo);
+                    return qual;
+                }
+            }
+        } else if (q instanceof EOAndQualifier || q instanceof EOOrQualifier) {
+            NSArray oriQualifiers = (NSArray)NSKeyValueCoding.Utility.valueForKey(q, "qualifiers");
+            NSMutableArray qualifiers = new NSMutableArray();
+            for (int i = oriQualifiers.count(); i-- > 0;) {
+                EOQualifier qual = (EOQualifier)oriQualifiers.objectAtIndex(i);
+                qualifiers.addObject(localInstancesInQualifier(ec, qual));
+            }
+            return new EOAndQualifier(qualifiers);
+        } else if (q instanceof EONotQualifier) {
+            EONotQualifier qNot = (EONotQualifier)q;
+            EOQualifier qual = localInstancesInQualifier(ec, qNot.qualifier());
+            return new EONotQualifier(qual);
+        } 
+        return q;
+        
     }    
 }
