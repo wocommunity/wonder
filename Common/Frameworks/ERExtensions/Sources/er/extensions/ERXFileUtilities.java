@@ -20,6 +20,30 @@ public class ERXFileUtilities {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileUtilities.class);
 
+
+    /**
+     * Returns the byte array for a given stream.
+     * @param in stream to get the bytes from
+     * @throws IOException if things go wrong
+     * @return byte array of the stream.
+     */
+    public static byte[] bytesFromInputStream(InputStream in) throws IOException {
+        if (in == null) throw new IllegalArgumentException("null input stream");
+        final int BUFSIZ = 1024;
+        byte[] data = new byte[BUFSIZ];
+        int total = 0, c = 0, x = 0;
+        while ((c = in.read(data, total, x)) != -1) {
+            total += c;
+            x -= c;
+            if (x == 0) { // Need more buffer
+                byte[] tmp = new byte[total + BUFSIZ];
+                System.arraycopy(data, 0, tmp, 0, total);
+                data = tmp; x = BUFSIZ;
+            }
+        }
+        return data;
+    }
+        
     /**
     * Returns the byte array for a given file.
      * @param f file to get the bytes from
