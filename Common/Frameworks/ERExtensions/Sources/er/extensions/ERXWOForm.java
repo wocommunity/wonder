@@ -31,9 +31,11 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
         if(context != null && context instanceof ERXMutableUserInfoHolderInterface && _formName != null) {
             String formName = (String)_formName.valueInComponent(context.component());
-            if(formName != null)
+            if(formName != null) {
                 ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().setObjectForKey(formName, "formName");
-        }
+                response._appendTagAttributeAndValue("name", formName, false);
+            }
+       }
         super.appendAttributesToResponse(response, context);
     }
 

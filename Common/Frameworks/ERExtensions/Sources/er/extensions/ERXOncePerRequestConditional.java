@@ -23,22 +23,31 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
     static final Category cat = Category.getInstance(ERXOncePerRequestConditional.class.getName());
     
     String keyName = null;
-    NSMutableDictionary displayCountDict;
-    int stage = 0;
-    String lastID;
-    
+    int currentStage = -1;
+
     /**
      * Public constructor
      * @param context context of request
      */
     public ERXOncePerRequestConditional(WOContext context) {
         super(context);
-	if(application().isConcurrentRequestHandlingEnabled())
-	    cat.warn("This Component is not multi-threading safe!");
+    }
+
+    public NSMutableDictionary displayCountDict() {
+        if(!(context() instanceof ERXMutableUserInfoHolderInterface)) {
+            throw new IllegalStateException("Context must implement ERXMutableUserInfoHolderInterface");
+        }
+
+        NSMutableDictionary displayCountDict = (NSMutableDictionary)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().objectForKey("ERXOncePerRequestDisplayCountDict");
+        if(displayCountDict == null) {
+             displayCountDict = new NSMutableDictionary();
+            ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().setObjectForKey(displayCountDict, "ERXOncePerRequestDisplayCountDict");
+        }
+        return displayCountDict;
     }
 
     public int displayCountForKey(String key) {
-	return ((Integer)displayCountDict.objectForKey(key)).intValue();
+	return ((Integer)displayCountDict().objectForKey(key)).intValue();
     }
     
     String keyName() {
@@ -60,52 +69,38 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	super.awake();
     }
 
-    public void resetDict(int currentStage, String contextID) {
-	int count = 0;
-	String key = keyName();
+    public void resetDict() {
+        String key = keyName() + "--" + currentStage;
 
-        if(cat.isDebugEnabled())
-            cat.debug("stage:" + stage + ", currentStage:" + currentStage + ", context:" + contextID + ", lastID:" + lastID);
-
-	
-	if(stage != currentStage || lastID == null || !lastID.equals(contextID)) {
-            if(cat.isDebugEnabled())
-                cat.debug("did reset");
-	    if(displayCountDict != null)
-		displayCountDict.removeAllObjects();
-	    stage = currentStage;
-	    lastID = contextID;
-	}
-	
-	if(displayCountDict == null) {
-	    displayCountDict = new NSMutableDictionary(ERXConstant.ZeroInteger, key);
-	} else if(displayCountDict.objectForKey(key) == null) {
-	    displayCountDict.setObjectForKey(ERXConstant.ZeroInteger, key);
-	} else {
-	    count = ((Integer)displayCountDict.objectForKey(key)).intValue() + 1;
-	    displayCountDict.setObjectForKey(ERXConstant.integerForInt(count), key);
-	}
+        if(displayCountDict().objectForKey(key) == null) {
+            displayCountDict().setObjectForKey(ERXConstant.integerForInt(-1), key);
+        }
+        int count = ((Integer)displayCountDict().objectForKey(key)).intValue() + 1;
+        displayCountDict().setObjectForKey(ERXConstant.integerForInt(count), key);
     }
-    
+
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
-	resetDict(0, context().session().sessionID() + context().contextID());
+        currentStage = 0;
+	resetDict();
 	super.takeValuesFromRequest(aRequest,aContext);
     }
 
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
-	resetDict(1, context().session().sessionID() + context().contextID());
+        currentStage = 1;
+	resetDict();
 	return super.invokeAction(aRequest,aContext);
     }
 
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-	resetDict(2, context().session().sessionID() + context().contextID());
+        currentStage = 2;
+	resetDict();
 	super.appendToResponse(aResponse,aContext);
     }
 
     public boolean displayContent() {
-	int showCount = displayCountForKey(keyName());
+	int showCount = displayCountForKey(keyName() + "--" + currentStage);
         if(cat.isDebugEnabled())
-            cat.debug("displayContent - showCount: " + showCount + " stage:" + stage);
+            cat.debug("displayContent - showCount: " + showCount + " stage:" + currentStage);
 	return showCount == 0;
     }
 }
