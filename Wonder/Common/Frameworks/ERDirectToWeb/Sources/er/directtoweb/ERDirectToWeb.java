@@ -41,6 +41,7 @@ public class ERDirectToWeb {
             if (cat.isDebugEnabled()) cat.debug("Initializing framework: ERDirectToWeb");
             Class c=ERD2WModel.class;        // force initialization
                                              // Configures the system for trace rule firing.
+            D2W.setFactory(new ERD2WFactory());
             try {
                 ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
             } catch (Throwable e) {
