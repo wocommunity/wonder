@@ -147,8 +147,9 @@
 				F606E159032174F201257492,
 				F6593153032178C901257492,
 				F604989B03212E6101257492,
-				F604989C03212E6101257492,
-				F6DCA9FB032A475D01257492,
+				F6A1CE5C03A86BF901257492,
+				F6A1CE5603A8691601257492,
+				F6A1CE5A03A86A2601257492,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,8 +611,9 @@
 		40B5828CFFD5E91B7F000001 = {
 			children = (
 				F604989903212E6101257492,
-				F604989A03212E6101257492,
-				F6DCA9FA032A475D01257492,
+				F6A1CE5503A8691601257492,
+				F6A1CE5B03A86BF901257492,
+				F6A1CE5903A86A1D01257492,
 				022D130B0059B6D511CD2978,
 				40B5828DFFD5E91B7F000001,
 				40B5828EFFD5E91B7F000001,
@@ -705,24 +707,8 @@
 			path = Libraries/jms_1.0.2a.jar;
 			refType = 4;
 		};
-		F604989A03212E6101257492 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "openjms-0.7.2.jar";
-			path = "Libraries/openjms-0.7.2.jar";
-			refType = 4;
-		};
 		F604989B03212E6101257492 = {
 			fileRef = F604989903212E6101257492;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-		F604989C03212E6101257492 = {
-			fileRef = F604989A03212E6101257492;
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
@@ -758,6 +744,54 @@
 			path = Documentation/GettingStartedMacOSX.txt;
 			refType = 4;
 		};
+		F6A1CE5503A8691601257492 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "openjms-0.7.3.1.jar";
+			path = "Libraries/openjms-0.7.3.1.jar";
+			refType = 4;
+		};
+		F6A1CE5603A8691601257492 = {
+			fileRef = F6A1CE5503A8691601257492;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+		F6A1CE5903A86A1D01257492 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = jta_1.0.1.jar;
+			path = Libraries/jta_1.0.1.jar;
+			refType = 4;
+		};
+		F6A1CE5A03A86A2601257492 = {
+			fileRef = F6A1CE5903A86A1D01257492;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
+		F6A1CE5B03A86BF901257492 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "exolabcore-0.3.3.jar";
+			path = "Libraries/exolabcore-0.3.3.jar";
+			refType = 4;
+		};
+		F6A1CE5C03A86BF901257492 = {
+			fileRef = F6A1CE5B03A86BF901257492;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
 		F6B7839B0345539001257492 = {
 			isa = PBXFileReference;
 			name = Properties;
@@ -768,22 +802,6 @@
 			fileRef = F6B7839B0345539001257492;
 			isa = PBXBuildFile;
 			settings = {
-			};
-		};
-		F6DCA9FA032A475D01257492 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = "exolabcore-0.3.3.jar";
-			path = "Libraries/exolabcore-0.3.3.jar";
-			refType = 4;
-		};
-		F6DCA9FB032A475D01257492 = {
-			fileRef = F6DCA9FA032A475D01257492;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
 			};
 		};
 		F6DCA9FE032A522C01257492 = {
