@@ -122,7 +122,7 @@ public class DRCriteria extends Object  {
     }
 
     public String toString() {
-        return  "<" + super.toString() +": "+(_valueDict.toString()) + ">";
+        return  "<DRCriteria valueDict: " + _valueDict + "; >";
     }
 
     private String _keyDesc = null;

@@ -520,4 +520,8 @@ public class DRSubMasterCriteria extends Object  {
         }
         return _keyDesc;
     }
+
+    public String toString() {
+        return "<DRSubMasterCriteria key: \"" + key() + "\"; label: \"" + label() + "\"; >";
+    }
 }
