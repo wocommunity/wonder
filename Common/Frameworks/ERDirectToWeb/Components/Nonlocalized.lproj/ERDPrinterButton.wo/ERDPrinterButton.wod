@@ -39,7 +39,7 @@ PrintButton: ERXSingleButton {
 	value = "Printer Friendly View";
 }
 
-PrinterFriendlyLink2: ERXOpenJSWindowHyperlink {
+PrinterFriendlyLink2: ERXJSOpenWindowHyperlink {
 	action = printerFriendlyVersion;
 	scrollbars = true;
 	target = "PrinterFriendly";

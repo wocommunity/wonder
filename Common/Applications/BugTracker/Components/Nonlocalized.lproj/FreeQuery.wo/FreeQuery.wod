@@ -1,0 +1,17 @@
+Form: WOForm {
+}
+
+SubmitButton1: WOSubmitButton {
+	action = find;
+	value = "Find";
+}
+
+Text1: WOText {
+	cols = 60;
+	rows = 10;
+	value = string;
+}
+
+Wrapper: PageWrapper {
+}
+

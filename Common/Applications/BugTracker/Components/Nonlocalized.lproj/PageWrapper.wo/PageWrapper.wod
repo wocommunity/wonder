@@ -1,0 +1,18 @@
+Body: WOComponentContent {
+	_unroll = YES;
+}
+
+BodyContainer: WOBody {
+    filename="fuzzyGreyStripe.gif";
+	framework = "JavaDirectToWeb";
+}
+
+ERStyleSheet1: ERXStyleSheet { 
+    styleSheetName="style_sheet.css";
+}
+
+Head: D2WHead {
+}
+
+Header: MenuHeader {
+}

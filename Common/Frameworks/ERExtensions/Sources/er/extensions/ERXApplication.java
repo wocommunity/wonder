@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
+//import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
 import org.apache.log4j.Category;
 
@@ -31,6 +32,20 @@ public abstract class ERXApplication extends WOApplication {
     // FIXME: Should correct all references to WORequestHandler.DidHandleRequestNotification and then delete this ivar.
     public static final String WORequestHandlerDidHandleRequestNotification = WORequestHandler.DidHandleRequestNotification;
 
+
+    /**
+     * The ERXApplication contructor.
+     * Sets the Context class name to "er.extensions.ERXWOContext" if
+     * it is "WOContext". Patches ERXWOForm to be used instead of WOForm.
+     */
+    public ERXApplication() {
+        super();
+        if(contextClassName().equals("WOContext"))
+            setContextClassName("er.extensions.ERXWOContext");
+        //ERXCompilerProxy.defaultProxy().setClassForName(ERXWOForm.class, "WOForm");
+        //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+    }
+    
     /**
      * The ERXApplication singleton.
      * @return returns the <code>WOApplication.application()</code> cast as an ERXApplication
@@ -76,6 +91,26 @@ public abstract class ERXApplication extends WOApplication {
             WOTimer t=new WOTimer(stopDate, 0, this, "startRefusingSessions", null, null, false);
             t.schedule();        }
         super.run();
+    }
+
+    /**
+     * Creates the request object for this loop.
+     * Overridden to use an {link ERXRequest} object that fixes a bug
+     * with localization.
+     * @param aMethod the HTTP method object used to send the request, must be one of "GET", "POST" or "HEAD"
+     * @param aURL - must be non-null
+     * @param anHTTPVersion - the version of HTTP used
+     * @param someHeaders - dictionary whose String keys correspond to header names
+     * @param aContent - the HTML content of the receiver
+     * @param someInfo - an NSDictionary that can contain any kind of information related to the current response.
+     * @returns a new WORequest object
+     */
+    public WORequest createRequest(String aMethod, String aURL,
+                                   String anHTTPVersion,
+                                   NSDictionary someHeaders, NSData aContent,
+                                   NSDictionary someInfo) {
+        WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
+        return worequest;
     }
 
     /**

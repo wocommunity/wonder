@@ -1,0 +1,3 @@
+FileBugLink:  WOHyperlink {
+   action=fileBug;
+}

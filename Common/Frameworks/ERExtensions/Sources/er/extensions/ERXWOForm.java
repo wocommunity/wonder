@@ -1,0 +1,52 @@
+//
+// ERXWOForm.java
+// Project armehaut
+//
+// Created by ak on Mon Apr 01 2002
+//
+
+package er.extensions;
+
+import com.webobjects.foundation.*;
+import com.webobjects.appserver.*;
+
+/** Transparent replacement for WOForm.
+ *  It adds the Forms name to the ERXContext's mutableUserInfo as as "formName" key,
+ *  which makes writing JavaScript elements a bit easier.
+ *  Also, it warns you when you have one Form embedded inside another.
+ *  Should be fixed to skip writing out the Form tag, which would make the
+ *  ERXOptionalForm obsolete.
+ *  This subclass is installed when the frameworks loads. 
+ */  
+public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
+    static final ERXLogger log = ERXLogger.getLogger(ERXWOForm.class);
+    String _formName;
+    NSDictionary _associations;
+    
+    public ERXWOForm(String name, NSDictionary associations,
+                     WOElement template) {
+        super(name, associations, template);
+        _associations = associations;
+        _formName = null;
+    }
+    
+    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+        if(context != null && context instanceof ERXMutableUserInfoHolderInterface && _associations != null) {
+            Object association = _associations.objectForKey("name");
+            if(association != null) {
+                String formName = (String)((WOAssociation)association).valueInComponent(context.component());
+                if(formName != null)
+                    ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().setObjectForKey(formName, "formName");
+            }
+        }
+        super.appendAttributesToResponse(response, context);
+    }
+
+    public void appendToResponse(WOResponse response, WOContext context) {
+        if(context.isInForm())
+            log.warn("This Form is embedded in another Form.");
+        super.appendToResponse(response, context);
+        if(context instanceof ERXMutableUserInfoHolderInterface)
+            ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().removeObjectForKey("formName");
+    }
+}

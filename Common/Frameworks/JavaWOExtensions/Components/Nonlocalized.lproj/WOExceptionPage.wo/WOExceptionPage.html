@@ -1,0 +1,118 @@
+<!--
+  -- WOExceptionPage.html
+  -- [JavaWOExtensions Project]
+  --
+  -- Copyright: © Copyright 2001 Apple Computer, Inc. All rights reserved.
+  --
+  -- Disclaimer:
+  --      IMPORTANT:  This Apple software is supplied to you by Apple Computer, Inc.
+  --      ("Apple") in consideration of your agreement to the following terms, and your
+  --      use, installation, modification or redistribution of this Apple software
+  --      constitutes acceptance of these terms.  If you do not agree with these terms,
+  --      please do not use, install, modify or redistribute this Apple software.
+  --
+  --      In consideration of your agreement to abide by the following terms, and subject
+  --      to these terms, Apple grants you a personal, non-exclusive license, under AppleUs
+  --      copyrights in this original Apple software (the "Apple Software"), to use,
+  --      reproduce, modify and redistribute the Apple Software, with or without
+  --      modifications, in source and/or binary forms; provided that if you redistribute
+  --      the Apple Software in its entirety and without modifications, you must retain
+  --      this notice and the following text and disclaimers in all such redistributions of
+  --      the Apple Software.  Neither the name, trademarks, service marks or logos of
+  --      Apple Computer, Inc. may be used to endorse or promote products derived from the
+  --      Apple Software without specific prior written permission from Apple.  Except as
+  --      expressly stated in this notice, no other rights or licenses, express or implied,
+  --      are granted by Apple herein, including but not limited to any patent rights that
+  --      may be infringed by your derivative works or by other works in which the Apple
+  --      Software may be incorporated.
+  --
+  --      The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
+  --      WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
+  --      WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  --      PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
+  --      COMBINATION WITH YOUR PRODUCTS.
+  --
+  --      IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
+  --      CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  --      GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  --      ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION
+  --      OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT
+  --      (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN
+  --      ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>WebObjects Error</title>
+</head>
+<body bgcolor="#ffffff">
+<table border=0 width="100%">
+  <TR> 
+    <td align=center valign=top> <webobject name=ExclamationImage></webobject><br>
+      Re-enter<br>
+      <webobject name=ReenterHyperlink> <b><webobject name=ApplicationNameString></webobject></b> 
+      </webobject> </td>
+    <td align=left valign=top> <webobject name=VisibleConditional> 
+      <hr>
+      <table border=0 width="100%">
+        <tr> 
+          <td align=right valign=top> <b>Application:</b> </td>
+          <td align=left valign=top> <webobject name=ApplicationNameString></webobject> 
+          </td>
+        </tr>
+        <tr> 
+          <td align=right valign=top height="13"> <b>Error:</b> </td>
+          <td align=left valign=top height="13"> <webobject name=ExceptionNameString></webobject> 
+          </td>
+        </tr>
+        <tr> 
+          <td align=right valign=top> <b>Reason:</b> </td>
+          <td align=left valign=top> <webobject name=CurrentReason></webobject> 
+          </td>
+        </tr>
+        <tr> 
+          <td align=right valign=top> <b>Stack trace:</b> </td>
+          <td align=left valign=top> 
+            <table border=0 width="100%">
+              <tr> 
+                <td>File</td>
+                <td>Line#</td>
+                <td>Method</td>
+                <td>Package</td>
+              </tr>
+              <tr> 
+                <td colspan=4> 
+                  <hr size=1 width="100%">
+                </td>
+              </tr>
+              <webobject name=ReasonRepetition> 
+              <tr> 
+                <td><webobject name=filename></webobject></td>
+                <td><webobject name=line></webobject></td>
+                <td><webobject name=methodname></webobject></td>
+                <td><webobject name=packagename></webobject></td>
+              </tr>
+              </webobject> 
+              <tr> 
+                <td colspan=4> 
+                  <hr size=1 width="100%">
+                </td>
+              </tr>
+              <tr> 
+                <td colspan=4 align=left>NA : Non applicable, JIT activated</td>
+              </tr>
+            </table>
+            <!--ul>
+                    <webobject name=ReasonRepetition>
+                    <li> <webobject name=packageinfo></webobject> <webobject name=methodname></webobject> (line : <webobject name=line></webobject>)</li>
+                    </webobject>
+		    </ul-->
+          </td>
+        </tr>
+      </table>
+      </webobject> </td>
+  </tr>
+</table>
+</body>
+</html>

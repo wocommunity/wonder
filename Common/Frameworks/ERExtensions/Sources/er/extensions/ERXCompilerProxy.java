@@ -83,6 +83,10 @@ public class ERXCompilerProxy {
         return com.webobjects.foundation._NSUtilities.classWithName(className);
     }
 
+    public void setClassForName(Class clazz, String className) {
+        com.webobjects.foundation._NSUtilities.setClassForName(clazz, className);
+    }
+
     public void initialize() {
         if(WOApplication.application().isCachingEnabled()) {
             cat.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
@@ -175,7 +179,7 @@ public class ERXCompilerProxy {
                         //   Object o = Class.forName(className).newInstance();
                         Class class_ = cl.loadClass(className, true);
                         // the whole magic is in these two lines
-                        com.webobjects.foundation._NSUtilities.setClassForName(class_, className);
+                        setClassForName(class_, className);
                         com.webobjects.appserver.WOApplication.application()._removeComponentDefinitionCacheContents();
                         cacheEntry.update();
                         // sparkle dust ends here
