@@ -10,7 +10,7 @@ Conditional4: WOConditional {
 	condition = d2wContext.shouldProvideConfirmMessage;
 }
 
-ERConfirmMessage1: ERXConfirmMessage {
+ERConfirmMessage1: ERDConfirmMessage {
 	confirmMessageManditory = d2wContext.confirmMessageManditory;
 	dataSource = dataSource;
 	object = object;
