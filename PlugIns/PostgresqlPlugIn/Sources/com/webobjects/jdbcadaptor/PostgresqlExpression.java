@@ -84,7 +84,13 @@ public class PostgresqlExpression extends JDBCExpression {
     }
 
     public String sqlStringForValue(Object v, String kp) {
-        return super.sqlStringForValue(v,kp)+"::"+columnTypeStringForAttribute( entity().attributeNamed( kp ) );
+        EOAttribute attribute = entity().attributeNamed(kp);
+        String suffix = "";
+        if(attribute != null) {
+            //ENHANCEME ak: we should hande key paths
+            return super.sqlStringForValue(v,kp) + "::" + columnTypeStringForAttribute(attribute);
+        }
+        return super.sqlStringForValue(v,kp);
     }
     
 }
