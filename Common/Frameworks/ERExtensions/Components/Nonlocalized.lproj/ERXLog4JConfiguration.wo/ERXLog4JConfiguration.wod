@@ -92,7 +92,7 @@ RadioButton5: WORadioButton {
 RadioButton6: WORadioButton {
 	name = category.name;
 	selection = categoryPriorityValue;
-	value = "-1";
+	value = unsetLevel;
 }
 
 Repetition1: WORepetition {
