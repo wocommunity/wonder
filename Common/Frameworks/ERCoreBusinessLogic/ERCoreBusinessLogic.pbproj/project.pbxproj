@@ -87,8 +87,7 @@
 		};
 		F5C403BA02022B0501A801D4 = {
 			children = (
-				F5DD885202C4D55901000102,
-				F5DD883B02C4D54F01000102,
+				F5F885AE038EB49001CF0E76,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -123,7 +122,7 @@
 				F5C4042E02022C8601A801D4,
 			);
 			isa = PBXGroup;
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			refType = 4;
 		};
 		F5C403CC02022B0501A801D4 = {
@@ -216,6 +215,8 @@
 				FRAMEWORK_VERSION = A;
 				INFO_FILE_NAME = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				PRODUCT_NAME = ERCoreBusinessLogic;
 				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
 				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
@@ -937,7 +938,6 @@
 				F5DD886502C4D59001000102,
 				F5DD886702C4D59001000102,
 				F533017C037B1A6501CF0E76,
-				F5DD886802C4D59001000102,
 				F5DD886902C4D59001000102,
 				F5DD886A02C4D59001000102,
 				F5F37BCF036E0CE601CF0E76,
@@ -992,7 +992,8 @@
 		};
 		F5DD886802C4D59001000102 = {
 			isa = PBXFileReference;
-			path = ERCMailableExceptionPage.java;
+			name = ERCMailableExceptionPage.java;
+			path = Sources/er/corebusinesslogic/ERCMailableExceptionPage.java;
 			refType = 4;
 		};
 		F5DD886902C4D59001000102 = {
@@ -1207,6 +1208,16 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F5F885AE038EB49001CF0E76 = {
+			children = (
+				F5DD886802C4D59001000102,
+				F5DD885202C4D55901000102,
+				F5DD883B02C4D54F01000102,
+			);
+			isa = PBXGroup;
+			name = ERCMailableExceptionPage;
+			refType = 4;
 		};
 //F50
 //F51
