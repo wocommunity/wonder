@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path="Sources"/>
-    <classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
-    <classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaDTWGeneration/JavaDirectToWeb/JavaFoundation/JavaWOExtensions/JavaWOJSPServlet/JavaWebObjects/JavaXML/JavaEOAccess/JavaEOControl/JavaEOProject/JavaJDBCAdaptor/ERJars/ERExtensions"/>
-    <classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" path="Sources"/>
+	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
+	<classpathentry kind="src" path="/ERExtensions"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/ERJars/JavaWOExtensions/JavaDirectToWeb/JavaDTWGeneration/JavaEOAccess/JavaEOControl/JavaEOProject/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaWOJSPServlet/JavaXML"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
