@@ -265,7 +265,29 @@ public class ERXFileUtilities {
      *		file object
      */
     public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
-        return WOApplication.application().resourceManager().pathForResourceNamed(fileName, frameworkName, languages);
+        String path = null;
+        NSBundle bundle = "app".equals(frameworkName) ? NSBundle.mainBundle() : NSBundle.bundleForName(frameworkName);
+        if(bundle != null && bundle.isJar()) {
+            log.warn("Can't get path when run as jar: " + frameworkName + " - " + fileName);
+        } else {
+            URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
+            if(url != null) {
+                path = url.getFile();
+            }
+        }
+        return path;
+    }
+    
+    /**
+     * Get the input stream from the specified Resource. 
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *		for the application bundle
+     * @return the absolutePath method off of the
+     *		file object
+     */
+    public static InputStream inputStreamForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+        return WOApplication.application().resourceManager().inputStreamForResourceNamed(fileName, frameworkName, languages);
     }
 
     /**
@@ -298,12 +320,7 @@ public class ERXFileUtilities {
      *		file object
      */
     public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray languages) {
-        URL url = null;
-        try {
-            url = new URL("file://" + pathForResourceNamed(fileName, frameworkName, languages));
-        } catch(MalformedURLException ex) {
-            throw new NSForwardException(ex);
-        }
+        URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
         return url;
     }
 
@@ -433,25 +450,24 @@ public class ERXFileUtilities {
      *		specified.
      */    
     public static Object readPropertyListFromFileInFramework(String fileName,
-                                                             String aFrameWorkName,
-                                                             NSArray languageList,
-                                                             String encoding) {
-        String filePath = pathForResourceNamed(fileName, aFrameWorkName, languageList);
-        Object result=null;
-        if (filePath!=null) {
-            File file = new File(filePath);
-            try {
-                String stringFromFile = stringFromFile(file, encoding);
+            String aFrameWorkName,
+            NSArray languageList,
+            String encoding) {
+        Object result = null;
+        try {
+            InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
+            if(stream != null) {
+                String stringFromFile = stringFromInputStream(stream, encoding);
                 result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
-            } catch (IOException ioe) {
-                log.error("ConfigurationManager: Error reading file <"+filePath+">");
             }
+        } catch (IOException ioe) {
+            log.error("ConfigurationManager: Error reading file <"+fileName+"> from framework " + aFrameWorkName);
         }
         return result;
     }
     
     /**
-        * Deletes all of the files in a given directory with the option to
+     * Deletes all of the files in a given directory with the option to
      * recursively delete all of the directories in the given directory.
      * @param directory to delete all of the files from
      * @param recurseIntoDirectories determines if the delete is recursive

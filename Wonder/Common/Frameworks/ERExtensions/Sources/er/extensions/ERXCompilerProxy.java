@@ -374,7 +374,7 @@ public class ERXCompilerProxy {
         }
 
 	NSBundle b = NSBundle.mainBundle();
-	String path = b.resourcePath();
+	String path = b.bundlePathURL().toExternalForm();
 	if (path.indexOf(".woa") == -1) {
             log.info("Sorry, can't find the .woa wrapper of this application. There is no support for the CompilerProxy in servlet deployment.");
 	    log.info("mainBundle.resourcePath="+path);
