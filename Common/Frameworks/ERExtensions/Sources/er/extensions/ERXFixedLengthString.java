@@ -132,12 +132,14 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
     public String strippedValue() {
         String value=(String)valueForBinding("value");
         StringTokenizer tokenizer = new StringTokenizer(value, "<", false);
+        if(value.length() < 1)
+            return null;
         int token = value.charAt(0) == '<' ? 0 : 1;
         String nextPart = null;
         StringBuffer result = new StringBuffer();
         int l=length();
         int currentLength = result.length();
-        while (tokenizer.hasMoreTokens() && currentLength < l) {
+        while (tokenizer.hasMoreTokens() && currentLength < l && currentLength < value.length()) {
             if(token == 0)
                 nextPart = tokenizer.nextToken(">");
             else {
