@@ -560,6 +560,9 @@ public class ERXStringUtilities {
      * @see <a href="http://www.norvig.com/java-iaq.html#tolower">tolower</a> 
      * @author Peter Norvig **/
     public static String toLowerCase(String str) {
+        if (str == null)
+            return null;
+
         int len = str.length();
         int different = -1;
         // See if there is a char that is different in lowercase
