@@ -75,7 +75,7 @@ public class ERXValueUtilities {
                 if (((Number)obj).intValue() == 0)
                     flag = false;
             } else if(obj instanceof String) {
-                String s = (String)obj;
+                String s = ((String)obj).trim();
                 if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n"))
                     flag = false;
                 else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y"))
@@ -85,7 +85,7 @@ public class ERXValueUtilities {
                         if (Integer.parseInt(s) == 0)
                             flag = false;
                     } catch(NumberFormatException numberformatexception) {
-                        throw new RuntimeException("error parsing boolean from value " + s);
+                        throw new RuntimeException("Error parsing boolean from value \"" + s + "\"");
                     }
             } else if (obj instanceof Boolean)
                 flag = ((Boolean)obj).booleanValue();
