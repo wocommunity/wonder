@@ -39,6 +39,303 @@
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
 		};
+		4138D3C20493A39300000102 = {
+			children = (
+				F54C4B3702C4DF3A01000102,
+				F55BB76902C4DCA101000102,
+				F55BB6B702C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = TextForEdit;
+			path = "";
+			refType = 2;
+		};
+		4138D4090493A3AF00000102 = {
+			children = (
+				F54C4B3802C4DF3A01000102,
+				F55BB76F02C4DCA101000102,
+				F55BB6B802C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = TextForInspect;
+			path = "";
+			refType = 2;
+		};
+		4138D4B40493A3D300000102 = {
+			children = (
+				F54C4B3902C4DF3A01000102,
+				F55BB77502C4DCA101000102,
+				F55BB6B902C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = TextForNew;
+			path = "";
+			refType = 2;
+		};
+		4138D5000493A40100000102 = {
+			children = (
+				F54C4B3A02C4DF3A01000102,
+				F55BB78102C4DCA101000102,
+				F55BB6BB02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = ViewUser;
+			path = "";
+			refType = 2;
+		};
+		4138D6140493A4CA00000102 = {
+			children = (
+				F54C4B3102C4DF3A01000102,
+				F55BB6B202C4DC7B01000102,
+				F55BB74D02C4DCA101000102,
+			);
+			isa = PBXGroup;
+			name = PageWrapper;
+			path = "";
+			refType = 2;
+		};
+		4138D62E0493A4D700000102 = {
+			children = (
+				F54C4B3202C4DF3A01000102,
+				F55BB6B302C4DC7B01000102,
+				F55BB75302C4DCA101000102,
+			);
+			isa = PBXGroup;
+			name = PriorityComponent;
+			path = "";
+			refType = 2;
+		};
+		4138D6430493A4E900000102 = {
+			children = (
+				F54C4B3302C4DF3A01000102,
+				F55BB6B402C4DC7B01000102,
+				F55BB75802C4DCA101000102,
+			);
+			isa = PBXGroup;
+			name = PushRelease;
+			path = "";
+			refType = 2;
+		};
+		4138D65D0493A4F000000102 = {
+			children = (
+				F54C4B3402C4DF3A01000102,
+				F55BB6B502C4DC7B01000102,
+				F55BB75E02C4DCA101000102,
+			);
+			isa = PBXGroup;
+			name = ReadMarker;
+			path = "";
+			refType = 2;
+		};
+		4138D6770493A4F800000102 = {
+			children = (
+				F54C4B3602C4DF3A01000102,
+				F55BB6B602C4DC7B01000102,
+				F55BB76402C4DCA101000102,
+			);
+			isa = PBXGroup;
+			name = StatusComponent;
+			path = "";
+			refType = 2;
+		};
+		4138D75B0493A54300000102 = {
+			children = (
+				F54C4B3002C4DF3A01000102,
+				F55BB6B102C4DC7B01000102,
+				F55BB74702C4DCA101000102,
+			);
+			isa = PBXGroup;
+			name = OnlineHatSystem;
+			path = "";
+			refType = 2;
+		};
+		4138D8820493A56700000102 = {
+			children = (
+				F54C4B2802C4DF3A01000102,
+				F55BB70F02C4DCA001000102,
+				F55BB6A902C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = FileBugFromTestItem;
+			path = "";
+			refType = 2;
+		};
+		4138D89C0493A57C00000102 = {
+			children = (
+				F54C4B2C02C4DF3A01000102,
+				F55BB72D02C4DCA101000102,
+				F55BB6AE02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = LinkToBookmarkBug;
+			path = "";
+			refType = 2;
+		};
+		4138D8E30493A58A00000102 = {
+			children = (
+				F54C4B2D02C4DF3A01000102,
+				F55BB73302C4DCA101000102,
+				F55BB6AF02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = Main;
+			path = "";
+			refType = 2;
+		};
+		4138D9380493A59C00000102 = {
+			children = (
+				F54C4B2A02C4DF3A01000102,
+				F55BB72102C4DCA001000102,
+				F55BB6AC02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = HomePage;
+			path = "";
+			refType = 2;
+		};
+		4138D9520493A5AA00000102 = {
+			children = (
+				F54C4B2B02C4DF3A01000102,
+				F55BB72702C4DCA001000102,
+				F55BB6AD02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = Inspectbug;
+			path = "";
+			refType = 2;
+		};
+		4138D96C0493A5B600000102 = {
+			children = (
+				F54C4B2F02C4DF3A01000102,
+				F55BB74002C4DCA101000102,
+				F55BB69E02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = MenuHeader;
+			path = "";
+			refType = 2;
+		};
+		4138D98B0493A5C600000102 = {
+			children = (
+				F54C4B2E02C4DF3A01000102,
+				F55BB73A02C4DCA101000102,
+				F55BB6B002C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = MarkReadFly;
+			path = "";
+			refType = 2;
+		};
+		4138D9A50493A5D800000102 = {
+			children = (
+				F54C4B2902C4DF3A01000102,
+				F55BB71B02C4DCA001000102,
+				F55BB6AB02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = FreeQuery;
+			path = "";
+			refType = 2;
+		};
+		4138D9BF0493A5F400000102 = {
+			children = (
+				F54C4B1F02C4DF3A01000102,
+				F55BB6E502C4DCA001000102,
+				F55BB6A002C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = BugReportEmail;
+			path = "";
+			refType = 2;
+		};
+		4138DA2E0493A61900000102 = {
+			children = (
+				F54C4B2302C4DF3A01000102,
+				F55BB6F702C4DCA001000102,
+				F55BB6A502C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = CreateTestItemFromReq;
+			path = "";
+			refType = 2;
+		};
+		4138DA480493A62600000102 = {
+			children = (
+				F54C4B2602C4DF3A01000102,
+				F55BB70302C4DCA001000102,
+				F55BB6A702C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = EditOwner;
+			path = "";
+			refType = 2;
+		};
+		4138DA620493A63500000102 = {
+			children = (
+				F54C4B2502C4DF3A01000102,
+				F55BB6FD02C4DCA001000102,
+				F55BB6A602C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = EditBug;
+			path = "";
+			refType = 2;
+		};
+		4138DA7C0493A64900000102 = {
+			children = (
+				F54C4B2702C4DF3A01000102,
+				F55BB70902C4DCA001000102,
+				F55BB6A802C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = EditRequirement;
+			path = "";
+			refType = 2;
+		};
+		4138DA960493A65D00000102 = {
+			children = (
+				F54C4B2202C4DF3A01000102,
+				F55BB6F102C4DCA001000102,
+				F55BB6A302C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = ComponentReport;
+			path = "";
+			refType = 2;
+		};
+		4138DAB00493A67200000102 = {
+			children = (
+				F54C4B2102C4DF3A01000102,
+				F55BB6DA02C4DCA001000102,
+				F55BB6A202C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = ComponentPicker;
+			path = "";
+			refType = 2;
+		};
+		4138DAC50493A68700000102 = {
+			children = (
+				F54C4B1E02C4DF3A01000102,
+				F55BB6DF02C4DCA001000102,
+				F55BB69F02C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = BTListPage;
+			path = "";
+			refType = 2;
+		};
+		4138DADF0493A6A300000102 = {
+			children = (
+				F54C4B2002C4DF3A01000102,
+				F55BB6EB02C4DCA001000102,
+				F55BB6A102C4DC7B01000102,
+			);
+			isa = PBXGroup;
+			name = BugsPerUser;
+			path = "";
+			refType = 2;
+		};
 		41FF1FC8045F3A8700000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -104,65 +401,11 @@
 		};
 		666256F30203C81E00CEE8E5 = {
 			children = (
-				F55BB6DA02C4DCA001000102,
-				F55BB6DF02C4DCA001000102,
-				F55BB6E502C4DCA001000102,
-				F55BB6EB02C4DCA001000102,
-				F55BB6F102C4DCA001000102,
-				F55BB6F702C4DCA001000102,
-				F55BB6FD02C4DCA001000102,
-				F55BB70302C4DCA001000102,
-				F55BB70902C4DCA001000102,
-				F55BB70F02C4DCA001000102,
 				F55BB71502C4DCA001000102,
-				F55BB71B02C4DCA001000102,
-				F55BB72102C4DCA001000102,
-				F55BB72702C4DCA001000102,
-				F55BB72D02C4DCA101000102,
-				F55BB73302C4DCA101000102,
-				F55BB73A02C4DCA101000102,
-				F55BB74002C4DCA101000102,
-				F55BB74702C4DCA101000102,
-				F55BB74D02C4DCA101000102,
-				F55BB75302C4DCA101000102,
-				F55BB75802C4DCA101000102,
-				F55BB75E02C4DCA101000102,
-				F55BB76402C4DCA101000102,
-				F55BB76902C4DCA101000102,
-				F55BB76F02C4DCA101000102,
-				F55BB77502C4DCA101000102,
-				F55BB77B02C4DCA101000102,
-				F55BB78102C4DCA101000102,
-				F55BB69E02C4DC7B01000102,
-				F55BB69F02C4DC7B01000102,
-				F55BB6A002C4DC7B01000102,
-				F55BB6A102C4DC7B01000102,
-				F55BB6A202C4DC7B01000102,
-				F55BB6A302C4DC7B01000102,
-				F55BB6A402C4DC7B01000102,
-				F55BB6A502C4DC7B01000102,
-				F55BB6A602C4DC7B01000102,
-				F55BB6A702C4DC7B01000102,
-				F55BB6A802C4DC7B01000102,
 				F55BB6AA02C4DC7B01000102,
-				F55BB6AB02C4DC7B01000102,
-				F55BB6AC02C4DC7B01000102,
-				F55BB6AD02C4DC7B01000102,
-				F55BB6AE02C4DC7B01000102,
-				F55BB6AF02C4DC7B01000102,
-				F55BB6B002C4DC7B01000102,
-				F55BB6A902C4DC7B01000102,
-				F55BB6B102C4DC7B01000102,
-				F55BB6B202C4DC7B01000102,
-				F55BB6B302C4DC7B01000102,
-				F55BB6B402C4DC7B01000102,
-				F55BB6B502C4DC7B01000102,
-				F55BB6B602C4DC7B01000102,
-				F55BB6B702C4DC7B01000102,
-				F55BB6B802C4DC7B01000102,
-				F55BB6B902C4DC7B01000102,
+				F55BB77B02C4DCA101000102,
 				F55BB6BA02C4DC7B01000102,
-				F55BB6BB02C4DC7B01000102,
+				F55BB6A402C4DC7B01000102,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -1026,236 +1269,250 @@
 //F54
 		F54C4B1A02C4DF3A01000102 = {
 			children = (
-				F54C4B1B02C4DF3A01000102,
+				F54C4B1D02C4DF3A01000102,
+				F54C4B3502C4DF3A01000102,
+				F54C4B2402C4DF3A01000102,
+				F54C4C5F02C4E41301000102,
+				4138DAC50493A68700000102,
+				4138DADF0493A6A300000102,
+				4138D9BF0493A5F400000102,
+				4138DAB00493A67200000102,
+				4138DA960493A65D00000102,
+				4138DA2E0493A61900000102,
+				4138DA620493A63500000102,
+				4138DA480493A62600000102,
+				4138DA7C0493A64900000102,
+				4138D8820493A56700000102,
+				4138D9A50493A5D800000102,
+				4138D9380493A59C00000102,
+				4138D9520493A5AA00000102,
+				4138D89C0493A57C00000102,
+				4138D8E30493A58A00000102,
+				4138D98B0493A5C600000102,
+				4138D96C0493A5B600000102,
+				4138D75B0493A54300000102,
+				4138D6140493A4CA00000102,
+				4138D62E0493A4D700000102,
+				4138D6430493A4E900000102,
+				4138D65D0493A4F000000102,
+				4138D6770493A4F800000102,
+				4138D3C20493A39300000102,
+				4138D4090493A3AF00000102,
+				4138D4B40493A3D300000102,
+				4138D5000493A40100000102,
 			);
 			isa = PBXGroup;
 			path = Sources;
 			refType = 2;
 		};
-		F54C4B1B02C4DF3A01000102 = {
-			children = (
-				F54C4B1C02C4DF3A01000102,
-			);
-			isa = PBXGroup;
-			path = er;
-			refType = 4;
-		};
-		F54C4B1C02C4DF3A01000102 = {
-			children = (
-				F54C4B1D02C4DF3A01000102,
-				F54C4B3502C4DF3A01000102,
-				F54C4B1E02C4DF3A01000102,
-				F54C4B1F02C4DF3A01000102,
-				F54C4B2002C4DF3A01000102,
-				F54C4B2102C4DF3A01000102,
-				F54C4B2202C4DF3A01000102,
-				F54C4B2302C4DF3A01000102,
-				F54C4B2402C4DF3A01000102,
-				F54C4B2502C4DF3A01000102,
-				F54C4B2602C4DF3A01000102,
-				F54C4B2702C4DF3A01000102,
-				F54C4B2802C4DF3A01000102,
-				F54C4B2902C4DF3A01000102,
-				F54C4B2A02C4DF3A01000102,
-				F54C4B2B02C4DF3A01000102,
-				F54C4B2C02C4DF3A01000102,
-				F54C4C5F02C4E41301000102,
-				F54C4B2D02C4DF3A01000102,
-				F54C4B2E02C4DF3A01000102,
-				F54C4B2F02C4DF3A01000102,
-				F54C4B3002C4DF3A01000102,
-				F54C4B3102C4DF3A01000102,
-				F54C4B3202C4DF3A01000102,
-				F54C4B3302C4DF3A01000102,
-				F54C4B3402C4DF3A01000102,
-				F54C4B3602C4DF3A01000102,
-				F54C4B3702C4DF3A01000102,
-				F54C4B3802C4DF3A01000102,
-				F54C4B3902C4DF3A01000102,
-				F54C4B3A02C4DF3A01000102,
-			);
-			isa = PBXGroup;
-			path = bugtracker;
-			refType = 4;
-		};
 		F54C4B1D02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = Application.java;
+			name = Application.java;
+			path = er/bugtracker/Application.java;
 			refType = 4;
 		};
 		F54C4B1E02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = BTListPage.java;
+			name = BTListPage.java;
+			path = Sources/er/bugtracker/BTListPage.java;
 			refType = 4;
 		};
 		F54C4B1F02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = BugReportEmail.java;
+			name = BugReportEmail.java;
+			path = Sources/er/bugtracker/BugReportEmail.java;
 			refType = 4;
 		};
 		F54C4B2002C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = BugsPerUser.java;
+			name = BugsPerUser.java;
+			path = Sources/er/bugtracker/BugsPerUser.java;
 			refType = 4;
 		};
 		F54C4B2102C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = ComponentPicker.java;
+			name = ComponentPicker.java;
+			path = Sources/er/bugtracker/ComponentPicker.java;
 			refType = 4;
 		};
 		F54C4B2202C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = ComponentReport.java;
+			name = ComponentReport.java;
+			path = Sources/er/bugtracker/ComponentReport.java;
 			refType = 4;
 		};
 		F54C4B2302C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = CreateTestItemFromReq.java;
+			name = CreateTestItemFromReq.java;
+			path = Sources/er/bugtracker/CreateTestItemFromReq.java;
 			refType = 4;
 		};
 		F54C4B2402C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = DirectAction.java;
+			name = DirectAction.java;
+			path = er/bugtracker/DirectAction.java;
 			refType = 4;
 		};
 		F54C4B2502C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = EditBug.java;
+			name = EditBug.java;
+			path = Sources/er/bugtracker/EditBug.java;
 			refType = 4;
 		};
 		F54C4B2602C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = EditOwner.java;
+			name = EditOwner.java;
+			path = Sources/er/bugtracker/EditOwner.java;
 			refType = 4;
 		};
 		F54C4B2702C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = EditRequirement.java;
+			name = EditRequirement.java;
+			path = Sources/er/bugtracker/EditRequirement.java;
 			refType = 4;
 		};
 		F54C4B2802C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = FileBugFromTestItem.java;
+			name = FileBugFromTestItem.java;
+			path = Sources/er/bugtracker/FileBugFromTestItem.java;
 			refType = 4;
 		};
 		F54C4B2902C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = FreeQuery.java;
+			name = FreeQuery.java;
+			path = Sources/er/bugtracker/FreeQuery.java;
 			refType = 4;
 		};
 		F54C4B2A02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = HomePage.java;
+			name = HomePage.java;
+			path = Sources/er/bugtracker/HomePage.java;
 			refType = 4;
 		};
 		F54C4B2B02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = Inspectbug.java;
+			name = Inspectbug.java;
+			path = Sources/er/bugtracker/Inspectbug.java;
 			refType = 4;
 		};
 		F54C4B2C02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = LinkToBookmarkBug.java;
+			name = LinkToBookmarkBug.java;
+			path = Sources/er/bugtracker/LinkToBookmarkBug.java;
 			refType = 4;
 		};
 		F54C4B2D02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = Main.java;
+			name = Main.java;
+			path = Sources/er/bugtracker/Main.java;
 			refType = 4;
 		};
 		F54C4B2E02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = MarkReadFly.java;
+			name = MarkReadFly.java;
+			path = Sources/er/bugtracker/MarkReadFly.java;
 			refType = 4;
 		};
 		F54C4B2F02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = MenuHeader.java;
+			name = MenuHeader.java;
+			path = Sources/er/bugtracker/MenuHeader.java;
 			refType = 4;
 		};
 		F54C4B3002C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = OnlineHatSystem.java;
+			name = OnlineHatSystem.java;
+			path = Sources/er/bugtracker/OnlineHatSystem.java;
 			refType = 4;
 		};
 		F54C4B3102C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = PageWrapper.java;
+			name = PageWrapper.java;
+			path = Sources/er/bugtracker/PageWrapper.java;
 			refType = 4;
 		};
 		F54C4B3202C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = PriorityComponent.java;
+			name = PriorityComponent.java;
+			path = Sources/er/bugtracker/PriorityComponent.java;
 			refType = 4;
 		};
 		F54C4B3302C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = PushRelease.java;
+			name = PushRelease.java;
+			path = Sources/er/bugtracker/PushRelease.java;
 			refType = 4;
 		};
 		F54C4B3402C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = ReadMarker.java;
+			name = ReadMarker.java;
+			path = Sources/er/bugtracker/ReadMarker.java;
 			refType = 4;
 		};
 		F54C4B3502C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = Session.java;
+			name = Session.java;
+			path = er/bugtracker/Session.java;
 			refType = 4;
 		};
 		F54C4B3602C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = StatusComponent.java;
+			name = StatusComponent.java;
+			path = Sources/er/bugtracker/StatusComponent.java;
 			refType = 4;
 		};
 		F54C4B3702C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = TextForEdit.java;
+			name = TextForEdit.java;
+			path = Sources/er/bugtracker/TextForEdit.java;
 			refType = 4;
 		};
 		F54C4B3802C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = TextForInspect.java;
+			name = TextForInspect.java;
+			path = Sources/er/bugtracker/TextForInspect.java;
 			refType = 4;
 		};
 		F54C4B3902C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = TextForNew.java;
+			name = TextForNew.java;
+			path = Sources/er/bugtracker/TextForNew.java;
 			refType = 4;
 		};
 		F54C4B3A02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = ViewUser.java;
+			name = ViewUser.java;
+			path = Sources/er/bugtracker/ViewUser.java;
 			refType = 4;
 		};
 		F54C4B3B02C4DF3A01000102 = {
@@ -1441,7 +1698,8 @@
 		F54C4C5F02C4E41301000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = KeyValueCodingProtectedAccessor.java;
+			name = KeyValueCodingProtectedAccessor.java;
+			path = er/bugtracker/KeyValueCodingProtectedAccessor.java;
 			refType = 4;
 		};
 		F54C4C6002C4E41301000102 = {
@@ -2564,9 +2822,9 @@
 		};
 		F586B881031582010123DCAA = {
 			children = (
-				F586B882031582010123DCAA,
-				F586B883031582010123DCAA,
 				F586B889031582010123DCAA,
+				F586B883031582010123DCAA,
+				F586B882031582010123DCAA,
 			);
 			isa = PBXGroup;
 			name = CollapsibleList;
