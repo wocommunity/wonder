@@ -46,6 +46,11 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
     public String toString() {
         return " <" + getClass().getName() + " key: " + key() + " > IN '" + value() + "'";
     }
+
+    public NSArray values() {
+        return (NSArray)value();
+    }
+
     
     /*
      * EOF seems to be wanting to clone qualifiers when
@@ -55,7 +60,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
      * @return cloned primary key list qualifier.
      */
     public Object clone() {
-        return new ERXInQualifier(key(), (NSArray)value());
+        return new ERXInQualifier(key(), values());
     }
 
     /**
@@ -102,9 +107,11 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
             return (EOQualifier)eoqualifier.clone();
         }
 
-        // ENHANCEME: Migration should be supported
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
-            return (EOQualifier)eoqualifier.clone();
-        }        
+            // the key migration is the same as for EOKeyValueQualifier
+            ERXInQualifier inQualifier=(ERXInQualifier)eoqualifier;
+            return new ERXInQualifier(_translateKeyAcrossRelationshipPath(inQualifier.key(), s, eoentity),
+                                      inQualifier.values());
+        }
     }
 }
