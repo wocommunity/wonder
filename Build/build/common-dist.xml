@@ -112,7 +112,7 @@
     </target>
 	
     <!-- ERCalendar -->
-    <target name="ERCalender.all">
+    <target name="ERCalendar.all">
         <antcall target="copy.framework" >
             <param name="project" value="ERCalendar" />
             <param name="project.dir" value="Common/Frameworks/ERCalendar" />
