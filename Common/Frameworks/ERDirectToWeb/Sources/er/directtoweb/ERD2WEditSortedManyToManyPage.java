@@ -127,10 +127,21 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return isSorted;
     }
 
+	 	 public boolean showIndex(){
+			 return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showIndex"), false);
+		 }
+	 
     public String browserStringForItem() {
-        return browserItem!=null &&
-        browserItem.valueForKeyPath(displayKey())!=null ?
-        browserItem.valueForKeyPath(displayKey()).toString() : "missing data";
+		 String result =  browserItem!=null &&
+		 browserItem.valueForKeyPath(displayKey())!=null ?
+		 browserItem.valueForKeyPath(displayKey()).toString() : "missing data";
+		 if(indexKey()!=null && showIndex()){
+			 Integer index = (Integer)browserItem.valueForKey(indexKey());
+			 if(index!=null){
+				 result = (index.intValue()+1) + ". "+ result ;
+			 }
+		 }
+		 return result;
     }
 
     public String displayNameForRelationshipKey() {
