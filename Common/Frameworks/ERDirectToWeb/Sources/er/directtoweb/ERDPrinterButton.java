@@ -35,7 +35,7 @@ public class ERDPrinterButton extends ERDActionButton {
             dummyContext.setEntity(EOUtilities.entityNamed(object().editingContext(),object().entityName()));
             dummyContext.setTask("inspect");
             
-            result=ERDirectToWeb.printerFriendlyPageForD2WContext(dummyContext,session());
+            result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(dummyContext,session());
             ((EditPageInterface)result).setObject(object());
         } else {
             if(task().equals("edit") || task().equals("inspect"))
@@ -47,7 +47,7 @@ public class ERDPrinterButton extends ERDActionButton {
     }
 
     public WOComponent editPrinterFriendlyVersion() {
-        WOComponent result=ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }

@@ -66,7 +66,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     public void setTabNumber(Integer newTabNumber){ _tabNumber  = newTabNumber;}
 
     public WOComponent printerFriendlyVersion() {
-        WOComponent result=ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }

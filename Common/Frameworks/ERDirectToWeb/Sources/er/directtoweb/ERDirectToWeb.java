@@ -244,63 +244,29 @@ public class ERDirectToWeb {
         return result;
     }
 
-    // MOVEME: ERD2WFactory
+    /** @deprecated use ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(D2WContext context, WOSession session)*/
     public static WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
-        D2WContext newContext=new D2WContext(session);
-        String newTask=context.task().equals("edit") ? "inspect" : context.task();
-        newContext.takeValueForKey(newTask,"task");
-        // not using subTask directly here because the cache mechanism relies on being able to compute wether this key
-        // is 'computable' (subTask is since a rule can fire to give a default) or an external output
-//        newContext.takeValueForKey("printerFriendly","subTask");
-        newContext.takeValueForKey("printerFriendly","forcedSubTask");
-        newContext.takeValueForKey(context.valueForKey("pageName"),"existingPageName");
-        newContext.takeValueForKey(context.valueForKey("subTask"),"existingSubTask");
-        newContext.takeValueForKey(context.valueForKey("pageConfiguration"),"pageConfiguration");
-        newContext.takeValueForKey(context.entity(),"entity");
-        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context());
-        ((D2WPage)result).setLocalContext(newContext);
-        return result;
+        return ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(context, session);
     }
 
-    // MOVEME: Should move to the ERXMLLook framework when created.
+    /** @deprecated use ERD2WFactory.erFactory().csvExportPageForD2WContext(D2WContext context, WOSession session)*/
     public static WOComponent csvExportPageForD2WContext(D2WContext context, WOSession session) {
-        D2WContext newContext=new D2WContext(session);
-        newContext.takeValueForKey(context.task(),"task");
-        // not using subTask directly here because the cache mechanism relies on being able to compute wether this key
-        // is 'computable' (subTask is since a rule can fire to give a default) or an external output
-        newContext.takeValueForKey("csv","forcedSubTask");
-        newContext.takeValueForKey(context.valueForKey("pageName"),"existingPageName");
-        newContext.takeValueForKey(context.valueForKey("subTask"),"existingSubTask");
-        newContext.takeValueForKey(context.valueForKey("pageConfiguration"),"pageConfiguration");
-        newContext.takeValueForKey(context.entity(),"entity");
-        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context());
-        ((D2WPage)result).setLocalContext(newContext);
-        return result;
+        return ERD2WFactory.erFactory().csvExportPageForD2WContext(context, session);
     }
 
-    // MOVEME: ERD2WFactory
+    /** @deprecated use ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session)*/
     public static WOComponent pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session) {
-        D2WContext newContext=new D2WContext(session);
-        newContext.setTask(task);
-        newContext.setEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
-        newContext.takeValueForKey(subtask, "subTask");
-        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context());
-        ((D2WPage)result).setLocalContext(newContext);
-        return result;        
+        return ERD2WFactory.erFactory().pageForTaskSubTaskAndEntityNamed(task, subtask, entityName, session);
     }
 
-    // MOVEME: ERD2WFactory
-    public static QueryPageInterface queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession s) {
-        WOComponent result= pageForTaskSubTaskAndEntityNamed("query", "fetchSpecification", entityName,s);
-        result.takeValueForKey(fsName, "fetchSpecificationName");
-        return (QueryPageInterface)result;
+    /** @deprecated use ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session)*/
+    public static QueryPageInterface queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession session) {
+        return ERD2WFactory.erFactory().queryPageWithFetchSpecificationForEntityNamed(fsName, entityName, session);
     }
 
-    public static WOComponent errorPageForException(Throwable e, WOSession s) {
-        ErrorPageInterface epi=D2W.factory().errorPage(s);
-        epi.setMessage(ERXUtilities.stackTrace(e));
-        epi.setNextPage(s.context().page());
-        return (WOComponent)epi;
+    /** @deprecated use ERD2WFactory.erFactory().errorPageForException(Throwable e, WOSession session)*/
+    public static WOComponent errorPageForException(Throwable e, WOSession session) {
+        return ERD2WFactory.erFactory().errorPageForException(e, session);
     }
 
     public static void reportException(Exception ex, D2WContext d2wContext) {
