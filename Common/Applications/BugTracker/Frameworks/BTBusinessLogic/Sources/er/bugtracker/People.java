@@ -56,7 +56,7 @@ public class People extends _People implements ERCoreUserInterface {
         }
     }
 
-    public static PeopleClazz peopleClazz() { return (PeopleClazz)EOGenericRecordClazz.clazzForEntityNamed("People"); }
+    public static final PeopleClazz clazz = (PeopleClazz)EOGenericRecordClazz.clazzForEntityNamed("People");
 
     public void newPreference(EOEnterpriseObject pref) {
         addToPreferences((ERCPreference)pref);
@@ -69,7 +69,7 @@ public class People extends _People implements ERCoreUserInterface {
     public boolean isAdminAsBoolean() { return ERXUtilities.booleanValue(isAdmin()); }
 
     public NSArray openBugs() {
-        return Bug.bugClazz().bugsOwnedWithUser(editingContext(), this);
+        return Bug.clazz.bugsOwnedWithUser(editingContext(), this);
     }
 
     public NSArray bugs() {
@@ -77,26 +77,26 @@ public class People extends _People implements ERCoreUserInterface {
     }
 
     public NSArray unreadBugs() {
-        return Bug.bugClazz().unreadBugsWithUser(editingContext(), this);
+        return Bug.clazz.unreadBugsWithUser(editingContext(), this);
     }
 
     public NSArray allRequirements() {
         if(isEngineeringAsBoolean()) {
-            return Requirement.requirementClazz().myTotalRequirementsEngineeringWithUser(editingContext(), this);
+            return Requirement.clazz.myTotalRequirementsEngineeringWithUser(editingContext(), this);
         } else {
-            return Requirement.requirementClazz().myTotalRequirementsWithUser(editingContext(), this);
+            return Requirement.clazz.myTotalRequirementsWithUser(editingContext(), this);
         }
     }
     
     public NSArray openRequirements() {
         if(isEngineeringAsBoolean()) {
-            return Requirement.requirementClazz().requirementsInBuildEngineeringWithUser(editingContext(), this);
+            return Requirement.clazz.requirementsInBuildEngineeringWithUser(editingContext(), this);
         } else {
-            return Requirement.requirementClazz().myRequirementsWithUser(editingContext(), this);
+            return Requirement.clazz.myRequirementsWithUser(editingContext(), this);
         }
     }
 
     public NSArray openTestItems() {
-        return TestItem.testItemClazz().unclosedTestItemsWithUser(editingContext(), this);
+        return TestItem.clazz.unclosedTestItemsWithUser(editingContext(), this);
     }
 }
