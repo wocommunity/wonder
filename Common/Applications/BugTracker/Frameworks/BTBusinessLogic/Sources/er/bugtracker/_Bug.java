@@ -99,107 +99,107 @@ public abstract class _Bug extends ERXGenericRecord {
         takeStoredValueForKey(aValue, "bugid");
     }
 
-    public er.bugtracker.Priority priority() {
-        return (er.bugtracker.Priority)storedValueForKey("priority");
+    public Priority priority() {
+        return (Priority)storedValueForKey("priority");
     }
 
-    public void setPriority(er.bugtracker.Priority aValue) {
+    public void setPriority(Priority aValue) {
         takeStoredValueForKey(aValue, "priority");
     }
-    public void addToBothSidesOfPriority(er.bugtracker.Priority object) {
+    public void addToBothSidesOfPriority(Priority object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "priority");
     }
-    public void removeFromBothSidesOfPriority(er.bugtracker.Priority object) {
+    public void removeFromBothSidesOfPriority(Priority object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "priority");
     }
 
 
-    public er.bugtracker.Component component() {
-        return (er.bugtracker.Component)storedValueForKey("component");
+    public Component component() {
+        return (Component)storedValueForKey("component");
     }
 
-    public void setComponent(er.bugtracker.Component aValue) {
+    public void setComponent(Component aValue) {
         takeStoredValueForKey(aValue, "component");
     }
-    public void addToBothSidesOfComponent(er.bugtracker.Component object) {
+    public void addToBothSidesOfComponent(Component object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "component");
     }
-    public void removeFromBothSidesOfComponent(er.bugtracker.Component object) {
+    public void removeFromBothSidesOfComponent(Component object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "component");
     }
 
 
-    public er.bugtracker.People owner() {
-        return (er.bugtracker.People)storedValueForKey("owner");
+    public People owner() {
+        return (People)storedValueForKey("owner");
     }
 
-    public void setOwner(er.bugtracker.People aValue) {
+    public void setOwner(People aValue) {
         takeStoredValueForKey(aValue, "owner");
     }
-    public void addToBothSidesOfOwner(er.bugtracker.People object) {
+    public void addToBothSidesOfOwner(People object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "owner");
     }
-    public void removeFromBothSidesOfOwner(er.bugtracker.People object) {
+    public void removeFromBothSidesOfOwner(People object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
     }
 
 
-    public er.bugtracker.State state() {
-        return (er.bugtracker.State)storedValueForKey("state");
+    public State state() {
+        return (State)storedValueForKey("state");
     }
 
-    public void setState(er.bugtracker.State aValue) {
+    public void setState(State aValue) {
         takeStoredValueForKey(aValue, "state");
     }
-    public void addToBothSidesOfState(er.bugtracker.State object) {
+    public void addToBothSidesOfState(State object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "state");
     }
-    public void removeFromBothSidesOfState(er.bugtracker.State object) {
+    public void removeFromBothSidesOfState(State object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "state");
     }
 
 
-    public er.bugtracker.People originator() {
-        return (er.bugtracker.People)storedValueForKey("originator");
+    public People originator() {
+        return (People)storedValueForKey("originator");
     }
 
-    public void setOriginator(er.bugtracker.People aValue) {
+    public void setOriginator(People aValue) {
         takeStoredValueForKey(aValue, "originator");
     }
-    public void addToBothSidesOfOriginator(er.bugtracker.People object) {
+    public void addToBothSidesOfOriginator(People object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "originator");
     }
-    public void removeFromBothSidesOfOriginator(er.bugtracker.People object) {
+    public void removeFromBothSidesOfOriginator(People object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "originator");
     }
 
 
-    public er.bugtracker.Release targetRelease() {
-        return (er.bugtracker.Release)storedValueForKey("targetRelease");
+    public Release targetRelease() {
+        return (Release)storedValueForKey("targetRelease");
     }
 
-    public void setTargetRelease(er.bugtracker.Release aValue) {
+    public void setTargetRelease(Release aValue) {
         takeStoredValueForKey(aValue, "targetRelease");
     }
-    public void addToBothSidesOfTargetRelease(er.bugtracker.Release object) {
+    public void addToBothSidesOfTargetRelease(Release object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "targetRelease");
     }
-    public void removeFromBothSidesOfTargetRelease(er.bugtracker.Release object) {
+    public void removeFromBothSidesOfTargetRelease(Release object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "targetRelease");
     }
 
 
-    public er.bugtracker.People previousOwner() {
-        return (er.bugtracker.People)storedValueForKey("previousOwner");
+    public People previousOwner() {
+        return (People)storedValueForKey("previousOwner");
     }
 
-    public void setPreviousOwner(er.bugtracker.People aValue) {
+    public void setPreviousOwner(People aValue) {
         takeStoredValueForKey(aValue, "previousOwner");
     }
-    public void addToBothSidesOfPreviousOwner(er.bugtracker.People object) {
+    public void addToBothSidesOfPreviousOwner(People object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "previousOwner");
     }
-    public void removeFromBothSidesOfPreviousOwner(er.bugtracker.People object) {
+    public void removeFromBothSidesOfPreviousOwner(People object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "previousOwner");
     }
 
@@ -210,22 +210,22 @@ public abstract class _Bug extends ERXGenericRecord {
     public void setTestItems(NSMutableArray aValue) {
         takeStoredValueForKey(aValue, "testItems");
     }
-    public void addToTestItems(er.bugtracker.TestItem object) {
+    public void addToTestItems(TestItem object) {
         NSMutableArray array = (NSMutableArray)testItems();
 
         willChange();
         array.addObject(object);
     }
-    public void removeFromTestItems(er.bugtracker.TestItem object) {
+    public void removeFromTestItems(TestItem object) {
         NSMutableArray array = (NSMutableArray)testItems();
 
         willChange();
         array.removeObject(object);
     }
-    public void addToBothSidesOfTestItems(er.bugtracker.TestItem object) {
+    public void addToBothSidesOfTestItems(TestItem object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "testItems");
     }
-    public void removeFromBothSidesOfTestItems(er.bugtracker.TestItem object) {
+    public void removeFromBothSidesOfTestItems(TestItem object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "testItems");
     }
 
