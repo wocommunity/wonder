@@ -635,14 +635,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * you wish to preserve your leading and trailing white space.
      */
     public void trimSpaces() {
-        System.out.println("stringAttributeListForEntityNamed(entityName()) ="+stringAttributeListForEntityNamed(entityName()));
         for (Enumeration e=stringAttributeListForEntityNamed(entityName()).objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
             String value=(String)storedValueForKey(key);
             if (value!=null) {
                 String trimmedValue=value.trim();
-                System.out.println("value = "+value+".");
-                System.out.println("trimmedValue="+trimmedValue+".");
                 if (trimmedValue.length()!=value.length())
                     takeStoredValueForKey(trimmedValue,key);
             }
