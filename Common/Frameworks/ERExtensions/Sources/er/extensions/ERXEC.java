@@ -16,6 +16,7 @@ public class ERXEC extends EOEditingContext {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEC.class);
     public static final ERXLogger lockLogger = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLogger");
     public static final ERXLogger lockLoggerTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLoggerTrace");
+    public static final ERXLogger lockTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockTrace");
     /** name of the notification that is posted after editing context is created */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
 
@@ -78,13 +79,21 @@ public class ERXEC extends EOEditingContext {
         lockCount++;
         super.lock();
         if (!autoLocked && lockLogger.isDebugEnabled()) {
-            lockLogger.debug("locked "+this);
+            if(lockTrace.isDebugEnabled()) {
+                lockLogger.debug("locked "+this, new Exception());
+            } else {
+                lockLogger.debug("locked "+this);
+            }
         }
     }
     public void unlock() {
         super.unlock();
         if (!autoLocked && lockLogger.isDebugEnabled()) {
-            lockLogger.debug("unlocked "+this);
+            if(lockTrace.isDebugEnabled()) {
+                lockLogger.debug("unlocked "+this, new Exception());
+            } else {
+                lockLogger.debug("unlocked "+this);
+            }
         }
         lockCount--;
     }
