@@ -87,7 +87,7 @@ public class ERXExtensions {
          *		updated and deleted objects.
          */
         public void didSave(NSNotification n) {
-            ERXGenericRecord.didSave(n);
+            ERXEC.factory().didSave(n);
         }
 
         /**

@@ -138,6 +138,7 @@ public class ERXEC extends EOEditingContext {
 
     public static interface Factory {
         public Object defaultEditingContextDelegate();
+        public void didSave(NSNotification n);
         public void setDefaultEditingContextDelegate(Object delegate);
         public Object defaultNoValidationDelegate();
         public void setDefaultNoValidationDelegate(Object delegate);
@@ -765,6 +766,41 @@ public class ERXEC extends EOEditingContext {
     		return defaultNoValidationDelegate; 
     	}
     	
+        /**
+         * Called by an observer after an editing context has
+         * successfully saved changes to a database. This method
+         * enumerates through all of the objects that were inserted,
+         * updated and deleted calling <code>didInsert</code>, <code>
+         * didUpdate</code> and <code>didDelete</code> on the objects
+         * respectively.
+         * @param n notifcation posted after an editing context has
+         *		successfully saved changes to the database.
+         */
+        public void didSave(NSNotification n) {
+            EOEditingContext ec=(EOEditingContext)n.object();
+            // Changed objects
+            NSArray updatedObjects=(NSArray)n.userInfo().objectForKey("updated");
+            for (Enumeration e = updatedObjects.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                if (eo instanceof ERXGenericRecord)
+                    ((ERXGenericRecord)eo).didUpdate();
+            }
+            // Deleted objects
+            NSArray deletedObjects=(NSArray)n.userInfo().objectForKey("deleted");
+            for (Enumeration e = deletedObjects.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                if (eo instanceof ERXGenericRecord)
+                    ((ERXGenericRecord)eo).didDelete(ec);
+            }
+            // Inserted objects
+            NSArray insertedObjects=(NSArray)n.userInfo().objectForKey("inserted");
+            for (Enumeration e = insertedObjects.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                if (eo instanceof ERXGenericRecord)
+                    ((ERXGenericRecord)eo).didInsert();
+            }
+        }
+        
     	/**
     	 * Sets the default editing context delegate to be
     	 * used for editing context creation that does not
