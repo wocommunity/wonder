@@ -25,9 +25,9 @@ public class WRRecordGroup extends WOComponent  {
     String _reportStyle;
     NSDictionary _totalDict;
 
-    DRRecord record;
-    DRValue value;
-    DRValue totalValue;
+    public DRRecord record;
+    public DRValue value;
+    public DRValue totalValue;
 
     String bgcolor;
     int _totalCount;
@@ -136,8 +136,15 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     public double totalValueTotal() {
-        if(totalValue != null && totalValue.key().indexOf("~") == 0) {
-            return DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup()));
+        if(totalValue != null) {
+            if(totalValue.key().indexOf("~") == 0) {
+                return DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup()));
+            } else {
+                String totalKey = (String)totalValue.attribute().userInfo().objectForKey("total");
+                if(totalKey != null) {
+                    return DRCriteria.doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
+                }
+            }
         }
         return totalValue.total();
     }
