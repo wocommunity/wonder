@@ -3,6 +3,9 @@
 	F5A1439F01FF7F8801A80106 = {
 		activeBuildStyle = F5A1470801FF7F8801A80106;
 		activeTarget = F5A1454D01FF7F8801A80106;
+		addToTargets = (
+			F5A1454D01FF7F8801A80106,
+		);
 		breakpoints = (
 		);
 		perUserDictionary = {
@@ -51,9 +54,9 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {920, 180}}";
-							BuildTranscriptFrame = "{{0, 189}, {920, 88}}";
-							Frame = "{{0, 0}, {918, 275}}";
+							BuildMessageFrame = "{{0, 0}, {868, 180}}";
+							BuildTranscriptFrame = "{{0, 189}, {868, 88}}";
+							Frame = "{{0, 0}, {866, 275}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {866, 295}}";
@@ -74,12 +77,12 @@
 						Frame = "{{0, 0}, {200, 100}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 733}}";
+						Frame = "{{0, 0}, {200, 817}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 358}}";
+							Frame = "{{0, 0}, {200, 399}}";
 						};
 						Split1 = {
-							Frame = "{{0, 367}, {200, 366}}";
+							Frame = "{{0, 408}, {200, 409}}";
 						};
 						SplitCount = 2;
 					};
