@@ -428,6 +428,7 @@
 				F54C4C5A02C4E24A01000102,
 				F54C4C5C02C4E2A001000102,
 				F54C4C5E02C4E2F101000102,
+				F69DF14002C76B3F01AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -680,38 +681,38 @@
 //044
 		04B9D382FFD85E7B11CD2B8D = {
 			children = (
-				F59C570C02C4562A01000102,
-				F59C570D02C4562A01000102,
-				F59C570E02C4562A01000102,
-				F59C570F02C4562A01000102,
-				F59C571002C4562A01000102,
-				F59C571102C4562A01000102,
-				F59C571202C4562A01000102,
-				F59C571302C4562A01000102,
-				F59C571402C4562A01000102,
-				F59C571502C4562A01000102,
-				F59C571602C4562A01000102,
-				F59C571702C4562A01000102,
-				F59C571802C4562A01000102,
-				F59C571902C4562A01000102,
-				F59C571A02C4562A01000102,
-				F59C571B02C4562A01000102,
-				F59C571C02C4562A01000102,
 				F59C571D02C4562A01000102,
-				F59C571E02C4562A01000102,
 				F59C571F02C4562A01000102,
-				F59C572002C4562A01000102,
-				F59C572102C4562A01000102,
-				F59C572202C4562A01000102,
-				F59C572302C4562A01000102,
-				F59C572402C4562A01000102,
+				F59C572B02C4562A01000102,
+				F59C572902C4562A01000102,
+				F59C570F02C4562A01000102,
 				F59C572502C4562A01000102,
 				F59C572602C4562A01000102,
-				F59C572702C4562A01000102,
+				F59C572302C4562A01000102,
+				F59C571802C4562A01000102,
+				F59C572402C4562A01000102,
+				F59C571902C4562A01000102,
+				F59C572102C4562A01000102,
+				F59C572202C4562A01000102,
+				F59C572002C4562A01000102,
+				F59C571E02C4562A01000102,
+				F59C571502C4562A01000102,
+				F59C571402C4562A01000102,
+				F59C571702C4562A01000102,
+				F59C571602C4562A01000102,
 				F59C572802C4562A01000102,
-				F59C572902C4562A01000102,
+				F59C572702C4562A01000102,
+				F59C571302C4562A01000102,
+				F59C571202C4562A01000102,
+				F59C571102C4562A01000102,
+				F59C571002C4562A01000102,
 				F59C572A02C4562A01000102,
-				F59C572B02C4562A01000102,
+				F59C571C02C4562A01000102,
+				F59C571B02C4562A01000102,
+				F59C571A02C4562A01000102,
+				F59C570E02C4562A01000102,
+				F59C570D02C4562A01000102,
+				F59C570C02C4562A01000102,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -760,8 +761,8 @@
 //0B4
 		0B4F248C0022200711CD2B8D = {
 			children = (
-				017C7B2CFFD7144B7F000001,
 				017C7B2DFFD7144B7F000001,
+				017C7B2CFFD7144B7F000001,
 			);
 			isa = PBXGroup;
 			name = Intermediates;
@@ -802,13 +803,13 @@
 		};
 		40B5827FFFD5E7DB7F000001 = {
 			children = (
+				40B58293FFD5E91B7F000001,
+				40B5828CFFD5E91B7F000001,
+				40B58280FFD5E8187F000001,
+				40B5828AFFD5E91B7F000001,
 				F59C576C02C4565601000102,
 				40B58289FFD5E91B7F000001,
-				40B5828AFFD5E91B7F000001,
 				04B9D382FFD85E7B11CD2B8D,
-				40B5828CFFD5E91B7F000001,
-				40B58293FFD5E91B7F000001,
-				40B58280FFD5E8187F000001,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -908,7 +909,7 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>Has_WOComponents</key>
-	<true/>
+	<string>YES</string>
 	<key>NSExecutable</key>
 	<string>ERExtensions</string>
 	<key>NSJavaClientRoot</key>
@@ -962,128 +963,22 @@
 		};
 		40B58289FFD5E91B7F000001 = {
 			children = (
-				F59C544802C4557A01000102,
-				F59C544E02C4557A01000102,
-				F59C545402C4557A01000102,
-				F59C545A02C4557A01000102,
-				F59C546002C4557A01000102,
-				F59C546602C4557A01000102,
-				F59C546C02C4557A01000102,
-				F59C547202C4557A01000102,
-				F59C547702C4557A01000102,
-				F59C547D02C4557A01000102,
-				F59C548302C4557A01000102,
-				F59C548902C4557A01000102,
-				F59C548F02C4557A01000102,
-				F59C549502C4557A01000102,
-				F59C549B02C4557A01000102,
-				F59C54A102C4557A01000102,
-				F59C54A702C4557A01000102,
-				F59C54AD02C4557A01000102,
-				F59C54B402C4557A01000102,
-				F59C54BA02C4557A01000102,
-				F59C54C002C4557A01000102,
-				F59C54C602C4557A01000102,
-				F59C54CC02C4557A01000102,
-				F59C54D202C4557A01000102,
-				F59C54D802C4557A01000102,
-				F59C54DE02C4557A01000102,
-				F59C54E402C4557A01000102,
-				F59C54EA02C4557A01000102,
-				F59C54F002C4557A01000102,
-				F59C54F602C4557A01000102,
-				F59C54FC02C4557A01000102,
-				F59C550202C4557A01000102,
-				F59C550802C4557A01000102,
-				F59C550E02C4557A01000102,
-				F59C551402C4557A01000102,
-				F59C551A02C4557A01000102,
-				F59C552002C4557A01000102,
-				F59C552602C4557A01000102,
-				F59C552C02C4557A01000102,
-				F59C553202C4557A01000102,
-				F59C553802C4557A01000102,
-				F59C553E02C4557A01000102,
-				F59C554402C4557A01000102,
-				F59C554A02C4557A01000102,
-				F59C555002C4557A01000102,
-				F59C555602C4557A01000102,
-				F59C555C02C4557A01000102,
-				F59C556202C4557A01000102,
-				F59C556802C4557A01000102,
-				F59C556E02C4557A01000102,
-				F59C557402C4557A01000102,
-				F59C557A02C4557A01000102,
-				F59C558002C4557A01000102,
-				F59C558602C4557A01000102,
-				F59C558C02C4557A01000102,
-				F59C559202C4557A01000102,
-				F59C559802C4557A01000102,
-				F59C559E02C4557A01000102,
-				F59C55A402C4557A01000102,
-				F59C55AA02C4557A01000102,
-				F59C55B002C4557A01000102,
-				F59C55B602C4557A01000102,
-				F59C53D002C4555D01000102,
-				F59C53D102C4555D01000102,
-				F59C53D202C4555D01000102,
-				F59C53D302C4555D01000102,
-				F59C53D402C4555D01000102,
-				F59C53D502C4555D01000102,
-				F59C53D602C4555D01000102,
-				F59C53D702C4555D01000102,
-				F59C53D802C4555D01000102,
-				F59C53D902C4555D01000102,
-				F59C53DA02C4555D01000102,
-				F59C53DB02C4555D01000102,
-				F59C53DC02C4555D01000102,
-				F59C53DD02C4555D01000102,
-				F59C53DE02C4555D01000102,
-				F59C53DF02C4555D01000102,
-				F59C53E002C4555D01000102,
-				F59C53E102C4555D01000102,
-				F59C53E202C4555D01000102,
-				F59C53E302C4555D01000102,
-				F59C53E402C4555D01000102,
-				F59C53E502C4555D01000102,
 				F59C53E602C4555D01000102,
-				F59C53E702C4555D01000102,
+				F59C54D202C4557A01000102,
 				F59C53E802C4555D01000102,
+				F59C54DE02C4557A01000102,
 				F59C53E902C4555D01000102,
+				F59C54E402C4557A01000102,
 				F59C53EA02C4555D01000102,
+				F59C54EA02C4557A01000102,
 				F59C53EB02C4555D01000102,
-				F59C53EC02C4555D01000102,
-				F59C53ED02C4555D01000102,
-				F59C53EE02C4555D01000102,
-				F59C53EF02C4555D01000102,
-				F59C53F002C4555D01000102,
-				F59C53F102C4555D01000102,
+				F59C54F002C4557A01000102,
 				F59C53F202C4555D01000102,
-				F59C53F302C4555D01000102,
-				F59C53F402C4555D01000102,
-				F59C53F502C4555D01000102,
-				F59C53F602C4555D01000102,
-				F59C53F702C4555D01000102,
-				F59C53F802C4555D01000102,
-				F59C53F902C4555D01000102,
-				F59C53FA02C4555D01000102,
-				F59C53FB02C4555D01000102,
-				F59C53FC02C4555D01000102,
-				F59C53FD02C4555D01000102,
-				F59C53FE02C4555D01000102,
-				F59C53FF02C4555D01000102,
-				F59C540002C4555D01000102,
-				F59C540102C4555D01000102,
-				F59C540202C4555D01000102,
-				F59C540302C4555D01000102,
-				F59C540402C4555D01000102,
-				F59C540502C4555D01000102,
-				F59C540602C4555D01000102,
-				F59C540702C4555D01000102,
-				F59C540802C4555D01000102,
-				F59C540902C4555D01000102,
-				F59C540A02C4555D01000102,
+				F59C551A02C4557A01000102,
 				F59C540B02C4555D01000102,
+				F59C55B002C4557A01000102,
+				F59C53D002C4555D01000102,
+				F59C55B602C4557A01000102,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -1091,12 +986,12 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
-				F59C56F202C455BF01000102,
 				F59C56F302C455BF01000102,
-				F59C56F402C455BF01000102,
 				F59C56F502C455BF01000102,
-				F59C56FA02C455DB01000102,
 				F59C56FC02C455DB01000102,
+				F59C56FA02C455DB01000102,
+				F59C56F402C455BF01000102,
+				F59C56F202C455BF01000102,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -1105,18 +1000,18 @@
 		};
 		40B5828CFFD5E91B7F000001 = {
 			children = (
-				022D130B0059B6D511CD2978,
-				40B5828DFFD5E91B7F000001,
-				40B5828EFFD5E91B7F000001,
-				40B5828FFFD5E91B7F000001,
-				40B58291FFD5E91B7F000001,
-				40B58292FFD5E91B7F000001,
 				F510755F02C453E501000102,
-				F510756202C4541701000102,
 				F510756302C4541701000102,
+				F510756202C4541701000102,
+				40B5828DFFD5E91B7F000001,
 				F510756402C4541701000102,
+				40B5828EFFD5E91B7F000001,
 				F510756502C4541701000102,
+				40B5828FFFD5E91B7F000001,
 				F59C599802C4575701000102,
+				40B58292FFD5E91B7F000001,
+				40B58291FFD5E91B7F000001,
+				022D130B0059B6D511CD2978,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -1154,13 +1049,13 @@
 		};
 		40B58293FFD5E91B7F000001 = {
 			children = (
-				F59C570402C4560D01000102,
-				F59C570502C4560D01000102,
-				F59C570602C4560D01000102,
-				F59C570702C4560D01000102,
-				F59C570802C4560D01000102,
 				F59C570902C4560D01000102,
+				F59C570402C4560D01000102,
+				F59C570602C4560D01000102,
 				F59C570A02C4560D01000102,
+				F59C570802C4560D01000102,
+				F59C570502C4560D01000102,
+				F59C570702C4560D01000102,
 				F59C570B02C4560D01000102,
 			);
 			isa = PBXGroup;
@@ -1196,6 +1091,29 @@
 //402
 //403
 //404
+//D80
+//D81
+//D82
+//D83
+//D84
+		D87D3D387A5018D87997F7DC = {
+			children = (
+				F6E7989202C8799401AD0D07,
+				FB127CDA7CF8FC97D2D297B5,
+				F6E7989302C8799401AD0D07,
+				F6E7989402C8799401AD0D07,
+				F6E7989502C8799401AD0D07,
+				F6E7989602C8799401AD0D07,
+			);
+			isa = PBXGroup;
+			name = "Conditional WOComponents";
+			refType = 4;
+		};
+//D80
+//D81
+//D82
+//D83
+//D84
 //F50
 //F51
 //F52
@@ -1274,13 +1192,15 @@
 		};
 		F54C4C5702C4E24A01000102 = {
 			isa = PBXFileReference;
-			path = ERXWOContext.java;
-			refType = 4;
+			name = ERXWOContext.java;
+			path = Sources/er/extensions/ERXWOContext.java;
+			refType = 2;
 		};
 		F54C4C5802C4E24A01000102 = {
 			isa = PBXFileReference;
-			path = ERXWOForm.java;
-			refType = 4;
+			name = ERXWOForm.java;
+			path = Sources/er/extensions/ERXWOForm.java;
+			refType = 2;
 		};
 		F54C4C5902C4E24A01000102 = {
 			fileRef = F54C4C5702C4E24A01000102;
@@ -1296,8 +1216,9 @@
 		};
 		F54C4C5B02C4E2A001000102 = {
 			isa = PBXFileReference;
-			path = ERXRequest.java;
-			refType = 4;
+			name = ERXRequest.java;
+			path = Sources/er/extensions/ERXRequest.java;
+			refType = 2;
 		};
 		F54C4C5C02C4E2A001000102 = {
 			fileRef = F54C4C5B02C4E2A001000102;
@@ -1307,8 +1228,9 @@
 		};
 		F54C4C5D02C4E2F101000102 = {
 			isa = PBXFileReference;
-			path = ERXMutableUserInfoHolderInterface.java;
-			refType = 4;
+			name = ERXMutableUserInfoHolderInterface.java;
+			path = Sources/er/extensions/ERXMutableUserInfoHolderInterface.java;
+			refType = 2;
 		};
 		F54C4C5E02C4E2F101000102 = {
 			fileRef = F54C4C5D02C4E2F101000102;
@@ -4144,9 +4066,24 @@
 		};
 		F59C576C02C4565601000102 = {
 			children = (
+				F6E7989102C8799401AD0D07,
+				D87D3D387A5018D87997F7DC,
+				F6E7989702C8799401AD0D07,
+				F6E7989802C8799401AD0D07,
+				F6E7989902C8799401AD0D07,
+				F6E7989A02C8799401AD0D07,
+				F6E7989E02C8799401AD0D07,
+				F6E798A002C8799401AD0D07,
+				F6E798C902C8799401AD0D07,
+				F6E798CA02C8799401AD0D07,
+				F6E798CB02C8799401AD0D07,
+				F6E798CC02C8799401AD0D07,
+				F6E798CD02C8799401AD0D07,
+				F6E798CE02C8799401AD0D07,
+				F6E798CF02C8799401AD0D07,
+				F6E798D202C8799401AD0D07,
 				F59C576D02C4565601000102,
 				F59C577502C4565601000102,
-				F59C580202C4565701000102,
 			);
 			isa = PBXGroup;
 			name = Sources;
@@ -4181,8 +4118,9 @@
 		};
 		F59C577002C4565601000102 = {
 			isa = PBXFileReference;
-			path = KeyValueCodingProtectedAccessor.java;
-			refType = 4;
+			name = KeyValueCodingProtectedAccessor.java;
+			path = Sources/com/webobjects/eoaccess/KeyValueCodingProtectedAccessor.java;
+			refType = 2;
 		};
 		F59C577102C4565601000102 = {
 			children = (
@@ -4194,8 +4132,9 @@
 		};
 		F59C577202C4565601000102 = {
 			isa = PBXFileReference;
-			path = KeyValueCodingProtectedAccessor.java;
-			refType = 4;
+			name = KeyValueCodingProtectedAccessor.java;
+			path = Sources/com/webobjects/eocontrol/KeyValueCodingProtectedAccessor.java;
+			refType = 2;
 		};
 		F59C577302C4565601000102 = {
 			children = (
@@ -4207,8 +4146,9 @@
 		};
 		F59C577402C4565601000102 = {
 			isa = PBXFileReference;
-			path = KeyValueCodingProtectedAccessor.java;
-			refType = 4;
+			name = KeyValueCodingProtectedAccessor.java;
+			path = Sources/com/webobjects/woextensions/KeyValueCodingProtectedAccessor.java;
+			refType = 2;
 		};
 		F59C577502C4565601000102 = {
 			children = (
@@ -4222,140 +4162,25 @@
 		F59C577602C4565601000102 = {
 			children = (
 				F59C577702C4565601000102,
-				F59C577802C4565601000102,
-				F59C577902C4565601000102,
-				F59C577A02C4565601000102,
-				F59C577B02C4565601000102,
-				F59C577C02C4565601000102,
 				F59C577D02C4565601000102,
-				F59C577E02C4565601000102,
-				F59C577F02C4565601000102,
 				F59C578002C4565601000102,
-				F59C578102C4565601000102,
-				F59C578202C4565601000102,
-				F59C578302C4565701000102,
-				F59C578402C4565701000102,
-				F59C578502C4565701000102,
-				F59C578602C4565701000102,
-				F59C578702C4565701000102,
-				F59C578802C4565701000102,
-				F59C578902C4565701000102,
-				F59C578A02C4565701000102,
-				F59C578B02C4565701000102,
-				F59C578C02C4565701000102,
-				F59C578D02C4565701000102,
-				F59C578E02C4565701000102,
-				F59C578F02C4565701000102,
-				F59C579002C4565701000102,
-				F59C579102C4565701000102,
-				F59C579202C4565701000102,
-				F59C579302C4565701000102,
-				F59C579402C4565701000102,
-				F59C579502C4565701000102,
-				F59C579602C4565701000102,
-				F59C579702C4565701000102,
-				F59C579802C4565701000102,
-				F59C579902C4565701000102,
-				F59C579A02C4565701000102,
-				F59C579B02C4565701000102,
-				F59C579C02C4565701000102,
-				F59C579D02C4565701000102,
 				F59C579E02C4565701000102,
-				F59C579F02C4565701000102,
-				F59C57A002C4565701000102,
-				F59C57A102C4565701000102,
-				F59C57A202C4565701000102,
-				F59C57A302C4565701000102,
-				F59C57A402C4565701000102,
-				F59C57A502C4565701000102,
-				F59C57A602C4565701000102,
-				F59C57A702C4565701000102,
-				F59C57A802C4565701000102,
-				F59C57A902C4565701000102,
 				F59C57AA02C4565701000102,
-				F59C57AB02C4565701000102,
 				F59C57AC02C4565701000102,
 				F59C57AD02C4565701000102,
 				F59C57AE02C4565701000102,
 				F59C57AF02C4565701000102,
-				F59C57B002C4565701000102,
-				F59C57B102C4565701000102,
-				F59C57B202C4565701000102,
-				F59C57B302C4565701000102,
-				F59C57B402C4565701000102,
-				F59C57B502C4565701000102,
-				F59C57B602C4565701000102,
-				F59C57B702C4565701000102,
 				F59C57B802C4565701000102,
 				F59C57B902C4565701000102,
-				F59C57BA02C4565701000102,
-				F59C57BB02C4565701000102,
 				F59C57BC02C4565701000102,
-				F59C57BD02C4565701000102,
-				F59C57BE02C4565701000102,
-				F59C57BF02C4565701000102,
 				F59C57C002C4565701000102,
-				F59C57C102C4565701000102,
+				F69DF13F02C76B3F01AD0D07,
 				F54C4C5D02C4E2F101000102,
-				F59C57C202C4565701000102,
-				F59C57C302C4565701000102,
-				F59C57C402C4565701000102,
-				F59C57C502C4565701000102,
 				F59C57C602C4565701000102,
-				F59C57C702C4565701000102,
-				F59C57C802C4565701000102,
-				F59C57C902C4565701000102,
-				F59C57CA02C4565701000102,
-				F59C57CB02C4565701000102,
-				F59C57CC02C4565701000102,
-				F59C57CD02C4565701000102,
-				F59C57CE02C4565701000102,
-				F59C57CF02C4565701000102,
-				F59C57D002C4565701000102,
-				F59C57D102C4565701000102,
-				F59C57D202C4565701000102,
-				F59C57D302C4565701000102,
-				F59C57D402C4565701000102,
-				F59C57D502C4565701000102,
-				F59C57D602C4565701000102,
-				F59C57D702C4565701000102,
-				F59C57D802C4565701000102,
 				F54C4C5B02C4E2A001000102,
-				F59C57D902C4565701000102,
-				F59C57DA02C4565701000102,
-				F59C57DB02C4565701000102,
-				F59C57DC02C4565701000102,
-				F59C57DD02C4565701000102,
-				F59C57DE02C4565701000102,
-				F59C57DF02C4565701000102,
-				F59C57E002C4565701000102,
-				F59C57E102C4565701000102,
-				F59C57E202C4565701000102,
-				F59C57E302C4565701000102,
-				F59C57E402C4565701000102,
-				F59C57E502C4565701000102,
-				F59C57E602C4565701000102,
-				F59C57E702C4565701000102,
-				F59C57E802C4565701000102,
-				F59C57E902C4565701000102,
 				F59C57EA02C4565701000102,
-				F59C57EB02C4565701000102,
-				F59C57EC02C4565701000102,
-				F59C57ED02C4565701000102,
-				F59C57EE02C4565701000102,
-				F59C57EF02C4565701000102,
-				F59C57F002C4565701000102,
-				F59C57F102C4565701000102,
-				F59C57F202C4565701000102,
-				F59C57F302C4565701000102,
-				F59C57F402C4565701000102,
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
-				F59C57F502C4565701000102,
-				F59C57F602C4565701000102,
-				F59C57F702C4565701000102,
-				F59C57F802C4565701000102,
-				F59C57F902C4565701000102,
 			);
 			isa = PBXGroup;
 			path = extensions;
@@ -4363,658 +4188,789 @@
 		};
 		F59C577702C4565601000102 = {
 			isa = PBXFileReference;
-			path = EOGenericRecordClazz.java;
-			refType = 4;
+			name = EOGenericRecordClazz.java;
+			path = Sources/er/extensions/EOGenericRecordClazz.java;
+			refType = 2;
 		};
 		F59C577802C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXApplication.java;
-			refType = 4;
+			name = ERXApplication.java;
+			path = Sources/er/extensions/ERXApplication.java;
+			refType = 2;
 		};
 		F59C577902C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXArrayUtilities.java;
-			refType = 4;
+			name = ERXArrayUtilities.java;
+			path = Sources/er/extensions/ERXArrayUtilities.java;
+			refType = 2;
 		};
 		F59C577A02C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXBatchNavigationBar.java;
-			refType = 4;
+			name = ERXBatchNavigationBar.java;
+			path = Sources/er/extensions/ERXBatchNavigationBar.java;
+			refType = 2;
 		};
 		F59C577B02C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXBatchNavigationBarInForm.java;
-			refType = 4;
+			name = ERXBatchNavigationBarInForm.java;
+			path = Sources/er/extensions/ERXBatchNavigationBarInForm.java;
+			refType = 2;
 		};
 		F59C577C02C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXCheckboxMatrix.java;
-			refType = 4;
+			name = ERXCheckboxMatrix.java;
+			path = Sources/er/extensions/ERXCheckboxMatrix.java;
+			refType = 2;
 		};
 		F59C577D02C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXCloneableThreadLocal.java;
-			refType = 4;
+			name = ERXCloneableThreadLocal.java;
+			path = Sources/er/extensions/ERXCloneableThreadLocal.java;
+			refType = 2;
 		};
 		F59C577E02C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXCollapsibleComponentContent.java;
-			refType = 4;
+			name = ERXCollapsibleComponentContent.java;
+			path = Sources/er/extensions/ERXCollapsibleComponentContent.java;
+			refType = 2;
 		};
 		F59C577F02C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXColoredTabPanel.java;
-			refType = 4;
+			name = ERXColoredTabPanel.java;
+			path = Sources/er/extensions/ERXColoredTabPanel.java;
+			refType = 2;
 		};
 		F59C578002C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXCompilerProxy.java;
-			refType = 4;
+			name = ERXCompilerProxy.java;
+			path = Sources/er/extensions/ERXCompilerProxy.java;
+			refType = 2;
 		};
 		F59C578102C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXConfigurationManager.java;
-			refType = 4;
+			name = ERXConfigurationManager.java;
+			path = Sources/er/extensions/ERXConfigurationManager.java;
+			refType = 2;
 		};
 		F59C578202C4565601000102 = {
 			isa = PBXFileReference;
-			path = ERXConstant.java;
-			refType = 4;
+			name = ERXConstant.java;
+			path = Sources/er/extensions/ERXConstant.java;
+			refType = 2;
 		};
 		F59C578302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXCrypto.java;
-			refType = 4;
+			name = ERXCrypto.java;
+			path = Sources/er/extensions/ERXCrypto.java;
+			refType = 2;
 		};
 		F59C578402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDatabaseContextDelegate.java;
-			refType = 4;
+			name = ERXDatabaseContextDelegate.java;
+			path = Sources/er/extensions/ERXDatabaseContextDelegate.java;
+			refType = 2;
 		};
 		F59C578502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDebugMarker.java;
-			refType = 4;
+			name = ERXDebugMarker.java;
+			path = Sources/er/extensions/ERXDebugMarker.java;
+			refType = 2;
 		};
 		F59C578602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDefaultEditingContextDelegate.java;
-			refType = 4;
+			name = ERXDefaultEditingContextDelegate.java;
+			path = Sources/er/extensions/ERXDefaultEditingContextDelegate.java;
+			refType = 2;
 		};
 		F59C578702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDHTMLComponent.java;
-			refType = 4;
+			name = ERXDHTMLComponent.java;
+			path = Sources/er/extensions/ERXDHTMLComponent.java;
+			refType = 2;
 		};
 		F59C578802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDictionaryUtilities.java;
-			refType = 4;
+			name = ERXDictionaryUtilities.java;
+			path = Sources/er/extensions/ERXDictionaryUtilities.java;
+			refType = 2;
 		};
 		F59C578902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDirectAction.java;
-			refType = 4;
+			name = ERXDirectAction.java;
+			path = Sources/er/extensions/ERXDirectAction.java;
+			refType = 2;
 		};
 		F59C578A02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDirectActionHyperlink.java;
-			refType = 4;
+			name = ERXDirectActionHyperlink.java;
+			path = Sources/er/extensions/ERXDirectActionHyperlink.java;
+			refType = 2;
 		};
 		F59C578B02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDirectActionImage.java;
-			refType = 4;
+			name = ERXDirectActionImage.java;
+			path = Sources/er/extensions/ERXDirectActionImage.java;
+			refType = 2;
 		};
 		F59C578C02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXDisplayDataAsString.java;
-			refType = 4;
+			name = ERXDisplayDataAsString.java;
+			path = Sources/er/extensions/ERXDisplayDataAsString.java;
+			refType = 2;
 		};
 		F59C578D02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXECNoValidationDelegate.java;
-			refType = 4;
+			name = ERXECNoValidationDelegate.java;
+			path = Sources/er/extensions/ERXECNoValidationDelegate.java;
+			refType = 2;
 		};
 		F59C578E02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEditingContextDelegate.java;
-			refType = 4;
+			name = ERXEditingContextDelegate.java;
+			path = Sources/er/extensions/ERXEditingContextDelegate.java;
+			refType = 2;
 		};
 		F59C578F02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEditingContextInspector.java;
-			refType = 4;
+			name = ERXEditingContextInspector.java;
+			path = Sources/er/extensions/ERXEditingContextInspector.java;
+			refType = 2;
 		};
 		F59C579002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEditURL.java;
-			refType = 4;
+			name = ERXEditURL.java;
+			path = Sources/er/extensions/ERXEditURL.java;
+			refType = 2;
 		};
 		F59C579102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEmptyComponent.java;
-			refType = 4;
+			name = ERXEmptyComponent.java;
+			path = Sources/er/extensions/ERXEmptyComponent.java;
+			refType = 2;
 		};
 		F59C579202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEntityClassDescription.java;
-			refType = 4;
+			name = ERXEntityClassDescription.java;
+			path = Sources/er/extensions/ERXEntityClassDescription.java;
+			refType = 2;
 		};
 		F59C579302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEOFAppender.java;
-			refType = 4;
+			name = ERXEOFAppender.java;
+			path = Sources/er/extensions/ERXEOFAppender.java;
+			refType = 2;
 		};
 		F59C579402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEOFLogEntryInterface.java;
-			refType = 4;
+			name = ERXEOFLogEntryInterface.java;
+			path = Sources/er/extensions/ERXEOFLogEntryInterface.java;
+			refType = 2;
 		};
 		F59C579502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEOToManyQualifier.java;
-			refType = 4;
+			name = ERXEOToManyQualifier.java;
+			path = Sources/er/extensions/ERXEOToManyQualifier.java;
+			refType = 2;
 		};
 		F59C579602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEqualConditional.java;
-			refType = 4;
+			name = ERXEqualConditional.java;
+			path = Sources/er/extensions/ERXEqualConditional.java;
+			refType = 2;
 		};
 		F59C579702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXErrorDictionaryPanel.java;
-			refType = 4;
+			name = ERXErrorDictionaryPanel.java;
+			path = Sources/er/extensions/ERXErrorDictionaryPanel.java;
+			refType = 2;
 		};
 		F59C579802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXEventRecordingDefaultHandler.java;
-			refType = 4;
+			name = ERXEventRecordingDefaultHandler.java;
+			path = Sources/er/extensions/ERXEventRecordingDefaultHandler.java;
+			refType = 2;
 		};
 		F59C579902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXExceptionHolder.java;
-			refType = 4;
+			name = ERXExceptionHolder.java;
+			path = Sources/er/extensions/ERXExceptionHolder.java;
+			refType = 2;
 		};
 		F59C579A02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXExtensions.java;
-			refType = 4;
+			name = ERXExtensions.java;
+			path = Sources/er/extensions/ERXExtensions.java;
+			refType = 2;
 		};
 		F59C579B02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXFakeRelationship.java;
-			refType = 4;
+			name = ERXFakeRelationship.java;
+			path = Sources/er/extensions/ERXFakeRelationship.java;
+			refType = 2;
 		};
 		F59C579C02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXFileNotificationCenter.java;
-			refType = 4;
+			name = ERXFileNotificationCenter.java;
+			path = Sources/er/extensions/ERXFileNotificationCenter.java;
+			refType = 2;
 		};
 		F59C579D02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXFixedLengthString.java;
-			refType = 4;
+			name = ERXFixedLengthString.java;
+			path = Sources/er/extensions/ERXFixedLengthString.java;
+			refType = 2;
 		};
 		F59C579E02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXFrameworkPrincipal.java;
-			refType = 4;
+			name = ERXFrameworkPrincipal.java;
+			path = Sources/er/extensions/ERXFrameworkPrincipal.java;
+			refType = 2;
 		};
 		F59C579F02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXFuzzyMatchCleaner.java;
-			refType = 4;
+			name = ERXFuzzyMatchCleaner.java;
+			path = Sources/er/extensions/ERXFuzzyMatchCleaner.java;
+			refType = 2;
 		};
 		F59C57A002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGeneratesPrimaryKeyInterface.java;
-			refType = 4;
+			name = ERXGeneratesPrimaryKeyInterface.java;
+			path = Sources/er/extensions/ERXGeneratesPrimaryKeyInterface.java;
+			refType = 2;
 		};
 		F59C57A102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGenericRecord.java;
-			refType = 4;
+			name = ERXGenericRecord.java;
+			path = Sources/er/extensions/ERXGenericRecord.java;
+			refType = 2;
 		};
 		F59C57A202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGraph.java;
-			refType = 4;
+			name = ERXGraph.java;
+			path = Sources/er/extensions/ERXGraph.java;
+			refType = 2;
 		};
 		F59C57A302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGraphUtilities.java;
-			refType = 4;
+			name = ERXGraphUtilities.java;
+			path = Sources/er/extensions/ERXGraphUtilities.java;
+			refType = 2;
 		};
 		F59C57A402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGroupingRepetition.java;
-			refType = 4;
+			name = ERXGroupingRepetition.java;
+			path = Sources/er/extensions/ERXGroupingRepetition.java;
+			refType = 2;
 		};
 		F59C57A502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGroupingTable.java;
-			refType = 4;
+			name = ERXGroupingTable.java;
+			path = Sources/er/extensions/ERXGroupingTable.java;
+			refType = 2;
 		};
 		F59C57A602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXGuardedObjectInterface.java;
-			refType = 4;
+			name = ERXGuardedObjectInterface.java;
+			path = Sources/er/extensions/ERXGuardedObjectInterface.java;
+			refType = 2;
 		};
 		F59C57A702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXHyperlinkKeyValueSetter.java;
-			refType = 4;
+			name = ERXHyperlinkKeyValueSetter.java;
+			path = Sources/er/extensions/ERXHyperlinkKeyValueSetter.java;
+			refType = 2;
 		};
 		F59C57A802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXImageTabPanel.java;
-			refType = 4;
+			name = ERXImageTabPanel.java;
+			path = Sources/er/extensions/ERXImageTabPanel.java;
+			refType = 2;
 		};
 		F59C57A902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXInstanceOfConditional.java;
-			refType = 4;
+			name = ERXInstanceOfConditional.java;
+			path = Sources/er/extensions/ERXInstanceOfConditional.java;
+			refType = 2;
 		};
 		F59C57AA02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSAutoClosePage.java;
-			refType = 4;
+			name = ERXJSAutoClosePage.java;
+			path = Sources/er/extensions/ERXJSAutoClosePage.java;
+			refType = 2;
 		};
 		F59C57AB02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSConfirmPanel.java;
-			refType = 4;
+			name = ERXJSConfirmPanel.java;
+			path = Sources/er/extensions/ERXJSConfirmPanel.java;
+			refType = 2;
 		};
 		F59C57AC02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSCookiesConditional.java;
-			refType = 4;
+			name = ERXJSCookiesConditional.java;
+			path = Sources/er/extensions/ERXJSCookiesConditional.java;
+			refType = 2;
 		};
 		F59C57AD02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSFormForTarget.java;
-			refType = 4;
+			name = ERXJSFormForTarget.java;
+			path = Sources/er/extensions/ERXJSFormForTarget.java;
+			refType = 2;
 		};
 		F59C57AE02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSOpenWindowHyperlink.java;
-			refType = 4;
+			name = ERXJSOpenWindowHyperlink.java;
+			path = Sources/er/extensions/ERXJSOpenWindowHyperlink.java;
+			refType = 2;
 		};
 		F59C57AF02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSOpenWindowSubmitButton.java;
-			refType = 4;
+			name = ERXJSOpenWindowSubmitButton.java;
+			path = Sources/er/extensions/ERXJSOpenWindowSubmitButton.java;
+			refType = 2;
 		};
 		F59C57B002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSPopUpRelationPicker.java;
-			refType = 4;
+			name = ERXJSPopUpRelationPicker.java;
+			path = Sources/er/extensions/ERXJSPopUpRelationPicker.java;
+			refType = 2;
 		};
 		F59C57B102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSPopupSelector.java;
-			refType = 4;
+			name = ERXJSPopupSelector.java;
+			path = Sources/er/extensions/ERXJSPopupSelector.java;
+			refType = 2;
 		};
 		F59C57B202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXJSTwoLevelEditToOneRelationship.java;
-			refType = 4;
+			name = ERXJSTwoLevelEditToOneRelationship.java;
+			path = Sources/er/extensions/ERXJSTwoLevelEditToOneRelationship.java;
+			refType = 2;
 		};
 		F59C57B302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXKeyValuePair.java;
-			refType = 4;
+			name = ERXKeyValuePair.java;
+			path = Sources/er/extensions/ERXKeyValuePair.java;
+			refType = 2;
 		};
 		F59C57B402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLinkRandomizer.java;
-			refType = 4;
+			name = ERXLinkRandomizer.java;
+			path = Sources/er/extensions/ERXLinkRandomizer.java;
+			refType = 2;
 		};
 		F59C57B502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLinlyn.java;
-			refType = 4;
+			name = ERXLinlyn.java;
+			path = Sources/er/extensions/ERXLinlyn.java;
+			refType = 2;
 		};
 		F59C57B602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXListContainsItemConditional.java;
-			refType = 4;
+			name = ERXListContainsItemConditional.java;
+			path = Sources/er/extensions/ERXListContainsItemConditional.java;
+			refType = 2;
 		};
 		F59C57B702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXListDisplay.java;
-			refType = 4;
+			name = ERXListDisplay.java;
+			path = Sources/er/extensions/ERXListDisplay.java;
+			refType = 2;
 		};
 		F59C57B802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLocalizedString.java;
-			refType = 4;
+			name = ERXLocalizedString.java;
+			path = Sources/er/extensions/ERXLocalizedString.java;
+			refType = 2;
 		};
 		F59C57B902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLocalizer.java;
-			refType = 4;
+			name = ERXLocalizer.java;
+			path = Sources/er/extensions/ERXLocalizer.java;
+			refType = 2;
 		};
 		F59C57BA02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLog4j.java;
-			refType = 4;
+			name = ERXLog4j.java;
+			path = Sources/er/extensions/ERXLog4j.java;
+			refType = 2;
 		};
 		F59C57BB02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLog4JConfiguration.java;
-			refType = 4;
+			name = ERXLog4JConfiguration.java;
+			path = Sources/er/extensions/ERXLog4JConfiguration.java;
+			refType = 2;
 		};
 		F59C57BC02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXLogger.java;
-			refType = 4;
+			name = ERXLogger.java;
+			path = Sources/er/extensions/ERXLogger.java;
+			refType = 2;
 		};
 		F59C57BD02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXMacBinarySwissArmyKnife.java;
-			refType = 4;
+			name = ERXMacBinarySwissArmyKnife.java;
+			path = Sources/er/extensions/ERXMacBinarySwissArmyKnife.java;
+			refType = 2;
 		};
 		F59C57BE02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXMailTo.java;
-			refType = 4;
+			name = ERXMailTo.java;
+			path = Sources/er/extensions/ERXMailTo.java;
+			refType = 2;
 		};
 		F59C57BF02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXMandatoryFieldMarker.java;
-			refType = 4;
+			name = ERXMandatoryFieldMarker.java;
+			path = Sources/er/extensions/ERXMandatoryFieldMarker.java;
+			refType = 2;
 		};
 		F59C57C002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXMessageEncoding.java;
-			refType = 4;
+			name = ERXMessageEncoding.java;
+			path = Sources/er/extensions/ERXMessageEncoding.java;
+			refType = 2;
 		};
 		F59C57C102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXMultiKey.java;
-			refType = 4;
+			name = ERXMultiKey.java;
+			path = Sources/er/extensions/ERXMultiKey.java;
+			refType = 2;
 		};
 		F59C57C202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNavigation.java;
-			refType = 4;
+			name = ERXNavigation.java;
+			path = Sources/er/extensions/ERXNavigation.java;
+			refType = 2;
 		};
 		F59C57C302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNextPageDelegate.java;
-			refType = 4;
+			name = ERXNextPageDelegate.java;
+			path = Sources/er/extensions/ERXNextPageDelegate.java;
+			refType = 2;
 		};
 		F59C57C402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNoHelpAvailableHelp.java;
-			refType = 4;
+			name = ERXNoHelpAvailableHelp.java;
+			path = Sources/er/extensions/ERXNoHelpAvailableHelp.java;
+			refType = 2;
 		};
 		F59C57C502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNonNullConditional.java;
-			refType = 4;
+			name = ERXNonNullConditional.java;
+			path = Sources/er/extensions/ERXNonNullConditional.java;
+			refType = 2;
 		};
 		F59C57C602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNonPluralFormLocalizer.java;
-			refType = 4;
+			name = ERXNonPluralFormLocalizer.java;
+			path = Sources/er/extensions/ERXNonPluralFormLocalizer.java;
+			refType = 2;
 		};
 		F59C57C702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNonZeroConditional.java;
-			refType = 4;
+			name = ERXNonZeroConditional.java;
+			path = Sources/er/extensions/ERXNonZeroConditional.java;
+			refType = 2;
 		};
 		F59C57C802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXNumberFormatter.java;
-			refType = 4;
+			name = ERXNumberFormatter.java;
+			path = Sources/er/extensions/ERXNumberFormatter.java;
+			refType = 2;
 		};
 		F59C57C902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXObjectSaveDelegate.java;
-			refType = 4;
+			name = ERXObjectSaveDelegate.java;
+			path = Sources/er/extensions/ERXObjectSaveDelegate.java;
+			refType = 2;
 		};
 		F59C57CA02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXObjectWasCreatedDelegate.java;
-			refType = 4;
+			name = ERXObjectWasCreatedDelegate.java;
+			path = Sources/er/extensions/ERXObjectWasCreatedDelegate.java;
+			refType = 2;
 		};
 		F59C57CB02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXOncePerRequestConditional.java;
-			refType = 4;
+			name = ERXOncePerRequestConditional.java;
+			path = Sources/er/extensions/ERXOncePerRequestConditional.java;
+			refType = 2;
 		};
 		F59C57CC02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXOptionalForm.java;
-			refType = 4;
+			name = ERXOptionalForm.java;
+			path = Sources/er/extensions/ERXOptionalForm.java;
+			refType = 2;
 		};
 		F59C57CD02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXPatternLayout.java;
-			refType = 4;
+			name = ERXPatternLayout.java;
+			path = Sources/er/extensions/ERXPatternLayout.java;
+			refType = 2;
 		};
 		F59C57CE02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXPluralString.java;
-			refType = 4;
+			name = ERXPluralString.java;
+			path = Sources/er/extensions/ERXPluralString.java;
+			refType = 2;
 		};
 		F59C57CF02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXPrimaryKeyListQualifier.java;
-			refType = 4;
+			name = ERXPrimaryKeyListQualifier.java;
+			path = Sources/er/extensions/ERXPrimaryKeyListQualifier.java;
+			refType = 2;
 		};
 		F59C57D002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXProperties.java;
-			refType = 4;
+			name = ERXProperties.java;
+			path = Sources/er/extensions/ERXProperties.java;
+			refType = 2;
 		};
 		F59C57D102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXQualifierInSubquery.java;
-			refType = 4;
+			name = ERXQualifierInSubquery.java;
+			path = Sources/er/extensions/ERXQualifierInSubquery.java;
+			refType = 2;
 		};
 		F59C57D202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXQualifierTraversal.java;
-			refType = 4;
+			name = ERXQualifierTraversal.java;
+			path = Sources/er/extensions/ERXQualifierTraversal.java;
+			refType = 2;
 		};
 		F59C57D302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXQualifierTraversalCallback.java;
-			refType = 4;
+			name = ERXQualifierTraversalCallback.java;
+			path = Sources/er/extensions/ERXQualifierTraversalCallback.java;
+			refType = 2;
 		};
 		F59C57D402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXQualifierUtilities.java;
-			refType = 4;
+			name = ERXQualifierUtilities.java;
+			path = Sources/er/extensions/ERXQualifierUtilities.java;
+			refType = 2;
 		};
 		F59C57D502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXQueryRecentDates.java;
-			refType = 4;
+			name = ERXQueryRecentDates.java;
+			path = Sources/er/extensions/ERXQueryRecentDates.java;
+			refType = 2;
 		};
 		F59C57D602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXRadioButtonMatrix.java;
-			refType = 4;
+			name = ERXRadioButtonMatrix.java;
+			path = Sources/er/extensions/ERXRadioButtonMatrix.java;
+			refType = 2;
 		};
 		F59C57D702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXRepeatingTable.java;
-			refType = 4;
+			name = ERXRepeatingTable.java;
+			path = Sources/er/extensions/ERXRepeatingTable.java;
+			refType = 2;
 		};
 		F59C57D802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXRetainer.java;
-			refType = 4;
+			name = ERXRetainer.java;
+			path = Sources/er/extensions/ERXRetainer.java;
+			refType = 2;
 		};
 		F59C57D902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSession.java;
-			refType = 4;
+			name = ERXSession.java;
+			path = Sources/er/extensions/ERXSession.java;
+			refType = 2;
 		};
 		F59C57DA02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSessionAddition.java;
-			refType = 4;
+			name = ERXSessionAddition.java;
+			path = Sources/er/extensions/ERXSessionAddition.java;
+			refType = 2;
 		};
 		F59C57DB02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSessionAdditionInterface.java;
-			refType = 4;
+			name = ERXSessionAdditionInterface.java;
+			path = Sources/er/extensions/ERXSessionAdditionInterface.java;
+			refType = 2;
 		};
 		F59C57DC02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSharedEOLoader.java;
-			refType = 4;
+			name = ERXSharedEOLoader.java;
+			path = Sources/er/extensions/ERXSharedEOLoader.java;
+			refType = 2;
 		};
 		F59C57DD02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSimpleHTMLFormatter.java;
-			refType = 4;
+			name = ERXSimpleHTMLFormatter.java;
+			path = Sources/er/extensions/ERXSimpleHTMLFormatter.java;
+			refType = 2;
 		};
 		F59C57DE02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSimpleTemplateParser.java;
-			refType = 4;
+			name = ERXSimpleTemplateParser.java;
+			path = Sources/er/extensions/ERXSimpleTemplateParser.java;
+			refType = 2;
 		};
 		F59C57DF02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSingleButton.java;
-			refType = 4;
+			name = ERXSingleButton.java;
+			path = Sources/er/extensions/ERXSingleButton.java;
+			refType = 2;
 		};
 		F59C57E002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSortOrder.java;
-			refType = 4;
+			name = ERXSortOrder.java;
+			path = Sources/er/extensions/ERXSortOrder.java;
+			refType = 2;
 		};
 		F59C57E102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXStatelessComponent.java;
-			refType = 4;
+			name = ERXStatelessComponent.java;
+			path = Sources/er/extensions/ERXStatelessComponent.java;
+			refType = 2;
 		};
 		F59C57E202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXStringListPicker.java;
-			refType = 4;
+			name = ERXStringListPicker.java;
+			path = Sources/er/extensions/ERXStringListPicker.java;
+			refType = 2;
 		};
 		F59C57E302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXStringUtilities.java;
-			refType = 4;
+			name = ERXStringUtilities.java;
+			path = Sources/er/extensions/ERXStringUtilities.java;
+			refType = 2;
 		};
 		F59C57E402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXStringWithLineBreaks.java;
-			refType = 4;
+			name = ERXStringWithLineBreaks.java;
+			path = Sources/er/extensions/ERXStringWithLineBreaks.java;
+			refType = 2;
 		};
 		F59C57E502C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXStyleSheet.java;
-			refType = 4;
+			name = ERXStyleSheet.java;
+			path = Sources/er/extensions/ERXStyleSheet.java;
+			refType = 2;
 		};
 		F59C57E602C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXSuccess.java;
-			refType = 4;
+			name = ERXSuccess.java;
+			path = Sources/er/extensions/ERXSuccess.java;
+			refType = 2;
 		};
 		F59C57E702C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTable.java;
-			refType = 4;
+			name = ERXTable.java;
+			path = Sources/er/extensions/ERXTable.java;
+			refType = 2;
 		};
 		F59C57E802C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTableWithBorder.java;
-			refType = 4;
+			name = ERXTableWithBorder.java;
+			path = Sources/er/extensions/ERXTableWithBorder.java;
+			refType = 2;
 		};
 		F59C57E902C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTabPanel.java;
-			refType = 4;
+			name = ERXTabPanel.java;
+			path = Sources/er/extensions/ERXTabPanel.java;
+			refType = 2;
 		};
 		F59C57EA02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXThreadStorage.java;
-			refType = 4;
+			name = ERXThreadStorage.java;
+			path = Sources/er/extensions/ERXThreadStorage.java;
+			refType = 2;
 		};
 		F59C57EB02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTimestampUtilities.java;
-			refType = 4;
+			name = ERXTimestampUtilities.java;
+			path = Sources/er/extensions/ERXTimestampUtilities.java;
+			refType = 2;
 		};
 		F59C57EC02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTimestampUtility.java;
-			refType = 4;
+			name = ERXTimestampUtility.java;
+			path = Sources/er/extensions/ERXTimestampUtility.java;
+			refType = 2;
 		};
 		F59C57ED02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTolerantSaver.java;
-			refType = 4;
+			name = ERXTolerantSaver.java;
+			path = Sources/er/extensions/ERXTolerantSaver.java;
+			refType = 2;
 		};
 		F59C57EE02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXToManyRelationship.java;
-			refType = 4;
+			name = ERXToManyRelationship.java;
+			path = Sources/er/extensions/ERXToManyRelationship.java;
+			refType = 2;
 		};
 		F59C57EF02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXToOneRelationship.java;
-			refType = 4;
+			name = ERXToOneRelationship.java;
+			path = Sources/er/extensions/ERXToOneRelationship.java;
+			refType = 2;
 		};
 		F59C57F002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXUnreadMarker.java;
-			refType = 4;
+			name = ERXUnreadMarker.java;
+			path = Sources/er/extensions/ERXUnreadMarker.java;
+			refType = 2;
 		};
 		F59C57F102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXUtilities.java;
-			refType = 4;
+			name = ERXUtilities.java;
+			path = Sources/er/extensions/ERXUtilities.java;
+			refType = 2;
 		};
 		F59C57F202C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXValidation.java;
-			refType = 4;
+			name = ERXValidation.java;
+			path = Sources/er/extensions/ERXValidation.java;
+			refType = 2;
 		};
 		F59C57F302C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXValidationException.java;
-			refType = 4;
+			name = ERXValidationException.java;
+			path = Sources/er/extensions/ERXValidationException.java;
+			refType = 2;
 		};
 		F59C57F402C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXValidationFactory.java;
-			refType = 4;
+			name = ERXValidationFactory.java;
+			path = Sources/er/extensions/ERXValidationFactory.java;
+			refType = 2;
 		};
 		F59C57F502C4565701000102 = {
 			isa = PBXFileReference;
-			path = WOCollapsibleComponentContent.java;
-			refType = 4;
+			name = WOCollapsibleComponentContent.java;
+			path = Sources/er/extensions/WOCollapsibleComponentContent.java;
+			refType = 2;
 		};
 		F59C57F602C4565701000102 = {
 			isa = PBXFileReference;
-			path = WOSortOrder.java;
-			refType = 4;
+			name = WOSortOrder.java;
+			path = Sources/er/extensions/WOSortOrder.java;
+			refType = 2;
 		};
 		F59C57F702C4565701000102 = {
 			isa = PBXFileReference;
-			path = WOTable.java;
-			refType = 4;
+			name = WOTable.java;
+			path = Sources/er/extensions/WOTable.java;
+			refType = 2;
 		};
 		F59C57F802C4565701000102 = {
 			isa = PBXFileReference;
-			path = WOToManyRelationship.java;
-			refType = 4;
+			name = WOToManyRelationship.java;
+			path = Sources/er/extensions/WOToManyRelationship.java;
+			refType = 2;
 		};
 		F59C57F902C4565701000102 = {
 			isa = PBXFileReference;
-			path = WOToOneRelationship.java;
-			refType = 4;
+			name = WOToOneRelationship.java;
+			path = Sources/er/extensions/WOToOneRelationship.java;
+			refType = 2;
 		};
 		F59C57FA02C4565701000102 = {
 			children = (
@@ -5032,43 +4988,51 @@
 		};
 		F59C57FB02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXBatchTestInterface.java;
-			refType = 4;
+			name = ERXBatchTestInterface.java;
+			path = Sources/er/testrunner/ERXBatchTestInterface.java;
+			refType = 2;
 		};
 		F59C57FC02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTestCase.java;
-			refType = 4;
+			name = ERXTestCase.java;
+			path = Sources/er/testrunner/ERXTestCase.java;
+			refType = 2;
 		};
 		F59C57FD02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTestListener.java;
-			refType = 4;
+			name = ERXTestListener.java;
+			path = Sources/er/testrunner/ERXTestListener.java;
+			refType = 2;
 		};
 		F59C57FE02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTestResult.java;
-			refType = 4;
+			name = ERXTestResult.java;
+			path = Sources/er/testrunner/ERXTestResult.java;
+			refType = 2;
 		};
 		F59C57FF02C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXTestRunner.java;
-			refType = 4;
+			name = ERXTestRunner.java;
+			path = Sources/er/testrunner/ERXTestRunner.java;
+			refType = 2;
 		};
 		F59C580002C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXWOTestInterface.java;
-			refType = 4;
+			name = ERXWOTestInterface.java;
+			path = Sources/er/testrunner/ERXWOTestInterface.java;
+			refType = 2;
 		};
 		F59C580102C4565701000102 = {
 			isa = PBXFileReference;
-			path = ERXWOTestResult.java;
-			refType = 4;
+			name = ERXWOTestResult.java;
+			path = Sources/er/testrunner/ERXWOTestResult.java;
+			refType = 2;
 		};
 		F59C580202C4565701000102 = {
 			isa = PBXFileReference;
-			path = WXOutlineControl.java;
-			refType = 4;
+			name = WXOutlineControl.java;
+			path = Sources/WXOutlineControl.java;
+			refType = 2;
 		};
 		F59C580302C4565701000102 = {
 			fileRef = F59C577002C4565601000102;
@@ -5933,6 +5897,792 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F60
+//F61
+//F62
+//F63
+//F64
+		F69DF13F02C76B3F01AD0D07 = {
+			isa = PBXFileReference;
+			name = ERXModelGroup.java;
+			path = Sources/er/extensions/ERXModelGroup.java;
+			refType = 2;
+		};
+		F69DF14002C76B3F01AD0D07 = {
+			fileRef = F69DF13F02C76B3F01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6E7989102C8799401AD0D07 = {
+			children = (
+				F59C57F502C4565701000102,
+				F59C57F602C4565701000102,
+				F59C57F702C4565701000102,
+				F59C57F802C4565701000102,
+				F59C57F902C4565701000102,
+				F59C580202C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "Backport from WOExtensions";
+			refType = 4;
+		};
+		F6E7989202C8799401AD0D07 = {
+			children = (
+				F59C53DC02C4555D01000102,
+				F59C579602C4565701000102,
+				F59C549502C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXEqualConditional;
+			refType = 4;
+		};
+		F6E7989302C8799401AD0D07 = {
+			children = (
+				F59C53F002C4555D01000102,
+				F59C57B602C4565701000102,
+				F59C550E02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXListContainsItemConditional;
+			refType = 4;
+		};
+		F6E7989402C8799401AD0D07 = {
+			children = (
+				F59C53F702C4555D01000102,
+				F59C57C502C4565701000102,
+				F59C553802C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXNonNullConditional;
+			refType = 4;
+		};
+		F6E7989502C8799401AD0D07 = {
+			children = (
+				F59C53F802C4555D01000102,
+				F59C57C702C4565701000102,
+				F59C553E02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXNonZeroConditional;
+			refType = 4;
+		};
+		F6E7989602C8799401AD0D07 = {
+			children = (
+				F59C53F902C4555D01000102,
+				F59C57CB02C4565701000102,
+				F59C554402C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXOncePerRequestConditional;
+			refType = 4;
+		};
+		F6E7989702C8799401AD0D07 = {
+			children = (
+				F59C579202C4565701000102,
+				F59C579802C4565701000102,
+				F59C579F02C4565701000102,
+				F59C57A102C4565701000102,
+				F59C57D402C4565701000102,
+				F59C57ED02C4565701000102,
+				F59C57F102C4565701000102,
+				F59C57F202C4565701000102,
+				F59C57F302C4565701000102,
+				F59C57F402C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "EOF Additions";
+			refType = 4;
+		};
+		F6E7989802C8799401AD0D07 = {
+			children = (
+				F59C578402C4565701000102,
+				F59C578602C4565701000102,
+				F59C578D02C4565701000102,
+				F59C578E02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "EOF Delegates";
+			refType = 4;
+		};
+		F6E7989902C8799401AD0D07 = {
+			children = (
+				F59C57A002C4565701000102,
+				F59C57A602C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "EOF Interfaces";
+			refType = 4;
+		};
+		F6E7989A02C8799401AD0D07 = {
+			children = (
+				F59C577902C4565601000102,
+				F59C578202C4565601000102,
+				F59C578802C4565701000102,
+				F59C57A302C4565701000102,
+				F59C57B302C4565701000102,
+				F59C57B502C4565701000102,
+				F59C57C102C4565701000102,
+				F59C57D002C4565701000102,
+				F59C57D802C4565701000102,
+				F59C57DD02C4565701000102,
+				F59C57E302C4565701000102,
+				F59C57EB02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "Foundation Additions";
+			refType = 4;
+		};
+		F6E7989B02C8799401AD0D07 = {
+			children = (
+				F59C53D702C4555D01000102,
+				F59C578702C4565701000102,
+				F59C546C02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXDHTMLComponent;
+			refType = 4;
+		};
+		F6E7989C02C8799401AD0D07 = {
+			children = (
+				F59C53E702C4555D01000102,
+				F59C57AB02C4565701000102,
+				F59C54D802C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSConfirmPanel;
+			refType = 4;
+		};
+		F6E7989D02C8799401AD0D07 = {
+			children = (
+				F59C53ED02C4555D01000102,
+				F59C57B102C4565701000102,
+				F59C54FC02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSPopupSelector;
+			refType = 4;
+		};
+		F6E7989E02C8799401AD0D07 = {
+			children = (
+				F6E7989B02C8799401AD0D07,
+				F6E7989C02C8799401AD0D07,
+				FB13D999F9BE5AD29792D4FB,
+				F6E7989D02C8799401AD0D07,
+			);
+			isa = PBXGroup;
+			name = "Javascript WOComponents";
+			refType = 4;
+		};
+		F6E7989F02C8799401AD0D07 = {
+			children = (
+				F59C53F302C4555D01000102,
+				F59C57BB02C4565701000102,
+				F59C552002C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXLog4JConfiguration;
+			refType = 4;
+		};
+		F6E798A002C8799401AD0D07 = {
+			children = (
+				F59C579302C4565701000102,
+				F59C579402C4565701000102,
+				F6E7989F02C8799401AD0D07,
+				F59C57BA02C4565701000102,
+				F59C57CD02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "Log4j Additions";
+			refType = 4;
+		};
+		F6E798A102C8799401AD0D07 = {
+			children = (
+				F59C53D102C4555D01000102,
+				F59C577A02C4565601000102,
+				F59C544802C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXBatchNavigationBar;
+			refType = 4;
+		};
+		F6E798A202C8799401AD0D07 = {
+			children = (
+				F59C53D202C4555D01000102,
+				F59C577B02C4565601000102,
+				F59C544E02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXBatchNavigationBarInForm;
+			refType = 4;
+		};
+		F6E798A302C8799401AD0D07 = {
+			children = (
+				F59C53D402C4555D01000102,
+				F59C577E02C4565601000102,
+				F59C545A02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXCollapsibleComponentContent;
+			refType = 4;
+		};
+		F6E798A402C8799401AD0D07 = {
+			children = (
+				F59C53D502C4555D01000102,
+				F59C577F02C4565601000102,
+				F59C546002C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXColoredTabPanel;
+			refType = 4;
+		};
+		F6E798A502C8799401AD0D07 = {
+			children = (
+				F59C53D602C4555D01000102,
+				F59C578502C4565701000102,
+				F59C546602C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXDebugMarker;
+			refType = 4;
+		};
+		F6E798A602C8799401AD0D07 = {
+			children = (
+				F59C578B02C4565701000102,
+				F59C547702C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXDirectActionImage;
+			refType = 4;
+		};
+		F6E798A702C8799401AD0D07 = {
+			children = (
+				F59C53D802C4555D01000102,
+				F59C578C02C4565701000102,
+				F59C547D02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXDisplayDataAsString;
+			refType = 4;
+		};
+		F6E798A802C8799401AD0D07 = {
+			children = (
+				F59C53DA02C4555D01000102,
+				F59C579002C4565701000102,
+				F59C548902C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXEditURL;
+			refType = 4;
+		};
+		F6E798A902C8799401AD0D07 = {
+			children = (
+				F59C53D902C4555D01000102,
+				F59C578F02C4565701000102,
+				F59C548302C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXEditingContextInspector;
+			refType = 4;
+		};
+		F6E798AA02C8799401AD0D07 = {
+			children = (
+				F59C53DB02C4555D01000102,
+				F59C579102C4565701000102,
+				F59C548F02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXEmptyComponent;
+			refType = 4;
+		};
+		F6E798AB02C8799401AD0D07 = {
+			children = (
+				F59C53DD02C4555D01000102,
+				F59C579702C4565701000102,
+				F59C549B02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXErrorDictionaryPanel;
+			refType = 4;
+		};
+		F6E798AC02C8799401AD0D07 = {
+			children = (
+				F59C53DE02C4555D01000102,
+				F59C579B02C4565701000102,
+				F59C54A102C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXFakeRelationship;
+			refType = 4;
+		};
+		F6E798AD02C8799401AD0D07 = {
+			children = (
+				F59C53DF02C4555D01000102,
+				F59C579D02C4565701000102,
+				F59C54A702C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXFixedLengthString;
+			refType = 4;
+		};
+		F6E798AE02C8799401AD0D07 = {
+			children = (
+				F59C53E002C4555D01000102,
+				F59C57A202C4565701000102,
+				F59C54AD02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXGraph;
+			refType = 4;
+		};
+		F6E798AF02C8799401AD0D07 = {
+			children = (
+				F59C53E102C4555D01000102,
+				F59C57A402C4565701000102,
+				F59C54B402C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXGroupingRepetition;
+			refType = 4;
+		};
+		F6E798B002C8799401AD0D07 = {
+			children = (
+				F59C53E202C4555D01000102,
+				F59C57A502C4565701000102,
+				F59C54BA02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXGroupingTable;
+			refType = 4;
+		};
+		F6E798B102C8799401AD0D07 = {
+			children = (
+				F59C53E302C4555D01000102,
+				F59C57A702C4565701000102,
+				F59C54C002C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXHyperlinkKeyValueSetter;
+			refType = 4;
+		};
+		F6E798B202C8799401AD0D07 = {
+			children = (
+				F59C53E402C4555D01000102,
+				F59C57A802C4565701000102,
+				F59C54C602C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXImageTabPanel;
+			refType = 4;
+		};
+		F6E798B302C8799401AD0D07 = {
+			children = (
+				F59C53EE02C4555D01000102,
+				F59C57B202C4565701000102,
+				F59C550202C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSTwoLevelEditToOneRelationship;
+			refType = 4;
+		};
+		F6E798B402C8799401AD0D07 = {
+			children = (
+				F59C53EF02C4555D01000102,
+				F59C57B402C4565701000102,
+				F59C550802C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXLinkRandomizer;
+			refType = 4;
+		};
+		F6E798B502C8799401AD0D07 = {
+			children = (
+				F59C53F102C4555D01000102,
+				F59C57B702C4565701000102,
+				F59C551402C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXListDisplay;
+			refType = 4;
+		};
+		F6E798B602C8799401AD0D07 = {
+			children = (
+				F59C53F402C4555D01000102,
+				F59C57BE02C4565701000102,
+				F59C552602C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXMailTo;
+			refType = 4;
+		};
+		F6E798B702C8799401AD0D07 = {
+			children = (
+				F59C53F502C4555D01000102,
+				F59C57BF02C4565701000102,
+				F59C552C02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXMandatoryFieldMarker;
+			refType = 4;
+		};
+		F6E798B802C8799401AD0D07 = {
+			children = (
+				F59C53F602C4555D01000102,
+				F59C57C402C4565701000102,
+				F59C553202C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXNoHelpAvailableHelp;
+			refType = 4;
+		};
+		F6E798B902C8799401AD0D07 = {
+			children = (
+				F59C53FA02C4555D01000102,
+				F59C57CC02C4565701000102,
+				F59C554A02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXOptionalForm;
+			refType = 4;
+		};
+		F6E798BA02C8799401AD0D07 = {
+			children = (
+				F59C53FB02C4555D01000102,
+				F59C57CE02C4565701000102,
+				F59C555002C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXPluralString;
+			refType = 4;
+		};
+		F6E798BB02C8799401AD0D07 = {
+			children = (
+				F59C53FC02C4555D01000102,
+				F59C57D502C4565701000102,
+				F59C555602C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXQueryRecentDates;
+			refType = 4;
+		};
+		F6E798BC02C8799401AD0D07 = {
+			children = (
+				F59C53FE02C4555D01000102,
+				F59C57D702C4565701000102,
+				F59C556202C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXRepeatingTable;
+			refType = 4;
+		};
+		F6E798BD02C8799401AD0D07 = {
+			children = (
+				F59C53FF02C4555D01000102,
+				F59C57DF02C4565701000102,
+				F59C556802C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXSingleButton;
+			refType = 4;
+		};
+		F6E798BE02C8799401AD0D07 = {
+			children = (
+				F59C540002C4555D01000102,
+				F59C57E002C4565701000102,
+				F59C556E02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXSortOrder;
+			refType = 4;
+		};
+		F6E798BF02C8799401AD0D07 = {
+			children = (
+				F59C540102C4555D01000102,
+				F59C57E202C4565701000102,
+				F59C557402C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXStringListPicker;
+			refType = 4;
+		};
+		F6E798C002C8799401AD0D07 = {
+			children = (
+				F59C540202C4555D01000102,
+				F59C57E402C4565701000102,
+				F59C557A02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXStringWithLineBreaks;
+			refType = 4;
+		};
+		F6E798C102C8799401AD0D07 = {
+			children = (
+				F59C540302C4555D01000102,
+				F59C57E502C4565701000102,
+				F59C558002C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXStyleSheet;
+			refType = 4;
+		};
+		F6E798C202C8799401AD0D07 = {
+			children = (
+				F59C540402C4555D01000102,
+				F59C57E602C4565701000102,
+				F59C558602C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXSuccess;
+			refType = 4;
+		};
+		F6E798C302C8799401AD0D07 = {
+			children = (
+				F59C540702C4555D01000102,
+				F59C57E902C4565701000102,
+				F59C559802C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXTabPanel;
+			refType = 4;
+		};
+		F6E798C402C8799401AD0D07 = {
+			children = (
+				F59C540502C4555D01000102,
+				F59C57E702C4565701000102,
+				F59C558C02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXTable;
+			refType = 4;
+		};
+		F6E798C502C8799401AD0D07 = {
+			children = (
+				F59C540602C4555D01000102,
+				F59C57E802C4565701000102,
+				F59C559202C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXTableWithBorder;
+			refType = 4;
+		};
+		F6E798C602C8799401AD0D07 = {
+			children = (
+				F59C540802C4555D01000102,
+				F59C57EE02C4565701000102,
+				F59C559E02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXToManyRelationship;
+			refType = 4;
+		};
+		F6E798C702C8799401AD0D07 = {
+			children = (
+				F59C540902C4555D01000102,
+				F59C57EF02C4565701000102,
+				F59C55A402C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXToOneRelationship;
+			refType = 4;
+		};
+		F6E798C802C8799401AD0D07 = {
+			children = (
+				F59C540A02C4555D01000102,
+				F59C57F002C4565701000102,
+				F59C55AA02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXUnreadMarker;
+			refType = 4;
+		};
+		F6E798C902C8799401AD0D07 = {
+			children = (
+				F6E798A102C8799401AD0D07,
+				F6E798A202C8799401AD0D07,
+				F6E798A302C8799401AD0D07,
+				F6E798A402C8799401AD0D07,
+				F6E798A502C8799401AD0D07,
+				FB1D3BECDADD387139FB5274,
+				F6E798A602C8799401AD0D07,
+				F6E798A702C8799401AD0D07,
+				F6E798A802C8799401AD0D07,
+				F6E798A902C8799401AD0D07,
+				F6E798AA02C8799401AD0D07,
+				F6E798AB02C8799401AD0D07,
+				F6E798AC02C8799401AD0D07,
+				F6E798AD02C8799401AD0D07,
+				F6E798AE02C8799401AD0D07,
+				F6E798AF02C8799401AD0D07,
+				F6E798B002C8799401AD0D07,
+				F6E798B102C8799401AD0D07,
+				F6E798B202C8799401AD0D07,
+				F6E798B302C8799401AD0D07,
+				F6E798B402C8799401AD0D07,
+				F6E798B502C8799401AD0D07,
+				F6E798B602C8799401AD0D07,
+				F6E798B702C8799401AD0D07,
+				F6E798B802C8799401AD0D07,
+				F6E798B902C8799401AD0D07,
+				F6E798BA02C8799401AD0D07,
+				F6E798BB02C8799401AD0D07,
+				F6E798BC02C8799401AD0D07,
+				F6E798BD02C8799401AD0D07,
+				F6E798BE02C8799401AD0D07,
+				F6E798BF02C8799401AD0D07,
+				F6E798C002C8799401AD0D07,
+				F6E798C102C8799401AD0D07,
+				F6E798C202C8799401AD0D07,
+				F6E798C302C8799401AD0D07,
+				F6E798C402C8799401AD0D07,
+				F6E798C502C8799401AD0D07,
+				F6E798C602C8799401AD0D07,
+				F6E798C702C8799401AD0D07,
+				F6E798C802C8799401AD0D07,
+			);
+			isa = PBXGroup;
+			name = "Misc WOComponents";
+			refType = 4;
+		};
+		F6E798CA02C8799401AD0D07 = {
+			children = (
+				F59C579A02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "Principal Class";
+			refType = 4;
+		};
+		F6E798CB02C8799401AD0D07 = {
+			children = (
+				F59C579502C4565701000102,
+				F59C57CF02C4565701000102,
+				F59C57D102C4565701000102,
+				F59C57D202C4565701000102,
+				F59C57D302C4565701000102,
+			);
+			isa = PBXGroup;
+			name = Qualifiers;
+			refType = 4;
+		};
+		F6E798CC02C8799401AD0D07 = {
+			children = (
+				F59C578102C4565601000102,
+				F59C578302C4565701000102,
+				F59C579C02C4565701000102,
+				F59C57BD02C4565701000102,
+				F59C57C802C4565701000102,
+				F59C57DE02C4565701000102,
+				F59C57EC02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = Utilities;
+			refType = 4;
+		};
+		F6E798CD02C8799401AD0D07 = {
+			children = (
+				F59C577802C4565601000102,
+				F59C578902C4565701000102,
+				F59C57C202C4565701000102,
+				F59C57D902C4565701000102,
+				F59C57DA02C4565701000102,
+				F59C57E102C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "WOF Additions";
+			refType = 4;
+		};
+		F6E798CE02C8799401AD0D07 = {
+			children = (
+				F59C57C302C4565701000102,
+				F59C57C902C4565701000102,
+				F59C57CA02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "WOF Delegates";
+			refType = 4;
+		};
+		F6E798CF02C8799401AD0D07 = {
+			children = (
+				F59C579902C4565701000102,
+				F59C57DB02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = "WOF Interfaces";
+			refType = 4;
+		};
+		F6E798D002C8799401AD0D07 = {
+			children = (
+				F59C53D302C4555D01000102,
+				F59C577C02C4565601000102,
+				F59C545402C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXCheckboxMatrix;
+			refType = 4;
+		};
+		F6E798D102C8799401AD0D07 = {
+			children = (
+				F59C53FD02C4555D01000102,
+				F59C57D602C4565701000102,
+				F59C555C02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXRadioButtonMatrix;
+			refType = 4;
+		};
+		F6E798D202C8799401AD0D07 = {
+			children = (
+				F6E798D002C8799401AD0D07,
+				F6E798D102C8799401AD0D07,
+				F59C57DC02C4565701000102,
+			);
+			isa = PBXGroup;
+			name = Workarounds/Bugfixes;
+			refType = 4;
+		};
+//F60
+//F61
+//F62
+//F63
+//F64
+//FB0
+//FB1
+//FB2
+//FB3
+//FB4
+		FB127CDA7CF8FC97D2D297B5 = {
+			children = (
+				F59C53E502C4555D01000102,
+				F59C57A902C4565701000102,
+				F59C54CC02C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXInstanceOfConditional;
+			refType = 4;
+		};
+		FB13D999F9BE5AD29792D4FB = {
+			children = (
+				F59C53EC02C4555D01000102,
+				F59C57B002C4565701000102,
+				F59C54F602C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSPopUpRelationPicker;
+			refType = 4;
+		};
+		FB1D3BECDADD387139FB5274 = {
+			children = (
+				F59C578A02C4565701000102,
+				F59C547202C4557A01000102,
+			);
+			isa = PBXGroup;
+			name = ERXDirectActionHyperlink;
+			refType = 4;
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;

@@ -30,7 +30,6 @@
 		};
 		666256D40203C81E00CEE8E5 = {
 			children = (
-				F5B4426E02C50C3601000102,
 				F54C4B1A02C4DF3A01000102,
 				666256F30203C81E00CEE8E5,
 				6662570E0203C81E00CEE8E5,
@@ -144,7 +143,6 @@
 				6662574B0203C81E00CEE8E5,
 				6662574C0203C81E00CEE8E5,
 				F59C855102350F4301000102,
-				F5B4439402C5123701000102,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -515,7 +513,6 @@
 				F54C4B5702C4DF3A01000102,
 				F54C4B5802C4DF3A01000102,
 				F54C4C6002C4E41301000102,
-				F5B4426F02C50C3601000102,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -538,7 +535,6 @@
 				666257B50203C81E00CEE8E5,
 				666257B60203C81E00CEE8E5,
 				666257B70203C81E00CEE8E5,
-				F5B4439602C5123701000102,
 			);
 			isa = PBXFrameworksBuildPhase;
 		};
@@ -2390,29 +2386,6 @@
 		};
 		F59C855702350F4301000102 = {
 			fileRef = F59C855102350F4301000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5B4426E02C50C3601000102 = {
-			isa = PBXFileReference;
-			name = _PBXProjectWatcher.java;
-			path = /Volumes/Home/Jobs/Sources/webobjects/ERExtrasJava/_PBXProjectWatcher.java;
-			refType = 0;
-		};
-		F5B4426F02C50C3601000102 = {
-			fileRef = F5B4426E02C50C3601000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5B4439402C5123701000102 = {
-			isa = PBXFrameworkReference;
-			path = ERExtras.framework;
-			refType = 3;
-		};
-		F5B4439602C5123701000102 = {
-			fileRef = F5B4439402C5123701000102;
 			isa = PBXBuildFile;
 			settings = {
 			};

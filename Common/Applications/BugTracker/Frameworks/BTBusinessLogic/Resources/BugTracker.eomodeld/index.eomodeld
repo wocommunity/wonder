@@ -212,7 +212,7 @@
         {className = er.bugtracker.Bug; name = Bug; }, 
         {className = er.bugtracker.Component; name = Component; }, 
         {className = er.bugtracker.Difficulty; name = Difficulty; }, 
-        {className = EOGenericRecord; name = EOPrototypes; }, 
+        {className = EOGenericRecord; name = EOJDBCPrototypes; }, 
         {className = er.bugtracker.Framework; name = Framework; }, 
         {className = er.bugtracker.People; name = People; }, 
         {className = er.bugtracker.Priority; name = Priority; }, 
@@ -248,6 +248,6 @@
             created = "2002-03-05 18:21:02 +0100 by ak"; 
             lastSaved = "2002-03-05 18:21:02 +0100 by ak"; 
         }; 
-        modificationDate = "2002-06-23 00:04:16 +0200"; 
+        modificationDate = "2002-06-24 17:39:38 +0200"; 
     }; 
 }

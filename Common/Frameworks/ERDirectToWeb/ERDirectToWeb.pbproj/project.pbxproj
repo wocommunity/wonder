@@ -1362,6 +1362,18 @@
 		};
 		F542066202C467DF01000102 = {
 			children = (
+				F6E7963602C877AF01AD0D07,
+				F6E7963A02C877AF01AD0D07,
+				F6E7963B02C877AF01AD0D07,
+				F6E7964102C877AF01AD0D07,
+				F6E7964202C877AF01AD0D07,
+				F6E7964302C877AF01AD0D07,
+				F6E7965402C877AF01AD0D07,
+				F6E7966902C877AF01AD0D07,
+				F6E7966A02C877AF01AD0D07,
+				F6E7967D02C877AF01AD0D07,
+				F6E796A502C877AF01AD0D07,
+				F6E796A702C877AF01AD0D07,
 				F542066302C467DF01000102,
 				F542066702C467DF01000102,
 			);
@@ -1388,7 +1400,6 @@
 		};
 		F542066502C467DF01000102 = {
 			children = (
-				F542066602C467DF01000102,
 			);
 			isa = PBXGroup;
 			path = directtoweb;
@@ -1396,8 +1407,9 @@
 		};
 		F542066602C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WUtilities.java;
-			refType = 4;
+			name = ERD2WUtilities.java;
+			path = Sources/com/webobjects/directtoweb/ERD2WUtilities.java;
+			refType = 2;
 		};
 		F542066702C467DF01000102 = {
 			children = (
@@ -1410,190 +1422,24 @@
 		F542066802C467DF01000102 = {
 			children = (
 				F542066902C467DF01000102,
-				F542066A02C467DF01000102,
-				F542066B02C467DF01000102,
-				F542066C02C467DF01000102,
 				F542066D02C467DF01000102,
-				F542066E02C467DF01000102,
-				F542066F02C467DF01000102,
-				F542067002C467DF01000102,
-				F542067102C467DF01000102,
-				F542067202C467DF01000102,
-				F542067302C467DF01000102,
-				F542067402C467DF01000102,
 				F542067502C467DF01000102,
-				F542067602C467DF01000102,
-				F542067702C467DF01000102,
-				F542067802C467DF01000102,
-				F542067902C467DF01000102,
-				F542067A02C467DF01000102,
-				F542067B02C467DF01000102,
-				F542067C02C467DF01000102,
-				F542067D02C467DF01000102,
-				F542067E02C467DF01000102,
-				F542067F02C467DF01000102,
-				F542068002C467DF01000102,
-				F542068102C467DF01000102,
-				F542068202C467DF01000102,
-				F542068302C467DF01000102,
-				F542068402C467DF01000102,
-				F542068502C467DF01000102,
-				F542068602C467DF01000102,
-				F542068702C467DF01000102,
-				F542068802C467DF01000102,
-				F542068902C467DF01000102,
-				F542068A02C467DF01000102,
-				F542068B02C467DF01000102,
 				F542068C02C467DF01000102,
-				F542068D02C467DF01000102,
-				F542068E02C467DF01000102,
-				F542068F02C467DF01000102,
-				F542069002C467DF01000102,
-				F542069102C467DF01000102,
-				F542069202C467DF01000102,
-				F542069302C467DF01000102,
-				F542069402C467DF01000102,
-				F542069502C467DF01000102,
-				F542069602C467DF01000102,
-				F542069702C467DF01000102,
+				F542068902C467DF01000102,
 				F542069802C467DF01000102,
-				F542069902C467DF01000102,
-				F542069A02C467DF01000102,
-				F542069B02C467DF01000102,
-				F542069C02C467DF01000102,
-				F542069D02C467DF01000102,
-				F542069E02C467DF01000102,
-				F542069F02C467DF01000102,
 				F54206A002C467DF01000102,
-				F54206A102C467DF01000102,
-				F54206A202C467DF01000102,
-				F54206A302C467DF01000102,
 				F54206A402C467DF01000102,
-				F54206A502C467DF01000102,
-				F54206A602C467DF01000102,
-				F54206A702C467DF01000102,
-				F54206A802C467DF01000102,
-				F54206A902C467E001000102,
-				F54206AA02C467E001000102,
-				F54206AB02C467E001000102,
-				F54206AC02C467E001000102,
 				F54206AD02C467E001000102,
-				F54206AE02C467E001000102,
 				F54206AF02C467E001000102,
-				F54206B002C467E001000102,
-				F54206B102C467E001000102,
-				F54206B202C467E001000102,
-				F54206B302C467E001000102,
-				F54206B402C467E001000102,
-				F54206B502C467E001000102,
-				F54206B602C467E001000102,
-				F54206B702C467E001000102,
-				F54206B802C467E001000102,
 				F54206B902C467E001000102,
-				F54206BA02C467E001000102,
-				F54206BB02C467E001000102,
-				F54206BC02C467E001000102,
-				F54206BD02C467E001000102,
-				F54206BE02C467E001000102,
-				F54206BF02C467E001000102,
 				F54206C002C467E001000102,
-				F54206C102C467E001000102,
-				F54206C202C467E001000102,
-				F54206C302C467E001000102,
-				F54206C402C467E001000102,
-				F54206C502C467E001000102,
-				F54206C602C467E001000102,
-				F54206C702C467E001000102,
-				F54206C802C467E001000102,
-				F54206C902C467E001000102,
-				F54206CA02C467E001000102,
-				F54206CB02C467E001000102,
-				F54206CC02C467E001000102,
-				F54206CD02C467E001000102,
-				F54206CE02C467E001000102,
-				F54206CF02C467E001000102,
-				F54206D002C467E001000102,
-				F54206D102C467E001000102,
-				F54206D202C467E001000102,
-				F54206D302C467E001000102,
-				F54206D402C467E001000102,
-				F54206D502C467E001000102,
-				F54206D602C467E001000102,
-				F54206D702C467E001000102,
-				F54206D802C467E001000102,
-				F54206D902C467E001000102,
 				F54206DA02C467E001000102,
-				F54206DB02C467E001000102,
-				F54206DC02C467E001000102,
-				F54206DD02C467E001000102,
-				F54206DE02C467E001000102,
 				F54206DF02C467E001000102,
-				F54206E002C467E001000102,
-				F54206E102C467E001000102,
-				F54206E202C467E001000102,
-				F54206E302C467E001000102,
-				F54206E402C467E001000102,
-				F54206E502C467E001000102,
-				F54206E602C467E001000102,
-				F54206E702C467E001000102,
-				F54206E802C467E001000102,
-				F54206E902C467E001000102,
-				F54206EA02C467E001000102,
-				F54206EB02C467E001000102,
-				F54206EC02C467E001000102,
-				F54206ED02C467E001000102,
-				F54206EE02C467E001000102,
-				F54206EF02C467E001000102,
-				F54206F002C467E001000102,
-				F54206F102C467E001000102,
-				F54206F202C467E001000102,
-				F54206F302C467E001000102,
-				F54206F402C467E001000102,
-				F54206F502C467E001000102,
-				F54206F602C467E001000102,
-				F54206F702C467E001000102,
-				F54206F802C467E001000102,
-				F54206F902C467E001000102,
-				F54206FA02C467E001000102,
-				F54206FB02C467E001000102,
-				F54206FC02C467E001000102,
-				F54206FD02C467E001000102,
-				F54206FE02C467E001000102,
-				F54206FF02C467E001000102,
-				F542070002C467E001000102,
 				F542070102C467E001000102,
 				F542070202C467E001000102,
 				F542070302C467E001000102,
-				F542070402C467E001000102,
-				F542070502C467E001000102,
-				F542070602C467E001000102,
-				F542070702C467E001000102,
-				F542070802C467E001000102,
-				F542070902C467E001000102,
-				F542070A02C467E001000102,
-				F542070B02C467E001000102,
-				F542070C02C467E001000102,
 				F542070D02C467E001000102,
-				F542070E02C467E001000102,
-				F542070F02C467E001000102,
-				F542071002C467E001000102,
-				F542071102C467E001000102,
-				F542071202C467E001000102,
-				F542071302C467E001000102,
-				F542071402C467E001000102,
-				F542071502C467E001000102,
-				F542071602C467E001000102,
 				F542071702C467E001000102,
-				F542071802C467E001000102,
-				F542071902C467E001000102,
-				F542071A02C467E001000102,
-				F542071B02C467E001000102,
-				F542071C02C467E001000102,
-				F542071D02C467E001000102,
-				F542071E02C467E001000102,
-				F542071F02C467E001000102,
-				F542072002C467E001000102,
-				F542072102C467E001000102,
 				F542072202C467E001000102,
 			);
 			isa = PBXGroup;
@@ -1602,933 +1448,1119 @@
 		};
 		F542066902C467DF01000102 = {
 			isa = PBXFileReference;
-			path = D2WPick.java;
-			refType = 4;
+			name = D2WPick.java;
+			path = Sources/er/directtoweb/D2WPick.java;
+			refType = 2;
 		};
 		F542066A02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCalendarPage.java;
-			refType = 4;
+			name = ERD2WCalendarPage.java;
+			path = Sources/er/directtoweb/ERD2WCalendarPage.java;
+			refType = 2;
 		};
 		F542066B02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCompactInspectPageTemplate.java;
-			refType = 4;
+			name = ERD2WCompactInspectPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WCompactInspectPageTemplate.java;
+			refType = 2;
 		};
 		F542066C02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCompactListPageTemplate.java;
-			refType = 4;
+			name = ERD2WCompactListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WCompactListPageTemplate.java;
+			refType = 2;
 		};
 		F542066D02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WConfirmPage.java;
-			refType = 4;
+			name = ERD2WConfirmPage.java;
+			path = Sources/er/directtoweb/ERD2WConfirmPage.java;
+			refType = 2;
 		};
 		F542066E02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WConfirmPageTemplate.java;
-			refType = 4;
+			name = ERD2WConfirmPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WConfirmPageTemplate.java;
+			refType = 2;
 		};
 		F542066F02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WContainer.java;
-			refType = 4;
+			name = ERD2WContainer.java;
+			path = Sources/er/directtoweb/ERD2WContainer.java;
+			refType = 2;
 		};
 		F542067002C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCSVGroupingListPageTemplate.java;
-			refType = 4;
+			name = ERD2WCSVGroupingListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WCSVGroupingListPageTemplate.java;
+			refType = 2;
 		};
 		F542067102C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCSVListPageTemplate.java;
-			refType = 4;
+			name = ERD2WCSVListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WCSVListPageTemplate.java;
+			refType = 2;
 		};
 		F542067202C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCustomComponentWithArgs.java;
-			refType = 4;
+			name = ERD2WCustomComponentWithArgs.java;
+			path = Sources/er/directtoweb/ERD2WCustomComponentWithArgs.java;
+			refType = 2;
 		};
 		F542067302C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCustomDisplayBoolean.java;
-			refType = 4;
+			name = ERD2WCustomDisplayBoolean.java;
+			path = Sources/er/directtoweb/ERD2WCustomDisplayBoolean.java;
+			refType = 2;
 		};
 		F542067402C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCustomEditBoolean.java;
-			refType = 4;
+			name = ERD2WCustomEditBoolean.java;
+			path = Sources/er/directtoweb/ERD2WCustomEditBoolean.java;
+			refType = 2;
 		};
 		F542067502C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WCustomQueryComponentWithArgs.java;
-			refType = 4;
+			name = ERD2WCustomQueryComponentWithArgs.java;
+			path = Sources/er/directtoweb/ERD2WCustomQueryComponentWithArgs.java;
+			refType = 2;
 		};
 		F542067602C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDirectAction.java;
-			refType = 4;
+			name = ERD2WDirectAction.java;
+			path = Sources/er/directtoweb/ERD2WDirectAction.java;
+			refType = 2;
 		};
 		F542067702C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayAddress.java;
-			refType = 4;
+			name = ERD2WDisplayAddress.java;
+			path = Sources/er/directtoweb/ERD2WDisplayAddress.java;
+			refType = 2;
 		};
 		F542067802C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayConstant.java;
-			refType = 4;
+			name = ERD2WDisplayConstant.java;
+			path = Sources/er/directtoweb/ERD2WDisplayConstant.java;
+			refType = 2;
 		};
 		F542067902C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayDateOrNull.java;
-			refType = 4;
+			name = ERD2WDisplayDateOrNull.java;
+			path = Sources/er/directtoweb/ERD2WDisplayDateOrNull.java;
+			refType = 2;
 		};
 		F542067A02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayHTML.java;
-			refType = 4;
+			name = ERD2WDisplayHTML.java;
+			path = Sources/er/directtoweb/ERD2WDisplayHTML.java;
+			refType = 2;
 		};
 		F542067B02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayImage.java;
-			refType = 4;
+			name = ERD2WDisplayImage.java;
+			path = Sources/er/directtoweb/ERD2WDisplayImage.java;
+			refType = 2;
 		};
 		F542067C02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayImageWithUrl.java;
-			refType = 4;
+			name = ERD2WDisplayImageWithUrl.java;
+			path = Sources/er/directtoweb/ERD2WDisplayImageWithUrl.java;
+			refType = 2;
 		};
 		F542067D02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayList.java;
-			refType = 4;
+			name = ERD2WDisplayList.java;
+			path = Sources/er/directtoweb/ERD2WDisplayList.java;
+			refType = 2;
 		};
 		F542067E02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayNumberWithUnit.java;
-			refType = 4;
+			name = ERD2WDisplayNumberWithUnit.java;
+			path = Sources/er/directtoweb/ERD2WDisplayNumberWithUnit.java;
+			refType = 2;
 		};
 		F542067F02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayPassword.java;
-			refType = 4;
+			name = ERD2WDisplayPassword.java;
+			path = Sources/er/directtoweb/ERD2WDisplayPassword.java;
+			refType = 2;
 		};
 		F542068002C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayString.java;
-			refType = 4;
+			name = ERD2WDisplayString.java;
+			path = Sources/er/directtoweb/ERD2WDisplayString.java;
+			refType = 2;
 		};
 		F542068102C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayStringWithLineBreaks.java;
-			refType = 4;
+			name = ERD2WDisplayStringWithLineBreaks.java;
+			path = Sources/er/directtoweb/ERD2WDisplayStringWithLineBreaks.java;
+			refType = 2;
 		};
 		F542068202C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayTextFromHTML.java;
-			refType = 4;
+			name = ERD2WDisplayTextFromHTML.java;
+			path = Sources/er/directtoweb/ERD2WDisplayTextFromHTML.java;
+			refType = 2;
 		};
 		F542068302C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayToManyCustom.java;
-			refType = 4;
+			name = ERD2WDisplayToManyCustom.java;
+			path = Sources/er/directtoweb/ERD2WDisplayToManyCustom.java;
+			refType = 2;
 		};
 		F542068402C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayToManyList.java;
-			refType = 4;
+			name = ERD2WDisplayToManyList.java;
+			path = Sources/er/directtoweb/ERD2WDisplayToManyList.java;
+			refType = 2;
 		};
 		F542068502C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayToManyTable.java;
-			refType = 4;
+			name = ERD2WDisplayToManyTable.java;
+			path = Sources/er/directtoweb/ERD2WDisplayToManyTable.java;
+			refType = 2;
 		};
 		F542068602C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayToOne.java;
-			refType = 4;
+			name = ERD2WDisplayToOne.java;
+			path = Sources/er/directtoweb/ERD2WDisplayToOne.java;
+			refType = 2;
 		};
 		F542068702C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayURL.java;
-			refType = 4;
+			name = ERD2WDisplayURL.java;
+			path = Sources/er/directtoweb/ERD2WDisplayURL.java;
+			refType = 2;
 		};
 		F542068802C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WDisplayYesNo.java;
-			refType = 4;
+			name = ERD2WDisplayYesNo.java;
+			path = Sources/er/directtoweb/ERD2WDisplayYesNo.java;
+			refType = 2;
 		};
 		F542068902C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditableListPage.java;
-			refType = 4;
+			name = ERD2WEditableListPage.java;
+			path = Sources/er/directtoweb/ERD2WEditableListPage.java;
+			refType = 2;
 		};
 		F542068A02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditableListTemplate.java;
-			refType = 4;
+			name = ERD2WEditableListTemplate.java;
+			path = Sources/er/directtoweb/ERD2WEditableListTemplate.java;
+			refType = 2;
 		};
 		F542068B02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditAllowRestrict.java;
-			refType = 4;
+			name = ERD2WEditAllowRestrict.java;
+			path = Sources/er/directtoweb/ERD2WEditAllowRestrict.java;
+			refType = 2;
 		};
 		F542068C02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditDateJavascript.java;
-			refType = 4;
+			name = ERD2WEditDateJavascript.java;
+			path = Sources/er/directtoweb/ERD2WEditDateJavascript.java;
+			refType = 2;
 		};
 		F542068D02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditLargeString.java;
-			refType = 4;
+			name = ERD2WEditLargeString.java;
+			path = Sources/er/directtoweb/ERD2WEditLargeString.java;
+			refType = 2;
 		};
 		F542068E02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditNumber.java;
-			refType = 4;
+			name = ERD2WEditNumber.java;
+			path = Sources/er/directtoweb/ERD2WEditNumber.java;
+			refType = 2;
 		};
 		F542068F02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditNumberWithUnit.java;
-			refType = 4;
+			name = ERD2WEditNumberWithUnit.java;
+			path = Sources/er/directtoweb/ERD2WEditNumberWithUnit.java;
+			refType = 2;
 		};
 		F542069002C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditOrDefault.java;
-			refType = 4;
+			name = ERD2WEditOrDefault.java;
+			path = Sources/er/directtoweb/ERD2WEditOrDefault.java;
+			refType = 2;
 		};
 		F542069102C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditPercentage.java;
-			refType = 4;
+			name = ERD2WEditPercentage.java;
+			path = Sources/er/directtoweb/ERD2WEditPercentage.java;
+			refType = 2;
 		};
 		F542069202C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditString.java;
-			refType = 4;
+			name = ERD2WEditString.java;
+			path = Sources/er/directtoweb/ERD2WEditString.java;
+			refType = 2;
 		};
 		F542069302C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditToManyRelationship.java;
-			refType = 4;
+			name = ERD2WEditToManyRelationship.java;
+			path = Sources/er/directtoweb/ERD2WEditToManyRelationship.java;
+			refType = 2;
 		};
 		F542069402C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditToOneRelationship.java;
-			refType = 4;
+			name = ERD2WEditToOneRelationship.java;
+			path = Sources/er/directtoweb/ERD2WEditToOneRelationship.java;
+			refType = 2;
 		};
 		F542069502C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditURL.java;
-			refType = 4;
+			name = ERD2WEditURL.java;
+			path = Sources/er/directtoweb/ERD2WEditURL.java;
+			refType = 2;
 		};
 		F542069602C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WEditYesNo.java;
-			refType = 4;
+			name = ERD2WEditYesNo.java;
+			path = Sources/er/directtoweb/ERD2WEditYesNo.java;
+			refType = 2;
 		};
 		F542069702C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WFactory.java;
-			refType = 4;
+			name = ERD2WFactory.java;
+			path = Sources/er/directtoweb/ERD2WFactory.java;
+			refType = 2;
 		};
 		F542069802C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WGroupingListPage.java;
-			refType = 4;
+			name = ERD2WGroupingListPage.java;
+			path = Sources/er/directtoweb/ERD2WGroupingListPage.java;
+			refType = 2;
 		};
 		F542069902C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WGroupingListPageTemplate.java;
-			refType = 4;
+			name = ERD2WGroupingListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WGroupingListPageTemplate.java;
+			refType = 2;
 		};
 		F542069A02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WGroupingListXMLPageTemplate.java;
-			refType = 4;
+			name = ERD2WGroupingListXMLPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WGroupingListXMLPageTemplate.java;
+			refType = 2;
 		};
 		F542069B02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WGroupingPrinterFriendlyListPageTemplate.java;
-			refType = 4;
+			name = ERD2WGroupingPrinterFriendlyListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WGroupingPrinterFriendlyListPageTemplate.java;
+			refType = 2;
 		};
 		F542069C02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WInspect.java;
-			refType = 4;
+			name = ERD2WInspect.java;
+			path = Sources/er/directtoweb/ERD2WInspect.java;
+			refType = 2;
 		};
 		F542069D02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WInspectPage.java;
-			refType = 4;
+			name = ERD2WInspectPage.java;
+			path = Sources/er/directtoweb/ERD2WInspectPage.java;
+			refType = 2;
 		};
 		F542069E02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WInspectPageTemplate.java;
-			refType = 4;
+			name = ERD2WInspectPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WInspectPageTemplate.java;
+			refType = 2;
 		};
 		F542069F02C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WKeyMapper.java;
-			refType = 4;
+			name = ERD2WKeyMapper.java;
+			path = Sources/er/directtoweb/ERD2WKeyMapper.java;
+			refType = 2;
 		};
 		F54206A002C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WListComparePage.java;
-			refType = 4;
+			name = ERD2WListComparePage.java;
+			path = Sources/er/directtoweb/ERD2WListComparePage.java;
+			refType = 2;
 		};
 		F54206A102C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WListComparePageTemplate.java;
-			refType = 4;
+			name = ERD2WListComparePageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WListComparePageTemplate.java;
+			refType = 2;
 		};
 		F54206A202C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WListPage.java;
-			refType = 4;
+			name = ERD2WListPage.java;
+			path = Sources/er/directtoweb/ERD2WListPage.java;
+			refType = 2;
 		};
 		F54206A302C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WListPageTemplate.java;
-			refType = 4;
+			name = ERD2WListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WListPageTemplate.java;
+			refType = 2;
 		};
 		F54206A402C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WListXMLPage.java;
-			refType = 4;
+			name = ERD2WListXMLPage.java;
+			path = Sources/er/directtoweb/ERD2WListXMLPage.java;
+			refType = 2;
 		};
 		F54206A502C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WListXMLPageTemplate.java;
-			refType = 4;
+			name = ERD2WListXMLPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WListXMLPageTemplate.java;
+			refType = 2;
 		};
 		F54206A602C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WMessagePage.java;
-			refType = 4;
+			name = ERD2WMessagePage.java;
+			path = Sources/er/directtoweb/ERD2WMessagePage.java;
+			refType = 2;
 		};
 		F54206A702C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WMessagePageTemplate.java;
-			refType = 4;
+			name = ERD2WMessagePageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WMessagePageTemplate.java;
+			refType = 2;
 		};
 		F54206A802C467DF01000102 = {
 			isa = PBXFileReference;
-			path = ERD2WModel.java;
-			refType = 4;
+			name = ERD2WModel.java;
+			path = Sources/er/directtoweb/ERD2WModel.java;
+			refType = 2;
 		};
 		F54206A902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPage.java;
-			refType = 4;
+			name = ERD2WPage.java;
+			path = Sources/er/directtoweb/ERD2WPage.java;
+			refType = 2;
 		};
 		F54206AA02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPick.java;
-			refType = 4;
+			name = ERD2WPick.java;
+			path = Sources/er/directtoweb/ERD2WPick.java;
+			refType = 2;
 		};
 		F54206AB02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPickFromEntities.java;
-			refType = 4;
+			name = ERD2WPickFromEntities.java;
+			path = Sources/er/directtoweb/ERD2WPickFromEntities.java;
+			refType = 2;
 		};
 		F54206AC02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPickFromList.java;
-			refType = 4;
+			name = ERD2WPickFromList.java;
+			path = Sources/er/directtoweb/ERD2WPickFromList.java;
+			refType = 2;
 		};
 		F54206AD02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPickListPage.java;
-			refType = 4;
+			name = ERD2WPickListPage.java;
+			path = Sources/er/directtoweb/ERD2WPickListPage.java;
+			refType = 2;
 		};
 		F54206AE02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPickListPageTemplate.java;
-			refType = 4;
+			name = ERD2WPickListPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WPickListPageTemplate.java;
+			refType = 2;
 		};
 		F54206AF02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPickTypePage.java;
-			refType = 4;
+			name = ERD2WPickTypePage.java;
+			path = Sources/er/directtoweb/ERD2WPickTypePage.java;
+			refType = 2;
 		};
 		F54206B002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPickTypePageTemplate.java;
-			refType = 4;
+			name = ERD2WPickTypePageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WPickTypePageTemplate.java;
+			refType = 2;
 		};
 		F54206B102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPopUp.java;
-			refType = 4;
+			name = ERD2WPopUp.java;
+			path = Sources/er/directtoweb/ERD2WPopUp.java;
+			refType = 2;
 		};
 		F54206B202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPrinterFriendlyInspectPageTemplate.java;
-			refType = 4;
+			name = ERD2WPrinterFriendlyInspectPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WPrinterFriendlyInspectPageTemplate.java;
+			refType = 2;
 		};
 		F54206B302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPrinterFriendlyListTemplate.java;
-			refType = 4;
+			name = ERD2WPrinterFriendlyListTemplate.java;
+			path = Sources/er/directtoweb/ERD2WPrinterFriendlyListTemplate.java;
+			refType = 2;
 		};
 		F54206B402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WPropertyName.java;
-			refType = 4;
+			name = ERD2WPropertyName.java;
+			path = Sources/er/directtoweb/ERD2WPropertyName.java;
+			refType = 2;
 		};
 		F54206B502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WQueryNonNull.java;
-			refType = 4;
+			name = ERD2WQueryNonNull.java;
+			path = Sources/er/directtoweb/ERD2WQueryNonNull.java;
+			refType = 2;
 		};
 		F54206B602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WQueryPage.java;
-			refType = 4;
+			name = ERD2WQueryPage.java;
+			path = Sources/er/directtoweb/ERD2WQueryPage.java;
+			refType = 2;
 		};
 		F54206B702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WQueryPageTemplate.java;
-			refType = 4;
+			name = ERD2WQueryPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WQueryPageTemplate.java;
+			refType = 2;
 		};
 		F54206B802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WQueryPageWithFetchSpecification.java;
-			refType = 4;
+			name = ERD2WQueryPageWithFetchSpecification.java;
+			path = Sources/er/directtoweb/ERD2WQueryPageWithFetchSpecification.java;
+			refType = 2;
 		};
 		F54206B902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WQueryPageWithFetchSpecificationTemplate.java;
-			refType = 4;
+			name = ERD2WQueryPageWithFetchSpecificationTemplate.java;
+			path = Sources/er/directtoweb/ERD2WQueryPageWithFetchSpecificationTemplate.java;
+			refType = 2;
 		};
 		F54206BA02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WQueryToOneRelationship.java;
-			refType = 4;
+			name = ERD2WQueryToOneRelationship.java;
+			path = Sources/er/directtoweb/ERD2WQueryToOneRelationship.java;
+			refType = 2;
 		};
 		F54206BB02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WStatelessCustomComponentWithArgs.java;
-			refType = 4;
+			name = ERD2WStatelessCustomComponentWithArgs.java;
+			path = Sources/er/directtoweb/ERD2WStatelessCustomComponentWithArgs.java;
+			refType = 2;
 		};
 		F54206BC02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WSwitchComponent.java;
-			refType = 4;
+			name = ERD2WSwitchComponent.java;
+			path = Sources/er/directtoweb/ERD2WSwitchComponent.java;
+			refType = 2;
 		};
 		F54206BD02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WTabInspectPage.java;
-			refType = 4;
+			name = ERD2WTabInspectPage.java;
+			path = Sources/er/directtoweb/ERD2WTabInspectPage.java;
+			refType = 2;
 		};
 		F54206BE02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WTabInspectPageTemplate.java;
-			refType = 4;
+			name = ERD2WTabInspectPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WTabInspectPageTemplate.java;
+			refType = 2;
 		};
 		F54206BF02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WTwoLevelEditToOneRelationship.java;
-			refType = 4;
+			name = ERD2WTwoLevelEditToOneRelationship.java;
+			path = Sources/er/directtoweb/ERD2WTwoLevelEditToOneRelationship.java;
+			refType = 2;
 		};
 		F54206C002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WWizardCreationPage.java;
-			refType = 4;
+			name = ERD2WWizardCreationPage.java;
+			path = Sources/er/directtoweb/ERD2WWizardCreationPage.java;
+			refType = 2;
 		};
 		F54206C102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WWizardCreationPageTemplate.java;
-			refType = 4;
+			name = ERD2WWizardCreationPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WWizardCreationPageTemplate.java;
+			refType = 2;
 		};
 		F54206C202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WXMLDisplayNumber.java;
-			refType = 4;
+			name = ERD2WXMLDisplayNumber.java;
+			path = Sources/er/directtoweb/ERD2WXMLDisplayNumber.java;
+			refType = 2;
 		};
 		F54206C302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WXMLDisplayString.java;
-			refType = 4;
+			name = ERD2WXMLDisplayString.java;
+			path = Sources/er/directtoweb/ERD2WXMLDisplayString.java;
+			refType = 2;
 		};
 		F54206C402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERD2WXMLDisplayToMany.java;
-			refType = 4;
+			name = ERD2WXMLDisplayToMany.java;
+			path = Sources/er/directtoweb/ERD2WXMLDisplayToMany.java;
+			refType = 2;
 		};
 		F54206C502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDAssignment.java;
-			refType = 4;
+			name = ERDAssignment.java;
+			path = Sources/er/directtoweb/ERDAssignment.java;
+			refType = 2;
 		};
 		F54206C602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDBranchDelegate.java;
-			refType = 4;
+			name = ERDBranchDelegate.java;
+			path = Sources/er/directtoweb/ERDBranchDelegate.java;
+			refType = 2;
 		};
 		F54206C702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDBranchInterface.java;
-			refType = 4;
+			name = ERDBranchInterface.java;
+			path = Sources/er/directtoweb/ERDBranchInterface.java;
+			refType = 2;
 		};
 		F54206C802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDComputingAssignmentInterface.java;
-			refType = 4;
+			name = ERDComputingAssignmentInterface.java;
+			path = Sources/er/directtoweb/ERDComputingAssignmentInterface.java;
+			refType = 2;
 		};
 		F54206C902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDConfigurationAssignment.java;
-			refType = 4;
+			name = ERDConfigurationAssignment.java;
+			path = Sources/er/directtoweb/ERDConfigurationAssignment.java;
+			refType = 2;
 		};
 		F54206CA02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDConfirmMessage.java;
-			refType = 4;
+			name = ERDConfirmMessage.java;
+			path = Sources/er/directtoweb/ERDConfirmMessage.java;
+			refType = 2;
 		};
 		F54206CB02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDConfirmObjectDelegate.java;
-			refType = 4;
+			name = ERDConfirmObjectDelegate.java;
+			path = Sources/er/directtoweb/ERDConfirmObjectDelegate.java;
+			refType = 2;
 		};
 		F54206CC02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDConfirmObjectWasSavedDelegate.java;
-			refType = 4;
+			name = ERDConfirmObjectWasSavedDelegate.java;
+			path = Sources/er/directtoweb/ERDConfirmObjectWasSavedDelegate.java;
+			refType = 2;
 		};
 		F54206CD02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDCustomComponent.java;
-			refType = 4;
+			name = ERDCustomComponent.java;
+			path = Sources/er/directtoweb/ERDCustomComponent.java;
+			refType = 2;
 		};
 		F54206CE02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDCustomEditComponent.java;
-			refType = 4;
+			name = ERDCustomEditComponent.java;
+			path = Sources/er/directtoweb/ERDCustomEditComponent.java;
+			refType = 2;
 		};
 		F54206CF02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDCustomQueryComponent.java;
-			refType = 4;
+			name = ERDCustomQueryComponent.java;
+			path = Sources/er/directtoweb/ERDCustomQueryComponent.java;
+			refType = 2;
 		};
 		F54206D002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDCustomQueryComponentWithArgs.java;
-			refType = 4;
+			name = ERDCustomQueryComponentWithArgs.java;
+			path = Sources/er/directtoweb/ERDCustomQueryComponentWithArgs.java;
+			refType = 2;
 		};
 		F54206D102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDebuggingHelp.java;
-			refType = 4;
+			name = ERDDebuggingHelp.java;
+			path = Sources/er/directtoweb/ERDDebuggingHelp.java;
+			refType = 2;
 		};
 		F54206D202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultCancelCreationMessageAssignment.java;
-			refType = 4;
+			name = ERDDefaultCancelCreationMessageAssignment.java;
+			path = Sources/er/directtoweb/ERDDefaultCancelCreationMessageAssignment.java;
+			refType = 2;
 		};
 		F54206D302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultCustomComponent.java;
-			refType = 4;
+			name = ERDDefaultCustomComponent.java;
+			path = Sources/er/directtoweb/ERDDefaultCustomComponent.java;
+			refType = 2;
 		};
 		F54206D402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultEntityNameAssignment.java;
-			refType = 4;
+			name = ERDDefaultEntityNameAssignment.java;
+			path = Sources/er/directtoweb/ERDDefaultEntityNameAssignment.java;
+			refType = 2;
 		};
 		F54206D502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultPropertyNameAssignment.java;
-			refType = 4;
+			name = ERDDefaultPropertyNameAssignment.java;
+			path = Sources/er/directtoweb/ERDDefaultPropertyNameAssignment.java;
+			refType = 2;
 		};
 		F54206D602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultsAssignment.java;
-			refType = 4;
+			name = ERDDefaultsAssignment.java;
+			path = Sources/er/directtoweb/ERDDefaultsAssignment.java;
+			refType = 2;
 		};
 		F54206D702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultSectionComponent.java;
-			refType = 4;
+			name = ERDDefaultSectionComponent.java;
+			path = Sources/er/directtoweb/ERDDefaultSectionComponent.java;
+			refType = 2;
 		};
 		F54206D802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultSectionComponentCSV.java;
-			refType = 4;
+			name = ERDDefaultSectionComponentCSV.java;
+			path = Sources/er/directtoweb/ERDDefaultSectionComponentCSV.java;
+			refType = 2;
 		};
 		F54206D902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultSectionComponentPrinterFriendly.java;
-			refType = 4;
+			name = ERDDefaultSectionComponentPrinterFriendly.java;
+			path = Sources/er/directtoweb/ERDDefaultSectionComponentPrinterFriendly.java;
+			refType = 2;
 		};
 		F54206DA02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDefaultsEmbeddedAssignment.java;
-			refType = 4;
+			name = ERDDefaultsEmbeddedAssignment.java;
+			path = Sources/er/directtoweb/ERDDefaultsEmbeddedAssignment.java;
+			refType = 2;
 		};
 		F54206DB02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDelayedAssignment.java;
-			refType = 4;
+			name = ERDDelayedAssignment.java;
+			path = Sources/er/directtoweb/ERDDelayedAssignment.java;
+			refType = 2;
 		};
 		F54206DC02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDelayedBooleanAssignment.java;
-			refType = 4;
+			name = ERDDelayedBooleanAssignment.java;
+			path = Sources/er/directtoweb/ERDDelayedBooleanAssignment.java;
+			refType = 2;
 		};
 		F54206DD02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDelayedConditionalAssignment.java;
-			refType = 4;
+			name = ERDDelayedConditionalAssignment.java;
+			path = Sources/er/directtoweb/ERDDelayedConditionalAssignment.java;
+			refType = 2;
 		};
 		F54206DE02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDelayedKeyValueAssignment.java;
-			refType = 4;
+			name = ERDDelayedKeyValueAssignment.java;
+			path = Sources/er/directtoweb/ERDDelayedKeyValueAssignment.java;
+			refType = 2;
 		};
 		F54206DF02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDelayedNonNullConditionalAssignment.java;
-			refType = 4;
+			name = ERDDelayedNonNullConditionalAssignment.java;
+			path = Sources/er/directtoweb/ERDDelayedNonNullConditionalAssignment.java;
+			refType = 2;
 		};
 		F54206E002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDelayedRuleAssignment.java;
-			refType = 4;
+			name = ERDDelayedRuleAssignment.java;
+			path = Sources/er/directtoweb/ERDDelayedRuleAssignment.java;
+			refType = 2;
 		};
 		F54206E102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDeletionDelegate.java;
-			refType = 4;
+			name = ERDDeletionDelegate.java;
+			path = Sources/er/directtoweb/ERDDeletionDelegate.java;
+			refType = 2;
 		};
 		F54206E202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDHTMLComponent.java;
-			refType = 4;
+			name = ERDDHTMLComponent.java;
+			path = Sources/er/directtoweb/ERDDHTMLComponent.java;
+			refType = 2;
 		};
 		F54206E302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDisplayImageIfExists.java;
-			refType = 4;
+			name = ERDDisplayImageIfExists.java;
+			path = Sources/er/directtoweb/ERDDisplayImageIfExists.java;
+			refType = 2;
 		};
 		F54206E402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDisplayMailTo.java;
-			refType = 4;
+			name = ERDDisplayMailTo.java;
+			path = Sources/er/directtoweb/ERDDisplayMailTo.java;
+			refType = 2;
 		};
 		F54206E502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDisplayNumberWithUnit.java;
-			refType = 4;
+			name = ERDDisplayNumberWithUnit.java;
+			path = Sources/er/directtoweb/ERDDisplayNumberWithUnit.java;
+			refType = 2;
 		};
 		F54206E602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDDisplayYearsMonths.java;
-			refType = 4;
+			name = ERDDisplayYearsMonths.java;
+			path = Sources/er/directtoweb/ERDDisplayYearsMonths.java;
+			refType = 2;
 		};
 		F54206E702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditButton.java;
-			refType = 4;
+			name = ERDEditButton.java;
+			path = Sources/er/directtoweb/ERDEditButton.java;
+			refType = 2;
 		};
 		F54206E802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditDateJavascript.java;
-			refType = 4;
+			name = ERDEditDateJavascript.java;
+			path = Sources/er/directtoweb/ERDEditDateJavascript.java;
+			refType = 2;
 		};
 		F54206E902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditDatePopup.java;
-			refType = 4;
+			name = ERDEditDatePopup.java;
+			path = Sources/er/directtoweb/ERDEditDatePopup.java;
+			refType = 2;
 		};
 		F54206EA02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditDatePopupCommon.java;
-			refType = 4;
+			name = ERDEditDatePopupCommon.java;
+			path = Sources/er/directtoweb/ERDEditDatePopupCommon.java;
+			refType = 2;
 		};
 		F54206EB02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditDatePopupOrNull.java;
-			refType = 4;
+			name = ERDEditDatePopupOrNull.java;
+			path = Sources/er/directtoweb/ERDEditDatePopupOrNull.java;
+			refType = 2;
 		};
 		F54206EC02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditList.java;
-			refType = 4;
+			name = ERDEditList.java;
+			path = Sources/er/directtoweb/ERDEditList.java;
+			refType = 2;
 		};
 		F54206ED02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditListButton.java;
-			refType = 4;
+			name = ERDEditListButton.java;
+			path = Sources/er/directtoweb/ERDEditListButton.java;
+			refType = 2;
 		};
 		F54206EE02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditOwnedRelationship.java;
-			refType = 4;
+			name = ERDEditOwnedRelationship.java;
+			path = Sources/er/directtoweb/ERDEditOwnedRelationship.java;
+			refType = 2;
 		};
 		F54206EF02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditPageInterface.java;
-			refType = 4;
+			name = ERDEditPageInterface.java;
+			path = Sources/er/directtoweb/ERDEditPageInterface.java;
+			refType = 2;
 		};
 		F54206F002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditPasswordConfirm.java;
-			refType = 4;
+			name = ERDEditPasswordConfirm.java;
+			path = Sources/er/directtoweb/ERDEditPasswordConfirm.java;
+			refType = 2;
 		};
 		F54206F102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditStringWithChoices.java;
-			refType = 4;
+			name = ERDEditStringWithChoices.java;
+			path = Sources/er/directtoweb/ERDEditStringWithChoices.java;
+			refType = 2;
 		};
 		F54206F202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEditYearsMonths.java;
-			refType = 4;
+			name = ERDEditYearsMonths.java;
+			path = Sources/er/directtoweb/ERDEditYearsMonths.java;
+			refType = 2;
 		};
 		F54206F302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEmptyListMessage.java;
-			refType = 4;
+			name = ERDEmptyListMessage.java;
+			path = Sources/er/directtoweb/ERDEmptyListMessage.java;
+			refType = 2;
 		};
 		F54206F402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEmptyPageWrapper.java;
-			refType = 4;
+			name = ERDEmptyPageWrapper.java;
+			path = Sources/er/directtoweb/ERDEmptyPageWrapper.java;
+			refType = 2;
 		};
 		F54206F502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDEntityAssignment.java;
-			refType = 4;
+			name = ERDEntityAssignment.java;
+			path = Sources/er/directtoweb/ERDEntityAssignment.java;
+			refType = 2;
 		};
 		F54206F602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDFilterDisplayGroupButton.java;
-			refType = 4;
+			name = ERDFilterDisplayGroupButton.java;
+			path = Sources/er/directtoweb/ERDFilterDisplayGroupButton.java;
+			refType = 2;
 		};
 		F54206F702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDFollowPageInterface.java;
-			refType = 4;
+			name = ERDFollowPageInterface.java;
+			path = Sources/er/directtoweb/ERDFollowPageInterface.java;
+			refType = 2;
 		};
 		F54206F802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDImageNameAssignment.java;
-			refType = 4;
+			name = ERDImageNameAssignment.java;
+			path = Sources/er/directtoweb/ERDImageNameAssignment.java;
+			refType = 2;
 		};
 		F54206F902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDInspect.java;
-			refType = 4;
+			name = ERDInspect.java;
+			path = Sources/er/directtoweb/ERDInspect.java;
+			refType = 2;
 		};
 		F54206FA02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDirectToWeb.java;
-			refType = 4;
+			name = ERDirectToWeb.java;
+			path = Sources/er/directtoweb/ERDirectToWeb.java;
+			refType = 2;
 		};
 		F54206FB02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDIsKindOfEntityQualifier.java;
-			refType = 4;
+			name = ERDIsKindOfEntityQualifier.java;
+			path = Sources/er/directtoweb/ERDIsKindOfEntityQualifier.java;
+			refType = 2;
 		};
 		F54206FC02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDKeyValueAssignment.java;
-			refType = 4;
+			name = ERDKeyValueAssignment.java;
+			path = Sources/er/directtoweb/ERDKeyValueAssignment.java;
+			refType = 2;
 		};
 		F54206FD02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDLinkToViewList.java;
-			refType = 4;
+			name = ERDLinkToViewList.java;
+			path = Sources/er/directtoweb/ERDLinkToViewList.java;
+			refType = 2;
 		};
 		F54206FE02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDList.java;
-			refType = 4;
+			name = ERDList.java;
+			path = Sources/er/directtoweb/ERDList.java;
+			refType = 2;
 		};
 		F54206FF02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDListOrganizer.java;
-			refType = 4;
+			name = ERDListOrganizer.java;
+			path = Sources/er/directtoweb/ERDListOrganizer.java;
+			refType = 2;
 		};
 		F542070002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDListPicker.java;
-			refType = 4;
+			name = ERDListPicker.java;
+			path = Sources/er/directtoweb/ERDListPicker.java;
+			refType = 2;
 		};
 		F542070102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDLocalizableAssignmentInterface.java;
-			refType = 4;
+			name = ERDLocalizableAssignmentInterface.java;
+			path = Sources/er/directtoweb/ERDLocalizableAssignmentInterface.java;
+			refType = 2;
 		};
 		F542070202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDLocalizedAssignment.java;
-			refType = 4;
+			name = ERDLocalizedAssignment.java;
+			path = Sources/er/directtoweb/ERDLocalizedAssignment.java;
+			refType = 2;
 		};
 		F542070302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDLocalizedMessageAssignment.java;
-			refType = 4;
+			name = ERDLocalizedMessageAssignment.java;
+			path = Sources/er/directtoweb/ERDLocalizedMessageAssignment.java;
+			refType = 2;
 		};
 		F542070402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDMassModifyButton.java;
-			refType = 4;
+			name = ERDMassModifyButton.java;
+			path = Sources/er/directtoweb/ERDMassModifyButton.java;
+			refType = 2;
 		};
 		F542070502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDMessagePageInterface.java;
-			refType = 4;
+			name = ERDMessagePageInterface.java;
+			path = Sources/er/directtoweb/ERDMessagePageInterface.java;
+			refType = 2;
 		};
 		F542070602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDNullQualifier.java;
-			refType = 4;
+			name = ERDNullQualifier.java;
+			path = Sources/er/directtoweb/ERDNullQualifier.java;
+			refType = 2;
 		};
 		F542070702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDObjectSaverInterface.java;
-			refType = 4;
+			name = ERDObjectSaverInterface.java;
+			path = Sources/er/directtoweb/ERDObjectSaverInterface.java;
+			refType = 2;
 		};
 		F542070802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDPageDelegate.java;
-			refType = 4;
+			name = ERDPageDelegate.java;
+			path = Sources/er/directtoweb/ERDPageDelegate.java;
+			refType = 2;
 		};
 		F542070902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDPageNameDelegate.java;
-			refType = 4;
+			name = ERDPageNameDelegate.java;
+			path = Sources/er/directtoweb/ERDPageNameDelegate.java;
+			refType = 2;
 		};
 		F542070A02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDPickPageInterface.java;
-			refType = 4;
+			name = ERDPickPageInterface.java;
+			path = Sources/er/directtoweb/ERDPickPageInterface.java;
+			refType = 2;
 		};
 		F542070B02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDPrinterButton.java;
-			refType = 4;
+			name = ERDPrinterButton.java;
+			path = Sources/er/directtoweb/ERDPrinterButton.java;
+			refType = 2;
 		};
 		F542070C02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDPrinterFriendlyWrapper.java;
-			refType = 4;
+			name = ERDPrinterFriendlyWrapper.java;
+			path = Sources/er/directtoweb/ERDPrinterFriendlyWrapper.java;
+			refType = 2;
 		};
 		F542070D02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDQueryDateRangeJavascript.java;
-			refType = 4;
+			name = ERDQueryDateRangeJavascript.java;
+			path = Sources/er/directtoweb/ERDQueryDateRangeJavascript.java;
+			refType = 2;
 		};
 		F542070E02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDQuestionPage.java;
-			refType = 4;
+			name = ERDQuestionPage.java;
+			path = Sources/er/directtoweb/ERDQuestionPage.java;
+			refType = 2;
 		};
 		F542070F02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDRecoverableErrorPage.java;
-			refType = 4;
+			name = ERDRecoverableErrorPage.java;
+			path = Sources/er/directtoweb/ERDRecoverableErrorPage.java;
+			refType = 2;
 		};
 		F542071002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDRelationshipSortAssignment.java;
-			refType = 4;
+			name = ERDRelationshipSortAssignment.java;
+			path = Sources/er/directtoweb/ERDRelationshipSortAssignment.java;
+			refType = 2;
 		};
 		F542071102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDSectionImage.java;
-			refType = 4;
+			name = ERDSectionImage.java;
+			path = Sources/er/directtoweb/ERDSectionImage.java;
+			refType = 2;
 		};
 		F542071202C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDSectionText.java;
-			refType = 4;
+			name = ERDSectionText.java;
+			path = Sources/er/directtoweb/ERDSectionText.java;
+			refType = 2;
 		};
 		F542071302C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDSmartAttributeAssignment.java;
-			refType = 4;
+			name = ERDSmartAttributeAssignment.java;
+			path = Sources/er/directtoweb/ERDSmartAttributeAssignment.java;
+			refType = 2;
 		};
 		F542071402C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDSmartRelationshipAssignment.java;
-			refType = 4;
+			name = ERDSmartRelationshipAssignment.java;
+			path = Sources/er/directtoweb/ERDSmartRelationshipAssignment.java;
+			refType = 2;
 		};
 		F542071502C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTabConfigurationAssignment.java;
-			refType = 4;
+			name = ERDTabConfigurationAssignment.java;
+			path = Sources/er/directtoweb/ERDTabConfigurationAssignment.java;
+			refType = 2;
 		};
 		F542071602C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTabDictionaryComputer.java;
-			refType = 4;
+			name = ERDTabDictionaryComputer.java;
+			path = Sources/er/directtoweb/ERDTabDictionaryComputer.java;
+			refType = 2;
 		};
 		F542071702C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTabEditPageInterface.java;
-			refType = 4;
+			name = ERDTabEditPageInterface.java;
+			path = Sources/er/directtoweb/ERDTabEditPageInterface.java;
+			refType = 2;
 		};
 		F542071802C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTabImage.java;
-			refType = 4;
+			name = ERDTabImage.java;
+			path = Sources/er/directtoweb/ERDTabImage.java;
+			refType = 2;
 		};
 		F542071902C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTabSectionsContentsAssignment.java;
-			refType = 4;
+			name = ERDTabSectionsContentsAssignment.java;
+			path = Sources/er/directtoweb/ERDTabSectionsContentsAssignment.java;
+			refType = 2;
 		};
 		F542071A02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTabText.java;
-			refType = 4;
+			name = ERDTabText.java;
+			path = Sources/er/directtoweb/ERDTabText.java;
+			refType = 2;
 		};
 		F542071B02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDTrashcan.java;
-			refType = 4;
+			name = ERDTrashcan.java;
+			path = Sources/er/directtoweb/ERDTrashcan.java;
+			refType = 2;
 		};
 		F542071C02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDUnitResolverAssignment.java;
-			refType = 4;
+			name = ERDUnitResolverAssignment.java;
+			path = Sources/er/directtoweb/ERDUnitResolverAssignment.java;
+			refType = 2;
 		};
 		F542071D02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDUserInfoInterface.java;
-			refType = 4;
+			name = ERDUserInfoInterface.java;
+			path = Sources/er/directtoweb/ERDUserInfoInterface.java;
+			refType = 2;
 		};
 		F542071E02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERDXMLPageWrapper.java;
-			refType = 4;
+			name = ERDXMLPageWrapper.java;
+			path = Sources/er/directtoweb/ERDXMLPageWrapper.java;
+			refType = 2;
 		};
 		F542071F02C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERXD2WInspect.java;
-			refType = 4;
+			name = ERXD2WInspect.java;
+			path = Sources/er/directtoweb/ERXD2WInspect.java;
+			refType = 2;
 		};
 		F542072002C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERXD2WList.java;
-			refType = 4;
+			name = ERXD2WList.java;
+			path = Sources/er/directtoweb/ERXD2WList.java;
+			refType = 2;
 		};
 		F542072102C467E001000102 = {
 			isa = PBXFileReference;
-			path = ERXD2WPick.java;
-			refType = 4;
+			name = ERXD2WPick.java;
+			path = Sources/er/directtoweb/ERXD2WPick.java;
+			refType = 2;
 		};
 		F542072202C467E001000102 = {
 			isa = PBXFileReference;
-			path = KeyValueCodingProtectedAccessor.java;
-			refType = 4;
+			name = KeyValueCodingProtectedAccessor.java;
+			path = Sources/er/directtoweb/KeyValueCodingProtectedAccessor.java;
+			refType = 2;
 		};
 		F542072302C467E001000102 = {
 			fileRef = F542066602C467DF01000102;
@@ -5166,241 +5198,17 @@
 		};
 		F59C5CD402C4663B01000102 = {
 			children = (
-				F542FDCC02C466C501000102,
-				F542FDD202C466C501000102,
-				F542FDD802C466C501000102,
-				F542FDDE02C466C501000102,
-				F542FDE402C466C501000102,
-				F542FDEA02C466C501000102,
-				F542FDF002C466C501000102,
-				F542FDF602C466C501000102,
-				F542FDFC02C466C501000102,
-				F542FE0202C466C501000102,
-				F542FE0802C466C501000102,
-				F542FE0E02C466C501000102,
-				F542FE1402C466C501000102,
-				F542FE1A02C466C501000102,
-				F542FE2002C466C501000102,
-				F542FE2602C466C501000102,
-				F542FE2C02C466C501000102,
-				F542FE3202C466C501000102,
-				F542FE3802C466C501000102,
-				F542FE3E02C466C501000102,
-				F542FE4402C466C501000102,
-				F542FE4A02C466C501000102,
-				F542FE5002C466C501000102,
-				F542FE5602C466C501000102,
-				F542FE5C02C466C501000102,
-				F542FE6202C466C501000102,
-				F542FE6802C466C501000102,
-				F542FE6E02C466C501000102,
-				F542FE7402C466C501000102,
-				F542FE7A02C466C501000102,
-				F542FE8002C466C501000102,
-				F542FE8602C466C501000102,
-				F542FE8C02C466C501000102,
-				F542FE9202C466C501000102,
-				F542FE9802C466C501000102,
-				F542FE9E02C466C501000102,
-				F542FEA302C466C501000102,
-				F542FEA902C466C501000102,
-				F542FEAF02C466C501000102,
-				F542FEB502C466C501000102,
-				F542FEBB02C466C501000102,
-				F542FEC102C466C501000102,
-				F542FEC702C466C501000102,
-				F542FECD02C466C501000102,
-				F542FED302C466C501000102,
-				F542FED902C466C501000102,
-				F542FEDF02C466C501000102,
-				F542FEE502C466C501000102,
-				F542FEEB02C466C501000102,
-				F542FEF102C466C501000102,
-				F542FEF702C466C501000102,
-				F542FEFD02C466C501000102,
-				F542FF0302C466C501000102,
-				F542FF0C02C466C601000102,
-				F542FF1202C466C601000102,
-				F542FF1802C466C601000102,
-				F542FF1E02C466C601000102,
-				F542FF2402C466C601000102,
-				F542FF2A02C466C601000102,
-				F542FF3002C466C601000102,
-				F542FF3602C466C601000102,
-				F542FF3C02C466C601000102,
-				F542FF4202C466C601000102,
-				F542FF4802C466C601000102,
-				F542FF4E02C466C601000102,
-				F542FF5402C466C601000102,
-				F542FF5A02C466C601000102,
-				F542FF6002C466C601000102,
-				F542FF6602C466C601000102,
-				F542FF6C02C466C601000102,
-				F542FF7202C466C601000102,
-				F542FF7802C466C601000102,
-				F542FF7E02C466C601000102,
-				F542FF8402C466C601000102,
-				F542FF8A02C466C601000102,
-				F542FF9002C466C601000102,
-				F542FF9602C466C601000102,
-				F542FF9C02C466C601000102,
-				F542FFA202C466C601000102,
-				F542FFA802C466C601000102,
-				F542FFAE02C466C601000102,
-				F542FFB402C466C601000102,
-				F542FFBA02C466C601000102,
-				F542FFC002C466C601000102,
-				F542FFC602C466C601000102,
-				F542FFCC02C466C601000102,
-				F542FFD202C466C601000102,
-				F542FFD802C466C601000102,
-				F542FFDE02C466C601000102,
-				F542FFE402C466C601000102,
-				F542FFEA02C466C601000102,
-				F542FFF002C466C601000102,
-				F542FFF602C466C601000102,
-				F542FFFC02C466C601000102,
-				F542000202C466C601000102,
-				F542000802C466C601000102,
-				F542000E02C466C601000102,
-				F542001402C466C601000102,
-				F542001A02C466C601000102,
-				F542002002C466C601000102,
-				F542002602C466C601000102,
-				F542002C02C466C601000102,
-				F542003202C466C601000102,
-				F542003802C466C601000102,
-				F542003E02C466C601000102,
-				F542004402C466C601000102,
-				F542004A02C466C601000102,
-				F542005002C466C601000102,
-				F542005602C466C601000102,
-				F542005C02C466C601000102,
-				F542006202C466C601000102,
-				F542006802C466C601000102,
-				F542006E02C466C601000102,
-				F542007402C466C601000102,
-				F542007A02C466C601000102,
-				F542008002C466C601000102,
-				F542008602C466C601000102,
-				F542008C02C466C601000102,
-				F59C5CD602C4667101000102,
-				F59C5CD702C4667101000102,
-				F59C5CD802C4667101000102,
-				F59C5CD902C4667101000102,
-				F59C5CDA02C4667101000102,
-				F59C5CDB02C4667101000102,
-				F59C5CDC02C4667101000102,
-				F59C5CDD02C4667101000102,
-				F59C5CDE02C4667101000102,
-				F59C5CDF02C4667101000102,
-				F59C5CE002C4667101000102,
-				F59C5CE102C4667101000102,
-				F59C5CE202C4667101000102,
-				F59C5CE302C4667101000102,
-				F59C5CE402C4667101000102,
-				F59C5CE502C4667101000102,
 				F59C5CE602C4667201000102,
-				F59C5CE702C4667201000102,
-				F59C5CE802C4667201000102,
-				F59C5CE902C4667201000102,
-				F59C5CEA02C4667201000102,
-				F59C5CEB02C4667201000102,
-				F59C5CEC02C4667201000102,
-				F59C5CED02C4667201000102,
-				F59C5CEE02C4667201000102,
-				F59C5CEF02C4667201000102,
-				F59C5CF002C4667201000102,
-				F59C5CF102C4667201000102,
-				F59C5CF202C4667201000102,
-				F59C5CF302C4667201000102,
+				F542FE2602C466C501000102,
 				F59C5CF402C4667201000102,
-				F59C5CF502C4667201000102,
-				F59C5CF602C4667201000102,
+				F542FE7A02C466C501000102,
 				F59C5CF702C4667201000102,
-				F59C5CF802C4667201000102,
-				F59C5CF902C4667201000102,
-				F59C5CFA02C4667201000102,
-				F59C5CFB02C4667201000102,
-				F59C5CFC02C4667201000102,
-				F59C5CFD02C4667201000102,
-				F59C5CFE02C4667201000102,
-				F59C5CFF02C4667201000102,
-				F59C5D0002C4667201000102,
-				F59C5D0102C4667301000102,
-				F59C5D0202C4667301000102,
-				F59C5D0302C4667301000102,
-				F59C5D0402C4667301000102,
-				F59C5D0502C4667301000102,
-				F59C5D0602C4667301000102,
-				F59C5D0702C4667301000102,
-				F59C5D0802C4667301000102,
-				F59C5D0902C4667301000102,
-				F59C5D0A02C4667301000102,
-				F59C5D0B02C4667301000102,
-				F59C5D0C02C4667301000102,
-				F59C5D0D02C4667301000102,
-				F59C5D0E02C4667301000102,
-				F59C5D0F02C4667301000102,
-				F59C5D1002C4667301000102,
-				F59C5D1102C4667301000102,
-				F59C5D1202C4667301000102,
-				F59C5D1302C4667301000102,
-				F59C5D1402C4667301000102,
-				F59C5D1502C4667301000102,
+				F542FE8C02C466C501000102,
+				F542FEE502C466C501000102,
 				F59C5D1602C4667301000102,
-				F59C5D1702C4667301000102,
-				F59C5D1802C4667301000102,
-				F59C5D1902C4667301000102,
-				F59C5D1A02C4667301000102,
-				F59C5D1B02C4667301000102,
-				F59C5D1C02C4667301000102,
-				F59C5D1D02C4667401000102,
-				F59C5D1E02C4667401000102,
-				F59C5D1F02C4667401000102,
-				F59C5D2002C4667401000102,
-				F59C5D2102C4667401000102,
-				F59C5D2202C4667401000102,
-				F59C5D2302C4667401000102,
-				F59C5D2402C4667401000102,
-				F59C5D2502C4667401000102,
-				F59C5D2602C4667401000102,
-				F59C5D2702C4667401000102,
-				F59C5D2802C4667401000102,
-				F59C5D2902C4667401000102,
-				F59C5D2A02C4667401000102,
-				F59C5D2B02C4667401000102,
-				F59C5D2C02C4667401000102,
-				F59C5D2D02C4667401000102,
-				F59C5D2E02C4667401000102,
-				F59C5D2F02C4667401000102,
-				F59C5D3002C4667401000102,
-				F59C5D3102C4667401000102,
-				F59C5D3202C4667401000102,
-				F59C5D3302C4667401000102,
-				F59C5D3402C4667401000102,
-				F59C5D3502C4667401000102,
-				F59C5D3602C4667401000102,
-				F59C5D3702C4667501000102,
-				F59C5D3802C4667501000102,
-				F59C5D3902C4667501000102,
-				F59C5D3A02C4667501000102,
-				F59C5D3B02C4667501000102,
-				F59C5D3C02C4667501000102,
-				F59C5D3D02C4667501000102,
-				F59C5D3E02C4667501000102,
-				F59C5D3F02C4667501000102,
+				F542FF4E02C466C601000102,
 				F59C5D4002C4667501000102,
-				F59C5D4102C4667501000102,
-				F59C5D4202C4667501000102,
-				F59C5D4302C4667501000102,
-				F59C5D4402C4667501000102,
-				F59C5D4502C4667501000102,
-				F59C5D4602C4667501000102,
-				F59C5D4702C4667501000102,
-				F59C5D4802C4667501000102,
-				F59C5D4902C4667501000102,
-				F59C5D4A02C4667501000102,
+				F542004A02C466C601000102,
 			);
 			isa = PBXGroup;
 			name = Components;
@@ -6836,13 +6644,13 @@
 		};
 		F5A143A001FF7F8801A80106 = {
 			children = (
-				F542066202C467DF01000102,
 				F59C5CD402C4663B01000102,
-				F5A144BD01FF7F8801A80106,
-				F5A1452D01FF7F8801A80106,
-				F5A1453B01FF7F8801A80106,
 				F54202E202C466E501000102,
+				F5A1453B01FF7F8801A80106,
 				F5A1454901FF7F8801A80106,
+				F5A144BD01FF7F8801A80106,
+				F542066202C467DF01000102,
+				F5A1452D01FF7F8801A80106,
 			);
 			isa = PBXGroup;
 			name = ERDirectToWeb;
@@ -6850,11 +6658,11 @@
 		};
 		F5A144BD01FF7F8801A80106 = {
 			children = (
-				F542046C02C4672F01000102,
-				F542046E02C4672F01000102,
-				F542046602C4671901000102,
 				F542046702C4671901000102,
+				F542046E02C4672F01000102,
+				F542046C02C4672F01000102,
 				F542046802C4671901000102,
+				F542046602C4671901000102,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -6862,11 +6670,11 @@
 		};
 		F5A1452D01FF7F8801A80106 = {
 			children = (
+				F542047A02C4674D01000102,
 				F542047602C4674D01000102,
 				F542047702C4674D01000102,
 				F542047802C4674D01000102,
 				F542047902C4674D01000102,
-				F542047A02C4674D01000102,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -7953,6 +7761,1397 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F60
+//F61
+//F62
+//F63
+//F64
+		F6E7963602C877AF01AD0D07 = {
+			children = (
+				F54206C502C467E001000102,
+				F54206C902C467E001000102,
+				F54206D202C467E001000102,
+				F54206D402C467E001000102,
+				F54206D502C467E001000102,
+				F54206D602C467E001000102,
+				F54206DB02C467E001000102,
+				F54206DC02C467E001000102,
+				F54206DD02C467E001000102,
+				F54206DE02C467E001000102,
+				F54206E002C467E001000102,
+				F54206F502C467E001000102,
+				F54206F802C467E001000102,
+				F54206FC02C467E001000102,
+				F542071002C467E001000102,
+				F542071302C467E001000102,
+				F542071402C467E001000102,
+				F542071502C467E001000102,
+				F542071602C467E001000102,
+				F542071902C467E001000102,
+				F542071C02C467E001000102,
+			);
+			isa = PBXGroup;
+			name = "D2W Assignments";
+			refType = 4;
+		};
+		F6E7963702C877AF01AD0D07 = {
+			children = (
+				F59C5CF602C4667201000102,
+				F542068E02C467DF01000102,
+				F542FE8602C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditNumber;
+			refType = 4;
+		};
+		F6E7963802C877AF01AD0D07 = {
+			children = (
+				F59C5D0502C4667301000102,
+				F542069F02C467DF01000102,
+				F542FEDF02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WKeyMapper;
+			refType = 4;
+		};
+		F6E7963902C877AF01AD0D07 = {
+			children = (
+				F59C5D1902C4667301000102,
+				F54206BC02C467E001000102,
+				F542FF6002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WSwitchComponent;
+			refType = 4;
+		};
+		F6E7963A02C877AF01AD0D07 = {
+			children = (
+				F542066A02C467DF01000102,
+				F542066F02C467DF01000102,
+				F542067602C467DF01000102,
+				F6E7963702C877AF01AD0D07,
+				F542069702C467DF01000102,
+				F542069D02C467DF01000102,
+				F6E7963802C877AF01AD0D07,
+				F54206A202C467DF01000102,
+				F54206A602C467DF01000102,
+				F54206A802C467DF01000102,
+				F54206A902C467E001000102,
+				F54206B602C467E001000102,
+				F6E7963902C877AF01AD0D07,
+				F54206BD02C467E001000102,
+				F542066602C467DF01000102,
+				F54206CD02C467E001000102,
+				F54206CE02C467E001000102,
+				F54206CF02C467E001000102,
+				F54206EA02C467E001000102,
+			);
+			isa = PBXGroup;
+			name = "D2W Base Additions";
+			refType = 4;
+		};
+		F6E7963B02C877AF01AD0D07 = {
+			children = (
+				F54206C602C467E001000102,
+				F54206CB02C467E001000102,
+				F54206CC02C467E001000102,
+				F54206E102C467E001000102,
+				F542070802C467E001000102,
+				F542070902C467E001000102,
+			);
+			isa = PBXGroup;
+			name = "D2W Delegates";
+			refType = 4;
+		};
+		F6E7963C02C877AF01AD0D07 = {
+			children = (
+				F59C5D0302C4667301000102,
+				F542069C02C467DF01000102,
+				F542FED302C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WInspect;
+			refType = 4;
+		};
+		F6E7963D02C877AF01AD0D07 = {
+			children = (
+				F59C5D0A02C4667301000102,
+				F54206AA02C467E001000102,
+				F542FF0302C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPick;
+			refType = 4;
+		};
+		F6E7963E02C877AF01AD0D07 = {
+			children = (
+				F59C5D4902C4667501000102,
+				F542071F02C467E001000102,
+				F542008002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERXD2WInspect;
+			refType = 4;
+		};
+		F6E7963F02C877AF01AD0D07 = {
+			children = (
+				F59C5D4A02C4667501000102,
+				F542072002C467E001000102,
+				F542008602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERXD2WList;
+			refType = 4;
+		};
+		F6E7964002C877AF01AD0D07 = {
+			children = (
+				F59C5CD602C4667101000102,
+				F542072102C467E001000102,
+				F542008C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERXD2WPick;
+			refType = 4;
+		};
+		F6E7964102C877AF01AD0D07 = {
+			children = (
+				F6E7963C02C877AF01AD0D07,
+				F6E7963D02C877AF01AD0D07,
+				F6E7963E02C877AF01AD0D07,
+				F6E7963F02C877AF01AD0D07,
+				F6E7964002C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "D2W Embedded Components";
+			refType = 4;
+		};
+		F6E7964202C877AF01AD0D07 = {
+			children = (
+				F54206C702C467E001000102,
+				F54206C802C467E001000102,
+				F54206EF02C467E001000102,
+				F54206F702C467E001000102,
+				F542070502C467E001000102,
+				F542070702C467E001000102,
+				F542070A02C467E001000102,
+				F542071D02C467E001000102,
+			);
+			isa = PBXGroup;
+			name = "D2W Interfaces";
+			refType = 4;
+		};
+		F6E7964302C877AF01AD0D07 = {
+			children = (
+				F54206FB02C467E001000102,
+				F542070602C467E001000102,
+			);
+			isa = PBXGroup;
+			name = "D2W Qualifiers";
+			refType = 4;
+		};
+		F6E7964402C877AF01AD0D07 = {
+			children = (
+				F59C5D1202C4667301000102,
+				F54206B402C467E001000102,
+				F542FF3602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPropertyName;
+			refType = 4;
+		};
+		F6E7964502C877AF01AD0D07 = {
+			children = (
+				F59C5D2202C4667401000102,
+				F54206D102C467E001000102,
+				F542FF9602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDebuggingHelp;
+			refType = 4;
+		};
+		F6E7964602C877AF01AD0D07 = {
+			children = (
+				F59C5D2402C4667401000102,
+				F54206D702C467E001000102,
+				F542FFA202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDefaultSectionComponent;
+			refType = 4;
+		};
+		F6E7964702C877AF01AD0D07 = {
+			children = (
+				F59C5D2502C4667401000102,
+				F54206D802C467E001000102,
+				F542FFA802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDefaultSectionComponentCSV;
+			refType = 4;
+		};
+		F6E7964802C877AF01AD0D07 = {
+			children = (
+				F59C5D2602C4667401000102,
+				F54206D902C467E001000102,
+				F542FFAE02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDefaultSectionComponentPrinterFriendly;
+			refType = 4;
+		};
+		F6E7964902C877AF01AD0D07 = {
+			children = (
+				F59C5D3502C4667401000102,
+				F54206F302C467E001000102,
+				F542000802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEmptyListMessage;
+			refType = 4;
+		};
+		F6E7964A02C877AF01AD0D07 = {
+			children = (
+				F59C5D3602C4667401000102,
+				F54206F402C467E001000102,
+				F542000E02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEmptyPageWrapper;
+			refType = 4;
+		};
+		F6E7964B02C877AF01AD0D07 = {
+			children = (
+				F59C5D3702C4667501000102,
+				F54206F602C467E001000102,
+				F542001402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDFilterDisplayGroupButton;
+			refType = 4;
+		};
+		F6E7964C02C877AF01AD0D07 = {
+			children = (
+				F59C5D3E02C4667501000102,
+				F542070B02C467E001000102,
+				F542003E02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDPrinterButton;
+			refType = 4;
+		};
+		F6E7964D02C877AF01AD0D07 = {
+			children = (
+				F59C5D3F02C4667501000102,
+				F542070C02C467E001000102,
+				F542004402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDPrinterFriendlyWrapper;
+			refType = 4;
+		};
+		F6E7964E02C877AF01AD0D07 = {
+			children = (
+				F59C5D4302C4667501000102,
+				F542071102C467E001000102,
+				F542005C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDSectionImage;
+			refType = 4;
+		};
+		F6E7964F02C877AF01AD0D07 = {
+			children = (
+				F59C5D4402C4667501000102,
+				F542071202C467E001000102,
+				F542006202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDSectionText;
+			refType = 4;
+		};
+		F6E7965002C877AF01AD0D07 = {
+			children = (
+				F59C5D4502C4667501000102,
+				F542071802C467E001000102,
+				F542006802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDTabImage;
+			refType = 4;
+		};
+		F6E7965102C877AF01AD0D07 = {
+			children = (
+				F59C5D4602C4667501000102,
+				F542071A02C467E001000102,
+				F542006E02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDTabText;
+			refType = 4;
+		};
+		F6E7965202C877AF01AD0D07 = {
+			children = (
+				F59C5D4702C4667501000102,
+				F542071B02C467E001000102,
+				F542007402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDTrashcan;
+			refType = 4;
+		};
+		F6E7965302C877AF01AD0D07 = {
+			children = (
+				F59C5D4802C4667501000102,
+				F542071E02C467E001000102,
+				F542007A02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDXMLPageWrapper;
+			refType = 4;
+		};
+		F6E7965402C877AF01AD0D07 = {
+			children = (
+				F6E7964402C877AF01AD0D07,
+				F6E7964502C877AF01AD0D07,
+				F6E7964602C877AF01AD0D07,
+				F6E7964702C877AF01AD0D07,
+				F6E7964802C877AF01AD0D07,
+				F6E7964902C877AF01AD0D07,
+				F6E7964A02C877AF01AD0D07,
+				F6E7964B02C877AF01AD0D07,
+				F6E7964C02C877AF01AD0D07,
+				F6E7964D02C877AF01AD0D07,
+				F6E7964E02C877AF01AD0D07,
+				F6E7964F02C877AF01AD0D07,
+				F6E7965002C877AF01AD0D07,
+				F6E7965102C877AF01AD0D07,
+				F6E7965202C877AF01AD0D07,
+				F6E7965302C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "D2W Template Piece Components";
+			refType = 4;
+		};
+		F6E7965502C877AF01AD0D07 = {
+			children = (
+				F59C5CDA02C4667101000102,
+				F542067002C467DF01000102,
+				F542FDDE02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCSVGroupingListPageTemplate;
+			refType = 4;
+		};
+		F6E7965602C877AF01AD0D07 = {
+			children = (
+				F59C5CD702C4667101000102,
+				F542066B02C467DF01000102,
+				F542FDCC02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCompactInspectPageTemplate;
+			refType = 4;
+		};
+		F6E7965702C877AF01AD0D07 = {
+			children = (
+				F59C5CD802C4667101000102,
+				F542066C02C467DF01000102,
+				F542FDD202C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCompactListPageTemplate;
+			refType = 4;
+		};
+		F6E7965802C877AF01AD0D07 = {
+			children = (
+				F59C5CF202C4667201000102,
+				F542068A02C467DF01000102,
+				F542FE6E02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditableListTemplate;
+			refType = 4;
+		};
+		F6E7965902C877AF01AD0D07 = {
+			children = (
+				F59C5D0002C4667201000102,
+				F542069902C467DF01000102,
+				F542FEC102C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WGroupingListPageTemplate;
+			refType = 4;
+		};
+		F6E7965A02C877AF01AD0D07 = {
+			children = (
+				F59C5D0102C4667301000102,
+				F542069A02C467DF01000102,
+				F542FEC702C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WGroupingListXMLPageTemplate;
+			refType = 4;
+		};
+		F6E7965B02C877AF01AD0D07 = {
+			children = (
+				F59C5D0202C4667301000102,
+				F542069B02C467DF01000102,
+				F542FECD02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WGroupingPrinterFriendlyListPageTemplate;
+			refType = 4;
+		};
+		F6E7965C02C877AF01AD0D07 = {
+			children = (
+				F59C5D0602C4667301000102,
+				F54206A102C467DF01000102,
+				F542FEEB02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WListComparePageTemplate;
+			refType = 4;
+		};
+		F6E7965D02C877AF01AD0D07 = {
+			children = (
+				F59C5D0702C4667301000102,
+				F54206A302C467DF01000102,
+				F542FEF102C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WListPageTemplate;
+			refType = 4;
+		};
+		F6E7965E02C877AF01AD0D07 = {
+			children = (
+				F59C5D0D02C4667301000102,
+				F54206AE02C467E001000102,
+				F542FF1802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPickListPageTemplate;
+			refType = 4;
+		};
+		F6E7965F02C877AF01AD0D07 = {
+			children = (
+				F59C5D0E02C4667301000102,
+				F54206B002C467E001000102,
+				F542FF1E02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPickTypePageTemplate;
+			refType = 4;
+		};
+		F6E7966002C877AF01AD0D07 = {
+			children = (
+				F59C5D1002C4667301000102,
+				F54206B202C467E001000102,
+				F542FF2A02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPrinterFriendlyInspectPageTemplate;
+			refType = 4;
+		};
+		F6E7966102C877AF01AD0D07 = {
+			children = (
+				F59C5D1102C4667301000102,
+				F54206B302C467E001000102,
+				F542FF3002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPrinterFriendlyListTemplate;
+			refType = 4;
+		};
+		F6E7966202C877AF01AD0D07 = {
+			children = (
+				F59C5D1402C4667301000102,
+				F54206B702C467E001000102,
+				F542FF4202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryPageTemplate;
+			refType = 4;
+		};
+		F6E7966302C877AF01AD0D07 = {
+			children = (
+				F59C5D1502C4667301000102,
+				F54206B802C467E001000102,
+				F542FF4802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryPageWithFetchSpecification;
+			refType = 4;
+		};
+		F6E7966402C877AF01AD0D07 = {
+			children = (
+				F59C5D1A02C4667301000102,
+				F54206BE02C467E001000102,
+				F542FF6602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WTabInspectPageTemplate;
+			refType = 4;
+		};
+		F6E7966502C877AF01AD0D07 = {
+			children = (
+				F59C5D1C02C4667301000102,
+				F54206C102C467E001000102,
+				F542FF7202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WWizardCreationPageTemplate;
+			refType = 4;
+		};
+		F6E7966602C877AF01AD0D07 = {
+			children = (
+				F59C5D2002C4667401000102,
+				F54206CA02C467E001000102,
+				F542FF8A02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDConfirmMessage;
+			refType = 4;
+		};
+		F6E7966702C877AF01AD0D07 = {
+			children = (
+				F59C5D4102C4667501000102,
+				F542070E02C467E001000102,
+				F542005002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDQuestionPage;
+			refType = 4;
+		};
+		F6E7966802C877AF01AD0D07 = {
+			children = (
+				F59C5D4202C4667501000102,
+				F542070F02C467E001000102,
+				F542005602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDRecoverableErrorPage;
+			refType = 4;
+		};
+		F6E7966902C877AF01AD0D07 = {
+			children = (
+				F6E7965502C877AF01AD0D07,
+				FBD20CDF52DD9A0EDE795ADE,
+				F6E7965602C877AF01AD0D07,
+				F6E7965702C877AF01AD0D07,
+				FBD20C97F2B69A0EDE795ADE,
+				F6E7965802C877AF01AD0D07,
+				F6E7965902C877AF01AD0D07,
+				F6E7965A02C877AF01AD0D07,
+				F6E7965B02C877AF01AD0D07,
+				FBD2127C9EDD9A0EDE795ADE,
+				F6E7965C02C877AF01AD0D07,
+				F6E7965D02C877AF01AD0D07,
+				FBD2153CF1759A0EDE795ADE,
+				FBD216FCCA0E9A0EDE795ADE,
+				F6E7965E02C877AF01AD0D07,
+				F6E7965F02C877AF01AD0D07,
+				F6E7966002C877AF01AD0D07,
+				F6E7966102C877AF01AD0D07,
+				F6E7966202C877AF01AD0D07,
+				F6E7966302C877AF01AD0D07,
+				F6E7966402C877AF01AD0D07,
+				F6E7966502C877AF01AD0D07,
+				F6E7966602C877AF01AD0D07,
+				F6E7966702C877AF01AD0D07,
+				F6E7966802C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "D2W Templates";
+			refType = 4;
+		};
+		F6E7966A02C877AF01AD0D07 = {
+			children = (
+				F54206FA02C467E001000102,
+			);
+			isa = PBXGroup;
+			name = "Principal Class";
+			refType = 4;
+		};
+		F6E7966B02C877AF01AD0D07 = {
+			children = (
+				F59C5CDF02C4667101000102,
+				F542067702C467DF01000102,
+				F542FDFC02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayAddress;
+			refType = 4;
+		};
+		F6E7966C02C877AF01AD0D07 = {
+			children = (
+				F59C5CE702C4667201000102,
+				F542067E02C467DF01000102,
+				F542FE2C02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayNumberWithUnit;
+			refType = 4;
+		};
+		F6E7966D02C877AF01AD0D07 = {
+			children = (
+				F59C5D2702C4667401000102,
+				F54206E202C467E001000102,
+				F542FFB402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDHTMLComponent;
+			refType = 4;
+		};
+		F6E7966E02C877AF01AD0D07 = {
+			children = (
+				F59C5D2802C4667401000102,
+				F54206E302C467E001000102,
+				F542FFBA02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDisplayImageIfExists;
+			refType = 4;
+		};
+		F6E7966F02C877AF01AD0D07 = {
+			children = (
+				F59C5D2902C4667401000102,
+				F54206E402C467E001000102,
+				F542FFC002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDisplayMailTo;
+			refType = 4;
+		};
+		F6E7967002C877AF01AD0D07 = {
+			children = (
+				F59C5D2A02C4667401000102,
+				F54206E602C467E001000102,
+				F542FFC602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDisplayYearsMonths;
+			refType = 4;
+		};
+		F6E7967102C877AF01AD0D07 = {
+			children = (
+				F59C5D2B02C4667401000102,
+				F54206E702C467E001000102,
+				F542FFCC02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditButton;
+			refType = 4;
+		};
+		F6E7967202C877AF01AD0D07 = {
+			children = (
+				F59C5D2C02C4667401000102,
+				F54206E802C467E001000102,
+				F542FFD202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditDateJavascript;
+			refType = 4;
+		};
+		F6E7967302C877AF01AD0D07 = {
+			children = (
+				F59C5D2D02C4667401000102,
+				F54206E902C467E001000102,
+				F542FFD802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditDatePopup;
+			refType = 4;
+		};
+		F6E7967402C877AF01AD0D07 = {
+			children = (
+				F59C5D2E02C4667401000102,
+				F54206EB02C467E001000102,
+				F542FFDE02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditDatePopupOrNull;
+			refType = 4;
+		};
+		F6E7967502C877AF01AD0D07 = {
+			children = (
+				F59C5D2F02C4667401000102,
+				F54206EC02C467E001000102,
+				F542FFE402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditList;
+			refType = 4;
+		};
+		F6E7967602C877AF01AD0D07 = {
+			children = (
+				F59C5D3002C4667401000102,
+				F54206ED02C467E001000102,
+				F542FFEA02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditListButton;
+			refType = 4;
+		};
+		F6E7967702C877AF01AD0D07 = {
+			children = (
+				F59C5D3202C4667401000102,
+				F54206F002C467E001000102,
+				F542FFF602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditPasswordConfirm;
+			refType = 4;
+		};
+		F6E7967802C877AF01AD0D07 = {
+			children = (
+				F59C5D3402C4667401000102,
+				F54206F202C467E001000102,
+				F542000202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditYearsMonths;
+			refType = 4;
+		};
+		F6E7967902C877AF01AD0D07 = {
+			children = (
+				F59C5D3902C4667501000102,
+				F54206FD02C467E001000102,
+				F542002002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDLinkToViewList;
+			refType = 4;
+		};
+		F6E7967A02C877AF01AD0D07 = {
+			children = (
+				F59C5D3B02C4667501000102,
+				F54206FF02C467E001000102,
+				F542002C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDListOrganizer;
+			refType = 4;
+		};
+		F6E7967B02C877AF01AD0D07 = {
+			children = (
+				F59C5D3C02C4667501000102,
+				F542070002C467E001000102,
+				F542003202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDListPicker;
+			refType = 4;
+		};
+		F6E7967C02C877AF01AD0D07 = {
+			children = (
+				F59C5D3D02C4667501000102,
+				F542070402C467E001000102,
+				F542003802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDMassModifyButton;
+			refType = 4;
+		};
+		F6E7967D02C877AF01AD0D07 = {
+			children = (
+				F6E7966B02C877AF01AD0D07,
+				F6E7966C02C877AF01AD0D07,
+				F6E7966D02C877AF01AD0D07,
+				F6E7966E02C877AF01AD0D07,
+				F6E7966F02C877AF01AD0D07,
+				F6E7967002C877AF01AD0D07,
+				F6E7967102C877AF01AD0D07,
+				F6E7967202C877AF01AD0D07,
+				F6E7967302C877AF01AD0D07,
+				F6E7967402C877AF01AD0D07,
+				F6E7967502C877AF01AD0D07,
+				F6E7967602C877AF01AD0D07,
+				FBDED2D817EDBE5AD297D139,
+				F6E7967702C877AF01AD0D07,
+				F6E7967802C877AF01AD0D07,
+				F6E7967902C877AF01AD0D07,
+				F6E7967A02C877AF01AD0D07,
+				F6E7967B02C877AF01AD0D07,
+				F6E7967C02C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "Property Level Custom WOComponents";
+			refType = 4;
+		};
+		F6E7967E02C877AF01AD0D07 = {
+			children = (
+				F59C5CDC02C4667101000102,
+				F542067202C467DF01000102,
+				F542FDEA02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCustomComponentWithArgs;
+			refType = 4;
+		};
+		F6E7967F02C877AF01AD0D07 = {
+			children = (
+				F59C5CDD02C4667101000102,
+				F542067302C467DF01000102,
+				F542FDF002C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCustomDisplayBoolean;
+			refType = 4;
+		};
+		F6E7968002C877AF01AD0D07 = {
+			children = (
+				F59C5CDE02C4667101000102,
+				F542067402C467DF01000102,
+				F542FDF602C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCustomEditBoolean;
+			refType = 4;
+		};
+		F6E7968102C877AF01AD0D07 = {
+			children = (
+				F59C5CE002C4667101000102,
+				F542067802C467DF01000102,
+				F542FE0202C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayConstant;
+			refType = 4;
+		};
+		F6E7968202C877AF01AD0D07 = {
+			children = (
+				F59C5CE102C4667101000102,
+				F542067902C467DF01000102,
+				F542FE0802C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayDateOrNull;
+			refType = 4;
+		};
+		F6E7968302C877AF01AD0D07 = {
+			children = (
+				F59C5CE202C4667101000102,
+				F542067A02C467DF01000102,
+				F542FE0E02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayHTML;
+			refType = 4;
+		};
+		F6E7968402C877AF01AD0D07 = {
+			children = (
+				F59C5CE302C4667101000102,
+				F542067B02C467DF01000102,
+				F542FE1402C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayImage;
+			refType = 4;
+		};
+		F6E7968502C877AF01AD0D07 = {
+			children = (
+				F59C5CE502C4667101000102,
+				F542067D02C467DF01000102,
+				F542FE2002C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayList;
+			refType = 4;
+		};
+		F6E7968602C877AF01AD0D07 = {
+			children = (
+				F59C5CE802C4667201000102,
+				F542067F02C467DF01000102,
+				F542FE3202C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayPassword;
+			refType = 4;
+		};
+		F6E7968702C877AF01AD0D07 = {
+			children = (
+				F59C5CE902C4667201000102,
+				F542068002C467DF01000102,
+				F542FE3802C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayString;
+			refType = 4;
+		};
+		F6E7968802C877AF01AD0D07 = {
+			children = (
+				F59C5CEA02C4667201000102,
+				F542068102C467DF01000102,
+				F542FE3E02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayStringWithLineBreaks;
+			refType = 4;
+		};
+		F6E7968902C877AF01AD0D07 = {
+			children = (
+				F59C5CED02C4667201000102,
+				F542068402C467DF01000102,
+				F542FE5002C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayToManyList;
+			refType = 4;
+		};
+		F6E7968A02C877AF01AD0D07 = {
+			children = (
+				F59C5CEE02C4667201000102,
+				F542068502C467DF01000102,
+				F542FE5602C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayToManyTable;
+			refType = 4;
+		};
+		F6E7968B02C877AF01AD0D07 = {
+			children = (
+				F59C5CEF02C4667201000102,
+				F542068602C467DF01000102,
+				F542FE5C02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayToOne;
+			refType = 4;
+		};
+		F6E7968C02C877AF01AD0D07 = {
+			children = (
+				F59C5CF002C4667201000102,
+				F542068702C467DF01000102,
+				F542FE6202C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayURL;
+			refType = 4;
+		};
+		F6E7968D02C877AF01AD0D07 = {
+			children = (
+				F59C5CF102C4667201000102,
+				F542068802C467DF01000102,
+				F542FE6802C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayYesNo;
+			refType = 4;
+		};
+		F6E7968E02C877AF01AD0D07 = {
+			children = (
+				F59C5CF302C4667201000102,
+				F542068B02C467DF01000102,
+				F542FE7402C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditAllowRestrict;
+			refType = 4;
+		};
+		F6E7968F02C877AF01AD0D07 = {
+			children = (
+				F59C5CF802C4667201000102,
+				F542068F02C467DF01000102,
+				F542FE9202C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditNumberWithUnit;
+			refType = 4;
+		};
+		F6E7969002C877AF01AD0D07 = {
+			children = (
+				F59C5CF902C4667201000102,
+				F542069002C467DF01000102,
+				F542FE9802C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditOrDefault;
+			refType = 4;
+		};
+		F6E7969102C877AF01AD0D07 = {
+			children = (
+				F59C5CFA02C4667201000102,
+				F542069102C467DF01000102,
+				F542FE9E02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditPercentage;
+			refType = 4;
+		};
+		F6E7969202C877AF01AD0D07 = {
+			children = (
+				F59C5CFB02C4667201000102,
+				F542069202C467DF01000102,
+				F542FEA302C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditString;
+			refType = 4;
+		};
+		F6E7969302C877AF01AD0D07 = {
+			children = (
+				F59C5CFC02C4667201000102,
+				F542069302C467DF01000102,
+				F542FEA902C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditToManyRelationship;
+			refType = 4;
+		};
+		F6E7969402C877AF01AD0D07 = {
+			children = (
+				F59C5CFD02C4667201000102,
+				F542069402C467DF01000102,
+				F542FEAF02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditToOneRelationship;
+			refType = 4;
+		};
+		F6E7969502C877AF01AD0D07 = {
+			children = (
+				F59C5CFE02C4667201000102,
+				F542069502C467DF01000102,
+				F542FEB502C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditURL;
+			refType = 4;
+		};
+		F6E7969602C877AF01AD0D07 = {
+			children = (
+				F59C5CFF02C4667201000102,
+				F542069602C467DF01000102,
+				F542FEBB02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditYesNo;
+			refType = 4;
+		};
+		F6E7969702C877AF01AD0D07 = {
+			children = (
+				F59C5D0B02C4667301000102,
+				F54206AB02C467E001000102,
+				F542FF0C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPickFromEntities;
+			refType = 4;
+		};
+		F6E7969802C877AF01AD0D07 = {
+			children = (
+				F59C5D0C02C4667301000102,
+				F54206AC02C467E001000102,
+				F542FF1202C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPickFromList;
+			refType = 4;
+		};
+		F6E7969902C877AF01AD0D07 = {
+			children = (
+				F59C5D0F02C4667301000102,
+				F54206B102C467E001000102,
+				F542FF2402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WPopUp;
+			refType = 4;
+		};
+		F6E7969A02C877AF01AD0D07 = {
+			children = (
+				F59C5D1302C4667301000102,
+				F54206B502C467E001000102,
+				F542FF3C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryNonNull;
+			refType = 4;
+		};
+		F6E7969B02C877AF01AD0D07 = {
+			children = (
+				F59C5D1702C4667301000102,
+				F54206BA02C467E001000102,
+				F542FF5402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryToOneRelationship;
+			refType = 4;
+		};
+		F6E7969C02C877AF01AD0D07 = {
+			children = (
+				F59C5D1802C4667301000102,
+				F54206BB02C467E001000102,
+				F542FF5A02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WStatelessCustomComponentWithArgs;
+			refType = 4;
+		};
+		F6E7969D02C877AF01AD0D07 = {
+			children = (
+				F59C5D1B02C4667301000102,
+				F54206BF02C467E001000102,
+				F542FF6C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WTwoLevelEditToOneRelationship;
+			refType = 4;
+		};
+		F6E7969E02C877AF01AD0D07 = {
+			children = (
+				F59C5D1D02C4667401000102,
+				F54206C202C467E001000102,
+				F542FF7802C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WXMLDisplayNumber;
+			refType = 4;
+		};
+		F6E7969F02C877AF01AD0D07 = {
+			children = (
+				F59C5D1E02C4667401000102,
+				F54206C302C467E001000102,
+				F542FF7E02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WXMLDisplayString;
+			refType = 4;
+		};
+		F6E796A002C877AF01AD0D07 = {
+			children = (
+				F59C5D1F02C4667401000102,
+				F54206C402C467E001000102,
+				F542FF8402C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WXMLDisplayToMany;
+			refType = 4;
+		};
+		F6E796A102C877AF01AD0D07 = {
+			children = (
+				F59C5D2102C4667401000102,
+				F54206D002C467E001000102,
+				F542FF9002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDCustomQueryComponentWithArgs;
+			refType = 4;
+		};
+		F6E796A202C877AF01AD0D07 = {
+			children = (
+				F59C5D2302C4667401000102,
+				F54206D302C467E001000102,
+				F542FF9C02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDDefaultCustomComponent;
+			refType = 4;
+		};
+		F6E796A302C877AF01AD0D07 = {
+			children = (
+				F59C5D3802C4667501000102,
+				F54206F902C467E001000102,
+				F542001A02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDInspect;
+			refType = 4;
+		};
+		F6E796A402C877AF01AD0D07 = {
+			children = (
+				F59C5D3A02C4667501000102,
+				F54206FE02C467E001000102,
+				F542002602C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDList;
+			refType = 4;
+		};
+		F6E796A502C877AF01AD0D07 = {
+			children = (
+				F6E7967E02C877AF01AD0D07,
+				F6E7967F02C877AF01AD0D07,
+				F6E7968002C877AF01AD0D07,
+				F6E7968102C877AF01AD0D07,
+				F6E7968202C877AF01AD0D07,
+				F6E7968302C877AF01AD0D07,
+				F6E7968402C877AF01AD0D07,
+				FBD20D3C95A236B0E03D1EB5,
+				F6E7968502C877AF01AD0D07,
+				F6E7968602C877AF01AD0D07,
+				F6E7968702C877AF01AD0D07,
+				F6E7968802C877AF01AD0D07,
+				FBD20D3C95A2DE1DFB961D75,
+				FBD20D3C95A2D86A72DEDD96,
+				F6E7968902C877AF01AD0D07,
+				F6E7968A02C877AF01AD0D07,
+				F6E7968B02C877AF01AD0D07,
+				F6E7968C02C877AF01AD0D07,
+				F6E7968D02C877AF01AD0D07,
+				F6E7968E02C877AF01AD0D07,
+				F6E7968F02C877AF01AD0D07,
+				F6E7969002C877AF01AD0D07,
+				F6E7969102C877AF01AD0D07,
+				F6E7969202C877AF01AD0D07,
+				F6E7969302C877AF01AD0D07,
+				F6E7969402C877AF01AD0D07,
+				F6E7969502C877AF01AD0D07,
+				F6E7969602C877AF01AD0D07,
+				F6E7969702C877AF01AD0D07,
+				F6E7969802C877AF01AD0D07,
+				F6E7969902C877AF01AD0D07,
+				F6E7969A02C877AF01AD0D07,
+				F6E7969B02C877AF01AD0D07,
+				F6E7969C02C877AF01AD0D07,
+				F6E7969D02C877AF01AD0D07,
+				F6E7969E02C877AF01AD0D07,
+				F6E7969F02C877AF01AD0D07,
+				F6E796A002C877AF01AD0D07,
+				F6E796A102C877AF01AD0D07,
+				F6E796A202C877AF01AD0D07,
+				F54206E502C467E001000102,
+				FBDED2DCDB37203D1C182CFC,
+				F6E796A302C877AF01AD0D07,
+				F6E796A402C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = "Property Level D2WComponents";
+			refType = 4;
+		};
+		F6E796A602C877AF01AD0D07 = {
+			children = (
+				F59C5CF502C4667201000102,
+				F542068D02C467DF01000102,
+				F542FE8002C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditLargeString;
+			refType = 4;
+		};
+		F6E796A702C877AF01AD0D07 = {
+			children = (
+				F6E796A602C877AF01AD0D07,
+			);
+			isa = PBXGroup;
+			name = Workarounds/Bugfixes;
+			refType = 4;
+		};
+//F60
+//F61
+//F62
+//F63
+//F64
+//FB0
+//FB1
+//FB2
+//FB3
+//FB4
+		FBD20C97F2B69A0EDE795ADE = {
+			children = (
+				F59C5CD902C4667101000102,
+				F542066E02C467DF01000102,
+				F542FDD802C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WConfirmPageTemplate;
+			refType = 4;
+		};
+		FBD20CDF52DD9A0EDE795ADE = {
+			children = (
+				F59C5CDB02C4667101000102,
+				F542067102C467DF01000102,
+				F542FDE402C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WCSVListPageTemplate;
+			refType = 4;
+		};
+		FBD20D3C95A236B0E03D1EB5 = {
+			children = (
+				F59C5CE402C4667101000102,
+				F542067C02C467DF01000102,
+				F542FE1A02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayImageWithUrl;
+			refType = 4;
+		};
+		FBD20D3C95A2D86A72DEDD96 = {
+			children = (
+				F59C5CEC02C4667201000102,
+				F542068302C467DF01000102,
+				F542FE4A02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayToManyCustom;
+			refType = 4;
+		};
+		FBD20D3C95A2DE1DFB961D75 = {
+			children = (
+				F59C5CEB02C4667201000102,
+				F542068202C467DF01000102,
+				F542FE4402C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayTextFromHTML;
+			refType = 4;
+		};
+		FBD2127C9EDD9A0EDE795ADE = {
+			children = (
+				F59C5D0402C4667301000102,
+				F542069E02C467DF01000102,
+				F542FED902C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WInspectPageTemplate;
+			refType = 4;
+		};
+		FBD2153CF1759A0EDE795ADE = {
+			children = (
+				F59C5D0802C4667301000102,
+				F54206A502C467DF01000102,
+				F542FEF702C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WListXMLPageTemplate;
+			refType = 4;
+		};
+		FBD216FCCA0E9A0EDE795ADE = {
+			children = (
+				F59C5D0902C4667301000102,
+				F54206A702C467DF01000102,
+				F542FEFD02C466C501000102,
+			);
+			isa = PBXGroup;
+			name = ERD2WMessagePageTemplate;
+			refType = 4;
+		};
+		FBDED2D817EDBE5AD297D139 = {
+			children = (
+				F59C5D3102C4667401000102,
+				F54206EE02C467E001000102,
+				F542FFF002C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditOwnedRelationship;
+			refType = 4;
+		};
+		FBDED2DCDB37203D1C182CFC = {
+			children = (
+				F59C5D3302C4667401000102,
+				F54206F102C467E001000102,
+				F542FFFC02C466C601000102,
+			);
+			isa = PBXGroup;
+			name = ERDEditStringWithChoices;
+			refType = 4;
 		};
 	};
 	rootObject = F5A1439F01FF7F8801A80106;

@@ -71,7 +71,7 @@ public class Main extends WOComponent {
         boolean isAdmin = userObject.isAdminAsBoolean();
         D2W.factory().setWebAssistantEnabled(isAdmin);
         String encryptedIDPrimaryKey = ERXCrypto.blowfishEncode(userObject.primaryKey());
-        WOCookie loginCookie=WOCookie.cookieWithName("BTL", rememberPassword ?  encryptedIDPrimaryKey : "");
+        WOCookie loginCookie=WOCookie.cookieWithName("BTL", rememberPassword ?  encryptedIDPrimaryKey : "-");
         loginCookie.setExpires(NSTimestamp.DistantFuture);
         loginCookie.setPath("/");
         context().response().addCookie(loginCookie);

@@ -75,6 +75,7 @@
 ../Sources/er/extensions/ERXMailTo.java:er.extensions
 ../Sources/er/extensions/ERXMandatoryFieldMarker.java:er.extensions
 ../Sources/er/extensions/ERXMessageEncoding.java:er.extensions
+../Sources/er/extensions/ERXModelGroup.java:er.extensions
 ../Sources/er/extensions/ERXMultiKey.java:er.extensions
 ../Sources/er/extensions/ERXMutableUserInfoHolderInterface.java:er.extensions
 ../Sources/er/extensions/ERXNavigation.java:er.extensions

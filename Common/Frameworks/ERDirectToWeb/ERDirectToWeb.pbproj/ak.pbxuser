@@ -1,15 +1,5 @@
 // !$*UTF8*$!
 {
-	F5005CDF02C507CF01000102 = {
-		fRef = F542066602C467DF01000102;
-		isa = PBXTextBookmark;
-		name = "ERD2WUtilities.java: resetContextCache";
-		rLen = 0;
-		rLoc = 645;
-		rType = 0;
-		vrLen = 1299;
-		vrLoc = 2659;
-	};
 	F5005CE002C507CF01000102 = {
 		fRef = F542047002C4672F01000102;
 		isa = PBXTextBookmark;
@@ -49,16 +39,6 @@
 		rType = 0;
 		vrLen = 100;
 		vrLoc = 0;
-	};
-	F5005CE502C507CF01000102 = {
-		fRef = F542066602C467DF01000102;
-		isa = PBXTextBookmark;
-		name = "ERD2WUtilities.java: resetContextCache";
-		rLen = 0;
-		rLoc = 645;
-		rType = 0;
-		vrLen = 1299;
-		vrLoc = 2659;
 	};
 	F5005CE602C507CF01000102 = {
 		fRef = F542047002C4672F01000102;
@@ -110,10 +90,6 @@
 		vrLen = 1479;
 		vrLoc = 3479;
 	};
-	F53F5F2102C9A7A30193F2B9 = {
-		isa = PBXTargetBookmark;
-		trg = F5A1454D01FF7F8801A80106;
-	};
 	F53F5F2202C9A7A30193F2B9 = {
 		fRef = F54206DA02C467E001000102;
 		isa = PBXTextBookmark;
@@ -123,37 +99,6 @@
 		rType = 0;
 		vrLen = 1479;
 		vrLoc = 3479;
-	};
-	F53F5F2302C9A7A30193F2B9 = {
-		isa = PBXTargetBookmark;
-		trg = F5A1454D01FF7F8801A80106;
-		uiCtxt = {
-			buildPhasesExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-			);
-			buildPhasesVisRect = "{{0, 0}, {626, 347}}";
-			buildSettingsExpandedSubviews = (
-				8,
-			);
-			buildSettingsVisRect = "{{0, 0}, {393, 256}}";
-			expertProductSettingsVisRect = "{{0, 75}, {600, 229}}";
-			guiProductSettingsExpandedSubviews = (
-				0,
-				1,
-				2,
-				3,
-			);
-			guiProductSettingsVisRect = "{{0, 102}, {626, 316}}";
-			productSettingsIsSimple = NO;
-			selectedTab = productSettings;
-		};
 	};
 	F54207E002C4687801000102 = {
 		fRef = F54206DA02C467E001000102;
@@ -174,16 +119,15 @@
 		breakpoints = (
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 46677359;
+			PBXPerProjectTemplateStateSaveDate = 46857197;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = F53F5F2302C9A7A30193F2B9;
+									bookmark = F637893802CAFC8301AD0D07;
 									history = (
-										F5005CDF02C507CF01000102,
 										F5005CE002C507CF01000102,
 										F5005CE102C507CF01000102,
 										F5005CE202C507CF01000102,
@@ -193,11 +137,10 @@
 										F5CCEF2102C52B6A01000102,
 										F5CCEF2202C52B6A01000102,
 										F53F5F2002C9A7A30193F2B9,
-										F53F5F2102C9A7A30193F2B9,
+										F637893702CAFC8301AD0D07,
 									);
 									prevStack = (
 										F54207E002C4687801000102,
-										F5005CE502C507CF01000102,
 										F5005CE602C507CF01000102,
 										F5005CE702C507CF01000102,
 										F5005CE802C507CF01000102,
@@ -211,7 +154,7 @@
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {641, 398}}";
+									Frame = "{{0, 0}, {572, 398}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -248,15 +191,15 @@
 				{
 					ContentSize = "{856, 572}";
 					LeftSlideOut = {
-						ActiveTab = 3;
+						ActiveTab = 0;
 						Collapsed = NO;
 						Frame = "{{0, 23}, {856, 549}}";
 						Split0 = {
 							ActiveTab = 2;
 							Collapsed = NO;
-							Frame = "{{215, 0}, {641, 549}}";
+							Frame = "{{284, 0}, {572, 549}}";
 							Split0 = {
-								Frame = "{{0, 151}, {641, 398}}";
+								Frame = "{{0, 151}, {572, 398}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -302,9 +245,9 @@
 								};
 							};
 							Tab2 = {
-								BuildMessageFrame = "{{0, 0}, {643, 120}}";
-								BuildTranscriptFrame = "{{0, 129}, {643, 0}}";
-								Frame = "{{0, 0}, {641, 127}}";
+								BuildMessageFrame = "{{0, 0}, {574, 120}}";
+								BuildTranscriptFrame = "{{0, 129}, {574, 0}}";
+								Frame = "{{0, 0}, {572, 127}}";
 							};
 							Tab3 = {
 								Frame = "{{0, 0}, {572, 265}}";
@@ -316,10 +259,12 @@
 						Tab0 = {
 							Frame = "{{0, 0}, {260, 549}}";
 							GroupTreeTableConfiguration = (
+								SCMStatusColumn,
+								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								227,
+								205,
 							);
 						};
 						Tab1 = {
@@ -391,23 +336,19 @@
 					WindowLocation = "{4, 85}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 46677359;
+			PBXWorkspaceStateSaveDate = 46857197;
 		};
 		perUserProjectItems = {
-			F5005CDF02C507CF01000102 = F5005CDF02C507CF01000102;
 			F5005CE002C507CF01000102 = F5005CE002C507CF01000102;
 			F5005CE102C507CF01000102 = F5005CE102C507CF01000102;
 			F5005CE202C507CF01000102 = F5005CE202C507CF01000102;
 			F5005CE302C507CF01000102 = F5005CE302C507CF01000102;
-			F5005CE502C507CF01000102 = F5005CE502C507CF01000102;
 			F5005CE602C507CF01000102 = F5005CE602C507CF01000102;
 			F5005CE702C507CF01000102 = F5005CE702C507CF01000102;
 			F5005CE802C507CF01000102 = F5005CE802C507CF01000102;
 			F5005CE902C507CF01000102 = F5005CE902C507CF01000102;
 			F53F5F2002C9A7A30193F2B9 = F53F5F2002C9A7A30193F2B9;
-			F53F5F2102C9A7A30193F2B9 = F53F5F2102C9A7A30193F2B9;
 			F53F5F2202C9A7A30193F2B9 = F53F5F2202C9A7A30193F2B9;
-			F53F5F2302C9A7A30193F2B9 = F53F5F2302C9A7A30193F2B9;
 			F54207E002C4687801000102 = F54207E002C4687801000102;
 			F5CCEF1F02C52B6A01000102 = F5CCEF1F02C52B6A01000102;
 			F5CCEF2002C52B6A01000102 = F5CCEF2002C52B6A01000102;
@@ -417,6 +358,8 @@
 			F5CCEF2402C52B6A01000102 = F5CCEF2402C52B6A01000102;
 			F5CCEF2502C52B6A01000102 = F5CCEF2502C52B6A01000102;
 			F5CCEF2602C52B6A01000102 = F5CCEF2602C52B6A01000102;
+			F637893702CAFC8301AD0D07 = F637893702CAFC8301AD0D07;
+			F637893802CAFC8301AD0D07 = F637893802CAFC8301AD0D07;
 		};
 		projectwideBuildSettings = {
 		};
@@ -510,6 +453,20 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 1212;
+		vrLoc = 0;
+	};
+	F637893702CAFC8301AD0D07 = {
+		fRef = F542066602C467DF01000102;
+		isa = PBXBookmark;
+	};
+	F637893802CAFC8301AD0D07 = {
+		fRef = F542066602C467DF01000102;
+		isa = PBXTextBookmark;
+		name = "ERD2WUtilities.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1203;
 		vrLoc = 0;
 	};
 }
