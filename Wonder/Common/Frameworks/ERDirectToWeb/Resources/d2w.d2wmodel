@@ -1698,7 +1698,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = customComponentName; 
-                value = ERDisplayMailTo; 
+                value = ERDDisplayMailTo; 
             }; 
         }, 
         {
@@ -4035,7 +4035,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = sectionComponentName; 
-                value = ERSectionText; 
+                value = ERDSectionText;
             }; 
         }, 
         {

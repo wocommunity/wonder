@@ -1,6 +1,5 @@
 JavaScript1: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
-	WODebug = false;
 }
 
 String1: WOString {
@@ -14,5 +13,4 @@ String2: WOString {
 TextField1: WOTextField {
 	name = name;
 	value = dateString;
-	WODebug = false;
 }

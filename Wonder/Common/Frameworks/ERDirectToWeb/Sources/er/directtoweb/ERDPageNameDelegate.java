@@ -11,8 +11,9 @@ import com.webobjects.directtoweb.NextPageDelegate;
 
 public class ERDPageNameDelegate implements NextPageDelegate {
 
-    public String _pageName;
-    public void PageDelegate(String pageName) { _pageName=pageName; }
+    protected String _pageName;
+    public ERDPageNameDelegate(String pageName) { _pageName=pageName; }
+    
     public WOComponent nextPage(WOComponent sender) {
         return sender.pageWithName(_pageName);
     }    

@@ -17,24 +17,27 @@ import org.apache.log4j.NDC;
 
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
 
+    public ERD2WPage(WOContext c) {
+        super(c);
+    }    
+    
     ///////////////////////////////////////  log4j category  ///////////////////////////////////////
     public final static Category cat = Category.getInstance(ERD2WPage.class);
     public static final Category validationCat = Category.getInstance("er.directtoweb.validation.ERD2WPage");
 
+    public NSMutableDictionary errorMessages() { return errorMessages; }
+    public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
+    
     protected NSMutableDictionary errorMessages = new NSMutableDictionary();
     protected NSMutableArray errorKeyOrder = new NSMutableArray();
     protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
     public String errorMessage="";
-
-    public ERD2WPage(WOContext c) {
-        super(c);
-    }
     
     protected EOEditingContext _context;
     public void setObject(EOEnterpriseObject eo) {
         _context = (eo != null) ? eo.editingContext() : null;
         // for SmartAssignment
-        d2wContext().takeValueForKey(eo,"object");
+        d2wContext().takeValueForKey(eo, "object");
         super.setObject(eo);
     }
 

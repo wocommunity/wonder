@@ -18,7 +18,6 @@ CELL: WOXMLNode {
 
 Conditional1: WOConditional {
 	condition = d2wContext.hasThirdLevel;
-	WODebug = false;
 }
 
 Conditional3: WOConditional {
@@ -26,7 +25,6 @@ Conditional3: WOConditional {
 }
 
 ERGroupingRepetition: ERXGroupingRepetition {
-	WODebug = false;
 	item = object;
 	list = displayGroup.displayedObjects;
 	sectionForItem = section;
@@ -158,10 +156,8 @@ SwitchComponent1: WOSwitchComponent {
 	WOComponentName = componentName;
 	localContext = localContext;
 	object = object;
-	WODebug = false;
 }
 
 XMLNode1: WOXMLNode {
 	elementName = "row";
 }
-

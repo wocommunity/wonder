@@ -2,5 +2,4 @@ PopUpButton1: WOPopUpButton {
 	list = list;
 	item = choice;
 	selection = choice;
-	WODebug = NO;
 }

@@ -35,14 +35,14 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
     public NSArray _dependentKeys;
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
-            NSDictionary booleanConditions = (NSDictionary)value(null);
+            NSDictionary booleanConditions = (NSDictionary)value();
             _dependentKeys=new NSArray(booleanConditions.objectForKey("conditionKey"));
         }
         return _dependentKeys;
     }
 
     public Object fireNow(D2WContext c) {
-        NSDictionary booleanConditions = (NSDictionary)value(c);
+        NSDictionary booleanConditions = (NSDictionary)value();
         if (cat.isDebugEnabled())
             cat.debug("Resolving delayed fire for boolean conditions: " + booleanConditions);
         return ERXUtilities.booleanValue(c.valueForKeyPath((String)booleanConditions.objectForKey("conditionKey"))) ?

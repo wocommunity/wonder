@@ -96,7 +96,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
                         endYear = end.intValue();
                     }
                 } catch (NumberFormatException e) {
-                    ((WOApplication)application()).logString("Binding exception in D2WEditDatePopup: " + e.toString());
+                    NSLog.err.appendln("Binding exception in D2WEditDatePopup: " + e.toString());
                 }
             }
             for (int year = startYear; year <= endYear; year++)

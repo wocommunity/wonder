@@ -36,8 +36,8 @@ public class ERDEntityAssignment extends Assignment implements ERDComputingAssig
     protected NSArray entityNames = null;
     public Object fire(D2WContext c) {
         Object result = null;
-        if (value(c) != null && value(c) instanceof String && ((String)value(c)).length() > 0) {
-            result = ERXUtilities.caseInsensitiveEntityNamed(((String)value(c)).toLowerCase());
+        if (value() != null && value() instanceof String && ((String)value()).length() > 0) {
+            result = ERXUtilities.caseInsensitiveEntityNamed(((String)value()).toLowerCase());
         }
         if (result == null && c.valueForKey("pageConfiguration") != null) {
             String lowerCasePageConfiguration = ((String)c.valueForKey("pageConfiguration")).toLowerCase();

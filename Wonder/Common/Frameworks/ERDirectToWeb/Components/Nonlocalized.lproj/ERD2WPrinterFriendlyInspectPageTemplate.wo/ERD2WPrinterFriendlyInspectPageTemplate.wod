@@ -17,7 +17,7 @@ BannerConditional: WOConditional {
 	condition = showBanner;
 }
 
-ERPrinterButton: ERXPrinterButton {
+ERPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	task = "inspect";
 }

@@ -26,7 +26,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
     public NSArray _dependentKeys;
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
-            NSDictionary conditionAssignment = (NSDictionary)this.value(null);
+            NSDictionary conditionAssignment = (NSDictionary)this.value();
             _dependentKeys=new NSArray(conditionAssignment.valueForKey("nonNullKeyPath"));
         }
         return _dependentKeys;
@@ -40,7 +40,7 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
         Object result = null;
         String keyPath;
         String resultKey;
-        NSDictionary conditionAssignment = (NSDictionary)this.value(c);
+        NSDictionary conditionAssignment = (NSDictionary)this.value();
         keyPath = (String)conditionAssignment.valueForKey("nonNullKeyPath");
         resultKey = c.valueForKeyPath(keyPath) == null ? "falseValue" : "trueValue";
         if (keyPath == null) {

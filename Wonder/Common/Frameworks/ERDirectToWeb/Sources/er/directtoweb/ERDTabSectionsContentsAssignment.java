@@ -26,7 +26,7 @@ public class ERDTabSectionsContentsAssignment extends ERDAssignment {
 
     public Object tabSectionsContents(D2WContext context) {
         NSMutableArray tabSectionsContents=new NSMutableArray();
-        for (Enumeration e= ((NSArray)value(context)).objectEnumerator(); e.hasMoreElements();) {
+        for (Enumeration e= ((NSArray)value()).objectEnumerator(); e.hasMoreElements();) {
             NSArray tab=(NSArray)e.nextElement();
             ERD2WContainer c=new ERD2WContainer();
             c.name=(String)tab.objectAtIndex(0);
