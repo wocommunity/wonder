@@ -207,7 +207,9 @@ public class ERXSession extends WOSession implements Serializable {
 
             _localizer = newLocalizer;
             ERXLocalizer.setCurrentLocalizer(_localizer);
-            _messageEncoding = browser().messageEncodingForLanguage(_localizer.language());
+            if (browser() != null) {
+                _messageEncoding = browser().messageEncodingForLanguage(_localizer.language());
+            }
         }
     }
 
@@ -263,7 +265,9 @@ public class ERXSession extends WOSession implements Serializable {
      */
     public ERXMessageEncoding messageEncoding() {
         if (_messageEncoding == null) {
-            _messageEncoding = browser().messageEncodingForLanguage(language());
+            if (browser() != null) {
+                _messageEncoding = browser().messageEncodingForLanguage(language());
+            }
         }
         return _messageEncoding; 
     }
