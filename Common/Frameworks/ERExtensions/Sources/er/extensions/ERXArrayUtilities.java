@@ -1098,6 +1098,23 @@ public class ERXArrayUtilities extends Object {
         }
         return result;
     }
+
+    /**
+     * Returns an array of dictionaries containing the key/value pairs for the given paths.
+     * @param array array of objects
+     * @param keys array of keys
+     * @return array of dictionaries containing values for the key paths
+     */
+    public static NSArray arrayForKeysPath(NSArray array, NSArray keys) {
+        NSMutableArray result=new NSMutableArray();
+        if (array != null && keys != null) {
+            for (Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
+                Object o = e.nextElement();
+                result.addObject(ERXDictionaryUtilities.dictionaryFromObjectWithKeys(o, keys));
+            }
+        }
+        return result.immutableClone();
+    }
     
     /** Removes all occurencies of NSKeyValueCoding.NullValue in the provided array
      * @param a the array from which the NullValue should be removed
