@@ -7893,6 +7893,12 @@
 			settings = {
 			};
 		};
+		F5ED7AE40340E87101CF0E76 = {
+			isa = PBXFileReference;
+			name = ERDBranchDelegateInterface.java;
+			path = er/directtoweb/ERDBranchDelegateInterface.java;
+			refType = 4;
+		};
 //F50
 //F51
 //F52
@@ -8180,6 +8186,7 @@
 				F542070702C467E001000102,
 				F542070A02C467E001000102,
 				F542071D02C467E001000102,
+				F5ED7AE40340E87101CF0E76,
 			);
 			isa = PBXGroup;
 			name = "D2W Interfaces";

@@ -6,7 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-// Used in conjunction with ERDBranchDelegate
+/**
+ * Used in conjunction with ERDBranchDelegateInterface.
+ * Templates that want to be able to use branch delegates
+ * need to implement this interface so that the delegate
+ * can know which branch was choosen.
+ */
 public interface ERDBranchInterface {
-    String branchName();
+    
+    /**
+     * Name of the branch choosen by the
+     * user.
+     * @return choosen branch name.
+     */
+    public String branchName();
 }

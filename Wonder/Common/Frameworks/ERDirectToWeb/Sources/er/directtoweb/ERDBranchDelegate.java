@@ -11,6 +11,7 @@ import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +19,7 @@ import java.util.Enumeration;
 
 import er.extensions.ERXLogger;
 import er.extensions.ERXUtilities;
+import er.extensions.ERXStringUtilities;
 
 /**
  * The branch delegate is used in conjunction with the
@@ -26,7 +28,7 @@ import er.extensions.ERXUtilities;
  * only be used with templates that implement the 
  * {@link ERDBranchInterface ERDBranchInterface}.
  */
-public abstract class ERDBranchDelegate implements NextPageDelegate {
+public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERDBranchDelegate.class);
@@ -76,17 +78,22 @@ public abstract class ERDBranchDelegate implements NextPageDelegate {
      */
     public NSArray branchChoicesForContext(D2WContext context) {
         NSArray choices = (NSArray)context.valueForKey("branchChoices");
-        if (choices == null) {
+        if (choices == null || choices.count() == 0) {
             try {
-                NSMutableArray methodNames = new NSMutableArray();
+                NSMutableArray methodChoices = new NSMutableArray();
                 Method methods[] = getClass().getMethods();
                 for (Enumeration e = new NSArray(methods).objectEnumerator(); e.hasMoreElements();) {
                     Method method = (Method)e.nextElement();
-                    if (method.getParameterTypes().equals(WOComponentClassArray) && 
-                            !method.getName().equals("nextPage")) {
-                        methodNames.addObject(method.getName());
+                    if (method.getParameterTypes().length == 1 && 
+                    method.getParameterTypes()[0] == WOComponent.class && !method.getName().equals("nextPage")) {
+                        NSMutableDictionary branch = new NSMutableDictionary();
+                        branch.setObjectForKey(method.getName(), "branchName");
+                        branch.setObjectForKey(ERXStringUtilities.displayNameForKey(method.getName()),
+                                                                "branchButtonLabel");
+                        methodChoices.addObject(branch);        
                     }
                 }
+                choices = methodChoices;
             } catch (SecurityException e) {
                 log.error("Caught security exception while calculating the branch choices for delegate: " 
                         + this + " exception: " + e.getMessage());
