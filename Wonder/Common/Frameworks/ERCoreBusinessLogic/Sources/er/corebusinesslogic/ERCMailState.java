@@ -12,7 +12,9 @@ import er.extensions.*;
  * You must populate your DB via the populate.sql script (you might need to adapt it)
  */
 public class ERCMailState extends _ERCMailState {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERCMailState.class);
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailState.class);
 
     public static ERCMailState EXCEPTION_STATE;
     public static ERCMailState READY_TO_BE_SENT_STATE;
@@ -27,8 +29,7 @@ public class ERCMailState extends _ERCMailState {
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
     }
-    
-    
+        
     // Class methods go here
     
     public static class ERCMailStateClazz extends _ERCMailStateClazz {
