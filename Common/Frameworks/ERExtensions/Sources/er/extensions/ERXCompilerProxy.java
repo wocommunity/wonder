@@ -558,7 +558,8 @@ public class ERXCompilerProxy {
 	    Enumeration e = classFiles.objectEnumerator();
 	    while (e.hasMoreElements()) {
 		CacheEntry ce = (CacheEntry)e.nextElement();
-		if (ce.classNameWithPackage().equals(name)) {
+		if (name.startsWith(ce.classNameWithPackage())) {
+                    classLoaderLog.debug("CompilerClassLoader.findClass:" + name + " is in array");
 		    contains = true;
 		    break;
 		}
