@@ -95,7 +95,7 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     public String branchName() { return (String)branch().valueForKey("branchName"); }
 
     /**
-        * Implementation of the {@link ERDBranchDelegate ERDBranchDelegate}.
+     * Implementation of the {@link ERDBranchDelegate ERDBranchDelegate}.
      * Gets the user selected branch name.
      * @return user selected branch name.
      */
