@@ -213,6 +213,10 @@
         {className = EOGenericRecord; name = EOPrototypes; }, 
         {className = "er.corebusinesslogic.ERCLogEntry"; name = ERCLogEntry; }, 
         {className = "er.corebusinesslogic.ERCMailMessage"; name = ERCMailMessage; }, 
+        {
+            className = "er.corebusinesslogic.ERCMailMessage"; 
+            name = ERCMailMessageArchive; 
+        }, 
         {className = "er.corebusinesslogic.ERCMailState"; name = ERCMailState; }, 
         {
             className = "er.corebusinesslogic.ERCMessageAttachment"; 

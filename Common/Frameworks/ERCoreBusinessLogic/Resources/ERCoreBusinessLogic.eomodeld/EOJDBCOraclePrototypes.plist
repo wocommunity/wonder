@@ -2,6 +2,13 @@
     attributes = (
         {
             columnName = ""; 
+            externalType = BLOB; 
+            name = blob; 
+            userInfo = {modificationDate = "2002-08-19 11:56:16 +0200"; }; 
+            valueClassName = NSData; 
+        }, 
+        {
+            columnName = ""; 
             externalType = CHAR; 
             name = charFlag; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
@@ -54,10 +61,18 @@
             allowsNull = Y; 
             columnName = ""; 
             externalType = NUMBER; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = NUMBER; 
             name = intNumber; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSNumber; 
-            valueType = i; 
+            valueType = c; 
         }, 
         {
             columnName = ""; 
@@ -151,7 +166,8 @@
         varchar16, 
         varchar10, 
         charFlag, 
-        varcharLarge
+        varcharLarge, 
+        intBoolean
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -170,7 +186,9 @@
         varchar10, 
         dateTime, 
         charFlag, 
-        varcharLarge
+        varcharLarge, 
+        intBoolean, 
+        blob
     ); 
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 

@@ -2,6 +2,13 @@
     attributes = (
         {
             columnName = ""; 
+            externalType = BLOB; 
+            name = blob; 
+            userInfo = {modificationDate = "2002-08-19 11:56:16 +0200"; }; 
+            valueClassName = NSData; 
+        }, 
+        {
+            columnName = ""; 
             externalType = CHAR; 
             name = charFlag; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
@@ -47,6 +54,14 @@
             name = id; 
             serverTimeZone = "Europe/Berlin"; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = ""; 
+            externalType = INT; 
+            name = intBoolean; 
             valueClassName = NSNumber; 
             valueType = i; 
         }, 
@@ -159,7 +174,9 @@
         varchar50, 
         varchar16, 
         varchar10, 
-        charFlag
+        charFlag, 
+        intBoolean, 
+        blob
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -178,7 +195,9 @@
         varchar10, 
         varcharLarge, 
         dateTime, 
-        charFlag
+        charFlag, 
+        intBoolean, 
+        blob
     ); 
     externalName = eoprototypes; 
     fetchSpecificationDictionary = {}; 

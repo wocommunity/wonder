@@ -5,6 +5,68 @@
 	};
 	objectVersion = 38;
 	objects = {
+		50E31CB10512426500CF0E76 = {
+			children = (
+				50E31CB20512429A00CF0E76,
+			);
+			isa = PBXGroup;
+			path = javamail;
+			refType = 4;
+		};
+		50E31CB20512429A00CF0E76 = {
+			children = (
+				50E31CB3051242D800CF0E76,
+				50E31CB4051242D800CF0E76,
+			);
+			isa = PBXGroup;
+			path = mailer;
+			refType = 4;
+		};
+		50E31CB3051242D800CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERMailer.java;
+			refType = 4;
+		};
+		50E31CB4051242D800CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = ERMailerTimerTask.java;
+			refType = 4;
+		};
+		50E31CB5051242D800CF0E76 = {
+			fileRef = 50E31CB3051242D800CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50E31CB6051242D800CF0E76 = {
+			fileRef = 50E31CB4051242D800CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50E31CB70512430300CF0E76 = {
+			isa = PBXFrameworkReference;
+			path = ERJavaMail.framework;
+			refType = 3;
+		};
+		50E31CB80512430300CF0E76 = {
+			fileRef = 50E31CB70512430300CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//500
+//501
+//502
+//503
+//504
+//F50
+//F51
+//F52
+//F53
+//F54
 		F533017C037B1A6501CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -122,6 +184,7 @@
 				F5C403D802022B0501A801D4,
 				F5C4042902022BDC01A801D4,
 				F5C4042E02022C8601A801D4,
+				50E31CB70512430300CF0E76,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -408,6 +471,8 @@
 				F5DD888902C4D59001000102,
 				F5F37BD0036E0CE601CF0E76,
 				F533017D037B1A6501CF0E76,
+				50E31CB5051242D800CF0E76,
+				50E31CB6051242D800CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -428,6 +493,7 @@
 				F5C4042B02022BDD01A801D4,
 				F5C4042F02022C8601A801D4,
 				F55598E9028334B101000104,
+				50E31CB80512430300CF0E76,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -916,6 +982,7 @@
 		};
 		F5DD885E02C4D59001000102 = {
 			children = (
+				50E31CB10512426500CF0E76,
 				F5DD885F02C4D59001000102,
 			);
 			isa = PBXGroup;
