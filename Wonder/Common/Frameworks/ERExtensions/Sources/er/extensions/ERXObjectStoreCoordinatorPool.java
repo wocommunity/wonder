@@ -145,13 +145,17 @@ public void sessionDidCreate(NSNotification n) {
         public EOEditingContext _newEditingContext(boolean validationEnabled) {
             ObjectStoreCoordinator os = (ObjectStoreCoordinator)defaultPool.currentRootObjectStore();
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
-            EOSharedEditingContext sec = os.sharedEditingContext();
-            ec.setSharedEditingContext(sec);
-            return ec;
-        }
 
-        protected EOEditingContext _createEditingContext(EOObjectStore parent) {
-            return new ERXEC(parent == null ? EOEditingContext.defaultParentObjectStore() : parent);
+            if (useSharedEditingContext()) {
+                EOSharedEditingContext sec = os.sharedEditingContext();
+                ec.lock();
+                try {
+                    ec.setSharedEditingContext(sec);
+                } finally {
+                    ec.unlock();
+                }
+            }
+            return ec;
         }
     }
 
