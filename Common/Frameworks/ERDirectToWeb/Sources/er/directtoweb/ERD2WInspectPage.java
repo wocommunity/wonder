@@ -28,7 +28,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public ERD2WInspectPage(WOContext context) { super(context); }
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WInspectPage");
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WInspectPage.class);
     public static final ERXLogger validationCat = ERXLogger.getERXLogger("er.directtoweb.validation.ERInspectPage");
 
     public String urlForCurrentState() {
@@ -208,38 +208,9 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             log.info(e.getMessage(), e);
             errorMessage = " Could not save your changes: "+e.getMessage()+" ";
         } catch(EOGeneralAdaptorException e) {
-            if(shouldRecoverFromOptimisticLockingFailure()){
-                NSDictionary userInfo = (NSDictionary)e.userInfo();
-                if(!(userInfo == null)) {
-                    String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
-                    if (!(eType == null)) {
-                        if (eType.equals("EOAdaptorOptimisticLockingFailure")) {
-                            //if (log.isDebugEnabled()) log.debug("about to get EOFailedAdaptorOperationKey");
-                            EOAdaptorOperation op = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
-                            EODatabaseOperation dbop = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
-                            //if (log.isDebugEnabled()) log.debug("about to get _changedValues");
-                            if (op != null && dbop != null) {
-                                NSDictionary changedValues =  op.changedValues();
-                                //if (log.isDebugEnabled()) log.debug("about to get _entity: _changedValues"+ changedValues);
-                                NSDictionary snapshot = dbop.dbSnapshot();
-                                if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
-                                EOEntity ent = op.entity();
-                                String entName = ent.name();
-                                if (log.isDebugEnabled()) log.debug("entName"+ entName);
-                                NSArray pkAttribs = ent.primaryKeyAttributes();
-                                EOQualifier qual = ERXTolerantSaver.qualifierWithSnapshotAndPks(pkAttribs, snapshot);
-                                EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
-                                fs.setRefreshesRefetchedObjects(true);
-                                NSArray objs = object().editingContext().objectsWithFetchSpecification(fs);
-                                object().editingContext().revert();
-                                errorMessage = "Could not save your changes. The "+ent.name()+
-                                    " has changed in the database before you could save. Your changes have been lost. Please reapply them.";
-                            } else {
-                                log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey. "+e+"\n\n"+e.userInfo());
-                            }
-                        }
-                    }
-                }
+            if(shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), e)) {
+                    errorMessage = "Could not save your changes. The "+d2wContext().valueForKey("displayNameForEntity")+
+                    " has changed in the database before you could save. Your changes have been lost. Please reapply them.";
             } else {
                 throw e;
             }
