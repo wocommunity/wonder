@@ -12,7 +12,7 @@ Uses OpenJMS, an open source implementation of Sun Microsystems's Java Message S
 OpenJMS Project 
 http://openjms.sourceforge.net/
 
-Sun - JMS: Java Message Service 
+Sun - JMS: Java Message Service (API Specification)
 http://java.sun.com/products/jms/
 
 
@@ -94,10 +94,10 @@ Then choose, Actions -> Shutdown OpenJMSServer from the OpenJMS Administration t
 
 Optional: Startup and Shutdown the OpenJMS Server Automatically
 ----------------------------------------------------------------
-(not yet ready) Put OpenJMS folder under Support folder into /Library/StartupItems folder. 
+Put OpenJMS folder under Support/StartupItemsMacOSX folder into /Library/StartupItems folder. 
 
 
-Optional: Improving Performance with MySQL, PostgreSQL, Oracle, etc.
+Optional: Improving Performance with MySQL, PostgreSQL, FrontBase, Oracle, etc.
 --------------------------------------------------------
 OpenJMS supports the following databases for persistent message store. They are faster databases than the embedded JDBM database, and using them should be able to improve performance. 
 
@@ -133,6 +133,13 @@ dbtool.sh -create -config ../config/rmi_jms_mysql.xml
 cd $OPENJMS_HOME/bin
 startjms.sh -config ../config/rmi_jms_mysql.xml & 
 
+5. If you have installed the OpenJMS StartupItem (Mac OS X), update the script with the configuration file you use. 
+
+With a text editor, open OpenJMS file inside /Library/StartupItems/OpenJMS folder. Update the following statement with the configuration file you use. 
+
+  # Replace this with the one that you actually use. 
+  CONFIG_FILE="rmi_jms_jdbm.xml"
+
 
 Configure your WebObjects Application
 -------------------------------------
@@ -154,3 +161,5 @@ wonder-disc@sourceforge.net
 
 September 7, 2002 (Draft) - Tatsuya Kawano <tatsuyak@mac.com>
 December 11, 2002 (Draft) - Added PostgreSQL description. by Tatsuya Kawano 
+December 29, 2002 (Draft) - Added StartupItems description. by Tatsuya Kawano
+
