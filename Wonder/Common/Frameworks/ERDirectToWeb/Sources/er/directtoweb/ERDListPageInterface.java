@@ -1,9 +1,3 @@
-//
-// ERDQueryPageInterface.java
-// Project ERDirectToWeb
-//
-// Created by bposokho on Fri Oct 18 2002
-//
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -11,8 +5,13 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
-public interface ERDQueryPageInterface extends QueryPageInterface{
+/** Extended {@see ListPageInterface} so we can get at the displayGroup. */
+public interface ERDListPageInterface extends ListPageInterface {
 
-    public void setCancelDelegate(NextPageDelegate cancelDelegate);
+    /**
+     * Returns the displayGroup for this list page.
+     * @returns the displayGroup for this list page
+     */
+    public WODisplayGroup displayGroup();
     
 }
