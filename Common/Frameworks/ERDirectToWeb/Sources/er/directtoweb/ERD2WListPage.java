@@ -68,6 +68,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         return flag;
     }
 
+    public boolean isEntityEditable() {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), false);
+    }
+
     /** Checks if the current task is select. We need this because this page implements the {@link SelectPageInterface} so we can't do an instanceof test.  */
     public boolean isSelecting() {
         return task().equals("select");
@@ -402,12 +406,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     public boolean shouldShowSelectAll() {
         return listSize()>10;
     }
-/*
-// FIXME: This needs to be generalized.
-public String pageTitle() {
-    return "NetStruxr - "+d2wContext().valueForKey("displayNameForEntity")+" List";
-}
-*/
+
     public void warmUpForDisplay(){
         //default implementation does nothing
     }
