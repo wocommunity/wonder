@@ -287,28 +287,6 @@ public class ERXUtilities {
     }
 
     /**
-     * Convenience method to get the next unique ID from a sequence.
-     * @param ec editing context
-     * @param sequenceName name of the sequence
-     * @return next value in the sequence
-     */
-    // FIXME: In following with standard EOUtilities naming ec should be the first parameter.
-    //	      also shouldn't have throws RuntimeException
-    // FIXME: Also might want to return a long
-    public static int getNextValFromSequenceNamed(String sequenceName, EOEditingContext ec) throws RuntimeException{
-        // CHECKME: Need a non-oracle specific way of doing this. Should poke around at
-        //		the adaptor level and see if we can't find something better.
-        String sqlString = "select "+sequenceName+".nextVal from dual";
-        // FIXME: Bad name reference here, should be a parameter.
-        NSArray array = EOUtilities.rawRowsForSQL( ec, "ER", sqlString);
-        if(array.count()==0)
-            throw new RuntimeException("Unable to generate value from sequence");
-        NSDictionary dictionary = (NSDictionary)array.objectAtIndex(0);
-        NSArray valuesArray = dictionary.allValues();
-        return ((Number)valuesArray.objectAtIndex(0)).intValue();
-    }
-
-    /**
      * Utility method to make a shared entity editable. This
      * can be useful if you want to have an adminstration
      * application that can edit shared enterprise objects
