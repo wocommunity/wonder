@@ -395,4 +395,59 @@ public class ERXEOAccessUtilities {
         }
         return wasHandled;
     }
+
+    /** Given an array of EOs, returns snapshot dictionaries for the given related objects. */
+    //CHECKME ak is this description correct?
+    public static NSArray snapshotsForObjectsFromRelationshipNamed(NSArray eos,String relKey) {
+        NSMutableArray result=new NSMutableArray();
+        if (eos.count()>0) {
+            String entityName=((EOEnterpriseObject)eos.objectAtIndex(0)).entityName();
+            EOEditingContext ec = ((EOEnterpriseObject)eos.objectAtIndex(0)).editingContext();
+            EOEntity entity=EOUtilities.entityNamed(ec,entityName);
+            EORelationship relationship = entity.relationshipNamed(relKey);
+            EOAttribute attribute = (EOAttribute)relationship.sourceAttributes().objectAtIndex(0);
+            EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
+            String name=attribute.name();
+            for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject target=(EOEnterpriseObject)e.nextElement();
+                Object value = (context.snapshotForGlobalID(ec.globalIDForObject(target))).valueForKey(name);
+                result.addObject(value);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Creates an array containing all of the primary
+     * keys of the given objects.
+     * @param eos array of enterprise objects
+     */
+    public static NSArray primaryKeysForObjects(NSArray eos) {
+        NSMutableArray result=new NSMutableArray();
+        if (eos.count()>0) {
+            for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject target=(EOEnterpriseObject)e.nextElement();
+                NSDictionary pKey=EOUtilities.primaryKeyForObject(target.editingContext(),target);
+                result.addObject(pKey.allValues().objectAtIndex(0));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Creates a where clause string " someKey IN ( someValue1,...)".
+     */
+    public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
+        StringBuffer sb=new StringBuffer();
+        sb.append(key);
+        sb.append(" IN ");
+        sb.append("(");
+        for (int i = 0; i < valueArray.count(); i++ ) {
+            if ( i > 0 )
+                sb.append(", ");
+            sb.append(e.sqlStringForValue(valueArray.objectAtIndex(i), key));
+        }
+        sb.append(")");
+        return sb.toString();
+    }
 }
