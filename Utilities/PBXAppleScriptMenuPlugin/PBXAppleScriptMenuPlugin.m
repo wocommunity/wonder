@@ -63,6 +63,6 @@ void EnableScriptingAdditions() {
     [self scanDirectoryAtPath:@"/Library/Contextual Menu Scripts"];
     [self scanDirectoryAtPath:[@"~/Library/Contextual Menu Scripts" stringByExpandingTildeInPath]];
 
-    [PBXTextViewPoser poseAsClass:[NSTextView class]];
+    [PBXTextViewPoser poseAsClass:[PBXTextView class]];
 }
 @end
