@@ -294,7 +294,7 @@ public final class GSVModel extends Object implements WOXMLCoding {
     public Class classForCoder() {
         try{
             return Class.forName("com.gammastream.validity.GSVModel");
-        }catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             return null;
         }
     }

@@ -32,7 +32,8 @@ public class GSVExceptionViewer extends WOComponent {
     }
     
     public NSValidation.ValidationException exception(){
-        return (NSValidation.ValidationException)this.valueForBinding("exception");
+	Object e = this.valueForBinding("exception");
+        return (NSValidation.ValidationException)e;
     }
     
     public boolean showAllErrors(){
