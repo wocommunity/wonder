@@ -46,6 +46,7 @@ public class ERXErrorDictionaryPanel extends WOComponent {
     }
 
     private final static String eliminable = "Could not save your changes: null";
+    private final static String couldNotSave = "Could not save your changes: ";
     public static String massageErrorMessage(String initialMessage, String displayErrorKey) {
         String result=ERXExtensions.substituteStringByStringInString("EOValidationException:",
                                                                     "",
@@ -76,8 +77,14 @@ public class ERXErrorDictionaryPanel extends WOComponent {
                 int colon=result.indexOf(':');
                 result= "<b>"+(displayErrorKey==null ?  result.substring(0,colon-1) : displayErrorKey);
                 result+="</b>: I could not understand the number you typed.";
-            } else if (result.indexOf(eliminable)>0)
+            } else if (result.indexOf(eliminable)>0) {
                 result=result.substring(eliminable.length()+1, result.length());
+            }
+            if(result.indexOf(couldNotSave)>0) {
+                String replace = ERXLocalizer.currentLocalizer().localizedStringForKey(couldNotSave);
+                if(replace != null)
+                    result=replace + result.substring(couldNotSave.length()+1, result.length());
+            }
         }
         return result;
     }
