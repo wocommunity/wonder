@@ -13,7 +13,7 @@ import ognl.webobjects.*;
 
 /**
  * Contains a cell in the table that {@link WRReport} has set up.
- * You should subclass this class to implement addtional behaviour
+ * You should subclass this class to implement additional behaviour
  * or cell-level rendering, like colors that depend on the current group.
  * Additionally, you must specify the components name in the bindings
  * for the report component as the <code>reportComponentName</code>
@@ -21,6 +21,8 @@ import ognl.webobjects.*;
  */
 
 public class WRRecordGroup extends WOComponent  {
+    /** logging support */
+    private static final ERXLogger log = ERXLogger.getLogger(WRRecordGroup.class,"components");
 
     String _totalToShow;
     DRRecordGroup _recordGroup;
@@ -28,24 +30,42 @@ public class WRRecordGroup extends WOComponent  {
     String _noTotalLabel;
     Boolean _showAsTable;
     Boolean _showHeadings;
+    Boolean _showRecordTable;
     DRReportModel _model;
     NSArray _colors;
     String _reportStyle;
     NSDictionary _totalDict;
     NSDictionary _coordinates;
+    int _totalCount = -1;
 
     public DRRecord record;
     public DRValue value;
     public DRValue totalValue;
 
     String bgcolor;
-    int _totalCount;
 
     public WRRecordGroup(WOContext c){
         super(c);
     }
 
+    /** Resets cached values. */
+    public void reset() {
+        _totalToShow = null;
+        _recordGroup = null;
+        _displayType = null;
+        _noTotalLabel = null;
+        _showAsTable = null;
+        _showHeadings = null;
+        _showRecordTable = null;
+        _model = null;
+        _colors = null;
+        _reportStyle = null;
+        _coordinates = null;
+        _totalDict = null;
+        _totalCount = -1;
+    }
 
+    
     /** Holds the cached dictionary of formatters */
     static private NSMutableDictionary _formatDict = new NSMutableDictionary();
 
@@ -88,28 +108,11 @@ public class WRRecordGroup extends WOComponent  {
         return true;
     }
     
-    /** Resets cached values. */
-    public void reset() {
-        _totalToShow = null;
-        _colors = null;
-        _totalDict = null;
-        _totalCount = -1;
-        _model = null;
-        _recordGroup = null;
-        _displayType = null;
-        _noTotalLabel = null;
-        _showAsTable = null;
-        _showHeadings = null;
-        _reportStyle = null;
-        _coordinates = null;
-    }
-
     public void sleep() {
-        this.reset();
+        //this.reset();
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        this.reset();
         super.appendToResponse(r, c);
     }
 
@@ -173,11 +176,11 @@ public class WRRecordGroup extends WOComponent  {
     public double totalValueTotal() {
         if(totalValue != null) {
             if(totalValue.key().indexOf("~") == 0) {
-                return DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup().rawRecordList()));
+                return DRValueConverter.converter().doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup().rawRecordList()));
             } else {
                 String totalKey = (String)totalValue.attribute().userInfo().objectForKey("total");
                 if(totalKey != null) {
-                    return DRCriteria.doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
+                    return DRValueConverter.converter().doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
                 }
             }
             return totalValue.total();
@@ -232,10 +235,10 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showRecordTable() {
-        if ("TABLE".equals(displayType())) {
-            return true;
+        if(_showRecordTable == null) {
+            _showRecordTable = "TABLE".equals(displayType()) ? Boolean.TRUE: Boolean.FALSE;
         }
-        return false;
+        return _showRecordTable.booleanValue();
     }
 
 
@@ -309,9 +312,9 @@ public class WRRecordGroup extends WOComponent  {
 
         if(totalKey != null) {
             if(totalKey.indexOf("~") == 0) {
-                doubleValue = DRCriteria.doubleForValue(WOOgnl.factory().getValue(totalKey.substring(1), recordGroup().rawRecordList()));
+                doubleValue = DRValueConverter.converter().doubleForValue(WOOgnl.factory().getValue(totalKey.substring(1), recordGroup().rawRecordList()));
             } else if(totalKey.indexOf("@") == 0) {
-                doubleValue = DRCriteria.doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
+                doubleValue = DRValueConverter.converter().doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
                 if(doubleValue == 0.0 && totalKey.indexOf("@count") == 0) {
                     return this.noTotalLabel();
                 }
@@ -372,19 +375,21 @@ public class WRRecordGroup extends WOComponent  {
     public NSArray colors() {
         if (_colors == null) {
             _colors = (NSArray)this.valueForBinding("colors");
-            if(_colors == null){
-                _colors = new NSArray();
+            if(_colors == null) {
+                _colors = NSArray.EmptyArray;
             }
         }
         return _colors;
     }
 
     public int totalCount() {
-        NSDictionary d = this.totalDict();
-        if (d == null) {
-            _totalCount = 0;
-        } else {
-            _totalCount = d.allKeys().count();
+        if(_totalCount != -1) {
+            NSDictionary d = this.totalDict();
+            if (d == null) {
+                _totalCount = 0;
+            } else {
+                _totalCount = d.allKeys().count();
+            }
         }
         return _totalCount;
     }
