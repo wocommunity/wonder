@@ -3,9 +3,6 @@ ActiveImage2: WOActiveImage { border=0;action = deleteSubAttribute; filename = "
 ActiveImage3: WOActiveImage { border=0;action = down; filename = "down.gif"; }
 ActiveImage4: WOActiveImage { border=0;action = up; filename = "up.gif"; }
 ActiveImage5: WOActiveImage { border=0;action = showUserInfo; filename = "cc1_infobutton.gif"; }
-add: WOActiveImage { border=0;action = add; filename = "cc1_addbutton_v2.gif"; }
-
-toggle:WOActiveImage {border=0; filename= toggleGroupImg; action= toggleGroup;};
 CheckBox1: WOCheckBox { checked = attribute.shouldSort; }
 CheckBox3: WOCheckBox { checked = attribute.shouldTotal; }
 Conditional1: WOConditional { condition = attribute.isGroup; negate = 1; }
@@ -21,12 +18,19 @@ TextField1: WOTextField { size = 14; value = attribute.keyPath; }
 TextField2: WOTextField { value = attribute.label; }
 TextField3: WOTextField { size = 7; value = attribute.format; }
 
+TextField4: WOTextField {
+	value = attribute.userInfo.total;
+}
+add: WOActiveImage { border=0;action = add; filename = "cc1_addbutton_v2.gif"; }
+img:WOImage{
+	filename="1pixel.gif";
+}
+
 td:WOGenericContainer{
 	elementName="TD";
 	bgcolor="cccccc";
 	width=2;
 	rowspan=rowspan;
 }
-img:WOImage{
-	filename="1pixel.gif"
-}
+
+toggle:WOActiveImage {border=0; filename= toggleGroupImg; action= toggleGroup;};
