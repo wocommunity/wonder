@@ -1075,11 +1075,6 @@
 			settings = {
 			};
 		};
-		F5588414025A532301000102 = {
-			isa = PBXFileReference;
-			path = ERXLog4JCategory.java;
-			refType = 4;
-		};
 		F558841A025B832201000102 = {
 			isa = PBXFileReference;
 			path = ERXLogger.java;
@@ -1801,6 +1796,7 @@
 				F57EA68B01FF59BF019E57DA,
 				F57EA6AF01FF59BF019E57DA,
 				F57EA6C101FF59BF019E57DA,
+				F597C1870263763401000102,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -2431,6 +2427,7 @@
 				F61422E70253618901AD0D07,
 				F61422F20253620001AD0D07,
 				F61422F30253620001AD0D07,
+				F597C1880263763401000102,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -3678,6 +3675,17 @@
 			path = ERXNonZeroConditional.wo;
 			refType = 4;
 		};
+		F597C1870263763401000102 = {
+			isa = PBXFileReference;
+			path = Localizable.strings;
+			refType = 4;
+		};
+		F597C1880263763401000102 = {
+			fileRef = F597C1870263763401000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5A3C5C20219A7D701A801D4 = {
 			isa = PBXFileReference;
 			path = ERXTimestampUtility.java;
@@ -4712,7 +4720,6 @@
 				F645C8880247899001AD0D07,
 				F57EA5E701FF59BF019E57DA,
 				F57EA5EE01FF59BF019E57DA,
-				F5588414025A532301000102,
 				F558841A025B832201000102,
 			);
 			isa = PBXGroup;
