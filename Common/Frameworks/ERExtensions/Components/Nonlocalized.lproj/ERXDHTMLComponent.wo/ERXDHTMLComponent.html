@@ -210,13 +210,18 @@ function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 		if(baseUrl == "") {
 			baseUrl = "DHTMLcontrol";
 		}
+		var last = baseUrl.lastIndexOf("s.gif");
+		if(last>0) {
+		    baseUrl = baseUrl.substring(0,last);
+		}
+		//alert(baseUrl);
 		out += '<div id="'+varName+'_div'+'" style="background-color:white;position:absolute;top:'+top+'px;left:'+left+'px;width:'+width+'px;height:'+height+'px;">';
 		out += '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
 		if(hasToolbar != 0)
 		{
 			out += '<tr ><td bgcolor="#f0f0f0">';
-			out += dhtmlCmdBar(formName,varName, baseUrl+"/align","DECMD_JUSTIFY", new Array("left", "center", "right"), new Array("LEFT", "CENTER", "RIGHT"),0);
-		 	out += dhtmlCmdBar(formName,varName, baseUrl+"/format","DECMD_", new Array("bold", "italic", "underline"), new Array("BOLD", "ITALIC", "UNDERLINE"),1);
+			out += dhtmlCmdBar(formName,varName, baseUrl+"align","DECMD_JUSTIFY", new Array("left", "center", "right"), new Array("LEFT", "CENTER", "RIGHT"),0);
+		 	out += dhtmlCmdBar(formName,varName, baseUrl+"format","DECMD_", new Array("bold", "italic", "underline"), new Array("BOLD", "ITALIC", "UNDERLINE"),1);
 		 	out += '</td></tr>';
 		}
 	 	out += '<tr><td>';
@@ -250,5 +255,5 @@ function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 	}
 }
 </WEBOBJECT>
-dhtmlCreate("<WEBOBJECT NAME=FormName/>","<WEBOBJECT NAME=VarName/>","<WEBOBJECT NAME=BaseUrl2/>",1);
+dhtmlCreate("<WEBOBJECT NAME=FormName/>","<WEBOBJECT NAME=VarName/>","<WEBOBJECT NAME=BaseUrl/>",1);
 </script>
