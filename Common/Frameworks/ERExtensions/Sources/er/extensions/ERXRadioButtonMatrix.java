@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
 public class ERXRadioButtonMatrix extends WOComponent {
 
@@ -18,9 +17,6 @@ public class ERXRadioButtonMatrix extends WOComponent {
         super(aContext);
     }
 
-    ////////////////////////////////////////  log4j category  /////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXRadioButtonMatrix.class);
-    
     protected Object currentItem;
     protected Object _selection;
     protected Number index;

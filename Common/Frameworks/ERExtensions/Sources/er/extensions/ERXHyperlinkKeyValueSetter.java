@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 
 public class ERXHyperlinkKeyValueSetter extends WOComponent {
@@ -15,11 +14,10 @@ public class ERXHyperlinkKeyValueSetter extends WOComponent {
         super(aContext);
     }
 
-    public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
     
     public WOComponent action() {
-        setValueForBinding(valueForBinding("value"),"binding");
+        setValueForBinding(valueForBinding("value"), "binding");
         return null;
     }
 }

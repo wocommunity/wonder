@@ -6,15 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
-public class ERXLinkRandomizer extends WOComponent {
+public class ERXLinkRandomizer extends ERXStatelessComponent {
 
     public ERXLinkRandomizer(WOContext context) {
         super(context);
     }
-
 }

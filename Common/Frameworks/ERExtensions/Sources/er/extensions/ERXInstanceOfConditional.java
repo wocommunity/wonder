@@ -24,7 +24,7 @@ public class ERXInstanceOfConditional extends WOComponent {
     }
 
     ////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXInstanceOfConditional.class);
+    public final static Category log = Category.getInstance(ERXInstanceOfConditional.class);
     
     public boolean isStateless() { return true; }
     public void reset() { _instanceOf = null; }
@@ -33,12 +33,12 @@ public class ERXInstanceOfConditional extends WOComponent {
     public boolean instanceOf() {
         if (_instanceOf == null) {
             Class instance = null;
-            try {
-                _NSUtilities.classWithName((String)valueForBinding("className"));
-            } catch (Exception e) {
-                cat.error("Invalid Class Name: " + valueForBinding("className") + " exception: " + e);
-                throw new RuntimeException("Invalid Class Name: " + valueForBinding("className") + " exception: " + e);
-            }
+            String className = (String)valueForBinding("className");
+            if (log.isDebugEnabled())
+                log.debug("Resolving class: " + className);
+            instance = _NSUtilities.classWithName(className);
+            if (instance == null)
+                throw new NSForwardException(new ClassNotFoundException((String)valueForBinding("className")));
             _instanceOf = instance.isInstance(valueForBinding("object")) ? Boolean.TRUE : Boolean.FALSE;
         }
         return _instanceOf.booleanValue();

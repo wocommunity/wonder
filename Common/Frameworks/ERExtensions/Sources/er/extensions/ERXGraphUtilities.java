@@ -21,13 +21,13 @@ public class ERXGraphUtilities {
 
     public final static Category cat = Category.getInstance(ERXGraphUtilities.class);
 
-    public static Integer fiftyOne = new Integer(51);
-    public static Integer oneHundredTwo = new Integer(102);
-    public static Integer oneHundredFiftyThree = new Integer(153);
-    public static Integer oneHundredSixtySix = new Integer(166);
-    public static Integer twoHundredFour = new Integer(204);
-    public static Integer twoHundredFiftyFour = new Integer(254);
-    public static Integer twoHundredFiftyFive = new Integer(255);
+    public static Integer fiftyOne = ERXConstant.integerForInt(51);
+    public static Integer oneHundredTwo = ERXConstant.integerForInt(102);
+    public static Integer oneHundredFiftyThree = ERXConstant.integerForInt(153);
+    public static Integer oneHundredSixtySix = ERXConstant.integerForInt(166);
+    public static Integer twoHundredFour = ERXConstant.integerForInt(204);
+    public static Integer twoHundredFiftyFour = ERXConstant.integerForInt(254);
+    public static Integer twoHundredFiftyFive = ERXConstant.integerForInt(255);
 
     public static NSArray orange = new NSArray(new Object[]{twoHundredFiftyFive,oneHundredTwo, ERXConstant.ZeroInteger});
     public static NSArray yellow = new NSArray(new Object[]{twoHundredFiftyFive,oneHundredFiftyThree,ERXConstant.ZeroInteger });

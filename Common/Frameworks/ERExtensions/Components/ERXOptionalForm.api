@@ -7,6 +7,8 @@
 		<binding name="name"/>
 		<binding name="enctype"/>
 		<binding name="multipleSubmit" defaults="Boolean"/>
+		<binding name="directActionName"/>
+		<binding name="actionClass"/>
 
 		<validation message="&apos;hasForm&apos; is a required binding">
 			<unbound name="hasForm"/>
