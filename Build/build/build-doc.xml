@@ -6,13 +6,13 @@
 <!-- Called from "build.xml", normally shouldn't be used as   --> 
 <!-- a standalone buildfile.                                  -->
 <!-- ======================================================== -->
-<project name="wonder-doc" default="doc" basedir="..">
+<project name="wonder-doc" default="doc" basedir="../..">
 
     <!-- ==================================================== -->
     <!--              CLASSPATH settings                      -->
     <!-- ==================================================== -->
     <path id="classpath">
-        <fileset dir="lib">
+        <fileset dir="Build/lib">
             <include name="cayenne.jar"/>
             <include name="jdom*.jar"/>
         </fileset>
@@ -45,18 +45,18 @@
         </taskdef>
 
         <!-- Build site -->
-        <anakia basedir="xdocs" destdir="${dist}/doc"
+        <anakia basedir="Build/xdocs" destdir="${dist}/doc"
              extension=".html" style="wonder.vsl"
              projectFile="stylesheets/project.xml"
              excludes="**/stylesheets/**"
              includes="**/*.xml"
              lastModifiedCheck="true"
-             templatePath="xdocs/stylesheets">
+             templatePath="Build/xdocs/stylesheets">
         </anakia>
 
         <!-- copy resources -->
         <copy todir="${dist}/doc" filtering="no">
-            <fileset dir="xdocs">
+            <fileset dir="Build/xdocs">
                 <include name="**/*.gif"/>
                 <include name="**/*.jpeg"/>
                 <include name="**/*.jpg"/>
