@@ -141,6 +141,8 @@
 				9DC9079A0351F85B10CF0E7D,
 				F550BFB703B2535801CCC668,
 				F550BFBA03B253CD01CCC668,
+				949E34B3067D631B0097CB1D,
+				949E34B5067D63260097CB1D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,6 +404,8 @@
 				946A96B60468773B00CF0E7D,
 				946A96B70468773B00CF0E7D,
 				946A96B80468773B00CF0E7D,
+				949E34B2067D631B0097CB1D,
+				949E34B4067D63260097CB1D,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -873,6 +877,30 @@
 		};
 		946A96BC0468773B00CF0E7D = {
 			fileRef = 946A96B80468773B00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		949E34B2067D631B0097CB1D = {
+			isa = PBXFileReference;
+			name = top.gif;
+			path = WebServerResources/top.gif;
+			refType = 4;
+		};
+		949E34B3067D631B0097CB1D = {
+			fileRef = 949E34B2067D631B0097CB1D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		949E34B4067D63260097CB1D = {
+			isa = PBXFileReference;
+			name = bottom.gif;
+			path = WebServerResources/bottom.gif;
+			refType = 4;
+		};
+		949E34B5067D63260097CB1D = {
+			fileRef = 949E34B4067D63260097CB1D;
 			isa = PBXBuildFile;
 			settings = {
 			};
