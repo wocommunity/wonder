@@ -561,4 +561,16 @@ public class ERXEOAccessUtilities {
         sb.append(")");
         return sb.toString();
     }
+
+    /**
+     * Returns the database context for the given entity in the given EOObjectStoreCoordinator
+     * @param entityName
+     * @param osc
+     * @return
+     */
+    public static EODatabaseContext databaseContextForEntityNamed(EOObjectStoreCoordinator osc, String entityName) {
+        EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
+        return dbc;
+    }
 }
