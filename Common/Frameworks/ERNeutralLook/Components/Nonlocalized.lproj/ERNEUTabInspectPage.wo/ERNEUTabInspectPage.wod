@@ -133,6 +133,7 @@ EditForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
 	showForm = d2wContext.hasForm;
 	name = "EditForm";
+	multipleSubmit = true;
 }
 
 EditImage: WOImage {
