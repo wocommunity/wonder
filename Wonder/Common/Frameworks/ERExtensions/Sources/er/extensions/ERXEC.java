@@ -614,7 +614,7 @@ public class ERXEC extends EOEditingContext {
     public void saveChanges(Object obj) {
         boolean wasAutoLocked = autoLock("saveChanges");
         try {
-            super.saveChanges(obj);
+            super.saveChanges();
         } finally {
             autoUnlock(wasAutoLocked);
         }
