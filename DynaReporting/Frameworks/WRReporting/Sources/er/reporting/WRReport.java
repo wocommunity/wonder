@@ -44,7 +44,6 @@ public class WRReport extends WOComponent  {
     protected Boolean _showRecordGroupHeadings;
     protected Boolean _showPresentationControls;
     protected Boolean _showEditing;
-    protected Boolean _shouldGetColorsFromParent;
     
     protected String _componentName;
 
@@ -111,28 +110,29 @@ public class WRReport extends WOComponent  {
         _indexDict.removeAllObjects();
         _colorDict = null;
         _showPresentationControls = null;
-        //[_currentZCriteria removeAllObjects];
-            initializeDimensionArrayFromBindings();
-   }
+        _currentZCriteria.removeAllObjects();
+        initializeDimensionArrayFromBindings();
+    }
 
-
+    
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r, c);
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        _indexDict.removeAllObjects();
-        //[_currentZCriteria removeAllObjects];
-        _model = null;
-        _colorDict = null;
+        if(false) {
+            _indexDict.removeAllObjects();
+            _model = null;
+            _colorDict = null;
+        }
         super.appendToResponse(r, c);
     }
 
 
     public void rebuildModel(NSNotification not) {
         _currentZCriteria.removeAllObjects();
-        _initializedDimensionArrayFromBindings = false;
-        initializeDimensionArrayFromBindings();
+        //_initializedDimensionArrayFromBindings = false;
+        //initializeDimensionArrayFromBindings();
         log.info("Rebuild model");
     }
 
@@ -491,15 +491,6 @@ public class WRReport extends WOComponent  {
         return dict;
     }
 
-    public boolean shouldGetColorsFromParent() {
-        if (_shouldGetColorsFromParent == null) {
-            boolean shouldGetColorsFromParent = hasBinding("currentCoordinates") && canSetValueForBinding("currentCoordinates");
-            shouldGetColorsFromParent = shouldGetColorsFromParent & hasBinding("colorForCoordinates") & canGetValueForBinding("colorForCoordinates");
-                _shouldGetColorsFromParent = shouldGetColorsFromParent ? Boolean.TRUE : Boolean.FALSE;
-        }
-        return _shouldGetColorsFromParent.booleanValue();
-    }
-    
     public NSDictionary currentCoordinates() {
         NSDictionary dict = this.addCoordsFrom(_currentZCriteria);
         return dict;
@@ -727,25 +718,20 @@ public class WRReport extends WOComponent  {
 
 
     public String colorForCoords() {
-        if(shouldGetColorsFromParent()) {
-            setValueForBinding(currentCoordinates(), "currentCoordinates");
-            return (String)valueForBinding("colorForCoordinates");
-        } else {
-            int totalCount = this.totalCount();
-            int maxColorsConfigured = this.colorDict().count();
+        int totalCount = this.totalCount();
+        int maxColorsConfigured = this.colorDict().count();
 
-            if (totalCount == maxColorsConfigured) {
-                return "eeeeee";
-            }
-
-            if (totalCount > maxColorsConfigured) {
-                return "ffffff";
-            }
-            return (String)this.colorDict().objectAtIndex(totalCount);
+        if (totalCount == maxColorsConfigured) {
+            return "#eeeeee";
         }
-    }
-    
 
+        if (totalCount > maxColorsConfigured) {
+            return "#ffffff";
+        }
+        return (String)this.colorDict().objectAtIndex(totalCount);
+    }
+
+    
     public String bgcolorColSpanTd() {
         return this.colorForCoords();
     }
@@ -768,11 +754,11 @@ public class WRReport extends WOComponent  {
 
     public NSArray colorDict() {
         if (_colorDict == null) {
-            if (!this.hasBinding("colors")) {
-                _colorDict = new NSArray(new Object[]{"c6c3af" , "b7af4b" , "d5ba27" , "ffec00"});
-                //@"a3a18d"
-            } else {
+            if (this.hasBinding("colors")) {
                 _colorDict = (NSArray)this.valueForBinding("colors");
+            }
+            if (_colorDict == null) {
+                _colorDict = new NSArray(new Object[]{"#c6c3af" , "#b7af4b" , "#d5ba27" , "#ffec00"});
             }
 
             /*
