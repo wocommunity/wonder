@@ -137,7 +137,7 @@
             <bottom><![CDATA[Copyright &#169; 2002 Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
-            <link href="http://developer.apple.com/techpubs/webobjects/Reference/Javadoc/"/>
+            <link href="http://developer.apple.com/techpubs/webobjects/WebObjects_5.1/Reference/Javadoc/"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://www.junit.org/junit/javadoc/3.7/"/>
         </javadoc>
