@@ -1075,6 +1075,28 @@
 			settings = {
 			};
 		};
+		F5588414025A532301000102 = {
+			isa = PBXFileReference;
+			path = ERXLog4JCategory.java;
+			refType = 4;
+		};
+		F5588416025A53D101000102 = {
+			fileRef = F5588414025A532301000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F558841A025B832201000102 = {
+			isa = PBXFileReference;
+			path = ERXLogger.java;
+			refType = 4;
+		};
+		F558841B025B832301000102 = {
+			fileRef = F558841A025B832201000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F57890BC0221E1F901A801D4 = {
 			isa = PBXFileReference;
 			path = WXOutlineControl.java;
@@ -1108,7 +1130,6 @@
 				F57EA6ED01FF59C0019E57DA,
 				669CC7790236A4B800CD2933,
 				F61422F70253628701AD0D07,
-				F61422F50253624C01AD0D07,
 				F57EA6E201FF59C0019E57DA,
 				F57EA6FD01FF59C0019E57DA,
 				F57EA68701FF59BF019E57DA,
@@ -2596,6 +2617,8 @@
 				F604FC9C0259E8FB01AD0D07,
 				F604FC9D0259E8FB01AD0D07,
 				F604FC9E0259E8FB01AD0D07,
+				F5588416025A53D101000102,
+				F558841B025B832301000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -3053,7 +3076,6 @@
 			files = (
 				669CC77A0236A4B800CD2933,
 				669CC77C0236A5C200CD2933,
-				F61422F60253624D01AD0D07,
 				F61422F80253628801AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
@@ -4378,17 +4400,6 @@
 			settings = {
 			};
 		};
-		F61422F50253624C01AD0D07 = {
-			isa = PBXFileReference;
-			path = ClassList.txt;
-			refType = 4;
-		};
-		F61422F60253624D01AD0D07 = {
-			fileRef = F61422F50253624C01AD0D07;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F61422F70253628701AD0D07 = {
 			isa = PBXFileReference;
 			path = ERXClassList.html;
@@ -4657,6 +4668,8 @@
 				F645C8880247899001AD0D07,
 				F57EA5E701FF59BF019E57DA,
 				F57EA5EE01FF59BF019E57DA,
+				F5588414025A532301000102,
+				F558841A025B832201000102,
 			);
 			isa = PBXGroup;
 			name = "Log4j Additions";
