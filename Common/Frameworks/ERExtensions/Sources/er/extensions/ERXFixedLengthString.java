@@ -105,7 +105,7 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
                 if (sl!=l) {
                     if (sl<l) {
                         StringBuffer sb=new StringBuffer(result);
-                        if (valueForBooleanBinding("shouldPadToLength", true)) {
+                        if (booleanValueForBinding("shouldPadToLength", true)) {
                             for (int i=sl; i<l; i++) sb.append(' ');
                         }
                         result=sb.toString();
@@ -166,7 +166,7 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
         value();
         String result = null;
         if ((value() != null && valueWasTrimmed))
-            result = (String)valueForObjectBinding("suffixWhenTrimmed");
+            result = (String)objectValueForBinding("suffixWhenTrimmed");
         return result;
     }
     
@@ -175,6 +175,6 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
      * @return optionally returns the boolean value of the binding or TRUE of not given.
      */
     public boolean escapeHTML() {
-        return valueForBooleanBinding("escapeHTML", true);
+        return booleanValueForBinding("escapeHTML", true);
     }
 }
