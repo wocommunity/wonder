@@ -451,7 +451,6 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
-			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 40B5827FFFD5E7DB7F000001;
 			productRefGroup = 40B58280FFD5E8187F000001;
@@ -583,8 +582,8 @@
 	<array>
 		<string>jakarta-oro-2.0.6.jar</string>
 		<string>ERJavaMail.jar</string>
-		<string>mail.jar</string>
-		<string>activation.jar</string>
+		<string>mail-1.3.jar</string>
+		<string>activation-1.0.2.jar</string>
 	</array>
 	<key>NSJavaPathClient</key>
 	<string>ERJavaMail.jar</string>
@@ -759,7 +758,6 @@
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
-					Merge,
 				);
 			};
 		};
@@ -768,7 +766,6 @@
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
-					Merge,
 				);
 			};
 		};
@@ -802,6 +799,18 @@
 		};
 		F5109A3103816A5701000107 = {
 			fileRef = F5109A2F03816A5701000107;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F52009810393A42801000104 = {
+			fileRef = 4E16E64A0392AC7300CF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F52009830393A42A01000104 = {
+			fileRef = 4E16E64B0392AC7300CF0E72;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1063,7 +1072,6 @@
 			isa = PBXBuildFile;
 			settings = {
 				ATTRIBUTES = (
-					Merge,
 				);
 			};
 		};
@@ -1103,6 +1111,8 @@
 			dstSubfolderSpec = 7;
 			files = (
 				F53788AA0335AE3A01000010,
+				F52009810393A42801000104,
+				F52009830393A42A01000104,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
