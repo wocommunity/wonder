@@ -22,7 +22,7 @@ import java.util.Enumeration;
 public class ERXSimpleTemplateParser {
 
     //////////////////////////////////////////////  log4j category  ////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXSimpleTemplateParser.class);
+    public final static Category cat = Category.getInstance(ERXSimpleTemplateParser.class.getName());
 
     private static ERXSimpleTemplateParser _sharedInstance;
     public static ERXSimpleTemplateParser sharedInstance() {
