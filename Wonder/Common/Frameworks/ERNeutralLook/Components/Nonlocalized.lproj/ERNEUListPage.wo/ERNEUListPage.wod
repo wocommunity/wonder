@@ -59,20 +59,6 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-DeleteEO2: WOHyperlink {
-	action = deleteObjectAction;
-}
-
-DeleteImage2: WOImage {
-	alt = "Delete that Object";
-	border = "0";
-	filename = "trashcan-btn.gif";
-	framework = "JavaDirectToWeb";
-	height = "16";
-	name = "Delete that Object";
-	width = "14";
-}
-
 EditEO: WOHyperlink {
 	action = editObjectAction;
 }
@@ -150,7 +136,7 @@ InspectImage: WOImage {
 
 IsEntityNotWritable: WOConditional {
 	_unroll = true;
-	condition = isEntityReadOnly;
+	condition = isEntityInspectable;
 }
 
 IsEntityWritable: WOConditional {
@@ -161,8 +147,7 @@ IsEntityWritable: WOConditional {
 
 IsEntityWritable2: WOConditional {
 	_unroll = true;
-	condition = isEntityReadOnly;
-	negate = true;
+	condition = d2wContext.isEntityDeletable;
 }
 
 IsListing: WOConditional {
@@ -279,5 +264,11 @@ ShowCancel2: WOConditional {
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
+}
+
+Trash: ERDTrashcan {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	object = object;
 }
 
