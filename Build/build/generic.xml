@@ -209,7 +209,7 @@ There are many ways to use this script:
                 <isfalse value="${wonder.development}"/>
             </and>
         </condition>
-        <condition property="wonder.lib.root" value="${user.home}/Roots">
+        <condition property="wonder.lib.root" value="${build.root}">
             <or>
                 <not><equals arg1="${project.type}" arg2="application" /></not>
                 <istrue value="${wonder.development}" />
