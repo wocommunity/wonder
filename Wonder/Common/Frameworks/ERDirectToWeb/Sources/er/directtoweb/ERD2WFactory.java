@@ -13,6 +13,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERD2WFactory extends D2W {
 
@@ -41,7 +42,52 @@ public class ERD2WFactory extends D2W {
         myCheckRules();
         return super. pageForConfigurationNamed(name, s);
     }
-    
+
+    private EOEnterpriseObject _newObjectWithEntityNamed(String entityName, EOEditingContext ec) {
+        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+        if (entity.isReadOnly()) {
+            throw new IllegalArgumentException(" You can't create a new instance of " + entityName + ". It is a read-only entity.  It is marked read-only in the model.");
+        }
+        if (entity.isAbstractEntity()) {
+            throw new IllegalArgumentException(" You can't create a new instance of " + entityName + ". It is an abstract entity");
+        }
+        ec.lock();
+        EOEnterpriseObject eo;
+        try {
+            EOClassDescription cd = entity.classDescriptionForInstances();
+            eo = (cd.createInstanceWithEditingContext(ec, null));
+            ec.insertObject(eo);
+        } finally {
+            ec.unlock();
+        }
+        return eo;
+    }
+    public EditPageInterface editPageForNewObjectWithEntityNamed(String string, WOSession wosession) {
+            EditPageInterface editpageinterface = editPageForEntityNamed(string, wosession);
+            EOEditingContext eoeditingcontext
+                = ERXExtensions.newEditingContext(wosession.defaultEditingContext()
+                                       .parentObjectStore());
+            EOEnterpriseObject eoenterpriseobject
+                = _newObjectWithEntityNamed(string, eoeditingcontext);
+            editpageinterface.setObject(eoenterpriseobject);
+            eoeditingcontext.hasChanges();
+            return editpageinterface;
+        }
+    public EditPageInterface editPageForNewObjectWithConfigurationNamed
+        (String string, WOSession wosession) {
+            EditPageInterface editpageinterface
+            = (EditPageInterface) pageForConfigurationNamed(string, wosession);
+            EOEditingContext eoeditingcontext
+                = ERXExtensions.newEditingContext(wosession.defaultEditingContext()
+                                       .parentObjectStore());
+            D2WContext d2wcontext = ((D2WPage) editpageinterface).d2wContext();
+            String entityName = d2wcontext.entity().name();
+            EOEnterpriseObject eoenterpriseobject
+                = _newObjectWithEntityNamed(entityName,                                            eoeditingcontext);
+            editpageinterface.setObject(eoenterpriseobject);
+            eoeditingcontext.hasChanges();
+            return editpageinterface;
+        }
     public WOComponent pageForTaskAndEntityNamed(String task, String entityName, WOSession session) {
         myCheckRules();
         D2WContext newContext=new D2WContext(session);
