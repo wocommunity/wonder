@@ -1435,6 +1435,12 @@
                         value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
                     }, 
                     {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        selectorName = "isGreaterThan"; 
+                        value = {class = java.lang.Number; value = 0; }; 
+                    }, 
+                    {
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
