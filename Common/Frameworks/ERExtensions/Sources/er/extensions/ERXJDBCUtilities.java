@@ -125,15 +125,6 @@ public class ERXJDBCUtilities {
 			return;
 		}
 
-		//transfer the data
-		//build the insert sql
-		//the sql looks like 'insert into TABLE (COLUMNS) values (VALUES);
-		//HACKALERT: this works fine for me...
-		if (destinationIsPostgres) {
-		    tableName = tableName.toUpperCase();
-		    columns = columns.toUpperCase();
-		}
-		
 		StringBuffer buf1 = new StringBuffer();
 		buf1
 		.append("insert into ")
