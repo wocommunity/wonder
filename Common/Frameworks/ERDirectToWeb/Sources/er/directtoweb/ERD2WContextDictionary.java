@@ -169,8 +169,16 @@ public class ERD2WContextDictionary {
             if(displayPropertyKeys != null && displayPropertyKeys.count() > 0) {
                 NSMutableDictionary componentLevelKeys = new NSMutableDictionary();
                 for(Enumeration e = displayPropertyKeys.objectEnumerator(); e.hasMoreElements(); ) {
-                    String key = (String)e.nextElement();
-                    componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
+                    Object o = (Object)e.nextElement();
+                    if(o instanceof NSArray) {
+                        for(Enumeration e1 = ((NSArray)o).objectEnumerator(); e1.hasMoreElements(); ) {
+                            String key = (String)e1.nextElement();
+                            componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
+                        }
+                    } else {
+                        String key = (String)o;
+                        componentLevelKeys.setObjectForKey(componentLevelValuesForKey(key), key);
+                    }
                 }
                 _dictionary.setObjectForKey( componentLevelKeys, "componentLevelKeys");
             }
