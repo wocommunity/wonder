@@ -62,7 +62,7 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
             }
         } catch (ERXValidationException ex) {
             try {
-                log.info(ex);
+                log.debug(ex);
                 NSKeyValueCoding d2wContext = (NSKeyValueCoding)page.valueForKey("d2wContext");
                 d2wContext.takeValueForKey(key, "propertyKey");
                 ex.setContext(d2wContext);
