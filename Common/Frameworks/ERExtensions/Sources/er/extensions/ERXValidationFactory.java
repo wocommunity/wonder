@@ -352,8 +352,9 @@ public class ERXValidationFactory {
                 targetLanguage = ERXLocalizer.currentLocalizer() != null ? ERXLocalizer.currentLocalizer().language() : ERXLocalizer.defaultLanguage();
             }
             
-            log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
-            ERXMultiKey k = new ERXMultiKey(new Object[] {entityName, property,
+            if (log.isDebugEnabled ())
+                log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
+            ERXMultiKey k = new ERXMultiKey (new Object[] {entityName, property,
                 type,targetLanguage});
             template = (String)_cache.get(k);
             // Not in the cache.  Simple resolving.
