@@ -26,6 +26,7 @@ import er.extensions.*;
  *  Optional Fields:<br>
  *	BCCAddresses - coma separated list of email address to bcc on the email
  *	CCAddresses - coma separated list of email address to cc on the email
+ * 	ReplyTo - reply to address
  *	DomainName - When generating a from email address, used for the bit after the
  *		@, ie fo@bar.com, the domain name is 'bar.com'.
  *	HostName - When generating an email address from, defaults to name of the
@@ -43,6 +44,9 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
 
     /** holds the computed from address */
     protected String computedFromAddress;
+
+    /** holds the reply to address */
+    protected String replyTo;
     
     /** holds the to addresses */
     protected String toAddresses;
@@ -102,6 +106,21 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
      */
     public void setFromAddress(String fromAddress) { this.fromAddress = fromAddress; }
 
+
+    /**
+     * Gets the reply to address set by the user.
+     * @return the reply to address.
+     */
+    public String getReplyTo() {
+        return replyTo;
+    }
+
+    /**
+     * Sets the reply to address.
+     * @param reply to address to use when generating emails.
+     */
+    public void setReplyTo(String replyTo) { this.replyTo = replyTo; }
+    
     /**
      * Gets the from address for the appender.
      * If a from address is not specified then
@@ -324,13 +343,16 @@ public class ERCMailMessageAppender extends AppenderSkeleton {
                 event.getRenderedMessage();
             }
             
-            ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
+            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(computedFromAddress(),
                                                           toAddressesAsArray(),
                                                           ccAddressesAsArray(),
                                                           bccAddressesAsArray(),
                                                           title,
                                                           this.layout.format(event),
                                                           editingContext());
+            if (getReplyTo() != null) {
+                message.setReplyToAddress(getReplyTo());
+            }
             try {
                 editingContext().saveChanges();
             } catch (RuntimeException e) {
