@@ -12,6 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import er.extensions.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
@@ -271,7 +272,14 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     standardExceptionPage.setExtraInfo(extraInfo);
 
                     EOEditingContext ec = ERXExtensions.newEditingContext();
-                    String shortExceptionName = ERXStringUtilities.lastPropertyKeyInKeyPath(exception.getClass().getName());
+
+                    String shortExceptionName;
+                    Throwable exceptionForTitle = exception;
+                    if (exception instanceof InvocationTargetException) {
+                        exceptionForTitle = ((InvocationTargetException)exception).getTargetException();
+                    } 
+                    shortExceptionName = ERXStringUtilities.lastPropertyKeyInKeyPath(exceptionForTitle.getClass().getName());                        
+                    
                     String hostName = ERXConfigurationManager.defaultManager().hostName();
 
                     ERCMailDelivery.sharedInstance().composeEmail(WOApplication.application().name()+"-"+hostName+"@"+problemEmailDomain(),
