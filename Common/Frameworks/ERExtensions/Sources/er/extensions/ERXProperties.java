@@ -32,6 +32,44 @@ public class ERXProperties {
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
 
+    /** WebObjects version number as string */
+    private static String _webObjectsVersion;
+
+    /** 
+     * Puts handy properties such as <code>com.webobjects.version</code> 
+     * into the system properties. This method is called when 
+     * the framework is initialized  
+     * (when WOApplication.ApplicationWillFinishLaunchingNotification 
+     * is posted.)
+     */
+    public static void populateSystemProperties() {
+        System.setProperty("com.webobjects.version", webObjectsVersion());
+    }
+
+    /** 
+     * Returns WebObjects version as string. If it's one of those 
+     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
+     * return 5.1. If it's 5.2s, this mothod will return more precise 
+     * version numbers such as 5.2.1. Note that version 5.0 series 
+     * is not supported and may return incorrect version numbers 
+     * (it will return 5.1). 
+     * 
+     * @return WebObjects version number as string. 
+     */ 
+    public static String webObjectsVersion() {
+        if (_webObjectsVersion == null) {
+            NSBundle webobjectsBundle = NSBundle.bundleForName("JavaWebObjects");
+            _webObjectsVersion = (String)webobjectsBundle.infoDictionary()
+                                            .objectForKey("CFBundleShortVersionString");
+            _webObjectsVersion = _webObjectsVersion.trim(); // remove the line ending char
+            
+            // if _webObjectsVersion is null or null-string, we assume it's WebObjects 5.1.x
+            if (_webObjectsVersion == null  ||  _webObjectsVersion.length() == 0) 
+                _webObjectsVersion = "5.1";
+        }
+        return _webObjectsVersion;
+    }
+
     /**
      * Cover method for returning an NSArray for a
      * given system property.
