@@ -703,64 +703,6 @@
 			settings = {
 			};
 		};
-		418904D40536BFFE00000107 = {
-			children = (
-				418904D50536BFFE00000107,
-				418904D60536BFFE00000107,
-				418904D70536BFFE00000107,
-			);
-			isa = PBXGroup;
-			name = ERD2WQueryTwoLevelToOneRelationship;
-			refType = 4;
-		};
-		418904D50536BFFE00000107 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = ERD2WQueryTwoLevelToOneRelationship.api;
-			path = Components/ERD2WQueryTwoLevelToOneRelationship.api;
-			refType = 4;
-		};
-		418904D60536BFFE00000107 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = ERD2WQueryTwoLevelToOneRelationship.java;
-			path = Sources/er/directtoweb/ERD2WQueryTwoLevelToOneRelationship.java;
-			refType = 4;
-		};
-		418904D70536BFFE00000107 = {
-			children = (
-				418904D80536BFFE00000107,
-			);
-			isa = PBXVariantGroup;
-			name = ERD2WQueryTwoLevelToOneRelationship.wo;
-			path = "";
-			refType = 4;
-		};
-		418904D80536BFFE00000107 = {
-			includeInIndex = 1;
-			isa = PBXFolderReference;
-			name = Nonlocalized;
-			path = Components/Nonlocalized.lproj/ERD2WQueryTwoLevelToOneRelationship.wo;
-			refType = 4;
-		};
-		418904DD0536BFFE00000107 = {
-			fileRef = 418904D50536BFFE00000107;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		418904DE0536BFFE00000107 = {
-			fileRef = 418904D60536BFFE00000107;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		418904DF0536BFFE00000107 = {
-			fileRef = 418904D70536BFFE00000107;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		418CC2E8044306F500AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -821,7 +763,6 @@
 		4198EB910526E4660048E379 = {
 			children = (
 				F6E7969B02C877AF01AD0D07,
-				418904D40536BFFE00000107,
 				F6E7968502C877AF01AD0D07,
 				FBD20D3C95A2D86A72DEDD96,
 				F6E7968902C877AF01AD0D07,
@@ -9139,8 +9080,6 @@
 				410A1F570508A4B500000104,
 				410A1F590508A4B500000104,
 				4198F0380526ED710048E379,
-				418904DD0536BFFE00000107,
-				418904DF0536BFFE00000107,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9378,7 +9317,6 @@
 				410CB69E05250FCD0051BB32,
 				410CBB5C052594850051BB32,
 				417A1B58052CCCE200000105,
-				418904DE0536BFFE00000107,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
