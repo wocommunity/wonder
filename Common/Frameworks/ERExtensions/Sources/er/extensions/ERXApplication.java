@@ -57,7 +57,7 @@ public abstract class ERXApplication extends WOApplication {
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
         // WO 5.1 specific patches
-        if (ERXProperties.webObjectsVersionAsDouble() < 5.2) {
+        if (ERXProperties.webObjectsVersionAsDouble() < 5.2d) {
             // ERXWOText contains a patch for WOText to not include the value 
             // attribute (#2948062). Fixed in WO 5.2
             ERXCompilerProxy.defaultProxy().setClassForName(ERXWOText.class, "WOText");
