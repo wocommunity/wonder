@@ -29,6 +29,13 @@ public class ERXEditDateJavascript extends WOComponent {
     public String dateString;
     
     public String name() { return "datebox"+hashCode(); }
+    public String href() {
+        String formName = "EditForm";
+        if(context() instanceof ERXMutableUserInfoHolderInterface) {
+            formName = (String)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().objectForKey("formName");
+        }
+        return "javascript:show_calendar('"+formName+"."+name()+ "');";
+    }
     //public Object value() {return dateString;}
 
     private static String _datePickerJavaScriptUrl;
