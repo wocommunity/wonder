@@ -11,6 +11,10 @@
             page = yes; 
             supports = (justification); 
         }; 
+        ERD2WStatelessCustomComponentWithArgs = {
+            editors = (extraBindings, customComponentName); 
+            inspectionInformation = "Allows custom components to resolve valueForBinding requests in the rules."; 
+        }; 
         ERD2WCustomComponentWithArgs = {
             editors = (extraBindings, customComponentName); 
             inspectionInformation = "Allows custom components to resolve valueForBinding requests in the rules."; 
@@ -336,10 +340,6 @@
             page = yes; 
             supports = (justification); 
         }; 
-        ERD2WStatelessCustomComponentWithArgs = {
-            editors = (customComponentName, extraBindings); 
-            inspectionInformation = "Stateless version of D2WCustomComponentWithArgs."; 
-        }; 
         ERD2WTabInspectPageTemplate = {
             editors = (
                 backgroundColorForTable, 
@@ -357,7 +357,7 @@
             ); 
             inspectionInformation = "An extended tab inspect page. Use propertyKeys named like '(Some section)' to divide the page up in sections and '[Some Tab]' to divide it into Tabs."; 
             page = yes; 
-            supports = (tabName, sectionName); 
+            supports = (); 
         }; 
         ERD2WTwoLevelEditToOneRelationship = {
             comment = "huh? what are all those keys? and JSTwoLevelEditToOneRelationship is certainly the wrong name."; 
@@ -390,7 +390,7 @@
             ); 
             inspectionInformation = "A multi-step page. Use propertyKeys named like '(Some section)' to divide the page up in sections and '[Some Step]' to divide it into pages."; 
             page = yes; 
-            supports = (tabName, sectionName); 
+            supports = (); 
         }; 
         ERD2WXMLDisplayNumber = {
             comment = "is this a value add?"; 
@@ -529,6 +529,12 @@
             isCustomComponent = yes; 
             unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
         }; 
+        ERD2WInspect = {
+            editors = (embeddedPageConfiguration); 
+            inspectionInformation = "Embedded component that can be used for nesting page configurations, ie ERDInspect can be a customComponentName."; 
+            isCustomComponent = yes; 
+            unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
+        }; 
         ERDInspectButton = {
             comment = "needs to be more generic, for example having text instead of the inspect button image"; 
             editors = (inspectConfigurationNameForEntity); 
@@ -540,8 +546,14 @@
             editors = (listPageConfigurationName); 
             inspectionInformation = "Generic link component used to view a list."; 
             isCustomComponent = yes; 
-        }; 
+        };
         ERDList = {
+            editors = (embeddedPageConfiguration, emptyListMessage, emptyListComponentName); 
+            inspectionInformation = "Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship."; 
+            isCustomComponent = yes; 
+            unused = (embeddedDisplayPropertyKeys, embeddedEntityName); 
+        }; 
+        ERD2WList = {
             editors = (embeddedPageConfiguration, emptyListMessage, emptyListComponentName); 
             inspectionInformation = "Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship."; 
             isCustomComponent = yes; 
@@ -589,18 +601,21 @@
             editingFor = property; 
             inputSize = 2; 
             title = "Browser Size"; 
+            type = stringEmptyIsNull; 
         }; 
         choiceDisplayKey = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Display Key for choice"; 
+            type = stringEmptyIsNull; 
         }; 
         choicePageName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Page Name for choice"; 
+            type = stringEmptyIsNull; 
         }; 
         choices = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
@@ -613,12 +628,14 @@
             editingFor = property; 
             inputSize = 20; 
             title = "Choices Names"; 
+            type = stringEmptyIsNull; 
         }; 
         confirmDeleteConfigurationName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Confirm Configuration"; 
+            type = stringEmptyIsNull; 
         }; 
         defaultRestrictedRelationshipKey = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
@@ -632,6 +649,7 @@
             editingFor = property; 
             inputSize = 30; 
             title = "Default value"; 
+            type = stringEmptyIsNull; 
         }; 
         destinationDisplayKey = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
@@ -659,42 +677,49 @@
             editingFor = property; 
             inputSize = 30; 
             title = "Display for NULL"; 
+            type = stringEmptyIsNull; 
         }; 
         editButtonName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 15; 
             title = "Edit Button Name"; 
+            type = stringEmptyIsNull; 
         }; 
         editConfigurationNameForEntity = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Edit Configuration"; 
+            type = stringEmptyIsNull; 
         }; 
         embeddedPageConfiguration = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Embedded Configuration"; 
+            type = stringEmptyIsNull; 
         }; 
         emptyArrayDisplayString = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 40; 
             title = "Empty array Message"; 
+            type = stringEmptyIsNull; 
         }; 
         emptyListComponentName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Empty list Component"; 
-        }; 
+             type = stringEmptyIsNull; 
+       }; 
         emptyListMessage = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 40; 
             title = "Empty list Message"; 
+            type = stringEmptyIsNull; 
         }; 
         entityNameForNewInstances = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
@@ -715,18 +740,21 @@
             editingFor = property; 
             inputSize = 40; 
             title = "Explanation Message"; 
+            type = stringEmptyIsNull; 
         }; 
         explanationComponentName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Explanation Component"; 
+            type = stringEmptyIsNull; 
         }; 
         extraBindings = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 30; 
             title = "Extra Bindings"; 
+            type = stringEmptyIsNull; 
         }; 
         goingVertically = {
             class = "com.apple.client.directtoweb.CheckboxComponentConfigurationPanel"; 
@@ -739,18 +767,21 @@
             editingFor = page; 
             inputSize = 15; 
             title = "Name for the grouping component"; 
+            type = stringEmptyIsNull; 
         }; 
         groupingKey = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = page; 
             inputSize = 15; 
             title = "Key for grouping."; 
+            type = stringEmptyIsNull; 
         }; 
         headComponentName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = page; 
             inputSize = 15; 
             title = "Name for the Header of the page."; 
+            type = stringEmptyIsNull; 
         }; 
         imageHeight = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
@@ -1019,6 +1050,7 @@
             editingFor = property; 
             inputSize = 15; 
             title = "Section Name"; 
+            type = stringEmptyIsNull; 
         }; 
         selectedChoiceKey = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
