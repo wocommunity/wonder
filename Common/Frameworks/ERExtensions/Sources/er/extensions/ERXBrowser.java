@@ -9,7 +9,41 @@ package er.extensions;
 import com.webobjects.foundation.*;
 
 /** 
- * Provides fundermental API for browser object. 
+ * ERXBrowser is an abstract class that defines browser object. 
+ * A browser object represents the web browser that the current 
+ * request-response loop is dealing with. It holds the information 
+ * retrieved from HTTP request's "user-agent" header, and such 
+ * information includes web browser's name, version, Mozilla 
+ * compatible version and platform (OS). Also, a browser object 
+ * can answer boolean questions such as <code>isIE</code>, 
+ * <code>isOmniWeb</code>, <code>isVersion5</code> and 
+ * <code>isMozilla40Compatible</code>. <br>
+ * 
+ * ERXBrowser is immutable and shared by different sessions and
+ * direct actions. 
+ * The shared instances are managed by ERXBrowserFactory which 
+ * is also responsible to parse "user-agent" header in a WORequest 
+ * object and to get an appropriate browser object. <br>
+ * 
+ * One concrete browser, ERXBasicBrowser, is defined in the 
+ * ERExtensions framework. It not only implements the basic 
+ * questions defined by ERXBrowser, but also more specific 
+ * questions like <code>isIFrameSupported</code> and 
+ * <code>willRenderNestedTablesFast</code>. <br>
+ * 
+ * You can extends ERXBrowser or its concrete subclass 
+ * ERXBasicBrowser to implement more specific questions for 
+ * your application. One good example will be to have a question 
+ * <code>isSupportedBrowser</code> that checks if the client 
+ * is using one of the supported browsers for your application. <br>
+ * 
+ * ERXSession holds a browser object that represent the web 
+ * browser for that session and <code>browser</code> method 
+ * returns the object. 
+ * 
+ * To access ERXBrowser's boolean questions from WOConditionals 
+ * on a web component, set the path like "session.brower.isIFrameSupported" 
+ * to their condition bindings. <br>
  */  
 public abstract class ERXBrowser implements NSKeyValueCoding {
 
@@ -122,6 +156,19 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     
     public void takeValueForKey(Object value, String key) {
         NSKeyValueCoding.DefaultImplementation.takeValueForKey(this, value, key);
+    }
+
+    private String _toString;
+    public String toString() {
+        if (_toString == null) {
+            _toString = "<" + getClass().getName() 
+                        + " browserName: " + browserName()
+                        + ", version: " + version()
+                        + ", mozillaVersion: " + mozillaVersion()
+                        + ", platform: " + platform()
+                        + ">";
+        }
+        return _toString;
     }
 
 }
