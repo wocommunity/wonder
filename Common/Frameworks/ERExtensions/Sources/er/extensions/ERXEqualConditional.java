@@ -18,7 +18,7 @@ public class ERXEqualConditional extends WOComponent {
     public boolean synchronizesBindingsWithVariables() { return false; }
     public boolean isStateless() { return true; }
     
-    protected boolean areEqual() {
+    public boolean areEqual() {
         Object v1=valueForBinding("value1");
         Object v2=valueForBinding("value2");
         return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
