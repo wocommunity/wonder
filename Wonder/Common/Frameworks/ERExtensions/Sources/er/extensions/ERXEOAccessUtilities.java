@@ -19,6 +19,45 @@ public class ERXEOAccessUtilities {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
 
+
+    /**
+     * Finds an entity that is contained in a string. This is used a lot in DirectToWeb.
+     * Example: "ListAllStudios"=>Studio
+     * @param ec editing context
+     * @param string string to look into
+     * @return found entity or null
+     */
+    protected static NSArray entityNames;
+    public static EOEntity entityMatchingString(EOEditingContext ec, String string) {
+        EOEntity result = null;
+        if(string != null) {
+            String lowerCaseName = string.toLowerCase();
+            if (entityNames == null) {
+                EOModelGroup group = (ec == null) ? EOModelGroup.defaultGroup() : EOUtilities.modelGroup(ec);
+                entityNames = (NSArray)ERXUtilities.entitiesForModelGroup(group).valueForKeyPath("name.toLowerCase");
+            }
+            NSMutableArray possibleEntities = new NSMutableArray();
+            for (Enumeration e = entityNames.objectEnumerator(); e.hasMoreElements();) {
+                String lowercaseEntityName = (String)e.nextElement();
+                if (lowerCaseName.indexOf(lowercaseEntityName) != -1)
+                    possibleEntities.addObject(lowercaseEntityName);
+            }
+            if (possibleEntities.count() == 1) {
+                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
+            } else if (possibleEntities.count() > 1) {
+                ERXArrayUtilities.sortArrayWithKey(possibleEntities, "length");
+                if (((String)possibleEntities.objectAtIndex(0)).length() == ((String)possibleEntities.objectAtIndex(1)).length())
+                    log.warn("Found multiple entities of the same length for string: " + string
+                             + " possible entities: " + possibleEntities);
+                result = ERXUtilities.caseInsensitiveEntityNamed((String)possibleEntities.lastObject());
+            }
+            if (log.isDebugEnabled())
+                log.debug("Found possible entities: " + possibleEntities + " for string: " + string
+                          + " result: " + result);
+        }
+        return result;
+    }
+
     /**
      * Method used to determine if a given entity is a shared entity.
      * @param ec editing context
