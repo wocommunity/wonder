@@ -140,7 +140,7 @@ Configure your WebObjects Application
 2. Add the framework under the Frameworks group of your application project. 
 3. Create an empty file called "Properties" (no file extension) under the Resource group of your application project. 
 4. Copy the contents of Documentation/SampleProperties.txt into the Properties file. 
-5. Add ERJars and ERExtensions framework to the applicaiton project. These frameworks are required just because ERChangeNotificationJMS framework uses ERXLogger for logging. If you don't want to include these frameworks, you can delete ERXLogger, log.info and log.debug statements from the framework source files (there are only three Java classes who use ERXLogger).
+5. Add ERJars and ERExtensions framework to the application project. These frameworks are required just because ERChangeNotificationJMS framework uses ERXLogger for logging. If you don't want to include these frameworks, you can delete ERXLogger, log.info and log.debug statements from the framework source files (there are only three Java classes who use ERXLogger).
 
 Note: There is no need to modify your application code. The framework works transparently. 
 
