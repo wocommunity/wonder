@@ -135,8 +135,11 @@ import java.util.Enumeration;
         if (! availableEncodings().containsObject(encoding)) 
             throw createIllegalArgumentException(encoding, "encoding", "availableEncodings()");
 
-        response.setContentEncoding (encoding);  
-        response.setHeader("text/html; charset=" + _encodings().objectForKey(encoding), "Content-Type");
+        String mimeType = response.headerForKey("Content-Type");
+        if(mimeType != null  &&  mimeType.equals("text/html")) {
+            response.setContentEncoding (encoding);  
+            response.setHeader("text/html; charset=" + _encodings().objectForKey(encoding), "Content-Type");
+        }
     }
 
     public void setEncodingToResponse(WOResponse response) {
