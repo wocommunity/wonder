@@ -50,4 +50,5 @@ public class ERXEditingContextInspector extends WOComponent {
     public String key;
     public EOEditingContext object;
     public EOEnterpriseObject item;
+    public Object debugPageProvider;
 }
