@@ -76,6 +76,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     static NSMutableDictionary localizers = new NSMutableDictionary();
     
     private NSMutableDictionary cache;
+    private NSMutableDictionary createdKeys;
     private String NOT_FOUND = "**NOT_FOUND**";
 
     public static void resetCache() {
@@ -155,11 +156,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public ERXLocalizer(String aLanguage) {
         language = aLanguage;
         cache = new NSMutableDictionary();
+        createdKeys = new NSMutableDictionary();
         load();
     }
 
     public void load() {
         cache.removeAllObjects();
+        createdKeys.removeAllObjects();
         
         NSArray languages = new NSArray(language);
         WOResourceManager rm = WOApplication.application().resourceManager();
@@ -192,12 +195,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
     
     public String language() {return language;}
+    public NSDictionary createdKeys() {return createdKeys;}
 
     public Object localizedValueForKeyWithDefault(String key) {
         Object result = localizedValueForKey(key);
         if(result == null) {
             cat.info("Default key inserted: '"+key+"'/"+language);
             cache.setObjectForKey(key, key);
+            createdKeys.setObjectForKey(key, key);
             result = key;
         }
         return result;
