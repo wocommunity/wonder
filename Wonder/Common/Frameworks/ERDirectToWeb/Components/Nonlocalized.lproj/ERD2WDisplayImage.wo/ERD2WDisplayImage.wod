@@ -1,5 +1,6 @@
 Image1: WOImage {
 	src = objectPropertyValue;
-	width=d2wContext.imageWidth; height=d2wContext.imageHeight;
+	width=d2wContext.imageWidth; 
+        height=d2wContext.imageHeight;
 }
 
