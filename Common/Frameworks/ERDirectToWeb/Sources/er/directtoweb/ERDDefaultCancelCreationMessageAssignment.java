@@ -10,10 +10,10 @@ import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
-// FIXME: Should be renamed ERDDefaultMessageAssignment.
+// FIXME: Should be renamed ERDDefaultLocalizedMessageAssignment.
 /**
  * Message assignment used when hitting a cancel button, just a little "Are you sure?" kind of thing.<br />
- * 
+ * @deprecated use ERDLocalizedAssignment
  */
 
 public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
@@ -30,6 +30,7 @@ public class ERDDefaultCancelCreationMessageAssignment extends ERDAssignment imp
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDDefaultCancelCreationMessageAssignment.class, ERDLocalizedAssignment.class);
         return new ERDDefaultCancelCreationMessageAssignment(eokeyvalueunarchiver);
     }
     
