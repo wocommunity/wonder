@@ -9,52 +9,104 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-//import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 
+/**
+ * This is more of a legacy object that was used until
+ * we had {@link ERXValidationFactory ERXValidationFactory} in place.
+ * The only place where this is used is when handling
+ * {@link com.webobjects.foundation.NSValidation$ValidationException ValidationExceptions}
+ * that have not been converted by the ERXValidationFactory. This class is
+ * also used to handle formatter exceptions that are thrown number formatters in
+ * WOComponents.
+ */
 public class ERXValidation {
 
     /** logging support */
     public static final Category cat = Category.getInstance("er.validation.ERValidation");
 
+    /** holds the static constant for pushing an incorrect value onto an eo */
     public final static boolean PUSH_INCORRECT_VALUE_ON_EO=true;
+
+    /** holds the static constant for not pushing an incorrect value onto an eo */
     public final static boolean DO_NOT_PUSH_INCORRECT_VALUE_ON_EO=false;
 
+    /** holds the default constant for pushing on values onto eos, defaults to false */
     private static boolean pushChangesDefault = DO_NOT_PUSH_INCORRECT_VALUE_ON_EO;
+
+    /**
+     * Sets pushing changes onto enterprise objects when a
+     * validation exception occurs.
+     * @param val sets whether incorrect values should be pushed
+     *		onto an object
+     */
     public static void setPushChangesDefault(boolean val) {
         pushChangesDefault = val;
     }
 
-    /*
-    private static D2WContext _propertyNameContext;
-    private static D2WContext propertyNameContext() {
-        if (_propertyNameContext==null) {
-            _propertyNameContext=new D2WContext();
-        }
-        return _propertyNameContext;
-    }*/
-
+    /**
+     * Processes a validation exception to make it look better.
+     * The resulting exception message is set in the errorMessages
+     * dictionary.
+     *
+     * @param e validation exception.
+     * @param value that failed validation.
+     * @param keyPath that failed validation.
+     * @param errorMessages dictionary to place the formatted message into.
+     * @param displayPropertyKeyPath key used in the case of the formatter exception
+     *		to calculate the pretty display name.
+     * @param localizer to use to localize the exception.
+     */    
     public static void validationFailedWithException(Throwable e,
                                                      Object value,
                                                      String keyPath,
                                                      NSMutableDictionary errorMessages,
                                                      String displayPropertyKeyPath,
-                                                     ERXLocalizer localizer
-                                                     ) {
+                                                     ERXLocalizer localizer) {
         validationFailedWithException(e,value,keyPath,errorMessages,displayPropertyKeyPath,localizer,null);
     }
 
+    /**
+     * Processes a validation exception to make it look better.
+     * The resulting exception message is set in the errorMessages
+     * dictionary. This method uses the default value for pushing values
+     * onto the eo.
+     *
+     * @param e validation exception.
+     * @param value that failed validation.
+     * @param keyPath that failed validation.
+     * @param errorMessages dictionary to place the formatted message into.
+     * @param displayPropertyKeyPath key used in the case of the formatter exception
+     *		to calculate the pretty display name.
+     * @param localizer to use to localize the exception.
+     * @param entity that the validation exception is happening too.
+     */    
     public static void validationFailedWithException(Throwable e,
                                                      Object value,
                                                      String keyPath,
                                                      NSMutableDictionary errorMessages,
                                                      String displayPropertyKeyPath,
                                                      ERXLocalizer localizer,
-                                                     EOEntity entity
-                                                     ) {
+                                                     EOEntity entity) {
         validationFailedWithException(e,value,keyPath,errorMessages, displayPropertyKeyPath, localizer, entity, pushChangesDefault);
     }
 
+    /**
+     * Processes a validation exception to make it look better.
+     * The resulting exception message is set in the errorMessages
+     * dictionary.
+     *
+     * @param e validation exception.
+     * @param value that failed validation.
+     * @param keyPath that failed validation.
+     * @param errorMessages dictionary to place the formatted message into.
+     * @param displayPropertyKeyPath key used in the case of the formatter exception
+     *		to calculate the pretty display name.
+     * @param localizer to use to localize the exception.
+     * @param entity that the validation exception is happening too.
+     * @param pushChanges boolean to flag if the bad values should be pushed onto the
+     *		eo.
+     */
     public static void validationFailedWithException(Throwable e,
                                                      Object value,
                                                      String keyPath,
@@ -62,15 +114,12 @@ public class ERXValidation {
                                                      String displayPropertyKeyPath,
                                                      ERXLocalizer localizer,
                                                      EOEntity entity,
-                                                      boolean pushChanges
-                                                     ) {
+                                                     boolean pushChanges) {
         if (cat.isDebugEnabled())
             cat.debug("ValidationFailedWithException: " + e.getClass().getName() + " message: " + e.getMessage());
         boolean addKeyToErrorMessage=false;
         String key = null;
         String newErrorMessage=e.getMessage();
-        // Need to reset the context for each validation exception.
-        //propertyNameContext().setEntity(null);
         if (e instanceof NSValidation.ValidationException && ((NSValidation.ValidationException)e).key() != null
             && ((NSValidation.ValidationException)e).object() != null) {
             NSValidation.ValidationException nve = (NSValidation.ValidationException)e;
@@ -87,55 +136,21 @@ public class ERXValidation {
                     ((EOEnterpriseObject)eo).takeValueForKeyPath(value, key);
                 }
                 entity = EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),(EOEnterpriseObject)eo);
-                // Setting the entity on the context
-                //propertyNameContext().setEntity(EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),
-                //                                                          (EOEnterpriseObject)eo));
             } else {
                 //the exception is coming from a formatter
                 key=(String)NSArray.componentsSeparatedByString(displayPropertyKeyPath,".").lastObject();
                 newErrorMessage="<b>"+key+"</b>:"+newErrorMessage;
-                //if (entity!=null)
-                //    propertyNameContext().setEntity(entity);
             }
         } else {
             key = keyPath;
-            //if (entity!=null)
-            //    propertyNameContext().setEntity(entity);
         }
         if (key != null && newErrorMessage != null) {
             String niceDisplay = entity != null ?
             entity.classDescriptionForInstances().displayNameForKey(key) : ERXStringUtilities.displayNameForKey(key);
             String localDisplayName = localizer != null ? localizer.localizedStringForKey(niceDisplay) : niceDisplay;
             errorMessages.setObjectForKey(newErrorMessage, localDisplayName != null ? localDisplayName : niceDisplay);
-        }
-        // Leveraging the power of D2WContext to generate great looking error messages.
-        //if (propertyNameContext().entity() != null && key != null) {
-        //    propertyNameContext().setPropertyKey(key);
-        //FIXME: (ak) this is just until I can rethink the whole message processing
-        //     NSMutableDictionary fakeSession = new NSMutableDictionary(localizer, "localizer");
-        //     propertyNameContext().takeValueForKey( fakeSession, "session");
-        //     if(newErrorMessage != null)
-        //         errorMessages.setObjectForKey(newErrorMessage, propertyNameContext().displayNameForProperty());
-        else {
+        } else {
             errorMessages.setObjectForKey(newErrorMessage, key);
         }
     }
-    /* Let's ditch these.
-    public static String displayNameForPropertyWithEO(String propertyKey, EOEnterpriseObject eo){
-        EOEntity entity = EOUtilities.entityForObject(eo.editingContext(),
-                                                      eo);
-        return displayNameForPropertyWithEntity(propertyKey, entity);
-    }
-
-    public static String displayNameForPropertyWithEntity(String propertyKey, EOEntity entity){
-        String result = null;
-        if (entity != null && propertyKey != null) {
-            propertyNameContext().setPropertyKey(propertyKey);
-            propertyNameContext().setEntity(entity);
-            result = propertyNameContext().displayNameForProperty();
-        } else {
-            result = propertyKey;
-        }
-        return result;
-    } */
 }
