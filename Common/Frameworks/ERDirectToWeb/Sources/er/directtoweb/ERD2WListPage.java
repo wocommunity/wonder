@@ -177,7 +177,17 @@ public abstract class ERD2WListPage extends D2WListPage {
             NDC.pop();
         }
     }
-
+    public void setDataSource(EODataSource eodatasource) {
+        try{
+            super.setDataSource(eodatasource);
+        } catch (Exception ex) {
+            log.info("Exception when setting datasource", ex);
+            NSArray sortOrderings=sortOrderings();
+            displayGroup().setDataSource(eodatasource);
+            displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : ERXConstant.EmptyArray);
+            displayGroup().fetch();
+        }
+    }
     protected void setupPhase() {
         WODisplayGroup dg=displayGroup();
         if (dg!=null) {
