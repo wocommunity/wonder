@@ -282,6 +282,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public boolean canDelete() { return true; }
     public boolean canUpdate() { return true; }
 
+
     // Used by the delegate to notify objects at the begining of a saveChanges.
     public void willDelete() throws NSValidation.ValidationException {
         if(canDelete() == false) {
@@ -360,6 +361,50 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
+    static boolean _raiseOnMissingEditingContextDelegate = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
+				    
+    public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
+	Object delegate=editingContext.delegate();
+	if (delegate==null) {
+	    if(!_raiseOnMissingEditingContextDelegate) {
+		cat.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
+		ERXExtensions.setDefaultDelegate(editingContext);
+		return true;
+	    } else {
+		throw new RuntimeException("Found null delegate");
+	    }
+	}
+	if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
+	    if(!_raiseOnMissingEditingContextDelegate) {
+		cat.warn("Found unexpected delegate class: "+delegate.getClass().getName());
+		return true;
+	    } else {
+		throw new RuntimeException("Found unexpected delegate class");
+	    }
+	}
+	return false;
+
+    }
+    public void awakeFromClientUpdate(EOEditingContext editingContext) {
+	if(_checkEditingContextDelegate(editingContext)) {
+	    willUpdate();
+	}
+	super.awakeFromClientUpdate(editingContext);
+    }
+    public void awakeFromInsertion(EOEditingContext editingContext) {
+	if(_checkEditingContextDelegate(editingContext)) {
+	    willInsert();
+	}
+	super.awakeFromInsertion(editingContext);
+    }
+    public void awakeFromFetch(EOEditingContext editingContext) {
+	if(_checkEditingContextDelegate(editingContext)) {
+	    willUpdate();
+	}
+	super.awakeFromFetch(editingContext);
+    }
+
+				    
     // --------------------------------------------------------------------------------------------
     // Debugging aids -- turn off during production
     
