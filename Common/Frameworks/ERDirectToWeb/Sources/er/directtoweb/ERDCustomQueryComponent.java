@@ -41,24 +41,5 @@ public class ERDCustomQueryComponent extends ERDCustomEditComponent {
     public void reset() {
         super.reset();
         _displayGroup = null;
-        _d2wContext = null;
-    }
-
-    protected D2WContext _d2wContext;
-    public void setD2WContext(D2WContext value) {
-        _d2wContext = value;
-    }
-    public void setLocalContext(D2WContext value) {
-        _d2wContext = value;
-    }
-    public D2WContext localContext() { return d2wContext();}
-    public D2WContext d2wContext() {
-        if (!synchronizesVariablesWithBindings()) {
-            _d2wContext = (D2WContext)super.valueForBinding("localContext");
-            if(_d2wContext == null) {
-                _d2wContext = (D2WContext)super.valueForBinding("d2wContext");
-            }
-        }
-        return _d2wContext;
     }
 }
