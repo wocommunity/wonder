@@ -258,7 +258,7 @@ public class ERXSession extends WOSession implements Serializable {
      * Returns the message encoding of the current session. 
      * If it's not already set up but no current <code>language()</code> 
      * available for the session, it creates one with 
-     * the defailt encoding. 
+     * the default encoding. 
      * @return message encoding object
      */
     public ERXMessageEncoding messageEncoding() {
