@@ -484,17 +484,22 @@ public class ERXArrayUtilities extends Object {
     
     /**
      * Filters out all of the duplicate objects in
-     * a given array.<br/>
-     * Note: The current implementation does not preserve
-     * 		the order of elements in the array.
+     * a given array.<br/> Preserves the order now.
      * @param anArray to be filtered
      * @return filtered array.
      */
-    // FIXME: Does not preserve array order
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
-        NSMutableSet aSet = new NSMutableSet();
-        aSet.addObjectsFromArray(anArray);
-        return aSet.allObjects();
+        String dummy = "DUMMY";
+        NSMutableArray result = new NSMutableArray();
+        NSMutableDictionary already = new NSMutableDictionary();
+        for(Enumeration e = anArray.objectEnumerator(); e.hasMoreElements();){
+            Object object = e.nextElement();
+            if(already.valueForKey(""+object.hashCode())==null){
+                already.takeValueForKey(dummy, ""+object.hashCode());
+                result.addObject(object);
+            }
+        }
+        return result;
     }
 
     /**
