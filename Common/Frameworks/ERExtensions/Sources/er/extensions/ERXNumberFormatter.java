@@ -42,7 +42,20 @@ public class ERXNumberFormatter extends NSNumberFormatter {
          return numberFormatterForPattern(DefaultKey);
     }
 
-    /**
+	/**
+	 * @param object
+	 * @return
+	 */
+	public static Format defaultNumberFormatterForObject(Object object) {
+		Format result = null;
+		if((object instanceof Double) || (object instanceof BigDecimal) || (object instanceof Float))
+			result = numberFormatterForPattern("#,##0.00;-(#,##0.00)");
+		else 
+			result = numberFormatterForPattern("0");
+		return result;
+	}
+
+	/**
      * Returns a shared instance for the specified pattern.
      * @return shared instance of formatter
      */
