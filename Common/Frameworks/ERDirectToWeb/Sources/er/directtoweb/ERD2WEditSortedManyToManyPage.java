@@ -237,7 +237,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                     if(eo!=null){
                         eo.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
                     }else{
-                        log.error("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
+                        log.warn("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
                     }
                     i++;
                 }
@@ -250,12 +250,14 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if(((ERXSession)session()).javaScriptEnabled())
             updateEOsOrdering();	   
         editingContext().saveChanges();
+        editingContext().revert();
         WOComponent result = nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : super.nextPage();
         if (result != null) {
             return result;
         }
         result = (WOComponent) D2W.factory().editPageForEntityNamed(object().entityName(), session());
         ((EditPageInterface) result).setObject(object());
+        editingContext().dispose();
         return result;
     }
 
