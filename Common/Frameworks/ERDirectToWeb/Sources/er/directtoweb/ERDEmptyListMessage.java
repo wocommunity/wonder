@@ -8,10 +8,9 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
+import er.extensions.ERXStatelessComponent;
 
-public class ERDEmptyListMessage extends WOComponent {
+public class ERDEmptyListMessage extends ERXStatelessComponent {
 
     public ERDEmptyListMessage(WOContext context) { super(context); }
-
-    public boolean isStateless() { return true; }
 }
