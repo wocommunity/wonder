@@ -28,7 +28,7 @@ public class ERDPrinterButton extends ERDActionButton {
     public WOComponent printerFriendlyVersion() {
         WOComponent result = null;
         if(object() != null) {
-            D2WContext dummyContext = new ERD2WContext();
+            D2WContext dummyContext = ERD2WContext.newContext();
             dummyContext.takeValueForKey(object(), "object");
             dummyContext.setEntity(EOUtilities.entityNamed(object().editingContext(),object().entityName()));
             dummyContext.setTask("inspect");
