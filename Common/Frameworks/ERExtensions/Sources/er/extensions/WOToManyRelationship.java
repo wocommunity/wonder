@@ -318,7 +318,7 @@ public class WOToManyRelationship extends WOComponent {
         NSMutableDictionary _dictionary = (isDictionary) ? (NSMutableDictionary)aSourceObject : null;
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
         String masterKey = _localRelationshipKey();
-        NSMutableArray currentValues = (NSMutableArray)NSKeyValueCoding.Utility.valueForKey(aSourceObject, masterKey);
+        NSMutableArray currentValues = (NSMutableArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(aSourceObject, masterKey);
         int count = currentValues.count();
         EOEnterpriseObject o;
         for (int i = count - 1; i >= 0; i--) {
@@ -379,7 +379,7 @@ public class WOToManyRelationship extends WOComponent {
 
     public NSArray selections() {
         if (_privateSelections()==null) {
-            set_privateSelections((NSArray)NSKeyValueCoding.Utility.valueForKey(_localSourceObject(), _localRelationshipKey()));
+            set_privateSelections((NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(_localSourceObject(), _localRelationshipKey()));
             // deal with isMandatory
             if ((_privateSelections()==null) && _localIsMandatory()) {
                 if (theList().count() > 0) {
