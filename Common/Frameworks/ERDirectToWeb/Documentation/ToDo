@@ -1,3 +1,8 @@
     
-    - Printer Friendly is broken
-    - So is mass move
+- Printer Friendly is broken
+- So is mass move
+
+- Introduce ERNeutralLook; neutral look enhanced with ER's tricks:
+    - property name display (mandatory marker, error market)
+    - better error display
+    - debug toggle
