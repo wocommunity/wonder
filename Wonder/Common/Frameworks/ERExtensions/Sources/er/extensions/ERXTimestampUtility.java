@@ -88,6 +88,11 @@ public class ERXTimestampUtility {
         return yearOfCommonEra(t)*12 + weekOfYear(t);
     }
 
+    public static boolean isWeekDay(NSTimestamp t) {
+        int day = dayOfWeek(t);
+        return !((day == GregorianCalendar.SATURDAY) || (day == GregorianCalendar.SUNDAY));
+    }
+
     public static int dayOfWeek(NSTimestamp t) {
         return calendarForTimestamp(t).get(GregorianCalendar.DAY_OF_WEEK);        
     }
