@@ -598,11 +598,19 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	/**
 	 * Returns a localized number formatter for the given key.
+	 * Also, can localize units to, just define in your
+	 * Localizable.strings a suitable key, with the appropriate
+	 * pattern.
 	 * @param formatString
-	 * @return
+	 * @return the formatter object
 	 */
     public Format localizedNumberFormatForKey(String formatString) {
-    	formatString = formatString == null ? "#,##0.00;-(#,##0.00)" : formatString;
+        String localizedFormatString = localizedStringForKey(formatString);
+    	formatString = formatString == null
+            ? "#,##0.00;-(#,##0.00)"
+            : localizedFormatString == null 
+                ? formatString 
+                : localizedFormatString;   
 		Format result = (Format)_numberFormatters.get(formatString);
 		if(result == null) {
 			synchronized(_numberFormatters) {
