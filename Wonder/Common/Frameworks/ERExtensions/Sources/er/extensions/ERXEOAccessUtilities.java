@@ -551,13 +551,21 @@ public class ERXEOAccessUtilities {
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
         StringBuffer sb=new StringBuffer();
-        sb.append(e.sqlStringForAttributeNamed(key));
+        EOAttribute attribute = e.entity().attributeNamed(key);
+        if(attribute == null) {
+            EORelationship relationship = e.entity().relationshipNamed(key);
+            attribute = ((EOJoin)relationship.joins().lastObject()).sourceAttribute();
+        }
+        sb.append(e.sqlStringForAttribute(attribute));
         sb.append(" IN ");
         sb.append("(");
         for (int i = 0; i < valueArray.count(); i++ ) {
-            if ( i > 0 )
+            if ( i > 0 ) {
                 sb.append(", ");
-            sb.append(e.sqlStringForValue(valueArray.objectAtIndex(i), key));
+            }
+            Object value = valueArray.objectAtIndex(i);
+            value = e.formatValueForAttribute(value, attribute);
+            sb.append(value);
         }
         sb.append(")");
         return sb.toString();
