@@ -3,5 +3,6 @@
 	<wo class="ERXEditingContextInspector" wocomponentcontent="false">
 
 		<binding name="object"/>
+		<binding name="debugPageProvider"/>
 	</wo>
 </wodefinitions>
