@@ -758,12 +758,18 @@
 			fileRef = 4E16E64A0392AC7300CF0E72;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
 			};
 		};
 		4E16E64D0392AC7300CF0E72 = {
 			fileRef = 4E16E64B0392AC7300CF0E72;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
 			};
 		};
 //4E0
@@ -1056,6 +1062,9 @@
 			fileRef = F53788A50335ADF401000010;
 			isa = PBXBuildFile;
 			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
 			};
 		};
 		F53788AA0335AE3A01000010 = {
