@@ -401,31 +401,21 @@ public class ERXArrayUtilities extends Object {
      *		passed in.
      */
     public static NSArray flatten(NSArray array, boolean filterDuplicates) {
-        NSMutableArray newArray = null;
-        for (int i=0; i < array.count(); i++) {
+        if (array.count() == 0) return array;
+        NSMutableArray newArray = new NSMutableArray();
+        for (int i=array.count(); i-- > 0;) {
             Object element = array.objectAtIndex(i);
             if (element instanceof NSArray) {
-                if (newArray==null) {
-                    newArray = new NSMutableArray();
-                    for (int j = 0; j < i; j++) {
-                        if (array.objectAtIndex(j) != null) {
-                            if (!filterDuplicates || !newArray.containsObject(array.objectAtIndex(j))) {
-                                newArray.addObject(array.objectAtIndex(j));                                
-                            }
-                        }
-                    }
-                }
-                NSArray a = flatten((NSArray)element);
-                for (int j = 0; j < a.count(); j++) {
-                    if (a.objectAtIndex(j) != null) {
-                        if (!filterDuplicates || !newArray.containsObject(array.objectAtIndex(j))) {
-                            newArray.addObject(a.objectAtIndex(j));
-                        }
-                    }
-                }
+                NSArray elementArray = (NSArray)element;
+                newArray.addObjectsFromArray(flatten(elementArray, filterDuplicates));
+            } else {
+                newArray.addObject(element);
             }
         }
-        return (newArray !=null) ? newArray : array;
+        if (filterDuplicates) {
+            return arrayWithoutDuplicates(newArray);
+        } 
+        return newArray;
     }
 
     /**
