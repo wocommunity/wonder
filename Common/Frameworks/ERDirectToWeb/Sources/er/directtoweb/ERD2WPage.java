@@ -341,9 +341,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
         try {
         	super.takeValuesFromRequest(r, c);
-        }catch(RuntimeException e) {
-        	log.error(e, e);
-        	throw e;
         } finally {
             NDC.pop();
         }
@@ -378,8 +375,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
         try {
             super.appendToResponse(r,c);
-        } catch(Exception ex) {
-            ERDirectToWeb.reportException(ex, d2wContext());
+        /*} catch(Exception ex) {
+            ERDirectToWeb.reportException(ex, d2wContext());*/
         } finally {
             NDC.pop();
         }
