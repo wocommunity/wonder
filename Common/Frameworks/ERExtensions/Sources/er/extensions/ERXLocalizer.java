@@ -288,11 +288,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                         cache.addEntriesFromDictionary(dict);
                     } catch(Exception ex) {
-                        log.warn("Exception loading: " + fileName + " - " + framework + " - " + languages + ":" + ex);
+                        log.warn("Exception loading: " + fileName + " - " 
+                            + (framework == null ? "app" : framework) + " - " 
+                            + languages + ":" + ex);
                     }
                 } else if (log.isDebugEnabled()) {
-                    log.debug("Unable to create path for resource named: " + fileName + " framework: " + framework
-                             + " languages: " + languages);
+                    log.debug("Unable to create path for resource named: " + fileName 
+                        + " framework: " + (framework == null ? "app" : framework)
+                        + " languages: " + languages);
                 }
             }
         }
