@@ -87,6 +87,10 @@ er.extensions.ERXSharedEOLoader.PatchSharedEOLoading=false
 #########################################################################
 er.extensions.ERXPatcher.cleanupXHTML=false
 
+#########################################################################
+# ERXComponentActionRedirector 
+#########################################################################
+er.extensions.ERXComponentActionRedirector.enabled=false
 
 #########################################################################
 # ERXDatabaseContextDelegate 
