@@ -87,7 +87,7 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
             } else if (item instanceof Object && choiceDisplayKey().indexOf(".") == -1) {
                 displayName = (String)((NSKeyValueCoding)item).valueForKey(choiceDisplayKey());
             } else {
-                displayName = (String)ERXKeyValueCoding.valueForKeyPath(item, choiceDisplayKey());
+                displayName = (String)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, choiceDisplayKey());
             }
         }
         return displayName != null ? displayName : " <null> ";
