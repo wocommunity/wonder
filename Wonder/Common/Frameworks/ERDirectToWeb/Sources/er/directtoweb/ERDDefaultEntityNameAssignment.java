@@ -18,7 +18,7 @@ import er.extensions.*;
 //		keys passing in the current keyPath.
 /**
  * Beautify the entity name.<br />
- * 
+ * @deprecated for entityName, use ERDDefaultsAssigment, for displayNameForEntity and displayNameForDestinationEntity use ERDDefaultDisplayNameAssigment
  */
 
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
@@ -39,6 +39,7 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDDefaultEntityNameAssignment.class, ERDDefaultModelAssignment.class);
         return new ERDDefaultEntityNameAssignment(eokeyvalueunarchiver);
     }
 
