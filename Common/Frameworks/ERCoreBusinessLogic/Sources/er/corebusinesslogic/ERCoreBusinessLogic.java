@@ -188,6 +188,14 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         preferencesRelationship.addJoin(preferencesJoin);
         preferencesRelationship.setToMany(true);
         preferencesRelationship.setJoinSemantic(EORelationship.InnerJoin);
+
+        EOJoin userJoin = new EOJoin(preference.attributeNamed("userID"), actor.attributeNamed(attributeNameToJoin) );
+        EORelationship userRelationship = new EORelationship();
+        userRelationship.setName("user");
+        preference.addRelationship(userRelationship);
+        userRelationship.addJoin(userJoin);
+        userRelationship.setToMany(false);
+        userRelationship.setJoinSemantic(EORelationship.InnerJoin);
     }
 
     /**
