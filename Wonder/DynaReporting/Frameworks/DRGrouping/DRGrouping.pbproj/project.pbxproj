@@ -95,20 +95,6 @@
 			path = Sources/er/grouping/DRValueGroup.java;
 			refType = 4;
 		};
-		F529261103AABD1B01AD0D0B = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = EONull_DREONullAdditions.java;
-			path = Sources/er/grouping/EONull_DREONullAdditions.java;
-			refType = 4;
-		};
-		F529261203AABD1B01AD0D0B = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = NSDate_DRNSDateAdditions.java;
-			path = Sources/er/grouping/NSDate_DRNSDateAdditions.java;
-			refType = 4;
-		};
 		F529261303AABD1B01AD0D0B = {
 			fileRef = F529260603AABD1B01AD0D0B;
 			isa = PBXBuildFile;
@@ -175,18 +161,6 @@
 			settings = {
 			};
 		};
-		F529261E03AABD1B01AD0D0B = {
-			fileRef = F529261103AABD1B01AD0D0B;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F529261F03AABD1B01AD0D0B = {
-			fileRef = F529261203AABD1B01AD0D0B;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F529262A03AABD4D01AD0D0B = {
 			children = (
 				F529276403AAC81C01AD0D0B,
@@ -201,8 +175,6 @@
 				F529260E03AABD1B01AD0D0B,
 				F529260F03AABD1B01AD0D0B,
 				F529261003AABD1B01AD0D0B,
-				F529261103AABD1B01AD0D0B,
-				F529261203AABD1B01AD0D0B,
 			);
 			isa = PBXGroup;
 			name = Sources;
@@ -567,8 +539,6 @@
 				F529261B03AABD1B01AD0D0B,
 				F529261C03AABD1B01AD0D0B,
 				F529261D03AABD1B01AD0D0B,
-				F529261E03AABD1B01AD0D0B,
-				F529261F03AABD1B01AD0D0B,
 				F529276503AAC81C01AD0D0B,
 			);
 			isa = PBXSourcesBuildPhase;
