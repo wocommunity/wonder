@@ -50,8 +50,8 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-ERXNonNullConditional1: ERXNonNullConditional {
-	condition = d2wContext.branchChoices;
+ERXNonNullConditional1: WOConditional {
+	condition = d2wContext.branchChoices.count;
 	negate = true;
 }
 
