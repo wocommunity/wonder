@@ -117,10 +117,14 @@ public abstract class ERXApplication extends WOApplication {
                                                          new NSSelector("didFinishLaunching",  ERXConstant.NotificationClassArray),
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
                                                          null);
-        if (isConcurrentRequestHandlingEnabled()) {
-            _sessions = Collections.synchronizedMap(new HashMap());
-        } else {
-            _sessions = new HashMap();
+        if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.MonitorSessionStore",
+                                                   false)) {
+            if (isConcurrentRequestHandlingEnabled()) {
+                _sessions = Collections.synchronizedMap(new HashMap());
+                log.warn("Concurrent request handling is enabled so the session store might report a false positive for a deadlocked session.");
+            } else {
+                _sessions = new HashMap();
+            }            
         }
         
     }
@@ -566,14 +570,15 @@ public abstract class ERXApplication extends WOApplication {
     /** Overridden to check the sessions */
     public WOSession createSessionForRequest(WORequest worequest) {
         WOSession wosession = super.createSessionForRequest(worequest);
-        _sessions.put(wosession.sessionID(), new SessionInfo(null));
+        if (_sessions != null)
+            _sessions.put(wosession.sessionID(), new SessionInfo(null));
         return wosession;
     }
 
     /** Overridden to check the sessions */
     public void saveSessionForContext(WOContext wocontext) {
         WOSession wosession = wocontext._session();
-        if(wosession != null) {
+        if(_sessions != null && wosession != null) {
             String sessionID = wosession.sessionID();
             SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
             if(sessionInfo == null) {
@@ -586,12 +591,14 @@ public abstract class ERXApplication extends WOApplication {
 
     /** Overridden to check the sessions */
     public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
-        SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
-        if(sessionInfo != null) {
-            throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
+        if (_sessions != null) {
+            SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+            if(sessionInfo != null) {
+                throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
+            }            
         }
         WOSession session = super.restoreSessionWithID(sessionID,wocontext);
-        if(session != null) {
+        if (_sessions != null && session != null) {
             _sessions.put(session.sessionID(), new SessionInfo(wocontext));
         }
         return session;
