@@ -27,25 +27,21 @@ public class DRValue extends Object  {
         return aVal;
     }
 
-
     static public DRValue withTotalAttribute(double tot, DRAttribute att) {
         DRValue aVal = new DRValue(tot, att);
         return aVal;
     }
-
 
     static public DRValue withRecordAttribute(DRRecord rec, DRAttribute att) {
         DRValue aVal = new DRValue(rec, att);
         return aVal;
     }
 
-
     public DRValue(DRRecord rec, DRAttribute att) {
         super();
         _record = rec;
         _attribute = att;
     }
-
 
     public DRValue(double tot, DRAttribute att) {
         super();
@@ -54,7 +50,6 @@ public class DRValue extends Object  {
         _attribute = att;
         _rawTotal = tot;
     }
-
 
     public DRValue initAsNull() {
         _isNull = true;
@@ -67,21 +62,17 @@ public class DRValue extends Object  {
         super();
     }
 
-
     public boolean isGroup() {
         return _isGroup;
     }
-
 
     public boolean isTotal() {
         return _isTotal;
     }
 
-
     public boolean isNull() {
         return _isNull;
     }
-
 
     public boolean shouldTotal() {
         if (_isNull) {
@@ -99,7 +90,6 @@ public class DRValue extends Object  {
         return false;
     }
 
-
     public String key() {
         if (_key == null) {
             if (_isTotal) {
@@ -114,16 +104,13 @@ public class DRValue extends Object  {
         return _key;
     }
 
-
     public DRAttribute attribute() {
         return _attribute;
     }
 
-
     public DRRecord record() {
         return _record;
     }
-
 
     public Object val() {
         if (_isTotal) {
@@ -133,7 +120,6 @@ public class DRValue extends Object  {
             return null;
         return _record.rawRecord().valueForKeyPath(_attribute.keyPath());
     }
-
 
     public double total() {
         if (_isTotal) {
@@ -155,7 +141,6 @@ public class DRValue extends Object  {
         return 0.0;
     }
 
-
     public void setTotal(double tot) {
         // only mutable id 'isTotal'
 
@@ -166,10 +151,8 @@ public class DRValue extends Object  {
 
     }
 
-
     public NSArray flatValues() {
         return null;
     }
-
 
 }
