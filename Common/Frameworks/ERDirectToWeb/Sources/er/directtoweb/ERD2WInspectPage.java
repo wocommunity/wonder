@@ -205,7 +205,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         if (validationCat.isDebugEnabled())
             validationCat.debug("Validation failed with exception: " + e + " value: " + value + " keyPath: " + keyPath);
         if (shouldCollectValidationExceptions())
-            er.extensions.ERXValidation.validationFailedWithException(e,value,keyPath,errorMessages,propertyKey(),d2wContext().entity());
+            er.extensions.ERXValidation.validationFailedWithException(e,value,keyPath,errorMessages,propertyKey(),d2wContext().entity(),ERXUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldSetFailedValidationValue"), false));
         else if (parent() != null && shouldPropogateExceptions()) {
             parent().validationFailedWithException(e, value, keyPath);
         }
