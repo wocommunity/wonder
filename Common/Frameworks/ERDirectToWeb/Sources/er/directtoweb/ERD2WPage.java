@@ -605,4 +605,27 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
     */
     public NSTimestamp now() { return new NSTimestamp(); }
+
+    protected WOComponent _nextPage;
+    protected NextPageDelegate _nextPageDelegate;
+
+    public WOComponent nextPage() {
+        return _nextPage;
+    }
+    
+    public void setNextPage(WOComponent wocomponent) {
+        _nextPage = wocomponent;
+    }
+    
+    public NextPageDelegate nextPageDelegate() {
+        return _nextPageDelegate;
+    }
+    
+    public void setNextPageDelegate(NextPageDelegate nextpagedelegate) {
+        _nextPageDelegate = nextpagedelegate;
+    }
+    
+    public boolean showCancel() {
+        return _nextPageDelegate != null || _nextPage != null;
+    }
 }
