@@ -549,7 +549,69 @@ public class ERXStringUtilities {
             return new String(chars);
         }
     }
+
+    /**
+     * String multiplication.
+     * @param n the number of times to concatinate a given string
+     * @param s string to be multipled
+     * @return multiplied string
+     */
+    public static String stringWithNtimesString(int n, String s) {
+        StringBuffer sb=new StringBuffer();
+        for (int i=0; i<n; i++) sb.append(s);
+        return sb.toString();
+    }
+
+    /**
+     * Counts the number of occurrences of a particular
+     * <code>char</code> in a given string.
+     * @param c char to count in string
+     * @param s string to look for specified char in.
+     * @return number of occurences of a char in the string
+     */
+    public static int numberOfOccurrencesOfCharInString(char c, String s) {
+        int result=0;
+        if (s!=null) {
+            for (int i=0; i<s.length();)
+                if (s.charAt(i++)==c) result++;
+        }
+        return result;
+    }
     
+    /**
+     * Simple test if the string is either null or
+     * equal to "".
+     * @param s string to test
+     * @return result of the above test
+     */
+    public static boolean stringIsNullOrEmpty(String s) {
+        return ((s == null) || (s.length() == 0));
+    }
+    
+    /**
+     * Simple utility method that will return null
+     * if the string passed in is equal to ""
+     * otherwise it will return the passed in
+     * string.
+     * @param s string to test
+     * @return null if the string is "" else the string.
+     */
+    public static String nullForEmptyString(String s) {
+        return s==null ? null : (s.length()==0 ? null : s);
+    }
+    
+    /**
+     * Simple utility method that will return the
+     * string "" if the string passed in is null
+     * otherwise it will return the passed in
+     * string.
+     * @param s string to test
+     * @return "" if the string is null else the string
+     */
+    public static String emptyStringForNull(String s) {
+        return s==null ? "" : s;
+    }
+
     public static String escapeNonBasicLatinChars(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         if (block != null  &&  Character.UnicodeBlock.BASIC_LATIN.equals(block)) 

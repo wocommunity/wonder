@@ -415,164 +415,74 @@ public class ERXExtensions {
         ERXEC.factory().setDefaultDelegateOnEditingContext(ec, validation);
     }
 
-    // DELETEME: This is duplicated in ERXUtilities
+    /**
+     * deprecated see {@link ERXEOControlUtilities#dataSourceForArray(NSArray)}
+     */
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
-        EOArrayDataSource dataSource = null;
-        if (array != null && array.count() > 0) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            dataSource = new EOArrayDataSource(eo.classDescription(), eo.editingContext());
-            dataSource.setArray(array);
-        }
-        return dataSource;
-    }
-
-    // DELETEME: This is duplicated in ERXUtilities
-    public static NSArray arrayFromDataSource(EODataSource dataSource) {
-        WODisplayGroup dg = new WODisplayGroup();
-        dg.setDataSource(dataSource);
-        dg.fetch(); // Have to fetch in the array, go figure.
-        return dg.allObjects();
+        return ERXEOControlUtilities.dataSourceForArray(array);
     }
 
     /**
-     * Creates a detail data source for a given enterprise
-     * object and a relationship key. These types of datasources
-     * can be very handy when you are displaying a list of objects
-     * a la D2W style and then some objects are added or removed
-     * from the relationship. If an array datasource were used
-     * then the list would not reflect the changes made, however
-     * the detail data source will reflect changes made to the
-     * relationship.<br/>
-     * Note: the relationship key does not have to be an eo
-     * relationship, instead it just has to return an array of
-     * enterprise objects.
-     * @param object that has the relationship
-     * @param key relationship key
-     * @return detail data source for the given object-key pair.
+     * deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
      */
-    public static EODetailDataSource dataSourceForObjectAndKey(EOEnterpriseObject object, String key) {
-        EODetailDataSource eodetaildatasource = new EODetailDataSource(EOClassDescription.classDescriptionForEntityName(object.entityName()), key);
-        eodetaildatasource.qualifyWithRelationshipKey(key, object);
-        return eodetaildatasource;
+    public static NSArray arrayFromDataSource(EODataSource dataSource) {
+        return ERXEOControlUtilities.arrayFromDataSource(dataSource);
+    }
+
+    /**
+     * deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
+     */
+    public static EODetailDataSource dataSourceForObjectAndKey(EOEnterpriseObject eo, String key) {
+        return ERXEOControlUtilities.dataSourceForObjectAndKey(eo, key);
     }
 
     /**
      * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
-     * ERXArrayUtilities.friendlyDisplayForKeyPath} 
      */
     public static String friendlyEOArrayDisplayForKey(NSArray list, String attribute, String nullArrayDisplay) {
         return ERXArrayUtilities.friendlyDisplayForKeyPath(list, attribute, nullArrayDisplay, ", ", " and ");
     }
 
     /**
-     * Replaces a given string by another string in a string.
-     * This method is just a cover method for calling the
-     * same method in {@link ERXSimpleHTMLFormatter}.
-     * @param old string to be replaced
-     * @param newString to be inserted
-     * @param s string to have the replacement done on it
-     * @return string after having all of the replacement done.
+     * @deprecated use {@link ERXStringUtilities#replaceStringByStringInString(String, String, String)
      */
-    // MOVEME: ERXStringUtilities
     public static String replaceStringByStringInString(String old, String newString, String s) {
         return ERXStringUtilities.replaceStringByStringInString(old,newString,s);
     }
 
     /**
-     * Simple utility method that will return the
-     * string "" if the string passed in is null
-     * otherwise it will return the passed in
-     * string.
-     * @param s string to test
-     * @return "" if the string is null else the string
+     * @deprecated use {@link ERXStringUtilities#emptyStringForNull(String)
      */
-    // MOVEME: ERXStringUtilities
     public static String emptyStringForNull(String s) {
-        return s==null ? "" : s;
-    }
-    
-    /**
-     * Simple utility method that will return the
-     * string "" if the object passed in is null
-     * otherwise it will return the passed in
-     * object with toString called on it.
-     * @param o object to test
-     * @return "" if the object is null else <code>toString</code>
-     *		on the object.
-     */
-    // MOVEME: ERXStringUtilities
-    public static String emptyStringForNull(Object o) {
-        return o==null ? ""  : emptyStringForNull(o.toString());
+        return ERXStringUtilities.emptyStringForNull(s);
     }
 
     /**
-     * Simple utility method that will return null
-     * if the string passed in is equal to ""
-     * otherwise it will return the passed in
-     * string.
-     * @param s string to test
-     * @return null if the string is "" else the string.
+     * @deprecated use {@link ERXStringUtilities#nullForEmptyString(String)
      */
-    // MOVEME: ERXStringUtilities
     public static String nullForEmptyString(String s) {
-        return s==null ? null : (s.length()==0 ? null : s);
+        return ERXStringUtilities.nullForEmptyString(s);
     }
 
     /**
-     * Simple utility method that will return null
-     * if the <code>toString</code> method off of
-     * the object is equal to "" otherwise it will
-     * return the passed in object with toString
-     * called on it.
-     * @param o object to test
-     * @return null if the object's <code>toString</code>
-     *		is equal to "" or the value of
-     *		<code>toString</code>on the object.
+     * @deprecated use {@link ERXStringUtilities#stringIsNullOrEmpty(String)
      */
-    // MOVEME: ERXStringUtilities
-    public static String nullForEmptyString(Object o) {
-        return o==null ? null : nullForEmptyString(o.toString());
-    }
-
-    /**
-     * Simple test if the string is either null or
-     * equal to "".
-     * @param s string to test
-     * @return result of the above test
-     */
-    // MOVEME: ERXStringUtilities
     public static boolean stringIsNullOrEmpty(String s) {
-        return ((s == null) || (s.length() == 0));
+        return ERXStringUtilities.stringIsNullOrEmpty(s);
     }
 
     /**
-     * Counts the number fo occurrences of a particular
-     * <code>char</code> in a given string.
-     * @param c char to count in string
-     * @param s string to look for specified char in.
-     * @return number of occurences of a char in the string
+     * @deprecated use {@link ERXStringUtilities#numberOfOccurrencesOfCharInString(char,String)
      */
-    // MOVEME: ERXStringUtilities
     public static int numberOfOccurrencesOfCharInString(char c, String s) {
-        int result=0;
-        if (s!=null) {
-            for (int i=0; i<s.length();)
-                if (s.charAt(i++)==c) result++;
-        }
-        return result;
+        return ERXStringUtilities.numberOfOccurrencesOfCharInString(c, s);
     }
 
     /**
-     * String multiplication.
-     * @param n the number of times to concatinate a given string
-     * @param s string to be multipled
-     * @return multiplied string
+     * @deprecated use {@link ERXStringUtilities#numberOfOccurrencesOfCharInString(int,String)
      */
-    // MOVEME: ERXStringUtilities
     public static String stringWithNtimesString(int n, String s) {
-        StringBuffer sb=new StringBuffer();
-        for (int i=0; i<n; i++) sb.append(s);
-        return sb.toString();
+        return ERXStringUtilities.stringWithNtimesString(n, s);
     }
 
     /**
@@ -668,20 +578,15 @@ public class ERXExtensions {
     }
 
     /**
-     * Returns the string representation of the primary key for
-     * a given object. Note that the object should only have
-     * one primary key.
-     * @param eo object to get the primary key for.
-     * @return string representation of the primary key of the
-     *		object.
+     * @deprecated use {@link ERXEOControlUtilities.primaryKeyStringForObject(EOEnterpriseObject)}
      */
-    // MOVEME: ERXEOFUtilities
     public static String primaryKeyForObject(EOEnterpriseObject eo) {
-        Object pk=rawPrimaryKeyForObject(eo);
-        return pk!=null ? pk.toString() : null;
+        return ERXEOControlUtilities.primaryKeyStringForObject(eo);
     }
 
-    // DELETEME: This one is very confusing, plus the primaryKey dictionary isn't even used?!?!
+    /**
+     * @deprecated use just about anything else, like Random.nextInt() for example
+     */
     public static Object rawPrimaryKeyFromPrimaryKeyAndEO(NSDictionary primaryKey, EOEnterpriseObject eo) {
         NSArray result = primaryKeyArrayForObject(eo);
 
