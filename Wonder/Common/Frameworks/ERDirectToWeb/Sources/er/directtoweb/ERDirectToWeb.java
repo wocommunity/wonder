@@ -312,7 +312,7 @@ public class ERDirectToWeb {
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("configureTraceRuleFiring",
                                                                             ERXConstant.NotificationClassArray),
-                                                             ERXLog4j.ConfigurationDidChangeNotification,
+                                                             ERXConfigurationManager.ConfigurationDidChangeNotification,
                                                              null);
             _initializedTraceRuleFiring = true;
         }
