@@ -267,15 +267,6 @@ public class WOToOneRelationship extends WOComponent {
             setDataSource((EODatabaseDataSource)valueForBinding("dataSource"));
             if (null==dataSource()) {
                 String anEntityName = _localSourceEntityName();
-                // FIXME (msanchez, 08/00, 2520053): use modelGroup on ObjectStoreCoordinator of our editingContext
-                EOModelGroup aModelGroup = EOModelGroup.defaultGroup();
-                EOEntity anEntity = aModelGroup.entityNamed(anEntityName);
-
-                if (anEntity == null) {
-                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
-                }
-
-                EOEntity destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
                 Object _source = _localSourceObject();
                 EOEditingContext anEditingContext = null;
                 if (_source instanceof EOEnterpriseObject) {
@@ -284,6 +275,11 @@ public class WOToOneRelationship extends WOComponent {
                 if (anEditingContext == null) {
                     anEditingContext = session().defaultEditingContext() ;
                 }
+                EOEntity anEntity = ERXEOAccessUtilities.entityNamed(anEditingContext, anEntityName);
+                if (anEntity == null) {
+                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
+                }
+                EOEntity destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
                 EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntity.name());
                 setDataSource(aDatabaseDataSource);
             }

@@ -68,9 +68,6 @@ public class EOGenericRecordClazz extends Object {
     /** caches the entity name */
     private String _entityName;
 
-    /** holds the entity name of the clazz */
-    private EOEntity _entity;
-    
     /**
      * Default public constructor
      */
@@ -118,7 +115,7 @@ public class EOGenericRecordClazz extends Object {
     public static EOGenericRecordClazz clazzForEntityNamed(String entityName) {
         EOGenericRecordClazz clazz = (EOGenericRecordClazz)allClazzes.objectForKey(entityName);
         if(clazz == null) {
-            clazz = classFromEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
+            clazz = classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
             clazz.setEntityName(entityName);
             allClazzes.setObjectForKey(clazz,entityName);
         }
@@ -149,9 +146,10 @@ public class EOGenericRecordClazz extends Object {
      * @return array of new primary keys
      */
     public NSArray newPrimaryKeys(EOEditingContext ec, int i) {
-        EODatabaseContext dc = EODatabaseContext.registeredDatabaseContextForModel(entity().model(), ec);
+        EOEntity entity = entity(ec);
+        EODatabaseContext dc = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         
-        return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity());
+        return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity);
     }
 
     /**
@@ -173,13 +171,14 @@ public class EOGenericRecordClazz extends Object {
      * @return enterprise object for the raw row
      */
     public EOEnterpriseObject objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
-        return EOUtilities.objectFromRawRow(ec, entityNameForRawRow(dict), dict);
+        return EOUtilities.objectFromRawRow(ec, entityNameFromRawRow(ec, dict), dict);
     }
 
-    public String entityNameForRawRow(NSDictionary dict) {
+    protected String entityNameFromRawRow(EOEditingContext ec, NSDictionary dict) {
         String entityName = entityName();
-        if(entity().isAbstractEntity() && entity().subEntities().count() > 0) {
-            for(Enumeration e = entity().subEntities().objectEnumerator(); e.hasMoreElements();) {
+        EOEntity entity = entity(ec);
+        if(entity.isAbstractEntity() && entity.subEntities().count() > 0) {
+            for(Enumeration e = entity.subEntities().objectEnumerator(); e.hasMoreElements();) {
                 EOEntity sub = (EOEntity)e.nextElement();
                 if(sub.restrictingQualifier() != null) {
                     if(sub.restrictingQualifier().evaluateWithObject(dict)) {
@@ -253,10 +252,17 @@ public class EOGenericRecordClazz extends Object {
      * name of the clazz.
      * @return entity for the clazz
      */
-     // ENHANCEME: Shouldn't assume the default model group
     public EOEntity entity() {
-        if (_entity == null) _entity = EOModelGroup.defaultGroup().entityNamed(entityName());
-        return _entity;
+        return entity(null);
+    }
+
+    /**
+     * Gets the entity corresponding to the entity
+     * name of the clazz.
+     * @return entity for the clazz
+     */
+    public EOEntity entity(EOEditingContext ec) {
+        return ERXEOAccessUtilities.entityNamed(ec,entityName());
     }
 
     /**
@@ -266,9 +272,20 @@ public class EOGenericRecordClazz extends Object {
      *		and the clazz's entity name
      */
     public EOFetchSpecification fetchSpecificationNamed(String name) {
-        return EOModelGroup.defaultGroup().fetchSpecificationNamed(name,entityName());
+        return fetchSpecificationNamed(null,name);
     }
-    
+
+    /**
+     * Gets a fetch specification for a given name.
+     * @param ec editing context to use for finding the model group
+     * @param name of the fetch specification
+     * @return fetch specification for the given name
+     *		and the clazz's entity name
+     */
+    public EOFetchSpecification fetchSpecificationNamed(EOEditingContext ec, String name) {
+        return entity(ec).fetchSpecificationNamed(name);
+    }
+
     /**
      * Returns the number of objects matching the given
      * qualifier for the clazz's entity name. Implementation
@@ -285,7 +302,7 @@ public class EOGenericRecordClazz extends Object {
         NSArray results = null;
 
         EOAttribute attribute = EOGenericRecordClazz.objectCountAttribute();
-        EOEntity entity = entity();
+        EOEntity entity = entity(ec);
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
         synchronized (entity) {
@@ -311,24 +328,24 @@ public class EOGenericRecordClazz extends Object {
      * name. Implementation wise the sql generated will
      * only return the count of the query, not all of the
      * rows matching the qualification. 
-     * @param editingContext used to perform the count in
+     * @param ec ec used to perform the count in
      * @param fetchSpecName name of the fetch specification
      * @param bindings dictionary of bindings for the fetch
      *		specification
      * @return number of objects matching the given fetch 
      *		specification and bindings
      */
-    public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext editingContext, String fetchSpecName,  NSDictionary bindings) {
+    public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
         String entityName = entityName();
         EOFetchSpecification unboundFetchSpec;
         EOFetchSpecification boundFetchSpec;
 
-        unboundFetchSpec = fetchSpecificationNamed(fetchSpecName);
+        unboundFetchSpec = fetchSpecificationNamed(ec, fetchSpecName);
         if (unboundFetchSpec == null) {
             return null;
         }
         boundFetchSpec = unboundFetchSpec.fetchSpecificationWithQualifierBindings(bindings);
-        return objectCountWithQualifier(editingContext, boundFetchSpec.qualifier());
+        return objectCountWithQualifier(ec, boundFetchSpec.qualifier());
     }
 
     /**
@@ -348,16 +365,17 @@ public class EOGenericRecordClazz extends Object {
         String entityName = entityName();
         EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
         fs.setFetchesRawRows(true);
-        NSMutableArray keys = new NSMutableArray(entity().primaryKeyAttributeNames());
+        EOEntity entity = entity(ec);
+        NSMutableArray keys = new NSMutableArray(entity.primaryKeyAttributeNames());
         if(additionalKeys != null) {
             keys.addObjectsFromArray(additionalKeys);
         }
-        if(entity().restrictingQualifier() != null) {
-            NSArray restrict = entity().restrictingQualifier().allQualifierKeys().allObjects();
+        if(entity.restrictingQualifier() != null) {
+            NSArray restrict = entity.restrictingQualifier().allQualifierKeys().allObjects();
             keys.addObjectsFromArray(restrict);
         }
-        if(entity().isAbstractEntity()) {
-            NSArray restrict = (NSArray)entity().subEntities().valueForKeyPath("restrictingQualifier.allQualifierKeys.allObjects.@flatten.@unique");
+        if(entity.isAbstractEntity()) {
+            NSArray restrict = (NSArray)entity.subEntities().valueForKeyPath("restrictingQualifier.allQualifierKeys.allObjects.@flatten.@unique");
             keys.addObjectsFromArray(restrict);
         }
         fs.setRawRowKeyPaths(keys);

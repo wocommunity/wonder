@@ -75,7 +75,7 @@ public class ERXEOEncodingUtilities {
 
     public NSArray enterpriseObjectsForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSDictionary groups = groupedEnterpriseObjectsFromFormValues(ec, formValues);
-        EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator((EOObjectStoreCoordinator)ec.rootObjectStore()).entityNamed(entityName);
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         NSMutableArray entityGroup = new NSMutableArray();
         if (entity != null && entity.isAbstractEntity()) {
             for (Enumeration e = ERXUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
@@ -302,9 +302,8 @@ public class ERXEOEncodingUtilities {
                     String encodedEntityName = key.substring(0, key.indexOf(separator));
                     String entityName = entityNameDecode (encodedEntityName);
 
-                    // FIXME: This needs to be made case insensitive and should be getting the
-                    //        model group from the ec
-                    EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+                    // FIXME: This needs to be made case insensitive
+                    EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
                     if(entity != null) {
                         if(entity.primaryKeyAttributes().count() == 1) {
                             for(Enumeration ee =((NSArray)values.objectForKey(key)).objectEnumerator(); ee.hasMoreElements();) {
