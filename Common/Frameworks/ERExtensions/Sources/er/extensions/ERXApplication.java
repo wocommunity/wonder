@@ -301,10 +301,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     }
 
     /** Used to instanciate a WOComponent when no context is available,
-        * typically ouside of a session
-        *
-        * @param pageName - The name of the WOComponent that must be instanciated.
-        */
+     * typically ouside of a session
+     *
+     * @param pageName - The name of the WOComponent that must be instanciated.
+     * @return created WOComponent with the given name
+     */
     public static WOComponent instantiatePage (String pageName) {
         // Create a context from a fake request
         WORequest fakeRequest = new ERXRequest("GET", "", "HTTP/1.1", null, null, null);
