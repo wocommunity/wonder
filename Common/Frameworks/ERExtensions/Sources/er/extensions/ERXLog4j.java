@@ -107,19 +107,26 @@ public class ERXLog4j {
      */
     public static void configureLogging() {
         if (!_isInitialized) {
+            // FIXME: (tatsuya) System.getProperty will always return null no matter if ERConfigurationPath 
+            //        is present. It will be called by the framework's static initializer and it's ealier than 
+            //        WOApplication populates the system properties. 
             String configurationPath=System.getProperty("ERConfigurationPath");
             if (configurationPath==null) {
                 File mainProperties=new File(System.getProperty("user.home"),
                                              "WebObjects.properties");
                 configurationPath=mainProperties.getPath();
             }
-            if (configurationPath != null) {
+            if (configurationPath != null  &&  new File(configurationPath).exists()) {
                 setConfigurationFilePath(configurationPath);
                 loadConfiguration();
                 cat = Category.getInstance(ERXLog4j.class);
                 cat.info("Logging system configured.");
             } else {
-                // ENHANCEME: Should configure the BasicConfigurator at this point
+                setConfigurationFilePath(null);
+                BasicConfigurator.configure();
+                cat = Category.getInstance(ERXLog4j.class);
+                cat.warn("The configuration file \"" + configurationPath + "\" does not exist. " 
+                            + "Logging system configured by the BasicConfigurator.");
             }
             setIsLoggingConfigured(true);
             _isInitialized = true;
@@ -138,10 +145,20 @@ public class ERXLog4j {
                 if (cat.isDebugEnabled()) cat.debug("Registering observer for file change.");
                 Observer o = new Observer();
                 ERXRetainer.retain(o);
-                ERXFileNotificationCenter.defaultCenter().addObserver(o,
+                try {
+                    ERXFileNotificationCenter.defaultCenter().addObserver(o,
                                                                       new NSSelector("reloadConfigurationFile",
                                                                                      ERXConstant.NotificationClassArray),
                                                                       configurationFilePath());
+                } catch (Exception ex) {
+                    String errorMessage = "An exception occured while registering the logging configuration file: " 
+                            + ex.getMessage();
+                    if (isLoggingConfigured()) 
+                        cat.error(errorMessage);
+                    else 
+                        System.out.println("ERXLog4J - configureRapidTurnAround: " + errorMessage);
+                    ERXRetainer.release(o);
+                }
             }
             _initializedRapidTurnAround = true;
         }
