@@ -48,6 +48,9 @@ public abstract class ERXApplication extends WOApplication {
         WOApplication.main(argv, applicationClass);
     }
 
+    /** improved streaming support*/
+    public NSMutableArray _streamingRequestHandlerKeys = new NSMutableArray(streamActionRequestHandlerKey());
+
     /**
      * Installs several bufixes and enhancements to WODynamicElements.
      * Sets the Context class name to "er.extensions.ERXWOContext" if
@@ -547,5 +550,13 @@ public abstract class ERXApplication extends WOApplication {
             + "public static void main(String argv[]) { \n"
             + "    ERXApplication.main(argv, Application.class); \n"
             + "}\n\n");
+    }
+
+    public void registerStreamingRequesHandlerKey(String s) {
+        if (!_streamingRequestHandlerKeys.containsObject(s)) _streamingRequestHandlerKeys.addObject(s);
+    }
+
+    public boolean isStreamingRequestHandlerKey(String s) {
+        return _streamingRequestHandlerKeys.containsObject(s);
     }
 }
