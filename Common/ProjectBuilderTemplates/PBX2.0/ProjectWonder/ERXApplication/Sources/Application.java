@@ -30,6 +30,11 @@ public class Application extends ERXApplication {
      */
     public void didFinishLaunching() {
         log.debug("didFinishLaunching called.");
+
+        log.info("WebObjects version: " + ERXProperties.webObjectsVersion());
+        log.info("ERExtensions version: " + ERXProperties.versionStringForFrameworkNamed("ERExtensions"));
+        log.info("app version: " + ERXProperties.versionStringForApplication());
+
         ERXBrowserFactory.factory().setBrowserClassName("Browser");
         //ERXMessageEncoding.setDefaultEncodingForAllLanguages("UTF8");
         //ERXMessageEncoding.setDefaultEncodingForAllLanguages("SJIS");
