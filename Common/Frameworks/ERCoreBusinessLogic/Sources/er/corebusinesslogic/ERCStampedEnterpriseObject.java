@@ -12,7 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import er.extensions.*;
 
-public abstract class ERCStampedEnterpriseObject extends ERCEnterpriseObject {
+public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     private boolean _propagateWillChange=true;
     public abstract String relationshipNameForLogEntry();
