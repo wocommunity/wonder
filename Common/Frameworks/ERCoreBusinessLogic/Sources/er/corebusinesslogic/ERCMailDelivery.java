@@ -218,5 +218,44 @@ public class ERCMailDelivery {
         if (bindings != null && bindings.count() > 0)
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
         return composeComponentEmail(from, to, cc, bcc, title, component, ec);
-    }    
+    }
+
+	 	 /**
+		 * Composes a mail message from a given component.
+		  *
+		  * @param from email address
+		  * @param to email addresses
+		  * @param cc email addresses
+		  * @param bcc email addresses
+		  * @param title of the message
+		  * @param componentName name of the component to render
+		  * @param plainTextComponentName name of the component to render
+		  * @param ec editing context to create the mail
+		  *		message in.
+		  * @return created mail message for the given parameters
+		  */
+    public ERCMailMessage composeComponentEmail (String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 String componentName,
+																 String plainTextComponentName,
+                                                 NSDictionary bindings,
+                                                 EOEditingContext ec) {
+		 ERCMailMessage result = composeComponentEmail(from, to , cc, bcc, title, componentName, bindings, ec);
+		 WOComponent plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
+		 try{
+			 plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
+		 }catch(WOPageNotFoundException exc){
+			 //Do nothing here since it is not mandatory to have a plain text version component
+		 }
+		 if(plainTextComponent!=null){
+			 EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(plainTextComponent, bindings);
+			 WOContext context = plainTextComponent.context();
+			 context._generateCompleteURLs ();
+			 result.setPlainText(plainTextComponent.generateResponse().contentString());
+		 }
+		 return result;
+    }  
 }
