@@ -1,13 +1,14 @@
-ERXJSPopUpRelationPicker1: ERXJSPopUpRelationPicker {
+ERXJSPopUpRelationPicker: ERXJSPopUpRelationPicker {
 	childDisplayValueName = ^secondaryKeyWhenRelationship;
 	childLabel = ^displayNameForSecondaryKey;
-	childPopUpStringForAll = "- all -";
 	parentDisplayValueName = ^keyWhenRelationship;
-	parentEntitiesList = restrictedChoiceList;
+	parentEntitiesList = theList;
 	parentLabel = ^displayNameForDestinationEntity;
-	parentPopUpStringForAll = "- all -";
 	parentToChildrenRelationshipName = ^secondaryKey;
-	selectedChild = secondaryDisplayGroupQueryMatchValue;
-	selectedParent = displayGroupQueryMatchValue;
 	size = ^size;
+	multiple = multiple;
+	parentSelection = displayGroupQueryMatchValue;
+	childrenSelection = secondaryDisplayGroupQueryMatchValue;
+	childPopUpStringForAll = session.localizer.ERDQueryTwoLevelRelationship.all;
+	parentPopUpStringForAll = session.localizer.ERDQueryTwoLevelRelationship.all;
 }
