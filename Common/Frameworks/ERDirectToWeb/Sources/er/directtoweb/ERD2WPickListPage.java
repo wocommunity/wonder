@@ -28,7 +28,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDBranchInterfa
 
     public NSDictionary aBranch;
     public NSMutableArray selectedObjects = new NSMutableArray();
-    protected String dummy;
+    public String dummy;
 
     public boolean hasForm() {
         Object hasForm = d2wContext().valueForKey("hasForm");
