@@ -624,8 +624,8 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks $(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
-				JAVA_COMPILER = /usr/local/bin/jikes;
-				JAVA_COMPILER_FLAGS = "-deprecation";
+				JAVA_COMPILER = /usr/bin/jikes;
+				JAVA_COMPILER_FLAGS = "";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
