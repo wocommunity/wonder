@@ -142,12 +142,21 @@ public class ERXProperties {
     }
 
     /**
-     * Quick covience method used to determine if the current
+     * Quick convience method used to determine if the current
      * webobjects version is 5.2 or higher.
      * @return if the version of webobjects is 5.2 or better
      */
     public static boolean webObjectsVersionIs52OrHigher() {
         return webObjectsVersionAsDouble() >= 5.2d;
+    }
+
+    /**
+     * Quick convience method used to determine if the current
+     * webobjects version is 5.22 or higher.
+     * @return if the version of webobjects is 5.22 or better
+     */
+    public static boolean webObjectsVersionIs522OrHigher() {
+        return webObjectsVersionAsDouble() >= 5.22d;
     }
 
     
