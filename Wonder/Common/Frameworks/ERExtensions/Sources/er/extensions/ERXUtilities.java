@@ -522,6 +522,8 @@ public class ERXUtilities {
      * @param objects objects to be deleted.
      */
     public static void deleteObjects(EOEditingContext ec, NSArray objects) {
+        if (ec == null)
+            throw new RuntimeException("Attempting to delete objects with a null editing context!");
         if (objects != null && objects.count() > 0) {
             for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();)
                 ec.deleteObject((EOEnterpriseObject)e.nextElement());            
