@@ -131,8 +131,7 @@ ERTable1: ERXTable {
 
 EditForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
-	hasForm = d2wContext.hasForm;
-	multipleSubmit = true;
+	showForm = d2wContext.hasForm;
 	name = "EditForm";
 }
 
