@@ -61,7 +61,7 @@ public class ERXLog4j {
 
     static class ERXFactory implements org.apache.log4j.spi.CategoryFactory {
         public Category makeNewCategoryInstance(String name) {
-            return new ERXLog(name);
+            return new ERXLogger(name);
         }
     }
 
