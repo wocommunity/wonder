@@ -75,7 +75,9 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         }
         if (navigationItem().directActionName() != null) {
             if(_linkDirectlyToDirectActions) {
-                return context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
+                NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
+                bindings.setObjectForKey(context().contextID(), "__cid");
+                return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
             } else {
                 return context().componentActionURL();
             }
