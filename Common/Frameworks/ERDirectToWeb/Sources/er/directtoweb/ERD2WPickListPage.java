@@ -10,9 +10,7 @@ import java.util.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 

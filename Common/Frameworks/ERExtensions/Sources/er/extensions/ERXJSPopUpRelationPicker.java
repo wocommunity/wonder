@@ -9,8 +9,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
