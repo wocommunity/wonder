@@ -7,12 +7,12 @@
 <p>Changes so far:<ul>
 <li>CP is disabled by default 
 <li>CP is disabled when you enable caching 
-<li>in your WebObjects.properties add a line<br><code>er.extensions.ERXCompilerProxyEnabled=true</code>
-<li>For best results, you should set your "JAVA_ARCHIVE_CLASSES=NO" in your development targets settings, 
-that way, the freshly compiled classes will overwrite the older ones.
+<li>in your WebObjects.properties add a line<p><code>er.extensions.ERXCompilerProxyEnabled=true</code></p>
+<li>For best results, you should set "JAVA_ARCHIVE_CLASSES=NO" in your development targets settings. 
+That way, the freshly compiled classes will overwrite the older ones.
 </ul>
-<p>To generate the <code>CPFileList.txt</code> add a shell build phase with 
-<code>sh "/Library/Frameworks/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh"</code>
+<p>To generate the <code>CPFileList.txt</code> automatically, add a shell build phase with 
+<br><br><code>sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh</code>
 </p>
 <p>Please direct any questions to ak@prnet.de.</p>
 
