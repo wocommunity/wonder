@@ -437,13 +437,9 @@ public class ERXUtilities {
      * 		the key path.
      */
     public static EORelationship relationshipWithObjectAndKeyPath(EOEnterpriseObject object, String keyPath) {
-        EOEnterpriseObject lastEO=object;
+        EOEnterpriseObject lastEO = relationshipObjectWithObjectAndKeyPath(object, keyPath);
         EORelationship relationship = null;
-        if (keyPath.indexOf(".")!=-1) {
-            String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
-            Object rawLastEO=object.valueForKeyPath(partialKeyPath);
-            lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
-        }
+        
         if (lastEO!=null) {
             // FIXME: Should use the model group of the object's editing context's
             //		root object store coordinator
@@ -452,6 +448,17 @@ public class ERXUtilities {
             relationship=entity.relationshipNamed(lastKey);
         }
         return relationship;
+    }
+
+    public static EOEnterpriseObject relationshipObjectWithObjectAndKeyPath(EOEnterpriseObject object, String keyPath) {
+        EOEnterpriseObject lastEO=object;
+        EORelationship relationship = null;
+        if (keyPath.indexOf(".")!=-1) {
+            String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
+            Object rawLastEO=object.valueForKeyPath(partialKeyPath);
+            lastEO=rawLastEO instanceof EOEnterpriseObject ? (EOEnterpriseObject)rawLastEO : null;
+        }
+        return lastEO;
     }
 
     /**
