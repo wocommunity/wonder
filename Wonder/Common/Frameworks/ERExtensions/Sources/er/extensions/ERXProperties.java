@@ -83,7 +83,7 @@ public class ERXProperties {
     /**
      * Returning an string for a given system 
      * property. This is a cover method of 
-     * {@link java.util.System#getProperty}
+     * {@link java.lang.System#getProperty}
      * @param s system property
      * @return string value of the system propery or null
      */
