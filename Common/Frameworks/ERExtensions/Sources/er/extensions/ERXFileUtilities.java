@@ -86,7 +86,7 @@ public class ERXFileUtilities {
      * @param f file to get the bytes from
      * @param n number of bytes to read from input file
      * @throws IOException if things go wrong
-     * @return byte array of the file.
+     * @return byte array of the first n bytes from the file.
      */
     public static byte[] bytesFromFile(File f, int n) throws IOException {
         if (f == null) throw new IllegalArgumentException("null file");
