@@ -5,7 +5,7 @@ import com.webobjects.appserver.*;
 /**
  * Used to display sections as text.<br />
  * 
- * @binding displayNameforSectionKey
+ * @binding displayNameForSectionKey
  */
 
 public class ERDSectionText extends ERDCustomComponent {
