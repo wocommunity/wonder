@@ -33,6 +33,7 @@ ERExtensionsJava	ProjectWonder/Frameworks/ERExtensionsJava
 ERDirectToWebJava	ProjectWonder/Frameworks/ERDirectToWebJava
 ERJarsJava		ProjectWonder/Frameworks/ERJarsJava
 ERCoreBusinessLogicJava ProjectWonder/Frameworks/ERCoreBusinessLogicJava
+ERNeutralLook		ProjectWonder/Frameworks/ERNeutralLook
 
 #######################################################################
 # BugTracker
