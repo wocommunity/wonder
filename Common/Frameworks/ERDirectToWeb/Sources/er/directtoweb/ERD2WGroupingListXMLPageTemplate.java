@@ -44,8 +44,8 @@ public class ERD2WGroupingListXMLPageTemplate extends ERD2WGroupingListPage {
         if(log.isDebugEnabled()) log.debug("sublistSection = "+sublistSection);
         if (sublistSection != null){
         if (groupingKeyDisplayKey!=null && !groupingKeyDisplayKey.equals("")){
-                if (sublistSection instanceof EOGenericRecord) {
-                    result = (String)((EOGenericRecord)sublistSection).valueForKey(groupingKeyDisplayKey);
+                if (sublistSection instanceof EOEnterpriseObject) {
+                    result = (String)((EOEnterpriseObject)sublistSection).valueForKey(groupingKeyDisplayKey);
                 }else if (sublistSection instanceof NSArray) {
                     NSArray values = (NSArray)((NSArray)sublistSection).valueForKey(groupingKeyDisplayKey);
                     result = values.componentsJoinedByString(", ");

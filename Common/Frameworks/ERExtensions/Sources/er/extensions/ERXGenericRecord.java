@@ -89,10 +89,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     /**
      * Clazz object implementation for ERXGenericRecord. See
-     * {@link EOGenericRecordClazz} for more information on this
+     * {@link EOEnterpriseObjectClazz} for more information on this
      * neat design pattern.
      */
-    public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
+    public static class ERXGenericRecordClazz extends EOEnterpriseObjectClazz {
+        
     }
 
     public String insertionStackTrace = null;
@@ -664,7 +665,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return array of all attribute names that are mapped to
      *		String objects.
      */
-    // MOVEME: Might be a canidate for EOGenericRecordClazz
+    // MOVEME: Might be a canidate for EOEnterpriseObjectClazz
     private static synchronized NSArray stringAttributeListForEntityNamed(String entityName) {
         // FIXME: this will need to be synchronized if you go full-MT
         NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);

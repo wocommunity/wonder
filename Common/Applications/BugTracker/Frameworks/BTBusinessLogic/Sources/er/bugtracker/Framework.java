@@ -24,5 +24,5 @@ public class Framework extends _Framework {
         
     }
 
-    public static FrameworkClazz clazz = (FrameworkClazz)EOGenericRecordClazz.clazzForEntityNamed("Framework");
+    public static FrameworkClazz clazz = (FrameworkClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Framework");
 }

@@ -46,7 +46,7 @@ public class ERCMailMessage extends _ERCMailMessage {
      * @return sigleton clazz object
      */
     public static ERCMailMessageClazz mailMessageClazz() {
-        return (ERCMailMessageClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCMailMessage");
+        return (ERCMailMessageClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailMessage");
     }
 
     /**

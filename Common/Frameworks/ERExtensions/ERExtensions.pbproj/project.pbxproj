@@ -312,7 +312,6 @@
 				F59C580302C4565701000102,
 				F59C580402C4565701000102,
 				F59C580502C4565701000102,
-				F59C580602C4565701000102,
 				F59C580702C4565701000102,
 				F59C580802C4565701000102,
 				F59C580902C4565701000102,
@@ -499,6 +498,8 @@
 				50EB03AA055EBAD2007F93C2,
 				50EB03AD055ED28E007F93C2,
 				50EB03AE055ED28E007F93C2,
+				4105E4A605C7C933003BA93B,
+				4105E4A805C7CBA9003BA93B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1151,6 +1152,32 @@
 //412
 //413
 //414
+		4105E4A505C7C933003BA93B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = EOEnterpriseObjectClazz.java;
+			path = er/extensions/EOEnterpriseObjectClazz.java;
+			refType = 4;
+		};
+		4105E4A605C7C933003BA93B = {
+			fileRef = 4105E4A505C7C933003BA93B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4105E4A705C7CBA9003BA93B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXCustomObject.java;
+			path = er/extensions/ERXCustomObject.java;
+			refType = 4;
+		};
+		4105E4A805C7CBA9003BA93B = {
+			fileRef = 4105E4A705C7CBA9003BA93B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		413B78DE04AB575F00000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1630,12 +1657,13 @@
 		};
 		419935740528DD360081353A = {
 			children = (
-				F59C577702C4565601000102,
+				4105E4A505C7C933003BA93B,
 				50287842040960A40043FCB8,
 				F59C579202C4565701000102,
 				F59C579802C4565701000102,
 				F5283C570365C94301CF0E76,
 				F59C57A102C4565701000102,
+				4105E4A705C7CBA9003BA93B,
 				F69DF13F02C76B3F01AD0D07,
 				63BE1727048D10E200A83704,
 				F59C57ED02C4565701000102,
@@ -5411,13 +5439,6 @@
 			path = Sources/com/webobjects/woextensions/KeyValueCodingProtectedAccessor.java;
 			refType = 2;
 		};
-		F59C577702C4565601000102 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = EOGenericRecordClazz.java;
-			path = Sources/er/extensions/EOGenericRecordClazz.java;
-			refType = 2;
-		};
 		F59C577802C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -6321,12 +6342,6 @@
 		};
 		F59C580502C4565701000102 = {
 			fileRef = F59C577402C4565601000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C580602C4565701000102 = {
-			fileRef = F59C577702C4565601000102;
 			isa = PBXBuildFile;
 			settings = {
 			};

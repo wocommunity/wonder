@@ -130,12 +130,14 @@
 			};
 		};
 		F512816B03AAD28F01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.api;
 			path = Components/Main.api;
 			refType = 4;
 		};
 		F512816C03AAD28F01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Report.api;
 			path = Components/Report.api;
@@ -186,36 +188,42 @@
 			refType = 4;
 		};
 		F512817603AAD2A701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Application.java;
 			path = er/reporting/examples/Application.java;
 			refType = 4;
 		};
 		F512817703AAD2A701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DirectAction.java;
 			path = er/reporting/examples/DirectAction.java;
 			refType = 4;
 		};
 		F512817903AAD2A701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Main.java;
 			path = er/reporting/examples/Main.java;
 			refType = 4;
 		};
 		F512817A03AAD2A701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = RefreshPage0.java;
 			path = er/reporting/examples/RefreshPage0.java;
 			refType = 4;
 		};
 		F512817B03AAD2A701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Report.java;
 			path = er/reporting/examples/Report.java;
 			refType = 4;
 		};
 		F512817C03AAD2A701AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Session.java;
 			path = er/reporting/examples/Session.java;
@@ -274,11 +282,11 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F5549E0603A493AE01000102 = {
 			isa = PBXFrameworkReference;
@@ -310,6 +318,7 @@
 				F59DCBD0016CA9F7013D89A4,
 				F59DCBD1016CA9F7013D89A4,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -543,7 +552,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59DCB80016CA9F6013D89A4 = {
 			isa = PBXTargetDependency;
@@ -616,7 +624,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59DCB82016CA9F6013D89A4 = {
 			buildActionMask = 2147483647;
@@ -821,7 +828,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59DCBA4016CA9F6013D89A4 = {
 			buildActionMask = 2147483647;

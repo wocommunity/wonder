@@ -55,5 +55,5 @@ public class ERCMailState extends _ERCMailState {
         }
     }
 
-    public static ERCMailStateClazz mailStateClazz() { return (ERCMailStateClazz)EOGenericRecordClazz.clazzForEntityNamed("ERCMailState"); }
+    public static ERCMailStateClazz mailStateClazz() { return (ERCMailStateClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCMailState"); }
 }

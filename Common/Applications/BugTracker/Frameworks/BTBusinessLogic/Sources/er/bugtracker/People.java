@@ -56,7 +56,7 @@ public class People extends _People implements ERCoreUserInterface {
         }
     }
 
-    public static final PeopleClazz clazz = (PeopleClazz)EOGenericRecordClazz.clazzForEntityNamed("People");
+    public static final PeopleClazz clazz = (PeopleClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("People");
 
     public void newPreference(EOEnterpriseObject pref) {
         addToPreferences((ERCPreference)pref);

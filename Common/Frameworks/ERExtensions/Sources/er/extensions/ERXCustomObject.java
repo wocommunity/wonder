@@ -92,7 +92,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * {@link EOCustomObjectClazz} for more information on this
      * neat design pattern.
      */
-    public static class ERXCustomObjectClazz extends EOCustomObjectClazz {        
+    public static class ERXCustomObjectClazz extends EOEnterpriseObjectClazz {        
+
     }
 
     public String insertionStackTrace = null;

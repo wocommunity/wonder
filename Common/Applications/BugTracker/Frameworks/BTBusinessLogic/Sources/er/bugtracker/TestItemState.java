@@ -40,5 +40,5 @@ public class TestItemState extends _TestItemState {
         
     }
 
-    public static final TestItemStateClazz clazz = (TestItemStateClazz)EOGenericRecordClazz.clazzForEntityNamed("TestItemState");
+    public static final TestItemStateClazz clazz = (TestItemStateClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("TestItemState");
 }
