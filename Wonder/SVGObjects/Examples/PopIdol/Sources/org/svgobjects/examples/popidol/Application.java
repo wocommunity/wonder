@@ -13,8 +13,8 @@ import com.webobjects.eoaccess.*;
 
 public class Application extends WOApplication {
     private EOEditingContext editingContext = new EOEditingContext();
-    protected EOEnterpriseObject garath;
-    protected EOEnterpriseObject will;
+    public EOEnterpriseObject garath;
+    public EOEnterpriseObject will;
 
     public static void main(String argv[]) {
         WOApplication.main(argv, Application.class);
