@@ -13,13 +13,21 @@ import java.util.*;
 import java.util.zip.*;
 
 /**
-* Collection of handy {java.io.File} utilities.
+ * Collection of handy {java.io.File} utilities.
  */
 public class ERXFileUtilities {
+
+    //	===========================================================================
+    //	Class Constants
+    //	---------------------------------------------------------------------------    
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileUtilities.class);
 
+    //	===========================================================================
+    //	Class Methods
+    //	---------------------------------------------------------------------------    
+    
     /**
      * Returns the byte array for a given stream.
      * @param in stream to get the bytes from
@@ -86,16 +94,74 @@ public class ERXFileUtilities {
      * @param stream to pull data from
      */
     public static void writeInputStreamToFile(File file, InputStream stream) throws IOException {
-        if (file == null)
-            throw new IllegalStateException("Attempting to write to a null file!");
+        if (file == null) throw new IllegalStateException("Attempting to write to a null file!");
         FileOutputStream out = new FileOutputStream(file);
-        //50 KBytes buffer
-        byte buf[] = new byte[1024 * 50];
+        byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
         int read = -1;
         while ((read = stream.read(buf)) != -1) {
             out.write(buf, 0, read);
         }
     }
+
+
+    /**
+     * Copy a file across hosts using scp.
+     * @param srcHost host to send from (null if file is local)
+     * @param srcPath path on srcHost to read from
+     * @param dstHost host to send to (null if file is local)
+     * @param dstPath path on srcHost to write to
+     */
+    public static void remoteCopyFile(String srcHost, String srcPath, String dstHost, String dstPath) throws IOException {
+        if (srcPath == null) throw new IllegalArgumentException("null source path not allowed");
+        if (dstPath == null) throw new IllegalArgumentException("null source path not allowed");
+
+        ArrayList args = new ArrayList(7);
+
+        args.add("/usr/bin/scp");
+        args.add("-B");
+        args.add("-q");
+        args.add("-o"); args.add("StrictHostKeyChecking=no");
+        args.add(((srcHost != null) ? (srcHost + ":") : "") + srcPath);
+        args.add(((dstHost != null) ? (dstHost + ":") : "") + dstPath);
+
+        String[] cmd = (String[])args.toArray(new String[]{});
+
+        Process task = null;
+        try {
+            task = Runtime.getRuntime().exec(cmd);
+            while (true) {
+                try { task.waitFor(); break; }
+                catch (InterruptedException e) {}
+            }
+            if (task.exitValue() != 0) {
+                BufferedReader err = new BufferedReader(new InputStreamReader(task.getErrorStream()));
+                String message = err.readLine();
+                throw new IOException("Unable to remote copy file: (exit status = " + task.exitValue() + ") " + message + "\n");
+            }
+        } finally {
+            ERXExtensions.freeProcessResources(task);
+        }
+    }
+
+    /**
+     * Copy a file across hosts using scp.
+     * @param srcFile local file to send
+     * @param dstHost host to send to (null if file is local)
+     * @param dstPath path on srcHost to write to
+     */
+    public static void remoteCopyFile(File srcFile, String dstHost, String dstPath) throws IOException {
+        remoteCopyFile(null, srcFile.getPath(), dstHost, dstPath);
+    }
+
+    /**
+     * Copy a file across hosts using scp.
+     * @param srcHost host to send from (null if file is local)
+     * @param srcPath path on srcHost to read from
+     * @param dstFile local file to write to
+     */
+    public static void remoteCopyFile(String srcHost, String srcPath, File dstFile) throws IOException {
+        remoteCopyFile(srcHost, srcPath, null, dstFile.getPath());
+    }    
     
     /**
      * Returns a string from the file using the default
@@ -300,9 +366,9 @@ public class ERXFileUtilities {
             if (!srcDirectory.exists() || !dstDirectory.exists())
                 throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
                                            + " Dst: " + dstDirectory);
-            File srcFiles[] = filter!=null ? 
-		srcDirectory.listFiles(filter) :
-		srcDirectory.listFiles();
+            File srcFiles[] = filter!=null ?
+                srcDirectory.listFiles(filter) :
+                srcDirectory.listFiles();
             if (srcFiles != null && srcFiles.length > 0) {
                 FileInputStream in = null;
                 FileOutputStream out = null;
@@ -314,18 +380,19 @@ public class ERXFileUtilities {
                 }
             }
         }
-
-/** Copys the source file to the destination
-  *
-  * @param srcFile source file
-  * @param dstFile destination file
-  * @param deleteOriginals tells if original file will be deleted. Note that if the appuser has no write rights
-        * on the file it is NOT deleted unless force delete is true
-        * @param forceDelete if true then missing write rights are ignored and the file is deleted.
-  */
-public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)
+    
+    /**
+     * Copys the source file to the destination
+     *
+     * @param srcFile source file
+     * @param dstFile destination file
+     * @param deleteOriginals tells if original file will be deleted. Note that if the appuser has no write rights
+     * on the file it is NOT deleted unless force delete is true
+     * @param forceDelete if true then missing write rights are ignored and the file is deleted.
+     */
+    public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)
         throws FileNotFoundException, IOException {
-        if (srcFile.exists() && srcFile.isFile()) {
+            if (srcFile.exists() && srcFile.isFile()) {
             Throwable thrownException=null;
             File  parent = dstFile.getParentFile();
             parent.mkdirs();
@@ -367,12 +434,13 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         }
     }
 
-    /** Creates a temporary directory.
-        *
-        * @return a temporary directory
-        *
-        * @exception IOException if something goes wrong
-        */
+    /**
+     * Creates a temporary directory.
+     *
+     * @return a temporary directory
+     *
+     * @exception IOException if something goes wrong
+     */
     public static final File createTempDir() throws IOException {
         File f = File.createTempFile("WonderTempDir", "");
 
@@ -383,12 +451,13 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         return f;
     }
 
-    /** Creates a temporary directory.
-        *
-        * @return a temporary directory
-        *
-        * @exception IOException if something goes wrong
-        */
+    /**
+     * Creates a temporary directory.
+     *
+     * @return a temporary directory
+     *
+     * @exception IOException if something goes wrong
+     */
     public static final File createTempDir(String prefix, String suffix) throws IOException {
         File f = File.createTempFile(prefix, suffix);
 
@@ -399,15 +468,15 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         return f;
     }
     
-    
-    /** Creates a new NSArray which contains all files in the specified directory.
-        *
-        * @param directory the directory from which to add the files
-        * @param recursive if true then files are added recursively meaning subdirectories are scanned, too.
-        *
-        * @return a NSArray containing the files in the directory. If the specified directory does not
-        * exist then the array is empty.
-        */
+    /**
+     * Creates a new NSArray which contains all files in the specified directory.
+     *
+     * @param directory the directory from which to add the files
+     * @param recursive if true then files are added recursively meaning subdirectories are scanned, too.
+     *
+     * @return a NSArray containing the files in the directory. If the specified directory does not
+     * exist then the array is empty.
+     */
     public static NSArray arrayByAddingFilesInDirectory(File directory, boolean recursive) {
         NSMutableArray files = new NSMutableArray();
         if (!directory.exists()) {
@@ -430,13 +499,14 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         return files;
     }
 
-    /** Replaces the extension of the given file with the new extension.
-        *
-        * @param path the path of the file.
-        * @param newExtension the new extension.
-        *
-        * @return the new path.
-        */
+    /**
+     * Replaces the extension of the given file with the new extension.
+     *
+     * @param path the path of the file.
+     * @param newExtension the new extension.
+     *
+     * @return the new path.
+     */
     public static String replaceFileExtension(String path, String newExtension) {
         String tmp = "." + newExtension;
 
@@ -456,24 +526,23 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         }
     }
 
-    
-
-/** Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
-        * structure is created as a subdirectory from destination. If destination is <code>null</code>
-        * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
-        * uncompressed file(s).
-        *
-        *
-        * @param f The file to unzip
-        * @param destination the destination directory. If directory is null then the file will be unzipped in
-        * java.io.tmpdir, if it does not exist, then a directory is created and if it exists but is a file
-        * then the destination is set to the directory in which the file is located.
-        *
-        *
-        * @return the file or directory in which the zipfile was unzipped
-        *
-        * @exception IOException
-        */
+    /**
+     * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
+     * structure is created as a subdirectory from destination. If destination is <code>null</code>
+     * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
+     * uncompressed file(s).
+     *
+     *
+     * @param f The file to unzip
+     * @param destination the destination directory. If directory is null then the file will be unzipped in
+     * java.io.tmpdir, if it does not exist, then a directory is created and if it exists but is a file
+     * then the destination is set to the directory in which the file is located.
+     *
+     *
+     * @return the file or directory in which the zipfile was unzipped
+     *
+     * @exception IOException
+     */
     public static File unzipFile(File f, File destination) throws IOException {
         if (!f.exists()) {
             throw new FileNotFoundException("file "+f+" does not exist");
