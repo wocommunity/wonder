@@ -325,15 +325,18 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          */
         public void prepareEntityForRegistration(EOEntity eoentity) {
             String className = eoentity.className();
-            String alternateClassName = System.getProperty("er.extensions.ERXEntityClassDescription."
-                                                           + eoentity.name() + ".ClassName");
+            String defaultClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXEntityClassDescription.defaultClassName", ERXGenericRecord.class.getName());
+            String alternateClassName = ERXProperties.stringForKey("er.extensions.ERXEntityClassDescription." + eoentity.name() + ".ClassName");
             if (alternateClassName != null) {
-                log.info(eoentity.name() + ": setting class from: " + className + " to: " + alternateClassName);
+                log.debug(eoentity.name() + ": setting class from: " + className + " to: " + alternateClassName);
                 eoentity.setClassName(alternateClassName);
             } else if (className.equals("EOGenericRecord")) {
-                className = ERXGenericRecord.class.getName();
-                eoentity.setClassName(className);
-                log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
+                if(eoentity.primaryKeyAttributes().count() == 1) {
+                    eoentity.setClassName(defaultClassName);
+                    log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + defaultClassName);
+                } else {
+                    log.warn(eoentity.name() + ": not setting class from EOGenericRecord to " + defaultClassName + ", it has a compound primary key");
+                }
             } 
         }
 
@@ -440,7 +443,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     _setClassDescriptionOnEntity(entity, cd);
                 }
             } else {
-                log.error("Unable to register descriptions for class: " + class1.getName());
+                log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException());
             }
         }
         
