@@ -362,19 +362,35 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         return validated;
     }
 
-
     /**
      * This method is called when an object is
-     * about to be saved. If any validation
+     * about to be saved. Adds support for extra validation keys to
+     * be set in an array in the entity's userInfo under the key
+     * <code>ERXAdditionalSaveValidationKeys</code>. If any validation
      * exceptions occur they are converted to an
      * {@link ERXValidationException} and that is
-     * thrown.
-     * @param obj enterprise object to be deleted
+     * thrown. 
+     * @param obj enterprise object to be saved
      * @throws validation exception
      */
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
-            super.validateObjectForSave(obj);
+            NSArray additionalValidationKeys = (NSArray)ERXValueUtilities.arrayValue(entity().userInfo().objectForKey("ERXAdditionalSaveValidationKeys"));
+            if(additionalValidationKeys != null) {
+                for(Enumeration e = additionalValidationKeys.objectEnumerator(); e.hasMoreElements();) {
+                    String key = (String)e.nextElement();
+                    NSSelector selector = new NSSelector(key);
+                    if(selector.implementedByObject(obj)) {
+                        try {
+                            selector.invoke(obj);
+                        } catch (Exception ex) {
+                            if(ex instanceof NSValidation.ValidationException)
+                                throw (NSValidation.ValidationException)ex;
+                            log.error(ex);
+                        }
+                    }
+                }
+            }
         } catch (NSValidation.ValidationException eov) {
             if (log.isDebugEnabled())
                 log.debug("Caught validation exception: " + eov);
@@ -382,6 +398,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             throw (erv != null ? erv : eov);
         }
     }
+
     /**
      * Calculates a display name for a key using
      * an improved method.
