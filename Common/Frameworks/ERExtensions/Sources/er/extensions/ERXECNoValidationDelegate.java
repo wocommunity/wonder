@@ -9,15 +9,18 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
+/**
+ * Exactly the same as {@link ERXDefaultEditingContextDelegate},
+ * except validation has been disabled.
+ */
 public class ERXECNoValidationDelegate extends ERXDefaultEditingContextDelegate {
 
-    ///////////////////////////  log4j category  ///////////////////////////
-    public static final Category cat = Category.getInstance(ERXECNoValidationDelegate.class);
-
-    // Turns off validation
+    /**
+     * Validation is disabled.
+     * @param anEditingContext an editing context
+     * @return false
+     */
     public boolean editingContextShouldValidateChanges(EOEditingContext anEditingContext) {
         return false;
     }
