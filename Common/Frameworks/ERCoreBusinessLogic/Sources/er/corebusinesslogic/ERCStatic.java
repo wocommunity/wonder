@@ -111,6 +111,7 @@ public class ERCStatic extends _ERCStatic {
                 privateEditingContext().lock();
                 takeStaticStoredValueForKey(privateEditingContext(), value, key);
                 // Clear out the stacks.
+                privateEditingContext().saveChanges();
                 privateEditingContext().revert();
             } finally {
                 privateEditingContext().unlock();
