@@ -55,10 +55,15 @@ public class ERD2WEditNumber extends D2WEditNumber {
                 throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
             }
         } catch(NSValidation.ValidationException ex) {
-            validationFailedWithException(ex, anObject, propertyKey());
+            //validationFailedWithException(ex, anObject, propertyKey());
             throw ex;
         }
-        return super.validateTakeValueForKeyPath(convertNumber(number), aPath);
+        return super.validateTakeValueForKeyPath(convertNumber(number), propertyKey());
+    }
+    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
+        // This is for number formatting exceptions
+        String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
+        parent().validationFailedWithException(theException, theValue, keyPath);
     }
     /*
      public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
