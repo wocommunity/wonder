@@ -212,30 +212,34 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
-        validationLog.debug("ERInspectPage in tryToSaveChanges calling validateForSave");
+        validationLog.debug("tryToSaveChanges calling validateForSave");
         boolean saved = false;
         try {
             if (object()!=null && validateObject && shouldValidateBeforeSave()) {
                 if (_context.insertedObjects().containsObject(object()))
-                    object().validateForInsert();    
-                object().validateForSave();
+                    object().validateForInsert();
+                else
+                    object().validateForUpdate();
             }
             if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges())
                 object().editingContext().saveChanges();
             saved = true;
-        } catch (NSValidation.ValidationException e) {
-            if (e instanceof ERXValidationException) {
-                ERXValidationException ex = (ERXValidationException)e;
-                ex.setContext(d2wContext());
-                ex.setTargetLanguage((String)session().valueForKeyPath("language"));
-                log.info("Target language:" + session().valueForKeyPath("language"));
-                Object o = ex.object();
-                if(o instanceof EOEnterpriseObject) {
-                    EOEnterpriseObject eo = (EOEnterpriseObject)o;
-                    d2wContext().takeValueForKey( eo.entityName(),"entityName");
-                    d2wContext().takeValueForKey( ex.propertyKey(),"propertyKey");
-                }
+        } catch (ERXValidationException ex) {
+            String propertyKey = ex.propertyKey();
+            ex.setContext(d2wContext());
+            ex.setTargetLanguage((String)session().valueForKeyPath("language"));
+            Object o = ex.object();
+            if(o instanceof EOEnterpriseObject) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)o;
+                d2wContext().takeValueForKey( eo.entityName(),"entityName");
+                d2wContext().takeValueForKey( propertyKey,"propertyKey");
             }
+            if(propertyKey != null && propertyKey.indexOf(",") > 0) {
+                keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString(propertyKey, ","));
+            }
+            errorMessage = " Could not save your changes: "+ex.getMessage()+" ";
+        } catch (NSValidation.ValidationException e) {
+            log.info(e.getMessage(), e);
             errorMessage = " Could not save your changes: "+e.getMessage()+" ";
         }
         return saved;

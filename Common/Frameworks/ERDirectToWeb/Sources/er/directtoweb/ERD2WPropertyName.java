@@ -33,8 +33,11 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     }
     
     public boolean hasNoErrors() {
-        String keyPath = "errorMessages." + displayNameForProperty();
-        return d2wContext().valueForKeyPath(keyPath) == null;
+        if(false) {
+            String keyPath = "errorMessages." + displayNameForProperty();
+            return d2wContext().valueForKeyPath(keyPath) == null;
+        }
+        return !validationExceptionOccurredForPropertyKey();
     }
 
     public boolean d2wComponentNameDebuggingEnabled() {
