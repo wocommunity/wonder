@@ -21,16 +21,17 @@
 	AxisFlag = BOTH;
 
 	NumberFont = tiny;
-	NumberFormat = "%3.0f";
+        NumberFormat = "#,##0.0##";
+	//  NumberFormat = "%3.0f";
 	Color = (200,200,200);
         DataFormat = DOUBLE;
-        DateFormat = "%Y-%m-%d";
+        DateFormat = "yyyy-MM-dd";
         XAxis = {
                 AxisFlag = MAIN;
 		DataFormat = DATE;
 		Unit = "Unset";
-
-		NumberFormat = "%1.1f";
+                NumberFormat = "#,##0.0##";
+		// NumberFormat = "%1.1f";
 
 	//	NumbersDeltaAbs = 1.;
 
@@ -44,13 +45,13 @@
 
 //		Min = "-5.0";
 
-		Max = 20.0;
+//		Max = 20.0;
 
 		Unit = "Unset";
 
-		TicsDeltaAbs = 10;
+//		TicsDeltaAbs = 10;
 
-		NumbersDeltaAbs = 10.;
+//		NumbersDeltaAbs = 10.;
 
 		};
 }
