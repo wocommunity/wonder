@@ -77,7 +77,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }    
 
     /**
-     * Implementation of the {@link ERXComponentActionRedirector.Restorable} interface.
+     * Implementation of the {@link ERXComponentActionRedirector$Restorable} interface.
      * This implementation creates an URL with the name of the current pageConfiguration as a direct action,
      * which assumes a {@link ERD2WDirectAction} as the default direct action.
      * Subclasses need to implement more sensible behaviour.
