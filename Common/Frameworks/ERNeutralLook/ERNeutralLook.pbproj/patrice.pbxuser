@@ -254,6 +254,12 @@
 	40B58282FFD5E8187F000001 = {
 		activeExec = 0;
 	};
+	F6EBF5EF02DF4FE70FCF0E72 = {
+		isa = PBXFileReference;
+		name = d2w.d2wmodel;
+		path = /Users/patrice/Developer/Wonder/ERNeutralLook/d2w.d2wmodel;
+		refType = 0;
+	};
 	F6EBF70002DF51480FCF0E72 = {
 		isa = PBXFileReference;
 		name = ERNEUInspectPage.html;
