@@ -507,6 +507,11 @@ public class ERXSession extends WOSession implements Serializable {
      */
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         messageEncoding().setEncodingToResponse(aResponse);
+        if (aContext != null && aContext.request() != null) {
+            if (ERXApplication.requestHandlingLog.isInfoEnabled()) {
+                ERXApplication.requestHandlingLog.info(aContext.request());
+            }
+        }
         super.appendToResponse(aResponse, aContext);
     }
 
@@ -522,6 +527,7 @@ public class ERXSession extends WOSession implements Serializable {
 //            NSNotificationCenter.defaultCenter().removeObserver(_observer);
 //        if (_browser != null) 
 //            ERXBrowserFactory.factory().releaseBrowser(_browser);
+        log.info("will terminate, sessionId is "+sessionID());
         super.terminate();
     }
 
