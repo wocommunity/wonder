@@ -362,17 +362,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         return validated;
     }
 
+
     /**
-     * Calculates a display name for a key using
-     * an improved method.
-     * @param key to be converted
-     * @return pretty display name
+     * This method is called when an object is
+     * about to be saved. If any validation
+     * exceptions occur they are converted to an
+     * {@link ERXValidationException} and that is
+     * thrown.
+     * @param obj enterprise object to be deleted
+     * @throws validation exception
      */
-    public String displayNameForKey(String key) {
-        return ERXStringUtilities.displayNameForKey(key);
-    }
-    // CHECKME: Why is this disabled?
-    /*
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             super.validateObjectForSave(obj);
@@ -383,5 +382,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             throw (erv != null ? erv : eov);
         }
     }
-    */
+    /**
+     * Calculates a display name for a key using
+     * an improved method.
+     * @param key to be converted
+     * @return pretty display name
+     */
+    public String displayNameForKey(String key) {
+        return ERXStringUtilities.displayNameForKey(key);
+    }
 }
