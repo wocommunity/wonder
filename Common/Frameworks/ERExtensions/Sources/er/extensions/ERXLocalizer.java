@@ -578,12 +578,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 */
 	
     public Format localizedDateFormatForKey(String formatString) {
-        String localizedFormatString = localizedStringForKey(formatString);
-        formatString = formatString == null 
-            ? ERXTimestampFormatter.DEFAULT_PATTERN 
-            : localizedFormatString == null 
-                ? formatString 
-                : localizedFormatString;
+        formatString = formatString == null ? ERXTimestampFormatter.DEFAULT_PATTERN : formatString;
+        formatString = localizedStringForKeyWithDefault(formatString);
         Format result = (Format)_dateFormatters.get(formatString);
 		if(result == null) {
 			// HACK ak
@@ -592,7 +588,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			synchronized(ERXLocalizer.class) {
 				Locale old = Locale.getDefault();
 				Locale.setDefault(locale());
-				NSTimestampFormatter formatter = new NSTimestampFormatter(localizedFormatString);
+				NSTimestampFormatter formatter = new NSTimestampFormatter(formatString);
 				result = formatter;
 				_dateFormatters.put(formatString, result);
 				Locale.setDefault(old);
@@ -610,12 +606,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * @return the formatter object
 	 */
     public Format localizedNumberFormatForKey(String formatString) {
-        String localizedFormatString = localizedStringForKey(formatString);
-    	formatString = formatString == null
-            ? "#,##0.00;-(#,##0.00)"
-            : localizedFormatString == null 
-                ? formatString 
-                : localizedFormatString;   
+        formatString = formatString == null ? "#,##0.00;-(#,##0.00)" : formatString;
+        formatString = localizedStringForKeyWithDefault(formatString);
 		Format result = (Format)_numberFormatters.get(formatString);
 		if(result == null) {
 			synchronized(_numberFormatters) {
