@@ -30,7 +30,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomEditComponent.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomComponent.class);
     
     /** Designated constructor */
     public ERDCustomComponent(WOContext context) {
@@ -165,23 +165,23 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         Object value=null;
         logDebugInfo();
         if (super.hasBinding(binding)) {
-            log.debug("super.hasBinding(binding) == true");
+            log.debug("super.hasBinding(binding) == true for binding "+binding);
             value = originalValueForBinding(binding);
         } else if(d2wContextFromBindings() != null) {
-            log.debug("has d2wContext == true");
+            log.debug("has d2wContext == true for binding "+binding);
             value = d2wContextValueForBinding(binding);
         } else {
             value = parentValueForBinding(binding);
         }
         if (value == null && binding != null && extraBindings() != null) {
-            log.debug("inside the extraBindings branch");
+            log.debug("inside the extraBindings branch for binding "+binding);
             value = extraBindingsValueForBinding(binding);
         }
         if (log.isDebugEnabled()) {
             if (value != null)
-                log.debug("returning " + value.getClass().getName() + ": " + value);
+                log.debug("returning " + value.getClass().getName() + ": " + value+" for binding "+binding);
             else
-                log.debug("returning value: null");
+                log.debug("returning value: null for binding "+binding);
         }
         return value;
     }
