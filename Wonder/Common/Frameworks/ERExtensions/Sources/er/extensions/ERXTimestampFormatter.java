@@ -28,7 +28,10 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	 * @return
 	 */
 	public static Format defaultDateFormatterForObject(Object object) {
-		Format result = dateFormatterForPattern("%Y/%m/%d");
+		Format result = null;
+		if(object != null && object instanceof NSTimestamp) {
+			result = dateFormatterForPattern("%Y/%m/%d");
+		}
 		return result;
 	}
 
