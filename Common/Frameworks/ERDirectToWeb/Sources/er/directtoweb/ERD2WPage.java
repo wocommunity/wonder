@@ -19,7 +19,7 @@ import org.apache.log4j.NDC;
  * 
  */
 
-public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface {
+public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WPage.class);
@@ -32,7 +32,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public ERD2WPage(WOContext c) {
         super(c);
     }    
-    
+
+    public String urlForCurrentState() {
+        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
+    }
+
     public NSMutableDictionary errorMessages() { return errorMessages; }
     public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
     

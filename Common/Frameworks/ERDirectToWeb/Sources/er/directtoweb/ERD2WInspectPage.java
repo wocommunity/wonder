@@ -19,7 +19,7 @@ import er.extensions.*;
  * 
  */
 
-public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, ERDEditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface {
+public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, ERDEditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface, ERXComponentActionRedirector.Restorable  {
 
     /**
      * Public constructor
@@ -30,7 +30,18 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WInspectPage");
     public static final ERXLogger validationCat = ERXLogger.getERXLogger("er.directtoweb.validation.ERInspectPage");
-    
+
+    public String urlForCurrentState() {
+        NSDictionary dict = null;
+        String actionName = d2wContext().dynamicPage();
+        if(object() instanceof ERXGenericRecord) {
+            ERXGenericRecord o = (ERXGenericRecord)object();
+            if(o.primaryKey() != null)
+                dict = new NSDictionary(o.primaryKey(), "__key");          
+        }
+        return context().directActionURLForActionNamed(actionName, dict);
+    }
+
     private boolean _objectWasSaved;
     public boolean objectWasSaved() { return _objectWasSaved; }
 

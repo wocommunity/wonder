@@ -14,7 +14,7 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 import org.apache.log4j.NDC;
 
-public abstract class ERD2WListPage extends D2WListPage {
+public abstract class ERD2WListPage extends D2WListPage implements ERXComponentActionRedirector.Restorable  {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WListPage.class);
@@ -28,6 +28,10 @@ public abstract class ERD2WListPage extends D2WListPage {
         if (ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate() != null) {
             displayGroup().setDelegate(ERD2WFactory.erFactory().defaultListPageDisplayGroupDelegate());
         }
+    }
+
+    public String urlForCurrentState() {
+        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
     // debug helpers
