@@ -331,11 +331,12 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 log.debug(eoentity.name() + ": setting class from: " + className + " to: " + alternateClassName);
                 eoentity.setClassName(alternateClassName);
             } else if (className.equals("EOGenericRecord")) {
-                if(eoentity.primaryKeyAttributes().count() == 1) {
+                // if we contain only pk attributes, we don't need to convert
+                if(eoentity.primaryKeyAttributes().count() != eoentity.attributes().count()) {
                     eoentity.setClassName(defaultClassName);
                     log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + defaultClassName);
                 } else {
-                    log.warn(eoentity.name() + ": not setting class from EOGenericRecord to " + defaultClassName + ", it has a compound primary key");
+                    log.warn(eoentity.name() + ": not setting class from EOGenericRecord to " + defaultClassName + ", there are no real attributes");
                 }
             } 
         }
@@ -690,7 +691,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 if(className == null) {
                     className = QualiferValidation.class.getName();
                 }
-                Class cl = ERXCompilerProxy.defaultProxy().classForName(className);
+                Class cl = ERXPatcher.classForName(className);
                 Constructor co = cl.getConstructor(new Class [] {Object.class});
                 Object o = co.newInstance(new Object[] {info});
                 q = (EOQualifierEvaluation)o;
