@@ -120,6 +120,19 @@
 		};
 		666257280203C81E00CEE8E5 = {
 			children = (
+				F682BEFA02E3219A01257492,
+				F682BEFB02E3219A01257492,
+				F682BEFC02E3219A01257492,
+				F682BEFD02E3219A01257492,
+				F682BEFE02E3219A01257492,
+				F682BEFF02E3219A01257492,
+				F682BF0002E3219A01257492,
+				F682BF0102E3219A01257492,
+				F682BF0202E3219A01257492,
+				F682BF0302E3219A01257492,
+				F682BF0402E3219A01257492,
+				F682BF0502E3219A01257492,
+				F682BF0602E3219A01257492,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -691,6 +704,19 @@
 		666257BF0203C81E00CEE8E5 = {
 			buildActionMask = 2147483647;
 			files = (
+				F682BF0702E3219A01257492,
+				F682BF0802E3219A01257492,
+				F682BF0902E3219A01257492,
+				F682BF0A02E3219A01257492,
+				F682BF0B02E3219A01257492,
+				F682BF0C02E3219A01257492,
+				F682BF0D02E3219A01257492,
+				F682BF0E02E3219A01257492,
+				F682BF0F02E3219A01257492,
+				F682BF1002E3219A01257492,
+				F682BF1102E3219A01257492,
+				F682BF1202E3219A01257492,
+				F682BF1302E3219A01257492,
 			);
 			isa = PBXResourcesBuildPhase;
 		};
@@ -918,7 +944,6 @@
 				F54C4B1B02C4DF3A01000102,
 			);
 			isa = PBXGroup;
-			name = Sources;
 			path = Sources;
 			refType = 2;
 		};
@@ -2314,7 +2339,6 @@
 				F55BB81A02C4DCC201000102,
 			);
 			isa = PBXGroup;
-			name = Documentation;
 			path = Documentation;
 			refType = 2;
 		};
@@ -2463,6 +2487,162 @@
 		};
 		F6025982023E714801AD0D07 = {
 			fileRef = F6025981023E714801AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BEFA02E3219A01257492 = {
+			isa = PBXFileReference;
+			name = check.gif;
+			path = WebServerResources/check.gif;
+			refType = 2;
+		};
+		F682BEFB02E3219A01257492 = {
+			isa = PBXFileReference;
+			name = molette.gif;
+			path = WebServerResources/molette.gif;
+			refType = 2;
+		};
+		F682BEFC02E3219A01257492 = {
+			isa = PBXFileReference;
+			name = document.gif;
+			path = WebServerResources/document.gif;
+			refType = 2;
+		};
+		F682BEFD02E3219A01257492 = {
+			isa = PBXFileReference;
+			name = style_sheet.css;
+			path = WebServerResources/style_sheet.css;
+			refType = 2;
+		};
+		F682BEFE02E3219A01257492 = {
+			isa = PBXFileReference;
+			name = DBWizardInsert.gif;
+			path = WebServerResources/DBWizardInsert.gif;
+			refType = 2;
+		};
+		F682BEFF02E3219A01257492 = {
+			isa = PBXFileReference;
+			name = doctor.gif;
+			path = WebServerResources/doctor.gif;
+			refType = 2;
+		};
+		F682BF0002E3219A01257492 = {
+			isa = PBXFileReference;
+			name = DBWizardDelete.gif;
+			path = WebServerResources/DBWizardDelete.gif;
+			refType = 2;
+		};
+		F682BF0102E3219A01257492 = {
+			isa = PBXFileReference;
+			name = bandaid.gif;
+			path = WebServerResources/bandaid.gif;
+			refType = 2;
+		};
+		F682BF0202E3219A01257492 = {
+			isa = PBXFileReference;
+			name = closed.gif;
+			path = WebServerResources/closed.gif;
+			refType = 2;
+		};
+		F682BF0302E3219A01257492 = {
+			isa = PBXFileReference;
+			name = gyrophare.gif;
+			path = WebServerResources/gyrophare.gif;
+			refType = 2;
+		};
+		F682BF0402E3219A01257492 = {
+			isa = PBXFileReference;
+			name = spider.gif;
+			path = WebServerResources/spider.gif;
+			refType = 2;
+		};
+		F682BF0502E3219A01257492 = {
+			isa = PBXFileReference;
+			name = fire.gif;
+			path = WebServerResources/fire.gif;
+			refType = 2;
+		};
+		F682BF0602E3219A01257492 = {
+			isa = PBXFileReference;
+			name = DBWizardUpdate.gif;
+			path = WebServerResources/DBWizardUpdate.gif;
+			refType = 2;
+		};
+		F682BF0702E3219A01257492 = {
+			fileRef = F682BEFA02E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0802E3219A01257492 = {
+			fileRef = F682BEFB02E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0902E3219A01257492 = {
+			fileRef = F682BEFC02E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0A02E3219A01257492 = {
+			fileRef = F682BEFD02E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0B02E3219A01257492 = {
+			fileRef = F682BEFE02E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0C02E3219A01257492 = {
+			fileRef = F682BEFF02E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0D02E3219A01257492 = {
+			fileRef = F682BF0002E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0E02E3219A01257492 = {
+			fileRef = F682BF0102E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF0F02E3219A01257492 = {
+			fileRef = F682BF0202E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF1002E3219A01257492 = {
+			fileRef = F682BF0302E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF1102E3219A01257492 = {
+			fileRef = F682BF0402E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF1202E3219A01257492 = {
+			fileRef = F682BF0502E3219A01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F682BF1302E3219A01257492 = {
+			fileRef = F682BF0602E3219A01257492;
 			isa = PBXBuildFile;
 			settings = {
 			};
