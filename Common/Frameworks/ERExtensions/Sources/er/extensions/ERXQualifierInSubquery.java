@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import java.util.Enumeration;
 
 /**
  * Generates a subquery for the qualifier given in argument
@@ -37,6 +38,9 @@ import com.webobjects.eoaccess.*;
 //                    ( SELECT t0.GROUP_ID FROM GROUP t0 WHERE t0.NAME = ? ) "
 public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXQualifierInSubquery.class);
+    
     /** holds the subqualifier */
     protected EOQualifier qualifier;
 
@@ -46,6 +50,8 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
     /** holds the attribute name */
     protected String attributeName;
 
+    protected String destinationAttName;
+    
     /**
      * Public single argument constructor. Use
      * this constructor for sub-qualification
@@ -53,7 +59,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
      * @param q sub-qualifier
      */
     public ERXQualifierInSubquery(EOQualifier q) {        
-        this(q, null, null);
+        this(q, null, null, null);
     }
 
     /**
@@ -66,11 +72,12 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
      * @param attributeName foriegn key attribute name
      */
     // ENHANCEME: Should be able to just use a relationship key instead of both.
-    public ERXQualifierInSubquery(EOQualifier q, String entityName, String attributeName) {
+    public ERXQualifierInSubquery(EOQualifier q, String entityName, String attributeName, String destinationAttName) {
         super();
         qualifier = q;
-        entityName = entityName;
-        attributeName = attributeName;
+        this.entityName = entityName;
+        this.attributeName = attributeName;
+        this.destinationAttName = destinationAttName;
     }
 
     //	===========================================================================
@@ -126,6 +133,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
         }
         sb.append(" IN ( ");
         EOEntity entity=entityName == null ? e.entity() : e.entity().model().entityNamed(entityName);
+
         EOFetchSpecification fs=new EOFetchSpecification(entity.name(),
                                                          qualifier,
                                                          null,
@@ -138,12 +146,26 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
         EODatabaseContext context = EODatabaseContext.registeredDatabaseContextForModel(entity.model(),
                                                                                         EOObjectStoreCoordinator.defaultCoordinator());
         EOSQLExpressionFactory factory = context.database().adaptor().expressionFactory();
-        EOSQLExpression expression=factory.selectStatementForAttributes(entity.primaryKeyAttributes(),
-                                           false,
-                                           fs,
-                                           entity);
 
-        sb.append(expression.statement());        
+        NSArray subAttributes = destinationAttName != null ? new NSArray(entity.attributeNamed(destinationAttName)) : entity.primaryKeyAttributes();
+        
+        EOSQLExpression subExpression = factory.expressionForEntity(entity);
+        subExpression.aliasesByRelationshipPath().setObjectForKey("t1", "");
+        subExpression.setUseAliases(true);
+        subExpression.prepareSelectExpressionWithAttributes(subAttributes,
+                                                            false,
+                                                            fs);
+        //EOSQLExpression expression=factory.selectStatementForAttributes(entity.primaryKeyAttributes(),
+        //                                   false,
+        //                                   fs,
+        //                                   entity);
+
+        for (Enumeration bindEnumeration = subExpression.bindVariableDictionaries().objectEnumerator();
+             bindEnumeration.hasMoreElements();) {
+            e.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
+        }
+        
+        sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", "t1.", subExpression.statement()));        
         sb.append(" ) ");
         return sb.toString();
     }
@@ -180,6 +202,6 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
      * @return cloned qualifier.
      */
     public Object clone() {
-        return new ERXQualifierInSubquery(qualifier, entityName, attributeName);
+        return new ERXQualifierInSubquery(qualifier, entityName, attributeName, destinationAttName);
     }    
 }
