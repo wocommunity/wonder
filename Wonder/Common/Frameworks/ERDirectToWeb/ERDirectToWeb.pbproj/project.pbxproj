@@ -2319,7 +2319,6 @@
 				F5A1454901FF7F8801A80106,
 				F5A144BD01FF7F8801A80106,
 				669CC77D0236A5CE00CD2933,
-				F5A1444B01FF7F8801A80106,
 				F5A1452D01FF7F8801A80106,
 			);
 			isa = PBXGroup;
@@ -3167,13 +3166,6 @@
 			path = ERDXMLPageWrapper.java;
 			refType = 4;
 		};
-		F5A1444B01FF7F8801A80106 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "Web Components";
-			refType = 4;
-		};
 		F5A1445301FF7F8801A80106 = {
 			isa = PBXFolderReference;
 			path = ERD2WPick.wo;
@@ -3276,7 +3268,6 @@
 		};
 		F5A144BD01FF7F8801A80106 = {
 			children = (
-				F5A144DE01FF7F8801A80106,
 				F5A144E901FF7F8801A80106,
 				F641B2F8026AE1BC014E589E,
 				F641B2F5026AE0AC014E589E,
@@ -3288,11 +3279,6 @@
 		F5A144D701FF7F8801A80106 = {
 			isa = PBXFileReference;
 			path = ERXD2WPick.api;
-			refType = 4;
-		};
-		F5A144DE01FF7F8801A80106 = {
-			isa = PBXFileReference;
-			path = DisplayNumberWithUnit.api;
 			refType = 4;
 		};
 		F5A144E701FF7F8801A80106 = {
@@ -3425,9 +3411,6 @@
 			children = (
 				F5A1453301FF7F8801A80106,
 				F5A1453601FF7F8801A80106,
-				F5A1453401FF7F8801A80106,
-				F5A1453501FF7F8801A80106,
-				F5A1453701FF7F8801A80106,
 			);
 			isa = PBXGroup;
 			name = "Other Sources";
@@ -3438,24 +3421,9 @@
 			path = CustomInfo.plist;
 			refType = 4;
 		};
-		F5A1453401FF7F8801A80106 = {
-			isa = PBXFileReference;
-			path = h.template;
-			refType = 4;
-		};
-		F5A1453501FF7F8801A80106 = {
-			isa = PBXFileReference;
-			path = java.template;
-			refType = 4;
-		};
 		F5A1453601FF7F8801A80106 = {
 			isa = PBXFileReference;
 			path = LICENSE.NPL;
-			refType = 4;
-		};
-		F5A1453701FF7F8801A80106 = {
-			isa = PBXFileReference;
-			path = m.template;
 			refType = 4;
 		};
 		F5A1453B01FF7F8801A80106 = {
@@ -3761,7 +3729,6 @@
 				F5A145BC01FF7F8801A80106,
 				F5A145C101FF7F8801A80106,
 				F5A145DC01FF7F8801A80106,
-				F5A145E301FF7F8801A80106,
 				F5A145EC01FF7F8801A80106,
 				F5A145EE01FF7F8801A80106,
 				F5A145F101FF7F8801A80106,
@@ -4096,12 +4063,6 @@
 		};
 		F5A145DC01FF7F8801A80106 = {
 			fileRef = F5A144D701FF7F8801A80106;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5A145E301FF7F8801A80106 = {
-			fileRef = F5A144DE01FF7F8801A80106;
 			isa = PBXBuildFile;
 			settings = {
 			};
