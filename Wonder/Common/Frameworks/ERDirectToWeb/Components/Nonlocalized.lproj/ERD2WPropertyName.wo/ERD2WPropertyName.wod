@@ -15,9 +15,17 @@ GenericContainer1: WOGenericContainer {
 
 NotRequired: WOConditional {
     condition=displayRequiredMarker;
-    negate=YES;
+    negate=true;
 }
 PropertyName: WOString {
     value=displayNameForProperty;
+}
+
+String2: WOString {
+	value = d2wComponentName;
+}
+
+showRealKey2: WOConditional {
+	condition = d2wComponentNameDebuggingEnabled;
 }
 

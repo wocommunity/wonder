@@ -17,7 +17,19 @@ import er.extensions.ERXConstant;
 public class ERD2WPropertyName extends D2WStatelessComponent {
 
     public ERD2WPropertyName(WOContext context) { super(context); }
-    
+
+    public boolean d2wComponentNameDebuggingEnabled() {
+        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
+    }
+
+    public String d2wComponentName() {
+        String name = (String)d2wContext().valueForKey("componentName");
+        if(name.indexOf("CustomComponent")>=0) {
+            name = (String)d2wContext().valueForKey("customComponentName");
+        }
+        return name;
+    }
+
     public String width() { return hasPropertyName() ? "148" : null; }
 
     public boolean hasPropertyName() {
