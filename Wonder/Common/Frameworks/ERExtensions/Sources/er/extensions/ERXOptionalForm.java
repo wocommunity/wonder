@@ -9,11 +9,30 @@ package er.extensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+/**
+ * 
+ * Synopsis:<br/>
+  *
+ * @binding hasForm
+ * @binding action
+ * @binding name
+ * @binding enctype
+ * @binding directActionName
+ * @binding actionClass
+ */
 public class ERXOptionalForm extends WOComponent {
 
+    /**
+     * Public constructor
+     * @param aContext current context
+     */
     public ERXOptionalForm(WOContext aContext) {
         super(aContext);
     }
 
+    /**
+     * Component is stateless
+     * @return true
+     */
     public boolean isStateless() { return true; }
 }
