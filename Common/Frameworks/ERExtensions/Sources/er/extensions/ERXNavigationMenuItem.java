@@ -13,6 +13,8 @@ import com.webobjects.eoaccess.*;
 
 import java.util.Enumeration;
 
+/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
+
 public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
     /** logging support */
@@ -29,6 +31,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     protected boolean _isSelected;
     protected boolean _isSelectedComputed;
     protected Boolean _hasActivity;
+    protected WOComponent _redirect;
     
     public ERXNavigationMenuItem(WOContext context) {
         super(context);
@@ -50,6 +53,14 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             _navigationState = ERXNavigationManager.manager().navigationStateForSession(session());
         return _navigationState;
     }
+
+    public WOComponent directActionRedirect() {
+        WOComponent page = pageWithName("WORedirect");
+        String url = context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
+        ((WORedirect)page).setURL(url);
+        
+        return page;
+    }
     
     public String contextComponentActionURL() {
         // If the navigation should be disabled return null
@@ -63,7 +74,8 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             return context().componentActionURL();
         }
         if (navigationItem().directActionName() != null) {
-            return context().directActionURLForActionNamed(navigationItem().directActionName(),navigationItem().queryBindings());
+            return context().componentActionURL();
+            //return context().directActionURLForActionNamed(navigationItem().directActionName(), navigationItem().queryBindings());
         }
 
         // If the user specified some javascript, put that into the HREF and return it
@@ -86,8 +98,12 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             anActionResult = (WOComponent)(pageWithName(navigationItem().pageName()));
         } else if ((navigationItem().directActionName() != null) && (navigationItem().directActionName() != "")) {
             // FIXME: Need to support directAction classes
-            ERXDirectAction da = new ERXDirectAction(context().request());
-            anActionResult = (WOComponent)(da.performActionNamed(navigationItem().directActionName()));
+            if(false) {
+                ERXDirectAction da = new ERXDirectAction(context().request());
+                anActionResult = (WOComponent)(da.performActionNamed(navigationItem().directActionName()));
+            } else {
+                anActionResult = (WOComponent)valueForKeyPath("directActionRedirect");
+            }
         }
         return anActionResult;
     }

@@ -11,6 +11,7 @@ import com.webobjects.appserver.*;
 
 import java.util.Enumeration;
 
+/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationManager {
 
     /** logging support */
