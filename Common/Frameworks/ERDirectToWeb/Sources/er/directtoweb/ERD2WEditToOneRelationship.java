@@ -6,9 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import er.extensions.*;
 
 public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
 
@@ -23,6 +25,14 @@ public class ERD2WEditToOneRelationship extends D2WEditToOneRelationship {
 
     public Object restrictedChoiceList() {
         String restrictedChoiceKey=(String)d2wContext().valueForKey("restrictedChoiceKey");
-        return restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 ?  valueForKeyPath(restrictedChoiceKey) : null;
+        if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 )
+            return valueForKeyPath(restrictedChoiceKey);
+        String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
+        if(fetchSpecName != null) {
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)object(),
+                                                                                        (String)d2wContext().valueForKey("propertyKey"));
+            return EOUtilities.objectsWithFetchSpecificationAndBindings(object().editingContext(), relationship.destinationEntity().name(),fetchSpecName,null);
+        }
+        return null;
     }
 }
