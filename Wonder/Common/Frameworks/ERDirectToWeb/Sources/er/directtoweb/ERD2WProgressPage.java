@@ -14,13 +14,16 @@ import er.extensions.ERXLongResponseTask;
  * @project ERDirectToWeb
  */
 
-public class ERD2WProgressPage extends ERD2WPage {
+public class ERD2WProgressPage extends ERD2WMessagePage {
 
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERD2WProgressPage.class,"components");
 
     /** holds the task */
     protected ERXLongResponseTask _longResponseTask;
+    
+    /** holds the completed percentage */
+    protected int _percentCompleted = -1;
     
     /**
      * Public constructor
@@ -33,8 +36,18 @@ public class ERD2WProgressPage extends ERD2WPage {
     public ERXLongResponseTask longResponseTask() {
         return _longResponseTask;
     }
-    
     public void setLongResponseTask(ERXLongResponseTask longResponseTask) {
         _longResponseTask = longResponseTask;
+    }
+    
+    public boolean shouldShowProgressBar() {
+    	return _percentCompleted != -1;
+    }
+    
+    public int percentCompleted() {
+    	return _percentCompleted;
+    }
+    public void setPercentCompleted(int value) {
+    	_percentCompleted = value;
     }
 }

@@ -14,13 +14,13 @@ import com.webobjects.eocontrol.*;
  * @project ERExtensions
  */
 
-public class ERXLongResponse extends WOComponent {
+public class ERXLongResponse extends ERXNonSynchronizingComponent {
     static String WOMetaRefreshSenderId = "WOMetaRefresh";
 
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERXLongResponse.class,"components");
 
-    protected int _refreshInterval;
+    protected Number _refreshInterval;
     protected boolean _performingAction;
     protected boolean _doneAndRefreshed;
 
@@ -29,22 +29,42 @@ public class ERXLongResponse extends WOComponent {
     public ERXLongResponse(WOContext aContext)  {
         super(aContext);
         _doneAndRefreshed = false;
-        _refreshInterval = 0;
+        _refreshInterval = ERXConstant.ZeroInteger;
         _performingAction = false;
     }
 
     public ERXLongResponseTask task() {
+    	if(_task == null) {
+    		_task = (ERXLongResponseTask)valueForBinding("task");
+    	}
         return _task;
     }
-
     public void setTask(ERXLongResponseTask task) {
         _task = task;
     }
 
+
+    public int refreshInterval() {
+    	if(ERXConstant.ZeroInteger.equals(_refreshInterval)) {
+    		Number n = (Number)valueForBinding("refreshInterval");
+    		if(n != null) {
+    			_refreshInterval = n;
+    		}
+    	}
+    	return _refreshInterval.intValue();
+    }
+    public void setRefreshInterval(int value) {
+    	_refreshInterval = new Integer(value);
+    }
+    
+    public WOComponent refresh() {
+    	return task().nextPage();
+    }
+    
     public void appendToResponse(WOResponse aResponse, WOContext aContext)  {
         if (!_performingAction) {
             _performingAction = true;
-            task().setRefreshPage(this);
+            task().setLongResponse(this);
             task().start();
         }
 
@@ -68,14 +88,6 @@ public class ERXLongResponse extends WOComponent {
         super.appendToResponse(aResponse, aContext);
     }
 
-    public int refreshInterval() {
-        return _refreshInterval;
-    }
-
-    public void setRefreshInterval(int value) {
-    	_refreshInterval = value;
-    }
-
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext)  {
         if (aContext.senderID().equals(WOMetaRefreshSenderId)) {
             // We recognized the elementID that was set for the meta refresh.
@@ -83,9 +95,5 @@ public class ERXLongResponse extends WOComponent {
             return refresh();
         }
         return super.invokeAction(aRequest, aContext);
-    }
-
-    public WOComponent refresh() {
-    	return task().nextPage();
     }
 }
