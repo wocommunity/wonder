@@ -5,14 +5,13 @@
 //  Created by Max Muller on Sun Feb 23 2003.
 //
 package er.extensions;
-import java.util.Vector;
+import java.util.*;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
- * Subclass that has every publich method overridden to support automatic 
+ * Subclass that has every public method overridden to support automatic 
  * lock/unlock handling for you. This is very useful, as is is potentially very dangerous to rely on EOFs 
  * automatic lock handling - it will invariably lead into deadlocks. As you will need to
  * use this class and its subclasses exclusively as your ECs, it also contains a factory class to create
@@ -42,8 +41,8 @@ public class ERXEC extends EOEditingContext {
     /** decides whether to lock/unlock automatically when used without a lock. */
     private Boolean useAutolock;
     
-    /** true, if we did automatically lock. */
-    private boolean autoLocked = false;
+    /** how many times we did automatically lock. */
+    private int autoLockCount = 0;
 
     /** how many times has the EC been locked. */
     private int lockCount = 0;
@@ -68,15 +67,29 @@ public class ERXEC extends EOEditingContext {
 	 */
     public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker && ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
     		if(ecs == null) {
     			ecs = new Vector();
+        		ERXThreadStorage.takeValueForKey(ecs, lockedContextsThreadKey());
     		}
     		ecs.add(ec);
-    		ERXThreadStorage.takeValueForKey(ecs, LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    		if(log.isDebugEnabled()) {
+    		    log.debug("After pushing: " + ecs);
+    		}
     	}
     }
     
+    /**
+     * ERXThreadStorage is inherited by newly created threads, and we don't
+     * want to have the child thread's locked ECs unlocked when the parent exits dispatchRequest(),
+     * so we need to append something to the thread key, to distinguish it from
+     * the parent.
+     * @return thread-unique thread-storage key
+     */
+    private static String lockedContextsThreadKey() {
+        return LockedContextsForCurrentThreadKey + ":" + System.identityHashCode(Thread.currentThread());
+    }
+
     /**
      * Pops the given EC from the array of contexts to unlock. The ECs left over
 	 * after the RR-loop will be automagically unlocked.
@@ -84,7 +97,7 @@ public class ERXEC extends EOEditingContext {
      */
     public static void popLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker &&  ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
     		if(ecs != null) {
     			int index = ecs.lastIndexOf(ec);
     			if(index >= 0) {
@@ -92,6 +105,9 @@ public class ERXEC extends EOEditingContext {
     			} else {
     				log.error("Should pop, but ec not found in Vector! " + Thread.currentThread().getName() + ", ec: " + ec + ", ecs:" + ecs);
     			}
+    		}
+       		if(log.isDebugEnabled()) {
+    		    log.debug("After popping: " + ecs);
     		}
     	}
     }
@@ -101,18 +117,20 @@ public class ERXEC extends EOEditingContext {
      * You shouldn't call this yourself, but let the Unlocker handle it for you.
      */
     public static void unlockAllContextsForCurrentThread() {
-    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
-    	ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
-    	log.debug("unlockAllContextsForCurrentThread: " + Thread.currentThread().getName() + ", ecs: " + ecs);
+    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
+    	ERXThreadStorage.removeValueForKey(lockedContextsThreadKey());
     	if(ecs != null && ecs.size() > 0) {
-    		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
+       		if(log.isDebugEnabled()) {
+    		    log.debug("Unlock remaining: " + ecs);
+    		}
+        	// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
     		for (int i = ecs.size() - 1; i >= 0; i--) {
     			EOEditingContext ec = (EOEditingContext) ecs.get(i);
     			log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
     			try {
     				ec.unlock();
     			} catch(IllegalStateException ex) {
-    				log.error("Could not unlock EC!", ex);
+    				log.error("Could not unlock EC: " + ec, ex);
     			}
     		}
     	}
@@ -183,7 +201,7 @@ public class ERXEC extends EOEditingContext {
     public void lock() {
         lockCount++;
         super.lock();
-        if (!autoLocked && lockLogger.isDebugEnabled()) {
+        if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
             if(lockTrace.isDebugEnabled()) {
                 lockLogger.debug("locked "+this, new Exception());
             } else {
@@ -200,7 +218,7 @@ public class ERXEC extends EOEditingContext {
     public void unlock() {
     	popLockedContextForCurrentThread(this);
     	super.unlock();
-        if (!autoLocked && lockLogger.isDebugEnabled()) {
+        if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
             if(lockTrace.isDebugEnabled()) {
                 lockLogger.debug("unlocked "+this, new Exception());
             } else {
@@ -217,27 +235,43 @@ public class ERXEC extends EOEditingContext {
      * @return whether we did lock automatically
      */
     protected boolean autoLock(String method) {
-        boolean unlock = false;
+        boolean wasAutoLocked = false;
+        
         if (lockCount == 0 && useAutoLock()) {
-            unlock = true;
+            wasAutoLocked = true;
+            autoLockCount++;
             lock();
-            if (!autoLocked && !isFinalizing) {
-                if(lockLoggerTrace.isDebugEnabled()) {
-                    lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
-                } else {
-                    lockLogger.warn("called method " + method + " without a lock, ec="+this);
-                }
-            }
         }
-        return unlock;
-    }
 
+        if(lockCount == 0) {
+	        if (!isAutoLocked() && !isFinalizing) {
+	            if(lockLoggerTrace.isDebugEnabled()) {
+	                lockLoggerTrace.debug("called method " + method + " without a lock, ec="+this, new Exception());
+	            } else {
+	                lockLogger.warn("called method " + method + " without a lock, ec="+this);
+	            }
+	        }
+        }
+        
+        return wasAutoLocked;
+    }
+    /**
+     * Utility to unlock the EC is it was locked in the previous invocation.
+     * @param wasAutoLocked true if the EC was autolocked
+     */
+    protected void autoUnlock(boolean wasAutoLocked) {
+        if (wasAutoLocked) {
+            unlock();
+            autoLockCount--;
+        }
+    }
+    
     /**
      * Returns whether we did autolock this instance.
      * @return true if we were autolocked.
      */
     public boolean isAutoLocked() {
-    	return autoLocked;
+    	return autoLockCount > 0;
     }
     
     /** Overriden to support automatic autoLocking. */ 
@@ -248,381 +282,381 @@ public class ERXEC extends EOEditingContext {
     
     /** Overriden to support automatic autoLocking. */ 
     public void reset() {
-        boolean unlock = autoLock("reset");
+        boolean wasAutoLocked = autoLock("reset");
         try {
             super.reset();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
 
     /** Overriden to support autoLocking. */ 
     public void recordObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
-        boolean unlock = autoLock("recordObject");
+        boolean wasAutoLocked = autoLock("recordObject");
         try {
             super.recordObject(eoenterpriseobject, eoglobalid);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
  
     /** Overriden to support autoLocking. */ 
     public void forgetObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("forgetObject");
+        boolean wasAutoLocked = autoLock("forgetObject");
         try {
             super.forgetObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void processRecentChanges() {
-        boolean unlock = autoLock("processRecentChanges");
+        boolean wasAutoLocked = autoLock("processRecentChanges");
         try {
             super.processRecentChanges();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray updatedObjects() {
-        boolean unlock = autoLock("updatedObjects");
+        boolean wasAutoLocked = autoLock("updatedObjects");
         try {
             return super.updatedObjects();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray registeredObjects() {
-        boolean unlock = autoLock("registeredObjects");
+        boolean wasAutoLocked = autoLock("registeredObjects");
         try {
             return super.registeredObjects();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray insertedObjects() {
-        boolean unlock = autoLock("insertedObjects");
+        boolean wasAutoLocked = autoLock("insertedObjects");
         try {
             return super.insertedObjects();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray deletedObjects() {
-        boolean unlock = autoLock("deletedObjects");
+        boolean wasAutoLocked = autoLock("deletedObjects");
         try {
             return super.deletedObjects();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void setSharedEditingContext(EOSharedEditingContext eosharededitingcontext) {
-        boolean unlock = autoLock("setSharedEditingContext");
+        boolean wasAutoLocked = autoLock("setSharedEditingContext");
         try {
             super.setSharedEditingContext(eosharededitingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public EOEnterpriseObject objectForGlobalID(EOGlobalID eoglobalid) {
-        boolean unlock = autoLock("objectForGlobalID");
+        boolean wasAutoLocked = autoLock("objectForGlobalID");
         try {
             return super.objectForGlobalID(eoglobalid);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public EOGlobalID globalIDForObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("globalIDForObject");
+        boolean wasAutoLocked = autoLock("globalIDForObject");
         try {
             return super.globalIDForObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSDictionary committedSnapshotForObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("committedSnapshotForObject");
+        boolean wasAutoLocked = autoLock("committedSnapshotForObject");
         try {
             return super.committedSnapshotForObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSDictionary currentEventSnapshotForObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("currentEventSnapshotForObject");
+        boolean wasAutoLocked = autoLock("currentEventSnapshotForObject");
         try {
             return super.currentEventSnapshotForObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void objectWillChange(Object obj) {
-        boolean unlock = autoLock("objectWillChange");
+        boolean wasAutoLocked = autoLock("objectWillChange");
         try {
             super.objectWillChange(obj);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void insertObjectWithGlobalID(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid) {
-        boolean unlock = autoLock("insertObjectWithGlobalID");
+        boolean wasAutoLocked = autoLock("insertObjectWithGlobalID");
         try {
             super.insertObjectWithGlobalID(eoenterpriseobject, eoglobalid);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void insertObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("insertObject");
+        boolean wasAutoLocked = autoLock("insertObject");
         try {
             super.insertObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void deleteObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("deleteObject");
+        boolean wasAutoLocked = autoLock("deleteObject");
         try {
             super.deleteObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public boolean hasChanges() {
-        boolean unlock = autoLock("hasChanges");
+        boolean wasAutoLocked = autoLock("hasChanges");
         try {
             return super.hasChanges();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void saveChanges() {
-        boolean unlock = autoLock("saveChanges");
+        boolean wasAutoLocked = autoLock("saveChanges");
         try {
             super.saveChanges();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public EOEnterpriseObject faultForGlobalID(EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("faultForGlobalID");
+        boolean wasAutoLocked = autoLock("faultForGlobalID");
         try {
             return super.faultForGlobalID(eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray arrayFaultWithSourceGlobalID(EOGlobalID eoglobalid, String s, EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("arrayFaultWithSourceGlobalID");
+        boolean wasAutoLocked = autoLock("arrayFaultWithSourceGlobalID");
         try {
             return super.arrayFaultWithSourceGlobalID(eoglobalid, s, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void initializeObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("initializeObject");
+        boolean wasAutoLocked = autoLock("initializeObject");
         try {
             super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void editingContextDidForgetObjectWithGlobalID(EOEditingContext eoeditingcontext, EOGlobalID eoglobalid) {
-        boolean unlock = autoLock("editingContextDidForgetObjectWithGlobalID");
+        boolean wasAutoLocked = autoLock("editingContextDidForgetObjectWithGlobalID");
         try {
             super.editingContextDidForgetObjectWithGlobalID(eoeditingcontext, eoglobalid);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray objectsForSourceGlobalID(EOGlobalID eoglobalid, String s, EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("objectsForSourceGlobalID");
+        boolean wasAutoLocked = autoLock("objectsForSourceGlobalID");
         try {
             return super.objectsForSourceGlobalID(eoglobalid, s, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void refaultObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("refaultObject");
+        boolean wasAutoLocked = autoLock("refaultObject");
         try {
             super.refaultObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void refaultObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("refaultObject");
+        boolean wasAutoLocked = autoLock("refaultObject");
         try {
             super.refaultObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public NSArray objectsWithFetchSpecification(EOFetchSpecification eofetchspecification, EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("objectsWithFetchSpecification");
+        boolean wasAutoLocked = autoLock("objectsWithFetchSpecification");
         try {
             return super.objectsWithFetchSpecification(eofetchspecification, eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void saveChangesInEditingContext(EOEditingContext eoeditingcontext) {
-        boolean unlock = autoLock("saveChangesInEditingContext");
+        boolean wasAutoLocked = autoLock("saveChangesInEditingContext");
         try {
             super.saveChangesInEditingContext(eoeditingcontext);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void refaultAllObjects() {
-        boolean unlock = autoLock("refaultAllObjects");
+        boolean wasAutoLocked = autoLock("refaultAllObjects");
         try {
             super.refaultAllObjects();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void invalidateObjectsWithGlobalIDs(NSArray nsarray) {
-        boolean unlock = autoLock("invalidateObjectsWithGlobalIDs");
+        boolean wasAutoLocked = autoLock("invalidateObjectsWithGlobalIDs");
         try {
             super.invalidateObjectsWithGlobalIDs(nsarray);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void invalidateAllObjects() {
-        boolean unlock = autoLock("invalidateAllObjects");
+        boolean wasAutoLocked = autoLock("invalidateAllObjects");
         try {
             super.invalidateAllObjects();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void lockObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("lockObject");
+        boolean wasAutoLocked = autoLock("lockObject");
         try {
             super.lockObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void revert() {
-        boolean unlock = autoLock("revert");
+        boolean wasAutoLocked = autoLock("revert");
         try {
             super.revert();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void saveChanges(Object obj) {
-        boolean unlock = autoLock("saveChanges");
+        boolean wasAutoLocked = autoLock("saveChanges");
         try {
             super.saveChanges(obj);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void refreshObject(EOEnterpriseObject eoenterpriseobject) {
-        boolean unlock = autoLock("refreshObject");
+        boolean wasAutoLocked = autoLock("refreshObject");
         try {
             super.refreshObject(eoenterpriseobject);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void undo() {
-        boolean unlock = autoLock("undo");
+        boolean wasAutoLocked = autoLock("undo");
         try {
             super.undo();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public void redo() {
-        boolean unlock = autoLock("redo");
+        boolean wasAutoLocked = autoLock("redo");
         try {
             super.redo();
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
     /** Overriden to support autoLocking. */ 
     public Object invokeRemoteMethod(EOEditingContext eoeditingcontext, EOGlobalID eoglobalid, String s, Class aclass[], Object aobj[]) {
-        boolean unlock = autoLock("invokeRemoteMethod");
+        boolean wasAutoLocked = autoLock("invokeRemoteMethod");
         try {
             return super.invokeRemoteMethod(eoeditingcontext, eoglobalid, s, aclass, aobj);
         } finally {
-            if (unlock) unlock();
+            autoUnlock(wasAutoLocked);
         }
     }
     
@@ -787,7 +821,7 @@ public class ERXEC extends EOEditingContext {
     		if (useSharedEditingContext == null) {
     			useSharedEditingContext = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useSharedEditingContext", true) 
 						? Boolean.TRUE : Boolean.FALSE;
-    			log.info("setting useSharedEditingContext to "+ useSharedEditingContext);
+    			log.debug("setting useSharedEditingContext to "+ useSharedEditingContext);
     		}
     		return useSharedEditingContext.booleanValue();
     	}
