@@ -103,6 +103,11 @@ public class ERXExtensions {
             ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
+            if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
+                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+            }
         }
 
         /**
@@ -142,11 +147,6 @@ public class ERXExtensions {
                 ERXLogger.configureLogging(System.getProperties());
 
                 log().debug("Initializing framework: ERXExtensions");
-                if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
-                    NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-                    NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-                    NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-                }
                 ERXArrayUtilities.initialize();
                 
                 // False by default
