@@ -14,7 +14,11 @@ import com.webobjects.directtoweb.*;
 
 public class ERD2WListComparePage extends ERD2WListPage {
 
-    public ERD2WListComparePage(WOContext context) {super(context);}
+    /**
+     * Public constructor
+     * @param context current context
+     */
+    public ERD2WListComparePage(WOContext context) { super(context); }
 
     protected int index, d2wPropertyKeyIndex, col;
 

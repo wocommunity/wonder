@@ -16,7 +16,17 @@ import er.extensions.*;
 import org.apache.log4j.Category;
 import java.util.*;
 
-// Primary Package Class
+/**
+ * Principle class of the ERDirectToWeb framework.
+ * This class is loaded when the NSBundle of this 
+ * framework is loaded. When loaded this class configures
+ * the directtoweb runtime to use the {@link ERD2WModel} and 
+ * {@link ERD2WFactory} subclasses instead of the default
+ * implementations. See each class for a description of the 
+ * additions/improvements made to the base implementation.
+ * This class also has a bunch of utility methods that are
+ * used throughout this framework.
+ */
 public class ERDirectToWeb {
 
     //////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
@@ -123,10 +133,12 @@ public class ERDirectToWeb {
 
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
+        // FIXME: Should use ERXUtilities.booleanValue
         Integer i=(Integer)context.valueForKey(key);
         return i==null || i.intValue()!=0;
     }
 
+    // DELETEME: This is duplicated from ERExtensions
     public static String userInfoUnit(EOEnterpriseObject object, String key) {
         // return the unit stored in the userInfo dictionary of the appropriate EOAttribute
         EOEntity entity=null;
@@ -164,6 +176,7 @@ public class ERDirectToWeb {
         return result;
     }
 
+    // MOVEME: ERD2WFactory
     public static WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
         D2WContext newContext=new D2WContext(session);
         String newTask=context.task().equals("edit") ? "inspect" : context.task();
@@ -181,6 +194,7 @@ public class ERDirectToWeb {
         return result;
     }
 
+    // MOVEME: Should move to the ERXMLLook framework when created.
     public static WOComponent csvExportPageForD2WContext(D2WContext context, WOSession session) {
         D2WContext newContext=new D2WContext(session);
         newContext.takeValueForKey(context.task(),"task");
@@ -196,7 +210,7 @@ public class ERDirectToWeb {
         return result;
     }
 
-    
+    // MOVEME: ERD2WFactory
     public static WOComponent pageForTaskSubTaskAndEntityNamed(String task, String subtask, String entityName, WOSession session) {
         D2WContext newContext=new D2WContext(session);
         newContext.setTask(task);
@@ -207,6 +221,7 @@ public class ERDirectToWeb {
         return result;        
     }
 
+    // MOVEME: ERD2WFactory
     public static QueryPageInterface queryPageWithFetchSpecificationForEntityNamed(String fsName, String entityName, WOSession s) {
         WOComponent result= pageForTaskSubTaskAndEntityNamed("query", "fetchSpecification", entityName,s);
         result.takeValueForKey(fsName, "fetchSpecificationName");

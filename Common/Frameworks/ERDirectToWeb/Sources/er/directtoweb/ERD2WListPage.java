@@ -16,9 +16,13 @@ import er.extensions.*;
 
 public abstract class ERD2WListPage extends D2WListPage {
 
-    //////////////////////////////////////  log4j category  ////////////////////////////////////////
+    /** logging support */
     public final static Category cat = Category.getInstance(ERD2WListPage.class);
 
+    /**
+     * Public constructor
+     * @param c current context
+     */
     public ERD2WListPage(WOContext c) {
         super(c);
     }

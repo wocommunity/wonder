@@ -10,16 +10,49 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
 
+/**
+ * This class is needed because the original tab
+ * dictionary computer does implement the computing
+ * interface and as such does not work with the 
+ * new caching scheme.
+ */
 public class ERDTabDictionaryComputer extends TabDictionaryComputer implements ERDComputingAssignmentInterface {
 
+    /** Holds the keys this assignment is dependent upon */
+    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "displayPropertyKeys" });
+
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDTabDictionaryComputer(eokeyvalueunarchiver);
     }
-
+    
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDTabDictionaryComputer (EOKeyValueUnarchiver u) { super(u); }
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDTabDictionaryComputer (String key, Object value) { super(key,value); }
 
-    // the class in D2W does not play nice with the new caching scheme
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "displayPropertyKeys" });
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment depends upon the context key: "displayPropertyKeys". 
+     * This array of keys is used when constructing the 
+     * significant keys for the passed in keyPath.
+     * @param keyPath to compute significant keys for. 
+     * @return array of context keys this assignment depends upon.
+     */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
 }
