@@ -14,26 +14,6 @@
 		<buildCommand>
 			<name>org.objectstyle.wolips.incrementalbuilder</name>
 			<arguments>
-				<dictionary>
-					<key>res.exclude.patterns</key>
-					<value>*/.*,*~,*~/*,*/CVS/*,*/.*/*</value>
-				</dictionary>
-				<dictionary>
-					<key>webserver.res.exclude.patterns</key>
-					<value>*/.*,*~,*~/*,*/CVS/*,*/.*/*</value>
-				</dictionary>
-				<dictionary>
-					<key>webserver.res.include.patterns</key>
-					<value>/WebServerResources/*.*</value>
-				</dictionary>
-				<dictionary>
-					<key>nsprincipalclass</key>
-					<value>er.javamail.ERJavaMail</value>
-				</dictionary>
-				<dictionary>
-					<key>res.include.patterns</key>
-					<value>/Resources/*,/Components/*,*/*.api,*/*.wo/*,*/*.eomodeld/*</value>
-				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
