@@ -295,9 +295,21 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return result;
     }
 
+    protected static NSMutableSet _allConfigurations = new NSMutableSet();
+    public static NSSet allConfigurationNames() {
+        return _allConfigurations;
+    }
+    
     /** Overridden from the parent for better logging. Reports exceptions in the console for easier debugging. */
     public void appendToResponse(WOResponse r, WOContext c) {
         NDC.push("Page: " + getClass().getName()+ (d2wContext()!= null ? (" - Configuration: "+d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
+        if(d2wContext()!= null && !WOApplication.application().isCachingEnabled()) {
+            synchronized(_allConfigurations) {
+                if(d2wContext().dynamicPage() != null) {
+                    _allConfigurations.addObject(d2wContext().dynamicPage());
+                }
+            }
+        }
         try {
             super.appendToResponse(r,c);
         } catch(Exception ex) {
