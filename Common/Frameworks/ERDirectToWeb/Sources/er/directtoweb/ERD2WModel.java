@@ -697,7 +697,7 @@ public class ERD2WModel extends D2WModel {
     public String nameForSet(NSSet set) {
         NSMutableArray stringObjects = new NSMutableArray();
         stringObjects.addObjectsFromArray(set.allObjects());
-        ERXArrayUtilities.sortedArraySortedWithKey(stringObjects, "description");
+        ERXArrayUtilities.sortArrayWithKey(stringObjects, "description");
         return stringObjects.componentsJoinedByString(".");
     }
 }
