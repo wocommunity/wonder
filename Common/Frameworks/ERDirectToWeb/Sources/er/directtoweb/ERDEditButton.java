@@ -11,8 +11,12 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERDEditButton extends ERDCustomEditComponent {
+
+   public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDEditButton");
+
 
     public ERDEditButton(WOContext context) {super(context);}
     
@@ -26,6 +30,9 @@ public class ERDEditButton extends ERDCustomEditComponent {
         EOEditingContext context = er.extensions.ERXExtensions.newEditingContext();
         EOEnterpriseObject localObject = EOUtilities.localInstanceOfObject(context, object());
         String configuration = (String)d2wContext().valueForKey("editConfigurationNameForEntity");
+        if(log.isDebugEnabled()){
+           log.debug("configuration = "+configuration);
+        }
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(configuration, session());
         epi.setObject(localObject);
         epi.setNextPage(context().page());
