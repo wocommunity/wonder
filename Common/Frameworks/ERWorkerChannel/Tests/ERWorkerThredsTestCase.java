@@ -29,7 +29,7 @@ public class ERWorkerThredsTestCase extends WOUTTestCase {
     }
 
     public void testWorkerThreds() {
-        ERWorkerChannel channel = new ERWorkerChannel(2, 25);   
+        ERWorkerChannel channel = new ERLocalWorkerChannel(2, 25);   
         channel.startWorkers();
         new ERTestClientThread("Alice", channel, 25).start();
         new ERTestClientThread("Bobby", channel, 30).start();
