@@ -271,6 +271,7 @@ public class ERXTolerantSaver {
 //                    log.error("TolerantSaver: No EOAdaptorFailureKey Exception:" + e);
                     String error = "Error: No EOAdaptorFailureKey, reason ";
                     error += errorFromException(e);
+                    log.error("TolerantSaver: UserInfo = "+userInfo+", exception: ", e);
                     return error;
                 }
             } else {
