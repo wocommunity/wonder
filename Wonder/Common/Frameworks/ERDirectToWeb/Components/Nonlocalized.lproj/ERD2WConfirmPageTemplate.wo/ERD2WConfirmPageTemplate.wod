@@ -54,9 +54,10 @@ Image1: WOImage {
 	border = 0;
 }
 
-String3: WOString {
-        escapeHTML = false;
-	value = message;
+Message: ERXLocalizedString {
+	escapeHTML = false;
+	object = d2wContext;
+	templateString = message;
 }
 
 SubmitButton1: WOSubmitButton {
@@ -77,5 +78,6 @@ SwitchComponent4: WOSwitchComponent {
 	WOComponentName = d2wContext.explanationComponent;
 	dataSource = dataSource;
 	object = object;
+	pageConfiguration = d2wContext.embeddedPageConfiguration;
 }
 
