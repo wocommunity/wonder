@@ -85,6 +85,6 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     
     public NSArray keyPathsWithValidationExceptions() {
         NSArray exceptions = (NSArray)d2wContext().valueForKey("keyPathsWithValidationExceptions");
-        return exceptions != null ? exceptions : ERXConstant.EmptyArray;
+        return exceptions != null ? exceptions : NSArray.EmptyArray;
     }
 }
