@@ -4,6 +4,7 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
+
 package er.directtoweb;
 
 import com.webobjects.directtoweb.*;
@@ -13,10 +14,24 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
-/* Not used right now.  Keeping it here so it will be simple to use in the future if need be.
- public class ERD2WFactory extends D2W {
+public class ERD2WFactory extends D2W {
 
 
+    private D2WContext _privateContext;
+    public D2WContext privateContext(WOSession s) {
+        if (_privateContext==null) {
+            _privateContext=new D2WContext(s);
+        }
+        _privateContext.takeValueForKey(s,"session");
+        return _privateContext;
+    }
+    
+    public NSArray visibleEntityNames(WOSession s) {        
+        return D2WUtils.visibleEntityNames(privateContext(s));
+    }
+
+    
+/*
     public void myCheckRules() {
         if (!WOApplication.application().isCachingEnabled()) {
             ERD2WModel.erDefaultModel().checkRules();
@@ -43,5 +58,8 @@ import com.webobjects.directtoweb.*;
         }
         return newPage;
     }    
+
+ */
+
 }
-*/
+
