@@ -66,17 +66,21 @@ public abstract class ERMailDelivery {
     protected NSMutableArray _inlineAttachments;
 
     /** Callback class name. Used to have ERMail call a method on a class
-        after a message has been sent */
+        after a message has been sent 
+        @deprecated*/
     public static String callBackClassName = null;
+    /** @deprecated */
     public static String callBackMethodName = null;
 
     public static String DefaultCharset = System.getProperty ("er.javamail.defaultEncoding");
     public String _charset = DefaultCharset;
 
-    /** callbackObject to refer to in the calling program */
+    /** callbackObject to refer to in the calling program 
+        @deprecated */
     public Object _callbackObject = null;
 
-    /** Sets the callback class and method name */
+    /** Sets the callback class and method name
+        @deprecated*/
     public static void setCallBackClassWithMethod (String className, String methodName) {
         callBackClassName = className;
         callBackMethodName = methodName;
@@ -227,10 +231,12 @@ public abstract class ERMailDelivery {
         setAddresses (bccAddresses, Message.RecipientType.BCC, true);
     }
 
-    /** Sets the object for the message. This is the identifying object from the calling program. */
+    /** Sets the object for the message. This is the identifying object from the calling program.
+        @deprecated */
     public void setCallbackObject (Object obj) {
         _callbackObject = obj;
     }
+    /** @deprecated */
     public Object callbackObject () {
         return _callbackObject;
     }
@@ -266,7 +272,6 @@ public abstract class ERMailDelivery {
     protected ERMessage buildMessage () {
         ERMessage message = new ERMessage ();
         message.setMimeMessage (this.mimeMessage ());
-        message.setCallbackObject (this.callbackObject ());
         return message;
     }
 

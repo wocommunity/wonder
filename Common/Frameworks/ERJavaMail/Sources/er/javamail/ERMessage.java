@@ -24,10 +24,12 @@ public class ERMessage extends Object {
         return message;
     }
     
+    /** @deprecated */
     public void setCallbackObject (Object obj) {
         anObject = obj;
     }
     
+    /** @deprecated */
     public Object callbackObject () {
         return anObject;
     }
