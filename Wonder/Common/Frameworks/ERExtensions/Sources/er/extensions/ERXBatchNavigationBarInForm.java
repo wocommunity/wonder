@@ -15,4 +15,8 @@ public class ERXBatchNavigationBarInForm extends ERXBatchNavigationBar {
     public ERXBatchNavigationBarInForm(WOContext context) {
         super(context);
     }
+
+    public String formTarget() {
+        return ((ERXWOContext)context()).mutableUserInfo().objectForKey("formName") + ".target=_self;";
+    }
 }
