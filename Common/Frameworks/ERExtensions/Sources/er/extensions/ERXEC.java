@@ -68,12 +68,12 @@ public class ERXEC extends EOEditingContext {
 	 */
     public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker && ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
     		if(ecs == null) {
     			ecs = new Vector();
     		}
     		ecs.add(ec);
-    		ERXThreadStorage.takeValueForKey(ecs, LockedContextsForCurrentThreadKey);
+    		ERXThreadStorage.takeValueForKey(ecs, LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
     	}
     }
     
@@ -84,7 +84,7 @@ public class ERXEC extends EOEditingContext {
      */
     public static void popLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker &&  ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
+    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
     		if(ecs != null) {
     			int index = ecs.lastIndexOf(ec);
     			if(index >= 0) {
@@ -101,8 +101,8 @@ public class ERXEC extends EOEditingContext {
      * You shouldn't call this yourself, but let the Unlocker handle it for you.
      */
     public static void unlockAllContextsForCurrentThread() {
-    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey);
-    	ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey);
+    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
+    	ERXThreadStorage.removeValueForKey(LockedContextsForCurrentThreadKey+Thread.currentThread().getName());
     	log.debug("unlockAllContextsForCurrentThread: " + Thread.currentThread().getName() + ", ecs: " + ecs);
     	if(ecs != null && ecs.size() > 0) {
     		// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
