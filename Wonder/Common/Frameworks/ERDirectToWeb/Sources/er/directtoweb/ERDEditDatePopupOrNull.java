@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import java.util.*;
 
 /**
  * Allows the choice to not specify a date.<br />
@@ -29,6 +30,10 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
+
+    public Object timeZoneString() {
+        return TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
+    }
 
     public String radioValue(){
         if(_radioValue == null) {
