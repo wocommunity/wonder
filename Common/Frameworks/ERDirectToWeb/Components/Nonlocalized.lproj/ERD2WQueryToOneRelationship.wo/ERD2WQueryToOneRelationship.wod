@@ -9,5 +9,6 @@ ToOneRelationship: ERXToOneRelationship {
 	displayGroup = displayGroup;
 	uiStyle = d2wContext.toOneUIStyle;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+        isMandatory = d2wContext.isMandatory;
 }
 
