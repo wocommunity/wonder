@@ -6,6 +6,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.io.*;
+import java.util.*;
 
 /**
  *	GSVModel used for the mapping validation rules to an entities' attributes.<BR>
@@ -100,9 +101,10 @@ public final class GSVModel extends Object implements WOXMLCoding {
             FileOutputStream fos = new FileOutputStream(configurationFile);
             fos.write(codedString.getBytes());
             fos.close();
+	    NSLog.out.appendln("did save model to file");
             return true;
         } catch(IOException e) {
-            System.out.println(e);
+            NSLog.out.appendln(e);
             return false;
         }
     }
@@ -294,6 +296,20 @@ public final class GSVModel extends Object implements WOXMLCoding {
         }catch(ClassNotFoundException e){
             return null;
         }
+    }
+
+    public void init(EOModel eomodel, EOEnterpriseObject eo) {
+	for (Enumeration e = entities().objectEnumerator(); e.hasMoreElements();) {
+	    GSVEntity entity = (GSVEntity)e.nextElement();
+	    EOEntity eoentity = eomodel.entityNamed(entity.name());
+	    NSLog.debug.appendln("checking gsventity"+entity.name());
+	    if ( eoentity == null) {
+		removeEntity(entity);
+		NSLog.debug.appendln("removed obsolete gsventity"+entity.name());
+	    } else {
+		entity.init(this, eoentity);
+	    }
+	}
     }
     
 }

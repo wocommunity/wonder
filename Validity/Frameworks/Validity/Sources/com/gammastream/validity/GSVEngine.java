@@ -348,6 +348,7 @@ public final class GSVEngine extends Object {
                 gsvModelPath = NSPathUtilities.stringByAppendingPathExtension(gsvModelPath, GSVModel.MODEL_EXTENSION);
                 model = (GSVModel)WOXMLDecoder.decoder().decodeRootObject(gsvModelPath);
                 model.setEomodelPath(eoModelPath);	//not sure why we need to do this?
+                model.init(eomodel, eoObject);
                 model.saveModel();					//not sure why we need to do this?
                 //now cache 
                 _modelCache.setObjectForKey(model, modelName);
@@ -370,7 +371,6 @@ public final class GSVEngine extends Object {
             _expired = true;
         }
         */
-        System.out.println("Validity 1.0 (Modeler and Framework)");
         _expired = false;
     }
     
