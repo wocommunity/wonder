@@ -293,12 +293,15 @@ There are three ways to use this script:
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
                 <include name="**/mime.types" /> 
+                <include name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
+                <include name="**/*.jpg" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
+                <include name="**/*.html" />
             </wsresources>
         </woframework>
         <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
@@ -333,12 +336,15 @@ There are three ways to use this script:
                 <include name="**/Properties" />
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
+                <include name="**/*.defaults" /> <!-- SVGObjects specific --> 
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
+                <include name="**/*.jpg" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
+                <include name="**/*.html" />
             </wsresources>
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
             <frameworks root="${wonder.lib.root}" if="use.wonder.core"> 
@@ -656,9 +662,16 @@ There are three ways to use this script:
             <param name="project.dir" value="Validity/Frameworks/Validity" />
         </antcall>
     </target>
+    
+    <target name="specific.validity.application" depends="global.properties">
+        <antcall target="global.application" />
+        <move todir="${build.root}/${project.name}.woa/Contents/WebServerResources" flatten="true" includeEmptyDirs="no">
+            <fileset dir="${build.root}/${project.name}.woa/Contents/WebServerResources" />
+        </move>
+    </target>
 
     <target name="Validity.application.all">
-        <antcall target="global.application" >
+        <antcall target="specific.validity.application" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityModeler" />
