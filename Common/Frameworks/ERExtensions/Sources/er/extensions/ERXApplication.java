@@ -552,6 +552,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             } else if (throwable instanceof StackOverflowError) {
                 // hm. could we do something reasonable here?
                 shouldQuit = false;
+            } else if (throwable instanceof com.webobjects.eocontrol._private.TokenMgrError) {
+                // this means something went wrong while parsing an EOQualifier string
+                // no reason to quit
+                shouldQuit = false;
             } else {
                 // We first log just in case the log4j call puts us in a bad state.
                 NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.");
