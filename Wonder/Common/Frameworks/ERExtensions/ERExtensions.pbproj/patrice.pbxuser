@@ -21,7 +21,7 @@
 						ActiveTab = 3;
 						Frame = "{{286, 0}, {866, 844}}";
 						Split0 = {
-							Frame = "{{0, 248}, {866, 596}}";
+							Frame = "{{0, 301}, {866, 543}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -57,12 +57,12 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {881, 155}}";
-							BuildTranscriptFrame = "{{0, 164}, {881, 151}}";
-							Frame = "{{0, 0}, {879, 313}}";
+							BuildMessageFrame = "{{0, 0}, {868, 155}}";
+							BuildTranscriptFrame = "{{0, 164}, {868, 151}}";
+							Frame = "{{0, 0}, {866, 313}}";
 						};
 						Tab3 = {
-							Frame = "{{0, 0}, {866, 224}}";
+							Frame = "{{0, 0}, {866, 277}}";
 						};
 						TabCount = 4;
 					};
@@ -122,6 +122,11 @@
 	F57EA60001FF59BF019E57DA = {
 		uiCtxt = {
 			sepNavWindowFrame = "{{15, 181}, {959, 816}}";
+		};
+	};
+	F57EA61101FF59BF019E57DA = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{15, 495}, {750, 502}}";
 		};
 	};
 	F57EA70101FF59C0019E57DA = {
