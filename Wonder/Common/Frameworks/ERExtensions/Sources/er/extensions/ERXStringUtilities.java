@@ -158,4 +158,38 @@ public class ERXStringUtilities extends Object {
         }
         return part;
     }
+
+    /**
+     * Calculates a default display name for a given
+     * key path. For instance for the key path:
+     * "foo.bar" the display name would be "Bar".
+     * @param key to calculate the display name
+     * @return display name for the given key
+     */
+    public static String displayNameForKey(String key) {
+        StringBuffer finalString = new StringBuffer();
+        if (key != null) {
+            NSArray keys=NSArray.componentsSeparatedByString(key,".");
+            String lastHop=(String)keys.objectAtIndex(keys.count()-1);
+            StringBuffer tempString = new StringBuffer();
+            char[] originalArray = lastHop.toCharArray();
+            originalArray[0] = Character.toUpperCase(originalArray[0]);
+            Character tempChar = null;
+            Character nextChar = null;
+            for(int i=0;i<(originalArray.length-1);i++){
+                tempChar = new Character(originalArray[i]);
+                nextChar = new Character(originalArray[i+1]);
+                if(Character.isUpperCase(originalArray[i]) &&
+                   Character.isLowerCase(originalArray[i+1])) {
+                    finalString.append(tempString);
+                    if (i>0) finalString.append(' ');
+                    tempString = new StringBuffer();
+                }
+                tempString.append(tempChar.toString());
+            }
+            finalString.append(tempString);
+            finalString.append(nextChar);
+        }
+        return finalString.toString();
+    }
 }
