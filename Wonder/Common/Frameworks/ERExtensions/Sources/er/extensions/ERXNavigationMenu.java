@@ -148,6 +148,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
             if (navigationState().state().containsObject(anObject.name())) {
                 // we need to stop going through the objects here
                 if (lev2Width <= (totalWidth + level1SpacerWidth())) {
+
                     // it will fit aligned right
                     if ((i + 1) == level1Items().count()) {
                         return 0;
@@ -227,7 +228,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
                 totalWidth += ((ERXNavigationItem)_level1Items.objectAtIndex(i)).width();
             }
         }
-        return totalWidth + _level1Items.count();
+        return totalWidth;
     }
 
     public NSArray level2Items() { return _level2Items; }
@@ -241,7 +242,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
                 totalWidth += ((ERXNavigationItem)_level2Items.objectAtIndex(i)).width();
             }
         }
-        return totalWidth + _level2Items.count();
+        return totalWidth;
     }
 
     public NSArray level3Items() { return _level3Items; }
@@ -255,7 +256,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
                 totalWidth += ((ERXNavigationItem)_level3Items.objectAtIndex(i)).width();
             }
         }
-        return totalWidth + _level3Items.count();
+        return totalWidth;
     }
 
     public int setupLevel1SpacerWidth() { return navItemsTableWidth()-level1Width(); }
