@@ -1194,6 +1194,20 @@ public class ERXArrayUtilities extends Object {
         return aa;
     }
     
+    /** Converts an Object array to a String array by casting each element.
+        * This is analogus to <code>String[] myStringArray = (String[])myObjectArray;</code> 
+        * except that it creates a clone of the array.
+        * @param o an Object array containing String elements
+        * @return a String array containing the same elements
+        */
+    public static String[] objectArrayCastToStringArray(Object[] o) {
+        String[] s = new String[o.length];
+        for (int i = 0; i < o.length; i++) {
+            s[i] = (String)o[i];
+        }
+        return s;
+    }
+    
     /** pretty prints an Object array which is ugly when using toString
      * @param o the object which one wants to print as a String
      * @return the String which can be used in lets say 
