@@ -11,14 +11,15 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
 import er.extensions.ERXConfigurationManager;
-import er.extensions.ERXStatelessComponent;
 
-public class ERCMailableExceptionPage extends ERXStatelessComponent {
+public class ERCMailableExceptionPage extends WOComponent {
 
+    public String errorMessage;
     public EOEnterpriseObject actor;
     public Throwable exception;
     public NSArray _reasonLines;
     public String currentReasonLine;
+    public String formattedMessage;
     public NSDictionary extraInfo;
 
     public String currentUserInfoKey;
@@ -44,9 +45,20 @@ public class ERCMailableExceptionPage extends ERXStatelessComponent {
         extraInfo = value;
     }
 
-    public void reset() {
-        super.reset();
-        _reasonLines=null;
+    public void setFormattedMessage(String value) {
+        formattedMessage = value;
+    }
+    
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+    
+    public String shortErrorMessage() {
+        return exception != null ? exception.getClass().getName() : errorMessage;
+    }
+    
+    public void setReasonLines(NSArray reasonLines) {
+        _reasonLines = reasonLines;
     }
     
     public NSArray reasonLines() {

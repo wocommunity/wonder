@@ -31,7 +31,19 @@
                     <webobject name=ExceptionNameString></webobject>
                 </td>
             </tr>
-            <tr>
+			<webobject name=HasExtraInfoDictionary>
+            <TR>
+            	<TD ALIGN=RIGHT><B>Extra Information:</B></TD>
+            	<TD></TD>
+            </TR>
+			<webobject name=ExtraInfoRowRepetition>
+            <TR>
+            	<TD ALIGN=RIGHT><B><WEBOBJECT NAME=UserInfoKeyString2></WEBOBJECT></B>:</TD>
+            	<TD><WEBOBJECT NAME=UserInfoValueString2></WEBOBJECT></TD>
+            </TR>
+            </webobject>
+			</webobject>
+			<tr>
                 <td align=right valign=top>
                     <b>Reason:</b>
                 </td>
@@ -41,22 +53,13 @@
                     </webobject>
                 </td>
             </tr>
-            <TR>
-            	<TD COLSPAN=2>
-            		<HR>
-            		<b>Extra Info Dictionary:</b></TD>
-            </TR>
-
-<webobject name=ExtraInfoRowRepetition>
-                <tr>
-                    <td align=right valign=top>
-                        <b><webobject name=UserInfoKeyString></webobject>:</b>
-                    </td>
-                    <td align=left valign=top>
-                        <pre><webobject name=UserInfoValueString></webobject></pre>
-                    </td>
-                </tr>
-                </webobject>
+			<WEBOBJECT NAME=Conditional2>
+				<TR>
+					<TD ALIGN=RIGHT VALIGN=TOP><B>Formatted Message:</B></TD>
+					<TD><WEBOBJECT NAME=String5></WEBOBJECT></TD>
+				</TR>
+			</WEBOBJECT>
+            
         </table>
 </td>
 </tr>
