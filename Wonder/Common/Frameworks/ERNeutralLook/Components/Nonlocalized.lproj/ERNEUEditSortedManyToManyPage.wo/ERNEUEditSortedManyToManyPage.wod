@@ -40,7 +40,6 @@ Conditional3: WOConditional {
 Conditional4: WOConditional {
 	condition = session.javaScriptEnabled;
 	negate = false;
-	WODebug = true;
 }
 
 DisplayArrows: WOConditional {
