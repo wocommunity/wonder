@@ -11,14 +11,15 @@ import com.webobjects.appserver.*;
 import er.extensions.*;
 
 /**
- * Superclass for most custom query components.<br />
- * 
+ * Superclass for most custom query components. <br />
+ *  
  */
 
 public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXExceptionHolder {
 
     /** interface for all the keys used in this pages code */
     public static interface Keys {
+
         public static final String displayGroup = "displayGroup";
     }
 
@@ -28,21 +29,26 @@ public class ERDCustomQueryComponent extends ERDCustomComponent implements ERXEx
     public ERDCustomQueryComponent(WOContext context) {
         super(context);
     }
-    
+
     private WODisplayGroup _displayGroup;
+
     public WODisplayGroup displayGroup() {
-        if (_displayGroup==null && !synchronizesVariablesWithBindings())
-            _displayGroup=(WODisplayGroup)super.valueForBinding(Keys.displayGroup);
+        if (_displayGroup == null && !synchronizesVariablesWithBindings())
+                _displayGroup = (WODisplayGroup) super.valueForBinding(Keys.displayGroup);
         return _displayGroup;
     }
-    public void setDisplayGroup(WODisplayGroup value) {_displayGroup = value; }
+
+    public void setDisplayGroup(WODisplayGroup value) {
+        _displayGroup = value;
+    }
 
     public Object displayGroupQueryMatchValue() {
         return key() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(key()) : null;
     }
-    public void setDisplayGroupQueryMatchValue (Object newValue) {
-        if (key() != null && displayGroup () != null && displayGroup().queryMatch()!=null )
-            displayGroup().queryMatch().setObjectForKey(newValue,key());
+
+    public void setDisplayGroupQueryMatchValue(Object newValue) {
+        if (key() != null && displayGroup() != null && displayGroup().queryMatch() != null)
+                displayGroup().queryMatch().setObjectForKey(newValue, key());
     }
 
     public void reset() {
