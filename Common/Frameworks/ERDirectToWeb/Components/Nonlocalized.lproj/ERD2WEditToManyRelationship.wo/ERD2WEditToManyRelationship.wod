@@ -1,7 +1,3 @@
-AreThereChoices: ERXNonZeroConditional {
-	condition = restrictedChoiceList.count;
-}
-
 AreThereChoices2: ERXNonZeroConditional {
 	condition = restrictedChoiceList.count;
 	negate = true;
@@ -21,6 +17,10 @@ CollapseContainer: D2WCollapsibleComponentContent {
 	allowCollapsing = d2wContext.allowCollapsing;
 	closedLabel = toManyDescription;
 	submitActionName = "";
+}
+
+ERXNonNullConditional1: ERXNonNullConditional {
+	condition = restrictedChoiceList;
 }
 
 EditToManyRelationship: ERXToManyRelationship {
