@@ -40,7 +40,7 @@ public class EOGenericRecordClazz extends Object {
      * fetch specification will return.
      * @return eo count attribute
      */
-    private static EOAttribute objectCountAttribute() {
+    protected static EOAttribute objectCountAttribute() {
         if ( _objectCountAttribute == null ) {
             _objectCountAttribute = new EOAttribute();
 
