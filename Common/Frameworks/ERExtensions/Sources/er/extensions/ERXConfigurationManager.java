@@ -168,8 +168,44 @@ public class ERXConfigurationManager {
                     if (cat.isDebugEnabled()) cat.debug("New Connection Dictionary "+newCD);
                 }
             }
+            // based on an idea from Stefan Apelt <stefan@tetlabors.de>
+            String f = stringForKey(aModelName + ".EOPrototypesFile");
+            f = f ==null ? stringForKey("EOPrototypesFileGLOBAL") : f;
+            if(f != null) {
+                NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
+                if(dict != null) {
+                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes from " + f);
+                    EOEntity proto = aModel.entityNamed("EOPrototypes");
+                    if (proto == null) {
+                        cat.warn("No prototypes found in model named \"" + aModelName + "\", although the EOPrototypesFile default was set!");
+                    } else {
+                        aModel.removeEntity(proto);
+                        proto = new EOEntity(dict, aModel);
+                        proto.awakeWithPropertyList(dict);
+                        aModel.addEntity(proto);
+                    }
+                }
+            }
+            String e = stringForKey(aModelName + ".EOPrototypesEntity");
+            e = e ==null ? stringForKey("EOPrototypesEntityGLOBAL") : e;
+            if(e != null) {
+                EOEntity proto = aModel.entityNamed("EOPrototypes");
+                EOEntity newproto = aModel.entityNamed(e);
+                if (newproto == null) {
+                    cat.warn("No prototypes found in model named \"" + aModelName + "\", although the EOPrototypesEntity default was set!");
+                } else {
+                    NSMutableDictionary dict = new NSMutableDictionary();
+                    newproto.encodeIntoPropertyList(dict);
+                    if(proto != null)
+                        aModel.removeEntity(proto);
+                    aModel.removeEntity(newproto);
+                    proto = new EOEntity(dict, aModel);
+                    proto.awakeWithPropertyList(dict);
+                    aModel.addEntity(proto);
+                }
+            }
         }
-
+        
     }
 
 
