@@ -412,6 +412,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public Object rawPrimaryKey() { return ERXExtensions.rawPrimaryKeyForObject(this); }
 
     /**
+     * Takes the primary key of the object and encrypts it
+     * with the blowfish cipher using {@link ERXCrypto ERXCrypto}.
+     * @return blowfish encrypted primary key
+     */
+    public String encryptedPrimaryKey() {
+        String pk = ERXExtensions.primaryKeyForObject(this);
+        return pk==null ? null : ERXCrypto.blowfishEncode(pk);
+    }
+        
+    /**
      * Returns the foreign key for a given relationship.
      * @param rel relationship key
      * @return foreign key for a given relationship.
