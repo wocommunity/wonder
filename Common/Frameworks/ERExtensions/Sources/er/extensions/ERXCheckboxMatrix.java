@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 // ported from WebScript - Corrected nil context problem.
 public class ERXCheckboxMatrix extends WOComponent {
@@ -42,6 +43,15 @@ public class ERXCheckboxMatrix extends WOComponent {
         setValueForBinding(currentItem, "item");
     }
 
+    public EOEnterpriseObject getRelationshipOwner() {
+        return (EOEnterpriseObject)valueForBinding("relationshipOwner");
+    }
+
+    public String getRelationshipName() {
+        Object o = valueForBinding("relationshipName");
+        return o == null ? null : o.toString();
+    }
+    
     public NSArray selections() {
         if (_selections==null) {
             _selections = (NSArray)valueForBinding("selections");
@@ -49,7 +59,29 @@ public class ERXCheckboxMatrix extends WOComponent {
         return _selections;
     }
 
-    public void setSelections(NSArray aFormValuesArray) {
+    public void setSelections(Vector v) throws IllegalAccessException, InvocationTargetException {
+        NSRange r = new NSRange(0, v.size());
+        setSelections(new NSArray(v, r, true));
+    }
+
+    public void takeValueForKey(Object value, String key)
+    {
+        try {
+            super.takeValueForKey(value, key);
+        } catch (java.lang.IllegalArgumentException e) {
+            if (value instanceof Vector) {
+                //convert the vector
+                NSRange r = new NSRange(0, ((Vector)value).size());
+                NSMutableArray a = new NSMutableArray((Vector)value, r, true);
+                super.takeValueForKey(a, key);
+                NSLog.out.appendln("done");
+            } else {
+                throw e;
+            }
+        }
+    }
+    
+    public void setSelections(NSArray aFormValuesArray) throws IllegalAccessException, InvocationTargetException {
         // ** This is where we accept the formValues.  Kind of weird.
         NSMutableArray aSelectionsArray = new NSMutableArray();
         if (aFormValuesArray != null && aFormValuesArray.count() > 0) {
@@ -66,7 +98,24 @@ public class ERXCheckboxMatrix extends WOComponent {
                 }
             }
         }
-        setValueForBinding(aSelectionsArray, "selections");
+        // dt: this can be used with a subset as array for the checkboxes.
+        if (getRelationshipName() != null && getRelationshipName().length() > 0 && getRelationshipOwner() != null) {
+            NSSet objectsToRemove = new NSSet(_selections).setBySubtractingSet(new NSSet(aSelectionsArray));
+            NSSet objectsToAdd = new NSSet(aSelectionsArray).setBySubtractingSet(new NSSet(_selections));
+            EOEnterpriseObject owner = getRelationshipOwner();
+            String relname = getRelationshipName();
+            for (Enumeration e = objectsToRemove.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                owner.removeObjectFromBothSidesOfRelationshipWithKey(eo, relname);
+            }
+            for (Enumeration e = objectsToAdd.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                owner.addObjectToBothSidesOfRelationshipWithKey(eo, relname);
+            }
+            
+        } else {
+            setValueForBinding(aSelectionsArray, "selections");
+        }
         _selections = null;
     }
 
