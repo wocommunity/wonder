@@ -107,7 +107,7 @@ public class ERXEOControlUtilities {
      * newly inserted, lives in a shared context and can either create a peer or nested context.
      *
      * @param eo object for the new instance
-     * @param useNestedContext true, if we should use a nested context (otherwise we create a peer context)
+     * @param createNestedContext true, if we should create a nested context (otherwise we create a peer context)
      *
      * @return new EO in new editing context
      */
