@@ -596,8 +596,8 @@ public class ERXExtensions {
      * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
      * @param obj enterprise object to get the primary key array from.
      * @return array of all the primary key values for the object.
+     * @deprecated use <code>ERXEOControlUtilities.primaryKeyArrayForObject<code> instead.
      */
-    // MOVEME: ERXEOFUtilities
     public static NSArray primaryKeyArrayForObject(EOEnterpriseObject obj) {
         EOEditingContext ec = obj.editingContext();
         if (ec == null) {
