@@ -62,8 +62,7 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         spec.setSortOrderings(sortOrderings());
 
         EOEditingContext ec = databaseDataSource().editingContext();
-        String sql = ERXEOAccessUtilities.sqlForFetchSpecificationAndEditingContext(spec, ec, start, end);
-        
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, start, end);
         NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
         spec.setHints(hints);
         
@@ -100,13 +99,12 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
             EOFetchSpecification spec = databaseDataSource().fetchSpecificationForFetch();
             EOEditingContext ec = databaseDataSource().editingContext();
             EOModel model = ERXEOAccessUtilities.modelForFetchSpecificationAndEditingContext(spec, ec);
-            String sql = ERXEOAccessUtilities.sqlForFetchSpecificationAndEditingContext(spec, ec);
-            int index = sql.indexOf("from");
-            if (index == -1) {
-                index = sql.indexOf("FROM");
-            }
-            sql = "select count(*) " + sql.substring(index, sql.length());
-            NSArray result = EOUtilities.rawRowsForSQL(ec, model.name(), sql);
+            EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, 0, -1);
+            String statement = sql.statement();
+            int index = statement.toLowerCase().indexOf(" from");
+            statement = "select count(*) " + statement.substring(index, statement.length());
+            sql.setStatement(statement);
+            NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
 
             if (result.count() > 0) {
                 NSDictionary dict = (NSDictionary)result.objectAtIndex(0);
