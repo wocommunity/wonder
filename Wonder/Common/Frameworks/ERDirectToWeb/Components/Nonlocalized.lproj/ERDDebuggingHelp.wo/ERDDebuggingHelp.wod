@@ -42,6 +42,11 @@ Hyperlink4: WOHyperlink {
 	target = "_inspector";
 }
 
+Hyperlink5: WOHyperlink {
+	action = toggleRuleTracing;
+	string = ruleTracingState;
+}
+
 String1: WOString {
 	value = ^d2wContext.pageConfiguration;
 	valueWhenEmpty = "No Page Configuration";
