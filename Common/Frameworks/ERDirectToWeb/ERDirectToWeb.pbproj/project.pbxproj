@@ -136,6 +136,19 @@
 			settings = {
 			};
 		};
+		41E12C8D0501CA0A00000102 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERDListPageInterface.java;
+			path = er/directtoweb/ERDListPageInterface.java;
+			refType = 4;
+		};
+		41E12C8E0501CA0A00000102 = {
+			fileRef = 41E12C8D0501CA0A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41F217BC046EE09200000103 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -8399,6 +8412,7 @@
 				9409EBF8047BFEC000CF0E7D,
 				4119063B04EFBC3000A88C3C,
 				411906A704EFC02A00A88C3C,
+				41E12C8E0501CA0A00000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9227,6 +9241,7 @@
 				F54206EF02C467E001000102,
 				F54206F702C467E001000102,
 				F542070102C467E001000102,
+				41E12C8D0501CA0A00000102,
 				F542070502C467E001000102,
 				F542070702C467E001000102,
 				F542070A02C467E001000102,
