@@ -230,7 +230,7 @@ public class ERDirectToWeb {
 
     public static WOComponent errorPageForException(Throwable e, WOSession s) {
         ErrorPageInterface epi=D2W.factory().errorPage(s);
-        epi.setMessage(e.toString()+" \n\n "+ERXUtilities.stackTrace(e));
+        epi.setMessage(ERXUtilities.stackTrace(e));
         epi.setNextPage(s.context().page());
         return (WOComponent)epi;
     }
