@@ -63,7 +63,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             return context().componentActionURL();
         }
         if (navigationItem().directActionName() != null) {
-            return context().directActionURLForActionNamed(navigationItem().directActionName(),null);
+            return context().directActionURLForActionNamed(navigationItem().directActionName(),navigationItem().queryBindings());
         }
 
         // If the user specified some javascript, put that into the HREF and return it
