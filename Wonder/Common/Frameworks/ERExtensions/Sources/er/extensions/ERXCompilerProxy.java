@@ -69,7 +69,7 @@ public class ERXCompilerProxy {
                 path = System.getProperty("projects." + name);
             }
             if(path != null) {
-                File f = new File( + "/CPFileList.txt");
+                File f = new File( path + "/CPFileList.txt");
                 if(f.exists()) {
                     cat.info("Found open project for framework '" +path+ "' at path " + bundle.projectPath());
                     projectPaths.addObject(bundle.projectPath());
