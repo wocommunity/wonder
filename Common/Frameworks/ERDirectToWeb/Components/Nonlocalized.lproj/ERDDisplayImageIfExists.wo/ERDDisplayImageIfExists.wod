@@ -3,6 +3,10 @@ Image1: WOImage {
 	mimeType = "";
 }
 
+String1: WOString {
+	value = session.localizer.ERDDisplayImageIfExists.message;
+}
+
 TestImageExists: ERXNonNullConditional {
 	condition = imageContent;
 }
