@@ -52,7 +52,6 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_CLASS_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Java/Extensions/jce1_2_1.jar\"";
-				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
@@ -361,14 +360,11 @@
 				F59C584F02C4565701000102,
 				F59C585002C4565701000102,
 				F59C585102C4565701000102,
-				F59C585202C4565701000102,
 				F59C585302C4565701000102,
 				F59C585402C4565701000102,
 				F59C585502C4565701000102,
 				F59C585602C4565701000102,
 				F59C585702C4565701000102,
-				F59C585802C4565701000102,
-				F59C585902C4565701000102,
 				F59C585A02C4565701000102,
 				F59C585B02C4565701000102,
 				F59C585C02C4565701000102,
@@ -376,8 +372,6 @@
 				F59C585E02C4565701000102,
 				F59C585F02C4565701000102,
 				F59C586002C4565701000102,
-				F59C586102C4565701000102,
-				F59C586202C4565701000102,
 				F59C586302C4565701000102,
 				F59C586402C4565701000102,
 				F59C586502C4565701000102,
@@ -4079,14 +4073,12 @@
 				F6E798CB02C8799401AD0D07,
 				F6E798CC02C8799401AD0D07,
 				F6E798CD02C8799401AD0D07,
-				F6E798CE02C8799401AD0D07,
 				F6E798CF02C8799401AD0D07,
 				F6E798D202C8799401AD0D07,
 				F59C576D02C4565601000102,
 				F59C577502C4565601000102,
 			);
 			isa = PBXGroup;
-			name = Sources;
 			path = Sources;
 			refType = 2;
 		};
@@ -4642,12 +4634,6 @@
 			path = Sources/er/extensions/ERXNavigation.java;
 			refType = 2;
 		};
-		F59C57C302C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXNextPageDelegate.java;
-			path = Sources/er/extensions/ERXNextPageDelegate.java;
-			refType = 2;
-		};
 		F59C57C402C4565701000102 = {
 			isa = PBXFileReference;
 			name = ERXNoHelpAvailableHelp.java;
@@ -4676,18 +4662,6 @@
 			isa = PBXFileReference;
 			name = ERXNumberFormatter.java;
 			path = Sources/er/extensions/ERXNumberFormatter.java;
-			refType = 2;
-		};
-		F59C57C902C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXObjectSaveDelegate.java;
-			path = Sources/er/extensions/ERXObjectSaveDelegate.java;
-			refType = 2;
-		};
-		F59C57CA02C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXObjectWasCreatedDelegate.java;
-			path = Sources/er/extensions/ERXObjectWasCreatedDelegate.java;
 			refType = 2;
 		};
 		F59C57CB02C4565701000102 = {
@@ -4730,18 +4704,6 @@
 			isa = PBXFileReference;
 			name = ERXQualifierInSubquery.java;
 			path = Sources/er/extensions/ERXQualifierInSubquery.java;
-			refType = 2;
-		};
-		F59C57D202C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXQualifierTraversal.java;
-			path = Sources/er/extensions/ERXQualifierTraversal.java;
-			refType = 2;
-		};
-		F59C57D302C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXQualifierTraversalCallback.java;
-			path = Sources/er/extensions/ERXQualifierTraversalCallback.java;
 			refType = 2;
 		};
 		F59C57D402C4565701000102 = {
@@ -5508,12 +5470,6 @@
 			settings = {
 			};
 		};
-		F59C585202C4565701000102 = {
-			fileRef = F59C57C302C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F59C585302C4565701000102 = {
 			fileRef = F59C57C402C4565701000102;
 			isa = PBXBuildFile;
@@ -5540,18 +5496,6 @@
 		};
 		F59C585702C4565701000102 = {
 			fileRef = F59C57C802C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C585802C4565701000102 = {
-			fileRef = F59C57C902C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C585902C4565701000102 = {
-			fileRef = F59C57CA02C4565701000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -5594,18 +5538,6 @@
 		};
 		F59C586002C4565701000102 = {
 			fileRef = F59C57D102C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C586102C4565701000102 = {
-			fileRef = F59C57D202C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C586202C4565701000102 = {
-			fileRef = F59C57D302C4565701000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6562,8 +6494,6 @@
 				F59C579502C4565701000102,
 				F59C57CF02C4565701000102,
 				F59C57D102C4565701000102,
-				F59C57D202C4565701000102,
-				F59C57D302C4565701000102,
 			);
 			isa = PBXGroup;
 			name = Qualifiers;
@@ -6594,16 +6524,6 @@
 			);
 			isa = PBXGroup;
 			name = "WOF Additions";
-			refType = 4;
-		};
-		F6E798CE02C8799401AD0D07 = {
-			children = (
-				F59C57C302C4565701000102,
-				F59C57C902C4565701000102,
-				F59C57CA02C4565701000102,
-			);
-			isa = PBXGroup;
-			name = "WOF Delegates";
 			refType = 4;
 		};
 		F6E798CF02C8799401AD0D07 = {
