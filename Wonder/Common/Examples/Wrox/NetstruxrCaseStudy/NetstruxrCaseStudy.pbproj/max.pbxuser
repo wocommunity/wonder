@@ -2,11 +2,16 @@
 {
 	6CA8E8680168DA0900A801D4 = {
 		activeBuildStyle = 6CA8E91C0168DA0900A801D4;
+		activeExecutable = 6CA8E91F0168DA1700A801D4;
 		activeTarget = 6CA8E8BB0168DA0900A801D4;
 		addToTargets = (
 			6CA8E8BD0168DA0900A801D4,
 		);
+		executables = (
+			6CA8E91F0168DA1700A801D4,
+		);
 		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 49590883;
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{951, 714}";
 				LeftSlideOut = {
@@ -90,34 +95,24 @@
 					TabCount = 5;
 				};
 			};
+			PBXWorkspaceStateSaveDate = 49590883;
+		};
+		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
-	6CA8E86B0168DA0900A801D4 = {
-		uiCtxt = {
-			sepNavWindowFrame = "{{100, 218}, {750, 502}}";
-		};
-	};
 	6CA8E8BB0168DA0900A801D4 = {
 		activeExec = 0;
-		customExecs = {
-		};
-		targetExecs = {
-			macosx = (
-				6CA8E91F0168DA1700A801D4,
-			);
-		};
+		executables = (
+			6CA8E91F0168DA1700A801D4,
+		);
 	};
 	6CA8E8BD0168DA0900A801D4 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 	6CA8E9000168DA0900A801D4 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 	6CA8E91F0168DA1700A801D4 = {
 		activeArgIndex = 2147483647;
@@ -129,6 +124,7 @@
 		environmentEntries = (
 		);
 		isa = PBXExecutable;
+		name = NetstruxrCaseStudy;
 		shlibInfoDictList = (
 		);
 		sourceDirectories = (
