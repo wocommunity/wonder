@@ -7,8 +7,8 @@ Conditional2: ERXNonNullConditional {
 	condition = message;
 }
 
-Conditional3: ERXNonNullConditional {
-	condition = d2wContext.explanationComponent;
+Conditional3: ERXNonZeroConditional { 
+	condition = d2wContext.explanationComponent.length;
 }
 
 Conditional4: WOConditional {
