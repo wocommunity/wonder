@@ -223,24 +223,26 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     public void updateEOsOrdering(){
-        //If the session uses javascript then we need to update the EOs according
-        //to what has been changed by the javascript in the WOBrowser
-        NSArray hiddenFieldValues = NSArray.componentsSeparatedByString(sortedObjects, ",");
-        if(log.isDebugEnabled()) log.debug("hiddenFieldValues = "+hiddenFieldValues);
-        if(hiddenFieldValues != null){
-            int i = 0;
-            for(Enumeration e = hiddenFieldValues.objectEnumerator(); e.hasMoreElements();){
-                String objectForHashCode = (String)e.nextElement();
-                if(log.isDebugEnabled()) log.debug("objectForHashCode = "+objectForHashCode);
-                EOEnterpriseObject eo = objectForHashCode(objectForHashCode);
-                if(eo!=null){
-                    eo.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
-                }else{
-                    log.error("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
+        if(isSortedRelationship()){
+            //If the session uses javascript then we need to update the EOs according
+            //to what has been changed by the javascript in the WOBrowser
+            NSArray hiddenFieldValues = NSArray.componentsSeparatedByString(sortedObjects, ",");
+            if(log.isDebugEnabled()) log.debug("hiddenFieldValues = "+hiddenFieldValues);
+            if(hiddenFieldValues != null){
+                int i = 0;
+                for(Enumeration e = hiddenFieldValues.objectEnumerator(); e.hasMoreElements();){
+                    String objectForHashCode = (String)e.nextElement();
+                    if(log.isDebugEnabled()) log.debug("objectForHashCode = "+objectForHashCode);
+                    EOEnterpriseObject eo = objectForHashCode(objectForHashCode);
+                    if(eo!=null){
+                        eo.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
+                    }else{
+                        log.error("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
+                    }
+                    i++;
                 }
-                i++;
-            }
-        }        
+            } 
+        }
     }
 
 
