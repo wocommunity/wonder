@@ -237,7 +237,7 @@ public class ERXTimestampUtilities extends Object {
     }
 
     /**
-        * Compares two timestamps.
+     * Compares two timestamps.
      * @param ts1 first timestamp
      * @param ts2 second timestamp
      * @return true if the the second timestamp is earlier than the
@@ -249,7 +249,7 @@ public class ERXTimestampUtilities extends Object {
     }
 
     /**
-        * Compares two timestamps.
+     * Compares two timestamps.
      * @param ts1 first timestamp
      * @param ts2 second timestamp
      * @return true if the the second timestamp is later than the
@@ -278,7 +278,7 @@ public class ERXTimestampUtilities extends Object {
     }
 
     /**
-        * Converts an offset from the epoch into a
+     * Converts an offset from the epoch into a
      * timestamp.
      * @param helpedNSNumber number offset from the epoch
      * @return timestamp representation of the offset from
@@ -289,7 +289,7 @@ public class ERXTimestampUtilities extends Object {
     }
 
     /**
-        * Converts a timestamp into the equivalent unix
+     * Converts a timestamp into the equivalent unix
      * offset from the epoch.
      * @param ts timestamp to be converted
      * @return timestamp represented as an integer offset

@@ -164,7 +164,7 @@ public class ERXBrowserFactory {
      * @param browserName string
      * @param version string
      * @param platform string
-     * @userInfo dictionary
+     * @param userInfo dictionary
      * @return a shared browser object
      */
     public synchronized ERXBrowser getBrowserInstance(String browserName, String version, String mozillaVersion, 
@@ -187,7 +187,7 @@ public class ERXBrowserFactory {
      * @param version string
      * @param mozillaVersion string
      * @param platform string
-     * @userInfo dictionary
+     * @param userInfo dictionary
      * @return new browser object that is a concrete subclass of <code>ERXBrowser</code>
      * @see	#setBrowserClassName
      * @see	#browserClassName
