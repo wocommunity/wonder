@@ -87,7 +87,15 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     }
 
     public boolean validationExceptionOccurredForPropertyKey() {
-        return d2wContext().propertyKey() != null ? keyPathsWithValidationExceptions().containsObject(d2wContext().propertyKey()) : false;
+        if (d2wContext().propertyKey() == null) {
+            return false;
+        } else {
+            String propertyKey = d2wContext().propertyKey();
+            boolean contains = keyPathsWithValidationExceptions().containsObject(propertyKey);
+            if (log.isDebugEnabled())
+            	log.debug("propertyKey="+propertyKey+", keyPathsWithValidationExceptions="+keyPathsWithValidationExceptions());
+            return contains;
+        }
     }
     
     public NSArray keyPathsWithValidationExceptions() {
