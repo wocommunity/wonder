@@ -14,14 +14,7 @@ public class ERMessage extends Object {
 
     private MimeMessage message;
     private Object anObject;
-    
-    public ERMessage() {};
-    
-    public ERMessage(MimeMessage mimeMessage, Object callbackObject ) {
-    	super();
-    	message = mimeMessage;
-    	anObject = callbackObject;
-    }
+
 
     public void setMimeMessage (MimeMessage m) {
         message = m;
