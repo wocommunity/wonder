@@ -265,9 +265,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     }
     
     public void setDataSource(EODataSource eodatasource) {
-        if (eodatasource.editingContext() != null) {
-            setEditingContext(eodatasource.editingContext());
-        }
+        super.setDataSource(eodatasource);
         NSArray sortOrderings=sortOrderings();
         displayGroup().setDataSource(eodatasource);
         setSortOrderingsOnDisplayGroup(sortOrderings, displayGroup());
@@ -438,32 +436,4 @@ public String pageTitle() {
         }
         return _referenceEOs;
     }
-
-    public EOEditingContext _context;
-    public void awake() {
-        super.awake();
-        if (_context!=null) {
-            _context.lock();
-        }
-    }
-
-    public void sleep() {
-        if (_context!=null) {
-            _context.unlock();
-        }
-        super.sleep();
-    }
-
-    public void setEditingContext(EOEditingContext newEditingContext) {
-        if (newEditingContext != _context) {
-            if (_context != null) {
-                _context.unlock();
-            }
-            _context = newEditingContext;
-            if (_context != null) {
-                _context.lock();
-            }
-        }
-    }
-
 }
