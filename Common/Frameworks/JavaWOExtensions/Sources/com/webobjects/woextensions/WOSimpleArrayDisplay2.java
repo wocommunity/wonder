@@ -9,8 +9,6 @@ package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
 
-import java.util.*;
-
 public class WOSimpleArrayDisplay2 extends WOSimpleArrayDisplay
 {
     // internal/private

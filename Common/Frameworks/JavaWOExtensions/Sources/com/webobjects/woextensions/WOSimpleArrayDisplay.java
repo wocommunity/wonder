@@ -9,9 +9,6 @@ package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-
-import java.util.*;
 
 public class WOSimpleArrayDisplay extends WOComponent
 {

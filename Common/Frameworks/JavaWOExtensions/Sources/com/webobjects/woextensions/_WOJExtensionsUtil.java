@@ -8,8 +8,8 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 public class _WOJExtensionsUtil extends Object {
 

@@ -15,8 +15,9 @@ package com.webobjects.woextensions;
  */
 import java.io.*;
 import java.util.*;
-import com.webobjects.foundation.*;
+
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 public class WOExceptionParser extends Object {
     protected NSMutableArray _stackTrace;

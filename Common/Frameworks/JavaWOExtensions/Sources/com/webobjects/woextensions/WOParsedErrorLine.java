@@ -20,7 +20,6 @@ package com.webobjects.woextensions;
  * ")" on a line is not present. This is why in the parsing stuff I try to get
  * the index of this closing parenthesis.
  */
-import com.webobjects.foundation.*;
 
 public class WOParsedErrorLine extends Object {
     protected String _packageName;

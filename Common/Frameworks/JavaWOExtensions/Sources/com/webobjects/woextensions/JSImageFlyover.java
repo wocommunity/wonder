@@ -8,8 +8,6 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import java.util.Random;
 
 public class JSImageFlyover extends JSComponent {
     public String uniqueID;
