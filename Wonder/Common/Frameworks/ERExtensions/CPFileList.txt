@@ -140,3 +140,4 @@
 ./Sources/er/testrunner/ERXTestRunner.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestInterface.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestResult.java:er.testrunner
+./Sources/ERXReplicableInterface.java:er.extensions
