@@ -85,7 +85,8 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 	htmlPart = new MimeBodyPart ();
 
 	// Set the content of the html part
-	htmlPart.setContent (this.htmlContent (), "text/html");
+	htmlPart.setContent (this.htmlContent (), "text/html; charset=\""  + charset () + "\"");
+
 	multipart.addBodyPart (htmlPart);
 
 	// Inline attachements
