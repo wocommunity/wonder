@@ -1,17 +1,17 @@
 // !$*UTF8*$!
 {
-	F5C402AF0201DA2F01A801D4 = {
-		activeBuildStyle = F5C403A30201DA2F01A801D4;
-		activeExecutable = F5C403A60201DCE401A801D4;
-		activeTarget = F5C4031A0201DA2F01A801D4;
+	013357CCFF5DD5F011CD2B9D = {
+		activeBuildStyle = 01A3BF6FFFB0C37D11CD2B9D;
+		activeExecutable = C6E4231E007BED7904000001;
+		activeTarget = 017C6100FFD43DA37F000001;
 		addToTargets = (
-			F5C4031C0201DA2F01A801D4,
+			017C60D6FFD2F2BB7F000001,
 		);
 		executables = (
-			F5C403A60201DCE401A801D4,
+			C6E4231E007BED7904000001,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 49589505;
+			PBXPerProjectTemplateStateSaveDate = 50045674;
 			PBXWorkspaceContents = (
 				{
 					LeftSlideOut = {
@@ -19,7 +19,7 @@
 							Split0 = {
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {485, 525}}";
+									Frame = "{{0, 0}, {572, 525}}";
 									NavBarVisible = YES;
 								};
 							};
@@ -61,9 +61,9 @@
 						Frame = "{{0, 23}, {856, 549}}";
 						Split0 = {
 							Collapsed = NO;
-							Frame = "{{371, 0}, {485, 549}}";
+							Frame = "{{284, 0}, {572, 549}}";
 							Split0 = {
-								Frame = "{{0, 24}, {485, 525}}";
+								Frame = "{{0, 24}, {572, 525}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -121,14 +121,12 @@
 						};
 						SplitCount = 1;
 						Tab0 = {
-							Frame = "{{0, 0}, {347, 549}}";
+							Frame = "{{0, 0}, {260, 549}}";
 							GroupTreeTableConfiguration = (
-								SCMStatusColumn,
-								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								292,
+								227,
 							);
 						};
 						Tab1 = {
@@ -200,45 +198,36 @@
 					WindowLocation = "{5, 112}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 49589505;
+			PBXWorkspaceStateSaveDate = 50045674;
 		};
 		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
-	F5C4031A0201DA2F01A801D4 = {
+	017C60B4FFD2F2BB7F000001 = {
+		activeExec = 0;
+	};
+	017C60D6FFD2F2BB7F000001 = {
+		activeExec = 0;
+	};
+	017C6100FFD43DA37F000001 = {
 		activeExec = 0;
 		executables = (
-			F5C403A60201DCE401A801D4,
+			C6E4231E007BED7904000001,
 		);
 	};
-	F5C4031C0201DA2F01A801D4 = {
-		activeExec = 0;
-	};
-	F5C403610201DA2F01A801D4 = {
-		activeExec = 0;
-	};
-	F5C4038F0201DA2F01A801D4 = {
-		activeExec = 0;
-	};
-	F5C403970201DA2F01A801D4 = {
-		activeExec = 0;
-	};
-	F5C4039D0201DA2F01A801D4 = {
-		activeExec = 0;
-	};
-	F5C403A60201DCE401A801D4 = {
+	C6E4231E007BED7904000001 = {
 		activeArgIndex = 2147483647;
 		argumentStrings = (
 		);
-		debuggerPlugin = GDBDebugging;
+		debuggerPlugin = JavaDebugging;
 		dylibVariantSuffix = "";
 		enableDebugStr = 1;
 		environmentEntries = (
 		);
 		isa = PBXExecutable;
-		name = D2WInspectExampleJava;
+		name = D2WInspectExample;
 		shlibInfoDictList = (
 		);
 		sourceDirectories = (
