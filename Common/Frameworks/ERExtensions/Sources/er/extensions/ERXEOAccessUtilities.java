@@ -16,6 +16,9 @@ import com.webobjects.eocontrol.*;
  */
 public class ERXEOAccessUtilities {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
+
     /**
      * Method used to determine if a given entity is a shared entity.
      * @param ec editing context
@@ -47,8 +50,7 @@ public class ERXEOAccessUtilities {
         String sqlString = "select "+sequenceName+".nextVal from dual";
         NSArray array = EOUtilities.rawRowsForSQL(ec, modelNamed, sqlString);
         if (array.count() == 0) {
-            throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName
-                                       + " in model: " + modelNamed);            
+            throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName + " in model: " + modelNamed);            
         }
         NSDictionary dictionary = (NSDictionary)array.objectAtIndex(0);
         NSArray valuesArray = dictionary.allValues();
@@ -350,5 +352,47 @@ public class ERXEOAccessUtilities {
         optionsCreate.setObjectForKey("NO", "CreateDatabaseKey");
         optionsCreate.setObjectForKey("NO", "DropDatabaseKey");
         return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    }
+
+    /**
+    * Tries to recover from a {@see EOGeneralAdaptorException}. 
+    *
+    * @param exception the exception as recieved from saveChanges()
+    * @param editingContext editing context that created the error
+    * @return true if the error could be handled.
+    */
+    public static boolean recoverFromAdaptorException(EOEditingContext editingContext, EOGeneralAdaptorException exception) {
+        boolean wasHandled = false;
+        NSDictionary userInfo = (NSDictionary)exception.userInfo();
+        if(userInfo != null) {
+            String failureKey = (String)userInfo.objectForKey("EOAdaptorFailureKey");
+            if ("EOAdaptorOptimisticLockingFailure".equals(failureKey)) {
+                EOAdaptorOperation adaptorOperation = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
+                EODatabaseOperation databaseOperation = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
+                if (adaptorOperation != null && databaseOperation != null) {
+                    NSDictionary changedValues = adaptorOperation.changedValues();
+                    NSDictionary snapshot = databaseOperation.dbSnapshot();
+                    
+                    if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
+
+                    EOEntity entity = adaptorOperation.entity();
+                    String entityName = entity.name();
+                    
+                    if (log.isDebugEnabled()) log.debug("entityName: "+ entityName);
+
+                    NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+                    EOQualifier qualifier = ERXTolerantSaver.qualifierWithSnapshotAndPks(primaryKeyAttributes, snapshot);
+                    EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
+                    fs.setRefreshesRefetchedObjects(true);
+
+                    NSArray objects = editingContext.objectsWithFetchSpecification(fs);
+                    editingContext.revert();
+                    wasHandled = true;
+                } else {
+                    log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey in " + exception + ": "+exception.userInfo());
+                }
+            }
+        }
+        return wasHandled;
     }
 }
