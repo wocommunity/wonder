@@ -8,7 +8,7 @@
             class = EOKeyValueQualifier; 
             key = key; 
             selectorName = "isEqualTo:"; 
-            value = {_key = key; class = EOQualifierVariable; }; 
+            value = {"_key" = key; class = EOQualifierVariable; }; 
         }; 
         requiresAllQualifierBindingVariables = YES; 
     }; 
@@ -24,13 +24,13 @@
                     class = EOKeyValueQualifier; 
                     key = userID; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = id; class = EOQualifierVariable; }; 
+                    value = {"_key" = id; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = key; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = key; class = EOQualifierVariable; }; 
+                    value = {"_key" = key; class = EOQualifierVariable; }; 
                 }
             ); 
         }; 
