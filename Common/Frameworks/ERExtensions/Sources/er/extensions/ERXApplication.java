@@ -64,7 +64,8 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         
         // use our localizing string class
         if(ERXLocalizer.isLocalizationEnabled()) {
-        	ERXPatcher.setClassForName(ERXWOString.class, "WOString");
+            ERXPatcher.setClassForName(ERXWOString.class, "WOString");
+            ERXPatcher.setClassForName(ERXWOTextField.class, "WOTextField");
         }
         
         //ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
