@@ -15,6 +15,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
+
 public class ERD2WFactory extends D2W {
 
 
@@ -51,43 +52,39 @@ public class ERD2WFactory extends D2W {
         if (entity.isAbstractEntity()) {
             throw new IllegalArgumentException(" You can't create a new instance of " + entityName + ". It is an abstract entity");
         }
-        ec.lock();
         EOEnterpriseObject eo;
         try {
-            EOClassDescription cd = entity.classDescriptionForInstances();
-            eo = (cd.createInstanceWithEditingContext(ec, null));
-            ec.insertObject(eo);
+	    ec.lock();
+            eo = ERXUtilities.createEO(entityName, ec);
         } finally {
             ec.unlock();
         }
         return eo;
     }
-    public EditPageInterface editPageForNewObjectWithEntityNamed(String string, WOSession wosession) {
-            EditPageInterface editpageinterface = editPageForEntityNamed(string, wosession);
-            EOEditingContext eoeditingcontext
-                = ERXExtensions.newEditingContext(wosession.defaultEditingContext()
-                                       .parentObjectStore());
-            EOEnterpriseObject eoenterpriseobject
-                = _newObjectWithEntityNamed(string, eoeditingcontext);
-            editpageinterface.setObject(eoenterpriseobject);
-            eoeditingcontext.hasChanges();
-            return editpageinterface;
-        }
-    public EditPageInterface editPageForNewObjectWithConfigurationNamed
-        (String string, WOSession wosession) {
-            EditPageInterface editpageinterface
-            = (EditPageInterface) pageForConfigurationNamed(string, wosession);
-            EOEditingContext eoeditingcontext
-                = ERXExtensions.newEditingContext(wosession.defaultEditingContext()
-                                       .parentObjectStore());
-            D2WContext d2wcontext = ((D2WPage) editpageinterface).d2wContext();
-            String entityName = d2wcontext.entity().name();
-            EOEnterpriseObject eoenterpriseobject
-                = _newObjectWithEntityNamed(entityName,                                            eoeditingcontext);
-            editpageinterface.setObject(eoenterpriseobject);
-            eoeditingcontext.hasChanges();
-            return editpageinterface;
-        }
+
+
+    public EditPageInterface editPageForNewObjectWithEntityNamed(String entityName, WOSession session) {
+        EditPageInterface epi = editPageForEntityNamed(entityName, session);
+        EOEditingContext peerContext = ERXExtensions.newEditingContext(session.defaultEditingContext()
+								       .parentObjectStore());
+	EOEnterpriseObject newObject = _newObjectWithEntityNamed(entityName, peerContext);
+	epi.setObject(newObject);
+	peerContext.hasChanges();
+	return epi;
+    }
+
+    public EditPageInterface editPageForNewObjectWithConfigurationNamed(String configurationName, WOSession session) {
+	EditPageInterface epi = (EditPageInterface) pageForConfigurationNamed(configurationName, session);
+	EOEditingContext peerContext = ERXExtensions.newEditingContext(session.defaultEditingContext()
+								       .parentObjectStore());
+	D2WContext d2wcontext = ((D2WPage)epi).d2wContext();
+	String entityName = d2wcontext.entity().name();
+	EOEnterpriseObject newObject = _newObjectWithEntityNamed(entityName, peerContext);
+	epi.setObject(newObject);
+	peerContext.hasChanges();
+	return epi;
+    }
+
     public WOComponent pageForTaskAndEntityNamed(String task, String entityName, WOSession session) {
         myCheckRules();
         D2WContext newContext=new D2WContext(session);
@@ -103,5 +100,8 @@ public class ERD2WFactory extends D2W {
         }
         return newPage;
     }    
+
+    
+
 }
 
