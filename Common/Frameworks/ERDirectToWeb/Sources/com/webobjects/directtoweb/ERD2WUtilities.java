@@ -20,7 +20,7 @@ public class ERD2WUtilities {
         if (context != null)
             context._localValues.clear();
     }
-
+    /*
     public static String displayNameForKey(String key) {
         StringBuffer finalString = new StringBuffer();
         if (key != null) {
@@ -46,7 +46,7 @@ public class ERD2WUtilities {
             finalString.append(nextChar);
         }
         return finalString.toString();
-    }
+    }*/
 
     // This will return the value of value() of the assignment. Useful if say you
     // want to know what the string or dictionary of the Assignment is, not what

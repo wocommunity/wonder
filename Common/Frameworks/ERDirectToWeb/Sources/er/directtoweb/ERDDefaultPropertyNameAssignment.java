@@ -60,7 +60,7 @@ public class ERDDefaultPropertyNameAssignment extends ERDAssignment implements E
 
     // Default names
     public Object displayNameForProperty(D2WContext c) {
-        String value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("propertyKey"));
+        String value = ERXStringUtilities.displayNameForKey((String)c.valueForKey("propertyKey"));
         return localizedValueForKeyWithDefaultInContext(value, c);
     }
 }
