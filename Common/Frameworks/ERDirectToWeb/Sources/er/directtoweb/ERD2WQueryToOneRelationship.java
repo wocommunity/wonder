@@ -8,8 +8,12 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WQueryToOneRelationship;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import er.extensions.*;
 
 public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
+    static final ERXLogger log = ERXLogger.getLogger(ERD2WQueryToOneRelationship.class);
 
     public ERD2WQueryToOneRelationship(WOContext context) {
         super(context);
@@ -17,6 +21,15 @@ public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
 
     public Object restrictedChoiceList() {
         String restrictedChoiceKey=(String)d2wContext().valueForKey("restrictedChoiceKey");
-        return restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 ?  valueForKeyPath(restrictedChoiceKey) : null;
+        if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 )
+            return valueForKeyPath(restrictedChoiceKey);
+        String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
+        if(fetchSpecName != null) {
+            EOEditingContext ec = ERXExtensions.newEditingContext();
+            EOEntity entity = d2wContext().entity();
+            EORelationship relationship = entity.relationshipNamed((String)d2wContext().valueForKey("propertyKey"));
+            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, relationship.destinationEntity().name(),fetchSpecName,null);
+        }
+        return null;
     }
 }
