@@ -21,6 +21,15 @@ AttributeValue2: WOSwitchComponent {
 }
 
 Border: ERXTableWithBorder {
+	bgcolor = d2wContext.backgroundColorForTable;
+	renderBorder = d2wContext.renderBorder;
+	border = d2wContext.border;
+	color = "#ee00ee";
+}
+
+Conditional1: WOConditional {
+	condition = isEmbedded;
+	negate = false;
 }
 
 Conditional4: WOConditional {
