@@ -63,7 +63,7 @@ public class ERXTabPanel extends WOTabPanel  {
 	    result = parent() != null ? parent().valueForKey(submitActionName()) : null;
         }
 
-        if (result==null || ERXUtilities.booleanValue(result)) {
+        if (result==null || ERXValueUtilities.booleanValue(result)) {
             switchTab();
         }
 
@@ -120,8 +120,8 @@ public class ERXTabPanel extends WOTabPanel  {
 
     public boolean useLinkForTabSwitch() {
         if (_useLinkForTabSwitch == null) {
-            _useLinkForTabSwitch = ERXUtilities.booleanValue(session().valueForKeyPath("browser.isIE")) &&
-            ERXUtilities.booleanValue(session().valueForKey("javaScriptEnabled")) ? Boolean.TRUE : Boolean.FALSE;
+            _useLinkForTabSwitch = ERXValueUtilities.booleanValue(session().valueForKeyPath("browser.isIE")) &&
+            ERXValueUtilities.booleanValue(session().valueForKey("javaScriptEnabled")) ? Boolean.TRUE : Boolean.FALSE;
         }
         return _useLinkForTabSwitch.booleanValue();
     }

@@ -29,7 +29,7 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WPickTypePageTemplate");
 
-    public boolean selectionManditory() { return ERXUtilities.booleanValue(d2wContext().valueForKey("selectionManditory")); }
+    public boolean selectionManditory() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("selectionManditory")); }
 
     protected NSMutableArray selections = new NSMutableArray();
     protected Object item;

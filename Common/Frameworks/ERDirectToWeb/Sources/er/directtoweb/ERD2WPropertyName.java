@@ -11,9 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXConstant;
-import er.extensions.ERXLogger;
+import er.extensions.*;
 
 /**
  * Used for displaying the propertyName in a template.<br />
@@ -70,7 +68,7 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
         // avoiding attribute() and relationship() because of lame-ass caching scheme on D2WContext
         String task = (String)d2wContext().valueForKey("task");
         if (task==null || task.equals("edit")) {
-            if (!ERXUtilities.booleanValue(d2wContext().valueForKey("isMandatory"))) {
+            if (!ERXValueUtilities.booleanValue(d2wContext().valueForKey("isMandatory"))) {
                 EOAttribute a=(EOAttribute)d2wContext().valueForKey("smartAttribute");
                 if (a!=null)
                     displayRequiredMarker = !a.allowsNull();
