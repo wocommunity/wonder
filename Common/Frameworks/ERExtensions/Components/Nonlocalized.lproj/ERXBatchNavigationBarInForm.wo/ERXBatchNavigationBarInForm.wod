@@ -25,6 +25,13 @@ EntityNameConditional: WOConditional {
     condition=hasObjectName;
 }
 
+Image1: WOImage {
+	filename = "s.gif";
+	framework = "ERExtensions";
+	height = 1;
+	width = 500;
+}
+
 ItemsPerBatch: WOTextField {
     value = numberOfObjectsPerBatch;
     numberformat = "0";
