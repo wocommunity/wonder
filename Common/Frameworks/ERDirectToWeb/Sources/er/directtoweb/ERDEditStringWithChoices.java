@@ -96,7 +96,11 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
                 if(keyValue.key().equals(chosenKey))
                    selectedElement = keyValue;
             }
-            if(log.isDebugEnabled()) log.debug("selectedElement = "+selectedElement.key()+" , "+selectedElement.value());
+            if(log.isDebugEnabled()) {
+                if(selectedElement != null) {
+                    log.debug("selectedElement = "+selectedElement.key()+" , "+selectedElement.value());
+                }
+            }
         }
         super.appendToResponse(r,c);
     }

@@ -261,12 +261,12 @@ public class ERXCompilerProxy {
 
             if(bundle != null) {
                 path = bundle.projectPath();
+                if(path == null || path.equals("")){
+                    // Assuming that bundle path is $PROJECT_DIR/build/foo.framework
+                    path = new File(bundle.bundlePath()).getParentFile().getParentFile().getAbsolutePath();
+                }
             } else {
                 path = projectInSearchPath(name);
-            }
-            if(path == null || path.equals("")){
-                // Assuming that bundle path is $PROJECT_DIR/build/foo.framework
-                path = new File(bundle.bundlePath()).getParentFile().getParentFile().getAbsolutePath();
             }
             if(path != null) {
                 File f = new File(pathForCPFileList(path));
