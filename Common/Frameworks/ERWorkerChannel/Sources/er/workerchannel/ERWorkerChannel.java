@@ -8,17 +8,17 @@ package er.workerchannel;
 
 import er.extensions.ERXLogger;
 
-public abstract class ERWorkerChannel {
+public interface ERWorkerChannel {
 
-    public abstract void startWorkers();
-    public abstract void shutdownWorkers();
-    public abstract void suspendWorkers();
-    public abstract void resumeWorkers();
-    public abstract void cancelScheduledWorkUnits();
+    public void startWorkers();
+    public void shutdownWorkers();
+    public void suspendWorkers();
+    public void resumeWorkers();
+    public void cancelScheduledWorkUnits();
     
-    public abstract ERResultUnit scheduleWorkUnit(ERWorkUnit workUnit);
-    public abstract ERWorkUnit dispatchWorkUnit();
+    public ERResultUnit scheduleWorkUnit(ERWorkUnit workUnit);
+    public ERWorkUnit dispatchWorkUnit();
     
-    public abstract int currentQueueSize();
+    public int currentQueueSize();
 
 }
