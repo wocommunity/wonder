@@ -54,7 +54,7 @@ public class Application extends ERXApplication {
         return super.handleException(exception, context);
     }
 
-    public void reportException(Throwable exception, NSDictionary extraInfo) {
+    public WOResponse reportException(Throwable exception, NSDictionary extraInfo) {
         try {
              NSLog.out.appendln("    **** Caught: "+exception);
              //NSLog.out.appendln("         Actor: "+User.actor());
@@ -70,5 +70,6 @@ public class Application extends ERXApplication {
              NSLog.out.appendln("** Second exception ");
             u.printStackTrace();
         }
+        return null;
     }
 }
