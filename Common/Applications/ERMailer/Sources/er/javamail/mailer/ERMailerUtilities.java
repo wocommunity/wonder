@@ -44,10 +44,10 @@ public class ERMailerUtilities {
                 mail.setBCCAddresses(message.bccAddressesAsArray());
 
             // Set the xMailer if one is specified
+			// Note (tuscland): setXMailerHeader has a higher precedence over
+			// System property er.javamail.XMailerHeader
             if (message.xMailer() != null)
                 mail.setXMailerHeader(message.xMailer());
-            else if (ERMailer.instance().defaultXMailerHeader() != null)
-                mail.setXMailerHeader(ERMailer.instance().defaultXMailerHeader());
             
             // Set the content
             mail.setSubject(message.title());
