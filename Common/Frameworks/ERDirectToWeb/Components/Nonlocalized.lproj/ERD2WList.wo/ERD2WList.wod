@@ -1,6 +1,7 @@
+
 Conditional1: WOConditional {
 	condition = isTargetXML;
-	negate = YES;
+	negate = true;
 }
 
 Conditional2: WOConditional {
@@ -15,41 +16,37 @@ GenericContainer1: WOGenericContainer {
 }
 
 List1: ERXD2WList { 	
-	pageConfiguration = ^listPageConfiguration;
-	entityName = entityName;
+	pageConfiguration = ^embeddedPageConfiguration;
+	entityName = ^embeddedEntityName;
 	list = list;
+	displayKeys = ^embeddedDisplayPropertyKeys;
 }
 
-List2: ERXD2WList { 	
-	pageConfiguration = ^listPageConfiguration;
-	entityName = entityName;
-	list = list;
-}
-
-NoEmptyListMessage: NonNullConditional {
+NoEmptyListMessage: ERXNonNullConditional {
 	condition = ^emptyListMessage;
-	negate = YES;
+	negate = true;
 }
 
-NonNullConditional1: NonNullConditional {
+NonNullConditional1: ERXNonNullConditional {
 	condition = ^emptyListMessage;
 }
 
-NonNullConditional2: NonNullConditional {
+NonNullConditional2: ERXNonNullConditional {
 	condition = ^emptyListComponentName;
 }
 
-NonZeroConditional1: NonZeroConditional {
+NonZeroConditional1: ERXNonZeroConditional {
 	condition = list.count;
 }
 
-NonZeroConditional2: NonZeroConditional {
+NonZeroConditional2: ERXNonZeroConditional {
 	condition = list.count;
-	negate = YES;
+	negate = true;
 }
 
 String1: WOString {
 	value = ^emptyListMessage;
+	escapeHTML = false;
 }
 
 SwitchComponent2: WOSwitchComponent {
