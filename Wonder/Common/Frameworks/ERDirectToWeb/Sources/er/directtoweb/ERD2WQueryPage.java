@@ -27,7 +27,7 @@ public class ERD2WQueryPage extends D2WQueryPage {
     public String branchName() { return (String)branch.valueForKey("branchName"); }
 
     public WOComponent queryAction() {
-        String listConfigurationName=(String)d2wContext().valueForKey("listPageConfiguration");
+        String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
         if(listConfigurationName!=null){
             ListPageInterface listpageinterface = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, this.session());
             listpageinterface.setDataSource(queryDataSource());
