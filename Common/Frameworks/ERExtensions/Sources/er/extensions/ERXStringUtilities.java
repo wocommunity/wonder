@@ -11,7 +11,29 @@ import com.webobjects.eocontrol.*;
 import java.io.*;
 
 public class ERXStringUtilities extends Object {
-   public static String stringWithContentsOfFile(String path) {
+    private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
+    private static NSArray _defaultTargetDisplayLanguages = new NSArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
+
+    public static String localizedStringForKey(String key) {
+        return localizedStringForKey(key, null, null);
+    }
+
+    public static String localizedStringForKey(String key, String framework) {
+        return localizedStringForKey(key, framework, null);
+    }
+
+    public static String localizedStringForKey(String key, String framework, NSArray languages) {
+        languages = languages != null && languages.count() > 0 ? languages : _defaultTargetDisplayLanguages;
+        String result = WOApplication.application().resourceManager().stringForKey( key, "Localizable", key, framework, languages);
+        return result;
+    }
+
+    public static String localizedTemplateStringWithObjectForKey(Object o, String key, String framework, NSArray languages) {
+        String template = localizedStringForKey(key, framework, languages);
+        return ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(template, null, o);
+    }
+
+    public static String stringWithContentsOfFile(String path) {
         try {
             InputStream in = new FileInputStream(path);
             
