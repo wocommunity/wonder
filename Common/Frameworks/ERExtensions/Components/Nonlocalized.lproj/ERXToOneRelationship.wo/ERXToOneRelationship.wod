@@ -27,6 +27,7 @@ PopupList: WOPopUpButton {
 	selection = selection;
         name=^popupName;
 	onChange = ^onChange;
+	escapeHTML = false;
 }
 
 RadioButtonMatrix: ERXRadioButtonMatrix {
