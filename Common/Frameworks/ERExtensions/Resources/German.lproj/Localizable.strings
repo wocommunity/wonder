@@ -1,5 +1,5 @@
 {
-    WOToOneRelationship.noneString = "- keine Auswahl -";
+    ERXArrayChooser.noneString = "- keine Auswahl -";
     "Could not save your changes: " = "Konnte nicht speichern: ";
     ERXCheckboxMatrix.deselectAll = "Keine";
     ERXCheckboxMatrix.selectAll = "Alle";
