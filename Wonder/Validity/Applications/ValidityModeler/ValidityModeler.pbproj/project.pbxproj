@@ -99,6 +99,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/ComputeTargetClasspath.sh\" \"NO\" \"${SERVER_UNIQUIFIER}\"";
 		};
@@ -122,7 +123,7 @@
 			);
 			buildSettings = {
 				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Users/Shared/Projects/WOBox/102a1/WOBox/build /Users/Shared/_WORK_AREA_/Validity/100b1_001/Validity/build /Users/admin/WORK_AREA/100b1_003/Validity/build";
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Users/Shared/Projects/WOBox/102a1/WOBox/build /Users/Shared/_WORK_AREA_/Validity/100b1_001/Validity/build /Users/admin/WORK_AREA/100b1_003/Validity/build /Users/tatsuyak/Roots";
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
@@ -142,8 +143,8 @@
 			productName = "Server App";
 			productReference = 017C60B1FFD2F2BB7F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -200,6 +201,7 @@
 				F558FC0F02F3CD4A01000103,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60C6FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -220,12 +222,14 @@
 				F558FC0D02F3CD3C01000103,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60D3FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXJavaArchiveBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60D4FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -237,9 +241,10 @@
 				085A02CE00150D1D11CD2B8D,
 				085A02CF00150D1D11CD2B8D,
 				022D13070059B68211CD2978,
-				F5DAF64401722CD901000001,
+				F6B14CB2033E440101257492,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60D6FFD2F2BB7F000001 = {
 			buildPhases = (
@@ -272,8 +277,8 @@
 			productName = "Client App";
 			productReference = 017C60B2FFD2F2BB7F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -307,6 +312,7 @@
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60D8FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -335,14 +341,17 @@
 				F558FC4002F3CD9601000103,
 				F558FC4102F3CD9601000103,
 				F558FC4302F3CDAF01000103,
+				F692CC57033E3E3401257492,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60EBFFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXJavaArchiveBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60ECFFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -356,6 +365,7 @@
 				022D13080059B68211CD2978,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60FFFFD43DA37F000001 = {
 			isa = PBXApplicationReference;
@@ -413,8 +423,8 @@
 			productName = NewWrapper;
 			productReference = 017C60FFFFD43DA37F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -470,24 +480,28 @@
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C6104FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C6105FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXJavaArchiveBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C6106FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C6107FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
@@ -498,6 +512,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleApplication.sh\"";
 		};
@@ -510,6 +525,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Create the run scripts and classpath files for all platforms\n. \"${BUILD_FILES_DIR}/CreateRunFiles.sh\"";
 		};
@@ -546,6 +562,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
@@ -678,7 +695,7 @@
 				096CB474FF7BFD6311CD2B9D,
 				096CB475FF7BFD6311CD2B9D,
 				022D13060059B68211CD2978,
-				F5DAF64301722CD901000001,
+				F6B14CB0033E440101257492,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -779,6 +796,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\nif [ \"${BUILD_CLIENT_LAUNCH_SCRIPT}\" = \"YES\" ]; then\n    . \"${BUILD_FILES_DIR}/ComputeTargetClasspath.sh\" \"YES\" \"${CLIENT_UNIQUIFIER}\"\nfi";
 		};
@@ -1201,6 +1219,7 @@
 				F558FC1502F3CD9601000103,
 				F558FC1A02F3CD9601000103,
 				F558FC2302F3CD9601000103,
+				F692CC56033E3E3401257492,
 				F558FC2402F3CD9601000103,
 				F558FC2502F3CD9601000103,
 				F558FC2602F3CD9601000103,
@@ -1533,17 +1552,6 @@
 			path = "";
 			refType = 4;
 		};
-		F5DAF64301722CD901000001 = {
-			isa = PBXFrameworkReference;
-			path = Validity.framework;
-			refType = 3;
-		};
-		F5DAF64401722CD901000001 = {
-			fileRef = F5DAF64301722CD901000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5FBE80400C87A2E01000001 = {
 			children = (
 				F558FBD402F3CCBA01000103,
@@ -1586,6 +1594,38 @@
 			isa = PBXGroup;
 			name = Modeler;
 			refType = 4;
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F60
+//F61
+//F62
+//F63
+//F64
+		F692CC56033E3E3401257492 = {
+			isa = PBXFileReference;
+			path = exception_icon.gif;
+			refType = 4;
+		};
+		F692CC57033E3E3401257492 = {
+			fileRef = F692CC56033E3E3401257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6B14CB0033E440101257492 = {
+			isa = PBXFrameworkReference;
+			path = Validity.framework;
+			refType = 3;
+		};
+		F6B14CB2033E440101257492 = {
+			fileRef = F6B14CB0033E440101257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = 013357CCFF5DD5F011CD2B9D;
