@@ -9,7 +9,10 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import java.math.BigDecimal;
 
-// Nice holder for base constaints.
+/**
+ * Collection of base constants. Note that upon class initialization
+ * 2500 Integers will be created and cached, from 0 - 2499.
+ */
 public class ERXConstant {
 
     public static final int MAX_INT=2500;
