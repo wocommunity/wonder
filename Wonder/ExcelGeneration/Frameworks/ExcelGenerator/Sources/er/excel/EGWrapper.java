@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.io.UnsupportedEncodingException;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
@@ -77,7 +79,14 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
 			super.appendToResponse(newResponse, context);
 			
 			String contentString = newResponse.contentString();
-			InputStream stream = new ByteArrayInputStream(contentString.getBytes());
+			byte[] bytes;
+            try {
+                bytes = contentString.getBytes("UTF-8");
+            } catch (UnsupportedEncodingException e) {
+               throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
+            }
+            InputStream stream = new ByteArrayInputStream(bytes);
+
 			EGSimpleTableParser parser = new EGSimpleTableParser(stream, fonts(), styles());
 			NSData data = parser.data();
 			if((hasBinding("data") && canSetValueForBinding("data")) ||
