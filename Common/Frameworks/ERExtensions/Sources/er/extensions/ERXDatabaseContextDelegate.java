@@ -14,7 +14,8 @@ import java.util.Enumeration;
 
 /**
  * This delegate implements several methods from the formal interface
- * {@link EODatabaseContext$Delegate}. Of special note this class adds the ability
+ * {@link com.webobjects.eoaccess.EODatabaseContext.Delegate EODatabaseContext.Delegate}. 
+ * Of special note this class adds the ability
  * for enterpiseobjects to generate their own primary keys, correctly throws an
  * exception when a toOne relationship object is not found in the database and adds
  * debugging abilities to tracking down when faults are fired.
@@ -91,7 +92,7 @@ public class ERXDatabaseContextDelegate {
      * the database. The object that is returned is a cleared fault.
      * We raise here to restore the functionality that existed prior to WebObjects 4.5.
      * Whenever a fault fails for a globalID (i.e. the object is NOT found in the database), we raise
-     * an {@link EOObjectNotAvailableException}.
+     * an {@link com.webobjects.eoaccess.EOObjectNotAvailableException EOObjectNotAvailableException}.
      * @param context database context
      * @param object object that is firing the fault for a given to-one relationship
      * @param gid global id that wasn't found in the database.

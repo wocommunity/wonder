@@ -39,7 +39,8 @@ public class ERXDirectAction extends WODirectAction {
      * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXJUnitPassword</code>.
      * <b>case</b> class name for unit test to be performed.<br/>
      * <br/>
-     * @return {@link ERXWOTestInterface} with the results after performing the given test.
+     * @return {@link er.testrunner.ERXWOTestInterface ERXWOTestInterface} 
+     * with the results after performing the given test.
      */
     public WOComponent testAction() {
         WOComponent result=null;
