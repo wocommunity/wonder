@@ -2,6 +2,14 @@
     attributes = (
         {
             columnName = ""; 
+            externalType = DOUBLE; 
+            name = amount; 
+            userInfo = {modificationDate = "2002-07-21 21:47:27 +0200"; }; 
+            valueClassName = NSNumber; 
+            valueType = d; 
+        }, 
+        {
+            columnName = ""; 
             externalType = CHAR; 
             name = charFlag; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
@@ -24,7 +32,6 @@
             valueClassName = NSCalendarDate; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = LONG; 
             name = doubleNumber; 
@@ -33,7 +40,6 @@
             valueType = d; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = NUMBER; 
             name = flag; 
@@ -51,7 +57,6 @@
             valueType = i; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = NUMBER; 
             name = intNumber; 
@@ -75,13 +80,21 @@
             width = 4; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = VARCHAR2; 
             name = shortString; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSString; 
             width = 50; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = CHAR; 
+            name = type; 
+            userInfo = {modificationDate = "2002-07-21 21:47:33 +0200"; }; 
+            valueClassName = NSString; 
+            valueType = c; 
+            width = 4; 
         }, 
         {
             columnName = ""; 
@@ -151,7 +164,9 @@
         varchar16, 
         varchar10, 
         charFlag, 
-        varcharLarge
+        varcharLarge, 
+        amount, 
+        type
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -170,7 +185,9 @@
         varchar10, 
         dateTime, 
         charFlag, 
-        varcharLarge
+        varcharLarge, 
+        amount, 
+        type
     ); 
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 
