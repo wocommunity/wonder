@@ -7,6 +7,7 @@
 package er.extensions;
 
 import java.lang.reflect.*;
+import java.net.URL;
 import java.text.*;
 import java.util.*;
 
@@ -400,13 +401,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             while(fr.hasMoreElements()) {
                 String framework = (String)fr.nextElement();
                 
-                String path = ERXFileUtilities.pathForResourceNamed(fileName, framework, languages);
+                URL path = ERXFileUtilities.pathURLForResourceNamed(fileName, framework, languages);
                 if(path != null) {
                     try {
                         framework = "app".equals(framework) ? null : framework;
                         log.debug("Loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
-                            + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
+                            + languages + path);
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                        // HACK: ak we have could have a collision between the search path for validation strings and
                        // the normal localized strings.
@@ -423,7 +424,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                             ERXFileNotificationCenter.defaultCenter().addObserver(observer,
                                                                                   new NSSelector("fileDidChange",
                                                                                                  ERXConstant.NotificationClassArray),
-                                                                                  path);
+                                                                                  path.getFile());
                             monitoredFiles.addObject(path);
                         }
                     } catch(Exception ex) {
