@@ -29,6 +29,7 @@
 ERExtensionsJava	ProjectWonder/Frameworks/ERExtensionsJava
 ERDirectToWebJava	ProjectWonder/Frameworks/ERDirectToWebJava
 ERJarsJava		ProjectWonder/Frameworks/ERJarsJava
+ERCoreBusinessLogicJava ProjectWonder/Frameworks/ERCoreBusinessLogicJava
 
 BTBusinessLogicJava	ProjectWonder/Frameworks/BTBusinessLogicJava
 BugTrackerJava		ProjectWonder/Applications/BugTrackerJava
