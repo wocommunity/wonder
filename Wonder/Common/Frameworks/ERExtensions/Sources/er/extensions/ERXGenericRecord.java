@@ -15,40 +15,49 @@ import java.lang.*;
 import java.util.*;
 import org.apache.log4j.Category;
 
+/**
+ * This class contains a bunch of extensions to the
+ * regular {@link EOGenericRecord} class. Of notable
+ * interest it contains built in support for generating
+ * primary keys via the {@link ERXGeneratesPrimaryKeyInterface},
+ * support for an augmented transaction methods like <code>
+ * willUpdate</code> and <code>didDelete</code> and a bunch
+ * of handy utility methods like <code>committedSnapshotValueForKey
+ * </code>. At the moment it is required that those wishing to take
+ * advantage of templatized and localized validation exceptions
+ * need to subclass this class. Hopefully in the future we can
+ * get rid of this requirement.
+ */
 public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface {
 
-    ///////////////////////////  log4j category  ///////////////////////////
-    // Did* Transaction categories
+    /** logging support. Called after an object is successfully inserted */
     public static final Category tranCatDidInsert = Category.getInstance("er.transaction.eo.did.insert.ERXGenericRecord");
+    /** logging support. Called after an object is successfully deleted */
     public static final Category tranCatDidDelete = Category.getInstance("er.transaction.eo.did.delete.ERXGenericRecord");
+    /** logging support. Called after an object is successfully updated */
     public static final Category tranCatDidUpdate = Category.getInstance("er.transaction.eo.did.update.ERXGenericRecord");
-    // Will* Transaction categories
+    /** logging support. Called before an object is inserted */
     public static final Category tranCatWillInsert = Category.getInstance("er.transaction.eo.will.insert.ERXGenericRecord");
+    /** logging support. Called before an object is deleted */
     public static final Category tranCatWillDelete = Category.getInstance("er.transaction.eo.will.delete.ERXGenericRecord");
+    /** logging support. Called before an object is updated */
     public static final Category tranCatWillUpdate = Category.getInstance("er.transaction.eo.will.update.ERXGenericRecord");
-
-    public static final Category fix = Category.getInstance("er.extensions.fixes.ERXGenericRecord");
-
+    /** logging support for validation information */
     public static final Category validation = Category.getInstance("er.eo.validation.ERXGenericRecord");
+    /** logging support for validation exceptions */
     public static final Category validationException = Category.getInstance("er.eo.validationException.ERXGenericRecord");
-
+    /** general logging support */
     public static final Category cat = Category.getInstance("er.eo.ERXGenericRecord");
-    public static final Category cloneCat =  Category.getInstance("er.eo.clone.ERXGenericRecord");
-    public static final Category willChangeCat = Category.getInstance("er.eo.willChange.ERXGenericRecord");
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
     public final static String KEY_MARKER="** KEY_MARKER **";
 
+    /**
+     * Clazz object implementation for ERXGenericRecord. See
+     * {@link EOGenericRecordClazz} for more information on this
+     * neat design pattern.
+     */
     public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
-    }
-
-    // DELETEME: Should remove once all dependency has been removed.
-    public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
-        // Not needed anymore, they fixed the bug!
-    }
-    
-    // DELETEME: Should remove once all dependency has been removed.
-    protected void _willFixRelationship(String key, EOEnterpriseObject object) {
-        // Not needed anymore, they fixed the bug!
     }
 
    /**
@@ -68,15 +77,35 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public boolean canUpdate() { return true; }
 
-    // Used by the delegate to notify objects at the begining of a saveChanges.
+    /**
+     * Called as part of the augmented transaction process.
+     * This method is called after saveChanges is called on
+     * the editing context, but before the object is actually
+     * deleted from the database. This method is also called
+     * before <code>validateForDelete</code> is called on this
+     * object. This method is called by the editing context
+     * delegate {@link ERXDefaultEditingContextDelegate}.
+     * @throws NSValidation.ValidationException to stop the object
+     *		from being deleted.
+     */
     public void willDelete() throws NSValidation.ValidationException {
-        if(canDelete() == false) {
+        if (canDelete() == false) {
+            // FIXME: This shouldn't be a RuntimeException seeing as these are difficult to catch
             throw new RuntimeException("The ERXGenericRecord "+this+" cannot be deleted.");
         }
         if (tranCatWillDelete.isDebugEnabled())
             tranCatWillDelete.debug("Object:" + description());
     }
     
+    /**
+     * Called as part of the augmented transaction process.
+     * This method is called after saveChanges is called on
+     * the editing context, but before the object is actually
+     * inserted into the database. This method is also called
+     * before <code>validateForInsert</code> is called on this
+     * object. This method is called by the editing context
+     * delegate {@link ERXDefaultEditingContextDelegate}.
+     */
     public void willInsert() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
         in the same transaction */
@@ -94,6 +123,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
          trimSpaces();
     }
 
+    /**
+     * Called as part of the augmented transaction process.
+     * This method is called after saveChanges is called on
+     * the editing context, but before the object is actually
+     * updated in the database. This method is also called
+     * before <code>validateForSave</code> is called on this
+     * object. This method is called by the editing context
+     * delegate {@link ERXDefaultEditingContextDelegate}.
+     */
     public void willUpdate() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
         in the same transaction */
@@ -137,7 +175,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
     /**
      * Called on the object after is has successfully
-     * been updated.
+     * been updated in the database.
      */
     public void didUpdate() {
         if (tranCatDidUpdate.isDebugEnabled())
@@ -145,7 +183,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
     /**
      * Called on the object after is has successfully
-     * been inserted.
+     * been inserted into the database.
      */
     public void didInsert() {
         if (tranCatDidInsert.isDebugEnabled())
@@ -183,9 +221,24 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
              }
         }
     }
-
-    static boolean _raiseOnMissingEditingContextDelegate = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
-				    
+    /** 
+     * caches the boolean value of the property key:
+     *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>
+     */
+    // MOVEME: Need to have a central repository of all of these keys and what they mean
+    static boolean _raiseOnMissingEditingContextDelegate = 	ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
+    /**
+     * By default, and this should change in the future, all editing contexts that
+     * are created and use ERXGenericRecords or subclasses need to have a delegate
+     * set of instance {@link ERXEditingContextDelegate}. These delegates provide
+     * the augmentation to the regular transaction mechanism, all of the will* methods
+     * plus the flushCaching method. To change the default behaviour set the property:
+     * <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b> to false in your
+     * WebObjects.properties file. This method is called when an object is fetched,
+     * updated or inserted.
+     * @param editingContext to check for the correct delegate.
+     * @return if the editing context has the correct delegate set.
+     */
     public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
 	Object delegate=editingContext.delegate();
 	
@@ -218,73 +271,60 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	return false;
 
     }
+    /**
+     * Checks the editing context delegate before calling
+     * super's implementation. See the method <code>
+     * _checkEditingContextDelegate</code> for an explanation
+     * as to what this check does.
+     * @param editingContext to be checked to make sure it has the
+     *		correct type of delegate set.
+     */
     public void awakeFromClientUpdate(EOEditingContext editingContext) {
-	if(_checkEditingContextDelegate(editingContext)) {
-	    // willUpdate();
-	}
-	super.awakeFromClientUpdate(editingContext);
+        _checkEditingContextDelegate(editingContext);
+        super.awakeFromClientUpdate(editingContext);
     }
+    /**
+     * Checks the editing context delegate before calling
+     * super's implementation. See the method <code>
+     * _checkEditingContextDelegate</code> for an explanation
+     * as to what this check does.
+     * @param editingContext to be checked to make sure it has the
+     *		correct type of delegate set.
+     */
     public void awakeFromInsertion(EOEditingContext editingContext) {
-	if(_checkEditingContextDelegate(editingContext)) {
-	    // willInsert();
-	}
-	super.awakeFromInsertion(editingContext);
+        _checkEditingContextDelegate(editingContext);
+        super.awakeFromInsertion(editingContext);
     }
+    /**
+     * Checks the editing context delegate before calling
+     * super's implementation. See the method <code>
+     * _checkEditingContextDelegate</code> for an explanation
+     * as to what this check does.
+     * @param editingContext to be checked to make sure it has the
+     *		correct type of delegate set.
+     */
     public void awakeFromFetch(EOEditingContext editingContext) {
-	if(_checkEditingContextDelegate(editingContext)) {
-	    // willUpdate();
-	}
-	super.awakeFromFetch(editingContext);
+        _checkEditingContextDelegate(editingContext);
+        super.awakeFromFetch(editingContext);
     }
-
-				    
-    // --------------------------------------------------------------------------------------------
-    // Debugging aids -- turn off during production
-    
-/*
-    public Object storedValueForKey(String key) {
-        // FIXME: turn this off during production
-        if (!allPropertyKeys().containsObject(key))
-            throw new RuntimeException("********* Tried to access storedValueForKey on "+entityName()+" on a non class property: "+key);
-        Object value = super.storedValueForKey(key);
-        if (toManyRelationshipKeys().containsObject(key)) {
-            if (value instanceof EONullValue) {
-                System.err.println(entityName() + ".storedValueForKey(" + key + ") = EONullValue");
-            }
-            if (value == null) {
-                System.err.println(entityName() + ".storedValueForKey(" + key + ") = null");
-            }
-        }
-        return value;
-    }
-    public void takeStoredValueForKey(Object value, String key) {
-        // FIXME: turn this off during production
-        if (!allPropertyKeys().containsObject(key)) {
-            System.err.println("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
-            throw new RuntimeException("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
-        }
-        if (value == null && toManyRelationshipKeys().containsObject(key)) {
-            System.err.println(new RuntimeException("********* Tried to takeStoredValueForKey of null on "
-                                                    +entityName()+" on a toManyRelationship key: "+key));
-        }
-        if (value != null &&
-            (value instanceof EONullValue) &&
-            toManyRelationshipKeys().containsObject(key)) {
-            System.err.println( new RuntimeException("********* Tried to takeStoredValueForKey of EONullValue on "+entityName()
-                                                     +" on a toManyRelationship key: "+key));
-        }
-        super.takeStoredValueForKey(value,key);
-    }
-*/
-     public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
+    /**
+     * Adds a check to make sure that both the object being added and
+     * this object are in the same editing contexts. If not then a runtime
+     * exception is thrown instead of getting the somewhat cryptic NSInternalInconsistency
+     * excpetion that is thrown when you attempt to save changes to the database.
+     * @param eo enterprise object to be added to the relationship
+     * @param key relationship to add the object to.
+     */
+    public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
         if (eo!=null &&
             ((EOEnterpriseObject)eo).editingContext()!=editingContext() &&
             !(editingContext() instanceof EOSharedEditingContext) &&
             !(((EOEnterpriseObject)eo).editingContext() instanceof EOSharedEditingContext)) {
             if (((EOEnterpriseObject)eo).editingContext()==null || editingContext()==null) {
-                //(ak) commented out because when we have a mandatory, propagte PK relationship, this is called before the new OE is inserted.
-                // cat.warn("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
-                if(editingContext()==null) throw new RuntimeException("******** Attempted to link to EOs through "+key+" when one of them was not in an editing context: "+this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
+                if(editingContext()==null)
+                    throw new RuntimeException("******** Attempted to link to EOs through "
+                                               +key+" when one of them was not in an editing context: "
+                                               +this+":"+editingContext()+" and "+eo+ ":" + ((EOEnterpriseObject)eo).editingContext());
             } else {
                 throw new RuntimeException("******** Attempted to link to EOs through "+key+" in different editing contexts: "+this+" and "+eo);
             }
@@ -300,16 +340,39 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return ERXExtensions.primaryKeyForObject(this);
     }
 
+    /**
+     * Calling this method will return the primary of the
+     * given enterprise object or if one has not been asigned
+     * to it yet, then it will have the adaptor channel generate
+     * one for it, cache it and then use that primary key when it
+     * is saved to the database. If you just want the
+     * primary key of the object or null if it doesn't have one
+     * yet, use the method <code>rawPrimaryKey</code>.
+     * @return the primary key of this object.
+     */
     public Object rawPrimaryKeyInTransaction() {
         Object result = rawPrimaryKey();
         if (result == null) {
             NSDictionary pk = primaryKeyDictionary(false);
             if (cat.isDebugEnabled()) cat.debug("pk: " + pk);
+            // FIXME: What the heck is this?!?!
             result = ERXExtensions.rawPrimaryKeyFromPrimaryKeyAndEO(pk, this);
         }
         return result;
     }
 
+    /**
+     * Calling this method will return the primary of the
+     * given enterprise object or if one has not been asigned
+     * to it yet, then it will have the adaptor channel generate
+     * one for it, cache it and then use that primary key when it
+     * is saved to the database. This method returns the string
+     * representation of the primary key. If you just want the
+     * primary key of the object or null if it doesn't have one
+     * yet, use the method <code>primaryKey</code>.
+     * @return string representation of the primary key of this
+     *		object.
+     */
     public String primaryKeyInTransaction() {
         Object rpk=rawPrimaryKeyInTransaction();
         return rpk!=null ? rpk.toString() : null;
@@ -322,37 +385,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public Object rawPrimaryKey() { return ERXExtensions.rawPrimaryKeyForObject(this); }
 
+    /**
+     * Returns the foreign key for a given relationship.
+     * @param rel relationship key
+     * @return foreign key for a given relationship.
+     */
     public Object foreignKeyForRelationshipWithKey(String rel) {
         NSDictionary d=EOUtilities.destinationKeyForSourceObject(editingContext(), this, rel);
-        return d.count()>0 ? d.allValues().objectAtIndex(0) : null;
+        return d != null && d.count()>0 ? d.allValues().objectAtIndex(0) : null;
     }
-
-    /* useful for debugging */
-/*    private Boolean _willChangeCalled = Boolean.FALSE;
-    private NSArray _skipKeys = new NSArray(new String[] {"roles"}); //keys that cause stack overflow here
-    public void willChange() {
-        if (willChangeCat.isDebugEnabled() && _willChangeCalled != null) {
-            if (_willChangeCalled.booleanValue()) {
-                System.err.println("will change again: " + this);
-                super.willChange();
-            } else {
-                _willChangeCalled = Boolean.TRUE;
-                if (getClass().getName().equals("er.eo.LandlordUser")) {
-                    NSArray allProps = allPropertyKeys();
-                    for (Enumeration e = allProps.objectEnumerator(); e.hasMoreElements();) {
-                        String key = (String)e.nextElement();
-                        if (!_skipKeys.containsObject(key)) {
-                            Object value = valueForKey(key);
-                            if (value != null && (value instanceof Boolean))
-                                System.err.println("BOOLEAN key: " + key);
-                        }
-                    }
-                }
-                super.willChange();
-                _willChangeCalled = Boolean.FALSE;
-            }
-        }
-    }*/
 
     /** caches the primary key dictionary for the given object */
     private NSDictionary _primaryKeyDictionary;
@@ -504,8 +545,18 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-// Note that after an eo has been deleted its editingContext will be set to null and as such it can be a bit
-// difficult to distinguish between a new EO and a deleted EO.
+    /**
+     * Determines if this object is a deleted object by
+     * checking to see if it is included in the deletedObjects
+     * array of the editing context or if it's editing context
+     * is null.<br/>
+     * <br/>
+     * Note: An object that has just been created will also not
+     * have an editing context and by this method would test
+     * positive for being a deleted object.
+     * @return if the object is a deleted object
+     */
+    // CHECKME: Might be able to tell better by checking EOGlobalIDs
     public boolean isDeletedEO() {
         if (cat.isDebugEnabled())
             cat.debug("editingContext() = " + editingContext() + " this object: " + this);
@@ -526,6 +577,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return ERXExtensions.isNewObject(this);
     }
 
+    /**
+     * Called by an observer after an editing context has
+     * successfully saved changes to a database. This method
+     * enumerates through all of the objects that were inserted,
+     * updated and deleted calling <code>didInsert</code>, <code>
+     * didUpdate</code> and <code>didDelete</code> on the objects
+     * respectively.
+     * @param n notifcation posted after an editing context has
+     *		successfully saved changes to the database.
+     */
     // MOVEME: ERXECFactory move it onto the default factory so subclasses can provide different implementations
     public static void didSave(NSNotification n) {
         EOEditingContext ec=(EOEditingContext)n.object();
@@ -566,6 +627,20 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return _validationContext.valueForKey(key);
     }
 
+    /**
+     * Overrides the default validation mechanisms to provide
+     * a few checks before invoking super's implementation,
+     * which incidently just invokes validateValueForKey on the
+     * object's class description. The class description for this
+     * object should be an {@link ERXEntityClassDescription} or subclass.
+     * It is that class that provides the hooks to convert model
+     * throw validation exceptions into {@link ERXValidationException}
+     * objects.
+     * @param value to be validated for a given attribute or relationship
+     * @param key corresponding to an attribute or relationship
+     * @throws NSValidation.ValidationException if the value fails validation
+     * @return the validated value
+     */
     public Object validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
         if (validation.isDebugEnabled())
             validation.debug("ValidateValueForKey on eo: " + this + " value: " + value + " key: " + key);
@@ -606,16 +681,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         } catch (NSValidation.ValidationException e) {
             if (e.key() == null || e.object() == null)
                 e = new NSValidation.ValidationException(e.getMessage(), this, key);
-            validationException.debug("Exception: " + e.getMessage() + " raised while validating object: " + this + " class: " + getClass() + " pKey: " + primaryKey() + "\n" + e);
+            validationException.debug("Exception: " + e.getMessage() + " raised while validating object: "
+                                      + this + " class: " + getClass() + " pKey: " + primaryKey() + "\n" + e);
             throw e;
         } catch (RuntimeException e) {
-            NSLog.err.appendln("**** During validateValueForKey "+key);
-            NSLog.err.appendln("**** caught "+e);
+            cat.error("**** During validateValueForKey "+key);
+            cat.error("**** caught "+e);
             throw e;
         }
         return result;
     }
 
+    /**
+     * This method performs a few checks before invoking
+     * super's implementation. If the property key:
+     * <b>ERDebuggingEnabled</b> is set to true then the method
+     * <code>checkConsistency</code> will be called on this object.
+     * @throws NSValidation.ValidationException if the object does not
+     *		pass validation for saving to the database.
+     */
     public void validateForSave( )  throws NSValidation.ValidationException {
         // This condition shouldn't ever happen, but it does ;)
         // CHECKME: This was a 4.5 issue, not sure if this one has been fixed yet.
@@ -625,12 +709,83 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         super.validateForSave();
         // FIXME: Should move all of the keys into on central place for easier management.
         // 	  Also might want to have a flag off of ERXApplication is debugging is enabled.
+        // FIXME: Should have a better flag than just ERDebuggingEnabled
         if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
             checkConsistency();
     }
+
+    /**
+     * Debugging method that will be called on an object before it is
+     * saved to the database if the property key: <b>ERDebuggingEnabled</b>
+     * is enabled. This allows for adding in a bunch of expensive validation
+     * checks that should only be enabled in developement and testing
+     * environments.
+     * @throws NSValidation.ValidationException if the object is not consistent
+     */
+    // CHECKME: This method was very useful at NS, might not be as useful here.
     public void checkConsistency() throws NSValidation.ValidationException {}
-    // batchCheckConsistency won't be called by validateForSave so you can check
-    // things here that you only want checked by a batch process
+
+    /**
+     * This method is very similiar to the <code>checkConsistency</code> method
+     * except that this method is only called from an outside process, usually
+     * a batch process, to verify that the data this object holds is consistent.
+     * JUnit tests are great for testing that all of the methods of a single
+     * object function correctly, batch checking of consistency is a good way
+     * of checking that all of the data in a given database is consistent. Hopefully
+     * in the future we will add a batch check consistency application to demonstrate
+     * the use of this method.
+     * @throws NSValidation.ValidationException if the object fails consisntency
+     */
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
+
+    // DELETEME: Should remove once all dependency has been removed.
+    public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
+        // Not needed anymore, they fixed the bug!
+    }
+
+    // DELETEME: Should remove once all dependency has been removed.
+    protected void _willFixRelationship(String key, EOEnterpriseObject object) {
+        // Not needed anymore, they fixed the bug!
+    }
     
+    // Debugging aids -- turn off during production
+    // These methods are used to catch the classic mistake of:
+    // public String foo() { return (String)valueForKey("foo"); }
+    // CHECKME: These methods need a once over as they have a boat load more stuff in them than I remember.
+/*
+    public Object storedValueForKey(String key) {
+        // FIXME: turn this off during production
+        if (!allPropertyKeys().containsObject(key))
+            throw new RuntimeException("********* Tried to access storedValueForKey on "+entityName()+" on a non class property: "+key);
+        Object value = super.storedValueForKey(key);
+        if (toManyRelationshipKeys().containsObject(key)) {
+            if (value instanceof EONullValue) {
+                System.err.println(entityName() + ".storedValueForKey(" + key + ") = EONullValue");
+            }
+            if (value == null) {
+                System.err.println(entityName() + ".storedValueForKey(" + key + ") = null");
+            }
+        }
+        return value;
+    }
+    public void takeStoredValueForKey(Object value, String key) {
+        // FIXME: turn this off during production
+        if (!allPropertyKeys().containsObject(key)) {
+            System.err.println("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
+            throw new RuntimeException("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
+        }
+        if (value == null && toManyRelationshipKeys().containsObject(key)) {
+            System.err.println(new RuntimeException("********* Tried to takeStoredValueForKey of null on "
+                                                    +entityName()+" on a toManyRelationship key: "+key));
+        }
+        if (value != null &&
+            (value instanceof EONullValue) &&
+            toManyRelationshipKeys().containsObject(key)) {
+            System.err.println( new RuntimeException("********* Tried to takeStoredValueForKey of EONullValue on "+entityName()
+                                                     +" on a toManyRelationship key: "+key));
+        }
+        super.takeStoredValueForKey(value,key);
+    }
+*/
+
 }
