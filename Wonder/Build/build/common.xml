@@ -299,6 +299,22 @@
         </antcall>
     </target>
     
+    <!-- ERChangeNotificationJMS -->
+    <target name="ERChangeNotificationJMS.all">
+        <antcall target="framework" >
+            <param name="project.principal.class" value="er.changenotification.ERCNNotificationCoordinator" />
+            <param name="project.name" value="ERChangeNotificationJMS" />
+            <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS" />
+        </antcall>
+    </target>
+    <target name="ERChangeNotificationJMS.clean">
+        <antcall target="clean" >
+            <param name="project.principal.class" value="er.changenotification.ERCNNotificationCoordinator" />
+            <param name="project.name" value="ERChangeNotificationJMS" />
+            <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS" />
+        </antcall>
+    </target>
+
     <!-- ERNeutralLook -->
     <target name="ERNeutralLook.all">
         <antcall target="framework" >
@@ -428,19 +444,31 @@
         </antcall>
     </target>
     
-    <target name="core.all" depends="ERJars.all,JavaWOExtensions.all,ERExtensions.all,ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all,ERNeutralLook.all,WOOgnl.all,ERCoreBusinessLogic.all,ERJavaMail.all" />
+    <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
+    <target name="core.clean" depends="ERJars.clean, JavaWOExtensions.clean, ERExtensions.clean, ERDirectToWeb.clean" />
 
-    <target name="bugtracker.all" depends="frameworks.all,BTBusinessLogic.all,BugTracker.all" />
-    <target name="applications.all" depends="frameworks.all,bugtracker.all" />
+    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all" />
+    <target name="frameworks.clean" depends="core.clean, ERNeutralLook.clean, WOOgnl.clean, ERCoreBusinessLogic.clean, ERJavaMail.clean, ERChangeNotificationJMS.clean" />
 
-    <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all,NetStruxrCaseStudy.all" />
-    <target name="stepwise.all" depends="D2WListExample.all,D2WInspectExample.all" />
-    <target name="examples.all" depends="frameworks.all,wrox.all,stepwise.all" />
+    <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
+    <target name="bugtracker.clean" depends="BTBusinessLogic.clean, BugTracker.clean" />
 
-    <target name="common.all" depends="frameworks.all,examples.all,applications.all" />
-    
+    <target name="applications.all" depends="frameworks.all, bugtracker.all" />
+    <target name="applications.clean" depends="bugtracker.clean" />
+
+    <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
+    <target name="wrox.clean" depends="ERMiniUglyLook.clean, NetStruxrCaseStudy.clean" />
+
+    <target name="stepwise.all" depends="D2WListExample.all ,D2WInspectExample.all" />
+    <target name="stepwise.clean" depends="D2WListExample.clean, D2WInspectExample.clean" />
+
+    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all" />
+    <target name="examples.clean" depends="wrox.clean, stepwise.clean" />
+
+    <target name="common.all" depends="frameworks.all, applications.all, examples.all" />
+    <target name="common.clean" depends="frameworks.clean, applications.clean, examples.clean" />
+
     <target name="all" depends="common.all" />
-    
-    <target name="all.clean" depends="ERJars.clean,JavaWOExtensions.clean,ERExtensions.clean,ERDirectToWeb.clean,ERNeutralLook.clean,WOOgnl.clean,ERCoreBusinessLogic.clean" />
+    <target name="all.clean" depends="common.clean" />
+
 </project>
