@@ -73,8 +73,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
         super.setLocalContext(newValue);
         log.debug("SetLocalContext "+newValue);
-        // This way
-        d2wContext().takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
+        if(d2wContext() != null)
+            d2wContext().takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
+        else
+            log.warn("D2WContext was null!");
     }
     
     public boolean shouldPropogateExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldPropogateExceptions")); }
