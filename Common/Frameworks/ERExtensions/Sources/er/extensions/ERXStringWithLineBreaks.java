@@ -61,9 +61,9 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
                 // FIXME: This could be optimized
                 result = ERXExtensions.replaceStringByStringInString("\r\n", "\r", result);
                 result = ERXExtensions.replaceStringByStringInString("\n", "\r", result);
-                result = ERXExtensions.replaceStringByStringInString("\r", "<BR>", result);
+                result = ERXExtensions.replaceStringByStringInString("\r", br(), result);
                 result = ERXExtensions.replaceStringByStringInString("\t",
-                                                                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+                                                                    tabs(),
                                                                     result);
             }
             _value = result;
@@ -71,6 +71,14 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
         return _value;
     }
 
+    public String br() {
+        return "<BR>";
+    }
+
+    public String tabs() {
+        return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+    
     /**
      * Returns binding <b>valueWhenEmpty</b>.
      * @return value to display when the string is empty
