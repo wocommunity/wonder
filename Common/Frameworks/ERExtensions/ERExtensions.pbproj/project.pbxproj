@@ -4916,8 +4916,8 @@
 		F59C56F402C455BF01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			name = erDefault.graph;
-			path = Resources/erDefault.graph;
+			name = graphDefault.plist;
+			path = Resources/graphDefault.plist;
 			refType = 2;
 		};
 		F59C56F502C455BF01000102 = {
