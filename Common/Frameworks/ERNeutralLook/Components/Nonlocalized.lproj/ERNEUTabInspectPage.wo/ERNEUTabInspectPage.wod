@@ -205,14 +205,14 @@ Help: ERDDebuggingHelp {
 
 Image1: WOImage {
 	filename = "floppy.gif";
-	framework = "ERExtensionsJava";
+	framework = "ERExtensions";
 }
 
 ImageSpacer: WOImage {
 	alt = "";
 	border = 0;
 	filename = "s.gif";
-	framework = "ERExtensionsJava";
+	framework = "ERExtensions";
 	height = 20;
 	width = 1;
 }
