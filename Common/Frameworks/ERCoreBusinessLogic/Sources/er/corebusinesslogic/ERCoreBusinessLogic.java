@@ -267,10 +267,11 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             } else {
                 s.append(ERXUtilities.stackTrace(exception));
             }
-            log.warn(s.toString());
-            
-            // we take this to mean we are in deployment
-            if (WOApplication.application().isCachingEnabled()) {
+            if (!ERCMailDelivery.usesMail()) {
+                log.error(s.toString());
+            } else if (WOApplication.application().isCachingEnabled()) {
+                // Usually the Mail appender is set to Threshold ERROR
+                log.warn(s.toString());
                 if (emailsForProblemRecipients().count() == 0 || problemEmailDomain() == null) {
                     log.error("Unable to log problem due to misconfiguration: recipients: "
                               + emailsForProblemRecipients() + " email domain: " + problemEmailDomain());
@@ -304,7 +305,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     } finally {
                         ec.unlock();
                     }
-                }                
+                    ec.dispose();
+                }
             }
         } catch (Throwable u) {
             try {
