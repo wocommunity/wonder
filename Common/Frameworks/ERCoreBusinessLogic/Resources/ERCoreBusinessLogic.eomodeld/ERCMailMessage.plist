@@ -2,6 +2,12 @@
     attributes = (
         {
             allowsNull = Y; 
+            columnName = "PLAIN_TEXT_"; 
+            name = plainText; 
+            prototypeName = varchar1000; 
+        }, 
+        {
+            allowsNull = Y; 
             columnName = "BCC_ADDR"; 
             name = bccAddresses; 
             prototypeName = varchar1000; 
@@ -55,7 +61,8 @@
         title, 
         xMailer, 
         isRead, 
-        exceptionReason
+        exceptionReason, 
+        plainText
     ); 
     className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
@@ -73,7 +80,8 @@
         attachments, 
         xMailer, 
         isRead, 
-        exceptionReason
+        exceptionReason, 
+        plainText
     ); 
     externalName = "ERCMAIL_MESSAG"; 
     name = ERCMailMessage; 
