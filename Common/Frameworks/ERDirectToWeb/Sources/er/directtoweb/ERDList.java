@@ -89,14 +89,14 @@ public class ERDList extends ERDCustomEditComponent {
     public Object valueForKey(String key) {
         Object o = super.valueForKey(key);
         if (key.indexOf("emptyListMessage")!=-1) {
-            log.info("key = emptyListMessage, value = "+o);
+            log.debug("key = emptyListMessage, value = "+o);
         } 
         return o;
     }
     public Object valueForBinding(String key) {
         Object o = super.valueForBinding(key);
         if (key.indexOf("emptyListMessage")!=-1) {
-            log.info("key = emptyListMessage, value = "+o);
+            log.debug("key = emptyListMessage, value = "+o);
         } 
         return o;
     }
