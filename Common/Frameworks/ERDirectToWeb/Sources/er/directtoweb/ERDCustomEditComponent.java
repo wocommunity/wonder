@@ -106,10 +106,14 @@ public abstract class ERDCustomEditComponent extends WOComponent {
     }
 
     public String key() {
-        if (key==null && !synchronizesVariablesWithBindings())
-            key=(String)super.valueForBinding("key");
-        if (key==null && !synchronizesVariablesWithBindings() && d2wContext() != null)
+        if(!synchronizesVariablesWithBindings()) {
+            if (key==null) {
+                key=(String)super.valueForBinding("key");
+            }
+        }
+        if (key==null && d2wContext() != null) {
             key=(String)d2wContext().valueForKey("propertyKey");
+        }
         return key;
     }
 
