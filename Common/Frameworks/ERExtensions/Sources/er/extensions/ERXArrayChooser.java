@@ -20,6 +20,7 @@ import com.webobjects.foundation.*;
  */
 
 public abstract class ERXArrayChooser extends ERXStatelessComponent {
+
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXArrayChooser.class);
 
