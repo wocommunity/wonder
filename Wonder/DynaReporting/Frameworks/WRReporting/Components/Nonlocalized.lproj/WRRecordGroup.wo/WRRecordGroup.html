@@ -1,0 +1,100 @@
+<webobject name=showRecordTable>
+	<td align=RIGHT valign=TOP>
+		<webobject name=notnototals>
+			<table border=1>
+				<webobject name=showHeadings>
+					<webobject name=attribs></webobject>
+				</webobject>
+				<webobject name=records>
+					<tr>
+						<webobject name=values>
+							<td align=RIGHT><font size=2 face=arial,geneva><webobject name=valueString></webobject></td>
+						</webobject>
+					</tr>
+				</webobject>
+				<tr>
+					<webobject name=totals>
+						<td align=RIGHT><font size=2 face=arial,geneva><webobject name=showTotal><webobject name=totalString></webobject></webobject></td>
+					</webobject>
+				</tr>
+			</table>
+		</webobject>
+		<webobject name=nototals>
+			<font size=2 face=arial,geneva>-</font>
+		</webobject>
+	</td>
+</webobject>
+<webobject name=showRecordTableAsCells>
+	<webobject name=HDimsUsed>
+		<webobject name=tdtop><font size=2 face=arial,geneva> showRecordTableAsCells not supported with Horz.
+			Dimensions
+		</webobject>
+	</webobject>
+	<webobject name=NoHDimsUsed>
+		<webobject name=useVerticalReportStyle>
+			<webobject name=notnototals>
+				<webobject name=isNotTotalGroup>
+					<webobject name=records>
+						<tr>
+							<webobject name=groupDepth>
+								<td> </td>
+							</webobject><webobject name=values><webobject name=tdAttribNoRecords><font size=2 face=arial,geneva><webobject name=valueString></webobject></webobject></webobject>
+						</tr>
+					</webobject>
+					<tr>
+						<webobject name=groupDepth>
+							<td height=2> </td>
+						</webobject><webobject name=tdNoRecordsLine></webobject>
+					</tr>
+				</webobject>
+				<tr>
+					<webobject name=groupDepth>
+						<td> </td>
+					</webobject><webobject name=totals><webobject name=tdAttribNoRecords><font size=2 face=arial,geneva><webobject name=showTotal><webobject name=totalString></webobject></webobject></webobject></webobject>
+				</tr>
+			</webobject>
+			<webobject name=nototals>
+				<tr>
+					<webobject name=groupDepth>
+						<td> </td>
+					</webobject><webobject name=tdNoRecords>
+						<font size=2 face=arial,geneva>-</font>
+					</webobject>
+				</tr>
+			</webobject>
+		</webobject>
+		<webobject name=dontUseVerticalReportStyle>
+			showRecordTableAsCells only supported with with 'VeritcalReportStyle'
+		</webobject>
+	</webobject>
+</webobject>
+<webobject name=showTotalsOnlyAsTable>
+	<webobject name=tdtop>
+		<webobject name=notnototals>
+			<table border=1>
+				<webobject name=showHeadings>
+					<webobject name=nonzerorecords>
+						<webobject name=attribs></webobject>
+					</webobject>
+				</webobject>
+				<tr>
+					<webobject name=totals><webobject name=showTotal>
+							<td><font size=2 face=arial,geneva><webobject name=totalString></webobject></td>
+						</webobject></webobject>
+				</tr>
+			</table>
+		</webobject>
+		<webobject name=nototals>
+			<font size=2 face=arial,geneva>-</font>
+		</webobject>
+	</webobject>
+</webobject>
+<webobject name=showTotalsOnlyAsCells>
+	<webobject name=totals><webobject name=showTotal><webobject name=tdtop><font size=2 face=arial,geneva><webobject name=totalString></webobject></webobject></webobject></webobject>
+	<webobject name=nototals>
+		<webobject name=nototalsCell><font size=2 face=arial,geneva>-</webobject>
+	</webobject>
+</webobject>
+<webobject name=showSingleValue>
+	<webobject name=tdtop><font size=2 face=arial,geneva><webobject name=singleTotal></webobject></webobject>
+</webobject>

@@ -1,0 +1,178 @@
+<webobject name=editForm>
+	<webobject name=showPresentationControls>
+		<webobject name=Custom1>
+			<table border=0>
+				<tr bgcolor=cccccc>
+					<td valign=top>
+						<table border=0>
+							<tr bgcolor=999999>
+								<td colspan=2><b><font size=2 face=arial,geneva>Record Grouping</font></b> </td>
+							</tr>
+							<tr>
+								<td colspan=1><b><font size=2 face=arial,geneva>Record Group Display:</font></b> </td>
+								<td colspan=2>
+									<webobject name=recGrpDisplayList></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td colspan=1><b><font size=2 face=arial,geneva>Report Style:</font></b> </td>
+								<td colspan=2>
+									<webobject name=reportStyle></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td><b><font size=2 face=arial,geneva>Single Total to Show:</font></b> </td>
+								<td>
+									<webobject name=totToShow></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td><b><font size=2 face=arial,geneva>Show Attribute Headings:</font></b> </td>
+								<td>
+									<webobject name=showRGHeadings></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td><b><font size=2 face=arial,geneva>Show Record Groups as Tables</font></b> </td>
+								<td>
+									<webobject name=showRGAsTable></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td><b><font size=2 face=arial,geneva>Show Dimension Navigation</font></b> </td>
+								<td>
+									<webobject name=showNavigationCheck></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td><b><font size=2 face=arial,geneva>Show Custom Report</font></b> </td>
+								<td>
+									<webobject name=showCustomCheck></webobject>
+								</td>
+							</tr>
+							<tr>
+								<td colspan=2><font size=2 face=arial,geneva><webobject name=regenReport></webobject>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td valign=top>
+						<table border=0>
+							<tr>
+								<td colspan=3 bgcolor=999999><b><font size=2 face=arial,geneva>Dimension Group Totaling</font></b> </td>
+							</tr>
+							<webobject name=allGroups>
+								<tr>
+									<td colspan=1><b><font size=2 face=arial,geneva><webobject name=grpLabel></webobject></font></b> </td>
+									<td colspan=2><webobject name=shouldTotalCheck></webobject></td>
+								</tr>
+							</webobject>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</webobject>
+	</webobject>
+	<table border=0 width=100% cellpadding=0 cellspacing=0>
+		<tr>
+			<td align=left valign=bottom rowspan=2>
+				<webobject name=zlist2></webobject>
+			</td>
+			<td align=right valign=bottom> </td>
+		</tr>
+		<tr>
+			<td align=right valign=bottom>
+				<webobject name=zlist1></webobject>
+			</td>
+		</tr>
+	</table>
+	<webobject name=showDefaultReportStyle>
+		<webobject name=dontshowVerticalRows>
+			<table border width=100%>
+				<webobject name=horzDimensions>
+					<tr>
+						<webobject name=vGroups>
+							<td></td>
+						</webobject>
+						<webobject name=hCriteriaList>
+							<webobject name=colSpanTd><b><font size=2 face=arial,geneva><webobject name=criteriaLabel></webobject></b></webobject>
+						</webobject>
+					</tr>
+				</webobject>
+				<webobject name=showHeadersForAsCells>
+					<webobject name=depthList>
+						<tr>
+							<webobject name=vGroups>
+								<td> </td>
+							</webobject>
+							<webobject name=numberOfCrits>
+								<webobject name=attribs>
+									<webobject name=td><b><font size=2 face=arial,geneva><webobject name=attribLabel></webobject></b></webobject>
+								</webobject>
+							</webobject>
+						</tr>
+					</webobject>
+				</webobject>
+				<webobject name=showNoColNoRow>
+					<webobject name=recordGroupTest></webobject>
+				</webobject>
+				<webobject name=showSingleRow>
+					<tr>
+						<webobject name=hCriteriaList2>
+							<webobject name=recordGroupTest></webobject>
+						</webobject>
+						<td></td>
+						<td></td>
+					</tr>
+				</webobject>
+				<webobject name=vCriteriaList>
+					<tr>
+						<webobject name=vindent><webobject name=showIndentCell>
+								<webobject name=rowSpanTd>
+									<b><font size=2 face=arial,geneva><webobject name=vIndentCriteriaLabel></webobject></b>
+								</webobject>
+							</webobject></webobject>
+						<webobject name=rowSpanTd2><b><font size=2 face=arial,geneva><webobject name=vcriteriaLabel></webobject></b></webobject>
+						<webobject name=hCriteriaList2>
+							<webobject name=recordGroupTest></webobject>
+						</webobject>
+						<webobject name=showSingleCol>
+							<webobject name=recordGroupTest></webobject>
+						</webobject>
+					</tr>
+				</webobject>
+			</table>
+		</webobject>
+		<webobject name=showVerticalRows>
+			<table border=0>
+				<webobject name=vCriteriaList>
+					<webobject name=vindent2><webobject name=showIndentCell>
+							<webobject name=showVHeadings>
+								<tr>
+									<td><font color=ffffff>.</font></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><font color=ffffff>.</font></td>
+									<td></td>
+								</tr>
+								<webobject name=attribsGroup></webobject>
+							</webobject>
+							<tr>
+								<webobject name=groupDepth>
+									<td></td>
+								</webobject>
+								<webobject name=rowSpanTd2Span><b><font size=2 face=arial,geneva><webobject name=vIndentCriteriaLabel></webobject></font></b></webobject>
+							</tr>
+						</webobject></webobject>
+					<webobject name=recordGroupTest></webobject>
+				</webobject>
+			</table>
+			<br>
+		</webobject>
+	</webobject>
+	<webobject name=dontshowDefaultReportStyle>
+		<webobject name=customContent></webobject>
+	</webobject>
+	<webobject name=zlist3></webobject>
+</webobject>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="WRReport" wocomponentcontent="true">
+
+		<binding name="model"/>
+		<binding name="recordGroupTotalToShow"/>
+		<binding name="selectedRecordGroupDisplayType"/>
+		<binding name="selectedReportStyle"/>
+		<binding name="showCustomReportStyle"/>
+		<binding name="showNavigation"/>
+		<binding name="showPresentationControls"/>
+		<binding name="showRecordGroupAsTable"/>
+		<binding name="showRecordGroupHeadings"/>
+
+		<validation message="'model' is a required binding">
+			<unbound name="model"/>
+		</validation>
+	</wo>
+</wodefinitions>

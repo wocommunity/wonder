@@ -1,0 +1,32 @@
+ActiveImage1: WOActiveImage { border=0; action = down; filename = "down.gif"; }
+ActiveImage2: WOActiveImage { border=0;action = deleteSubAttribute; filename = "cc1_deletebutton.gif"; }
+ActiveImage3: WOActiveImage { border=0;action = down; filename = "down.gif"; }
+ActiveImage4: WOActiveImage { border=0;action = up; filename = "up.gif"; }
+ActiveImage5: WOActiveImage { border=0;action = showUserInfo; filename = "cc1_infobutton.gif"; }
+add: WOActiveImage { border=0;action = add; filename = "cc1_addbutton_v2.gif"; }
+
+toggle:WOActiveImage {border=0; filename= toggleGroupImg; action= toggleGroup;};
+CheckBox1: WOCheckBox { checked = attribute.shouldSort; }
+CheckBox3: WOCheckBox { checked = attribute.shouldTotal; }
+Conditional1: WOConditional { condition = attribute.isGroup; negate = 1; }
+Conditional2: WOConditional { condition = attribute.isGroup; negate = 1; }
+Conditional3: WOConditional { condition = attribute.isGroup; }
+Custom1: WOCollapsibleComponentContent { closedLabel = "Explode Sub-Attributes"; openedLabel = "Collapse Sub-Attributes"; }
+Custom2: WRAttributeEditor { attribute = subAttribute; }
+Hyperlink1: WOHyperlink { action = toggleGroup; string = toggleGroupLabel; }
+Image1: WOImage { alt = "1pixel_666666"; filename = "1pixel_666666"; height = 2; width = 600; }
+Repetition1: WORepetition { item = subAttribute; list = attribute.attributes; }
+String1: WOString { value = attribute.label; }
+TextField1: WOTextField { size = 14; value = attribute.keyPath; }
+TextField2: WOTextField { value = attribute.label; }
+TextField3: WOTextField { size = 7; value = attribute.format; }
+
+td:WOGenericContainer{
+	elementName="TD";
+	bgcolor="cccccc";
+	width=2;
+	rowspan=rowspan;
+}
+img:WOImage{
+	filename="1pixel.gif"
+}
