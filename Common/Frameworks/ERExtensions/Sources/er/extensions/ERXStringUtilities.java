@@ -341,7 +341,19 @@ public class ERXStringUtilities {
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
         if(bundle != null)
             return stringWithContentsOfFile(bundle.pathForResource(name, extension, null));
-         return stringWithContentsOfFile(ERXFileUtilities.pathForResourceNamed(name +"." + extension, null, null));
+         return stringWithContentsOfFile(ERXFileUtilities.pathForResourceNamed(name + "." + extension, null, null));
+    }
+
+    public static final String firstPropertyKeyInKeyPath(String keyPath) {
+        String part = null;
+        if (keyPath != null) {
+            int index = keyPath.indexOf(".");
+            if (index != -1)
+                part = keyPath.substring(0, index);
+            else
+                part = keyPath;
+        }
+        return part;
     }
 
     public static final String lastPropertyKeyInKeyPath(String keyPath) {
@@ -362,6 +374,16 @@ public class ERXStringUtilities {
             int index = keyPath.lastIndexOf(".");
             if (index != -1)
                 part = keyPath.substring(0, index);
+        }
+        return part;
+    }
+
+    public static final String keyPathWithoutFirstProperty(String keyPath) {
+        String part = null;
+        if(keyPath != null) {
+            int index = keyPath.indexOf(".");
+            if (index != -1)
+                part = keyPath.substring(index + 1);
         }
         return part;
     }
