@@ -477,12 +477,14 @@ public abstract class ERXApplication extends WOApplication {
                 // We first log just in case the log4j call puts us in a bad state.
                 NSLog.err.appendln("Ran out of memory, killing this instance");
                 log.error("Ran out of memory, killing this instance");
+            } else if (throwable instanceof StackOverflowError) {
+                // hm. could we do something reasonable here?
             } else {
                 // We first log just in case the log4j call puts us in a bad state.
-                NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + " occurried. Can't recover killing this instance.");
-                log.error("java.lang.Error \"" + throwable.getClass().getName() + " occurried. Can't recover killing this instance.");
+                NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.");
+                log.error("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.");
             }
-            Runtime.getRuntime().exit( 1 );
+            Runtime.getRuntime().exit(1);
         }
     }
 
