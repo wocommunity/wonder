@@ -254,26 +254,24 @@ public class WOToManyRelationship extends WOComponent {
             setDataSource((EODatabaseDataSource)valueForBinding("dataSource"));
             if (null==dataSource()) {
                 String anEntityName = _localSourceEntityName();
-                // FIXME (msanchez, 08/00, 2520053): use modelGroup on ObjectStoreCoordinator of our editingContext
-                EOModelGroup aModelGroup = EOModelGroup.defaultGroup();
-                EOEntity anEntity = aModelGroup.entityNamed(anEntityName);
-
-                if (anEntity == null) {
-                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
-                }                
                 Object _source = _localSourceObject();
                 EOEditingContext anEditingContext = null;
                 EOEntity destinationEntity = null;
                 if (_source instanceof EOEnterpriseObject) {
-                    EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
-                                                                                               _localRelationshipKey());
-                    destinationEntity = relationship != null ? relationship.entity() : null;
                     anEditingContext = ((EOEnterpriseObject)_source).editingContext();
-                } else {
-                    destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
                 }
                 if (anEditingContext == null) {
                     anEditingContext = session().defaultEditingContext() ;
+                }
+                EOEntity anEntity = ERXEOAccessUtilities.entityNamed(anEditingContext, anEntityName);
+                if (anEntity == null) {
+                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
+                }
+                if (_source instanceof EOEnterpriseObject) {
+                    EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source, _localRelationshipKey());
+                    destinationEntity = relationship != null ? relationship.entity() : null;
+                } else {
+                    destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
                 }
                 EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntity.name());
                 setDataSource(aDatabaseDataSource);

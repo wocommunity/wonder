@@ -154,11 +154,12 @@ public class ERXSharedEOLoader {
     public void objectStoreWasAdded(NSNotification aNotification) {
         if (!_loadingComplete) {
             if (_modelList.count() == 0) {
-                if (EOModelGroup.defaultGroup() != null && EOModelGroup.defaultGroup().models().count() == 0) {
+                EOModelGroup group = EOModelGroup.modelGroupForObjectStoreCoordinator((EOObjectStoreCoordinator)aNotification.object());
+                if (group != null && group.models().count() == 0) {
                     throw new RuntimeException("No models found in default group");
                 }
                 // internal list empty; drop it and use modelgroup's.
-                _modelList = new NSMutableArray(EOModelGroup.defaultGroup().models());
+                _modelList = new NSMutableArray(group.models());
             }
             _loadingComplete = true; // make sure we only do this once.
             EOModel currentModel = null;

@@ -139,7 +139,7 @@ public class ERXUtilities {
     // FIXME: Should also dump all of the currently shared eos from
     //		the shared context.
     public static void makeEditableSharedEntityNamed(String entityName) {
-        EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
+        EOEntity e = ERXEOAccessUtilities.entityNamed(null, entityName);
         if (e.isReadOnly()) {
             e.setReadOnly(false);
             e.setCachesObjects(false);
@@ -234,9 +234,7 @@ public class ERXUtilities {
         EORelationship relationship = null;
         
         if (lastEO!=null) {
-            // FIXME: Should use the model group of the object's editing context's
-            //		root object store coordinator
-            EOEntity entity=EOModelGroup.defaultGroup().entityNamed(lastEO.entityName());
+            EOEntity entity=ERXEOAccessUtilities.entityNamed(object.editingContext(), lastEO.entityName());
             String lastKey=ERXStringUtilities.lastPropertyKeyInKeyPath(keyPath);
             relationship=entity.relationshipNamed(lastKey);
         }
@@ -334,7 +332,7 @@ public class ERXUtilities {
         if (entityName != null) {
             if (_entityNameEntityCache == null) {
                 _entityNameEntityCache = new NSMutableDictionary();
-                for (Enumeration e = entitiesForModelGroup(EOModelGroup.defaultGroup()).objectEnumerator(); e.hasMoreElements();) {
+                for (Enumeration e = entitiesForModelGroup(ERXEOAccessUtilities.modelGroup(null)).objectEnumerator(); e.hasMoreElements();) {
                     EOEntity anEntity = (EOEntity)e.nextElement();
                     _entityNameEntityCache.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
                 }
