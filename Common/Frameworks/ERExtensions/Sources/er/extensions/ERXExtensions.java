@@ -530,6 +530,7 @@ public class ERXExtensions {
 
     /**
      * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
+     * ERXArrayUtilities.friendlyDisplayForKeyPath} 
      */
     public static String friendlyEOArrayDisplayForKey(NSArray list, String attribute, String nullArrayDisplay) {
         return ERXArrayUtilities.friendlyDisplayForKeyPath(list, attribute, nullArrayDisplay, ", ", " and ");
@@ -950,7 +951,7 @@ public class ERXExtensions {
      * Recursively flattens an array of arrays into a single
      * array of elements.<br/>
      * @deprecated use {@link ERXArrayUtilities#flatten(NSArray) 
-     * ERXArrayUtilities.flatten} instead.
+     * ERXArrayUtilities.flatten}
      */
     public static NSArray flatten(NSArray array) {
         return ERXArrayUtilities.flatten(array);
@@ -968,7 +969,7 @@ public class ERXExtensions {
     /**
      * Groups an array of objects by a given key path.
      * @deprecated use {@link ERXArrayUtilities#arrayGroupedByKeyPath(NSArray, String, boolean, String)
-     * ERXArrayUtilities.arrayGroupedByKeyPath}
+     * ERXArrayUtilities.arrayGroupedByKeyPath} 
      */
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos,
                                                           String keyPath,
@@ -1302,6 +1303,7 @@ public class ERXExtensions {
 
     /**
     * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
+    * ERXArrayUtilities.friendlyDisplayForKeyPath} 
     */
     // DELETEME: duplicate method friendlyEOArrayDisplayForKey
     public static String userPresentableEOArray(NSArray array, String attribute) {

@@ -341,7 +341,7 @@ public abstract class ERXApplication extends WOApplication {
      * @param extraInfo dictionary of extra information about what was
      *		happening when the exception was thrown.
      * @return a valid response to display or null. In that case the superclasses
-     *         {@link handleException(Exception, NSDictionary) is called
+     *         {@link #handleException(Exception, WOContext)} is called
      */
     public WOResponse reportException(Throwable exception, NSDictionary extraInfo) {
         log.error("Exception caught, " + exception.getMessage() + " extra info: "
