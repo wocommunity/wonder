@@ -14,10 +14,10 @@ public class ERMailTextAttachment extends ERMailFileAttachment {
 
     public ERMailTextAttachment (String fileName, String content) {
         super (content);
-		this.setFileName (fileName);
+	this.setFileName (fileName);
     }
 
-    protected BodyPart getBodyPart () throws Exception {
+    protected BodyPart getBodyPart () throws MessagingException {
         MimeBodyPart bp = new MimeBodyPart ();
 
         bp.setText ((String)this.content (), ERMailDelivery.DefaultCharset);
