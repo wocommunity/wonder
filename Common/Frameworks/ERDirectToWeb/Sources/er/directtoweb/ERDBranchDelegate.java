@@ -6,12 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.NextPageDelegate;
-import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.*;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -57,10 +54,10 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                 nextPage = (WOComponent)m.invoke(this, new WOComponent[] { sender });
             } catch (InvocationTargetException ite) {
                 log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
-                throw ite.getTargetException();
+                throw new NSForwardException(ite.getTargetException());
             } catch (Exception e) {
                 log.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
-                throw e;
+                throw new NSForwardException(e);
             }
         } else {
             log.warn("Branch delegate being used with a component that does not implement the ERBranchInterface");
