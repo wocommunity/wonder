@@ -141,6 +141,8 @@
 				9DC9079A0351F85B10CF0E7D,
 				F550BFB703B2535801CCC668,
 				F550BFBA03B253CD01CCC668,
+				943360C30556D67900CF0E7D,
+				943360C40556D67900CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -401,6 +403,8 @@
 				946A968C04686B2600CF0E7D,
 				946A968D04686B2600CF0E7D,
 				946A968E04686B2600CF0E7D,
+				943360C10556D67900CF0E7D,
+				943360C20556D67900CF0E7D,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -771,6 +775,30 @@
 //942
 //943
 //944
+		943360C10556D67900CF0E7D = {
+			isa = PBXFileReference;
+			name = bottom.gif;
+			path = WebServerResources/bottom.gif;
+			refType = 4;
+		};
+		943360C20556D67900CF0E7D = {
+			isa = PBXFileReference;
+			name = top.gif;
+			path = WebServerResources/top.gif;
+			refType = 4;
+		};
+		943360C30556D67900CF0E7D = {
+			fileRef = 943360C10556D67900CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		943360C40556D67900CF0E7D = {
+			fileRef = 943360C20556D67900CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		946A968B04686B2600CF0E7D = {
 			isa = PBXFileReference;
 			name = down.gif;

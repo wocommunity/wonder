@@ -1,6 +1,16 @@
+Image5: WOImage {
+	border = 0;
+	filename = "top.gif";
+}
+
 Image2: WOImage {
 	filename = "down.gif";
 	border = 0;
+}
+
+Image6: WOImage {
+	border = 0;
+	filename = "bottom.gif";
 }
 
 Image1: WOImage {

@@ -38,6 +38,16 @@ BumpUp(abox);
    }
 }
 
+function MoveTop(dbox){
+for(var i = 0; i < dbox.options.length; i++) {
+if (dbox.options[i].selected) {
+		for(var j = 0; j < i; j++){
+			Moveup(dbox);
+		}
+      }
+   }
+}
+
 function MoveupFast(dbox){
 	 Moveup(dbox);
 	 Moveup(dbox);
@@ -59,6 +69,16 @@ dbox.options[i-1].selected = tmpval3;
       }
    }
 updateHidden();
+}
+
+function MoveBottom(ebox){
+for(var i = 0; i < ebox.options.length; i++) {
+if (ebox.options[i].selected) {
+		for(var j = i; j < ebox.options.length; j++){
+			Movedown(ebox);
+		}
+      }
+   }
 }
 
 function MovedownFast(ebox){
@@ -109,7 +129,7 @@ function updateHidden(){
 
 <WEBOBJECT NAME=ToManyForm><TABLE><TR><TD VALIGN=middle><FONT SIZE=-1><STRONG><WEBOBJECT NAME=NumberOfEntities></WEBOBJECT> <WEBOBJECT NAME=EntityName></WEBOBJECT>(s)</STRONG></FONT></TD><TD><WEBOBJECT NAME=AttributeValue></WEBOBJECT></TD><WEBOBJECT NAME=DisplayArrows><WEBOBJECT NAME=Conditional3><TD ALIGN=CENTER><WEBOBJECT NAME=SubmitButton1></WEBOBJECT><P ALIGN=CENTER><WEBOBJECT NAME=SubmitButton2></WEBOBJECT></P></TD>
 </WEBOBJECT>
-<WEBOBJECT NAME=Conditional4><TD ALIGN=CENTER><TABLE><TR><TD><A HREF="javascript:MoveupFast(editForm().list2);"><WEBOBJECT NAME=Image3></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:Moveup(editForm().list2);"><WEBOBJECT NAME=Image1></WEBOBJECT></A></TD></TR><TR><TD>&nbsp;</TD></TR><TR><TD><A HREF="javascript:Movedown(editForm().list2);"><WEBOBJECT NAME=Image2></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:MovedownFast(editForm().list2);"><WEBOBJECT NAME=Image4></WEBOBJECT></A></TD></TR></TABLE>
+<WEBOBJECT NAME=Conditional4><TD ALIGN=CENTER><TABLE><TR><TD><A HREF="javascript:MoveTop(editForm().list2);"><WEBOBJECT NAME=Image5></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:MoveupFast(editForm().list2);"><WEBOBJECT NAME=Image3></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:Moveup(editForm().list2);"><WEBOBJECT NAME=Image1></WEBOBJECT></A></TD></TR><TR><TD>&nbsp;</TD></TR><TR><TD><A HREF="javascript:Movedown(editForm().list2);"><WEBOBJECT NAME=Image2></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:MovedownFast(editForm().list2);"><WEBOBJECT NAME=Image4></WEBOBJECT></A></TD></TR><TR><TD><A HREF="javascript:MoveBottom(editForm().list2);"><WEBOBJECT NAME=Image6></WEBOBJECT></A></TD></TR></TABLE>
 </TD>
 </WEBOBJECT></WEBOBJECT>
 <TD VALIGN=middle><WEBOBJECT NAME=RemoveButton></WEBOBJECT><BR><WEBOBJECT NAME=Hyperlink1>Remove All</WEBOBJECT><WEBOBJECT NAME=HiddenField1></WEBOBJECT></TD></TR>
