@@ -102,6 +102,16 @@ public class ERXFetchSpecificationBatchIterator {
     }
 
     /**
+     * Gets the number of batches for a given iterator.
+     * @return number of objects / batch size rounded up
+     */
+    public int batchCount() {
+        if (!hasFetchedPrimaryKeys())
+            fetchPrimaryKeys();
+        return (int)Math.ceil((primaryKeys.count() * 1.0) / (batchSize() * 1.0));
+    }
+    
+    /**
      * Gets the current number of objects
      * fetched thus far.
      * @return current number of objects fetched.
