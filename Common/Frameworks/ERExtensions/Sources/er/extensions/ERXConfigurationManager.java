@@ -370,6 +370,16 @@ public class ERXConfigurationManager {
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
+                if (aModel.adaptorName().equals("JDBC") && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.poolModelConnections", false)) {
+                    try {
+                        // is the JavaERJDBCAdaptor framework available?
+                        Class cl = Class.forName("er.jdbcadaptor.ERJDBCAdaptor");
+                        // important if one compiles with jikes as jikes would eliminate the call above!
+                        log.debug(cl);
+                        aModel.setAdaptorName("ERJDBC");
+                    } catch (ClassNotFoundException e1) {
+                    }
+                }
                 NSDictionary jdbcInfoDictionary = null;
                 String url= ERXSystem.getProperty(aModelName + ".URL");
                 url = url ==null ? ERXSystem.getProperty("dbConnectURLGLOBAL") : url;
