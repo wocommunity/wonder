@@ -4,8 +4,8 @@ JSPopup: ERXJSPopUpRelationPicker {
     parentDisplayValueName=^restrictingDestinationDisplayKey;
     childDisplayValueName=^destinationDisplayKey;
     selectedParent=selectedParent;
-    selectedChild=selectedChild;
     childrenSortKey=^sortKey;
     defaultChildKey=^defaultRestrictedRelationshipKey;
+	childrenSelection = selectedChild;
 }
 
