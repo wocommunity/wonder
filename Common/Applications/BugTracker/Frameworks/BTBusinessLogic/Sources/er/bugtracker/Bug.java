@@ -21,6 +21,7 @@ public class Bug extends _Bug {
         setReadAsBoolean(true);
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
+        setFeatureRequest(new Integer(0));
     }
 
     public void markReadBy(People reader) {
