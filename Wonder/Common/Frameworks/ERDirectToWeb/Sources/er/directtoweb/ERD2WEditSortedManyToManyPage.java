@@ -116,7 +116,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     } 
 
     public String displayKey() {
-        return destinationRelationship().name()+".userPresentableDescription";
+        String displayKeyFromD2W = (String)d2wContext().valueForKey("displayKey");
+        if(displayKeyFromD2W!=null && displayKeyFromD2W.length()!=0){
+            return displayKeyFromD2W;
+        }else{
+            return destinationRelationship().name()+".userPresentableDescription";
+        }
     }
 
     public boolean displayQuery() {
