@@ -73,7 +73,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
 
     public ERD2WController controllerForName(String controllerName, WOSession session) {
         myCheckRules();
-        D2WContext newContext=new D2WContext(session);
+        D2WContext newContext=new ERD2WContext(session);
         newContext.takeValueForKey(controllerName, "controllerName");
         // give an InstanceCreationAssigment a chance
         ERD2WController c = controllerInstanceWithContext(newContext);
@@ -83,7 +83,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
 
     public ERD2WController controllerForTaskAndEntityNamed(String task, String entityName, WOSession session) {
         myCheckRules();
-        D2WContext newContext=new D2WContext(session);
+        D2WContext newContext=new ERD2WContext(session);
         newContext.setTask(task);
         EOEntity newEntity=entityName!=null ? EOModelGroup.defaultGroup().entityNamed(entityName) : null;
         if (newEntity!=null) newContext.setEntity(newEntity);
@@ -124,7 +124,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
 
         public D2WContext d2wContext() {
             if(d2wContext == null) {
-                d2wContext = new D2WContext(session());
+                d2wContext = new ERD2WContext(session());
             }
             return d2wContext;
         }
