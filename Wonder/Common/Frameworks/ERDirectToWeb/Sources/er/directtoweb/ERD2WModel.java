@@ -65,6 +65,7 @@ public class ERD2WModel extends D2WModel {
         NSMutableArray result=new NSMutableArray();
         result.addObject(_prioritySortOrdering);
         result.addObject(_descriptionSortOrdering);
+
         return result;
     }
     private final static NSArray _ruleSortOrderingKeyVector=ruleSortOrderingKeyArray();
@@ -357,9 +358,8 @@ public class ERD2WModel extends D2WModel {
         // transfer all this into
         for (Enumeration e7=dependendKeysPerKey.keys(); e7.hasMoreElements(); ) {
             String key=(String)e7.nextElement();
-            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) System.out.print("Rhs key "+key+" <-- ");
             Vector keys=(Vector)dependendKeysPerKey.get(key);
-            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) System.out.println(keys);
+            if (log.isDebugEnabled()) log.debug("Rhs key "+key+" <-- " + keys);
             String[] a=new String[keys.size()];
             for (int i=0; i<keys.size();i++) a[i]=(String)keys.elementAt(i);
             _significantKeysPerKey.put(key,a);
@@ -367,7 +367,7 @@ public class ERD2WModel extends D2WModel {
     }
 
     protected void invalidateCaches() {
-        log.info("Invalidating cache");
+        log.debug("Invalidating cache");
         if (_cache!=null)
             _cache.clear();
         if (_systemCache!=null)
@@ -396,7 +396,7 @@ public class ERD2WModel extends D2WModel {
         if(ruleDecodeLog.isDebugEnabled()) {
             try {
                 NSDictionary dic = Services.dictionaryFromFile(modelFile);
-                ruleDecodeLog.info("Got dictionary for file: " + modelFile + "\n\n");
+                ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
                 for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
                     NSDictionary aRule = (NSDictionary)e.nextElement();
                     NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
