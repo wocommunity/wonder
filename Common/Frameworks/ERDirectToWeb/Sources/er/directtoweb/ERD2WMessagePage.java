@@ -16,7 +16,7 @@ import er.extensions.ERXLogger;
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDBranchInterface {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WMessagePage");
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WMessagePage.class);
     
     protected String _message;
     protected String _title;
@@ -114,4 +114,5 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
     public boolean hasBranchChoices() {
         return nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface;
     }
+    //---------------- End Branch Delegate Support --------------------//
 }
