@@ -314,7 +314,7 @@ public class PostgresqlExpression extends JDBCExpression {
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
         } else {
-            value = super.formatValueForAttribute(obj, eoattribute);
+            value = ((obj == null || obj == NSKeyValueCoding.NullValue) ? "NULL" : obj.toString());
         }
         return value;
     }
