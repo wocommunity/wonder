@@ -15,28 +15,28 @@
         }, 
         {
             allowsNull = N; 
-            columnName = IS_ACTIVE; 
+            columnName = "IS_ACTIVE"; 
             name = isActive; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:21 +0200"; }; 
         }, 
         {
             allowsNull = N; 
-            columnName = IS_ADMIN; 
+            columnName = "IS_ADMIN"; 
             name = isAdmin; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:33 +0200"; }; 
         }, 
         {
             allowsNull = N; 
-            columnName = IS_CUSTOMER_SERVICE; 
+            columnName = "IS_CUSTOMER_SERVICE"; 
             name = isCustomerService; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:51 +0200"; }; 
         }, 
         {
             allowsNull = N; 
-            columnName = IS_ENGINEERING; 
+            columnName = "IS_ENGINEERING"; 
             name = isEngineering; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:46 +0200"; }; 
@@ -80,7 +80,7 @@
         isActive, 
         id
     ); 
-    className = er.bugtracker.People; 
+    className = "er.bugtracker.People"; 
     classProperties = (
         login, 
         name, 
@@ -92,7 +92,7 @@
         isActive
     ); 
     externalName = PEOPLE; 
-    internalInfo = {_clientClassPropertyNames = (login, name, password, isAdmin, email); }; 
+    internalInfo = {"_clientClassPropertyNames" = (login, name, password, isAdmin, email); }; 
     name = People; 
     primaryKeyAttributes = (id); 
     userInfo = {

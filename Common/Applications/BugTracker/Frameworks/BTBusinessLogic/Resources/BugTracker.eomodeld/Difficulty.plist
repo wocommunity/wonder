@@ -15,7 +15,7 @@
     ); 
     attributesUsedForLocking = (oid, difficultyDescription); 
     cachesObjects = Y; 
-    className = er.bugtracker.Difficulty; 
+    className = "er.bugtracker.Difficulty"; 
     classProperties = (difficultyDescription); 
     externalName = DIFFICULTY; 
     isReadOnly = Y; 

@@ -10,13 +10,13 @@
                     class = EOKeyValueQualifier; 
                     key = dateSubmitted; 
                     selectorName = "isGreaterThan:"; 
-                    value = {_key = date; class = EOQualifierVariable; }; 
+                    value = {"_key" = date; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = originator; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = user; class = EOQualifierVariable; }; 
+                    value = {"_key" = user; class = EOQualifierVariable; }; 
                 }
             ); 
         }; 
@@ -30,7 +30,7 @@
             qualifiers = (
                 {
                     class = EOKeyValueQualifier; 
-                    key = state.oid; 
+                    key = "state.oid"; 
                     selectorName = "isEqualTo:"; 
                     value = buld; 
                 }, 
@@ -38,7 +38,7 @@
                     class = EOKeyValueQualifier; 
                     key = targetRelease; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = targetRelease; class = EOQualifierVariable; }; 
+                    value = {"_key" = targetRelease; class = EOQualifierVariable; }; 
                 }
             ); 
         }; 
@@ -54,11 +54,11 @@
                     class = EOKeyValueQualifier; 
                     key = owner; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = user; class = EOQualifierVariable; }; 
+                    value = {"_key" = user; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
-                    key = state.oid; 
+                    key = "state.oid"; 
                     selectorName = "isNotEqualTo:"; 
                     value = clsd; 
                 }
@@ -82,11 +82,11 @@
                     class = EOKeyValueQualifier; 
                     key = owner; 
                     selectorName = "isEqualTo:"; 
-                    value = {_key = user; class = EOQualifierVariable; }; 
+                    value = {"_key" = user; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
-                    key = state.oid; 
+                    key = "state.oid"; 
                     selectorName = "isNotEqualTo:"; 
                     value = buld; 
                 }
