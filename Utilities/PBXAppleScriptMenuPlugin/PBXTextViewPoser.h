@@ -18,6 +18,9 @@
     char _observingHighlightColorChangedNotification;
     NSColor *_highlightBaseColor;
     unsigned int _modifierFlagsAtLastSingleMouseDown;
+    float _pageGuideWidth;
+    NSColor *_pageGuideOutOfBoundsColor;
+    void *__reserved[3];
 }
 @end
 
