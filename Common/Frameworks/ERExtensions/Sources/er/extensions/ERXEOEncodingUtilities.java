@@ -247,7 +247,7 @@ public class ERXEOEncodingUtilities {
             EOEnterpriseObject eo =(EOEnterpriseObject)e.nextElement();
 
             // Get the primary key of the object
-            String pk = ERXExtensions.primaryKeyForObject(eo);
+            String pk = ERXEOControlUtilities.primaryKeyStringForObject(eo);
             if(pk == null && eo instanceof ERXGeneratesPrimaryKeyInterface) {
                 NSDictionary pkDict =((ERXGeneratesPrimaryKeyInterface)eo).primaryKeyDictionary(false);
                 if(pkDict != null && pkDict.allValues().count() == 1)

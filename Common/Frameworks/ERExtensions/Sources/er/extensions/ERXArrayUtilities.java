@@ -656,11 +656,11 @@ public class ERXArrayUtilities extends Object {
     
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>flatten</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKey("@flatten");</code><br/>
+     * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
      * <br/>
      * Which in this case would return myArray flattened.
      */
@@ -676,8 +676,9 @@ public class ERXArrayUtilities extends Object {
          */
         public Object compute(NSArray array, String keypath) {
 	    synchronized (array) {
-                array = arrayWithoutDuplicates(array);
                 array = contents(array, keypath);
+                if(array != null)
+                    array = arrayWithoutDuplicates(array);
                 return array;
 	    }
         }
