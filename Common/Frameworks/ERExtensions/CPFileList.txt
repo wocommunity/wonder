@@ -25,6 +25,7 @@
 ./Sources/er/extensions/ERXDirectAction.java:er.extensions
 ./Sources/er/extensions/ERXDirectActionHyperlink.java:er.extensions
 ./Sources/er/extensions/ERXDirectActionImage.java:er.extensions
+./Sources/er/extensions/ERXDirectActionRequestHandler.java:er.extensions
 ./Sources/er/extensions/ERXDisplayDataAsString.java:er.extensions
 ./Sources/er/extensions/ERXECNoValidationDelegate.java:er.extensions
 ./Sources/er/extensions/ERXEditingContextDelegate.java:er.extensions
