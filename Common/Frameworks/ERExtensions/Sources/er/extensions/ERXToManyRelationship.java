@@ -189,7 +189,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         super.takeValuesFromRequest(r, c);
         if (_localRelativeSourceObject() instanceof EOEnterpriseObject) {
             EOEnterpriseObject localObject = (EOEnterpriseObject)_localRelativeSourceObject();
-            Object value = localObject.valueForKey(_localRelativeRelationshipKey());
+            Object value = localObject.valueForKeyPath(_localRelativeRelationshipKey());
             try {
                 localObject.validateValueForKey(value, _localRelativeRelationshipKey());
             } catch (NSValidation.ValidationException eov) {
