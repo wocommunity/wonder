@@ -187,8 +187,7 @@ public class ERCMailDelivery {
                                                  String componentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-        WOContext context = new WOContext(new WORequest("POST", "", "HTTP/1.1", null, null, null));
-        WOComponent component = WOApplication.application().pageWithName(componentName, context);
+        WOComponent component = ERXApplication.instantiatePage(componentName);
         if (bindings != null && bindings.count() > 0)
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
         return composeComponentEmail(from, to, cc, bcc, title, component, ec);
