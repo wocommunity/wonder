@@ -124,6 +124,7 @@ public class ERXValidationFactory {
             "must have at least one",			// "The exercises property of ERPCompanyRole must have at least one ERPExercise"
             "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
             "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
+            "exceeds maximum length of"
         };
         Object objects[] = {
             ERXValidationException.NullPropertyException,
@@ -132,6 +133,7 @@ public class ERXValidationFactory {
             ERXValidationException.MandatoryToManyRelationshipException,
             ERXValidationException.ObjectRemovalException,
             ERXValidationException.ObjectsRemovalException,
+            ERXValidationException.ExceedsMaximiumLengthException
         };
         _mappings = new NSDictionary( objects, keys );
     }
