@@ -173,7 +173,10 @@ public class ERXSession extends WOSession implements Serializable {
 
             _localizer = newLocalizer;
             ERXLocalizer.setCurrentLocalizer(_localizer);
-            _messageEncoding = browser().messageEncodingForLanguage(_localizer.language());
+
+            if (browser()!= null) {
+                _messageEncoding = browser().messageEncodingForLanguage(_localizer.language());
+            }
 
             NSMutableArray languageList = new NSMutableArray(_localizer.language());
             if (! languageList.containsObject("Nonlocalized")) 
@@ -502,11 +505,11 @@ public class ERXSession extends WOSession implements Serializable {
     public void terminate() {
         // WOFIX: 5.1.2
         // work around a bug in WO 5.1.2 where the sessions EC will keep a lock on the SEC
-        defaultEditingContext().setSharedEditingContext(null);
-        if (_observer != null) 
-            NSNotificationCenter.defaultCenter().removeObserver(_observer);
-        if (_browser != null) 
-            ERXBrowserFactory.factory().releaseBrowser(_browser);
+//        defaultEditingContext().setSharedEditingContext(null);
+//        if (_observer != null) 
+//            NSNotificationCenter.defaultCenter().removeObserver(_observer);
+//        if (_browser != null) 
+//            ERXBrowserFactory.factory().releaseBrowser(_browser);
         super.terminate();
     }
 
