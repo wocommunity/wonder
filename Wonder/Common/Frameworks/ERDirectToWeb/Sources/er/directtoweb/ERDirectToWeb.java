@@ -32,12 +32,17 @@ public class ERDirectToWeb {
         public void didFinishedLaunchingApp(NSNotification n) {
             ERDirectToWeb.warmUpRuleCache();
             NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("didCompileClass",
+                                                             new NSSelector("resetModel",
                                                                             ERXConstant.NotificationClassArray),
                                                              ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
                                                              null);
+            NSNotificationCenter.defaultCenter().addObserver(this,
+                                                             new NSSelector("resetModel",
+                                                                            ERXConstant.NotificationClassArray),
+                                                             ERXLocalizer.LocalizationDidResetNotification,
+                                                             null);
         }
-        public void didCompileClass(NSNotification n) {
+        public void resetModel(NSNotification n) {
             ERD2WModel.erDefaultModel().resetModel();
         }
     }

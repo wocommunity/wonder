@@ -59,6 +59,18 @@ public class ERXSession extends WOSession {
         }
     }
 
+    private ERXLocalizer localizer;
+    public ERXLocalizer localizer() {
+        if(localizer == null) {
+            localizer = ERXLocalizer.localizerForLanguages(languages());
+        }
+        return localizer;
+    }
+
+    public void setLanguage(String language) {
+        localizer = ERXLocalizer.localizerForLanguage(language);
+    }
+
     private static boolean registered = false;
     public static void registerNotifications() {
         if (!registered) {

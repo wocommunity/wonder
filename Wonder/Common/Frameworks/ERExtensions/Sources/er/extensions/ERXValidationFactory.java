@@ -382,16 +382,10 @@ public class ERXValidationFactory {
     }
 
     // These are used for knowing how to build the cache, ie which localized resources to load.
-    private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
-    private NSMutableArray _targetDisplayLanguages = new NSMutableArray(DEFAULT_TARGET_DISPLAY_LANGUAGE);
-    public NSArray targetDisplayLanguages() { return _targetDisplayLanguages; }
-    public void setTargetDisplayLanguages(NSArray targets) { _targetDisplayLanguages = new NSMutableArray(targets); }
-    public void addTargetDisplayLanguage(String target) {
-        if (!_targetDisplayLanguages.containsObject(target))
-            _targetDisplayLanguages.addObject(target);
-    }
 
-    private String _defaultTargetLanguage = DEFAULT_TARGET_DISPLAY_LANGUAGE;
-    public String defaultTargetLanguage() { return _defaultTargetLanguage; }
-    public void setDefaultTargetLanguage(String target) { _defaultTargetLanguage = target; }
+    public NSArray targetDisplayLanguages() { return ERXLocalizer.availableLanguages(); }
+    public void setTargetDisplayLanguages(NSArray targets) { ERXLocalizer.setAvailableLanguages(targets); }
+
+    public String defaultTargetLanguage() { return ERXLocalizer.defaultLanguage(); }
+    public void setDefaultTargetLanguage(String target) { ERXLocalizer.setDefaultLanguage(target);}
 }

@@ -10,8 +10,10 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.directtoweb.ERD2WUtilities;
+import er.extensions.*;
 
 public class ERDDefaultPropertyNameAssignment extends ERDAssignment {
+    static final ERXLogger log = ERXLogger.getLogger(ERDDefaultPropertyNameAssignment.class);
 
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDefaultPropertyNameAssignment(eokeyvalueunarchiver);
@@ -21,10 +23,20 @@ public class ERDDefaultPropertyNameAssignment extends ERDAssignment {
     public ERDDefaultPropertyNameAssignment (String key, Object value) { super(key,value); }
 
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "propertyKey"});
-    public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
+    public static final NSArray _DEPENDENT_KEYS_WITH_LOCALIZATION=new NSArray(new String[] { "propertyKey", "session.localizer"});
+    public NSArray dependentKeys(String keyPath) {
+        if(ERXLocalizer.isLocalizationEnabled()) return _DEPENDENT_KEYS_WITH_LOCALIZATION;
+        return _DEPENDENT_KEYS;
+    }
 
     // Default names
     public Object displayNameForProperty(D2WContext c) {
-        return ERD2WUtilities.displayNameForKey((String)c.valueForKey("propertyKey"));
+        Object value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("propertyKey"));
+        if(value != null && ERXLocalizer.isLocalizationEnabled()) {
+            ERXLocalizer l = (ERXLocalizer)c.valueForKeyPath("session.localizer");
+            if(l != null)
+                value = l.localizedStringForKeyWithDefault((String)value);
+        }
+        return value;
     }
 }

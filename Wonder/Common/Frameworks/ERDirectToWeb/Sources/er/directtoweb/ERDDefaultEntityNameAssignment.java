@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.directtoweb.ERD2WUtilities;
+import er.extensions.*;
 
 public class ERDDefaultEntityNameAssignment extends ERDAssignment {
 
@@ -21,10 +22,23 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment {
     public ERDDefaultEntityNameAssignment (EOKeyValueUnarchiver u) { super(u); }
     public ERDDefaultEntityNameAssignment (String key, Object value) { super(key,value); }
 
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"entity.name"});
-    public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
+    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "entity.name"});
+    public static final NSArray _DEPENDENT_KEYS_WITH_LOCALIZATION=new NSArray(new String[] { "propertyKey", "session.localizer"});
+    public NSArray dependentKeys(String keyPath) {
+        if(ERXLocalizer.isLocalizationEnabled()) return _DEPENDENT_KEYS_WITH_LOCALIZATION;
+        return _DEPENDENT_KEYS;
+    }
 
-    public Object displayNameForEntity(D2WContext c) { return ERD2WUtilities.displayNameForKey((String)c.valueForKeyPath("entity.name")); }
+    // Default names
+    public Object displayNameForEntity(D2WContext c) {
+        Object value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("entity.name"));
+        if(value != null && ERXLocalizer.isLocalizationEnabled()) {
+            ERXLocalizer l = (ERXLocalizer)c.valueForKeyPath("session.localizer");
+            if(l != null)
+                value = l.localizedStringForKeyWithDefault((String)value);
+        }
+        return value;
+    }
 
    // a fake entity that can be used for tasks such as error/confirm..
     private EOEntity _dummyEntity;
