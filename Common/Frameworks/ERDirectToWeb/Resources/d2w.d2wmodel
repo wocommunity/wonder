@@ -1964,7 +1964,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = emptyListComponentName; 
-                value = ERD2WEmptyListMessage; 
+                value = ERDEmptyListMessage; 
             }; 
         }, 
         {
@@ -3769,7 +3769,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageWrapperName; 
-                value = ERRTFPageWrapper; 
+                value = ERDRTFPageWrapper; 
             }; 
         }, 
         {
@@ -3795,7 +3795,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageWrapperName; 
-                value = XMLPageWrapper; 
+                value = ERDXMLPageWrapper; 
             }; 
         }, 
         {
@@ -3810,7 +3810,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = pageWrapperName; 
-                value = D2WEmptyWrapper; 
+                value = ERDEmptyPageWrapper; 
             }; 
         }, 
         {
