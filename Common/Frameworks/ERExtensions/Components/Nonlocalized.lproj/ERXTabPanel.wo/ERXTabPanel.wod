@@ -221,8 +221,7 @@ Table: WOGenericContainer {
 }
 
 UseLinkForTabSwitch: WOConditional {
-  condition=useLinkForTabSwitch;
-	WODebug = false;
+    condition=useLinkForTabSwitch;
 }
 
 td1: WOGenericContainer {
