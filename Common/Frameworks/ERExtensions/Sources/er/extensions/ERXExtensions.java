@@ -1050,18 +1050,8 @@ public class ERXExtensions {
      * @throws IOException if things go wrong
      * @return byte array of the file.
      */
-    // MOVEME: ERXFileUtilities
     public static byte[] bytesFromFile(File f) throws IOException {
-        if (f == null)
-            throw new IOException("null file");
-        int size = (int) f.length();
-        FileInputStream fis = new FileInputStream(f);
-        byte[] data = new byte[size];
-        int bytesRead = 0;
-        while (bytesRead < size)
-            bytesRead += fis.read(data, bytesRead, size - bytesRead);
-        fis.close();
-        return data;
+        return ERXFileUtilities.bytesFromFile(f);
     }
 
     /**
@@ -1072,7 +1062,7 @@ public class ERXExtensions {
      */
     // MOVEME: ERXFileUtilities
     public static String stringFromFile(File f) throws IOException {
-        return new String(bytesFromFile(f));
+        return ERXFileUtilities.stringFromFile(f);
     }
     /**
      * Returns a string from the file using the specified
@@ -1083,7 +1073,7 @@ public class ERXExtensions {
      */
     // MOVEME: ERXFileUtilities    
     public static String stringFromFile(File f, String encoding) throws IOException {
-        return new String(bytesFromFile(f), encoding);
+        return ERXFileUtilities.stringFromFile(f, encoding);
     }
 
     /**
@@ -1099,14 +1089,7 @@ public class ERXExtensions {
     // MOVEME: ERXFileUtilities
     // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
-        long lastModified = 0;
-        String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
-                                                                                             frameworkName,
-                                                                                             null);
-        if (filePath!=null) {
-            lastModified = new File(filePath).lastModified();
-        }
-        return lastModified;
+        return ERXFileUtilities.lastModifiedDateForFileInFramework(fileName, frameworkName);
     }
 
     /**
@@ -1121,7 +1104,7 @@ public class ERXExtensions {
     // FIXME: Capitalize inFramework
     // MOVEME: ERXFileUtilities
     public static Object readPropertyListFromFileinFramework(String fileName, String aFrameWorkName) {
-        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null);
+        return ERXFileUtilities.readPropertyListFromFileInFramework(fileName, aFrameWorkName);
     }
 
     /**
@@ -1137,24 +1120,12 @@ public class ERXExtensions {
      */
     // FIXME: Not the best way of handling encoding
     // MOVEME: ERXFileUtilities
-    public static Object readPropertyListFromFileInFramework(String fileName, String aFrameWorkName, NSArray languageList) {
-        String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
-                                                                                             aFrameWorkName,
-                                                                                             languageList);
-        Object result=null;
-        if (filePath!=null) {
-            File file = new File(filePath);
-            try {
-                try {
-                    result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
-                } catch (IllegalArgumentException iae) {
-                    result=NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
-                }
-            } catch (IOException ioe) {
-                log().error("ConfigurationManager: Error reading "+filePath);
-            }
-        }
-        return result;
+    public static Object readPropertyListFromFileInFramework(String fileName,
+                                                             String aFrameWorkName,
+                                                             NSArray languageList) {
+        return ERXFileUtilities.readPropertyListFromFileInFramework(fileName,
+                                                             aFrameWorkName,
+                                                             languageList);
     }
 
     /**
