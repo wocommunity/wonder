@@ -731,6 +731,7 @@ There are three ways to use this script:
             <param name="project.dir" value="DynaReporting/Examples/DynaReporter" />
 
             <param name="use.wonder.core" value="true" />
+            <param name="use.webobjects.d2w" value="true" />
             <param name="use.reporting" value="true" />
             <param name="use.mysql" value="true" />
             <param name="use.movies" value="true" />
