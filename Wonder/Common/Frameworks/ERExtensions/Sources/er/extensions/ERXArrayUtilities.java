@@ -396,6 +396,28 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Sorts a given mutable array with a key in place.
+     * @param array array to be sorted.
+     * @param key sort key.
+     */
+    public static void sortArrayWithKey(NSMutableArray array, String key) {
+        sortArrayWithKey(array, key, null);
+    }
+
+    /**
+     * Sorts a given mutable array with a key in place.
+     * @param array array to be sorted.
+     * @param key sort key.
+     * @param selector sort order selector to use, if null, then sort will be ascending.
+     */
+    public static void sortArrayWithKey(NSMutableArray array, String key, NSSelector selector) {
+        ERXAssert.PRE.notNull("Attempting to sort null array of eos.", array);
+        ERXAssert.PRE.notNull("Attepting to sort array of eos with null key.", key);
+        NSArray order=new NSArray(new Object[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
+        EOSortOrdering.sortArrayUsingKeyOrderArray(array, order);
+    }
+
+    /**
      * The core class of {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator}, which adds support for keyPaths.<br/>
      */
 
