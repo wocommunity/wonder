@@ -319,7 +319,7 @@
     <!-- ERJavaMail -->
     <target name="ERJavaMail.all">
         <antcall target="framework" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.javamail.ERJavaMail" />
             <param name="project.name" value="ERJavaMail" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJavaMail" />
         </antcall>
