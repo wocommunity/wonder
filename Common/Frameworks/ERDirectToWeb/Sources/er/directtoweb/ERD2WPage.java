@@ -43,11 +43,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public void setObject(EOEnterpriseObject eo) {
         _context = (eo != null) ? eo.editingContext() : null;
         // for SmartAssignment
-        if(d2wContext() != null) {
-            d2wContext().takeValueForKey(eo, "object");
-        } else {
-            log.warn("No D2W context!");
-        }
+        d2wContext().takeValueForKey(eo, "object");
         super.setObject(eo);
     }
     // debug helpers
@@ -61,7 +57,13 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
         return name;
     }
-    
+    public D2WContext d2wContext() {
+        if(hasBinding("localContext") && super.d2wContext()==null) {
+            setLocalContext((D2WContext)valueForBinding("localContext"));
+        }
+        return super.d2wContext();
+    }
+
     // make kvc happy
     public void setD2wContext(D2WContext newValue) {}
     public void setLocalContext(D2WContext newValue) {
@@ -70,11 +72,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             // D2WComponent.setLocalContext, which holds on to the first non null value it gets.
             // I swear if I could get my hands on the person who did that.. :-)
             _localContext=newValue;
+            log.debug("SetLocalContext:"+newValue);
         }
         super.setLocalContext(newValue);
-        log.debug("SetLocalContext "+newValue);
-        if(d2wContext() != null)
-            d2wContext().takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
+        if(newValue != null)
+            newValue.takeValueForKey(keyPathsWithValidationExceptions, "keyPathsWithValidationExceptions");
         else
             log.warn("D2WContext was null!");
     }
