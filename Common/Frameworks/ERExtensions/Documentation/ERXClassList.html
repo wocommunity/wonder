@@ -116,7 +116,7 @@
 <H3> Log4j Additions </H3> 
 <DL>
 	<DT>
-		ERXLog4j 
+		ERXLog4JConfiguration 
 	</DT>
 	<DD>
 		Configures and manages the log4j logging system. Will also configure the system for rapid turn around, ie when WOCaching is disabled when the conf file changes it will get reloaded. 
@@ -228,12 +228,6 @@
 	</DT>
 	<DD>
 		Utility methods useful when using GifPlot. 
-	</DD>
-	<DT>
-		ERXKeyValueCoding 
-	</DT>
-	<DD>
-		Poor man's key value coding. 
 	</DD>
 	<DT>
 		ERXKeyValuePair 
@@ -354,12 +348,6 @@
 		Extensions of EOGenericRecord. Has alot of really nice convience methods like committedSnapshotValueForKey. 
 	</DD>
 	<DT>
-		ERXQualifierUtilities 
-	</DT>
-	<DD>
-		Added a bunch of EOQualifier comparision utility methods. 
-	</DD>
-	<DT>
 		ERXUtilities 
 	</DT>
 	<DD>
@@ -417,12 +405,6 @@
 		Used to denote if the current WOComponent holds throw exceptions. 
 	</DD>
 	<DT>
-		ERXSessionAdditionInterface 
-	</DT>
-	<DD>
-		Used for implementing a SessionAddition. 
-	</DD>
-	<DT>
 		ERXMutableUserInfoHolderInterface 
 	</DT>
 	<DD>
@@ -455,12 +437,6 @@
 	</DT>
 	<DD>
 		Extension of WOSession. Adds notifications when awake and sleep occur. Plus adds a fair amount in terms of browser knowledge. 
-	</DD>
-	<DT>
-		ERXSessionAddition 
-	</DT>
-	<DD>
-		Added the concept of a singleton that has knowledge of the current session and can be reached through binding in the ui, ie session.additions.myAddition.myMethod. Useful for partitioning logic at the session level. 
 	</DD>
 	<DT>
 		ERXStatelessComponent 
@@ -577,7 +553,7 @@
 		Stateless implementation of JSConfirmPanel.* 
 	</DD>
 	<DT>
-		ERXJSCloseWindow 
+		ERXJSAutoClosePage 
 	</DT>
 	<DD>
 		Closes a javascript window. 
@@ -604,12 +580,6 @@
 <H3> Misc WOComponents </H3> 
 <DL>
 	<DT>
-		ERXCheckedIfEqual 
-	</DT>
-	<DD>
-		Given two values displays a checkbox checked or not. 
-	</DD>
-	<DT>
 		ERXDebugMarker 
 	</DT>
 	<DD>
@@ -620,12 +590,6 @@
 	</DT>
 	<DD>
 		Displays a byte array of data as a String. 
-	</DD>
-	<DT>
-		ERXDisplayHTML 
-	</DT>
-	<DD>
-		Displays a String with escape html set to false. 
 	</DD>
 	<DT>
 		ERXEditURL 
@@ -810,12 +774,6 @@
 		Sets a key value when the hyperlink is clicked. 
 	</DD>
 	<DT>
-		ERXLongResponsePage 
-	</DT>
-	<DD>
-		Java port of WOLongResponsePage, now uses Java threads. 
-	</DD>
-	<DT>
 		ERXMailTo 
 	</DT>
 	<DD>
@@ -834,28 +792,10 @@
 		Nice for adjusting the query specs for dates on a display group. 
 	</DD>
 	<DT>
-		ERXRenameObject 
-	</DT>
-	<DD>
-		Renames an object.* 
-	</DD>
-	<DT>
 		ERXStringListPicker 
 	</DT>
 	<DD>
 		Useful for picking a String from a list. 
-	</DD>
-	<DT>
-		ERXNoHelpAvailableHelp 
-	</DT>
-	<DD>
-		"No help available" page 
-	</DD>
-	<DT>
-		ERXAddObjectWithName 
-	</DT>
-	<DD>
-		description forthcoming! 
 	</DD>
 	<DT>
 		ERXDirectActionImage 
@@ -916,12 +856,6 @@
 <DL>
 	<DT>
 		WOSortOrder 
-	</DT>
-	<DD>
-		(Back port from WO 5 WOExtensions) 
-	</DD>
-	<DT>
-		WOTabPanel 
 	</DT>
 	<DD>
 		(Back port from WO 5 WOExtensions) 
