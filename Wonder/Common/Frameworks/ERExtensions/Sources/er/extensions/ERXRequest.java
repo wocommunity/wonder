@@ -91,22 +91,22 @@ public  class ERXRequest extends WORequest {
     
     private static class _LanguageComparator extends NSComparator {
         
-        private static float q(String languageString) {
+        private static float quality(String languageString) {
             float result=0f;
             if (languageString!=null) {
                 languageString = languageString.trim();
-                int semicolumn=languageString.indexOf(';');
-                if (semicolumn!=-1 &&
-                    languageString.length()>semicolumn+2) {
-                    result=Float.parseFloat(languageString.substring(semicolumn+3));
+                int semicolon=languageString.indexOf(';');
+                if (semicolon!=-1 &&
+                    languageString.length()>semicolon+2) {
+                    result=Float.parseFloat(languageString.substring(semicolon+1).trim().substring(2));
                 } else
                     result=1.0f;
             }
             return result;
         }
         public int compare(Object o1, Object o2) {
-            float f1=q((String)o1);
-            float f2=q((String)o2);
+            float f1=quality((String)o1);
+            float f2=quality((String)o2);
             return f1<f2 ? OrderedDescending : ( f1==f2 ? OrderedSame : OrderedAscending ); // we want DESCENDING SORT!!
         }
         
