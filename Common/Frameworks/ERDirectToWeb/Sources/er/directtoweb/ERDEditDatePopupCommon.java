@@ -29,6 +29,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     protected NSMutableArray yearList;
     protected static NSArray monthList;
     protected NSArray monthNameList;
+    protected static NSArray defaultMonthNameList;
     protected static NSArray dayList;
 
     protected static final NSTimestampFormatter DAY_FORMAT =
@@ -74,6 +75,12 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     public NSArray monthNameList() {
         if (monthNameList == null) {
             monthNameList = (NSArray)ERXLocalizer.currentLocalizer().valueForKey("ERDDatePopup.monthList");
+            if(monthNameList == null) {
+                if(defaultMonthNameList == null) {
+                    defaultMonthNameList = new NSArray(new Object[] { "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"});
+                }
+                monthNameList = defaultMonthNameList;
+            }
         }
         return monthNameList;
     }
