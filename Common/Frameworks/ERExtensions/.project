@@ -16,7 +16,7 @@
 				<dictionary>
 					<key>LaunchConfigHandle</key>
 					<value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;launchConfiguration local=&quot;true&quot; path=&quot;ERExtensions compile.launch&quot;/&gt;
+&lt;launchConfiguration local=&quot;true&quot; path=&quot;ERExtensionsCompile.launch&quot;/&gt;
 </value>
 				</dictionary>
 			</arguments>
