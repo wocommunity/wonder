@@ -135,17 +135,18 @@ public class EOModeler extends WOComponent {
         }
         /*** actions **********/
         public WOComponent addAttribute() {
-            addAttributeNamed(selectedEntity, "attributeName");
+            addAttributeNamed(selectedEntity, "attributeName", null);
             return null;
         }
-        public WOComponent addRelationship() {
-            return null;
-        }
-        public EOAttribute addAttributeNamed(EOEntity entity, String name) {
+
+        public EOAttribute addAttributeNamed(EOEntity entity, String name, EOAttribute prototype) {
             EOAttribute a = new EOAttribute();
             a.setName(name);
-            a.setColumnName(name.toLowerCase());
             entity.addAttribute(a);
+            if(prototype != null)
+                a.setPrototype(prototype);
+            a.setColumnName(name.toLowerCase());
+            updateClassProperties(entity,a,false);
             return a;
         }
         
@@ -167,10 +168,7 @@ public class EOModeler extends WOComponent {
             EOAttribute selectedPK = (EOAttribute)selectedEntity.primaryKeyAttributes().objectAtIndex(0);
             
             if(foreignAttribute == null) {
-                
-                foreignAttribute = addAttributeNamed(targetEntity, selectedName+"id");
-                foreignAttribute.setPrototype(selectedPK.prototype());
-                updateClassProperties(targetEntity,foreignAttribute,false);
+                foreignAttribute = addAttributeNamed(targetEntity, selectedName+"id", selectedPK.prototype());
             }
             
             EORelationship relationship = new EORelationship();
@@ -198,14 +196,9 @@ public class EOModeler extends WOComponent {
             String targetName = targetEntity.name().toLowerCase();
             String selectedName = selectedEntity.name().toLowerCase();
             EOAttribute selectedPK = (EOAttribute)targetEntity.primaryKeyAttributes().objectAtIndex(0);
-            log.info(selectedPK + "--" + selectedPK.prototype());
+
             if(foreignAttribute == null) {
-                foreignAttribute = new EOAttribute();
-                foreignAttribute.setName(targetName+"id");
-                foreignAttribute.setColumnName(targetName+"id");
-                selectedEntity.addAttribute(foreignAttribute);
-                foreignAttribute.setPrototype(selectedPK.prototype());
-                updateClassProperties(selectedEntity,foreignAttribute,false);
+                foreignAttribute = addAttributeNamed(selectedEntity, targetName+"id", selectedPK.prototype());
             }
             relationship.setName(targetName+(isToMany ? "s" : ""));
             selectedEntity.addRelationship(relationship);
