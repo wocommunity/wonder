@@ -75,18 +75,18 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
 	}
     }
     
-    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
-	resetDict(0, context().session().sessionID());
-	return super.invokeAction(aRequest,aContext);
-    }
-
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
-	resetDict(1, context().session().sessionID());
+	resetDict(0, context().session().sessionID() + context().contextID());
 	super.takeValuesFromRequest(aRequest,aContext);
     }
 
+    public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+	resetDict(1, context().session().sessionID() + context().contextID());
+	return super.invokeAction(aRequest,aContext);
+    }
+
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-	resetDict(2, context().session().sessionID());
+	resetDict(2, context().session().sessionID() + context().contextID());
 	super.appendToResponse(aResponse,aContext);
     }
 
