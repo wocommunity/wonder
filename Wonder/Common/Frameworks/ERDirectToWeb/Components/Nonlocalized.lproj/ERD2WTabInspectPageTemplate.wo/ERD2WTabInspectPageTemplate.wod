@@ -190,4 +190,5 @@ TabPanel: ERXTabPanel {
 	selectedTab = currentTab;
 	tabNameKey = "displayName";
 	submitActionName = switchTabActionName;
+	useFormSubmit = true;
 }
