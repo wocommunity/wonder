@@ -156,10 +156,17 @@ public class ERXCompilerProxy {
             _filesToWatch = new NSMutableDictionary();
             return;
 	}
-	
+
         log.debug("initialize");
 
         _classPath = System.getProperty("java.class.path");
+        if(_classPath.indexOf("Classes/classes.jar") < 0) {
+            // (ak) We need this when we do an Ant build, until WOProject is fixed to include classes.jar
+            // This wouldn't work on windows of course, but then again, the rest of this class doesn't, too.
+            String systemRoot = "/System/Library/Frameworks/JavaVM.framework/Classes/";
+            _classPath += ":" + systemRoot + "classes.jar";
+            _classPath += ":" + systemRoot + "ui.jar";
+        }
 
         _raiseOnError = System.getProperty("CPRaiseOnError") != null;
 
