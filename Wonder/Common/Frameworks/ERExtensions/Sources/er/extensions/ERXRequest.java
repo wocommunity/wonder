@@ -47,11 +47,44 @@ public  class ERXRequest extends WORequest {
         return _browserLanguages;
     }
 
-    /** Translates ("de", "en-gb;q=0.66", "en-us;q=0.33") to ("de", "en_gb", "en-us", "en").
+
+
+    private static class _LanguageComparator extends NSComparator {
+        
+        private static float q(String languageString) {
+            float result=0f;
+            if (languageString!=null) {
+                int semicolumn=languageString.indexOf(';');
+                if (semicolumn!=-1 &&
+                    languageString.length()>semicolumn+2) {
+                    result=Float.parseFloat(languageString.substring(semicolumn+3));
+                } else
+                    result=1.0f;
+            }
+            return result;
+        }
+        public int compare(Object o1, Object o2) {
+            float f1=q((String)o1);
+            float f2=q((String)o2);
+            return f1<f2 ? OrderedDescending : ( f1==f2 ? OrderedSame : OrderedAscending ); // we want DESCENDING SORT!!
+        }
+        
+    }
+
+    
+    /** Translates ("de", "en-us;q=0.33", "en", "en-gb;q=0.66") to ("de", "en_gb", "en-us", "en").
      * @param languages NSArray of Strings
-     * @returns NSArray of normalized Strings
-     */
+        * @returns sorted NSArray of normalized Strings
+        */
+    private final static NSComparator COMPARE_Qs=new _LanguageComparator();
     protected NSArray fixAbbreviationArray(NSArray languages) {
+        try {
+            languages=languages.sortedArrayUsingComparator(COMPARE_Qs);
+        } catch (NSComparator.ComparisonException e) {
+            log.error("Couldn't sort language array "+languages+": "+e);
+        } catch (NumberFormatException e2) {
+            log.error("Couldn't sort language array "+languages+": "+e2);
+        }
         NSMutableArray nsmutablearray = new NSMutableArray(languages.count());
         int cnt = languages.count();
         for (int i = cnt - 1; i >= 0; i--) {
