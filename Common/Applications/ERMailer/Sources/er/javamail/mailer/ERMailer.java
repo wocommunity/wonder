@@ -149,6 +149,8 @@ public class ERMailer {
             // Set the content
             mail.setSubject(message.title());
             mail.setHTMLContent(message.text());
+				if(message.plainText()!=null && message.plainText().length()>0)
+					mail.setHiddenPlainTextContent(message.plainText());
         } catch (Exception e) {
             log.error("Caught exception constructing mail to delevery: " + ERXUtilities.stackTrace(e));
             mail = null;
