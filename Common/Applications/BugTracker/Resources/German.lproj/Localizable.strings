@@ -1,0 +1,74 @@
+{
+    "HomePage.ListForOpenBugs" = "Liste von @pluralCount@ offenen @pluralString@ für Dich";
+    "HomePage.ListForUnreadBugs" = "Liste von @pluralCount@ ungelesenen @pluralString@ für Dich";
+    "List @user.openTestItems.count@ open TestItem(s) assigned to you" = "Liste von @user.openTestItems.count@ offenen Testfällen(s) für Dich";
+    "List @user.openRequirements.count@ open Requirements(s) assigned to you" = "Liste von @user.openRequirements.count@ offenen Anforderung(en) für Dich";
+    "List @user.allRequirements.count@ total Requirements(s) assigned to you" = "Liste von @user.allRequirements.count@ Anforderung(en) insgesamt für Dich";
+    "CreateTestItemFromReq.templateString" = "[Von Anfoderung #@primaryKey@]";
+    "CreateTestItem.templateString" = "[Von Anfoderung #@primaryKey@]";
+
+    "Is Open" = "Ist offen";
+    "Text Description" = "Text Beschreibung";
+    "Subject" = "Betreff";
+    "Date Submitted" = "Eingereicht am";
+    "Requirement Sub Type" = "Anforderung Untertyp";
+    "Owner" = "Eigentümer";
+    "Comments" = "Kommentare";
+    "Originator" = "Eingereicht von";
+    "Bugs" = "Bugs";
+    "Requirement" = "Anforderung";
+    "1, Critical" = "Kritisch";
+    "Name" = "Name";
+    "Administrator" = "Administrator";
+    "Controlled" = "Überprüft";
+    "People" = "Leute";
+    "3, Medium" = "Mittel";
+    "3, Closed" = "Abgeschlossen";
+    "Requirement Type" = "Anforderung Untertyp";
+    "Title" = "Titel";
+    "Password" = "Passwort";
+    "Is Active" = "Ist Aktiv";
+    "Priority" = "Priorität";
+    "Login" = "Login";
+    "Parent" = "Parent";
+    "Is Customer Service" = "Für Kundenbetreuung";
+    "1, Open" = "Offen";
+    "4, Low" = "Gering";
+    "Bug" = "Bug";
+    "Is Admin" = "Ist Administrator";
+    "Difficulty" = "Schwierigkeit";
+    "Component" = "Component";
+    "Test Item" = "Testfall";
+    "Release" = "Release";
+    "2, High" = "Hoch";
+    "2, Bug" = "Bug";
+    "State" = "Status";
+    "Date Created" = "Angelegt am";
+    "Target Release" = "Ziel Release";
+    "4, Requirement" = "Anforderung";
+    "Email" = "Email";
+
+    "3, Verify" = "Überprüfung";
+    "Primary Key" = "PK";
+    "High" = "Hoch";
+    "Closed" = "Abgeschlossen";
+    "Build" = "Build";
+    "Read" = "Gelesen";
+    "Medium" = "Mittel";
+    "Text Description For Search" = "Suche in Beschreibung";
+    "Verify" = "Überprüfen";
+
+    "4, Document" = "Dokumentieren";
+    "Feature Request" = "Feature Request";
+    "1, Analyze" = "Analysieren";
+    "2, Build" = "Build";
+    "Analyze" = "Analysieren";
+    "Test Items" = "Testfall";
+
+    "Low" = "Gering";
+    "5, Closed" = "Abgeschlossen";
+
+    "Date Modified" = "Geändert am";
+    "Document" = "Dokumentieren";
+    "Critical" = "Kritisch";
+}
