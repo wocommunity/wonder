@@ -1,0 +1,11 @@
+CardLink: WOHyperlink {
+	?image = image;
+	?message = message;
+	?subject = subject;
+	actionClass = "DirectAction";
+	directActionName = "feedback";
+}
+
+String1: WOString {
+	value = from;
+}
