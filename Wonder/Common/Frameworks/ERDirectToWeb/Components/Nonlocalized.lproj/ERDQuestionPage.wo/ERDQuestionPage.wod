@@ -13,12 +13,12 @@ String1: WOString {
 }
 
 SubmitButton1: WOSubmitButton {
-	action = okClicked;
+	action = confirmAction;
 	value = " Yes ";
 }
 
 SubmitButton2: WOSubmitButton {
-	action = cancelClicked;
+	action = cancelAction;
 	value = " No ";
 }
 

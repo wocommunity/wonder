@@ -3,30 +3,8 @@ package er.directtoweb;
 import com.webobjects.directtoweb.*;
 import com.webobjects.appserver.*;
 
-public class ERD2WConfirmPage extends ERD2WInspectPage implements ConfirmPageInterface {
+/** Unless you need the special shouldProvideConfirmMessage, one should use ERD2WMessagePage instead */
+public class ERD2WConfirmPage extends ERD2WMessagePage {
 
     public ERD2WConfirmPage(WOContext context) { super(context); }
-
-    protected String _message;
-    protected WOComponent _cancelPage;
-    protected NextPageDelegate _cancelDelegate;
-
-    public WOComponent cancelAction() { return (cancelDelegate() != null) ? cancelDelegate().nextPage(this) : cancelPage(); }
-    public WOComponent confirmAction() { return errorMessages.count()==0 ? nextPage() : null; }
-
-    public void setMessage(String message) { _message = message; }
-    public String message() { return _message; }
-
-    public void setCancelPage(WOComponent cancelPage) { _cancelPage = cancelPage; }
-    public WOComponent cancelPage() { return _cancelPage; }
-
-    public void setCancelDelegate(NextPageDelegate cancelDelegate) { _cancelDelegate = cancelDelegate; }
-    public NextPageDelegate cancelDelegate() { return _cancelDelegate; }
-
-    // These just remap to the nextPage* of EditPageInterface
-    public void setConfirmDelegate(NextPageDelegate confirmPageDelegate) { setNextPageDelegate(confirmPageDelegate); }
-    public NextPageDelegate confirmDelegate() { return nextPageDelegate(); }
-
-    public void setConfirmPage(WOComponent confirmPage) { setNextPage(confirmPage); }
-    public WOComponent confirmPage() { return nextPage(); }
 }
