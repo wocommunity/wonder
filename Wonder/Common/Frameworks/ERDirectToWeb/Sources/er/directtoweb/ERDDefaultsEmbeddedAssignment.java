@@ -82,7 +82,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return default localized embedded entity name.
      */
     public String defaultEmbeddedEntityDisplayName(D2WContext c) {
-        String value = ERD2WUtilities.displayNameForKey((String)c.valueForKey("embeddedEntityName"));
+        String value = ERXStringUtilities.displayNameForKey((String)c.valueForKey("embeddedEntityName"));
         return (String)localizerForContext(c).localizedValueForKeyWithDefault(value);
     }
     
