@@ -1,0 +1,254 @@
+Custom1: WOCollapsibleComponentContent { closedLabel = "Explode Layout"; openedLabel = "Collapse Layout";}
+Custom2: WOCollapsibleComponentContent { closedLabel = "Explode Navigation"; openedLabel = "Collapse Navigation";}
+
+
+allGroups:WORepetition{
+	list = model.groups;
+	item = aGrp;
+}
+attribHeading:WRAttributeGroup{
+	model=model;
+	bgcolor = "ffffff";
+}
+
+attribLabel:WOString{
+	value= attribLabel;
+}
+attribs:WORepetition{
+	list = attributeListAtDepth;
+	item = attrib;
+}
+
+attribsGroup:WRAttributeGroup{
+	model = model;
+	totalsOnly = false;
+	groups = model.vList;
+	bgcolor = "dedede";
+}
+colSpanTd:WOGenericContainer{
+	elementName = "TD";
+	bgcolor = bgcolorColSpanTd;
+	colspan = horzColSpan;
+}
+collapseVertList: WOCollapsibleComponentContent { closedLabel = "Explode Vertical List"; openedLabel = "Collapse Vertical List";}
+criteriaLabel:WOString{
+	value = topCriteria.label;
+	escapeHTML = false;
+}
+customContent: WOComponentContent {
+}
+
+depthList:WORepetition{
+	count = depthCount;
+	index = depth;
+}
+dontshowDefaultReportStyle:WOConditional{
+	condition= showDefaultReportStyleBool;
+}
+dontshowVerticalRows:WOConditional{
+	condition= showVerticalRows;
+	negate=true;
+}
+
+editForm:WOForm{
+	multipleSubmit=true;
+}
+groupDepth:WORepetition{
+	count= vheadingIndex;
+}
+grpLabel:WOString{
+	value = aGrp.masterCriteria.label;
+}
+
+hCriteriaList: WRNestedList {
+    list = topHorzGroupCriteriaList.@sort.score;
+    item = topCriteria;
+    index = currentIndex;
+    level = currentLevel;
+    sublist = horzSubList;
+    //action = nestedListClicked;
+    //isOrdered = true;
+}
+hCriteriaList2: WRNestedList {
+    list = topHorzGroupCriteriaList;
+    item = topCriteria;
+    index = currentIndex;
+    level = currentLevel;
+    sublist = horzSubList2;
+    //action = nestedListClicked;
+    //isOrdered = YES;
+}
+
+horzDimensions: WORepetition { list= horzDimensions; item= hGroup;}
+numberOfCrits:WORepetition{
+	count = numberOfCrits;
+	//index = depth;
+}
+
+recGrpDisplayList:WOPopUpButton{
+	list = recordGroupDisplayTypes;
+	item = dispType;
+	value = dispType;
+	selection = selectedRecordGroupDisplayType;
+}
+
+recordGroupTest:WRRecordGroup{
+	model = model;
+	recordGroup= recordGroupTest;
+	showHeadings= showRecordGroupHeadings;
+	displayType = selectedRecordGroupDisplayType;
+	totalToShow = recordGroupTotalToShow;
+	showAsTable = showRecordGroupAsTable;
+	colors = colorDict;
+	totalDict = totalDict;
+	reportStyle = selectedReportStyle;
+}
+regenReport:WOSubmitButton{
+	action = regenReport;
+	value = "Regenerate Report";
+}
+reportStyle:WOPopUpButton{
+	list = reportStyles;
+	item = areportStyle;
+	value = areportStyle;
+	selection = selectedReportStyle;
+}
+rowSpanTd:WOGenericContainer{
+	elementName = "TD";
+	rowspan = vertRowSpan;
+	bgcolor = bgcolorRowSpanTd;
+}
+rowSpanTd2:WOGenericContainer{
+	elementName = "TD";
+	bgcolor = bgcolorRowSpanTd;
+}
+rowSpanTd2Span:WOGenericContainer{
+	elementName = "TD";
+	bgcolor = bgcolorRowSpanTd;
+	colspan= depthCountAllAttribs;
+}
+shouldTotalCheck:WOCheckBox{
+	checked = shouldTotalCheck;
+}
+
+showCustomCheck:WOCheckBox{
+	checked = showDefaultReportStyleBool;
+}
+
+
+showDefaultReportStyle:WOConditional{
+	condition= showDefaultReportStyleBool;
+	negate=true;
+}
+showEditing:WOConditional{
+	condition = showEditing;
+}
+
+
+
+
+showHeadersForAsCells: WOConditional{
+	condition = showHeadersForAsCells;
+}
+showIndentCell:WOConditional{
+	condition= showIndentCell;
+}
+showNavigationCheck:WOCheckBox{
+	checked = showNavigation;
+}
+showNoColNoRow:WOConditional{
+	condition= showNoColNoRow;
+}
+showPresentationControls :WOConditional{
+	condition = showPresentationControls;
+}
+showRGAsTable:WOCheckBox{
+	checked = showRGAsTable;
+}
+showRGHeadings:WOCheckBox{
+	checked = showRGHeadings;
+}
+showSingleCol:WOConditional{
+	condition= showSingleCol;
+}
+
+
+showSingleRow:WOConditional{
+	condition= showSingleRow;
+}
+//vIndentCriteriaLabel2:WOString{
+//	value = vIndentCriteriaLabel;
+//	escapeHTML = NO;
+//}
+//showIndentCell2:WOConditional{
+//	condition= showIndentCell;
+//}
+showVHeadings:WOConditional{
+	condition= showVHeadings;
+}
+showVerticalRows:WOConditional{
+	condition= showVerticalRows;
+}
+
+td:WOGenericContainer{
+	elementName = "TD";
+	colspan = colSpan;
+	rowspan = rowSpan;
+}
+totToShow:WOTextField{
+	value = recordGroupTotalToShow;
+}
+vCriteriaList: WRNestedList {
+    list = topVertGroupCriteriaList;
+    item = topCriteriaV;
+    index = currentIndexV;
+    level = currentLevelV;
+    sublist = vertSubList;
+    //action = nestedListClicked;
+    //isOrdered = YES;
+}
+vGroups: WORepetition { list= vertDimensions; item= vGroup;}
+vIndentCriteriaLabel:WOString{
+	value = vIndentCriteriaLabel;
+	escapeHTML = false;
+}
+vcriteriaLabel:WOString{
+	value = topCriteriaVLabel;
+	escapeHTML = false;
+}
+
+
+
+vindent:WORepetition{
+	count = vheadingCount; 
+	index = vheadingIndex;
+}
+
+vindent2:WORepetition{
+	count = vheadingCount2; 
+	index = vheadingIndex;
+}
+
+zlist1: WRNavigationControl {
+	listLabel = "H";
+	listName = "Horizontal List";
+	model = model;
+	showNavigation = showNavigation;
+	zCriteria = currentZCriteria;
+}
+
+zlist2: WRNavigationControl {
+	listLabel = "Z";
+	listName = "Page List";
+	model = model;
+	showNavigation = showNavigation;
+	zCriteria = currentZCriteria;
+}
+
+zlist3: WRNavigationControl {
+	listLabel = "V";
+	listName = "Vertical List";
+	model = model;
+	showNavigation = showNavigation;
+	zCriteria = currentZCriteria;
+}
