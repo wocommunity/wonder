@@ -273,36 +273,28 @@ dbMinConnectionsGLOBAL=1
 # this means your UNIX process which is running the JVM from 
 # your application must be able to use a lot of open files. 
 # see ulimit to understand how to change the default settings
-#dbMaxConnectionsGLOBAL=5
-
-# path to the logfile for the JDBC connection pooling
-#dbLogPathGLOBAL=/tmp/ERXJDBCConnectionBroker_@@name@@_@@WOPort@@.log
+# dbMaxConnectionsGLOBAL=5
 
 # time how long a JDBC connection should be reused
 # value is in days
-#dbConnectionRecycleGLOBAL=1.0
+# dbConnectionRecycleGLOBAL=1.0
 
 # time in seconds how long a request may use a connection
 # in this case a download may not take longer than 3 days
 # value is in seconds
-#dbMaxCheckoutGLOBAL=86400
+# dbMaxCheckoutGLOBAL=86400
 
 # debug level for the Connection Pooling, 0 - 3
-#dbDebugLevelGLOBAL=1
+# dbDebugLevelGLOBAL=1
 
 # if enabled all connections used by the broker are used
 # every er.extensions.ERXJDBCConnectionBroker.connectionPingInterval seconds
 # this is very useful if a firewall between the appserver and the database
 # kill sockets after a certain time of inactivity and the app is not used 
 # a lot.
-#er.extensions.ERXJDBCConnectionBroker.connectionPingEnabled=false
-#er.extensions.ERXJDBCConnectionBroker.connectionPingInterval=300
-#er.extensions.ERXJDBCConnectionBroker.connectionPingSQL=select 'i am alive' from dual;
-
-# if enabled then eof uses a pool of java.sql.Connections instead of
-# one connection for every adaptor. Useful if one uses one multiple
-# EOF stacks with the same connection dictionary
-#er.extensions.ERXJDBCConnectionBroker.poolModelConnections=false
+# er.extensions.ERXJDBCConnectionBroker.connectionPingEnabled=false
+# er.extensions.ERXJDBCConnectionBroker.connectionPingInterval=300
+# er.extensions.ERXJDBCConnectionBroker.connectionPingSQL=select 1+1;
 
 #########################################################################
 # ERXLongPrimaryKeyFactory 
