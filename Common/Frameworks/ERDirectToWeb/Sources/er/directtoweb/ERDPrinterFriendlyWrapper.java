@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
 
-// FIXME: References help components, needs to move to look framework.
+// FIXME: Needs to move to look framework.
 /**
  * Printer friendly page wrapper.<br />
  * 
