@@ -17,7 +17,19 @@ import er.extensions.*;
 
 public class ERD2WFactory extends D2W {
 
+    /**
+     * Gets the D2W facotry cast as an ERD2WFactory objects.
+     * @return the singleton factory
+     */
+    public static ERD2WFactory erFactory() {
+        return (ERD2WFactory)D2W.factory();
+    }
+    
     private D2WContext _privateContext;
+
+    /** holds a reference to the default delegate */
+    protected Object defaultListPageDisplayGroupDelegate;
+
     public D2WContext privateContext(WOSession s) {
         if (_privateContext==null) {
             _privateContext=new D2WContext(s);
@@ -30,6 +42,25 @@ public class ERD2WFactory extends D2W {
         return D2WUtils.visibleEntityNames(privateContext(s));
     }
 
+
+    /**
+     * Gets the default list page delegate for
+     * display groups
+     * @return default list page display group delegate
+     */
+    public Object defaultListPageDisplayGroupDelegate() {
+        return defaultListPageDisplayGroupDelegate;
+    }
+
+
+    /**
+     * Sets the default display group delegate for list
+     * pages
+     * @param delegate object
+     */    
+    public void setDefaultListPageDisplayGroupDelegate(Object delegate) {
+        defaultListPageDisplayGroupDelegate = delegate;
+    }
     
     public void myCheckRules() {
         if (!WOApplication.application().isCachingEnabled()) {
