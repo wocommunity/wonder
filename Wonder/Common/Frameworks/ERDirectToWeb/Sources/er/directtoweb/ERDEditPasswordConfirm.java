@@ -4,37 +4,34 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
 
-        public ERDEditPasswordConfirm(WOContext context) {super(context);}
-    
-    protected String password;
-    protected String passwordConfirm;
-    
+    public ERDEditPasswordConfirm(WOContext context) { super(context); }
+
+    public String password;
+    public String passwordConfirm;
+
     public void fail(String errorMessage) {
         validationFailedWithException(new NSValidation.ValidationException(errorMessage),
                                       password,
                                       key());
     }
 
-    public boolean passwordExists(){ return objectKeyPathValue()!=null ? true : false; }
+    public boolean passwordExists() { return objectKeyPathValue() != null ? true : false; }
 
     public void setObject(EOEnterpriseObject newObject) {
         if (newObject!=object()) {
             password=passwordConfirm=null;
         }
-        super.setObject(newObject);            
+        super.setObject(newObject);
     }
-    
+
     public void takeValuesFromRequest(WORequest r, WOContext c){
         super.takeValuesFromRequest(r,c);
         if (password==null || password.equals("") ||
@@ -59,7 +56,7 @@ public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
                         validationFailedWithException(e, password, key());
                     }
                 } else
-                    object().validateTakeValueForKeyPath(password, key());                    
+                    object().validateTakeValueForKeyPath(password, key());
             }
         }
     }

@@ -27,11 +27,8 @@ public abstract class ERDCustomEditComponent extends WOComponent {
         super(context);
     }
 
-
-
-    ///////////////////////////  log4j category  ///////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.components.CustomEditComponent");
-    ////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////  log4j category  ////////////////////////////////////
+    public final static Category cat = Category.getInstance(ERDCustomEditComponent.class);
 
     //////////////////////////////////////// Static Methods //////////////////////////////////////////////////////////////
     protected static Integer TRUE = ERXConstant.OneInteger;
@@ -41,7 +38,7 @@ public abstract class ERDCustomEditComponent extends WOComponent {
     private EOEnterpriseObject object;
     protected EOEditingContext editingContext;
     private String key;
-    protected Object extraBindings;
+    protected NSDictionary extraBindings;
 
     // Validation Support
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
@@ -94,11 +91,12 @@ public abstract class ERDCustomEditComponent extends WOComponent {
         key = null;
         object = null;
     }
-    
+
+    public void setExtraBindings(NSDictionary value) { extraBindings = value; }
     public NSDictionary extraBindings() {
         if (extraBindings == null && !synchronizesVariablesWithBindings())
-            extraBindings = super.valueForBinding("extraBindings");
-        return (NSDictionary)extraBindings;
+            extraBindings = (NSDictionary)super.valueForBinding("extraBindings");
+        return extraBindings;
     }
 
     public String key() {
