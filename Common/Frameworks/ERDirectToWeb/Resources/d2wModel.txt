@@ -1,3 +1,4 @@
+     0 : ((displayNameForProperty = '') or (displayNameForProperty = null)) => hidePropertyName = 1 [com.webobjects.directtoweb.BooleanAssignment]
      0 : ((task = 'inspect') or (task = 'edit')) => repetitionComponentName = ERDInspectPageRepetition
      0 : (pageConfiguration like 'ConfirmDelete*') => explanationComponentName = ERXD2WInspect
      0 : (pageConfiguration like 'ConfirmDelete*') => explanationConfigurationName = inspectConfigurationName [er.directtoweb.ERDKeyValueAssignment]
@@ -29,6 +30,7 @@
      0 : *true* => groupingComponentName = ERDDefaultSectionComponent
      0 : *true* => hasForm = 1 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => headerComponentName = ERXEmptyComponent
+     0 : *true* => hidePropertyName = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => indefiniteArticleForProperty = a
      0 : *true* => indexKey = index
      0 : *true* => isEntityEditable = 0 [com.webobjects.directtoweb.BooleanAssignment]
