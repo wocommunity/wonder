@@ -878,7 +878,6 @@
 				F5DD885E02C4D59001000102,
 			);
 			isa = PBXGroup;
-			name = Sources;
 			path = Sources;
 			refType = 2;
 		};
@@ -1152,8 +1151,8 @@
 		F5DD888B02C4D5AC01000102 = {
 			isa = PBXFileReference;
 			name = populate.sql;
-			path = /Volumes/Scratch/test/Common/Frameworks/ERCoreBusinessLogic/Support/populate.sql;
-			refType = 0;
+			path = Support/populate.sql;
+			refType = 2;
 		};
 		F5DD888C02C4D5B001000102 = {
 			children = (
