@@ -804,4 +804,18 @@ public class ERXUtilities {
             r2.addObjectToBothSidesOfRelationshipWithKey(replicableTarget.replicate(r2.editingContext()), relationshipName);
         }
     }
+
+    /** Copies a relationship from one EO to another using the name of the relationship */
+    public static void deplicateRelationshipFromEO(ERXGenericRecord r1, String relationshipName){
+        System.out.println("r1 "+r1);
+        System.out.println("relationshipName "+relationshipName);
+        System.out.println("array "+r1.valueForKey(relationshipName));
+        for(Enumeration e = ((NSArray)r1.valueForKey(relationshipName)).objectEnumerator(); e.hasMoreElements();){
+            ERXReplicableInterface replicableTarget = (ERXReplicableInterface)e.nextElement();
+            System.out.println("replicableTarget "+replicableTarget);
+            r1.removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject)replicableTarget,
+                                                              relationshipName);
+            replicableTarget.deplicate();
+        }
+    }
 }
