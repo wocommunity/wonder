@@ -436,7 +436,7 @@ public abstract class ERXApplication extends WOApplication {
         // We only want to push in the context the first time it is
         // created, ie we don't want to loose the current context
         // when we create a context for an error page.
-        if (ERXThreadStorage.valueForKey("wocontext") != null) {
+        if (ERXThreadStorage.valueForKey("wocontext") == null) {
             ERXThreadStorage.takeValueForKey(context, "wocontext");
         }
         return context;
