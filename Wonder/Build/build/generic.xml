@@ -659,8 +659,16 @@ There are three ways to use this script:
          </antcall>
     </target>
 
+    <target name="ERCalendar.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERCalendar" />
+            <param name="project.dir" value="Common/Frameworks/ERCalendar" />
+        </antcall>
+    </target>
+
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all" />
+    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all, ERCalendar.all" />
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
     <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
@@ -715,6 +723,9 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="BTBusinessLogic" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="ERCalendar" />
         </antcall>
 
         <antcall target="global.clean.application" >
@@ -788,6 +799,9 @@ There are three ways to use this script:
         <antcall target="global.web.framework" >
             <param name="project.name" value="BTBusinessLogic" />
         </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="ERCalendar" />
+        </antcall>
 
         <antcall target="global.web.application" >
             <param name="project.name" value="BugTracker" />
@@ -857,6 +871,9 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="BTBusinessLogic" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="ERCalendar" />
         </antcall>
 
         <antcall target="global.install.application" >
