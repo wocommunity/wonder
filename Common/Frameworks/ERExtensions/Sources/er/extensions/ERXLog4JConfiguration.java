@@ -129,7 +129,11 @@ public class ERXLog4JConfiguration extends WOComponent {
     	String result = "";
     	for (Enumeration e=loggers().objectEnumerator(); e.hasMoreElements();) {
     		Logger log=(Logger)e.nextElement();
-    		result += "log4j.category." + log.getName() + "=" + log.getLevel()+ "\n";
+    		String name = log.getName();
+    		Level level = log.getLevel();
+    		if(level != null && !"root".equals(name)) {
+    			result += "log4j.category." + log.getName() + "=" + log.getLevel()+ "\n";
+    		}
     	}
     	return result;
     }
