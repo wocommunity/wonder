@@ -1,0 +1,69 @@
+{
+	013357CCFF5DD5F011CD2B9D = {
+		activeBuildStyle = 01A3BF6FFFB0C37D11CD2B9D;
+		activeTarget = 017C6100FFD43DA37F000001;
+	};
+	017C60B4FFD2F2BB7F000001 = {
+		activeExec = 0;
+		targetExecs = {
+			macosx = (
+				C6E4231F007BEE8404000001,
+			);
+		};
+	};
+	017C60D6FFD2F2BB7F000001 = {
+		activeExec = 0;
+		targetExecs = {
+			macosx = (
+				C6E42320007BEE8404000001,
+			);
+		};
+	};
+	017C6100FFD43DA37F000001 = {
+		activeExec = 0;
+		targetExecs = {
+			macosx = (
+				C6E4231E007BED7904000001,
+			);
+		};
+	};
+	C6E4231E007BED7904000001 = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = JavaDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		sourceDirectories = (
+		);
+	};
+	C6E4231F007BEE8404000001 = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = JavaDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		sourceDirectories = (
+		);
+	};
+	C6E42320007BEE8404000001 = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = JavaDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		sourceDirectories = (
+		);
+	};
+}
