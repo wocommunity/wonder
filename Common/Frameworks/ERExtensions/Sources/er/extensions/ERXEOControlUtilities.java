@@ -917,7 +917,7 @@ public class ERXEOControlUtilities {
      */
     public static NSArray globalIDsForObjects(NSArray eos) {
         NSMutableArray ids = new NSMutableArray(eos.count());
-        for (int i = 0; i < ids.count(); i++) {
+        for (int i = 0; i < eos.count(); i++) {
             EOEnterpriseObject eo = (EOEnterpriseObject)eos.objectAtIndex(i);
             EOEditingContext ec = eo.editingContext();
             EOGlobalID gid = ec.globalIDForObject(eo);
