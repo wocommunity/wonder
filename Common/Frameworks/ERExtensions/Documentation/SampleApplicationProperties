@@ -53,7 +53,7 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 
 ### Cryptgraphy ###
 #ERBlowfishCipherKey = DefaultBlowfishCipherKey
-#er.extensions.ERXBlowfishCipherKey = DefaultBlowfishCipherKey
+#er.extensions.ERXBlowfishCipherKey = DefaultCipherKey
 
 ### Application Name ###
 #ERApplicationName = BuyerTraining
