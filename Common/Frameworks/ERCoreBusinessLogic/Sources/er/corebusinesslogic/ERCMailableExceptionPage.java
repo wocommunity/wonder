@@ -22,7 +22,7 @@ public class ERCMailableExceptionPage extends ERXStatelessComponent {
     public NSDictionary extraInfo;
 
     public String currentUserInfoKey;
-    public String currentUserInfoValue;    
+    public Object currentUserInfoValue;    
     
     public ERCMailableExceptionPage(WOContext aContext) {
         super(aContext);
