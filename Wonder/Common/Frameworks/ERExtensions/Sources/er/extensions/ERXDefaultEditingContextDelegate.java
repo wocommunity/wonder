@@ -106,18 +106,24 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
                 buffer.append("The following exception has occurred with ec: " + ec + "\n" + ERXUtilities.stackTrace(e) + "\n");
                 if (ec.updatedObjects()!=null) {
                     buffer.append("** Updated Objects "+ec.updatedObjects().count());
-                    for (Enumeration en = ec.updatedObjects().objectEnumerator(); en.hasMoreElements();)
-                        buffer.append("\n" + toDebugString((EOEnterpriseObject)en.nextElement()));
+                    for (Enumeration en = ec.updatedObjects().objectEnumerator(); en.hasMoreElements();) {
+                        buffer.append('\n');
+                        buffer.append(toDebugString((EOEnterpriseObject)en.nextElement()));
+                    }
                 }
                 if (ec.insertedObjects()!=null) {
                     buffer.append("\n** Inserted Objects "+ec.insertedObjects().count());
-                    for (Enumeration en = ec.insertedObjects().objectEnumerator(); en.hasMoreElements();)
+                    for (Enumeration en = ec.insertedObjects().objectEnumerator(); en.hasMoreElements();) {
+                        buffer.append('\n');
                         buffer.append(toDebugString((EOEnterpriseObject)en.nextElement()));
+                    }
                 }
                 if (ec.deletedObjects()!=null) {
                     buffer.append("\n** Deleted Objects "+ec.deletedObjects().count());
-                    for (Enumeration en = ec.deletedObjects().objectEnumerator(); en.hasMoreElements();)
+                    for (Enumeration en = ec.deletedObjects().objectEnumerator(); en.hasMoreElements();) {
+                        buffer.append('\n');
                         buffer.append(toDebugString((EOEnterpriseObject)en.nextElement()));
+                    }
                 }
                 catMod.error(buffer);
             } catch (Throwable e2) {
