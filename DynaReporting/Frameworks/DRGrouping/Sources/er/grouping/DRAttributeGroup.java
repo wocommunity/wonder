@@ -10,9 +10,9 @@ public class DRAttributeGroup extends DRAttribute  {
     protected NSMutableArray _flatAttributes;
     protected NSMutableArray _flatAttributesTotal;
 
-    static public DRAttributeGroup withKeyPathFormatLabelTotalListUserInfo(String ap, String af, String al, boolean at, NSArray lst, NSDictionary ui) {
-        DRAttributeGroup aAtt = new DRAttributeGroup(ap, af, al, at, lst, ui);
-        return aAtt;
+    static public DRAttributeGroup withKeyPathFormatLabelTotalListUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSArray attributes, NSDictionary userInfo) {
+        DRAttributeGroup attributeGroup = new DRAttributeGroup(keyPath, format, label, shouldTotal, attributes, userInfo);
+        return attributeGroup;
     }
 
     public DRAttributeGroup() {
@@ -22,26 +22,21 @@ public class DRAttributeGroup extends DRAttribute  {
         _flatAttributesTotal = null;
     }
 
-    public DRAttributeGroup(String ap, String af, String al, boolean at, NSArray lst, NSDictionary ui) {
-        this();
-        setKeyPath(ap);
-        setFormat(af);
-        setLabel(al);
-        setShouldTotal(at);
-        setUserInfo(ui);
-        if (lst != null) {
-            attributes().addObjectsFromArray(lst);
+    public DRAttributeGroup(String keyPath, String format, String label, boolean shouldTotal, NSArray attributes, NSDictionary userInfo) {
+        super(keyPath, format, label, shouldTotal, userInfo);
+        if (attributes != null) {
+            _attributes.addObjectsFromArray(attributes);
         }
         flatListForAttributeList();
     }
-
-    public DRAttributeGroup(NSDictionary attDict, NSArray subAttListObjects) {
-        this((String)attDict.objectForKey("keyPath"),
-             (String)attDict.objectForKey("format"),
-             (String)attDict.objectForKey("label"),
-             ERXValueUtilities.booleanValue(attDict.objectForKey("total")),
-             subAttListObjects,
-             (NSDictionary)attDict.objectForKey("userInfo"));
+    
+    public DRAttributeGroup(NSDictionary dictionary, NSArray subAttributes) {
+        this((String)dictionary.objectForKey("keyPath"),
+             (String)dictionary.objectForKey("format"),
+             (String)dictionary.objectForKey("label"),
+             ERXValueUtilities.booleanValue(dictionary.objectForKey("total")),
+             subAttributes,
+             (NSDictionary)dictionary.objectForKey("userInfo"));
     }
 
     public boolean showTotal() {
@@ -56,7 +51,7 @@ public class DRAttributeGroup extends DRAttribute  {
         return _attributes;
     }
 
-    public void flatListForAttributeDepthDictionary(DRAttribute att, int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
+    protected void flatListForAttributeDepthDictionary(DRAttribute att, int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
         NSMutableArray lst;
         Number dpthKey;
 
@@ -81,7 +76,7 @@ public class DRAttributeGroup extends DRAttribute  {
         }
     }
 
-    public NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
+    protected NSArray flatAttributesWithDepthDictionary(int attributeListDepth, NSMutableDictionary flatAttributeDepthDict) {
         DRAttribute att;
         Enumeration anEnum = _attributes.objectEnumerator();
         _flatAttributes.removeAllObjects();
@@ -102,7 +97,7 @@ public class DRAttributeGroup extends DRAttribute  {
         return _flatAttributes;
     }
 
-    public void flatListForAttributeList() {
+    protected void flatListForAttributeList() {
         this.flatAttributesWithDepthDictionary(0, null);
     }
 
