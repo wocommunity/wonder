@@ -16,6 +16,10 @@ import er.extensions.ERXConstant;
 
 public class ERD2WPick extends ERDCustomEditComponent {
 
+    /**
+     * Public constructor.
+     * @param context current context
+     */
     public ERD2WPick(WOContext context) { super(context); }
     
     // Keeps kvc happy
@@ -32,20 +36,15 @@ public class ERD2WPick extends ERDCustomEditComponent {
 
     public String pickPageConfiguration() { return (String)valueForBinding("pickPageConfiguration"); }
     
-    // Gets a little freaky here.  We basicly use a bit of reflection to get the correct branch delegate from the session object.
-    public ERDBranchDelegate branchDelegate() {
-        String branchDelegateMethod = (String)valueForBinding("branchDelegateMethod");
-        ERDBranchDelegate delegate = null;
-        if (branchDelegateMethod != null) {
-            try {
-                Method m = session().getClass().getMethod(branchDelegateMethod, ERXConstant.EmptyClassArray);
-                delegate = (ERDBranchDelegate)m.invoke(session(), ERXConstant.EmptyObjectArray);
-            } catch (Exception e) {
-                NSLog.err.appendln("EXCEPTION:  Unable to find branch delegate for method named: "
-                                        + branchDelegateMethod + " on session.");
-            }            
+    public ERDBranchDelegateInterface branchDelegate() {
+        ERDBranchDelegateInterface branchDelegate = (ERDBranchDelegateInterface)valueForBinding("branchDelegate");
+        if (branchDelegate == null) {
+            String branchDelegateMethod = (String)valueForBinding("branchDelegateMethod");
+            if (branchDelegateMethod != null) {
+                branchDelegate = (ERDBranchDelegateInterface)session().valueForKeyPath(branchDelegateMethod);
+            }
         }
-        return delegate;
+        return branchDelegate;
     }
 
     public boolean erD2WListOmitCenterTag() {
