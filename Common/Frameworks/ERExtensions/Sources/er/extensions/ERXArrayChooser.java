@@ -74,7 +74,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             if(_noneString == null) {
                 _noneString = "ERXArrayChooser.noneString";
             }
-            _noneString = localizer().localizedStringForKey(_noneString);
+            _noneString = localizer().localizedStringForKeyWithDefault(_noneString);
         }
         return _noneString;
     }
