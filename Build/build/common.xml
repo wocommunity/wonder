@@ -224,13 +224,10 @@
     <!-- ERJars -->
     <!-- (ak) ERJars is handled separately because it needs to copy the compiler proxy files first -->
     <target name="ERJars.all">
-        <property name="project.principal.class" value="" />
-        <property name="project.name" value="ERJars" />
         <property name="project.dir" value="${wonder.root}/Common/Frameworks/ERJars" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
-            <!--classpath refid="project.class.path" /-->
         </taskdef>
-        <woframework name="${project.name}" destDir="${build.root}" principalClass="" jarName="${project.name}">
+        <woframework name="ERJars" destDir="${build.root}" principalClass="" jarName="ERJars">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
