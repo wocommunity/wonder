@@ -84,14 +84,22 @@ public class ERCMailDelivery {
                                      String title,
                                      String message,
                                      EOEditingContext ec) {
-        ERCMailMessage mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
-        String safeTitle=title!=null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
-        mailMessage.setTitle(safeTitle);
-        mailMessage.setFromAddress(from);
-        mailMessage.setToAddresses(commaSeparatedListFromArray(to));
-        mailMessage.setCcAddresses(commaSeparatedListFromArray(cc));
-        mailMessage.setBccAddresses(commaSeparatedListFromArray(bcc));
-        mailMessage.setText(message);
+        ERCMailMessage mailMessage = null;
+        boolean usesMail = ERXProperties.booleanForKey("er.corebusinesslogic.ERCUseMailFacility");
+        if(usesMail){
+            mailMessage = (ERCMailMessage)ERCMailMessage.mailMessageClazz().createAndInsertObject(ec);
+            String safeTitle=title!=null ? ( title.length() > 200 ? title.substring(0,198) : title ) : null;
+            mailMessage.setTitle(safeTitle);
+            mailMessage.setFromAddress(from);
+            mailMessage.setToAddresses(commaSeparatedListFromArray(to));
+            mailMessage.setCcAddresses(commaSeparatedListFromArray(cc));
+            mailMessage.setBccAddresses(commaSeparatedListFromArray(bcc));
+            mailMessage.setText(message);
+        }else{
+            throw new RuntimeException("The application doesn't use the ERCUseMailFacility."+
+                                       "You can either set er.corebusinesslogic.ERCUseMailFacility in your properties or better check for that property before trying to compose the email");
+        }
+
         return mailMessage;
     }
 
@@ -179,7 +187,7 @@ public class ERCMailDelivery {
                                                  String componentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-        WOContext context = new WOContext(new WORequest(null, null, null, null, null, null));
+        WOContext context = new WOContext(new WORequest("POST", "", "HTTP/1.1", null, null, null));
         WOComponent component = WOApplication.application().pageWithName(componentName, context);
         if (bindings != null && bindings.count() > 0)
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
