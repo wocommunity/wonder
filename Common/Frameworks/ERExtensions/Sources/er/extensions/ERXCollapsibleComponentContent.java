@@ -44,7 +44,7 @@ public class ERXCollapsibleComponentContent extends WOCollapsibleComponentConten
     public String framework() {
         if (!_isFrameworkSet) {
             _isFrameworkSet = true;
-            _framework = hasBinding("framework") ? (String)valueForBinding("framework") : "ERXExtensionsJava";
+            _framework = hasBinding("framework") ? (String)valueForBinding("framework") : "ERExtensions";
             if (_framework != null && _framework.equalsIgnoreCase("app"))
                 _framework=null;
         }
