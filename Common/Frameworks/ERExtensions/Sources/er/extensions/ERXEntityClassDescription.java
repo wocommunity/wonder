@@ -313,7 +313,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         private NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
 
         /**
-         * This method allows for entities to be altered
+         * Allows for entities to be altered
          * before they have a custom class description
          * registered. Sub classes can override this method
          * to provide any extra alterings before the description
@@ -342,6 +342,39 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         /**
+         * Checks for foreign keys that are <code>NOT NULL</code>,
+         * but whose relationship is marked as non-mandatory and vice-versa. This
+         * error is not checked by EOModeler, so we do it here.
+         * @param eoentity to be check
+         */
+        public void checkForeignKeys(EOEntity eoentity) {
+            for(Enumeration relationships = eoentity.relationships().objectEnumerator(); relationships.hasMoreElements(); ) {
+                EORelationship relationship = (EORelationship)relationships.nextElement();
+                if(!relationship.isToMany()) {
+                    if(relationship.isMandatory()) {
+                        for(Enumeration attributes = relationship.sourceAttributes().objectEnumerator(); attributes.hasMoreElements(); ) {
+                            EOAttribute attribute = (EOAttribute)attributes.nextElement();
+                            if(attribute.allowsNull()) {
+                                log.error(eoentity.name() + ": relationship '"
+                                          + relationship.name() + "' is marked to-one and mandatory, but the foreign key '"
+                                          + attribute.name() + "' allows NULL values");
+                            }
+                        }
+                    } else {
+                        for(Enumeration attributes = relationship.sourceAttributes().objectEnumerator(); attributes.hasMoreElements(); ) {
+                            EOAttribute attribute = (EOAttribute)attributes.nextElement();
+                            if(!attribute.allowsNull()) {
+                                log.error(eoentity.name() + ": relationship '"
+                                          + relationship.name() + "' is marked to-one and optional, but the foreign key '"
+                                          + attribute.name() + "' does NOT allow NULL values");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
          * This method registers custom class descriptions for all
          * of the entities in a given model. This method is called
          * when a model is loaded. The reason for this method is
@@ -357,6 +390,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     String className = eoentity.className();
 
                     prepareEntityForRegistration(eoentity);
+                    checkForeignKeys(eoentity);
 
                     NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(className);
                     if(array == null) {
