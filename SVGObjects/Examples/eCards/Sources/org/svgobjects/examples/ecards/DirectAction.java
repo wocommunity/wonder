@@ -11,12 +11,12 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
 public class DirectAction extends WODirectAction {
-    protected static NSArray keys = new NSArray(new String[]{"from", "to", "message", "subject", "image"});
-    protected String from;
-    protected String to;
-    protected String subject;
-    protected String message;
-    protected String image;
+    public static NSArray keys = new NSArray(new String[]{"from", "to", "message", "subject", "image"});
+    public String from;
+    public String to;
+    public String subject;
+    public String message;
+    public String image;
 
     public DirectAction(WORequest aRequest) {
         super(aRequest);
