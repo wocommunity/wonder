@@ -22,6 +22,6 @@ Browser2: WOBrowser {
 
 HiddenField1: WOHiddenField {
 	name = "resultHiddenField";
-	value = chosenKeyPathes;
+	value = chosenKeyPaths;
 }
 
