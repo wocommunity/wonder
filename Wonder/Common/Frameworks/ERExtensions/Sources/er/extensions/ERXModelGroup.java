@@ -42,7 +42,7 @@ public class ERXModelGroup extends EOModelGroup {
         NSArray nsarray = NSBundle.frameworkBundles();
         int i = nsarray.count() + 1;
 
-        log.debug("Loading bundles" + nsarray.valueForKey("name"));
+        if (log.isDebugEnabled()) log.debug("Loading bundles" + nsarray.valueForKey("name"));
 
         NSMutableArray nsmutablearray = new NSMutableArray(i);
         nsmutablearray.addObject(NSBundle.mainBundle());
