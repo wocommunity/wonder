@@ -129,7 +129,7 @@ public class ERXDatabaseContextDelegate {
                                                 EOFetchSpecification fs,
                                                 EODatabaseChannel channel) {
         if (dbLog.isDebugEnabled()) {
-            dbLog.debug("databaseContextDidSelectObjects " + fs);
+            dbLog.debug("databaseContextDidSelectObjects " + fs + " at: " + ERXUtilities.stackTrace());
         }
     }
 
