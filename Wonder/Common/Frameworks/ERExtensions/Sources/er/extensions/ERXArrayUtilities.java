@@ -660,10 +660,39 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
+    /**
+     * Define an {@link NSArray$Operator} for the key <b>reverse</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@reverse.someMorePath");</code><br/>
+     * <br/>
+     * which return a reversed result as to you would normally get.
+     */
+    static class ReverseOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public ReverseOperator() {}
+
+        /**
+         * returns the reverse value for the values of the keypath.
+         * @param array array to be checked.
+         * @param keypath value of reverse.
+         * @return reversed array for keypath.
+         */
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                array = reverse(array);
+                if(keypath != null && keypath.length() > 0) {
+                    array = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(array, keypath);
+                }
+                return array;
+            }
+        }
+    }
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
-     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b> and <b>fetchSpec</b> 
+     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b> and <b>fetchSpec</b> 
      */
     public static void initialize() {
 	if (initialized) {
@@ -683,6 +712,7 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
             NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
             NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
+            NSArray.setOperatorForKey("reverse", new ReverseOperator());
         }
     }
 
