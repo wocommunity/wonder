@@ -40,7 +40,7 @@ public class ERXExtensions {
             ERXSession.registerNotifications();
  	    // initialize compiler proxy
 	    ERXCompilerProxy.defaultProxy().initialize();
-           //ERXValidationFactory.defaultFactory().configureFactory();
+            ERXValidationFactory.defaultFactory().configureFactory();
             //ERWebLint.configureWebLint();
         }
         public void sessionDidTimeOut(NSNotification n) {
