@@ -51,6 +51,25 @@ public class ERXBatchNavigationBar extends WOComponent {
     }
     
     public void appendToResponse(WOResponse response, WOContext context) {
+        // set the numberOfObjectsPerBatch
+        
+        if (newNumberOfObjectsPerBatch!=null && newNumberOfObjectsPerBatch.intValue() != displayGroup().numberOfObjectsPerBatch()) {
+            if (displayGroup()!=null) {
+                if(log.isDebugEnabled()) log.debug("Setting db # of objects per batch to "+newNumberOfObjectsPerBatch);
+                displayGroup().setNumberOfObjectsPerBatch(newNumberOfObjectsPerBatch.intValue());
+
+                if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
+                displayGroup().setCurrentBatchIndex(1);
+            }
+            Object d2wcontext=valueForBinding("d2wContext");
+            if (d2wcontext!=null) {
+                NSNotificationCenter.defaultCenter().postNotification("BatchSizeChanged",
+                                                                      ERXConstant.integerForInt(newNumberOfObjectsPerBatch.intValue()),
+                                                                      new NSDictionary(d2wcontext,"d2wContext"));
+            }
+        }
+        newNumberOfObjectsPerBatch = null;
+        
         if (displayGroup() != null  &&  ! displayGroup().hasMultipleBatches()) {
             if (currentBatchIndex() != 0) 
                 setCurrentBatchIndex(ERXConstant.ZeroInteger);
@@ -59,6 +78,8 @@ public class ERXBatchNavigationBar extends WOComponent {
     }
     
     private WODisplayGroup _displayGroup;
+
+    private Number newNumberOfObjectsPerBatch;
     public WODisplayGroup displayGroup() {
         if (_displayGroup == null) {
             _displayGroup = (WODisplayGroup)valueForBinding("displayGroup");
@@ -87,21 +108,7 @@ public class ERXBatchNavigationBar extends WOComponent {
     }
     
     public void setNumberOfObjectsPerBatch(Number newValue) {
-        if (newValue!=null) {
-            if (displayGroup()!=null) {
-                log.debug("Setting db # of objects per batch to "+newValue);
-                displayGroup().setNumberOfObjectsPerBatch(newValue.intValue());
-
-                if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
-                displayGroup().setCurrentBatchIndex(1);
-            }
-            Object context=valueForBinding("d2wContext");
-            if (context!=null) {
-                NSNotificationCenter.defaultCenter().postNotification("BatchSizeChanged",
-                                                                      ERXConstant.integerForInt(newValue.intValue()),
-                                                                      new NSDictionary(context,"d2wContext"));
-            }
-        }
+        newNumberOfObjectsPerBatch = newValue;
     }
 
     public int filteredObjectsCount() {
