@@ -30,8 +30,9 @@ public class ERMailSender extends Thread {
 
     private Stats stats;
     private MimeMessage message;
-    private ERQueue messages = new ERQueue (50); // defaults with a limit of 50 messages
 
+    // Holds sending messages. The queue size can be set er.javamail.senderQueue.size property
+    private ERQueue messages; 
     // For thread management
     private boolean threadSuspended = false;
     private int milliSecondsWaitRunLoop = 5000;
@@ -47,6 +48,7 @@ public class ERMailSender extends Thread {
         super ("ERMailSender");
         this.setPriority (Thread.MIN_PRIORITY);
         stats = new Stats ();
+        messages = new ERQueue (ERJavaMail.sharedInstance().senderQueueSize());
 
         if (WOApplication.application ().isDebuggingEnabled ())
             milliSecondsWaitRunLoop = 2000;

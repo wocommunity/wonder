@@ -79,7 +79,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         this.setCentralize (centralize);
         log.debug ("er.javamail.centralize: " + centralize);
 
-        // Time to wait when sender if overflowed
+         // Number of messages that the sender queue can hold at a time
+        int queueSize = ERXProperties.intForKey ("er.javamail.senderQueue.size");
+        if (queueSize >= 1)
+            this.setSenderQueueSize (queueSize);
+        log.debug ("er.javamail.senderQueue.size: " + queueSize);
+
+       // Time to wait when sender if overflowed
         int milliswait = ERXProperties.intForKey ("er.javamail.milliSecondsWaitIfSenderOverflowed");
         if (milliswait > 1000)
             this.setMilliSecondsWaitIfSenderOverflowed (milliswait);
@@ -193,6 +199,20 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         _centralize = centralize;
     }
 
+    /** 
+     * Number of messages that the sender queue can hold at a time; 
+     * default to 50 messages and can be configured by 
+     * <code>er.javamail.senderQueue.size</code> system property. 
+     */
+    protected int _senderQueueSize = 50; 
+    
+    public int senderQueueSize () {
+        return _senderQueueSize;
+    }
+    
+    public void setSenderQueueSize (int value) {
+        _senderQueueSize = value;
+    }
 
     /** Wait n milliseconds (by default this value is 6000) if the mail sender is overflowed */
     protected int _milliSecondsWaitIfSenderOverflowed = 6000;
