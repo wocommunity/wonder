@@ -26,18 +26,22 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
     public ERXNSLogLog4jBridge(int type) {
         super();
         this.type = type;
-        setIsEnabled(true);
+       // setIsEnabled(true);
     }
 
     public void appendln(Object obj) {
         if (isEnabled()) {
             if (obj == null)   obj = "";
-            if (type == OUT) {
-                log.info(obj.toString());
-            } else if (type == ERR) {
-                log.info(obj.toString());
-            } else if (type == DEBUG) {
-                log.debug(obj.toString());
+            switch (type) {
+                case OUT:
+                    log.info(obj.toString());
+                    break;
+                case ERR:
+                    log.info(obj.toString());
+                    break;
+                case DEBUG:
+                    log.debug(obj.toString());
+                    break;
             }
         }
     }
@@ -45,11 +49,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
     public void setIsEnabled(boolean enabled) {
         super.setIsEnabled(enabled);
         if (type == DEBUG) {
-            if (enabled) {
-                log.setLevel(Level.DEBUG);
-            } else {
-                log.setLevel(Level.INFO);
-            }
+            log.setLevel(enabled ? Level.DEBUG : Level.INFO);
         }
     }
 
