@@ -13,37 +13,147 @@ import java.lang.*;
 import java.util.*;
 import org.apache.log4j.Category;
 
+/**(ak) major reorg: made the static stuff subclassable via a Factory
+ class that can handle extensions to the registration process.
+Specifically, you can override newClassDescriptionForEntity()
+to return your own subclass. 
+
+Set the Factory class to use via
+ er.extensions.ERXClassDescription.factoryClass=myclassname
+and don't forget to call super.
+*/
+
 // This class is used to throw ERXValidationExceptions.  See the description of ERXValidationException for
 // details on the improvements made to validation handling.
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     public static final Category cat = Category.getInstance(ERXEntityClassDescription.class);
 
-    public static class Observer {
+    public static class Factory {
+        public Factory() {}
+        
         public void modelWasAddedNotification(NSNotification n) {
             // Don't want this guy getting in our way.
             cat.debug("modelWasAddedNotification: " + ((EOModel)n.object()).name());
             NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
-            ERXEntityClassDescription.registerDescriptionForEntitiesInModel((EOModel)n.object());
+            registerDescriptionForEntitiesInModel((EOModel)n.object());
         }
         public void classDescriptionNeededForEntityName(NSNotification n) {
             cat.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get
             if(e == null) cat.error("Entity " + name + " not found in this model!");
-            ERXEntityClassDescription.registerDescriptionForEntity(e);
+            registerDescriptionForEntity(e);
         }
         public void classDescriptionNeededForClass(NSNotification n) {
             Class c = (Class)n.object();
             cat.debug("classDescriptionNeededForClass: " + c.getName());
-            ERXEntityClassDescription.registerDescriptionForClass(c);
+            registerDescriptionForClass(c);
         }
+
+        /** subclasses should override this */
+        public ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
+            return new ERXEntityClassDescription(entity);
+        }
+
+
+        private NSMutableArray _registeredModelNames = new NSMutableArray();
+        private NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
+
+        /** subclasses should override this and call super*/
+        public void prepareEntityForRegistration(EOEntity eoentity) {
+            String className = eoentity.className();
+            if(className.equals("EOGenericRecord")) {
+                className = ERXGenericRecord.class.getName();
+                eoentity.setClassName(className);
+                cat.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
+            }
+            //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
+        }
+        
+        public void registerDescriptionForEntitiesInModel(EOModel model) {
+            if (!_registeredModelNames.containsObject(model.name())) {
+                for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
+                    EOEntity eoentity = (EOEntity)e.nextElement();
+                    String className = eoentity.className();
+
+                    prepareEntityForRegistration(eoentity);
+
+                    NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(className);
+                    if(array == null) {
+                        array = new NSMutableArray();
+                    }
+                    if(cat.isDebugEnabled())
+                        cat.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
+                    array.addObject(eoentity);
+                    _entitiesForClass.setObjectForKey(array, eoentity.className());
+
+                    //HACK ALERT: (ak) We work around classDescriptionForNewInstances() of EOEntity being broken here...
+                    registerDescriptionForEntity(eoentity);
+                }
+                _registeredModelNames.addObject(model.name());
+            }
+            // Don't want this guy getting in our way later on ;
+            NSNotificationCenter.defaultCenter().removeObserver(model);
+        }
+
+        private void _setClassDescriptionOnEntity(EOEntity entity, ERXEntityClassDescription cd)  {
+            try {
+                //HACK ALERT: (ak) We push the cd rather rudely into the entity to have it ready when classDescriptionForNewInstances() is called on it. We will have to add a com.webobjects.eoaccess.KVCProtectedAccessor to make this work
+                NSKeyValueCoding.Utility.takeValueForKey(entity, cd, "classDescription");
+            } catch(RuntimeException ex) {
+                cat.warn("_setClassDescriptionOnEntity: " + ex);
+            }
+        }
+
+        public void registerDescriptionForEntity(EOEntity entity) {
+            try {
+                String className = entity.className();
+                if (cat.isDebugEnabled())
+                    cat.debug("Registering description for entity: " + entity.name() + " with class: " + className);
+                Class entityClass = className.equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
+                ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
+                EOClassDescription.registerClassDescription(cd, entityClass);
+                _setClassDescriptionOnEntity(entity, cd);
+            } catch (java.lang.ClassNotFoundException ex) {
+                cat.error("Invalid class name for entity: " + entity.name() + " exception: " + ex);
+            }
+        }
+
+        // What we do here is go ahead and register all of the entities mapped onto this class, except for EOGenericRecord.
+        public void registerDescriptionForClass(Class class1) {
+            NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
+            if (entities != null) {
+                if (cat.isDebugEnabled())
+                    cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
+                for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
+                    EOEntity entity = (EOEntity)e.nextElement();
+                    ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
+                    EOClassDescription.registerClassDescription(cd, class1);
+                    _setClassDescriptionOnEntity(entity, cd);
+                }
+            } else {
+                cat.error("Unable to register descriptions for class: " + class1.getName());
+            }
+        }
+        
     }
     
     private static boolean _registered = false;
     public static void registerDescription() {
         if (!_registered) {
-            Observer observer=new Observer();
+            Factory observer = null;
+            try {
+                String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
+                if(className != null) {
+                    observer = (Factory)Class.forName(className).newInstance();
+                }
+            } catch(Exception ex) {
+                cat.warn("Exception while registering factory, using default: " + ex );
+            }
+            
+            if(observer == null)
+                observer=new Factory();
             ERXRetainer.retain(observer);
             // Need to be able to preempt the model registering descriptions.
             NSNotificationCenter.defaultCenter().addObserver(observer,
@@ -60,107 +170,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                                                              EOClassDescription.ClassDescriptionNeededForClassNotification,
                                                              null);
             _registered = true;
-        }
-    }
-
-    private static NSMutableArray _registeredModelNames = new NSMutableArray();
-    private static NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
-    private static boolean unlockProblematicColumns = ERXUtilities.booleanValue(System.getProperty("er.extensions.ERXClassDescription.unlockProblematicColumns"));
-    
-    static void fixLockingForMysql(Object connectionString, EOEntity eoentity) {
-        String unlockedAttributes = "";
-        if(unlockProblematicColumns && connectionString != null && ((String)connectionString).startsWith("jdbc:mysql")) {
-            NSMutableArray newLockingAttributes = new NSMutableArray();
-            for (Enumeration e1 = eoentity.attributesUsedForLocking().objectEnumerator(); e1.hasMoreElements();) {
-                EOAttribute a = (EOAttribute)e1.nextElement();
-                boolean shouldUnlock = false;
-                if(a.className().indexOf("NSTimestamp") >= 0
-                   || a.externalType().equals("DOUBLE")
-                   || a.externalType().equals("FLOAT")
-                   ) {
-                    shouldUnlock = true;
-                }
-                if(shouldUnlock && eoentity.primaryKeyAttributes().containsObject(a)) {
-                    cat.warn("We would unlock a primary key attribute: " + a.name());
-                    shouldUnlock = false;
-                }
-                if(shouldUnlock)
-                    unlockedAttributes += a.name() +"  ";
-                else
-                    newLockingAttributes.addObject(a);
-            }
-            if(unlockedAttributes.length()> 0)
-                eoentity.setAttributesUsedForLocking(newLockingAttributes);
-        }
-        if(unlockedAttributes.length()> 0)
-            cat.info("The following attributes of " + eoentity.name() + " were unlocked: " + unlockedAttributes);
-    }
-    
-    public static void registerDescriptionForEntitiesInModel(EOModel model) {
-        if (!_registeredModelNames.containsObject(model.name())) {
-            for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
-                EOEntity eoentity = (EOEntity)e.nextElement();
-                String className = eoentity.className();
-                if(className.equals("EOGenericRecord")) {
-                    className = ERXGenericRecord.class.getName();
-                    eoentity.setClassName(className);
-                    cat.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
-                }
-                if(cat.isDebugEnabled())
-                    cat.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
-                
-                NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(className);
-                if(array == null) {
-                    array = new NSMutableArray();
-                }
-                array.addObject(eoentity);
-                _entitiesForClass.setObjectForKey(array, eoentity.className());
-                //HACK ALERT: (ak) We work around classDescriptionForNewInstances() of EOEntity being broken here...
-                registerDescriptionForEntity(eoentity);
-                //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
-                fixLockingForMysql(model.connectionDictionary().valueForKey("URL"), eoentity);
-            }
-            _registeredModelNames.addObject(model.name());
-        }
-        // Don't want this guy getting in our way later on ;)
-        NSNotificationCenter.defaultCenter().removeObserver(model);
-    }
-
-    public static void registerDescriptionForEntity(EOEntity entity) {
-        try {
-            String className = entity.className();
-            if (cat.isDebugEnabled())
-                cat.debug("Registering description for entity: " + entity.name() + " with class: " + className);
-            Class entityClass = className.equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
-            ERXEntityClassDescription cd = new ERXEntityClassDescription(entity);
-            EOClassDescription.registerClassDescription(cd, entityClass);
-            _setClassDescriptionOnEntity(entity, cd);
-        } catch (java.lang.ClassNotFoundException ex) {
-            cat.error("Invalid class name for entity: " + entity.name() + " exception: " + ex);
-        }
-    }
-    static void _setClassDescriptionOnEntity(EOEntity entity, ERXEntityClassDescription cd)  {
-        try {
-            //HACK ALERT: (ak) We push the cd rather rudely into the entity to have it ready when classDescriptionForNewInstances() is called on it. We will have to add a com.webobjects.eoaccess.KVCProtectedAccessor to make this work
-            NSKeyValueCoding.Utility.takeValueForKey(entity, cd, "classDescription");
-        } catch(RuntimeException ex) {
-            cat.warn("_setClassDescriptionOnEntity: " + ex);
-        }
-    }
-    // What we do here is go ahead and register all of the entities mapped onto this class, except for EOGenericRecord.
-    public static void registerDescriptionForClass(Class class1) {
-        NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
-        if (entities != null) {
-            if (cat.isDebugEnabled())
-                cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
-            for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
-                EOEntity entity = (EOEntity)e.nextElement();
-                ERXEntityClassDescription cd = new ERXEntityClassDescription(entity);
-                EOClassDescription.registerClassDescription(cd, class1);
-                _setClassDescriptionOnEntity(entity, cd);
-            }
-        } else {
-            cat.error("Unable to register descriptions for class: " + class1.getName());
         }
     }
     
