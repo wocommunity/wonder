@@ -11,7 +11,7 @@ usefull class in to automatically en- and decode an NSMutableDictionary
 */
 public class ERXMutableDictionary extends NSMutableDictionary {
 
-    public static NSData toBlob(C9MutableDictionary d) throws Exception {
+    public static NSData toBlob(ERXMutableDictionary d) throws Exception {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bout);
         oos.writeObject(d);
