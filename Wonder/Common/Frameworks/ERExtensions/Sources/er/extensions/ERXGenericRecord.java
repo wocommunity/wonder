@@ -58,6 +58,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
     }
 
+    /**
+        * self is usefull for directtoweb purposes
+     */
+    public ERXGenericRecord self(){
+        return this;
+    }
+
    /**
     * Implementation of {@link ERXGuardedObjectInterface}. This is checked
     * before the object is deleted in the <code>willDelete</code> method
