@@ -146,7 +146,38 @@ public final class GSVEngine extends Object {
         //NSLog.debug.appendln("*** Validity: GSVEngine.validateEOObjectOnDelete(EOEnterpriseObject eoObject)");
         return ( this.validateEOObject(eoObject, ON_DELETE) );
     }
- 
+
+    public NSDictionary validateKeyAndValueInEntity(String key, String value, String entity) {
+        GSVEntity gsvEntity = null;
+        GSVAttribute currentAttribute = null;
+        GSVRule currentRule = null;
+        NSMutableDictionary errorDict = new NSMutableDictionary();
+        boolean rulePassed = false;
+	gsvEntity = this.entityWithName(entity);
+	if( gsvEntity != null ){
+	    //check each of the object's attributes
+	    currentAttribute = gsvEntity.attributeNamed(key);
+	    if (currentAttribute != null) {
+		NSArray rules = currentAttribute.rules();
+		if (rules != null) {
+		    for(int r=0; r<currentAttribute.rules().count(); r++){
+			currentRule = (GSVRule)currentAttribute.rules().objectAtIndex(r);
+			rulePassed = this.checkRule(currentRule, key, errorDict, value, ON_SAVE);
+			if(currentRule.stopIfFails() && !rulePassed){
+			    break;
+			}
+		    }
+		}
+	    }
+	}
+	//if the error dict contains values, rules failed, so throw an exception
+	if(errorDict.allKeys().count()>0) {
+	    return errorDict;
+	} else {
+	    return null;
+	}
+    }
+
     /**
      *	May be called arbitrarily to validate and eo object
      *	Returns <code>true</code> if all validation succeeds.
@@ -164,20 +195,21 @@ public final class GSVEngine extends Object {
                 //check each of the object's attributes
                 for(int i=0;i<gsvEntity.attributes().count();i++){
                     currentAttribute = (GSVAttribute)gsvEntity.attributes().objectAtIndex(i);
-                    //check each or the attribute's rules
-                    for(int r=0;r<currentAttribute.rules().count();r++){
-                        currentRule = (GSVRule)currentAttribute.rules().objectAtIndex(r);
-                        rulePassed = this.checkRule(currentRule, currentAttribute.name(), errorDict, eoObject, when);
-                        if(currentRule.stopIfFails() && !rulePassed){
-                            break;
-                        }
-                    }
-                }
-            }
-            
+		    //check each or the attribute's rules
+		    for(int r=0;r<currentAttribute.rules().count();r++){
+			currentRule = (GSVRule)currentAttribute.rules().objectAtIndex(r);
+			rulePassed = this.checkRule(currentRule, currentAttribute.name(), errorDict, eoObject, when);
+			if(currentRule.stopIfFails() && !rulePassed){
+			    break;
+			}
+		    }
+
+		}
+	    }    
             //if the error dict contains values, rules failed, so throw an exception
             if(errorDict.allKeys().count()>0){
                 NSDictionary userInfo = new NSDictionary(errorDict, GSVEngine.ERROR_DICTIONARY_KEY);
+                System.out.println("eo="+eoObject);
                 throw new NSValidation.ValidationException("Validity Exception", userInfo);
             }
             
@@ -216,23 +248,16 @@ public final class GSVEngine extends Object {
         return true;
     }
 
-    /**
-     *	May be called arbitrarily to validate an EO Object, though
-     *	it is explicitly called by <code>validateObject</code>
-     *	Returns <code>true</code> if all validation succeeds.
-     *	Returns <code>false</code> if the rule fails, and populates the error
-     *	dictionary with the error.
-     */
-    public boolean checkRule(GSVRule rule, String attributeName, NSMutableDictionary errorDict, Object eoObject, int when){
+    private boolean checkRule(GSVRule rule, String attributeName, NSMutableDictionary errorDict, String value, Object eoObject, int when) {
         //determine whether this rule applies to the provided 'when'
-        if( (when == GSVEngine.ON_SAVE && rule.onSave()) || 
+        if( (when == GSVEngine.ON_SAVE && rule.onSave()) ||
             (when == GSVEngine.ON_INSERT && rule.onInsert()) ||
             (when == GSVEngine.ON_UPDATE && rule.onUpdate()) ||
-            (when == GSVEngine.ON_DELETE && rule.onDelete()) || 
+            (when == GSVEngine.ON_DELETE && rule.onDelete()) ||
             (when == GSVEngine.ON_DEMAND)){
-            
+
             try{
-                Object attributeValue = NSKeyValueCoding.Utility.valueForKey(eoObject,attributeName);
+		Object attributeValue = (eoObject == null) ? value : NSKeyValueCoding.Utility.valueForKey(eoObject,attributeName);
                 //if the attributeValue is null, we can stop
                 if( attributeValue == null && rule.continueIfNULL()==false){
                     if( rule.failIfNULL() ){
@@ -249,11 +274,11 @@ public final class GSVEngine extends Object {
                         }else{
                             errorArray.addObject(attributeName+": Error - No message provided.");
                         }
-                        return false;	//rule failed
+			return false;
                     }
                     return true;	//rule passed
                 }
-                
+
                 //continue
                 String classKey = rule.cName();
                 String ruleKey = rule.cName() + "." + rule.mName();
@@ -261,7 +286,7 @@ public final class GSVEngine extends Object {
                 Method method = (Method)_methodCache.objectForKey(ruleKey);
                 Class methodReturnType = null;
                 boolean rulePassed = false;
-                
+
                 if(method == null){
                     //first lets get the class, if we don't have it already
                     if( clss == null ){
@@ -280,11 +305,11 @@ public final class GSVEngine extends Object {
                         }
                     }
                 }
-                
+
                 //we have the method, lets continue;
-                
+
                 if( method != null ){
-                
+
                     methodReturnType = method.getReturnType();
                     //this return type must be a <code>boolean</code>
                     if(methodReturnType.toString().equals("boolean")){
@@ -324,20 +349,35 @@ public final class GSVEngine extends Object {
         }
         return true;
     }
+
+    public boolean checkRule(GSVRule rule, String attributeName, NSMutableDictionary errorDict, String value, int when){
+	return checkRule(rule, attributeName, errorDict, value, null, when);
+    }
     
     /**
-     *	Loads and returns the GSVEntity associated with the enterprise object.
+     *	May be called arbitrarily to validate an EO Object, though
+     *	it is explicitly called by <code>validateObject</code>
+     *	Returns <code>true</code> if all validation succeeds.
+     *	Returns <code>false</code> if the rule fails, and populates the error
+     *	dictionary with the error.
      */
-    private GSVEntity entityForObject(EOEnterpriseObject eoObject){
-        EOEntity eoentity = _defaultModelGroup.entityNamed(eoObject.entityName());
-        
+    public boolean checkRule(GSVRule rule, String attributeName, NSMutableDictionary errorDict, Object eoObject, int when){
+	return  checkRule(rule, attributeName, errorDict, null, eoObject, when);
+    }
+
+    private GSVEntity entityWithName(String name) {
+        EOEntity eoentity = _defaultModelGroup.entityNamed(name);
+	return entityForEntity(eoentity);
+    }
+
+    private GSVEntity entityForEntity(EOEntity eoentity) {
         //if the eoentity, indeed exists, find out the name of it's model
         if( eoentity != null ){
             String modelName = eoentity.model().name();
-            
+
             //check the cache to see if this Valididty model has been loaded
             GSVModel model = (GSVModel)_modelCache.objectForKey(modelName);
-            
+
             //if the model hasn't been cache, load then cache it
             if( model == null ){
                 EOModel eomodel = eoentity.model();
@@ -348,9 +388,10 @@ public final class GSVEngine extends Object {
                 gsvModelPath = NSPathUtilities.stringByAppendingPathExtension(gsvModelPath, GSVModel.MODEL_EXTENSION);
                 model = (GSVModel)WOXMLDecoder.decoder().decodeRootObject(gsvModelPath);
                 model.setEomodelPath(eoModelPath);	//not sure why we need to do this?
-                model.init(eomodel, eoObject);
+		model.init(eomodel);
+
                 model.saveModel();					//not sure why we need to do this?
-                //now cache 
+				       //now cache
                 _modelCache.setObjectForKey(model, modelName);
             }
             return model.entityNamed(eoentity.name());
@@ -358,7 +399,13 @@ public final class GSVEngine extends Object {
         //the eo entity wasn't found
         return null;
     }
-    
+    /**
+     *	Loads and returns the GSVEntity associated with the enterprise object.
+     */
+    private GSVEntity entityForObject(EOEnterpriseObject eoObject){
+        EOEntity eoentity = _defaultModelGroup.entityNamed(eoObject.entityName());
+        return entityForEntity(eoentity);
+    }
     /**
      *	Checks the expiration date for the trial/beta versions of Validity.
      */

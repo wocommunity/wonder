@@ -190,7 +190,6 @@ public final class GSVEntity extends Object implements WOXMLCoding {
 			//NSLog.debug.appendln("checking eo="+eoentity.name()+", attributename="+attribute.name());
 			EOClassDescription eoclassdescription = EOClassDescription.classDescriptionForEntityName(eoentity.name());
 			EOEnterpriseObject eoenterpriseobject = eoclassdescription.createInstanceWithEditingContext(null, null);
-                        ec.insertObject(eoenterpriseobject);
                         eoenterpriseobject.valueForKeyPath(attribute.name());
                         
 		    }
@@ -198,6 +197,8 @@ public final class GSVEntity extends Object implements WOXMLCoding {
 		    //NSLog.debug.appendln(e1);
 		    NSLog.out.appendln("attribute "+attribute.name() + " does not exist in entity " + name() + " anymore, deleted from Valididy model");
 		    removeAttribute(attribute);
+                } catch (Exception e1) {
+                    
                 } finally {
                     ec.unlock();
                     ec.dispose();
