@@ -137,10 +137,11 @@ public class ERXExtensions {
      */
     static {
             try {
+                // This will load any optional configuration files, 
+                ERXConfigurationManager.defaultManager().initialize();
                 ERXLogger.configureLogging(System.getProperties());
                 
                 log().info("Initializing framework: ERXExtensions");
-                ERXConfigurationManager.defaultManager().initialize();
 
                 NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
