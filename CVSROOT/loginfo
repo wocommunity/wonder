@@ -27,5 +27,5 @@
  
 CVSROOT $CVSROOT/CVSROOT/syncmail %{sVv} patrice@mac.com maxmuller@mac.com
 
-DEFAULT $CVSROOT/CVSROOT/syncmail %{sVv} patrice@mac.com wonder-cvs@lists.sourceforge.net
+DEFAULT $CVSROOT/CVSROOT/syncmail %{sVv} wonder-cvs@lists.sourceforge.net
 
