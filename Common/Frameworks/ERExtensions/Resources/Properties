@@ -16,10 +16,10 @@ CPRaiseOnError = false
 #########################################################################
 # Localizer
 #########################################################################
-er.extensions.ERXLocalizer.frameworkSearchPath = app, ERDirectToWeb, ERExtensions
+er.extensions.ERXLocalizer.frameworkSearchPath = app,ERDirectToWeb,ERExtensions
 
 er.extensions.ERXLocalizer.defaultLanguage = English
-er.extensions.ERXLocalizer.availableLanguages = English, German, Japanese
+er.extensions.ERXLocalizer.availableLanguages = English,German,Japanese
 #er.extensions.ERXLocalizer.availableLanguages = English, German, French, Norwegian, Japanese
 
 #er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
