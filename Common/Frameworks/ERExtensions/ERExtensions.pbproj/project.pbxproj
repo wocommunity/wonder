@@ -720,12 +720,6 @@
 			settings = {
 			};
 		};
-		66F39C73021A475800CD2933 = {
-			fileRef = F57EA61901FF59BF019E57DA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		66F39C74021A475800CD2933 = {
 			fileRef = F57EA61A01FF59BF019E57DA;
 			isa = PBXBuildFile;
@@ -1043,6 +1037,17 @@
 			settings = {
 			};
 		};
+		F53F521C028977D101257492 = {
+			isa = PBXFileReference;
+			path = ERXValidationException.java;
+			refType = 4;
+		};
+		F53F521D028977D101257492 = {
+			fileRef = F53F521C028977D101257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F55412400270D30001000105 = {
 			isa = PBXFileReference;
 			path = ERXTestCase.java;
@@ -1061,6 +1066,49 @@
 		};
 		F558841B025B832301000102 = {
 			fileRef = F558841A025B832201000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F567C7C302897B5C01257492 = {
+			children = (
+				F567C7C402897B6901257492,
+				F567C7C602897B6F01257492,
+				F567C7C802897B7C01257492,
+			);
+			isa = PBXGroup;
+			name = ERXLocalizedString;
+			refType = 4;
+		};
+		F567C7C402897B6901257492 = {
+			isa = PBXFileReference;
+			path = ERXLocalizedString.api;
+			refType = 4;
+		};
+		F567C7C502897B6901257492 = {
+			fileRef = F567C7C402897B6901257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F567C7C602897B6F01257492 = {
+			isa = PBXFileReference;
+			path = ERXLocalizedString.java;
+			refType = 4;
+		};
+		F567C7C702897B6F01257492 = {
+			fileRef = F567C7C602897B6F01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F567C7C802897B7C01257492 = {
+			isa = PBXFolderReference;
+			path = ERXLocalizedString.wo;
+			refType = 4;
+		};
+		F567C7C902897B7C01257492 = {
+			fileRef = F567C7C802897B7C01257492;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1526,11 +1574,6 @@
 		F57EA61801FF59BF019E57DA = {
 			isa = PBXFileReference;
 			path = ERXStatelessComponent.java;
-			refType = 4;
-		};
-		F57EA61901FF59BF019E57DA = {
-			isa = PBXFileReference;
-			path = ERXValidationException.java;
 			refType = 4;
 		};
 		F57EA61A01FF59BF019E57DA = {
@@ -2330,6 +2373,8 @@
 				F641B2FE026AF07D014E589E,
 				F7CC3073027B365801A8010C,
 				F7BA9418027F9A7201A8010C,
+				F567C7C502897B6901257492,
+				F567C7C902897B7C01257492,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -2474,7 +2519,6 @@
 				66F39C70021A475800CD2933,
 				66F39C71021A475800CD2933,
 				66F39C72021A475800CD2933,
-				66F39C73021A475800CD2933,
 				66F39C74021A475800CD2933,
 				66F39C75021A475800CD2933,
 				66F39C76021A475800CD2933,
@@ -2501,6 +2545,8 @@
 				F55412410270D30001000105,
 				F76729CE0284598901A8010C,
 				F76729CF0284598901A8010C,
+				F53F521D028977D101257492,
+				F567C7C702897B6F01257492,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -3521,6 +3567,18 @@
 			path = ERXNonZeroConditional.wo;
 			refType = 4;
 		};
+		F58FAD91028971DE01257492 = {
+			isa = PBXFileReference;
+			name = Japanese;
+			path = Japanese.lproj/ValidationTemplate.strings;
+			refType = 4;
+		};
+		F58FAD92028971DE01257492 = {
+			isa = PBXFileReference;
+			name = Japanese;
+			path = Japanese.lproj/Localizable.strings;
+			refType = 4;
+		};
 		F597C1870263763401000102 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
@@ -4266,6 +4324,7 @@
 			children = (
 				F57EA68B01FF59BF019E57DA,
 				F641B2FF026AF091014E589E,
+				F58FAD91028971DE01257492,
 			);
 			isa = PBXVariantGroup;
 			name = ValidationTemplate.strings;
@@ -4275,6 +4334,7 @@
 			children = (
 				F597C1870263763401000102,
 				F6A85F97026AF1530146FA97,
+				F58FAD92028971DE01257492,
 			);
 			isa = PBXVariantGroup;
 			name = Localizable.strings;
@@ -4373,7 +4433,7 @@
 				F57EA60701FF59BF019E57DA,
 				F57EA60901FF59BF019E57DA,
 				F57EA60A01FF59BF019E57DA,
-				F57EA61901FF59BF019E57DA,
+				F53F521C028977D101257492,
 				F57EA61A01FF59BF019E57DA,
 				F5177FBF0266EB2801000102,
 			);
@@ -4581,6 +4641,7 @@
 				F645C89D0247899001AD0D07,
 				F645C89F0247899001AD0D07,
 				F645C8A00247899001AD0D07,
+				F567C7C302897B5C01257492,
 				F645C8A10247899001AD0D07,
 				F645C8A20247899001AD0D07,
 				F645C8A30247899001AD0D07,
