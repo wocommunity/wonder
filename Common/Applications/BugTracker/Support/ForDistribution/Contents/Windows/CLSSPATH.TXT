@@ -1,0 +1,30 @@
+# JVM              == java
+# JVMOptions       == 
+# JDB              == jdb
+# JDBOptions       == 
+# ApplicationClass == er.bugtracker.Application
+APPROOT\Resources\Java\BugTracker.jar
+WOROOT\Library\Frameworks\JavaJDBCAdaptor.framework\Resources\Java\javajdbcadaptor.jar
+WOROOT\Library\Frameworks\JavaXML.framework\Resources\Java\javaxml.jar
+WOROOT\Library\Frameworks\JavaEOControl.framework\Resources\Java\javaeocontrol.jar
+WOROOT\Library\Frameworks\JavaWebObjects.framework\Resources\Java\javawebobjects.jar
+WOROOT\Library\Frameworks\JavaDirectToWeb.framework\Resources\Java\javadirecttoweb.jar
+WOROOT\Library\Frameworks\JavaEOProject.framework\Resources\Java\javaeoproject.jar
+WOROOT\Library\Frameworks\JavaEOAccess.framework\Resources\Java\javaeoaccess.jar
+WOROOT\Library\Frameworks\JavaFoundation.framework\Resources\Java\javafoundation.jar
+WOROOT\Library\Frameworks\JavaDTWGeneration.framework\Resources\Java\javadtwgeneration.jar
+LOCALROOT\Library\Frameworks\ERJars.framework\Resources\Java\ERJars.jar
+LOCALROOT\Library\Frameworks\ERJars.framework\Resources\Java\junit.jar
+LOCALROOT\Library\Frameworks\ERJars.framework\Resources\Java\log4j.jar
+LOCALROOT\Library\Frameworks\ERCoreBusinessLogic.framework\Resources\Java\ERCoreBusinessLogic.jar
+LOCALROOT\Library\Frameworks\ERExtensions.framework\Resources\Java\ERExtensions.jar
+LOCALROOT\Library\Frameworks\ERDirectToWeb.framework\Resources\Java\ERDirectToWeb.jar
+LOCALROOT\Library\Frameworks\BTBusinessLogic.framework\Resources\Java\BTBusinessLogic.jar
+LOCALROOT\Library\Frameworks\JavaWOExtensions.framework\Resources\Java\JavaWOExtensions.jar
+LOCALROOT\Library\Frameworks\MysqlPlugIn.framework\Resources\Java\MysqlPlugIn.jar
+HOMEROOT\Library\Java
+LOCALROOT\Library\Java
+WOROOT\Library\Java
+\Network\Library\Java
+WOROOT\Library\Frameworks\JavaVM.framework\Classes\classes.jar
+WOROOT\Library\Frameworks\JavaVM.framework\Classes\ui.jar
