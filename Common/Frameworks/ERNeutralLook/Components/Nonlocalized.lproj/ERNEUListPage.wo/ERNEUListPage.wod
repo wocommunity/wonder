@@ -59,6 +59,15 @@ ColumnLabelRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
+Conditional1: WOConditional {
+	condition = false;
+}
+
+EditButton: ERDEditButton {
+	d2wContext = d2wContext;
+	object = object;
+}
+
 EditEO: WOHyperlink {
 	action = editObjectAction;
 }
