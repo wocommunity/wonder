@@ -148,9 +148,13 @@ public class ERXComponentActionRedirector {
             redirector = (ERXComponentActionRedirector)responses.valueForKeyPath(request.sessionID() + "." + request.uri());
         }
         if(redirector != null) {
-            log.info("Retrieved URL: " + redirector.url());
+            if(log.isDebugEnabled()) {
+                log.debug("Retrieved URL: " + redirector.url());
+            }
         } else {
-            log.info("No Redirector for request: " + request.uri());
+            if(log.isDebugEnabled()) {
+                log.debug("No Redirector for request: " + request.uri());
+            }
         }
         return redirector;
     }
