@@ -436,12 +436,33 @@ public class ERXArrayUtilities extends Object {
      * @return sorted array.
      */
     public static NSArray sortedArraySortedWithKey(NSArray array, String key, NSSelector selector) {
-        ERXAssert.PRE.notNull("Attempting to sort null array of eos.", array);
-        ERXAssert.PRE.notNull("Attepting to sort array of eos with null key.", key);
+        ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
+        ERXAssert.PRE.notNull("Attepting to sort array of objects with null key.", key);
         NSArray order=new NSArray(new Object[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
         return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, order);
     }
 
+    /**
+        * Sorts a given array with a set of keys according to the given selector.
+     * @param array array to be sorted.
+     * @param keys sort keys
+     * @param selector sort order selector to use, if null, then sort will be ascending.
+     * @return sorted array.
+     */
+    public static NSArray sortedArraySortedWithKeys(NSArray array, NSArray keys, NSSelector selector) {
+        ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
+        ERXAssert.PRE.notNull("Attepting to sort an array with null keys.", keys);
+        if (keys.count() < 2)
+            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector);
+
+        NSMutableArray order = new NSMutableArray(keys.count());
+        for (Enumeration keyEnumerator = keys.objectEnumerator(); keyEnumerator.hasMoreElements();) {
+            String key = (String)keyEnumerator.nextElement();
+            order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareAscending : selector));
+        }
+        return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, order);
+    }   
+    
     /**
      * Sorts a given mutable array with a key in place.
      * @param array array to be sorted.
@@ -501,13 +522,19 @@ public class ERXArrayUtilities extends Object {
          * @param keypath sort key.
          * @return immutable sorted array.
          */
-	public Object compute(NSArray array, String keypath) {
-	    synchronized (array) {
-		if (array.count() < 2)
-		    return array;
-		return sortedArraySortedWithKey(array, keypath, selector);
-	    }
-	}
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                if (array.count() < 2)
+                    return array;
+                if (keypath != null && keypath.indexOf(",") != -1) {
+                    return sortedArraySortedWithKeys(array,
+                                                     NSArray.componentsSeparatedByString(keypath, ","),
+                                                     selector);
+                } else {
+                    return sortedArraySortedWithKey(array, keypath, selector);
+                }
+            }
+        }
     }
 
     /**
