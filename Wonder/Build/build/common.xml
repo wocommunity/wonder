@@ -359,7 +359,7 @@
     <!-- WOOgnl -->
     <target name="WOOgnl.all">
         <antcall target="framework" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="${wonder.root}/Common/Frameworks/WOOgnl" />
         </antcall>
