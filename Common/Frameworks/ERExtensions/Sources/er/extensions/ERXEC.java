@@ -42,7 +42,7 @@ public class ERXEC extends EOEditingContext {
     /** decides whether to lock/unlock automatically when used without a lock. */
     private Boolean useAutolock;
     
-    /** true, if we did automatically lock. */
+    /** how many times we did automatically lock. */
     private int autoLockCount = 0;
 
     /** how many times has the EC been locked. */
