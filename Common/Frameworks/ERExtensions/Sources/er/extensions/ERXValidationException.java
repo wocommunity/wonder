@@ -11,19 +11,37 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import org.apache.log4j.Category;
 
+/**
+ * ERXValidationExceptions extends the regular
+ * {@link com.webobjects.foundation.NSValidation.ValidationException NSValidation.ValidationException}
+ * to added template based resolution of the validation exception. See more
+ * information about resolving templates in the {@link ERXValidationFactory ERXValidationFactory}.
+ */
 public class ERXValidationException extends NSValidation.ValidationException implements NSKeyValueCoding {
 
     /** logging support */
     public static final Category cat = Category.getInstance(ERXValidationException.class);
 
     // Validation Exception Types
-    
+    /** corresponds to a model thrown 'null property' exception */
     public static final String NullPropertyException = "NullPropertyException";
+    
+    /** corresponds to a number formatter exception */
     public static final String InvalidNumberException = "InvalidNumberException";
+
+    /** corresponds to a model thrown 'mandatory toOne relationship' exception */
     public static final String MandatoryToOneRelationshipException = "MandatoryToOneRelationshipException";
+
+    /** corresponds to a model thrown 'manditory relationship' exception */
     public static final String MandatoryRelationshipException = "MandatoryRelationshipException";
+
+    /** corresponds to a model thrown 'object removal' exception */    
     public static final String ObjectRemovalException = "ObjectRemovalException";
+
+    /** corresponds to a model thrown 'objects removal' exception */
     public static final String ObjectsRemovalException = "ObjectsRemovalException";
+
+    /** corresponds to a custom thrown exception */
     public static final String CustomMethodException = "CustomMethodException";
 
     /**
@@ -126,23 +144,79 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public boolean isCustomMethodException() { return type() == CustomMethodException; }
 
     /**
-     *  
+     * Method name. The method name is only set if the validation
+     * exception is a custom validation exception.
+     * @return custom method name.
      */
     public String method() { return method; }
-    
+
+    /**
+     * Sets the custom method name that threw the
+     * validation exception.
+     * @param aMethod name to be set.
+     */
     public void setMethod(String aMethod) { method = aMethod; }
-    
+
+    /**
+     * Cover method that casts the <code>object</code> of
+     * the validation exception to an EOEnterpriseObject.
+     * @return object cast as an enterprise object.
+     */
     public EOEnterpriseObject eoObject() { return (EOEnterpriseObject)object(); }
-    
+
+    /**
+     * Cover method for returning the <code>key</code> of
+     * the validation exception under the name propertyKey.
+     * @return the key of the validation exception
+     */
     public String propertyKey() { return key(); }
 
+    /**
+     * Cover method to return the type of the validation
+     * exception. The corresponds to one of the constant
+     * strings defined in this class.
+     * @return the type of this validation exception.
+     */
     public String type() { return type; }
+
+    /**
+     * Sets the validation type of this exception.
+     * Should correspond to one of the type constants
+     * defined in this class. All of the model thrown
+     * validation exceptions should have the correct
+     * type already set.
+     * @param aType name to set on this validation
+     *		exception.
+     */
     public void setType(String aType) { type = aType; }
 
+    /**
+     * The value that failed validation.
+     * @return failed validation value.
+     */
     public Object value() { return value; }
+
+    /**
+     * Sets the value that failed validation.
+     * @param aValue that failed validation
+     */
     public void setValue(Object aValue) { value = aValue; }
 
+    /**
+     * The target language to display the validation message in.
+     * If a target language is not set then the current default
+     * language for the current thread is used.
+     * @return target language if one is set.
+     */
     public String targetLanguage() { return targetLanguage; }
+
+    /**
+     * Sets the target language to use when rendering the validation
+     * message. Only set a target language if you want to override
+     * the current language of the thread.
+     * @param aValue name fo the language to render the validation
+     *		exception in.
+     */
     public void setTargetLanguage(String aValue) {  targetLanguage = aValue; }
 
     /**
