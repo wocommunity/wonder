@@ -12,7 +12,7 @@ usefull class in to automatically en- and decode an NSMutableDictionary
 */
 public class ERXMutableDictionary extends NSMutableDictionary implements Map {
     public static final long serialVersionUID = 8091318522043166356L;
-
+    
     public static NSData toBlob(ERXMutableDictionary d) throws Exception {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bout);
@@ -139,4 +139,22 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
         return new ERXMutableArray(av);
     }
     
+    /** return the string value of an  object for key
+     * @param key, the key which is linked to the object
+     * @return if objectForKey return a non null value 
+     * this method returns the toString value from the object
+     */
+    public String stringObjectForKey(String key) {
+        Object o = objectForKey(key);
+        return o == null ? null : o.toString();
+    }
+    
+    /**
+     * @param key
+     * @return
+     */
+    public Boolean booleanObjectForKey(String key) {
+        Object o = objectForKey(key);
+        return o == null ? null : ERXValueUtilities.booleanValue(o) ? Boolean.TRUE : Boolean.FALSE;
+    }
 }
