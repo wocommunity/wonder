@@ -1,0 +1,20 @@
+Hyperlink1: WOHyperlink {
+	directActionName = "image";
+	target = "svg";
+}
+
+Hyperlink2: WOHyperlink {
+	directActionName = "animate";
+	target = "svg";
+}
+
+Hyperlink3: WOHyperlink {
+	directActionName = "circle";
+	target = "svg";
+}
+
+Hyperlink4: WOHyperlink {
+	directActionName = "xmllink";
+	target = "svg";
+}
+
