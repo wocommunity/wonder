@@ -1,7 +1,7 @@
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
-	list = currentSectionKeys.keys;
+	list = currentSectionKeys;
 }
 
 AttributeValue1: WOSwitchComponent {
