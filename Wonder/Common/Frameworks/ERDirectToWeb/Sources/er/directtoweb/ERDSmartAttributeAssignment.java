@@ -22,7 +22,8 @@ import com.webobjects.directtoweb.*;
  * not find it is that it uses the Model to find out the EOAttribute 
  * and starts from A. Following the relationship b, gives a B, and 
  * asking B for an attribute named k returns nil and you lose.
- */
+ * @deprecated use ERDDefaultModelAssignment
+*/
 //	Note that these assignments require that the object is pushed into the context.  Look
 //	on some of the ERInspectPage setObject methods we push the object into the context.
 // MOVEME: Should combind with ERDSmartRelationship into a single class, maybe the defaults
@@ -42,6 +43,7 @@ public class ERDSmartAttributeAssignment extends ERDAssignment {
      */
      // ENHANCEME: Only need one of these guys created.
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDSmartAttributeAssignment.class, ERDDefaultModelAssignment.class);
         return new ERDSmartAttributeAssignment(eokeyvalueunarchiver);
     }
     
