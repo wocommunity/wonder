@@ -24,7 +24,7 @@ Image1: WOImage {
 }
 
 PageWrapper: WOSwitchComponent {
-	WOComponentName = session.wrapperPageName;
+	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
 }
