@@ -58,7 +58,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * an ERXCompilerProxy did reset.
          */
         public void compilerProxyDidCompileClasses(NSNotification n) {
-            cat.debug("compilerProxyDidCompileClasses: " + ((EOModel)n.object()).name());
+            cat.debug("compilerProxyDidCompileClasses: " + n);
             reset();
        }
 
