@@ -3,5 +3,10 @@
 	<wo class="ERXEditDateJavascript" wocomponentcontent="false">
 
 		<binding name="dateString"/>
+		<binding name="dateformat" defaults="Date Format Strings"/>
+
+		<validation message="&apos;dateString&apos; is a required binding">
+			<unbound name="dateString"/>
+		</validation>
 	</wo>
 </wodefinitions>

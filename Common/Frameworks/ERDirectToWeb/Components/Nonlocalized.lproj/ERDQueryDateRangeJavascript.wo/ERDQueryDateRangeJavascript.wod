@@ -27,7 +27,7 @@ JavaScript2: WOJavaScript {
 }
 
 String1: WOString {
-	value = formatterString.toLowerCase;
+	value = formatterStringForScript.toLowerCase;
 }
 
 String2: WOString {
@@ -41,13 +41,13 @@ String3: WOString {
 TextField1: WOTextField {
 	name = minName;
 	value = minValue;
-	maxlength = 10;
+	maxlength = 12;
 	size = 12;
 }
 
 TextField2: WOTextField {
 	name = maxName;
 	value = maxValue;
-	maxlength = 10;
+	maxlength = 12;
 	size = 12;
 }
