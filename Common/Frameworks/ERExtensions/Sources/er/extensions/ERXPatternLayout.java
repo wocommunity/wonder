@@ -316,14 +316,19 @@ class ERXPatternParser extends PatternParser {
                     if (appName != null) 
                         _appInfo.setObjectForKey(appName, "appName");
 
-                    // WO 5.1.x -- Apple Ref# 2260519
-                    NSArray adaptors = app.adaptors();
-                    if (adaptors != null  &&  adaptors.count() > 0) {
-                        WOAdaptor primaryAdaptor = (WOAdaptor)adaptors.objectAtIndex(0);
-                        String portNumber = String.valueOf(primaryAdaptor.port()); 
-                        if (portNumber != null) 
-                            _appInfo.setObjectForKey(portNumber, "portNumber");
+                    if (app.port() != null && app.port().intValue() > 0) {
+                        _appInfo.setObjectForKey(app.port().toString(), "portNumber");
+                    } else {
+                        // WO 5.1.x -- Apple Ref# 2260519
+                        NSArray adaptors = app.adaptors();
+                        if (adaptors != null  &&  adaptors.count() > 0) {
+                            WOAdaptor primaryAdaptor = (WOAdaptor)adaptors.objectAtIndex(0);
+                            String portNumber = String.valueOf(primaryAdaptor.port());
+                            if (portNumber != null)
+                                _appInfo.setObjectForKey(portNumber, "portNumber");
+                        }                        
                     }
+                    
                     _template = _templateParser.parseTemplateWithObject(_template, "@", _appInfo, _defaultLabels);
                     _constantsInitialized = true;
                 }
