@@ -50,6 +50,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /** holds all subclass related ERXLogger's */
     public static NSMutableDictionary classLogs = new NSMutableDictionary();
     public static final Object lock = new Object();
+
+    public static boolean shouldTrimSpaces(){
+        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", true);
+    }
     
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
     public final static String KEY_MARKER="** KEY_MARKER **";
@@ -157,7 +161,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
              }
              tranLogWillInsert.debug("Object:" + description());
          }
-         trimSpaces();
+        if(shouldTrimSpaces())
+            trimSpaces();
     }
 
     /**
@@ -184,7 +189,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
              if (tranLogWillUpdate.isDebugEnabled())
                  tranLogWillUpdate.debug("Object:" + description() + " changes: " + changesFromCommittedSnapshot());
          }
-        trimSpaces();
+        if(shouldTrimSpaces())
+            trimSpaces();
     }
 
     /**
@@ -629,11 +635,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * you wish to preserve your leading and trailing white space.
      */
     public void trimSpaces() {
+        System.out.println("stringAttributeListForEntityNamed(entityName()) ="+stringAttributeListForEntityNamed(entityName()));
         for (Enumeration e=stringAttributeListForEntityNamed(entityName()).objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
             String value=(String)storedValueForKey(key);
             if (value!=null) {
                 String trimmedValue=value.trim();
+                System.out.println("value = "+value+".");
+                System.out.println("trimmedValue="+trimmedValue+".");
                 if (trimmedValue.length()!=value.length())
                     takeStoredValueForKey(trimmedValue,key);
             }
