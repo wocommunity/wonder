@@ -7,11 +7,10 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 /**
- * Class for DirectToWeb Component ERD2WCustomQueryBoolean.
- *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
- *
+ * Better D2WQueryBoolean, which allows you to sprecify the choices names via a context key, 
+ * containing the labels in a format like ("Don't care", "Yes", "No") or ("Yes", "No").
+ * Also keeps the selected value. 
+ * 
  * @created ak on Mon Dec 22 2003
  * @project ERDirectToWeb
  */
@@ -39,6 +38,31 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
     public void reset(){
         super.reset();
         _choicesNames = null;
+    }
+    
+    public Object value() {
+    	int index = 0;
+    	if(">".equals(displayGroup().queryOperator().valueForKey(propertyKey()))) {
+    		index = 2;
+    	}
+     	index = displayGroup().queryMatch().valueForKey(propertyKey()) != null ? 1 : 0;
+     	return queryNumbers.objectAtIndex(index);
+    }
+
+    public void setValue(Object obj) {
+    	displayGroup().queryOperator().removeObjectForKey(propertyKey());
+    	displayGroup().queryMatch().removeObjectForKey(propertyKey());
+    	if(obj.equals(queryNumbers.objectAtIndex(0))) {
+    		log.debug("Don't care");
+    	} else {
+    		displayGroup().queryMatch().takeValueForKey(ERXConstant.ZeroInteger, propertyKey());
+    		if(obj.equals(queryNumbers.objectAtIndex(1))) {
+    			displayGroup().queryOperator().takeValueForKey(">", propertyKey());
+    			log.debug("True");
+    		} else {
+    			log.debug("False");
+    		}
+     	}
     }
     
     public String displayString() {
