@@ -1,22 +1,9 @@
-Conditional1: WOConditional {
-	condition = isTargetXML;
-	negate = true;
-}
-
-Conditional2: WOConditional {
-	condition = isTargetXML;
-}
-
 Content2: WOComponentContent {}
-
-GenericContainer1: WOGenericContainer {
-	elementName = "CENTER";
-	omitTags = erD2WListOmitCenterTag;
-}
 
 List1: ERXD2WList { 	
 	pageConfiguration = ^listConfigurationName;
 	list = list;
+	entityName = ^destinationEntityName;
 }
 
 NoEmptyListMessage: ERXNonNullConditional {
@@ -46,7 +33,7 @@ String1: WOString {
 	escapeHTML = false;
 }
 
-String2: WOString {
+String3: WOString {
 	value = ^destinationEntity.name;
 }
 
