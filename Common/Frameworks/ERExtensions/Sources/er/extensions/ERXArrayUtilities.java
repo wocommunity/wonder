@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import java.util.*;
 import java.io.*;
+import java.math.BigDecimal;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
@@ -538,7 +539,7 @@ public class ERXArrayUtilities extends Object {
 
 
     /**
-        * Define an {@link NSArray$Operator} for the key <b>objectAtIndex</b>.<br/>
+     * Define an {@link NSArray$Operator} for the key <b>objectAtIndex</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
@@ -571,6 +572,45 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
+    /**
+     * Define an {@link NSArray$Operator} for the key <b>avgNonNull</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@avgNonNull.revenue");</code><br/>
+     * <br/>
+     * which will sum up all values and divide by the number of nun-null entries. 
+     */
+    static class AvgNonNullOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public AvgNonNullOperator() {}
+
+        /**
+         * returns the average value for over all non-null values.
+         * @param array array to be checked.
+         * @param keypath value of average.
+         * @return computed average as double or <code>NULL</code>.
+         */
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                BigDecimal result = new BigDecimal(0L);
+                int count = 0;
+                
+                for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
+                    Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
+                    if(value != null && value != NSKeyValueCoding.NullValue) {
+                        count = count+1;
+                        result = result.add(ERXValueUtilities.bigDecimalValue(value));
+                    }
+                }
+                if(count == 0) {
+                    return null;
+                }
+                return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
+            }
+        }
+    }
+
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
@@ -592,6 +632,7 @@ public class ERXArrayUtilities extends Object {
 	NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
 	NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
         NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
+        NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
     }
 
     
