@@ -144,6 +144,9 @@
     <!-- Create Wonder Destribution.                          -->
     <!-- ==================================================== -->
     <target name="dist" depends="init, prepare">
+        <ant antfile="Build/build/generic.xml" target="all.clean" />
+        <antcall target="clean" />
+
         <property name="wonder.development" value="false" />
 
         <ant antfile="Build/build/generic.xml" target="frameworks.all" />
@@ -176,8 +179,6 @@
         <ant antfile="Build/build/subprojects-dist.xml" />
 
         <ant antfile="Build/build/dist-generic.xml" target="all" />
-        <ant antfile="Build/build/dist-generic.xml" target="dist.source" />
-        <ant antfile="Build/build/dist-generic.xml" target="dist.prebuilt.zip" />
         
     </target>
     
