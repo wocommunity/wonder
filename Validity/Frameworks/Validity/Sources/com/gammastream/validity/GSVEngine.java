@@ -386,7 +386,9 @@ public final class GSVEngine extends Object {
                 eoModelPath = NSPathUtilities.stringByAppendingPathExtension(eoModelPath, "eomodeld");
                 String gsvModelPath = NSPathUtilities.stringByAppendingPathComponent(eoModelPath, GSVModel.MODEL_NAME);
                 gsvModelPath = NSPathUtilities.stringByAppendingPathExtension(gsvModelPath, GSVModel.MODEL_EXTENSION);
-                model = (GSVModel)WOXMLDecoder.decoder().decodeRootObject(gsvModelPath);
+                WOXMLDecoder decoder = WOXMLDecoder.decoder();
+                decoder.setEncoding("UTF-8");
+                model = (GSVModel)decoder.decodeRootObject(gsvModelPath);
                 model.setEomodelPath(eoModelPath);	//not sure why we need to do this?
 		model.init(eomodel);
 
