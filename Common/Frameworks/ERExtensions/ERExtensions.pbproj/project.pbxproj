@@ -52,6 +52,7 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_CLASS_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Java/Extensions/jce1_2_2.jar\"";
+				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
@@ -509,6 +510,13 @@
 				41CFDED305F3D17000523BB7,
 				41CFDED505F3D18300523BB7,
 				41CFDED705F3D22F00523BB7,
+				505EFE6F0601432A00121B55,
+				505EFE700601432A00121B55,
+				505EFE710601432A00121B55,
+				505EFE740601436C00121B55,
+				505EFE750601436C00121B55,
+				505EFE77060143D200121B55,
+				505EFE79060143FF00121B55,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1735,6 +1743,7 @@
 				F59C578902C4565701000102,
 				F698E7CE030C6F6B01257492,
 				50EB03A9055EBAD2007F93C2,
+				505EFE78060143FF00121B55,
 				F59C57C002C4565701000102,
 				50EB03AB055ED28E007F93C2,
 				50EB03AC055ED28E007F93C2,
@@ -1742,6 +1751,7 @@
 				F59C57D902C4565701000102,
 				F59C57E102C4565701000102,
 				41FF21AF0461C69F00000102,
+				505EFE76060143D200121B55,
 				4105EC4405C81354003BA93B,
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
@@ -1784,6 +1794,8 @@
 				F5E3B46A034823BF016A5D3F,
 				500D40B803CDFC7100CF0E76,
 				F59C57A302C4565701000102,
+				505EFE720601436C00121B55,
+				505EFE730601436C00121B55,
 				633FC07B040A414D00AE7795,
 				F59C57E302C4565701000102,
 				F59C57EB02C4565701000102,
@@ -2049,6 +2061,111 @@
 		};
 		50287843040960A40043FCB8 = {
 			fileRef = 50287842040960A40043FCB8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE6B060142F600121B55 = {
+			children = (
+				F59C57C802C4565701000102,
+				41CFDED605F3D22F00523BB7,
+				505EFE6C0601432A00121B55,
+				505EFE6D0601432A00121B55,
+				505EFE6E0601432A00121B55,
+				F59C57DD02C4565701000102,
+				F6ED0C790361C03B01257492,
+			);
+			isa = PBXGroup;
+			name = Formatters;
+			refType = 4;
+		};
+		505EFE6C0601432A00121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXDividingNumberFormatter.java;
+			path = er/extensions/ERXDividingNumberFormatter.java;
+			refType = 4;
+		};
+		505EFE6D0601432A00121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXFormatterFactory.java;
+			path = er/extensions/ERXFormatterFactory.java;
+			refType = 4;
+		};
+		505EFE6E0601432A00121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXMultiplyingNumberFormatter.java;
+			path = er/extensions/ERXMultiplyingNumberFormatter.java;
+			refType = 4;
+		};
+		505EFE6F0601432A00121B55 = {
+			fileRef = 505EFE6C0601432A00121B55;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE700601432A00121B55 = {
+			fileRef = 505EFE6D0601432A00121B55;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE710601432A00121B55 = {
+			fileRef = 505EFE6E0601432A00121B55;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE720601436C00121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXJDBCUtilities.java;
+			path = er/extensions/ERXJDBCUtilities.java;
+			refType = 4;
+		};
+		505EFE730601436C00121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXKeyValueCodingUtilities.java;
+			path = er/extensions/ERXKeyValueCodingUtilities.java;
+			refType = 4;
+		};
+		505EFE740601436C00121B55 = {
+			fileRef = 505EFE720601436C00121B55;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE750601436C00121B55 = {
+			fileRef = 505EFE730601436C00121B55;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE76060143D200121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXNonSynchronizingComponent.java;
+			path = er/extensions/ERXNonSynchronizingComponent.java;
+			refType = 4;
+		};
+		505EFE77060143D200121B55 = {
+			fileRef = 505EFE76060143D200121B55;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		505EFE78060143FF00121B55 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXLongResponseTask.java;
+			path = er/extensions/ERXLongResponseTask.java;
+			refType = 4;
+		};
+		505EFE79060143FF00121B55 = {
+			fileRef = 505EFE78060143FF00121B55;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7769,10 +7886,7 @@
 				F59C57D802C4565701000102,
 				F59C57EA02C4565701000102,
 				F59C57DE02C4565701000102,
-				F59C57DD02C4565701000102,
-				F59C57C802C4565701000102,
-				41CFDED605F3D22F00523BB7,
-				F6ED0C790361C03B01257492,
+				505EFE6B060142F600121B55,
 			);
 			isa = PBXGroup;
 			name = Foundation;
