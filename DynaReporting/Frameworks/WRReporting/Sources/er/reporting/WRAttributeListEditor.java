@@ -23,8 +23,9 @@ public class WRAttributeListEditor extends WOComponent implements DRAttributeEdi
         super(c);
     }
 
+    // CHECKME ak This can not be working!! We will mess seriously when we have several users and one edits this list
     public void resetAttributes() {
-        NSNotificationCenter.defaultCenter().postNotification("DRReportModelUpdate", null, null);
+        NSNotificationCenter.defaultCenter().postNotification(DRReportModel.DRReportModelUpdateNotification, null, null);
     }
 
 
