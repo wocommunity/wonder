@@ -347,6 +347,12 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         return validated;
     }
 
+    /**
+     * Calculates a display name for a key using
+     * an improved method.
+     * @param key to be converted
+     * @return pretty display name
+     */
     public String displayNameForKey(String key) {
         return ERXStringUtilities.displayNameForKey(key);
     }
