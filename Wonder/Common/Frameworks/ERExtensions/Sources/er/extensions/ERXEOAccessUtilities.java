@@ -92,7 +92,7 @@ public class ERXEOAccessUtilities {
     //		the adaptor level and see if we can't find something better.
     public static Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
         String sqlString = "select " + sequenceName + ".nextVal from dual";
-        NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString);
+        NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString, null);
         if (array.count() == 0) { throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName
                 + " in model: " + modelName); }
         NSDictionary dictionary = (NSDictionary) array.objectAtIndex(0);
@@ -611,6 +611,9 @@ public class ERXEOAccessUtilities {
      * Creates a where clause string " someKey IN ( someValue1,...)".
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
+        if(valueArray.count() == 0) {
+            return "0=1";
+        }
         StringBuffer sb = new StringBuffer();
         EOAttribute attribute = e.entity().attributeNamed(key);
         if (attribute == null) {
