@@ -64,24 +64,6 @@ Conditional3: WOConditional {
 	condition = session.browser.isIE;
 }
 
-Conditional4: WOConditional {
-	condition = session.browser.isIE;
-	negate = true;
-}
-
-Conditional5: WOConditional {
-	condition = session.browser.isIE;
-}
-
-Conditional6: WOConditional {
-	condition = session.browser.isIE;
-	negate = true;
-}
-
-Conditional7: WOConditional {
-	condition = session.browser.isIE;
-}
-
 Conditional8: WOConditional {
 	condition = session.browser.isIE;
 	negate = true;
@@ -250,16 +232,6 @@ SubmitButton1: WOSubmitButton {
 SubmitButton2: WOSubmitButton {
 	action = submitAction;
 	value = "Save";
-}
-
-SubmitButton3: WOSubmitButton {
-	action = editAction;
-	value = "Edit";
-}
-
-SubmitButton4: WOSubmitButton {
-	action = nextPage;
-	value = "Return";
 }
 
 SubmitButton5: WOSubmitButton {
