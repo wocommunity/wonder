@@ -137,6 +137,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     }
 
     public WOActionResults dynamicPageForActionNamed(String anActionName) {
+        ERD2WModel.erDefaultModel().checkRules();
         WOComponent newPage = null;
         try {
             newPage = D2W.factory().pageForConfigurationNamed(anActionName, session());
