@@ -248,6 +248,7 @@ public class ERCMailDelivery {
      * @param title of the message
      * @param componentName name of the component to render
      * @param plainTextComponentName name of the component to render
+     * @param bindings bindings dictionary to use for the components that are instantiated
      * @param ec editing context to create the mail
      *		message in.
      * @return created mail message for the given parameters
@@ -274,6 +275,40 @@ public class ERCMailDelivery {
             context._generateCompleteURLs ();
             result.setPlainText(plainTextComponent.generateResponse().contentString());
         }
+        return result;
+    }
+    
+    /**
+     * Composes a mail message from previously instantiated components.
+     *
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param component component to render
+     * @param plainTextComponent plain-text component to render
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
+     public ERCMailMessage composeComponentEmail (String from,
+                                                 NSArray to,
+                                                 NSArray cc,
+                                                 NSArray bcc,
+                                                 String title,
+                                                 WOComponent component,
+                                                 WOComponent plainTextComponent,
+                                                 EOEditingContext ec) {
+        ERCMailMessage result = composeComponentEmail(from, to, cc, bcc, title, component, ec);
+        
+        if ( plainTextComponent != null ) {
+            WOContext context = plainTextComponent.context();
+            
+            context._generateCompleteURLs();
+            result.setPlainText(plainTextComponent.generateResponse().contentString());
+        }
+        
         return result;
     }
 }
