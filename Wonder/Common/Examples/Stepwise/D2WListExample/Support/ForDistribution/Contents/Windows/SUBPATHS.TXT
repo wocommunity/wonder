@@ -1,0 +1,16 @@
+#APPROOT
+WOROOT\Library\Frameworks\JavaEOAccess.framework
+WOROOT\Library\Frameworks\JavaEOControl.framework
+WOROOT\Library\Frameworks\JavaFoundation.framework
+WOROOT\Library\Frameworks\JavaWebObjects.framework
+WOROOT\Library\Frameworks\JavaWOExtensions.framework
+WOROOT\Library\Frameworks\JavaJDBCAdaptor.framework
+WOROOT\Local\Library\Frameworks
+WOROOT\Local\Library\Java
+WOROOT\Local\Library
+WOROOT\Library\Frameworks
+WOROOT\Library\Java
+WOROOT\Library\JDK\lib
+WOROOT\Library
+WOROOT
+#HOMEROOT

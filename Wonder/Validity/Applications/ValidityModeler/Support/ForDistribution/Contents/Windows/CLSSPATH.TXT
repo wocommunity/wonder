@@ -1,0 +1,21 @@
+# JVM              == java
+# JVMOptions       == 
+# JDB              == jdb
+# JDBOptions       == 
+# ApplicationClass == Application
+APPROOT\Resources\Java\ValidityModeler.jar
+WOROOT\Library\Frameworks\JavaFoundation.framework\Resources\Java\javafoundation.jar
+WOROOT\Library\Frameworks\JavaEOControl.framework\Resources\Java\javaeocontrol.jar
+WOROOT\Library\Frameworks\JavaEOAccess.framework\Resources\Java\javaeoaccess.jar
+WOROOT\Library\Frameworks\JavaWebObjects.framework\Resources\Java\javawebobjects.jar
+WOROOT\Library\Frameworks\JavaJDBCAdaptor.framework\Resources\Java\javajdbcadaptor.jar
+WOROOT\Library\Frameworks\JavaWOExtensions.framework\Resources\Java\JavaWOExtensions.jar
+WOROOT\Library\Frameworks\JavaXML.framework\Resources\Java\javaxml.jar
+LOCALROOT\Library\Frameworks\Validity.framework\Resources\Java\GammaCore.jar
+LOCALROOT\Library\Frameworks\Validity.framework\Resources\Java\Validity.jar
+HOMEROOT\Library\Java
+LOCALROOT\Library\Java
+WOROOT\Library\Java
+\Network\Library\Java
+WOROOT\Library\Frameworks\JavaVM.framework\Classes\classes.jar
+WOROOT\Library\Frameworks\JavaVM.framework\Classes\ui.jar
