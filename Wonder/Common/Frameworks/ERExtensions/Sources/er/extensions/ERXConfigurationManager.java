@@ -276,6 +276,7 @@ public class ERXConfigurationManager {
         if(aModel!=null) {
             String aModelName=aModel.name();
             log.debug("Adjusting "+aModelName);
+            NSMutableDictionary newConnectionDictionary=null;
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
                 String serverName= stringForKey(aModelName + ".DBServer");
                 serverName=serverName==null ? stringForKey("dbConnectServerGLOBAL") : serverName;
@@ -285,12 +286,11 @@ public class ERXConfigurationManager {
                 passwd= passwd ==null ? stringForKey("dbConnectPasswordGLOBAL") : passwd;
 
                 if((serverName!=null) || (userName!=null) || (passwd!=null)) {
-                    NSMutableDictionary dict=new NSMutableDictionary(aModel.connectionDictionary());
-                    if (serverName!=null) dict.setObjectForKey(serverName,"serverId");
-                    if (userName!=null) dict.setObjectForKey(userName,"userName");
-                    if (passwd!=null) dict.setObjectForKey(passwd,"password");
-                    aModel.setConnectionDictionary(dict);
-                    if (log.isDebugEnabled()) log.debug("New Connection Dictionary "+dict);
+                    newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                    if (serverName!=null) newConnectionDictionary.setObjectForKey(serverName,"serverId");
+                    if (userName!=null) newConnectionDictionary.setObjectForKey(userName,"userName");
+                    if (passwd!=null) newConnectionDictionary.setObjectForKey(passwd,"password");
+                    aModel.setConnectionDictionary(newConnectionDictionary);
                 }
                 
             } else if (aModel.adaptorName().indexOf("Flat")!=-1) {
@@ -313,26 +313,21 @@ public class ERXConfigurationManager {
                     path=NSPathUtilities.stringByDeletingLastPathComponent(path);
                     path=NSPathUtilities.stringByAppendingPathComponent(path,aModel.name()+".db");                    
                 }
-                NSMutableDictionary dict=new NSMutableDictionary(aModel.connectionDictionary());
-                if (path!=null) dict.setObjectForKey(path,"path");
-                if (operatingSystem()==WindowsOperatingSystem) dict.setObjectForKey("\r\n","rowSeparator");
-                aModel.setConnectionDictionary(dict);
-                if (log.isDebugEnabled()) log.debug("New Connection Dictionary "+dict);
+                newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                if (path!=null) newConnectionDictionary.setObjectForKey(path,"path");
+                if (operatingSystem()==WindowsOperatingSystem)
+                    newConnectionDictionary.setObjectForKey("\r\n","rowSeparator");
+                aModel.setConnectionDictionary(newConnectionDictionary);
             } else if (aModel.adaptorName().indexOf("OpenBase")!=-1) {
                 String db= stringForKey(aModelName + ".DBDatabase");
                 db = db ==null ? stringForKey("dbConnectDatabaseGLOBAL") : db;
-                if (db!=null) {
-                    NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
-                    newCD.setObjectForKey(db, "databaseName");
-                    aModel.setConnectionDictionary(newCD);
-                }
                 String h= stringForKey(aModelName + ".DBHostName");
                 h = h ==null ? stringForKey("dbConnectHostNameGLOBAL") : h;
-                if (h!=null) {
-                    NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
-                    newCD.setObjectForKey(h, "hostName");
-                    aModel.setConnectionDictionary(newCD);
-                    if (log.isDebugEnabled()) log.debug("New Connection Dictionary "+newCD);
+                if (h!=null || db!=null) {
+                    newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                    if (db!=null) newConnectionDictionary.setObjectForKey(db, "databaseName");
+                    if (h!=null) newConnectionDictionary.setObjectForKey(h, "hostName");
+                    aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
                 String url= stringForKey(aModelName + ".URL");
@@ -348,23 +343,30 @@ public class ERXConfigurationManager {
                 String plugin= stringForKey(aModelName + ".DBPlugin");
                 plugin= plugin ==null ? stringForKey("dbConnectPluginGLOBAL") : plugin;
                 if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
-                    NSMutableDictionary newCD=new NSMutableDictionary(aModel.connectionDictionary());
-                    if (url!=null) newCD.setObjectForKey(url, "URL");
-                    if (userName!=null) newCD.setObjectForKey(userName,"username");
-                    if (passwd!=null) newCD.setObjectForKey(passwd,"password");
-                    if (driver!=null) newCD.setObjectForKey(driver,"driver");
+                    newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
+                    if (url!=null) newConnectionDictionary.setObjectForKey(url, "URL");
+                    if (userName!=null) newConnectionDictionary.setObjectForKey(userName,"username");
+                    if (passwd!=null) newConnectionDictionary.setObjectForKey(passwd,"password");
+                    if (driver!=null) newConnectionDictionary.setObjectForKey(driver,"driver");
                     if (jdbcInfo!=null) {
                         NSDictionary d=(NSDictionary)NSPropertyListSerialization.propertyListFromString(jdbcInfo);
                         if (d!=null)
-                            newCD.setObjectForKey(d,"jdbc2Info");
+                            newConnectionDictionary.setObjectForKey(d,"jdbc2Info");
                         else
-                            newCD.removeObjectForKey("jdbc2Info");
+                            newConnectionDictionary.removeObjectForKey("jdbc2Info");
                     }
-                    if (plugin!=null) newCD.setObjectForKey(plugin,"plugin");                    
-                    aModel.setConnectionDictionary(newCD);
-                    if (log.isDebugEnabled()) log.debug("New Connection Dictionary for "+aModel.name()+": "+newCD);
+                    if (plugin!=null) newConnectionDictionary.setObjectForKey(plugin,"plugin");                    
+                    aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             }
+
+            if (newConnectionDictionary!=null && log.isDebugEnabled()) {
+                if (newConnectionDictionary.objectForKey("password")!=null)
+                    newConnectionDictionary.setObjectForKey("<deleted for log>", "password");
+                log.debug("New Connection Dictionary for "+aModelName+": "+newConnectionDictionary);                
+            }
+            
+            
             // based on an idea from Stefan Apelt <stefan@tetlabors.de>
             String f = stringForKey(aModelName + ".EOPrototypesFile");
             f = f ==null ? stringForKey("EOPrototypesFileGLOBAL") : f;
