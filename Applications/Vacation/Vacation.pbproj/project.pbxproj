@@ -671,8 +671,8 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Properties;
-			path = Resources/Properties;
-			refType = 4;
+			path = Resources.BBC/Properties;
+			refType = 2;
 		};
 		412B651E041D30E200000103 = {
 			fileRef = 412B651C041D30E200000103;
@@ -801,8 +801,8 @@
 		D7BE005C0427247800000164 = {
 			isa = PBXFileReference;
 			name = Vacation.eomodeld;
-			path = Resources/Vacation.eomodeld;
-			refType = 4;
+			path = Resources.BBC/Vacation.eomodeld;
+			refType = 2;
 		};
 		D7BE005D0427247800000164 = {
 			fileRef = D7BE005C0427247800000164;
@@ -1421,7 +1421,7 @@
 				D7BE005C0427247800000164,
 			);
 			isa = PBXGroup;
-			name = Resources;
+			path = Resources;
 			refType = 4;
 		};
 		F5D2081A02B17BE101A318C2 = {

@@ -59,7 +59,7 @@ public class UserInfo extends VacationComponent {
                                                          " has requested some leave from " + fm.format(newDate.fromDate()) + " to " + fm.format(newDate.toDate())
                                                          + " (" + newDate.comment() + ") for " + newDate.totalTime() + " day(s).\n\n" +
                                                          "Please check the Leave Management software.\n\nClick here to login and view the request: "
-                                                         + application.settings.objectForKey("appURL") + "?edit=" + session.user().userID(), true);
+                                                         + application.settings.objectForKey("appURL") + "wa/default?edit=" + session.user().userID(), true);
                         }
                     }
 
