@@ -117,8 +117,8 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             // the key migration is the same as for EOKeyValueQualifier
             ERXInQualifier inQualifier=(ERXInQualifier)eoqualifier;
-            return new ERXInQualifier(_translateKeyAcrossRelationshipPath(inQualifier.key(), s, eoentity),
-                                      inQualifier.values());
+            String newPath = EOQualifierSQLGeneration.Support._translateKeyAcrossRelationshipPath(inQualifier.key(), s, eoentity);
+            return new ERXInQualifier(newPath, inQualifier.values());
         }
     }
 }
