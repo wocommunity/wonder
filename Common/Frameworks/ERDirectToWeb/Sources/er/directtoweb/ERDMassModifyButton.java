@@ -103,10 +103,8 @@ public class ERDMassModifyButton extends WOComponent {
 
 
     public WOComponent massModify() {
-        EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(d2wContext().entity().name());
         EOEditingContext localContext = ERXEC.newEditingContext(false); // we will never validate or save this one
-        EOEnterpriseObject newEO = cd.createInstanceWithEditingContext(localContext, null);
-        localContext.insertObject(newEO);
+        EOEnterpriseObject newEO = ERXEOControlUtilities.createAndInsertObject(localContext, d2wContext().entity().name());
         EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed((String)d2wContext().valueForKey("massModificationPageConfiguration"),
                                                                                          session());
         epi.setObject(newEO);
