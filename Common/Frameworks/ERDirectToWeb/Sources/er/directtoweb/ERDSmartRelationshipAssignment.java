@@ -29,7 +29,7 @@ import com.webobjects.directtoweb.*;
 //	on some of the ERInspectPage setObject methods we push the object into the context.
 // MOVEME: Combind with SmartAttribute
 public class ERDSmartRelationshipAssignment extends ERDAssignment {
-
+    
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "object.entityName", "propertyKey"  });
 
