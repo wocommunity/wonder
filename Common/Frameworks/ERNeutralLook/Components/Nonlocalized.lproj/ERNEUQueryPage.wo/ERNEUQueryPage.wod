@@ -13,6 +13,14 @@ BannerConditional: WOConditional {
 	condition = showBanner;
 }
 
+Conditional1: WOConditional {
+	condition = d2wContext.showListInSamePage;
+}
+
+Conditional2: WOConditional {
+	condition = showResults;
+}
+
 EntityName: WOString {
 	_unroll = true;
 	value = d2wContext.displayNameForEntity;
@@ -35,6 +43,12 @@ FontContainer: WOGenericContainer {
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
+}
+
+ListPage: D2WList {
+	dataSource = queryDataSource;
+	entityName = entity;
+	pageConfiguration = d2wContext.listConfigurationName;
 }
 
 MainTable: WOGenericContainer {
@@ -103,6 +117,10 @@ ResourceRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
+}
+
+String1: WOString {
+	value = d2wContext.showListInSamePage;
 }
 
 SwitchComponent1: WOSwitchComponent {
