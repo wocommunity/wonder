@@ -20,16 +20,14 @@ import er.extensions.ERXLogger;
  * @binding displayGroup
  */
 
-public class ERDFilterDisplayGroupButton extends WOComponent {
+public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
 
     public ERDFilterDisplayGroupButton(WOContext context) { super(context); }
 
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDFilterDisplayGroupButton");
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDFilterDisplayGroupButton.class, "components");
 
     public boolean isStateless() { return true; }
-    public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
-    
-    public WODisplayGroup displayGroup() { return (WODisplayGroup)valueForBinding("displayGroup"); }
+    public boolean synchronizesVariablesWithBindings() { return false; }
 
     public static class _FilterDelegate implements NextPageDelegate {
         private WOComponent _nextPage;
@@ -59,10 +57,19 @@ public class ERDFilterDisplayGroupButton extends WOComponent {
     }
 
     public WOComponent filter() {
-        String pageConfigurationForFiltering=(String)d2wContext().valueForKey("pageConfigurationForFiltering");
-        QueryPageInterface qpi=pageConfigurationForFiltering!=null ?
-            (QueryPageInterface)D2W.factory().pageForConfigurationNamed(pageConfigurationForFiltering, session()) :
-            D2W.factory().queryPageForEntityNamed(d2wContext().entity().name(), session());
+        String pageConfigurationForFiltering=(String)valueForBinding("pageConfigurationForFiltering");
+        QueryPageInterface qpi;
+        if(pageConfigurationForFiltering!=null) {
+            qpi = (QueryPageInterface)D2W.factory().pageForConfigurationNamed(pageConfigurationForFiltering, session());
+        } else {
+            String entityName = (String)valueForBinding("entityName");
+            if(entityName == null && d2wContext() != null) {
+                entityName = d2wContext().entity().name();
+            }
+            if(entityName == null)
+                throw new IllegalStateException("entityName or d2wContext can't both be null.");
+            qpi = D2W.factory().queryPageForEntityNamed(entityName, session());
+        }
         qpi.setNextPageDelegate(new _FilterDelegate(context().page(), displayGroup()));
         return (WOComponent)qpi;
     }
