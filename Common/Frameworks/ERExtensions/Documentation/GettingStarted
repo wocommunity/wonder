@@ -52,26 +52,12 @@ The validation should make localization of model-thrown messages much easier, ho
   throw new NSValidation.ValidationException("Something went wrong!");
 write
   throw new ERXValidationException(eo, key, value, "somecode");
+or (more lengthy)
+  throw ERXValidationFactory.defaultFactory().createException(eo, key, value, "somecode");
 
+  
 and in a Validations.strings add
 
   somecode = "Something went wrong";
 
-Then localize the Validation.strings and when you display it, instead of
- 
-  catch (NSValidation.ValidationException ex) {
-    errorMessage = ex.getMessage();
-  }
-
-write
-
-  catch (ERXValidationException exv) {
-    exv.setTargetLanguage(theCurrentLanguage); //English,German etc.
-    errorMessage = exv.getMessage();
-  } catch (NSValidation.ValidationException ex) {
-    errorMessage = ex.getMessage();
-  }
-
-Translations of the plain model exceptions into german will be supplied shortly, in the meantime, look at the english versions in the ERDirectToWebJava.
-
-
+Translations of the standard exception to German and Japanese are provided in ERD2W. For the moment, you should include ERD2W but we are working on removing that requirement.
