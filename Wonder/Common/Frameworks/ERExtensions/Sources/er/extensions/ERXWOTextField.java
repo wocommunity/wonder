@@ -8,19 +8,21 @@ import java.text.Format;
 import java.text.ParseException;
 
 /**
- * Replacement for WOTextField. Works around the missing end tag and also provides for localized 
- * formatters. Never use this directly, rather use WOTextField and let the ERXPatcher handle the
- * replacement of classes.
+ * Replacement for WOTextField. Provides for localized formatters. 
+ * Never use this directly, rather use WOTextField and let the ERXPatcher handle the
+ * replacement of WOTextField in all cases.
  * @author ak
  */
-public class ERXWOTextField extends WOTextField {
-
+public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.TextField*/ {
+	
+    public static ERXLogger log = ERXLogger.getERXLogger(ERXWOTextField.class);
+    
 	protected WOAssociation _formatter;
 	protected WOAssociation _dateFormat;
 	protected WOAssociation _numberFormat;
 	protected WOAssociation _useDecimalNumber;
 
-	public ERXWOTextField(String s, NSDictionary nsdictionary, WOElement woelement) {
+	public ERXWOTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super("input", nsdictionary, woelement);
 		if(_value == null || !_value.isValueSettable())
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'value' attribute not present or is a constant");
@@ -34,11 +36,11 @@ public class ERXWOTextField extends WOTextField {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
 		}
 	}
-
-	protected String type() {
+	
+	public String type() {
 		return "text";
 	}
-
+	
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
 		if(!disabledInComponent(component) && wocontext._wasFormSubmitted()) {
@@ -123,7 +125,6 @@ public class ERXWOTextField extends WOTextField {
 	}
 
 	protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
-		woresponse.appendContentString("</input>");
 	}
 
 	public String toString() {
@@ -137,4 +138,15 @@ public class ERXWOTextField extends WOTextField {
 		stringbuffer.append(">");
 		return stringbuffer.toString();
 	}
+	
+	/**
+	 * Overridden to make output XML compatible.
+	 */
+    public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+        WOResponse newResponse = new WOResponse();
+        super.appendToResponse(newResponse, wocontext);
+        
+        ERXPatcher.DynamicElementsPatches.processResponse(this, newResponse, wocontext, 0, nameInContext(wocontext, wocontext.component()));
+        woresponse.appendContentString(newResponse.contentString());
+    }
 }
