@@ -186,6 +186,15 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 dataSource().deleteObject(object);
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
+            //Now need to reindex the joins
+            int i = 0;
+            for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
+                e.hasMoreElements();){
+                EOEnterpriseObject object = (EOEnterpriseObject)e.nextElement();
+                object.takeValueForKey(new Integer(i), indexKey());
+                i++;
+            }
+
         }
         return null;
     }
