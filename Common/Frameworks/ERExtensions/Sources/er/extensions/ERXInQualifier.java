@@ -99,12 +99,12 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
 
         // ENHANCEME: This should support restrictive qualifiers on the root entity
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
-            return eoqualifier;
+            return (EOQualifier)eoqualifier.clone();
         }
 
         // ENHANCEME: Migration should be supported
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
-            throw new RuntimeException("qualifierMigratedFromEntityRelationshipPath is not supported for qualifier classes of type: " + eoqualifier.getClass().getName());
+            return (EOQualifier)eoqualifier.clone();
         }        
     }
 }
