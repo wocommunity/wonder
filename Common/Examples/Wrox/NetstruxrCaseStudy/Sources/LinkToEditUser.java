@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXExtensions;
-import wrox.eo.User;
+import er.wrox.eo.User;
 
 public class LinkToEditUser extends WOComponent {
 

@@ -9,7 +9,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.directtoweb.*;
-import wrox.eo.User;
+import er.wrox.eo.User;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXObjectWasCreatedDelegate;
 import er.extensions.ERXExtensions;

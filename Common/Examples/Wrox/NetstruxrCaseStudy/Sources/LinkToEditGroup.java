@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.ERXExtensions;
-import wrox.eo.Group;
+import er.wrox.eo.Group;
 
 public class LinkToEditGroup extends WOComponent {
 
