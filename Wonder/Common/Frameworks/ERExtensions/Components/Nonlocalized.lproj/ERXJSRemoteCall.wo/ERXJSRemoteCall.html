@@ -1,66 +1,16 @@
-<webobject name=ERXOncePerRequestConditional1><script language="javascript">
+<webobject name=ERXOncePerRequestConditional1><iframe name="RSIFrame" id="RSIFrame" style="border:0px;width:0px;height:0px;" src="about:blank"></iframe><script language="javascript">
 function <webobject name=Name></webobject>RPC(<webobject name=Repetition1><webobject name=String1></webobject>,</webobject>callback) {
-	var url = "<webobject name=URL></webobject>" <webobject name=Repetition1> + "&<webobject name=String1></webobject>=" + escape(<webobject name=String1></webobject>)</webobject> + "&callback=" + escape(callback)
-  if (!IFrameObj && document.createElement) {
-    // create the IFrame and assign a reference to the
-    // object to our global variable IFrameObj.
-    // this will only happen the first time 
-    // callToServer() is called
-   try {
-      var tempIFrame=document.createElement('iframe');
-      tempIFrame.setAttribute('id','RSIFrame');
-      tempIFrame.style.border='0px';
-      tempIFrame.style.width='0px';
-      tempIFrame.style.height='0px';
-      IFrameObj = document.body.appendChild(tempIFrame);
-      
-      if (document.frames) {
-        // this is for IE5 Mac, because it will only
-        // allow access to the document object
-        // of the IFrame if we access it through
-        // the document.frames array
-        IFrameObj = document.frames['RSIFrame'];
-      }
-    } catch(exception) {
-      // This is for IE5 PC, which does not allow dynamic creation
-      // and manipulation of an iframe object. Instead, we'll fake
-      // it up by creating our own objects.
-      iframeHTML='\<iframe id="RSIFrame" style="';
-      iframeHTML+='border:0px;';
-      iframeHTML+='width:0px;';
-      iframeHTML+='height:0px;';
-      iframeHTML+='"><\/iframe>';
-      document.body.innerHTML+=iframeHTML;
-      IFrameObj = new Object();
-      IFrameObj.document = new Object();
-      IFrameObj.document.location = new Object();
-      IFrameObj.document.location.iframe = document.getElementById('RSIFrame');
-      IFrameObj.document.location.replace = function(location) {
-        this.iframe.src = location;
-      }
-    }
-  }
-if (navigator.userAgent.indexOf('Gecko') !=-1 && !IFrameObj.contentDocument) {
-    // we have to give NS6 a fraction of a second
-    // to recognize the new IFrame
-    setTimeout('callToServer()',10);
-    return false;
-  }
-  
-  if (IFrameObj.contentDocument) {
-    // For NS6
-    IFrameDoc = IFrameObj.contentDocument; 
-  } else if (IFrameObj.contentWindow) {
-    // For IE5.5 and IE6
-    IFrameDoc = IFrameObj.contentWindow.document;
-  } else if (IFrameObj.document) {
-    // For IE5
-    IFrameDoc = IFrameObj.document;
-  } else {
-    return true;
-  }
-  
-  IFrameDoc.location.replace(url); 
+	var url = "<webobject name=URL></webobject>" <webobject name=Repetition1> + "&<webobject name=String1></webobject>=" + escape(<webobject name=String1></webobject>)</webobject> + "&callback=" + escape(callback);
+	var nav = navigator.userAgent;
+
+	var frame;
+	if(!frame && document.frames) frame = document.frames["RSIFrame"]
+	if(!frame) frame = document.getElementById("RSIFrame");
+	if(nav.indexOf("Gecko") != -1) frame.contentDocument.location = url;
+	else if(nav.indexOf("Safari") != -1) frame.location = url;
+	else if(nav.indexOf("MSIE") != -1 && nav.indexOf("Mac") != -1) { frame.document.location = url; }
+	else frame.document.location = url
 	return false
 }
-</script></webobject><webobject name=ComponentContent1></webobject>
+</script>
+</WEBOBJECT><webobject name=ComponentContent1></webobject>
