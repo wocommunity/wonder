@@ -106,7 +106,7 @@ public class ERXValidation {
             String niceDisplay = entity != null ?
             entity.classDescriptionForInstances().displayNameForKey(key) : ERXStringUtilities.displayNameForKey(key);
             String localDisplayName = localizer != null ? localizer.localizedStringForKey(niceDisplay) : niceDisplay;
-            errorMessages.setObjectForKey(newErrorMessage, localDisplayName);
+            errorMessages.setObjectForKey(newErrorMessage, localDisplayName != null ? localDisplayName : niceDisplay);
         }
         // Leveraging the power of D2WContext to generate great looking error messages.
         //if (propertyNameContext().entity() != null && key != null) {
