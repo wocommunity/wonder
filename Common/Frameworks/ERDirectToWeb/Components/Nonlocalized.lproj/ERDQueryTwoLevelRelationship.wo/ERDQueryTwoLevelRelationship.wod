@@ -9,4 +9,5 @@ ERXJSPopUpRelationPicker1: ERXJSPopUpRelationPicker {
 	parentToChildrenRelationshipName = ^secondaryKey;
 	selectedChild = secondaryDisplayGroupQueryMatchValue;
 	selectedParent = displayGroupQueryMatchValue;
+	size = ^size;
 }
