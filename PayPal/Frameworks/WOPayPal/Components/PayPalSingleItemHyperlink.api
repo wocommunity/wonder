@@ -4,6 +4,7 @@
 		<image path="image.tiff"/>
 
 		<binding name="amount"/>
+                <binding name="currencyCode"/>
 		<binding name="cancelURL"/>
 		<binding name="custom"/>
 		<binding name="userDefinableQuantity" defaults="Boolean"/>
