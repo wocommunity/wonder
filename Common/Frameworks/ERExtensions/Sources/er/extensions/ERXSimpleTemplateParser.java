@@ -19,8 +19,11 @@ import java.util.Enumeration;
  */
 public class ERXSimpleTemplateParser {
 
+    /** The default label for keys not found while parsing */
+    public static final String DEFAULT_UNDEFINED_KEY_LABEL = "?";
+
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSimpleTemplateParser.class.getName());
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXSimpleTemplateParser.class.getName());
 
     /** holds a reference to the shared instance of the parser */
     private static ERXSimpleTemplateParser _sharedInstance;
@@ -28,17 +31,60 @@ public class ERXSimpleTemplateParser {
     /**
      * Convience method to return the shared instance
      * of the template parser.
+     * 
      * @return shared instance of the parser
+     * @see setSharedInstance
      */
     public static ERXSimpleTemplateParser sharedInstance() {
-        if (_sharedInstance == null)
-            _sharedInstance = new ERXSimpleTemplateParser();
+        if (_sharedInstance == null) 
+            setSharedInstance(new ERXSimpleTemplateParser());
         return _sharedInstance;
+    }
+    
+    /**
+     * Sets the shared instance of the template parser.
+     * 
+     * @param newSharedInstance  the parser object that will be shared
+     * @see sharedInstance
+     */
+    public static synchronized void setSharedInstance(ERXSimpleTemplateParser newSharedInstance) {
+        _sharedInstance = newSharedInstance;
+    } 
+    
+    /** 
+     * Flag to disable logging. {@link ERXPatternLayout} will set 
+     * this to true for its internal parser object in order to 
+     * prevent an infinite debug logging loop. 
+     */ 
+    protected boolean isLoggingDisabled = false;
+
+    /** The label that will be appeared where an undefined key is found */ 
+    private String _undefinedKeyLabel;
+
+    /** 
+     * Returns a parser object with the default undefined label
+     * 
+     * @see #DEFAULT_UNDEFINED_KEY_LABEL
+     */
+    public ERXSimpleTemplateParser() {
+        this(DEFAULT_UNDEFINED_KEY_LABEL);
+    }
+
+    /** 
+     * Returns a parser object with the given string as the undefined key label 
+     * 
+     * @param undefinedKeyLabel  string as the undefined key label, 
+     *                            for examle, "?", "N/A"
+     */
+    public ERXSimpleTemplateParser(String undefinedKeyLabel) {
+        super();
+        _undefinedKeyLabel = undefinedKeyLabel;
     }
 
     /**
      * Calculates the set of keys used in a given template
      * for a given delimiter.
+     * 
      * @param template to check for keys
      * @param delimiter for finding keys
      * @return array of keys
@@ -48,8 +94,10 @@ public class ERXSimpleTemplateParser {
         if (delimiter == null)
             delimiter = "@";
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
-        log.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
-        for (Enumeration e = NSArray.componentsSeparatedByString(template, delimiter).objectEnumerator(); e.hasMoreElements();) {
+        NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
+        if (! isLoggingDisabled  &&  log.isDebugEnabled()) 
+            log.debug("Components: " + components);
+        for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if (deriveElement) {
                 if (element.length() == 0)
@@ -67,6 +115,7 @@ public class ERXSimpleTemplateParser {
      * Cover method for calling the four argument method
      * passing in <code>null</code> for the <code>otherObject</code>
      * parameter. See that method for documentation.
+     * 
      * @param template to use to parse
      * @param delimiter to use to find keys
      * @param object to resolve keys
@@ -78,14 +127,19 @@ public class ERXSimpleTemplateParser {
                                        null);
     }
     
-    /*
+    /**
      * This method replaces the keys enclosed between the
      * delimeter with the values found in object and otherObject.
      * It first looks for a value in object, and then in otherObject
      * if the key is not found in object. Therefore, otherObject is
      * a good place to store default values while other object is a
-     * good place to override default values.
-     *
+     * good place to override default values. 
+     * <p>
+     * When the value is not found in both object and otherObject, 
+     * it will replace the key with the undefined key label which 
+     * defaults to "?". You can set the label via the constructor 
+     * {@link #ERXSimpleTemplateParser(String)}. 
+     * 
      * @param template to use to parse
      * @param delimiter to use to check for keys
      * @param object to resolve keys off of
@@ -97,26 +151,33 @@ public class ERXSimpleTemplateParser {
             throw new RuntimeException("Attempting to parse null template!");
         if (object == null)
             throw new RuntimeException("Attempting to parse template with null object!");
-        if (log.isDebugEnabled())
-            log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
         if(delimiter == null) delimiter = "@";
-        log.debug("Template: " + template);
-        log.debug("Delim: " + delimiter);
-        log.debug("otherObject: " + otherObject);
+        if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
+            log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
+            log.debug("Template: " + template);
+            log.debug("Delim: " + delimiter);
+            log.debug("otherObject: " + otherObject);
+        }
         StringBuffer buffer = new StringBuffer();
         boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
-        log.debug("Components: " + NSArray.componentsSeparatedByString(template, delimiter));
-        for (Enumeration e = NSArray.componentsSeparatedByString(template, delimiter).objectEnumerator(); e.hasMoreElements();) {
+        NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
+        if (! isLoggingDisabled  &&  log.isDebugEnabled())
+            log.debug("Components: " + components);
+        for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
-            log.debug("Processing Element: " + element);
+            if (! isLoggingDisabled)  log.debug("Processing Element: " + element);
             if (deriveElement) {
-                log.debug("Deriving value ...");
-                if(element.length() == 0)
+                if (! isLoggingDisabled)  log.debug("Deriving value ...");
+                if (element.length() == 0)
                     throw new RuntimeException("\"\" is not a valid keypath");
                 Object obj;
                 try {
-                    obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element);
-                } catch (Throwable t) {
+                    obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element); 
+                    // For just in case the above doesn't throw an exception when the 
+                    // key is not defined. (NSDictionary doesn't seem to throw the exception.)
+                    if (obj == null  &&  otherObject != null)
+                        throw new NSKeyValueCoding.UnknownKeyException("The key is not defined in the object.", null, element);
+               } catch (Throwable t) {
                     try {
                         if (otherObject != null) {
                             obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(otherObject, element);
@@ -127,14 +188,15 @@ public class ERXSimpleTemplateParser {
                         throw new RuntimeException("An exception occured while parsing element, " + element + ", of template, " + template + ": " + t1.getMessage());
                     }
                 }
-                buffer.append(obj == null ? "null" : obj.toString());                
+                buffer.append(obj == null ? _undefinedKeyLabel : obj.toString());                
                 deriveElement = false;
             } else {
                 if (element.length() > 0)
                     buffer.append(element);
                 deriveElement = true;
             }
-            log.debug("Buffer: " + buffer);
+            if (! isLoggingDisabled  && log.isDebugEnabled())
+                log.debug("Buffer: " + buffer);
         }
         return buffer.toString();
     }
