@@ -1,4 +1,3 @@
-
 AltContent: WOComponentContent {
 }
 
@@ -7,7 +6,7 @@ IFrameContainer: WOGenericContainer {
 	elementName = "iframe";
 	frameborder = ^frameborder;
 	height = ^height;
-	invokeAction = getFrameContent;
+	invokeAction = frameContent;
 	longdesc = ^longdesc;
 	marginheight = ^marginheight;
 	marginwidth = ^marginwidth;
