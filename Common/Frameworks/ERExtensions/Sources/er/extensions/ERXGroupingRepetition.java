@@ -57,6 +57,10 @@ public class ERXGroupingRepetition extends WOComponent {
                     }
                     itemsForSection.addObject(item);
                 }
+                String sortKey = (String)valueForBinding("sortKey");
+                if(sortKey != null) {
+                    _sections = (NSMutableArray)_sections.valueForKeyPath(sortKey);
+                }
             }
         }
         return _sections;
