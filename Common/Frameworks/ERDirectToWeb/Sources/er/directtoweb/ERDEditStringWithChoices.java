@@ -15,7 +15,8 @@ import java.util.Enumeration;
 
 /**
  * Provides a toOne relationship-like component except the value is pushed in as a string.<br />
- * 
+ * The coices can be either given as an NSDictionary with {key1=val1;key2=val2...}, an NSArray of
+ * NSDictionaries with ({key1=val1;},{key2=val2;}...) or a means not yet clear to me (ak:).
  */
 
 public class ERDEditStringWithChoices extends ERDCustomEditComponent {
@@ -35,12 +36,36 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     protected NSArray _availableElements;
     public NSArray availableElements(){
         if(_availableElements==null){
-            if(log.isDebugEnabled()) log.debug("key ="+key());
-            String keyForAvailableObjects = key()+"Available";
-            entityForReportName = (String)valueForBinding("entityNameForReport");
-            _availableElements =
-                ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
-                                                              entityForReportName, ERXLocalizer.localizerForSession(session()).language());
+            Object choices = valueForBinding("possibleChoices");
+            log.info(choices);
+            if(choices != null) {
+                NSMutableArray keyChoices = new NSMutableArray();
+                if(choices instanceof NSArray) {
+                    for(Enumeration e = ((NSArray)choices).objectEnumerator(); e.hasMoreElements(); ) {
+                        NSDictionary dict = (NSDictionary)e.nextElement();
+                        String key = (String)dict.allKeys().lastObject();
+                        String value = (String)dict.objectForKey(key);
+                        keyChoices.addObject(new ERXKeyValuePair(key, ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(value)));
+                    }
+                } else if(choices instanceof NSDictionary) {
+                    NSArray keys = ((NSDictionary)choices).allKeys();
+                    keys = ERXArrayUtilities.sortedArraySortedWithKey(keys, "toString");
+                    for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
+                        String key = (String)e.nextElement();
+                        String value = (String)((NSDictionary)choices).objectForKey(key);
+                        keyChoices.addObject(new ERXKeyValuePair(key, ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(value)));
+                    }
+                }
+                _availableElements = keyChoices;
+            }
+            if(_availableElements==null){
+                if(log.isDebugEnabled()) log.debug("key ="+key());
+                String keyForAvailableObjects = key()+"Available";
+                entityForReportName = (String)valueForBinding("entityNameForReport");
+                _availableElements =
+                    ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
+                                                                  entityForReportName, ERXLocalizer.localizerForSession(session()).language());
+            }
             if(log.isDebugEnabled()) log.debug("availableElements = "+_availableElements);
         }
         return _availableElements;
@@ -64,7 +89,6 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        entityForReportName = (String)object().valueForKey("entityForReportName");
         String chosenKey = (String)objectPropertyValue();
         if(log.isDebugEnabled()) log.debug("chosenKey = "+chosenKey);
         if(chosenKey!=null){
