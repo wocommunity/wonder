@@ -13,7 +13,7 @@ import er.extensions.*;
  * @project ERDirectToWeb
  */
 
-public abstract class ERDActionButton extends ERDCustomComponent {
+public  class ERDActionButton extends ERDCustomComponent {
 
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERDActionButton.class,"components");
@@ -72,7 +72,7 @@ public abstract class ERDActionButton extends ERDCustomComponent {
     protected WOComponent enclosingPageOfClass(Class c) {
         WOComponent p = parent();
         while(p != null) {
-            if(c.isAssignableFrom(c))
+            if(c.isAssignableFrom(p.getClass()))
                 return p;
             p = p.parent();
         }
