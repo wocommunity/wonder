@@ -190,7 +190,9 @@ public class ERMailSender extends Thread {
         } catch (MessagingException e) {
             exception = e;
         } catch (Throwable t) {
-            log.error ("An unexpected error occured while sending mail.", t);
+            log.error ("An unexpected error occured while sending message: " + message
+                       + " mime message: " + aMessage + " sending to: " +  aMessage.getAllRecipients ()
+                       + " transport: " + transport, t);
         } finally {
             stats.incrementMailCount ();
             if (exception != null)
