@@ -19,17 +19,20 @@ import org.apache.log4j.Category;
 
 public class ERXBatchNavigationBar extends WOComponent {
 
+    /** logging support */
+    public static final Category cat = Category.getInstance(ERXBatchNavigationBar.class);
+
+    /** Contains a string that names the notification posted when the batch size changes */
+    public final static String BatchSizeChanged = "BatchSizeChanged";
+
+    /** Public constructor */
     public ERXBatchNavigationBar(WOContext aContext) {
         super(aContext);
     }
 
-    ////////////////////////////////////////// log4j category  //////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXBatchNavigationBar.class);
-
-    ////////////////////////////////////////// Notification Hooks ///////////////////////////////////
-    public final static String BatchSizeChanged = "BatchSizeChanged";
-    
+    /** component is stateless */
     public boolean isStateless() { return true; }
+    /** component does not synchronize it's variables */
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public void reset() {

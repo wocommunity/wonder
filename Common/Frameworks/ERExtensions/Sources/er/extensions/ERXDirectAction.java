@@ -4,24 +4,40 @@
  * This software is published under the terms of the NetStruxr 
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERXDirectAction.java created by patrice on Thu 08-Nov-2001 */
 package er.extensions;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import org.apache.log4j.Category;
 
+/**
+ * Basic collector for direct action additions. This class currectly adds two
+ * direct actions: <b>testAction</b> for performing junit tests and <b>log4jAction</b>
+ * for re-configuring logging settings at runtime.
+ */
 public class ERXDirectAction extends WODirectAction {
 
-    ////////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
+    /** logging support */
     public final static Category cat = Category.getInstance(ERXDirectAction.class);
 
+    /** Public constructor */
     public ERXDirectAction(WORequest r) { super(r); }
 
+    /**
+     * Action used for junit tests. This method is only active when WOCachingEnabled is
+     * disabled (we take this to mean that the application is not in production).<br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>&case=<i>classNameOfTestCase</i>
+     * <br/>
+     * Form Values:<br/>
+     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXJUnitPassword</code>.
+     * <b>case</b> class name for unit test to be performed.<br/>
+     * <br/>
+     * @return {@link ERXWOTestInterface} with the results after performing the given test.
+     */
     public WOComponent testAction() {
         WOComponent result=null;
         if (!WOApplication.application().isCachingEnabled() ||
@@ -34,11 +50,23 @@ public class ERXDirectAction extends WODirectAction {
                 // (ak:I wish we could return a direct test result...)
                 // return (WOComponent)result.valueForKey("performTest");
             }
-        }
-             
+        }             
         return result;
     }
-    
+
+    /**
+     * Action used for changing logging settings at runtime. This method is only active
+     * when WOCachingEnabled is disabled (we take this to mean that the application is
+     *                                    not in production).<br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>
+     * <br/>
+     * Form Values:<br/>
+     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXLog4JPassword</code>.
+     * <br/>
+     * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
+     */
     public WOComponent log4jAction() {
         WOComponent result=null;
         if (!WOApplication.application().isCachingEnabled() ||
@@ -46,6 +74,4 @@ public class ERXDirectAction extends WODirectAction {
             result=pageWithName("ERXLog4JConfiguration");
         return result;
     }
-
-    
 }
