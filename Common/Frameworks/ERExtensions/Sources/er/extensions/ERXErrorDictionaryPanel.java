@@ -33,6 +33,9 @@ public class ERXErrorDictionaryPanel extends WOComponent {
     //protected String errorMessageItem;
     public String extraErrorMessage;
 
+    public boolean shouldShowNewLineAbove;
+    public boolean shouldShowNewLineBelow;
+    
     public boolean hasErrors() {
         boolean hasErrors = false;
         if (errorMessages!=null)
