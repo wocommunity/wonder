@@ -128,6 +128,7 @@
 ./Sources/er/extensions/ERXTolerantSaver.java:er.extensions
 ./Sources/er/extensions/ERXToManyRelationship.java:er.extensions
 ./Sources/er/extensions/ERXToOneRelationship.java:er.extensions
+./Sources/er/extensions/ERXUnitAwareDecimalFormat.java:er.extensions
 ./Sources/er/extensions/ERXUnreadMarker.java:er.extensions
 ./Sources/er/extensions/ERXUtilities.java:er.extensions
 ./Sources/er/extensions/ERXValidation.java:er.extensions
