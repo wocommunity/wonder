@@ -212,14 +212,15 @@ public class ERXConfigurationManager {
                 }
             }
             String e = stringForKey(aModelName + ".EOPrototypesEntity");
-            e = e ==null ? stringForKey("EOPrototypesEntityGLOBAL") : e;
+            // global prototype setting not supported yet
+            //e = e ==null ? stringForKey("EOPrototypesEntityGLOBAL") : e;
             if(e != null) {
-                // we look for the entity globally so we can a one prototype entity
+                // we look for the entity globally so we can have one prototype entity
                 EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
                 if (newPrototypeEntity == null) {
                     cat.warn("Prototype Entity named "+e+" not found in model "+aModel.name());
                 } else {
-                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes from entity " + e);
+                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes to those from entity " + e);
 
                     EOEntity proto = aModel.entityNamed("EOPrototypes");
                     if(proto != null) aModel.removeEntity(proto);
