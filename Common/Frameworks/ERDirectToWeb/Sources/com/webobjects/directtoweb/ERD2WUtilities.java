@@ -6,13 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package com.webobjects.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
+
+    private static ERXLogger log = ERXLogger.getERXLogger(ERD2WUtilities.class);
 
     public static void finalizeContext(D2WContext context) {
         if (context != null)
@@ -37,6 +40,7 @@ public class ERD2WUtilities {
     // Should just return null instead of throwing.
     public static Object contextValueForKeyNoInferenceNoException(D2WContext c, String keyPath) {
         Object result = null;
+        String oriKeyPath = keyPath;
         int i = keyPath.indexOf(".");
         if (i == -1) {
             result = c.valueForKeyNoInference(keyPath);
@@ -46,16 +50,22 @@ public class ERD2WUtilities {
             result = c.valueForKeyNoInference(first);
             if (result != null) {
                 // Optimized for two paths deep
-                if (second.indexOf(".") == -1) {
-                    result = NSKeyValueCoding.Utility.valueForKey(result, second);
-                } else {
-                    NSArray parts = NSArray.componentsSeparatedByString(second, ".");
-                    for (int j = 0; j < parts.count(); j++) {
-                        String part = (String)parts.objectAtIndex(j);
-                        result = NSKeyValueCoding.Utility.valueForKey(result, part);
-                        if (result == null)
-                            break;
+                
+                try {
+                    if (second.indexOf(".") == -1) {
+                        result = NSKeyValueCoding.Utility.valueForKey(result, second);
+                    } else {
+                        NSArray parts = NSArray.componentsSeparatedByString(second, ".");
+                        for (int j = 0; j < parts.count(); j++) {
+                            String part = (String)parts.objectAtIndex(j);
+                            result = NSKeyValueCoding.Utility.valueForKey(result, part);
+                            if (result == null)
+                                break;
+                        }
                     }
+                } catch (NSKeyValueCoding.UnknownKeyException e) {
+                    log.warn("keyPath "+keyPath+" is not available for context "+c);
+                    return null;
                 }
             }
         }
