@@ -106,4 +106,13 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
     public Object valueForObjectBinding(String binding, Object defaultValue) {
         return super.objectValueForBinding(binding, defaultValue);
     }
+
+    
+    /* (non-Javadoc)
+     * @see com.webobjects.appserver.WOComponent#reset()
+     */
+    public void reset() {
+        super.reset();
+        _dynamicBindings = null;
+    }
 }
