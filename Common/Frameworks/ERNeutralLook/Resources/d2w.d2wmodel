@@ -1,6 +1,15 @@
 {
     rules = (
         {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = nonSelectedTabBgColor; 
+                value = "#999999"; 
+            }; 
+        }, 
+        {
             author = 50; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
@@ -35,8 +44,8 @@
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
-                keyPath = nonSelectedTabBgColor; 
-                value = "#999999"; 
+                keyPath = templateNameForErrorPage; 
+                value = er.neutral.ERNEUErrorPage; 
             }; 
         }, 
         {
@@ -81,7 +90,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = templateNameForTabInspectPage; 
-                value = ERNEUTabInspectPage; 
+                value = er.neutral.ERNEUTabInspectPage; 
             }; 
         }, 
         {
@@ -90,7 +99,7 @@
             rhs = {
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = templateNameForWizardCreationPage; 
-                value = ERNEUWizardCreationPage; 
+                value = er.neutral.ERNEUWizardCreationPage; 
             }; 
         }, 
         {
