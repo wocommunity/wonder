@@ -122,7 +122,7 @@ public class ERXJSPopUpRelationPicker extends WOComponent {
                                                        EOSortOrdering.CompareAscending);
         NSMutableArray sortArray=new NSMutableArray(sortOrdering);
         NSArray result=EOSortOrdering.sortedArrayUsingKeyOrderArray(unsortedChildren, sortArray);
-        return result!=null ? result : ERXConstant.EmptyArray;
+        return result!=null ? result : NSArray.EmptyArray;
     }
 
     protected Object childWithHashCode(int hashCode) {

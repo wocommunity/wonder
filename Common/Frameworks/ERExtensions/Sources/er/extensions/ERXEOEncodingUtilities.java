@@ -87,7 +87,7 @@ public class ERXEOEncodingUtilities {
         } else {
             entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));            
         }
-        return entityGroup != null ? entityGroup : ERXConstant.EmptyArray;
+        return entityGroup != null ? entityGroup : NSArray.EmptyArray;
     }
     
     /** This dictionary contains the encoded entity names used in the defaultGroup */ 
