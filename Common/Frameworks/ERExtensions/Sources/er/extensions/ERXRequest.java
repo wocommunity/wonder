@@ -117,7 +117,7 @@ public  class ERXRequest extends WORequest {
         } catch (Throwable t) {
             log.warn(t + ":" + this);
             log.warn(t);
-            return new NSDictionary();
+            return NSDictionary.EmptyDictionary;
         }
     }    
 }
