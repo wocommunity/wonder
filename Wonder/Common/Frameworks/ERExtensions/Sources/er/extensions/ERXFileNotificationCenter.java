@@ -106,7 +106,7 @@ public class ERXFileNotificationCenter {
         if (selector == null)
             throw new RuntimeException("Attempting to register null selector for file: " + file);
         if (cachingEnabled)
-            log.warn("Registering an observer when WOCaching is enabled.  This observer will not ever by default be called: " + file);
+            log.info("Registering an observer when WOCaching is enabled.  This observer will not ever by default be called: " + file);
         String filePath = file.getAbsolutePath();
         if (log.isDebugEnabled())
             log.debug("Registering Observer for file at path: " + filePath);
