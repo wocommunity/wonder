@@ -158,19 +158,6 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         return logEntry;
     }
     
-    protected static String _defaultHostName;
-    public static String defaultHostName(){
-        if (_defaultHostName == null) {
-            try {
-                _defaultHostName = java.net.InetAddress.getLocalHost().getHostName();
-            } catch (java.net.UnknownHostException ehe) {
-                WOApplication.application().logString("Caught unknown host: " + ehe.getMessage());
-                _defaultHostName = "UnknownHost";
-            }
-        }
-        return _defaultHostName;
-    }
-
     // ----------------------------------------------------------------------------------------
     // Exception reporting
     public static void reportException(Throwable exception, NSDictionary extraInfo) {
