@@ -12,6 +12,11 @@ public final class Configuration extends Object implements WOXMLCoding {
     private NSMutableArray paths = new NSMutableArray();
     private NSMutableArray quickRules = new NSMutableArray();
     private String password;
+    private String fontList;
+    
+    /** @TypeInfo java.lang.String */
+    private NSArray availableFontLists = new NSArray(new Object[] {
+        "Arial,Helvetica", "Osaka,MS P Gothic" }); 
 
     public static Configuration configurationWithPath(java.lang.String path){
         return (Configuration)WOXMLDecoder.decoder().decodeRootObject(path);
@@ -61,6 +66,18 @@ public final class Configuration extends Object implements WOXMLCoding {
         password = s;
     }
     
+    public String fontList(){
+        return fontList;
+    }
+    
+    public void setFontList(String s){
+        fontList = s;
+    }
+    
+    public NSArray availableFontLists(){
+        return availableFontLists;
+    }
+    
     public boolean hasRules() {
         return (quickRules().count()>0);
     }
@@ -81,12 +98,16 @@ public final class Configuration extends Object implements WOXMLCoding {
         coder.encodeObjectForKey((NSArray)paths, "Paths");
         coder.encodeObjectForKey(password, "Password");
         coder.encodeObjectForKey((NSArray)quickRules, "QuickRules");
+        coder.encodeObjectForKey(fontList, "FontList");
     }
 
     public Configuration(WOXMLDecoder decoder) {
         paths = new NSMutableArray((NSArray)decoder.decodeObjectForKey("Paths"));
         password = (String)decoder.decodeObjectForKey("Password");
         quickRules = new NSMutableArray((NSArray)decoder.decodeObjectForKey("QuickRules"));
+        fontList = (String)decoder.decodeObjectForKey("FontList");
+        if (fontList == null  ||  fontList.length() == 0)
+            fontList = (String)availableFontLists.objectAtIndex(0);
     }
 
     public Class classForCoder() {

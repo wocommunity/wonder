@@ -178,6 +178,16 @@ Form1: WOForm {
 	action = saveAction;
 }
 
+Generic1: WOGenericContainer {
+	elementName = "font";
+	face = application.fontList;
+}
+
+Generic2: WOGenericContainer {
+	elementName = "font";
+	face = application.fontList;
+}
+
 Hyperlink1: WOHyperlink {
 	action = showInspectorAction;
 }
