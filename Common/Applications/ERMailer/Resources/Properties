@@ -8,3 +8,6 @@ er.mailer.ERBatchMailerDaemonFrequency = 0
 # this flag to true
 #er.javamail.mailer.ERTestSendingMail=true
 
+dbConnectDriverGLOBAL =
+dbConnectPluginGLOBAL =
+dbConnectJDBCInfoGLOBAL = 
