@@ -52,6 +52,12 @@
     <!-- Sets up distribution directories.                    -->
     <!-- ==================================================== -->
     <target name="prepare">
+        <!-- Create the time stamp -->
+        <tstamp>
+            <format property="updated.date" pattern="EEE, MMM d, yyyy"/>
+            <format property="updated.time" pattern="hh:mm aa z"/>
+        </tstamp>
+        <!-- Create directories -->
         <mkdir dir="${dist}"/>
         <mkdir dir="${dist}/doc"/>
         <mkdir dir="${dist}/doc/api"/>
@@ -97,7 +103,7 @@
     </target>
 
     <!-- ========================================== -->
-    <!-- Builds API documenatation.                 -->
+    <!-- Builds API documentation.                  -->
     <!-- ========================================== -->
     <target name="api" depends="prepare">
         <!--<copy todir="${dist}/doc">
@@ -112,6 +118,7 @@
                    author="true"
                    version="true"
                    use="true"
+                   verbose="false"
                    windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
@@ -121,7 +128,8 @@
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 Project Wonder. All Rights Reserved.]]></bottom>
+            <bottom><![CDATA[Copyright &#169; 2002 Project Wonder.]]></bottom>
+            <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
             <link href="http://developer.apple.com/techpubs/webobjects/Reference/Javadoc/"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
