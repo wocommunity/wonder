@@ -29,6 +29,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import er.extensions.ERXUtilities;
+import er.extensions.ERXLocalizer;
 import java.util.Enumeration;
 
 public class WOToOneRelationship extends WOComponent {
@@ -42,18 +43,25 @@ public class WOToOneRelationship extends WOComponent {
     EODataSource _dataSource;
     String _uiStyle;
     boolean _isMandatory;
-
+    boolean _localizeDisplayKeysRead;
     // ** internal
     Object theCurrentItem;
     NSArray _privateList;
     Object _privateSelection;
 
-    public static String _noneString = "- none -";
+    public String _noneString;
 
     public WOToOneRelationship(WOContext aContext)  {
         super(aContext);
     }
 
+    public String noneString() {
+        if(_noneString == null) {
+            _noneString = localizer().localizedStringForKey("WOToOneRelationship.noneString");
+        }
+        return _noneString;
+    }
+    
     public boolean isStateless() {
         return true;
     }
@@ -171,6 +179,8 @@ public class WOToOneRelationship extends WOComponent {
         setTheCurrentItem(null);
         set_privateList(null);
         set_privateSelection(null);
+        _noneString = null;
+        _localizeDisplayKeysRead = false;
     }
 
     public void reset() {
@@ -346,7 +356,7 @@ public class WOToOneRelationship extends WOComponent {
             }
         }
 
-        if (anEO==_noneString) {
+        if (anEO==noneString()) {
             aValue = null;
         } else {
             aValue = anEO;
@@ -364,7 +374,7 @@ public class WOToOneRelationship extends WOComponent {
         }
         // deal with isMandatory
         if ((_privateSelection()==null) && !_localIsMandatory()) {
-            setSelection(_noneString);
+            setSelection(noneString());
         }
         return _privateSelection();
     }
@@ -389,7 +399,7 @@ public class WOToOneRelationship extends WOComponent {
             }
 
             if (!_localIsMandatory()) {
-                aSortedArray.insertObjectAtIndex(_noneString, 0);
+                aSortedArray.insertObjectAtIndex(noneString(), 0);
             }
             set_privateList(aSortedArray);
         }
@@ -399,14 +409,38 @@ public class WOToOneRelationship extends WOComponent {
     public void setTheList(NSArray aValue) {
     }
 
-    public Object theCurrentValue() {
-        // handle the case where it's the - none - string
-        if (theCurrentItem==_noneString) {
-            return theCurrentItem;
+    public static boolean localizeDisplayKeysDefault = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.WOToOneRelationship.localizeDisplayKeysDefault"), false);
+    boolean _localizeDisplayKeys;
+    public boolean localizeDisplayKeys() {
+        if(!_localizeDisplayKeysRead) {
+            _localizeDisplayKeysRead = true;
+            _localizeDisplayKeys = ERXUtilities.booleanValueForBindingOnComponentWithDefault("localizeDisplayKeys", this, localizeDisplayKeysDefault);
         }
-        return NSKeyValueCoding.Utility.valueForKey(theCurrentItem , _localDestinationDisplayKey());
+        return _localizeDisplayKeys;
     }
 
+    public ERXLocalizer localizer() {
+        return ERXLocalizer.localizerForSession(session());
+    }
+
+    public Object theCurrentValue() {
+        // handle the case where it's the - none - string
+        if (theCurrentItem==noneString()) {
+            return theCurrentItem;
+        }
+        Object currentValue = NSKeyValueCoding.Utility.valueForKey(theCurrentItem , _localDestinationDisplayKey());
+        if(localizeDisplayKeys()) {
+            String stringValue;
+            if(!(currentValue instanceof String))
+                stringValue = (String)currentValue;
+            else
+                stringValue = currentValue.toString();
+            stringValue = localizer().localizedStringForKeyWithDefault(stringValue);
+            return stringValue;
+        }
+        return currentValue;
+    }
+    
     public boolean isRadio() {
         if (_localUiStyle().equals("radio")) {
             return true;

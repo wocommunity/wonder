@@ -53,6 +53,7 @@ public class WOToManyRelationship extends WOComponent {
     Object theCurrentItem;
     NSArray _privateList;
     NSArray _privateSelections;
+    boolean _localizeDisplayKeysRead;
 
 /////////////////////////////////////////////////////////////////
 // The following may be set/passed-in by user of this component
@@ -176,6 +177,7 @@ public class WOToManyRelationship extends WOComponent {
         setTheCurrentItem(null);
         set_privateList(null);
         set_privateSelections(null);
+        _localizeDisplayKeysRead = false;
     }
 
     public void reset() {
@@ -407,10 +409,34 @@ public class WOToManyRelationship extends WOComponent {
         return _privateList();
     }
 
-    public Object theCurrentValue() {
-        return NSKeyValueCoding.Utility.valueForKey(theCurrentItem , _localDestinationDisplayKey());
+    public static boolean localizeDisplayKeysDefault = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.WOToManyRelationship.localizeDisplayKeysDefault"), false);
+    boolean _localizeDisplayKeys;
+    public boolean localizeDisplayKeys() {
+        if(!_localizeDisplayKeysRead) {
+            _localizeDisplayKeysRead = true;
+            _localizeDisplayKeys = ERXUtilities.booleanValueForBindingOnComponentWithDefault("localizeDisplayKeys", this, localizeDisplayKeysDefault);
+        }
+        return _localizeDisplayKeys;
     }
 
+    public ERXLocalizer localizer() {
+        return ERXLocalizer.localizerForSession(session());
+    }
+
+    public Object theCurrentValue() {
+        Object currentValue = NSKeyValueCoding.Utility.valueForKey(theCurrentItem , _localDestinationDisplayKey());
+        if(localizeDisplayKeys()) {
+            String stringValue;
+            if(!(currentValue instanceof String))
+                stringValue = (String)currentValue;
+            else
+                stringValue = currentValue.toString();
+            stringValue = localizer().localizedStringForKeyWithDefault(stringValue);
+            return stringValue;
+        }
+        return currentValue;
+    }
+    
     public boolean isCheckBox() {
         if (_localUiStyle().equals("checkbox")) {
             return true;
