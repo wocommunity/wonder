@@ -50,7 +50,7 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         D2WListPage result=(D2WListPage)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
         result.setDataSource(dataSource());
         result.displayGroup().setSortOrderings(displayGroup().sortOrderings());
-        result.displayGroup().setNumberOfObjectsPerBatch(displayGroup().allObjects().count());
+        result.displayGroup().setNumberOfObjectsPerBatch(listSize());
         result.displayGroup().updateDisplayedObjects();
         return result;
     }
@@ -221,7 +221,7 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
             // the current index if out of range
             log.debug("dg.currentBatchIndex() "+dg.currentBatchIndex());
             dg.setCurrentBatchIndex(dg.currentBatchIndex());
-            if (dg.allObjects().count() > 0)
+            if (listSize() > 0)
                 d2wContext().takeValueForKey(dg.allObjects().objectAtIndex(0), "object");
         }
     }
@@ -254,8 +254,11 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         WOComponent result = null;
         String editConfigurationName=(String)d2wContext().valueForKey("editConfigurationName");
 
-        if(editConfigurationName != null){
-            EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
+        if(editConfigurationName != null) {
+            log.debug("editConfigurationName = "+editConfigurationName);
+            Object page = D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
+            log.debug("page = "+page);
+            EditPageInterface epi = (EditPageInterface)page;
 
             epi.setObject(localInstanceOfObject());
             epi.setNextPage(context().page());
@@ -286,6 +289,7 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
         }
     }
 
+    
     protected EOEnterpriseObject localInstanceOfObject() {
         return ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
     }
@@ -332,7 +336,7 @@ public abstract class ERD2WListPage extends D2WListPage implements ERXComponentA
     }
 
     public boolean shouldShowSelectAll() {
-        return displayGroup().allObjects().count()>10;
+        return listSize()>10;
     }
 /*
 // FIXME: This needs to be generalized.
