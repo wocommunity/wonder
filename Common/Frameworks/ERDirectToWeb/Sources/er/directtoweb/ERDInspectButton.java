@@ -22,7 +22,7 @@ public class ERDInspectButton extends ERDActionButton {
     public WOComponent inspectObjectAction() {
         EOEditingContext context = ERXEC.newEditingContext();
         EOEnterpriseObject localObject = EOUtilities.localInstanceOfObject(context, object());
-        String configuration = (String)valueForBinding("inspectConfigurationNameForEntity");
+        String configuration = (String)valueForBinding("inspectConfigurationName");
         InspectPageInterface epi = (InspectPageInterface)D2W.factory().pageForConfigurationNamed(configuration, session());
         epi.setObject(localObject);
         epi.setNextPage(context().page());
