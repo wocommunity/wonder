@@ -5,13 +5,9 @@ ActiveImage4: WOActiveImage { border=0;action = up; filename = "up.gif"; framewo
 ActiveImage5: WOActiveImage { border=0;action = showUserInfo; filename = "cc1_infobutton.gif"; framework="WRReporting";}
 CheckBox1: WOCheckBox { checked = attribute.shouldSort; }
 CheckBox3: WOCheckBox { checked = attribute.shouldTotal; }
-Conditional1: WOConditional { condition = attribute.isGroup; negate = 1; }
-Conditional2: WOConditional { condition = attribute.isGroup; negate = 1; }
-Conditional3: WOConditional { condition = attribute.isGroup; }
 Custom1: WOCollapsibleComponentContent { closedLabel = "Explode Sub-Attributes"; openedLabel = "Collapse Sub-Attributes"; }
 Custom2: WRAttributeEditor { attribute = subAttribute; }
 Hyperlink1: WOHyperlink { action = toggleGroup; string = toggleGroupLabel; }
-Image1: WOImage { alt = "1pixel_666666.gif"; filename = "1pixel_666666.gif"; height = 2; width = 600; framework="WRReporting";}
 Repetition1: WORepetition { item = subAttribute; list = attribute.attributes; }
 String1: WOString { value = attribute.label; }
 TextField1: WOTextField { size = 14; value = attribute.keyPath; }
@@ -22,9 +18,8 @@ TextField4: WOTextField {
 	value = attribute.userInfo.total;
 }
 add: WOActiveImage { border=0;action = add; filename = "cc1_addbutton_v2.gif"; framework="WRReporting";}
-img:WOImage{
-	filename="1pixel.gif"; framework="WRReporting";
-}
+isGroup: WOConditional { condition = attribute.isGroup; }
+isNoGroup: WOConditional { condition = attribute.isGroup; negate = true; }
 
 td:WOGenericContainer{
 	elementName="TD";

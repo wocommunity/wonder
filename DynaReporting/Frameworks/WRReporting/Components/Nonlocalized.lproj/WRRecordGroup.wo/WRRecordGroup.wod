@@ -8,7 +8,7 @@ NoHDimsUsed: WOConditional{
 attribs:WRAttributeGroup{
 	model = model;
 	totalsOnly = totalsOnly;
-	bgcolor = "ffffff";
+	bgcolor = "#ffffff";
 }
 
 description :WOString{
@@ -37,9 +37,9 @@ nototals:WOConditional{
 }
 
 nototalsCell:WOGenericContainer{
-	elementName="TD";
+	elementName="td";
 	colspan= nototalsrowspan;
-	bgcolor= colorForCoords;
+	bgcolor= ^colorForCoords;
 	align = "center";
 }
 records:WORepetition{
@@ -74,33 +74,29 @@ showTotalsOnlyAsTable:WOConditional{
 singleTotal:WOString {
 	value = singleTotal;
 }
-td:WOGenericContainer{
-	elementName="TD";
-	bgcolor= colorForCoords;
-}
 tdAttribNoRecords:WOGenericContainer{
-	elementName="TD";
-	bgcolor = "dedede";
+	elementName="td";
+	bgcolor = "#dedede";
 	align = "right";
 }
 
 tdNoRecords:WOGenericContainer{
-	elementName="TD";
+	elementName="td";
 	colspan = colspanForAllAttribs;
-	bgcolor = "dedede";
+	bgcolor = "#dedede";
 	align = "center";
 }
 tdNoRecordsLine:WOGenericContainer{
-	elementName="TD";
+	elementName="td";
 	colspan = colspanForAllAttribs;
-	bgcolor = "000000";
+	bgcolor = "#000000";
 	height = 2;
 }
 
 tdtop:WOGenericContainer{
-	elementName="TD";
+	elementName="td";
 	valign="top";
-	bgcolor= colorForCoords;
+	bgcolor= ^colorForCoords;
 	//bgcolor="ff0000";
 	align = "right";
 }

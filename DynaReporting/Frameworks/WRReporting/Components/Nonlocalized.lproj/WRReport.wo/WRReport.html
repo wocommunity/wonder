@@ -17,26 +17,30 @@
 	</table>
 	<webobject name=showDefaultReportStyle>
 		<webobject name=dontshowVerticalRows>
-			<table border width=100%>
+			<table width=100%>
 				<webobject name=horzDimensions>
 					<tr>
-						<webobject name=vGroups>
-							<td></td>
-						</webobject>
+						<webobject name=showTopCrits><webobject name=vGroups>
+								<td>
+									<spacer>
+								</td>
+							</webobject></webobject>
 						<webobject name=hCriteriaList>
-							<webobject name=colSpanTd><b><font size=2 face=arial,geneva><webobject name=criteriaLabel></webobject></font></b></webobject>
+							<webobject name=colSpanTd><webobject name=criteriaLabel></webobject></webobject>
 						</webobject>
 					</tr>
 				</webobject>
 				<webobject name=showHeadersForAsCells>
 					<webobject name=depthList>
 						<tr>
-							<webobject name=vGroups>
-								<td> </td>
-							</webobject>
+							<webobject name=showTopCrits><webobject name=vGroups>
+									<td>
+										<spacer>
+									</td>
+								</webobject></webobject>
 							<webobject name=numberOfCrits>
 								<webobject name=attribs>
-									<webobject name=td><b><font size=2 face=arial,geneva><webobject name=attribLabel></webobject></b></webobject>
+									<webobject name=td><webobject name=attribLabel></webobject></webobject>
 								</webobject>
 							</webobject>
 						</tr>
@@ -50,19 +54,24 @@
 						<webobject name=hCriteriaList2>
 							<webobject name=recordGroupTest></webobject>
 						</webobject>
-						<td></td>
-						<td></td>
+						<td>
+							<spacer>
+						</td>
+						<td>
+							<spacer>
+						</td>
 					</tr>
 				</webobject>
 				<webobject name=vCriteriaList>
 					<tr>
 						<webobject name=vindent><webobject name=showIndentCell>
 								<webobject name=rowSpanTd>
-									<b><font size=2 face=arial,geneva><webobject name=vIndentCriteriaLabel></webobject></b>
+									<webobject name=vIndentCriteriaLabel></webobject>
 								</webobject>
 							</webobject></webobject>
-						<webobject name=rowSpanTd2><b><font size=2 face=arial,geneva><webobject name=vcriteriaLabel></webobject></b></webobject>
-						<webobject name=hCriteriaList2>
+						<webobject name=showTopCrits>
+							<webobject name=rowSpanTd2><webobject name=vcriteriaLabel></webobject></webobject>
+						</webobject><webobject name=hCriteriaList2>
 							<webobject name=recordGroupTest></webobject>
 						</webobject>
 						<webobject name=showSingleCol>
@@ -71,27 +80,33 @@
 					</tr>
 				</webobject>
 			</table>
-		</webobject>
+			</webobject>
 		<webobject name=showVerticalRows>
 			<table border=0>
 				<webobject name=vCriteriaList>
 					<webobject name=vindent2><webobject name=showIndentCell>
 							<webobject name=showVHeadings>
 								<tr>
-									<td><font color=ffffff>.</font></td>
-									<td></td>
+									<td><font color=white>.</font></td>
+									<td>
+										<spacer>
+									</td>
 								</tr>
 								<tr>
-									<td><font color=ffffff>.</font></td>
-									<td></td>
+									<td><font color=white>.</font></td>
+									<td>
+										<spacer>
+									</td>
 								</tr>
 								<webobject name=attribsGroup></webobject>
 							</webobject>
 							<tr>
 								<webobject name=groupDepth>
-									<td></td>
+									<td>
+										<spacer>
+									</td>
 								</webobject>
-								<webobject name=rowSpanTd2Span><b><font size=2 face=arial,geneva><webobject name=vIndentCriteriaLabel></webobject></font></b></webobject>
+								<webobject name=rowSpanTd2Span><webobject name=vIndentCriteriaLabel></webobject></webobject>
 							</tr>
 						</webobject></webobject>
 					<webobject name=recordGroupTest></webobject>
