@@ -112,16 +112,20 @@
                    author="true"
                    version="true"
                    use="true"
-                   windowtitle="Project Wonder API">
+                   windowtitle="Project Wonder Reference Documentation">
 
-        <classpath refid="classpath"/>
-        <sourcepath>
-            <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
-            <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
-        </sourcepath>
-        <doctitle><![CDATA[<h2>Project Wonder API Documentation</h2>]]></doctitle>
-        <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
-        <link href="http://developer.apple.com/techpubs/webobjects/Reference/Javadoc/"/>
+            <classpath refid="classpath"/>
+            <sourcepath>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
+            </sourcepath>
+            <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
+            <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
+            <bottom><![CDATA[Copyright &#169; 2002 Project Wonder. All Rights Reserved.]]></bottom>
+            <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
+            <link href="http://developer.apple.com/techpubs/webobjects/Reference/Javadoc/"/>
+            <link href="http://jakarta.apache.org/log4j/docs/api/"/>
+            <link href="http://www.junit.org/junit/javadoc/3.7/"/>
         </javadoc>
     </target>
 
