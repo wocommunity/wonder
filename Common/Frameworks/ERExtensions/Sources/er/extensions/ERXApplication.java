@@ -28,6 +28,9 @@ public abstract class ERXApplication extends WOApplication {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);
 
+    /** request logging support */
+    public static final ERXLogger requestHandlingLog = ERXLogger.getERXLogger("er.extensions.ERXApplication.RequestHandling");
+    
     // FIXME: Should correct all references to WORequestHandler.DidHandleRequestNotification and then delete this ivar.
     public static final String WORequestHandlerDidHandleRequestNotification = WORequestHandler.DidHandleRequestNotification;
 
@@ -87,7 +90,13 @@ public abstract class ERXApplication extends WOApplication {
         Long timestampLag=Long.getLong("EOEditingContextDefaultFetchTimestampLag");
         if (timestampLag!=null)
             EOEditingContext.setDefaultFetchTimestampLag(timestampLag.longValue());
-            
+
+        String defaultMessageEncoding = System.getProperty("er.extensions.ERXApplication.DefaultMessageEncoding");
+        if (defaultMessageEncoding != null) {
+            log.debug("Setting WOMessage default encoding to \"" + defaultMessageEncoding + "\"");
+            WOMessage.setDefaultEncoding(defaultMessageEncoding);
+        }
+        
         NSNotificationCenter.defaultCenter().addObserver(
                         this,
                         new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
@@ -427,12 +436,18 @@ public abstract class ERXApplication extends WOApplication {
      */
     public WOResponse dispatchRequest(WORequest request) {
         WOResponse response = null;
+        if (requestHandlingLog.isDebugEnabled()) {
+            requestHandlingLog.debug("Dispatching request: " + request);
+        }
         try {
             response = super.dispatchRequest(request);
         } finally {
             // We always want to get rid of the wocontext key.
             ERXThreadStorage.removeValueForKey("wocontext");
         }
+        if (requestHandlingLog.isDebugEnabled()) {
+            requestHandlingLog.debug("Returning response: " + response);
+        }        
         return response;
     }
 
