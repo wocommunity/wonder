@@ -173,9 +173,12 @@ public class ERXEOControlUtilities {
      * @return true if firstEO and secondEO correspond to the same object or if both are null.  false otherwise.
      */
     public static boolean eoEquals(EOEnterpriseObject firstEO, EOEnterpriseObject secondEO) {
-        boolean result;
+        boolean result = false;
         
-        if (firstEO != null && secondEO != null) {
+        if ( firstEO == secondEO ) {
+            result = true;
+        }
+        else if (firstEO != null && secondEO != null) {
             final EOEditingContext firstContext = firstEO.editingContext();
             final EOEditingContext secondContext = secondEO.editingContext();
             
@@ -185,18 +188,6 @@ public class ERXEOControlUtilities {
                 
                 result = firstGID.equals(secondGID);
             }
-            else if (firstContext == null && secondContext == null) {
-                result = firstEO.equals(secondEO);
-            }
-            else {
-                result = false;
-            }
-        }
-        else if (firstEO != null || secondEO != null) {
-            result = false;
-        }
-        else {  // both are null
-            result = true;
         }
         
         return result;        
