@@ -464,6 +464,7 @@
 				500567420408508100CF0E76,
 				50287843040960A40043FCB8,
 				416B00E4040EC20100000106,
+				509531170512A4CF00CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1218,6 +1219,19 @@
 		};
 		50287843040960A40043FCB8 = {
 			fileRef = 50287842040960A40043FCB8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		509531160512A4CF00CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXCompressionUtilities.java;
+			path = er/extensions/ERXCompressionUtilities.java;
+			refType = 4;
+		};
+		509531170512A4CF00CF0E76 = {
+			fileRef = 509531160512A4CF00CF0E76;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7418,6 +7432,7 @@
 				F6ED0C790361C03B01257492,
 				F592A409036D480201AD0D07,
 				633FC07B040A414D00AE7795,
+				509531160512A4CF00CF0E76,
 			);
 			isa = PBXGroup;
 			name = Utilities;
