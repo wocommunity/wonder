@@ -1,86 +1,51 @@
-<webobject name=PageWrapper><webobject name=Help></webobject><webobject name=Errors></webobject>
-	<webobject name=EditingForm>
-		<table>
-			<tr valign=top>
-				<td valign=top align=right><webobject name="TabPanel"><webobject name=InspectTable>
-							<webobject name=Sections>
-								<webobject name=HasSectionName>
-									<tr>
-										<td colspan="3" bgcolor=#FFFFFF height=26 valign="middle"><webobject name=SwitchComponent3></webobject></td>
-									</tr>
-								</webobject>
-								<webobject name=DoNotFlush>
-									<tr height=6>
-										<td colspan=3>&nbsp;</td>
-									</tr>
-								</webobject>
-								<tr>
-									<td colspan=3 align=left>
-										<webobject name=NotUsingMatrixLayout>
-											<table border=0 cellpadding=0 cellspacing=1>
-												<webobject name=AttributeRepetition>
-													<tr>
-														<webobject name=HasDisplayNameForProperty>
-															<td valign=TOP align=LEFT><webobject name=SwitchComponent1></webobject></td>
-														</webobject>
-														<webobject name=DoNotFlush>
-															<td>&nbsp</td>
-														</webobject>
-														<td valign="top" align="left"><webobject name=AttributeValue2></webobject></td>
-													</tr>
-												</webobject>
-											</table>
-										</webobject>
-										<webobject name=Conditional4><webobject name=ERTable1>
-												<table cellpadding=0 cellspacing=0 border=0>
-													<tr>
-														<td valign=TOP align=LEFT width=150><webobject name=SwitchComponent2></webobject></td>
-														<td>&nbsp;</td>
-														<td valign=TOP><webobject name=AttributeValue1></webobject></td>
-													</tr>
-												</table>
-											</webobject></webobject>
-									</td>
-								</tr>
-								<webobject name=DoNotFlush>
-									<tr height=6>
-										<td colspan=3>&nbsp;</td>
-									</tr>
-								</webobject>
-							</webobject>
-							<tr bgcolor=#999999>
-								<td width=770 height=20 colspan=3 bgcolor=#999999 valign="middle"> </td>
+<webobject name="PageWrapper"><webobject name="Help"></webobject><webobject name="Errors"></webobject><webobject name="EditForm"><webobject name="SwitchComponent3"><webobject name="Border">
+				<table cellspacing="0" cellpadding="0" border="0" bgcolor="#ebebeb">
+					<webobject name="BorderWasRendered">
+						<tr bgcolor="#CCCCCC">
+							<td colspan="4">&nbsp;</td>
+						</tr>
+					</webobject><webobject name="Sections"><webobject name="HasSectionName">
+							<tr>
+								<td height="26" bgcolor="#FFFFFF" valign="middle" colspan="3"><webobject name="UseSectionImagesConditional"><webobject name="SectionImage"></webobject></webobject><webobject name="DoNotUseSectionImagesConditional"><h3><webobject name="SectionNameString"></webobject></h3></webobject></td>
+							</tr>
+						</webobject><webobject name="DoNotFlush">
+							<tr height="6">
+								<td colspan="3">&nbsp;</td>
 							</tr>
 						</webobject>
-					</webobject></td></tr>
-			<tr>
-				<td align=center colspan=3>
-					<table border=0 cellpadding=0 cellspacing=0>
 						<tr>
-							<td align=center>
-								<webobject name=IsEditingConditional>
-									<webobject name=CancelLink><webobject name=CancelButton></webobject></webobject>
-								</webobject>
-								<webobject name=IsNotEditingConditional>
-									<webobject name=ReturnLink><webobject name=ReturnButton></webobject></webobject>
-								</webobject>
-							</td>
-							<webobject name=IsEntityWritable>
-								<td align=right> </td>
-							</webobject>
-							<td align=left>
-								<webobject name=IsEntityWritable2>
-									<webobject name=IsNotEditingConditional2>
-										<webobject name=EditLink><webobject name=EditImage></webobject></webobject>
-									</webobject>
-								</webobject>
-								<webobject name=IsEditingConditional2>
-									<webobject name=SubmitChanges></webobject></webobject>
-							</td>
+							<td align="left" colspan="3"><webobject name=InspectPageRepetition></webobject></td>
 						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</webobject>
+						<webobject name="DoNotFlush">
+							<tr height="6">
+								<td colspan="3">&nbsp;</td>
+							</tr>
+						</webobject></webobject>
+					<tr bgcolor="#999999">
+						<td width="770" height="20" bgcolor="#999999" valign="middle" colspan="3">
+							<table cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#CCCCCC">
+								<tr>
+									<td><font color="#ffffff" size="-1"><webobject name="IsTaskEdit">
+											<table cellspacing="1" border="0" cellpadding="0">
+												<tr>
+													<td align="CENTER" class="requiredMarker">*</td>
+													<td><font color="#ffffff" size="-1">: Required Field</font></td>
+												</tr>
+											</table>
+										</webobject></font></td>
+									<td align="right" valign="middle"><webobject name="ImageSpacer"></webobject><webobject name="IsEditingConditional">
+											<webobject name="Conditional9"><webobject name="Conditional13"><webobject name="CancelLink2"><webobject name="ReturnButton2"></webobject></webobject></webobject><webobject name="Conditional14"><webobject name="CancelLink"><webobject name="CancelButton"></webobject></webobject></webobject></webobject><webobject name="Conditional12"><webobject name="Conditional11"><webobject name="SubmitChanges5"></webobject></webobject><webobject name="Conditional10"><webobject name="SubmitChanges4"></webobject></webobject></webobject>&nbsp;
+										</webobject><webobject name="IsNotEditingConditional"><webobject name="Conditional6"><webobject name="Conditional8"><webobject name="EditLink3"><webobject name="EditImage3"></webobject></webobject></webobject><webobject name="Conditional7"><webobject name="EditLink4"><webobject name="EditImage4"></webobject></webobject></webobject></webobject>
+											<webobject name="ShowCancel2"><webobject name="NonNullConditional2"><webobject name="ReturnLink"><webobject name="ReturnButton"></webobject></webobject></webobject></webobject>
+										</webobject><webobject name="Conditional3"><webobject name="PrinterFriendlyLink"><webobject name="PrintButton"></webobject></webobject></webobject><webobject name="IsEntityWritable2">
+											<webobject name="IsNotEditingConditional2"><webobject name="EditLink"><webobject name="EditImage"></webobject></webobject><webobject name="NonNullConditional1"><webobject name="EditLink2"><webobject name="EditImage2"></webobject></webobject></webobject>
+											</webobject></webobject><webobject name="IsEditingConditional2">
+											<webobject name="Conditional2"><webobject name="SubmitChanges"></webobject></webobject>
+										</webobject><webobject name="Conditional1"><webobject name="Image1"></webobject></webobject></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</webobject></webobject></webobject><webobject name="Conditional5"><webobject name="IsEditing"><webobject name="Script"></webobject></webobject></webobject>
 </webobject>
