@@ -315,7 +315,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 
     /**
      * Overridden to install/uninstall a timer that will terminate the application
-     * in (4*the session timeout) in minutes from the time this method is called.
+     * in <code>ERTimeToKill</code> seconds from the time this method is called.
      * The timer will get uninstalled if you allow new sessions again during that
      * time span.
      */
