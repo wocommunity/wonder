@@ -1641,7 +1641,7 @@
 			refType = 2;
 		};
 		F542046F02C4672F01000102 = {
-			fileEncoding = 30;
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/Localizable.strings;
@@ -1669,7 +1669,7 @@
 			refType = 2;
 		};
 		F542047302C4672F01000102 = {
-			fileEncoding = 30;
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = Japanese;
 			path = Resources/Japanese.lproj/Localizable.strings;
@@ -8637,8 +8637,8 @@
 				F542069D02C467DF01000102,
 				F54206A002C467DF01000102,
 				F54206A202C467DF01000102,
-				F54206A402C467DF01000102,
 				F54206A602C467DF01000102,
+				F54206A402C467DF01000102,
 				F54206A902C467E001000102,
 				F54206AD02C467E001000102,
 				F54206AF02C467E001000102,
