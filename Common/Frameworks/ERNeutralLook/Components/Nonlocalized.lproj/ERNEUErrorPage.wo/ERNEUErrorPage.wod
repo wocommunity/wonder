@@ -30,6 +30,6 @@ PageWrapper: WOSwitchComponent {
 }
 
 String1: WOString {
-	value = message;
+	value = formattedMessage;
 	escapeHTML = false;
 }
