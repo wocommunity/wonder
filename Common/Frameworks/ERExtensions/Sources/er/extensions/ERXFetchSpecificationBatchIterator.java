@@ -122,9 +122,23 @@ public class ERXFetchSpecificationBatchIterator {
      * @return number of objects / batch size rounded up
      */
     public int batchCount() {
-        if (!hasFetchedPrimaryKeys())
-            fetchPrimaryKeys();
+        init();
         return (int)Math.ceil((primaryKeys.count() * 1.0) / (batchSize() * 1.0));
+    }
+
+    /**
+     * Gets the count of the number of objects returned by
+     * the fetch spec.
+     * @return number of objects returned by the fetch spec
+     */
+    public int objectFetchCount() {
+        init();
+        return primaryKeys.count();
+    }
+    
+    protected void init() {
+        if (!hasFetchedPrimaryKeys())
+            fetchPrimaryKeys();        
     }
     
     /**
@@ -172,8 +186,7 @@ public class ERXFetchSpecificationBatchIterator {
      * @return if calling <b>nextBatch</b> will have any effect
      */
     public boolean hasNextBatch() {
-        if (!hasFetchedPrimaryKeys())
-            fetchPrimaryKeys();
+        init();
         return currentObjectFetchCount < primaryKeys.count();
     }
 
@@ -196,8 +209,7 @@ public class ERXFetchSpecificationBatchIterator {
         String primaryKeyAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
 
         NSArray nextBatch = null;
-        if (!hasFetchedPrimaryKeys())
-            fetchPrimaryKeys();
+        init();
         if (hasNextBatch()) {
             int length = primaryKeys.count() - currentObjectFetchCount > batchSize() ? batchSize() : primaryKeys.count() - currentObjectFetchCount;
             NSRange range = new NSRange(currentObjectFetchCount, length);
@@ -219,6 +231,38 @@ public class ERXFetchSpecificationBatchIterator {
         return nextBatch != null ? nextBatch : NSArray.EmptyArray;
     }
 
+    /**
+     *
+     */
+    public NSArray batchWithIndex(int index) {
+        NSArray batch = null;
+
+        EOEntity entity = EOUtilities.entityNamed(editingContext(), fetchSpecification.entityName());
+        if (entity.primaryKeyAttributes().count() > 1)
+            throw new RuntimeException("ERXFetchSpecificationBatchIterator: Currently only single primary key entities are supported.");
+
+        String primaryKeyAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
+        
+        init();
+        if (index < batchCount()) {
+            int start = batchSize() * index;
+            int length = primaryKeys.count() - start  > batchSize() ? batchSize() : primaryKeys.count() - start;
+            NSRange range = new NSRange(start, length);
+            NSArray primaryKeysToFetch = primaryKeys.subarrayWithRange(range);
+
+            log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
+
+            ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
+            EOFetchSpecification fetchSpec = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
+            if (fetchSpecification.prefetchingRelationshipKeyPaths() != null)
+                fetchSpec.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
+            batch = editingContext().objectsWithFetchSpecification(fetchSpec);
+
+            log.debug("Actually fetched: " + batch.count() + " with fetch speciifcation: " + fetchSpec);
+        }
+        return batch != null ? batch : NSArray.EmptyArray;        
+    }
+    
     /**
      * Determines if the primary keys have been fetched
      * yet for the given fetch specification.
