@@ -96,7 +96,6 @@ public class PostgresqlExpression extends JDBCExpression {
     public String assembleJoinClause(String leftName,
                                      String rightName,
                                      int semantic) {
-        
         if (disableOuterJoins == true) {
             return super.assembleJoinClause(leftName, rightName, semantic);
         }
@@ -162,20 +161,16 @@ public class PostgresqlExpression extends JDBCExpression {
         jc.table2 = rightTable + " " + rightAlias;
         NSArray destCols = (NSArray) r.destinationAttributes().valueForKey( "columnName" );
         NSArray sourceCols = (NSArray) r.sourceAttributes().valueForKey( "columnName" );
-        if( destCols.equals( sourceCols ) ) {
-            jc.joinCondition = " USING (" + destCols.componentsJoinedByString( ", " ) + ")";
-        } else {
-            NSArray joins = r.joins();
-            int joinsCount = joins.count();
-            NSMutableArray joinStrings = new NSMutableArray( joinsCount );
-            for( int i = 0; i < joinsCount; i++ ) {
-                EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
-                joinStrings.addObject
-                    ( leftAlias +"."+ currentJoin.sourceAttribute().columnName() + " = " + 
-                      rightAlias +"."+ currentJoin.destinationAttribute().columnName() );
-            }
-            jc.joinCondition = " ON " + joinStrings.componentsJoinedByString( " AND " );
+        NSArray joins = r.joins();
+        int joinsCount = joins.count();
+        NSMutableArray joinStrings = new NSMutableArray( joinsCount );
+        for( int i = 0; i < joinsCount; i++ ) {
+            EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
+            joinStrings.addObject
+                ( leftAlias +"."+ currentJoin.sourceAttribute().columnName() + " = " + 
+                  rightAlias +"."+ currentJoin.destinationAttribute().columnName() );
         }
+        jc.joinCondition = " ON " + joinStrings.componentsJoinedByString( " AND " );
         if( !_alreadyJoined.containsObject( jc ) ) {
             _alreadyJoined.insertObjectAtIndex(jc, 0);
             return jc.toString();
