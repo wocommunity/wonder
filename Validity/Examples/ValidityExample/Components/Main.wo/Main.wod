@@ -1,0 +1,10 @@
+Footer1: Footer {
+}
+
+Hyperlink1: WOHyperlink {
+	action = goToAllTogetherPage;
+}
+
+Hyperlink2: WOHyperlink {
+	action = goToSeparatePage;
+}
