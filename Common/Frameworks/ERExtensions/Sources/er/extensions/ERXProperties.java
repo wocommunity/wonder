@@ -187,7 +187,7 @@ public class ERXProperties extends Properties {
                 return true;
             }
         }
-        return false;
+        return webObjectsVersionAsDouble() >= 5.22d;
     }
 
     
