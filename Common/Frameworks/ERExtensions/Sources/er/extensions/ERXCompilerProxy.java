@@ -214,6 +214,15 @@ public class ERXCompilerProxy {
             _lastModified = _sourceFile.lastModified();
         }
 
+        public File classFile() {
+            String fileName = _className.replace('.', File.separatorChar) + ".class";
+            File f = new File( _destinationPath + File.separatorChar + fileName);
+            if (f.exists() && f.isFile() && f.canRead()) {
+                return f;
+            }
+            return null;
+        }
+
         public String className() {
             return _className;
         }
@@ -229,12 +238,17 @@ public class ERXCompilerProxy {
         }
 
         public boolean needsRefresh() {
-            if(_sourceFile.exists() && _lastModified < _sourceFile.lastModified()) {
-                return true;
+            if(_sourceFile.exists()) {
+                if(classFile() != null && classFile().lastModified() < _sourceFile.lastModified()) {
+                    return true;
+                }
+                if(_lastModified < _sourceFile.lastModified()) {
+                    return true;
+                }
             }
             return false;
         }
-
+        
         public void didRefresh() {
             _lastModified = _sourceFile.lastModified();
             cat.info("Did refresh " + _path);
