@@ -200,7 +200,7 @@ public class ERXExtensions {
             // This allows enabling from the log4j system.
             adaptorCategory = Category.getInstance("er.transaction.adaptor.EOAdaptorDebugEnabled");
             sharedEOAdaptorCategory = Category.getInstance("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
-            if (adaptorCategory.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
+            if (adaptorCategory.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
             }
             adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) ? Boolean.TRUE : Boolean.FALSE;
