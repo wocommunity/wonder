@@ -157,7 +157,7 @@ public class ERXUtilities {
     }
 
     /**
-     * deprecated see {@link ERXEOControlUtilities.arrayFromDataSource(EODataSource)}
+     * @deprecated see {@link ERXEOControlUtilities.arrayFromDataSource(EODataSource)}
      */
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
         return ERXEOControlUtilities.arrayFromDataSource(dataSource);
