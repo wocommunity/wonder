@@ -40,15 +40,13 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return _HTMLTab;
     }
 
-    // static creation of this class creates deadlocks
-    // making it lazy
     private static ERXSimpleHTMLFormatter _formatter;
     public static ERXSimpleHTMLFormatter formatter(){
-        if (_formatter==null) {
+        if (_formatter==null)
             _formatter=new ERXSimpleHTMLFormatter();
-        }
         return _formatter;
     }
+
     public String htmlStringFromString(String aString) {
         String returnString = "";
         try {
@@ -85,24 +83,19 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return convertedString.toString();
     }
 
-    public String applyFormat(Object anObject)
-        throws IllegalArgumentException /* JC_WARNING - You may want to use NumberFormatException instead.*/
-    {
+    public String applyFormat(Object anObject) throws IllegalArgumentException {
         String newString;
 
-        if(anObject == null || !(anObject instanceof String)) //.getClass().isInstance(anObject) == false)
+        if(anObject == null || !(anObject instanceof String))
             return null;
 
         // Convert tabs in the argument (which must be a String) to HTML spacers.
         newString = replaceStringByStringInString(ASCIITab, HTMLTab(), (String)anObject);
         // Convert new-lines in the argument (which must be a String) to HTML breaks.
         return replaceStringByStringInString(ASCIIReturn, HTMLReturn, newString);
-        
     }
 
-    public Object parseObject(String inString)
-        throws java.text.ParseException
-    {
+    public Object parseObject(String inString) throws java.text.ParseException {
         String newString;
 
         if(inString == null)
@@ -130,5 +123,4 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
     public String stringForObjectValue(Object anObject)
         throws IllegalArgumentException
     {  return applyFormat(anObject); }
-
 }
