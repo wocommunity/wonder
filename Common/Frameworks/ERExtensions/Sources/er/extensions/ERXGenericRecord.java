@@ -681,37 +681,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             throw new RuntimeException("validateValueForKey called with null key on "+this);
         Object result=null;
         try {
-            // MOVEME: All of this rule based validation should move to ERXClassDescription
-            //		also should be re-thought.
-            // FIXME: Bad way of getting the entity.
-            EOEntity myEntity=EOModelGroup.defaultGroup().entityNamed(entityName());
-            EOAttribute attr = (EOAttribute)myEntity.attributeNamed(key);
-            if (attr!=null && attr.userInfo()!=null && value!=null && value instanceof Number){
-                String unit=(String)attr.userInfo().objectForKey("unit");
-                if (unit==null) unit="";
-                Number inputValue = (Number)value;
-                /*
-                String min=(String)ruleValueForAttributeAndKey(attr,"minValue");
-                if (min!=null) {
-                    Integer minimum = ERXConstant.integerForString(min);
-                    if (inputValue.intValue() < minimum.intValue())
-                        throw new NSValidation.ValidationException("<b>" +KEY_MARKER+"</b> should be greater than <b>" +min+ " "+unit+"</b>.");
-                }
-                String max=(String)ruleValueForAttributeAndKey(attr,"maxValue");
-                if(max!=null){
-                    Integer maximum = ERXConstant.integerForString(max);
-                    if (inputValue.intValue() > maximum.intValue()){
-                        throw new NSValidation.ValidationException("<b>" +KEY_MARKER+"</b> should be smaller than <b>" +max+ " "+unit+"</b>.");
-                    }
-                }
-                 */
-            }
-            if (validation.isDebugEnabled())
-                validation.debug("Before call to super, classDescription: " + classDescription());
             result=super.validateValueForKey(value,key);
         } catch (ERXValidationException e) {
-            ((ERXValidationException)e).setPropertyKey(key);
-            ((ERXValidationException)e).setEoObject(this);
+            
+            //((ERXValidationException)e).setPropertyKey(key);
+            //((ERXValidationException)e).setEoObject(this);
             throw e;
         } catch (NSValidation.ValidationException e) {
             if (e.key() == null || e.object() == null)

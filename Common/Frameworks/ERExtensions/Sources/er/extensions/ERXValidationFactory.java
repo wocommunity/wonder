@@ -37,17 +37,11 @@ public class ERXValidationFactory {
     private static final String EDI_TFE_METHOD_NAME = "templateForException";
     
     /** holds the class argument array for delegate validation exception messages */    
-    private static final Class[] EDI_FE_ARGS = new Class[] {ERXValidationException.class};
+    private static final Class[] EDI_FE_ARGS = new Class[] { ERXValidationException.class };
 
-    /** NSValidation.ValidationException exception constructor paramaters */
-    private static Class[] _exceptionConstructor = new Class[] { String.class, NSDictionary.class };
-    
     /** Regular ERXValidationException constructor parameters */
-    private static Class[] _regularConstructor = new Class[] { EOEnterpriseObject.class, String.class, Object.class, String.class };
-    
-    /** Custom ERXValidationException constructor parameters */
-    private static Class[] _customConstructor = new Class[] { EOEnterpriseObject.class, String.class };
-    
+    private static Class[] _regularConstructor = new Class[] { String.class, Object.class, String.class, Object.class };
+        
     /**
      * Sets the default factory to be used for converting
      * model thrown exceptions.
@@ -128,12 +122,14 @@ public class ERXValidationFactory {
 
     /** holds the validation exception class */
     private Class _validationExceptionClass;
+    
     /**
      * Sets the validation class to be used when
      * creating validation exceptions.
      * @param class1 validation exception class
      */
     public void setValidationExceptionClass(Class class1) { _validationExceptionClass = class1; }
+    
     /**
      * Returns the validation exception class to use
      * when creating exceptions. If none is specified
@@ -147,15 +143,23 @@ public class ERXValidationFactory {
         return _validationExceptionClass;
     }
 
+    protected Constructor regularConstructor;
+    protected Constructor regularValidationExceptionConstructor() {
+        if (regularConstructor == null) {
+            try {
+                regularConstructor = validationExceptionClass().getConstructor(_regularConstructor);
+            } catch (Exception e) {
+                cat.error("Exception looking up regular constructor. Exception: " + e.getMessage());
+            }
+        }
+        return regularConstructor;
+    }
+    
     public ERXValidationException createException(EOEnterpriseObject eo, String property, Object value, String type) {
         ERXValidationException erve = null;
         try {
-            //erve = (ERXValidationException)validationExceptionClass().getConstructor(_regularConstructor).newInstance(new Object[] {eo, property,
-            //    value, type});
             cat.debug("Creating exception for type: " + type + " validationExceptionClass: " + validationExceptionClass().getName());
-            erve = (ERXValidationException)validationExceptionClass().getConstructor(_exceptionConstructor).newInstance(new Object[] {type,
-                new NSMutableDictionary()});
-            erve.exceptionForObject(eo, property, value, type);
+            erve = (ERXValidationException)regularValidationExceptionConstructor().newInstance(new Object[] {type, eo, property, value});
         } catch (InvocationTargetException ite) {
             cat.error("Caught InvocationTargetException creating regular validation exception: " + ite.getTargetException());            
         } catch (Exception e) {
@@ -165,16 +169,19 @@ public class ERXValidationFactory {
     }
 
     public ERXValidationException createCustomException(EOEnterpriseObject eo, String method) {
-        ERXValidationException erve = null;
-        try {
-            erve = (ERXValidationException)validationExceptionClass().getConstructor(_customConstructor).newInstance(new Object[] {eo,
-                method});
-        } catch (Exception e) {
-            cat.error("Caught exception creating custom validation exception: " + e.getMessage());
-        }
-        return erve;
+        ERXValidationException erv = createException(eo, null, null, ERXValidationException.CustomMethodException);
+        if (erv != null)
+            erv.setMethod(method);
+        return erv;
     }
 
+    public ERXValidationException createCustomException(EOEnterpriseObject eo, String property, Object value, String method) {
+        ERXValidationException erv = createException(eo, property, value, ERXValidationException.CustomMethodException);
+        if (erv != null)
+            erv.setMethod(method);
+        return erv;
+    }    
+    
     // Not very eligant, but until we have a way of throwing our own class of validation exception this is the only way.
     // Note that this is only used to convert model thrown exceptions in ERXEntityClassDescription.
     public ERXValidationException convertException(NSValidation.ValidationException eov) { return convertException(eov, null); }
@@ -184,14 +191,13 @@ public class ERXValidationFactory {
             cat.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
-            NSDictionary userInfo = eov.userInfo() != null ? (NSDictionary)eov.userInfo() : ERXConstant.EmptyDictionary;
+            EOEnterpriseObject eo = (EOEnterpriseObject)eov.object();
+            //NSDictionary userInfo = eov.userInfo() != null ? (NSDictionary)eov.userInfo() : ERXConstant.EmptyDictionary;
             for (Enumeration e = _mappings.allKeys().objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
+                //EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
                 String key = (String)e.nextElement();
                 String type = (String)_mappings.objectForKey(key);
                 if (message.lastIndexOf(key) >= 0) {
-                    // String property = (String)userInfo.objectForKey(NSValidation.ValidationException.ValidatedKeyUserInfoKey);
-                    cat.debug("UserInfo:" + userInfo);
                     String property = eov.key();
                     if(property == null && message.indexOf("Removal") == 0) {
                         //FIXME: (ak) pattern matching?
@@ -201,7 +207,7 @@ public class ERXValidationFactory {
                     break;
                 }
             }
-            NSArray additionalExceptions = (NSArray)userInfo.objectForKey(NSValidation.ValidationException.AdditionalExceptionsKey);
+            NSArray additionalExceptions = eov.additionalExceptions();
             if (erve == null) {
                 cat.error("Unable to convert validation exception: " + eov);
             } else if (additionalExceptions != null && additionalExceptions.count() > 0) {
@@ -212,7 +218,7 @@ public class ERXValidationFactory {
                         erveAddtionalExceptions.addObject(erven);
                 }
                 if (erveAddtionalExceptions.count() > 0)
-                    erve.setObjectForKey(erveAddtionalExceptions, NSValidation.ValidationException.AdditionalExceptionsKey);
+                    erve.setAdditionalExceptions(erveAddtionalExceptions);
             }
         } else {
             cat.warn("Attempting to convert validation exception: " + eov + " that is already of type ERXValidationException");
@@ -229,13 +235,12 @@ public class ERXValidationFactory {
             message = ((ExceptionDelegateInterface)erv.delegate()).messageForException(erv);
         }
         if (message == null) {
-            message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(templateForException(erv), templateDelimiter(), erv);
+            message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(templateForException(erv),
+                                                                                       templateDelimiter(),
+                                                                                       erv);
         }
         return message;
     }
-
-    //ak: This should belong to ERXMultiKey if we are prepared to put NULL values in it, if not, we should check every throw if ERXValidationException if it has values for every argument...
-    private Object _kvcNullValue(Object o) {return (o == null? NSKeyValueCoding.NullValue : o);}
     
     // Override this method in subclasses to provide a different mechanism for resolving getting/generating a template.
     private final static String UNDEFINED_VALIDATION_TEMPLATE = "Undefined Validation Template";
@@ -285,12 +290,14 @@ public class ERXValidationFactory {
 
     /** holds the default template delimiter, "@" */
     private String _delimiter = "@";
+    
     /**
      * returns the template delimiter, the
      * default delimiter is "@".
      * @return template delimiter
      */
     public String templateDelimiter() { return _delimiter; }
+    
     /**
      * sets the template delimiter to be used
      * when parsing templates for creating validation
@@ -349,7 +356,6 @@ public class ERXValidationFactory {
      * @returns template for key or null if none is found
      */
     public String templateForKeyPath(String key, String language) {
-        String template = ERXLocalizer.localizerForLanguage(language).localizedStringForKey(key);
-        return template;
+        return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(key);
     }
 }
