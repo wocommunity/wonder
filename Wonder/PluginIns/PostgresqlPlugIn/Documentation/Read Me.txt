@@ -1,0 +1,7 @@
+Adds support for Postgres with WebObjects.
+
+Currently, the Ant build is the only one that works.
+
+There is no EOModeler plugin, because all the needed sequences are generated on the fly.
+
+Anjo
