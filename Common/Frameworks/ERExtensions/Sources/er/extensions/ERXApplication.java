@@ -32,17 +32,26 @@ public abstract class ERXApplication extends WOApplication {
 
 
     /**
-     * The ERXApplication contructor.
+     * Installs several bufixes and enhancements to WODynamicElements.
      * Sets the Context class name to "er.extensions.ERXWOContext" if
-     * it is "WOContext". Patches ERXWOForm to be used instead of WOForm.
+     * it is "WOContext". Patches ERXWOForm, ERXWOFileUpload, ERXWOText
+     * to be used instead of WOForm, WOFileUpload, WOText.
      */
-    public ERXApplication() {
-        super();
+    public void installPatches() {
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOForm.class, "WOForm");
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOFileUpload.class, "WOFileUpload");
+        ERXCompilerProxy.defaultProxy().setClassForName(ERXWOText.class, "WOText");
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+    }
+    
+    /**
+     * The ERXApplication contructor.
+     */
+    public ERXApplication() {
+        super();
+        installPatches();
 
         ERXModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
         registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
