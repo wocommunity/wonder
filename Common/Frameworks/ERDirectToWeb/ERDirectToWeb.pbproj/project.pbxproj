@@ -1182,6 +1182,78 @@
 			settings = {
 			};
 		};
+		41C5E74B05D11B9800F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WProgressPage.java;
+			path = er/directtoweb/ERD2WProgressPage.java;
+			refType = 4;
+		};
+		41C5E74E05D11B9900F59489 = {
+			fileRef = 41C5E74B05D11B9800F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5E75705D11C6D00F59489 = {
+			children = (
+				41C5E75805D11C6D00F59489,
+				41C5E75905D11C6D00F59489,
+				41C5E75F05D11C6D00F59489,
+			);
+			isa = PBXGroup;
+			name = ERD2WProgressPageTemplate;
+			path = "";
+			refType = 2;
+		};
+		41C5E75805D11C6D00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WProgressPageTemplate.api;
+			path = Components/ERD2WProgressPageTemplate.api;
+			refType = 4;
+		};
+		41C5E75905D11C6D00F59489 = {
+			children = (
+				41C5E75A05D11C6D00F59489,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WProgressPageTemplate.wo;
+			path = "";
+			refType = 4;
+		};
+		41C5E75A05D11C6D00F59489 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WProgressPageTemplate.wo;
+			refType = 4;
+		};
+		41C5E75F05D11C6D00F59489 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WProgressPageTemplate.java;
+			path = Sources/er/directtoweb/ERD2WProgressPageTemplate.java;
+			refType = 4;
+		};
+		41C5E76005D11C6D00F59489 = {
+			fileRef = 41C5E75805D11C6D00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5E76105D11C6D00F59489 = {
+			fileRef = 41C5E75905D11C6D00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41C5E76205D11C6D00F59489 = {
+			fileRef = 41C5E75F05D11C6D00F59489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		41D6409705C92B2B00BB3C39 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -9340,6 +9412,8 @@
 				4131AAC705AEBF580066ECD8,
 				41C5E53A05D0EFFC00F59489,
 				41C5E53B05D0EFFC00F59489,
+				41C5E76005D11C6D00F59489,
+				41C5E76105D11C6D00F59489,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9582,6 +9656,8 @@
 				4131AAC805AEBF580066ECD8,
 				41D6409A05C92B2B00BB3C39,
 				41C5E53C05D0EFFC00F59489,
+				41C5E74E05D11B9900F59489,
+				41C5E76205D11C6D00F59489,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10049,6 +10125,7 @@
 				F54206A902C467E001000102,
 				F54206AD02C467E001000102,
 				F54206AF02C467E001000102,
+				41C5E74B05D11B9800F59489,
 				41B8F4BC0503E12500000102,
 				F54206B602C467E001000102,
 				F54206B802C467E001000102,
@@ -10835,6 +10912,7 @@
 				F6E7965F02C877AF01AD0D07,
 				F6E7966002C877AF01AD0D07,
 				F6E7966102C877AF01AD0D07,
+				41C5E75705D11C6D00F59489,
 				41B8F46E0503D9E900000102,
 				F6E7966202C877AF01AD0D07,
 				F6E7966302C877AF01AD0D07,
