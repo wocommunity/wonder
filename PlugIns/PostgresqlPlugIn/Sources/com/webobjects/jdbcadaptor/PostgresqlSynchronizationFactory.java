@@ -47,10 +47,10 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         EOEntity destinationEntity = rel.destinationEntity();
         return !rel.isFlattened()
             && destinationEntity.externalName() != null
-            && rel.entity().model() == destinationEntity.model()
-            && (destinationEntity.subEntities() == null
-                || destinationEntity.subEntities().count() == 0
-                || destinationEntity.subEntities().containsObject(rel.entity()));          
+            && rel.entity().model() == destinationEntity.model();
+//            && (destinationEntity.subEntities() == null
+//                || destinationEntity.subEntities().count() == 0
+//                || destinationEntity.subEntities().containsObject(rel.entity()));          
     }
     
     /**
