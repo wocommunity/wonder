@@ -70,7 +70,13 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
      */
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
-            NSDictionary conditionAssignment = (NSDictionary)this.value();
+            NSDictionary conditionAssignment;
+            try {
+               conditionAssignment = (NSDictionary)this.value();
+            } catch (ClassCastException e) {
+                log.error("expected a NSDictionary object but received "+this.value(), e);
+                throw e;
+            }
             String qualFormat =
                 (String)conditionAssignment.objectForKey("qualifierFormat");
             NSArray args = (NSArray)conditionAssignment.objectForKey("args");
