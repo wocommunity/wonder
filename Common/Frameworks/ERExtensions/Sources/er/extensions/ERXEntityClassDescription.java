@@ -905,6 +905,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     
     public void setDefaultValuesInObject(EOEnterpriseObject eo,  EOEditingContext ec) {
         defaultLog.debug("About to set values in EO");
+        if(_initialDefaultValues == null) {
+            readDefaultValues();
+        }
         for( Enumeration e = _initialDefaultValues.keyEnumerator(); e.hasMoreElements();) {
             String key = (String)e.nextElement();
             defaultLog.debug("About to set <"+key+"> in EO");
