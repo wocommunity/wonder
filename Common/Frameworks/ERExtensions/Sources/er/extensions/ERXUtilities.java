@@ -220,6 +220,31 @@ public class ERXUtilities {
         return relationship;
     }
 
+    
+    public static NSDictionary relationshipEntityWithEntityAndKeyPath(EOEntity srcentity, String keyPath) {
+        //keyPath is something like 'project.user.person.firstname'
+        //we will get the Person entity
+        if (keyPath.indexOf(".") == -1) {
+            NSDictionary d = new NSDictionary(new Object[]{srcentity, keyPath}, new Object[]{"entity", "keyPath"});
+            return d;
+        }
+
+        while (keyPath.indexOf(".") != -1) {
+            String key = ERXStringUtilities.firstPropertyKeyInKeyPath(keyPath);
+            EORelationship rel = srcentity.relationshipNamed(key);
+            if (rel == null) {
+                break;
+
+            } else {
+                srcentity = rel.destinationEntity();
+                keyPath = ERXStringUtilities.keyPathWithoutFirstProperty(keyPath);
+                
+            }
+        }
+        NSDictionary d = new NSDictionary(new Object[]{srcentity, keyPath}, new Object[]{"entity", "keyPath"});
+        return d;
+    }
+    
     public static EOEnterpriseObject relationshipObjectWithObjectAndKeyPath(EOEnterpriseObject object, String keyPath) {
         EOEnterpriseObject lastEO=object;
         EORelationship relationship = null;
