@@ -811,21 +811,10 @@
 			settings = {
 			};
 		};
-		F516196B020753AF01A801D4 = {
-			isa = PBXFolderReference;
-			path = ERXFormForTarget.wo;
-			refType = 4;
-		};
 		F516196C020753AF01A801D4 = {
 			isa = PBXFileReference;
-			path = ERXFormForTarget.api;
+			path = ERXJSFormForTarget.api;
 			refType = 4;
-		};
-		F516196D020753AF01A801D4 = {
-			fileRef = F516196B020753AF01A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F516196E020753AF01A801D4 = {
 			fileRef = F516196C020753AF01A801D4;
@@ -882,21 +871,10 @@
 			settings = {
 			};
 		};
-		F516197C0207547601A801D4 = {
-			isa = PBXFolderReference;
-			path = ERXOpenJSWindowHyperlink.wo;
-			refType = 4;
-		};
 		F516197D0207547601A801D4 = {
 			isa = PBXFileReference;
-			path = ERXOpenJSWindowHyperlink.api;
+			path = ERXJSOpenWindowHyperlink.api;
 			refType = 4;
-		};
-		F516197E0207547601A801D4 = {
-			fileRef = F516197C0207547601A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F516197F0207547601A801D4 = {
 			fileRef = F516197D0207547601A801D4;
@@ -1021,6 +999,61 @@
 		};
 		F5177FC00266EB2801000102 = {
 			fileRef = F5177FBF0266EB2801000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F539EEB102BBCE9E0189032C = {
+			isa = PBXFolderReference;
+			path = ERXJSFormForTarget.wo;
+			refType = 4;
+		};
+		F539EEB202BBCE9E0189032C = {
+			fileRef = F539EEB102BBCE9E0189032C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F539EEB302BBCFAB0189032C = {
+			isa = PBXFolderReference;
+			path = ERXJSCookiesConditional.wo;
+			refType = 4;
+		};
+		F539EEB402BBCFAB0189032C = {
+			fileRef = F539EEB302BBCFAB0189032C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F539EEB502BBD11A0189032C = {
+			isa = PBXFolderReference;
+			path = ERXJSOpenWindowHyperlink.wo;
+			refType = 4;
+		};
+		F539EEB602BBD11A0189032C = {
+			isa = PBXFileReference;
+			path = ERXJSOpenWindowSubmitButton.api;
+			refType = 4;
+		};
+		F539EEB702BBD11A0189032C = {
+			isa = PBXFolderReference;
+			path = ERXJSOpenWindowSubmitButton.wo;
+			refType = 4;
+		};
+		F539EEB802BBD11B0189032C = {
+			fileRef = F539EEB502BBD11A0189032C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F539EEB902BBD11B0189032C = {
+			fileRef = F539EEB602BBD11A0189032C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F539EEBA02BBD11B0189032C = {
+			fileRef = F539EEB702BBD11A0189032C;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1187,7 +1220,7 @@
 		};
 		F57EA5C501FF59BF019E57DA = {
 			isa = PBXFileReference;
-			path = ERXCheckCookies.java;
+			path = ERXJSCookiesConditional.java;
 			refType = 4;
 		};
 		F57EA5C701FF59BF019E57DA = {
@@ -1292,7 +1325,7 @@
 		};
 		F57EA5DE01FF59BF019E57DA = {
 			isa = PBXFileReference;
-			path = ERXFormForTarget.java;
+			path = ERXJSFormForTarget.java;
 			refType = 4;
 		};
 		F57EA5DF01FF59BF019E57DA = {
@@ -1352,12 +1385,12 @@
 		};
 		F57EA5EB01FF59BF019E57DA = {
 			isa = PBXFileReference;
-			path = ERXOpenJSWindowHyperlink.java;
+			path = ERXJSOpenWindowHyperlink.java;
 			refType = 4;
 		};
 		F57EA5EC01FF59BF019E57DA = {
 			isa = PBXFileReference;
-			path = ERXOpenJSWindowSubmitButton.java;
+			path = ERXJSOpenWindowSubmitButton.java;
 			refType = 4;
 		};
 		F57EA5ED01FF59BF019E57DA = {
@@ -2300,7 +2333,6 @@
 				F5FEEB0402063E7C01A801D4,
 				F5FEEB0802063F5B01A801D4,
 				F5FEEB0902063F5B01A801D4,
-				F5FEEB0D02063F9F01A801D4,
 				F5FEEB0E02063F9F01A801D4,
 				F5FEEB120206403D01A801D4,
 				F5FEEB130206403D01A801D4,
@@ -2316,8 +2348,6 @@
 				F5EF5A38020641FD01A801D4,
 				F5EF5A3C0206423C01A801D4,
 				F5EF5A3D0206423C01A801D4,
-				F5EF5A410206427801A801D4,
-				F5EF5A420206427801A801D4,
 				F5EF5A46020642C101A801D4,
 				F5EF5A47020642C101A801D4,
 				F5EF5A4B020642F401A801D4,
@@ -2330,13 +2360,11 @@
 				F5EF5A5B0206449501A801D4,
 				F51619680207537001A801D4,
 				F51619690207537001A801D4,
-				F516196D020753AF01A801D4,
 				F516196E020753AF01A801D4,
 				F5161972020753E801A801D4,
 				F5161973020753E801A801D4,
 				F51619780207541C01A801D4,
 				F51619790207541C01A801D4,
-				F516197E0207547601A801D4,
 				F516197F0207547601A801D4,
 				F5161983020754A501A801D4,
 				F5161984020754A501A801D4,
@@ -2363,6 +2391,11 @@
 				F7BA9418027F9A7201A8010C,
 				F567C7C502897B6901257492,
 				F567C7C902897B7C01257492,
+				F539EEB202BBCE9E0189032C,
+				F539EEB402BBCFAB0189032C,
+				F539EEB802BBD11B0189032C,
+				F539EEB902BBD11B0189032C,
+				F539EEBA02BBD11B0189032C,
 			);
 			isa = PBXResourcesBuildPhase;
 		};
@@ -3706,28 +3739,6 @@
 			settings = {
 			};
 		};
-		F5EF5A3F0206427701A801D4 = {
-			isa = PBXFolderReference;
-			path = ERXOpenJSWindowSubmitButton.wo;
-			refType = 4;
-		};
-		F5EF5A400206427701A801D4 = {
-			isa = PBXFileReference;
-			path = ERXOpenJSWindowSubmitButton.api;
-			refType = 4;
-		};
-		F5EF5A410206427801A801D4 = {
-			fileRef = F5EF5A3F0206427701A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5EF5A420206427801A801D4 = {
-			fileRef = F5EF5A400206427701A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5EF5A44020642C001A801D4 = {
 			isa = PBXFolderReference;
 			path = ERXWOTestResult.wo;
@@ -4058,21 +4069,10 @@
 			settings = {
 			};
 		};
-		F5FEEB0B02063F9E01A801D4 = {
-			isa = PBXFolderReference;
-			path = ERXCheckCookies.wo;
-			refType = 4;
-		};
 		F5FEEB0C02063F9E01A801D4 = {
 			isa = PBXFileReference;
-			path = ERXCheckCookies.api;
+			path = ERXJSCookiesConditional.api;
 			refType = 4;
-		};
-		F5FEEB0D02063F9F01A801D4 = {
-			fileRef = F5FEEB0B02063F9E01A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F5FEEB0E02063F9F01A801D4 = {
 			fileRef = F5FEEB0C02063F9E01A801D4;
@@ -4501,29 +4501,29 @@
 		};
 		F645C87F0247899001AD0D07 = {
 			children = (
-				F645C8800247899001AD0D07,
 				F645C8810247899001AD0D07,
-				F645C8820247899001AD0D07,
 				F7BA9415027F9A7201A8010C,
 				F645C8840247899001AD0D07,
+				F645C8800247899001AD0D07,
+				F645C8820247899001AD0D07,
+				FB189E73E037D81139FB5274,
+				F645C8860247899001AD0D07,
 				FB13D999F9BE5AD29792D4FB,
 				F645C8850247899001AD0D07,
 				F645C89E0247899001AD0D07,
-				FB189E73E037D81139FB5274,
-				F645C8860247899001AD0D07,
 			);
 			isa = PBXGroup;
-			name = "Javascript WOComponents";
+			name = "Javascript & DHTML WOComponents";
 			refType = 4;
 		};
 		F645C8800247899001AD0D07 = {
 			children = (
 				F5FEEB0C02063F9E01A801D4,
 				F57EA5C501FF59BF019E57DA,
-				F5FEEB0B02063F9E01A801D4,
+				F539EEB302BBCFAB0189032C,
 			);
 			isa = PBXGroup;
-			name = ERXCheckCookies;
+			name = ERXJSCookiesConditional;
 			refType = 4;
 		};
 		F645C8810247899001AD0D07 = {
@@ -4540,10 +4540,10 @@
 			children = (
 				F516196C020753AF01A801D4,
 				F57EA5DE01FF59BF019E57DA,
-				F516196B020753AF01A801D4,
+				F539EEB102BBCE9E0189032C,
 			);
 			isa = PBXGroup;
-			name = ERXFormForTarget;
+			name = ERXJSFormForTarget;
 			refType = 4;
 		};
 		F645C8840247899001AD0D07 = {
@@ -4568,12 +4568,12 @@
 		};
 		F645C8860247899001AD0D07 = {
 			children = (
-				F5EF5A400206427701A801D4,
+				F539EEB602BBD11A0189032C,
 				F57EA5EC01FF59BF019E57DA,
-				F5EF5A3F0206427701A801D4,
+				F539EEB702BBD11A0189032C,
 			);
 			isa = PBXGroup;
-			name = ERXOpenJSWindowSubmitButton;
+			name = ERXJSOpenWindowSubmitButton;
 			refType = 4;
 		};
 		F645C8870247899001AD0D07 = {
@@ -5438,10 +5438,10 @@
 			children = (
 				F516197D0207547601A801D4,
 				F57EA5EB01FF59BF019E57DA,
-				F516197C0207547601A801D4,
+				F539EEB502BBD11A0189032C,
 			);
 			isa = PBXGroup;
-			name = ERXOpenJSWindowHyperlink;
+			name = ERXJSOpenWindowHyperlink;
 			refType = 4;
 		};
 		FB1D3BECDADD387139FB5274 = {

@@ -4,14 +4,11 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERKeyValueQualifierInSubquery.java created by bposokhow on Tue 25-Jul-2000 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 
 public class ERXQualifierInSubquery extends EOSQLQualifier {
 
@@ -47,15 +44,14 @@ public class ERXQualifierInSubquery extends EOSQLQualifier {
         /* in theory we should be able to accept any qualifier in here
          but for KeyValueQualifiers, they HAVE to end in an attribute it seems
          coveredCounties.state=<State mass> throws */
-        this (q,entity);
+        this (q, entity);
         _attribute=(EOAttribute)_entity.primaryKeyAttributes().objectAtIndex(0);
     }
 
     public ERXQualifierInSubquery(EOEntity entity,
                                  EOAttribute att,
                                  EOQualifier q) {
-
-        this(q,entity);
+        this(q, entity);
         _attribute=att;
     }
 
@@ -69,9 +65,9 @@ public class ERXQualifierInSubquery extends EOSQLQualifier {
                                                          false,
                                                          true,
                                                          null);
+        // FIXME: This will create a new EOAdaptor everytime it is called.
         EOSQLExpressionFactory factory=EOAdaptor.adaptorWithModel(_entity.model()).expressionFactory();
-        EOSQLExpression expression=factory.
-            selectStatementForAttributes( _entity.primaryKeyAttributes(),
+        EOSQLExpression expression=factory.selectStatementForAttributes( _entity.primaryKeyAttributes(),
                                            false,
                                            fs,
                                            _entity);
@@ -82,8 +78,7 @@ public class ERXQualifierInSubquery extends EOSQLQualifier {
         return sb.toString();
     }
 
-    public String description() { return " <subquery> '"+_qualifier.toString()+"'"; }
-    public String toString() { return description(); }
+    public String toString() { return " <subquery> '"+_qualifier.toString()+"'"; }
 
     /*
      EOF seems to be wanting to clone qualifiers when the are inside an and-or qualifier

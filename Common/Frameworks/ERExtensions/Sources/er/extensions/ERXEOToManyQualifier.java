@@ -201,6 +201,7 @@ public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
      * the are inside an and-or qualifier without this
      * method, ERXToManyQualifier is cloned into an
      * EOSQLQualifier and the generated SQL is incorrect..
+     * @return clone of the qualifier 
      */
     public Object clone() {
         return new ERXEOToManyQualifier(_entity, _toManyKey, _elements, _minCount);

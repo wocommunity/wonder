@@ -28,8 +28,7 @@ ERXNavigation: Should most likely be removed, as well as all the references in E
 JS Components
 ERXJSConfirmPanel: Should use a WOComponentContent and expose all of the bindings usually found on WOHyperlink.
 ERXJSPopupSelector: Get rid of hardcoded form index in js.
-ERXCheckCookies: Should be renamed to ERXJSCookiesConditional
-ERXFormForTarget: Renamed to ERXJSFormForTarget. Should remove the targetDictionary and break all of the keys out into bindings.
+ERXJSFormForTarget: Should remove the targetDictionary and break all of the keys out into bindings.
     Should also be stateless. 
 
 log4j
