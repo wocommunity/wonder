@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URI;
+import sun.text.Normalizer;
 
 /**
  * @author david teran
