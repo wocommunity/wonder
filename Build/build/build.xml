@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================== -->
+<!--                  WONDER Ant build file                   -->
+<!-- "basedir" is wonder project directory, not "build" where -->
+<!-- this files is located.                                   --> 
+<!-- ======================================================== -->
+<project name="wonder" default="doc" basedir="..">
+	
+    <!-- ==================================================== -->
+    <!--              Import properties.                      -->
+    <!-- Properties that are imported first take precedence   -->
+    <!-- over the properties imported later.                  -->
+    <!-- NOTE: ONLY "default.properties" EXISTS IN CVS,       -->
+    <!-- VARIOUS "build.properties" FILEA ARE LOCAL TO        -->
+    <!-- THE DEVELOPER MACHINE AND ALLOW BUILD CUSTOMIZATION. -->                       
+    <!-- ==================================================== -->
+    <property file="${user.home}/build.properties" />
+    <property file="build/build.properties" />
+    <property file="build/default.properties" />
+    
+    
+    <!-- ==================================================== -->
+    <!--              Derived Properties.                     -->
+    <!-- These properties are derived from other properties.  -->
+    <!-- Normally, these should not be redefined.             -->
+    <!-- ==================================================== -->
+    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+
+
+    <!-- ==================================================== -->
+    <!--              CLASSPATH settings                      -->
+    <!-- ==================================================== -->
+    <path id="classpath">
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    
+    
+
+    <!-- ==================================================== -->
+    <!-- Sets up build and distribution directories.          -->
+    <!-- ==================================================== -->
+    <target name="prepare">
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${dist}/doc"/>
+        <mkdir dir="${dist}/doc/api"/>
+    </target>
+
+
+    <!-- ==================================================== -->
+    <!-- Clean Wonder                                         -->
+    <!-- ==================================================== -->
+    <target name="clean">
+        <delete dir="${dist.base}"/>
+    </target>
+
+
+    <!-- ==================================================== -->
+    <!-- Build Wonder documenatation.                         -->
+    <!-- ==================================================== -->
+    <target name="doc" depends="prepare">
+        <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+            <classpath refid="classpath"/>
+        </taskdef>
+
+        <!-- Build site -->
+        <anakia basedir="xdocs" destdir="${dist}/doc"
+             extension=".html" style="wonder.vsl"
+             projectFile="stylesheets/project.xml"
+             excludes="**/stylesheets/**"
+             includes="**/*.xml"
+             lastModifiedCheck="true"
+             templatePath="xdocs/stylesheets">
+        </anakia>
+
+        <!-- copy resources -->
+        <copy todir="${dist}/doc" filtering="no">
+            <fileset dir="xdocs">
+                <include name="**/*.gif"/>
+                <include name="**/*.jpeg"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.png"/>
+                <include name="**/*.css"/>
+            </fileset>
+        </copy>
+    </target>
+</project>
