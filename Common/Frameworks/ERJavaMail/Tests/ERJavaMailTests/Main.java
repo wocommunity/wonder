@@ -15,27 +15,37 @@ import java.util.*;
 
 public class Main extends WOComponent {
 
-    public static String EMAIL = "test@domain.com";
+    // Accented email
+    public static String EMAIL = "Frédéric Dupond <test@domain.com>";
+    public String content = "Ceci est le contenu du mail, il n'y a rien de particulier, juste un texte avec des accents:\n\né è ä à ù ï î ô ö ç É È Ä À Ï Î Ô Ö";
+
     public Main(WOContext context) {
         super(context);
     }
 
+    public void setAdminEmail (String email) {
+        ERJavaMail.sharedInstance ().setAdminEmail (email);
+    }
+
+    public String adminEmail () {
+        return ERJavaMail.sharedInstance ().adminEmail ();
+    }
 
     public void sendTextOnlyMail () {
         // Create Attachment
-        ERMailTextAttachment textAttachment = new ERMailTextAttachment ("stockReport.txt", "Data goes here! ...");
+        ERMailTextAttachment textAttachment = new ERMailTextAttachment ("Résultats.txt", "Data goes here! ...");
 
         // Create an instance of an OFMailDelivery subclass
         ERMailDeliveryPlainText mail = new ERMailDeliveryPlainText ();
 
         try {
             mail.newMail();
-            mail.setTextContent ("Please see attachment!");
+            mail.setTextContent (content);
             mail.addAttachment (textAttachment);
             mail.setFromAddress (EMAIL);
             mail.setReplyToAddress (EMAIL);
             mail.setToAddress (EMAIL);
-            mail.setSubject ("Testing Stock Report via Email");
+            mail.setSubject ("Les résultats sont arrivés !");
 			mail.sendMail ();
 		} catch (Exception e) {
 			e.printStackTrace ();
