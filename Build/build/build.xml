@@ -78,6 +78,8 @@
         <ant antfile="Build/build/generic.xml" target="Validity.framework.all" />
         <ant antfile="Build/build/generic.xml" target="WOPayPal.all" />
         <ant antfile="Build/build/generic.xml" target="WRReporting.all" />
+        <ant antfile="Build/build/generic.xml" target="ExcelGenerator.all" />
+        <ant antfile="Build/build/generic.xml" target="PostgresqlPlugIn.all" />
     </target>
 
     <!-- ==================================================== -->
@@ -101,6 +103,7 @@
         <ant antfile="Build/build/generic.xml" target="DRGroupingTest.all" />
         <ant antfile="Build/build/generic.xml" target="DynaReporter.all" />
         <ant antfile="Build/build/generic.xml" target="ERMailer.all" />
+        <ant antfile="Build/build/generic.xml" target="EGSampleApp.all" />
         <ant antfile="Build/build/generic.xml" target="NetStruxrCaseStudy.all" />
         <ant antfile="Build/build/generic.xml" target="SVGObjects.example.all" />
         <ant antfile="Build/build/generic.xml" target="Validity.application.all" />
