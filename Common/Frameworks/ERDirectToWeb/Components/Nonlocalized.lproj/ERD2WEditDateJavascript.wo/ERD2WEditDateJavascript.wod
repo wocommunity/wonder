@@ -1,0 +1,18 @@
+JavaScript1: WOJavaScript {
+	scriptSource = datePickerJavaScriptUrl;
+	WODebug = false;
+}
+
+String1: WOString {
+	value = name;
+}
+
+String2: WOString {
+	value = datePickerJavaScriptUrl;
+}
+
+TextField1: WOTextField {
+	name = name;
+	value = dateString;
+	WODebug = false;
+}

@@ -1,0 +1,58 @@
+Conditional1: WOConditional {
+	condition = isTargetXML;
+	negate = YES;
+}
+
+Conditional2: WOConditional {
+	condition = isTargetXML;
+}
+
+Content2: WOComponentContent {}
+
+GenericContainer1: WOGenericContainer {
+	elementName = "CENTER";
+	omitTags = erD2WListOmitCenterTag;
+}
+
+List1: ERXD2WList { 	
+	pageConfiguration = ^listPageConfiguration;
+	entityName = entityName;
+	list = list;
+}
+
+List2: ERXD2WList { 	
+	pageConfiguration = ^listPageConfiguration;
+	entityName = entityName;
+	list = list;
+}
+
+NoEmptyListMessage: NonNullConditional {
+	condition = ^emptyListMessage;
+	negate = YES;
+}
+
+NonNullConditional1: NonNullConditional {
+	condition = ^emptyListMessage;
+}
+
+NonNullConditional2: NonNullConditional {
+	condition = ^emptyListComponentName;
+}
+
+NonZeroConditional1: NonZeroConditional {
+	condition = list.count;
+}
+
+NonZeroConditional2: NonZeroConditional {
+	condition = list.count;
+	negate = YES;
+}
+
+String1: WOString {
+	value = ^emptyListMessage;
+}
+
+SwitchComponent2: WOSwitchComponent {
+	WOComponentName = ^emptyListComponentName;
+	d2wContext = ^d2wContext;
+}

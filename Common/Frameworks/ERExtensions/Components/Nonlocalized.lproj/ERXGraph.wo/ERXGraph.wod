@@ -1,0 +1,2 @@
+Image1: WOImage { data = newImage; height = 300; mimeType = "image/gif"; width = 400; }
+

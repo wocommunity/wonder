@@ -1,0 +1,12 @@
+
+
+Content: WOComponentContent {
+}
+
+LinkContainer: WOGenericContainer {
+	elementName = "A";
+	href = href;
+        target = "_top";
+	oneTime = oneTime;
+	class = ^linkClass;
+}

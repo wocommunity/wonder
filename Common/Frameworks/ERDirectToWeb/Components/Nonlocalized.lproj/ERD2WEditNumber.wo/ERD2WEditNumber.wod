@@ -1,0 +1,6 @@
+EditNumber: WOTextField {
+	size = length;
+	useDecimalNumber = isDecimalNumber;
+	value = stringValue;
+}
+

@@ -1,0 +1,11 @@
+JSPopup: ERXJSPopUpRelationPicker {
+    parentEntitiesList=parentList;
+    parentToChildrenRelationshipName=^restrictedRelationshipKey;
+    parentDisplayValueName=^restrictingDestinationDisplayKey;
+    childDisplayValueName=^destinationDisplayKey;
+    selectedParent=selectedParent;
+    selectedChild=selectedChild;
+    childrenSortKey=^sortKey;
+    defaultChildKey=^defaultRestrictedRelationshipKey;
+}
+

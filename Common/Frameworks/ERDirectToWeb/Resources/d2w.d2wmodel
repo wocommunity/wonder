@@ -1,0 +1,5020 @@
+{
+    rules = (
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = showEditButton; }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = query; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERQueryPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartRelationship.isToMany; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = java.lang.Number; value = 1; }; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WEditToOneRelationship; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERDefaultPropertyNameAssignment; 
+                keyPath = displayNameForProperty; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = formEncoding; }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = sortKey; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = possibleChoices; }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = select; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = select; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = batchSize; 
+                value = 10; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = attribute; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = relationship; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = propertyIsSortable; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = propertyIsSortable; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                keyPath = sortKeyForList; 
+                value = propertyKey; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = propertyType; 
+                selectorName = "isEqualTo"; 
+                value = r; 
+            }; 
+            rhs = {
+                class = er/directtoweb/RelationshipSortAssignment; 
+                keyPath = sortKeyForList; 
+                value = "<RelationshipSortAssignment>"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = isEntityDeletable; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = isEntityEditable; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = isEntityInspectable; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = noSelectionString; 
+                value = "- none -"; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isEqualTo"; 
+                        value = url; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WEditURL; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = propertyKey; 
+                selectorName = "isEqualTo"; 
+                value = url; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WDisplayURL; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartAttribute.userInfo.unit; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WEditNumberWithUnit; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        selectorName = "isGreaterThan"; 
+                        value = {class = java.lang.Number; value = 0; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartRelationship.isToMany; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = java.lang.Number; value = 1; }; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = toOneUIStyle; 
+                value = popup; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = java.lang.String; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.width; 
+                        selectorName = "isGreaterThanOrEqualTo"; 
+                        value = {class = java.lang.Number; value = 110; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = EREditLargeString; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = edit; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = query; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartAttribute.userInfo.unit; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WDisplayNumberWithUnit; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = defaultSortOrdering; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "###,##0.##;0;-"; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = propertyKey; 
+                                selectorName = "isEqualTo"; 
+                                value = password; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.userInfo.erPrototype; 
+                                selectorName = "isEqualTo"; 
+                                value = password; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WCustomComponentWithArgs; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = propertyKey; 
+                                selectorName = "isEqualTo"; 
+                                value = password; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.userInfo.erPrototype; 
+                                selectorName = "isEqualTo"; 
+                                value = password; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = customComponentName; 
+                value = EditPasswordConfirm; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERDefaultEntityNameAssignment; 
+                keyPath = displayNameForEntity; 
+                value = defaultDisplayNameForEntity; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = session.javaScriptEnabled; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = customComponentName; 
+                value = D2WEditDatePopup; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = Boolean; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WEditBoolean; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = query; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = Boolean; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WQueryBoolean; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WStatelessCustomComponentWithArgs; 
+            }; 
+        }, 
+        {
+            author = 70; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = printerFriendly; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERPrinterFriendlyInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = printerFriendly; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = disabled; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = printerFriendly; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = inspect; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = allowCollapsing; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 70; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = printerFriendly; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERPrinterFriendlyListTemplate; 
+            }; 
+        }, 
+        {
+            author = 70; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = printerFriendly; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = existingPageName; 
+                                selectorName = "isLike"; 
+                                value = "ERTabInspectPageTemplate*"; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = existingPageName; 
+                                selectorName = "isLike"; 
+                                value = "ERInspectPageTemplateImpact*"; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = existingPageName; 
+                                selectorName = "isLike"; 
+                                value = "ERWizardCreationPageTemplate*"; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERPrinterFriendlyTemplateInspectPage; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = com.webobjects.foundation.NSTimestamp; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = com.webobjects.foundation.NSTimestamp; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "%b %d,%Y"; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/SmartAttributeAssignment; 
+                keyPath = smartAttribute; 
+                value = "<computedAttribute>"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = usf; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "###,###.##;0;-"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = "%"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = java.math.BigDecimal; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "##.###;0;-"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = permissionToEdit; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = pick; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERPickListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = yearRangeBottom; 
+                value = 2001; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = yearRangeTop; 
+                value = 2030; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = saveButtonLabel; 
+                value = Save; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/SmartRelationshipAssignment; 
+                keyPath = smartRelationship; 
+                value = "<computedRelationship>"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = "%"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 5; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = tab; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERTabInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = wizard; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERWizardCreationPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = subTask; 
+                                selectorName = "isEqualTo"; 
+                                value = compactInspect; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = subTask; 
+                                selectorName = "isEqualTo"; 
+                                value = compact; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = edit; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERCompactInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = subTask; 
+                                selectorName = "isEqualTo"; 
+                                value = compactList; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = subTask; 
+                                selectorName = "isEqualTo"; 
+                                value = compact; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERCompactListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                keyPath = isMandatory; 
+                value = smartRelationship.isMandatory; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.allowsNull; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WDisplayDate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = hasPrinterFriendlyVersion; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 250; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = propertyKey; 
+                selectorName = "isLike"; 
+                value = "*primaryKey"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WDisplayString; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = rsf; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "###,###.##;0;-"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = "USD in Mills"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = "USD in Millions."; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "###,###.##;0;-"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERConfigurationAssignment; 
+                keyPath = createConfigurationNameForEntity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERConfigurationAssignment; 
+                keyPath = editConfigurationNameForEntity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldSaveChanges; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERConfigurationAssignment; 
+                keyPath = inspectConfigurationNameForEntity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = edit; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = permissionToEdit; 
+                value = 1; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Create*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Edit*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = edit; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Create*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "EditWizard*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "InspectWizard*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = wizard; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERConfigurationAssignment; 
+                keyPath = confirmConfigurationNameForEntity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Confirm*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = confirm; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "List*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Pick*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = list; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "List*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = showBanner; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = list; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = readOnly; 
+                value = 1; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = list; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = isEntityInspectable; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = branchChoices; 
+                value = (); 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERConfigurationAssignment; 
+                keyPath = listConfigurationNameForEntity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = spaces; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "######;0;-"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = spaces; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = inspect; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = permissionToEdit; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Inspect*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = inspect; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = confirm; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERConfirmPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = confirm; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageWrapperName; 
+                value = D2WEmptyWrapper; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = confirm; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldProvideConfirmMessage; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = confirm; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = confirmMessageManditory; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = edit; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "*email"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = query; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = customComponentName; 
+                value = ERDisplayMailTo; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        selectorName = "isGreaterThan"; 
+                        value = {class = java.lang.Number; value = 0; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.isToMany; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WEditToManyRelationship; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.width; 
+                selectorName = "isGreaterThan"; 
+                value = {class = java.lang.Number; value = 0; }; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                keyPath = maxLength; 
+                value = smartAttribute.width; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = java.lang.String; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WEditString2; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = "%"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = maxLength; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = spaces; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = maxLength; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = disabled; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Select*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = select; 
+            }; 
+        }, 
+        {
+            author = 15; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyIsKeyPath; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WDisplayString; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        selectorName = "isGreaterThan"; 
+                        value = {class = java.lang.Number; value = 0; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.isToMany; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERDisplayToManyTable; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        selectorName = "isGreaterThan"; 
+                        value = {class = java.lang.Number; value = 0; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartRelationship.isToMany; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = java.lang.Number; value = 1; }; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WDisplayToOne; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = maxLength; 
+                value = 255; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useMatrixLayout; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = matrixLayoutVertical; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = flushPropertyValue; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = renderBorder; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isLike"; 
+                        value = usf; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isLike"; 
+                        value = rsf; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isLike"; 
+                        value = feet; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = minValue; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = "%"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = maxValue; 
+                value = 100; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = "%"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = minValue; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = USD/SF/Yr.; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = USD; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = "USD / Month"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = USD/SF; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = USD/RSF/Year; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = "USD / RSF"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = minValue; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartAttribute; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = justification; 
+                value = right; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = Boolean; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = justification; 
+                value = center; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = confirmRows; 
+                value = 4; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = group; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERGroupingListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOAndQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = subTask; 
+                                selectorName = "isEqualTo"; 
+                                value = groupPick; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOAndQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = subTask; 
+                                selectorName = "isEqualTo"; 
+                                value = group; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERGroupingPickListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = maxColumns; 
+                value = 2; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERTabDictionaryComputer; 
+                keyPath = tabs; 
+                value = "<ERTabDictionaryComputer>"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERTabDictionaryComputer; 
+                keyPath = tabContents; 
+                value = "<ERTabDictionaryComputer>"; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = resolvedUnit; 
+                        selectorName = "isCaseInsensitiveLike"; 
+                        value = "USD*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isCaseInsensitiveLike"; 
+                        value = "USD*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "#,##0.00"; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/UnitResolverAssignment; 
+                keyPath = resolvedUnit; 
+                value = "<UnitResolverAssignment>"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = inspect; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Error*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = error; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "EditTab*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "InspectTab*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = tab; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "EditCompact*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "InspectCompact*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "ListCompact*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = compact; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Pick*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = pick; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "PickGroup*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = groupPick; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "SelectGroup*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "ListGroup*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = group; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = error; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERRecoverableErrorPage; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Search*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Query*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Filter*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = query; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "ListCompare*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = compare; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = compare; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERListComparePageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERImageNameAssignment; 
+                keyPath = sectionImageName; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = "%"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = java.lang.Number; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "##.###;0;-"; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = targetOutput; 
+                            selectorName = "isEqualTo"; 
+                            value = xml; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = targetOutput; 
+                            selectorName = "isEqualTo"; 
+                            value = rtf; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = valueWhenEmpty; 
+                value = "&nbsp;"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = java.lang.String; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = targetOutput; 
+                            selectorName = "isEqualTo"; 
+                            value = xml; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = targetOutput; 
+                            selectorName = "isEqualTo"; 
+                            value = rtf; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WDisplayString; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                keyPath = styleSheetFrameworkName; 
+                value = lookFrameworkName; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = pickType; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = choiceDisplayKey; 
+                value = toString; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "SelectPickType*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = pickType; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = select; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = pickType; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERPickTypePageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "ListCalendar*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = calendar; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = calendar; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERCalendarPage; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = pickType; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = uiStyle; 
+                value = radio; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = sectionComponentName; 
+                value = ERSectionText; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldShowSubmitButton; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = customComponentName; 
+                value = ERD2WDefaultCustomComponent; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = defaultBatchSize; 
+                value = 10; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = group; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = groupingComponentName; 
+                value = DefaultSectionComponent; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useFocus; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = massModify; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldSaveChanges; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = massModify; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = isMandatory; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldCollectValidationExceptions; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = massModify; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldCollectValidationExceptions; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = massModify; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldValidateBeforeSave; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = BooleanYesNo; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WEditYesNo; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = query; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = BooleanYesNo; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WQueryBoolean; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = BooleanYesNo; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WDisplayYesNo; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = BooleanYesNo; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = justification; 
+                value = center; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = sqft; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 9; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = ft; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = pounds/sf; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = Volts; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = Amps; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.userInfo.unit; 
+                selectorName = "isEqualTo"; 
+                value = cf/h; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = query; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        selectorName = "isGreaterThan"; 
+                        value = {class = java.lang.Number; value = 0; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = smartRelationship.isToMany; 
+                            selectorName = "isEqualTo"; 
+                            value = {class = java.lang.Number; value = 1; }; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WQueryToOneRelationship; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "*rawPrimaryKey"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "*RawPrimaryKey"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = propertyIsSortable; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 5000; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = forcedSubTask; 
+                selectorName = "isNotEqualTo"; 
+                value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.KeyValueAssignment; 
+                keyPath = subTask; 
+                value = forcedSubTask; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.valueClassName; 
+                selectorName = "isEqualTo"; 
+                value = java.math.BigDecimal; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = maxLength; 
+                value = 30; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = showPublicNavigation; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = session.javaScriptEnabled; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = customComponentName; 
+                value = D2WEditDateJavascript; 
+            }; 
+        }, 
+        {
+            author = 500; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isLike"; 
+                value = "group*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = propertyIsSortable; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = query; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = fetchSpecification; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERQueryPageWithFetchSpecification; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = edit; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = hasForm; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = session.javaScriptEnabled; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WCustomComponentWithArgs; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = csv; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERCSVListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = hasCSVVersion; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = csv; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = existingSubTask; 
+                        selectorName = "isEqualTo"; 
+                        value = group; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERCSVGroupingListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isLike"; 
+                        value = "printerFriendly*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isLike"; 
+                        value = "csv*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = justification; 
+                value = left; 
+            }; 
+        }, 
+        {
+            author = 70; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = printerFriendly; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = existingSubTask; 
+                        selectorName = "isEqualTo"; 
+                        value = group; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERGroupingPrinterFriendlyListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.allowsNull; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = com.webobjects.foundation.NSTimestamp; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WDisplayDateOrNull; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = propertyNameComponentName; 
+                value = ERD2WPropertyName; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = edit; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = months; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = customComponentName; 
+                value = DisplayYearsMonths; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = edit; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.unit; 
+                        selectorName = "isEqualTo"; 
+                        value = months; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WStatelessCustomComponentWithArgs; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = inspect; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldShowCancelButton; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = list; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = isEmbeddedInForm; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = printerFriendly; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageWrapperName; 
+                value = ERPrinterFriendlyWrapper; 
+            }; 
+        }, 
+        {
+            author = 25; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = Boolean; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = edit; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = query; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WDisplayBoolean; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = backgroundColorForTable; 
+                value = "#ebebeb"; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = edit; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "*email"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = query; 
+                        }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WStatelessCustomComponentWithArgs; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = csv; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = groupingComponentName; 
+                value = DefaultSectionComponentCSV; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = printerFriendly; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = groupingComponentName; 
+                value = DefaultSectionComponentPrinterFriendly; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = submitButtonName; 
+                value = Submit; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = previousButtonName; 
+                value = Previous; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = nextButtonName; 
+                value = Next; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = useSubmitImages; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldShowNextButton; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldShowPreviousButton; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Message*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = task; 
+                value = message; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = er/directtoweb/ERDefaultCancelCreationMessageAssignment; 
+                keyPath = cancelMessage; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = formatter; 
+                value = "###,###.##;0;-"; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = emptyListComponentName; 
+                value = ERD2WEmptyListMessage; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = ERD2WEditNumber; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentAvailable; 
+                value = ERD2WEditNumber; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERListXMLPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 60; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = edit; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = EREditableListTemplate; 
+            }; 
+        }, 
+        {
+            author = 50; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "EditList*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = subTask; 
+                value = list; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = targetOutput; 
+                value = html; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "*XML*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = targetOutput; 
+                value = xml; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = task; 
+                        selectorName = "isEqualTo"; 
+                        value = list; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = subTask; 
+                        selectorName = "isEqualTo"; 
+                        value = group; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageName; 
+                value = ERGroupingListXMLPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 600; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = frame; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageWrapperName; 
+                value = XMLPageWrapper; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = pickType; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = selectionManditory; 
+                value = 1; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldShowActionButtons; 
+                value = 1; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = subTask; 
+                selectorName = "isEqualTo"; 
+                value = compact; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldRenderBorder; 
+                value = 1; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = propertyKey; 
+                selectorName = "isEqualTo"; 
+                value = dummy; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = displayNameForProperty; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = task; 
+                selectorName = "isEqualTo"; 
+                value = edit; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldValidateBeforeSave; 
+                value = 1; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = batchNavigationBarComponentName; 
+                value = ERBatchNavigationBar; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = isEmbeddedInForm; 
+                selectorName = "isEqualTo"; 
+                value = {class = java.lang.Number; value = 1; }; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = batchNavigationBarComponentName; 
+                value = ERBatchNavigationBarInForm; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = singleSelection; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = showHeader; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 250; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = Boolean; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = D2WCustomDisplayBoolean; 
+            }; 
+        }, 
+        {
+            author = 220; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.lang.Number; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartAttribute.valueClassName; 
+                                selectorName = "isEqualTo"; 
+                                value = java.math.BigDecimal; 
+                            }
+                        ); 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = XMLDisplayNumber; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = list; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = select; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = task; 
+                                selectorName = "isEqualTo"; 
+                                value = inspect; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyIsKeyPath; 
+                        selectorName = "isEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = XMLDisplayString; 
+            }; 
+        }, 
+        {
+            author = 200; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EONotQualifier; 
+                        qualifier = {
+                            class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                            key = task; 
+                            selectorName = "isEqualTo"; 
+                            value = query; 
+                        }; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = XMLDisplayString; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = shouldShowUnits; 
+                value = true; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = hasThirdLevel; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 250; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOOrQualifier; 
+                        qualifiers = (
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = relationship.isToMany; 
+                                selectorName = "isEqualTo"; 
+                                value = {class = java.lang.Number; value = 1; }; 
+                            }, 
+                            {
+                                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                                key = smartRelationship.isToMany; 
+                                selectorName = "isEqualTo"; 
+                                value = {class = java.lang.Number; value = 1; }; 
+                            }
+                        ); 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOuput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = componentName; 
+                value = XMLDisplayToMany; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = targetOutput; 
+                selectorName = "isEqualTo"; 
+                value = xml; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = offset; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 20; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = targetOutput; 
+                selectorName = "isEqualTo"; 
+                value = xml; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = title; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = displayValueForNull; 
+                value = N/A; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = com.webobjects.foundation.NSTimestamp; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.valueClassName; 
+                        selectorName = "isEqualTo"; 
+                        value = com.webobjects.foundation.NSTimestamp; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = displayValueForNull; 
+                value = None; 
+            }; 
+        }, 
+        {
+            author = 600; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = targetOutput; 
+                selectorName = "isEqualTo"; 
+                value = xml; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = batchSize; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 600; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = targetOutput; 
+                selectorName = "isEqualTo"; 
+                value = xml; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = defaultBatchSize; 
+                value = 0; 
+            }; 
+        }, 
+        {
+            author = 250; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = targetOutput; 
+                        selectorName = "isEqualTo"; 
+                        value = xml; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = smartAttribute.userInfo.erPrototype; 
+                        selectorName = "isEqualTo"; 
+                        value = Boolean; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = choicesNames; 
+                value = (Y, N); 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.valueClassName; 
+                selectorName = "isEqualTo"; 
+                value = java.lang.String; 
+            }; 
+            rhs = {
+                class = er/directtoweb/ERDefaultsAssignment; 
+                keyPath = length; 
+                value = smartDefaultAttributeWidth; 
+            }; 
+        }, 
+        {
+            author = 5; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = smartAttribute.valueClassName; 
+                selectorName = "isEqualTo"; 
+                value = java.lang.String; 
+            }; 
+            rhs = {
+                class = er/directtoweb/ERDefaultsAssignment; 
+                keyPath = rows; 
+                value = smartDefaultRows; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.BooleanAssignment; 
+                keyPath = allowsFiltering; 
+                value = false; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageConfigurationForFiltering; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Search*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "Query*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = taskVerb; 
+                value = Search; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = pageConfiguration; 
+                selectorName = "isLike"; 
+                value = "Filter*"; 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = taskVerb; 
+                value = Filter; 
+            }; 
+        }, 
+        {
+            author = 700; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOAndQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = pageConfiguration; 
+                        selectorName = "isLike"; 
+                        value = "*RTFFragment*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = frame; 
+                        selectorName = "isNotEqualTo"; 
+                        value = {class = java.lang.Number; value = 1; }; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = pageWrapperName; 
+                value = ERRTFPageWrapper; 
+            }; 
+        }
+    ); 
+}

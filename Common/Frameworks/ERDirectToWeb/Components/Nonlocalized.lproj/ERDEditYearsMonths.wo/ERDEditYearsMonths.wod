@@ -1,0 +1,12 @@
+PopUpButton1: WOPopUpButton {
+	item = numberOfYears;
+	list = yearList;
+	selection = numberOfYears;
+}
+
+PopUpButton2: WOPopUpButton {
+	item = numberOfMonths;
+	list = monthList;
+	selection = numberOfMonths;
+}
+

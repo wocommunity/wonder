@@ -1,0 +1,18 @@
+Browser: WOBrowser {
+	displayString = displayStringForItem;
+	item = item;
+	list = list;
+}
+
+Conditional1: WOConditional {
+	condition = permissionToEdit;
+}
+
+HasElements: ERXNonZeroConditional {
+	condition = list.count;
+}
+
+SubmitButton1: WOSubmitButton {
+	action = editList;
+	value = editButtonName;
+}
