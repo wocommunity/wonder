@@ -11,6 +11,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
+import java.math.*;
 import java.io.File;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
