@@ -5,6 +5,8 @@ NumberField: WOTextField {
 
 OperatorPopUp: WOPopUpButton {
 	list = allQualifierOperators;
-	selection = anOperator;
+	selection = selectedElement;
+	item = currentElement;
+	displayString = currentElement.value;
 }
 

@@ -4,6 +4,6 @@ PopUpButton1: WOPopUpButton {
 	list = availableElements;
 	value = currentElement.key;
 	selection = selectedElement;
-	noSelectionString = "None";
+	noSelectionString = session.localizer.ERDEditStringWithChoices.noSelectionString;
 }
 
