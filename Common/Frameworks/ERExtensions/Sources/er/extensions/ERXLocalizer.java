@@ -86,17 +86,17 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public static void initialize() {
-        if(!isInitialized) {
+        if (!isInitialized) {
             observer = new Observer();
             monitoredFiles = new NSMutableArray();
             isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
             if (isLocalizationEnabled) {
-                // To detect ERXLocalizer and its subclasses are recompiled at run-time. 
-                NSNotificationCenter.defaultCenter().addObserver(
-                        observer, 
-                        new NSSelector("compilerProxyDidCompileClasses", ERXConstant.NotificationClassArray), 
-                        ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, 
-                        null);
+                // To detect ERXLocalizer and its subclasses are recompiled at run-time.
+                NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                                 new NSSelector("compilerProxyDidCompileClasses",
+                                                                                ERXConstant.NotificationClassArray),
+                                                                 ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
+                                                                 null);
             }
             isInitialized = true;
         }
@@ -344,31 +344,37 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     protected String language;
     protected Locale locale;
     
-   
+
     public ERXLocalizer(String aLanguage) {
         language = aLanguage;
         cache = new NSMutableDictionary();
         createdKeys = new NSMutableDictionary();
-        String shortLanguage = null;
-        NSDictionary dict = ERXDictionaryUtilities.dictionaryFromPropertyList("Languages", 
-        		NSBundle.bundleForName("JavaWebObjects"));
-        for(Enumeration keys = dict.keyEnumerator(); keys.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			String value = (String)dict.valueForKey(key);
-			if(aLanguage.equals(value)) {
-				shortLanguage = key;
-				break;
-			}
-		}
-        if(shortLanguage != null) {
-        	locale = new Locale(shortLanguage);
+
+        // We first check to see if we have a locale register for the language name
+        String shortLanguage = System.getProperty("er.extensions.ERXLocalizer." + aLanguage + ".locale");
+
+        // Let's go fishing
+        if (shortLanguage == null) {
+            NSDictionary dict = ERXDictionaryUtilities.dictionaryFromPropertyList("Languages",
+                                                                                  NSBundle.bundleForName("JavaWebObjects"));
+            NSArray keys = dict.allKeysForObject(aLanguage);
+            if (keys.count() > 0) {
+                shortLanguage = (String)keys.objectAtIndex(0);
+                if (keys.count() > 1) {
+                    log.error("Found multiple entries for language \"" + aLanguage
+                              + "\" in Language.plist file! Found keys: " + keys);
+                }
+            }
+        }
+        if (shortLanguage != null) {
+            locale = new Locale(shortLanguage);
         } else {
-        	log.error("Locale for " + aLanguage + " not found!");
-        	locale = Locale.getDefault();
+            log.error("Locale for " + aLanguage + " not found! Using default locale: " + Locale.getDefault());
+            locale = Locale.getDefault();
         }
         load();
     }
-
+    
     public void load() {
         cache.removeAllObjects();
         createdKeys.removeAllObjects();
@@ -405,7 +411,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                        }
                         cache.addEntriesFromDictionary(dict);
                         if(!monitoredFiles.containsObject(path)) {
-                            ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
+                            ERXFileNotificationCenter.defaultCenter().addObserver(observer,
+                                                                                  new NSSelector("fileDidChange",
+                                                                                                 ERXConstant.NotificationClassArray),
+                                                                                  path);
                             monitoredFiles.addObject(path);
                         }
                     } catch(Exception ex) {
