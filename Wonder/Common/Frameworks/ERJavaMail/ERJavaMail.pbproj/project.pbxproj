@@ -47,7 +47,7 @@
 				017C7B34FFD7144B7F000001,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
@@ -329,14 +329,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
-		01D74EAB00210AE911CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Interfaces;
-			path = "";
-			refType = 4;
-		};
 //010
 //011
 //012
@@ -375,14 +367,6 @@
 //042
 //043
 //044
-		04B9D382FFD85E7B11CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "Web Server Resources";
-			path = "";
-			refType = 4;
-		};
 		04B9D3C4FFD8653E11CD2B8D = {
 			fileRef = 40B5828DFFD5E91B7F000001;
 			isa = PBXBuildFile;
@@ -463,10 +447,7 @@
 			children = (
 				F5FE9178032D709B017B0907,
 				F5251D70032D489A019C4BA9,
-				40B58289FFD5E91B7F000001,
 				40B5828AFFD5E91B7F000001,
-				04B9D382FFD85E7B11CD2B8D,
-				01D74EAB00210AE911CD2B8D,
 				40B5828CFFD5E91B7F000001,
 				40B58293FFD5E91B7F000001,
 				40B58280FFD5E8187F000001,
@@ -627,13 +608,6 @@
 			);
 			isa = PBXRezBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		40B58289FFD5E91B7F000001 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "Web Components";
-			refType = 4;
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
@@ -845,18 +819,9 @@
 				F5251D7D032D49E1019C4BA9,
 				F54ECDF6033CEEC501000102,
 				F5109A2F03816A5701000107,
-				F5251D73032D48A3019C4BA9,
 			);
 			isa = PBXGroup;
 			path = javamail;
-			refType = 4;
-		};
-		F5251D73032D48A3019C4BA9 = {
-			children = (
-				F5251D8C032D4A0F019C4BA9,
-			);
-			isa = PBXGroup;
-			path = samples;
 			refType = 4;
 		};
 		F5251D74032D49E1019C4BA9 = {
@@ -990,12 +955,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F5251D8C032D4A0F019C4BA9 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = MessageCallBack.java;
-			refType = 4;
 		};
 		F5251D8E032D4AD5019C4BA9 = {
 			fileEncoding = 30;
