@@ -47,6 +47,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /** general logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger("er.eo.ERXGenericRecord");
 
+    /** holds all subclass related ERXLogger's */
+    public static NSMutableDictionary classLogs = new NSMutableDictionary();
+    public static final Object lock = new Object();
+    
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
     public final static String KEY_MARKER="** KEY_MARKER **";
 
@@ -58,6 +62,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
     }
 
+       /** This methods checks if we already have created an ERXLogger for this class
+        * If not, one will be created, stored and returned on next request.
+        * This method eliminates individual static variables for ERXLogger's in all
+        * subclasses. We use an NSDictionary here because static fields are class specific
+        * and thus something like lazy initialization would not work in this case.
+        *
+        * @return an {@link ERXLogger} for this objects class
+        */
+    public ERXLogger getClassLog() {
+        ERXLogger log = (ERXLogger)classLogs.objectForKey(this.getClass());
+        if ( log == null) {
+            synchronized(lock) {
+                log = ERXLogger.getERXLogger(this.getClass());
+                classLogs.setObjectForKey(log, this.getClass());
+            }
+        }
+        return log;
+    }
+    
     /**
         * self is usefull for directtoweb purposes
      */
@@ -577,7 +600,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		String objects.
      */
     // MOVEME: Might be a canidate for EOGenericRecordClazz
-    private static NSArray stringAttributeListForEntityNamed(String entityName) {
+    private static synchronized NSArray stringAttributeListForEntityNamed(String entityName) {
         // FIXME: this will need to be synchronized if you go full-MT
         NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);
         if (result==null) {
