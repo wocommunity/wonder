@@ -304,23 +304,34 @@ public class ERXFileUtilities {
                                            + " Dst: " + dstDirectory);
             File srcFiles[] = srcDirectory.listFiles();
             if (srcFiles != null && srcFiles.length > 0) {
-                FileInputStream in;
-                FileOutputStream out;
+                FileInputStream in = null;
+                FileOutputStream out = null;
 
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];
                     if (srcFile.exists() && srcFile.isFile()) {
                         in = new FileInputStream(srcFile);
-                        File dstFile = new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
-                        out = new FileOutputStream(dstFile);
-                        int c;
-                        while ((c = in.read()) != -1) {
-                            out.write(c);
+                        File dstFile = null;
+                        try {
+                            dstFile =new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
+                            out = new FileOutputStream(dstFile);
+                            int c;
+                            while ((c = in.read()) != -1) {
+                                out.write(c);
+                            }
+                            if (deleteOriginals)
+                                srcFile.delete();
+                        } finally {
+                            if (out != null)
+                                try {
+                                    out.close();
+                                } catch (IOException io) {}
+                            if (in != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException io) {}
+                            }
                         }
-                        out.close();
-                        in.close();
-                        if (deleteOriginals)
-                            srcFile.delete();
                     }
                 }
             }
