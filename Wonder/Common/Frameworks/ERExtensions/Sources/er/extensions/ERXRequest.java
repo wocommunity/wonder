@@ -1,6 +1,8 @@
 package er.extensions;
 import java.net.*;
 
+import sun.misc.BASE64Encoder;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -151,6 +153,11 @@ public  class ERXRequest extends WORequest {
         return nsmutablearray;
     }
 
+    /**
+     * Overridden because malformed cookie to return an empty dictionary
+     * if the super implementation throws an exception. This will happen
+     * if the request contains malformed cookie values.
+     */
     public NSDictionary cookieValues() {
         try {
             return super.cookieValues();
@@ -161,6 +168,12 @@ public  class ERXRequest extends WORequest {
         }
     }    
 
+    /**
+     * Overridden because the super implementation would pull in all 
+     * content even if the request is supposed to be streaming and thus 
+     * very large. Will now return <code>false</code> if the request
+     * handler is streaming.
+     */
     public boolean isSessionIDInRequest() {
         ERXApplication app = (ERXApplication)WOApplication.application();
         
@@ -170,6 +183,13 @@ public  class ERXRequest extends WORequest {
             return super.isSessionIDInRequest();
         }
     }
+
+    /**
+     * Overridden because the super implementation would pull in all 
+     * content even if the request is supposed to be streaming and thus 
+     * very large. Will now look for the session ID only in the cookie
+     * values.
+     */
 
     protected String _getSessionIDFromValuesOrCookie(boolean inCookiesFirst) {
         ERXApplication app = (ERXApplication)WOApplication.application();
@@ -195,6 +215,23 @@ public  class ERXRequest extends WORequest {
         return sessionID;
     }
     
+    /**
+     * Utility method to set credentials for basic authorization.
+     * 
+     */
+    public void setCredentials(String userName, String password) {
+        String up = userName + ":" + password;
+        BASE64Encoder coder = new BASE64Encoder();
+        byte[] bytes = up.getBytes();
+        String encodedString = coder.encode(bytes);
+        setHeader("Basic " +  encodedString, "authorization");
+    }
+    
+    /**
+     * Returns the remote host name. Works in various setups, like
+     * direct connect, deployed etc. If no host name can be found,
+     * returns "UNKNOWN".
+     */
     public String remoteHost() {
         String host = null;
         if (WOApplication.application().isDirectConnectEnabled()) {
