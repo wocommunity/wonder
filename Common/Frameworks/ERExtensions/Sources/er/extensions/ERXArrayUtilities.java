@@ -138,7 +138,8 @@ public class ERXArrayUtilities extends Object {
      * @param bindings bindings dictionary for qualifier variable substitution.
      * @return array filtered and sorted by the named fetch specification.
      */
-    public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamedBindings(NSArray array, String fetchSpec, String entity, NSDictionary bindings) {
+    
+    public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec, NSDictionary bindings) {
         EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
         NSArray sortOrderings, result;
         EOQualifier qualifier;
@@ -159,6 +160,13 @@ public class ERXArrayUtilities extends Object {
 
         return result;
     }
+    
+    /**
+     * @depreceated
+     */
+    public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamedBindings(NSArray array, String fetchSpec, String entity, NSDictionary bindings) {
+        return filteredArrayWithEntityFetchSpecification( array, entity, fetchSpec, bindings);
+    }
 
     /**
      * Filters a given array with a named fetch specification.
@@ -167,7 +175,14 @@ public class ERXArrayUtilities extends Object {
      * @param entity name of the {@link EOEntity} to which the fetch specification is associated.
      * @return array filtered and sorted by the named fetch specification.
      */
+    public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String fetchSpec, String entity) {
+        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
+    }
+
+    /**
+    * @depreceated
+     */
     public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
-        return ERXArrayUtilities.filteredArrayWithFetchSpecificationNamedEntityNamedBindings(array, fetchSpec, entity, null);
+        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
 }
