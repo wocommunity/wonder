@@ -772,6 +772,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         Object result=null;
         try {
             result=super.validateValueForKey(value,key);
+            EOClassDescription cd = classDescription();
+            if(cd instanceof ERXEntityClassDescription) {
+                ((ERXEntityClassDescription)cd).validateObjectWithUserInfo(this, value, "validateForKey." + key, key);
+            }
         } catch (ERXValidationException e) {
             throw e;
         } catch (NSValidation.ValidationException e) {

@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.lang.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 /**
  * The main purpose of the ERXClassDescription class is
@@ -25,14 +26,91 @@ import java.util.*;
  * is called when the principal class of this framework is
  * loaded. This happens really early so you shouldn't have
  * to worry about this at all.<br/>
+ * <br />
+ * Additionally, this class allows for model driven validations in a "poor-mans-Validity-way":
+ * add a <code>ERXValidation</code> user info entry on your entity.
+ * This is an example:<code><pre>
+ {
+     // these keys are evaluated on validateForSave, they don't correspond to properties
+     additionalValidationKeys = (mailAndPass);
+
+     // This dictionary holds the keys to use for validating properties
+     validateForKey =
+     {
+
+         // these keys are evaluated on validateForSave, they don't correspond to properties
+         email =
+         (
+          {
+              // this is the message code into ValidationStrings.plist
+              message = "User.email.wrongLength";
+
+              // if there is a qualifier key, then a dictionary containing "object" and "value" is evaluated and an exception is thrown if the evaluation returns false
+              qualifier = "(value.length >= 5) AND (value.length < 50)";
+          },
+          {
+              // again, this is the message code into ValidationStrings.plist
+              message = "User.email.sampleTest";
+
+              // Given this key, an object of the corresponding EOQualifierEvaluation subclass is created and given this dictionary on creation. This object needs to be re-entrant.
+              className = "SampleTest";
+              // an example is:
+              // public class SampleTest implements EOQualifierEvaluation {
+              //	int minLength, maxLength;
+              //	public SampleTest(Object dict) {
+              //		minLength = ERXValueUtilities.intValue(dict.objectForKey("minLength"));
+              //		maxLength = ERXValueUtilities.intValue(dict.objectForKey("maxLength"));
+              //	}
+              //	public boolean evaluateObject(Object o) {
+              //		ERXEntityClassDescription.ValidationObjectValue val
+              //		  = (ERXEntityClassDescription.ValidationObjectValue)o;
+              //		EOEnterpriseObject eo = val.object();
+              //		String value = (String)val.value();
+              //		return value.length() >= minLength && value.length() <= maxLength;
+              //	}
+              // }
+
+              minLength = "5";
+              maxLength = "10";
+          }
+          );
+
+         // This key does not correspond to any property, it get's evaluated in D2WApps where you have a multi-step page and need to do validation before validateForSave
+         mailAndPass =
+             (
+              {
+                  message = "User.mailAndPass.stupidTest";
+                  qualifier = "(object.email.length >= object.password.length)";
+              }
+              );
+     };
+
+     // These get checked when the object gets saved, additionally to "addtionalValidations"
+     // The structure of "validateForInsert" and "validateForDelete" is the same
+     validateForSave =
+         (
+          {
+              message = "User.save.cantBeBoth";
+              qualifier = "(object.isEditor = 'Y' and object.isAdmin = 'Y')";
+          }
+          );
+ }</pre></code>
+ * This code is mainly a quick-and-dirty rewrite from PRValidation by Proteon.
  * <br/>
  * If you wish to provide your own class description subclass
  * see the documentation associated with the Factory inner class.
  */
+
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEntityClassDescription.class);
+
+    /** Holds validation info from the entities user info dictionary */
+    protected NSDictionary _validationInfo;
+
+    /** Holds validation qualifiers */
+    protected NSMutableDictionary  _validationQualiferCache;
 
     /**
      * This factory inner class is registered as the observer
@@ -311,7 +389,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * Public constructor
      * @param entity that this class description corresponds to
      */
-    public ERXEntityClassDescription(EOEntity entity) { super(entity); }
+    public ERXEntityClassDescription(EOEntity entity) {
+        super(entity);
+        _validationInfo = ERXValueUtilities.dictionaryValue(entity.userInfo().objectForKey("ERXValidation"));
+        _validationQualiferCache = new NSMutableDictionary();
+    }
 
     /**
      * This method is called when an object is
@@ -325,6 +407,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             super.validateObjectForDelete(obj);
+            validateObjectWithUserInfo(obj, null, "validateForDelete", "validateForDelete");
+        } catch (ERXValidationException eov) {
+            throw eov;
         } catch (NSValidation.ValidationException eov) {
             if (log.isDebugEnabled())
                 log.debug("Caught validation exception: " + eov);
@@ -353,6 +438,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             log.debug("Validate value: " + obj + " for key: " + s);
         try {
             validated = super.validateValueForKey(obj, s);
+        } catch (ERXValidationException eov) {
+            throw eov;
         } catch (NSValidation.ValidationException eov) {
             if (log.isDebugEnabled())
                 log.debug("Caught validation exception: " + eov);
@@ -365,32 +452,40 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     /**
      * This method is called when an object is
      * about to be saved. Adds support for extra validation keys to
-     * be set in an array in the entity's userInfo under the key
-     * <code>ERXAdditionalSaveValidationKeys</code>. If any validation
+     * be set in an array in the entity's userInfo under the keypath
+     * <code>ERXValidation.additionalValidationKeys</code>. If any validation
      * exceptions occur they are converted to an
      * {@link ERXValidationException} and that is
      * thrown. 
      * @param obj enterprise object to be saved
      * @throws validation exception
      */
+
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
-            NSArray additionalValidationKeys = (NSArray)ERXValueUtilities.arrayValue(entity().userInfo().objectForKey("ERXAdditionalSaveValidationKeys"));
-            if(additionalValidationKeys != null) {
-                for(Enumeration e = additionalValidationKeys.objectEnumerator(); e.hasMoreElements();) {
-                    String key = (String)e.nextElement();
-                    NSSelector selector = new NSSelector(key);
-                    if(selector.implementedByObject(obj)) {
-                        try {
-                            selector.invoke(obj);
-                        } catch (Exception ex) {
-                            if(ex instanceof NSValidation.ValidationException)
-                                throw (NSValidation.ValidationException)ex;
-                            log.error(ex);
+            if(_validationInfo != null) {
+                NSArray additionalValidationKeys = (NSArray)_validationInfo.objectForKey("additionalValidationKeys");
+                if(additionalValidationKeys != null) {
+                    for(Enumeration e = additionalValidationKeys.objectEnumerator(); e.hasMoreElements();) {
+                        String key = (String)e.nextElement();
+                        NSSelector selector = new NSSelector(key);
+                        if(selector.implementedByObject(obj)) {
+                            try {
+                                selector.invoke(obj);
+                            } catch (Exception ex) {
+                                if(ex instanceof NSValidation.ValidationException)
+                                    throw (NSValidation.ValidationException)ex;
+                                log.error(ex);
+                            }
+                        } else {
+                            validateObjectWithUserInfo(obj, null, "validateForKey." + key, key);
                         }
                     }
                 }
             }
+            validateObjectWithUserInfo(obj, null, "validateForSave", "validateForSave");
+        } catch (ERXValidationException eov) {
+            throw eov;
         } catch (NSValidation.ValidationException eov) {
             if (log.isDebugEnabled())
                 log.debug("Caught validation exception: " + eov);
@@ -399,6 +494,65 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
     }
 
+    public static class ValidationObjectValue {
+        protected EOEnterpriseObject object;
+        protected Object value;
+        public ValidationObjectValue(EOEnterpriseObject object, Object value) {
+            this.object = object;
+            this.value = value;
+        }
+        public Object value() { return value;}
+        public EOEnterpriseObject object() { return object;}
+    }
+    public static class QualiferValidation implements EOQualifierEvaluation {
+        protected EOQualifier qualifier;
+        public QualiferValidation(Object info) {
+            NSDictionary dict =(NSDictionary)info;
+            qualifier = EOQualifier.qualifierWithQualifierFormat((String)dict.objectForKey("qualifier"), null);
+        }
+        public boolean evaluateWithObject(Object o) {
+            return qualifier.evaluateWithObject(o);
+        }
+    }
+    
+    protected boolean validateObjectValueDictWithInfo(ValidationObjectValue values, NSDictionary info) {
+        String className = (String)info.objectForKey("className");
+        if(className == null) {
+            className = QualiferValidation.class.getName();
+        }
+        String key = info.toString();
+        EOQualifierEvaluation q = (EOQualifierEvaluation)_validationQualiferCache.objectForKey(key);
+        if(q == null) {
+            try {
+                Class cl = ERXCompilerProxy.defaultProxy().classForName(className);
+                Constructor co = cl.getConstructor(new Class [] {Object.class});
+                Object o = co.newInstance(new Object[] {info});
+                q = (EOQualifierEvaluation)o;
+            } catch(Exception ex) {
+                throw new NSForwardException(ex);
+            }
+            _validationQualiferCache.setObjectForKey(q, key);
+        }
+        if(q != null)
+            return q.evaluateWithObject(values);
+        return true;
+    }
+
+    public void validateObjectWithUserInfo(EOEnterpriseObject object, Object value, String validationTypeString, String property) {
+        if(_validationInfo != null) {
+            NSArray qualifiers = (NSArray)_validationInfo.valueForKeyPath(validationTypeString);
+            if(qualifiers != null) {
+                ValidationObjectValue values = new ValidationObjectValue(object, value);
+                for(Enumeration e = qualifiers.objectEnumerator(); e.hasMoreElements();) {
+                    NSDictionary info = (NSDictionary)e.nextElement();
+                    if(!validateObjectValueDictWithInfo(values, info)) {
+                        throw ERXValidationFactory.defaultFactory().createException(object, property, value, (String)info.objectForKey("message"));
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * Calculates a display name for a key using
      * an improved method.
