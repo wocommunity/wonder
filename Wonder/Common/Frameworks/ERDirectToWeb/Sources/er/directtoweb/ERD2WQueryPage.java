@@ -16,19 +16,93 @@ import er.extensions.*;
 
 /**
  * Superclass for all query pages.<br />
- * 
+ * In addition to the rest of the goodies of ERD2WPage, it lets you 
+ * save and restore the initial query bindings by supplying a NS(Mutable)Dictionary which
+ * contains the keys "queryMin", "queryMax" etc from the respective fields of the WODisplayGroup.
  */
 
 public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
 
     public WODisplayGroup displayGroup = new WODisplayGroup();
-
+    protected boolean didLoadQueryBindings;
+    protected NSDictionary queryBindings;
+    
     public ERD2WQueryPage(WOContext context) { super(context); }
 
+    protected void pullQueryBindingsForName(String name) {
+    	NSDictionary queryBindings = queryBindings();
+    	if(queryBindings != null) {
+    		NSDictionary source = (NSDictionary)queryBindings.objectForKey(name);
+    		if(source != null) {
+    			NSMutableDictionary destination = (NSMutableDictionary)NSKeyValueCoding.Utility.valueForKey(displayGroup, name);
+    			destination.addEntriesFromDictionary(source);
+    		}
+    	}
+    }
+    
+    protected void pushQueryBindingsForName(String name) {
+    	NSDictionary queryBindings = queryBindings();
+    	if(queryBindings != null && (queryBindings instanceof NSMutableDictionary)) {
+    		NSMutableDictionary mutableQueryBindings = (NSMutableDictionary)queryBindings;
+    		NSDictionary source = (NSDictionary)NSKeyValueCoding.Utility.valueForKey(displayGroup, name);
+    		mutableQueryBindings.setObjectForKey(source.mutableClone(), name);
+    	}
+    }
+    
+    public void takeValuesFromRequest(WORequest request, WOContext context) {
+    	super.takeValuesFromRequest(request, context);
+    	saveQueryBindings();
+    }
+    
+    public void appendToResponse(WOResponse arg0, WOContext arg1) {
+    	loadQueryBindings();
+    	super.appendToResponse(arg0, arg1);
+    }
+    
+    protected void saveQueryBindings() {
+    	NSDictionary queryBindings = queryBindings();
+    	if(queryBindings != null) {
+    		pushQueryBindingsForName("queryMin");
+    		pushQueryBindingsForName("queryMax");
+    		pushQueryBindingsForName("queryMatch");
+    		pushQueryBindingsForName("queryOperator");
+    		pushQueryBindingsForName("queryBindings"); 
+    	}
+    }
+    
+    protected void loadQueryBindings() {
+    	if(!didLoadQueryBindings) {
+    		NSDictionary queryBindings = queryBindings();
+    		if(queryBindings != null) {
+    			pullQueryBindingsForName("queryMin");
+    			pullQueryBindingsForName("queryMax");
+    			pullQueryBindingsForName("queryMatch");
+    			pullQueryBindingsForName("queryOperator");
+    			pullQueryBindingsForName("queryBindings"); 
+    			didLoadQueryBindings = true;
+    		}
+    	}
+    }
+    
+    public void awake() {
+        super.awake();
+    }
+    
     public boolean isDeep() {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("isDeep"));
     }
 
+    public NSDictionary queryBindings() {
+    	if(queryBindings == null) {
+    		queryBindings = (NSDictionary)valueForBinding("queryBindings");
+    	}
+        return queryBindings;
+    }
+    
+    public void setQueryBindings(NSDictionary dictionary) {
+    	queryBindings = dictionary;
+    }
+    
     public boolean usesDistinct() {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("usesDistinct"));
     }
