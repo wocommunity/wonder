@@ -44,6 +44,8 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      * 
      * @param actionName  String action name
      * @param queryDict   NSDictionary containing query key/value pairs
+     * @param includeSessionID	true: to include the Session ID (if has one), <br>
+     * 				false: not to include the Session ID
      * @return a String containing the URL for the specified action
      * @see WODirectAction
      */
