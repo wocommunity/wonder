@@ -1,0 +1,125 @@
+<project name="common" default="all" basedir="../..">
+
+    <!-- don't touch from here on -->
+    <property name="build.compiler" value="jikes" />
+    <property name="build.compiler.emacs" value="true" />
+    <property name="build.compiler.fulldepend" value="false" />
+
+    <property file="Build/build/build.properties" />
+    <property file="${user.home}/build.properties" />
+    <property file="Build/build/default.properties" />
+
+    <property name="wo.system.root" value="/System/Library/Frameworks" />
+    <property name="wo.local.root" value="/Library/Frameworks" />
+    <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
+    <property name="wonder.root" value="${basedir}" />
+
+    <target name="framework.properties">
+        <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+        <property name="build.root" value="${user.home}/Roots" />
+        <property name="project.source.dir" value="${wonder.root}/${project.dir}" />
+    </target>
+
+    <target name="copy.framework" depends="framework.properties">
+        <property name="framework.name" value="${project}.framework" />
+
+        <copy todir="${dist}/Frameworks/${framework.name}">
+            <fileset dir="${build.root}/${framework.name}" />
+        </copy>
+
+        <copy todir="${dist}/WebServerResources/Frameworks/${framework.name}">
+            <fileset dir="${build.root}/${framework.name}/WebServerResources" />
+        </copy>
+
+        <copy todir="${dist}/Documentation/Frameworks/${framework.name}">
+            <fileset dir="${project.source.dir}/Documentation">
+                <exclude name="**/CVS/**" />
+            </fileset>
+        </copy>
+
+        <copy todir="${dist}/Documentation/Frameworks/${framework.name}/Support">
+            <fileset dir="${project.source.dir}/Support">
+                <exclude name="**/CVS/**" />
+            </fileset>
+        </copy>
+
+        <echo message="-------------------------------------" />
+        <echo message="${framework.name}" />
+        <echo message="-------------------------------------" />
+    </target>
+
+
+    <target name="application.properties">
+        <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+        <property name="build.root" value="${user.home}/Roots" />
+        <property name="project.source.dir" value="${wonder.root}/${project.dir}" />
+    </target>
+
+    <target name="copy.application" depends="application.properties">
+        <property name="application.name" value="${project}.woa" />
+
+        <copy todir="${dist}/Applications/${application.name}">
+            <fileset dir="${build.root}/${application.name}" />
+        </copy>
+
+        <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources">
+            <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
+        </copy>
+
+        <copy todir="${dist}/Documentation/Applications/${project}">
+            <fileset dir="${project.source.dir}/Documentation">
+                <exclude name="**/CVS/**" />
+            </fileset>
+        </copy>
+
+        <copy todir="${dist}/Documentation/Applications/${project}/Support">
+            <fileset dir="${project.source.dir}/Support">
+                <exclude name="**/CVS/**" />
+            </fileset>
+        </copy>
+
+        <echo message="-------------------------------------" />
+        <echo message="${application.name}" />
+        <echo message="-------------------------------------" />
+    </target>
+
+
+    <!-- WOPayPal -->
+    <target name="WOPayPal.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="WOPayPal" />
+            <param name="project.dir" value="PayPal/Frameworks/WOPayPal" />
+        </antcall>
+    </target>
+	
+    <!-- Validity Framework -->
+    <target name="Validity.framework.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="Validity" />
+            <param name="project.dir" value="Validity/Frameworks/Validity" />
+        </antcall>
+    </target>
+
+    <!-- Validity Application -->
+    <target name="Validity.applicaion.all">
+        <antcall target="copy.application" >
+            <param name="project" value="Validity" />
+            <param name="project.dir" value="Validity/Applications/Validity" />
+        </antcall>
+    </target>
+	
+    <!-- Validity Example Application -->
+    <target name="Validity.example.all">
+        <antcall target="copy.application" >
+            <param name="project" value="ValidityExample" />
+            <param name="project.dir" value="Validity/Examples/ValidityExample" />
+        </antcall>
+    </target>
+	
+    <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
+    <target name="Validity.all" depends="Validity.base, Validity.example.all" />
+    <target name="dist.prebuilt" depends="WOPayPal.all, Validity.all" />
+
+    <target name="all" depends="dist.prebuiltw" />
+	
+</project>
