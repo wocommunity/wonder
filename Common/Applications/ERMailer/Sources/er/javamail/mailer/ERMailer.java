@@ -48,16 +48,25 @@ public class ERMailer {
      * messages.
      */
     public void processOutgoingMail() {
-        log.debug("Starting outgoing mail processing.");
+        if (log.isDebugEnabled())
+            log.debug("Starting outgoing mail processing.");
         EOEditingContext ec = ERXExtensions.newEditingContext();
+        ec.lock();
 
-        NSArray unsentMessages = ERCMailMessage.mailMessageClazz().messagesToBeSent(ec);
+        try {
+            NSArray unsentMessages = ERCMailMessage.mailMessageClazz().messagesToBeSent(ec);
 
-        sendMailMessages(unsentMessages);
+            if (unsentMessages.count() > 0)
+                sendMailMessages(unsentMessages);
+            else
+                log.info("No messages to be sent.");
+        } finally {
+            ec.unlock();
+            ec.dispose();
+        }
 
-        ec.dispose();
-        
-        log.debug("Done outgoing mail processing.");
+        if (log.isDebugEnabled())
+            log.debug("Done outgoing mail processing.");
     }
     
     /**
@@ -65,45 +74,48 @@ public class ERMailer {
      * @param mailMessages array of messages to send
      */
     public void sendMailMessages(NSArray mailMessages) {
-        for (Enumeration messageEnumerator = mailMessages.objectEnumerator(); messageEnumerator.hasMoreElements();) {
-            ERCMailMessage mailMessage = (ERCMailMessage)messageEnumerator.nextElement();
-            ERMailDelivery delivery = createMailDeliveryForMailMessage(mailMessage);
+        if (mailMessages.count() > 0) {
+            log.info("Sending " + mailMessages.count() + " mail message(s).");
+            for (Enumeration messageEnumerator = mailMessages.objectEnumerator(); messageEnumerator.hasMoreElements();) {
+                ERCMailMessage mailMessage = (ERCMailMessage)messageEnumerator.nextElement();
+                ERMailDelivery delivery = createMailDeliveryForMailMessage(mailMessage);
 
-            if (log.isDebugEnabled())
-                log.debug("Sending mail message: " + mailMessage);
-            
-            if (delivery != null) {
-                try {
-                    mailMessage.setState(ERCMailState.PROCESSING_STATE);
-                    mailMessage.editingContext().saveChanges(); // This will throw if optimistic locking occurs
-                    delivery.sendMail(true);
-                    mailMessage.setState(ERCMailState.SENT_STATE);
-                    mailMessage.setDateSent(new NSTimestamp());
-                } catch (EOGeneralAdaptorException ge) {
-                    log.warn("Caught general adaptor exception, reverting context : " + ge);
-                    mailMessage.editingContext().revert();
-                } catch (NSForwardException e) {
-                    log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.originalException()));
-                    // ENHANCEME: Need to implement a waiting state to retry sending mails.
-                    mailMessage.setState(ERCMailState.EXCEPTION_STATE);
-                    mailMessage.setExceptionReason(e.originalException().getMessage());
-                    // Report the mailing error
-                    ERCoreBusinessLogic.sharedInstance().reportException(e.originalException(),
-                                                                         new NSDictionary(mailMessage.snapshot(),
-                                                                                          "Mail Message Snapshot"));
-                } finally {
-                    // The editingcontext will not have any changes if an optimistic error occurred
-                    if (mailMessage.editingContext().hasChanges()) {
-                        try {
-                            mailMessage.editingContext().saveChanges();
-                        } catch (RuntimeException runtime) {
-                            log.error("RuntimeException during save changes! Exception: " + runtime.getMessage());
-                            throw runtime;
-                        }                        
+                if (log.isDebugEnabled())
+                    log.debug("Sending mail message: " + mailMessage);
+
+                if (delivery != null) {
+                    try {
+                        mailMessage.setState(ERCMailState.PROCESSING_STATE);
+                        mailMessage.editingContext().saveChanges(); // This will throw if optimistic locking occurs
+                        delivery.sendMail(true);
+                        mailMessage.setState(ERCMailState.SENT_STATE);
+                        mailMessage.setDateSent(new NSTimestamp());
+                    } catch (EOGeneralAdaptorException ge) {
+                        log.warn("Caught general adaptor exception, reverting context : " + ge);
+                        mailMessage.editingContext().revert();
+                    } catch (NSForwardException e) {
+                        log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.originalException()));
+                        // ENHANCEME: Need to implement a waiting state to retry sending mails.
+                        mailMessage.setState(ERCMailState.EXCEPTION_STATE);
+                        mailMessage.setExceptionReason(e.originalException().getMessage());
+                        // Report the mailing error
+                        ERCoreBusinessLogic.sharedInstance().reportException(e.originalException(),
+                                                                             new NSDictionary(mailMessage.snapshot(),
+                                                                                              "Mail Message Snapshot"));
+                    } finally {
+                        // The editingcontext will not have any changes if an optimistic error occurred
+                        if (mailMessage.editingContext().hasChanges()) {
+                            try {
+                                mailMessage.editingContext().saveChanges();
+                            } catch (RuntimeException runtime) {
+                                log.error("RuntimeException during save changes!", runtime);
+                                throw runtime;
+                            }
+                        }
                     }
                 }
-            }
-        }        
+            }            
+        }
     }
     
     /**
