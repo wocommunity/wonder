@@ -14,6 +14,7 @@ import er.extensions.ERXApplication;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLogger;
 import er.extensions.ERXProperties;
+import er.extensions.ERXUtilities;
 
 import er.corebusinesslogic.ERCMailDelivery;
 import er.corebusinesslogic.ERCMailMessage;
@@ -59,7 +60,7 @@ public class Application extends ERXApplication {
      * <b>er.javamail.mailer.ERBatchMailerDaemonFrequency</b>
      */
     public void didFinishLaunching() {
-        if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail");
+        if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail"));
             testSendingMail();
         int frequency = ERXProperties.intForKey("er.javamail.mailer.ERBatchMailerDaemonFrequency");
         if (frequency > 0) {
@@ -78,9 +79,9 @@ public class Application extends ERXApplication {
         try {
             EOEditingContext ec = ERXExtensions.newEditingContext();
             
-            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.adminEmail(),
-                                                          new NSArray(ERJavaMail.adminEmail()),
-                                                          new NSArray(ERJavaMail.adminEmail()),
+            ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
+                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
                                                           null,
                                                           "This is a test",
                                                           "This is the body",
