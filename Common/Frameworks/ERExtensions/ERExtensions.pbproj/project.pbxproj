@@ -458,6 +458,7 @@
 				7752CFA603D67F4D00257492,
 				9419AD3003D792BD00CF0E7D,
 				509AC52803EB364B00CF0E76,
+				500567420408508100CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1108,6 +1109,19 @@
 //502
 //503
 //504
+		500567410408508100CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXEOAccessUtilities.java;
+			path = er/extensions/ERXEOAccessUtilities.java;
+			refType = 4;
+		};
+		500567420408508100CF0E76 = {
+			fileRef = 500567410408508100CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		500D40B803CDFC7100CF0E76 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -6682,6 +6696,7 @@
 			children = (
 				F59C577702C4565601000102,
 				F59C579202C4565701000102,
+				500567410408508100CF0E76,
 				F5E99BAF0354DE4F01CF0E76,
 				F5E3B46A034823BF016A5D3F,
 				F59C579802C4565701000102,
