@@ -3031,9 +3031,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WGroupingListXMLPageTemplate; 
+                value = templateNameForGroupingListXMLPage; 
             }; 
         }, 
         {
@@ -3057,9 +3057,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WListXMLPageTemplate; 
+                value = templateNameForListXMLPage; 
             }; 
         }, 
         {
@@ -3117,9 +3117,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WPrinterFriendlyTemplateInspectPage; 
+                value = templateNameForPrinterFriendlyInspectPage; 
             }; 
         }, 
         {
@@ -3154,9 +3154,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WPrinterFriendlyInspectPageTemplate; 
+                value = templateNameForPrinterFriendlyInspectPage; 
             }; 
         }, 
         {
@@ -3197,9 +3197,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WGroupingPrinterFriendlyListPageTemplate; 
+                value = templateNameForGroupingPrinterFriendlyListPage; 
             }; 
         }, 
         {
@@ -3234,9 +3234,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WPrinterFriendlyListTemplate; 
+                value = templateNameForPrinterFriendlyList; 
             }; 
         }, 
         {
@@ -3260,9 +3260,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WEditableListTemplate; 
+                value = templateNameForEditableList; 
             }; 
         }, 
         {
@@ -3292,9 +3292,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WCSVGroupingListPageTemplate; 
+                value = templateNameForCSVGroupingListPageTemplate; 
             }; 
         }, 
         {
@@ -3340,9 +3340,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WCompactInspectPageTemplate; 
+                value = templateNameForCompactInspectPage; 
             }; 
         }, 
         {
@@ -3388,9 +3388,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WCompactListPageTemplate; 
+                value = templateNameForCompactListPage; 
             }; 
         }, 
         {
@@ -3473,9 +3473,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WPickListPageTemplate; 
+                value = templateNameForPickListPage; 
             }; 
         }, 
         {
@@ -3510,9 +3510,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WTabInspectPageTemplate; 
+                value = templateNameForTabInspectPage; 
             }; 
         }, 
         {
@@ -3547,9 +3547,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WWizardCreationPageTemplate; 
+                value = templateNameForWizardCreationPage; 
             }; 
         }, 
         {
@@ -3599,9 +3599,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WListComparePageTemplate; 
+                value = templateNameForListComparePage; 
             }; 
         }, 
         {
@@ -3625,9 +3625,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WCSVListPageTemplate; 
+                value = templateNameForCSVListPage; 
             }; 
         }, 
         {
@@ -3651,9 +3651,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WGroupingListPageTemplate; 
+                value = templateNameForGroupingListPage; 
             }; 
         }, 
         {
@@ -3703,9 +3703,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WPickTypePageTemplate; 
+                value = templateNameForPickTypePage; 
             }; 
         }, 
         {
@@ -3729,9 +3729,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WInspectPageTemplate; 
+                value = templateNameForInspectPage; 
             }; 
         }, 
         {
@@ -3755,9 +3755,9 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WListPageTemplate; 
+                value = templateNameForListPage; 
             }; 
         }, 
         {
@@ -3770,9 +3770,9 @@
                 value = confirm; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WConfirmPageTemplate; 
+                value = templateNameForConfirmPage; 
             }; 
         }, 
         {
@@ -3800,9 +3800,9 @@
                 value = query; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = er.directtoweb.ERDKeyValueAssignment; 
                 keyPath = pageName; 
-                value = ERD2WQueryPageTemplate; 
+                value = templateNameForQueryPage; 
             }; 
         }, 
         {
@@ -4884,6 +4884,204 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = taskVerb; 
                 value = Filter; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForCSVGroupingListPage; 
+                value = ERD2WCSVGroupingListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForCSVGroupingListPage; 
+                value = ERD2WCSVGroupingListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForCSVListPage; 
+                value = ERD2WCSVListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForCompactInspectPage; 
+                value = ERD2WCompactInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForCompactListPage; 
+                value = ERD2WCompactListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForConfirmPage; 
+                value = ERD2WConfirmPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForEditableList; 
+                value = ERD2WEditableListTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForGroupingListPage; 
+                value = ERD2WGroupingListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForGroupingListXMLPage; 
+                value = ERD2WGroupingListXMLPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForGroupingPrinterFriendlyListPage; 
+                value = ERD2WGroupingPrinterFriendlyListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForInspectPage; 
+                value = ERD2WInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForListComparePage; 
+                value = ERD2WListComparePageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForListPage; 
+                value = ERD2WListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForListXMLPage; 
+                value = ERD2WListXMLPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForMessagePage; 
+                value = ERD2WMessagePageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForPickListPage; 
+                value = ERD2WPickListPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForPickTypePage; 
+                value = ERD2WPickTypePageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForPrinterFriendlyInspectPage; 
+                value = ERD2WPrinterFriendlyInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForPrinterFriendlyList; 
+                value = ERD2WPrinterFriendlyListTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForQueryPage; 
+                value = ERD2WQueryPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForTabInspectPage; 
+                value = ERD2WTabInspectPageTemplate; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = templateNameForWizardCreationPage; 
+                value = ERD2WWizardCreationPageTemplate; 
             }; 
         }, 
         {
