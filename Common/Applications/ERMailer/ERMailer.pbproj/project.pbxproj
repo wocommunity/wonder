@@ -102,6 +102,7 @@
 				017C60D3FFD2F2BB7F000001,
 				017C60D4FFD2F2BB7F000001,
 				0171C3300017AA3E11CD2B8D,
+				50EDF204040DC43200CF0E76,
 			);
 			buildSettings = {
 				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
@@ -321,6 +322,7 @@
 				017C6107FFD43DA37F000001,
 				017C6108FFD43DA37F000001,
 				01CC6D570020D11111CD2B8D,
+				50EDF205040DC4A900CF0E76,
 			);
 			buildSettings = {
 				APPLICATION_DIR_MACOS = "$(CONTENTS_DIR)/MacOS";
@@ -807,6 +809,42 @@
 //212
 //213
 //214
+//500
+//501
+//502
+//503
+//504
+		50EDF204040DC43200CF0E76 = {
+			buildActionMask = 8;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "echo ${JAVAC_FRAMEWORK_JARS} > ${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}-javac_framework_jars";
+		};
+		50EDF205040DC4A900CF0E76 = {
+			buildActionMask = 8;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "if [ -z \"${PACKAGE_APPLICATION}\" ]; then\n  echo \"Copying frameworks into application wrapper...\"\n  BUILT_IN_FRAMEWORKS_DIR=\"${CONTENTS_DIR}/Library/Frameworks\"\n  mkdir -p \"${BUILT_IN_FRAMEWORKS_DIR}\"\n  for framework in $(cat ${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}-javac_framework_jars); do\n      cd $(dirname \"${framework}\") &&\n        pax -rw $(basename \"${framework}\") \"${BUILT_IN_FRAMEWORKS_DIR}\"\n  done\n  perl -i -pe \"s|${SYMROOT}|APPROOT/Library/Frameworks|\" \"${APPLICATION_DIR_MACOS}/MacOSClassPath.txt\"\n  BUILT_IN_EXTENSIONS_DIR=\"${CONTENTS_DIR}/Extensions\"\n  mkdir -p \"${BUILT_IN_EXTENSIONS_DIR}\"\n  cp $(find /Library/Java/Extensions -name '*.jar' -o -name '*.zip') \"${BUILT_IN_EXTENSIONS_DIR}\"\nfi";
+		};
+//500
+//501
+//502
+//503
+//504
 //C60
 //C61
 //C62
