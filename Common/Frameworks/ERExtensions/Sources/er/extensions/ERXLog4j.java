@@ -33,7 +33,10 @@ public class ERXLog4j {
     }
 
     /** logging support */
-    public static Category cat;
+    public static Category log;
+
+    //CHECKME: (tatsuya) This will be moved to ERXProperties, ERXPropertyUtilities or ERXConfigurationManager
+    protected static String ERConfigurationPathPropertyName = "ERConfigurationPath";
 
     /**
      * holds the notification that is posted after
@@ -43,9 +46,6 @@ public class ERXLog4j {
 
     /** holds a reference to the current configuration file */
     private static String _configurationFilePath;
-
-    /** records if the logging system has been configured */
-    private static boolean _isLoggingConfigured=false;
 
     /** records if the logging system has been initialized */
     private static boolean _isInitialized=false;
@@ -87,49 +87,64 @@ public class ERXLog4j {
     }
 
     /**
-     * Cover method that returns if the logging system is configured.
-     * @return if the logging system has been configured
-     */
-    public static boolean isLoggingConfigured() { return _isLoggingConfigured; }
-
-    /**
-     * Sets if the logging system has been configured.
-     * @param value if the logging sytem is configured
-     */
-    public static void setIsLoggingConfigured(boolean value) { _isLoggingConfigured = value; }
-
-    /**
-     * The entry point for setting up the logging system.
-     * This method should be called as early as possible,
-     * the best spot being in a static block of the
-     * application class. Calling this method multiple times
-     * will not have any additional effect after the first call.
+     * <p>The entry point for setting up the logging system.
+     * This method should be called as early as possible. </p>
+     * <p>ERXExtensions class will call this method twice 
+     * during the initialization process: <br> 
+     * - At the very beginning of loading ERExtensions framework <br>
+     * - When the application class posts finishedLaunchingApp
+     * notification </p>
+     * <p>The second one is necessary to reconfigure the logging 
+     * system when ERConfigurationPath is specified as a launch 
+     * argument. </p>
+     * <p>Calling this method multiple times will have 
+     * no effect unless the configuration file path (not the file 
+     * contents) has changed from the last call. (This will be 
+     * the case when ERConfigurationPath is specified.)</p>
+     * <p>ERXLogger will also call this method when it's initialized, 
+     * for just in case the logging system has never been 
+     * configured. </p>
      */
     public static void configureLogging() {
+        String originalConfigFilePath = configurationFilePath(); // Note: This can be null.
         if (!_isInitialized) {
-            // FIXME: (tatsuya) System.getProperty will always return null no matter if ERConfigurationPath 
-            //        is present. It will be called by the framework's static initializer and it's ealier than 
-            //        WOApplication populates the system properties. 
-            String configurationPath=System.getProperty("ERConfigurationPath");
-            if (configurationPath==null) {
-                File mainProperties=new File(System.getProperty("user.home"),
-                                             "WebObjects.properties");
-                configurationPath=mainProperties.getPath();
-            }
-            if (configurationPath != null  &&  new File(configurationPath).exists()) {
-                setConfigurationFilePath(configurationPath);
-                loadConfiguration();
-                cat = Category.getInstance(ERXLog4j.class);
-                cat.info("Logging system configured.");
-            } else {
-                setConfigurationFilePath(null);
-                BasicConfigurator.configure();
-                cat = Category.getInstance(ERXLog4j.class);
-                cat.warn("The configuration file \"" + configurationPath + "\" does not exist. " 
-                            + "Logging system configured by the BasicConfigurator.");
-            }
-            setIsLoggingConfigured(true);
+            BasicConfigurator.configure();
+            log = Category.getInstance(ERXLog4j.class.getName());
             _isInitialized = true;
+        }
+        log.debug("Configure logging requested.");
+        
+        File configurationFile = null;
+        String erConfigurationPath = System.getProperty(ERConfigurationPathPropertyName);
+        
+        if (erConfigurationPath != null) {
+            configurationFile = new File(erConfigurationPath);
+            if (! configurationFile.exists()  &&  ! erConfigurationPath.equals(originalConfigFilePath)) {
+                log.warn("The configuration file \"" + erConfigurationPath + "\"" 
+                            + " spacified by " + ERConfigurationPathPropertyName 
+                            + " does not exist. The default configuration file will be used.");
+                configurationFile = null;
+            }
+        }
+            
+        if (configurationFile == null) 
+            configurationFile = new File(System.getProperty("user.home"), "WebObjects.properties");
+
+        if (configurationFile.exists()) {
+            setConfigurationFilePath(configurationFile.getPath());
+            if (! configurationFilePath().equals(originalConfigFilePath)) {
+                loadConfiguration();
+                log.info("Logging system configured from the configuration file \""
+                            + configurationFilePath() + "\".");
+            } else {
+                log.debug("Skipped to load the configuration since the configuration file \""
+                            + configurationFilePath() + "\" remains same as the last one.");
+            }
+        } else {
+            setConfigurationFilePath(originalConfigFilePath);
+            log.warn("The configuration file \"" + configurationFile.getPath() + "\" does not exist. " 
+                        + "Logging system will keep the last configuration with file \""
+                        + originalConfigFilePath + "\".");
         }
     }
 
@@ -142,7 +157,7 @@ public class ERXLog4j {
     public static void configureRapidTurnAround() {
         if (!_initializedRapidTurnAround) {
             if (!WOApplication.application().isCachingEnabled() && configurationFilePath() != null) {
-                if (cat.isDebugEnabled()) cat.debug("Registering observer for file change.");
+                log.debug("Registering observer for file change.");
                 Observer o = new Observer();
                 ERXRetainer.retain(o);
                 try {
@@ -151,12 +166,8 @@ public class ERXLog4j {
                                                                                      ERXConstant.NotificationClassArray),
                                                                       configurationFilePath());
                 } catch (Exception ex) {
-                    String errorMessage = "An exception occured while registering the logging configuration file: " 
-                            + ex.getMessage();
-                    if (isLoggingConfigured()) 
-                        cat.error(errorMessage);
-                    else 
-                        System.out.println("ERXLog4J - configureRapidTurnAround: " + errorMessage);
+                    log.error("An exception occured while registering an observer for the "
+                            + "logging configuration file: " + ex.getMessage());
                     ERXRetainer.release(o);
                 }
             }
@@ -175,10 +186,7 @@ public class ERXLog4j {
             PropertyConfigurator.configure(readPropertiesFromPath(configurationFilePath()));
             NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
         } else {
-            if (isLoggingConfigured())
-                cat.error("Unable to reset logging, configFilePath is null.");
-            else
-                System.err.println("Unable to reset logging, configFilePath is null.");
+            log.error("Unable to reset logging, configFilePath is null.");
         }
     }
 
@@ -192,21 +200,17 @@ public class ERXLog4j {
     // MOVEME: ERXProperties or ERXPropertyUtilities
     public static Properties readPropertiesFromPath(String path) {
         Properties result = new Properties();
-        if (path!=null) {
+        if (path != null) {
             try {
                 FileInputStream in = new FileInputStream(path);
                 result.load(in);
                 in.close();
-                if (isLoggingConfigured())
-                    cat.info("Loaded configuration file at path: "+path);
+                log.info("Loaded configuration file at path: "+path);
             } catch (IOException e) {
-                if (isLoggingConfigured())
-                    cat.error("Unable to initialize properties from file "+path+"\nError :"+e);
-                else
-                    System.err.println("Unable to initialize properties from file "+path+"\nError :"+e);
+                log.error("Unable to initialize properties from file "+path+"\nError :"+e);
             }
         } else {
-            cat.warn("Attempting to read property file for null file path");
+            log.warn("Attempting to read property file for null file path");
         }
         return result;
     }
