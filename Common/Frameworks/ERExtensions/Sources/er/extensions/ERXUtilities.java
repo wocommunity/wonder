@@ -411,7 +411,7 @@ public class ERXUtilities {
     public static final NSTimestamp DISTANT_FUTURE = new NSTimestamp(2999,1,1,1,1,1,TimeZone.getDefault());
     public static NSTimestamp distantFuture() { return DISTANT_FUTURE; }
 
-    public static final NSTimestamp DISTANT_PAST = new NSTimestamp(0001,1,1,1,1,1,TimeZone.getDefault());
+    public static final NSTimestamp DISTANT_PAST = new NSTimestamp(1000,1,1,1,1,1,TimeZone.getDefault());
     public static NSTimestamp distantPast() { return DISTANT_PAST; }
 
     /**
