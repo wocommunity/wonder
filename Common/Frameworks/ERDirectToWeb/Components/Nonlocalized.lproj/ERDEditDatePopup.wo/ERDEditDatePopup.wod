@@ -15,7 +15,9 @@ dayPopup: WOPopUpButton {
 
 monthPopup: WOPopUpButton {
 	list = monthList;
-	selection = month;
+	value = month;
+	displayString = monthName;
+	item = currentMonth;
 }
 
 yearPopup: WOPopUpButton {

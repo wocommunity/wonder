@@ -47,10 +47,11 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
         if (radioValue().equals(date)){
             NSTimestamp date = null;
             try {
+                
                 if (time==null || time.length()!=5) {
-                    date = (NSTimestamp)ALL_FORMAT.parseObject(day+" "+month+" "+year);
+                    date = (NSTimestamp)ALL_FORMAT.parseObject(day+" "+ month +" "+year);
                 } else {
-                    date = (NSTimestamp)ALL_FORMAT_AND_TIME.parseObject(day+" "+month+" "+year+" "+time);
+                    date = (NSTimestamp)ALL_FORMAT_AND_TIME.parseObject(day+" "+ month +" "+year+" "+time);
                 }
                 object().validateTakeValueForKeyPath(date, key());
             } catch (NSValidation.ValidationException v) {
