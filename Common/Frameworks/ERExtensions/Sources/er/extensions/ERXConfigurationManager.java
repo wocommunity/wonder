@@ -387,17 +387,17 @@ public class ERXConfigurationManager {
                 
                 // additional information used for ERXJDBCConnectionBroker
                 String minConnections = ERXSystem.getProperty(aModelName + ".DBMinConnections");
-                minConnections = minConnections == null ? ERXSystem.getProperty("dbMinConnectionsGLOBAL") : minConnections;
+                minConnections = minConnections == null ? ERXProperties.stringForKeyWithDefault("dbMinConnectionsGLOBAL", "20") : minConnections;
                 String maxConnections = ERXSystem.getProperty(aModelName + ".DBMaxConnections");
-                maxConnections = maxConnections == null ? ERXSystem.getProperty("dbMaxConnectionsGLOBAL") : maxConnections;
+                maxConnections = maxConnections == null ? ERXProperties.stringForKeyWithDefault("dbMaxConnectionsGLOBAL", "20") : maxConnections;
                 String logPath = ERXSystem.getProperty(aModelName + ".DBLogPath");
-                logPath = logPath == null ? ERXSystem.getProperty("dbLogPathGLOBAL") : logPath;
+                logPath = logPath == null ? ERXProperties.stringForKeyWithDefault("dbLogPathGLOBAL", "/tmp/ERXJDBCConnectionBroker_@@name@@_@@WOPort@@.log") : logPath;
                 String connectionRecycle = ERXSystem.getProperty(aModelName + ".DBConnectionRecycle");
-                connectionRecycle = connectionRecycle == null ? ERXSystem.getProperty("dbConnectionRecycleGLOBAL") : connectionRecycle;
+                connectionRecycle = connectionRecycle == null ? ERXProperties.stringForKeyWithDefault("dbConnectionRecycleGLOBAL", "1.0") : connectionRecycle;
                 String maxCheckout = ERXSystem.getProperty(aModelName + ".DBMaxCheckout");
-                maxCheckout = maxCheckout == null ? ERXSystem.getProperty("dbMaxCheckoutGLOBAL") : maxCheckout;
+                maxCheckout = maxCheckout == null ? ERXProperties.stringForKeyWithDefault("dbMaxCheckoutGLOBAL", "86400") : maxCheckout;
                 String debugLevel = ERXSystem.getProperty(aModelName + ".DBDebugLevel");
-                debugLevel = debugLevel == null ? ERXSystem.getProperty("dbDebugLevelGLOBAL") : debugLevel;
+                debugLevel = debugLevel == null ? ERXProperties.stringForKeyWithDefault("dbDebugLevelGLOBAL", "1") : debugLevel;
                 
                 if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
                     String modelName = jdbcInfo.substring(1, jdbcInfo.length());
