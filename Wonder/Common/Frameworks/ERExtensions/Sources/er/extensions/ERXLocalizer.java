@@ -276,24 +276,24 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 
                 String path = ERXFileUtilities.pathForResourceNamed(fileName, framework, languages);
                 if(path != null) {
-                    if(!monitoredFiles.containsObject(path)) {
-                        ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
-                        monitoredFiles.addObject(path);
-                    }
                     try {
                         framework = "app".equals(framework) ? null : framework;
-                        log.debug("Loading: " + fileName + " - " 
+                        log.info("Loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
                             + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                         cache.addEntriesFromDictionary(dict);
+                        if(!monitoredFiles.containsObject(path)) {
+                            ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
+                            monitoredFiles.addObject(path);
+                        }
                     } catch(Exception ex) {
                         log.warn("Exception loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
                             + languages + ":" + ex);
                     }
-                } else if (log.isDebugEnabled()) {
-                    log.debug("Unable to create path for resource named: " + fileName 
+                } else  {
+                    log.info("Unable to create path for resource named: " + fileName 
                         + " framework: " + (framework == null ? "app" : framework)
                         + " languages: " + languages);
                 }
