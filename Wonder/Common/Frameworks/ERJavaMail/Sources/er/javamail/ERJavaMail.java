@@ -512,9 +512,17 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
             (this.hasWhiteList () || this.hasBlackList ())) {
             filteredAddresses = new NSMutableArray (emailAddresses);
 
+            if (log.isDebugEnabled ()) {
+                log.debug ("Filtering email addresses: " + filteredAddresses);
+            }
+            
             if (this.hasWhiteList ()) {
                 EOQualifier.filterArrayWithQualifier (filteredAddresses,
                                                       whiteListQualifier ());
+                if (log.isDebugEnabled ()) {
+                    log.debug ("White list qualifier: " + whiteListQualifier ()
+                               + " after filtering: " + filteredAddresses);
+                }                    
             }
 
             if (this.hasBlackList ()) {
@@ -523,6 +531,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
                                                             blackListQualifier ());
                 if (filteredOutAddresses.count () > 0)
                     filteredAddresses.removeObjectsInArray (filteredOutAddresses);
+                if (log.isDebugEnabled ()) {
+                    log.debug ("Black list qualifier: " + blackListQualifier ()
+                               + " filtering: " + filteredAddresses);
+                }                
             }
         }
 
