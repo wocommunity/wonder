@@ -80,43 +80,6 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
     }
 
     /**
-     * Replaces a given string by another string in a string.
-     * This method is just a cover method for calling the
-     * same method in {@link ERXSimpleHTMLFormatter}.
-     * @param old string to be replaced
-     * @param newString to be inserted
-     * @param buffer string to have the replacement done on it
-     * @return string after having all of the replacement done.
-     */    
-    //MOVEME: This should go in ERXStringUtilities, we have a few of these floating around and this
-    //		is the correct implementation.
-    public static String replaceStringByStringInString(String old, String newString, String buffer) {
-        int begin, end;
-        int oldLength = old.length();
-        int length = buffer.length();
-        StringBuffer convertedString = new StringBuffer(length + 100);
-
-        begin = 0;
-        while(begin < length)
-        {
-            end = buffer.indexOf(old, begin);
-            if(end == -1)
-            {
-                convertedString.append(buffer.substring(begin));
-                break;
-            }
-            if(end == 0)
-                convertedString.append(newString);
-            else {
-                convertedString.append(buffer.substring(begin, end));
-                convertedString.append(newString);
-            }
-            begin = end+oldLength;
-        }
-        return convertedString.toString();
-    }
-
-    /**
      * The FieldPosition is not important, so this method
      * just calls <code>applyFormat</code> and appends that
      * string to the buffer.
@@ -144,9 +107,9 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
             return null;
 
         // Convert tabs in the argument (which must be a String) to HTML spacers.
-        newString = replaceStringByStringInString(ASCIITab, HTMLTab(), (String)anObject);
+        newString = ERXStringUtilities.replaceStringByStringInString(ASCIITab, HTMLTab(), (String)anObject);
         // Convert new-lines in the argument (which must be a String) to HTML breaks.
-        return replaceStringByStringInString(ASCIIReturn, HTMLReturn, newString);
+        return ERXStringUtilities.replaceStringByStringInString(ASCIIReturn, HTMLReturn, newString);
     }
 
     /**
@@ -161,9 +124,9 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
             return null;
 
         // Convert new-lines in the argument (which must be a String) to HTML breaks.
-        newString = replaceStringByStringInString(HTMLReturn, ASCIIReturn, inString);
+        newString = ERXStringUtilities.replaceStringByStringInString(HTMLReturn, ASCIIReturn, inString);
         // Convert tabs in the argument (which must be a String) to HTML spacers.
-        return replaceStringByStringInString(HTMLTab(), ASCIITab, newString);
+        return ERXStringUtilities.replaceStringByStringInString(HTMLTab(), ASCIITab, newString);
     }
 
     /**

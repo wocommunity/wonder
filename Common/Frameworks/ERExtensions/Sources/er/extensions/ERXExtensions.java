@@ -574,7 +574,7 @@ public class ERXExtensions {
      */
     // MOVEME: ERXStringUtilities
     public static String replaceStringByStringInString(String old, String newString, String s) {
-        return ERXSimpleHTMLFormatter.replaceStringByStringInString(old,newString,s);
+        return ERXStringUtilities.replaceStringByStringInString(old,newString,s);
     }
 
     /**
