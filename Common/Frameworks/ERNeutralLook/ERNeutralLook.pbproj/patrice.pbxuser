@@ -1,0 +1,431 @@
+// !$*UTF8*$!
+{
+	017C7B2FFFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	017C7B36FFD7144B7F000001 = {
+		activeExec = 0;
+	};
+	40B5827EFFD5E7DB7F000001 = {
+		activeBuildStyle = 40B5829AFFD5EB0D7F000001;
+		activeTarget = 40B58282FFD5E8187F000001;
+		addToTargets = (
+			017C7B2FFFD7144B7F000001,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 48190812;
+			PBXWorkspaceContents = (
+				{
+					LeftSlideOut = {
+						Split0 = {
+							Split0 = {
+								NavContent0 = {
+									bookmark = F6EBF73402DF55240FCF0E72;
+									history = (
+										F6EBF72302DF55240FCF0E72,
+										F6EBF72402DF55240FCF0E72,
+										F6EBF72502DF55240FCF0E72,
+										F6EBF72602DF55240FCF0E72,
+										F6EBF72702DF55240FCF0E72,
+										F6EBF72802DF55240FCF0E72,
+										F6EBF72902DF55240FCF0E72,
+										F6EBF72A02DF55240FCF0E72,
+										F6EBF72B02DF55240FCF0E72,
+									);
+									prevStack = (
+										F6EBF72C02DF55240FCF0E72,
+										F6EBF72D02DF55240FCF0E72,
+										F6EBF72E02DF55240FCF0E72,
+										F6EBF72F02DF55240FCF0E72,
+										F6EBF73002DF55240FCF0E72,
+										F6EBF73102DF55240FCF0E72,
+										F6EBF73202DF55240FCF0E72,
+										F6EBF73302DF55240FCF0E72,
+									);
+								};
+								NavCount = 1;
+								NavGeometry0 = {
+									Frame = "{{0, 0}, {572, 525}}";
+									NavBarVisible = YES;
+								};
+							};
+							SplitCount = 1;
+							Tab0 = {
+								Debugger = {
+									Split0 = {
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									TabCount = 2;
+								};
+								LauncherConfigVersion = 7;
+							};
+							Tab1 = {
+								LauncherConfigVersion = 3;
+								Runner = {
+								};
+							};
+							TabCount = 4;
+						};
+						SplitCount = 1;
+						Tab1 = {
+							OptionsSetName = "Hierarchy, all classes";
+						};
+						Tab3 = {
+							SplitCount = 2;
+						};
+						TabCount = 6;
+					};
+				},
+			);
+			PBXWorkspaceGeometries = (
+				{
+					ContentSize = "{856, 572}";
+					LeftSlideOut = {
+						ActiveTab = 0;
+						Collapsed = NO;
+						Frame = "{{0, 23}, {856, 549}}";
+						Split0 = {
+							Collapsed = NO;
+							Frame = "{{284, 0}, {572, 549}}";
+							Split0 = {
+								Frame = "{{0, 24}, {572, 525}}";
+							};
+							SplitCount = 1;
+							Tab0 = {
+								Debugger = {
+									Collapsed = NO;
+									Frame = "{{0, 0}, {572, 214}}";
+									Split0 = {
+										Frame = "{{0, 24}, {572, 190}}";
+										Split0 = {
+											Frame = "{{0, 0}, {279, 190}}";
+										};
+										Split1 = {
+											DebugVariablesTableConfiguration = (
+												Name,
+												63.80298,
+												Value,
+												86.07401,
+												Summary,
+												108.123,
+											);
+											Frame = "{{288, 0}, {284, 190}}";
+										};
+										SplitCount = 2;
+									};
+									SplitCount = 1;
+									Tab0 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									Tab1 = {
+										Frame = "{{0, 0}, {100, 50}}";
+									};
+									TabCount = 2;
+									TabsVisible = YES;
+								};
+								Frame = "{{0, 0}, {572, 214}}";
+								LauncherConfigVersion = 7;
+							};
+							Tab1 = {
+								Frame = "{{0, 0}, {572, 125}}";
+								LauncherConfigVersion = 3;
+								Runner = {
+									Frame = "{{0, 0}, {572, 125}}";
+								};
+							};
+							Tab2 = {
+								BuildMessageFrame = "{{0, 0}, {574, 120}}";
+								BuildTranscriptFrame = "{{0, 129}, {574, 0}}";
+								Frame = "{{0, 0}, {572, 127}}";
+							};
+							Tab3 = {
+								Frame = "{{0, 0}, {572, 265}}";
+							};
+							TabCount = 4;
+							TabsVisible = YES;
+						};
+						SplitCount = 1;
+						Tab0 = {
+							Frame = "{{0, 0}, {260, 549}}";
+							GroupTreeTableConfiguration = (
+								TargetStatusColumn,
+								18,
+								MainColumn,
+								227,
+							);
+						};
+						Tab1 = {
+							ClassesFrame = "{{0, 0}, {247, 330}}";
+							ClassesTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXClassColumnIdentifier,
+								204,
+							);
+							Frame = "{{0, 0}, {245, 549}}";
+							MembersFrame = "{{0, 339}, {247, 210}}";
+							MembersTreeTableConfiguration = (
+								PBXBookColumnIdentifier,
+								20,
+								PBXMethodColumnIdentifier,
+								203,
+							);
+						};
+						Tab2 = {
+							Frame = "{{0, 0}, {226, 549}}";
+						};
+						Tab3 = {
+							Frame = "{{0, 0}, {191, 549}}";
+							Split0 = {
+								Frame = "{{0, 0}, {191, 265}}";
+								TargetTreeTableConfiguration = (
+									ActiveTarget,
+									16,
+									TargetName,
+									159,
+								);
+							};
+							Split1 = {
+								BuildStyleTreeTableConfiguration = (
+									IsActive,
+									16,
+									Name,
+									160,
+								);
+								Frame = "{{0, 274}, {191, 275}}";
+							};
+							SplitCount = 2;
+						};
+						Tab4 = {
+							ExecutableTreeTableConfiguration = (
+								ActiveExecutable,
+								16,
+								ExecutableName,
+								158,
+							);
+							Frame = "{{0, 0}, {191, 549}}";
+						};
+						Tab5 = {
+							BreakpointsTreeTableConfiguration = (
+								breakpointColumn,
+								197,
+								enabledColumn,
+								31,
+							);
+							Frame = "{{0, 0}, {250, 549}}";
+						};
+						TabCount = 6;
+						TabsVisible = YES;
+					};
+					StatusViewVisible = YES;
+					Template = F5F68CF101725D4C0D7A8F4C;
+					ToolbarVisible = YES;
+					WindowLocation = "{259, 367}";
+				},
+			);
+			PBXWorkspaceStateSaveDate = 48190812;
+		};
+		perUserProjectItems = {
+			F6EBF72302DF55240FCF0E72 = F6EBF72302DF55240FCF0E72;
+			F6EBF72402DF55240FCF0E72 = F6EBF72402DF55240FCF0E72;
+			F6EBF72502DF55240FCF0E72 = F6EBF72502DF55240FCF0E72;
+			F6EBF72602DF55240FCF0E72 = F6EBF72602DF55240FCF0E72;
+			F6EBF72702DF55240FCF0E72 = F6EBF72702DF55240FCF0E72;
+			F6EBF72802DF55240FCF0E72 = F6EBF72802DF55240FCF0E72;
+			F6EBF72902DF55240FCF0E72 = F6EBF72902DF55240FCF0E72;
+			F6EBF72A02DF55240FCF0E72 = F6EBF72A02DF55240FCF0E72;
+			F6EBF72B02DF55240FCF0E72 = F6EBF72B02DF55240FCF0E72;
+			F6EBF72C02DF55240FCF0E72 = F6EBF72C02DF55240FCF0E72;
+			F6EBF72D02DF55240FCF0E72 = F6EBF72D02DF55240FCF0E72;
+			F6EBF72E02DF55240FCF0E72 = F6EBF72E02DF55240FCF0E72;
+			F6EBF72F02DF55240FCF0E72 = F6EBF72F02DF55240FCF0E72;
+			F6EBF73002DF55240FCF0E72 = F6EBF73002DF55240FCF0E72;
+			F6EBF73102DF55240FCF0E72 = F6EBF73102DF55240FCF0E72;
+			F6EBF73202DF55240FCF0E72 = F6EBF73202DF55240FCF0E72;
+			F6EBF73302DF55240FCF0E72 = F6EBF73302DF55240FCF0E72;
+			F6EBF73402DF55240FCF0E72 = F6EBF73402DF55240FCF0E72;
+		};
+		projectwideBuildSettings = {
+		};
+		wantsIndex = 1;
+		wantsSCM = -1;
+	};
+	40B58282FFD5E8187F000001 = {
+		activeExec = 0;
+	};
+	F6EBF70002DF51480FCF0E72 = {
+		isa = PBXFileReference;
+		name = ERNEUInspectPage.html;
+		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
+		refType = 0;
+	};
+	F6EBF72302DF55240FCF0E72 = {
+		fRef = F6EBF5E602DF4F960FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 0;
+	};
+	F6EBF72402DF55240FCF0E72 = {
+		fRef = F6EBF5EF02DF4FE70FCF0E72;
+		isa = PBXTextBookmark;
+		name = "d2w.d2wmodel: 27";
+		rLen = 0;
+		rLoc = 894;
+		rType = 0;
+		vrLen = 946;
+		vrLoc = 0;
+	};
+	F6EBF72502DF55240FCF0E72 = {
+		fRef = F6EBF5E202DF4F8A0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUQueryPage.java: 8";
+		rLen = 20;
+		rLoc = 145;
+		rType = 0;
+		vrLen = 527;
+		vrLoc = 0;
+	};
+	F6EBF72602DF55240FCF0E72 = {
+		fRef = F6EBF5E102DF4F8A0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUListPage.java: 8";
+		rLen = 0;
+		rLoc = 143;
+		rType = 0;
+		vrLen = 486;
+		vrLoc = 0;
+	};
+	F6EBF72702DF55240FCF0E72 = {
+		fRef = F6EBF5E002DF4F8A0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.java: 8";
+		rLen = 0;
+		rLoc = 168;
+		rType = 0;
+		vrLen = 513;
+		vrLoc = 0;
+	};
+	F6EBF72802DF55240FCF0E72 = {
+		isa = PBXTargetBookmark;
+		trg = 40B58282FFD5E8187F000001;
+	};
+	F6EBF72902DF55240FCF0E72 = {
+		isa = PBXTargetBookmark;
+		trg = 017C7B2FFFD7144B7F000001;
+	};
+	F6EBF72A02DF55240FCF0E72 = {
+		fRef = F6EBF73502DF55240FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUQueryPage.html: 1";
+		rLen = 0;
+		rLoc = 28;
+		rType = 0;
+		vrLen = 1199;
+		vrLoc = 0;
+	};
+	F6EBF72B02DF55240FCF0E72 = {
+		fRef = F6EBF70002DF51480FCF0E72;
+		isa = PBXBookmark;
+	};
+	F6EBF72C02DF55240FCF0E72 = {
+		fRef = F6EBF5E602DF4F960FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.api: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 0;
+	};
+	F6EBF72D02DF55240FCF0E72 = {
+		fRef = F6EBF5EF02DF4FE70FCF0E72;
+		isa = PBXTextBookmark;
+		name = "d2w.d2wmodel: 27";
+		rLen = 0;
+		rLoc = 894;
+		rType = 0;
+		vrLen = 946;
+		vrLoc = 0;
+	};
+	F6EBF72E02DF55240FCF0E72 = {
+		fRef = F6EBF5E202DF4F8A0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUQueryPage.java: 8";
+		rLen = 20;
+		rLoc = 145;
+		rType = 0;
+		vrLen = 527;
+		vrLoc = 0;
+	};
+	F6EBF72F02DF55240FCF0E72 = {
+		fRef = F6EBF5E102DF4F8A0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUListPage.java: 8";
+		rLen = 0;
+		rLoc = 143;
+		rType = 0;
+		vrLen = 486;
+		vrLoc = 0;
+	};
+	F6EBF73002DF55240FCF0E72 = {
+		fRef = F6EBF5E002DF4F8A0FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.java: 8";
+		rLen = 0;
+		rLoc = 168;
+		rType = 0;
+		vrLen = 513;
+		vrLoc = 0;
+	};
+	F6EBF73102DF55240FCF0E72 = {
+		isa = PBXTargetBookmark;
+		trg = 40B58282FFD5E8187F000001;
+	};
+	F6EBF73202DF55240FCF0E72 = {
+		isa = PBXTargetBookmark;
+		trg = 017C7B2FFFD7144B7F000001;
+	};
+	F6EBF73302DF55240FCF0E72 = {
+		fRef = F6EBF73602DF55240FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUQueryPage.html: 1";
+		rLen = 0;
+		rLoc = 28;
+		rType = 0;
+		vrLen = 1199;
+		vrLoc = 0;
+	};
+	F6EBF73402DF55240FCF0E72 = {
+		fRef = F6EBF73702DF55240FCF0E72;
+		isa = PBXTextBookmark;
+		name = "ERNEUInspectPage.html: 1";
+		rLen = 0;
+		rLoc = 28;
+		rType = 0;
+		vrLen = 1931;
+		vrLoc = 548;
+	};
+	F6EBF73502DF55240FCF0E72 = {
+		isa = PBXFileReference;
+		name = ERNEUQueryPage.html;
+		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUQueryPage.wo/ERNEUQueryPage.html;
+		refType = 0;
+	};
+	F6EBF73602DF55240FCF0E72 = {
+		isa = PBXFileReference;
+		name = ERNEUQueryPage.html;
+		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUQueryPage.wo/ERNEUQueryPage.html;
+		refType = 0;
+	};
+	F6EBF73702DF55240FCF0E72 = {
+		isa = PBXFileReference;
+		name = ERNEUInspectPage.html;
+		path = /Users/patrice/Developer/Wonder/ERNeutralLook/Components/Nonlocalized.lproj/ERNEUInspectPage.wo/ERNEUInspectPage.html;
+		refType = 0;
+	};
+}
