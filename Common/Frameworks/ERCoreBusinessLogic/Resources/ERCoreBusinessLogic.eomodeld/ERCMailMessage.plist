@@ -97,6 +97,7 @@
         }, 
         {
             destination = ERCMailState; 
+            isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = mailStateID; }); 
