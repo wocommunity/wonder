@@ -96,6 +96,7 @@
 ./Sources/er/extensions/ERXQueryRecentDates.java:er.extensions
 ./Sources/er/extensions/ERXRadioButtonMatrix.java:er.extensions
 ./Sources/er/extensions/ERXRepeatingTable.java:er.extensions
+./Sources/er/extensions/ERXReplicableInterface.java:er.extensions
 ./Sources/er/extensions/ERXRequest.java:er.extensions
 ./Sources/er/extensions/ERXRetainer.java:er.extensions
 ./Sources/er/extensions/ERXSession.java:er.extensions
@@ -140,4 +141,3 @@
 ./Sources/er/testrunner/ERXTestRunner.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestInterface.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestResult.java:er.testrunner
-./Sources/ERXReplicableInterface.java:er.extensions
