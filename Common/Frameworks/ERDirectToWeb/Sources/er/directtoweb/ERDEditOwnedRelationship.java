@@ -21,7 +21,7 @@ import java.util.*;
 //	explanationComponentName - component that is used in the StringListPicker to explain what it is that they are picking.
 //	additionalRelationshipKeys - key-value pairs of additional relationships that need to be set after the eo is created.
 //	uiStyle - list style will use a D2WList, popup/radio/browser will use an ERToOneRelationship FIXME: add in ERToManyRelationship
-//	listConfigurationNameForEntity - optional key that is for the list configuration of the D2W component.
+//	listConfigurationName - optional key that is for the list configuration of the D2W component.
 //	destinationDisplayKey - key used to denote what to display in the ERToOneRelationship
 //	selectionListKey - key that denotes what to use as the dataSource for the ERToOneRelationship.
 //	permissionToEdit - key that determines if the add and/or edit button are shown.
@@ -34,7 +34,7 @@ import java.util.*;
  * @binding showAddButton" defaults="Boolean
  * @binding key
  * @binding object
- * @binding listConfigurationNameForEntity
+ * @binding listConfigurationName
  * @binding entityNamesForNewInstances
  * @binding explanationComponentName
  * @binding uiStyle
@@ -69,7 +69,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
     public NSDictionary postRelationshipKeys() { return (NSDictionary)valueForBinding("postRelationshipKeys"); }
     public NSArray entityNamesForNewInstances() { return (NSArray)valueForBinding("entityNamesForNewInstances"); }
     public String explanationComponentName() { return (String)valueForBinding("explanationComponentName"); }
-    public String listConfigurationNameForEntity() { return (String)valueForBinding("listConfigurationNameForEntity"); }
+    public String listConfigurationName() { return (String)valueForBinding("listConfigurationName"); }
     public String selectionListKey() { return (String)valueForBinding("selectionListKey"); }
     public String postCreateNextPageDelegateKey() { return (String)valueForBinding("postCreateNextPageDelegateKey"); }
     public String errorMessage() { return hasBinding("noSelectionErrorMessage") ? (String)valueForBinding("noSelectionErrorMessage") : "";}
