@@ -52,7 +52,6 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_CLASS_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Java/Extensions/jce1_2_2.jar\"";
-				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
@@ -458,6 +457,7 @@
 				7752CFA603D67F4D00257492,
 				9419AD3003D792BD00CF0E7D,
 				509AC52803EB364B00CF0E76,
+				633FC07C040A414D00AE7795,
 				500567420408508100CF0E76,
 				50287843040960A40043FCB8,
 			);
@@ -890,7 +890,6 @@
 				INSTALL_PATH = "$(INSTALL_PREFIX)/Frameworks";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				INSTALL_PREFIX = "$(LOCAL_LIBRARY_DIR)";
-				JAVA_COMPILER = /usr/bin/jikes;
 				PRODUCT_NAME = ERExtensions;
 				RESOURCES_DIR = "$(CONTENTS_DIR)/Resources";
 				RESOURCES_JAVA_DIR = "$(RESOURCES_DIR)/Java";
@@ -1211,6 +1210,29 @@
 //502
 //503
 //504
+//630
+//631
+//632
+//633
+//634
+		633FC07B040A414D00AE7795 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXRuntimeUtilities.java;
+			path = er/extensions/ERXRuntimeUtilities.java;
+			refType = 4;
+		};
+		633FC07C040A414D00AE7795 = {
+			fileRef = 633FC07B040A414D00AE7795;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//630
+//631
+//632
+//633
+//634
 //770
 //771
 //772
@@ -7321,6 +7343,7 @@
 				F59C57EA02C4565701000102,
 				F6ED0C790361C03B01257492,
 				F592A409036D480201AD0D07,
+				633FC07B040A414D00AE7795,
 			);
 			isa = PBXGroup;
 			name = Utilities;
