@@ -24,7 +24,8 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
 
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERDEditPasswordConfirmation.class,"components");
-	
+
+    public int length;
     /**
      * Public constructor
      * @param context the context
