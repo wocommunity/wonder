@@ -32,7 +32,7 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 	} catch(NullPointerException ex) {
 	    System.err.println("NullPointerException in WOOgnlAssociation with keyPath '" + keyPath() + "'");
 	    // AK@PRNET:DE
-     //FIXME: we should have a default that tell us wether to throw or not
+     //FIXME: we should have a default that tell us whether to throw or not
 	    // throw ex;
 	}
         if(event != null)

@@ -15,11 +15,11 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import java.util.Enumeration;
-//import org.apache.log4j.Category;
+//import org.apache.log4j.Logger;
 
 public class WOOgnlHTMLTemplateParser extends WOHTMLTemplateParser {
 
-    //public static final Category cat = Category.getInstance("ognl.webobjects.WOOgnlHTMLTemplateParser");
+    //public static final Logger log = Logger.getLogger("ognl.webobjects.WOOgnlHTMLTemplateParser");
     
     public WOOgnlHTMLTemplateParser(String s, String s1, NSArray array) {
         super(s, s1, array);
