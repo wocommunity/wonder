@@ -50,6 +50,8 @@ public class ERXCompilerProxy {
      */
     static boolean _raiseOnError = false;
 
+    static private boolean initialized = false;
+    
     /** Holds the files to watch.
      */
     NSMutableDictionary _filesToWatch;
@@ -145,6 +147,10 @@ public class ERXCompilerProxy {
      * Registers for ApplicationWillDispatchRequest notification.
      */
     public void initialize() {
+	if (initialized) {
+	    return;
+	}
+	initialized = true;
         if(WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
             log.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
             _filesToWatch = new NSMutableDictionary();
@@ -322,7 +328,7 @@ public class ERXCompilerProxy {
                             log.info("WODirectAction loaded: "+ cacheEntry.className());
                         }
                         if(WOComponent.class.isAssignableFrom(class_)) {
-                            WOContext context = new WOContext(new WORequest("GET", "/", "1.0", null, null, null));
+                            WOContext context = new WOContext(new WORequest("GET", "/", "HTTP/1.1", null, null, null));
                             WOApplication.application().pageWithName(cacheEntry.className(), context)._componentDefinition().componentInstanceInContext(context); // mark an instance as locked
                         }
                         if(EOEnterpriseObject.class.isAssignableFrom(class_) && !didResetModelGroup) {
