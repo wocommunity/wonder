@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import er.extensions.ERXConstant;
+import er.extensions.*;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:
@@ -148,16 +148,12 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     private Integer _editTime;
     public boolean editTime(){
         if (_editTime==null) {
-            Object et=valueForBinding("editTime");
-            if (et!=null) {
-                _editTime=et instanceof Integer ? (Integer)valueForBinding("editTime") :
-                ((String)et).equals("YES") || ((String)et).equals("1") ? ERXConstant.OneInteger : ERXConstant.ZeroInteger;
-            }
+            _editTime= ERXValueUtilities.booleanValue(valueForBinding("editTime")) ? ERXConstant.OneInteger : ERXConstant.ZeroInteger;
         }
         return _editTime!=null ? _editTime.intValue()!=0 : false;
     }
 
-
+    
     //JavaScript which returns today's date in the format 07/12/2000
     public String today() {
         return "var mydate=new Date() /n var year=mydate.getYear() /n if (year < 1000) /n year+=1900 /n var day=mydate.getDay() /n var month=mydate.getMonth()+1 /n if (month<10) /n month=\"0\"+month /n var daym=mydate.getDate() /n if (daym<10) /n daym=\"0\"+daym /n document.write(\"<small><font color='000000' face='Arial'><b>\"+month+\"/\"+daym+\"/\"+year+\"</b></font></small>)\"";
