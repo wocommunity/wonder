@@ -347,6 +347,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         return validated;
     }
 
+    public String displayNameForKey(String key) {
+        return ERXStringUtilities.displayNameForKey(key);
+    }
     // CHECKME: Why is this disabled?
     /*
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
