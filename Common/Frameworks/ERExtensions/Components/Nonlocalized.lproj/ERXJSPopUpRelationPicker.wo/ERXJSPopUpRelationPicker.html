@@ -56,14 +56,14 @@ function parentSwapped(parentschildren,new_parent_id,children_select,selected_pa
 		if(children_select != null) {
 			setSelectToArrayOfEntities(children_select, children_array, childPopUpStringForAll);
 			children_select.options[def].selected = true;
-			childSwapped(children_select.options[def].value,selected_child,null,selected_parent,selected_child);
+			childSwapped(parentschildren,children_select.options[def].value,null,selected_parent,selected_child);
 		}
 	}
 }
 function childSwapped(parentschildren,new_child_id,parent_select,selected_parent,selected_child) {
 	if(selected_child.value != new_child_id) {
 		selected_child.value = new_child_id;
-		if(("null" != new_child_id || new_child_id != null) && parent_select != null) {
+		if(("null" != new_child_id && new_child_id != null) && parent_select != null) {
 			var new_parent_id = getParentEntityForChildId(parentschildren,new_child_id);
 			for (loop=0; loop < parentschildren.length; loop++) {
 				parentschildren[loop].selected = (parentschildren[loop].entityId == new_parent_id);
