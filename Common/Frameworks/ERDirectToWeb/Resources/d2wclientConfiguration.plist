@@ -623,13 +623,13 @@
             inputSize = 30; 
             title = Choice; 
         }; 
-        choicesNames = {
+        choicesNames_Arrays_dont_work = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
             title = "Choices Names"; 
             type = stringEmptyIsNull; 
-        }; 
+        };
         confirmDeleteConfigurationName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
