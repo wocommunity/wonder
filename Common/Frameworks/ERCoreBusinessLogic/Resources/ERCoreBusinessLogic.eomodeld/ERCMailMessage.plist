@@ -124,7 +124,6 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = mailMessageId; sourceAttribute = id; }); 
             name = attachments; 
-            ownsDestination = Y; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
         }, 
         {
