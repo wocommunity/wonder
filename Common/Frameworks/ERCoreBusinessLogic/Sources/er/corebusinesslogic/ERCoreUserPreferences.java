@@ -15,22 +15,49 @@ import java.util.Enumeration;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 
+    //	===========================================================================
+    //	Class Constant(s)
+    //	---------------------------------------------------------------------------    
+    
     /** Logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreUserPreferences.class);
 
+    /** EOEncoding key */
     private final static String VALUE="_V";
 
+    /** Notification that is posted when preferences change */
     public final static String PreferenceDidChangeNotification = "PreferenceChangedNotification";
 
+    //	===========================================================================
+    //	Class Variable(s)
+    //	---------------------------------------------------------------------------    
+
+    /** caches the singleton user preference object */
     private static ERCoreUserPreferences _userPreferences;
+
+    //	===========================================================================
+    //	Class Method(s)
+    //	---------------------------------------------------------------------------
+
+    /**
+     * Gets the singleton instance for interacting with
+     * the user preference system.
+     * @return single instance of the user preferences
+     */
     public static ERCoreUserPreferences userPreferences() {
         if (_userPreferences == null)
             _userPreferences = new ERCoreUserPreferences();
         return _userPreferences;
     }
 
-    /////////////////////////////////////////// Instance Methods /////////////////////////////////////////////
-    // Here is where we register the handlers.
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------    
+
+    /**
+     * Registers notification handlers for user preference notifications. These
+     * are mainly used within the context of D2W pages.
+     */
     public void registerHandlers() {
         log.debug("Registering preference handlers");
         _UserPreferenceHandler handler = new _UserPreferenceHandler();
@@ -46,33 +73,24 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         
     }
     
-    public NSArray preferences() {
-        ERCoreUserInterface user = (ERCoreUserInterface)ERCoreBusinessLogic.actor(preferencesEditingContext());
+    protected NSArray preferences(EOEditingContext ec) {
+        ERCoreUserInterface user = (ERCoreUserInterface)ERCoreBusinessLogic.actor(ec);
         return user!=null ? user.preferences() : NSArray.EmptyArray;
     }
 
-    // FIXME: this EC will end up collecting a *lot* of stuff over the course of its life
-    // a bunch of users and their prefs which have long since departed.
-    private EOEditingContext _preferencesEditingContext;
-    private EOEditingContext preferencesEditingContext() {
-        if (_preferencesEditingContext==null)
-            _preferencesEditingContext=ERXExtensions.newEditingContext();
-        return _preferencesEditingContext;
-    }
-
-    private EOEnterpriseObject preferenceRecordForKey(String key) {
+    protected EOEnterpriseObject preferenceRecordForKey(String key, EOEditingContext ec) {
         EOEnterpriseObject result=null;
-        if (key!=null) {
+        if (key != null) {
             if (log.isDebugEnabled())
                 log.debug("Preference value for Key = "+key);
-            for (Enumeration e=preferences().objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject pref=(EOEnterpriseObject)e.nextElement();
-                String prefKey=(String)pref.valueForKey("key");
-                if (log.isDebugEnabled()){
-                    log.debug("prefKey = "+prefKey);
+            for (Enumeration e = preferences(ec).objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject pref = (EOEnterpriseObject)e.nextElement();
+                String prefKey = (String)pref.valueForKey("key");
+                if (log.isDebugEnabled()) {
+                    log.debug("prefKey \"" + prefKey + "\"");   
                 }
-                if (prefKey!=null && prefKey.equals(key)) {
-                    result=pref;
+                if (prefKey != null && prefKey.equals(key)) {
+                    result = pref;
                     break;
                 }
             }
@@ -80,25 +98,41 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         return result;
     }
 
+    protected String encodedValue(Object value) {
+        EOKeyValueArchiver archiver = new EOKeyValueArchiver();
+        archiver.encodeObject(value,VALUE);
+        String encodedValue = NSPropertyListSerialization.stringFromPropertyList(archiver.dictionary());
+        return encodedValue;
+    }
+
+    protected Object decodedValue(String encodedValue) {
+        NSDictionary d = (NSDictionary )NSPropertyListSerialization.propertyListFromString(encodedValue);
+        EOKeyValueUnarchiver u = new EOKeyValueUnarchiver(d);
+        return u.decodeObjectForKey(VALUE);
+    }    
+    
+    //	===========================================================================
+    //	Implementation of NSKeyValueCoding
+    //	---------------------------------------------------------------------------    
+    
     // FIXME -- unarchiving - archiving probably could use optimization
     public Object valueForKey(String key) {
         Object result=null;
-        EOEnterpriseObject pref=preferenceRecordForKey(key);
-        if (pref!=null) {
-            String encodedValue=(String)pref.valueForKey("value");
-            NSDictionary d=(NSDictionary )NSPropertyListSerialization.propertyListFromString(encodedValue);
-            EOKeyValueUnarchiver u=new EOKeyValueUnarchiver(d);
-            result=u.decodeObjectForKey(VALUE);
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
+            if (pref != null) {
+                String encodedValue = (String)pref.valueForKey("value");
+                result = decodedValue(encodedValue);
+            }
+        } finally {
+            ec.unlock();
         }
-        if (log.isDebugEnabled()) log.debug("Prefs vfk "+key+" = "+result);
+        ec.dispose();
+        if (log.isDebugEnabled())
+            log.debug("Prefs vfk " + key + " = " + result);
         return result;
-    }
-
-    public String encodedValue(Object value) {
-        EOKeyValueArchiver archiver=new EOKeyValueArchiver();
-        archiver.encodeObject(value,VALUE);
-        String encodedValue=NSPropertyListSerialization.stringFromPropertyList(archiver.dictionary());
-        return encodedValue;
     }
 
     public void takeValueForKey(Object value, String key) {
@@ -108,35 +142,43 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         // so that if a user opens two sessions they don't get locking failures
         // this is OK for display style prefs (how many items, how they are sorted)
         // but might not be for more behavior-style prefs!!
-        preferencesEditingContext().revert();
-        EOEnterpriseObject pref=preferenceRecordForKey(key);
-        ERCoreUserInterface u=(ERCoreUserInterface)ERCoreBusinessLogic.actor(preferencesEditingContext());
-        if (pref!=null) {
-            if (value!=null) {
-                String encodedValue=encodedValue(value);
-                if (ERXExtensions.safeDifferent(encodedValue,pref.valueForKey("value"))) {
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
+            ERCoreUserInterface u = (ERCoreUserInterface)ERCoreBusinessLogic.actor(ec);
+            if (pref != null) {
+                if (value != null) {
+                    String encodedValue = encodedValue(value);
+                    if (ERXExtensions.safeDifferent(encodedValue,pref.valueForKey("value"))) {
+                        if (log.isDebugEnabled())
+                            log.debug("Updating preference "+u+": "+key+"="+encodedValue);
+                        pref.takeValueForKey(encodedValue,"value");
+                    }
+                } else {
                     if (log.isDebugEnabled())
-                        log.debug("Updating preference "+u+": "+key+"="+encodedValue);
-                    pref.takeValueForKey(encodedValue,"value");
+                        log.debug("Removing preference "+u+": "+key);
+                    ec.deleteObject(pref);
                 }
-            } else {
+            } else if (value!=null) {
+                pref = ERXUtilities.createEO("ERCPreference", ec);
+                u.newPreference(pref);
+                // done this way to not force you to sub-class our User entity
+                pref.takeValueForKey(ERXExtensions.rawPrimaryKeyForObject((EOEnterpriseObject)u),"userID");
+                pref.takeValueForKey(key,"key");
+                pref.takeValueForKey(encodedValue(value),"value");
                 if (log.isDebugEnabled())
-                    log.debug("Removing preference "+u+": "+key);
-                pref.editingContext().deleteObject(pref);
+                    log.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
             }
-        } else if (value!=null) {
-            pref=ERXUtilities.createEO("ERCPreference",
-                                      preferencesEditingContext());
-            u.newPreference(pref);
-            // done this way to not force you to sub-class our User entity
-            pref.takeValueForKey(ERXExtensions.rawPrimaryKeyForObject((EOEnterpriseObject)u),"userID");
-            pref.takeValueForKey(key,"key");
-            pref.takeValueForKey(encodedValue(value),"value");
-            if (log.isDebugEnabled())
-                log.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
+            if (ec.hasChanges()) {
+                ec.saveChanges();
+            }
+        } finally {
+            ec.unlock();
         }
-        preferencesEditingContext().saveChanges();
-        NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification, new NSDictionary(value,key));
+        ec.dispose();
+        NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification,
+                                                              new NSDictionary(value, key));
     }
 
     public static class _UserPreferenceHandler {
@@ -154,34 +196,4 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             }
         }
     }
-    /*
-    public static class _SortOrderingHandler {
-        // this class handles the changes -- the other direction (from BL to UI) is handled in rules
-        public void handleSortOrderingChange(NSNotification n) {
-            if (ERCoreBusinessLogic.actor()!=null) {
-                NSKeyValueCoding context=(NSKeyValueCoding)n.userInfo().objectForKey("d2wContext");
-                WODisplayGroup dg=(WODisplayGroup)n.object();
-                if (log.isDebugEnabled()) log.debug("handleSortOrderingChange "+context);
-                if (context!=null) {
-                    ERCoreUserPreferences.userPreferences().takeValueForKey(dg.sortOrderings(),
-                                                                          ERXExtensions.userPreferencesKeyFromContext("sortOrdering", context));
-                }
-            }
-        }
-    }
-
-    public static class _BatchSizeHandler {
-        // this class handles the changes -- the other direction (from BL to UI) is handled in rules
-        public void handleBatchSizeChange(NSNotification n) {
-            if (ERCoreBusinessLogic.actor() != null) {
-                NSKeyValueCoding context=(NSKeyValueCoding)n.userInfo().objectForKey("d2wContext");
-                if (log.isDebugEnabled()) log.debug("handleBatchSizeChange "+context);
-                if (context!=null) {
-                    ERCoreUserPreferences.userPreferences().takeValueForKey(n.object(),
-                                                                          ERXExtensions.userPreferencesKeyFromContext("batchSize", context));
-                }
-            }
-        }
-    }
-     */
 }
