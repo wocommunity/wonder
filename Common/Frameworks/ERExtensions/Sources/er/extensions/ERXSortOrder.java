@@ -128,7 +128,7 @@ public class ERXSortOrder extends WOSortOrder {
         if (cat.isDebugEnabled()) cat.debug("toggleClicked "+valueForBinding("d2wContext"));
         if (valueForBinding("d2wContext") != null) {
             NSNotificationCenter.defaultCenter().postNotification(SortOrderingChanged,
-                                                                  displayGroup(),
+                                                                  displayGroup().sortOrderings(),
                                                                   new NSDictionary(valueForBinding("d2wContext"), "d2wContext"));
         }
         return null;
