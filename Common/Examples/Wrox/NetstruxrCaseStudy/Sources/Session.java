@@ -11,10 +11,11 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import org.apache.log4j.Category;
 import er.wrox.User;
+import er.extensions.ERXSession;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXCrypto;
 
-public class Session extends WOSession {
+public class Session extends ERXSession {
 
     /////////////////////////////////// log4j category ///////////////////////////////////
     public static final Category cat = Category.getInstance("wrox.application.Session");

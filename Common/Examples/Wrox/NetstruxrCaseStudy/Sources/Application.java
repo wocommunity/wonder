@@ -14,7 +14,7 @@ import er.extensions.*;
 import er.wrox.User;
 import java.util.Enumeration;
 
-public class Application extends WOApplication { 
+public class Application extends ERXApplication { 
 
     public static void main(String argv[]) {
         WOApplication.main(argv, Application.class);
