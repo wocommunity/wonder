@@ -5,6 +5,7 @@
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="build.framework.dir" value="${build.root}/${framework.name}" />
         <property name="build.jar.file" value="${build.framework.dir}/Resources/Java/${project.name}.jar" />
+        <property name="build.temp.dir" value="${build.root}/tmp$" />
 
         <path id="project.class.path">
             <fileset dir="${build.root}">
@@ -61,6 +62,11 @@
     </target>
 
     <target name="framework" depends="properties,compile" description="Default compile target">
+        <mkdir dir="${build.temp.dir}" />
+        <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
+            <fileset dir="${project.dir}/WebServerResources" />
+        </copy>
+
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="project.class.path" />
@@ -83,19 +89,27 @@
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
-            <wsresources dir="${project.dir}/WebServerResources">
+            <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
             </wsresources>
-            </woframework>
-            <echo message="-------------------------------------" />
-            <echo message="${project.name}.framework" />
-            <echo message="-------------------------------------" />
+        </woframework>
+
+        <delete dir="${build.temp.dir}" />
+
+        <echo message="-------------------------------------" />
+        <echo message="${project.name}.framework" />
+        <echo message="-------------------------------------" />
     </target>
 
     <target name="application" depends="properties,compile" description="Default compile target">
+        <mkdir dir="${build.temp.dir}" />
+        <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
+            <fileset dir="${project.dir}/WebServerResources" />
+        </copy>
+
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
         </taskdef>
@@ -114,7 +128,7 @@
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
-            <wsresources dir="${project.dir}/WebServerResources">
+            <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.js" />
@@ -143,12 +157,20 @@
                 <exclude name="JavaEODistribution.framework"/>
             </frameworks>
         </woapplication>
+
+        <delete dir="${build.temp.dir}" />
+
         <echo message="-------------------------------------" />
         <echo message="${project.name}.woa" />
         <echo message="-------------------------------------" />
     </target>
 
-    <target name="stepwiseApplication" depends="properties,compile" description="Default compile target">
+    <target name="stepwiseApplication" depends="properties, compile" description="Default compile target">
+        <mkdir dir="${build.temp.dir}" />
+        <copy todir="${build.temp.dir}/${project.name}/WebServerResources" flatten="true">
+            <fileset dir="${project.dir}/WebServerResources" />
+        </copy>
+
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="project.class.path" />
         </taskdef>
@@ -167,7 +189,7 @@
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
-            <wsresources dir="${project.dir}/WebServerResources">
+            <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.js" />
@@ -182,6 +204,9 @@
                 <exclude name="JavaEODistribution.framework"/>
             </frameworks>
         </woapplication>
+
+        <delete dir="${build.temp.dir}" />
+
     <echo message="-------------------------------------" />
     <echo message="${project.name}.woa" />
     <echo message="-------------------------------------" />
