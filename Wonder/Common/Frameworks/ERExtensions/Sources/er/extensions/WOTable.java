@@ -77,16 +77,19 @@ public class WOTable extends WOComponent {
 
     public int rowCount()  {
         if (_rowCount == -1) {
+            _rowCount=0;
             NSArray aList = list();
-            int aMaxColCount = maxColumns();
-            int aListCount = aList.count();
-            int aRemainder = 0;
-            if (aMaxColCount!=0)  {
-                _rowCount = aListCount / aMaxColCount;
-                aRemainder = aListCount % aMaxColCount;
-            }
-            if (aRemainder!=0) {
-                _rowCount++;
+            if (aList!=null) {
+                int aMaxColCount = maxColumns();
+                int aListCount = aList.count();
+                int aRemainder = 0;
+                if (aMaxColCount!=0)  {
+                    _rowCount = aListCount / aMaxColCount;
+                    aRemainder = aListCount % aMaxColCount;
+                }
+                if (aRemainder!=0) {
+                    _rowCount++;
+                }
             }
         }
         return _rowCount;
