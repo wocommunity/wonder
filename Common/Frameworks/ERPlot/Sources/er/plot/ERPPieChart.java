@@ -28,17 +28,20 @@ public class ERPPieChart extends ERPChart {
     public ERPPieChart(WOContext context) {
         super(context);
     }
-
+    
     public Dataset dataset() {
         if(_dataset == null) {
-            DefaultPieDataset dataset = new DefaultPieDataset();
-            for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
-                Object item = items.nextElement();
-                String name = (String)NSKeyValueCoding.Utility.valueForKey(item, nameKey());
-                Number value = (Number)NSKeyValueCoding.Utility.valueForKey(item, valueKey());
-                dataset.setValue(name, value.intValue());
+            _dataset = super.dataset();
+            if(_dataset == null) {
+                DefaultPieDataset dataset = new DefaultPieDataset();
+                for(Enumeration items = items().objectEnumerator(); items.hasMoreElements(); ) {
+                    Object item = items.nextElement();
+                    String name = (String)NSKeyValueCoding.Utility.valueForKey(item, nameKey());
+                    Number value = (Number)NSKeyValueCoding.Utility.valueForKey(item, valueKey());
+                    dataset.setValue(name, value.intValue());
+                }
+                _dataset = dataset;
             }
-            _dataset = dataset;
         }
         return _dataset;
     }
@@ -49,7 +52,7 @@ public class ERPPieChart extends ERPChart {
             PieDataset dataset = (PieDataset)dataset();
             String name = name();
 
-            if("3D".equals(type())) {
+            if("3D".equals(chartType())) {
                 chart = ChartFactory.createPie3DChart(name,dataset,true,false,false);
             } else {
                 chart = ChartFactory.createPieChart(name,dataset,true,false,false);
