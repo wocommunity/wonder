@@ -20,40 +20,32 @@ import com.webobjects.eocontrol.*;
  * The second pop-up displays a list of what can be thought of as children entities. When a user selects an entity in 
  * the parent list, the child list is instantly modified to reflect the children entities available to the user 
  * through that parent. This is done through client-side Javascript.
- * For example,
-
+ * For example:
+<pre><code>
 parent1(child1,child2,child3)
 parent2(child4,child5)
 parent3(child2,child5)
-
+</code></pre>
  * When the user selects parent1, its appropriate children are displayed in the second popup. 
  * If the user selects child2 in the children pop-up this is the value that is returned to the 
  * user through the selectedChild variable.
- * Users should set:
-
-parentEntitiesList - This is an array of the parent objects that appear in the first pop-up.
-parentToChildrenRelationshipName - the name of the relationship from the parent to its possible children. This is used to fill the values that appear in the children popup.
-selectedParent - the currently selected parent in the parent pop-up. This can be null, but will return the user-selected parent.
-selectedChild - set to null. Returns the user-selected child.
-parentDisplayValueName - the name of the variable displayed in the parent pop-up gotten by parent.valueForKey(parentDisplayValueName)
-childDisplayValueName - the name of the variable displayed in the child pop-up.
-parentLabel - the value displayed in the table interface for the parent popup.
-relationLabel - the value displayed in the table interface for the child popup.
-
  * For the display of the parent popup, if we aren't passed in a selectedParent, then we default to 
  * parentPopUpStringForAll. If we aren't given that either, then we default to the last parent in the array.
  * For the display of the child popup, if we aren't passed in a selectedChild, then we default to childPopUpStringForAll. 
  * If we aren't given that either, then we default to the last child in the array.
- * @binding parentEntitiesList
- * @binding parentToChildrenRelationshipName
- * @binding selectedParent
- * @binding selectedChild
- * @binding parentDisplayValueName
- * @binding parentLabel
- * @binding defaultChildKey
- * @binding childrenSortKey
- * @binding childDisplayValueName
- * @binding childLabel
+ * 
+ * @binding parentEntitiesList array of the parent objects that appear in the first pop-up.
+ * @binding parentToChildrenRelationshipName name of the relationship from the parent to its possible children. This is used to fill the values that appear in the children popup.
+ * @binding selectedParent currently selected parent in the parent pop-up. This can be null, but will return the user-selected parent.
+ * @binding selectedChild set to null. Returns the user-selected child.
+ * @binding parentDisplayValueName keypath of the parent displayed in the parent pop-up
+ * @binding parentLabel value displayed in the table interface for the parent popup.
+ * @binding childLabel value displayed in the table interface for the child popup.
+ * @binding defaultChildKey keypath of the parent for the default child (eg, largest city)
+ * @binding childrenSortKey keypath to sort the children on
+ * @binding childDisplayValueName keypath of the child displayed in the child pop-up
+ * @binding parentPopUpStringForAll  to display if no parent is chosen ("- all -")
+ * @binding childPopUpStringForAll to display if no child is chosen ("- all -")
  */
 
 public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
