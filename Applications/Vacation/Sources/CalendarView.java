@@ -185,21 +185,22 @@ public class CalendarView extends VacationComponent {
             // construct calendar date
             GregorianCalendar myDate = dateFromDayNumber((Number) calendarDate());
 
-            // fetch dates only if today is not saturday or sunday
-            if (myDate.get(GregorianCalendar.DAY_OF_WEEK)!=GregorianCalendar.SATURDAY && myDate.get(GregorianCalendar.DAY_OF_WEEK)!=GregorianCalendar.SUNDAY) {
-                
-                NSMutableDictionary bindings = new NSMutableDictionary();
-                bindings.setObjectForKey(myDate.getTime(),"DATE");
+            // if today is a weekend, and weekends are not enabled, return nothing;
+            if (!application.settings.objectForKey("showDatesOnWeekends").equals("true"))
+                if (myDate.get(GregorianCalendar.DAY_OF_WEEK)==GregorianCalendar.SATURDAY || myDate.get(GregorianCalendar.DAY_OF_WEEK)==GregorianCalendar.SUNDAY)
+                    return null;
 
-                if (session.user().group()!=null) {
-                    bindings.setObjectForKey(session.user().group(),"GROUP");
-                    bindings.setObjectForKey(NSKeyValueCoding.NullValue,"EXCEPTION");
-                }
+            NSMutableDictionary bindings = new NSMutableDictionary();
+            bindings.setObjectForKey(myDate.getTime(),"DATE");
 
-                // retrieve the fetch spec from the eomodel
-                datesForDate = EOUtilities.objectsWithFetchSpecificationAndBindings(session.defaultEditingContext(),
-                                                                                    "VacationEvent","EventsForDate",bindings);
+            if (session.user().group()!=null) {
+                bindings.setObjectForKey(session.user().group(),"GROUP");
+                bindings.setObjectForKey(NSKeyValueCoding.NullValue,"EXCEPTION");
             }
+
+            // retrieve the fetch spec from the eomodel
+            datesForDate = EOUtilities.objectsWithFetchSpecificationAndBindings(session.defaultEditingContext(),
+                                                                                "VacationEvent","EventsForDate",bindings);
         }
 
         EOQualifier qual = EOQualifier.qualifierWithQualifierFormat("type = 'Holiday'", null);
@@ -208,7 +209,7 @@ public class CalendarView extends VacationComponent {
         if (holidays.count() > 0) return holidays;
         else return datesForDate;
     }
-
+    
     public WOComponent goDirectToMonth() {
 
         currentDate = new GregorianCalendar(currentYearSelection.intValue(),
