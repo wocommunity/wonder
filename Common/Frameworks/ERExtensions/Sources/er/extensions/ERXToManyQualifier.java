@@ -19,18 +19,17 @@ import java.util.*;
  * generate three joins no matter how many eos you are  trying to find. Example usage:
  * <pre><code>
  * NSArray employees; // given
- * EOEntity department; // given
  * // Find all of the departments that have all of those employees
- * ERXToManyQualifier q = new ERXToManyQualifier(department, "toEmployees", employees);
+ * ERXToManyQualifier q = new ERXToManyQualifier("toEmployees", employees);
  * EOFetchSpecification fs = new EOFetchSpecification("Department", q, null);
  * NSArray departments = ec.objectsWithFetchSpecification(fs);
  * </code></pre>
  * If you want to find say departments that have 5 or more of the given
  * employees (imagine you have a list of 10 or so), then you could
  * construct the qualifier like: <br>
- * <code> ERXToManyQualifier q = new ERXToManyQualifier(department, "toEmployees", employees, 5);</code><br>
+ * <code> ERXToManyQualifier q = new ERXToManyQualifier("toEmployees", employees, 5);</code><br>
  * or to find any department that has at least one of the given employees<br>
- * <code> ERXToManyQualifier q = new ERXToManyQualifier(department, "toEmployees", employees, 1);</code>
+ * <code> ERXToManyQualifier q = new ERXToManyQualifier("toEmployees", employees, 1);</code>
  */
 
 public class ERXToManyQualifier extends EOQualifier implements Cloneable {
@@ -38,13 +37,10 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ToManyQualifierSQLGenerationSupport(), ERXToManyQualifier.class);
     }
-//public class ERXToManyQualifier extends EOSQLQualifier implements Cloneable {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXToManyQualifier.class);
 
-    /** holds the entity */
-    private EOEntity _entity;
     /** holds the to many key */    
     private String _toManyKey;
     /** holds the array of elements */    
@@ -52,12 +48,11 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
     /** holds the min count to match against, defaults to 0 */
     private int _minCount = 0;
 
-    public ERXToManyQualifier(EOEntity e, String toManyKey, NSArray elements) {
-        this(e,toManyKey,elements, 0);
+    public ERXToManyQualifier(String toManyKey, NSArray elements) {
+        this(toManyKey,elements, 0);
     }
 
-    public ERXToManyQualifier (EOEntity e, String toManyKey, NSArray elements, int minCount) {
-        _entity=e;
+    public ERXToManyQualifier(String toManyKey, NSArray elements, int minCount) {
         _toManyKey=toManyKey;
         _elements=elements;
         _minCount = minCount;
@@ -65,10 +60,6 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
     
     public NSArray elements() {
         return _elements;
-    }
-    
-    public EOEntity entity() {
-        return _entity;
     }
     
     public String key() {
@@ -93,7 +84,7 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
      * @return clone of the qualifier.
      */
     public Object clone() {
-        return new ERXToManyQualifier(_entity, _toManyKey, _elements, _minCount);
+        return new ERXToManyQualifier(_toManyKey, _elements, _minCount);
     }
 
     /**
@@ -118,13 +109,13 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             ERXToManyQualifier qualifier = (ERXToManyQualifier)eoqualifier;
             StringBuffer result=new StringBuffer();
-
+            EOEntity targetEntity=e.entity();
+            
             NSArray pKeys=ERXEOAccessUtilities.primaryKeysForObjects(qualifier.elements());
 
-            String tableName=qualifier.entity().externalName();
+            String tableName=targetEntity.externalName();
             NSArray toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
             EORelationship targetRelationship=null;
-            EOEntity targetEntity=qualifier.entity();
             for (int i=0; i<toManyKeys.count()-1;i++) {
                 targetRelationship= targetEntity.relationshipNamed((String)toManyKeys.objectAtIndex(i));
                 targetEntity=targetRelationship.destinationEntity();
@@ -183,10 +174,26 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
                 result.append('.');
                 result.append(secondHopSourceAttribute.columnName());
                 
-                result.append(" IN "); // FIXME !!
-                result.append(pKeys);
+                result.append(" IN ("); 
+                String pkName = (String)targetEntity.primaryKeyAttributeNames().lastObject();
+                EOAttribute pk = (EOAttribute)targetEntity.primaryKeyAttributes().lastObject();
+                for(int i = 0; i < pKeys.count(); i++) {
+                    
+                    Object key = pKeys.objectAtIndex(i);
+                    String keyString = null;
+                    if(key instanceof NSData) {
+                        //ak: This is a fix for Postgres NSData PKs, note that you need the correct plugin for this to work
+                        keyString = e.sqlStringForData((NSData)key);
+                    } else {
+                        keyString = key.toString();
+                    }
+                    result.append(keyString);
+                    if(i < pKeys.count()-1) {
+                        result.append(",");
+                    }
+                }
 
-                result.append(" GROUP BY ");
+                result.append(") GROUP BY ");
                 appendColumnForAttributeToStringBuffer(sourceAttribute,result);
 
                 result.append(" HAVING COUNT(*)");
@@ -210,7 +217,7 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String relationshipPath) {
             ERXToManyQualifier qualifier=(ERXToManyQualifier)eoqualifier;
             String newPath =  EOQualifierSQLGeneration.Support._translateKeyAcrossRelationshipPath(qualifier.key(), relationshipPath, eoentity);
-            return new ERXToManyQualifier(eoentity, newPath, qualifier.elements(), qualifier.minCount());
+            return new ERXToManyQualifier(newPath, qualifier.elements(), qualifier.minCount());
         }
     }
 
