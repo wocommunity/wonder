@@ -27,8 +27,15 @@ public class ERXPluralString extends WOComponent {
 
     public String value() {
         Number c=(Number)valueForBinding("count");
-        return ERXLocalizer.localizerForSession(session()).plurifiedString((String)valueForBinding("value"), c!=null ? c.intValue() : 0);
+        return localizer().plurifiedString((String)valueForBinding("value"), c!=null ? c.intValue() : 0);
     }
+
+    public ERXLocalizer localizer() {
+        ERXLocalizer l=(ERXLocalizer)valueForBinding("localizer");
+        return l!=null ? l : ERXLocalizer.localizerForSession(session());
+    }
+
+    
 /*
     public static String plurify(String s, int howMany) {
         String result=s;
