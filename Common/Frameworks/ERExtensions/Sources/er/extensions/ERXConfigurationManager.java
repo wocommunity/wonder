@@ -370,7 +370,7 @@ public class ERXConfigurationManager {
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
-                if (aModel.adaptorName().equals("JDBC") && ERXProperties.booleanForKeyWithDefault("er.extensions.ERXJDBCConnectionBroker.poolModelConnections", false)) {
+                if (aModel.adaptorName().equals("JDBC") && ERXProperties.booleanForKeyWithDefault("er.jdbcadaptor.ERJDBCAdaptor.poolModelConnections", false)) {
                     try {
                         // is the JavaERJDBCAdaptor framework available?
                         Class cl = Class.forName("er.jdbcadaptor.ERJDBCAdaptor");
