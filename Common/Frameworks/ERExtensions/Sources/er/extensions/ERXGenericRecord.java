@@ -819,8 +819,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-        * This method uses Validity if the property key
-     * <b>er.extensions.ERXGenericRecord</b> is set to true
+     * This method uses Validity if the property key
+     * <b>er.extensions.ERXGenericRecord.useValidity</b> is set to true
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
@@ -828,12 +828,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (useValidity()) {
             invokeValidityMethodWithType(VALIDITY_INSERT);
         }
+        EOClassDescription cd = classDescription();
+        if(cd instanceof ERXEntityClassDescription) {
+            ((ERXEntityClassDescription)cd).validateObjectForInsert(this);
+        }
         super.validateForInsert();
     }
 
     /**
-        * This method uses Validity if the property key
-     * <b>er.extensions.ERXGenericRecord</b> is set to true
+     * This method uses Validity if the property key
+     * <b>er.extensions.ERXGenericRecord.useValidity</b> is set to true
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
@@ -841,12 +845,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (useValidity()) {
             invokeValidityMethodWithType(VALIDITY_UPDATE);
         }
+        EOClassDescription cd = classDescription();
+        if(cd instanceof ERXEntityClassDescription) {
+            ((ERXEntityClassDescription)cd).validateObjectForUpdate(this);
+        }
         super.validateForUpdate();
     }
 
     /**
-        * This method uses Validity if the property key
-     * <b>er.extensions.ERXGenericRecord</b> is set to true
+     * This method uses Validity if the property key
+     * <b>er.extensions.ERXGenericRecord.useValidity</b> is set to true
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */

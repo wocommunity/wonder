@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.lang.*;
 import java.util.*;
+import java.io.File;
 import java.lang.reflect.*;
 
 /**
@@ -43,14 +44,15 @@ import java.lang.reflect.*;
          (
           {
               // this is the message code into ValidationStrings.plist
-              message = "User.email.wrongLength";
+              //    User.email.wrongLength = "The mail does not have the right size (5 to 50)";
+              message = "wrongLength";
 
               // if there is a qualifier key, then a dictionary containing "object" and "value" is evaluated and an exception is thrown if the evaluation returns false
               qualifier = "(value.length >= 5) AND (value.length < 50)";
           },
           {
               // again, this is the message code into ValidationStrings.plist
-              message = "User.email.sampleTest";
+              message = "sampleTest";
 
               // Given this key, an object of the corresponding EOQualifierEvaluation subclass is created and given this dictionary on creation. This object needs to be re-entrant.
               className = "SampleTest";
@@ -79,18 +81,18 @@ import java.lang.reflect.*;
          mailAndPass =
              (
               {
-                  message = "User.mailAndPass.stupidTest";
+                  message = "stupidTest";
                   qualifier = "(object.email.length >= object.password.length)";
               }
               );
      };
 
-     // These get checked when the object gets saved, additionally to "addtionalValidations"
-     // The structure of "validateForInsert" and "validateForDelete" is the same
+     // These get checked when the object gets saved, additionally to "additionalValidations"
+     // The structure of "validateForInsert", "validateForUpdate" and "validateForDelete" is the same.
      validateForSave =
          (
           {
-              message = "User.save.cantBeBoth";
+              message = "validateForSave.cantBeBoth";
               qualifier = "(object.isEditor = 'Y' and object.isAdmin = 'Y')";
           }
           );
@@ -235,7 +237,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 eoentity.setClassName(className);
                 log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
             } 
-            //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
         }
 
         /**
@@ -417,6 +418,50 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             throw (erv != null ? erv : eov);
         }
     }
+
+    /**
+     * This method is called when an object is
+     * about to be updated. If any validation
+     * exceptions occur they are converted to an
+     * {@link ERXValidationException} and that is
+     * thrown.
+     * @param obj enterprise object to be deleted
+     * @throws validation exception
+     */
+    public void validateObjectForUpdate(EOEnterpriseObject obj) throws NSValidation.ValidationException {
+        try {
+            validateObjectWithUserInfo(obj, null, "validateForUpdate", "validateForUpdate");
+        } catch (ERXValidationException eov) {
+            throw eov;
+        } catch (NSValidation.ValidationException eov) {
+            if (log.isDebugEnabled())
+                log.debug("Caught validation exception: " + eov);
+            ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
+            throw (erv != null ? erv : eov);
+        }
+    }
+    
+    /**
+     * This method is called when an object is
+     * about to be inserted. If any validation
+     * exceptions occur they are converted to an
+     * {@link ERXValidationException} and that is
+     * thrown.
+     * @param obj enterprise object to be deleted
+     * @throws validation exception
+     */
+    public void validateObjectForInsert(EOEnterpriseObject obj) throws NSValidation.ValidationException {
+        try {
+            validateObjectWithUserInfo(obj, null, "validateForInsert", "validateForInsert");
+        } catch (ERXValidationException eov) {
+            throw eov;
+        } catch (NSValidation.ValidationException eov) {
+            if (log.isDebugEnabled())
+                log.debug("Caught validation exception: " + eov);
+            ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
+            throw (erv != null ? erv : eov);
+        }
+    }
     
     /**
      * This method is called to validate a value
@@ -515,15 +560,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
     }
     
-    protected boolean validateObjectValueDictWithInfo(ValidationObjectValue values, NSDictionary info) {
-        String className = (String)info.objectForKey("className");
-        if(className == null) {
-            className = QualiferValidation.class.getName();
-        }
-        String key = info.toString();
-        EOQualifierEvaluation q = (EOQualifierEvaluation)_validationQualiferCache.objectForKey(key);
+    protected boolean validateObjectValueDictWithInfo(ValidationObjectValue values, NSDictionary info, String cacheKey) {
+        EOQualifierEvaluation q = (EOQualifierEvaluation)_validationQualiferCache.objectForKey(cacheKey);
         if(q == null) {
             try {
+                String className = (String)info.objectForKey("className");
+                if(className == null) {
+                    className = QualiferValidation.class.getName();
+                }
                 Class cl = ERXCompilerProxy.defaultProxy().classForName(className);
                 Constructor co = cl.getConstructor(new Class [] {Object.class});
                 Object o = co.newInstance(new Object[] {info});
@@ -531,7 +575,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             } catch(Exception ex) {
                 throw new NSForwardException(ex);
             }
-            _validationQualiferCache.setObjectForKey(q, key);
+            _validationQualiferCache.setObjectForKey(q, cacheKey);
         }
         if(q != null)
             return q.evaluateWithObject(values);
@@ -543,11 +587,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             NSArray qualifiers = (NSArray)_validationInfo.valueForKeyPath(validationTypeString);
             if(qualifiers != null) {
                 ValidationObjectValue values = new ValidationObjectValue(object, value);
+                int i = 0;
                 for(Enumeration e = qualifiers.objectEnumerator(); e.hasMoreElements();) {
                     NSDictionary info = (NSDictionary)e.nextElement();
-                    if(!validateObjectValueDictWithInfo(values, info)) {
+                    if(!validateObjectValueDictWithInfo(values, info, validationTypeString+property+i)) {
                         throw ERXValidationFactory.defaultFactory().createException(object, property, value, (String)info.objectForKey("message"));
                     }
+                    i = i+1;
                 }
             }
         }
