@@ -30,23 +30,26 @@ public class WOToOneRelationship extends ERXArrayChooser {
         String realRelationshipKey = realRelationshipKey();
         Object realSourceObject = realSourceObject();
         
-        if(realSourceObject instanceof EOEnterpriseObject) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)realSourceObject;
-            if(value instanceof EOEnterpriseObject) {
-                eo.addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject)value, realRelationshipKey);
-            } else {
-                Object oldValue = eo.valueForKey(realRelationshipKey);
-                if(oldValue instanceof EOEnterpriseObject) {
-                    eo.removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject)oldValue, realRelationshipKey);
+        Object currentValue = NSKeyValueCoding.Utility.valueForKey(realSourceObject, realRelationshipKey);
+        if(!ERXExtensions.safeEquals(value, currentValue)) {
+            if(realSourceObject instanceof EOEnterpriseObject) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)realSourceObject;
+                if(value instanceof EOEnterpriseObject) {
+                    eo.addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject)value, realRelationshipKey);
                 } else {
-                    //  handle attributes
-                    eo.takeValueForKey(value, realRelationshipKey);
+                    Object oldValue = eo.valueForKey(realRelationshipKey);
+                    if(oldValue instanceof EOEnterpriseObject) {
+                        eo.removeObjectFromBothSidesOfRelationshipWithKey((EOEnterpriseObject)oldValue, realRelationshipKey);
+                    } else {
+                        //  handle attributes
+                        eo.takeValueForKey(value, realRelationshipKey);
+                    }
                 }
+            } else { 
+                // handle every other type of object, 
+                // we rely on NSMutableDictionary.takeValueForKey(null, someKey) will actually remove the object
+                NSKeyValueCoding.Utility.takeValueForKey(realSourceObject, value, realRelationshipKey);
             }
-        } else { 
-            // handle every other type of object, 
-            // we rely on NSMutableDictionary.takeValueForKey(null, someKey) will actually remove the object
-            NSKeyValueCoding.Utility.takeValueForKey(realSourceObject, value, realRelationshipKey);
         }
     }
     
