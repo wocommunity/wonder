@@ -14,6 +14,6 @@ WOROOT/Library/Frameworks/JavaPlot.framework/Resources/Java/javaplot.jar
 WOROOT/Library/Frameworks/JavaWebObjects.framework/Resources/Java/javawebobjects.jar
 WOROOT/Library/Frameworks/JavaWOJSPServlet.framework/Resources/Java/javawojspservlet.jar
 WOROOT/Library/Frameworks/JavaXML.framework/Resources/Java/javaxml.jar
-HOMEROOT/Roots/JavaWOExtensions.framework/Resources/Java/JavaWOExtensions.jar
+LOCALROOT/Library/Frameworks/JavaWOExtensions.framework/Resources/Java/JavaWOExtensions.jar
 
 
