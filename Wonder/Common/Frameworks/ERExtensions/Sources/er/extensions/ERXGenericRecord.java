@@ -667,21 +667,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-    /** Caches the context used for validations */
-    // FIXME: We should have a better mechanism than this.
-    //private static D2WContext _validationContext;
-    
-    // DELETEME: Let's ditch this for now, it is kinda half baked
-    /*
-    public static Object ruleValueForAttributeAndKey(EOAttribute a, String key) {
-        if (_validationContext==null) {
-            _validationContext=new D2WContext();
-        }
-        _validationContext.setEntity(a.entity());
-        _validationContext.setPropertyKey(a.name());
-        return _validationContext.valueForKey(key);
-    }*/
-
     /**
      * Overrides the default validation mechanisms to provide
      * a few checks before invoking super's implementation,
@@ -705,9 +690,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         try {
             result=super.validateValueForKey(value,key);
         } catch (ERXValidationException e) {
-            
-            //((ERXValidationException)e).setPropertyKey(key);
-            //((ERXValidationException)e).setEoObject(this);
             throw e;
         } catch (NSValidation.ValidationException e) {
             if (e.key() == null || e.object() == null)
