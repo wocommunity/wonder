@@ -436,9 +436,9 @@
 				F5E99BB00354DE4F01CF0E76,
 				F56937BD03561CDA01CF0E76,
 				F6ED0C7A0361C03B01257492,
-				F5F0454A0364AFE801CF0E76,
 				F531D2ED03658BC001AD0D07,
 				F692713F0365AD3301257492,
+				F5283C580365C94301CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1149,6 +1149,18 @@
 		};
 		F510756102C453E601000102 = {
 			fileRef = F510755F02C453E501000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5283C570365C94301CF0E76 = {
+			isa = PBXFileReference;
+			name = ERXFetchSpecificationBatchIterator.java;
+			path = er/extensions/ERXFetchSpecificationBatchIterator.java;
+			refType = 4;
+		};
+		F5283C580365C94301CF0E76 = {
+			fileRef = F5283C570365C94301CF0E76;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -5853,18 +5865,6 @@
 			settings = {
 			};
 		};
-		F5F045490364AFE801CF0E76 = {
-			isa = PBXFileReference;
-			name = ERXPrimaryKeyBatchIterator.java;
-			path = er/extensions/ERXPrimaryKeyBatchIterator.java;
-			refType = 4;
-		};
-		F5F0454A0364AFE801CF0E76 = {
-			fileRef = F5F045490364AFE801CF0E76;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 //F50
 //F51
 //F52
@@ -6050,8 +6050,10 @@
 			children = (
 				F59C577702C4565601000102,
 				F59C579202C4565701000102,
+				F5E99BAF0354DE4F01CF0E76,
 				F5E3B46A034823BF016A5D3F,
 				F59C579802C4565701000102,
+				F5283C570365C94301CF0E76,
 				F59C579F02C4565701000102,
 				F59C57A102C4565701000102,
 				F69DF13F02C76B3F01AD0D07,
@@ -6060,8 +6062,6 @@
 				F59C57F202C4565701000102,
 				F59C57F302C4565701000102,
 				F59C57F402C4565701000102,
-				F5E99BAF0354DE4F01CF0E76,
-				F5F045490364AFE801CF0E76,
 			);
 			isa = PBXGroup;
 			name = "EOF Additions";
