@@ -1,17 +1,30 @@
 <project name="Wonder" default="core">
-<target name="all">
-<ant antFile="Build/build/generic.xml" target="all" />
-</target>
-<target name="reporting">
-<ant antFile="Build/build/generic.xml" target="DynaReporting.all" />
-</target>
-<target name="excel">
-<ant antFile="Build/build/generic.xml" target="excelgeneration.all" />
-</target>
-<target name="core">
-<ant antFile="Build/build/generic.xml" target="frameworks.all" />
-</target>
-<target name="clean">
-<ant antFile="Build/build/generic.xml" target="clean" />
-</target>
+    <!-- 
+     this file is just a tiny wrapper around the core file Build/build/generic.xml
+     more info about the builds can be found there
+    -->
+    <target name="clean">
+        <ant antFile="Build/build/generic.xml" target="clean" />
+    </target>
+    <target name="compile">
+        <ant antFile="Build/build/generic.xml" target="compile" />
+    </target>
+    <target name="install">
+        <ant antFile="Build/build/generic.xml" target="install" />
+    </target>
+    <target name="web">
+        <ant antFile="Build/build/generic.xml" target="web" />
+    </target>
+    <target name="all" depends="clean,compile,install,web" />
+    
+    <!-- these are just for convenience -->
+    <target name="reporting">
+        <ant antFile="Build/build/generic.xml" target="DynaReporting.all" />
+    </target>
+    <target name="excel">
+        <ant antFile="Build/build/generic.xml" target="excelgeneration.all" />
+    </target>
+    <target name="core">
+        <ant antFile="Build/build/generic.xml" target="frameworks.all" />
+    </target>
 </project>
