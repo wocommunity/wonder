@@ -8,8 +8,10 @@ package er.extensions;
 
 import com.webobjects.foundation.NSArray;
 
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -19,6 +21,7 @@ import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
@@ -82,4 +85,40 @@ public class ERXEOControlUtilities {
         EOFetchSpecification fs = ERXEOControlUtilities.primaryKeyFetchSpecificationForEntity(ec, entityName, eoqualifier, sortOrderings, null);
         return ec.objectsWithFetchSpecification(fs);
     }
+
+    /**
+    * Returns the number of objects matching the given
+     * qualifier for the clazz's entity name. Implementation
+     * wise this method will generate the correct sql to only
+     * perform a count, i.e. all of the objects wouldn't be
+     * pulled into memory.
+     * @param ec editing context to use for the count qualification
+     * @param qualifier to find the matching objects
+     * @return number of matching objects
+     */
+    public static Number objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        
+        NSArray results = null;
+
+        EOAttribute attribute = EOGenericRecordClazz.objectCountAttribute();
+        
+        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
+        synchronized (entity) {
+            entity.addAttribute(attribute);
+
+            fs.setFetchesRawRows(true);
+            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
+
+            results = ec.objectsWithFetchSpecification(fs);
+
+            entity.removeAttribute(attribute);
+        }
+        if ((results != null) && (results.count() == 1)) {
+            NSDictionary row = (NSDictionary) results.lastObject();
+            return (Number)row.objectForKey(attribute.name());
+        }
+        return null;
+    }    
 }
