@@ -1,0 +1,4 @@
+String4: WOString {
+	numberformat = "#,##0";
+	value = totalMillis;
+}
