@@ -28,7 +28,7 @@ public class ERXListDisplay extends WOComponent {
     public boolean isStateless() { return true; }
 
     public boolean escapeHTML() {
-        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("escapeHTML", this, true);
+        return ERXValueUtilities.booleanValueWithDefault(valueForBinding("escapeHTML"), true);
     }
     
     public String displayString() {

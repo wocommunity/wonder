@@ -138,20 +138,6 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     }
 
     /**
-     * Retrives a given binding and if it is not null
-     * then returns <code>toString</code> called on the
-     * bound object.
-     * @param binding to be resolved
-     * @return resolved binding in string format
-     */
-    // MOVEME: Should move to ERXStatelessComponent and have this component subclass that
-    // FIXME: Should be renamed stringValueForBinding
-    public String stringForBinding(String binding) {
-        Object v=valueForBinding(binding);
-        return v!=null ? v.toString() : null;
-    }
-
-    /**
      * Generates an href for the given direct action based
      * on all of the bindings. Currently it generates an
      * absolute url starting with the key: ADAPTOR_PREFIX_MARKER.
