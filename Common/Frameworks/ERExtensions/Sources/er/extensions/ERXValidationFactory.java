@@ -297,7 +297,7 @@ public class ERXValidationFactory {
         } else {
             ERXValidationException original = (ERXValidationException)eov;
             erve = createException(original.eoObject(), original.key(), original.value(), original.type());
-            log.info("Converting exception: " + original + " value: " + (original.value() != null ? original.value() : "<NULL>"));
+            log.debug("Converting exception: " + original + " value: " + (original.value() != null ? original.value() : "<NULL>"));
         }
         if (erve == null) {
             log.error("Unable to convert validation exception: " + eov, eov);
