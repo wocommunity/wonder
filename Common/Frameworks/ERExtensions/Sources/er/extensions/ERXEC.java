@@ -238,9 +238,11 @@ public class ERXEC extends EOEditingContext {
      * @return whether we did lock automatically
      */
     protected boolean autoLock(String method) {
+        if (!useAutoLock()) return false;
+        
         boolean wasAutoLocked = false;
         
-        if (lockCount == 0 && useAutoLock()) {
+        if (lockCount == 0) {
             wasAutoLocked = true;
             autoLockCount++;
             lock();
