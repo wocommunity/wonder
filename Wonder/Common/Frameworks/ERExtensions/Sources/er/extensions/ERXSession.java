@@ -258,9 +258,11 @@ public class ERXSession extends WOSession implements Serializable {
      * the defailt encoding. 
      * @return message encoding object
      */
-    public ERXMessageEncoding messageEncoding() { 
-        if (_messageEncoding == null) 
-            _messageEncoding = new ERXMessageEncoding(language());
+    public ERXMessageEncoding messageEncoding() {
+        if (_messageEncoding == null) {
+            //_messageEncoding = new ERXMessageEncoding(language());
+            _messageEncoding = browser().messageEncodingForLanguage(language());
+        }
         return _messageEncoding; 
     }
 
@@ -278,7 +280,11 @@ public class ERXSession extends WOSession implements Serializable {
             WORequest request = context().request();
             if (request != null) {
                 ERXBrowserFactory browserFactory = ERXBrowserFactory.factory();
-                _browser = browserFactory.browserMatchingRequest(request);
+                if (request instanceof ERXRequest) {
+                    _browser = ((ERXRequest)request).browser();
+                } else {
+                    _browser = browserFactory.browserMatchingRequest(request);                    
+                }
                 browserFactory.retainBrowser(_browser);
             }
         }
