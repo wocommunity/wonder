@@ -86,24 +86,33 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         return "decode('" + new String(hex) + "','hex')";
     }
-/*
+
+    /**
+     * Overridden to add typecasts after the value. I.e. '2'::char. This is
+     * done because Postgres can be very strict regarding type conversions.
+     */
     public String sqlStringForValue(Object v, String kp) {
-        EOAttribute attribute = entity().attributeNamed(kp);
-        String suffix = "";
+        EOAttribute attribute;
+        int lastDotIdx = kp.lastIndexOf(".");
+        if (lastDotIdx == -1) {
+            attribute = entity().attributeNamed(kp);
+        } else {
+            EOEntity kpEntity = entityForKeyPath(kp);
+            attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
+        }
         if(attribute != null) {
-            //ENHANCEME ak: we should hande key paths
             return super.sqlStringForValue(v,kp) + "::" + columnTypeStringForAttribute(attribute);
         }
         return super.sqlStringForValue(v,kp);
     }
-*/
-
+    
     /** Helper class to store a join definition */
     private class JoinClause {
         String table1;
         String op;
         String table2;
         String joinCondition;
+        
         public String toString() {
             return table1 + op + table2 + joinCondition;
         }
@@ -163,13 +172,14 @@ public class PostgresqlExpression extends JDBCExpression {
 
         for (int i = 0; i < _alreadyJoined.count(); i++) {
             JoinClause jc = (JoinClause)_alreadyJoined.objectAtIndex(i);
+            boolean seenTable1 = seenIt.objectForKey(jc.table1) != null;
+            boolean seenTable2 = seenIt.objectForKey(jc.table2) != null;
 
-            if (seenIt.objectForKey(jc.table1) == null &&
-                seenIt.objectForKey(jc.table2) == null) {
+            if (!seenTable1 && !seenTable2) {
                 sb.append(jc.table1);
                 sb.append(jc.op);
                 sb.append(jc.table2);
-            } else if (seenIt.objectForKey(jc.table1) == null) {
+            } else if (!seenTable2) {
                 sb.append(jc.op);
                 sb.append(jc.table1);
             } else {
@@ -191,35 +201,23 @@ public class PostgresqlExpression extends JDBCExpression {
     public void addJoinClause(String leftName,
                               String rightName,
                               int semantic) {
-        String clause = assembleJoinClause(leftName, rightName, semantic);
+        JoinClause clause = createJoinClause(leftName, rightName, semantic);
         _alreadyJoined.insertObjectAtIndex(clause, 0);
     }
 
+
     /**
-     * Utility that traverses a key path to find the last destination entity
+     * Overriden to construct a valid SQL92 JOIN clause as opposed to
+     * the Oracle-like SQL the superclass produces.
      */
-    private EOEntity entityForKeyPath(String keyPath) {
-        NSArray keys = NSArray.componentsSeparatedByString(keyPath, ".");
-        EOEntity ent = entity();
-        for (int i = 0; i < keys.count(); i++) {
-            String k = (String)keys.objectAtIndex(i);
-            EORelationship rel = ent.anyRelationshipNamed(k);
-            if (rel == null) {
-                throw new IllegalArgumentException("relationship " + k + " relationship was null");
-            }
-            ent = rel.destinationEntity();
-        }
-        return ent;
+    public String assembleJoinClause(String leftName, String rightName, int semantic) {
+        return createJoinClause(leftName, rightName, semantic).toString();
     }
 
     /**
-     * Overriden to contruct a valid SQL92 JOIN clause as opposed to
-     * the Oracle-like SQL the superclass produces.
+     * Utility to construct a JoinClause.
      */
-    public String assembleJoinClause(String leftName,
-                                     String rightName,
-                                     int semantic) {
-        StringBuffer sb = new StringBuffer();
+    private JoinClause createJoinClause(String leftName, String rightName, int semantic) {
         String leftAlias = leftName.substring(0, leftName.indexOf("."));
         String rightAlias = rightName.substring(0, rightName.indexOf("."));
 
@@ -274,6 +272,27 @@ public class PostgresqlExpression extends JDBCExpression {
         } else {
             jc.joinCondition = " ON " + leftName + " = " + rightName;
         }
-        return jc.toString();
+        return jc;
+    }
+
+    /**
+     * Utility that traverses a key path to find the last destination entity
+     */
+    private EOEntity entityForKeyPath(String keyPath) {
+        NSArray keys = NSArray.componentsSeparatedByString(keyPath, ".");
+        EOEntity ent = entity();
+        for (int i = 0; i < keys.count(); i++) {
+            String k = (String)keys.objectAtIndex(i);
+            EORelationship rel = ent.anyRelationshipNamed(k);
+            if (rel == null) {
+                // it may be an attribute
+                if (ent.anyAttributeNamed(k) != null) {
+                    break;
+                } 
+                throw new IllegalArgumentException("relationship " + keyPath + " generated null");
+            }
+            ent = rel.destinationEntity();
+        }
+        return ent;
     }
 }
