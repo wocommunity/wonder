@@ -139,6 +139,9 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
     public Object displayNameForPageConfiguration(D2WContext c) {
         String pageConfiguration = (String)c.valueForKey("pageConfiguration");
         // do we have task__entityName?
+        if(pageConfiguration == null) {
+        	return "";
+        }
         if(pageConfiguration.indexOf("__") == 0) {
             String taskName = (String)c.valueForKey("task");
             if(taskName == null) {
