@@ -73,6 +73,7 @@ import java.util.*;
 // Netscape 7.0b1   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
 // Netscape 6.2.3   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
 // OmniWeb 4.1-v422 Mozilla/4.5 (compatible; OmniWeb/4.1-v422; Mac_PowerPC)
+// Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
 //
 // Windows 2000
 // ----------------------------------------------------------------------------------
@@ -261,6 +262,7 @@ public class ERXBrowserFactory {
 
         String browser  = ERXBrowser.UNKNOWN_BROWSER;
         if      (browserString.indexOf("MSIE") > -1) 		browser  = ERXBrowser.IE;
+        else if (browserString.indexOf("Safari") > -1) 		browser  = ERXBrowser.SAFARI;
         else if (browserString.indexOf("OmniWeb") > -1)		browser  = ERXBrowser.OMNIWEB;
         else if (browserString.indexOf("iCab") > -1)		browser  = ERXBrowser.ICAB;
         else if (browserString.indexOf("Opera") > -1)		browser  = ERXBrowser.OPERA;
@@ -329,6 +331,14 @@ public class ERXBrowserFactory {
         String browserString = userAgent;
         int startpos;
 
+        // Get substring "Safari/48"
+        // from          "Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) "
+        //               "AppleWebKit/48 (like Gecko) Safari/48"
+        final String safari = "Safari";
+        startpos = browserString.indexOf(safari);
+        if (startpos > -1)
+            browserString = browserString.substring(startpos);
+
         // Get substring "Opera 6.04  [en]" 
         // from          "Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.04  [en]"
         final String opera = "Opera";
@@ -393,12 +403,12 @@ public class ERXBrowserFactory {
 
     private String _computeKey(ERXBrowser browser) {
         return browser.browserName() + "." + browser.version() + "." + browser.mozillaVersion() + "."
-                        + browser.platform() + "." + browser.userInfo().toString();
+                        + browser.platform() + "." + browser.userInfo();
     }
 
     private String _computeKey(String browserName, String version, String mozillaVersion, 
                                                                 String platform, NSDictionary userInfo) {
-        return browserName + "." + version + "." + mozillaVersion + "." + platform + "." + userInfo.toString();
+        return browserName + "." + version + "." + mozillaVersion + "." + platform + "." + userInfo;
     }
 
 }
