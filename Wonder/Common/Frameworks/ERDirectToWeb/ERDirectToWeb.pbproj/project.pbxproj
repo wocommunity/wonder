@@ -3269,6 +3269,7 @@
 		F5A144BD01FF7F8801A80106 = {
 			children = (
 				F5A144E901FF7F8801A80106,
+				F71C11CA02720BF501A8010C,
 				F641B2F8026AE1BC014E589E,
 				F641B2F5026AE0AC014E589E,
 			);
@@ -3937,6 +3938,7 @@
 				F63D832D026D7E8501FA2AC8,
 				F634BAE0026F0A5E012617F5,
 				F634BAE1026F0A5E012617F5,
+				F71C11CB02720BF501A8010C,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -7171,6 +7173,27 @@
 //F62
 //F63
 //F64
+//F70
+//F71
+//F72
+//F73
+//F74
+		F71C11CA02720BF501A8010C = {
+			isa = PBXFileReference;
+			path = d2wclientConfiguration.plist;
+			refType = 4;
+		};
+		F71C11CB02720BF501A8010C = {
+			fileRef = F71C11CA02720BF501A8010C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F70
+//F71
+//F72
+//F73
+//F74
 //FB0
 //FB1
 //FB2
