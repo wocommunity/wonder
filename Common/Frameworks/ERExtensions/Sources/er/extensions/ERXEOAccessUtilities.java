@@ -96,8 +96,34 @@ public class ERXEOAccessUtilities {
      * @return the SQL which the EOFetchSpecification would use
      */
     public static String sqlForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
-       return sqlForFetchSpecificationAndEditingContext(spec,ec,0,-1);
+       return sqlExpressionForFetchSpecificationAndEditingContext(spec,ec,0,-1).statement();
     }
+
+    public static NSArray rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
+        EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+        dbc.lock();
+        NSMutableArray results = null;
+        try {
+            EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
+            if (!channel.isOpen())
+                channel.openChannel();
+            channel.evaluateExpression(expression);
+            try {
+                channel.setAttributesToFetch(channel.describeResults());
+                results = new NSMutableArray();
+                NSDictionary row;
+                while ((row = channel.fetchRow()) != null)
+                    results.addObject(row);
+            } catch (EOGeneralAdaptorException ex) {
+                channel.cancelFetch();
+                throw ex;
+            }
+        } finally {
+            dbc.unlock();
+        }
+        return results;
+    }
+
     
     /** creates the SQL which is used by the provides EOFetchSpecification. The EOEditingContext is needed
     * because it -could- be possible to have multiple EOF stacks, each having its own EOModelGroup and
@@ -111,7 +137,7 @@ public class ERXEOAccessUtilities {
     *
     * @return the SQL which the EOFetchSpecification would use
     */
-    public static String sqlForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec, long start, long end) {
+    public static EOSQLExpression sqlExpressionForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec, long start, long end) {
         EOModel model = modelForFetchSpecificationAndEditingContext(spec, ec);
         EOEntity entity = model.entityNamed(spec.entityName());
         EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
@@ -120,9 +146,25 @@ public class ERXEOAccessUtilities {
 
         //NSArray attributes = spec.rawRowKeyPaths();
         NSArray attributesFromEntity = entity.attributesToFetch();
+        /*EOQualifier qualifier = spec.qualifier();
+        if (qualifier != null)
+            qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity.rootEntity());
+        if (qualifier != spec.qualifier()) {
+            spec = (EOFetchSpecification) spec.clone();
+            spec.setQualifier(qualifier);
+        }*/
+
+        EOSQLExpression ex = sqlFactory.expressionForEntity(entity);
+        ex.setUseAliases(true);
+        ex.setUseBindVariables(true);
+        ex.prepareSelectExpressionWithAttributes(attributesFromEntity, false, spec);
+        System.out.println(" ex.statement():" +  ex.statement());
+        //EOSQLExpression expression=factory.selectStatementForAttributes(entity.primaryKeyAttributes(),
+        //                                   false,
+        //                                   fs,
+        //                                   entity);
 
         EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributesFromEntity, false, spec, entity);
-        sqlExpr.setUseBindVariables(false);
         String sql = sqlExpr.statement();
         if(end >= 0) {
             String url = (String)model.connectionDictionary().objectForKey("URL");
@@ -143,10 +185,11 @@ public class ERXEOAccessUtilities {
                 } else if(url.toLowerCase().indexOf("mysql") != -1) {
                     sql += " LIMIT " + start + ", " + (end - start);
                 }
-             }
+            }
+            sqlExpr.setStatement(sql);
         }
 
-        return sql;
+        return sqlExpr;
     }
 
     public static EOModel modelForFetchSpecificationAndEditingContext(EOFetchSpecification spec, EOEditingContext ec) {
