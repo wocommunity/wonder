@@ -241,10 +241,11 @@ public class ERXValidationFactory {
             String entityName = erv.eoObject().entityName();
             String property = erv.isCustomMethodException() ? erv.method() : erv.propertyKey();
             String type = erv.type();
-            String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : ERXLocalizer.defaultLanguage();
+            String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : ERXLocalizer.currentLocalizer().language();
 
             cat.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
-            ERXMultiKey k = new ERXMultiKey(new NSArray(new Object[] {_kvcNullValue(entityName), _kvcNullValue(property), _kvcNullValue(type), _kvcNullValue(targetLanguage)}));
+            ERXMultiKey k = new ERXMultiKey(new Object[] {entityName, property,
+                type,targetLanguage});
             template = (String)_cache.get(k);
             // Not in the cache.  Simple resolving.
             if (template == null) {

@@ -104,6 +104,7 @@ public class ERXSession extends WOSession {
      */
     public void setLanguage(String language) {
         localizer = ERXLocalizer.localizerForLanguage(language);
+        ERXLocalizer.setCurrentLocalizer(localizer);
     }
 
     /**
@@ -215,6 +216,7 @@ public class ERXSession extends WOSession {
     public void awake() {
         super.awake();
         ERXExtensions.setSession(this);
+        ERXLocalizer.setCurrentLocalizer(localizer());
         NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
         WORequest request=context()!=null ? context().request() : null;
         // ENHANCEME: Should pull all of this browser detection out into it's own object with a factory
@@ -293,6 +295,7 @@ public class ERXSession extends WOSession {
     public void sleep() {
         NSNotificationCenter.defaultCenter().postNotification(SessionWillSleepNotification, this);
         super.sleep();
+        ERXLocalizer.setCurrentLocalizer(null);
         ERXExtensions.setSession(null);
     }
 
