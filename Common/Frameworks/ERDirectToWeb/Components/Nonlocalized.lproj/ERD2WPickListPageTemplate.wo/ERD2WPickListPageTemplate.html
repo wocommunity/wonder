@@ -1,41 +1,63 @@
-<WEBOBJECT NAME=PageWrapper>
-	<WEBOBJECT NAME=ListNotEmpty><WEBOBJECT NAME=Form1>
-			<WEBOBJECT NAME=NavBar></WEBOBJECT><WEBOBJECT NAME=HiddenField></WEBOBJECT><BR>
-				<WEBOBJECT NAME=ListTable><WEBOBJECT NAME=ListTableHeaderRow>
-						<TH></TH>
-						<WEBOBJECT NAME=ColumnLabelRepetition>
-							<TH NOWRAP VALIGN=bottom>
-								<TABLE><TR><TH><B CLASS=white><WEBOBJECT NAME=PropertyName></WEBOBJECT><BR></B><WEBOBJECT NAME=IsPropertySortable><WEBOBJECT NAME=AttributeSorter></WEBOBJECT></WEBOBJECT></TH><TH></TH></TR></TABLE>
-							</TH>
-						</WEBOBJECT>
-						<TH VALIGN=BOTTOM>Select</TH>
-					</WEBOBJECT><WEBOBJECT NAME=EntityRepetition><WEBOBJECT NAME=ListTableRow>
-							<TD>
-								<TABLE>
-									<TR>
-										<TD></TD>
-										<TD><WEBOBJECT NAME=IsEntityNotWritable>
-												<WEBOBJECT NAME=InspectImage></WEBOBJECT>
-											</WEBOBJECT></TD>
-									</TR>
-								</TABLE>
-							</TD>
-							<WEBOBJECT NAME=AttributeRepetition><WEBOBJECT NAME=AttributeCell><FONT SIZE=-1>
-									<WEBOBJECT NAME=AttributeDisplay></WEBOBJECT>
-									</FONT></WEBOBJECT></WEBOBJECT>
-							<TD>
-								<WEBOBJECT NAME=CheckBox2></WEBOBJECT>
-							</TD>
-						</WEBOBJECT>
-						<TR HEIGHT=2>
-							<TD COLSPAN=50 BGCOLOR=#ffffff><IMG BORDER=0 HEIGHT=2 WIDTH=1></TD>
-						</TR>
-					</WEBOBJECT></WEBOBJECT><BR>
-				
-					<WEBOBJECT NAME=ShowCancel><WEBOBJECT NAME=SubmitButton2></WEBOBJECT>&nbsp;</WEBOBJECT>
-				<WEBOBJECT NAME=ERXNonNullConditional1><WEBOBJECT NAME=SubmitButton1></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=ERXNonNullConditional2><WEBOBJECT NAME=Repetition1><WEBOBJECT NAME=SubmitButton3></WEBOBJECT>&nbsp;</WEBOBJECT></WEBOBJECT>
-		</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=ListEmpty><WEBOBJECT NAME=EmptyMessageComponent></WEBOBJECT><BR>
-		<BR>
-		<WEBOBJECT NAME=HideReturnOnSelect2>
-			<WEBOBJECT NAME=ShowCancel2><WEBOBJECT NAME=BackLink2><WEBOBJECT NAME=ReturnButton2></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-		</WEBOBJECT></WEBOBJECT></WEBOBJECT>
+<webobject name=PageWrapper><webobject name=Help></webobject>
+	<table  align=center border=0>
+		<tr>
+			<td colspan=2><webobject name=ERDBannerComponent2></webobject><webobject name=Header></webobject></td>
+		</tr>
+		<webobject name=Conditional1><webobject name=Form1><webobject name=HiddenField></webobject>
+				<tr>
+					<td align=CENTER><webobject name=NavBar1></webobject></td>
+				</tr>
+				<tr>
+					<td><webobject name=ListTable><webobject name=ListTableHeaderRow>
+								<th>
+									<spacer>
+								</th>
+								<webobject name=ColumnLabelRepetition>
+									<th nowrap>
+										<table border=0>
+											<tr>
+												<th><webobject name=PropertyName></webobject><webobject name=IsPropertySortable><br>
+														<webobject name=AttributeSorter2></webobject></webobject></th>
+											</tr>
+										</table>
+									</th>
+								</webobject>
+								<th>Select</th>
+							</webobject>
+							<tr height=2>
+								<td bgcolor="#ffffff" colspan=50>
+									<spacer height=2 width=1>
+								</td>
+							</tr>
+							<webobject name=EntityRepetition><webobject name=ListTableRow>
+									<td valign=MIDDLE><webobject name=InspectImage></webobject></td>
+									<webobject name=AttributeRepetition><webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject></webobject>
+									<td><webobject name=CheckBox2></webobject></td>
+								</webobject>
+								<tr height=2>
+									<td bgcolor="#ffffff" colspan=50>
+										<spacer height=2 width=1>
+									</td>
+								</tr>
+							</webobject></webobject></td>
+				</tr>
+				<tr>
+					<td align=CENTER><webobject name=ShowCancel><webobject name=SubmitButton2></webobject>&nbsp;</webobject><webobject name=ShowCancel3><webobject name=SubmitButton4></webobject>&nbsp;<webobject name=SubmitButton5></webobject>&nbsp;</webobject>
+						<webobject name=ERXNonNullConditional1><webobject name=SubmitButton1></webobject></webobject><webobject name=ERXNonNullConditional2><webobject name=Repetition1><webobject name=SubmitButton3></webobject>&nbsp;</webobject></webobject></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr></webobject>
+			</webobject>
+			<webobject name=Conditional2>
+				<tr>
+					<td><webobject name=EmptyMessageComponent></webobject></td>
+				</tr>
+				<tr>
+					<td align=CENTER><webobject name=HideReturnOnSelect2>
+							<webobject name=ShowCancel2><webobject name=BackLink2><webobject name=ReturnButton2></webobject></webobject></webobject>
+						</webobject></td>
+				</tr>
+			</webobject>
+	</table>
+</webobject>
