@@ -139,7 +139,7 @@ public class WRReport extends WOComponent  {
 
 
     public void rebuildModel(NSNotification notification) {
-        if(_model == notification.object()) {
+        if(model() == notification.object()) {
             _currentZCriteria.removeAllObjects();
             _initializedDimensionArrayFromBindings = false;
             _model = null;
