@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.zip.*;
 
@@ -206,6 +207,60 @@ public class ERXFileUtilities {
      */
     public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
         return WOApplication.application().resourceManager().pathForResourceNamed(fileName, frameworkName, languages);
+    }
+
+    /**
+     * Determines the path URL of the specified Resource. This is done
+     * to get a single entry point due to the deprecation of pathForResourceNamed.
+     * In a later version this will call out to the resource managers new methods directly.
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *		for the application bundle
+     * @return the absolutePath method off of the
+     *		file object
+     */
+    public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+        URL url = null;
+        try {
+            url = new URL("file://" + pathForResourceNamed(fileName, frameworkName, languages));
+        } catch(MalformedURLException ex) {
+            throw new NSForwardException(ex);
+        }
+        return url;
+    }
+
+    /**
+     * Create an URL for a given file.
+     * @param fileName name of the file
+     * @return file:// URL for the given path
+     */
+    public static URL URLFromFile(File file) {
+        URL url = null;
+        if(file != null) {
+            try {
+                url = URLFromPath(file.getCanonicalPath());
+            } catch(IOException ex) {
+                throw new NSForwardException(ex);
+            }
+        }
+        return url;
+    }
+
+    /**
+     * Create an URL for a given path.
+     * @param fileName path of the file
+     * @return file:// URL for the given path
+     */
+    public static URL URLFromPath(String fileName) {
+        URL url = null;
+        if(fileName != null) {
+            try {
+                url = new URL("file://" + fileName);
+            } catch(MalformedURLException ex) {
+                throw new NSForwardException(ex);
+            }
+        }
+        return url;
     }
 
     /**
