@@ -1,0 +1,7 @@
+ComponentContent1: WOComponentContent {
+}
+
+Hyperlink1: WOHyperlink {
+	pageName = "Main";
+}
+
