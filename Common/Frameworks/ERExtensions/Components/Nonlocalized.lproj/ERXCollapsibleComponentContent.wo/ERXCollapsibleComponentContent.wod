@@ -1,5 +1,6 @@
 Anchor: WOHyperlink {
 	name = anchor;
+	action = toggleVisibilityClicked;
 }
 ArrowActiveImage: WOActiveImage {
 	action = toggleVisibilityClicked;
