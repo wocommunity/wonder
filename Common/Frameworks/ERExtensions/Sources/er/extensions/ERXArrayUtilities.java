@@ -536,6 +536,41 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
+
+    /**
+        * Define an {@link NSArray$Operator} for the key <b>objectAtIndex</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@objectAtIndex.3.firstName");</code><br/>
+     * <br/>
+     *
+     */
+    static class ObjectAtIndexOperator implements NSArray.Operator {
+        /** public empty constructor */
+        public ObjectAtIndexOperator() {}
+
+        /**
+         * returns the keypath value for n-ths object.
+         * @param array array to be checked.
+         * @param keypath integer value of index (zero based).
+         * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value otherwise.
+         */
+        public Object compute(NSArray array, String keypath) {
+            synchronized (array) {
+                int end = keypath.indexOf(".");
+                int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
+                Object value = null;
+                if(index < array.count() )
+                    value = array.objectAtIndex(index);
+                if(end != -1 && value != null) {
+                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keypath.substring(end+1));
+                }
+                return value;
+            }
+        }
+    }
+
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
@@ -556,6 +591,7 @@ public class ERXArrayUtilities extends Object {
         NSArray.setOperatorForKey("unique", new UniqueOperator());
 	NSArray.setOperatorForKey("isEmpty", new IsEmptyOperator());
 	NSArray.setOperatorForKey("subarrayWithRange", new SubarrayWithRangeOperator());
+        NSArray.setOperatorForKey("objectAtIndex", new ObjectAtIndexOperator());
     }
 
     
