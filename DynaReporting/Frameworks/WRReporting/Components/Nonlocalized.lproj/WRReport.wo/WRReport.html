@@ -17,11 +17,19 @@
 	</table>
 	<webobject name=showDefaultReportStyle>
 		<webobject name=dontshowVerticalRows>
-			<table width=100%>
+			<table width=100% border=1>
+					<webobject name=hasTitle><tr>
+						<webobject name=showTopCrits><webobject name=vGroups>
+								<td class=spacer>
+									<spacer>
+								</td>
+							</webobject></webobject>
+						<webobject name=colSpanTdHead><webobject name=title></webobject></webobject>
+					</tr></webobject>
 				<webobject name=horzDimensions>
 					<tr>
 						<webobject name=showTopCrits><webobject name=vGroups>
-								<td>
+								<td class=spacer>
 									<spacer>
 								</td>
 							</webobject></webobject>
@@ -34,13 +42,13 @@
 					<webobject name=depthList>
 						<tr>
 							<webobject name=showTopCrits><webobject name=vGroups>
-									<td>
+									<td class=spacer>
 										<spacer>
 									</td>
 								</webobject></webobject>
 							<webobject name=numberOfCrits>
 								<webobject name=attribs>
-									<webobject name=td><webobject name=attribLabel></webobject></webobject>
+									<webobject name=attributeTd><webobject name=attribLabel></webobject></webobject>
 								</webobject>
 							</webobject>
 						</tr>
@@ -54,10 +62,10 @@
 						<webobject name=hCriteriaList2>
 							<webobject name=recordGroupTest></webobject>
 						</webobject>
-						<td>
+						<td class=spacer>
 							<spacer>
 						</td>
-						<td>
+						<td class=spacer>
 							<spacer>
 						</td>
 					</tr>

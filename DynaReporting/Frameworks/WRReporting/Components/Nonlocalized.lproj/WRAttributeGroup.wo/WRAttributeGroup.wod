@@ -1,4 +1,4 @@
-attribLabel:WOString{
+attribLabel:ERXLocalizedString{
 	value= attribLabel;
 }
 attribs:WORepetition{
@@ -18,4 +18,7 @@ td:WOGenericContainer{
 	colspan = colSpan;
 	rowspan = rowSpan;
 	bgcolor = ^bgcolor;
+}
+debug: WOString {
+    value = depth;
 }
