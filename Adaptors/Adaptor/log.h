@@ -48,6 +48,6 @@ void WOLog(int level, const char *format, ...);
  * and log messages associated with this particular lock.
  * (Doing so would be an infinite recursion.)
  */
-void *logMutex;
+extern void *logMutex;
 
 #endif

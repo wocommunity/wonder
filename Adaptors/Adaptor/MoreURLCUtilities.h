@@ -53,8 +53,8 @@ and limitations under the License.
 /*
  *	Cover some functions to support URL versioning
  */
-void ComposeURL(char *string, WOURLComponents *components);
-unsigned int SizeURL(WOURLComponents *components);
+unsigned int SizeURL(WOURLComponents *wc);
+void ComposeURL(char *string, WOURLComponents *wc);
 
 /*
  *	parses just the application name from the url, returns 0 on 
@@ -72,10 +72,6 @@ const char *WOParseAndCheckURL(WOURLComponents *wc, const char *url, int version
  *	err code to string
  */
 const char *WOURLstrerror(WOURLError err);
-
-unsigned int SizeURL(WOURLComponents *wc);
-void ComposeURL(char *string, WOURLComponents *wc);
-
 
 /*
  *	for debugging, I guess
