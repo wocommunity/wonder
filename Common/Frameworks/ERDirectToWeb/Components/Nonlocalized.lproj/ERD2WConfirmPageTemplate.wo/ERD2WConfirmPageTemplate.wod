@@ -7,8 +7,8 @@ Conditional2: ERXNonNullConditional {
 	condition = message;
 }
 
-Conditional3: ERXNonNullConditional {
-	condition = d2wContext.explanationComponent;
+Conditional3: WOConditional {
+	condition = showExplanationComponent;
 }
 
 Conditional4: WOConditional {
@@ -97,6 +97,6 @@ SwitchComponent4: WOSwitchComponent {
 	WOComponentName = d2wContext.explanationComponent;
 	dataSource = dataSource;
 	object = object;
-	pageConfiguration = d2wContext.inspectConfigurationName;
+	pageConfiguration = d2wContext.explanationConfigurationName;
 }
 
