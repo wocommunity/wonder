@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERD2WQueryPage extends D2WQueryPage {
 
@@ -38,14 +39,20 @@ public class ERD2WQueryPage extends D2WQueryPage {
     protected NSDictionary branch;
     public String branchName() { return (String)branch.valueForKey("branchName"); }
 
+    public boolean showResults = false;
+
     public WOComponent queryAction() {
         if(nextPageDelegate() == null) {
-            String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
-            if(listConfigurationName!=null){
-                ListPageInterface listpageinterface = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, this.session());
-                listpageinterface.setDataSource(queryDataSource());
-                listpageinterface.setNextPage(this.context().page());
-                return (WOComponent) listpageinterface;
+            if(ERXUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
+                showResults = true;
+            }else{
+                String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
+                if(listConfigurationName!=null){
+                    ListPageInterface listpageinterface = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, this.session());
+                    listpageinterface.setDataSource(queryDataSource());
+                    listpageinterface.setNextPage(this.context().page());
+                    return (WOComponent) listpageinterface;
+                }
             }
         }
         return super.queryAction();
