@@ -19,13 +19,12 @@ There are three ways to use this script:
             -Dproject.type=framework \
             generic.$ACTION
 
-3) to build clickable targets in PBX for your own projects.
-   You need to define a custom build target in Project Builder like this:
+3) to build your own projects that have the same layout as a wonder project
         ant -emacs -f ~/Wonder/Build/build/generic.xml  \
 		-Dproject.type=application \
 		-Dproject.name=SomeProject \
 		-Dproject.principal.class=com.company.Application \
-		-Dproject.type=/path/to/my/SomeProject \
+		-Dproject.dir=/path/to/my/SomeProject \
 		-Duse.webobjects.d2w=true \
 		-Duse.wonder.core=true \
 		-Duse.wonder.d2w=true \
@@ -40,13 +39,15 @@ There are three ways to use this script:
 		-Duse.additional.framework.3=SomePattern2\* \
 		-Duse.additional.framework.4=SomePattern3\* \
 		generic.MODE
+
 	Leave out any option you don't want. Valid entries MODEs are:
 		all    	--> create in ${build.root}
 		install --> copy to ${wo.localroot}
 		web     --> copy to ${wo.server.root}
 		clean   --> remove .classes, .framework or .woa
-	For MODE "install" and "web" it is sufficient to create another target with:
-        ant -emacs -f ~/Wonder/Build/generic.xml  \
+
+	For MODE "install", "clean" and "web" it is sufficient to call:
+        ant -emacs -f ~/Wonder/Build/build/generic.xml  \
 		-Dproject.type=application \
 		-Dproject.name=SomeProject \
 		generic.MODE
@@ -54,12 +55,12 @@ There are three ways to use this script:
     </target>
 
     <!-- When you add another sub-project, use this as a template
-         We (I actually) strongly encourage you to use one of the provided 
+         We strongly encourage you to use one of the provided 
          templates or mimic the structure
              SomeProject/
                 Sources/
                 Resources/
-                WebServerSources/
+                WebServerResources/
                 Components/
          when you create a new project.
          Additionally, you might want to add your subproject in the dependency hierachy
