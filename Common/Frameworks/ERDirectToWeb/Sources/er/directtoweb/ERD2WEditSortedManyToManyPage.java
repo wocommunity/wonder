@@ -101,7 +101,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     } 
 
     public String displayKey() {
-        System.out.println(destinationRelationship().name()+".userPresentableDescription");
         return destinationRelationship().name()+".userPresentableDescription";
     }
 
@@ -235,30 +234,11 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     private EORelationship _destinationRelationship;
     public EORelationship destinationRelationship() {
         if (_destinationRelationship==null) {
-            /*
-            EOEntity joinEntity=entity();
-            // for now we rely on the fact that join entity should only have 2 relationships
-            // and one of them is going back to the original object
-            NSArray relationships=joinEntity.relationships();
-            if (relationships==null)
-                throw new RuntimeException("Empty relationship array on "+joinEntity.name()+": "+relationships);
-            NSMutableArray filteredRelationships = new NSMutableArray();
-            for(Enumeration e = relationships.objectEnumerator(); e.hasMoreElements();){
-                EORelationship	relationship = (EORelationship)e.nextElement();
-                EOEntity destinationEntity = relationship.destinationEntity();
-                if(destinationEntity.sharedObjectFetchSpecificationNames().count()==0){
-                    filteredRelationships.addObject(relationship);
-                }
-            }
-            //Need to filter out relationships that are going to shared EOs
-            
-            if (filteredRelationships.count()!=2)
-                throw new RuntimeException("Found unexpected relationship array on "+joinEntity.name()+": "+relationships);
-            */
             NSArray joinRelationships = ERDSortedManyToManyAssignment.joinRelationshipsForJoinEntity(entity());
 
             EORelationship destinationRelationship=null;
             String originEntityName=object().entityName();
+            //General case
             for (Enumeration e=joinRelationships.objectEnumerator(); e.hasMoreElements();) {
                 EORelationship r=(EORelationship)e.nextElement();
                 if (!originEntityName.equals(r.destinationEntity().name())) {
@@ -266,6 +246,20 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                     break;
                 }
             }
+            // In the case we have a self join relationship we have to be more clever
+            if(_destinationRelationship==null){
+                EOEntity originEntity = EOModelGroup.defaultGroup().entityNamed(originEntityName);
+                EORelationship originRelationship = originEntity.relationshipNamed(_relationshipKey);
+                EORelationship inverseOriginRelationship = originRelationship.inverseRelationship();
+                for (Enumeration e=joinRelationships.objectEnumerator(); e.hasMoreElements();) {
+                    EORelationship r=(EORelationship)e.nextElement();
+                    if (r!=inverseOriginRelationship) {
+                        _destinationRelationship=r;
+                        break;
+                    }
+                }
+            }
+
         }
         return _destinationRelationship;
     }
@@ -326,12 +320,18 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
     public EOEnterpriseObject objectAtIndex(int index){
         EOEnterpriseObject result = null;
+        if(log.isDebugEnabled()){
+            log.debug("looking for index "+index);
+        }
         for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
             e.hasMoreElements();){
             EOEnterpriseObject indexObject = (EOEnterpriseObject)e.nextElement();
+            if(log.isDebugEnabled()){
+                log.debug("object is at index"+indexObject.valueForKey(indexKey()));
+            }
             if( ((Integer)indexObject.valueForKey(indexKey())).intValue() == index){
                 result = indexObject;
-                break;
+                //break;
             }
         }
         return result;
