@@ -96,13 +96,9 @@ public class ERD2WCalendarPage extends ERD2WListPage {
         EOEnterpriseObject eo=(EOEnterpriseObject)_allObjects().objectAtIndex(i);
         return (NSTimestamp)eo.valueForKey(defaultSortKey());
     }
-
+    
     public boolean isEditable() {
-        boolean result = false;
-        Integer isEditable = (Integer)d2wContext().valueForKey("isEntityEditable");
-        if (isEditable != null) {
-            result = isEditable.intValue() != 0;
-        }
+        boolean result = ERXValueUtilities.booleanValue(d2wContext().valueForKey("isEntityEditable"));
         Object o = object();
         if (o instanceof ERXGuardedObjectInterface) {
             result = result && ((ERXGuardedObjectInterface)o).canUpdate();
