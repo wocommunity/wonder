@@ -106,6 +106,8 @@ EntityName: WOString {
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 FontContainer: WOGenericContainer {

@@ -7,6 +7,8 @@ CheckboxMatrix: ERXCheckboxMatrix {
 
 ErrorDictionaryPanel: ERXErrorDictionaryPanel {
 	errorMessages = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 Form1: WOForm {
