@@ -224,9 +224,7 @@ public class ERXUtilities {
      * @return the shared object registered in the default shared editing context
      */
     public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
-        return EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
-                                                     entityName,
-                                                     pk);
+        return ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName, pk);
     }
     
     /**
@@ -255,11 +253,15 @@ public class ERXUtilities {
             EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
             if (!adaptorChannel.isOpen())
                 adaptorChannel.openChannel();
-            primaryKey = (NSDictionary)adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity).lastObject();
+            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+            if(arr != null)
+                primaryKey = (NSDictionary)arr.lastObject();
+            else
+                log.warn("Could not get primary key for entity: " + entityName + " exception");
             dbContext.unlock();
         } catch (Exception e) {
             dbContext.unlock();
-            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e);
+            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
         }
         return primaryKey;
     }
@@ -306,7 +308,7 @@ public class ERXUtilities {
             e.setCachesObjects(false);
             e.removeSharedObjectFetchSpecificationByName("FetchAll");
         } else {
-            log.warn("MakeSharedEntityEditable: enity already editable: " + entityName);
+            log.warn("MakeSharedEntityEditable: entity already editable: " + entityName);
         }
     }
 
@@ -523,7 +525,7 @@ public class ERXUtilities {
     }
 
     /** entity name cache */
-    private static NSMutableDictionary _enityNameEntityCache;
+    private static NSMutableDictionary _entityNameEntityCache;
     /**
      * Finds an entity given a case insensitive search
      * of all the entity names.<br/>
@@ -537,14 +539,14 @@ public class ERXUtilities {
     public static EOEntity caseInsensitiveEntityNamed(String entityName) {
         EOEntity entity = null;
         if (entityName != null) {
-            if (_enityNameEntityCache == null) {
-                _enityNameEntityCache = new NSMutableDictionary();
+            if (_entityNameEntityCache == null) {
+                _entityNameEntityCache = new NSMutableDictionary();
                 for (Enumeration e = entitiesForModelGroup(EOModelGroup.defaultGroup()).objectEnumerator(); e.hasMoreElements();) {
                     EOEntity anEntity = (EOEntity)e.nextElement();
-                    _enityNameEntityCache.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
+                    _entityNameEntityCache.setObjectForKey(anEntity, anEntity.name().toLowerCase());    
                 }
             }
-            entity = (EOEntity)_enityNameEntityCache.objectForKey(entityName.toLowerCase());
+            entity = (EOEntity)_entityNameEntityCache.objectForKey(entityName.toLowerCase());
         }
         return entity;
     }
@@ -764,4 +766,5 @@ public class ERXUtilities {
             replicableTarget.deplicate();
         }
     }
+
 }

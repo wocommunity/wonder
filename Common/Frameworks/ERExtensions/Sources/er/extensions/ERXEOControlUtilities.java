@@ -10,13 +10,17 @@ import com.webobjects.foundation.NSArray;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
@@ -24,7 +28,9 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * Collection of EOF utility method centered around
@@ -89,6 +95,26 @@ public class ERXEOControlUtilities {
     public static NSArray primaryKeysMatchingQualifier(EOEditingContext ec, String entityName, EOQualifier eoqualifier, NSArray sortOrderings) {
         EOFetchSpecification fs = ERXEOControlUtilities.primaryKeyFetchSpecificationForEntity(ec, entityName, eoqualifier, sortOrderings, null);
         return ec.objectsWithFetchSpecification(fs);
+    }
+
+    /**
+     * Returns an {@link NSArray} containing the objects from the resulting rows starting
+     * at start and stopping at end using a custom SQL, derived from the SQL
+     * which the {@link EOFetchSpecification} would use normally {@link EOFetchSpecification.setHints}
+     *
+     * @param ec editingcontext to fetch objects into
+     * @param spec fetch specification for the fetch
+     * @param start
+     * @param end
+     *
+     * @return objects in the given range
+     */
+    public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, start, end);
+        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
+        spec.setHints(hints);
+
+        return ec.objectsWithFetchSpecification(spec);
     }
 
     /**
@@ -227,6 +253,23 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Gets the shared enterprise object with the given primary
+     * from the default shared editing context. This has the
+     * advantage of not requiring a roundtrip to the database to
+     * lookup the object.
+     * @param entityName name of the entity
+     * @param pk primary key of object to be found
+     * @return the shared object registered in the default shared editing context
+     */
+    public static EOEnterpriseObject sharedObjectWithPrimaryKey(String entityName, Object primaryKey) {
+        EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, new Object[] {primaryKey});
+        EOEnterpriseObject eo = EOSharedEditingContext.defaultSharedEditingContext().objectForGlobalID(gid);
+        return (eo != null) ? eo : EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
+                                                     entityName,
+                                                     primaryKey);
+    }
+    
+    /**
      * Gets a fetch specification from a given entity. If qualifier binding variables
      * are passed in then the fetchspecification is cloned and the binding variables
      * are substituted returning a fetch specification that can be used.
@@ -243,5 +286,137 @@ public class ERXEOControlUtilities {
                                                                                       entityName);
         return fetchSpec != null && bindings != null ?
             fetchSpec.fetchSpecificationWithQualifierBindings(bindings) : fetchSpec;
+    }
+
+    /**
+     * Utility method to generate a new primary key dictionary using
+     * the objects class properties. Use it when your PKs are class properties.
+     * @param eo object in question
+     * @returns new primary key dictionary or null if one of the properties is
+     * null or one of the primary key attributes is not a class property.
+     */
+
+    public static NSDictionary newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject eo) {
+        EOEditingContext ec = eo.editingContext();
+        EOEntity entity = EOUtilities.entityNamed(ec, eo.entityName());
+        NSArray pkAttributes = entity.primaryKeyAttributeNames();
+        int count = pkAttributes.count();
+        NSMutableDictionary nsmutabledictionary = new NSMutableDictionary(count);
+        NSArray classPropertyNames = entity.classPropertyNames();
+        while (count-- != 0) {
+            String key = (String)pkAttributes.objectAtIndex(count);
+            if(!classPropertyNames.containsObject(key))
+                return null;
+            Object value = eo.valueForKey(key);
+            if(value == null)
+                return null;
+            nsmutabledictionary.setObjectForKey(value, key);
+        }
+        return nsmutabledictionary;
+    }
+
+
+    /**
+     * Utility method to generate a new primary key for an object. Calls
+     * {@link newPrimaryKeyForObjectFromClassProperties(EOEnterpriseObject)} and if that returns null,
+     * {@link newPrimaryKeyDictionaryForEntityNamed(EOEditingContext, String)}
+     * @returns new primary key dictionary or null if a failure occured.
+     */
+
+    public static NSDictionary newPrimaryKeyDictionaryForObject(EOEnterpriseObject eo) {
+        NSDictionary dict = newPrimaryKeyDictionaryForObjectFromClassProperties(eo);
+        if(dict == null) {
+            dict = newPrimaryKeyDictionaryForEntityNamed(eo.editingContext(), eo.entityName());
+        }
+        return dict;
+    }
+
+
+    /**
+     * Utility method to generate a new primary key dictionary using
+     * the adaptor for a given entity. This is can be handy if you
+     * need to have a primary key for an object before it is saved to
+     * the database. This method uses the same method that EOF uses
+     * by default for generating primary keys. See
+     * {@link ERXGeneratesPrimaryKeyInterface} for more information
+     * about using a newly created dictionary as the primary key for
+     * an enterprise object.
+     * @param ec editing context
+     * @param entityName name of the entity to generate the primary
+     *		key dictionary for.
+     * @returns a dictionary containing a new primary key for the given
+     *		entity.
+     */
+    public static NSDictionary newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        NSDictionary primaryKey = null;
+        try {
+            dbContext.lock();
+            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
+            if (!adaptorChannel.isOpen())
+                adaptorChannel.openChannel();
+            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+            if(arr != null)
+                primaryKey = (NSDictionary)arr.lastObject();
+            else
+                log.warn("Could not get primary key for entity: " + entityName + " exception");
+            dbContext.unlock();
+        } catch (Exception e) {
+            dbContext.unlock();
+            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
+        }
+        return primaryKey;
+    }
+
+    /**
+     * Returns the propertylist-encoded string representation of the primary key for
+     * a given object.
+     * @param eo object to get the primary key for.
+     * @returns string representation of the primary key of the
+     *		object.
+     */
+    public static String primaryKeyStringForObject(EOEnterpriseObject eo) {
+        Object pk=primaryKeyObjectForObject(eo);
+        if(pk == null)
+            return null;
+        if(pk instanceof String || pk instanceof Number) {
+            return pk.toString();
+        }
+        return NSPropertyListSerialization.stringFromPropertyList(pk);
+    }
+
+    /**
+     * Returns either the single object the PK consist of or the NSArray of its values if the key is compound.
+     * @param eo object to get the primary key for.
+     * @returns single object or NSArray
+     */
+    public static Object primaryKeyObjectForObject(EOEnterpriseObject eo) {
+        NSArray arr=primaryKeyArrayForObject(eo);
+        if(arr != null && arr.count() == 1) return arr.lastObject();
+        return arr;
+    }
+
+    /**
+     * Gives the primary key array for a given enterprise
+     * object. This has the advantage of not firing the
+     * fault of the object, unlike the method in
+     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
+     * @param obj enterprise object to get the primary key array from.
+     * @return array of all the primary key values for the object.
+     */
+    public static NSArray primaryKeyArrayForObject(EOEnterpriseObject obj) {
+        EOEditingContext ec = obj.editingContext();
+        if (ec == null) {
+            //you don't have an EC! Bad EO. We can do nothing.
+            return null;
+        }
+        EOGlobalID gid = ec.globalIDForObject(obj);
+        if (gid.isTemporary()) {
+            //no pk yet assigned
+            return null;
+        }
+        EOKeyGlobalID kGid = (EOKeyGlobalID) gid;
+        return kGid.keyValuesArray();
     }
 }
