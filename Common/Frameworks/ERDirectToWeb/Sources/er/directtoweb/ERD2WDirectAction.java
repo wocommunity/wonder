@@ -47,6 +47,10 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     static final String fetchSpecificationKey = "__fs";
     static final String createPrefix = "Create";
 
+    protected EOEditingContext newEditingContext() {
+        return ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
+    }
+    
     public EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
         String fsName = context().request().stringFormValueForKey(fetchSpecificationKey);
         if(fsName != null) {
@@ -127,7 +131,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         
         if(newPage instanceof EditPageInterface && taskName.equals("edit")) {
             EditPageInterface epi=(EditPageInterface)newPage;
-            EOEditingContext ec = ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
+            EOEditingContext ec = newEditingContext();
             EOEnterpriseObject eo = null;
 
             ec.lock();
