@@ -21,6 +21,7 @@
 		<binding name="tableWidth"/>
 		<binding name="goingVertically" defaults="Boolean"/>
 		<binding name="headerImages"/>
+		<binding name="headerRowBackgroundColor"/>
 
 		<validation message="&apos;list&apos; is a required binding">
 			<unbound name="list"/>
