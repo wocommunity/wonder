@@ -12,6 +12,9 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.*;
 
+/** Groups items into sections.<br>
+ Please see the page BugsPerUser.wo from the BugTracker application to find out how to use it. */
+
 public class ERXGroupingRepetition extends WOComponent {
 
     public ERXGroupingRepetition(WOContext aContext) {
