@@ -131,9 +131,9 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Filters any kinds of collections that implements {@Enumeration} 
-     * interface such as {@NSArray}, {@NSSet}, {@Vector} and {@Hashtable} 
-     * using the {@link EOQualifierEvaluation} interface. 
+     * Filters any kinds of collections that implements {@link Enumeration} 
+     * interface such as {@link NSArray}, {@link NSSet}, {@link Vector} 
+     * and {@link Hashtable} using the {@link EOQualifierEvaluation} interface. 
      *
      * @param enumeration to be filtered; to obtain an enumeration, 
      *             use objectEnumerator() for the collections in 
@@ -153,9 +153,9 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Filters any kind of collections that implements {@Iterator} interface 
-     * such as {@ArrayList}, {@HashMap}, {@SortedSet} and {@TreeSet}
-     * using the {@link EOQualifierEvaluation} interface. 
+     * Filters any kind of collections that implements {@link Iterator} 
+     * interface such as {@link ArrayList}, {@link HashMap}, {@link SortedSet} 
+     * and {@link TreeSet} using the {@link EOQualifierEvaluation} interface. 
      *
      * @param iterator to be filtered; use itarator() to obtain 
      *             an iterator from the collections
