@@ -53,7 +53,7 @@
 		isa = PBXTextBookmark;
 		name = "Properties: 55";
 		rLen = 0;
-		rLoc = 3063;
+		rLoc = 3059;
 		rType = 0;
 		vrLen = 1370;
 		vrLoc = 1623;
@@ -73,7 +73,7 @@
 		isa = PBXTextBookmark;
 		name = "Properties: 55";
 		rLen = 0;
-		rLoc = 3063;
+		rLoc = 3059;
 		rType = 0;
 		vrLen = 1370;
 		vrLoc = 1623;
@@ -93,7 +93,7 @@
 		isa = PBXTextBookmark;
 		name = "Properties: 47";
 		rLen = 0;
-		rLoc = 2515;
+		rLoc = 2511;
 		rType = 0;
 		vrLen = 1408;
 		vrLoc = 1623;
@@ -103,7 +103,7 @@
 		isa = PBXTextBookmark;
 		name = "Properties: 47";
 		rLen = 0;
-		rLoc = 2515;
+		rLoc = 2511;
 		rType = 0;
 		vrLen = 1473;
 		vrLoc = 1558;
@@ -124,6 +124,8 @@
 		activeBuildStyle = F5D2079702B17BE101A318C2;
 		activeExecutable = D74911D0044179CC00902413;
 		activeTarget = F5D2078102B17BE101A318C2;
+		addToTargets = (
+		);
 		executables = (
 			D74911D0044179CC00902413,
 		);
@@ -135,16 +137,16 @@
 					Collapsed = NO;
 					Frame = "{{0, 0}, {665, 594}}";
 					Split0 = {
-						ActiveTab = 3;
-						ActiveTabName = PBXProjectFindModule;
+						ActiveTab = 4;
+						ActiveTabName = PBXCVSModule;
 						Collapsed = NO;
 						Frame = "{{0, 0}, {665, 594}}";
 						Split0 = {
-							Frame = "{{0, 301}, {665, 293}}";
+							Frame = "{{0, 214}, {665, 380}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
-							Frame = "{{0, 0}, {484, 208}}";
+							Frame = "{{0, 0}, {665, 208}}";
 						};
 						Tab1 = {
 							Debugger = {
@@ -255,7 +257,7 @@
 				StatusViewVisible = NO;
 				Template = F5CA7EC9015C08ED0DCA290F;
 				ToolbarVisible = NO;
-				WindowLocation = "{69, 216}";
+				WindowLocation = "{459, 153}";
 			};
 			PBXWorkspaceContents = (
 				{

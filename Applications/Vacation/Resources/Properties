@@ -24,6 +24,7 @@ MyLiveSettings = { \
         version = "3.5, February 2003"; \
 	SMTPHost = "smtp.server.name"; \
          emailActivated = "true"; \
+         showDatesOnWeekends="false"; \
 	appURL = "http://bbcappsn025.newsonline.tc.nca.bbc.co.uk/scripts/WebObjects.dll/Vacation.woa/"; \
 	adminEmail = "ash.mishra@sarofax.com"; \
 	welcomeMessage = "My<BR> Team Calendar"; \
@@ -37,4 +38,5 @@ MyLiveSettings = { \
          periodStrings = ("am","pm"); \
 }
 ConnectionDictionaryName = DevelopmentMysql
+SettingsDictionaryName = MyLiveSettings
 
