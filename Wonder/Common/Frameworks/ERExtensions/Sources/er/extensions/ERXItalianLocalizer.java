@@ -33,7 +33,6 @@ public class ERXItalianLocalizer extends ERXLocalizer {
             return super.plurifiedString(name,count);
         String result = name;
         if(name != null && count > 1) {
-            System.out.println("localizerExceptions." + name);
             String exception = (String) valueForKeyPath("localizerExceptions." + name);
             if(exception != null) 
                 return exception;
