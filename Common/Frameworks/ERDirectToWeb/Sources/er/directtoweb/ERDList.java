@@ -39,6 +39,14 @@ public class ERDList extends ERDCustomEditComponent {
         super.reset();
     }
 
+    public NSDictionary settings() {
+        String pc = d2wContext().dynamicPage();
+        if(pc != null) {
+            return new NSDictionary(pc, "parentPageConfiguration");
+        }
+        return null;
+    }
+    
     public WOComponent createObjectAction() {
     	WOComponent nextPage = context().page();
     	String editRelationshipConfigurationName = (String)valueForBinding("editRelationshipConfigurationName");
