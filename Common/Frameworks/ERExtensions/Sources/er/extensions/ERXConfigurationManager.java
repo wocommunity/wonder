@@ -24,7 +24,7 @@ import java.lang.reflect.*;
  * You can provide the system configuration by the following ways:<br/>
  * Note: This is the standard way for WebObjects 5.x applications.
  * <ul>
- *   <li><code>Properties</code> file under the Reources group of the  
+ *   <li><code>Properties</code> file under the Resources group of the  
  *       application and framework project. 
  *       It's a {@link java.util.Properties} file and Project Wonder's 
  *       standard project templates include it. (The templates won't 
@@ -256,7 +256,7 @@ public class ERXConfigurationManager {
         log.info("Reinserted the command line arguments to the system properties.");
     }
 
-
+    //CHECKME: shouldn't this use ERXProperties.stringForKey?
     private String stringForKey(String key) { return System.getProperty(key); }
 
     public void modelAddedHandler(NSNotification n) {
@@ -423,5 +423,32 @@ public class ERXConfigurationManager {
         }
         return _operatingSystem;
     }
-    
+
+    /**
+     * Path to the web server's document root.
+     * This implementation tries first to resolve the
+     * <code>application.name()+ "DocumentRoot"</code> property value,
+     * then the <code>ERXDocumentRoot</> property before
+     * getting the <code>DocumentRoot</code> key in your WebServerConfig.plist in the
+     * JavaWebObjects bundle.
+     * @returns to the web server's document root.
+     */
+    protected String documentRoot; 
+    public String documentRoot() {
+        if (documentRoot == null) {
+            // for WebObjects.properties
+            documentRoot = ERXProperties.stringForKey(WOApplication.application().name() + "DocumentRoot");
+            if(documentRoot == null) {
+                // for command line and Properties
+                documentRoot = ERXProperties.stringForKey("ERXDocumentRoot");
+                if(documentRoot == null) {
+                    // default value
+                    NSDictionary dict = ERXDictionaryUtilities.dictionaryFromPropertyList("WebServerConfig", NSBundle.bundleForName("JavaWebObjects"));
+                    if(dict != null)
+                        documentRoot = (String)dict.objectForKey("DocumentRoot");
+                }
+            }
+        }
+        return documentRoot;
+    }
 }
