@@ -28,19 +28,15 @@ public class ERXFileUtilities {
      */
     public static byte[] bytesFromInputStream(InputStream in) throws IOException {
         if (in == null) throw new IllegalArgumentException("null input stream");
-        final int BUFSIZ = 1024;
-        byte[] data = new byte[BUFSIZ];
-        int total = 0, c = 0, x = 0;
-        while ((c = in.read(data, total, x)) != -1) {
-            total += c;
-            x -= c;
-            if (x == 0) { // Need more buffer
-                byte[] tmp = new byte[total + BUFSIZ];
-                System.arraycopy(data, 0, tmp, 0, total);
-                data = tmp; x = BUFSIZ;
-            }
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        int read = -1;
+        byte[] buf = new byte[1024 * 50];
+        while ((read = in.read(buf)) != -1) {
+            bout.write(buf, 0, read);
         }
-        return data;
+        
+        return bout.toByteArray();
     }
 
     /**
@@ -375,7 +371,7 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         * @exception IOException if something goes wrong
         */
     public static final File createTempDir() throws IOException {
-        File f = File.createTempFile("", "");
+        File f = File.createTempFile("WonderTempDir", "");
 
         f.delete();
         f.delete();
@@ -431,6 +427,33 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         return files;
     }
 
+    /** Replaces the extension of the given file with the new extension.
+        *
+        * @param path the path of the file.
+        * @param newExtension the new extension.
+        *
+        * @return the new path.
+        */
+    public static String replaceFileExtension(String path, String newExtension) {
+        String tmp = "." + newExtension;
+
+        if(path.endsWith(tmp)) {
+            return path;
+
+        } else {
+            int index = path.lastIndexOf(".");
+
+            if(index > 0) {
+                String p = path.substring(0, index);
+                return p + tmp;
+
+            } else {
+                return path + tmp;
+            }
+        }
+    }
+
+    
 
 /** Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
         * structure is created as a subdirectory from destination. If destination is <code>null</code>
