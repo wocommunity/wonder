@@ -132,7 +132,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
                                                          new NSSelector("didFinishLaunching",
                                                                         ERXConstant.NotificationClassArray),
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
-                                                         null);        
+                                                         null);
+        // Signal handling support
+        if (ERXGracefulShutdown.isEnabled()) {
+            ERXGracefulShutdown.installHandler();
+        }        
     }
 
     /**
