@@ -74,8 +74,9 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }   
 
     public WOComponent cancelAction() {
-        if ((object() != null) && (object().editingContext()!=null))
+        if ((object() != null) && (object().editingContext()!=null) && shouldRevertChanges()) {
             object().editingContext().revert();
+        }
         return nextPage(false);
     }    
 
@@ -214,6 +215,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         return displayNameForProperty!=null && displayNameForProperty.length()>0;
     }
 
+    public boolean shouldRevertChanges() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldRevertChanges")); }
     public boolean shouldSaveChanges() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChanges")); }
     public boolean shouldValidateBeforeSave() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
     public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
