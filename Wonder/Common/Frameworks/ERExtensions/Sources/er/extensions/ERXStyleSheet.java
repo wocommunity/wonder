@@ -8,7 +8,6 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 
 /**
  * Simple stateless component used for adding a style sheet
@@ -29,7 +28,7 @@ import org.apache.log4j.Category;
 public class ERXStyleSheet extends WOComponent {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXStyleSheet.class);
+    public static final ERXLogger log = ERXLogger.getLogger(ERXStyleSheet.class);
 
     /** holds the calculated style sheet url */
     private String _styleSheetUrl;
@@ -73,7 +72,7 @@ public class ERXStyleSheet extends WOComponent {
     public String styleSheetUrl() {
         if (_styleSheetUrl==null) {
             _styleSheetUrl=application().resourceManager().urlForResourceNamed(styleSheetName(),
-                                                                               styleSheetFrameworkName(),null,context().request());
+                                        styleSheetFrameworkName(),_languages(),context().request());
         }
         return _styleSheetUrl;
     }
@@ -86,8 +85,8 @@ public class ERXStyleSheet extends WOComponent {
         if (!_frameworkNameInitialized) {
             _styleSheetFrameworkName = (String)valueForBinding("styleSheetFrameworkName");
             _frameworkNameInitialized = true;
-            if (cat.isDebugEnabled())
-                cat.debug("Style sheet framework name: " + _styleSheetFrameworkName);
+            if (log.isDebugEnabled())
+                log.debug("Style sheet framework name: " + _styleSheetFrameworkName);
         }
         return _styleSheetFrameworkName;
     }
@@ -101,8 +100,8 @@ public class ERXStyleSheet extends WOComponent {
         if (!_styleSheetNameInitialized) {
             _styleSheetName = (String)valueForBinding("styleSheetName");                                      
             _styleSheetNameInitialized = true;
-            if (cat.isDebugEnabled())
-                cat.debug("Style sheet name: " + _styleSheetName);
+            if (log.isDebugEnabled())
+                log.debug("Style sheet name: " + _styleSheetName);
         }
         return _styleSheetName;
     }
@@ -116,4 +115,15 @@ public class ERXStyleSheet extends WOComponent {
             _favIconLink = (String)valueForBinding("favIconLink");
         return _favIconLink;
     }    
+
+    private NSArray _languages() {
+        WOSession session = session();
+	if (session != null)
+	    return session.languages();
+	WORequest request = context().request();
+	if (request != null)
+	    return request.browserLanguages();
+	return null;
+    }
+
 }
