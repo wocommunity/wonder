@@ -1,7 +1,0 @@
-ComponentContent1: WOComponentContent {
-}
-
-Form1: WOForm {
-	targetString = targetString;
-	multipleSubmit = true;
-}

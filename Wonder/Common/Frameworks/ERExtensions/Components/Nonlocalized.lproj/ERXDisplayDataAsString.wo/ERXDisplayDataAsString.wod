@@ -1,5 +1,0 @@
-String1: WOString {
-    escapeHTML=false;
-    value = string;
-}
-

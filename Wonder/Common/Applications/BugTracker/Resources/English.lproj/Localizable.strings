@@ -1,9 +1,0 @@
-{
-    "HomePage.ListForOpenBugs" = "List @pluralCount@ open @pluralString@ assigned to you";
-    "HomePage.ListForUnreadBugs" = "List @pluralCount@ unread @pluralString@ assigned to you";
-    "List @user.openTestItems.count@ open TestItem(s) assigned to you" = "List @user.openTestItems.count@ open TestItem(s) assigned to you";
-    "List @user.openRequirements.count@ open Requirements(s) assigned to you" = "List @user.openRequirements.count@ open Requirements(s) assigned to you";
-    "List @user.allRequirements.count@ total Requirements(s) assigned to you" = "List @user.allRequirements.count@ total Requirements(s) assigned to you";
-    "CreateTestItemFromReq.templateString" = "[From Requirement #@primaryKey@]";
-    "CreateTestItem.templateString" = "[From Requirement #@primaryKey@]";
-}

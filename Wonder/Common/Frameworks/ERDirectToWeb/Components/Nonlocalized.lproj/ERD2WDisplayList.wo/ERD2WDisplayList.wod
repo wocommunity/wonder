@@ -1,6 +1,0 @@
-listing: ERXListDisplay {
-	attribute = ^keyWhenRelationship;
-	list = listToDisplay;
-	nullArrayDisplay = ^emptyArrayDisplayString;
-}
-

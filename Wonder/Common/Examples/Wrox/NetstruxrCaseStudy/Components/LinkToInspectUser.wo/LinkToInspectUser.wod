@@ -1,8 +1,0 @@
-Hyperlink1: WOHyperlink {
-	action = inspectUser;
-}
-
-String1: WOString {
-	value = user.fullName;
-}
-
