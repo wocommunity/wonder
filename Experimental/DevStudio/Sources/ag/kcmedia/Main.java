@@ -6,8 +6,8 @@ import er.extensions.*;
 public class Main extends WOComponent {
 
     public String className = "com.webobjects.appserver.WOContext";
-    public String modelPath = "/Volumes/Home/Desktop/armehaut/AHLogic/armehaut.eomodeld";
-    public String ruleFileName = "/Users/ak/Roots/ERDirectToWeb.framework/Resources/d2w.d2wmodel";
+    public String modelPath = System.getProperty("user.home") + "/Roots/ERCoreBusinessLogic.framework/Resources/ERCoreBusinessLogic.eomodeld";
+    public String ruleFileName = System.getProperty("user.home") + "/Roots/ERDirectToWeb.framework/Resources/d2w.d2wmodel";
     
     public Main(WOContext aContext) {
         super(aContext);
