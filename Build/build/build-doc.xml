@@ -112,7 +112,7 @@
             </fileset>
         </copy>-->
 
-        <javadoc   packagenames="er.*"
+        <javadoc   packagenames="er.*, com.gammastream.*"
                    defaultexcludes="yes"
                    destdir="${dist}/Documentation/api"
                    author="true"
@@ -126,7 +126,11 @@
                 <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERCalendar/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS/Sources/"/>
+                <pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
+                <pathelement path="${wonder.root}/Validity/Frameworks/Validity/Sources"/>
+                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
