@@ -24,7 +24,7 @@ public class ERXLog4JConfiguration extends WOComponent {
     private String _ruleKey;
     private String _loggerName;
 
-    public boolean showAll=true;
+    public boolean showAll=false;
     
     public Logger logger() { return _logger; }
     public void setLogger(Logger newValue) { _logger=newValue; }
