@@ -18,7 +18,7 @@ import java.util.*;
 import er.extensions.*;
 
 /**
- * component for ineractively running tests.<br />
+ * component for interactively running tests.<br />
  * 
  */
 
@@ -66,10 +66,13 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
                     while (classNameEnum.hasMoreElements()) {
                         String className = (String)classNameEnum.nextElement();
                         if (className != null
-                            && ( className.endsWith( "TestCase" ) || className.indexOf("tests.") == 0 || className.indexOf(".tests.") > 0)
+                            && ( className.endsWith( "Test" ) || className.endsWith( "TestCase" ) || className.indexOf("tests.") == 0 || className.indexOf(".tests.") > 0)
                             && !className.startsWith( "junit." )
-                            && className.indexOf( "$" ) < 0)
-                            theClassNames.addObject(className);
+                            && className.indexOf( "$" ) < 0) {
+                            Class c = ERXPatcher.classForName(className);
+                            //if(c != null && c.isAssignableFrom(TestCase.class))
+                                theClassNames.addObject(munge(className));
+                        }
                     }
                 }
             }
@@ -83,7 +86,25 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
         }
         return allTests;
     }
-    
+
+    private String munge(String className) {
+        String mungedName = className;
+        int offset = className.lastIndexOf('.');
+        if(offset >= 0) {
+            mungedName = className.substring(offset+1) + " - " + className.substring(0, offset);
+        }
+        return mungedName;
+    }
+
+    private String demunge(String className) {
+        String demungedName = className;
+        int offset = className.indexOf(" - ");
+        if(offset >= 0) {
+            demungedName = className.substring(offset+3) + "." + className.substring(0, offset);
+        }
+        return demungedName;
+    }
+
     private void resetInterface() {
         runTime = 0;
         errorMessage = "";
@@ -109,7 +130,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
             throw new Exception("You need to provide the name of a class to use as the TestCase for this run.");
         }
         try {
-            Test suite = aTestRunner.getTest(theTest);
+            Test suite = aTestRunner.getTest(demunge(theTest));
             return doRun(suite);
         }
         catch(Exception e) {
