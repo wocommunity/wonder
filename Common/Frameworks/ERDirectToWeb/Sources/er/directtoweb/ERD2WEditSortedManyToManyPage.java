@@ -54,6 +54,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if (!object().isToManyKey(relationshipKey))
             throw new RuntimeException(relationshipKey+" is not a to-many relationship");
         
+        d2wContext().takeValueForKey(relationshipKey, "editRelationshipPropertyKey");
+        
         EODetailDataSource relationshipDataSource = new EODetailDataSource(object().classDescription(), relationshipKey());
         relationshipDataSource.qualifyWithRelationshipKey(relationshipKey(), newObject);
         setDataSource(relationshipDataSource);
@@ -75,7 +77,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if(displayKeyFromD2W!=null && displayKeyFromD2W.length()!=0){
             return displayKeyFromD2W;
         }else{
-            return destinationRelationship().name()+".userPresentableDescription";
+            return destinationRelationshipKey()+".userPresentableDescription";
         }
     }
 
@@ -159,7 +161,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 joinEO.takeValueForKey(ERXConstant.integerForInt(newIndex),indexKey());                
             }
             joinEO.addObjectToBothSidesOfRelationshipWithKey(_localEoToAddToRelationship,
-                                                             destinationRelationship().name());
+                                                             destinationRelationshipKey());
             object().addObjectToBothSidesOfRelationshipWithKey(joinEO, relationshipKey());
             dataSource().insertObject(joinEO);
             relationshipDisplayGroup.fetch();
@@ -185,9 +187,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             for (Enumeration e = browserSelections.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject object=(EOEnterpriseObject)e.nextElement();
                 EOEnterpriseObject _localEoToRremoveFromRelationship =
-                    (EOEnterpriseObject)object.valueForKey(destinationRelationship().name());
+                    (EOEnterpriseObject)object.valueForKey(destinationRelationshipKey());
                 object.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
-                                                                    destinationRelationship().name());
+                                                                    destinationRelationshipKey());
                 object().removeObjectFromBothSidesOfRelationshipWithKey(object,
                                                                       relationshipKey());
                 if(((object instanceof ERXGuardedObjectInterface) && ((ERXGuardedObjectInterface)object).canDelete()) 
@@ -216,9 +218,9 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         for (Enumeration e = relationshipDisplayGroup.displayedObjects().immutableClone().objectEnumerator(); e.hasMoreElements();) {
             EOEnterpriseObject joinObject=(EOEnterpriseObject)e.nextElement();
             EOEnterpriseObject _localEoToRremoveFromRelationship =
-                (EOEnterpriseObject)joinObject.valueForKey(destinationRelationship().name());
+                (EOEnterpriseObject)joinObject.valueForKey(destinationRelationshipKey());
             joinObject.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
-                                                                  destinationRelationship().name());
+                                                                  destinationRelationshipKey());
             object().removeObjectFromBothSidesOfRelationshipWithKey(joinObject,
                                                                     relationshipKey());
                                                                    
@@ -322,6 +324,17 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return null;
     }
 
+    private String _destinationRelationshipKey;
+    public String destinationRelationshipKey() {
+        if (_destinationRelationshipKey == null) {
+            _destinationRelationshipKey = (String)d2wContext().valueForKey("destinationRelationshipKey");
+            if (_destinationRelationshipKey == null) {
+                _destinationRelationshipKey = destinationRelationship().name();
+            }
+        }
+        return _destinationRelationshipKey;
+    }
+    
     private EORelationship _destinationRelationship;
     public EORelationship destinationRelationship() {
         if (_destinationRelationship==null) {
@@ -350,13 +363,19 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                     }
                 }
             }
-
         }
         return _destinationRelationship;
     }
 
+    private EOEntity _destinationEntity;
     public EOEntity destinationEntity() {
-        return destinationRelationship().destinationEntity();
+        if (_destinationEntity == null) {
+            _destinationEntity = (EOEntity)d2wContext().valueForKey("destinationRelationshipEntity");
+            if (_destinationEntity == null) {
+                _destinationEntity =  destinationRelationship().destinationEntity();
+            }
+        }
+        return _destinationEntity;
     }
     
     public String indexKey() {
