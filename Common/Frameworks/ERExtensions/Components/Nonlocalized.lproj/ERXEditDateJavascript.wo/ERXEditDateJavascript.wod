@@ -1,7 +1,8 @@
 Hyperlink1: WOHyperlink {
-	href = href;
+	href = "#";
 	onmouseout = "window.status='';return true;";
 	onmouseover = "window.status='Date Picker';return true;";
+	onclick = href;
 }
 
 Image1: WOImage {
