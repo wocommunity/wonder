@@ -7,6 +7,7 @@
 		<binding name="isMandatory"/>
 		<binding name="relationshipKey"/>
 		<binding name="sourceEntityName"/>
+		<binding name="destinationEntityName"/>
 		<binding name="sourceObject"/>
 		<binding name="uiStyle"/>
 		<binding name="destinationSortKey"/>
@@ -18,12 +19,18 @@
 		<binding name="maxColumns"/>
 		<binding name="localizeDisplayKeys" defaults="Boolean"/>
 
-		<validation message="&apos;relationshipKey&apos; is a required binding">
-			<unbound name="relationshipKey"/>
+		<validation message="&apos;sourceEntityName&apos; is required when &apos; destinationEntityName&apos; is not bound">
+			<and>
+                            <unbound name="sourceEntityName"/>
+                            <unbound name="destinationEntityName"/>
+			</and>
 		</validation>
 
-		<validation message="&apos;sourceEntityName&apos; is a required binding">
-			<unbound name="sourceEntityName"/>
+		<validation message="&apos;relationshipKey&apos; is required when &apos; destinationEntityName&apos; is not bound">
+			<and>
+                            <unbound name="relationshipKey"/>
+                            <unbound name="destinationEntityName"/>
+			</and>
 		</validation>
 
 		<validation message="&apos;possibleChoices&apos; and &apos;qualifier&apos; can not both be bound.">
