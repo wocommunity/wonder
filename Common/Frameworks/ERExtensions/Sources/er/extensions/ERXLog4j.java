@@ -20,9 +20,7 @@ import org.apache.log4j.*;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ERXLog4j {
     static {
-        // (ak): this is *so* ugly...
-        Category.defaultHierarchy.setCategoryFactory(new ERXLog4j.Factory());
-        // System.out.println("Log4J: I set the Log4j factory to the right class...");
+        ERXLogger.class.getName();
     }
     
     ///////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
@@ -60,14 +58,6 @@ public class ERXLog4j {
             cat.info("Log4j configured.");
             setIsLoggingConfigured(true);
             _isInitialized = true;
-        }
-    }
-
-    public static class Factory implements org.apache.log4j.spi.CategoryFactory {
-        public Category makeNewCategoryInstance(String name) {
-            if(cat != null && cat.isDebugEnabled())
-                cat.debug("makeNewCategoryInstance: " + name);
-            return new ERXLogger(name);
         }
     }
 
