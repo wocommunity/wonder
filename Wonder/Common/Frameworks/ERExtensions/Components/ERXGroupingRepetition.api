@@ -8,6 +8,9 @@
 		<binding name="subList"/>
 		<binding name="subListSection"/>
 		<binding name="sectionKey"/>
+		<binding name="sortKey"/>
+		<binding name="splitArrays" defaults="Boolean"/>
+		<binding name="ignoreNulls" defaults="Boolean"/>
 
 		<validation message="&apos;item&apos; must be bound to a settable value">
 			<unsettable name="item"/>

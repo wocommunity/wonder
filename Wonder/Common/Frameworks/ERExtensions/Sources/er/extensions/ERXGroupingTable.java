@@ -40,7 +40,4 @@ public class ERXGroupingTable extends ERXGroupingRepetition {
     public ERXGroupingTable(WOContext context) {
         super(context);
     }
-    
-    public boolean synchronizesVariablesWithBindings() { return false; }
-    public boolean isStateless() { return true; }
 }

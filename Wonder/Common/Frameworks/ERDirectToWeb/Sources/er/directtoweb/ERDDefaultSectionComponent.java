@@ -6,34 +6,35 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 import com.webobjects.directtoweb.*;
+
+import er.extensions.*;
 
 /**
  * Displays section name as a string.<br />
  * 
  */
 
-public class ERDDefaultSectionComponent extends WOComponent {
-
-   public ERDDefaultSectionComponent(WOContext context) {super(context);}
-
-    public boolean isStateless() { return true; }
-
-    public EOEnterpriseObject object() { return (EOEnterpriseObject)valueForBinding("object"); }
+public class ERDDefaultSectionComponent extends ERXStatelessComponent {
+    
+    public ERDDefaultSectionComponent(WOContext context) {
+        super(context);
+    }
+    
+    public Object object() { 
+        return valueForBinding("object"); 
+    }
     
     public Object sectionTitle() {
         D2WContext c=(D2WContext)valueForBinding("d2wContext");
         Object result=object();
-        boolean computed=false;
         if (result!=null) {
             if (c!=null) {
                 String k=(String)c.valueForKey("keyWhenGrouping");
                 if (k!=null) {
-                    result=((EOEnterpriseObject)result).valueForKey(k);
-                    computed=true;
+                    result=NSKeyValueCodingAdditions.Utility.valueForKeyPath(result,k);
                 }
             }
         }

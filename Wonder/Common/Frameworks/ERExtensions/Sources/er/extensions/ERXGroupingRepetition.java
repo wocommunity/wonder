@@ -9,13 +9,49 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.util.*;
 
-/** Groups items into sections.<br>
- Please see the page BugsPerUser.wo from the BugTracker application to find out how to use it. */
+/** 
+ * Groups items into sections.For example: Employees belong to a department, you want to 
+ * group on department. So the parent will need to consist of something like:
+ * <pre>
+ * 
+ * [erxgroupingrepetition]
+ * [wostring value=currentDepartment.name] 
+ * [worepetition list=currentEmployees item=currentEmployee] 
+ *    [wostring value=currentEmployees.firstName] 
+ * [/worepetition] 
+ * [/erxgroupingrepetition]
+ * 
+ * </pre>
+ * and then you'd set up the bindings of the grouping repetition like:
+ * <pre>
+ * 
+ * list=allEmployees : list of employees to group
+ * item=currentEmployee : will be set so the next key can get evaluated
+ * sectionForItem=departmentForCurrentEmployee : a method in the parent that returns sth like currentEmployee.department()
+ * sectionKey="name" : assuming department has a name, but can be unbound; note that you can group on "city", too!
+ * subListSection=currentDepartment : instance variable in the parent that will get set to the current department
+ * subList=currentEmployees : instance variable in the parent that will get set to the employees of the current department
+ * sortKey="@sortAsc.name" : sorts the department list by name
+ * 
+ * </pre>
+ * If a user could belong to many departments, you could either set the <code>splitArrays</code> binding to true,
+ * in which case the sections would be all the departments and the user would be added in each section he belongs
+ * or you could leave it out. Then the sections will be each combination of departments a user belongs to.
+ * Please see the page BugsPerUser.wo from the BugTracker application to find another example on how to use it. 
+ * @binding list list of objects to group
+ * @binding item current item, will get pushed to the parent, so that it can evaluate sectionForItem
+ * @binding sectionForItem value pulled from the parent, after "item" gets pushed
+ * @binding sectionKey key to group departments on (usually primaryKey or hashCode)
+ * @binding subListSection will get set to the current section
+ * @binding subList will get set to the grouped items for the section
+ * @binding sortKey optional key for sorting the group list (sth like '@sortAsc.name')
+ * @binding splitArrays optional boolean specifying if array keys are regarded as distinct keys
+ * @binding ignoreNulls optional boolean specifying if nulls are ignored
+ */
 
-public class ERXGroupingRepetition extends WOComponent {
+public class ERXGroupingRepetition extends ERXStatelessComponent {
 
     public ERXGroupingRepetition(WOContext aContext) {
         super(aContext);
@@ -23,77 +59,121 @@ public class ERXGroupingRepetition extends WOComponent {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXGroupingRepetition.class);
-
+    
     private NSMutableArray _sections;
     private Object _sectionItem;
     private NSMutableDictionary _itemsPerSection=new NSMutableDictionary();
     private final static Object NULL="N/A";
     
-    public boolean synchronizesVariablesWithBindings() { return false; }
-    public boolean isStateless() { return true; }
+    private String _sectionKey;
+    public String sectionKey() {
+        if (_sectionKey==null) {
+            _sectionKey=stringValueForBinding("sectionKey", "hashCode");
+        }
+        return _sectionKey;
+    }
     
     public NSArray sections() {
         if (_sections==null) {
             _sections= new NSMutableArray();
             NSArray list=(NSArray)valueForBinding("list");
+            _itemsPerSection=new NSMutableDictionary();
             if (list!=null) {
+                boolean ignoreNulls = booleanValueForBinding("ignoreNulls", false);
+                
                 for (Enumeration e=list.objectEnumerator(); e.hasMoreElements();) {
                     Object item=e.nextElement();
                     if(log.isDebugEnabled()) log.debug("item = "+item);
+                    
+                    // push value up, so parent can tell us the group
                     setValueForBinding(item,"item");
+                    
                     // Sections have to be copiable objects -- no EOs!!
                     Object section=valueForBinding("sectionForItem");
-                    if(log.isDebugEnabled()) log.debug("section = "+section);
-                    if (section==null) section=NULL;
-                    Object sectionKey=copiableKeyForSection(section);
-                    if(log.isDebugEnabled()) log.debug("copiableKeyForSection = "+sectionKey);
-                    NSMutableArray itemsForSection=null;
-                    if (_sections.containsObject(section))
-                        itemsForSection=(NSMutableArray)_itemsPerSection.objectForKey(sectionKey);
-                    else {
-                        _sections.addObject(section);
-                        itemsForSection=new NSMutableArray();
-                        _itemsPerSection.setObjectForKey(itemsForSection,sectionKey);
+                    if (section==EOKeyValueCoding.NullValue) section=null;
+                    Object sectionKey;
+
+                    if(section == null) {
+                        if(ignoreNulls) {
+                            continue;
+                        }
+                        section=NULL;
                     }
-                    itemsForSection.addObject(item);
+                    sectionKey = keyForSection(section);
+                    if(sectionKey instanceof NSArray) {
+                        NSArray array = (NSArray)sectionKey;
+                        int index = 0;
+                        for (Enumeration keys = ((NSArray)sectionKey).objectEnumerator(); keys.hasMoreElements(); ) {
+                            Object currentKey = keys.nextElement();
+                            Object currentSection = ((NSArray)section).objectAtIndex(index++);
+                            NSMutableArray currentItemsForSection=(NSMutableArray)_itemsPerSection.objectForKey(currentKey);
+                            if (currentItemsForSection==null) {
+                                _sections.addObject(currentSection);
+                                currentItemsForSection=new NSMutableArray();
+                                _itemsPerSection.setObjectForKey(currentItemsForSection,currentKey);
+                            }
+                            currentItemsForSection.addObject(item);
+                        }
+                    } else {
+                        NSMutableArray currentItemsForSection=(NSMutableArray)_itemsPerSection.objectForKey(sectionKey);
+                        if (currentItemsForSection==null) {
+                            _sections.addObject(section);
+                            currentItemsForSection=new NSMutableArray();
+                            _itemsPerSection.setObjectForKey(currentItemsForSection,sectionKey);
+                        }
+                        currentItemsForSection.addObject(item);
+                    }
                 }
-                String sortKey = (String)valueForBinding("sortKey");
-                //the key act on the array, so it must be in the form "@sortAsc.someKey"
-                if(sortKey != null) {
-                    _sections = (NSMutableArray)_sections.valueForKeyPath(sortKey);
-                }
+            }
+            String sortKey = (String)valueForBinding("sortKey");
+            //the key act on the array, so it must be in the form "@sortAsc.someKey"
+            if(sortKey != null) {
+                _sections = (NSMutableArray)_sections.valueForKeyPath(sortKey);
             }
         }
         return _sections;
     }
-
-    private String _sectionKey=null;
-    public Object copiableKeyForSection(Object section) {
-        Object result=section;
-        if (section!=null && section!=NULL) {
-            if(log.isDebugEnabled()) log.debug("_sectionKey = "+_sectionKey);
-            if (_sectionKey==null) {
-                _sectionKey=(String)valueForBinding("sectionKey");
+    
+    /**
+     * @param splitArrays
+     * @param section
+     * @return
+     */
+    private Object keyForSection(Object section) {
+        Object sectionKey = NULL;
+        if(section != null && section != NULL) {
+            sectionKey = NSKeyValueCodingAdditions.Utility.valueForKeyPath(section,sectionKey());
+            if(!splitArrays() && (sectionKey instanceof NSArray)) {
+                sectionKey = ((NSArray)((NSArray)section).valueForKey(_sectionKey)).componentsJoinedByString(",");
             }
-            if (_sectionKey!=null && section instanceof EOEnterpriseObject) {
-                result = ((EOEnterpriseObject)section).valueForKey(_sectionKey);
-            } else if (_sectionKey!=null && section instanceof NSArray) {
-                result = ((NSArray)((NSArray)section).valueForKey(_sectionKey)).componentsJoinedByString(",");
-            }	
         }
-        return result!=null ? result : NULL;        
+        return sectionKey;
     }
 
-    public Object sectionItem() { return _sectionItem; }
+    
+    private Boolean _splitArrays;
+    private boolean splitArrays() {
+        if(_splitArrays == null) {
+            _splitArrays = booleanValueForBinding("splitArrays", false) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _splitArrays.booleanValue();
+    }
+
+    public Object sectionItem() { 
+        return _sectionItem; 
+    }
+    
     public void setSectionItem(Object section) {
         _sectionItem=section;
-        setValueForBinding((_sectionItem!=NULL && (_sectionItem ==null || !_sectionItem.equals(NULL))) ? _sectionItem : null, "subListSection");
-        setValueForBinding(_itemsPerSection.objectForKey(copiableKeyForSection(_sectionItem)),"subList");
+        setValueForBinding(_sectionItem!=NULL ? _sectionItem : null, "subListSection");
+        setValueForBinding(_itemsPerSection.objectForKey(keyForSection(_sectionItem)), "subList");
     }
     
     public void reset() {
         _sections=null;
+        _splitArrays=null;
         _sectionItem=null;
         _sectionKey=null;
+        _itemsPerSection=null;
     }
 }
