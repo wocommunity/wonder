@@ -4123,21 +4123,6 @@
             }; 
         }, 
         {
-            author = 10; 
-            class = "com.webobjects.directtoweb.Rule"; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = task; 
-                selectorName = "isEqualTo"; 
-                value = error; 
-            }; 
-            rhs = {
-                class = "com.webobjects.directtoweb.Assignment"; 
-                keyPath = pageName; 
-                value = ERDRecoverableErrorPage; 
-            }; 
-        }, 
-        {
             author = 600; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
