@@ -92,7 +92,9 @@
 			</resources>
 			<wsresources dir="${project.dir}/WebServerResources">
 				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
 				<include name="**/*.js" />
+				<include name="**/*.css" />
 			</wsresources>
 		</woframework>
 	</target>
@@ -118,22 +120,63 @@
 			</resources>
 			<wsresources dir="${project.dir}/WebServerResources">
 				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
 				<include name="**/*.js" />
+				<include name="**/*.css" />
 			</wsresources>
 			<frameworks root="${build.root}">
 				<include name="ER*.framework"/>
 				<include name="BT*.framework"/>
 			</frameworks>
-			<frameworks root="/Library/Frameworks">
+			<frameworks root="${wo.local.root}">
 				<include name="Mysql*.framework"/>
 			</frameworks>
-			<frameworks root="wo.woroot">
-				<include name="Library/Frameworks/Java*.framework"/>
-				<exclude name="Library/Frameworks/Java*Cocoa.framework"/>
-				<exclude name="Library/Frameworks/JavaOpen*.framework"/>
-				<exclude name="Library/Frameworks/JavaEOGeneration*.framework"/>
-				<exclude name="Library/Frameworks/JavaEOInterface.framework"/>
-				<exclude name="Library/Frameworks/JavaEODistribution.framework"/>
+			<frameworks root="${wo.system.root}">
+				<include name="Java*.framework"/>
+				<exclude name="Java*Cocoa.framework"/>
+				<exclude name="JavaOpen*.framework"/>
+				<exclude name="JavaEOGeneration*.framework"/>
+				<exclude name="JavaEOInterface.framework"/>
+				<exclude name="JavaEODistribution.framework"/>
+			</frameworks>
+    	</woapplication>
+		<echo message="-------------------------------------" />
+		<echo message="${build.root}" />
+		<echo message="-------------------------------------" />
+	</target>
+
+	<target name="stepwiseApplication" depends="properties,compile" description="Default compile target">
+		<taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
+			<classpath refid="project.class.path" />
+		</taskdef>
+		<woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+			<classes dir="${build.classes}">
+				<include name="**/*.class" />
+			</classes>
+			<resources dir="${project.dir}/Components">
+				<include name="**.api" />
+				<include name="**/*.wo/**" />
+			</resources>
+			<resources dir="${project.dir}/Resources">
+				<include name="*.eomodeld/**" />
+				<include name="**/*.plist" />
+				<include name="**/*.d2wmodel" />
+				<include name="**/*.strings" />
+				<include name="**/*.sh" />
+			</resources>
+			<wsresources dir="${project.dir}/WebServerResources">
+				<include name="**/*.gif" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.js" />
+				<include name="**/*.css" />
+			</wsresources>
+			<frameworks root="${wo.system.root}">
+				<include name="Java*.framework"/>
+				<exclude name="Java*Cocoa.framework"/>
+				<exclude name="JavaOpen*.framework"/>
+				<exclude name="JavaEOGeneration*.framework"/>
+				<exclude name="JavaEOInterface.framework"/>
+				<exclude name="JavaEODistribution.framework"/>
 			</frameworks>
     	</woapplication>
 		<echo message="-------------------------------------" />
@@ -307,7 +350,7 @@
 
 	<!-- D2WInspectExample -->
 	<target name="D2WInspectExample.all">
-		<antcall target="application" >
+		<antcall target="stepwiseApplication" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WInspectExample" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Stepwise/D2WInspectExample" />
@@ -323,7 +366,7 @@
 
 	<!-- D2WListExample -->
 	<target name="D2WListExample.all">
-		<antcall target="application" >
+		<antcall target="stepwiseApplication" >
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WListExample" />
             <param name="project.dir" value="${wonder.root}/Common/Examples/Stepwise/D2WListExample" />
@@ -377,7 +420,7 @@
 	<target name="applications.all" depends="frameworks.all,bugtracker.all" />
 
 	<target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all,NetStruxrCaseStudy.all" />
-	<target name="stepwise.all" depends="frameworks.all,D2WListExample.all,D2WInspectExample.all" />
+	<target name="stepwise.all" depends="D2WListExample.all,D2WInspectExample.all" />
 	<target name="examples.all" depends="frameworks.all,wrox.all,stepwise.all" />
 
 	<target name="common.all" depends="frameworks.all,examples.all,applications.all" />
