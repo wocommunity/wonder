@@ -11,7 +11,15 @@
 				01A3BF70FFB0C37D11CD2B9D,
 				015E5C37FFDDB4DD11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Nonlocalized,
+			);
 			mainGroup = 013357CDFF5DD5F011CD2B9D;
 			productRefGroup = 013357CEFF5DD64811CD2B9D;
 			projectDirPath = "";
@@ -28,7 +36,6 @@
 				013357D6FF5DD68111CD2B9D,
 				15D0BC7BFF5EC4B811CD2B9D,
 				15D0BC79FF5EC47311CD2B9D,
-				01D74EAA00210ABC11CD2B8D,
 				096CB46EFF7BFC8111CD2B9D,
 				2123FDFDFFD467417F000001,
 				013357CEFF5DD64811CD2B9D,
@@ -72,18 +79,6 @@
 			};
 			isa = PBXBuildStyle;
 			name = WebServer;
-		};
-		016FA8CAFFE5B8A311CD2B8D = {
-			includeInIndex = 0;
-			isa = PBXFolderReference;
-			path = Main.wo;
-			refType = 4;
-		};
-		016FA8CBFFE5B8A311CD2B8D = {
-			fileRef = 016FA8CAFFE5B8A311CD2B8D;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		0171C3300017AA3E11CD2B8D = {
 			buildActionMask = 2147483647;
@@ -175,18 +170,15 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C60B5FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
-				2123FE01FFD467417F000001,
 				F54CCF8E016A3CC601000001,
 				F517296803AAD91901AD0D0B,
 				F517296903AAD91901AD0D0B,
-				F517296A03AAD91901AD0D0B,
-				F517296B03AAD91901AD0D0B,
 				F517296C03AAD91901AD0D0B,
+				502878860409779D0043FCB8,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,10 +187,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2123FE02FFD467417F000001,
-				016FA8CBFFE5B8A311CD2B8D,
-				C65E1ED90072974704CD2B8D,
-				F54CCF8F016A3CC601000001,
 				F54CCF90016A3CC601000001,
+				502878840409778B0043FCB8,
+				5028788E040977DC0043FCB8,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,7 +279,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C60D7FFD2F2BB7F000001 = {
 			buildActionMask = 2147483647;
@@ -423,7 +413,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C6101FFD43DA37F000001 = {
 			isa = PBXTargetDependency;
@@ -525,14 +514,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
-		};
-		01D74EAA00210ABC11CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Interfaces;
-			path = "";
-			refType = 4;
 		};
 //010
 //011
@@ -747,7 +728,6 @@
 		};
 		15D0BC7BFF5EC4B811CD2B9D = {
 			children = (
-				C65E1ED80072974704CD2B8D,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -789,22 +769,19 @@
 //214
 		2123FDF9FFD467417F000001 = {
 			children = (
-				2123FDFBFFD467417F000001,
-				016FA8CAFFE5B8A311CD2B8D,
 				2123FDFCFFD467417F000001,
+				5028787D0409778B0043FCB8,
+				502878850409779D0043FCB8,
 			);
 			isa = PBXGroup;
 			name = Main;
 			refType = 4;
 		};
-		2123FDFBFFD467417F000001 = {
-			isa = PBXFileReference;
-			path = Main.java;
-			refType = 4;
-		};
 		2123FDFCFFD467417F000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = Main.api;
+			name = Main.api;
+			path = Components/Main.api;
 			refType = 4;
 		};
 		2123FDFDFFD467417F000001 = {
@@ -813,14 +790,6 @@
 			isa = PBXGroup;
 			name = Documentation;
 			refType = 4;
-		};
-		2123FE01FFD467417F000001 = {
-			fileRef = 2123FDFBFFD467417F000001;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
 		};
 		2123FE02FFD467417F000001 = {
 			fileRef = 2123FDFCFFD467417F000001;
@@ -833,27 +802,73 @@
 //212
 //213
 //214
-//C60
-//C61
-//C62
-//C63
-//C64
-		C65E1ED80072974704CD2B8D = {
-			isa = PBXFileReference;
-			path = WOAfile.icns;
+//500
+//501
+//502
+//503
+//504
+		5028787D0409778B0043FCB8 = {
+			children = (
+				5028787E0409778B0043FCB8,
+			);
+			isa = PBXVariantGroup;
+			name = Main.wo;
+			path = "";
 			refType = 4;
 		};
-		C65E1ED90072974704CD2B8D = {
-			fileRef = C65E1ED80072974704CD2B8D;
+		5028787E0409778B0043FCB8 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/Main.wo;
+			refType = 4;
+		};
+		502878840409778B0043FCB8 = {
+			fileRef = 5028787D0409778B0043FCB8;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-//C60
-//C61
-//C62
-//C63
-//C64
+		502878850409779D0043FCB8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Main.java;
+			path = Sources/er/grouping/examples/Main.java;
+			refType = 4;
+		};
+		502878860409779D0043FCB8 = {
+			fileRef = 502878850409779D0043FCB8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50287887040977DC0043FCB8 = {
+			children = (
+				50287888040977DC0043FCB8,
+			);
+			isa = PBXVariantGroup;
+			name = GroupingOnly.wo;
+			path = "";
+			refType = 4;
+		};
+		50287888040977DC0043FCB8 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/GroupingOnly.wo;
+			refType = 4;
+		};
+		5028788E040977DC0043FCB8 = {
+			fileRef = 50287887040977DC0043FCB8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//500
+//501
+//502
+//503
+//504
 //F50
 //F51
 //F52
@@ -874,8 +889,6 @@
 			children = (
 				F517296303AAD91901AD0D0B,
 				F517296403AAD91901AD0D0B,
-				F517296503AAD91901AD0D0B,
-				F517296603AAD91901AD0D0B,
 				F517296703AAD91901AD0D0B,
 			);
 			isa = PBXGroup;
@@ -883,30 +896,21 @@
 			refType = 4;
 		};
 		F517296303AAD91901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Application.java;
 			path = er/grouping/examples/Application.java;
 			refType = 4;
 		};
 		F517296403AAD91901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DirectAction.java;
 			path = er/grouping/examples/DirectAction.java;
 			refType = 4;
 		};
-		F517296503AAD91901AD0D0B = {
-			isa = PBXFileReference;
-			name = GroupingOnly.java;
-			path = er/grouping/examples/GroupingOnly.java;
-			refType = 4;
-		};
-		F517296603AAD91901AD0D0B = {
-			isa = PBXFileReference;
-			name = Main.java;
-			path = er/grouping/examples/Main.java;
-			refType = 4;
-		};
 		F517296703AAD91901AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Session.java;
 			path = er/grouping/examples/Session.java;
@@ -924,18 +928,6 @@
 			settings = {
 			};
 		};
-		F517296A03AAD91901AD0D0B = {
-			fileRef = F517296503AAD91901AD0D0B;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F517296B03AAD91901AD0D0B = {
-			fileRef = F517296603AAD91901AD0D0B;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F517296C03AAD91901AD0D0B = {
 			fileRef = F517296703AAD91901AD0D0B;
 			isa = PBXBuildFile;
@@ -947,7 +939,6 @@
 			buildPhases = (
 			);
 			buildSettings = {
-				OPTIMIZATION_CFLAGS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -960,46 +951,38 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F54CCF8A016A3CC601000001 = {
 			children = (
 				F54CCF8B016A3CC601000001,
-				F54CCF8C016A3CC601000001,
 				F54CCF8D016A3CC601000001,
+				50287887040977DC0043FCB8,
 			);
 			isa = PBXGroup;
 			name = GroupingOnly;
 			refType = 4;
 		};
 		F54CCF8B016A3CC601000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = GroupingOnly.java;
-			refType = 4;
-		};
-		F54CCF8C016A3CC601000001 = {
-			includeInIndex = 0;
-			isa = PBXFolderReference;
-			path = GroupingOnly.wo;
+			name = GroupingOnly.java;
+			path = Sources/er/grouping/examples/GroupingOnly.java;
 			refType = 4;
 		};
 		F54CCF8D016A3CC601000001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = GroupingOnly.api;
+			name = GroupingOnly.api;
+			path = Components/GroupingOnly.api;
 			refType = 4;
 		};
 		F54CCF8E016A3CC601000001 = {
 			fileRef = F54CCF8B016A3CC601000001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F54CCF8F016A3CC601000001 = {
-			fileRef = F54CCF8C016A3CC601000001;
 			isa = PBXBuildFile;
 			settings = {
 			};

@@ -15,7 +15,7 @@ import com.webobjects.eocontrol.*;
 public class Application extends ERXApplication {
     
     public static void main(String argv[]) {
-        WOApplication.main(argv, Application.class);
+        ERXApplication.main(argv, Application.class);
     }
 
     public Application() {
