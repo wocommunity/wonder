@@ -74,7 +74,7 @@ RightArrow: WOImageButton {
     action = nextPage;
     alt = "next step";    
 	filename = "NextMetalBtn.gif";
-	framework = "ERExtension";
+	framework = "ERExtensions";
 }
 
 SwitchComponent1: WOSwitchComponent {
