@@ -447,8 +447,67 @@ public class ERXEOControlUtilities {
             fs.setPrefetchingRelationshipKeyPaths(prefetchingKeyPaths);
         NSArray eos = ec.objectsWithFetchSpecification(fs);
         if (eos.count() > 1)
-            throw new IllegalStateException("Found multiple objects for entity \"" + entity.name() + " with primary key value: " + primaryKeyValue);
+            throw new IllegalStateException("Found multiple objects for entity \"" + entity.name()
+                                            + " with primary key value: " + primaryKeyValue);
         return eos.count() == 1 ? (EOEnterpriseObject)eos.lastObject() : null;
     }
-    
+
+    /**
+     * Enhanced version of the utility method found in EOUtilities. Adds
+     * support for including newly created objects in the fetch as well
+     * as prefetching key paths.
+     * @param ec editing context to fetch it into
+     * @param entityName name of the entity
+     * @param qualifierFormat format of the qualifier string
+     * @param args qualifier arguments
+     * @param prefetchKeyPaths prefetching key paths
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @return array of objects matching the constructed qualifier
+     */
+    public static NSArray objectsWithQualifierFormat(EOEditingContext ec,
+                                                         String entityName,
+                                                         String qualifierFormat,
+                                                         NSArray args,
+                                                         NSArray prefetchKeyPaths,
+                                                         boolean includeNewObjects) {
+        EOQualifier qual = EOQualifier.qualifierWithQualifierFormat(qualifierFormat, args);
+        return objectsWithQualifier(ec, entityName, qual, prefetchKeyPaths, includeNewObjects);
+    }
+
+    /**
+     * Utility method used to fetch an array of objects given a qualifier. Also
+     * has support for filtering the newly inserted objects as well as specifying
+     * prefetching key paths.
+     * @param ec editing context to fetch it into
+     * @param entityName name of the entity
+     * @param qualifierFormat format of the qualifier string
+     * @param args qualifier arguments
+     * @param prefetchKeyPaths prefetching key paths
+     * @param includeNewObjects option to include newly inserted objects in the result set
+     * @return array of objects matching the constructed qualifier
+     */    
+    // ENHANCEME: This should handle entity inheritance for in memory filtering
+    public static NSArray objectsWithQualifier(EOEditingContext ec,
+                                                   String entityName,
+                                                   EOQualifier qualifier,
+                                                   NSArray prefetchKeyPaths,
+                                                   boolean includeNewObjects) {
+        NSMutableArray result = null;
+        if (includeNewObjects) {
+            NSDictionary insertedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(ec.insertedObjects(), "entityName");
+            NSArray insertedObjectsForEntity = (NSArray)insertedObjects.objectForKey(entityName);
+
+            if (insertedObjectsForEntity != null && insertedObjectsForEntity.count() > 0) {
+                NSArray inMemory = EOQualifier.filteredArrayWithQualifier(insertedObjectsForEntity, qualifier);
+                if (inMemory.count() > 0)
+                    result = inMemory.mutableClone();
+            }            
+        }
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
+        fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
+        NSArray fromDb = ec.objectsWithFetchSpecification(fs);
+        if (result != null)
+            result.addObjectsFromArray(fromDb);
+        return result != null ? result : fromDb;
+    }    
 }
