@@ -36,11 +36,22 @@ public class ERXConstant {
     public static final Class[] ObjectClassArray = { Object.class };
     public static final Class[] StringClassArray = new Class[] { String.class };
     public static final Object[] EmptyObjectArray = new Object[] {};
-    
+
+    /**
+     * Returns an Integer for a given int
+     * @return potentially cache Integer for a given int
+     */
     public static Integer integerForInt(int i) {
         return (i>=0 && i<MAX_INT) ? INTEGERS[i] : new Integer(i);
     }
 
+    /**
+     * Returns an Integer for a given String
+     * @throws NumberFormatException forwarded from the
+     *		parseInt method off of Integer
+     * @return potentially cache Integer for a given String
+     */
+    // MOVEME: ERXStringUtilities
     public static Integer integerForString(String s) throws NumberFormatException {
         return integerForInt(Integer.parseInt(s));
     }
