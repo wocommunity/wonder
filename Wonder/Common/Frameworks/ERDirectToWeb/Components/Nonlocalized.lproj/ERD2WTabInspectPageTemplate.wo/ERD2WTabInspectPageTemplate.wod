@@ -1,15 +1,3 @@
-Border: ERXTableWithBorder {
-    color="#999999";
-    bgcolor="#CCCCCC";
-    renderBorder=session.browser.willRenderNestedTablesFast;
-    doNotRenderTop = true;
-}
-
-BorderWasRendered: WOConditional {
-condition=session.browser.willRenderNestedTablesFast;
-negate=true;
-}
-
 CancelButton: WOImage {
 	alt = "Reverts your changes";
 	border = 0;
@@ -24,11 +12,6 @@ CancelLink: WOHyperlink {
 
 CancelLink2: WOHyperlink {
 	action = nextPage;
-}
-
-Conditional1: WOConditional {
-//	condition = object.editingContext.hasChanges;
-  condition=false;
 }
 
 Conditional10: WOConditional {
@@ -84,16 +67,6 @@ Conditional9: WOConditional {
 	condition = showCancel;
 }
 
-DoNotFlush: WOConditional {
-    condition=d2wContext.flushPropertyValue;
-   negate=true;
-}
-
-DoNotUseSectionImagesConditional: WOConditional {
-	condition = d2wContext.useTabSectionImages;
-	negate = true;
-}
-
 EditForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
 	showForm = d2wContext.hasForm;
@@ -143,11 +116,11 @@ EditLink2: WOHyperlink {
 }
 
 EditLink3: WOHyperlink {
-	action = previousTab;
+	action = previousTabAction;
 }
 
 EditLink4: WOHyperlink {
-	action = nextTab;
+	action = nextTabAction;
 }
 
 Errors: ERXErrorDictionaryPanel {
@@ -157,17 +130,8 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 }
 
-HasSectionName: ERXNonZeroConditional {
-	condition = currentSection.name.length;
-}
-
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
-}
-
-Image1: WOImage {
-	filename = "floppy.gif";
-	framework = "ERExtensions";
 }
 
 ImageSpacer: WOImage {
@@ -182,6 +146,7 @@ ImageSpacer: WOImage {
 InspectPageRepetition: ERDInspectPageRepetition {
 	d2wContext = localContext;
 	object = object;
+	displayPropertyKeys = currentTab.keys;
 }
 
 IsEditing: WOKeyValueConditional {
@@ -278,23 +243,12 @@ Script: WOJavaScript {
 	hideInComment = true;
 }
 
-SectionImage: WOImage {
-  src=currentSectionImageName;
-  alt=currentSection.name;
-  border=0;
-}
-
-SectionNameString: WOString {
-	value = currentSection.name;
-}
-
-Sections: WORepetition {
-    list=sectionsForCurrentTab;
-    item=currentSection;
-}
-
 ShowCancel2: WOConditional {
 	condition = showCancel;
+}
+
+String1: WOString {
+	value = currentTab.name;
 }
 
 SubmitChanges: WOImageButton {
@@ -309,7 +263,7 @@ SubmitChanges: WOImageButton {
 }
 
 SubmitChanges4: WOImageButton {
-	action = nextTab;
+	action = nextTabAction;
 	alt = "Next Tab";
 	border = 0;
 	name = "Next Tab";
@@ -318,7 +272,7 @@ SubmitChanges4: WOImageButton {
 }
 
 SubmitChanges5: WOImageButton {
-	action = previousTab;
+	action = previousTabAction;
 	alt = "Previous Tab";
 	border = 0;
 	name = "Previous Tab";
@@ -328,15 +282,11 @@ SubmitChanges5: WOImageButton {
 
 SwitchComponent3: WOSwitchComponent {
 	WOComponentName = tabComponentName;
-	bgColor = "#CCCCCC";
+	bgColor = "#CC00CC";
 	nonSelectedBgColor = d2wContext.nonSelectedTabBgColor;
 	selectedTab = currentTab;
 	submitActionName = switchTabActionName;
-	tabNameKey = "name";
+	tabNameKey = "displayName";
 	tabs = tabSectionsContents;
 	useFormSubmit = d2wContext.hasForm;
-}
-
-UseSectionImagesConditional: WOConditional {
-	condition = d2wContext.useTabSectionImages;
 }
