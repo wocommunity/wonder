@@ -21,8 +21,8 @@ import javax.jms.*;
  * and registered to the NSNotificationCenter, but its publishChange method   
  * will be executed by application's multiple worker threads concurrently.
  * Since JMS session object is limited for serial use (single threaded use), 
- * ERCNPublisher prepares a session object per thread so that each worker threads 
- * can perform the operation concurrently. 
+ * ERCNPublisher prepares a JMS session object per thread so that each worker  
+ * threads can perform the operation concurrently. 
  */ 
 public class ERCNPublisher {
 
