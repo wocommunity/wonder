@@ -62,11 +62,11 @@ public class ERXSimpleTemplateParser {
                     throw new RuntimeException("\"\" is not a valid keypath");
                 Object obj;
                 try {
-                    obj = ERXKeyValueCoding.valueForKeyPath(object, element);
+                    obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element);
                 } catch (Throwable t) {
                     try {
                         if (otherObject != null) {
-                            obj = ERXKeyValueCoding.valueForKeyPath(otherObject, element);
+                            obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(otherObject, element);
                         } else {
                             throw new RuntimeException("Could not find a value for \"" + element + "\" of a template in either the object or extra data");
                         }
@@ -74,7 +74,7 @@ public class ERXSimpleTemplateParser {
                         throw new RuntimeException("An exception occured while parsing element, " + element + ", of template, " + template + ": " + t1.getMessage());
                     }
                 }
-                buffer.append(obj.toString());                
+                buffer.append(obj == null ? "null" : obj.toString());                
                 deriveElement = false;
             } else {
                 if (element.length() > 0)
