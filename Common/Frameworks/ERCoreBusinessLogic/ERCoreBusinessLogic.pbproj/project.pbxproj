@@ -6,6 +6,7 @@
 	objectVersion = 38;
 	objects = {
 		F533017C037B1A6501CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCLogEntryInterface.java;
 			refType = 4;
@@ -55,6 +56,7 @@
 				F5C4042602022B0501A801D4,
 				F5C4042702022B0501A801D4,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -284,7 +286,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5C403DF02022B0501A801D4 = {
 			isa = PBXTargetDependency;
@@ -299,7 +300,7 @@
 				F5C4040902022B0501A801D4,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_VERSION = TMP;
 				JAVAC_FLAGS = "-deprecation";
 				JAVA_ARCHIVE_CLASSES = YES;
@@ -357,7 +358,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5C403E102022B0501A801D4 = {
 			buildActionMask = 2147483647;
@@ -556,7 +556,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5C4040C02022B0501A801D4 = {
 			buildActionMask = 2147483647;
@@ -844,6 +843,7 @@
 			};
 		};
 		F5DD885202C4D55901000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERCMailableExceptionPage.api;
 			path = Components/ERCMailableExceptionPage.api;
@@ -865,6 +865,7 @@
 			refType = 2;
 		};
 		F5DD885502C4D56E01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = Resources/English.lproj/Validation.strings;
@@ -877,12 +878,14 @@
 			};
 		};
 		F5DD885702C4D57F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = d2w.d2wmodel;
 			path = Resources/d2w.d2wmodel;
 			refType = 2;
 		};
 		F5DD885802C4D57F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CustomInfo.plist;
 			path = Resources/CustomInfo.plist;
@@ -956,97 +959,116 @@
 			refType = 4;
 		};
 		F5DD886002C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _ERCLogEntry.java;
 			refType = 4;
 		};
 		F5DD886102C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _ERCMailMessage.java;
 			refType = 4;
 		};
 		F5DD886202C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _ERCMailState.java;
 			refType = 4;
 		};
 		F5DD886302C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _ERCMessageAttachment.java;
 			refType = 4;
 		};
 		F5DD886402C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _ERCPreference.java;
 			refType = 4;
 		};
 		F5DD886502C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = _ERCStatic.java;
 			refType = 4;
 		};
 		F5DD886702C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCLogEntry.java;
 			refType = 4;
 		};
 		F5DD886802C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERCMailableExceptionPage.java;
 			path = Sources/er/corebusinesslogic/ERCMailableExceptionPage.java;
 			refType = 4;
 		};
 		F5DD886902C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCMailDelivery.java;
 			refType = 4;
 		};
 		F5DD886A02C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCMailMessage.java;
 			refType = 4;
 		};
 		F5DD886B02C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCMailState.java;
 			refType = 4;
 		};
 		F5DD886C02C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCMessageAttachment.java;
 			refType = 4;
 		};
 		F5DD886D02C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCoreBusinessLogic.java;
 			refType = 4;
 		};
 		F5DD886E02C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCoreUserInterface.java;
 			refType = 4;
 		};
 		F5DD886F02C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCoreUserPreferences.java;
 			refType = 4;
 		};
 		F5DD887002C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCPreference.java;
 			refType = 4;
 		};
 		F5DD887202C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCStampedEnterpriseObject.java;
 			refType = 4;
 		};
 		F5DD887302C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCStatic.java;
 			refType = 4;
 		};
 		F5DD887402C4D59001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCUserPreferencesAssignment.java;
 			refType = 4;
@@ -1199,6 +1221,7 @@
 			};
 		};
 		F5F37BCF036E0CE601CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCMailMessageAppender.java;
 			refType = 4;
@@ -1230,6 +1253,7 @@
 //F63
 //F64
 		F6B782BC034552CD01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Properties;
 			path = Resources/Properties;
