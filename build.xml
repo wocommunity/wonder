@@ -13,6 +13,10 @@
         <ant antFile="Build/build/generic.xml" target="all.install" />
         <ant antFile="Build/build/generic.xml" target="all.web" />
     </target>
+    <target name="dist">
+        <ant antFile="Build/build/common-dist.xml" target="all" />
+        <ant antFile="Build/build/subprojects-dist.xml" target="all" />
+    </target>
     <target name="all" depends="clean,compile,install" />
     
     <!-- these are just for convenience -->
