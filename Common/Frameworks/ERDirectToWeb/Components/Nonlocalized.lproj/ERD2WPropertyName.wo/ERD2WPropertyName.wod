@@ -1,9 +1,5 @@
-ComponentName: WOString {
-	value = d2wComponentName;
-}
-
 DebuggingEnabled: WOConditional {
-	condition = d2wComponentNameDebuggingEnabled;
+	condition = d2wDebuggingEnabled;
 }
 
 DisplayMandatory: WOConditional {
@@ -24,11 +20,20 @@ NotRequired: WOConditional {
     condition=displayRequiredMarker;
     negate=true;
 }
-
-PropertyKey: WOString {
-	value = d2wContext.propertyKey;
-}
 PropertyName: WOString {
     value=displayNameForProperty;
+}
+
+Repetition1: WORepetition {
+	list = contextDictionaryForPropertyKey.allKeys.@sortAsc.toString;
+	item = currentKey;
+}
+
+String1: WOString {
+	value = currentKey;
+}
+
+String2: WOString {
+	value = currentValue;
 }
 
