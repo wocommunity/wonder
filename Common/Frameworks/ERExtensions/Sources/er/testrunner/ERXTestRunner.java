@@ -69,4 +69,28 @@ public class ERXTestRunner extends BaseTestRunner {
         public Test getTest(String testClass) {
             return new TestSuite(ERXCompilerProxy.defaultProxy().classForName(testClass));
         }
+
+        /* (non-Javadoc)
+         * @see junit.runner.BaseTestRunner#testStarted(java.lang.String)
+         */
+        public void testStarted(String arg0) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        /* (non-Javadoc)
+         * @see junit.runner.BaseTestRunner#testEnded(java.lang.String)
+         */
+        public void testEnded(String arg0) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        /* (non-Javadoc)
+         * @see junit.runner.BaseTestRunner#testFailed(int, junit.framework.Test, java.lang.Throwable)
+         */
+        public void testFailed(int arg0, Test arg1, Throwable arg2) {
+            // TODO Auto-generated method stub
+            
+        }
 }
