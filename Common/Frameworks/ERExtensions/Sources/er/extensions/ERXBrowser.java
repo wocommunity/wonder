@@ -31,7 +31,7 @@ import com.webobjects.foundation.*;
  * questions like <code>isIFrameSupported</code> and 
  * <code>willRenderNestedTablesFast</code>. <br>
  * 
- * You can extends ERXBrowser or its concrete subclass 
+ * You can extend ERXBrowser or its concrete subclass 
  * ERXBasicBrowser to implement more specific questions for 
  * your application. One good example will be to have a question 
  * <code>isSupportedBrowser</code> that checks if the client 
