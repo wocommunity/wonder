@@ -114,7 +114,7 @@ public class ERXBrowserFactory {
                 }
             }
             if (_factory == null) {
-                log.info("Factory null creating default browser factory. " + browserFactoryClass);
+                log.debug("Factory null creating default browser factory. " + browserFactoryClass);
                 _factory = new ERXBrowserFactory();
             }
         }
