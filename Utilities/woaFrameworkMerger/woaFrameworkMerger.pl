@@ -23,7 +23,7 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 	my $unixPath = $woa . '/Contents/Unix/UnixClassPath.txt';
 	my $frameworksPath = $woa . '/Contents/Frameworks';
 	my $macOS = slurp( $macOSPath );
-	my @inputPaths = split( /\n/, $macOS );
+	my @inputPaths = split( /[\n\r]+/, $macOS );
 	my @outputPaths = ();
 	my $madeFrameworkDir = 0;
 	
@@ -33,7 +33,10 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 	#print "cpCWD = $cpCWD\n";
 	
 	for $inputPath ( @inputPaths ) {
-		if( $inputPath =~ m/^(\/|\.\.|LOCALROOT).+\.jar$/ ) {
+		# fix up ant-generated paths
+		$inputPath =~ s#^/System#WOROOT# if($inputPath =~ m#^/System#);
+
+		if( $inputPath =~ m#^(/|\.\.|LOCALROOT).+\.jar$# ) {
 			if( $madeFrameworkDir == 0 ) {
 				if ( -e $frameworksPath ) {
 					print  "removing $frameworksPath\n";
@@ -74,7 +77,7 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 			push @outputPaths, $inputPath;
 		}
 	}
-	$macOS = join( "\n", @outputPaths );
+	$macOS = join( "\n", @outputPaths ) . "\n";
 	print "rewriting MacOSClassPath.txt...\n";
 	burp( $macOSPath, $macOS );
 	print "rewriting UnixClassPath.txt...\n";
