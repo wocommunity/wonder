@@ -12,6 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
+import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.log4j.*;
@@ -103,6 +104,9 @@ public abstract class ERXApplication extends WOApplication {
             log.debug("Setting WOMessage default encoding to \"" + defaultMessageEncoding + "\"");
             WOMessage.setDefaultEncoding(defaultMessageEncoding);
         }
+
+        // Configure the WOStatistics CLFF logging since it can't be controled by a property, grrr.
+        configureStatisticsLogging();
         
         NSNotificationCenter.defaultCenter().addObserver(
                         this,
@@ -116,6 +120,28 @@ public abstract class ERXApplication extends WOApplication {
                                                          null);        
     }
 
+    /**
+        * Configures the statistics logging for a given application. By default will log to a
+     * file <base log directory>/<WOApp Name>-<host>-<port>.log if the base log path is defined. The
+     * base log path is defined by the property <code>er.extensions.ERXApplication.StatisticsBaseLogPath</code>
+     * The default log rotation frequency is 24 hours, but can be changed by setting in milliseconds the
+     * property <code>er.extensions.ERXApplication.StatisticsLogRotationFrequency</code>
+     */
+    public void configureStatisticsLogging() {
+        String statisticsBasePath = System.getProperty("er.extensions.ERXApplication.StatisticsBaseLogPath");
+        if (statisticsBasePath != null) {
+            // Defaults to a single day
+            int rotationFrequency = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.StatisticsLogRotationFrequency", 24*60*60*1000);
+            String logPath = statisticsBasePath + File.separator + name() + "-"
+                + ERXConfigurationManager.defaultManager().hostName() + "-" + port() + ".log";
+            if (log.isDebugEnabled()) {
+                log.debug("Configured statistics logging to file path \"" + logPath + "\" with rotation frequency: "
+                          + rotationFrequency);
+            }
+            statisticsStore().setLogFile(logPath, (long)rotationFrequency);
+        }
+    }
+    
     /**
      * Notification method called when the application posts
      * the notification {@link WOApplicaiton#ApplicationWillFinishLaunchingNotification}. 

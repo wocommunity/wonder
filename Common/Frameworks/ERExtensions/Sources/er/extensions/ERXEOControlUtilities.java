@@ -399,4 +399,39 @@ public class ERXEOControlUtilities {
         EOKeyGlobalID kGid = (EOKeyGlobalID) gid;
         return kGid.keyValuesArray();
     }
+
+
+    /**
+        * Fetches an enterprise object based on a given primary key value.
+     * This method has an advantage over the standard EOUtilities method
+     * in that you can specify prefetching key paths as well as refreshing
+     * the snapshot of the given object
+     * @param ec editing context to fetch into
+     * @param entityName name of the entity
+     * @param primaryKeyValue primary key value
+     * @param prefetchingKeyPaths key paths to fetch off of the eo
+     * @return enterprise object matching the given value
+     */
+    public static EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec,
+                                                               String entityName,
+                                                               Object primaryKeyValue,
+                                                               NSArray prefetchingKeyPaths) {
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+        if (entity.primaryKeyAttributes().count() != 1) {
+            throw new IllegalStateException("Entity \"" + entity.name() + "\" has a compound primary key. Can't be used with the method: objectWithPrimaryKeyValue");
+        }
+        NSDictionary values = new NSDictionary(primaryKeyValue,
+                                               ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name());
+        EOQualifier qualfier = EOQualifier.qualifierToMatchAllValues(values);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualfier, null);
+        // Might as well get fresh stuff
+        fs.setRefreshesRefetchedObjects(true);
+        if (prefetchingKeyPaths != null)
+            fs.setPrefetchingRelationshipKeyPaths(prefetchingKeyPaths);
+        NSArray eos = ec.objectsWithFetchSpecification(fs);
+        if (eos.count() > 1)
+            throw new IllegalStateException("Found multiple objects for entity \"" + entity.name() + " with primary key value: " + primaryKeyValue);
+        return eos.count() == 1 ? (EOEnterpriseObject)eos.lastObject() : null;
+    }
+    
 }
