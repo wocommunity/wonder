@@ -1,11 +1,16 @@
 package er.plot;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
-import org.jfree.chart.*;
-import org.jfree.data.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.Dataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * PieChart.
@@ -19,7 +24,7 @@ import java.util.*;
 public class ERPPieChart extends ERPChart {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERPPieChart.class,"plot");
+    public static final NSArray SUPPORTED_TYPES = new NSArray(new Object[] {"PieChart", "PieChart3D"});
         
     /**
      * Public constructor
@@ -50,15 +55,19 @@ public class ERPPieChart extends ERPChart {
         if(_chart == null) {
             JFreeChart chart = null;
             PieDataset dataset = (PieDataset)dataset();
-            String name = name();
+            String name = stringValueForBinding("name", null);
 
-            if("3D".equals(chartType())) {
-                chart = ChartFactory.createPie3DChart(name,dataset,true,false,false);
+            if("PieChart3D".equals(chartType())) {
+                chart = ChartFactory.createPieChart3D(name,dataset,true,false,false);
             } else {
-                chart = ChartFactory.createPieChart(name,dataset,true,false,false);
+                chart = ChartFactory.createPieChart(name,dataset,showLegends(),showToolTips(),showUrls());
             }
             _chart = chart;
         }
         return _chart;
+    }
+
+    protected NSArray supportedTypes() {
+        return SUPPORTED_TYPES;
     }
 }

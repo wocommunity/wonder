@@ -1,15 +1,24 @@
 package er.plot;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
-import java.io.*;
-import org.jfree.chart.*;
-import org.jfree.data.*;
+import java.io.ByteArrayOutputStream;
+
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.Dataset;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSForwardException;
+
+import er.extensions.ERXAssert;
+import er.extensions.ERXLogger;
+import er.extensions.ERXStatelessComponent;
 
 /**
  * Abstract superclass of the charts. The most important binding is <code>items</code> which
  * should contain an array of objects from which the values <code>nameKey</code> and <code>
- * valueKey</code> are retrieved. For example, you might have an array of
+ * valueKey</code> are retrieved. For example, you might have an array of line items, 
+ * with a valueKey <code>amount</code> and a nameKey <code>product.name</code>. 
  * @binding name the name of the chart
  * @binding chartType the type of the chart (possible values depend on the concrete subclass)
  * @binding imageType the type of the image to show: <code>png</code> (default) or <code>jpeg</code>
@@ -19,6 +28,9 @@ import org.jfree.data.*;
  * @binding items array of values to display the chart for
  * @binding nameKey the key for the name (must return String)
  * @binding valueKey the key for the value (must return Number)
+ * @binding showLegends true, if legends should be shown
+ * @binding showToolTips true, if tool tips should be shown
+ * @binding showLegends true, if legends should be shown
  * 
  * @author ak
  */
@@ -83,18 +95,30 @@ public abstract class ERPChart extends ERXStatelessComponent {
     public String chartType() {
         if(_chartType == null) {
             _chartType = (String)valueForBinding("chartType");
+            ERXAssert.DURING.notNull("chartType", _chartType);
+            ERXAssert.DURING.isTrue("chartType "+_chartType +" is not in supported types: " + supportedTypes(), 
+                    supportedTypes().containsObject(_chartType));
         }
         return _chartType;
     }
 
     public String imageType() {
         if(_imageType == null) {
-            _imageType = (String)valueForBinding("imageType");
-            if(_imageType == null) {
-                _imageType = "image/png";
-            }
+            _imageType = stringValueForBinding("imageType", "image/png");
         }
         return _imageType;
+    }
+
+    public boolean showLegends() {
+        return booleanValueForBinding("showLegends", true);
+    }
+    
+    public boolean showUrls() {
+        return booleanValueForBinding("showUrls", false);
+    }
+    
+    public boolean showToolTips() {
+        return booleanValueForBinding("showToolTips", true);
     }
 
     public String valueKey() {
@@ -122,6 +146,8 @@ public abstract class ERPChart extends ERXStatelessComponent {
     }
 
     public abstract JFreeChart chart();
+    protected abstract NSArray supportedTypes();
+
     
     public Dataset dataset() {
         if(_dataset == null) {
@@ -144,7 +170,7 @@ public abstract class ERPChart extends ERXStatelessComponent {
                     _imageData = new NSData(baos.toByteArray());
                 }
             } catch (Exception ex) {
-                log.warn(ex,ex);
+                NSForwardException._runtimeExceptionForThrowable(ex);
             }
         }
         return _imageData;
