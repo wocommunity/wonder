@@ -41,13 +41,7 @@
         <mkdir dir="${build.classes}" />
     </target>
 
-    <target name="checkupdate">
-        <uptodate property="no.changes" targetfile="${build.jar.file}">
-            <srcfiles dir="${project.dir}/Sources" />
-        </uptodate>
-    </target>
-    
-    <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
+    <target name="compile" depends="prepare" description="Default compile target">
         <mkdir dir="${build.classes}" />
         <javac srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on">
             <classpath> 
