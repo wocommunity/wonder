@@ -10,9 +10,11 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.*;
+import java.net.*;
 
 public class ERXPathDirectAction extends WODirectAction {
 
+    /** loggin support */
     protected static final ERXLogger log = ERXLogger.getERXLogger(ERXPathDirectAction.class);
 
     protected NSArray pathParts;
@@ -28,8 +30,17 @@ public class ERXPathDirectAction extends WODirectAction {
             if (request().requestHandlerPathArray().count() > 2) {
                 pathParts = request().requestHandlerPathArray().subarrayWithRange(new NSRange(1, request().requestHandlerPathArray().count() - 2));
             }
-            if (pathParts == null)
+            if (pathParts == null) {
                 pathParts = NSArray.EmptyArray;
+            } else {
+                // Need to correctly WOUrlDecode the path parts
+                NSMutableArray temp = new NSMutableArray(pathParts.count());
+                for (Enumeration pathPartEnumerator = pathParts.objectEnumerator();
+                     pathPartEnumerator.hasMoreElements();) {
+                    temp.addObject(URLDecoder.decode((String)pathPartEnumerator.nextElement()));
+                }
+                pathParts = temp;
+            }
             if (log.isDebugEnabled())
                 log.debug("Generated path parts: " + pathParts + " for uri: " + request().uri());
         }
