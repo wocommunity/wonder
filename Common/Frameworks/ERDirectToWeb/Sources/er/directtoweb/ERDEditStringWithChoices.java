@@ -37,7 +37,6 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public NSArray availableElements(){
         if(_availableElements==null){
             Object choices = valueForBinding("possibleChoices");
-            log.info(choices);
             if(choices != null) {
                 NSMutableArray keyChoices = new NSMutableArray();
                 if(choices instanceof NSArray) {
