@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
 
 public class ERXToOneRelationship extends WOToOneRelationship {
 
@@ -19,8 +18,8 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         super(context);
     }
     
-    //////////////////////////////////////////  log4j category  ///////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXToOneRelationship.class);
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getLogger(ERXToOneRelationship.class);
 
     // ** passed-in (optional)
     protected String _destinationSortKey;
@@ -195,7 +194,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 
     public Object selection() {
         if (_privateSelection()==null) {
-            set_privateSelection(NSKeyValueCoding.Utility.valueForKey(_localSourceObject(), _localRelationshipKey()));
+            set_privateSelection(NSKeyValueCoding.Utility.valueForKey(_localRelativeSourceObject(), _localRelativeRelationshipKey()));
         }
         // deal with isMandatory
         if ((_privateSelection()==null) && !_localIsMandatory()) {
