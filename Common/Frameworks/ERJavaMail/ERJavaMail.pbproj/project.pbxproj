@@ -53,6 +53,7 @@
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERJavaMail";
@@ -154,11 +155,11 @@
 				017C7B50FFD714AF7F000001,
 				017C7B51FFD714AF7F000001,
 				022D130C0059B6D611CD2978,
-				F5251D97032D5F95019C4BA9,
-				F5251D98032D5F95019C4BA9,
 				F5251D9D032D60A4019C4BA9,
 				F5251D9E032D60A4019C4BA9,
 				F53788A60335ADF401000010,
+				4E16E64C0392AC7300CF0E72,
+				4E16E64D0392AC7300CF0E72,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,6 +190,7 @@
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)ERJavaMail";
@@ -449,6 +451,7 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 40B5827FFFD5E7DB7F000001;
 			productRefGroup = 40B58280FFD5E8187F000001;
@@ -653,11 +656,11 @@
 				40B5828FFFD5E91B7F000001,
 				40B58291FFD5E91B7F000001,
 				40B58292FFD5E91B7F000001,
-				F5251D95032D5F95019C4BA9,
-				F5251D96032D5F95019C4BA9,
 				F53788A50335ADF401000010,
 				F5251D99032D60A4019C4BA9,
 				F5251D9A032D60A4019C4BA9,
+				4E16E64A0392AC7300CF0E72,
+				4E16E64B0392AC7300CF0E72,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -718,6 +721,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
@@ -730,17 +735,55 @@
 //402
 //403
 //404
+//4E0
+//4E1
+//4E2
+//4E3
+//4E4
+		4E16E64A0392AC7300CF0E72 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "activation-1.0.2.jar";
+			path = "Libraries/activation-1.0.2.jar";
+			refType = 4;
+		};
+		4E16E64B0392AC7300CF0E72 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "mail-1.3.jar";
+			path = "Libraries/mail-1.3.jar";
+			refType = 4;
+		};
+		4E16E64C0392AC7300CF0E72 = {
+			fileRef = 4E16E64A0392AC7300CF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4E16E64D0392AC7300CF0E72 = {
+			fileRef = 4E16E64B0392AC7300CF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4E0
+//4E1
+//4E2
+//4E3
+//4E4
 //F50
 //F51
 //F52
 //F53
 //F54
 		F5109A2E03816A5701000107 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailDeliveryComponentBased.java;
 			refType = 4;
 		};
 		F5109A2F03816A5701000107 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERWOMailDelivery.java;
 			refType = 4;
@@ -806,56 +849,67 @@
 			refType = 4;
 		};
 		F5251D74032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailAttachment.java;
 			refType = 4;
 		};
 		F5251D75032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailDelivery.java;
 			refType = 4;
 		};
 		F5251D76032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailDeliveryHTML.java;
 			refType = 4;
 		};
 		F5251D77032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailDeliveryPlainText.java;
 			refType = 4;
 		};
 		F5251D79032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailDeliveryWOComponentPlainText.java;
 			refType = 4;
 		};
 		F5251D7A032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailFileAttachment.java;
 			refType = 4;
 		};
 		F5251D7B032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailSender.java;
 			refType = 4;
 		};
 		F5251D7C032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailTextAttachment.java;
 			refType = 4;
 		};
 		F5251D7D032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailUtils.java;
 			refType = 4;
 		};
 		F5251D7E032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMessage.java;
 			refType = 4;
 		};
 		F5251D7F032D49E1019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERQueue.java;
 			refType = 4;
@@ -927,11 +981,13 @@
 			};
 		};
 		F5251D8C032D4A0F019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MessageCallBack.java;
 			refType = 4;
 		};
 		F5251D8E032D4AD5019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERJavaMail.java;
 			refType = 4;
@@ -943,38 +999,13 @@
 			};
 		};
 		F5251D93032D5C42019C4BA9 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMailDeliveryJapanesePlainText.java;
 			refType = 4;
 		};
 		F5251D94032D5C42019C4BA9 = {
 			fileRef = F5251D93032D5C42019C4BA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5251D95032D5F95019C4BA9 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = activation.jar;
-			path = Libraries/activation.jar;
-			refType = 4;
-		};
-		F5251D96032D5F95019C4BA9 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = mail.jar;
-			path = Libraries/mail.jar;
-			refType = 4;
-		};
-		F5251D97032D5F95019C4BA9 = {
-			fileRef = F5251D95032D5F95019C4BA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5251D98032D5F95019C4BA9 = {
-			fileRef = F5251D96032D5F95019C4BA9;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1034,6 +1065,7 @@
 			};
 		};
 		F54ECDF6033CEEC501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERMimetypesMapper.java;
 			refType = 4;
@@ -1045,6 +1077,7 @@
 			};
 		};
 		F54ECDF8033CEF3101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = mime.types;
 			refType = 4;
@@ -1061,25 +1094,12 @@
 			dstSubfolderSpec = 7;
 			files = (
 				F53788AA0335AE3A01000010,
-				F55E8E5A032D65D2010A39CE,
-				F55E8E5B032D65D2010A39CE,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F55E8E5A032D65D2010A39CE = {
-			fileRef = F5251D95032D5F95019C4BA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F55E8E5B032D65D2010A39CE = {
-			fileRef = F5251D96032D5F95019C4BA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5B3FE230348539E01AC65B4 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Properties;
 			refType = 4;
@@ -1099,11 +1119,13 @@
 			refType = 4;
 		};
 		F5FE9179032D70B2017B0907 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SampleConfiguration.txt;
 			refType = 4;
 		};
 		F5FE917B032D718F017B0907 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = README.txt;
 			refType = 4;
