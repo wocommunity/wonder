@@ -3304,6 +3304,7 @@
 				F5D9B71402088E1D01A80106,
 				F55233D10208B8E301A80106,
 				F5A144E901FF7F8801A80106,
+				F604FCA3025B37CD01AD0D07,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -3998,6 +3999,7 @@
 				F6970DF0024A570501AD0D07,
 				F61422DF02535F7701AD0D07,
 				F61422E002535F7701AD0D07,
+				F604FCA4025B37CD01AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -6898,6 +6900,17 @@
 //F62
 //F63
 //F64
+		F604FCA3025B37CD01AD0D07 = {
+			isa = PBXFileReference;
+			path = ValidationTemplate.strings;
+			refType = 4;
+		};
+		F604FCA4025B37CD01AD0D07 = {
+			fileRef = F604FCA3025B37CD01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F61422DB02535F7701AD0D07 = {
 			children = (
 				F61422DC02535F7701AD0D07,

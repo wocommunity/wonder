@@ -9,20 +9,23 @@ package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import er.extensions.*;
+import org.apache.log4j.*;
 
 public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
-
+    public static final Category cat = Category.getInstance(ERDEditPasswordConfirm.class);
+    
     public ERDEditPasswordConfirm(WOContext context) { super(context); }
 
     public String password;
     public String passwordConfirm;
 
-    public void fail(String errorMessage) {
-        validationFailedWithException(new NSValidation.ValidationException(errorMessage),
-                                      password,
-                                      key());
+    public void fail(String errorCode) {
+        if(cat.isDebugEnabled())
+            cat.debug("fail:<object:" + object() + "; key:" + key() + ";  password: " + password + "; code:" + errorCode + ";>");
+        validationFailedWithException(ERXValidationFactory.defaultFactory().createException(object(), key(), password, errorCode), password, key());
     }
-
+    
     public boolean passwordExists() { return objectKeyPathValue() != null ? true : false; }
 
     public void setObject(EOEnterpriseObject newObject) {
@@ -38,16 +41,16 @@ public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
             passwordConfirm==null || passwordConfirm.equals("")) {
             // one or both is null or empty
             if (objectKeyPathValue()==null)
-                fail ("Please fill in both <b>password</b> fields.");
+                fail ("PasswordsFillBothFieldsException");
             else {
                 // if we already have a value, then they need to both be null||empty
                 if (!(password==null || password.equals("")) && (passwordConfirm==null || passwordConfirm.equals("")))
-                    fail("Please fill in both <b>password</b> fields.");
+                    fail("PasswordsFillBothFieldsException");
             }
         } else {
             // they are both non-null
             if(!password.equals(passwordConfirm))
-                fail("The <b>passwords</b> you entered do not match.");
+                fail("PasswordsDontMatchException");
             else {
                 if (object() instanceof NSValidation) {
                     try {
