@@ -1971,6 +1971,15 @@
             author = 0; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
+                class = er.directtoweb.ERDLocalizedMessageAssignment; 
+                keyPath = emptyListMessage; 
+                value = "No matching @displayNameForEntity@ records found."; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
                 class = com.webobjects.directtoweb.BooleanAssignment; 
                 keyPath = flushPropertyValue; 
                 value = false; 
