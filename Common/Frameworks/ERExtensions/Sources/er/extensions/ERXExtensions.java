@@ -38,7 +38,9 @@ public class ERXExtensions {
             ERXLog4j.configureRapidTurnAround(); // Will only enable if WOCaching is off.
             ERXExtensions.warmUpRuleCache();
             ERXSession.registerNotifications();
-            //ERXValidationFactory.defaultFactory().configureFactory();
+ 	    // initialize compiler proxy
+	    ERXCompilerProxy.defaultProxy().initialize();
+           //ERXValidationFactory.defaultFactory().configureFactory();
             //ERWebLint.configureWebLint();
         }
         public void sessionDidTimeOut(NSNotification n) {
