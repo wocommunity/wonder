@@ -333,7 +333,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
     /**
      * Adds a check to make sure that both the object being added and
-     * this object are in the same editing contexts. If not then a runtime
+     * this object are in the same editing context. If not then a runtime
      * exception is thrown instead of getting the somewhat cryptic NSInternalInconsistency
      * excpetion that is thrown when you attempt to save changes to the database.
      * @param eo enterprise object to be added to the relationship
