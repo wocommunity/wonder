@@ -4501,6 +4501,15 @@
             }; 
         }, 
         {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
+                keyPath = shouldRevertChanges; 
+                value = true; 
+            }; 
+        }, 
+        {
             author = 50; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
