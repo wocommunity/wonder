@@ -243,18 +243,18 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public WOComponent removeAllFromToManyRelationship(){
         if(((ERXSession)session()).javaScriptEnabled())
             updateEOsOrdering();
-        for (Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator(); e.hasMoreElements();) {
-            EOEnterpriseObject object=(EOEnterpriseObject)e.nextElement();
+        for (Enumeration e = relationshipDisplayGroup.displayedObjects().immutableClone().objectEnumerator(); e.hasMoreElements();) {
+            EOEnterpriseObject joinObject=(EOEnterpriseObject)e.nextElement();
             EOEnterpriseObject _localEoToRremoveFromRelationship =
-                (EOEnterpriseObject)object.valueForKey(destinationRelationship().name());
-            object.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
+                (EOEnterpriseObject)joinObject.valueForKey(destinationRelationship().name());
+            joinObject.removeObjectFromBothSidesOfRelationshipWithKey(_localEoToRremoveFromRelationship,
                                                                   destinationRelationship().name());
-            object().removeObjectFromBothSidesOfRelationshipWithKey(object,
+            object().removeObjectFromBothSidesOfRelationshipWithKey(joinObject,
                                                                     relationshipKey());
                                                                    
-            if(((object instanceof ERXGuardedObjectInterface) && ((ERXGuardedObjectInterface)object).canDelete()) 
-            	|| !(object instanceof ERXGuardedObjectInterface)) {
-                 editingContext().deleteObject(object);
+            if(((joinObject instanceof ERXGuardedObjectInterface) && ((ERXGuardedObjectInterface)joinObject).canDelete()) 
+            	|| !(joinObject instanceof ERXGuardedObjectInterface)) {
+                 editingContext().deleteObject(joinObject);
             }
         }
         relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
