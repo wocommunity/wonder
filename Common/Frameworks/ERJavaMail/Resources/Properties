@@ -2,6 +2,18 @@
 # *** Defaults to 'safe' settings:
 # ***
 
+# Sometimes when sending big masses of emails, the java virtual machine
+# doesn't collects correctly the garbage and needs a little delay
+# between each message sending.  Use this option if you have problem with
+# memory management
+er.javamail.useSenderDelay = false
+
+# This delay is set to 15 milliseconds
+er.javamail.senderDelayMillis = 15
+
+# * Default encoding used for ERJavaMail
+er.javamail.defaultEncoding = iso-8859-1
+
 # * Enables ERJavaMail to send all the mails to only one destination
 # This is useful when debugging
 er.javamail.centralize = true
