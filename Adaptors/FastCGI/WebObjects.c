@@ -29,6 +29,7 @@ and limitations under the License.
  *	- Apple <webobjects@apple.com>
  *	- Wojtek Narczynski <wojtek@power.com.pl>
  *	- Pawel Piaskowy <pawel@ifirma.pl>
+ *	- Marek Janukowicz <marek@power.com.pl>
  *
  */
  
@@ -150,29 +151,58 @@ static void sendResponse(HTTPResponse *resp)
    str_free(resphdrs);
 #ifndef PROFILE
    FCGX_PutS(CRLF, out);
-   FCGX_FFlush(out);
 #endif
 
 #ifndef PROFILE
-   if (resp->content_length) {
-      FCGX_PutStr(resp->content,resp->content_length,out);
-      FCGX_FFlush(out);
+
+   /* resp->content_valid will be 0 for HEAD requests and empty responses */
+   if (resp->content_valid) {
+      while (resp->content_read < resp->content_length) {
+         //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
+	      FCGX_PutStr( resp->content, resp->content_valid, out);
+		 resp_getResponseContent(resp, 1);
+      }
+      //fwrite(resp->content,sizeof(char),resp->content_valid,stdout);
+      FCGX_PutStr(resp->content, resp->content_valid, out);
    }
+   FCGX_FFlush(out);
 #endif
    return;		
 }
 
-static void die_resp(HTTPResponse *resp)
+static void sendErrorResponse(HTTPResponse *resp)
 {
    sendResponse(resp);
    resp_free(resp);
-   exit(0);
+   // TODO: we should be able to recover from this...
+   exit(-1);
 }
 
-static void die(const char *msg, int status)
+static void prepareAndSendErrorResponse(const char *msg, int status)
 {
    HTTPResponse *resp = resp_errorResponse(msg, status);
-   die_resp(resp);
+   sendErrorResponse(resp);
+}
+
+
+/* Read up to dataSize bytes into the buffer at dataBuffer. */
+/* Returns the number of bytes read, or -1 on error. */
+static int readContentData(HTTPRequest *req, void *buffer, int dataSize, int mustFill)
+{
+		WOLog ( WO_INFO, "data size: %d", dataSize );
+   //int n = fread(buffer, 1, dataSize, stdin);
+   int n = FCGX_GetStr(buffer, dataSize, in);
+
+
+   if (n != dataSize) {
+      //int err = ferror(stdin);
+	int err = FCGX_GetError(in);
+      if (err)
+         WOLog(WO_ERR,"Error getting content data: %s (%d)", strerror(errno), err);
+   }
+/*	*((char*)buffer+dataSize) = '\0';
+	 WOLog ( WO_INFO, "buffer: %s", (char *)buffer );*/
+   return n == dataSize ? n : -1;
 }
 
 
@@ -195,8 +225,9 @@ int main() {
     int i;
 #endif
     const char *config_url, *username, *password, *config_options;
+		char *content_buffer;
     strtbl *options = NULL;
-    int exit_status;
+    int exit_status = 0;
 
     // install SIGUSR1, SIGPIPE, SIGTERM handler
     signal(SIGTERM, sig_handler);
@@ -246,9 +277,10 @@ int main() {
        */
 
       if (init_adaptor(options)) {
-          die("The request could not be completed due to a server error.", HTTP_SERVER_ERROR);
+          WOLog( WO_ERR, "<FastCGI> Adaptor initialization failed.");
+    	    exit( -1 );
       }
-            
+
     WOLog( WO_INFO,"<FastCGI> process started" );
    
     while (!should_terminate) {
@@ -287,7 +319,7 @@ int main() {
       WOLog( WO_INFO,"<FastCGI> CGI_PATH_INFO = %s", path_info );
 
       if (script_name == NULL)
-         die(INV_SCRIPT, HTTP_NOT_FOUND);
+         prepareAndSendErrorResponse(INV_SCRIPT, HTTP_NOT_FOUND);
       else if (path_info == NULL) {
          path_info = "/";
       }
@@ -321,13 +353,13 @@ int main() {
          if (urlerr == WOURLInvalidApplicationName) {
              if (ac_authorizeAppListing(&wc)) {
                  resp = WOAdaptorInfo(NULL, &wc);
-                 die_resp(resp);
+                 sendErrorResponse(resp);
              } else {
-                 die(_urlerr, HTTP_NOT_FOUND);
+                 prepareAndSendErrorResponse(_urlerr, HTTP_NOT_FOUND);
              }
          }
 
-         die(_urlerr, HTTP_BAD_REQUEST);
+         prepareAndSendErrorResponse(_urlerr, HTTP_BAD_REQUEST);
       }
 
 
@@ -342,7 +374,7 @@ int main() {
        */
       reqerr = req_validateMethod(req);
       if (reqerr) {
-          die(reqerr, HTTP_BAD_REQUEST);
+          prepareAndSendErrorResponse(reqerr, HTTP_BAD_REQUEST);
       }
 
       /*
@@ -356,11 +388,11 @@ int main() {
          /* copy env. line. */
          key = WOSTRDUP(*hdrp);
 
-         for (value = key; *value && !isspace(*value) && (*value != '='); value++) {}
+         for (value = key; *value && !isspace((int)*value) && (*value != '='); value++) {}
          if (*value) {
             *value++ = '\0';	/* null terminate 'key' */
          }
-         while (*value && (isspace(*value) || (*value == '='))) {
+         while (*value && (isspace((int)*value) || (*value == '='))) {
             value++;
          }
          /* BEGIN Support for getting the client's certificate. */
@@ -395,7 +427,17 @@ int main() {
        *	assume that POSTs with content length will be reformatted to GETs later
        */
 	
+      WOLog ( WO_INFO, "Getting request data, length: %d",req->content_length );
       if (req->content_length > 0) {
+//<<<<<<< cgi52
+         req_allocateContent(req, req->content_length, 1);
+         req->getMoreContent = (req_getMoreContentCallback)readContentData;
+				 WOLog ( WO_INFO, "content_buffer_size: %d",req->content_buffer_size );
+         if (req->content_buffer_size == 0)
+            prepareAndSendErrorResponse(ALLOCATION_FAILURE, HTTP_SERVER_ERROR);
+         if (readContentData(req, req->content, req->content_buffer_size, 1) == -1) {
+            prepareAndSendErrorResponse(WOURLstrerror(WOURLInvalidPostData), HTTP_BAD_REQUEST);
+/* =======
          char *buffer = WOMALLOC(req->content_length);
 	 int n = FCGX_GetStr(buffer, req->content_length, in);
          if (n != req->content_length) {
@@ -413,8 +455,22 @@ int main() {
             die(errmsg, HTTP_BAD_REQUEST);
          } else {
             req->content = buffer;
+>>>>>>> fcgi51
+*/
          }
       }
+			
+			WOLog ( WO_INFO, "Content length: %d",req->content_length );
+			WOLog ( WO_INFO, "--------Content: %s---",req->content );
+			if ( req->content ) {
+				content_buffer = (char *)malloc (req->content_length+1);			
+				strncpy (content_buffer,req->content,req->content_length);
+				content_buffer[req->content_length] = '\0';
+				WOLog ( WO_INFO, "---content buffer: %s",content_buffer );
+				strncpy (req->content,content_buffer,req->content_length+1);
+				free (content_buffer);
+			}
+			//WOLog ( WO_INFO, "Content_length: %d, real: %d", req->content_length,strlen (req->content) );
 
       /* Always get the query string */
       /* Don't add ? if the query string is empty. */
