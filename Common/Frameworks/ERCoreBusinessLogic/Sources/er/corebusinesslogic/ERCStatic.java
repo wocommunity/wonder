@@ -39,7 +39,12 @@ public class ERCStatic extends _ERCStatic {
         public void invalidateCache() { _staticsPerKey.removeAllObjects(); }
 
         // the STATIC table acts as a dictionary
-        private final static EOEditingContext _ec = ERXEC.newEditingContext();
+        private final static EOEditingContext _ec;
+
+        static {
+            _ec = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
+            _ec.setSharedEditingContext(null);
+        }
 
         public static String staticStoredValueForKey(EOEditingContext ec, String key) {
             return staticStoredValueForKey(ec, key, false);
