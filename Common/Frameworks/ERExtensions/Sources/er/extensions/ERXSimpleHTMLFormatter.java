@@ -12,41 +12,64 @@ import com.webobjects.appserver.*;
 import org.apache.log4j.Category;
 import java.text.*;
 
-/*
- This is a simple class for converting ASCII strings to HTML and vice versa.
- In the current implementation, all this class does is convert newlines to HTML breaks and
- tab characters to HTML <spacer> tags.
+/**
+ * This is a simple class for converting ASCII strings to HTML and vice versa.
+ * In the current implementation, all this class does is convert newlines to HTML breaks and
+ * tab characters to HTML <spacer> tags.
  */
-
 public class ERXSimpleHTMLFormatter extends java.text.Format {
 
-    ///////////////////////////////////  log4j category  //////////////////////////////////////////
+    /** logging support */
     public final static Category cat = Category.getInstance(ERXSimpleHTMLFormatter.class);
 
-    public StringBuffer format(Object object, StringBuffer buffer, FieldPosition fp) {
-        // The value of fp does not matter in this case.
-        return buffer.append(applyFormat(object));
-    }
+    /** holds the HTML return string */
+    private final static String HTMLReturn = "<br>";
+    /** holds the ASCII return string*/
+    // FIXME: Should support all the kinds of returns, see ERXStringWithLineBreaks
+    private final static String ASCIIReturn = "\n";
+    /** holds the ASCII tab string */
+    private final static String ASCIITab = "\t";
 
-    static private String HTMLReturn = "<br>";
-    static private String ASCIIReturn = "\n";
-    static private String ASCIITab = "\t";
-    static private String _HTMLTab;
+    /** holds the reference to the shared formatter */
+    private static ERXSimpleHTMLFormatter _formatter;
+
+    /** holds a reference to the url of the spacer image */
+    private static String _HTMLTab;    
+
+    /**
+     * Simple method used to get the url to the spacer gif
+     * s.gif from the WOResourceManager.
+     * @return url to the space gif image set in an image ref
+     */
     protected static String HTMLTab() {
         if (_HTMLTab == null)
             // A pixel size of 50 is arbitrary
+            // FIXME: Should be able to customize
+            // FIXME: Should have all framework name references broken out into
+            //		a single entry off the principal class.
             _HTMLTab = "<img src=" + WOApplication.application().resourceManager().urlForResourceNamed("s.gif", "ERExtensions",null,null)
                 + " width=50>";
         return _HTMLTab;
     }
 
-    private static ERXSimpleHTMLFormatter _formatter;
-    public static ERXSimpleHTMLFormatter formatter(){
-        if (_formatter==null)
-            _formatter=new ERXSimpleHTMLFormatter();
+    /**
+     * Method used to retrieve the shared instance of the
+     * html formatter.
+     * @return shared instance of the html formatter
+     */
+    public static ERXSimpleHTMLFormatter formatter() {
+        if (_formatter == null)
+            _formatter = new ERXSimpleHTMLFormatter();
         return _formatter;
     }
 
+    /**
+     * Converts an ASCII string into an HTML
+     * string.
+     * @param aString to be converted
+     * @return html-ified string
+     */
+    // CHECKME: Should this method be static?
     public String htmlStringFromString(String aString) {
         String returnString = "";
         try {
@@ -57,6 +80,17 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return returnString;
     }
 
+    /**
+     * Replaces a given string by another string in a string.
+     * This method is just a cover method for calling the
+     * same method in {@link ERXSimpleHTMLFormatter}.
+     * @param old string to be replaced
+     * @param newString to be inserted
+     * @param buffer string to have the replacement done on it
+     * @return string after having all of the replacement done.
+     */    
+    //MOVEME: This should go in ERXStringUtilities, we have a few of these floating around and this
+    //		is the correct implementation.
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;
         int oldLength = old.length();
@@ -83,10 +117,31 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return convertedString.toString();
     }
 
+    /**
+     * The FieldPosition is not important, so this method
+     * just calls <code>applyFormat</code> and appends that
+     * string to the buffer.
+     * @param object to be formatted
+     * @param buffer to have the formatted object appended to
+     * @param fp ignored parameter
+     * @return buffer after having the format appended to it.
+     */
+    public StringBuffer format(Object object, StringBuffer buffer, FieldPosition fp) {
+        // The value of fp does not matter in this case.
+        return buffer.append(applyFormat(object));
+    }    
+
+    /**
+     * Applies the HTML formatting to a given string
+     * object replacing ASCII formatting with HTML
+     * formatting.
+     * @param anObject to have the formatting applied to
+     * @return formatted object
+     */
     public String applyFormat(Object anObject) throws IllegalArgumentException {
         String newString;
 
-        if(anObject == null || !(anObject instanceof String))
+        if (anObject == null || !(anObject instanceof String))
             return null;
 
         // Convert tabs in the argument (which must be a String) to HTML spacers.
@@ -95,6 +150,11 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return replaceStringByStringInString(ASCIIReturn, HTMLReturn, newString);
     }
 
+    /**
+     * Converts an HTML string into an ASCII string.
+     * @param inString HTML string
+     * @return ASCII-fied string
+     */
     public Object parseObject(String inString) throws java.text.ParseException {
         String newString;
 
@@ -107,6 +167,13 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return replaceStringByStringInString(HTMLTab(), ASCIITab, newString);
     }
 
+    /**
+     * Converts an HTML string into an ASCII string
+     * starting from a given parse position.
+     * @param string HTML string
+     * @param p current parsing position
+     * @return ASCII representation of the string
+     */
     public Object parseObject(String string, ParsePosition p) {
         int index = p.getIndex();
         String substring = string.substring(index);
@@ -120,6 +187,12 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
         return result;
     }
 
+    /**
+     * Accessor method used to convert an ASCII
+     * string into an HTML string.
+     * @param anObject string to convert
+     * @param HTML-ified string
+     */
     public String stringForObjectValue(Object anObject)
         throws IllegalArgumentException
     {  return applyFormat(anObject); }

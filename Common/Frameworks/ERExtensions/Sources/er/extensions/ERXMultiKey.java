@@ -11,33 +11,71 @@ import java.util.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 
-// This is mainly used for caching sets of keys in hash tables.
+/**
+ * Simple class to use multiple objects as
+ * a single key for a dictionary or HashMap.
+ * The goal of this class is to be very fast.
+ */
 public class ERXMultiKey {
 
+    /** holds the object array of keys */
     private Object[] _keys;
+    /** caches the number of keys */
     private short _keyCount;
 
+    /**
+     * Constructs a multi-key for a given
+     * number.
+     * @param keyCount number of keys
+     */
     public ERXMultiKey(short keyCount) {
         _keyCount=keyCount;
         _keys=new Object[keyCount];
     }
+
+    /**
+     * Constructs a multi-key for a given
+     * object array.
+     * @param keys object array
+     */
     public ERXMultiKey(Object[] keys) {
         this((short)keys.length);
         System.arraycopy(keys,0,_keys,0,(int)_keyCount);
         //for (int i=0; i<_keyCount; i++) _keys[i]=keys[i];
     }
 
+    /**
+     * Constructs a multi-key for a given
+     * array.
+     * @param keys array of keys
+     */    
     public ERXMultiKey(NSArray keys) {
         this ((short)keys.count());
         for (int i=0; i<keys.count(); i++) _keys[i]=keys.objectAtIndex(i);
    }
-
+    /**
+     * Constructs a multi-key for a given
+     * vector.
+     * @param keys vector of keys
+     */
     public ERXMultiKey(Vector keys) {
         this ((short)keys.size());
         for (int i=0; i<keys.size(); i++) _keys[i]=keys.elementAt(i);
-   }
-    
+    }
+
+    /**
+     * Method used to return the object array
+     * of keys for the current multi-key.
+     * @return object array of keys
+     */    
     public final Object[] keys() { return _keys; }
+
+    /**
+     * Calculates a unique hash code for
+     * the given array of keys.
+     * @return unique hash code for the array
+     *		of keys.
+     */
     public final int hashCode() {
         int result=0;
         for (int i=0; i<_keyCount; i++)
@@ -46,7 +84,17 @@ public class ERXMultiKey {
         return result;
     }
 
+    /**
+     * Method used to compare two ERXMultiKeys.
+     * A multi key is equal to another multi key
+     * if the number of keys are equal and all
+     * of the keys are either both null or <code>
+     * equals</code>.
+     * @param o object to be compared
+     * @return result of comparison
+     */
     public final boolean equals(Object o) {
+        // FIXME: Potential ClassCastException here
         ERXMultiKey o2=(ERXMultiKey)o;
         if (_keyCount!=o2._keyCount)
             return false;
@@ -59,6 +107,10 @@ public class ERXMultiKey {
         return true;
     }
 
+    /**
+     * String representation of the multi-key.
+     * @return string representation of key.
+     */
     public String toString() {
         StringBuffer result=new StringBuffer("(");
         for (short i=0; i<_keys.length; i++) {
