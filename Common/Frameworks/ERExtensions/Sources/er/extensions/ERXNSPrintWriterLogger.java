@@ -60,7 +60,7 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
     }
 
     public ERXNSPrintWriterLogger(String encodingName) throws java.io.UnsupportedEncodingException {
-        _printWriter = new PrintWriter(new OutputStreamWriter(System.out, encodingName));
+        _printWriter = new PrintWriter(new OutputStreamWriter(System.out, encodingName), true);
     }
     
     public void appendln() {
