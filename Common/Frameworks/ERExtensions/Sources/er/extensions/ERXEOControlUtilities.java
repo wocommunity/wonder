@@ -352,7 +352,7 @@ public class ERXEOControlUtilities {
      * the snapshot of the given object
      * @param ec editing context to fetch into
      * @param entityName name of the entity
-     * @param primaryKeyValue primary key value
+     * @param primaryKeyValue primary key value. Compound primary keys are given as NSDictionaries.
      * @param prefetchingKeyPaths key paths to fetch off of the eo
      * @return enterprise object matching the given value
      */    
@@ -361,11 +361,16 @@ public class ERXEOControlUtilities {
                                                                Object primaryKeyValue,
                                                                NSArray prefetchingKeyPaths) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-        if (entity.primaryKeyAttributes().count() != 1) {
-            throw new IllegalStateException("Entity \"" + entity.name() + "\" has a compound primary key. Can't be used with the method: objectWithPrimaryKeyValue");
+        NSDictionary values;
+        if(primaryKeyValue instanceof NSDictionary) {
+            values = (NSDictionary)primaryKeyValue;
+        }  else {
+            if (entity.primaryKeyAttributes().count() != 1) {
+                throw new IllegalStateException("Entity \"" + entity.name() + "\" has a compound primary key. Can't be used with the method: objectWithPrimaryKeyValue");
+            }
+            values = new NSDictionary(primaryKeyValue,
+                               ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name());
         }
-        NSDictionary values = new NSDictionary(primaryKeyValue,
-                                               ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name());
         EOQualifier qualfier = EOQualifier.qualifierToMatchAllValues(values);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, qualfier, null);
         // Might as well get fresh stuff

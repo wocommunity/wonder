@@ -215,11 +215,11 @@ public class EOEnterpriseObjectClazz extends Object {
      * primary key value and corresponding to the clazz's
      * entity name.
      * @param ec editing context to fetch into
-     * @param pk primary key value
+     * @param pk primary key value. Compound primary keys are given as NSDictionaries.
      * @return enterprise object for the specified primary key value.
      */
     public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
-        return EOUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk);
+        return ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk, null);
     }
 
     /**
