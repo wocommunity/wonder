@@ -52,31 +52,31 @@ public class ERXEOEncodingUtilities {
             EntityNameSeparator = entityNameSep;
 
         // Specify separator in link ?
-        SpecifySeparatorInURL = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL"), true);
+        SpecifySeparatorInURL = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL", true);
     }        
     
-    public NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
+    public static NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
         if (ec == null)
             throw new RuntimeException("Attempting to decode enterprise objects with null editing context.");
         return decodeEnterpriseObjectsFromFormValues(ec, formValues);
     }
 
-    public NSDictionary groupedEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
+    public static NSDictionary groupedEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
         NSArray formValueObjects = enterpriseObjectsFromFormValues(ec, formValues);
         return ERXArrayUtilities.arrayGroupedByKeyPath(formValueObjects, "entityName");
     }
 
-    public EOEnterpriseObject enterpriseObjectForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
+    public static EOEnterpriseObject enterpriseObjectForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSArray entityGroup = enterpriseObjectsForEntityNamedFromFormValues(ec, entityName, formValues);
         if (entityGroup.count() > 1)
             log.warn("Multiple objects for entity name: " + entityName + " expecting one. objects: " + entityGroup);
         return entityGroup.count() > 0 ? (EOEnterpriseObject)entityGroup.lastObject() : null;
     }
 
-    public NSArray enterpriseObjectsForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
+    public static NSArray enterpriseObjectsForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSDictionary groups = groupedEnterpriseObjectsFromFormValues(ec, formValues);
-        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-        NSMutableArray entityGroup = new NSMutableArray();
+	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);        
+	NSMutableArray entityGroup = new NSMutableArray();
         if (entity != null && entity.isAbstractEntity()) {
             for (Enumeration e = ERXUtilities.allSubEntitiesForEntity(entity, false).objectEnumerator(); e.hasMoreElements();) {
                 EOEntity subEntity = (EOEntity)e.nextElement();
@@ -302,7 +302,7 @@ public class ERXEOEncodingUtilities {
                     String encodedEntityName = key.substring(0, key.indexOf(separator));
                     String entityName = entityNameDecode (encodedEntityName);
 
-                    // FIXME: This needs to be made case insensitive
+		    // FIXME: This needs to be made case insensitive
                     EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
                     if(entity != null) {
                         if(entity.primaryKeyAttributes().count() == 1) {
