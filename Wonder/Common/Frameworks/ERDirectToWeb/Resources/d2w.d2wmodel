@@ -2018,6 +2018,15 @@
             }; 
         }, 
         {
+            author = 10; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "er.directtoweb.ERDDefaultEntityNameAssignment"; 
+                keyPath = displayNameForDestinationEntity; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
             author = 15; 
             class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
