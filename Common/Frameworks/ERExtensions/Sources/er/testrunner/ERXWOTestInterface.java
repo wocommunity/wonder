@@ -52,7 +52,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     public NSArray allTests() {
         if(allTests == null) {
             String thisBundleName = NSBundle.bundleForClass(getClass()).name();
-            NSMutableArray theClassNames = new NSMutableArray();
+            NSMutableSet theClassNames = new NSMutableSet();
             Enumeration bundleEnum = bundles().objectEnumerator();
             while (bundleEnum.hasMoreElements()) {
                 NSBundle bundle = (NSBundle)bundleEnum.nextElement();
@@ -68,9 +68,9 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
                     }
                 }
             }
-            allTests = theClassNames;
+            allTests = theClassNames.allObjects();
             try {
-                allTests = theClassNames.sortedArrayUsingComparator(NSComparator.AscendingStringComparator);
+                allTests = allTests.sortedArrayUsingComparator(NSComparator.AscendingStringComparator);
             } catch (Exception ex) {
                 log.warn(ex);
                 // so we won't get sorted, oh well :)
