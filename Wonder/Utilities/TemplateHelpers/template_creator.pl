@@ -68,7 +68,7 @@ foreach $file (@files) {
     }
 }
 chop($rules);
-            print "~/Roots/PBXTool $dest/IDE/*.pbproj/project.pbxproj 'Components' $classes\n";
+            print "~/Roots/PBXTool $dest/*.pbproj/project.pbxproj 'Components' $classes\n";
 open D2W, ">$dest/Resources/d2w.d2wmodel" || die("Can't open $dest/Resources/d2w.d2wmodel");
 print D2W "{ rules = ( $rules );}";
 close D2W;
