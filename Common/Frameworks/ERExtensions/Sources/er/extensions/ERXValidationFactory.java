@@ -325,9 +325,9 @@ public class ERXValidationFactory {
             NSArray erveAdditionalExceptions = convertAdditionalExceptions(eov);
             if (erveAdditionalExceptions.count() > 0)
                 erve.setAdditionalExceptions(erveAdditionalExceptions);
-        }
-        if(erve != eov) {
-            erve.setStackTrace(eov.getStackTrace());
+            if(erve != eov) {
+                erve.setStackTrace(eov.getStackTrace());
+            }
         }
         return erve;
     }
