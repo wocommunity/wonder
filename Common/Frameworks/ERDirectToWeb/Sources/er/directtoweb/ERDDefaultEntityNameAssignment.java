@@ -18,9 +18,13 @@ import er.extensions.*;
 //		keys passing in the current keyPath.
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultEntityNameAssignment.class);
+    
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("entity.name");
 
+    private static final NSArray DependentKeysDestinationEntityDisplayName = new NSArray(new Object[]{ "object.entity", "propertyKey"});
     /**
      * Static constructor required by the EOKeyValueUnarchiver
      * interface. If this isn't implemented then the default
@@ -56,7 +60,7 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
      * @return array of context keys this assignment depends upon.
      */
     public NSArray dependentKeys(String keyPath) {
-        return _DEPENDENT_KEYS;
+        return keyPath.equals("displayNameForDestinationEntity") ? DependentKeysDestinationEntityDisplayName : _DEPENDENT_KEYS;
     }
 
     // Default names
@@ -74,4 +78,25 @@ public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERD
         }
         return _dummyEntity;
     }
+
+    /**
+     * Calculates the display name for a destination entity.
+     * @param context current context
+     * @return display name for the destination entity
+     */
+    public String displayNameForDestinationEntity(D2WContext context) {
+        String displayName = null;
+        EORelationship relationship = (EORelationship)context.valueForKey("smartRelationship");
+        if (relationship != null) {
+            EOEntity entity = (EOEntity)context.valueForKey("entity");
+            if (entity != null) {
+                context.takeValueForKey(relationship.destinationEntity(), "entity");
+                displayName = (String)context.valueForKey("displayNameForEntity");
+            } else {
+                log.warn("Current context: " + context + " doesn't have an entity, very strange, defaulting to destination entity name.");
+                displayName = relationship.destinationEntity().name();
+            }
+        }
+        return displayName;
+    }    
 }

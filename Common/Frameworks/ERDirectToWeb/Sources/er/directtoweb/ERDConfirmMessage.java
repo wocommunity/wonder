@@ -51,7 +51,7 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
                 _list = er.extensions.ERXExtensions.arrayFromDataSource((EODataSource)valueForBinding("dataSource"));
             } else {
                 log.warn("ERConfirmMessage being used without the proper bindings");
-                _list = ERXConstant.EmptyArray;
+                _list = NSArray.EmptyArray;
             }
             if (_list.count() == 0)
                 log.warn("ERConfirmMessage: list set to zero");
