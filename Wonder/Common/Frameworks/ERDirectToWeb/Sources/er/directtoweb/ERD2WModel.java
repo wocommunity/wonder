@@ -501,7 +501,7 @@ public class ERD2WModel extends D2WModel {
         EOQualifier containedQualifier = null;
         while (e.hasMoreElements()) {
             EOQualifierEvaluation q2 = (EOQualifierEvaluation)e.nextElement();
-            if (ERXQualifierUtilities.qualifiersAreEqual(q1, q2)) {
+            if (q1.equals(q2)) {
                 containedQualifier = (EOQualifier)q2; break;
             }
         }
