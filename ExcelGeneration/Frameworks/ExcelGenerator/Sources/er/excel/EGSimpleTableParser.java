@@ -246,7 +246,7 @@ public class EGSimpleTableParser {
     	for (int j = 0; j < rowNodes.getLength(); j++) {
     		Node rowNode = rowNodes.item(j);
     		if(rowNode.getNodeType() == Node.ELEMENT_NODE
-    				&& "tr".equals(rowNode.getLocalName())) {
+    				&& "tr".equals(rowNode.getLocalName().toLowerCase())) {
     			NSMutableDictionary rowDict = new NSMutableDictionary(sheetDict);
     			addEntriesFromNode(rowDict, rowNode);
     			
@@ -258,8 +258,8 @@ public class EGSimpleTableParser {
     			for (int k = 0; k < cellNodes.getLength(); k++) {
     				Node cellNode = cellNodes.item(k);
     				if(cellNode.getNodeType() == Node.ELEMENT_NODE
-    						&& ("td".equals(cellNode.getLocalName())
-    								|| "th".equals(cellNode.getLocalName()))) {
+    						&& ("td".equals(cellNode.getLocalName().toLowerCase())
+    								|| "th".equals(cellNode.getLocalName().toLowerCase()))) {
     					HSSFCell cell = row.createCell((short) (row.getLastCellNum()+1));
     					Object value = null;
     					if(cellNode.getFirstChild() != null) {
