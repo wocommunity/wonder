@@ -1,9 +1,9 @@
 DirectorEdit: ERXToManyRelationship {
 	destinationDisplayKey = "firstName";
 	destinationSortKey = "firstName";
-	relationshipKey = "^key";
-	sourceEntityName = "^object.entityName";
-	sourceObject = "^object";
+	relationshipKey = ^key;
+	sourceEntityName = ^object.entityName;
+	sourceObject = ^object;
 	uiStyle = "browser";
 }
 
