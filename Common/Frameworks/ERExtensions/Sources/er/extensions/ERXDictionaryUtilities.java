@@ -76,13 +76,13 @@ public class ERXDictionaryUtilities extends Object {
      */
     public static NSDictionary dictionaryByRemovingFromDictionaryKeysInArray(NSDictionary d, NSArray a) {
         NSMutableDictionary result=new NSMutableDictionary();
-        if (d!=null && a!=null) {
-            for (Enumeration e=d.allKeys().objectEnumerator();e.hasMoreElements();) {
-                String key=(String)e.nextElement();
+        if (d != null && a != null) {
+            for (Enumeration e = d.allKeys().objectEnumerator(); e.hasMoreElements();) {
+                String key = (String)e.nextElement();
                 if (!a.containsObject(key))
-                    result.setObjectForKey(d.objectForKey(key),key);
+                    result.setObjectForKey(d.objectForKey(key), key);
             }
         }
-        return result;
+        return result.immutableClone();
     }    
 }
