@@ -23,6 +23,7 @@ public abstract class ERXStatelessComponent extends WOComponent {
 
     /** component is stateless */
     public boolean isStateless() { return true; }
+    
     /** component does not synchronize variables */    
     public boolean synchronizesVariablesWithBindings() { return false; }
 
