@@ -8,6 +8,7 @@ package er.javamail;
 
 import java.util.Enumeration;
 import javax.mail.internet.AddressException;
+import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
@@ -216,22 +217,32 @@ public class ERMailUtils extends Object {
     }
 
     /**
-     * Method that converts NSArray of String emails to
-     * InternetAddress [].
-     * @param addressesArray an <code>InternetAddress[]</code> value
+     * Method that converts Address [] loaded with either Address or 
+     * InternetAddress objects to NSArray of String emails.
+     * <p>
+     * Note that this method will not only accept Address []  
+     * but also InternetAddress []. 
+     * @param addressesArray an <code>Address[]</code> value
      * @return a <code>NSArray</code> value
      * @exception AddressException if an error occurs
      */
-    public static NSArray convertInternetAddressesToNSArray (InternetAddress [] addressesArray)
+    public static NSArray convertInternetAddressesToNSArray (Address [] addressesArray)
         throws AddressException {
         NSMutableArray addresses = new NSMutableArray (addressesArray.length);
 
         for (int i = 0 ; i < addressesArray.length ; i++) {
-            InternetAddress anAddress = (InternetAddress) addressesArray[i];
-            String emailAddress = anAddress.toUnicodeString ();
+            Address anAddress = addressesArray[i];
+            String emailAddress = null;
+
+            if (anAddress instanceof InternetAddress) 
+                emailAddress = ((InternetAddress) anAddress).toUnicodeString ();
+            else  // anAddress will instanceof Address 
+                emailAddress = anAddress.toString ();
+
             addresses.addObject (emailAddress);
         }
 
         return addresses;
     }
+
 }

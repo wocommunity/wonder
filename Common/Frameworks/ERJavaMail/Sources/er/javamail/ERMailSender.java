@@ -183,7 +183,7 @@ public class ERMailSender extends Thread {
                 if (callbackObject != null) {
                     SendFailedException sfex = (SendFailedException)e;
                     NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray
-                        ((InternetAddress [])sfex.getInvalidAddresses ());
+                        (sfex.getInvalidAddresses ());
                     this.notifyInvalidEmails (callbackObject, invalidEmails);
                 }
 
