@@ -74,4 +74,17 @@ public class ERXDirectAction extends WODirectAction {
             result=pageWithName("ERXLog4JConfiguration");
         return result;
     }
+
+
+    public WOComponent logoutAction() {
+        if (existingSession()!=null) {
+            existingSession().terminate();
+        }
+        WORedirect r=(WORedirect)pageWithName("WORedirect");
+        r.setUrl(context().directActionURLForActionNamed("default", null));
+        return r;
+    }
+    
+
+    
 }
