@@ -96,10 +96,12 @@ public class ERXLog4JConfiguration extends WOComponent {
     }
     // This functionality depends on ERDirectToWeb's presence..    
     public WOComponent addRuleKey() {
-        String prefix="er.directtoweb.rules."+ruleKey();
-        Logger.getLogger(prefix+".fire");
-        Logger.getLogger(prefix+".cache");
-        setFilterString(prefix);
+    	String prefix="er.directtoweb.rules."+ruleKey();
+    	Logger.getLogger(prefix+".fire");
+    	Logger.getLogger(prefix+".cache");
+    	Logger.getLogger(prefix+".candidates");
+    	showAll = true;
+    	setFilterString(prefix);
         return null;
     }
 
@@ -123,6 +125,14 @@ public class ERXLog4JConfiguration extends WOComponent {
     public boolean loggerIsNotError() { return logger()!=null && logger().getLevel()!=Level.ERROR; }
     public boolean loggerIsNotFatal() { return logger()!=null && logger().getLevel()!=Level.FATAL; }
 
+    public String loggerPropertiesString() {
+    	String result = "";
+    	for (Enumeration e=loggers().objectEnumerator(); e.hasMoreElements();) {
+    		Logger log=(Logger)e.nextElement();
+    		result += "log4j.category." + log.getName() + "=" + log.getLevel()+ "\n";
+    	}
+    	return result;
+    }
     
     public void setLoggerLevelValue(Integer newValue) {
         int lvl=newValue!=null ? newValue.intValue() : -1;
