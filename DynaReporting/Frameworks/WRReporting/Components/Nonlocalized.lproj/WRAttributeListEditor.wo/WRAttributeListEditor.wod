@@ -1,4 +1,8 @@
-add: WOActiveImage { border=0;action = add; filename = "cc1_addbutton_v2.gif"; }
+add: WOActiveImage { 
+        border=0; 
+        action=add; 
+        filename="cc1_addbutton_v2.gif"; 
+}
 attList:WORepetition{
         list = attributeList;
         item = attribute;
