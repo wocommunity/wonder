@@ -278,7 +278,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                                                                   emailsForProblemRecipients(),
                                                                   null,
                                                                   null,
-                                                                  exceptionName+" in "+WOApplication.application().name(),
+                                                                  WOApplication.application().name() + ": " + exceptionName
+                                                                  + ": " + exception.getMessage(),
                                                                   standardExceptionPage.generateResponse().contentString(),
                                                                   ec);
                     ec.saveChanges();
