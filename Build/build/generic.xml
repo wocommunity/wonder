@@ -312,6 +312,7 @@ There are three ways to use this script:
                 <include name="**/Properties" />
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
+                <include name="**/*.dat" />
                 <include name="**/mime.types" /> 
                 <include name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
             </resources>
@@ -443,6 +444,16 @@ There are three ways to use this script:
                 <include name="JavaDTWGeneration.framework" />
             </frameworks>
         </woapplication>
+        <!--copy file="${wonder.lib.root}/ERJars.framework/Resources/appstart.sh" tofile="${build.root}/${project.name}.woa/${project.name}" overwrite="yes" />
+        <copy file="${wonder.lib.root}/ERJars.framework/Resources/appstart.mac" tofile="${build.root}/${project.name}.woa/Contents/MacOS/${project.name}" overwrite="yes" />
+        <copy file="${wonder.lib.root}/ERJars.framework/Resources/appstart.cmd" tofile="${build.root}/${project.name}.woa/${project.name}.cmd" overwrite="yes" />
+        <copy file="${wonder.lib.root}/ERJars.framework/Resources/Java/wostart.jar" tofile="${build.root}/${project.name}.woa/wostart.jar" overwrite="yes" /-->
+        <exec dir="${build.root}/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
+            <arg line="a+x ${project.name}" />
+        </exec>
+        <exec dir="${build.root}/${project.name}.woa/Contents/MacOS" executable="/bin/chmod" os="Mac OS X">
+            <arg line="a+x ${project.name}" />
+        </exec>
         <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
             <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
         </exec>
@@ -511,6 +522,8 @@ There are three ways to use this script:
             </lib>
             <resources dir="${project.dir}/Resources">
                 <include name="**/*.sh" />
+                <include name="**/*.mac" />
+                <include name="**/*.cmd" />
             </resources>
         </woframework>
     </target>
@@ -716,6 +729,7 @@ There are three ways to use this script:
             <param name="project.name" value="DocsByExample" />
             <param name="project.dir" value="DynaReporting/Examples/DocsByExample" />
 
+            <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.core" value="true" />
             <param name="use.reporting" value="true" />
             <param name="use.mysql" value="true" />
@@ -730,8 +744,8 @@ There are three ways to use this script:
             <param name="project.name" value="DynaReporter" />
             <param name="project.dir" value="DynaReporting/Examples/DynaReporter" />
 
-            <param name="use.wonder.core" value="true" />
             <param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.core" value="true" />
             <param name="use.reporting" value="true" />
             <param name="use.mysql" value="true" />
             <param name="use.movies" value="true" />
@@ -745,6 +759,7 @@ There are three ways to use this script:
             <param name="project.name" value="DRGroupingTest" />
             <param name="project.dir" value="DynaReporting/Examples/DRGroupingTest" />
 
+            <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.core" value="true" />
             <param name="use.grouping" value="true" />
             <param name="use.mysql" value="true" />
@@ -890,7 +905,7 @@ There are three ways to use this script:
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
 
-    <target name="subprojects.all" depends="DynaReporting.all, WOPayPal.all, Validity.all, SVGObjects.all" />
+    <target name="subprojects.all" depends="WOPayPal.all, Validity.all, SVGObjects.all, DynaReporting.all" />
 
     <target name="experimental.all" depends="DevStudio.all" />
 
