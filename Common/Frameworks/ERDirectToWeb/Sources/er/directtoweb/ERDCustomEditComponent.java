@@ -90,6 +90,7 @@ public abstract class ERDCustomEditComponent extends WOComponent {
         extraBindings = null;
         key = null;
         object = null;
+        d2wContext = null;
     }
 
     public void setExtraBindings(NSDictionary value) { extraBindings = value; }
@@ -146,6 +147,26 @@ public abstract class ERDCustomEditComponent extends WOComponent {
         return booleanForBinding(binding) ? ERDCustomEditComponent.TRUE : ERDCustomEditComponent.FALSE;
     }
 
+    protected NSKeyValueCoding d2wContext;
+    public void setD2wContext(NSKeyValueCoding value) {
+        d2wContext = value;
+    }
+    public void setLocalContext(NSKeyValueCoding value) {
+        setD2wContext(value);
+    }
+    public NSKeyValueCoding localContext() {
+        return d2wContext();
+    }
+    public NSKeyValueCoding d2wContext() {
+        if (d2wContext == null && !synchronizesVariablesWithBindings()) {
+            d2wContext = (NSKeyValueCoding)valueForBinding("localContext");
+            if(d2wContext == null) {
+                d2wContext = (NSKeyValueCoding)valueForBinding("d2wContext");
+            }
+        }
+        return d2wContext;
+    }
+
     public Object valueForBinding(String binding) {
         Object value=null;
         if (log.isDebugEnabled()) {
@@ -161,6 +182,8 @@ public abstract class ERDCustomEditComponent extends WOComponent {
             log.debug("***** CustomEditComponent: super.hasBinding(binding) == true");
             value = super.valueForBinding(binding);
             log.debug("***** CustomEditComponent: value = " + value);
+        } else if(d2wContext() != null){
+            value = d2wContext().valueForKey(binding);
         } else {
             WOComponent parent=parent();
             if (parent instanceof ERDCustomEditComponent ||
