@@ -21,10 +21,16 @@ JavaScript2: WOJavaScript {
 }
 
 String1: WOString {
+	value = formatterStringForScript.toLowerCase;
+}
+
+String2: WOString {
 	value = name;
 }
 
 TextField1: WOTextField {
 	name = name;
 	value = dateString;
+	size = 12;
+	maxlength = 12;
 }
