@@ -16,6 +16,18 @@ import java.util.*;
 import java.io.*;
 import org.apache.log4j.Category;
 
+/**
+ * Principle class of the ERExtensions framework. This class
+ * will be loaded at runtime when the ERExtensions bundle is
+ * loaded (even before the Application construcor is called)
+ * This class has a boat-load of stuff in it that will hopefully
+ * be finding better homes in the future. This class serves as
+ * the initilization point of this framework, look in the static
+ * initializer to see all the stuff that is initially setup when
+ * this class is loaded. This class also has a boat load of
+ * string, array and eof utilities as well as the factory methods
+ * for creating editing contexts with the default delegates set.
+ */
 public class ERXExtensions {
 
     /** logging support */
@@ -49,13 +61,36 @@ public class ERXExtensions {
      * This delegate is configured when this framework is loaded.
      */
     public static class Observer {
+        /**
+         * This method is called everytime the configuration file
+         * is changed. This allows for turning SQL debuging on and
+         * off at runtime.
+         * @param n notification posted when the configuration file
+         * 	changes.
+         */
         public void configureAdaptorContext(NSNotification n) {
             ERXExtensions.configureAdaptorContext();
         }
 
+        /**
+         * This method is called everytime an editingcontext is
+         * saved. This allows us to call all of the didInsert,
+         * didUpdate and didSave methods on the enterprise objects
+         * after the transaction is complete.
+         * @param n notification that contains the array of inserted,
+         *		updated and deleted objects.
+         */
         public void didSave(NSNotification n) {
             ERXGenericRecord.didSave(n);
         }
+
+        /**
+         * This method is called when the application has finished
+         * launching. Here is where log4j is configured for rapid
+         * turn around, the compiler proxy is initialized and the
+         * validation template system is configured.
+         * @param n notification posted when the app is done launching
+         */
         public void finishedLaunchingApp(NSNotification n) {
             ERXLog4j.configureRapidTurnAround(); // Will only enable if WOCaching is off.
             ERXExtensions.warmUpRuleCache();
@@ -64,54 +99,71 @@ public class ERXExtensions {
 	    ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
-            //ERWebLint.configureWebLint();
         }
+
+        /**
+         * This method is called every time a session times
+         * out. It allows us to release references to all the
+         * editing contexts that were created when that particular
+         * session was active.
+         * @param n notification that contains the session ID.
+         */
         public void sessionDidTimeOut(NSNotification n) {
             String sessionID=(String)n.object();
             ERXExtensions.sessionDidTimeOut(sessionID);
         }
     }
     
-    // called implicitely because ERXExtensions is the principal class of the framework
+    /** We only ever want the framework to be init's once. */
+    // CHECKME: This was needed back in the 4.5 days because initialize() might be called multiple
+    //          times on a given object (very rare, but boy when it happened it caused problems).
+    //		Now with statics I don't think that this is needed.
     private static boolean _isInitialized=false;
+
+    /**
+     * Configures the framework. All the bits and pieces that need
+     * to be configured are configured, those that need to happen
+     * later are delayed by registering an observer for notifications
+     * that are posted when the application is finished launching.
+     */
     static {
         if (!_isInitialized) {
             // This will configure the Log4j system.
             // This is OK to call multiple times as it will only be configured the first time.
             try {
-            ERXLog4j.configureLogging();
-            ERXConfigurationManager.initializeDefaults();
-            cat().info("Initializing framework: ERXExtensions");
-            // Initing defaultEditingContext delegates
-            _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
-            _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
-            // CHECKME: This shouldn't be needed now with WO 5
-            ERXRetainer.retain(_defaultEditingContextDelegate);
-            ERXRetainer.retain(_defaultECNoValidationDelegate);
+                ERXLog4j.configureLogging();
+                ERXConfigurationManager.initializeDefaults();
+                cat().info("Initializing framework: ERXExtensions");
+                // Initing defaultEditingContext delegates
+                _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
+                _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
+                // CHECKME: This shouldn't be needed now with WO 5
+                ERXRetainer.retain(_defaultEditingContextDelegate);
+                ERXRetainer.retain(_defaultECNoValidationDelegate);
 
-            Observer observer = new Observer();
-            ERXRetainer.retain(observer); // has to be retained
-            ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
-            EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
-            ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
+                Observer observer = new Observer();
+                ERXRetainer.retain(observer); // has to be retained
+                ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
+                EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+                ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
-	    ERXEntityClassDescription.registerDescription();
-            // CHECKME: I think this bug is fixed
-            // This patches shared eo loading so cross model relationships to shared eos work.
-            //ERXSharedEOLoader.patchSharedEOLoading();
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("didSave", ERXConstant.NotificationClassArray),
-                                                             EOEditingContext.EditingContextDidSaveChangesNotification,
-                                                             null);
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
-                                                             WOApplication.ApplicationDidFinishLaunchingNotification,
-                                                             null);
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-                                                             WOSession.SessionDidTimeOutNotification,
-                                                             null);
-            _isInitialized=true;
+                ERXEntityClassDescription.registerDescription();
+                // CHECKME: I think this bug is fixed
+                // This patches shared eo loading so cross model relationships to shared eos work.
+                //ERXSharedEOLoader.patchSharedEOLoading();
+                NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                                 new NSSelector("didSave", ERXConstant.NotificationClassArray),
+                                                                 EOEditingContext.EditingContextDidSaveChangesNotification,
+                                                                 null);
+                NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                                 new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
+                                                                 WOApplication.ApplicationDidFinishLaunchingNotification,
+                                                                 null);
+                NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                                 new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
+                                                                 WOSession.SessionDidTimeOutNotification,
+                                                                 null);
+                _isInitialized=true;
             } catch (Exception e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
@@ -125,6 +177,10 @@ public class ERXExtensions {
 
     private static boolean _isConfigureAdaptorContextRapidTurnAround = false;
     // FIXME: This shouldn't be enabled when the application is in production.
+    // FIXME: Now that all of the logging has been centralized, we should just be able
+    //		to do something like this, but much more generic, i.e. have a mapping
+    //		between category names and NSLog groups, for example com.webobjects.logging.DebugGroupSQLGeneration we should
+    //		be able to get the last part of the logger name and look up that log group and turn 
     public static void configureAdaptorContextRapidTurnAround(Object observer) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
@@ -143,6 +199,12 @@ public class ERXExtensions {
         }
     }
 
+    /**
+     * This method is called by the delegate when the configuration
+     * file is changed. It's sole purpose is to map a logging logger
+     * to a debug group. Hopefully in the future we will have a more
+     * generic solution.
+     */
     public static void configureAdaptorContext() {
         Boolean targetState = null;
         if (adaptorCategory.isDebugEnabled() && !adaptorEnabled.booleanValue()) {
@@ -190,15 +252,54 @@ public class ERXExtensions {
     // MOVEME: ERXECFactory
     public static ERXECNoValidationDelegate defaultECNoValidationDelegate() { return _defaultECNoValidationDelegate; }
 
+    // DELETEME: Not a real notification, don't think it is being used.
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
 
-    // EditingContext creation methods
+    /**
+     * Factory method to create a new editing context. Sets
+     * the current default delegate on the newly created
+     * editing context.
+     * @return a newly created editing context with the
+     *		default delegate set.
+     */
+    // MOVEME: ERXECFactory
     public static EOEditingContext newEditingContext() {
         return ERXExtensions.newEditingContext(EOEditingContext.defaultParentObjectStore(), true);
     }
+
+    /**
+     * Factory method to create a new editing context with
+     * validation disabled. Sets the default no validation
+     * delegate on the editing context. Becareful an
+     * editing context that does not perform validation
+     * means that none of the usual validation methods are
+     * called on the enterprise objects before they are saved
+     * to the database.
+     * @param validation flag that determines if validation
+     *		should or should not be enabled.
+     * @return a newly created editing context with a delegate
+     *		set that has disabled validation.
+     */
+    // MOVEME: ERXECFactory
     public static EOEditingContext newEditingContext(boolean validation) {
         return ERXExtensions.newEditingContext(EOEditingContext.defaultParentObjectStore(), validation);
     }
+
+    /**
+     * Creates a new editing context with the specified object
+     * store as the parent object store. This method is useful
+     * when creating nested editing contexts. After creating
+     * the editing context the default delegate is set on the
+     * editing context.<br/>
+     * <br/>
+     * Note: an {@link EOEditingContext} is a subclass of EOObjectStore
+     * so passing in another editing context to this method is
+     * completely kosher.
+     * @param objectStore parent object store for the newly created
+     *		editing context.
+     * @return new editing context with the given parent object store
+     */
+    // MOVEME: ERXECFactory
     public static EOEditingContext newEditingContext(EOObjectStore objectStore) {
         return ERXExtensions.newEditingContext(objectStore, true);
     }
@@ -230,11 +331,35 @@ public class ERXExtensions {
         adaptorChannel.evaluateExpression(factory.expressionForString(exp));
     }
 
-    // Retaining the editing contexts explicitly until the session that was active
-    // when they were created goes away
-    // this hopefully will go some way towards avoiding the 'attempted to send
-    // message to EO whose EditingContext is gone
+    /**
+     * Retaining the editing contexts explicitly until the session that was active
+     * when they were created goes away
+     * this hopefully will go some way towards avoiding the 'attempted to send
+     * message to EO whose EditingContext is gone. 
+     */
+    // FIXME: This feature/bug fix should be able to be disabled
     private static NSMutableDictionary _editingContextsPerSession=new NSMutableDictionary();
+
+    /**
+     * Creates a new editing context with the specified object
+     * store as the parent object store and with validation turned
+     * on or off depending on the flag passed in. This method is useful
+     * when creating nested editing contexts. After creating
+     * the editing context the default delegate is set on the
+     * editing context if validation is enabled or the default no
+     * validation delegate is set if validation is disabled.<br/>
+     * <br/>
+     * Note: an {@link EOEditingContext} is a subclass of EOObjectStore
+     * so passing in another editing context to this method is
+     * completely kosher.
+     * @param objectStore parent object store for the newly created
+     *		editing context.
+     * @param validation determines if the editing context should perform
+     *		validation
+     * @return new editing context with the given parent object store
+     *		and the delegate corresponding to the validation flag
+     */
+    // MOVEME: ERXECFactory
     public static EOEditingContext newEditingContext(EOObjectStore objectStore, boolean validation) {
         EOEditingContext ec = new EOEditingContext(objectStore);
         ERXExtensions.setDefaultDelegate(ec, validation);
@@ -254,6 +379,13 @@ public class ERXExtensions {
         return ec;
     }
 
+    /**
+     * This method is called when a session times out.
+     * Calling this method will release references to
+     * all editing contexts that were created when this
+     * session was active.
+     * @param sessionID of the session that timed out
+     */
     public static void sessionDidTimeOut(String sessionID) {
         if (sessionID!=null) {
             if (cat().isDebugEnabled()) {
@@ -266,7 +398,27 @@ public class ERXExtensions {
         }
     }
 
+    /**
+     * Sets the default editing context delegate on
+     * the given editing context.
+     * @param ec editing context to have it's delegate set.
+     */
+    // FIXME: Misleading name, sounds like we are setting the actual delegate and not setting the delegate on
+    //		an editing context
+    // MOVEME: ERXECFactory
     public static void setDefaultDelegate(EOEditingContext ec) { ERXExtensions.setDefaultDelegate(ec, true); }
+
+    /**
+     * Sets either the default editing context delegate
+     * that does or does not allow validation based on
+     * the validation flag passed in on the given editing context.
+     * @param ec editing context to have it's delegate set.
+     * @param validation flag that determines if the editing context
+     * 		should perform validation on objects being saved.
+     */
+    // FIXME: Misleading name, sounds like we are setting the actual delegate and not setting the delegate on
+    //		an editing context
+    // MOVEME: ERXECFactory
     public static void setDefaultDelegate(EOEditingContext ec, boolean validation) {
         if (ec != null) {
             if (validation)
@@ -471,8 +623,18 @@ public class ERXExtensions {
         return sb.toString();
     }
 
+    /**
+     * Removes all of the HTML tags from a given string.
+     * Note: that this is a very simplistic implementation
+     * and will most likely not work with complex HTML.
+     * Note: for actual conversion of HTML tags into regular
+     * strings have a look at {@link ERXSimpleHTMLFormatter}
+     * @param s html string
+     * @return string with all of it's html tags removed
+     */
+    // FIXME: this is so simplistic it will break if you sneeze
+    // MOVEME: ERXStringUtilities 
     public static String removeHTMLTagsFromString(String s) {
-        // FIXME this is so simplistic it will break if you sneeze
         StringBuffer result=new StringBuffer();
         if (s.length()>0) {
             int position=0;
@@ -498,6 +660,24 @@ public class ERXExtensions {
         return replaceStringByStringInString("&nbsp;"," ",result.toString());
     }
 
+    /**
+     * Forces the garbage collector to run. The
+     * max loop parameter determines the maximum
+     * number of times to run the garbage collector
+     * if the memory footprint is still going down.
+     * In normal cases you would just need to call
+     * this method with the parameter 1. If called
+     * with the parameter 0 the garbage collector
+     * will continue to run until no more free memory
+     * is available to collect. <br/>
+     * <br/>
+     * Note: This can be a very costly operation and
+     * should only be used in extreme circumstances.
+     * @param maxLoop maximum times to run the garbage
+     *		collector. Passing in 0 will cause the
+     *		collector to run until all free objects
+     *		have been collected.
+     */
     public static void forceGC(int maxLoop) {
         if (cat().isDebugEnabled()) cat().debug("Forcing full Garbage Collection");
         Runtime runtime = Runtime.getRuntime();
@@ -535,7 +715,12 @@ public class ERXExtensions {
     }
 
     /**
-     * 
+     * Returns the string representation of the primary key for
+     * a given object. Note that the object should only have
+     * one primary key.
+     * @param eo object to get the primary key for.
+     * @return string representation of the primary key of the
+     *		object.
      */
     // MOVEME: ERXEOFUtilities
     public static String primaryKeyForObject(EOEnterpriseObject eo) {
@@ -543,6 +728,7 @@ public class ERXExtensions {
         return pk!=null ? pk.toString() : null;
     }
 
+    // DELETEME: This one is very confusing, plus the primaryKey dictionary isn't even used?!?!
     public static Object rawPrimaryKeyFromPrimaryKeyAndEO(NSDictionary primaryKey, EOEnterpriseObject eo) {
         NSArray result = primaryKeyArrayForObject(eo);
 
@@ -576,7 +762,15 @@ public class ERXExtensions {
         EOKeyGlobalID kGid = (EOKeyGlobalID) gid;
         return kGid.keyValuesArray();
     }
-    
+
+    /**
+     * Returns the raw primary key of the object. Possible
+     * objects returned could be Integer, BigDecimal or NSData.
+     * Note: the object passed in should only have one primary
+     * key.
+     * @param eo enterprise object to get the primary key from
+     * @param primary key of the object in it's raw form
+     */
     public static Object rawPrimaryKeyForObject(EOEnterpriseObject eo) {
         Object result = null;
         if (eo!=null)  {
@@ -1056,7 +1250,7 @@ public class ERXExtensions {
         return result;
     }
 
-    // FIXME: Not sure exactly what to do with this one, tempted just to delete it
+    // DELETEME: Not sure exactly what to do with this one, tempted just to delete it
     //		to get rid of the D2W dependency. Could instead use the class description's
     //		basic name beautifier and have that be localized.
     public static String displayNameForPropertyKey(String key, String entityName) {
@@ -1243,6 +1437,13 @@ public class ERXExtensions {
         return dico.allValues();
     }
 
+    /**
+     * Subtracts the contents of one array from another.
+     * Note: Current implementation does not preserve order.
+     * @param main array to have values removed from it.
+     * @param minus array of values to remove from the main array
+     * @param result array after performing subtraction.
+     */
     // FIXME: This has the side effect of removing any duplicate elements from
     //		the main array as well as not preserving the order of the array
     // MOVEME: ERXArrayUtilities
@@ -1408,9 +1609,18 @@ public class ERXExtensions {
             ((ERXApplication)WOApplication.application()).warmUpRuleCache();
         }
     }
-    // ----------------------------------------------------------------------------------------
-    // fuzzy match
 
+    /**
+     * Removes any occurances of any strings in the array passed
+     * in from the string passed in. Used in conjunction with
+     * fuzzy matching.
+     * @param newString string to have other strings removed from it
+     * @param toBeCleaneds array of strings to check to see if the other
+     *		string contains
+     * @return cleaned string.
+     */
+    // MOVEME: Either ERXStringUtilities or fuzzy matching stuff
+    // FIXME: Should use a StringBuffer instead of creating strings all over the place.
     public static String cleanString(String newString, NSArray toBeCleaneds) {
         String result=newString;
         if (newString!=null) {
@@ -1424,14 +1634,48 @@ public class ERXExtensions {
         return result;
     }
 
-
+    /** holds the base adjustment for fuzzy matching */
+    // FIXME: Not thread safe
+    // MOVEME: Needs to go with the fuzzy matching stuff
     protected static double adjustement = 0.5;
-    public static void setAdjustement(double newAdjustement){
+
+    /**
+     * Sets the base adjustment used for fuzzy matching
+     * @param newAdjustment factor to be used.
+     */
+    // FIXME: Not thread safe.
+    // MOVEME: fuzzy matching stuff
+    public static void setAdjustement(double newAdjustement) {
         adjustement = newAdjustement;
     }
+
+    /**
+     * Fuzzy matching is useful for catching user entered typos. For example
+     * if a user is search for a company named 'Aple' within your application
+     * they aren't going to find it. Thus the idea of fuzzy matching, meaning you
+     * can define a threshold of 'how close can they be' type of thing.
+     * 
+     * @param name to be matched against
+     * @param entityName name of the entity to perform the match against.
+     * @param proertyKey to be matched against
+     * @param synonymsKey allows objects to have additional values to be matched
+     * 		against in addition to just the value of the propertyKey
+     * @param ec context to fetch data in
+     * @param cleaner object used to clean a string, for example the cleaner might
+     *		strip out the words 'The' and 'Inc.'
+     * @param comparisonString can be either 'asc' or 'desc' to tell how the results
+     *		should be sorted. Bad design, this will change.
+     * @return an array of objects that match in a fuzzy manner the name passed in.
+     */
+    // FIXME: This needs to be made more generic, i.e. right now it depends on having a field 'distance' on the
+    //	      enterprise object. Also right now it fetches *all* of the attributes for *all* of the entities.
+    //	      that is very costly. Should only be getting the attribute and pk.
+    // FIXME: Bad api design with the comparisonString, should just pass in an EOSortOrdering
+    // MOVEME: Not sure, maybe it's own class and put the interface as a static inner interface
     public static NSArray fuzzyMatch(String name,
                                      String entityName,
-                                     String propertyKey, String synonymsKey,
+                                     String propertyKey,
+                                     String synonymsKey,
                                      EOEditingContext ec,
                                      ERXFuzzyMatchCleaner cleaner,
                                      String comparisonString){
@@ -1495,79 +1739,81 @@ public class ERXExtensions {
         return results;
     }
 
-    //The code below comes from the following post on http://mail.python.org
-    /*Fuzzy string matching
-        Magnus L. Hetland mlh@idt.ntnu.no
-        27 Aug 1999 15:51:03 +0200
-
-        Explanation of the distance algorithm...
-
-        The algorithm:
-
-        def distance(a,b):
-        c = {}
-        n = len(a); m = len(b)
-
-        for i in range(0,n+1):
-        c[i,0] = i
-        for j in range(0,m+1):
-        c[0,j] = j
-
-        for i in range(1,n+1):
-        for j in range(1,m+1):
-        x = c[i-1,j]+1
-        y = c[i,j-1]+1
-        if a[i-1] == b[j-1]:
-        z = c[i-1,j-1]
-else:
-        z = c[i-1,j-1]+1
-        c[i,j] = min(x,y,z)
-        return c[n,m]
-
-        It calculates the following: Given two strings, a and b, and three
-        operations, adding, subtracting and exchanging single characters, what
-        is the minimal number of steps needed to translate a into b?
-
-        The method is based on the following idea:
-
-        We want to find the distance between a[:x] and b[:y]. To do this, we
-        first calculate
-
-        1) the distance between a[:x-1] and b[:y], adding the cost of a
-subtract-operation, used to get from a[:x] to a[:z-1];
-
-2) the distance between a[:x] and b[:y-1], adding the cost of an
-addition-operation, used to get from b[:y-1] to b[:y];
-
-3) the distance between a[:x-1] and b[:y-1], adding the cost of a
-*possible* exchange of the letter b[y] (with a[x]).
-
-The cost of the subtraction and addition operations are 1, while the
-exchange operation has a cost of 1 if a[x] and b[y] are different, and
-0 otherwise.
-
-After calculating these costs, we choose the least one of them (since
-                                                                we want to use the best solution.)
-
-Instead of doing this recursively (i.e. calculating ourselves "back"
-                                   from the final value), we build a cost-matrix c containing the optimal
-costs, so we can reuse them when calculating the later values. The
-costs c[i,0] (from string of length n to empty string) are all i, and
-correspondingly all c[0,j] (from empty string to string of length j)
-are j.
-
-Finally, the cost of translating between the full strings a and b
-(c[n,m]) is returned.
-
-I guess that ought to cover it...
-
---
-
-    Magnus              Making no sound / Yet smouldering with passion
-    Lie          The firefly is still sadder / Than the moaning insect
-          Hetland                                       : Minamoto Shigeyuki*/
-
-    public static double distance( String a, String b){
+    /**
+     * Java port of the distance algorithm.
+     *
+     * The code below comes from the following post on http://mail.python.org
+     * Fuzzy string matching
+     *   Magnus L. Hetland mlh@idt.ntnu.no
+     *   27 Aug 1999 15:51:03 +0200
+     *
+     *  Explanation of the distance algorithm...
+     *
+     *  The algorithm:
+     *
+     *  def distance(a,b):
+     *   c = {}
+     *  n = len(a); m = len(b)
+     *
+     *  for i in range(0,n+1):
+     *  c[i,0] = i
+     *  for j in range(0,m+1):
+     *  c[0,j] = j
+     *
+     *  for i in range(1,n+1):
+     *  for j in range(1,m+1):
+     *  x = c[i-1,j]+1
+     *  y = c[i,j-1]+1
+     *  if a[i-1] == b[j-1]:
+     *    z = c[i-1,j-1]
+     *  else:
+     *    z = c[i-1,j-1]+1
+     *  c[i,j] = min(x,y,z)
+     *  return c[n,m]
+     *
+     *  It calculates the following: Given two strings, a and b, and three
+     *  operations, adding, subtracting and exchanging single characters, what
+     *  is the minimal number of steps needed to translate a into b?
+     *
+     *  The method is based on the following idea:
+     *
+     *  We want to find the distance between a[:x] and b[:y]. To do this, we
+     *  first calculate
+     *
+     *  1) the distance between a[:x-1] and b[:y], adding the cost of a
+     *  subtract-operation, used to get from a[:x] to a[:z-1];
+     *
+     *  2) the distance between a[:x] and b[:y-1], adding the cost of an
+     *  addition-operation, used to get from b[:y-1] to b[:y];
+     *
+     *  3) the distance between a[:x-1] and b[:y-1], adding the cost of a
+     *  *possible* exchange of the letter b[y] (with a[x]).
+     *
+     *  The cost of the subtraction and addition operations are 1, while the
+     *  exchange operation has a cost of 1 if a[x] and b[y] are different, and
+     *  0 otherwise.
+     *
+     *  After calculating these costs, we choose the least one of them (since
+     *                                                          we want to use the best solution.)
+     *
+     *  Instead of doing this recursively (i.e. calculating ourselves "back"
+     *                             from the final value), we build a cost-matrix c containing the optimal
+     *  costs, so we can reuse them when calculating the later values. The
+     *  costs c[i,0] (from string of length n to empty string) are all i, and
+     *  correspondingly all c[0,j] (from empty string to string of length j)
+     *  are j.
+     *
+     *  Finally, the cost of translating between the full strings a and b
+     *  (c[n,m]) is returned.
+     *
+     *  I guess that ought to cover it...
+     * --------------------------
+     * @param a first string
+     * @param b second string
+     * @return the distance between the two strings
+     */
+    // MOVEME: ERXStringUtilities
+     public static double distance( String a, String b){
         int n = a.length();
         int m = b.length();
         int c[][] = new int[n+1][m+1];
@@ -1659,9 +1905,15 @@ I guess that ought to cover it...
         return (WOSession)_sessionsPerThread.objectForKey(key);
     }
 
-    // -----------------------------------------------------------------------
-    // method used by the preferences mechanism from ERDirectToWeb
-    // needs to be in here because shared by ERDirectToWeb and ERCoreBusinessLogic
+    /**
+     * method used by the preferences mechanism from ERDirectToWeb
+     * needs to be in here because shared by ERDirectToWeb and ERCoreBusinessLogic
+     * The basic idea of this method is to construct a unique key based on
+     * a context.
+     * @param key preference key
+     * @param context most likely a d2wContext object
+     * @return a unique preference key for storing and retriving preferences
+     */
     // FIXME: Needs to find a better home.
     public static String userPreferencesKeyFromContext(String key, NSKeyValueCoding context) {
         StringBuffer result=new StringBuffer(key);
