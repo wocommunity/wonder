@@ -11,7 +11,15 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
-// Useful for creating a javascript target for a form submit
+/**
+ * Useful for creating a javascript window for a form submit.
+ * @binding multipleSubmit true the form multiple submit
+ * @binding targetDictionary dictionary (optionally) containing
+ *  <li>width - width of the window
+ *  <li>targetName - name of the target window
+ *  <li>height - height of the target window
+ *  <li>scrollbars - NO/false if you don't want scrollbars 
+ */
 public class ERXJSFormForTarget extends WOComponent {
 
     public ERXJSFormForTarget(WOContext aContext) {
@@ -34,8 +42,7 @@ public class ERXJSFormForTarget extends WOComponent {
             buffer.append( targetDictionary.valueForKey("height")!=null ?
                            targetDictionary.valueForKey("height") : "{myHeight}");
             buffer.append(",");
-            buffer.append( (targetDictionary.valueForKey("scrollbars")!=null && targetDictionary.valueForKey("scrollbars")== "NO")?
-                           " " : "scrollbars");
+            buffer.append( ERXValueUtilities.booleanValueWithDefault(targetDictionary.valueForKey("scrollbars"), true) ? " " : "scrollbars");
             buffer.append(", {(isResizable)?'resizable':''}, status");
             //System.out.println("buffer = "+buffer.toString());
             result = buffer.toString();
