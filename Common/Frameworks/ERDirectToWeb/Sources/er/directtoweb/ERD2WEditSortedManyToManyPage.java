@@ -240,7 +240,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                                                                       relationshipKey());
                 if(((object instanceof ERXGuardedObjectInterface) && ((ERXGuardedObjectInterface)object).canDelete()) 
                     || !(object instanceof ERXGuardedObjectInterface)) {
-                     editingContext().deleteObject(object);
+                    ((ERXGuardedObjectInterface)object).delete();
                 }
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
