@@ -82,7 +82,7 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         return "decode('" + new String(hex) + "','hex')";
     }
-
+/*
     public String sqlStringForValue(Object v, String kp) {
         EOAttribute attribute = entity().attributeNamed(kp);
         String suffix = "";
@@ -92,5 +92,5 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         return super.sqlStringForValue(v,kp);
     }
-    
+*/    
 }
