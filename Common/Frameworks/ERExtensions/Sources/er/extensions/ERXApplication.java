@@ -358,7 +358,18 @@ public abstract class ERXApplication extends WOApplication {
                   ((NSForwardException) exception).originalException() : exception);
         return null;
     }
-    
+
+
+    /**
+     * Workaround for WO 5.2 DirectAction lock-ups.
+     * @param exception to be handled
+     * @param context current context
+     * @return the WOResponse of the generated exception page.
+     */
+    public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
+        return handleException(exception, actionInstance.context());
+    }
+
     /**
      * Logs extra information about the current state.
      * @param exception to be handled
