@@ -13,7 +13,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
-public abstract class ERD2WListPage extends ERD2WPage implements ListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
+public abstract class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WListPage.class);
@@ -116,26 +116,14 @@ public abstract class ERD2WListPage extends ERD2WPage implements ListPageInterfa
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
-    // debug helpers
-    public boolean d2wComponentNameDebuggingEnabled() {
-        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
-    }
-    public String d2wCurrentComponentName() {
-        String name = (String)d2wContext().valueForKey("componentName");
-        if(name.indexOf("CustomComponent")>=0) {
-            name = (String)d2wContext().valueForKey("customComponentName");
-        }
-        return name;
-    }
-
     public static WOComponent printerFriendlyVersion(D2WContext d2wContext, WOSession session, EODataSource dataSource, WODisplayGroup displayGroup) {
         ListPageInterface result=(ListPageInterface)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext,session);
         result.setDataSource(dataSource);
         WODisplayGroup dg = null;
         if(result instanceof D2WListPage) {
             dg = ((D2WListPage)result).displayGroup();
-        } else if(result instanceof ERD2WListPage) {
-            dg = ((ERD2WListPage)result).displayGroup();
+        } else if(result instanceof ERDListPageInterface) {
+            dg = ((ERDListPageInterface)result).displayGroup();
         } else {
             try {
                 dg = (WODisplayGroup)((WOComponent)result).valueForKey("displayGroup");
