@@ -92,15 +92,13 @@ public class ERXPatcher  {
              * First tries to get a localized version and if that fails, uses the
              * supplied value as the default
              */
-            protected void _appendValueAttributeToResponse(WOResponse response,
-                                                           WOContext context) {
+            protected void _appendValueAttributeToResponse(WOResponse response, WOContext context) {
                 if (_value != null) {
-                    Object object = _value.valueInComponent(context.component());
-                    Object object1 = null;
-                    if (object != null) {
-                        String string = object.toString();
-                        string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
-                        response._appendTagAttributeAndValue("value", string, true);
+                    Object value = _value.valueInComponent(context.component());
+                    if (value != null) {
+                        String stringValue = value.toString();
+                        stringValue = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValue);
+                        response._appendTagAttributeAndValue("value", stringValue, true);
                     }
                 }
             }
