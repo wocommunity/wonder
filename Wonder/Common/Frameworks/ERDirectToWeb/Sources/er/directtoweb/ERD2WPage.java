@@ -238,7 +238,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 errorKeyOrder.addObject(d2wContext().displayNameForProperty());
                 errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
                 if (erv.eoObject() != null && erv.propertyKey() != null && shouldSetFailedValidationValue()) {
-                    erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
+                	try {
+                		erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
+                	} catch(NSKeyValueCoding.UnknownKeyException  ex) {
+                		// AK: as we could have custom components that have non-existant keys
+                		// we of course can't push a value, so we discard the resulting exception
+                	} catch(NoSuchElementException  ex) {
+                		// AK: as we could have custom components that have non-existant keys
+                		// we of course can't push a value, so we discard the resulting exception
+                	}
                 }   
             } else {
                 _temp.removeAllObjects();
