@@ -6,7 +6,7 @@ D2WSwitchComponent: ERD2WSwitchComponent {
 	dataSource = ^dataSource;
 	displayKeys = ^displayKeys;
 	nextPage = ^nextPage;
-	nextPageDelegate = actionPageDelegate;
+	nextPageDelegate = ^branchDelegate;
 	selectedObjects = ^selectedObjects;
 }
 
