@@ -30,7 +30,7 @@ public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
 
 
     public WOComponent printerFriendlyVersion() {
-        WOComponent result=ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result= ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
@@ -54,8 +54,8 @@ public class ERNEUTabInspectPage extends ERD2WTabInspectPage {
 
     public String cancelButtonFileName() { return shouldShowReturnButton() ? "/nsi/buttonReturn.gif" : "/nsi/buttonCancel.gif"; }
 
-    public boolean useTabImages() { return ERXUtilities.booleanValue(d2wContext().valueForKey("useTabImages")); }
-    public boolean useTabSectionImages() { return ERXUtilities.booleanValue(d2wContext().valueForKey("useTabSectionImages")); }
+    public boolean useTabImages() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("useTabImages")); }
+    public boolean useTabSectionImages() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("useTabSectionImages")); }
     
     public String tabComponentName() {
 	return useTabImages() ? IMAGE_TAB_COMPONENT_NAME : TEXT_TAB_COMPONENT_NAME;
