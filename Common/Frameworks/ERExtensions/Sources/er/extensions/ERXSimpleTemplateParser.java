@@ -46,6 +46,7 @@ public class ERXSimpleTemplateParser {
             throw new RuntimeException("Attempting to parse template with null object!");
         if (cat.isDebugEnabled())
             cat.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
+        if(delimiter == null) delimiter = "@";
         cat.debug("Template: " + template);
         cat.debug("Delim: " + delimiter);
         cat.debug("otherObject: " + otherObject);
