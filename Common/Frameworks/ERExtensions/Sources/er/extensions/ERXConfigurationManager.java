@@ -51,8 +51,8 @@ import java.lang.reflect.*;
 
 public class ERXConfigurationManager {
 
-    /////////////////////////////////////  log4j category  ////////////////////////////////////
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.extensions.ConfigurationManager");
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXConfigurationManager.class);
 
     static ERXConfigurationManager defaultManager=null;
     
