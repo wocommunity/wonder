@@ -5,12 +5,14 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
-
-import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.*;
+import er.extensions.*;
 
 public class ERDInspect extends ERDCustomEditComponent {
-
-    public ERDInspect(WOContext context) { super(context); }
-    
+    static final ERXLogger log = ERXLogger.getLogger(ERDInspect.class,"components");
+	
+    public ERDInspect(WOContext context) {
+        super(context);
+    }
     public boolean synchronizesVariablesWithBindings() { return false; }
 }
