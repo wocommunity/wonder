@@ -31,7 +31,15 @@ public class ERDirectToWeb {
     public static class Observer {
         public void didFinishedLaunchingApp(NSNotification n) {
             ERDirectToWeb.warmUpRuleCache();
-        }        
+            NSNotificationCenter.defaultCenter().addObserver(this,
+                                                             new NSSelector("didCompileClass",
+                                                                            ERXConstant.NotificationClassArray),
+                                                             ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
+                                                             null);
+        }
+        public void didCompileClass(NSNotification n) {
+            ERD2WModel.erDefaultModel().resetModel();
+        }
     }
     
     private static boolean _isInitialized=false;
