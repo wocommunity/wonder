@@ -14,7 +14,7 @@ die print("usage: $0 <destination directory> <prefix> <postfix>\n") if($#ARGV !=
 $pathToERDirectToWeb = "~/Roots/ERDirectToWebJava.framework/Resources/";
 
 ($dest, $prefix, $postfix) = @ARGV;
-$dest = "tmp";
+$dest = "." if(!defined($dest) || $dest eq "");
 $pattern = 'ERD2W(.*?)Template';
 
 $cmd = "find $pathToERDirectToWeb -name \\*Template.wo";
@@ -56,5 +56,5 @@ foreach $file (@files) {
 }
 chop($rules);
 open D2W, ">$dest/d2w.d2wmodel" || die("Can't open $dest/d2w.d2wmodel");
-print D2W "{ rules = ( $rules )}";
+print D2W "{ rules = ( $rules );}";
 close D2W;
