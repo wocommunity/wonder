@@ -39,7 +39,7 @@ public class ERXBatchNavigationBar extends WOComponent {
     }
     
     public void appendToResponse(WOResponse response, WOContext context) {
-        if (displayGroup() != null  &&  displayGroup().hasMultipleBatches() == false) {
+        if (displayGroup() != null  &&  ! displayGroup().hasMultipleBatches()) {
             if (currentBatchIndex() != 0) 
                 setCurrentBatchIndex(ERXConstant.ZeroInteger);
         }
