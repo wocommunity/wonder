@@ -77,7 +77,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 	// set the plain text part
 	if (_hasHiddenPlainTextContent) {
 	    textPart = new MimeBodyPart ();
-	    textPart.setText (_hiddenPlainTextContent);
+	    textPart.setText (_hiddenPlainTextContent, charset());
 	    multipart.addBodyPart (textPart);
 	}
 
