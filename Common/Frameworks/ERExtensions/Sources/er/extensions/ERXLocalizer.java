@@ -301,7 +301,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                     } catch(Exception ex) {
                         log.warn("Exception loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
-                            + languages + ":" + ex);
+                            + languages + ":" + ex, ex);
                     }
                 } else  {
                     log.debug("Unable to create path for resource named: " + fileName 
@@ -337,7 +337,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public static ERXLocalizer currentLocalizer() {
         ERXLocalizer current = (ERXLocalizer)ERXThreadStorage.valueForKey("localizer");
         if(current == null) {
-            current = defaultLocalizer();
+        	if(!isInitialized) {
+            	initialize();
+            }
+        	current = defaultLocalizer();
         }
         return current;
     }
