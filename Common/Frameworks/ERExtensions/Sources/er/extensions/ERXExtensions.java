@@ -1037,7 +1037,7 @@ public class ERXExtensions {
     // CHECKME: Anyone know the reason why this has final in the method
     //		signature?
     // MOVEME: ERXStringUtilities
-    public byte[] hexStringToByteArray(String s) {
+    public static byte[] hexStringToByteArray(String s) {
         byte[] result=null;
         if (s!=null) {
             int l=s.length();
