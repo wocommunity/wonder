@@ -291,19 +291,25 @@ public class ERXFileUtilities {
 
     
     /**
-        * Copys all of the files in a given directory to another directory.
+        * Copies all of the files in a given directory to another directory.
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files
+     * @param filter, optional parameter which filters files to be copied
      */
     // ENHANCEME: Should support recursive directory copying.
-    public static void copyFilesFromDirectory(File srcDirectory, File dstDirectory, boolean deleteOriginals)
+    public static void copyFilesFromDirectory(File srcDirectory,
+                                              File dstDirectory,
+                                              boolean deleteOriginals,
+                                              FileFilter filter)
         throws FileNotFoundException, IOException {
             if (!srcDirectory.exists() || !dstDirectory.exists())
                 throw new RuntimeException("Both the src and dst directories must exist! Src: " + srcDirectory
                                            + " Dst: " + dstDirectory);
             Throwable thrownException=null;
-            File srcFiles[] = srcDirectory.listFiles();
+            File srcFiles[] = filter!=null ?
+                srcDirectory.listFiles(filter) :
+                srcDirectory.listFiles();
             if (srcFiles != null && srcFiles.length > 0) {
                 FileInputStream in = null;
                 FileOutputStream out = null;
