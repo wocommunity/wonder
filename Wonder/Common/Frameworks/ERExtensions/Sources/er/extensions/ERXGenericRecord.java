@@ -769,23 +769,26 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     // Debugging aids -- turn off during production
     // These methods are used to catch the classic mistake of:
     // public String foo() { return (String)valueForKey("foo"); }
-    // CHECKME: These methods need a once over as they have a boat load more stuff in them than I remember.
+    // where foo is not a property key
 
-    public Object storedValueForKey(String key) {
-        // FIXME: turn this off during production
-        if (!allPropertyKeys().containsObject(key))
-            throw new RuntimeException("********* Tried to access storedValueForKey on "+entityName()+" on a non class property: "+key);
-        Object value = super.storedValueForKey(key);
-        return value;
-    }
+    /*
+     public Object storedValueForKey(String key) {
+         // FIXME: turn this off during production
+         if (!allPropertyKeys().containsObject(key))
+             throw new RuntimeException("********* Tried to access storedValueForKey on "+entityName()+" on a non class property: "+key);
+         Object value = super.storedValueForKey(key);
+         return value;
+     }
 
- public void takeStoredValueForKey(Object value, String key) {
-        // FIXME: turn this off during production
-        if (!allPropertyKeys().containsObject(key)) {
-            throw new RuntimeException("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
-        }
-        super.takeStoredValueForKey(value,key);
-    }
+     public void takeStoredValueForKey(Object value, String key) {
+         // FIXME: turn this off during production
+         if (!allPropertyKeys().containsObject(key)) {
+             throw new RuntimeException("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
+         }
+         super.takeStoredValueForKey(value,key);
+     }
+
+     */
 
 
 }
