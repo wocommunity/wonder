@@ -71,7 +71,7 @@ public class ERDirectToWeb {
                 e.printStackTrace();
             }
             Observer observer=new Observer();
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
+            ERXRetainer.retain(observer);
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("didFinishedLaunchingApp",
                                                                             ERXConstant.NotificationClassArray),
