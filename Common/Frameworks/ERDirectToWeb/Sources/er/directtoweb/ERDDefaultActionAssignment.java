@@ -62,8 +62,8 @@ public class ERDDefaultActionAssignment extends ERDAssignment {
      * @param c a D2W context
      * @return the array of array of action names for that context.
      */
-    public NSArray defaultActions(D2WContext c) {
-        NSArray actions = new NSArray(new Object[] {defaultLeftActions(c), defaultRightActions(c)});
+    public NSDictionary defaultActions(D2WContext c) {
+        NSDictionary actions = new NSDictionary(new Object[] {defaultLeftActions(c), defaultRightActions(c)}, new Object [] {"left", "right"});
         log.debug(actions);
         return actions;
     }

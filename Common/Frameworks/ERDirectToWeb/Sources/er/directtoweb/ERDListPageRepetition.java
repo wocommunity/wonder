@@ -21,7 +21,7 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERDListPageRepetition.class,"components");
 
-    protected static final NSArray NO_ACTIONS = new NSArray(new Object[] {NSArray.EmptyArray, NSArray.EmptyArray});
+    protected static final NSDictionary NO_ACTIONS = NSDictionary.EmptyDictionary;
     
     /**
      * Public constructor
@@ -37,17 +37,17 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
     }
 
     /** Should return an array of arrays denoting actions */
-    public NSArray actions() {
-        NSArray actions = (NSArray)valueForBinding("actions");
+    public NSDictionary actions() {
+        NSDictionary actions = (NSDictionary)valueForBinding("actions");
         return actions == null ? NO_ACTIONS : actions;
     }
 
     public NSArray leftActions() {
-        return (NSArray)actions().objectAtIndex(0);
+        return (NSArray)actions().objectForKey("left");
     }
 
     public NSArray rightActions() {
-        return (NSArray)actions().objectAtIndex(1);
+        return (NSArray)actions().objectForKey("right");
     }
 
     public WODisplayGroup displayGroup() {
