@@ -4,11 +4,9 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERComputingAssignmentInterface.java created by patrice on Sat 25-Nov-2000 */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
 
 // 	Implemented by custom assignments that need to tell the rule system that they depend on other
 //	keys.

@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -12,17 +11,16 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 import er.extensions.ERXConstant;
 
 // For now this simply 
 public class ERDConfirmMessage extends ERDCustomEditComponent {
 
-    public ERDConfirmMessage(WOContext context) {super(context);}
+    public ERDConfirmMessage(WOContext context) { super(context); }
     
     //////////////////////////////////////////////  log4j category  /////////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.components.ERConfimMessage");
+    public final static Category cat = Category.getInstance(ERDConfirmMessage.class);
     
     public String message;
     

@@ -4,8 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERCustomComponent.java created by max on Fri 15-Dec-2000 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -17,12 +15,12 @@ import er.extensions.*;
 
 public abstract class ERDCustomComponent extends WOComponent {
 
-public ERDCustomComponent(WOContext context) {super(context);}
+    public ERDCustomComponent(WOContext context) {super(context);}
 
     //////////////////////////////////////// Static Methods //////////////////////////////////////////////////////////////
     protected static Integer TRUE = ERXConstant.OneInteger;
     protected static Integer FALSE = ERXConstant.ZeroInteger;
-    
+
     //////////////////////////////////////// Instance Methods ////////////////////////////////////////////////////////////
     protected EOEnterpriseObject _object;
     protected EOEditingContext _editingContext;
@@ -36,18 +34,18 @@ public ERDCustomComponent(WOContext context) {super(context);}
         return (EOEnterpriseObject)(_object == null && !synchronizesVariablesWithBindings() ?
                                     super.valueForBinding("object") : _object);
     }
-    
+
     public void setObject(EOEnterpriseObject value) {
         _object = value;
         if (_object!=null) // making sure the editing context stays alive
             _editingContext = _object.editingContext();
     }
-    
+
     public Object objectKeyPathValue() {
         return key() != null && object() != null ? object().valueForKeyPath(key()) : null;
     }
 
-    
+
     public boolean hasBinding(String binding) {
         // FIXME:  Turn this check off in production
         if (synchronizesVariablesWithBindings()) {
@@ -55,7 +53,7 @@ public ERDCustomComponent(WOContext context) {super(context);}
         }
         return (valueForBinding(binding) != null);
     }
-    
+
     // Validation Support
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);

@@ -4,17 +4,12 @@
  * This software is published under the terms of the NetStruxr 
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* DelayedNonNullConditionalAssigment.java created by jd on Mon 10-Sep-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import org.apache.log4j.*;
-import java.util.*;
+import org.apache.log4j.Category;
 
 public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment {
 
@@ -37,10 +32,6 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
         return _dependentKeys;
     }
 
-
-    public Object fire(D2WContext c) {
-        return super.fire(c);
-    }
     /**
      * This method is called whenever the propertyKey is requested,
      * but the value in the cache is actually a rule.
@@ -56,11 +47,8 @@ public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment
             keyPath = (String)conditionAssignment.valueForKey("nullKeyPath");
             resultKey = c.valueForKeyPath(keyPath) == null ? "trueValue" : "falseValue";
         }
-        System.err.println("Key Path: " + keyPath);
         result = conditionAssignment.objectForKey(resultKey);
-        cat.debug("   " + resultKey + " = " + result);
+        if (cat.isDebugEnabled()) cat.debug("   " + resultKey + " = " + result);
         return result;
     }
-
-
 }
