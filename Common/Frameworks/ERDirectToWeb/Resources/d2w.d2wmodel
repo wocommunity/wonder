@@ -3283,6 +3283,15 @@
             class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
                 class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = noChoiceAvailableMessage; 
+                value = ""; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = noSelectionString; 
                 value = "- none -"; 
             }; 
