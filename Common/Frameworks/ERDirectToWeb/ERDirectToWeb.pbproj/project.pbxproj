@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		669CC77D0236A5CE00CD2933 = {
 			isa = PBXFileReference;
@@ -1278,6 +1278,7 @@
 			refType = 4;
 		};
 		F55233850208AB2101A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPrinterFriendlyInspectPageTemplate.wo;
 			refType = 4;
@@ -1300,6 +1301,7 @@
 			};
 		};
 		F552338A0208AB7801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDisplayImageIfExists.wo;
 			refType = 4;
@@ -1322,6 +1324,7 @@
 			};
 		};
 		F552338F0208AC6701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEmptyPageWrapper.wo;
 			refType = 4;
@@ -1344,6 +1347,7 @@
 			};
 		};
 		F55233940208AD0301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WGroupingPrinterFriendlyListPageTemplate.wo;
 			refType = 4;
@@ -1366,6 +1370,7 @@
 			};
 		};
 		F55233990208AD3B01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditYesNo.wo;
 			refType = 4;
@@ -1388,6 +1393,7 @@
 			};
 		};
 		F552339E0208AD7501A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditURL.wo;
 			refType = 4;
@@ -1410,6 +1416,7 @@
 			};
 		};
 		F55233A30208ADB101A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditYearsMonths.wo;
 			refType = 4;
@@ -1432,6 +1439,7 @@
 			};
 		};
 		F55233A80208AE3601A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WListPageTemplate.wo;
 			refType = 4;
@@ -1454,6 +1462,7 @@
 			};
 		};
 		F55233AD0208AF5201A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditOwnedRelationship.wo;
 			refType = 4;
@@ -1476,6 +1485,7 @@
 			};
 		};
 		F55233B20208AFB001A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPickListPageTemplate.wo;
 			refType = 4;
@@ -1498,6 +1508,7 @@
 			};
 		};
 		F55233B70208AFF101A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDefaultSectionComponentPrinterFriendly.wo;
 			refType = 4;
@@ -1520,6 +1531,7 @@
 			};
 		};
 		F55233BC0208B09D01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDTabText.wo;
 			refType = 4;
@@ -1542,6 +1554,7 @@
 			};
 		};
 		F55233C10208B16A01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDMassModifyButton.wo;
 			refType = 4;
@@ -1564,6 +1577,7 @@
 			};
 		};
 		F55233C60208B19601A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDFilterDisplayGroupButton.wo;
 			refType = 4;
@@ -1586,6 +1600,7 @@
 			};
 		};
 		F55233CB0208B89B01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WKeyMapper.wo;
 			refType = 4;
@@ -1608,6 +1623,7 @@
 			};
 		};
 		F55233D00208B8E301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDQueryDateRangeJavascript.wo;
 			refType = 4;
@@ -1630,6 +1646,7 @@
 			};
 		};
 		F55233D50208B92401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditListButton.wo;
 			refType = 4;
@@ -1652,6 +1669,7 @@
 			};
 		};
 		F55233DA0208B96701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDisplayYearsMonths.wo;
 			refType = 4;
@@ -1674,6 +1692,7 @@
 			};
 		};
 		F55233DF0208B9D401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDebuggingHelp.wo;
 			refType = 4;
@@ -1696,6 +1715,7 @@
 			};
 		};
 		F55233E40208BA2901A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPickTypePageTemplate.wo;
 			refType = 4;
@@ -1718,6 +1738,7 @@
 			};
 		};
 		F55233E90208BBBE01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WTabInspectPageTemplate.wo;
 			refType = 4;
@@ -1740,6 +1761,7 @@
 			};
 		};
 		F55233EE0208BBF901A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayTextFromHTML.wo;
 			refType = 4;
@@ -1762,6 +1784,7 @@
 			};
 		};
 		F55233F30208BC6001A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WTwoLevelEditToOneRelationship.wo;
 			refType = 4;
@@ -1784,6 +1807,7 @@
 			};
 		};
 		F55233F80208BCBC01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCompactInspectPageTemplate.wo;
 			refType = 4;
@@ -1806,6 +1830,7 @@
 			};
 		};
 		F55233FD0208BD6801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayHTML.wo;
 			refType = 4;
@@ -1828,6 +1853,7 @@
 			};
 		};
 		F55234020208BDDC01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPrinterFriendlyListTemplate.wo;
 			refType = 4;
@@ -1850,6 +1876,7 @@
 			};
 		};
 		F55234070208BE1401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditString.wo;
 			refType = 4;
@@ -1872,6 +1899,7 @@
 			};
 		};
 		F552340C0208BE7901A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WGroupingListXMLPageTemplate.wo;
 			refType = 4;
@@ -1894,6 +1922,7 @@
 			};
 		};
 		F55234180209D74F01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDTabImage.wo;
 			refType = 4;
@@ -1916,6 +1945,7 @@
 			};
 		};
 		F55753830209DB6F01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WQueryPageTemplate.wo;
 			refType = 4;
@@ -1938,6 +1968,7 @@
 			};
 		};
 		F55753880209DBA701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayURL.wo;
 			refType = 4;
@@ -1960,6 +1991,7 @@
 			};
 		};
 		F557538D0209DC4301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditButton.wo;
 			refType = 4;
@@ -1982,6 +2014,7 @@
 			};
 		};
 		F55753920209DCDA01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEmptyListMessage.wo;
 			refType = 4;
@@ -2004,6 +2037,7 @@
 			};
 		};
 		F55753970209DD1301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDefaultCustomComponent.wo;
 			refType = 4;
@@ -2026,6 +2060,7 @@
 			};
 		};
 		F557539C0209DD8E01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditDatePopupOrNull.wo;
 			refType = 4;
@@ -2048,6 +2083,7 @@
 			};
 		};
 		F55753A10209DDC001A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditDatePopup.wo;
 			refType = 4;
@@ -2070,6 +2106,7 @@
 			};
 		};
 		F55753A60209DDFF01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditNumberWithUnit.wo;
 			refType = 4;
@@ -2092,6 +2129,7 @@
 			};
 		};
 		F55753AB0209DE5C01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayYesNo.wo;
 			refType = 4;
@@ -2114,6 +2152,7 @@
 			};
 		};
 		F55753B00209DF3D01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditAllowRestrict.wo;
 			refType = 4;
@@ -2136,6 +2175,7 @@
 			};
 		};
 		F55753B50209DF7901A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditStringWithChoices.wo;
 			refType = 4;
@@ -2158,6 +2198,7 @@
 			};
 		};
 		F55753BA0209DFC901A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCSVGroupingListPageTemplate.wo;
 			refType = 4;
@@ -2180,6 +2221,7 @@
 			};
 		};
 		F55753BF0209E00201A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDTrashcan.wo;
 			refType = 4;
@@ -2202,6 +2244,7 @@
 			};
 		};
 		F55753C40209E04C01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCSVListPageTemplate.wo;
 			refType = 4;
@@ -2224,6 +2267,7 @@
 			};
 		};
 		F55753C90209E0D301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WQueryPageWithFetchSpecification.wo;
 			refType = 4;
@@ -3175,101 +3219,121 @@
 			refType = 4;
 		};
 		F5A1445301FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPick.wo;
 			refType = 4;
 		};
 		F5A1446301FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPropertyName.wo;
 			refType = 4;
 		};
 		F5A1446601FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXD2WPick.wo;
 			refType = 4;
 		};
 		F5A1447E01FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayStringWithLineBreaks.wo;
 			refType = 4;
 		};
 		F5A1448101FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WInspect.wo;
 			refType = 4;
 		};
 		F5A1448801FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXD2WList.wo;
 			refType = 4;
 		};
 		F5A1448E01FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayString.wo;
 			refType = 4;
 		};
 		F5A1448F01FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPopUp.wo;
 			refType = 4;
 		};
 		F5A1449801FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayImage.wo;
 			refType = 4;
 		};
 		F5A1449901FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayToOne.wo;
 			refType = 4;
 		};
 		F5A144A201FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditPercentage.wo;
 			refType = 4;
 		};
 		F5A144A501FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERXD2WInspect.wo;
 			refType = 4;
 		};
 		F5A144A601FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditNumber.wo;
 			refType = 4;
 		};
 		F5A144A901FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditOrDefault.wo;
 			refType = 4;
 		};
 		F5A144AB01FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayList.wo;
 			refType = 4;
 		};
 		F5A144AE01FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditToManyRelationship.wo;
 			refType = 4;
 		};
 		F5A144B201FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayConstant.wo;
 			refType = 4;
 		};
 		F5A144B401FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WQueryToOneRelationship.wo;
 			refType = 4;
 		};
 		F5A144B601FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WSwitchComponent.wo;
 			refType = 4;
 		};
 		F5A144BB01FF7F8801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditToOneRelationship.wo;
 			refType = 4;
@@ -3654,7 +3718,7 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
-				JAVA_COMPILER_FLAGS = "-deprecation";
+				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERDirectToWeb";
@@ -3712,7 +3776,6 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F5A1455101FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -3951,7 +4014,6 @@
 				F6AC07AC0276DE6C01AD0D07,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		F5A1455901FF7F8801A80106 = {
 			fileRef = F5A1445301FF7F8801A80106;
@@ -4379,9 +4441,9 @@
 				F634BAE2026F0A5E012617F5,
 				F6AC07A50276DDDA01AD0D07,
 				F6AC07AD0276DE6C01AD0D07,
+				F683A18302AC418F0FCF0E72,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		F5A1463401FF7F8801A80106 = {
 			fileRef = F5A143A301FF7F8801A80106;
@@ -5378,7 +5440,6 @@
 				F518015002022C9D01A80106,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F5A146DD01FF7F8801A80106 = {
 			fileRef = F5A1453C01FF7F8801A80106;
@@ -5445,7 +5506,6 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F5A146EA01FF7F8801A80106 = {
 			isa = PBXTargetDependency;
@@ -5514,7 +5574,6 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F5A146ED01FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -5525,7 +5584,6 @@
 				F5A146F101FF7F8801A80106,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		F5A146EE01FF7F8801A80106 = {
 			fileRef = F5A1452E01FF7F8801A80106;
@@ -5556,7 +5614,6 @@
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		F5A146F301FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -5574,7 +5631,6 @@
 				F518015102022C9D01A80106,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F5A146F401FF7F8801A80106 = {
 			fileRef = F5A1453C01FF7F8801A80106;
@@ -5641,14 +5697,12 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F5A1470101FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F5A1470201FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -5658,28 +5712,24 @@
 				F5B906C90268D98A01000102,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		F5A1470301FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		F5A1470401FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F5A1470501FF7F8801A80106 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F5A1470601FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -5688,7 +5738,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -5701,7 +5750,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -5713,7 +5761,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -5790,6 +5838,7 @@
 			};
 		};
 		F5D9B6530207839401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCustomComponentWithArgs.wo;
 			refType = 4;
@@ -5812,6 +5861,7 @@
 			};
 		};
 		F5D9B6580207844401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDXMLPageWrapper.wo;
 			refType = 4;
@@ -5834,6 +5884,7 @@
 			};
 		};
 		F5D9B65D020784FD01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayNumberWithUnit.wo;
 			refType = 4;
@@ -5856,6 +5907,7 @@
 			};
 		};
 		F5D9B6620207859601A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayDateOrNull.wo;
 			refType = 4;
@@ -5878,6 +5930,7 @@
 			};
 		};
 		F5D9B6670207860801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayImageWithUrl.wo;
 			refType = 4;
@@ -5900,6 +5953,7 @@
 			};
 		};
 		F5D9B66C0207865401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDSectionImage.wo;
 			refType = 4;
@@ -5922,6 +5976,7 @@
 			};
 		};
 		F5D9B671020786AA01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDListOrganizer.wo;
 			refType = 4;
@@ -5944,6 +5999,7 @@
 			};
 		};
 		F5D9B6760207877201A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPickFromList.wo;
 			refType = 4;
@@ -5966,6 +6022,7 @@
 			};
 		};
 		F5D9B67B020787BD01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayAddress.wo;
 			refType = 4;
@@ -5988,6 +6045,7 @@
 			};
 		};
 		F5D9B680020787F901A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDisplayMailTo.wo;
 			refType = 4;
@@ -6010,6 +6068,7 @@
 			};
 		};
 		F5D9B6850207883301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCustomEditBoolean.wo;
 			refType = 4;
@@ -6032,6 +6091,7 @@
 			};
 		};
 		F5D9B68A0207887301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayToManyTable.wo;
 			refType = 4;
@@ -6054,6 +6114,7 @@
 			};
 		};
 		F5D9B68F020788BE01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDefaultSectionComponentCSV.wo;
 			refType = 4;
@@ -6076,6 +6137,7 @@
 			};
 		};
 		F5D9B694020788F501A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCustomDisplayBoolean.wo;
 			refType = 4;
@@ -6098,6 +6160,7 @@
 			};
 		};
 		F5D9B6990207896601A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WListXMLPageTemplate.wo;
 			refType = 4;
@@ -6120,6 +6183,7 @@
 			};
 		};
 		F5D9B69E0207899E01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDListPicker.wo;
 			refType = 4;
@@ -6142,6 +6206,7 @@
 			};
 		};
 		F5D9B6A3020789D601A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WPickFromEntities.wo;
 			refType = 4;
@@ -6164,6 +6229,7 @@
 			};
 		};
 		F5D9B6A802078A2001A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDCustomQueryComponentWithArgs.wo;
 			refType = 4;
@@ -6197,6 +6263,7 @@
 			};
 		};
 		F5D9B6AF02078A9701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDList.wo;
 			refType = 4;
@@ -6219,6 +6286,7 @@
 			};
 		};
 		F5D9B6B402078AD101A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayPassword.wo;
 			refType = 4;
@@ -6241,6 +6309,7 @@
 			};
 		};
 		F5D9B6B902078B0A01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDQuestionPage.wo;
 			refType = 4;
@@ -6263,6 +6332,7 @@
 			};
 		};
 		F5D9B6BE02078B9C01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditableListTemplate.wo;
 			refType = 4;
@@ -6285,6 +6355,7 @@
 			};
 		};
 		F5D9B6C302078C3401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditPasswordConfirm.wo;
 			refType = 4;
@@ -6307,6 +6378,7 @@
 			};
 		};
 		F5D9B6C802078CA501A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WListComparePageTemplate.wo;
 			refType = 4;
@@ -6329,6 +6401,7 @@
 			};
 		};
 		F5D9B6CD02078D2401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayToManyCustom.wo;
 			refType = 4;
@@ -6351,6 +6424,7 @@
 			};
 		};
 		F5D9B6D202078F4001A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WXMLDisplayNumber.wo;
 			refType = 4;
@@ -6373,6 +6447,7 @@
 			};
 		};
 		F5D9B6D702078FA701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WCompactListPageTemplate.wo;
 			refType = 4;
@@ -6395,6 +6470,7 @@
 			};
 		};
 		F5D9B6DC02078FE301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDConfirmMessage.wo;
 			refType = 4;
@@ -6417,6 +6493,7 @@
 			};
 		};
 		F5D9B6E10207902101A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WDisplayToManyList.wo;
 			refType = 4;
@@ -6439,6 +6516,7 @@
 			};
 		};
 		F5D9B6E60207905001A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDSectionText.wo;
 			refType = 4;
@@ -6461,6 +6539,7 @@
 			};
 		};
 		F5D9B6EB0207908801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WQueryNonNull.wo;
 			refType = 4;
@@ -6483,6 +6562,7 @@
 			};
 		};
 		F5D9B6F0020790D301A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WXMLDisplayString.wo;
 			refType = 4;
@@ -6505,6 +6585,7 @@
 			};
 		};
 		F5D9B6F50207912F01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WMessagePageTemplate.wo;
 			refType = 4;
@@ -6527,6 +6608,7 @@
 			};
 		};
 		F5D9B6FA02088C3401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WConfirmPageTemplate.wo;
 			refType = 4;
@@ -6549,6 +6631,7 @@
 			};
 		};
 		F5D9B6FF02088CE801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WInspectPageTemplate.wo;
 			refType = 4;
@@ -6571,6 +6654,7 @@
 			};
 		};
 		F5D9B70402088D3701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDPrinterButton.wo;
 			refType = 4;
@@ -6593,6 +6677,7 @@
 			};
 		};
 		F5D9B70902088D7801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WStatelessCustomComponentWithArgs.wo;
 			refType = 4;
@@ -6615,6 +6700,7 @@
 			};
 		};
 		F5D9B70E02088DBF01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDefaultSectionComponent.wo;
 			refType = 4;
@@ -6637,6 +6723,7 @@
 			};
 		};
 		F5D9B71302088E1D01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditList.wo;
 			refType = 4;
@@ -6659,6 +6746,7 @@
 			};
 		};
 		F5D9B71802088E5801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WEditLargeString.wo;
 			refType = 4;
@@ -6681,6 +6769,7 @@
 			};
 		};
 		F5D9B71D02088E9801A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDRecoverableErrorPage.wo;
 			refType = 4;
@@ -6703,6 +6792,7 @@
 			};
 		};
 		F5D9B72202088ED701A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDLinkToViewList.wo;
 			refType = 4;
@@ -6725,6 +6815,7 @@
 			};
 		};
 		F5D9B72702088F0D01A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WXMLDisplayToMany.wo;
 			refType = 4;
@@ -6747,6 +6838,7 @@
 			};
 		};
 		F5D9B72C0208900601A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDPrinterFriendlyWrapper.wo;
 			refType = 4;
@@ -6769,6 +6861,7 @@
 			};
 		};
 		F5D9B7310208908501A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WWizardCreationPageTemplate.wo;
 			refType = 4;
@@ -6791,6 +6884,7 @@
 			};
 		};
 		F5D9B7360208911401A80106 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WGroupingListPageTemplate.wo;
 			refType = 4;
@@ -6850,6 +6944,7 @@
 			refType = 4;
 		};
 		F61422DE02535F7701AD0D07 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDDHTMLComponent.wo;
 			refType = 4;
@@ -7025,6 +7120,7 @@
 			refType = 4;
 		};
 		F634BADE026F0A5D012617F5 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERD2WQueryPageWithFetchSpecificationTemplate.wo;
 			refType = 4;
@@ -7137,6 +7233,12 @@
 			path = German.lproj/ValidationTemplate.strings;
 			refType = 4;
 		};
+		F683A18302AC418F0FCF0E72 = {
+			fileRef = F6AC07A60276DE2D01AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F6970DEB024A570501AD0D07 = {
 			children = (
 				F6970DEC024A570501AD0D07,
@@ -7154,6 +7256,7 @@
 			refType = 4;
 		};
 		F6970DED024A570501AD0D07 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDEditDateJavascript.wo;
 			refType = 4;
@@ -7213,6 +7316,7 @@
 			refType = 4;
 		};
 		F6AC07AA0276DE6C01AD0D07 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			path = ERDInspect.wo;
 			refType = 4;
