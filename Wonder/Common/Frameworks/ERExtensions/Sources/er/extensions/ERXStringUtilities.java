@@ -431,7 +431,7 @@ public class ERXStringUtilities {
 
     /**
      * Utility method to append a character to a
-     * StringBuffer is the last character is not
+     * StringBuffer if the last character is not
      * a certain character. Useful for determining
      * if you need to add an '&' to the end of a
      * form value string.
