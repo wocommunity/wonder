@@ -748,7 +748,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @deprecated use {@link ERXEC$Factory#didSave} instead.
      */
     public static void didSave(NSNotification n) {
-        NSNotificationCenter.defaultCenter().postNotification(new NSNotification("DID_SAVE", null));
         EOEditingContext ec=(EOEditingContext)n.object();
         // Changed objects
         NSArray updatedObjects=(NSArray)n.userInfo().objectForKey("updated");
