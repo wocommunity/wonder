@@ -368,7 +368,39 @@ public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOrig
         }
     }
 
+    /** Creates a temporary directory.
+        *
+        * @return a temporary directory
+        *
+        * @exception IOException if something goes wrong
+        */
+    public static final File createTempDir() throws IOException {
+        File f = File.createTempFile("", "");
 
+        f.delete();
+        f.delete();
+        f.mkdirs();
+
+        return f;
+    }
+
+    /** Creates a temporary directory.
+        *
+        * @return a temporary directory
+        *
+        * @exception IOException if something goes wrong
+        */
+    public static final File createTempDir(String prefix, String suffix) throws IOException {
+        File f = File.createTempFile(prefix, suffix);
+
+        f.delete();
+        f.delete();
+        f.mkdirs();
+
+        return f;
+    }
+    
+    
     /** Creates a new NSArray which contains all files in the specified directory.
         *
         * @param directory the directory from which to add the files
