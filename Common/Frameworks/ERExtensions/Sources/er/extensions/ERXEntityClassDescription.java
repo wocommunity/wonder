@@ -902,14 +902,17 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 // nothing for strings so far...
             }
             if(defaultValue != null) {
+                String s = defaultValue.toString();
+                s = s.substring(s.indexOf("@")+1);
                 if(adaptorType == AdaptorDateType) {
-                    defaultValue = ERXTimestampUtilities.timestampForString(defaultValue.toString());
+                    defaultValue = ERXTimestampUtilities.timestampForString(s);
                 } else if (adaptorType == AdaptorNumberType) {
-                    NSTimestamp temp = ERXTimestampUtilities.timestampForString(defaultValue.toString());
+                    NSTimestamp temp = ERXTimestampUtilities.timestampForString(s);
                     if(temp != null) {
                         defaultValue = ERXTimestampUtilities.unixTimestamp(temp);
                     } else {
-                        defaultValue = new Integer(Integer.parseInt(defaultValue.toString()));
+                        //the value will be coerced by the eo...
+                        defaultValue = ERXValueUtilities.bigDecimalValue(s);
                     }
                 }
             }
