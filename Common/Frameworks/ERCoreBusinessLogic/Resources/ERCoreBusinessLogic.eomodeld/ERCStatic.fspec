@@ -3,13 +3,13 @@
         class = EOFetchSpecification; 
         entityName = ERCStatic; 
         fetchLimit = 0; 
-        isDeep = YES; 
         qualifier = {
             class = EOKeyValueQualifier; 
             key = key; 
             selectorName = "isEqualTo:"; 
             value = {"_key" = key; class = EOQualifierVariable; }; 
         }; 
+        refreshesRefetchedObjects = YES; 
         requiresAllQualifierBindingVariables = YES; 
     }; 
 }
