@@ -590,7 +590,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     /**
      * Simple method that will return if the parent object store of this object's editing
-     * context is an instance of {@link EOObjectStoreCoordinator}. The reason this is important
+     * context is an instance of {@link com.webobjects.eocontrol.EOObjectStoreCoordinator EOObjectStoreCoordinator}. The reason this is important
      * is because if this condition evaluates to true then when changes are saved in this
      * editing context they will be propagated to the database.
      * @return if the parent object store of this object's editing context is an EOObjectStoreCoordinator.
