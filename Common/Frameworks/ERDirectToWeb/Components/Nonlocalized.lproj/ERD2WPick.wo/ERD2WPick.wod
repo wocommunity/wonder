@@ -3,7 +3,7 @@ D2WSwitchComponent: D2WSwitchComponent {
 	_entityName = ^entityName;
 	_task = "list";
 	_unroll = true;
-	dataSource = internalDataSource;
+	dataSource = datasource;
 	displayKeys = ^displayKeys;
 	nextPage = ^nextPage;
 	nextPageDelegate = actionPageDelegate;
