@@ -15,7 +15,7 @@ import java.util.*;
 
 /**
  * This class contains a bunch of extensions to the
- * regular {@link EOGenericRecord} class. Of notable
+ * regular {@link com.webobjects.eocontrol.EOGenericRecord} class. Of notable
  * interest it contains built in support for generating
  * primary keys via the {@link ERXGeneratesPrimaryKeyInterface},
  * support for an augmented transaction methods like <code>
