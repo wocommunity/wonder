@@ -41,29 +41,31 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static class ERXGenericRecordClazz extends EOGenericRecordClazz {        
     }
 
-    // CHECKME: Should remove once all dependency has been removed.
+    // DELETEME: Should remove once all dependency has been removed.
     public static void willFixToOneRelationship(String key, EOEnterpriseObject object) {
         // Not needed anymore, they fixed the bug!
     }
     
-    // CHECKME: Should remove once all dependency has been removed.
+    // DELETEME: Should remove once all dependency has been removed.
     protected void _willFixRelationship(String key, EOEnterpriseObject object) {
         // Not needed anymore, they fixed the bug!
     }
 
    /**
-     * Implementation of {@link ERXGuardedObjectInterface}. This is checked
-     * before the object is deleted in the <code>willDelete</code> method
-     * which is in turn called by {@link ERXEditingContextDelegate}. The default
-     * implementation returns <code>true</code>.
-     */
+    * Implementation of {@link ERXGuardedObjectInterface}. This is checked
+    * before the object is deleted in the <code>willDelete</code> method
+    * which is in turn called by {@link ERXEditingContextDelegate}. The default
+    * implementation returns <code>true</code>.
+    * @return true
+    */
     public boolean canDelete() { return true; }
     /**
-      * Implementation of {@link ERXGuardedObjectInterface}. This is checked
-      * before the object is deleted in the <code>willUpdate</code> method
-      * which is in turn called by {@link ERXEditingContextDelegate}. The default
-      * implementation returns <code>true</code>.
-      */
+     * Implementation of {@link ERXGuardedObjectInterface}. This is checked
+     * before the object is deleted in the <code>willUpdate</code> method
+     * which is in turn called by {@link ERXEditingContextDelegate}. The default
+     * implementation returns <code>true</code>.
+     * @return true
+     */
     public boolean canUpdate() { return true; }
 
     // Used by the delegate to notify objects at the begining of a saveChanges.
@@ -110,18 +112,41 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         trimSpaces();
     }
 
-    // Called by the delegate on editingContextDidMergeChanges
+    /**
+     * This is called when an object has had
+     * changes merged into it by the editing context.
+     * This is called by {@link ERXDefaultEditingContextDelegate}
+     * after it merges changes. Any caches that an object
+     * keeps based on any of it's values it should flush.
+     * The default implementation of this method does
+     * nothing.
+     */
     public void flushCaches() {}
 
-    // did delete needs the EC, since it has been set to null by the time didDelete is called
+    /**
+     * Called on the object after is has been deleted.
+     * The editing context is passed to the object since
+     * by this point the editingContext of the object is
+     * null.
+     * @param ec editing context that used to be associated
+     *		with the object.
+     */
     public void didDelete(EOEditingContext ec) {
         if (tranCatDidDelete.isDebugEnabled())
             tranCatDidDelete.debug("Object:" + description());
     }
+    /**
+     * Called on the object after is has successfully
+     * been updated.
+     */
     public void didUpdate() {
         if (tranCatDidUpdate.isDebugEnabled())
             tranCatDidUpdate.debug("Object:" + description());
     }
+    /**
+     * Called on the object after is has successfully
+     * been inserted.
+     */
     public void didInsert() {
         if (tranCatDidInsert.isDebugEnabled())
             tranCatDidInsert.debug("Object:" + description());
@@ -329,7 +354,31 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }*/
 
+    /** caches the primary key dictionary for the given object */
     private NSDictionary _primaryKeyDictionary;
+
+    /**
+     * Implementation of the interface {@link ERXGeneratesPrimaryKeyInterface}.
+     * This implementation operates in the following fashion. If it is called
+     * passing in 'false' and it has not yet been saved to the database, meaning
+     * this object does not yet have a primary key assigned, then it will have the
+     * adaptor channel generate a primary key for it. Then when the object is saved
+     * to the database it will use the previously generated primary key instead of
+     * having the adaptor channel generate another primary key. If 'true' is passed in
+     * then this method will either return the previously generated primaryKey
+     * dictionary or null if it does not have one. Typically you should only call
+     * this method with the 'false' parameter seeing as unless you are doing something
+     * really funky you won't be dealing with this object when it is in the middle of
+     * a transaction. The delegate {@link ERXDatabaseContextDelegate} is the only class
+     * that should be calling this method and passing in 'true'.
+     * @param inTransaction boolean flag to tell the object if it is currently in the
+     *		middle of a transaction.
+     * @return primary key dictionary for the current object, if the object does not have
+     *		a primary key assigned yet and is not in the middle of a transaction then
+     *		a new primary key dictionary is created, cached and returned.
+     */
+    // FIXME: This should work for compound pks as well, ie don't try to gen a new pk
+    //		if they have a compound pk.
     public NSDictionary primaryKeyDictionary(boolean inTransaction) {
         if (!inTransaction && _primaryKeyDictionary == null) {
             if (primaryKey() != null) {
@@ -368,23 +417,58 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * editing context they will be propogated to the database.
      * @return if the parent object store of this object's editing context is an EOObjectStoreCoordinator.
      */
-    public boolean parentObjectStoreIsObjectStoreCoordinator() { return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator; }
+    public boolean parentObjectStoreIsObjectStoreCoordinator() {
+        return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator;
+    }
 
+    /**
+     * Overrides the EOGenericRecord's implementation to
+     * provide a slightly less verbose output. A typical
+     * output for an object mapped to the class com.foo.User
+     * with a primary key of 50 would look like:
+     * <com.foo.User pk:"50">
+     * EOGenericRecord's implementation is preserved in the
+     * method <code>toLongString</code>. To restore the original
+     * verbose logging in your subclasses override this method and
+     * return toLongString.
+     * @return much less verbose description of an enterprise
+     *		object.
+     */
     public String toString() {
         String pk = primaryKey();
         EOEditingContext ec = editingContext();
         pk = (pk == null) ? "null" : pk;
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
     }
-    
+
+    /**
+     * Cover method to return <code>toString</code>.
+     * @return the results of calling toString.
+     */
     public String description() { return toString(); }
+    /**
+     * Returns the super classes implementation of toString
+     * which prints out the current key-value pairs for all
+     * of the attributes and relationships for the current
+     * object. Very verbose.
+     * @return super's implementation of <code>toString</code>.
+     */
     public String toLongString() { return super.toString(); }
 
+    /** Caches the string attribute keys on a per entity name basis */
     private static NSMutableDictionary _attributeKeysPerEntityName=new NSMutableDictionary();
+    /**
+     * Calculates all of the EOAttributes of a given entity that
+     * are mapped to String objects.
+     * @return array of all attribute names that are mapped to
+     *		String objects.
+     */
+    // MOVEME: Might be a canidate for EOGenericRecordClazz
     private static NSArray stringAttributeListForEntityNamed(String entityName) {
         // FIXME: this will need to be synchronized if you go full-MT
         NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);
         if (result==null) {
+            // FIXME: Bad way of getting the entity.
             EOEntity entity=EOModelGroup.defaultGroup().entityNamed(entityName);
             NSMutableArray attList=new NSMutableArray();
             _attributeKeysPerEntityName.setObjectForKey(attList,entityName);
@@ -401,6 +485,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return result;
     }
 
+    /**
+     * This method will trim the leading and trailing white
+     * space from any attributes that are mapped to a String
+     * object. This method is called before the object is saved
+     * to the database. Override this method to do nothing if
+     * you wish to preserve your leading and trailing white space.
+     */
     public void trimSpaces() {
         for (Enumeration e=stringAttributeListForEntityNamed(entityName()).objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
@@ -421,12 +512,21 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return editingContext() != null && editingContext().deletedObjects().containsObject(this);
     }
 
-    // sometimes we need to know if this object is new (have not been committed yet).  Note that a deleted object will also have
-    // a null editingContext.
+    /**
+     * Determines if this object is a new object and
+     * hasn't been saved to the database yet. This
+     * method just calls the method ERExtensions.isNewObject
+     * passing in this object as the current parameter. Note
+     * that an object that has been successfully deleted will
+     * also look as if it is a new object because it will have
+     * a null editingcontext.
+     * @return if the object is a new enterprise object.
+     */
     public boolean isNewEO() {
         return ERXExtensions.isNewObject(this);
     }
 
+    // MOVEME: ERXECFactory move it onto the default factory so subclasses can provide different implementations
     public static void didSave(NSNotification n) {
         EOEditingContext ec=(EOEditingContext)n.object();
         // Changed objects
@@ -452,8 +552,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
+    /** Caches the context used for validations */
     // FIXME: We should have a better mechanism than this.
     private static D2WContext _validationContext;
+    
+    // DELETEME: Let's ditch this for now, it is kinda half baked
     public static Object ruleValueForAttributeAndKey(EOAttribute a, String key) {
         if (_validationContext==null) {
             _validationContext=new D2WContext();
@@ -470,6 +573,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             throw new RuntimeException("validateValueForKey called with null key on "+this);
         Object result=null;
         try {
+            // MOVEME: All of this rule based validation should move to ERXClassDescription
+            //		also should be re-thought.
+            // FIXME: Bad way of getting the entity.
             EOEntity myEntity=EOModelGroup.defaultGroup().entityNamed(entityName());
             EOAttribute attr = (EOAttribute)myEntity.attributeNamed(key);
             if (attr!=null && attr.userInfo()!=null && value!=null && value instanceof Number){
@@ -492,7 +598,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             }
             if (validation.isDebugEnabled())
                 validation.debug("Before call to super, classDescription: " + classDescription());
-            //result=classDescription().validateValueForKey(value,key);
             result=super.validateValueForKey(value,key);
         } catch (ERXValidationException e) {
             ((ERXValidationException)e).setPropertyKey(key);
@@ -513,10 +618,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     public void validateForSave( )  throws NSValidation.ValidationException {
         // This condition shouldn't ever happen, but it does ;)
+        // CHECKME: This was a 4.5 issue, not sure if this one has been fixed yet.
         if (editingContext() != null && editingContext().deletedObjects().containsObject(this)) {
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
         super.validateForSave();
+        // FIXME: Should move all of the keys into on central place for easier management.
+        // 	  Also might want to have a flag off of ERXApplication is debugging is enabled.
         if (ERXProperties.booleanForKey("ERDebuggingEnabled"))
             checkConsistency();
     }

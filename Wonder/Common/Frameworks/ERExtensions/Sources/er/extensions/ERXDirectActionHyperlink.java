@@ -16,29 +16,77 @@ import org.apache.log4j.Category;
 
 public class ERXDirectActionHyperlink extends WOComponent {
 
-    public ERXDirectActionHyperlink(WOContext aContext) {
-        super(aContext);
-    }
-
     public final static String ADAPTOR_PREFIX_MARKER="**ADAPTOR_PREFIX**";
     public final static String SUFFIX_MARKER="**SUFFIX**";
 
     /** logging support */
     public static final Category cat = Category.getInstance(ERXDirectActionHyperlink.class);
+    /**
+     * Holds the default entity name separator
+     * that is used when objects are encoded into urls.
+     * Default value is: _
+     */
+    public static final String DefaultEntityNameSeparator = "_";
+
+    /**
+     * Public constructor
+     * @param aContext a context
+     */
+    public ERXDirectActionHyperlink(WOContext aContext) {
+        super(aContext);
+    }
 
     // DELETEME: Not needed
     protected String oneTime;
-    public boolean synchronizesVariablesWithBindings() { return false; }
+    /**
+     * Component is stateless
+     * @return true
+     */
     public boolean isStateless() { return true; }
 
+    /**
+     * Cover method to return the binding: <b>entityNameSeparator</b>
+     * The entity name separator is used when constructing 
+     * @return returns the value for binding: <b>entityNameSeparator</b> 
+     */
     public String entityNameSeparator() { return (String)valueForBinding("entityNameSeparator"); }
-    public boolean shouldEncryptObjectFormValues() { return ERXUtilities.booleanValue(valueForBinding("shouldEncryptObjectFormValues")); }
-    public NSArray objectsForFormValues() { return (NSArray)valueForBinding("objectsForFormValues"); }
-    public EOEnterpriseObject objectForFormValue() { return (EOEnterpriseObject)valueForBinding("objectForFormValue"); }
 
+    /**
+     * Cover method to return the boolean value
+     * of the binding: <b>shouldEncryptObjectFormValues</b>
+     * Defaults to <code>false</code>. 
+     * @return returns if the encoded objects' primary keys
+     *		should be encrypted or not.
+     */
+    public boolean shouldEncryptObjectFormValues() {
+        return ERXUtilities.booleanValue(valueForBinding("shouldEncryptObjectFormValues"));
+    }
+    /**
+     * Cover method to return the binding: <b>objectsForFormValues</b>
+     * This is an array of objects to be encoded as form values.
+     * @return returns bound array of objects to be encoded
+     */
+    public NSArray objectsForFormValues() {
+        return (NSArray)valueForBinding("objectsForFormValues");
+    }
+    /**
+     * Cover method to return the binding: <b>objectsForFormValue</b>
+     * This is an enterprise object to be encoded as form values.
+     * @return returns bound enterprise object to be encoded
+     */
+    public EOEnterpriseObject objectForFormValue() {
+        return (EOEnterpriseObject)valueForBinding("objectForFormValue");
+    }
+
+    // MOVEME: This stuff might be better served if it was off of ERXApplication
+    /** Holds the application host url */
     private static String _applicationHostUrl;
+    /**
+     *
+     */
     public static String applicationHostUrl() {
         if (_applicationHostUrl ==null) {
+            // FIXME: Should be: er.extensions.ERXApplicationHostURL
             _applicationHostUrl = System.getProperty("ERApplicationHostURL");
             if (_applicationHostUrl ==null || _applicationHostUrl.length()==0)
                 throw new RuntimeException("The ERApplicationHostURL default was empty -- please set it for the machine running the target application: it should look like http://mymachine.com");
@@ -46,6 +94,7 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return _applicationHostUrl;
     }
 
+    // MOVEME: ERXWOUtilities
     public static String completeURLFromString(String s,
                                                WOContext c,
                                                String applicationName,
@@ -68,13 +117,27 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return s;
     }
 
-
-    public static final String DefaultEntityNameSeparator = "_";
-    
+    /**
+     * Utility method to append a character to a
+     * StringBuffer is the last character is not
+     * a certain character. Useful for determining
+     * if you need to add an '&' to the end of a
+     * form value string.
+     * @param separator character to add to potentially
+     *		add to the StringBuffer.
+     * @param not character to test if the given
+     *		StringBuffer ends in it.
+     * @param sb StringBuffer to test and potentially
+     *		append to.
+     */
+    // MOVEME: ERXStringUtilities
     public static void appendSeparatorIfLastNot(char separator, char not, StringBuffer sb) {
-        if (sb.charAt(sb.length() - 1) != not) sb.append(separator);
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != not)
+            sb.append(separator);
     }
 
+    // MOVEME: All of this encrypting and decrypting should move to either ERXEOFUtilities or ERXGenericRecordClazz
+    
     public static NSDictionary dictionaryOfFormValuesForEnterpriseObjects(NSArray eos, String separator, boolean encrypt){
         String base = encodeEnterpriseObjectsPrimaryKeyForUrl(eos, separator, encrypt);
         NSArray elements = NSArray.componentsSeparatedByString (base, "&");
@@ -86,6 +149,11 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return encodeEnterpriseObjectsPrimaryKeyForUrl(new NSArray(eo), seperator, encrypt);
     }
 
+    /**
+     * Encodes an array of enterprise objects
+     */
+    // ENHANCEME: Could also place a sha hash of the blowfish key in the form values so we can know if we are using
+    //		  the correct key for decryption.
     public static String encodeEnterpriseObjectsPrimaryKeyForUrl(NSArray eos, String separator, boolean encrypt) {
         if (separator == null) separator = DefaultEntityNameSeparator;
         NSMutableArray encoded = new NSMutableArray("sep=" + separator);
@@ -108,9 +176,19 @@ public class ERXDirectActionHyperlink extends WOComponent {
     }
 
     /** @deprecated -- bad spelling */
+    // DELETEME:
     public static NSArray deccodeEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary values) {
         return decodeEnterpriseObjectsFromFormValues(ec, values);
     }
+    /**
+     *
+     * @param ec editingcontext to fetch the objects from
+     * @param values form value dictionary where the values are an
+     *		NSArray containing the primary key of the object in either
+     *		cleartext or encrypted format.
+     * @return array of enterprise objects corresponding to the passed
+     *		in form value array.
+     */
     public static NSArray decodeEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary values) {
         if (cat.isDebugEnabled()) cat.debug("values = "+values);
         NSMutableArray encoded = new NSMutableArray();
@@ -158,7 +236,15 @@ public class ERXDirectActionHyperlink extends WOComponent {
         }
         return encoded;
     }
-    
+
+    /**
+     * Returns all of the objects to be encoded
+     * in the form values. Collects those bound
+     * to both 'objectsForFormValues' and
+     * 'objectForFormValue' into a single array.
+     * @return complete collection of objects to
+     * 		be encoded in form values.
+     */
     public NSArray allObjectsForFormValues() {
         NSMutableArray objects = null;
         if (hasBinding("objectsForFormValues") || hasBinding("objectForFormValue")) {
@@ -171,12 +257,22 @@ public class ERXDirectActionHyperlink extends WOComponent {
         return objects != null ? objects : ERXConstant.EmptyArray;
     }
 
+    /**
+     * Retrives a given binding and if it is not null
+     * then returns <code>toString</code> called on the
+     * bound object.
+     * @param binding to be resolved
+     * @return resolved binding in string format
+     */
+    // MOVEME: Should move to ERXStatelessComponent and have this component subclass that
+    // FIXME: Should be renamed stringValueForBinding
     public String stringForBinding(String binding) {
         Object v=valueForBinding(binding);
         return v!=null ? v.toString() : null;
     }
 
     public String href() {
+        //FIXME: Need to make this optional
         StringBuffer result=new StringBuffer(ADAPTOR_PREFIX_MARKER);
         result.append(".woa/wa/");
         // FIXME: Should make actionClass optional
@@ -270,10 +366,8 @@ public class ERXDirectActionHyperlink extends WOComponent {
             appendSeparatorIfLastNot('&', '?', result);
             result.append(encodeEnterpriseObjectsPrimaryKeyForUrl(allObjectsForFormValues(), entityNameSeparator(), shouldEncryptObjectFormValues()));
         }
+        // FIXME: Need to make this optional as well
         result.append(SUFFIX_MARKER);
         return result.toString();
     }
-
-
-
 }

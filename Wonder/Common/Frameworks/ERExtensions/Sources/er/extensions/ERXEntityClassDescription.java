@@ -13,54 +13,119 @@ import java.lang.*;
 import java.util.*;
 import org.apache.log4j.Category;
 
-/**(ak) major reorg: made the static stuff subclassable via a Factory
- class that can handle extensions to the registration process.
-Specifically, you can override newClassDescriptionForEntity()
-to return your own subclass. 
-
-Set the Factory class to use via
- er.extensions.ERXClassDescription.factoryClass=myclassname
-and don't forget to call super.
-*/
-
-// This class is used to throw ERXValidationExceptions.  See the description of ERXValidationException for
-// details on the improvements made to validation handling.
+/**
+ * The main purpose of the ERXClassDescription class is
+ * to throw {@link ERXValidationException}s instead of the
+ * usual NSValidation.ValidationException objects. See the
+ * ERXValidationException and ERXValidationFactory class
+ * for more information about localized and templatized
+ * validation exceptions. This class is configured to
+ * register itself as the class description by calling
+ * the method <code>registerDescription</code>. This method
+ * is called when the principal class of this framework is
+ * loaded. This happens really early so you shouldn't have
+ * to worry about this at all.<br/>
+ * <br/>
+ * If you wish to provide your own class description subclass
+ * see the documentation associated with the Factory inner class.
+ */
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
+    /** logging support */
     public static final Category cat = Category.getInstance(ERXEntityClassDescription.class);
 
+    /**
+     * This factory inner class is registered as the observer
+     * for three notifications: modelWasAdded, classDescriptionNeededForEntity
+     * and classDescriptionNeededForClass. If you wish to provide your own
+     * subclass of ERXEntityClassDescription then you need to create a
+     * subclass of Factory and set that class name in the system properties
+     * under the key: er.extensions.ERXClassDescription.factoryClass
+     * In your Factory subclass override the method: newClassDescriptionForEntity
+     * to provide your own ERXEntityClassDescription subclass.
+     */
     public static class Factory {
+        /** Public constructor */
         public Factory() {}
-        
+
+        /**
+         * Method called by the {@link NSNotificationCenter} when
+         * an EOModel is loaded. This method just calls the method
+         * <code>registerDescriptionForEntitiesInModel</code>
+         * @param n notification that has the EOModel that was loaded.
+         */
         public void modelWasAddedNotification(NSNotification n) {
             // Don't want this guy getting in our way.
             cat.debug("modelWasAddedNotification: " + ((EOModel)n.object()).name());
+            // FIXME: This is done twice
             NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
             registerDescriptionForEntitiesInModel((EOModel)n.object());
         }
+
+        /**
+         * Method called by the {@link NSNotificationCenter} when
+         * a class description is needed for a given entity. Usually
+         * this method isn't needed seeing as we preempt the on demand
+         * loading of class descriptions by loading all of them when
+         * the EOModel is loaded. This method just calls the method
+         * <code>registerDescriptionForEntity</code>
+         * @param n notification that has the name of the entity
+         * 	that needs the class description.
+         */
         public void classDescriptionNeededForEntityName(NSNotification n) {
             cat.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
-            EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get
-            if(e == null) cat.error("Entity " + name + " not found in this model!");
+            EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get the entity
+            if(e == null) cat.error("Entity " + name + " not found in the default model group!");
             registerDescriptionForEntity(e);
         }
+
+        /**
+         * Method called by the {@link NSNotificationCenter} when
+         * a class description is needed for a given Class. Usually
+         * this method isn't needed seeing as we preempt the on demand
+         * loading of class descriptions by loading all of them when
+         * the EOModel is loaded. This method just calls the method
+         * <code>registerDescriptionForClass</code>
+         * @param n notification that has the Class object
+         * 	that needs a class description.
+         */
         public void classDescriptionNeededForClass(NSNotification n) {
             Class c = (Class)n.object();
             cat.debug("classDescriptionNeededForClass: " + c.getName());
             registerDescriptionForClass(c);
         }
 
-        /** subclasses should override this */
+        /**
+         * Factory method that is used to create a new class
+         * description for a given entity. Sub classes that
+         * wish to provide a sub class of ERXEntityClassDescription
+         * should override this method to create that custom
+         * description. By default this method returns a new
+         * ERXEntityClassDescription.
+         * @param entity to create the class description for
+         * @return new class description for the given entity
+         */
         public ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
             return new ERXEntityClassDescription(entity);
         }
 
-
+        /** holds a reference to all of the registered model names */
         private NSMutableArray _registeredModelNames = new NSMutableArray();
+        /** holds a mapping of class to entities */
         private NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
 
-        /** subclasses should override this and call super*/
+        /**
+         * This method allows for entities to be altered
+         * before they have a custom class description
+         * registered. Sub classes can override this method
+         * to provide any extra alterings before the description
+         * is registered. However be sure to call super as this
+         * method does convert the class name from EOGenericRecord
+         * to ERXGenericRecord, which unfortunately is required
+         * for custom validation to work at the moment.
+         * @param eoentity to be prepared for registration
+         */
         public void prepareEntityForRegistration(EOEntity eoentity) {
             String className = eoentity.className();
             if(className.equals("EOGenericRecord")) {
@@ -70,7 +135,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             }
             //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
         }
-        
+
+        /**
+         * This method registers custom class descriptions for all
+         * of the entities in a given model. This method is called
+         * when a model is loaded. The reason for this method is
+         * to preempt the usual class description loading mechanism
+         * which has a race condition involved for the order in
+         * which the notifications are recieved.
+         * @param model that contains all of the entities to be registerd
+         */
         public void registerDescriptionForEntitiesInModel(EOModel model) {
             if (!_registeredModelNames.containsObject(model.name())) {
                 for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
@@ -97,6 +171,19 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             NSNotificationCenter.defaultCenter().removeObserver(model);
         }
 
+        /**
+         * This is a hack to work around RadarBug:2867501. EOEntity
+         * is hardwired to return an EOEntityClassdescription for the
+         * method classDescriptionForNewInstances, this causes a serious
+         * problem when using custom class descriptions with D2W which
+         * makes use of this method. What this hack does is use the magic
+         * of key-value coding to push our custom class description onto
+         * a given entity. In order to do this we needed to add the
+         * custom {@link KVCProtectedAccessor} to the package
+         * com.webobjects.eoaccess.
+         * @param entity to have the custom class description set on
+         * @param cd class description to set on the entity
+         */
         private void _setClassDescriptionOnEntity(EOEntity entity, ERXEntityClassDescription cd)  {
             try {
                 //HACK ALERT: (ak) We push the cd rather rudely into the entity to have it ready when classDescriptionForNewInstances() is called on it. We will have to add a com.webobjects.eoaccess.KVCProtectedAccessor to make this work
@@ -106,6 +193,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             }
         }
 
+        /**
+         * Registers a custom class description for the given
+         * entity using the method <code>newClassDescriptionForEntity</code>
+         * which can be overridden by subclasses to provide a
+         * different class description subclass.
+         * @param entity to register the class description for
+         */
         public void registerDescriptionForEntity(EOEntity entity) {
             try {
                 String className = entity.className();
@@ -120,7 +214,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             }
         }
 
-        // What we do here is go ahead and register all of the entities mapped onto this class, except for EOGenericRecord.
+        /**
+         * This method is called when a class description is
+         * needed for a particular class. Here we use the
+         * previous cache that we constructed of class to
+         * entity map when the models were loaded. In this
+         * way we can register all of the custom class
+         * descriptions for a given class if need be.
+         * @param class1 class object to have a custom class
+         *		description registered for.
+         */
         public void registerDescriptionForClass(Class class1) {
             NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
             if (entities != null) {
@@ -138,14 +241,30 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
         
     }
-    
+
+    /** 
+     * flag to know if the <code>registerDescription</code>
+     * method has been called
+     */
     private static boolean _registered = false;
+
+    /**
+     * This method is called by the principal class
+     * of the framework when the framework's NSBundle is
+     * loaded. This method registers an observer, either
+     * a Factory object, ehich is an inner class of this class
+     * or a custom Factory subclass specified in the property:
+     * <b>er.extensions.ERXClassDescription.factoryClass</b>.
+     * This observer listens for notifications when a model
+     * is loaded or a class description is needed and responds
+     * by creating and registering custom class descriptions.
+     */
     public static void registerDescription() {
         if (!_registered) {
             Factory observer = null;
             try {
                 String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
-                if(className != null) {
+                if (className != null) {
                     observer = (Factory)Class.forName(className).newInstance();
                 }
             } catch(Exception ex) {
@@ -172,9 +291,22 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             _registered = true;
         }
     }
-    
+
+    /**
+     * Public constructor
+     * @param entity that this class description corresponds to
+     */
     public ERXEntityClassDescription(EOEntity entity) { super(entity); }
 
+    /**
+     * This method is called when an object is
+     * about to be deleted. If any validation
+     * exceptions occur they are converted to an
+     * {@link ERXValidationException} and that is
+     * thrown.
+     * @param obj enterprise object to be deleted
+     * @throws validation exception
+     */
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             super.validateObjectForDelete(obj);
@@ -185,7 +317,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             throw (erv != null ? erv : eov);
         }
     }
-/*
+
+    // CHECKME: Why is this disabled?
+    /*
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             super.validateObjectForSave(obj);
@@ -196,8 +330,22 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             throw (erv != null ? erv : eov);
         }
     }
-
-  */  
+    */
+    
+    /**
+     * This method is called to validate a value
+     * for a particular key. Typcial validation
+     * exceptions that might occur are non-null
+     * constraints or string is greater in length
+     * than is allowed. If a validation
+     * exception does occur they are converted to an
+     * {@link ERXValidationException} and that is
+     * thrown.
+     * @param obj value to be validated
+     * @param s property key to validate the value
+     *		against.
+     * @throws validation exception
+     */
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
         Object validated = null;
         if (cat.isDebugEnabled())
