@@ -58,6 +58,7 @@ public abstract class ERXApplication extends WOApplication {
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
         ERXCompilerProxy.defaultProxy().setClassForName(ERXWOForm.class, "WOForm");
+        ERXCompilerProxy.defaultProxy().setClassForName(ERXAnyField.class, "WOAnyField");
         //ERXCompilerProxy.defaultProxy().setClassForName(ERXSubmitButton.class, "WOSubmitButton");
 
         // WO 5.1 specific patches
