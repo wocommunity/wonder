@@ -6,6 +6,7 @@
 
 package er.javamail;
 
+import java.util.Properties;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.eocontrol.EOOrQualifier;
@@ -20,17 +21,32 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import java.util.Enumeration;
-import java.util.Properties;
 
+/**
+ * <code>ERJavaMail</code> is the prinicpal class for the ERJavaMail framework.
+ *
+ * @author <a href="mailto:tuscland@mac.com">Camille Troillard</a>
+ * @version $Id$
+ */
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
+    /** Class logger */
     private static final ERXLogger log = ERXLogger.getERXLogger (ERJavaMail.class);
 
     static {
 	setUpFrameworkPrincipalClass (ERJavaMail.class);
     }
 
+    /**
+     * ERJavaMail class singleton.
+     */
     protected static ERJavaMail sharedInstance;
+
+    /**
+     * Accessor to the ERJavaMail singleton.
+     *
+     * @return the one <code>ERJavaMail</code> instance
+     */
     public static ERJavaMail sharedInstance () {
 	if(sharedInstance == null) {
 	    sharedInstance = (ERJavaMail)ERXFrameworkPrincipal.sharedInstance (ERJavaMail.class);
@@ -38,12 +54,28 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	return sharedInstance;
     }
 
-    // Mail Validation ivars
+    /**
+     * <code>EMAIL_VALIDATION_PATTERN</code> is a regexp pattern that
+     * is used to validate emails.
+     */
     protected static final String EMAIL_VALIDATION_PATTERN =
         "^[A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)*[@][A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)+$";
+
+    /**
+     * The Jakarta ORO regexp matcher.
+     */
     protected Perl5Matcher _matcher;
+
+    /**
+     * The compiled form of the <code>EMAIL_VALIDATION_PATTERN</code>
+     * pattern.
+     */
     protected Pattern _pattern = null;
 
+    /**
+     * Specialized implementation of the method from
+     * ERXPrincipalClass.
+     */
     public void finishInitialization () {
         if (log.isDebugEnabled ())
 	    log.debug ("Initializing Framework.");
@@ -54,13 +86,20 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         try {
             _pattern = compiler.compile (EMAIL_VALIDATION_PATTERN);
         } catch (MalformedPatternException e) {
-            throw new RuntimeException ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
+            throw new RuntimeException
+                ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
         }
 
         this.initializeFrameworkFromSystemProperties ();
         log.info ("ERJavaMail: finished initialization");
     }
 
+    /**
+     * This method is used to initialize ERJavaMail from System
+     * properties.  Later, we will implement a way to initialize
+     * those properties everytime the propertis are changed.  The
+     * observer will call this method whenever appropriate.
+     */
     public void initializeFrameworkFromSystemProperties () {
         // Admin Email
         String adminEmail = System.getProperty ("er.javamail.adminEmail");
@@ -104,6 +143,16 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         log.debug ("er.javamail.XMailHeader: " + this.defaultXMailerHeader ());
     }
 
+    /**
+     * Helper method to init the smtpHost property.  This method
+     * first check is <code>er.javamail.smtpHost</code> is set.  If
+     * it is not set, then it looks for <code>mail.smtp.host</code>
+     * (standard JavaMail property).  When a correct property is
+     * found, then it sets both properties to the found value.  If no
+     * properties are found, a RuntimeException is thrown.
+     * @throws RuntimeException if neither one of
+     * <code>er.javamail.smtpHost</code> nor mail.smtp.host is set.
+     */
     protected void setupSmtpHostSafely () {
         // Smtp host
         String smtpHost = System.getProperty ("er.javamail.smtpHost");
@@ -121,50 +170,109 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         log.debug ("er.javamail.smtpHost: " + smtpHost);
     }
 
+    /**
+     * This is the deafult JavaMail Session.  It is shared among all
+     * deliverers for immediate deliveries.  Deferred deliverers, use
+     * their own JavaMail session.
+     */
     protected javax.mail.Session _defaultSession;
 
+    /**
+     * Sets the default JavaMail session to a particular value.  This
+     * value is set by default at initialization of the framework but
+     * you can specify a custom one by using this method.  Note that
+     * a new deliverer need to be instanciated for changes to be
+     * taken in account.
+     *
+     * @param session the default <code>javax.mail.Session</code>
+     */
     public void setDefaultSession (javax.mail.Session session) {
         session.setDebug (this.debugEnabled ());
         _defaultSession = session;
     }
 
+    /**
+     * This is the deafult JavaMail Session accessor.  It is shared
+     * among all deliverers for immediate deliveries.  Deferred
+     * deliverers, use their own JavaMail session.
+     *
+     * @return the default <code>javax.mail.Session</code> instance
+     */
     public javax.mail.Session defaultSession () {
         return _defaultSession;
     }
 
-    /** Return a newly allocated Session object from the given Properties */
+    /**
+     * Returns a newly allocated Session object from the given
+     * Properties
+     * @param props a <code>Properties</code> value
+     * @return a <code>javax.mail.Session</code> value initialized
+     * from the given properties
+     */
     public javax.mail.Session newSession (Properties props) {
         javax.mail.Session session = javax.mail.Session.getInstance (props);
         session.setDebug (this.debugEnabled ());
         return session;
     }
 
-    /** Return a newly allocated Session object from the System Properties */
+    /**
+     * Returns a newly allocated Session object from the System
+     * Properties
+     * @return a <code>javax.mail.Session</code> value
+     */
     public javax.mail.Session newSession () {
         return javax.mail.Session.getInstance (System.getProperties ());
     }
 
 
-    /** email address when centralizeMails == true <BR>
-        Needed when debugging application so that mails are always sent to only one destination */
+    /**
+     * email address used when centralizeMails == true <BR>
+     * Needed when debugging application so that mails are always
+     * sent to only one destination.
+     */
     protected String _adminEmail;
 
+    /**
+     * admin email accessor.  The admin email is the email address
+     * where centralized mail go to.
+     *
+     * @return a <code>String</code> value
+     */
     public String adminEmail () {
         return _adminEmail;
     }
 
+    /**
+     * Sets the admin email to another value.  This value is set at
+     * initialization from the <code>er.javamail.adminEmail</code>
+     * Property.
+     *
+     * @param adminEmail a <code>String</code> value
+     */
     public void setAdminEmail (String adminEmail) {
 	if (this.isValidEmail (adminEmail))
 	    _adminEmail = adminEmail;
     }
 
 
+    /** This property specify wether JavaMail is debug enabled or not. */
     protected boolean _debugEnabled = true;
 
+    /**
+     * Returns <code>true</code> if JavaMail is debug enabled.
+     *
+     * @return a <code>boolean</code> value
+     */
     public boolean debugEnabled () {
         return _debugEnabled;
     }
 
+    /**
+     * Sets the debug mode of JavaMail.
+     *
+     * @param debug a <code>boolean</code> value sets JavaMail in
+     * debug mode
+     */
     public void setDebugEnabled (boolean debug) {
         _debugEnabled = debug;
     }
@@ -183,6 +291,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         return _defaultXMailerHeader;
     }
 
+    /**
+     * Sets the default value of the XMailer header used when sending
+     * mails.
+     *
+     * @param header a <code>String</code> value
+     */
     public void setDefaultXMailerHeader (String header) {
         _defaultXMailerHeader = header;
     }
@@ -191,10 +305,24 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     /** Used to send mail to adminEmail only.  Useful for debugging issues */
     protected boolean _centralize = true;
 
+    /**
+     * Centralize is used to send all the outbound email to a single
+     * address which is useful when debugging.
+     *
+     * @return a <code>boolean</code> value
+     */
     public boolean centralize () {
         return _centralize;
     }
 
+    /**
+     * Sets the value of the <code>er.javamail.centralize</code>
+     * Property.
+     *
+     * @param centralize if the boolean value is true, then all the
+     * outbound mails will be sent to <code>adminEmail</code> email
+     * address.
+     */
     public void setCentralize (boolean centralize) {
         _centralize = centralize;
     }
@@ -217,21 +345,37 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     /** Wait n milliseconds (by default this value is 6000) if the mail sender is overflowed */
     protected int _milliSecondsWaitIfSenderOverflowed = 6000;
 
+    /**
+     * This method return the time spent waiting if the mail queue if
+     * overflowed.  During that time, mails are sent and the queue
+     * lowers.  When the duration is spent, and the queue is under
+     * the overflow limit, the mails are being sent again.
+     * @return an <code>int</code> value
+     */
     public int milliSecondsWaitIfSenderOverflowed () {
         return _milliSecondsWaitIfSenderOverflowed;
     }
 
+    /**
+     * Sets the value of the
+     * <code>er.javamail.milliSecondsWaitIfSenderOverflowed</code>
+     * Property.
+     *
+     * @param value an <code>int</code> value in milli-seconds.
+     */
     public void  setMilliSecondsWaitIfSenderOverflowed (int value) {
         _milliSecondsWaitIfSenderOverflowed = value;
     }
 
 
-    // MAIL VALIDATION
-    /** Validates an enterprise object's attribute (accessed via key).
-        @param object the object to be validated
-        @param key the attribute's name
-        @param email the email value
-        @return the email if correct */
+    /**
+     * Validates an enterprise object's email attribute (accessed via
+     * key).
+     * @param object the object to be validated
+     * @param key the attribute's name
+     * @param email the email value
+     * @return the email if the validation didn't failed
+     */
     public String validateEmail (EOEnterpriseObject object, String key, String email) {
         if (email != null) {
             if (!this.isValidEmail(email))
@@ -242,13 +386,18 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         return email;
     }
 
-    /** @return true if the email is valid
-	@param email the email value to validate */
+    /**
+     * Predicate used to validate email well-formness.
+     * @return true if the email is valid
+     * @param email the email String value to validate
+     * @return a <code>boolean</code> value
+     */
     public boolean isValidEmail (String email) {
         if (email != null)
             return _matcher.matches (email, _pattern);
         return false;
     }
+
 
     //	===========================================================================
     //	Black and White list email address filtering support
@@ -270,16 +419,16 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * Determines if a white list has been specified
      * @return if the white list has any elements in it
      */
-    public boolean hasWhiteList() {
-        return whiteListEmailAddressPatterns().count() > 0;
+    public boolean hasWhiteList () {
+        return this.whiteListEmailAddressPatterns ().count () > 0;
     }
 
     /**
      * Determines if a black list has been specified
      * @return if the black list has any elements in it
      */    
-    public boolean hasBlackList() {
-        return blackListEmailAddressPatterns().count() > 0;
+    public boolean hasBlackList () {
+        return this.blackListEmailAddressPatterns ().count () > 0;
     }
 
     /**
@@ -287,10 +436,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * patterns.
      * @return array of white list email address patterns
      */
-    public NSArray whiteListEmailAddressPatterns() {
+    public NSArray whiteListEmailAddressPatterns () {
         if (whiteListEmailAddressPatterns == null) {
             whiteListEmailAddressPatterns =
-            ERXProperties.arrayForKeyWithDefault("er.javamail.WhiteListEmailAddressPatterns", NSArray.EmptyArray);
+            ERXProperties.arrayForKeyWithDefault
+                ("er.javamail.WhiteListEmailAddressPatterns", NSArray.EmptyArray);
         }
         return whiteListEmailAddressPatterns;
     }
@@ -300,10 +450,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * patterns.
      * @return array of black list email address patterns
      */
-    public NSArray blackListEmailAddressPatterns() {
+    public NSArray blackListEmailAddressPatterns () {
         if (blakListEmailAddressPatterns == null) {
             blakListEmailAddressPatterns =
-            ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.EmptyArray);
+                ERXProperties.arrayForKeyWithDefault
+                ("er.javamail.BlackListEmailAddressPatterns", NSArray.EmptyArray);
         }
         return blakListEmailAddressPatterns;
     }
@@ -313,9 +464,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * patterns in the white list.
      * @return Or qualifier for the white list
      */
-    public EOOrQualifier whiteListQualifier() {
+    public EOOrQualifier whiteListQualifier () {
         if (whiteListQualifier == null) {
-            whiteListQualifier = qualifierArrayForEmailPatterns(whiteListEmailAddressPatterns());
+            whiteListQualifier =
+                this.qualifierArrayForEmailPatterns (this.whiteListEmailAddressPatterns ());
         }
         return whiteListQualifier;
     }
@@ -325,9 +477,10 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * in the black list.
      * @return or qualifier
      */
-    public EOOrQualifier blackListQualifier() {
+    public EOOrQualifier blackListQualifier () {
         if (blackListQualifier == null) {
-            blackListQualifier = qualifierArrayForEmailPatterns(blackListEmailAddressPatterns());
+            blackListQualifier =
+                this.qualifierArrayForEmailPatterns (this.blackListEmailAddressPatterns ());
         }
         return blackListQualifier;
     }
@@ -339,13 +492,16 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * @param emailPatterns array of email patterns
      * @return or qualifier to match any of the given patterns
      */
-    protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray emailPatterns) {
-        NSMutableArray patternQualifiers = new NSMutableArray();
-        for (Enumeration patternEnumerator = emailPatterns.objectEnumerator(); patternEnumerator.hasMoreElements();) {
-            String pattern = (String)patternEnumerator.nextElement();
-            patternQualifiers.addObject(EOQualifier.qualifierWithQualifierFormat("toString caseInsensitiveLike '" + pattern + "'", null));
+    protected EOOrQualifier qualifierArrayForEmailPatterns (NSArray emailPatterns) {
+        NSMutableArray patternQualifiers = new NSMutableArray ();
+        for (Enumeration patternEnumerator = emailPatterns.objectEnumerator ()
+                 patternEnumerator.hasMoreElements();) {
+            String pattern = (String) patternEnumerator.nextElement ();
+            patternQualifiers.addObject
+                (EOQualifier.qualifierWithQualifierFormat
+                 ("toString caseInsensitiveLike '" + pattern + "'", null));
         }
-        return new EOOrQualifier(patternQualifiers);
+        return new EOOrQualifier (patternQualifiers);
     }
 
     /**
@@ -354,21 +510,29 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * @param emailAddresses array of email addresses to be filtered
      * @return array of filtered email addresses
      */
-    public NSArray filterEmailAddresses(NSArray emailAddresses) {
+    public NSArray filterEmailAddresses (NSArray emailAddresses) {
         NSMutableArray filteredAddresses = null;
-        if (emailAddresses != null && emailAddresses.count() > 0 && (hasWhiteList() || hasBlackList())) {
-            filteredAddresses = new NSMutableArray(emailAddresses);
-            if (hasWhiteList()) {
-                EOQualifier.filterArrayWithQualifier(filteredAddresses,
-                                                    whiteListQualifier());
+        if ((emailAddresses != null) &&
+            (emailAddresses.count () > 0) &&
+            (this.hasWhiteList () || this.hasBlackList ())) {
+            filteredAddresses = new NSMutableArray (emailAddresses);
+
+            if (this.hasWhiteList ()) {
+                EOQualifier.filterArrayWithQualifier (filteredAddresses,
+                                                      whiteListQualifier ());
             }
-            if (hasBlackList()) {
-                NSArray filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses,
-                                                                                     blackListQualifier());
-                if (filteredOutAddresses.count() > 0)
-                    filteredAddresses.removeObjectsInArray(filteredOutAddresses);
+
+            if (this.hasBlackList ()) {
+                NSArray filteredOutAddresses =
+                    EOQualifier.filteredArrayWithQualifier (filteredAddresses,
+                                                            blackListQualifier ());
+                if (filteredOutAddresses.count () > 0)
+                    filteredAddresses.removeObjectsInArray (filteredOutAddresses);
             }
         }
-        return filteredAddresses != null ? filteredAddresses.immutableClone() : emailAddresses;
+
+        return (filteredAddresses != null) ?
+            filteredAddresses.immutableClone () :
+            emailAddresses;
     }
 }
