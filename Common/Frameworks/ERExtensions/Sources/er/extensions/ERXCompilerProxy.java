@@ -219,12 +219,11 @@ public class ERXCompilerProxy {
                         cacheEntry.update();
                         // sparkle dust ends here
 
-			NSNotificationCenter.defaultCenter().postNotification(CompilerProxyDidCompileClassesNotification, className);
-
                     } catch(ClassNotFoundException ex) {
                         throw new RuntimeException("Could not load the class "+ className + " with exception:" + ex.toString());
                     }
                 }
+                NSNotificationCenter.defaultCenter().postNotification(CompilerProxyDidCompileClassesNotification, classFiles);
             }
         }
     }
