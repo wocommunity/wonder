@@ -1,7 +1,7 @@
 AttributeCell: WOGenericContainer {
-	_unroll = "YES";
+	_unroll = true;
 	align = d2wContext.justification;
-	elementName = "TD";
+	elementName = "td";
 	valign = "middle";
 	bgcolor = "#ffffff";
 }
@@ -75,7 +75,7 @@ GenericContainer1: WOGenericContainer {
 	_unroll = "YES";
 	align = d2wContext.justification;
 //	colspan = 2;
-	elementName = "TD";
+	elementName = "td";
 	valign = "middle";
 }
 
@@ -102,7 +102,9 @@ GroupingRepetition: ERXGroupingRepetition {
 	subListSection = sublistSection;
 	subList = sublist;
 	sectionForItem = section;
-	sectionKey = "primaryKey";
+	sectionKey = "name";
+	splitArrays = true;
+	sortKey = d2wContext.groupingOrderKey;
 }
 
 HasHeader: ERXNonNullConditional {
@@ -186,9 +188,9 @@ SumForSubList: WOString {
 }
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = groupingComponentName;
-        d2wContext = d2wContext;
+   	d2wContext = d2wContext;
 	object = sublistSection;
-        sublist = sublist;
+   	sublist = sublist;
 }
 
 
