@@ -18,13 +18,15 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreBusinessLogic.class);
 
+    protected static ERCoreBusinessLogic sharedInstance;
+
+    
     static {
         setUpFrameworkPrincipalClass(ERCoreBusinessLogic.class);
     }
 
-    static ERCoreBusinessLogic sharedInstance;
     public static ERCoreBusinessLogic sharedInstance() {
-        if(sharedInstance == null) {
+        if (sharedInstance == null) {
             sharedInstance = (ERCoreBusinessLogic)ERXFrameworkPrincipal.sharedInstance(ERCoreBusinessLogic.class);
         }
         return sharedInstance;
