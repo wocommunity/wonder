@@ -39,13 +39,18 @@ public class ERDFilterDisplayGroupButton extends WOComponent {
             if (eds!=null) {
                 if (eds instanceof EODatabaseDataSource) {
                     EODatabaseDataSource dbds=(EODatabaseDataSource)eds;
-                    EOQualifier q=dbds.auxiliaryQualifier();
-                    log.debug("Setting qualifier to "+q);
+                    EOQualifier q=dbds.fetchSpecification().qualifier();
+                    if(log.isDebugEnabled()){
+                        log.debug("Data source fetchSpecification():"+dbds.fetchSpecification());
+                        log.debug("Setting qualifier to "+q);
+                    }
                     _displayGroup.setQualifier(q);
                     _displayGroup.updateDisplayedObjects();
                 } else {
                     log.warn("Data source of unknown type: "+eds.getClass().getName());
                 }
+            }else if(log.isDebugEnabled()){
+                log.debug("the query datasource is null");
             }
             return _nextPage;
         }
