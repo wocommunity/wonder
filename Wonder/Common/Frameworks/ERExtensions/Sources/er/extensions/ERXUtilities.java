@@ -109,6 +109,13 @@ public class ERXUtilities {
                                                                    null);
     }
 
+    public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
+        return EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
+                                                     entityName,
+                                                     pk);
+    }
+    
+
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
