@@ -7,7 +7,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 /**
- * This class houses various EOF related utility methods.
  * 
  * @author Lenny Marks (lenny@aps.org)
  *  
