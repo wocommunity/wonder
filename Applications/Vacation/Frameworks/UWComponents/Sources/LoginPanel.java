@@ -80,12 +80,12 @@ public class LoginPanel extends BaseComponent {
     
     public WOResponse loginCheck() {
         
-        // Initialize your component here
+        // Initialize your component here 
         if (login==null || password == null) {
-            System.out.println("no login or password");
+            System.out.println("both login or password must be specified");
             return null;
         }
-        
+
         NSDictionary loginBindings = new NSDictionary(new Object[] {login,password},new Object[] {databaseKeyForLogin,databaseKeyForPassword});
 
         try {
@@ -93,8 +93,9 @@ public class LoginPanel extends BaseComponent {
         }
         catch (Exception e) {
             System.out.println(e);
+            databaseResults = new NSArray(); // blank out the array
         }
-
+        
         WOActionResults pageToReturn = (WOActionResults) performParentAction(parentLoginCheck);
         WOResponse responseToModify = pageToReturn.generateResponse();
 
