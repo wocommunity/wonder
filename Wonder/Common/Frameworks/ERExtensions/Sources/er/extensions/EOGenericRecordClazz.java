@@ -64,6 +64,12 @@ public class EOGenericRecordClazz extends Object {
         EOEnterpriseObject eo = ERXUtilities.createEO(entityName(), ec);
         return eo;
     }
+
+    public NSArray newPrimaryKeys(EOEditingContext ec, int i) {
+        EODatabaseContext dc = EODatabaseContext.registeredDatabaseContextForModel(entity().model(), ec);
+        
+        return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity());
+    }
     
     public NSArray allObjects(EOEditingContext ec) {
         return EOUtilities.objectsForEntityNamed(ec, entityName());
