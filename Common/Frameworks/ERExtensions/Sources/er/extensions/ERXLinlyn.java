@@ -119,12 +119,11 @@ package er.extensions;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 public class ERXLinlyn {
 
-    /////////////////////////////////////  log4j category  /////////////////////////////////////////
-    public static Category cat  = Category.getInstance(ERXLinlyn.class);
+    /** logging support */
+    public static ERXLogger log = ERXLogger.getERXLogger(ERXLinlyn.class);
     
     // FOR DEBUGGING: set the variable to "true"
     private boolean DEBUG = false;
@@ -348,9 +347,9 @@ public class ERXLinlyn {
         pos.print(cmd + "\r\n" );
         pos.flush(); 
         String response = responseHandler(cmd);
-        if(cat.isDebugEnabled()) {
-            cat.debug("command = "+cmd);
-            cat.debug("response = "+response);
+        if(log.isDebugEnabled()) {
+            log.debug("command = "+cmd);
+            log.debug("response = "+response);
         }
         return response;
     }

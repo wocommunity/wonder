@@ -14,12 +14,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 public class ERXBatchNavigationBar extends WOComponent {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXBatchNavigationBar.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchNavigationBar.class);
 
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";
@@ -62,7 +61,7 @@ public class ERXBatchNavigationBar extends WOComponent {
         if (newValue!=null) {
             if (displayGroup()!=null){
                 displayGroup().setCurrentBatchIndex(newValue.intValue());
-                if (cat.isDebugEnabled()) cat.debug("The batch index is being set to :"+newValue.intValue());
+                if (log.isDebugEnabled()) log.debug("The batch index is being set to :"+newValue.intValue());
             }
         }
     }
@@ -70,10 +69,10 @@ public class ERXBatchNavigationBar extends WOComponent {
     public void setNumberOfObjectsPerBatch(Number newValue) {
         if (newValue!=null) {
             if (displayGroup()!=null) {
-                cat.debug("Setting db # of objects per batch to "+newValue);
+                log.debug("Setting db # of objects per batch to "+newValue);
                 displayGroup().setNumberOfObjectsPerBatch(newValue.intValue());
 
-                if(cat.isDebugEnabled()) cat.debug("The batch index is being set to : "+ 1);
+                if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
                 displayGroup().setCurrentBatchIndex(1);
             }
             Object context=valueForBinding("d2wContext");

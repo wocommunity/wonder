@@ -10,14 +10,14 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import org.apache.log4j.Category;
+
 /** Designated starter class for frameworks.
  * the <code>finishInitialization</code> will be called when the app finishes startup.
  * To use, subclass it and set the NSPrincipalClass of your framework to the subclass. See the ERXCoreBusinessLogic and BTBusinessLogic frameworks for an example of usage.
 */
 
 public abstract class ERXFrameworkPrincipal {
-    public static final Category cat = Category.getInstance(ERXFrameworkPrincipal.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFrameworkPrincipal.class);
 
     private static NSMutableDictionary initializedFrameworks = new NSMutableDictionary();
 
@@ -28,7 +28,7 @@ public abstract class ERXFrameworkPrincipal {
     public static void setUpFrameworkPrincipalClass(Class c) {
         try {
             if (initializedFrameworks.objectForKey(c.getName()) == null) {
-                cat.debug("Starting up: " + c.getName());
+                log.debug("Starting up: " + c.getName());
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
                 ERXRetainer.retain(principal);
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
@@ -51,7 +51,7 @@ public abstract class ERXFrameworkPrincipal {
 
     public abstract void finishInitialization();
     
-    public Category log() {
-        return cat;
+    public ERXLogger log() {
+        return log;
     }
 }

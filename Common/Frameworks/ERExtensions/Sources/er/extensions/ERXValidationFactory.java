@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import java.util.*;
 import java.lang.reflect.*;
 
@@ -24,7 +23,7 @@ import java.lang.reflect.*;
 public class ERXValidationFactory {
 
     /** logging support */
-    public final static Category cat = Category.getInstance(ERXValidationFactory.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXValidationFactory.class);
     
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
@@ -179,7 +178,7 @@ public class ERXValidationFactory {
             try {
                 regularConstructor = validationExceptionClass().getConstructor(_regularConstructor);
             } catch (Exception e) {
-                cat.error("Exception looking up regular constructor. Exception: " + e.getMessage());
+                log.error("Exception looking up regular constructor. Exception: " + e.getMessage());
             }
         }
         return regularConstructor;
@@ -201,12 +200,12 @@ public class ERXValidationFactory {
     public ERXValidationException createException(EOEnterpriseObject eo, String property, Object value, String type) {
         ERXValidationException erve = null;
         try {
-            cat.debug("Creating exception for type: " + type + " validationExceptionClass: " + validationExceptionClass().getName());
+            log.debug("Creating exception for type: " + type + " validationExceptionClass: " + validationExceptionClass().getName());
             erve = (ERXValidationException)regularValidationExceptionConstructor().newInstance(new Object[] {type, eo, property, value});
         } catch (InvocationTargetException ite) {
-            cat.error("Caught InvocationTargetException creating regular validation exception: " + ite.getTargetException());            
+            log.error("Caught InvocationTargetException creating regular validation exception: " + ite.getTargetException());            
         } catch (Exception e) {
-            cat.error("Caught exception creating regular validation exception: " + e);
+            log.error("Caught exception creating regular validation exception: " + e);
         }
         return erve;
     }
@@ -267,8 +266,8 @@ public class ERXValidationFactory {
      */
     public ERXValidationException convertException(NSValidation.ValidationException eov, Object value) {
         ERXValidationException erve = null;
-        if (cat.isDebugEnabled())
-            cat.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
+        if (log.isDebugEnabled())
+            log.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
             EOEnterpriseObject eo = (EOEnterpriseObject)eov.object();
@@ -289,7 +288,7 @@ public class ERXValidationFactory {
             }
             NSArray additionalExceptions = eov.additionalExceptions();
             if (erve == null) {
-                cat.error("Unable to convert validation exception: " + eov);
+                log.error("Unable to convert validation exception: " + eov);
             } else if (additionalExceptions != null && additionalExceptions.count() > 0) {
                 NSMutableArray erveAddtionalExceptions = new NSMutableArray();
                 for (Enumeration e = additionalExceptions.objectEnumerator(); e.hasMoreElements();) {
@@ -301,7 +300,7 @@ public class ERXValidationFactory {
                     erve.setAdditionalExceptions(erveAddtionalExceptions);
             }
         } else {
-            cat.warn("Attempting to convert validation exception: " + eov + " that is already of type ERXValidationException");
+            log.warn("Attempting to convert validation exception: " + eov + " that is already of type ERXValidationException");
             erve = (ERXValidationException)eov;
         }
         return erve;
@@ -348,7 +347,7 @@ public class ERXValidationFactory {
             String type = erv.type();
             String targetLanguage = erv.targetLanguage() != null ? erv.targetLanguage() : ERXLocalizer.currentLocalizer().language();
 
-            cat.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
+            log.debug("templateForException with entityName: " + entityName + "; property: " + property + "; type: " + type + "; targetLanguage: " + targetLanguage);
             ERXMultiKey k = new ERXMultiKey(new Object[] {entityName, property,
                 type,targetLanguage});
             template = (String)_cache.get(k);
@@ -369,7 +368,7 @@ public class ERXValidationFactory {
      */
     public void resetTemplateCache(NSNotification n) {
         _cache = new Hashtable(1000);
-        if (cat.isDebugEnabled()) cat.debug("Resetting template cache");
+        if (log.isDebugEnabled()) log.debug("Resetting template cache");
     }
 
     /**
@@ -453,7 +452,7 @@ public class ERXValidationFactory {
         if (template == null)
             template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
-            cat.error("Unable to find template for entity: " + entityName + " property: " + property + " type: "
+            log.error("Unable to find template for entity: " + entityName + " property: " + property + " type: "
                       + type + " targetLanguage: " + targetLanguage);
             template = UNDEFINED_VALIDATION_TEMPLATE;
         }

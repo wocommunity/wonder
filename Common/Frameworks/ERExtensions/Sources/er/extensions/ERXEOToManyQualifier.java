@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 // Optimized toMany qualifier, much, much better SQL than the Apple provided qualifier.
 
@@ -19,7 +18,7 @@ import org.apache.log4j.Category;
 public class ERXEOToManyQualifier extends EOSQLQualifier implements Cloneable {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXEOToManyQualifier.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOToManyQualifier.class);
 
     /** holds the entity */
     private EOEntity _entity;

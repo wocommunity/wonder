@@ -18,7 +18,7 @@ import com.webobjects.foundation.*;
  *  Good for languages that don't have plural forms (such as Japanese).
  */
 public class ERXNonPluralFormLocalizer extends ERXLocalizer {
-    static final ERXLogger cat = ERXLogger.getLogger(ERXNonPluralFormLocalizer.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(ERXNonPluralFormLocalizer.class);
 
     public ERXNonPluralFormLocalizer(String aLanguage) { 
         super(aLanguage); 

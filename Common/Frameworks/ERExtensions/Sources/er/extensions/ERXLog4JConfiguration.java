@@ -19,21 +19,21 @@ public class ERXLog4JConfiguration extends WOComponent {
         super(aContext);
     }
 
-    private Category _category;
+    private Logger _logger;
     private String _filterString;
     private String _ruleKey;
-    private String _categoryName;
+    private String _loggerName;
 
     public boolean showAll=true;
     
-    public Category category() { return _category; }
-    public void setCategory(Category newValue) { _category=newValue; }
+    public Logger logger() { return _logger; }
+    public void setLogger(Logger newValue) { _logger=newValue; }
     
     public String filterString() { return _filterString; }
     public void setFilterString(String newValue) { _filterString=newValue; }
 
-    public String categoryName() { return _categoryName; }
-    public void setCategoryName(String newValue) { _categoryName=newValue; }
+    public String loggerName() { return _loggerName; }
+    public void setLoggerName(String newValue) { _loggerName=newValue; }
 
     public String ruleKey() { return _ruleKey; }
     public void setRuleKey(String newValue) { _ruleKey=newValue; }
@@ -42,38 +42,39 @@ public class ERXLog4JConfiguration extends WOComponent {
                                                                             EOSortOrdering.CompareAscending);
     public final static NSMutableArray SORT_BY_NAME=new NSMutableArray(NAME_SORT_ORDERING);
 
-    // not obvious what the appropriate API is to get your parent in Log4J 1.1
-    public Category parentForCategory(Category c) {
-        Category result=null;
-        String name=c.getName();
+
+    public Logger parentForLogger(Logger l) {
+        Logger result=(Logger)l.getParent();
+        /*
+        String name=l.getName();
         int i=name.lastIndexOf('.');
         if (i!=-1) {
             String parentName=name.substring(0,i);
-            result=Category.getInstance(parentName);
-        }
+            result=Logger.getLogger(parentName);
+        } */
         return result;
     }
     
-    public NSArray categories() {
+    public NSArray loggers() {
         NSMutableArray result=new NSMutableArray();
-        for (Enumeration e=Category.getCurrentCategories(); e.hasMoreElements();) {
-            Category cat=(Category)e.nextElement();
-            while (cat!=null) {
-                addCategory(cat, result);
-                cat=parentForCategory(cat);
+        for (Enumeration e=LogManager.getCurrentLoggers(); e.hasMoreElements();) {
+            Logger log=(Logger)e.nextElement();
+            while (log!=null) {
+                addLogger(log, result);
+                log=parentForLogger(log);
             }
         }
         EOSortOrdering.sortArrayUsingKeyOrderArray(result, SORT_BY_NAME);
         return result;
     }
 
-    public void addCategory(Category cat, NSMutableArray result) {
+    public void addLogger(Logger log, NSMutableArray result) {
         if ((filterString()==null ||
              filterString().length()==0 ||
-             cat.getName().toLowerCase().indexOf(filterString().toLowerCase())!=-1) &&
-            (showAll || cat.getPriority()!=null) &&
-            !result.containsObject(cat)) {
-            result.addObject(cat);
+             log.getName().toLowerCase().indexOf(filterString().toLowerCase())!=-1) &&
+            (showAll || log.getLevel()!=null) &&
+            !result.containsObject(log)) {
+            result.addObject(log);
         }        
     }
     
@@ -82,45 +83,45 @@ public class ERXLog4JConfiguration extends WOComponent {
     public WOComponent resetFilter() { _filterString=null; return null; }
     public WOComponent update() { return null; }
     public WOComponent showAll() { showAll=true; return null; }
-    public WOComponent showExplicitelySet() { showAll=false; return null; }
-    public WOComponent addCategory() {
-        Category.getInstance(categoryName());
-        setFilterString(categoryName());
+    public WOComponent showExplicitlySet() { showAll=false; return null; }
+    public WOComponent addLogger() {
+        Logger.getLogger(loggerName());
+        setFilterString(loggerName());
         return null;
     }
     // This functionality depends on ERDirectToWeb's presence..    
     public WOComponent addRuleKey() {
         String prefix="er.directtoweb.rules."+ruleKey();
-        Category.getInstance(prefix+".fire");
-        Category.getInstance(prefix+".cache");
+        Logger.getLogger(prefix+".fire");
+        Logger.getLogger(prefix+".cache");
         setFilterString(prefix);
         return null;
     }
 
 
     
-    public Integer debugLevel() { return ERXConstant.integerForInt(Priority.DEBUG.toInt()); }
-    public Integer infoLevel() { return ERXConstant.integerForInt(Priority.INFO.toInt()); }
-    public Integer warnLevel() { return ERXConstant.integerForInt(Priority.WARN.toInt()); }
-    public Integer errorLevel() { return ERXConstant.integerForInt(Priority.ERROR.toInt()); }
-    public Integer fatalLevel() { return ERXConstant.integerForInt(Priority.FATAL.toInt()); }
+    public Integer debugLevel() { return ERXConstant.integerForInt(Level.DEBUG.toInt()); }
+    public Integer infoLevel() { return ERXConstant.integerForInt(Level.INFO.toInt()); }
+    public Integer warnLevel() { return ERXConstant.integerForInt(Level.WARN.toInt()); }
+    public Integer errorLevel() { return ERXConstant.integerForInt(Level.ERROR.toInt()); }
+    public Integer fatalLevel() { return ERXConstant.integerForInt(Level.FATAL.toInt()); }
     public Integer unsetLevel() { return ERXConstant.MinusOneInteger; }
 
-    public Integer categoryPriorityValue() {
-        return category()!=null && category().getPriority()!=null ?
-        ERXConstant.integerForInt(category().getPriority().toInt()) : ERXConstant.MinusOneInteger;
+    public Integer loggerLevelValue() {
+        return logger()!=null && logger().getLevel()!=null ?
+        ERXConstant.integerForInt(logger().getLevel().toInt()) : ERXConstant.MinusOneInteger;
     }
 
-    public boolean categoryIsNotDebug() { return category()!=null && category().getPriority()!=Priority.DEBUG; }
-    public boolean categoryIsNotInfo() { return category()!=null && category().getPriority()!=Priority.INFO; }
-    public boolean categoryIsNotWarn() { return category()!=null && category().getPriority()!=Priority.WARN; }
-    public boolean categoryIsNotError() { return category()!=null && category().getPriority()!=Priority.ERROR; }
-    public boolean categoryIsNotFatal() { return category()!=null && category().getPriority()!=Priority.FATAL; }
+    public boolean loggerIsNotDebug() { return logger()!=null && logger().getLevel()!=Level.DEBUG; }
+    public boolean loggerIsNotInfo() { return logger()!=null && logger().getLevel()!=Level.INFO; }
+    public boolean loggerIsNotWarn() { return logger()!=null && logger().getLevel()!=Level.WARN; }
+    public boolean loggerIsNotError() { return logger()!=null && logger().getLevel()!=Level.ERROR; }
+    public boolean loggerIsNotFatal() { return logger()!=null && logger().getLevel()!=Level.FATAL; }
 
     
-    public void setCategoryPriorityValue(Integer newValue) {
-        int pr=newValue!=null ? newValue.intValue() : -1;
-        category().setPriority(pr!=-1 ? Priority.toPriority(pr) : null);
+    public void setLoggerLevelValue(Integer newValue) {
+        int lvl=newValue!=null ? newValue.intValue() : -1;
+        logger().setLevel(lvl!=-1 ? Level.toLevel(lvl) : null);
     }
     
     private final static NSDictionary BG_COLORS=new NSDictionary(
@@ -132,18 +133,18 @@ public class ERXLog4JConfiguration extends WOComponent {
                                                                      "#bbffbb"
                                                                  },
                                                                  new Object[] {
-                                                                     ERXConstant.integerForInt(Priority.DEBUG.toInt()),
-                                                                     ERXConstant.integerForInt(Priority.INFO.toInt()),
-                                                                     ERXConstant.integerForInt(Priority.WARN.toInt()),
-                                                                     ERXConstant.integerForInt(Priority.ERROR.toInt()),
-                                                                     ERXConstant.integerForInt(Priority.FATAL.toInt()),
+                                                                     ERXConstant.integerForInt(Level.DEBUG.toInt()),
+                                                                     ERXConstant.integerForInt(Level.INFO.toInt()),
+                                                                     ERXConstant.integerForInt(Level.WARN.toInt()),
+                                                                     ERXConstant.integerForInt(Level.ERROR.toInt()),
+                                                                     ERXConstant.integerForInt(Level.FATAL.toInt()),
                                                                  });
     public String bgColor() {
-        return (String)BG_COLORS.objectForKey(categoryPriorityValue());
+        return (String)BG_COLORS.objectForKey(loggerLevelValue());
     }
 
     public int indentLevel() {
-        return ERXExtensions.numberOfOccurrencesOfCharInString('.',category().getName());
+        return ERXExtensions.numberOfOccurrencesOfCharInString('.',logger().getName());
     }
 
 

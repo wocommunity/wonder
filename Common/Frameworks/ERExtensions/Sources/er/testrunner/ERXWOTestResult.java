@@ -12,10 +12,10 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import junit.framework.*;
 import junit.runner.*;
-import org.apache.log4j.Category;
 import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
 import com.webobjects.woextensions.*;
+import er.extensions.*;
 
 public class ERXWOTestResult extends WOComponent {
     public Throwable exception;
@@ -38,8 +38,8 @@ public class ERXWOTestResult extends WOComponent {
         }
     }
 
-    /////////////////////////////////////  log4j category  ////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXWOTestResult.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXWOTestResult.class);
 
     public String errorMessage;
     public ERXTestResult testResult;

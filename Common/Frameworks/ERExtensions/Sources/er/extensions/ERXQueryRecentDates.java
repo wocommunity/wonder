@@ -8,7 +8,6 @@ package er.extensions;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
 
 public class ERXQueryRecentDates extends WOComponent {
 
@@ -16,8 +15,8 @@ public class ERXQueryRecentDates extends WOComponent {
         super(aContext);
     }
     
-    ////////////////////////////////////  log4j category  ////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXQueryRecentDates.class);
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXQueryRecentDates.class);
     
     public WODisplayGroup displayGroup;
     public String key;

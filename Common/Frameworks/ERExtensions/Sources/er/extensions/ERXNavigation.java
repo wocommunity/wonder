@@ -13,13 +13,12 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 public class ERXNavigation {
 
-    /////////////////////////////////////  log4j category  /////////////////////////////////////////
-    public static Category cat  = Category.getInstance("er.navigation.extensions.ERXNavigation");
+    /** logging support */
+    public static ERXLogger log = ERXLogger.getERXLogger("er.navigation.extensions.ERXNavigation");
 
     protected NSArray _additionalNavigationState, _navigationState;
     protected boolean isDisabled;
@@ -37,8 +36,8 @@ public class ERXNavigation {
     }
 
     public void setAdditionalNavigationState(NSArray value) {
-        if (cat.isDebugEnabled())
-            cat.debug("Setting additional navigation state: " + value);
+        if (log.isDebugEnabled())
+            log.debug("Setting additional navigation state: " + value);
         _additionalNavigationState = value;
     }
     // Not used.
@@ -67,18 +66,18 @@ public class ERXNavigation {
             int index = currentNavigationLevel - 1;
             int length = navCount - currentNavigationLevel + 1;
             NSRange range = new NSRange(index, length);
-            cat.debug("Range: " + range + " current: " + currentNavigationLevel + " navCount: " + navCount);
+            log.debug("Range: " + range + " current: " + currentNavigationLevel + " navCount: " + navCount);
             itmesToBeShown = navigationState().subarrayWithRange(range);
             
         }
-        cat.debug("Nav state: " + navigationState() + " current nav level: " + currentNavigationLevel + " items: " + itmesToBeShown);
+        log.debug("Nav state: " + navigationState() + " current nav level: " + currentNavigationLevel + " items: " + itmesToBeShown);
         return itmesToBeShown != null ? itmesToBeShown : ERXConstant.EmptyArray;
     }
     
     // Anytime we are setting the absolute we reset the relative.
     public void setNavigationState(NSArray navigationState) {
-        if (cat.isDebugEnabled())
-            cat.debug("Setting Navigation State: " + navigationState);
+        if (log.isDebugEnabled())
+            log.debug("Setting Navigation State: " + navigationState);
         _navigationState = navigationState;
         _additionalNavigationState = null;
     }

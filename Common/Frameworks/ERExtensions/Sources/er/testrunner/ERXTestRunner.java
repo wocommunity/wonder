@@ -12,13 +12,12 @@ import java.util.*;
 import java.io.PrintStream;
 import junit.framework.*;
 import junit.runner.*;
-import org.apache.log4j.Category;
 import er.extensions.*;
 
 public class ERXTestRunner extends BaseTestRunner {
 
-    ///////////////////////////////////  log4j category  ///////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXTestRunner.class);
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXTestRunner.class);
 
         public ERXTestListener externalListener = null;
 

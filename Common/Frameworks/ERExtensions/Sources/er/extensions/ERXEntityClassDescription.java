@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.lang.*;
 import java.util.*;
-import org.apache.log4j.Category;
 
 /**
  * The main purpose of the ERXClassDescription class is
@@ -33,7 +32,7 @@ import org.apache.log4j.Category;
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXEntityClassDescription.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEntityClassDescription.class);
 
     /**
      * This factory inner class is registered as the observer
@@ -59,7 +58,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * when an ERXCompilerProxy did reset.
          */
         public void compilerProxyDidCompileClasses(NSNotification n) {
-            cat.debug("compilerProxyDidCompileClasses: " + n);
+            log.debug("compilerProxyDidCompileClasses: " + n);
             reset();
        }
 
@@ -73,7 +72,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          */
         public void modelWasAddedNotification(NSNotification n) {
             // Don't want this guy getting in our way.
-            cat.debug("modelWasAddedNotification: " + ((EOModel)n.object()).name());
+            log.debug("modelWasAddedNotification: " + ((EOModel)n.object()).name());
             // FIXME: This is done twice
             NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
             registerDescriptionForEntitiesInModel((EOModel)n.object());
@@ -92,10 +91,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * 	that needs the class description.
          */
         public void classDescriptionNeededForEntityName(NSNotification n) {
-            cat.debug("classDescriptionNeededForEntityName: " + (String)n.object());
+            log.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get the entity
-            if(e == null) cat.error("Entity " + name + " not found in the default model group!");
+            if(e == null) log.error("Entity " + name + " not found in the default model group!");
             registerDescriptionForEntity(e);
         }
 
@@ -112,7 +111,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          */
         public void classDescriptionNeededForClass(NSNotification n) {
             Class c = (Class)n.object();
-            cat.debug("classDescriptionNeededForClass: " + c.getName());
+            log.debug("classDescriptionNeededForClass: " + c.getName());
             registerDescriptionForClass(c);
         }
 
@@ -151,7 +150,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             if(className.equals("EOGenericRecord")) {
                 className = ERXGenericRecord.class.getName();
                 eoentity.setClassName(className);
-                cat.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
+                log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
             }
             //(ak) this should probably move to the plugin, but it won't get loaded until the model is opened
         }
@@ -177,8 +176,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     if(array == null) {
                         array = new NSMutableArray();
                     }
-                    if(cat.isDebugEnabled())
-                        cat.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
+                    if(log.isDebugEnabled())
+                        log.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
                     array.addObject(eoentity);
                     _entitiesForClass.setObjectForKey(array, eoentity.className());
 
@@ -209,7 +208,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 //HACK ALERT: (ak) We push the cd rather rudely into the entity to have it ready when classDescriptionForNewInstances() is called on it. We will have to add a com.webobjects.eoaccess.KVCProtectedAccessor to make this work
                 NSKeyValueCoding.Utility.takeValueForKey(entity, cd, "classDescription");
             } catch(RuntimeException ex) {
-                cat.warn("_setClassDescriptionOnEntity: " + ex);
+                log.warn("_setClassDescriptionOnEntity: " + ex);
             }
         }
 
@@ -223,14 +222,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         public void registerDescriptionForEntity(EOEntity entity) {
             try {
                 String className = entity.className();
-                if (cat.isDebugEnabled())
-                    cat.debug("Registering description for entity: " + entity.name() + " with class: " + className);
+                if (log.isDebugEnabled())
+                    log.debug("Registering description for entity: " + entity.name() + " with class: " + className);
                 Class entityClass = className.equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
                 ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
                 EOClassDescription.registerClassDescription(cd, entityClass);
                 _setClassDescriptionOnEntity(entity, cd);
             } catch (java.lang.ClassNotFoundException ex) {
-                cat.error("Invalid class name for entity: " + entity.name() + " exception: " + ex);
+                log.error("Invalid class name for entity: " + entity.name() + " exception: " + ex);
             }
         }
 
@@ -247,8 +246,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         public void registerDescriptionForClass(Class class1) {
             NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
             if (entities != null) {
-                if (cat.isDebugEnabled())
-                    cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
+                if (log.isDebugEnabled())
+                    log.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
                 for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
                     EOEntity entity = (EOEntity)e.nextElement();
                     ERXEntityClassDescription cd = newClassDescriptionForEntity(entity);
@@ -256,7 +255,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     _setClassDescriptionOnEntity(entity, cd);
                 }
             } else {
-                cat.error("Unable to register descriptions for class: " + class1.getName());
+                log.error("Unable to register descriptions for class: " + class1.getName());
             }
         }
         
@@ -288,7 +287,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     observer = (Factory)Class.forName(className).newInstance();
                 }
             } catch(Exception ex) {
-                cat.warn("Exception while registering factory, using default: " + ex );
+                log.warn("Exception while registering factory, using default: " + ex );
             }
             
             if(observer == null)
@@ -322,8 +321,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         try {
             super.validateObjectForDelete(obj);
         } catch (NSValidation.ValidationException eov) {
-            if (cat.isDebugEnabled())
-                cat.debug("Caught validation exception: " + eov);
+            if (log.isDebugEnabled())
+                log.debug("Caught validation exception: " + eov);
             ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
             throw (erv != null ? erv : eov);
         }
@@ -345,13 +344,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
         Object validated = null;
-        if (cat.isDebugEnabled())
-            cat.debug("Validate value: " + obj + " for key: " + s);
+        if (log.isDebugEnabled())
+            log.debug("Validate value: " + obj + " for key: " + s);
         try {
             validated = super.validateValueForKey(obj, s);
         } catch (NSValidation.ValidationException eov) {
-            if (cat.isDebugEnabled())
-                cat.debug("Caught validation exception: " + eov);
+            if (log.isDebugEnabled())
+                log.debug("Caught validation exception: " + eov);
             ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
             throw (erv != null ? erv : eov);
         }
@@ -373,8 +372,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         try {
             super.validateObjectForSave(obj);
         } catch (NSValidation.ValidationException eov) {
-            if (cat.isDebugEnabled())
-                cat.debug("Caught validation exception: " + eov);
+            if (log.isDebugEnabled())
+                log.debug("Caught validation exception: " + eov);
             ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
             throw (erv != null ? erv : eov);
         }

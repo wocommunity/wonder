@@ -45,8 +45,8 @@ TODO: chaining of Localizers
 */
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
-    protected static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
-    protected static final ERXLogger createdKeysLog = ERXLogger.getLogger(ERXLocalizer.class, "createdKeys");
+    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXLocalizer.class);
+    protected static final ERXLogger createdKeysLog = (ERXLogger)ERXLogger.getLogger(ERXLocalizer.class.getClass().getName() + ".createdKeys");
     private static boolean isLocalizationEnabled = false;
     private static boolean isInitialized = false;
     
@@ -172,7 +172,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             Constructor constructor = localizerClass.getConstructor(ERXConstant.StringClassArray);
             localizer = (ERXLocalizer)constructor.newInstance(new Object[] {language});
         } catch (Exception e) {
-            cat.error("Unable to create localizer for class name: " + className + " exception: " + e.getMessage() + " will use default classes");
+            log.error("Unable to create localizer for class name: " + className + " exception: " + e.getMessage() + " will use default classes");
         }
         if (localizer == null) {
             if (pluralForm)
@@ -204,8 +204,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 String firstComponent = key.substring(0, indexOfDot);
                 String otherComponents = key.substring(indexOfDot+1, key.length());
                 result = cache.objectForKey(firstComponent);
-                if(cat.isDebugEnabled())
-                    cat.debug("Trying " + firstComponent + " . " + otherComponents);
+                if(log.isDebugEnabled())
+                    log.debug("Trying " + firstComponent + " . " + otherComponents);
                 if(result != null) {
                     result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
                     if(result != null) {
@@ -254,11 +254,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                     }
                     try {
                         framework = "app".equals(framework) ? null : framework;
-                        cat.debug("Loading: " + fileName + " - " + framework + " - " + languages + WOApplication.application().resourceManager().pathForResourceNamed(fileName, framework, languages));
+                        log.debug("Loading: " + fileName + " - " + framework + " - " + languages + WOApplication.application().resourceManager().pathForResourceNamed(fileName, framework, languages));
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                         cache.addEntriesFromDictionary(dict);
                     } catch(Exception ex) {
-                        cat.warn("Exception loading: " + fileName + " - " + framework + " - " + languages + ":" + ex);
+                        log.warn("Exception loading: " + fileName + " - " + framework + " - " + languages + ":" + ex);
                     }
                 }
             }
@@ -338,7 +338,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(result != null) return result;
 
         if(createdKeysLog.isDebugEnabled())
-            cat.debug("Key not found: '"+key+"'/"+language);
+            log.debug("Key not found: '"+key+"'/"+language);
         cache.setObjectForKey(NOT_FOUND, key);
         return null;
     }

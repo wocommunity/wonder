@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 import java.util.Enumeration;
 
 /**
@@ -23,9 +22,9 @@ import java.util.Enumeration;
 public class ERXDatabaseContextDelegate {
 
     /** Basic logging support */
-    public final static Category cat = Category.getInstance(ERXDatabaseContextDelegate.class);
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace</b> */
-    public final static Category dbCat = Category.getInstance("er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace");
+    public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled.BackTrace");
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate;
@@ -33,7 +32,7 @@ public class ERXDatabaseContextDelegate {
     public static ERXDatabaseContextDelegate defaultDelegate() {
         if (_defaultDelegate == null) {
             _defaultDelegate = new ERXDatabaseContextDelegate();
-            cat.info("Created default delegate");
+            log.info("Created default delegate");
             ERXRetainer.retain(_defaultDelegate); // Retaining the delegate on the ObjC side.  This might not be necessary.
         }
         return _defaultDelegate;
@@ -67,20 +66,20 @@ public class ERXDatabaseContextDelegate {
         EOAdaptor adaptor=dbc.adaptorContext().adaptor();
         boolean shouldHandleConnection = false;
         if(e instanceof EOGeneralAdaptorException)
-            cat.error(((EOGeneralAdaptorException)e).userInfo());
+            log.error(((EOGeneralAdaptorException)e).userInfo());
         else
-            cat.error(e);
+            log.error(e);
         if (adaptor.isDroppedConnectionException(e))
             shouldHandleConnection = true;
         // FIXME: Should provide api to extend the list of bad exceptions.
         else if (e.toString().indexOf("ORA-01041")!=-1) {
             // just returning true here does not seem to do the trick. why !?!?
-            cat.error("ORA-01041 detecting -- forcing reconnect");
+            log.error("ORA-01041 detecting -- forcing reconnect");
             dbc.database().handleDroppedConnection();
             shouldHandleConnection = false;
         } else {
             if(e instanceof EOGeneralAdaptorException)
-                cat.info(((EOGeneralAdaptorException)e).userInfo());
+                log.info(((EOGeneralAdaptorException)e).userInfo());
             throw e;
         }
         return shouldHandleConnection;
@@ -128,8 +127,8 @@ public class ERXDatabaseContextDelegate {
     public void databaseContextDidSelectObjects(EODatabaseContext dc,
                                                 EOFetchSpecification fs,
                                                 EODatabaseChannel channel) {
-        if (dbCat.isDebugEnabled()) {
-            dbCat.debug("databaseContextDidSelectObjects "+fs);
+        if (dbLog.isDebugEnabled()) {
+            dbLog.debug("databaseContextDidSelectObjects "+fs);
         }
     }
 }

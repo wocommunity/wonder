@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import org.apache.log4j.Category;
 
 /**
  * ERXValidationExceptions extends the regular
@@ -20,7 +19,7 @@ import org.apache.log4j.Category;
 public class ERXValidationException extends NSValidation.ValidationException implements NSKeyValueCoding {
 
     /** logging support */
-    public static final Category cat = Category.getInstance(ERXValidationException.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXValidationException.class);
 
     // Validation Exception Types
     /** corresponds to a model thrown 'null property' exception */

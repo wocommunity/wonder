@@ -13,13 +13,14 @@ import com.webobjects.eoaccess.*;
 
 import junit.framework.*;
 import junit.runner.*;
-import org.apache.log4j.Category;
 import java.io.PrintStream;
 import java.util.*;
+import er.extensions.*;
 
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
-    //////////////////////////////////////  log4j category  /////////////////////////////////////
-    public static final Category cat = Category.getInstance(ERXWOTestInterface.class);
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXWOTestInterface.class);
 
     // bind to a WOTextField
     public String theTest;
@@ -71,7 +72,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
             try {
                 allTests = theClassNames.sortedArrayUsingComparator(NSComparator.AscendingStringComparator);
             } catch (Exception ex) {
-                cat.warn(ex);
+                log.warn(ex);
                 // so we won't get sorted, oh well :)
             }
         }
@@ -124,31 +125,31 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     // TestListener implementation
     //////////////////////////////////////
     public synchronized void addError(Test test, Throwable t) {
-        cat.error ("[E] " + test.toString() + " : " + t.getMessage());
+        log.error ("[E] " + test.toString() + " : " + t.getMessage());
     }
 
     public synchronized void addFailure(Test test, AssertionFailedError t) {
-        cat.error ("[F] " + test.toString() + " : " + t.getMessage());
+        log.error ("[F] " + test.toString() + " : " + t.getMessage());
     }
 
     public synchronized void startTest(Test test) {
-        cat.info ("[START] " + test.toString());
+        log.info ("[START] " + test.toString());
     }
 
     public void endTest(Test test) {
-        cat.info ("[END] " + test.toString());
+        log.info ("[END] " + test.toString());
     }
 
     //////////////////////////////////////
     // ERTestListener implementation
     //////////////////////////////////////
     public void runFailed(String message) {
-        cat.debug ("--------------------------- runFailed() ---------------------------");
+        log.debug ("--------------------------- runFailed() ---------------------------");
         errorMessage = message;
     }
 
     public void clearStatus() {
-        cat.debug ("-------------------------- clearStatus() --------------------------");
+        log.debug ("-------------------------- clearStatus() --------------------------");
         errorMessage = "";
     }
 }

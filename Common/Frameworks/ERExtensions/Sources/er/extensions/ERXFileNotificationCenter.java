@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
 import java.io.*;
 import java.util.Enumeration;
 
@@ -28,7 +27,7 @@ import java.util.Enumeration;
 public class ERXFileNotificationCenter {
 
     /** Logging support */
-    public static final Category cat = Category.getInstance(ERXFileNotificationCenter.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileNotificationCenter.class);
 
     /** Contains the name of the notification that is posted when a file changes. */
     public static final String FileDidChange = "FileDidChange";
@@ -63,7 +62,7 @@ public class ERXFileNotificationCenter {
     public ERXFileNotificationCenter() {
         if (!WOApplication.application().isCachingEnabled()) {
             ERXRetainer.retain(this);
-            cat.debug("Caching disabled.  Registering for notification: " + ERXApplication.WORequestHandlerDidHandleRequestNotification);
+            log.debug("Caching disabled.  Registering for notification: " + ERXApplication.WORequestHandlerDidHandleRequestNotification);
             NSNotificationCenter.defaultCenter().addObserver(this,
                                                              new NSSelector("checkIfFilesHaveChanged",
                                                                             ERXConstant.NotificationClassArray),
@@ -112,10 +111,10 @@ public class ERXFileNotificationCenter {
         if (selector == null)
             throw new RuntimeException("Attempting to register null selector for file: " + file);
         if (cachingEnabled)
-            cat.warn("Registering an observer when WOCaching is enabled.  This observer will not ever by default be called: " + file);
+            log.warn("Registering an observer when WOCaching is enabled.  This observer will not ever by default be called: " + file);
         String filePath = file.getAbsolutePath();
-        if (cat.isDebugEnabled())
-            cat.debug("Registering Observer for file at path: " + filePath);
+        if (log.isDebugEnabled())
+            log.debug("Registering Observer for file at path: " + filePath);
         // Register last modified date.
         registerLastModifiedDateForFile(file);
         // FIXME: This retains the observer.  This is not ideal.  With the 1.3 JDK we can use a ReferenceQueue to maintain weak references.
@@ -157,7 +156,7 @@ public class ERXFileNotificationCenter {
     protected void fileHasChanged(File file) {
         NSMutableSet observers = (NSMutableSet)_observersByFilePath.objectForKey(file.getAbsolutePath());
         if (observers == null)
-            cat.warn("Unable to find observers for file: " + file);
+            log.warn("Unable to find observers for file: " + file);
         else {
             NSNotification notification = new NSNotification(FileDidChange, file);
             for (Enumeration e = observers.objectEnumerator(); e.hasMoreElements();) {
@@ -165,7 +164,7 @@ public class ERXFileNotificationCenter {
                 try {
                     holder.selector.invoke(holder.observer, notification);
                 } catch (Exception ex) {
-                    cat.error("Catching exception when invoking method on observer: " + ex.toString()+" - "+ERXUtilities.stackTrace(ex));
+                    log.error("Catching exception when invoking method on observer: " + ex.toString()+" - "+ERXUtilities.stackTrace(ex));
                 }
             }
             registerLastModifiedDateForFile(file);            
@@ -179,7 +178,7 @@ public class ERXFileNotificationCenter {
      * @param NSNotification notification posted from the NSNotificationCenter.
      */
     public void checkIfFilesHaveChanged(NSNotification n) {
-        if (cat.isDebugEnabled()) cat.debug("Checking if files have changed");
+        if (log.isDebugEnabled()) log.debug("Checking if files have changed");
         for (Enumeration e = _lastModifiedByFilePath.keyEnumerator(); e.hasMoreElements();) {
             File file = new File((String)e.nextElement());
             if (file.exists() && hasFileChanged(file)) {
