@@ -41,7 +41,11 @@ public class ERDirectToWeb {
             if (cat.isDebugEnabled()) cat.debug("Initializing framework: ERDirectToWeb");
             Class c=ERD2WModel.class;        // force initialization
                                              // Configures the system for trace rule firing.
-            //ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
+            try {
+                ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
             Observer observer=new Observer();
             ERXRetainer.retain(observer); // has to be retained on the objC side!!
             NSNotificationCenter.defaultCenter().addObserver(observer,
@@ -238,25 +242,31 @@ public class ERDirectToWeb {
         ERD2WModel.erDefaultModel().prepareDataStructures();
     }
 
-    public static final Category trace = Category.getInstance("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
+    public static Category trace;
 
     // This enables us to turn trace rule firing on or off at will.
-    // FIXME: Disabled for now
+
+
+    public static class _Observer {
+        public void configureTraceRuleFiring(NSNotification n) {
+            ERDirectToWeb.configureTraceRuleFiring();
+        }
+    }
+
     private static boolean _initializedTraceRuleFiring = true;
     public static void configureTraceRuleFiringRapidTurnAround() {
         if (!_initializedTraceRuleFiring) {
+            // otherwise not properly initialized
+            trace = Category.getInstance("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE
-            if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForLevel(21)) {
-                NSLog.setAllowedDebugLevel(21);
+            if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
+                NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
+                NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
                 trace.info("Rule tracing on");
             }
-            Object observer=new Object() {
-                public void configureTraceRuleFiring(NSNotification n) {
-                    ERDirectToWeb.configureTraceRuleFiring();
-                }
-            };
+            Object observer=new _Observer();
             ERXRetainer.retain(observer); // has to be retained on the objC side!!
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("configureTraceRuleFiring",
@@ -271,6 +281,7 @@ public class ERDirectToWeb {
     public static void configureTraceRuleFiring() {
         if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
             NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
+            NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
             trace.info("Rule tracing on");
         } else if (!trace.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
             NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
