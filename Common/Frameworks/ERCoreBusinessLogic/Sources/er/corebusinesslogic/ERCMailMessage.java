@@ -79,12 +79,15 @@ public class ERCMailMessage extends _ERCMailMessage {
         if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldArchive",
                                                    false)) {
             setShouldArchiveSentMail(Boolean.TRUE);
+        } else {
+            setShouldArchiveSentMail(Boolean.FALSE);            
         }
         if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldGzipContent",
                                                    true)) {
             setContentGzipped(Boolean.TRUE);
+        } else {
+            setShouldArchiveSentMail(Boolean.FALSE);            
         }
-        
     }
         
     // State Methods
@@ -102,7 +105,7 @@ public class ERCMailMessage extends _ERCMailMessage {
         setIsRead(read ? ERXConstant.OneInteger : ERXConstant.ZeroInteger);
     }
     public boolean isReadAsBoolean() {
-        return ERXUtilities.booleanValue(isRead());
+        return ERXValueUtilities.booleanValue(isRead());
     }
 
     public NSArray toAddressesAsArray() {
@@ -180,10 +183,9 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     public ERCMailMessage archive() {
-        ERCMailMessage archive = (ERCMailMessage)ERXUtilities.createEO("ERCMailMessageArchive",
-                                                                                     editingContext());
-        archive.takeValuesFromDictionary(archive.snapshot());
-        return archive;
+        return (ERCMailMessage)ERXEOControlUtilities.createAndInsertObject(editingContext(),
+                                                                           "ERCMailMessageArchive",
+                                                                           snapshot());
     }
     
     /**
@@ -222,7 +224,8 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     public void attachFileWithMimeType(String filePath, String mimeType) {
-        ERCMessageAttachment attachment = (ERCMessageAttachment)ERXUtilities.createEO("ERCMessageAttachment", editingContext());
+        ERCMessageAttachment attachment = (ERCMessageAttachment)ERXEOControlUtilities.createAndInsertObject(editingContext(),
+                                                                                                            "ERCMessageAttachment");
         attachment.setFilePath(filePath);
         if(mimeType != null)
             attachment.setMimeType(mimeType);
