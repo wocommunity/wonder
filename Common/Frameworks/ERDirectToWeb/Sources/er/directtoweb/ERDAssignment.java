@@ -13,9 +13,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.lang.reflect.*;
 import java.util.*;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXLogger;
+import er.extensions.*;
 
 /**
  * Abstact super class of most assignments found in 
@@ -48,6 +46,10 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      */
     public ERDAssignment(String key, Object value) { super(key,value); }
 
+    protected boolean booleanContextValueForKey(D2WContext c, String key, boolean defaultValue) {
+        return ERXValueUtilities.booleanValueWithDefault(c.valueForKey(key), defaultValue);
+    }
+    
     /**
      * Gets the localizer for a given context.
      * The default implementation just returns
