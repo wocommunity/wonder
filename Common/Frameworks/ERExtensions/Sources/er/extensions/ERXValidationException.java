@@ -92,7 +92,10 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     
     /** holds the value that failed validation */
     protected Object value;
-    
+
+    /** holds the object that failed validation */
+    protected Object object;
+
     /** holds the target language if provided */
     protected String targetLanguage;
     
@@ -166,6 +169,17 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      */
     public EOEnterpriseObject eoObject() { return (EOEnterpriseObject)object(); }
 
+
+    /**
+     * Overrides super implementation to allow for setable object value.
+     * @return object object for this exception.
+     */
+    public Object object() {
+        if(object == null)
+            object = super.object();
+        return object;
+    }
+
     /**
      * Cover method for returning the <code>key</code> of
      * the validation exception under the name propertyKey.
@@ -221,6 +235,12 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     public void setValue(Object aValue) { value = aValue; }
 
     /**
+     * Sets the object that failed validation.
+     * @param aValue object that failed validation
+     */
+    public void setObject(Object aValue) { object = aValue; }
+    
+    /**
      * Returns the target language to display the validation message in.
      * If a target language is not set then the current default
      * language for the current thread is used.
@@ -265,7 +285,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * <p>
      * @return current context for the validation exception.
      */
-    // CHECKME: Now with WO 5 this doesn't nee to implement the NSKeyValueCoding interface
+    // CHECKME: Now with WO 5 this doesn't need to implement the NSKeyValueCoding interface
     public NSKeyValueCoding context() {
         if (_context == null)
             _context = ERXValidationFactory.defaultFactory().contextForException(this);
@@ -290,7 +310,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 
     /**
      * Cover method to return any additional exceptions that
-     * occurried. The reason this method is needed is because
+     * occurred. The reason this method is needed is because
      * we wanted to have the ability to set the additional
      * exceptions.
      * @return array of additional exceptions
@@ -299,7 +319,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
         if (additionalExceptions == null) {
             additionalExceptions = super.additionalExceptions();
             if (additionalExceptions == null)
-                additionalExceptions = NSArray.EmptyArray;
+                return NSArray.EmptyArray;
         }
         return additionalExceptions;
     }
@@ -350,12 +370,26 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     }
 
     /**
+     * Compares this exception to anything else.
+     * @return description of the validation exception
+     */
+    public boolean equals(Object anotherObject) {
+        if(anotherObject != null && anotherObject instanceof ERXValidationException) {
+            ERXValidationException ex = (ERXValidationException)anotherObject;
+            return ERXExtensions.safeEquals(type(), ex.type()) && ERXExtensions.safeEquals(key(), ex.key()) && ERXExtensions.safeEquals(object(), ex.object())
+                && ERXExtensions.safeEquals(value(), ex.value()) && ERXExtensions.safeEquals(additionalExceptions(), ex.additionalExceptions());
+        }
+        return super.equals(anotherObject);
+    }
+    
+    
+    /**
      * Returns the formatted description of the validation exception
      * without calling <code>getMessage</code>.
      * @return description of the validation exception
      */
     public String toString() {
         return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "
-        + propertyKey() + "; type: " + type() + ">";
+        + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
     }
 }
