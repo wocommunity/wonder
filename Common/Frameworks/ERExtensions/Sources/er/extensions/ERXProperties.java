@@ -50,6 +50,51 @@ public class ERXProperties {
     }
 
     /** 
+     * Returns the version string of the application.  
+     * It checkes <code>CFBundleShortVersionString</code> property 
+     * in the <code>info.plist</code> resource and returns 
+     * a trimed version of the value. 
+     * 
+     * @return version number as string; can be a null-string when 
+     * 			the applicaiton doesn't have the value of 
+     *			<code>CFBundleShortVersionString</code> 
+     *                  in its <code>info.plist</code> resource. 
+     * @see #versionStringForFrameworkNamed
+     * @see #webObjectsVersion
+     */ 
+    public static String versionStringForApplication() {
+        NSBundle bundle = NSBundle.mainBundle();
+        String versionString = (String) bundle.infoDictionary()
+                                            .objectForKey("CFBundleShortVersionString");
+        return versionString == null  ?  ""  :  versionString.trim(); // remove the line ending char
+    }
+
+    /** 
+     * Returns the version string of the given framework.
+     * It checkes <code>CFBundleShortVersionString</code> property 
+     * in the <code>info.plist</code> resource and returns 
+     * a trimed version of the value. 
+     * 
+     * @param  frameworkName name
+     * @return version number as string; can be null-string when 
+     * 			the framework is not found or the framework 
+     *			doesn't have the value of 
+     *                 	<code>CFBundleShortVersionString</code> in its 
+     *                 	<code>info.plist</code> resource. 
+     * @see #versionStringForApplication
+     * @see #webObjectsVersion
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString
+     */ 
+    public static String versionStringForFrameworkNamed(String frameworkName) {
+        NSBundle bundle = NSBundle.bundleForName(frameworkName);
+        if (bundle == null)  return "";
+        
+        String versionString = (String) bundle.infoDictionary()
+                                            .objectForKey("CFBundleShortVersionString");
+        return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
+    }
+
+    /** 
      * Returns WebObjects version as string. If it's one of those 
      * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
      * return 5.1. If it's 5.2s, this mothod will return more precise 
@@ -57,22 +102,32 @@ public class ERXProperties {
      * is not supported and may return incorrect version numbers 
      * (it will return 5.1). 
      * 
-     * @return WebObjects version number as string. 
+     * @return WebObjects version number as string
+     * @see #webObjectsVersionAsDouble
+     * @see ERXStringUtilities#removeExtraDotsFromVersionString
      */ 
     public static String webObjectsVersion() {
         if (_webObjectsVersion == null) {
-            NSBundle webobjectsBundle = NSBundle.bundleForName("JavaWebObjects");
-            _webObjectsVersion = (String)webobjectsBundle.infoDictionary()
-                                            .objectForKey("CFBundleShortVersionString");
-            _webObjectsVersion = _webObjectsVersion.trim(); // remove the line ending char
+            _webObjectsVersion = versionStringForFrameworkNamed("JavaWebObjects");
             
-            // if _webObjectsVersion is null or null-string, we assume it's WebObjects 5.1.x
-            if (_webObjectsVersion == null  ||  _webObjectsVersion.length() == 0) 
+            // if _webObjectsVersion is a null-string, we assume it's WebObjects 5.1.x
+            if (_webObjectsVersion.equals("")) 
                 _webObjectsVersion = "5.1";
         }
         return _webObjectsVersion;
     }
 
+    /** 
+     * Returns WebObjects version as double. If it's one of those 
+     * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
+     * return 5.1. If it's 5.2s, this mothod will return more precise 
+     * version numbers such as 5.2.1. Note that version 5.0 series 
+     * is not supported and may return incorrect version numbers 
+     * (it will return 5.1). 
+     * 
+     * @return WebObjects version number as double
+     * @see #webObjectsVersion
+     */
     public static double webObjectsVersionAsDouble() {
         if (_webObjectsVersionDouble == 0.0d) {
             String woVersionString = ERXStringUtilities.removeExtraDotsFromVersionString(webObjectsVersion());
