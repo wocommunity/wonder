@@ -11,6 +11,7 @@
 ./Sources/er/extensions/ERXBrowser.java:er.extensions
 ./Sources/er/extensions/ERXBrowserFactory.java:er.extensions
 ./Sources/er/extensions/ERXCheckboxMatrix.java:er.extensions
+./Sources/er/extensions/ERXCloneableEnterpriseObject.java:er.extensions
 ./Sources/er/extensions/ERXCloneableThreadLocal.java:er.extensions
 ./Sources/er/extensions/ERXCollapsibleComponentContent.java:er.extensions
 ./Sources/er/extensions/ERXColoredTabPanel.java:er.extensions
@@ -34,6 +35,8 @@
 ./Sources/er/extensions/ERXEditURL.java:er.extensions
 ./Sources/er/extensions/ERXEmptyComponent.java:er.extensions
 ./Sources/er/extensions/ERXEntityClassDescription.java:er.extensions
+./Sources/er/extensions/ERXEOControlUtilities.java:er.extensions
+./Sources/er/extensions/ERXEOEncodingUtilities.java:er.extensions
 ./Sources/er/extensions/ERXEOFAppender.java:er.extensions
 ./Sources/er/extensions/ERXEOFLogEntryInterface.java:er.extensions
 ./Sources/er/extensions/ERXEOToManyQualifier.java:er.extensions
@@ -131,6 +134,7 @@
 ./Sources/er/extensions/ERXValidationException.java:er.extensions
 ./Sources/er/extensions/ERXValidationFactory.java:er.extensions
 ./Sources/er/extensions/ERXWOContext.java:er.extensions
+./Sources/er/extensions/ERXWOFileUpload.java:er.extensions
 ./Sources/er/extensions/ERXWOForm.java:er.extensions
 ./Sources/er/extensions/WOCollapsibleComponentContent.java:er.extensions
 ./Sources/er/extensions/WOSortOrder.java:er.extensions
