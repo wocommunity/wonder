@@ -11,8 +11,8 @@ HasBranchChoices: WOConditional {
 	condition = hasBranchChoices;
 }
 
-HasExplanationComponent: ERXNonNullConditional {
-	condition = d2wContext.explanationComponentName;
+HasExplanationComponent: WOConditional {
+	condition = showExplanationComponent;
 }
 
 HasNextPage: WOConditional {
