@@ -143,11 +143,16 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     // MAIL VALIDATION
     public String validateEmail (EOEnterpriseObject object, String key, String email) {
         if (email != null) {
-            if (!_matcher.matches (email, _pattern))
+            if (!isValidEmail(email))
                 throw ERXValidationFactory.defaultFactory ().createException (object, key, email, "malformedEmail");
         }
 
         return email;
     }
-
+    public boolean isValidEmail (String email) {
+        if (email != null) {
+            return _matcher.matches (email, _pattern);
+        }
+        return false;
+    }
 }
