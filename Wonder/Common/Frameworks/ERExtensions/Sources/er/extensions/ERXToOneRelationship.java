@@ -38,35 +38,35 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         // variables need to be flushed when this component sleeps
         // so that it will pull via association.
         super._invalidateCaches();
-        this.setNoSelectionString(null);
-        this.setDestinationSortKey(null);
+        setNoSelectionString(null);
+        setDestinationSortKey(null);
     }
 
     protected EODataSource _localDataSource() {
-        if (null==this.dataSource()) {
-            this.setDataSource((EODataSource)this.valueForBinding("dataSource"));
-            if (this.dataSource() == null) {
-                String anEntityName = this._localSourceEntityName();
+        if (null==dataSource()) {
+            setDataSource((EODataSource)valueForBinding("dataSource"));
+            if (dataSource() == null) {
+                String anEntityName = _localSourceEntityName();
                 // FIXME (msanchez, 08/00, 2520053): use modelGroup on ObjectStoreCoordinator of our editingContext
                 EOModelGroup aModelGroup = EOModelGroup.defaultGroup();
                 EOEntity anEntity = aModelGroup.entityNamed(anEntityName);
 
                 if (anEntity == null) {
-                    throw new IllegalStateException("<" + this.getClass().getName() + " could not find entity named " + anEntityName + ">");
+                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
                 }
                 EOEntity destinationEntity = null;
                 EOEditingContext anEditingContext = null;
-                Object _source = this._localSourceObject();
+                Object _source = _localSourceObject();
                 if (_source instanceof EOEnterpriseObject) {
                     EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
-                                                                                               this._localRelationshipKey());
-                    destinationEntity = relationship != null ? relationship.entity() : null;
+                                                                                               _localRelationshipKey());
+                    destinationEntity = relationship != null ? relationship.destinationEntity() : null;
                     anEditingContext = ((EOEnterpriseObject)_source).editingContext();
                 }
                 if (destinationEntity == null)
-                    destinationEntity = this.entityWithEntityAndKeyPath(anEntity, this._localRelationshipKey());
+                    destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
                 if (anEditingContext == null) {
-                    anEditingContext = this.session().defaultEditingContext() ;
+                    anEditingContext = session().defaultEditingContext() ;
                 }
                 NSArray possibleChoices = (NSArray)valueForBinding("possibleChoices");
                 if (possibleChoices != null) {
@@ -81,7 +81,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 }
             }
         }
-        return this.dataSource();
+        return dataSource();
     }
 
     protected String _localSortKey() {
@@ -114,8 +114,8 @@ public class ERXToOneRelationship extends WOToOneRelationship {
      */
 
     public void updateSourceObject(Object anEO) {
-        String masterKey = this._localRelationshipKey();
-        Object aSourceObject = this._localSourceObject();
+        String masterKey = _localRelationshipKey();
+        Object aSourceObject = _localSourceObject();
         boolean isDictionary = (aSourceObject instanceof NSMutableDictionary);
         NSMutableDictionary _dictionary = (isDictionary) ? (NSMutableDictionary)aSourceObject : null;
         EOEnterpriseObject _eo = !(isDictionary) ? (EOEnterpriseObject)aSourceObject : null;
@@ -188,40 +188,41 @@ public class ERXToOneRelationship extends WOToOneRelationship {
             aValue = anEO;
         }
 
-        this.set_privateSelection(aValue);
+        set_privateSelection(aValue);
         // this set method needs to trigger the setSourceObject:
         // it's the only way our value will get back into the parent
-        this.updateSourceObject(aValue);
+        updateSourceObject(aValue);
     }
 
     public Object selection() {
-        if (this._privateSelection()==null) {
-            this.set_privateSelection(NSKeyValueCoding.Utility.valueForKey(this._localSourceObject(), this._localRelationshipKey()));
+        if (_privateSelection()==null) {
+            set_privateSelection(NSKeyValueCoding.Utility.valueForKey(_localSourceObject(), _localRelationshipKey()));
         }
         // deal with isMandatory
-        if ((this._privateSelection()==null) && !this._localIsMandatory()) {
-            this.setSelection(noSelectionString());
+        if ((_privateSelection()==null) && !_localIsMandatory()) {
+            setSelection(noSelectionString());
         }
-        return this._privateSelection();
+        return _privateSelection();
     }
 
     public NSArray theList() {
         NSMutableArray aSortedArray;
         NSArray anUnsortedArray;
-        if (this._privateList()==null) {
-            EODataSource aDataSource = this._localDataSource();
+        if (_privateList()==null) {
+            EODataSource aDataSource = _localDataSource();
             // Need to make sure that the eos are in the right editingContext.
             anUnsortedArray = ERXUtilities.localInstancesOfObjects(((EOEnterpriseObject)_sourceObject).editingContext(), aDataSource.fetchObjects());
             // 81398 sort contents
             aSortedArray = new NSMutableArray(anUnsortedArray);
             /* WO5
                 try {
-                    _RelationshipSupport._sortEOsUsingSingleKey(aSortedArray, this._localSortKey());
+                    _RelationshipSupport._sortEOsUsingSingleKey(aSortedArray, _localSortKey());
                 } catch (NSComparator.ComparisonException e) {
                     throw new NSForwardException(e);
                 }
             */
-            ERXUtilities.sortEOsUsingSingleKey(aSortedArray, this._localSortKey());
+            if (_localSortKey()!=null && _localSortKey().length()>0)
+                ERXUtilities.sortEOsUsingSingleKey(aSortedArray, _localSortKey());
 
             // if there is a value on the EO, then we need to make sure that the list's EOs are in the same EC
             // otherwise the popup selection will be wrong (will default to the first element)
@@ -240,16 +241,17 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                 aSortedArray=localArray;
             }
 
-            if (!this._localIsMandatory()) {
+            if (!_localIsMandatory()) {
                 aSortedArray.insertObjectAtIndex(noSelectionString(), 0);
             }
-            this.set_privateList(aSortedArray);
+            set_privateList(aSortedArray);
         }
-        return this._privateList();
+        return _privateList();
     }
 
     public Object theCurrentValue() {
         // handle the case where it's the - none - string
-        return theCurrentItem==noSelectionString() ? theCurrentItem : NSKeyValueCoding.Utility.valueForKey(theCurrentItem, this._localDestinationDisplayKey());
+        return theCurrentItem==noSelectionString() ?
+                theCurrentItem : NSKeyValueCoding.Utility.valueForKey(theCurrentItem, _localDestinationDisplayKey());
     }
 }
