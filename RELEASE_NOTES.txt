@@ -5,6 +5,7 @@ General
 -------
 - Added ERPlot framework, based on JFreechart. Doesn't do to much but will get 
   very useful with DynaGrouping. (Anjo Krank)
+- Added a PlugIn for Postgres.  (Anjo Krank)
 - Added ExcelGenerator framework, based on POI. (Anjo Krank)
 - Refactored code from ERMailer to ERCoreBusinessLogic
 - Ant Builds based in property files (Anjo Krank)
