@@ -74,9 +74,15 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public static int staticStoredIntValueForKey(String key) {
         return ERCStatic.staticClazz().staticStoredIntValueForKey(key);
     }
-
+    public static String staticStoredValueForKey(String key, EOEditingContext ec) {
+        return ERCStatic.staticClazz().staticStoredValueForKey(ec, key);
+    }
+    public static int staticStoredIntValueForKey(String key, EOEditingContext ec) {
+        return ERCStatic.staticClazz().staticStoredIntValueForKey(ec, key);
+    }
+    
     public static void takeStaticStoredValueForKey(String value, String key, EOEditingContext editingContext) {
-        ERCStatic.staticClazz().takeStaticStoredValueForKey(value, key, editingContext);
+        ERCStatic.staticClazz().takeStaticStoredValueForKey(editingContext, value, key);
     }
     
 
