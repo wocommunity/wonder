@@ -247,6 +247,8 @@ function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 
 function dhtmlMake(formName,varName,baseUrl,hasToolbar)
 {
+    if(!document.body)
+	return;
     if(! document.dhtmlControls) {
 	document.dhtmlControls = new Object();
 	if(document.body.onload) {
