@@ -52,12 +52,13 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
     public String primaryQueryKey() {
         return (String)valueForBinding("primaryQueryKey");
     }
-    public Object secondaryDisplayGroupQueryMatchValue() {
-        return key() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(secondaryQueryKey()) : null;
-    }
-    
+
     public boolean multiple() {
         return booleanValueForBinding("multiple");
+    }
+    
+    public Object secondaryDisplayGroupQueryMatchValue() {
+        return key() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(secondaryQueryKey()) : null;
     }
     
     public void setSecondaryDisplayGroupQueryMatchValue (Object newValue) {
@@ -70,12 +71,16 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
             if(multiple()) {
                 displayGroup().queryOperator().setObjectForKey(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, 
                         secondaryQueryKey());
+            } else {
+                displayGroup().queryOperator().setObjectForKey(EOQualifier.QualifierOperatorEqual.name(), secondaryQueryKey());
             }
         }
     }
+    
     public Object displayGroupQueryMatchValue() {
         return primaryQueryKey() != null && displayGroup() != null ? displayGroup().queryMatch().objectForKey(primaryQueryKey()) : null;
     }
+    
     public void setDisplayGroupQueryMatchValue (Object newValue) {
         if (primaryQueryKey() != null && displayGroup () != null && displayGroup().queryMatch()!=null ) {
             if(newValue != null) {
@@ -86,6 +91,8 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
             if(multiple()) {
                 displayGroup().queryOperator().setObjectForKey(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, 
                         primaryQueryKey());
+            } else {
+                displayGroup().queryOperator().setObjectForKey(EOQualifier.QualifierOperatorEqual.name(), primaryQueryKey());
             }
         }
     }
@@ -94,17 +101,12 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
         String restrictedChoiceKey=(String)valueForBinding("restrictedChoiceKey");
         if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 )
             return valueForKeyPath(restrictedChoiceKey);
-        EOEditingContext ec = ERXEC.newEditingContext();
+        EOEditingContext ec = displayGroup().dataSource().editingContext();
         String destinationEntityName = (String)valueForBinding("destinationEntityName");
-        ec.lock();
-        try {
-            String restrictingFetchSpecification=(String)valueForBinding("restrictingFetchSpecification");
-            if(restrictingFetchSpecification != null &&  restrictingFetchSpecification.length()>0) {
-                return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, destinationEntityName, restrictingFetchSpecification,null);
-            }
-            return EOUtilities.objectsForEntityNamed(ec, destinationEntityName);
-        } finally {
-            ec.unlock();
+        String restrictingFetchSpecification=(String)valueForBinding("restrictingFetchSpecification");
+        if(restrictingFetchSpecification != null &&  restrictingFetchSpecification.length()>0) {
+            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, destinationEntityName, restrictingFetchSpecification,null);
         }
+        return EOUtilities.objectsForEntityNamed(ec, destinationEntityName);
     }
 }
