@@ -105,8 +105,8 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
             NSMutableArray argHolder = new NSMutableArray(args.count());
             for (Enumeration argEnumerator = args.objectEnumerator(); argEnumerator.hasMoreElements();) {
                 Object arg = argEnumerator.nextElement();
-                if (arg instanceof String && arg.length() > 1 && arg.charAt(0).equals('^')) {
-                    Object value = c.valueForKeyPath(arg.substring(1, arg.length()));
+                if (arg instanceof String && ((String)arg).length() > 1 && ((String)arg).charAt(0) == '^') {
+                    Object value = c.valueForKeyPath(((String)arg).substring(1, ((String)arg).length()));
                     if (value == null)
                         value = NSKeyValueCoding.NullValue;
                     argHolder.addObject(value);
