@@ -151,7 +151,7 @@ ReturnLink: WOHyperlink {
 
 SubmitButton1: WOSubmitButton {
 	action = moveObjectUp;
-	value = "UP";
+	value = "  Up  ";
 }
 
 SubmitButton2: WOSubmitButton {
