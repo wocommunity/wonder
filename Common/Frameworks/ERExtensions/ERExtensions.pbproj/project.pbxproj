@@ -504,6 +504,7 @@
 				4105E4A805C7CBA9003BA93B,
 				4105EC4505C81354003BA93B,
 				41D6423905CF9CC600BB3C39,
+				416E92DB05E4BD3800F3D01E,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +521,7 @@
 				F510756102C453E601000102,
 				F59C599A02C4575701000102,
 				639E08E60466746E00A83704,
+				416E92DD05E4BD7000F3D01E,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1068,6 +1070,7 @@
 				40B58291FFD5E91B7F000001,
 				022D130B0059B6D511CD2978,
 				639E08E50466746E00A83704,
+				416E92DC05E4BD7000F3D01E,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -1613,6 +1616,31 @@
 			settings = {
 			};
 		};
+		416E92DA05E4BD3800F3D01E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXWOServletContext.java;
+			path = er/extensions/ERXWOServletContext.java;
+			refType = 4;
+		};
+		416E92DB05E4BD3800F3D01E = {
+			fileRef = 416E92DA05E4BD3800F3D01E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		416E92DC05E4BD7000F3D01E = {
+			isa = PBXFrameworkReference;
+			name = JavaWOJSPServlet.framework;
+			path = /System/Library/Frameworks/JavaWOJSPServlet.framework;
+			refType = 0;
+		};
+		416E92DD05E4BD7000F3D01E = {
+			fileRef = 416E92DC05E4BD7000F3D01E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4198E3BF052634260048E379 = {
 			children = (
 				4198E3C0052634260048E379,
@@ -1717,6 +1745,7 @@
 				F50C03910354549D014B9BC9,
 				F522D6CC03A0397701CAC43C,
 				F59BE09403A5883C01CF0E76,
+				416E92DA05E4BD3800F3D01E,
 				D87D3D387A5018D87997F7DC,
 				F6E798CF02C8799401AD0D07,
 				F6E7989E02C8799401AD0D07,
