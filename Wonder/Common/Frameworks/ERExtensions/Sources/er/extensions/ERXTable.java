@@ -27,7 +27,7 @@ import com.webobjects.appserver.*;
  * [maxColumns=<i>aNumber</i>;][tableBackgroundColor=<i>aString</i>;][border=<i>aNumber</i>;][cellpadding=<i>aNumber</i>;][cellspacing=<i>aNumber</i>;]
  * [rowBackgroundColor=<i>aString</i>;][cellBackgroundColor=<i>aString</i>;][cellAlign=<i>aNumber</i>;][cellVAlign=<i>aNumber</i>;]
  * [cellWidth=<i>aNumber</i>;][tableWidth=<i>aNumber</i>;]
- * [goingVertically=<i>aBoolean</i>;][headerImages=<i>anArray</i>;]
+ * [goingVertically=<i>aBoolean</i>;][headerImages=<i>anArray</i>;][headerRowBackgroundColor=<i>aColor</i>;]
  *
  * @binding col pushed to the parent with the current
  *		column number
@@ -54,6 +54,8 @@ import com.webobjects.appserver.*;
  *		layed out horizontally or vertically.
  * @binding headerImages array of images to be displayed
  *		in the header cells of the table
+ * @binding headerRowBackgroundColor background color for the 
+ *		header row
  */
 public class ERXTable extends WOTable {
 
