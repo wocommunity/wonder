@@ -60,13 +60,6 @@ public class ERDList extends ERDCustomEditComponent {
     }
 
     // This is fine because we only use the D2WList if we have at least one element in the list.
-
-    // FIXME: This sucks.
-    public boolean isTargetXML(){
-        String listConfigurationName = stringValueForBinding("listConfigurationName");
-        return listConfigurationName != null && listConfigurationName.indexOf("XML") > -1;
-    }
-
     public boolean erD2WListOmitCenterTag() {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
