@@ -27,7 +27,6 @@ public class ERDInspectButton extends ERDCustomEditComponent {
         EOEditingContext context = er.extensions.ERXExtensions.newEditingContext();
         EOEnterpriseObject localObject = EOUtilities.localInstanceOfObject(context, object());
         String configuration = (String)d2wContext().valueForKey("inspectConfigurationNameForEntity");
-        System.out.println("inspectConfigurationNameForEntity = "+configuration);
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(configuration, session());
         epi.setObject(localObject);
         epi.setNextPage(context().page());
