@@ -93,13 +93,15 @@ public class LoginPanel extends BaseComponent {
         }
         catch (Exception e) {
             System.out.println(e);
-            databaseResults = new NSArray(); // blank out the array
         }
         
         WOActionResults pageToReturn = (WOActionResults) performParentAction(parentLoginCheck);
-        WOResponse responseToModify = pageToReturn.generateResponse();
-
-        return this.modifyResponse(responseToModify);
+        
+        if (pageToReturn!=null) {
+            WOResponse responseToModify = pageToReturn.generateResponse();
+            return this.modifyResponse(responseToModify);
+        }
+        else return null;
         
     }
 
