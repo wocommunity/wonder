@@ -1,0 +1,12 @@
+{
+    NullPropertyException = "Fornire un valore per <b>@@displayNameForProperty@@</b>.";
+    InvalidNumberException = "Numero non valido.";
+    MandatoryToOneRelationshipException = "<b>@@displayNameForEntity@@</b> deve avere un/a <b>@@displayNameForProperty@@</b>.";
+    MandatoryToManyRelationshipException = "<b>@@displayNameForEntity@@</b> deve avere almeno un/a <b>@@displayNameForDestinationEntity@@</b>.";
+    ObjectRemovalException = "Non posso eliminare questo/a <b>@@displayNameForEntity@@</b>. Dovresti prima cancellare <b>@@displayNameForProperty@@</b>.";
+    ObjectsRemovalException = "Non posso eliminare questo/a <b>@@displayNameForEntity@@</b>. Dovresti prima cancellare <b>@@displayNameForProperty@@</b>.";
+
+    ExceedsMaximumLengthException = "Il valore fornito per <b>@@displayNameForProperty@@</b> è più lungo di <b>@@attribute.width@@</b>.";
+    ValueConversionException = "Il valore fornito per <b>@@displayNameForProperty@@</b> non è valido <b>@@attribute.valueClass@@</b>.";
+}
+

@@ -1,0 +1,6 @@
+{
+    WOToOneRelationship.noneString = "- nessuno/a -";
+    "Could not save your changes: " = "Non posso salvare le modifiche: ";
+    ERXCheckboxMatrix.deselectAll = "Nessuno/a";
+    ERXCheckboxMatrix.selectAll = "Tutti/e";
+}
