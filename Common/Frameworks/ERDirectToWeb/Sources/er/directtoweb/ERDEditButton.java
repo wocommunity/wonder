@@ -20,7 +20,7 @@ import er.extensions.*;
 
 public class ERDEditButton extends ERDActionButton {
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDEditButton.class,"components");
+    private static final ERXLogger log = ERXLogger.getLogger(ERDEditButton.class,"components,actions");
 
     public ERDEditButton(WOContext context) {super(context);}
     
@@ -39,7 +39,7 @@ public class ERDEditButton extends ERDActionButton {
 
     public WOComponent editObjectAction() {
         EOEnterpriseObject localObject = localInstanceOfObject();
-        String configuration = (String)valueForBinding("editConfigurationNameForEntity");
+        String configuration = (String)valueForBinding("editConfigurationName");
         if(log.isDebugEnabled()){
            log.debug("configuration = "+configuration);
         }
