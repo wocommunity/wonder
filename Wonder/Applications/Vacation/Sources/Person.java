@@ -18,6 +18,7 @@ public class Person extends _Person implements SelectionInterface {
 
     public Integer selectedYear;
     public Person editorUser;
+    public static GregorianCalendar _archiveDate;
 
     public Person(EOEditingContext newContext, NSArray years) {
         super();
@@ -68,16 +69,8 @@ public class Person extends _Person implements SelectionInterface {
     public NSArray datesForSelectedYear() {
         if (selectedYear!=null) {
 
-            GregorianCalendar archiveDate = new GregorianCalendar();
-            Setting setting = Setting.currentSettingForContext(editingContext());
-
-            // create Start and End year dates, if there is none set
-            
-            if (setting != null) archiveDate.setTime(setting.archiveDate());
-            else archiveDate = new GregorianCalendar(selectedYear.intValue(),Calendar.JANUARY,1,0,0,0);          
-
-            GregorianCalendar startOfYear = new GregorianCalendar(selectedYear.intValue(), archiveDate.get(GregorianCalendar.MONTH), archiveDate.get(GregorianCalendar.DAY_OF_MONTH), 0, 0, 0);
-            GregorianCalendar endOfYear = new GregorianCalendar(selectedYear.intValue()+1,archiveDate.get(GregorianCalendar.MONTH), archiveDate.get(GregorianCalendar.DAY_OF_MONTH), 0, 0, 0);
+            GregorianCalendar startOfYear = new GregorianCalendar(selectedYear.intValue(), archiveDate().get(GregorianCalendar.MONTH), archiveDate().get(GregorianCalendar.DAY_OF_MONTH), 0, 0, 0);
+            GregorianCalendar endOfYear = new GregorianCalendar(selectedYear.intValue()+1,archiveDate().get(GregorianCalendar.MONTH), archiveDate().get(GregorianCalendar.DAY_OF_MONTH), 0, 0, 0);
 
             // construct qualifiers
             EOKeyValueQualifier qual1 = new EOKeyValueQualifier("fromDate", EOQualifier.QualifierOperatorGreaterThanOrEqualTo, startOfYear.getTime());
@@ -88,6 +81,19 @@ public class Person extends _Person implements SelectionInterface {
 
         }
         else return null;
+    }
+
+    public GregorianCalendar archiveDate() {
+        if (_archiveDate==null) {
+            
+            _archiveDate = new GregorianCalendar();
+            Setting setting = Setting.currentSettingForContext(editingContext());
+        
+            if (setting != null) _archiveDate.setTime(setting.archiveDate());
+            else _archiveDate = new GregorianCalendar(selectedYear.intValue(),Calendar.JANUARY,1,0,0,0);
+        }
+
+        return _archiveDate;
     }
 
     public YearlyData currentYearlyData() {
