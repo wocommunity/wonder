@@ -27,6 +27,19 @@ public abstract class ERXStatelessComponent extends WOComponent {
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     /**
+     * Resolves a given binding as a int value. Useful for image sizes and the like.
+     * @param binding binding to be resolved as a int value.
+     * @param defaultValue default int value to be used if the
+     *        binding is not bound.
+     * @return result of evaluating binding as a int.
+     */
+    // RENAMEME: all of the valueForXXX method should be named
+    // xxxValueForBinding() like the ones in WORequest.
+    public int valueForIntBinding(String binding, int defaultValue) {
+        return ERXValueUtilities.intValueForBindingOnComponentWithDefault(binding, this, defaultValue);
+    }
+
+    /**
      * Resolves a given binding as a boolean value. Defaults to
      * false.
      * @param binding binding to be resolved as a boolean value.
@@ -42,10 +55,12 @@ public abstract class ERXStatelessComponent extends WOComponent {
      *        binding is not bound.
      * @return result of evaluating binding as a boolean.
      */
+    // CHECKME: from the name of the method, one would think that
+    // ERXValueUtilities.booleanValueForBindingOnComponentWithDefault
+    // would be the correct method to use, but after reading the comment there, I'm not sure.
     public boolean valueForBooleanBinding(String binding, boolean defaultValue) {
         if (hasBinding(binding)) {
-            Object o = valueForBinding(binding);
-            return (o == null) ? false : ERXUtilities.booleanValue(o);
+            return ERXValueUtilities.booleanValueWithDefault(valueForBinding(binding), false);
         } else {
             return defaultValue;
         }
@@ -61,8 +76,7 @@ public abstract class ERXStatelessComponent extends WOComponent {
      */
     public boolean valueForBooleanBinding(String binding, ERXUtilities.BooleanOperation defaultValue) {
         if (hasBinding(binding)) {
-            Object o = valueForBinding(binding);
-            return (o == null) ? false : ERXUtilities.booleanValue(o);
+            return valueForBooleanBinding(binding, false);
         } else {
             return defaultValue.value();
         }
