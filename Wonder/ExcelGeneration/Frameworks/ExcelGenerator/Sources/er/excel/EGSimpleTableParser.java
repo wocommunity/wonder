@@ -152,19 +152,19 @@ public class EGSimpleTableParser {
     		document = builder.parse(stream);
     		
     		_workbook = new HSSFWorkbook();
-
-                if (log.isDebugEnabled())
-                    log.debug(document.getDocumentElement());
+    		
+    		if (log.isDebugEnabled())
+    		    log.debug(document.getDocumentElement());
     		
     		NodeList nodes = document.getDocumentElement().getChildNodes();
     		for (int i = 0; i < nodes.getLength(); i++) {
-    			Node node = nodes.item(i);
-    			if(node.getNodeType() == Node.ELEMENT_NODE) {
-    				parseNode(node);
-    			}
+    		    Node node = nodes.item(i);
+    		    if(node.getNodeType() == Node.ELEMENT_NODE) {
+    		        parseNode(node);
+    		    }
     		}
     	} catch(Exception ex) {
-    		throw new NSForwardException(ex);
+    	    throw new NSForwardException(ex);
     	}
     }
     
@@ -234,9 +234,17 @@ public class EGSimpleTableParser {
     	
     	NSMutableDictionary sheetDict = new NSMutableDictionary();
     	addEntriesFromNode(sheetDict, tableNode);
-    	
-    	HSSFSheet sheet = _workbook.createSheet(sheetName);
-    	NodeList rowNodes = tableNode.getChildNodes();
+        if(sheetName.matches("[\\/\\\\\\*\\?\\[\\]]")) {
+            sheetName = sheetName.replaceAll("[\\/\\\\\\*\\?\\[\\]]", "-");
+            log.warn("Illegal characters in sheet name (/\\*?[]): " + sheetName);
+        }
+        if(sheetName.length() > 31) {
+            sheetName = sheetName.substring(0,31);
+            log.warn("Sheet name too long (max 31 Characters): " + sheetName);
+        }
+        HSSFSheet sheet = _workbook.createSheet(sheetName);
+ 
+        NodeList rowNodes = tableNode.getChildNodes();
     	
     	//takeNumberValueForKey(tableNode, "defaultColumnWidthInPoints", workbook, null);
     	takeNumberValueForKey(sheetDict, "defaultColumnWidth", sheet, null);
