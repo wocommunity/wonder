@@ -21,11 +21,36 @@ public class EOGenericRecordClazz extends Object {
     /** logging support */
     public static final ERXLogger log = ERXLogger.getLogger(EOGenericRecordClazz.class);
     
+    /** caches the clazz objects */
+    private static NSMutableDictionary allClazzes = new NSMutableDictionary();
+
+    /** caches the count attribute */
+    private static EOAttribute _objectCountAttribute = null;
+
+    /**
+     * Creates and caches an eo attribute that can be
+     * used to return the number of objects that a given
+     * fetch specification will return.
+     * @return eo count attribute
+     */
+    private static EOAttribute objectCountAttribute() {
+        if ( _objectCountAttribute == null ) {
+            _objectCountAttribute = new EOAttribute();
+
+            _objectCountAttribute.setName("p_objectCountAttribute");
+            _objectCountAttribute.setColumnName("p_objectCountAttribute");
+            _objectCountAttribute.setClassName("java.lang.Number");
+            _objectCountAttribute.setValueType("i");
+            _objectCountAttribute.setReadFormat("count(*)");
+        }
+        return _objectCountAttribute;
+    }
+
     /** caches the entity name */
     private String _entityName;
 
-    /** caches the clazz objects */
-    private static NSMutableDictionary allClazzes = new NSMutableDictionary();
+    /** holds the entity name of the clazz */
+    private EOEntity _entity;
     
     /**
      * Default public constructor
@@ -110,54 +135,113 @@ public class EOGenericRecordClazz extends Object {
         return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity());
     }
     
+    /**
+     * Returns all of the objects for the given
+     * entity of the clazz in the given editing
+     * context.
+     * @param ec editing context to fetch into
+     * @return all of the objects corresponding to
+     *		the clazz's entity.
+     */
     public NSArray allObjects(EOEditingContext ec) {
         return EOUtilities.objectsForEntityNamed(ec, entityName());
     }
 
+    /**
+     * Creates an enterprise object from a raw row
+     * for the clazz's entity in the given editing context.
+     * @param ec editing context to create the eo in
+     * @param dict raw row dictionary
+     * @return enterprise object for the raw row
+     */
     public EOEnterpriseObject objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
         return EOUtilities.objectFromRawRow(ec, entityName(), dict);
     }
 
+    /**
+     * Fetches the enterprise object for the specified 
+     * primary key value and corresponding to the clazz's
+     * entity name.
+     * @param ec editing context to fetch into
+     * @param pk primary key value
+     * @return enterprise object for the specified primary
+     *		key value.
+     */
     public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
         return EOUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk);
     }
 
+    /**
+     * Fetches all of the objects matching the given qualifer
+     * format corresponding to the clazz's entity using the 
+     * given editing context.
+     * @oaram ec editing context
+     * @param qualifer format string
+     * @param args qualifier format arguments
+     * @return array of objects corresponding to the passed in
+     *		parameters.
+     */
     public NSArray objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
         return EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
     }
 
+    /**
+     * Fetchs an array of objects for a given fetch specification
+     * and an array of bindings. The fetch specifiation is resolved
+     * off of the entity corresponding to the current clazz.
+     * @param ec editing content to fetch into
+     * @param name fetch specification name
+     * @param bindings used to resolve binding keys within the fetch
+     *		specification
+     * @return array of objects fetched using the given fetch specification
+     */
     public NSArray objectsWithFetchSpecificationAndBindings(EOEditingContext ec, String name, NSDictionary bindings) {
         return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, entityName(), name, bindings);
     }
 
+    /**
+     * Sets the entity name of the clazz.
+     * @param name of the entity
+     */
     public void setEntityName(String name) { _entityName = name; }
+    
+    /**
+     * Gets the entity name of the clazz.
+     * @return entity name of the clazz.
+     */
     public String entityName() { return _entityName; }
 
-    private EOEntity _entity;
+    /**
+     * Gets the entity corresponding to the entity
+     * name of the clazz.
+     * @return entity for the clazz
+     */
+     // ENHANCEME: Shouldn't assume the default model group
     public EOEntity entity() {
-        if(_entity == null) _entity = EOModelGroup.defaultGroup().entityNamed(entityName());
+        if (_entity == null) _entity = EOModelGroup.defaultGroup().entityNamed(entityName());
         return _entity;
     }
 
+    /**
+     * Gets a fetch specification for a given name.
+     * @param name of the fetch specification
+     * @return fetch specification for the given name
+     *		and the clazz's entity name
+     */
     public EOFetchSpecification fetchSpecificationNamed(String name) {
         return EOModelGroup.defaultGroup().fetchSpecificationNamed(name,entityName());
     }
     
-    private static EOAttribute _objectCountAttribute = null;
-
-    private static EOAttribute objectCountAttribute() {
-        if ( _objectCountAttribute == null ) {
-            _objectCountAttribute = new EOAttribute();
-
-            _objectCountAttribute.setName("p_objectCountAttribute");
-            _objectCountAttribute.setColumnName("p_objectCountAttribute");
-            _objectCountAttribute.setClassName("java.lang.Number");
-            _objectCountAttribute.setValueType("i");
-            _objectCountAttribute.setReadFormat("count(*)");
-        }
-        return _objectCountAttribute;
-    }
-
+    /**
+     * Returns the number of objects matching the given
+     * qualifier for the clazz's entity name. Implementation
+     * wise this method will generate the correct sql to only
+     * perform a count, i.e. all of the objects wouldn't be 
+     * pulled into memory.
+     * @param ec editing context to use for the count qualification
+     * @param qualifier to find the matching objects
+     * @return number of matching objects
+     */
     public Number objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
         String entityName = entityName();
         
@@ -179,13 +263,24 @@ public class EOGenericRecordClazz extends Object {
         }
         if ((results != null) && (results.count() == 1)) {
             NSDictionary row = (NSDictionary) results.lastObject();
-
             return (Number)row.objectForKey(attribute.name());
         }
-
         return null;
     }
 
+    /**
+     * Find the number of objects matching the given fetch
+     * specification and bindings for the clazz's entity
+     * name. Implementation wise the sql generated will
+     * only return the count of the query, not all of the
+     * rows matching the qualification. 
+     * @param editingContext used to perform the count in
+     * @param fetchSpecName name of the fetch specification
+     * @param bindings dictionary of bindings for the fetch
+     *		specification
+     * @return number of objects matching the given fetch 
+     *		specification and bindings
+     */
     public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext editingContext, String fetchSpecName,  NSDictionary bindings) {
         String entityName = entityName();
         EOFetchSpecification unboundFetchSpec;
