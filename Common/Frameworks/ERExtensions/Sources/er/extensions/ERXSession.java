@@ -58,10 +58,8 @@ public class ERXSession extends WOSession implements Serializable {
     /** holds a reference to the current browser used for this session */
     transient private ERXBrowser _browser;
 
-    /** flag for if java script is enabled, defaults to true */
-    protected boolean _javaScriptEnabled=true; // most people have JS by now
-    /** flag to indicate if java script has been set */
-    protected boolean _javaScriptInitialized=false;
+    /** flag for if java script is enabled */
+    protected Boolean _javaScriptEnabled; // most people have JS by now
 
     /** holds a debugging store for a given session. */
     protected NSMutableDictionary _debuggingStore;
@@ -328,9 +326,33 @@ public class ERXSession extends WOSession implements Serializable {
 
     /**
      * Returns if this user has javascript enabled.
+     * This checks a form value "javaScript" and a cookie "js"
+     * if the value is 1.
      * @return if js is enabled, defaults to true.
      */
-    public boolean javaScriptEnabled() { return _javaScriptEnabled; }
+    //CHECKME: (ak) I don't understand this? Having a default of TRUE makes no sense. At least not without some ERXJSCheckJavaScript component that would set a value on &lt;NOSCRIPT&gt; or sth like this.
+    public boolean javaScriptEnabled() {
+        WORequest request = context() != null ? context().request() : null;
+        if(_javaScriptEnabled == null && request != null) {
+            // FIXME: Shouldn't be hardcoded form value.
+            String js = request.stringFormValueForKey("javaScript");
+            if(js != null) {
+                if (log.isDebugEnabled())
+                    log.debug("Received javascript form value "+js);
+            } else {
+                try {
+                    js = request.cookieValueForKey(JAVASCRIPT_ENABLED_COOKIE_NAME);
+                } catch (StringIndexOutOfBoundsException e) {
+                    // malformed cookies cause WO 5.1.3 to raise here
+                }
+            }
+            if(js != null) {
+                _javaScriptEnabled = (ERXValueUtilities.booleanValue(js) && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) ||  browser().isMozilla40Compatible() ||  browser().isMozilla50Compatible())) ? Boolean.TRUE : Boolean.FALSE;
+            }
+        }
+        // defaults to true as most browsers have javascript
+        return _javaScriptEnabled == null ? true : _javaScriptEnabled.booleanValue();
+    }
 
     /**
      * Sets if javascript is enabled for this session.
@@ -339,8 +361,7 @@ public class ERXSession extends WOSession implements Serializable {
      * @param newValue says if javascript is enabled
      */
     public void setJavaScriptEnabled(boolean newValue) {
-        _javaScriptEnabled=newValue;
-        _javaScriptInitialized=true;
+        _javaScriptEnabled=newValue ? Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -354,30 +375,11 @@ public class ERXSession extends WOSession implements Serializable {
         NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
 
         WORequest request=context()!=null ? context().request() : null;
-        if (request!=null && log.isDebugEnabled()) log.debug("Form values "+request.formValues());
-        // FIXME: Shouldn't be hardcoded form value.
-        if (request!=null && request.formValueForKey("javaScript")!=null) {
-            String js=(String)request.formValueForKey("javaScript");
-            if (log.isDebugEnabled()) log.debug("Received javascript form value "+js);
-            setJavaScriptEnabled(js != null  &&  js.equals("1")  
-                                    && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) 
-                                        ||  browser().isMozilla40Compatible()  
-                                        ||  browser().isMozilla50Compatible()) );
-        }
-        if (request!=null && /* !_javaScriptInitialized */true) {
-            String js=null;
-            try {
-                request.cookieValueForKey(JAVASCRIPT_ENABLED_COOKIE_NAME);
-            } catch (StringIndexOutOfBoundsException e) {
-                // malformed cookies cause WO 5.1.3 to raise here
-            }
-            if (js!=null) { // a friend sent us a cookie!
-                if (log.isDebugEnabled()) log.debug("Got JAVASCRIPT_ENABLED_COOKIE from a friend "+js);
-                setJavaScriptEnabled(js.equals("1") 
-                                    && (browser().browserName().equals(ERXBrowser.UNKNOWN_BROWSER) 
-                                        ||  browser().isMozilla40Compatible()  
-                                        ||  browser().isMozilla50Compatible()) );
-            }
+        if (request!=null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
+            if(((String)request.headerForKey("content-type")).toLowerCase().indexOf("multipart/form-data") == -1)
+                log.debug("Form values "+request.formValues());
+            else
+                log.debug("Multipart Form values found");
         }
     }
 
