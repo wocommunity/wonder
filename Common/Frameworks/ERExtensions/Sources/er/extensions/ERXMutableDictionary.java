@@ -10,6 +10,7 @@ usefull class in to automatically en- and decode an NSMutableDictionary
  as blob into a database. ERPrototype name = mutableDictionary
 */
 public class ERXMutableDictionary extends NSMutableDictionary {
+    public static final long serialVersionUID = 8091318522043166356L;
 
     public static NSData toBlob(ERXMutableDictionary d) throws Exception {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
