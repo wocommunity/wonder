@@ -687,7 +687,7 @@ public class ERXExtensions {
         if(result!=null && result.count() == 1) {
             return result.lastObject();
         } else if (result!=null && result.count() > 1) {
-            log().warn("Attempting to get a raw primary key from an object with a compound key: " + eo);
+            log().warn("Attempting to get a raw primary key from an object with a compound key: " + eo.eoShallowDescription());
         }
         return result;
     }
