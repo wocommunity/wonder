@@ -341,14 +341,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 log.debug(eoentity.name() + ": setting class from: " + className + " to: " + alternateClassName);
                 eoentity.setClassName(alternateClassName);
             } else if (className.equals("EOGenericRecord")) {
-                // if we contain only pk attributes, we don't need to convert
-                if(eoentity.primaryKeyAttributes().count() != eoentity.attributes().count()) {
-                    eoentity.setClassName(defaultClassName);
-                    log.debug(eoentity.name() + ": setting class from EOGenericRecord to " + defaultClassName);
-                } else {
-                    log.debug(eoentity.name() + ": not setting class from EOGenericRecord to "
-                              + defaultClassName + ", there are no real attributes");
-                }
+                eoentity.setClassName(defaultClassName);
             } 
         }
 
