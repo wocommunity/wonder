@@ -12,6 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
+import org.apache.log4j.*;
 
 /**
  *  ERXApplication is the abstract superclass of WebObjects applications
@@ -338,6 +339,13 @@ public abstract class ERXApplication extends WOApplication {
             if (context.hasSession())
                 if (context.session().statistics() != null)
                     extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
+            if(MDC.get("user")!=null){
+                EOEnterpriseObject user = (EOEnterpriseObject)MDC.get("user");
+                extraInfo.setObjectForKey(user.userPresentableDescription(), "user");
+            }
+            if(MDC.get("ip")!=null){
+                extraInfo.setObjectForKey(MDC.get("ip"), "ip");
+            }
         }
         return extraInfo;
     }
@@ -382,9 +390,7 @@ public abstract class ERXApplication extends WOApplication {
         handlePotentiallyFatalException(exception);
 
         // Not a fatal exception, business as usual.
-        
         NSDictionary extraInfo = extraInformationForExceptionInContext(exception, context);
-        
         WOResponse response = reportException(exception, extraInfo);
         if(response == null)
             response = super.handleException(exception, context);
