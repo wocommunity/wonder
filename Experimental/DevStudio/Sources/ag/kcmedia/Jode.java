@@ -243,6 +243,11 @@ public class Jode extends Object {
                 decompiler.decompile(classInfo().getName(), writer, null);
             } catch (IOException ex) {
                 log.error(ex.toString());
+            } catch (jode.AssertError ex) {
+                log.error(ex.toString());
+                return ex.toString() + " occurred. \n\n" 
+                    + "Please check if you have all necessary jar and class files \n" 
+                    + "added to ClassPaths property in the Localizable.strings file.";
             }
             sourceCode = writer.toString();
             sourceCode = JavaCCtoHTML.prettyString(sourceCode);
