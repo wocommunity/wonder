@@ -106,7 +106,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
                     fileName = "results.xls";
                 }
                 response.setHeader("inline; filename=" + fileName, "content-disposition");
-                response.setHeader("application/msexcel", "content-type");
+                response.setHeader("application/vnd.ms-excel", "content-type");
             }
         } else {
             super.appendToResponse(response, context);
