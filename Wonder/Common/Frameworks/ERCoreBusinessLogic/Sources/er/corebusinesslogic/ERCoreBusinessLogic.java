@@ -230,8 +230,15 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         StringBuffer s = new StringBuffer();
         try {
             s.append("    **** Caught: "+exception + "\n");
-            s.append("         Actor: "+actor() + "\n");
-            s.append("         Extra Information "+extraInfo + "\n");
+            s.append("         Actor: " + (actor() != null ? actor().toString() : "No Actor") + "\n");
+            if (extraInfo != null && extraInfo.count() > 0) {
+                s.append("         Extra Information: \n");
+                for (Enumeration keyEnumerator = extraInfo.keyEnumerator(); keyEnumerator.hasMoreElements();) {
+                    String key = (String)keyEnumerator.nextElement();
+                    s.append("         " + key + " = " + extraInfo.objectForKey(key) + "\n");
+                }
+            }
+            
             if (exception instanceof EOGeneralAdaptorException) {
                 EOGeneralAdaptorException  e= (EOGeneralAdaptorException)exception;
                 if (e.userInfo()!=null) {
