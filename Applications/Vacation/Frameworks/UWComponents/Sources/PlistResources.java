@@ -49,7 +49,11 @@ public class PlistResources extends Object implements NSKeyValueCoding {
 
     // load settings from a text file
     public Object objectForKey(String key) {
-        return dictionary.objectForKey(key);
+        return valueForKey(key);
+    }
+
+    public String stringForKey(String key) {
+        return (String) valueForKey(key);
     }
 
     public NSDictionary dictionaryForKey(String key) {
