@@ -8,10 +8,12 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 /**
- * @author david@cluster9.com
- * 
- * This is the default EOModelGroup delegate. It just implements one method:
- * <code>subEntityForEntity(EOEntity entity, NSDictionary dict)</code>
+ * @author david@cluster9.com<br/>
+ * <br/>
+ * This is the default EOModelGroup delegate. It just implements one method:<br/>
+ * <br/>
+ * <code>subEntityForEntity(EOEntity entity, NSDictionary dict)</code><br/>
+ * <br/>
  * which is being used if <code>ERXLongPrimaryKeyFactory.encodeEntityInPkValue()</code>
  * returns <code>true</code>
  * 
