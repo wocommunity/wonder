@@ -57,9 +57,9 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
     }
 
     /**
-     * Public three qrgument constructor. Use
+     * Public three argument constructor. Use
      * this constructor for for building queries
-     * on foriegn key attributes of the current
+     * on foreign key attributes of the current
      * entity.
      * @param q sub qualifier
      * @param entityName of the sub qualification
