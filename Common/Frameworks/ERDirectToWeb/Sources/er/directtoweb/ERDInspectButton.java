@@ -13,16 +13,13 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
-public class ERDInspectButton extends ERDCustomEditComponent {
+public class ERDInspectButton extends ERDActionButton {
 
     public ERDInspectButton(WOContext context) {
         super(context);
     }
 
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
-    public WOComponent inspect() {
+    public WOComponent inspectObjectAction() {
         EOEditingContext context = ERXEC.newEditingContext();
         EOEnterpriseObject localObject = EOUtilities.localInstanceOfObject(context, object());
         String configuration = (String)valueForBinding("inspectConfigurationNameForEntity");
