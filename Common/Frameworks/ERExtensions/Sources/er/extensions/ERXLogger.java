@@ -141,22 +141,28 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public static synchronized void configureLogging(Properties properties) {
         if (_isFirstTimeConfig) {
-            if (!ERXProperties.webObjectsVersionIs522OrHigher()) {
+            boolean is522OrHigher = false;
+            _isFirstTimeConfig = false;
+            try {
+                is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
+            } catch(NullPointerException ex) {
+                System.err.println("*** Exception while installing logger!");
+                (new RuntimeException()).printStackTrace(System.err);
+            }
+            if (!is522OrHigher) {
                 BasicConfigurator.configure();
                 Logger.getRootLogger().setLevel(Level.INFO);                
-		if(ERXProperties.webObjectsVersionIs522OrHigher()) {
-		    NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-		    NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-		    NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-		}
+            } else {
+                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
             }
-            _isFirstTimeConfig = false;
         }
         PropertyConfigurator.configure(properties);
         
         if (log == null) 
             log = Logger.getLogger(ERXLogger.class.getName(), factory);
-
+        
         log.info("Updated the logging configuration with the current system properties.");
         if(log.isDebugEnabled()) {
             log.debug("log4j.loggerFactory: " + System.getProperty("log4j.loggerFactory"));
