@@ -2,19 +2,35 @@ package com.webobjects.jdbcadaptor;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
-
+/**
+ * A synchronization factory usable outside EOModeler
+ * @author giorgio_v
+ */
 public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory implements EOSchemaGeneration, EOSchemaSynchronization {
 
     public PostgresqlSynchronizationFactory(EOAdaptor adaptor) {
         super(adaptor);
     }
 
-    private static PostgresqlExpression createExpression( EOEntity anEntity, String statement ) {
-        PostgresqlExpression result = new PostgresqlExpression( anEntity );
+    /**
+     * <code>PostgresqlExpression</code> factory method.
+     *
+     * @param entity    the entity to which <code>PostgresqlExpression</code> is to be rooted
+     * @param statement the SQL statement
+     * @return a <code>PostgresqlExpression</code> rooted to <code>entity</code>
+     */
+    private static PostgresqlExpression createExpression( EOEntity entity, String statement ) {
+        PostgresqlExpression result = new PostgresqlExpression( entity );
         result.setStatement( statement );
         return result;
     }
     
+    /**
+     * Generates the PostgreSQL-specific SQL statements to drop the primary key support.
+     *
+     * @param entityGroup   an array of <code>EOEntity</code> objects
+     * @return  the array of SQL statements
+     */
     public NSArray dropPrimaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
         EOEntity entity;
         int count;
@@ -31,6 +47,12 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return results;
     }
     
+    /**
+     * Generates the PostgreSQL-specific SQL statements to drop tables.
+     *
+     * @param entityGroup   an array of <code>EOEntity</code> objects
+     * @return  the array of SQL statements
+     */    
     public NSArray dropTableStatementsForEntityGroup(NSArray entityGroup) {
         EOEntity entity;
         int count;
@@ -46,6 +68,13 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return results;
     }
 
+    /**
+     * Generates the PostgreSQL-specific SQL statements to enforce
+     * the foreign key constraints for <code>relationship</code>.
+     *
+     * @param relationship  the relationship, as represented by EOF
+     * @return  the array of SQL statements
+     */    
     public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
         NSArray superResults;
         NSMutableArray results;
@@ -61,18 +90,21 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             results.addObject( expression );
             String tableName = expression.entity().externalName();
             NSArray columNames = ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) );
-            results.addObject( createExpression( expression.entity(), "CREATE INDEX "+ indexNameForRelationship( null, relationship ) +" ON "+
+            String indexName = relationship.entity().externalName() + "_" +
+                ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) ).componentsJoinedByString( "_" ) +"_IDX";
+            results.addObject( createExpression( expression.entity(), "CREATE INDEX "+ indexName +" ON "+
                                                  tableName +"( "+ columNames.componentsJoinedByString( ", " ) +" )" ) );
         }
         return results;
     }
     
-    private String indexNameForRelationship( String alternativeTableName, EORelationship relationship ) {
-        String tableName = alternativeTableName != null ? alternativeTableName : relationship.entity().externalName();
-        String columnNames = ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) ).componentsJoinedByString( "_" );
-        return tableName +"_"+ columnNames +"_IDX";
-    }
-
+    /**
+     * Generates the PostgreSQL-specific SQL statements to enforce
+     * primary key constraints.
+     *
+     * @param entityGroup   an array of <code>EOEntity</code> objects
+     * @return  the array of SQL statements
+     */        
     public NSArray primaryKeyConstraintStatementsForEntityGroup(NSArray entityGroup) {
         EOEntity entity;
         int count;
@@ -105,6 +137,12 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return results;
     }
     
+    /**
+     * Generates the PostgreSQL-specific SQL statements to create the primary key support.
+     *
+     * @param entityGroup   an array of <code>EOEntity</code> objects
+     * @return  the array of SQL statements
+     */        
     public NSArray primaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
         EOEntity entity;
         int count;
@@ -122,28 +160,29 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             if ( priKeyAttributes.count() == 1 ) {
                 priKeyAttribute = (EOAttribute) priKeyAttributes.objectAtIndex(0);
                 String sql;
-                sql = "CREATE FUNCTION EOF_TMP_ID_MAX() RETURNS " + priKeyAttribute.externalType() + "AS \n'"
+                sql = "CREATE FUNCTION EOF_TMP_ID_MAX() RETURNS " + priKeyAttribute.externalType() + " AS \n'"
                     + "SELECT MAX(" + priKeyAttribute.columnName() +") FROM " + entity.externalName()
                     + "'\n    LANGUAGE 'sql'";
                 results.addObject(createExpression(entity, sql));
-
+                
                 sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
                 sql = "CREATE SEQUENCE " + sequenceName;
                 results.addObject(createExpression(entity, sql));
-
-                sql = "SELECT SETVAL('" + sequenceName + "', EOF_TMP_ID_MAX() + 1 ) INTO TEMP EOF_TMP_TABLE";
+                
+                sql = "SELECT SETVAL('" + sequenceName + "', EOF_TMP_ID_MAX() ) INTO TEMP EOF_TMP_TABLE";
                 results.addObject(createExpression(entity, sql));
-
+                
                 sql = "DROP TABLE EOF_TMP_TABLE";
                 results.addObject(createExpression(entity, sql));
-
+                
                 sql = "DROP FUNCTION EOF_TMP_ID_MAX()";
                 results.addObject(createExpression(entity, sql));
-
+                
                 sql =  "ALTER TABLE "+ entity.externalName() +" ALTER COLUMN "+ priKeyAttribute.columnName() +" SET DEFAULT nextval( '"+ sequenceName+ "' )" ;
                 results.addObject(createExpression(entity, sql));
             }
         }
         return results;
     }
+
 }
