@@ -206,7 +206,7 @@ public class ERXEC {
      * editing context if validation is enabled or the default no
      * validation delegate is set if validation is disabled.<br/>
      * <br/>
-     * Note: an {@link EOEditingContext} is a subclass of EOObjectStore
+     * Note: an {@link com.webobjects.eocontrol.EOEditingContext EOEditingContext} is a subclass of EOObjectStore
      * so passing in another editing context to this method is
      * completely kosher.
      * @param parent object store for the newly created
