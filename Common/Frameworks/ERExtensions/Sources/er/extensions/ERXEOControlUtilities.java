@@ -98,26 +98,6 @@ public class ERXEOControlUtilities {
     }
 
     /**
-     * Returns an {@link NSArray} containing the objects from the resulting rows starting
-     * at start and stopping at end using a custom SQL, derived from the SQL
-     * which the {@link EOFetchSpecification} would use normally {@link EOFetchSpecification.setHints}
-     *
-     * @param ec editingcontext to fetch objects into
-     * @param spec fetch specification for the fetch
-     * @param start
-     * @param end
-     *
-     * @return objects in the given range
-     */
-    public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, start, end);
-        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
-        spec.setHints(hints);
-
-        return ec.objectsWithFetchSpecification(spec);
-    }
-
-    /**
      * Returns the number of objects matching the given
      * qualifier for a given entity name. Implementation
      * wise this method will generate the correct sql to only
