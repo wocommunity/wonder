@@ -45,6 +45,9 @@ public class ERXSession extends WOSession {
     /** holds a reference to the current localizer used for this session */
     private ERXLocalizer localizer;
 
+    /** holds a reference to the current message encoding used for this session */
+    private ERXMessageEncoding messageEncoding;
+
     /** flag for if java script is enabled, defaults to true */
     protected boolean _javaScriptEnabled=true; // most people have JS by now
     /** flag to indicate if java script has been set */
@@ -105,6 +108,7 @@ public class ERXSession extends WOSession {
     public void setLanguage(String language) {
         localizer = ERXLocalizer.localizerForLanguage(language);
         ERXLocalizer.setCurrentLocalizer(localizer);
+        messageEncoding = new ERXMessageEncoding(localizer.language());
     }
 
     /**
@@ -116,6 +120,19 @@ public class ERXSession extends WOSession {
      */
     public String language() {
         return localizer().language();
+    }
+
+    /**
+     * Returns the message encoding of the current session. 
+     * If it's not already set up but no current <code>language()</code> 
+     * available for the session, it creates one with 
+     * the defailt encoding. 
+     * @return message encoding object
+     */
+    public ERXMessageEncoding messageEncoding() { 
+        if (messageEncoding == null) 
+            messageEncoding = new ERXMessageEncoding(language());
+        return messageEncoding; 
     }
 
     /**
@@ -387,18 +404,20 @@ public class ERXSession extends WOSession {
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
         if (didBackTrack) cat.debug("User backtracking in takeValuesFromRequest.");
+        messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
         super. takeValuesFromRequest (aRequest, aContext);
     }
 
     /**
      * Overridden to display debugging information when a
      * user backtracks.
-     * @param r current response object
-     * @param c current context object
+     * @param aResponse current response object
+     * @param aContext current context object
      */
-    public void appendToResponse(WOResponse r, WOContext c) {
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
         if (didBackTrack) cat.debug("User backtracking in appendToResponse.");
-        super.appendToResponse(r, c);
+        messageEncoding().setEncodingToResponse(aResponse);
+        super.appendToResponse(aResponse, aContext);
     }
 
     /**
