@@ -5,7 +5,7 @@
     "Test message for unit test in last framework" = "SUCCESS - not overridden in other frameworks is unique";
     "unittest.key.path.as.string" = "SUCCESS";
     "unittest" = {"key" = { "path" = { "as" = {"dict"="SUCCESS";};};};};
-    WOToOneRelationship.noneString = "- none -";
+    ERXArrayChooser.noneString = "- none -";
     "Could not save your changes: " = "Could not save your changes: ";
     ERXCheckboxMatrix.deselectAll = "None";
     ERXCheckboxMatrix.selectAll = "All";

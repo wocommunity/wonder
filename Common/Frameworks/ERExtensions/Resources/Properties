@@ -29,8 +29,7 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 #er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
 #er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.ERXNonPluralFormLocalizer
 
-#er.extensions.WOToManyRelationship.localizeDisplayKeysDefault = true
-#er.extensions.WOToOneRelationship.localizeDisplayKeysDefault = true
+#er.extensions.ERXArrayChooser.localizeDisplayKeysDefault = true
 
 #########################################################################
 # Encoding
