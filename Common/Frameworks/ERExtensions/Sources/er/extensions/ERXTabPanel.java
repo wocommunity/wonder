@@ -104,9 +104,9 @@ public class ERXTabPanel extends WOTabPanel  {
 
 
     public Object submitString() {
-        return "javascript:document.EditForm."+(currentTabNameWithoutSpaces())+".click(); return false;";
+        String formName = ERXWOForm.formName(context(), "EditForm");
+        return "document."+formName+".submit(); return false;";
     }
-
 
     public Object currentTabNameWithoutSpaces() {
         return NSArray.componentsSeparatedByString((String)valueForKey("currentTabName"), " ").componentsJoinedByString("");
