@@ -49,6 +49,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_VERSION = TMP;
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = /usr/local/openjms/lib;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
@@ -59,7 +60,6 @@
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(SERVER_UNIQUIFIER)ERChangeNotificationJMS";
 				SERVER_UNIQUIFIER = Server;
-				USE_GCC3 = NO;
 				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_EXTENSION = tmp;
 			};
@@ -107,7 +107,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B30FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -120,6 +119,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6B7839C0345539001257492,
+				77BC206D03B5303400257492,
+				77BC206F03B5304000257492,
+				77BC207103B5307100257492,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,12 +180,12 @@
 				COMPILE_JAVA_SOURCES_IN_NIB_FILES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_VERSION = TMP;
+				GCC_VERSION = 2.x;
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				OTHER_JAVA_CLASS_PATH = "";
 				PRODUCT_NAME = "_WO$(CLIENT_UNIQUIFIER)ERChangeNotificationJMS";
-				USE_GCC3 = NO;
 				WO_TEMPLATE_VERSION = 5;
 				WRAPPER_EXTENSION = tmp;
 			};
@@ -223,7 +225,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B37FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -433,6 +434,7 @@
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 40B5827FFFD5E7DB7F000001;
 			productRefGroup = 40B58280FFD5E8187F000001;
@@ -488,6 +490,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_SYMLINK = "$(VERSIONS_DIR)/Current";
 				FRAMEWORK_VERSION = A;
+				GCC_VERSION = 2.x;
 				INFO_FILE_NAME = Info.plist;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -498,7 +501,6 @@
 				RESOURCES_SYMLINK = "$(WRAPPER_DIR)/Resources";
 				SERVER_UNIQUIFIER = Server;
 				SPLIT_INSTALL = NO;
-				USE_GCC3 = NO;
 				VERSIONS_DIR = "$(WRAPPER_DIR)/Versions";
 				WEBSERVER_BUILD_VERSION_DIR = "$(WEBSERVER_VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				WEBSERVER_CONTENTS_DIR = "$(WEBSERVER_BUILD_VERSION_DIR)";
@@ -562,7 +564,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		40B58283FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -695,6 +696,52 @@
 //402
 //403
 //404
+//770
+//771
+//772
+//773
+//774
+		77BC206C03B5303400257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = rmi_jms_frontbase.xml;
+			refType = 4;
+		};
+		77BC206D03B5303400257492 = {
+			fileRef = 77BC206C03B5303400257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		77BC206E03B5304000257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = rmi_jms_postgres.xml;
+			refType = 4;
+		};
+		77BC206F03B5304000257492 = {
+			fileRef = 77BC206E03B5304000257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		77BC207003B5307100257492 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = create_frontbase.sql;
+			refType = 4;
+		};
+		77BC207103B5307100257492 = {
+			fileRef = 77BC207003B5307100257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//770
+//771
+//772
+//773
+//774
 //F60
 //F61
 //F62
@@ -739,6 +786,7 @@
 			};
 		};
 		F6668DED032A9CC701257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = GettingStartedMacOSX.txt;
 			path = Documentation/GettingStartedMacOSX.txt;
@@ -793,6 +841,7 @@
 			};
 		};
 		F6B7839B0345539001257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Properties;
 			path = Resources/Properties;
@@ -814,20 +863,24 @@
 		};
 		F6DCAA02032A532D01257492 = {
 			children = (
+				77BC207003B5307100257492,
+				77BC206C03B5303400257492,
 				F6DCAA05032A537401257492,
 				F6DCAA03032A532D01257492,
-				F6DCAA17032A56B801257492,
+				77BC206E03B5304000257492,
 			);
 			isa = PBXGroup;
 			path = Support;
 			refType = 4;
 		};
 		F6DCAA03032A532D01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = rmi_jms_mysql.xml;
 			refType = 4;
 		};
 		F6DCAA05032A537401257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = rmi_jms_jdbm.xml;
 			refType = 4;
@@ -853,21 +906,25 @@
 			refType = 4;
 		};
 		F6DCAA0B032A547B01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCNNotificationCoordinator.java;
 			refType = 4;
 		};
 		F6DCAA0C032A547B01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCNPublisher.java;
 			refType = 4;
 		};
 		F6DCAA0D032A547B01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCNSnapshot.java;
 			refType = 4;
 		};
 		F6DCAA0E032A547B01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERCNSubscriber.java;
 			refType = 4;
@@ -897,16 +954,11 @@
 			};
 		};
 		F6DCAA15032A552A01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = SampleProperties.txt;
 			path = Documentation/SampleProperties.txt;
 			refType = 4;
-		};
-		F6DCAA17032A56B801257492 = {
-			isa = PBXFileReference;
-			name = create_mysql.sql;
-			path = /usr/local/openjms/config/create_mysql.sql;
-			refType = 0;
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
