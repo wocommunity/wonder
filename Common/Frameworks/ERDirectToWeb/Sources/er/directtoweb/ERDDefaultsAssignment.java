@@ -21,7 +21,7 @@ public class ERDDefaultsAssignment extends ERDAssignment {
     }
     
     //////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.ERDefaultsAssignment");
+    public final static Category cat = Category.getInstance("er.directtoweb.ERDDefaultsAssignment");
 
     public ERDDefaultsAssignment (EOKeyValueUnarchiver u) { super(u); }
     public ERDDefaultsAssignment (String key, Object value) { super(key,value); }
