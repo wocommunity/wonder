@@ -150,7 +150,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
 
     public void updateSourceObject(NSArray newValues) {
         // If no selections are choosen then newValues is null.
-        newValues = newValues != null ? newValues : ERXConstant.EmptyArray;
+        newValues = newValues != null ? newValues : NSArray.EmptyArray;
         String masterKey = _localRelationshipKey();
         Object aSourceObject = _localSourceObject();
         boolean isDictionary = (aSourceObject instanceof NSMutableDictionary);

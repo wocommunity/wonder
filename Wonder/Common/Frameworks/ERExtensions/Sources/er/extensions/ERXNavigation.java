@@ -71,7 +71,7 @@ public class ERXNavigation {
             
         }
         log.debug("Nav state: " + navigationState() + " current nav level: " + currentNavigationLevel + " items: " + itmesToBeShown);
-        return itmesToBeShown != null ? itmesToBeShown : ERXConstant.EmptyArray;
+        return itmesToBeShown != null ? itmesToBeShown : NSArray.EmptyArray;
     }
     
     // Anytime we are setting the absolute we reset the relative.

@@ -134,7 +134,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
             if(objectForFormValue() != null)
                 objects.addObject(objectForFormValue());
         }
-        return objects != null ? objects : ERXConstant.EmptyArray;
+        return objects != null ? objects : NSArray.EmptyArray;
     }
 
     /**
