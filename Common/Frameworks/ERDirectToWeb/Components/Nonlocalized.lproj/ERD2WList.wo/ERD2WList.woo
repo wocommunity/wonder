@@ -1,5 +1,3 @@
 {
-    "WebObjects Release" = "WebObjects 3.5"; 
-    encoding = NSMacOSRomanStringEncoding; 
-    variables = {}; 
+    "WebObjects Release" = "WebObjects 5.0"; 
 }
