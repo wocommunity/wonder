@@ -68,8 +68,7 @@ public abstract class ERD2WListPage extends D2WListPage {
     }
 
     public boolean isEntityReadOnly() {
-        Integer isEntityEditable=(Integer)d2wContext().valueForKey("isEntityEditable");
-        return  isEntityEditable!=null ? isEntityEditable.intValue()==0 : super.isEntityReadOnly();
+        return !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
     }
 
     private boolean _hasBeenInitialized=false;
