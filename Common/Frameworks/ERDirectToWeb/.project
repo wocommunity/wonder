@@ -22,9 +22,14 @@
 				</dictionary>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.objectstyle.wolips.antbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.objectstyle.wolips.frameworknature</nature>
+		<nature>org.objectstyle.wolips.antframeworknature</nature>
 	</natures>
 </projectDescription>
