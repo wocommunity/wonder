@@ -1,0 +1,281 @@
+/*
+ * Created on 22.03.2004
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - Java - Code Generation - Code and Comments
+ */
+package er.extensions;
+
+import java.util.*;
+
+
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
+
+
+/** 
+ * Synchronizes different EOF stacks inside an instance. This supplements the
+ * change notification frameworks that sync different instances and should help
+ * you to run multithreaded.
+ * After calling initialize(), every ObjectStoreCoordinator
+ * that gets created will be added to the list of stacks to sync.
+ * You will need to add any stack created before initalization manually.
+ */
+public class ERXObjectStoreCoordinatorSynchronizer {
+    private static ERXLogger log = ERXLogger.getERXLogger(ERXObjectStoreCoordinatorSynchronizer.class);
+   
+    private static ERXObjectStoreCoordinatorSynchronizer _synchronizer;
+    
+    public static void initialize() {
+        if(_synchronizer == null) {
+            _synchronizer = new ERXObjectStoreCoordinatorSynchronizer();
+        }
+    }
+    
+    public ERXObjectStoreCoordinatorSynchronizer synchronizer() {
+        if(_synchronizer == null) {
+            initialize();
+        }
+        return _synchronizer;
+    }
+    
+    private NSMutableArray _coordinators;
+    private ProcessChangesQueue _queueThread;
+    
+    private ERXObjectStoreCoordinatorSynchronizer() {
+        _coordinators = new NSMutableArray();
+        _queueThread = new ProcessChangesQueue();
+        new Thread(_queueThread).start();
+        NSNotificationCenter.defaultCenter().addObserver(
+                this,
+                new NSSelector("objectStoreWasAdded", new Class[] { NSNotification.class } ),
+                EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification,
+                null);
+        NSNotificationCenter.defaultCenter().addObserver(
+                this,
+                new NSSelector("objectStoreWasRemoved", new Class[] { NSNotification.class } ),
+                EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification,
+                null);
+    }
+    
+    public void objectStoreWasRemoved(NSNotification n) {
+        removeObjectStore((EOObjectStoreCoordinator)n.object());
+    }      
+    
+    public void objectStoreWasAdded(NSNotification n) {
+        addObjectStore((EOObjectStoreCoordinator)n.object());
+    }
+    
+    public void addObjectStore(EOObjectStoreCoordinator osc) {
+        _coordinators.addObject(osc);
+        
+        NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class } );
+        NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+    }
+    
+    public void removeObjectStore(EOObjectStoreCoordinator osc) {
+        _coordinators.removeObject(osc);
+        NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+    }
+    
+    public void publishChange(NSNotification n) {
+        if (_coordinators.count() >= 2) {
+            Change changes = new Change((EOObjectStoreCoordinator)n.object(), n.userInfo());
+            _queueThread.addChange(changes);
+        }
+    }
+    
+    private NSArray coordinators() {
+        return _coordinators;
+    }
+    
+    /** 
+     * Thread and locking safe implementation to propagate 
+     * the changes from one EOF stack to another.
+     */
+    private class ProcessChangesQueue implements Runnable {
+        private abstract class SnapshotProcessor {
+            public abstract void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID);
+        }
+        
+        private class DeleteProcessor extends SnapshotProcessor {
+            public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
+                database.forgetSnapshotForGlobalID(globalID);
+            }
+        }
+        private class UpdateProcessor extends SnapshotProcessor {
+            public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
+                database.forgetSnapshotForGlobalID(globalID);
+                database.recordSnapshotForGlobalID(snapshot, globalID);
+           }
+        }
+        private class InsertProcessor extends SnapshotProcessor {
+            public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
+                database.recordSnapshotForGlobalID(snapshot, globalID);
+           }
+        }
+        
+        List _elements = new LinkedList();
+        
+        SnapshotProcessor _deleteProcessor = new DeleteProcessor();
+        SnapshotProcessor _insertProcessor = new InsertProcessor();
+        SnapshotProcessor _updateProcessor = new UpdateProcessor();
+        
+        private ProcessChangesQueue() {
+        }
+        
+        private void addChange(Change changes) {
+            synchronized (_elements) {
+                _elements.add(changes);
+                notify();
+            }
+        }
+        
+        public void run() {
+            boolean run = true;
+            while (true) {
+                try {
+                    if(_elements.isEmpty()) {
+                        wait(10);
+                    }
+                } catch (InterruptedException e) {
+                    run = false;
+                    log.info("Interrupted: " + e, e);
+                }
+                if (!_elements.isEmpty()) {
+                    Change changes = null;
+                    synchronized(_elements) {
+                        changes = (Change)_elements.remove(0);
+                    }
+                    EOObjectStoreCoordinator sender = changes.coordinator();
+  
+                    process(sender, _deleteProcessor, changes.deleted());
+                    process(sender, _insertProcessor, changes.inserted());
+                    process(sender, _updateProcessor, changes.updated());
+                }
+            }
+        }
+        
+        /**
+         * @param dictionary
+         * @param sender
+         */
+        private synchronized void process(EOObjectStoreCoordinator sender, SnapshotProcessor processor, NSDictionary changesByEntity) {
+            for(Enumeration entityNames = changesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
+                String entityName = (String)entityNames.nextElement();
+                EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
+                NSArray snapshots = (NSArray)changesByEntity.objectForKey(entityName);
+                NSMutableDictionary dbcs = new NSMutableDictionary();
+                for (Enumeration oscs = _synchronizer.coordinators().objectEnumerator(); oscs.hasMoreElements(); ) {
+                    EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) oscs.nextElement();
+                    if (osc == sender) {
+                        continue;
+                    }
+                    EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
+                    if(dbc == null) {
+                        dbc = databaseContextForEntityNamed(entityName, osc);
+                        dbcs.setObjectForKey(dbc, entityName);
+                    }
+                    EODatabase database = dbc.database();
+                    Enumeration snapshotsEnumerator = snapshots.objectEnumerator();
+                    while (snapshotsEnumerator.hasMoreElements()) {
+                        NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
+                        if (snapshot != null) {
+                            EOGlobalID globalID = entity.globalIDForRow(snapshot);
+                            EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
+                            dbc.lock();
+                            try {
+                                processor.processSnapshotForGlobalID(dbc, snapshot, globalID);
+                            } finally {
+                                dbc.unlock();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        private EODatabaseContext databaseContextForEntityNamed(String entityName, EOObjectStoreCoordinator osc) {
+            return Change.databaseContextForEntityNamed(entityName, osc);
+        }
+        
+    }
+    
+    /**
+     * Holds a change notification (one transaction). 
+     */
+    private static class Change {
+        private EOObjectStoreCoordinator _coordinator;
+        private NSDictionary _inserted;
+        private NSDictionary _updated;
+        private NSDictionary _deleted;
+        
+        public Change(EOObjectStoreCoordinator osc, NSDictionary userInfo) {
+            _coordinator = osc;
+            _deleted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("updated"), osc);
+            _updated = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("deleted"), osc);
+            _inserted = snapshotsGroupedByEntity((NSArray)userInfo.objectForKey("inserted"), osc);
+        }
+        /**
+         * Returns a dictionary of snapshots where the key is the entity name and the value an
+         * array of snapshots.
+         * @param objects
+         * @param osc
+         * @return
+         */
+        private NSDictionary snapshotsGroupedByEntity(NSArray objects, EOObjectStoreCoordinator osc) {
+            if(objects != null) {
+                return NSDictionary.EmptyDictionary;
+            }
+            
+            NSMutableDictionary result = new NSMutableDictionary();
+            NSMutableDictionary dbcs = new NSMutableDictionary();
+            
+            for(Enumeration gids = objects.objectEnumerator(); gids.hasMoreElements();) {
+                EOKeyGlobalID globalID = (EOKeyGlobalID) gids.nextElement();
+                String entityName = globalID.entityName();
+                
+                EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
+                if(dbc == null) {
+                    dbc = databaseContextForEntityNamed(entityName, osc);
+                    dbcs.setObjectForKey(dbc, entityName);
+                }
+                NSMutableArray snapshotsForEntity = (NSMutableArray)result.objectForKey(entityName);
+                if(snapshotsForEntity == null) {
+                    snapshotsForEntity = new NSMutableArray();
+                    result.setObjectForKey(snapshotsForEntity, entityName);
+                }
+                synchronized(snapshotsForEntity) {
+                    Object o = dbc.snapshotForGlobalID(globalID);
+                    if(o != null) {
+                        snapshotsForEntity.addObject(o);
+                    }
+                }
+            }
+            return result.immutableClone();
+        }
+        
+        public NSDictionary updated() {
+            return _updated;
+        }
+        
+        public NSDictionary deleted() {
+            return _updated;
+        }
+        
+        public NSDictionary inserted() {
+            return _updated;
+        }
+        
+        public EOObjectStoreCoordinator coordinator() {
+            return _coordinator;
+        }
+        
+        private static synchronized EODatabaseContext databaseContextForEntityNamed(String entityName, EOObjectStoreCoordinator osc) {
+            EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
+            EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
+            return dbc;
+        }
+    }    
+}
