@@ -192,7 +192,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Determines the path of the specified Resource. This is done
+     * Determines the path of the specified Resource. This is done
      * to get a single entry point due to the deprecation of pathForResourceNamed
      * @param fileName name of the file
      * @param frameworkName name of the framework, null or "app"
