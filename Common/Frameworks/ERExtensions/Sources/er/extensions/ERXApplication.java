@@ -80,6 +80,11 @@ public abstract class ERXApplication extends WOApplication {
                         new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
                         WOApplication.ApplicationWillFinishLaunchingNotification,
                         null);
+
+        NSNotificationCenter.defaultCenter().addObserver(this,
+                                                         new NSSelector("didFinishLaunching",  ERXConstant.NotificationClassArray),
+                                                         WOApplication.ApplicationDidFinishLaunchingNotification,
+                                                         null);        
     }
 
     /**
@@ -96,12 +101,33 @@ public abstract class ERXApplication extends WOApplication {
     }
 
     /**
+     * Notification method called when the application posts
+     * the notification {@link WOApplicaiton#ApplicationDidFinishLaunchingNotification}.
+     * This method calls subclasse's {@link #didFinishLaunching} method.
+     *
+     * @param n notification that is posted after the WOApplication
+     *      has finished launching and is ready for accepting requests.
+     */    
+    public final void didFinishLaunching(NSNotification n) {
+        didFinishLaunching();
+    }
+    
+    /**
      * Called when the application posts {@link WOApplicaiton#ApplicationWillFinishLaunchingNotification}.  
      * Override this to perform application initialization. (optional)
      */
     public void finishInitialization() {
         // empty
     }
+
+    /**
+     * Called when the application posts {@link WOApplicaiton#ApplicationDidFinishLaunchingNotification}.
+     * Override this to perform application specific tasks after the application has been initialized.
+     * THis is a good spot to perform batch application tasks.
+     */
+    public void didFinishLaunching() {
+        // empty
+    }    
     
     /**
      * The ERXApplication singleton.
