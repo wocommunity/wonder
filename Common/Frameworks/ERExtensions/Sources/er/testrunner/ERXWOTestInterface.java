@@ -22,15 +22,15 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     public static final Category cat = Category.getInstance(ERXWOTestInterface.class);
 
     // bind to a WOTextField
-    protected String theTest;
+    public String theTest;
     // bind to a WOString
-    protected String errorMessage;
+    public String errorMessage;
     // bind to a WOCheckbox
-    protected Boolean showExceptions;
+    public Boolean showExceptions;
 
-    protected ERXTestRunner aTestRunner;
-    protected ERXTestResult testResult;
-    protected long runTime;
+    public ERXTestRunner aTestRunner;
+    public ERXTestResult testResult;
+    public long runTime;
     
     public ERXWOTestInterface(WOContext context) {
         super(context);
@@ -60,7 +60,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
     }
 
     // Starts a test run. Analyzes the command line arguments (test) and runs the given test suite.
-    protected ERXTestResult start() throws Exception {
+    public ERXTestResult start() throws Exception {
         if (theTest.equals("")) {
             throw new Exception("You need to provide the name of a class to use as the TestCase for this run.");
         }
@@ -73,7 +73,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
         }
     }
 
-    protected ERXTestResult doRun(Test suite) {
+    public ERXTestResult doRun(Test suite) {
         testResult.addListener(this);
         long startTime = System.currentTimeMillis();
         suite.run(testResult);
