@@ -61,17 +61,13 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
                     dateIsValid = reformattedDate.equals(modifiedDateString);
                 }
                 if (!dateIsValid) {
-                    String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObject("InvalidDateFormatException", this);
-                    log.debug(message);
-                    throw new NSValidation.ValidationException(message);
+                    throw ERXValidationFactory.defaultFactory().createException(object(), key(), dateString, "InvalidDateFormatException");
                 }
-
             }
             if (object()!=null) object().validateTakeValueForKeyPath(date, key());
-        } catch (java.text.ParseException nspe) {
-            String message = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObject("InvalidDateFormatException", this);
-            log.debug("java.text.ParseException:" + message);
-            NSValidation.ValidationException v = new NSValidation.ValidationException(message);
+        } catch (java.text.ParseException npse) {
+            log.debug("java.text.ParseException:" + npse);
+            ERXValidationException v = ERXValidationFactory.defaultFactory().createException(object(), key(),dateString, "InvalidDateFormatException");
             parent().validationFailedWithException( v, date, key());
         } catch (NSValidation.ValidationException v) {
             log.debug("NSValidation.ValidationException:" + v);
