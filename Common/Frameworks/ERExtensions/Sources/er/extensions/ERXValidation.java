@@ -95,7 +95,6 @@ public class ERXValidation {
                 propertyNameContext.setEntity(entity);
         }
         // Leveraging the power of D2WContext to generate great looking error messages.
-        cat.debug(propertyNameContext.entity() );
         if (propertyNameContext.entity() != null && key != null) {
             propertyNameContext.setPropertyKey(key);
             errorMessages.setObjectForKey(newErrorMessage, propertyNameContext.displayNameForProperty());

@@ -30,7 +30,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             cat.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get
-            cat.debug("Entity: " + e);
             ERXEntityClassDescription.registerDescriptionForEntity(e);
         }
         public void classDescriptionNeededForClass(NSNotification n) {
@@ -70,14 +69,23 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         if (!_registeredModelNames.containsObject(model.name())) {
             for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
                 EOEntity eoentity = (EOEntity)e.nextElement();
+                String className = eoentity.className();
+                if(className.equals("EOGenericRecord")) {
+                    className = ERXGenericRecord.class.getName();
+                    eoentity.setClassName(className);
+                    cat.debug(eoentity.name() + ": setting class from EOGenericRecord to " + className);
+                }
                 if(cat.isDebugEnabled())
                     cat.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
-                NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(eoentity.className());
+                
+                NSMutableArray array = (NSMutableArray)_entitiesForClass.objectForKey(className);
                 if(array == null) {
                     array = new NSMutableArray();
                 }
                 array.addObject(eoentity);
                 _entitiesForClass.setObjectForKey(array, eoentity.className());
+                //HACK ALERT: (ak) We work around classDescriptionForNewInstances() of EOEntity being broken here...
+                registerDescriptionForEntity(eoentity);
             }
             _registeredModelNames.addObject(model.name());
         }
@@ -90,12 +98,21 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             Class entityClass = entity.className().equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(entity.className());
             if (cat.isDebugEnabled())
                 cat.debug("Registering description for entity: " + entity.name() + " with class: " + entity.className());
-            EOClassDescription.registerClassDescription(new ERXEntityClassDescription(entity), entityClass);
+            ERXEntityClassDescription cd = new ERXEntityClassDescription(entity);
+            EOClassDescription.registerClassDescription(cd, entityClass);
+            _setClassDescriptionOnEntity(entity, cd);
         } catch (java.lang.ClassNotFoundException ex) {
-            cat.error("Invalid class name for entity: " + entity + " exception: " + ex);
+            cat.error("Invalid class name for entity: " + entity.name() + " exception: " + ex);
         }
     }
-
+    static void _setClassDescriptionOnEntity(EOEntity entity, ERXEntityClassDescription cd)  {
+        try {
+            //HACK ALERT: (ak) We push the cd rather rudely into the entity to have it ready when classDescriptionForNewInstances() is called on it. We will have to add a com.webobjects.eoaccess.KVCProtectedAccessor to make this work
+            NSKeyValueCoding.Utility.takeValueForKey(entity, cd, "classDescription");
+        } catch(Exception ex) {
+            cat.warn("_setClassDescriptionOnEntity: " + ex);
+        }
+    }
     // What we do here is go ahead and register all of the entities mapped onto this class, except for EOGenericRecord.
     public static void registerDescriptionForClass(Class class1) {
         NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
@@ -103,7 +120,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             if (cat.isDebugEnabled())
                 cat.debug("Registering descriptions for class: " + class1.getName() + " found entities: " + entities.valueForKey("name"));
             for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
-                EOClassDescription.registerClassDescription(new ERXEntityClassDescription((EOEntity)e.nextElement()), class1);
+                EOEntity entity = (EOEntity)e.nextElement();
+                ERXEntityClassDescription cd = new ERXEntityClassDescription(entity);
+                EOClassDescription.registerClassDescription(cd, class1);
+                _setClassDescriptionOnEntity(entity, cd);
             }
         } else {
             cat.error("Unable to register descriptions for class: " + class1.getName());
@@ -112,6 +132,29 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     
     public ERXEntityClassDescription(EOEntity entity) { super(entity); }
 
+    public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
+        try {
+            super.validateObjectForDelete(obj);
+        } catch (NSValidation.ValidationException eov) {
+            if (cat.isDebugEnabled())
+                cat.debug("Caught validation exception: " + eov);
+            ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
+            throw (erv != null ? erv : eov);
+        }
+    }
+/*
+    public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
+        try {
+            super.validateObjectForSave(obj);
+        } catch (NSValidation.ValidationException eov) {
+            if (cat.isDebugEnabled())
+                cat.debug("Caught validation exception: " + eov);
+            ERXValidationException erv = ERXValidationFactory.defaultFactory().convertException(eov, obj);
+            throw (erv != null ? erv : eov);
+        }
+    }
+
+  */  
     public Object validateValueForKey(Object obj, String s) throws NSValidation.ValidationException {
         Object validated = null;
         if (cat.isDebugEnabled())
