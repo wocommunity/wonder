@@ -10,15 +10,19 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.directtoweb.D2WEditBoolean;
+import er.extensions.*;
 
 public class ERD2WEditYesNo extends D2WEditBoolean {
+    public static ERXLogger log = ERXLogger.getLogger(ERD2WEditYesNo.class);
 
     public ERD2WEditYesNo(WOContext context) { super(context); }
 
     public Integer yesNoBoolean() {
-        return (Integer)object().valueForKey(propertyKey());
+        Object bool = object().valueForKeyPath(propertyKey());
+        bool = new Integer(ERXUtilities.booleanValue(bool) ? 1 : 0);
+        return (Integer)bool;
     }
-
+    
     public void setYesNoBoolean(Integer newYesNoBoolean) {
         object().validateTakeValueForKeyPath(newYesNoBoolean, propertyKey());
     }
