@@ -2534,6 +2534,7 @@
 				F567C7C702897B6F01257492,
 				F6F0213B02ACDF5701AD0D07,
 				F578333302AD902001257492,
+				F5E26A5A02B3935201257492,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -3624,6 +3625,17 @@
 		};
 		F5BE99C40262584501000102 = {
 			fileRef = F5BE99C20262584401000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E26A5902B3935201257492 = {
+			isa = PBXFileReference;
+			path = ERXMessageEncoding.java;
+			refType = 4;
+		};
+		F5E26A5A02B3935201257492 = {
+			fileRef = F5E26A5902B3935201257492;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -5060,6 +5072,7 @@
 				F57EA5FA01FF59BF019E57DA,
 				F5A3C5C20219A7D701A801D4,
 				F6F0213A02ACDF5701AD0D07,
+				F5E26A5902B3935201257492,
 			);
 			isa = PBXGroup;
 			name = Utilities;
