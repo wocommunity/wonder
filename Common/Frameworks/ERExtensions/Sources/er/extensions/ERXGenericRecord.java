@@ -532,19 +532,27 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     //		if they have a compound pk.
     // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
     public NSDictionary primaryKeyDictionary(boolean inTransaction) {
-        if (!inTransaction && _primaryKeyDictionary == null) {
-            if (rawPrimaryKey() != null) {
+        if(_primaryKeyDictionary == null) {
+            if (!inTransaction) {
                 NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
-                if (primaryKeyAttributeNames.count()>1)
-                    throw new RuntimeException("primaryKeyDictionary does not support compound primary keys");
-                //FIXME: Should be getting primaryKey name from the entity of the enterprise object.
-                _primaryKeyDictionary = new NSDictionary(rawPrimaryKey(), primaryKeyAttributeNames.lastObject());
-            } else
-                _primaryKeyDictionary = ERXUtilities.primaryKeyDictionaryForEntity(editingContext(), entityName());
+                if (primaryKeyAttributeNames.count()>1) {
+                    if(true) // ak:testing
+                        return null;
+                    else
+                        throw new RuntimeException("primaryKeyDictionary does not support compound primary keys");
+                }
+                if (rawPrimaryKey() != null) {
+                    if (log.isDebugEnabled()) log.debug("Got raw key: "+ rawPrimaryKey());
+                   //FIXME: Should be getting primaryKey name from the entity of the enterprise object.
+                    _primaryKeyDictionary = new NSDictionary(rawPrimaryKey(), primaryKeyAttributeNames.lastObject());
+                } else
+                    if (log.isDebugEnabled()) log.debug("No raw key, trying single key");
+                    _primaryKeyDictionary = ERXUtilities.primaryKeyDictionaryForEntity(editingContext(), entityName());
+            }
         }
         return _primaryKeyDictionary;
     }
-
+    
     /**
      * Determines what the value of the given key is in the committed
      * snapshot
