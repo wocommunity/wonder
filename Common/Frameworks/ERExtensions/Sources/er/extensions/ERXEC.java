@@ -144,6 +144,8 @@ public class ERXEC extends EOEditingContext {
         public void setDefaultNoValidationDelegate(Object delegate);
         public void setDefaultDelegateOnEditingContext(EOEditingContext ec);
         public void setDefaultDelegateOnEditingContext(EOEditingContext ec, boolean validation);
+        public boolean useSharedEditingContext();
+        public void setUseSharedEditingContext(boolean value);
         public EOEditingContext _newEditingContext();
         public EOEditingContext _newEditingContext(boolean validationEnabled);
         public EOEditingContext _newEditingContext(EOObjectStore objectStore);
