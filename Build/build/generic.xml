@@ -1019,7 +1019,7 @@ There are many ways to use this script:
         <antcall target="global.framework" >
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
             <param name="project.name" value="PostgresqlPlugIn" />
-            <param name="project.dir" value="PluginIns/PostgresqlPlugIn" />
+            <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
         </antcall>
     </target>
     
