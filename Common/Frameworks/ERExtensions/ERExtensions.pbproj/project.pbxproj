@@ -505,6 +505,7 @@
 				4105EC4505C81354003BA93B,
 				41D6423905CF9CC600BB3C39,
 				416E92DB05E4BD3800F3D01E,
+				41E14A2A05EF5EF100DE10B6,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1904,6 +1905,19 @@
 		};
 		41D6423905CF9CC600BB3C39 = {
 			fileRef = 41D6423605CF9CC600BB3C39;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41E14A2905EF5EF100DE10B6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXMailAppender.java;
+			path = er/extensions/ERXMailAppender.java;
+			refType = 4;
+		};
+		41E14A2A05EF5EF100DE10B6 = {
+			fileRef = 41E14A2905EF5EF100DE10B6;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7784,6 +7798,7 @@
 		};
 		F6E798A002C8799401AD0D07 = {
 			children = (
+				41E14A2905EF5EF100DE10B6,
 				F59C579302C4565701000102,
 				F59C579402C4565701000102,
 				F6E7989F02C8799401AD0D07,
