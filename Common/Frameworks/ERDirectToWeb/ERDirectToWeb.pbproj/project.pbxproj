@@ -130,6 +130,18 @@
 			settings = {
 			};
 		};
+		9DA572350356469710CF0E7D = {
+			isa = PBXFileReference;
+			name = ERDDelayedSwitchAssignment.java;
+			path = er/directtoweb/ERDDelayedSwitchAssignment.java;
+			refType = 4;
+		};
+		9DA572360356469710CF0E7D = {
+			fileRef = 9DA572350356469710CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //9D0
 //9D1
 //9D2
@@ -7576,6 +7588,7 @@
 				F686D4E5033285420FCF0E72,
 				9D5BC635033AB0C210CF0E7D,
 				9D8628A5034E504C10CF0E7D,
+				9DA572360356469710CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8109,6 +8122,7 @@
 				F542071902C467E001000102,
 				F542071C02C467E001000102,
 				F686D4E4033285420FCF0E72,
+				9DA572350356469710CF0E7D,
 			);
 			isa = PBXGroup;
 			name = "D2W Assignments";
