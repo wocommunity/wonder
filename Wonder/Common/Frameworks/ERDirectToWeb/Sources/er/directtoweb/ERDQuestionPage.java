@@ -13,7 +13,7 @@ import com.webobjects.foundation.*;
 /**
  * Similiar to the message page, except this one has the choice Yes or No.<br />
  * As this functionality is already integrated in ERD2WMessagePage, you should use this instead.
- * @deprecated subclass ERD2WMessagePage instead
+ * @deprecated subclass ERD2WMessagePage instead, also, the name is wrong
  */
 public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInterface {
 
@@ -22,7 +22,7 @@ public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInte
     }
     
     // D2W compatibility
-    public void setOkDelegate(NextPageDelegate okDelegate) { setConfirmDelegate(_okDelegate); }
+    public void setOkDelegate(NextPageDelegate okDelegate) { setConfirmDelegate(okDelegate); }
     public void setOkNextPage(WOComponent page) { setNextPage(page); }
     public void setCancelNextPage(WOComponent page) { setCancelPage(page); }
 
