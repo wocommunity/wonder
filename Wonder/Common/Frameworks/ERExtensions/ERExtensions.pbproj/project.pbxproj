@@ -294,6 +294,7 @@
 				413BCCFB04631A7F00000102,
 				413BE5AB0463315E00000102,
 				413BE5AD0463315E00000102,
+				41600221046856BD00000102,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1360,6 +1361,19 @@
 		};
 		413BE5AD0463315E00000102 = {
 			fileRef = 413BE5A50463315E00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41600220046856BD00000102 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXDirectActionHyperlink.api;
+			path = Components/ERXDirectActionHyperlink.api;
+			refType = 2;
+		};
+		41600221046856BD00000102 = {
+			fileRef = 41600220046856BD00000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -7840,6 +7854,7 @@
 		};
 		FB1D3BECDADD387139FB5274 = {
 			children = (
+				41600220046856BD00000102,
 				F59C578A02C4565701000102,
 				F59C547202C4557A01000102,
 			);
