@@ -16,6 +16,11 @@ import com.webobjects.appserver.*;
  */
 public abstract class ERXStatelessComponent extends WOComponent {
 
+    /** Public constructor */
+    public ERXStatelessComponent(WOContext context) {
+        super(context);
+    }
+
     /** component is stateless */
     public boolean isStateless() { return true; }
     /** component does not synchronize variables */    
