@@ -11,13 +11,12 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.util.Properties;
-import er.extensions.ERXLogger;
 
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.Context;
-import org.exolab.jms.client.JmsTopicConnectionFactory;
-import org.exolab.jms.jndi.JndiConstants;
+//import org.exolab.jms.client.JmsTopicConnectionFactory;
+//import org.exolab.jms.jndi.JndiConstants;
 import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
 
 /**
@@ -80,9 +79,6 @@ import org.exolab.jms.jndi.rmi.RmiJndiInitialContextFactory;
  */
 public class ERCNNotificationCoordinator implements ExceptionListener {
 
-    /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCNNotificationCoordinator.class);
-
     private static final ERCNNotificationCoordinator _coordinator = new ERCNNotificationCoordinator();
 
     private ERCNPublisher _publisher;
@@ -102,7 +98,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
     private boolean _isTerminated = false;
 
     static {
-        log.debug("Registering the observer to initialize ERChangeNotification Framework");
+        NSLog.debug.appendln("Registering the observer to initialize ERChangeNotification Framework");
         
         NSNotificationCenter.defaultCenter().addObserver(
             _coordinator, 
@@ -160,7 +156,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
     public synchronized void initialize(NSNotification notification) {
         if (_isInitialized)  return;
 
-        log.info("Initializing ERChangeNotification Framework");
+        NSLog.out.appendln("Initializing ERChangeNotificationJMS Framework");
 
         setEntitiesNotToSynchronize((NSArray)NSPropertyListSerialization.propertyListFromString(
                 System.getProperty("er.changenotification.entitiesNotToSynchronize")));
@@ -187,7 +183,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         props.put(Context.PROVIDER_URL, protocol + "://" + host + ":" + port + "/" + jndiName);
         props.put(Context.INITIAL_CONTEXT_FACTORY, protocolType);
         
-        log.debug("props: " + props);
+        NSLog.debug.appendln("props: " + props);
         
         try {
             // Open the connection to the JMS server. 
@@ -206,7 +202,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
             _connection.setExceptionListener(this);
 
         } catch (Exception ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
             return;
         }
@@ -226,7 +222,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         try {
             _subscriber.topicSubscriber().setMessageListener(_subscriber);
         } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
             return;
         }
@@ -235,10 +231,12 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         try {
             _connection.start();
         } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
             return;
         }
+
+        NSLog.out.appendln("Finished initializing ERChangeNotificationJMS Framework");
 
         _isInitialized = true;
     }
@@ -256,18 +254,18 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
         try {
             _connection.stop();
          } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
         }
        
         _publisher.terminate();
    	_subscriber.terminate();
         
-        log.debug("Closing the JMS connection.");
+        NSLog.out.appendln("Closing the JMS connection.");
         try {
             _connection.close();
         } catch (JMSException ex) {
-            log.error("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
+            NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
             ex.printStackTrace();
         }
 
@@ -282,7 +280,7 @@ public class ERCNNotificationCoordinator implements ExceptionListener {
     // ENHANCEME: Should handle connection errors; try to reconnect when the 
     //            connection is interrupted. 
     public void onException(JMSException exception) {
-        log.error("An exception occured: " + exception.getClass().getName() + " - " + exception.getMessage());
+        NSLog.err.appendln("An exception occured: " + exception.getClass().getName() + " - " + exception.getMessage());
         exception.printStackTrace();
     }
 
