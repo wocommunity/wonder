@@ -32,6 +32,7 @@ public class ERXExtensions {
 
     /** logging support */
     private static Logger _log;
+
     /**
      * creates and caches the logging logger
      * @return logging logger
