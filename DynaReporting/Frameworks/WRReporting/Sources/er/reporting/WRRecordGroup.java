@@ -18,8 +18,8 @@ public class WRRecordGroup extends WOComponent  {
     DRRecordGroup _recordGroup;
     String _displayType;
     String _noTotalLabel;
-    String _showAsTable;
-    String _showHeadings;
+    Boolean _showAsTable;
+    Boolean _showHeadings;
     DRReportModel _model;
     NSArray _colors;
     String _reportStyle;
@@ -53,6 +53,10 @@ public class WRRecordGroup extends WOComponent  {
 
     public boolean synchronizesVariablesWithBindings() {
         return false;
+    }
+
+    public boolean isStateless() {
+        return true;
     }
 
     public void reset() {
@@ -168,39 +172,31 @@ public class WRRecordGroup extends WOComponent  {
         return _model;
     }
 
-    public String showAsTable() {
+    public Boolean booleanValueForBinding(String name) {
+        boolean flag = ERXValueUtilities.booleanValue(valueForBinding(name));
+        return flag ? Boolean.TRUE : Boolean.FALSE;
+    }
+    
+    public boolean showAsTable() {
         if (_showAsTable == null) {
-            Object v = (Object)this.valueForBinding("showAsTable");
-            if (ERXValueUtilities.booleanValue(v)) {
-                _showAsTable = "true";
-            }else {
-                _showAsTable = "false";
-            }
+            _showAsTable = booleanValueForBinding("showAsTable");
         }
-        return _showAsTable;
+        return _showAsTable.booleanValue();
     }
 
-    public String showHeadings() {
-        if (this.showSingleValue()) {
-            return "false";
+    public boolean showHeadings() {
+        if (showSingleValue()) {
+            return false;
         }
         if (_showHeadings == null) {
-            Object v = (Object)this.valueForBinding("showHeadings");
-            if (ERXValueUtilities.booleanValue(v)) {
-                _showHeadings = "true";
-            }else {
-                _showHeadings = "false";
-            }
+            _showHeadings = booleanValueForBinding("showHeadings");
         }
-        return _showHeadings;
+        return _showHeadings.booleanValue();
     }
 
 
     public boolean showHeadingsForTotalsOrTable() {
-        if ("true".equals(showHeadings())) {
-            return true;
-        }
-        return false;
+        return showHeadings();
     }
 
 
@@ -229,7 +225,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showTotalsOnlyAsTable() {
-        if (this.showTotalsOnly() && this.showAsTable().equals("true")) {
+        if (this.showTotalsOnly() && this.showAsTable()) {
             return true;
         }
         return false;
@@ -237,7 +233,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showTotalsOnlyAsCells() {
-        if (this.showTotalsOnly() && !this.showAsTable().equals("true")) {
+        if (this.showTotalsOnly() && !this.showAsTable()) {
             return true;
         }
         return false;
@@ -245,7 +241,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showRecordTableAsCells() {
-        if (this.showRecordTable() && !this.showAsTable().equals("true")) {
+        if (this.showRecordTable() && !this.showAsTable()) {
             return true;
         }
         return false;
@@ -253,18 +249,15 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public boolean showRecordTableAsTable() {
-        if (this.showRecordTable() && this.showAsTable().equals("true")) {
+        if (this.showRecordTable() && this.showAsTable()) {
             return true;
         }
         return false;
     }
 
 
-    public String totalsOnly() {
-        if (this.showTotalsOnly()) {
-            return "true";
-        }
-        return "false";
+    public boolean totalsOnly() {
+        return showTotalsOnly();
     }
 
 
@@ -387,7 +380,7 @@ public class WRRecordGroup extends WOComponent  {
 
 
     public NSDictionary attributeListDict() {
-        if (this.totalsOnly() != null) {
+        if (this.totalsOnly()) {
             return this.model().flatAttributeListTotalDict();
         }
 
@@ -404,11 +397,11 @@ public class WRRecordGroup extends WOComponent  {
         return this.model().flatAttributeList().count();
     }
 
-
+/*
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         //Abort call to super to save all this processing time
     }
-
+*/
 
     public NSArray recordFlatValueList() {
         return record.flatValueList();
