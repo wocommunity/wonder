@@ -69,8 +69,8 @@
 			productName = Server;
 			productReference = 017C7B2CFFD7144B7F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -112,7 +112,6 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B31FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -277,7 +276,6 @@
 				F59C576B02C4562A01000102,
 			);
 			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B32FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -425,9 +423,9 @@
 				F64DCF6602EF3A4001257492,
 				F64DCF6702EF3A4001257492,
 				F64DCF6802EF3A4001257492,
+				F698E7CF030C6F6B01257492,
 			);
 			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B33FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -442,14 +440,12 @@
 				F59C599A02C4575701000102,
 			);
 			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B34FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B35FFD7144B7F000001 = {
 			isa = PBXTargetDependency;
@@ -484,8 +480,8 @@
 			productName = Client;
 			productReference = 017C7B2DFFD7144B7F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -519,7 +515,6 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B38FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -558,14 +553,12 @@
 				F59C574B02C4562A01000102,
 			);
 			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B39FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B3AFFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -578,14 +571,12 @@
 				022D130D0059B6D611CD2978,
 			);
 			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B3BFFD7144B7F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C7B3CFFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -596,7 +587,6 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
 		};
@@ -639,7 +629,6 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
@@ -884,8 +873,8 @@
 			productName = WOFramework;
 			productReference = 40B58281FFD5E8187F000001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -915,16 +904,8 @@
 	<string>ERExtensions</string>
 	<key>NSJavaClientRoot</key>
 	<string>WebServerResources/Java</string>
-	<key>NSJavaNeeded</key>
-	<true/>
-	<key>NSJavaPath</key>
-	<array>
-		<string>ERExtensions.jar</string>
-	</array>
 	<key>NSJavaPathClient</key>
 	<string>ERExtensions.jar</string>
-	<key>NSJavaRoot</key>
-	<string>Resources/Java</string>
 	<key>NSPrincipalClass</key>
 	<string>er.extensions.ERXExtensions</string>
 </dict>
@@ -937,35 +918,30 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58284FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58285FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58286FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B58287FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
@@ -5805,6 +5781,18 @@
 			settings = {
 			};
 		};
+		F698E7CE030C6F6B01257492 = {
+			isa = PBXFileReference;
+			name = ERXDirectActionRequestHandler.java;
+			path = er/extensions/ERXDirectActionRequestHandler.java;
+			refType = 4;
+		};
+		F698E7CF030C6F6B01257492 = {
+			fileRef = F698E7CE030C6F6B01257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F69DF13F02C76B3F01AD0D07 = {
 			isa = PBXFileReference;
 			name = ERXModelGroup.java;
@@ -5826,7 +5814,6 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". \"${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh\"";
 		};
@@ -6505,6 +6492,7 @@
 				F64DCF6202EF3A4001257492,
 				F64DCF6102EF3A4001257492,
 				F59C578902C4565701000102,
+				F698E7CE030C6F6B01257492,
 				F59C57C002C4565701000102,
 				F59C57C202C4565701000102,
 				F54C4C5B02C4E2A001000102,
