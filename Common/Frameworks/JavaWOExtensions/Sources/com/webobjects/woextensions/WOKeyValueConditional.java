@@ -8,7 +8,6 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 
 public class WOKeyValueConditional extends WOComponent {
     protected String _key;

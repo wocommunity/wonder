@@ -7,11 +7,11 @@
 
 package com.webobjects.woextensions;
 
+import java.net.*;
 import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
-
-import java.net.UnknownHostException;
 
 public class WOStatsPage extends WOComponent {
     public NSDictionary detailsDict;

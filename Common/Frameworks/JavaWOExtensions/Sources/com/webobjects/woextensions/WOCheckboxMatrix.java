@@ -9,10 +9,10 @@ package com.webobjects.woextensions;
 
 // ** This uses a technique of having the WORepetition compute the form values for us.  This is a bit strange to have the Repetition having form values.  It may well be clearer to simply use takeValuesFromRequest... in here and not use this trick.  The ability to ask an element for its elementID seems logical and useful (as we use it for the umbrealla name here).  Of course, we could have this on the component just as easily, and this may be clearer.  However, if there is a repetition with a repetition in it, then the component's elementID isn't enough.
 
-import com.webobjects.appserver.*;
-
-import com.webobjects.foundation.*;
 import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 public class WOCheckboxMatrix extends WOComponent {
 

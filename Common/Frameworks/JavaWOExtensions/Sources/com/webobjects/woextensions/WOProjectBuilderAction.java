@@ -7,15 +7,10 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects._ideservices.*;
+import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-
-import java.net.*;
-import java.io.*;
-import java.util.Properties;
+import com.webobjects.foundation.*;
 
 /* This DirectAction is used for driving ProjectBuilder : it creates a socket and hope that
  ProjectBuilder is listening on it, then it sends the details about the exception so PB can
