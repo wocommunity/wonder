@@ -16,6 +16,28 @@ import java.util.Enumeration;
 
 /**
  * Cool class to automatically create page configurations from URLs.<br />
+ * Examples:
+ *   QueryArticle
+ * will create an query page for articles.
+ *
+ *   QueryArticle?__fs=findNewArticles
+ * will create an query page for fetch spec "findNewArticles". This will only work if your rules return a ERD2WQueryPageWithFetchSpecification.
+ *
+ *   InspectArticle?__key=<articleid>
+ * will create an inpect page for the given article.
+ *
+ *   EditArticle?__key=<articleid>
+ * will create an edit page for the given article.
+ *
+ *   CreateArticle
+ * will create an edit page for a newly created article.
+ *
+ *   ListArticle?__key=<userid>&__keypath=User.articles
+ * will list the articles of the given user.
+ *
+ *   ListArticle?__fs=recentArticles&authorName=*foo*
+ * will list the articles by calling the fetch spec "recentArticles". When the
+ * fetch spec has an "authorName" binding, it is set to "*foo*".
  * 
  */
 
@@ -31,26 +53,33 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      */
     public ERD2WDirectAction(WORequest r) { super(r); }
 
-    /** primaryKeyKey is used to identity a given object via it's primary key.
-    *   EditArticle?__key=<userid>&__keypath=User.articles
-    * will list the articles of the given user.
-    */
+    /**
+     * primaryKeyKey is used to identity a given object via it's primary key.
+     */
     static final String primaryKeyKey = "__key";
 
-    /** keyPathKey is used to get relationships of a given object.
-     *   ListArticle?__key=<userid>&__keypath=User.articles
-     * will list the articles of the given user.
+    /**
+     * keyPathKey is used to get relationships of a given object.
      */
     static final String keyPathKey = "__keypath";
 
-    static final String contextIDKey = "__cid";
+    /**
+     * fetchSpecificationKey is used to get relationships of a given object.
+     */
     static final String fetchSpecificationKey = "__fs";
+
+    /** denotes the context ID for the previous page */
+    static final String contextIDKey = "__cid";
+
+    
     static final String createPrefix = "Create";
 
+    /** For edit pages, we always use a fresh editing context. */
     protected EOEditingContext newEditingContext() {
-        return ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
+        return ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
     }
-    
+
+    /** Retrieves and executes the fetch specification given in the request. */
     public EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
         String fsName = context().request().stringFormValueForKey(fetchSpecificationKey);
         if(fsName != null) {
@@ -110,7 +139,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     public WOActionResults dynamicPageForActionNamed(String anActionName) {
         WOComponent newPage = null;
         try {
-            newPage = D2W.factory().pageForConfigurationNamed(anActionName, session());;
+            newPage = D2W.factory().pageForConfigurationNamed(anActionName, session());
         } catch (IllegalStateException ex) {
             // this will get thrown when a page simply isn't found. We don't really need to report it
             actionLog.debug("dynamicPageForActionNamed failed for Action:" + anActionName, ex);
@@ -154,10 +183,16 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             ipi.setNextPage(previousPageFromRequest());
         } else if(newPage instanceof QueryPageInterface) {
             QueryPageInterface qpi=(QueryPageInterface)newPage;
+            EOEditingContext ec = session().defaultEditingContext();
+            EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
+            if(qpi instanceof ERD2WQueryPageWithFetchSpecification) {
+                if(fs != null)
+                    ((ERD2WQueryPageWithFetchSpecification)qpi).setFetchSpecification(fs);
+            }
         } else if(newPage instanceof ListPageInterface) {
             ListPageInterface lpi=(ListPageInterface)newPage;
             EOEditingContext ec = session().defaultEditingContext();
-            EOEntity entity = (EOEntity)newPage.valueForKeyPath("d2wContext.entity");
+            EOEntity entity = context.entity();
             EODataSource ds = relationshipArrayFromRequest(ec, entity.classDescriptionForInstances());
             if(ds == null) {
                 ds = new EODatabaseDataSource(ec, entityName);
