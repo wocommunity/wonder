@@ -76,9 +76,9 @@ public class ERXBetweenQualifier extends EOQualifier implements EOQualifierSQLGe
 //	---------------------------------------------------------------------------
 
         /**
-         * Default public constructor.
+         * Default protected constructor.
          */
-	public ERXBetweenQualifier() {
+	protected ERXBetweenQualifier() {
 		super();
 	}
 
