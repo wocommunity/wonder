@@ -358,11 +358,10 @@ public class ERXUtilities {
      * {@link ERXArrayUtilities}. 
      * @param eos mutable array to be sorted
      * @param key key to be sorted on.
+     * @deprecated use ERXArrayUtilities.sortedArraySortedWithKey(NSArray,String) instead
      */
-    // CHECKME: Should these methods move to ERXArrayUtilities or the
-    //		yet to be created ERXEOFUtilities?
     public static void sortEOsUsingSingleKey(NSMutableArray eos, String key) {
-        sortEOsUsingSingleKey(eos, key, EOSortOrdering.CompareCaseInsensitiveAscending);
+        ERXArrayUtilities.sortedArraySortedWithKey(eos, key, EOSortOrdering.CompareCaseInsensitiveAscending);
     }
 
     /**
@@ -372,16 +371,10 @@ public class ERXUtilities {
      * @param eos mutable array to be sorted
      * @param key key to be sorted on.
      * @param selector sort selector.
+     * @deprecated use ERXArrayUtilities.sortedArraySortedWithKey(NSArray,String,NSSelector) instead
      */
-    // CHECKME: Should these methods move to ERXArrayUtilities or the
-    //		yet to be created ERXEOFUtilities?
     public static void sortEOsUsingSingleKey(NSMutableArray eos, String key, NSSelector selector) {
-        if (eos == null)
-            throw new RuntimeException("Attempting to sort null array of eos.");
-        if (key == null)
-            throw new RuntimeException("Attepting to sort array of eos with null key.");
-        EOSortOrdering.sortArrayUsingKeyOrderArray(eos,
-                                                   new NSArray(new EOSortOrdering(key, selector)));
+        ERXArrayUtilities.sortedArraySortedWithKey(eos, key, selector);
     }
 
     /**
