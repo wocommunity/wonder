@@ -285,6 +285,26 @@ public class ERDirectToWeb {
         return ERD2WFactory.erFactory().errorPageForException(e, session);
     }
 
+    /**
+     * Subclass of NSForwardException that can hold a d2wContext. Usefull when the exception 
+     * occurs while evaluating embedded components. The page's d2wContext will not show you the error.
+     * 
+     * @author ak
+     */
+    public static class D2WException extends NSForwardException {
+    	
+		private D2WContext _context;
+		
+		public D2WException(Exception ex, D2WContext context) {
+			super(ex);
+			_context = context;
+		}
+		
+		public D2WContext d2wContext() {
+			return _context;
+		}
+	}
+    
     public static void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {
             log.error("Exception <"+ex+">: "+
@@ -293,12 +313,13 @@ public class ERDirectToWeb {
                       "entityName <" + d2wContext.valueForKeyPath("entity.name") + ">, "+
                       "displayPropertyKeys <" +d2wContext.valueForKeyPath("displayPropertyKeys")+ ">, "+
                       "componentName <" + d2wContext().valueForKey("componentName") + ">, "+
-                      "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">", ex);
+                      "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">"/*, ex*/);
         } else {
-            log.error("Exception <"+ex+">: with NULL d2wContext", ex);
+            log.error("Exception <"+ex+">: with NULL d2wContext"/*, ex*/);
         }
-        if(ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", true))
-            throw new NSForwardException(ex);
+        if(ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", true)) {
+        	throw new D2WException(ex, d2wContext);
+        }
     }
     
     public static String displayNameForPropertyKey(String key, String entityName, String language) {
