@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * Works much the same as a {@link WODisplayGroup}.
- * @see {@link ERXMonthView} and {@ERXWeekDisplay} for examples on how to use it.
+ * See {@link ERXMonthView} and {@link ERXWeekDisplay} for examples on how to use it.
  *
  * @created ak on Mon Nov 04 2002
  */

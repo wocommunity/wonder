@@ -8,13 +8,14 @@
 <!-- ======================================================== -->
 <project name="wonder-doc" default="api" basedir="../..">
 
-    <property file="Build/build/build.properties" />
+    <property file="${basedir}/Build/build/build.properties" />
     <property file="${user.home}/build.properties" />
-    <property file="Build/build/default.properties" />
+    <property file="${basedir}/Build/build/default.properties" />
 
     <property name="wo.system.root" value="/System/Library/Frameworks" />
     <property name="build.root" value="${user.home}/Roots" />
     <property name="wonder.root" value="${basedir}" />
+
 
     <!-- ==================================================== -->
     <!--              Derived Properties.                     -->
@@ -27,7 +28,7 @@
     <!--              CLASSPATH settings                      -->
     <!-- ==================================================== -->
     <path id="classpath">
-        <fileset dir="Build/lib">
+        <fileset dir="${wonder.root}/Build/lib">
             <include name="cayenne.jar"/>
             <include name="jdom*.jar"/>
         </fileset>
@@ -85,7 +86,7 @@
         </taskdef>
 
         <!-- Build site -->
-        <anakia basedir="Build/xdocs" destdir="${dist}/doc"
+        <anakia basedir="${wonder.root}/Build/xdocs" destdir="${dist}/doc"
              extension=".html" style="wonder.vsl"
              projectFile="stylesheets/project.xml"
              excludes="**/stylesheets/**"
@@ -132,16 +133,16 @@
                 <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERCalendar/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS/Sources/"/>
-                <pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
+                <!--pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
                 <pathelement path="${wonder.root}/Validity/Frameworks/Validity/Sources"/>
-                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/>
+                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/-->
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
             <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2003 Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
-            <link href="http://developer.apple.com/techpubs/webobjects/WebObjects_5.1/Reference/Javadoc/"/>
+            <link offline="true" href="http://developer.apple.com/documentation/WebObjects/Reference/API/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://www.junit.org/junit/javadoc/3.7/"/>
         </javadoc>

@@ -36,9 +36,9 @@ public abstract class ERXApplication extends WOApplication {
 
     /** 
      * Called when the application starts up and saves the command line 
-     * arguments for {@link ERXConfigurationManger}. 
+     * arguments for {@link ERXConfigurationManager}. 
      * 
-     * @see com.webobjects.appserver.WOApplication#main(String[], Class)
+     * @see WOApplication#main(String[], Class)
      */
     public static void main(String argv[], Class applicationClass) {
         _wasERXApplicationMainInvoked = true;
@@ -84,7 +84,7 @@ public abstract class ERXApplication extends WOApplication {
     protected EOModelGroup defaultModelGroup;
 
     /**
-     * Delegate method for the {@see EOModelGroup} class delegate.
+     * Delegate method for the {@link EOModelGroup} class delegate.
      * @return a fixed ERXModelGroup
      */
     public EOModelGroup defaultModelGroup() {
@@ -160,7 +160,7 @@ public abstract class ERXApplication extends WOApplication {
     
     /**
      * Notification method called when the application posts
-     * the notification {@link WOApplicaiton#ApplicationWillFinishLaunchingNotification}. 
+     * the notification {@link WOApplication#ApplicationWillFinishLaunchingNotification}. 
      * This method calls subclasse's {@link #finishInitialization} method. 
      * 
      * @param n notification that is posted after the WOApplication
@@ -173,7 +173,7 @@ public abstract class ERXApplication extends WOApplication {
 
     /**
      * Notification method called when the application posts
-     * the notification {@link WOApplicaiton#ApplicationDidFinishLaunchingNotification}.
+     * the notification {@link WOApplication#ApplicationDidFinishLaunchingNotification}.
      * This method calls subclasse's {@link #didFinishLaunching} method.
      *
      * @param n notification that is posted after the WOApplication
@@ -184,7 +184,7 @@ public abstract class ERXApplication extends WOApplication {
     }
     
     /**
-     * Called when the application posts {@link WOApplicaiton#ApplicationWillFinishLaunchingNotification}.  
+     * Called when the application posts {@link WOApplication#ApplicationWillFinishLaunchingNotification}.  
      * Override this to perform application initialization. (optional)
      */
     public void finishInitialization() {
@@ -192,7 +192,7 @@ public abstract class ERXApplication extends WOApplication {
     }
 
     /**
-     * Called when the application posts {@link WOApplicaiton#ApplicationDidFinishLaunchingNotification}.
+     * Called when the application posts {@link WOApplication#ApplicationDidFinishLaunchingNotification}.
      * Override this to perform application specific tasks after the application has been initialized.
      * THis is a good spot to perform batch application tasks.
      */
@@ -423,7 +423,7 @@ public abstract class ERXApplication extends WOApplication {
      * Workaround for WO 5.2 DirectAction lock-ups.
      * As the super-implementation is empty, it is fairly safe to override here to call
      * the normal exception handling earlier than usual.
-     * @see com.webobjects.appserver.WOApplication#handleActionRequestError(WORequest, Exception, String, WORequestHandler, String, String, Class, WOAction)
+     * @see WOApplication#handleActionRequestError(WORequest, Exception, String, WORequestHandler, String, String, Class, WOAction)
      */
     // NOTE: if you use WO 5.1, comment out this method, otherwise it won't compile. 
     public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
@@ -592,7 +592,7 @@ public abstract class ERXApplication extends WOApplication {
      * during the startup.
      */
     private void _displayMainMethodWarning() {
-        log.warn("\n\nIt seems that your applicaiton class " 
+        log.warn("\n\nIt seems that your application class " 
             + application().getClass().getName() + " did not call "   
             + ERXApplication.class.getName()
             + ".main(argv[], applicationClass) method. "
