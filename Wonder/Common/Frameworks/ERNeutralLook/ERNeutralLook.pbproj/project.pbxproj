@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 34;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
 			buildRules = (
@@ -125,6 +125,10 @@
 				9D2B3D4F02EE256410CF0CA3,
 				9D2B3D7302EE2A1A10CF0CA3,
 				9D2B3D7A02EE2A7710CF0CA3,
+				F7C7CAFE02EF1E87014AF50A,
+				F7C7CAFF02EF1E87014AF50A,
+				F7C7CB0002EF1E87014AF50A,
+				F7C7CB0102EF1E87014AF50A,
 			);
 			isa = PBXResourcesBuildPhase;
 		};
@@ -136,6 +140,8 @@
 				F6EBF5E502DF4F8A0FCF0E72,
 				9D2B3D4002EE1EF810CF0CA3,
 				9D2B3D5102EE256410CF0CA3,
+				F7C7CB0202EF1E87014AF50A,
+				F7C7CB0302EF1E87014AF50A,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -615,6 +621,8 @@
 				F6EBF5EE02DF4FB90FCF0E72,
 				9D2B3D3602EE1EF710CF0CA3,
 				9D2B3D4702EE256310CF0CA3,
+				F7C7CAF402EF1E87014AF50A,
+				F7C7CAF902EF1E87014AF50A,
 			);
 			isa = PBXGroup;
 			name = "Web Components";
@@ -797,7 +805,6 @@
 			refType = 4;
 		};
 		9D2B3D6E02EE2A1A10CF0CA3 = {
-			includeInIndex = 1;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUQueryAllPage.wo;
@@ -819,7 +826,6 @@
 			refType = 4;
 		};
 		9D2B3D7502EE2A7710CF0CA3 = {
-			includeInIndex = 1;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUEditRelationshipPage.wo;
@@ -863,7 +869,6 @@
 			refType = 4;
 		};
 		F6EBF38C02DF4EFF0FCF0E72 = {
-			includeInIndex = 1;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUInspectPage.wo;
@@ -879,7 +884,6 @@
 			refType = 4;
 		};
 		F6EBF39702DF4EFF0FCF0E72 = {
-			includeInIndex = 1;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUListPage.wo;
@@ -895,7 +899,6 @@
 			refType = 4;
 		};
 		F6EBF3A202DF4EFF0FCF0E72 = {
-			includeInIndex = 1;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUQueryPage.wo;
@@ -1074,6 +1077,126 @@
 		};
 		F6EBF6BF02DF50980FCF0E72 = {
 			fileRef = F6EBF6BD02DF50980FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F60
+//F61
+//F62
+//F63
+//F64
+//F70
+//F71
+//F72
+//F73
+//F74
+		F7C7CAF402EF1E87014AF50A = {
+			children = (
+				F7C7CAF502EF1E87014AF50A,
+				F7C7CAF602EF1E87014AF50A,
+				F7C7CAF702EF1E87014AF50A,
+			);
+			isa = PBXGroup;
+			name = ERNEUTabInspectPage;
+			refType = 4;
+		};
+		F7C7CAF502EF1E87014AF50A = {
+			isa = PBXFileReference;
+			name = ERNEUTabInspectPage.api;
+			path = Components/ERNEUTabInspectPage.api;
+			refType = 4;
+		};
+		F7C7CAF602EF1E87014AF50A = {
+			isa = PBXFileReference;
+			name = ERNEUTabInspectPage.java;
+			path = Sources/er/neutral/ERNEUTabInspectPage.java;
+			refType = 4;
+		};
+		F7C7CAF702EF1E87014AF50A = {
+			children = (
+				F7C7CAF802EF1E87014AF50A,
+			);
+			isa = PBXVariantGroup;
+			name = ERNEUTabInspectPage.wo;
+			path = "";
+			refType = 4;
+		};
+		F7C7CAF802EF1E87014AF50A = {
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERNEUTabInspectPage.wo;
+			refType = 4;
+		};
+		F7C7CAF902EF1E87014AF50A = {
+			children = (
+				F7C7CAFA02EF1E87014AF50A,
+				F7C7CAFB02EF1E87014AF50A,
+				F7C7CAFC02EF1E87014AF50A,
+			);
+			isa = PBXGroup;
+			name = ERNEUWizardCreationPage;
+			refType = 4;
+		};
+		F7C7CAFA02EF1E87014AF50A = {
+			isa = PBXFileReference;
+			name = ERNEUWizardCreationPage.api;
+			path = Components/ERNEUWizardCreationPage.api;
+			refType = 4;
+		};
+		F7C7CAFB02EF1E87014AF50A = {
+			isa = PBXFileReference;
+			name = ERNEUWizardCreationPage.java;
+			path = Sources/er/neutral/ERNEUWizardCreationPage.java;
+			refType = 4;
+		};
+		F7C7CAFC02EF1E87014AF50A = {
+			children = (
+				F7C7CAFD02EF1E87014AF50A,
+			);
+			isa = PBXVariantGroup;
+			name = ERNEUWizardCreationPage.wo;
+			path = "";
+			refType = 4;
+		};
+		F7C7CAFD02EF1E87014AF50A = {
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERNEUWizardCreationPage.wo;
+			refType = 4;
+		};
+		F7C7CAFE02EF1E87014AF50A = {
+			fileRef = F7C7CAF702EF1E87014AF50A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7C7CAFF02EF1E87014AF50A = {
+			fileRef = F7C7CAFC02EF1E87014AF50A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7C7CB0002EF1E87014AF50A = {
+			fileRef = F7C7CAF502EF1E87014AF50A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7C7CB0102EF1E87014AF50A = {
+			fileRef = F7C7CAFA02EF1E87014AF50A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7C7CB0202EF1E87014AF50A = {
+			fileRef = F7C7CAF602EF1E87014AF50A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7C7CB0302EF1E87014AF50A = {
+			fileRef = F7C7CAFB02EF1E87014AF50A;
 			isa = PBXBuildFile;
 			settings = {
 			};
