@@ -264,6 +264,10 @@
 			files = (
 				9DF7E71503AE8C5110CF0E7D,
 				9DF7E71603AE8C5210CF0E7D,
+				946A969304686B3000CF0E7D,
+				946A969404686B3000CF0E7D,
+				946A969504686B3100CF0E7D,
+				946A969604686B3100CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,6 +397,10 @@
 			children = (
 				9DF7E71103AE8C4210CF0E7D,
 				9DF7E71203AE8C4210CF0E7D,
+				946A968B04686B2600CF0E7D,
+				946A968C04686B2600CF0E7D,
+				946A968D04686B2600CF0E7D,
+				946A968E04686B2600CF0E7D,
 			);
 			isa = PBXGroup;
 			name = "Web Server Resources";
@@ -758,6 +766,64 @@
 //402
 //403
 //404
+//940
+//941
+//942
+//943
+//944
+		946A968B04686B2600CF0E7D = {
+			isa = PBXFileReference;
+			name = down.gif;
+			path = WebServerResources/down.gif;
+			refType = 4;
+		};
+		946A968C04686B2600CF0E7D = {
+			isa = PBXFileReference;
+			name = downFast.gif;
+			path = WebServerResources/downFast.gif;
+			refType = 4;
+		};
+		946A968D04686B2600CF0E7D = {
+			isa = PBXFileReference;
+			name = up.gif;
+			path = WebServerResources/up.gif;
+			refType = 4;
+		};
+		946A968E04686B2600CF0E7D = {
+			isa = PBXFileReference;
+			name = upFast.gif;
+			path = WebServerResources/upFast.gif;
+			refType = 4;
+		};
+		946A969304686B3000CF0E7D = {
+			fileRef = 946A968B04686B2600CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A969404686B3000CF0E7D = {
+			fileRef = 946A968C04686B2600CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A969504686B3100CF0E7D = {
+			fileRef = 946A968D04686B2600CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A969604686B3100CF0E7D = {
+			fileRef = 946A968E04686B2600CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//940
+//941
+//942
+//943
+//944
 //9D0
 //9D1
 //9D2
