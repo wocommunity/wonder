@@ -144,8 +144,10 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public static synchronized void configureLogging(Properties properties) {
         if (_isFirstTimeConfig) {
-            BasicConfigurator.configure();
-            Logger.getRootLogger().setLevel(Level.INFO);
+            if (!ERXProperties.webObjectsVersionIs522OrHigher()) {
+                BasicConfigurator.configure();
+                Logger.getRootLogger().setLevel(Level.INFO);
+            }
             _isFirstTimeConfig = false;
         }
         PropertyConfigurator.configure(properties);
