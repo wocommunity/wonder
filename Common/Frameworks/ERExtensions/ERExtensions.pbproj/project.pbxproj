@@ -424,6 +424,7 @@
 				F54C4C5E02C4E2F101000102,
 				F69DF14002C76B3F01AD0D07,
 				F57D5EAE02E538B901000102,
+				9DFF48B502E7404E10CF0CA3,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -1056,6 +1057,28 @@
 //402
 //403
 //404
+//9D0
+//9D1
+//9D2
+//9D3
+//9D4
+		9DFF48B402E7404E10CF0CA3 = {
+			isa = PBXFileReference;
+			name = ERXReplicableInterface.java;
+			path = er/extensions/ERXReplicableInterface.java;
+			refType = 4;
+		};
+		9DFF48B502E7404E10CF0CA3 = {
+			fileRef = 9DFF48B402E7404E10CF0CA3;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//9D0
+//9D1
+//9D2
+//9D3
+//9D4
 //D80
 //D81
 //D82
@@ -5935,6 +5958,7 @@
 			children = (
 				F59C57A002C4565701000102,
 				F59C57A602C4565701000102,
+				9DFF48B402E7404E10CF0CA3,
 			);
 			isa = PBXGroup;
 			name = "EOF Interfaces";
