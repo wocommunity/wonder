@@ -277,56 +277,56 @@ public class ERXExtensions {
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static ERXEditingContextDelegate defaultEditingContextDelegate() {
         return (ERXEditingContextDelegate)ERXEC.factory().defaultEditingContextDelegate();
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static void setDefaultEditingContextDelegate(ERXEditingContextDelegate delegate) {
         ERXEC.factory().setDefaultEditingContextDelegate(delegate);
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static ERXECNoValidationDelegate defaultECNoValidationDelegate() {
         return (ERXECNoValidationDelegate)ERXEC.factory().defaultNoValidationDelegate();
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static void setDefaultECNoValidationDelegate(ERXECNoValidationDelegate delegate) {
         ERXEC.factory().setDefaultNoValidationDelegate(delegate);
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static EOEditingContext newEditingContext() {
         return ERXEC.newEditingContext();
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */    
     public static EOEditingContext newEditingContext(boolean validation) {
         return ERXEC.newEditingContext(validation);
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static EOEditingContext newEditingContext(EOObjectStore objectStore) {
         return ERXEC.newEditingContext(objectStore);
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */    
     public static EOEditingContext newEditingContext(EOObjectStore objectStore, boolean validation) {
         return ERXEC.newEditingContext(objectStore, validation);
@@ -402,35 +402,35 @@ public class ERXExtensions {
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static void setDefaultDelegate(EOEditingContext ec) {
         ERXEC.factory().setDefaultDelegateOnEditingContext(ec);
     }
 
     /**
-     * deprecated see {@link ERXEC}
+     * @deprecated see {@link ERXEC}
      */
     public static void setDefaultDelegate(EOEditingContext ec, boolean validation) {
         ERXEC.factory().setDefaultDelegateOnEditingContext(ec, validation);
     }
 
     /**
-     * deprecated see {@link ERXEOControlUtilities#dataSourceForArray(NSArray)}
+     * @deprecated see {@link ERXEOControlUtilities#dataSourceForArray(NSArray)}
      */
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
         return ERXEOControlUtilities.dataSourceForArray(array);
     }
 
     /**
-     * deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
+     * @deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
      */
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
         return ERXEOControlUtilities.arrayFromDataSource(dataSource);
     }
 
     /**
-     * deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
+     * @deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
      */
     public static EODetailDataSource dataSourceForObjectAndKey(EOEnterpriseObject eo, String key) {
         return ERXEOControlUtilities.dataSourceForObjectAndKey(eo, key);
