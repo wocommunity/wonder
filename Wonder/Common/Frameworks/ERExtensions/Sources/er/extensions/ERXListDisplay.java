@@ -28,7 +28,7 @@ public class ERXListDisplay extends WOComponent {
         return ERXUtilities.booleanValueForBindingOnComponentWithDefault("escapeHTML", this, true);
     }
     
-    protected String displayString() {
+    public String displayString() {
         return ERXExtensions.friendlyEOArrayDisplayForKey((NSArray)valueForBinding("list"),
                                                          (String)valueForBinding("attribute"),
                                                          (String)valueForBinding("nullArrayDisplay"));
