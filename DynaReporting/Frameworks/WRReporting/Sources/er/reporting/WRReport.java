@@ -87,19 +87,13 @@ public class WRReport extends WOComponent  {
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
-
-    public void awake() {
-        _vheadingIndex = 0;
-        _indexDict.removeAllObjects();
-        _colorDict = null;
-        _showPresentationControls = null;
-        //[_currentZCriteria removeAllObjects];
+    public void initializeDimensionArrayFromBindings() {
         if(!_initializedDimensionArrayFromBindings) {
+            _initializedDimensionArrayFromBindings = true;
             if(model() != null) {
                 initializeDimensionArrayFromBindings("H");
                 initializeDimensionArrayFromBindings("V");
                 initializeDimensionArrayFromBindings("Z");
-                _initializedDimensionArrayFromBindings = true;
                 if(log.isDebugEnabled()) {
                     log.debug("V :" + model().vList());
                     log.debug("H :" + model().hList());
@@ -111,6 +105,20 @@ public class WRReport extends WOComponent  {
         }
     }
 
+    public void awake() {
+        _model = null;
+        _vheadingIndex = 0;
+        _indexDict.removeAllObjects();
+        _colorDict = null;
+        _showPresentationControls = null;
+        //[_currentZCriteria removeAllObjects];
+            initializeDimensionArrayFromBindings();
+   }
+
+
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        super.takeValuesFromRequest(r, c);
+    }
 
     public void appendToResponse(WOResponse r, WOContext c) {
         _indexDict.removeAllObjects();
@@ -124,6 +132,8 @@ public class WRReport extends WOComponent  {
     public void rebuildModel(NSNotification not) {
         _currentZCriteria.removeAllObjects();
         _initializedDimensionArrayFromBindings = false;
+        initializeDimensionArrayFromBindings();
+        log.info("Rebuild model");
     }
 
 
@@ -496,7 +506,7 @@ public class WRReport extends WOComponent  {
     }
 
 
-    public DRRecordGroup recordGroupTest() {
+    public DRRecordGroup recordGroup() {
         NSDictionary crds = this.currentCoordinates();
         DRRecordGroup drg =  this.model().recordGroupForCoordinates(crds);
         return drg;
