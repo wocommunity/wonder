@@ -27,6 +27,7 @@
 				F527406E017CADD2014387C8,
 				F527406F017CADD2014387C8,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = F5274011017CADD2014387C8;
 			productRefGroup = F5274032017CADD2014387C8;
@@ -261,7 +262,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5274037017CADD2014387C8 = {
 			isa = PBXTargetDependency;
@@ -330,7 +330,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5274039017CADD2014387C8 = {
 			buildActionMask = 2147483647;
@@ -508,7 +507,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5274054017CADD2014387C8 = {
 			buildActionMask = 2147483647;
@@ -722,54 +720,63 @@
 			name = WebServer;
 		};
 		F54F865102C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = D2WOgnlAssignment.java;
 			path = Sources/ognl/webobjects/D2WOgnlAssignment.java;
 			refType = 2;
 		};
 		F54F865202C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOOgnlHTMLTemplateParser.java;
 			path = Sources/ognl/webobjects/WOOgnlHTMLTemplateParser.java;
 			refType = 2;
 		};
 		F54F865302C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NSArrayPropertyAccessor.java;
 			path = Sources/ognl/webobjects/NSArrayPropertyAccessor.java;
 			refType = 2;
 		};
 		F54F865402C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NSFoundationElementsAccessor.java;
 			path = Sources/ognl/webobjects/NSFoundationElementsAccessor.java;
 			refType = 2;
 		};
 		F54F865502C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NSObjectPropertyAccessor.java;
 			path = Sources/ognl/webobjects/NSObjectPropertyAccessor.java;
 			refType = 2;
 		};
 		F54F865602C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NSClassResolver.java;
 			path = Sources/ognl/webobjects/NSClassResolver.java;
 			refType = 2;
 		};
 		F54F865702C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NSDictionaryPropertyAccessor.java;
 			path = Sources/ognl/webobjects/NSDictionaryPropertyAccessor.java;
 			refType = 2;
 		};
 		F54F865802C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOOgnl.java;
 			path = Sources/ognl/webobjects/WOOgnl.java;
 			refType = 2;
 		};
 		F54F865902C7AFA901E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = WOOgnlAssociation.java;
 			path = Sources/ognl/webobjects/WOOgnlAssociation.java;
@@ -838,6 +845,7 @@
 			refType = 2;
 		};
 		F54F866B02C7AFE401E168BF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = LICENSE.NPL;
 			refType = 4;
