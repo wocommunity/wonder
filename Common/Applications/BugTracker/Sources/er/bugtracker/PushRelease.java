@@ -24,7 +24,7 @@ public class PushRelease extends WOComponent {
     protected Bug currentBug;
     public NSArray bugsInBuild() {
         if (_bugsInBuild==null) {
-            _bugsInBuild=Bug.bugClazz().bugsInBuildWithTargetRelease(session().defaultEditingContext(), null);
+            _bugsInBuild=Bug.clazz.bugsInBuildWithTargetRelease(session().defaultEditingContext(), null);
         }
         return _bugsInBuild;
     }
