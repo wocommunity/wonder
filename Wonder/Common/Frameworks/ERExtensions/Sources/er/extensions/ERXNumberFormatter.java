@@ -7,25 +7,42 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
-import org.apache.log4j.Category;
 import java.text.*;
 
-// An extension to the simple number formatter that will ignore characters ($%)
+/**
+ * A simple extension to the number formatter that
+ * will strip out the characters '%$,' when parsing
+ * a string.
+ */
 public class ERXNumberFormatter extends NSNumberFormatter {
 
-    //////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance(ERXNumberFormatter.class);
-    public ERXNumberFormatter() {
-    }
-    
+    /** holds a reference to the shared instance */
     protected static ERXNumberFormatter _sharedInstance;
+    /**
+     * Returns the shared instance
+     * @return shared instance
+     */
     public static ERXNumberFormatter sharedInstance() {
         if (_sharedInstance == null)
             _sharedInstance = new ERXNumberFormatter();
         return _sharedInstance;
     }
 
-    // FIXME: SHould provide api to allow for additions to the list of ignored characters
+    /**
+     * Public constructor
+     */
+    public ERXNumberFormatter() {
+    }
+
+    /**
+     * Strips out the characters '$%,' from the string to
+     * be parsed.
+     * @param aString to be parsed
+     * @return the parsed object
+     */
+    // FIXME: Should provide api to allow for additions to the list of ignored characters
+    // 		also ignoring the , character is not good for localization.
+    // CHECKME: Is this really needed now that we can form locales?
     public Object parseObject(String aString) throws java.text.ParseException {
         char[] chars = aString.toCharArray();
         char[] filteredChars = new char[chars.length];
