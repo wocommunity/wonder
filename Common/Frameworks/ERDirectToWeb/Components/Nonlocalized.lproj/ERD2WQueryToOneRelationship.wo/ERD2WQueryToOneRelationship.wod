@@ -1,5 +1,3 @@
-
-
 ToOneRelationship: ERXToOneRelationship {
 	destinationDisplayKey = d2wContext.keyWhenRelationship;
         possibleChoices = restrictedChoiceList;
@@ -10,5 +8,6 @@ ToOneRelationship: ERXToOneRelationship {
 	sourceObject = displayGroup.queryMatch;
 	displayGroup = displayGroup;
 	uiStyle = d2wContext.toOneUIStyle;
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 }
 

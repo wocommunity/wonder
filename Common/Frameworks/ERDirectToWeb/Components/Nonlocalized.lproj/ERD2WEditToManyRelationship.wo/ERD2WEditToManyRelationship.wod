@@ -4,11 +4,11 @@ AreThereChoices: ERXNonZeroConditional {
 
 AreThereChoices2: ERXNonZeroConditional {
 	condition = restrictedChoiceList.count;
-	negate = YES;
+	negate = true;
 }
 
 CollapseContainer: D2WCollapsibleComponentContent {
-	_unroll = YES;
+	_unroll = true;
 	allowCollapsing = d2wContext.allowCollapsing;
 	closedLabel = toManyDescription;
 	submitActionName = "";
@@ -27,5 +27,11 @@ EditToManyRelationship: ERXToManyRelationship {
 	goingVertically = d2wContext.goingVertically;
 	destinationSortKey = d2wContext.sortKey;
 	shouldShowSelectAllButtons = shouldShowSelectAllButtons;
+	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+}
+
+noChoiceAvaliable: ERXLocalizedString {
+	templateString = "ERD2WEditToManyRelationship.noChoiceAvailable";
+	object = d2wContext;
 }
 
