@@ -1,5 +1,5 @@
-<WEBOBJECT NAME=TextArea></WEBOBJECT>
-<WEBOBJECT NAME=Conditional1><script language="JavaScript1.2">
+<webobject name=Span><WEBOBJECT NAME=TextArea></WEBOBJECT></WEBOBJECT>
+<WEBOBJECT NAME=Conditional1><div style="position:absolute;top:00px;left:500px;color=#ff00ff;width=500px;height=200px;" id="debug"></div><script language="JavaScript1.2">
 var DECMD_BOLD =                      5000;
 var DECMD_COPY =                      5002;
 var DECMD_CUT =                       5003;
@@ -63,199 +63,221 @@ function dhtmlGetTextVarByName(formName,varName) {return dhtmlGetFormByName(form
 
 function dhtmlCmd(formName,varName,cmd)
 {
-	dhtmlGetDHTMLByName(formName,varName).execCommand(cmd,false);
+    dhtmlGetDHTMLByName(formName,varName).execCommand(cmd,false);
 }
 
 function dhtmlReplaceGlobalWithParam(text,regEx,replacement)
 {
-	var re=new RegExp(regEx,"i");
-	while(re.test(text))
-	{
-		text=text.replace(re,eval(replacement));
-	}
-	return text;
+    var re=new RegExp(regEx,"i");
+    while(re.test(text)) {
+	text=text.replace(re,eval(replacement));
+    }
+    return text;
 }
 
 function dhtmlRemoveGlobal(text,regEx)
 {
-	var re=new RegExp(regEx,"gi");
-	var tempText=text;
+    var re=new RegExp(regEx,"gi");
+    var tempText=text;
 
-	text=tempText.replace(re,"");
-	return text;
+    text=tempText.replace(re,"");
+    return text;
 }
 
 function dhtmlCheckReplace(currtext)
 {
-	currtext=dhtmlReplaceGlobalWithParam(currtext,"<(\\/?)strong>","'<'+RegExp.$1+'b>'");
-	currtext=dhtmlReplaceGlobalWithParam(currtext,"<(\\/?)em>","'<'+RegExp.$1+'i>'");
-	currtext=currtext.replace(new RegExp("<tr[^>]*>","gi"),"<tr>");
-	currtext=currtext.replace(new RegExp("<td[^>]*>","gi"),"<td>");
-	currtext=currtext.replace(new RegExp("<table[^>]*>","gi"),"<table border='0'>");
-	currtext=dhtmlRemoveGlobal(currtext,"<\\/?span>");
-	currtext=dhtmlRemoveGlobal(currtext,"<colgroup[^>]*>");
-	currtext=dhtmlRemoveGlobal(currtext,"<col[^>]*>");
-	currtext=dhtmlRemoveGlobal(currtext,"<\\/?font[^>]*>");
-	currtext=dhtmlRemoveGlobal(currtext,"<\\/?o[^>]*>");
-	currtext=dhtmlRemoveGlobal(currtext,"bgcolor=\"[^\"]*\"");
-	currtext=dhtmlRemoveGlobal(currtext,"width=\"[^\"]*\"");
-	currtext=dhtmlRemoveGlobal(currtext,"style=\"[^\"]*\"");
-	currtext=dhtmlRemoveGlobal(currtext,"class=\"[^\"]*\"");
-	currtext=dhtmlRemoveGlobal(currtext,"designtimesp = [0-9]+");
-	return currtext;
+    currtext=dhtmlReplaceGlobalWithParam(currtext,"<(\\/?)strong>","'<'+RegExp.$1+'b>'");
+    currtext=dhtmlReplaceGlobalWithParam(currtext,"<(\\/?)em>","'<'+RegExp.$1+'i>'");
+    currtext=currtext.replace(new RegExp("<tr[^>]*>","gi"),"<tr>");
+    currtext=currtext.replace(new RegExp("<td[^>]*>","gi"),"<td>");
+    currtext=currtext.replace(new RegExp("<table[^>]*>","gi"),"<table border='0'>");
+    currtext=dhtmlRemoveGlobal(currtext,"<\\/?span>");
+    currtext=dhtmlRemoveGlobal(currtext,"<colgroup[^>]*>");
+    currtext=dhtmlRemoveGlobal(currtext,"<col[^>]*>");
+    currtext=dhtmlRemoveGlobal(currtext,"<\\/?font[^>]*>");
+    currtext=dhtmlRemoveGlobal(currtext,"<\\/?o[^>]*>");
+    currtext=dhtmlRemoveGlobal(currtext,"bgcolor=\"[^\"]*\"");
+    currtext=dhtmlRemoveGlobal(currtext,"width=\"[^\"]*\"");
+    currtext=dhtmlRemoveGlobal(currtext,"style=\"[^\"]*\"");
+    currtext=dhtmlRemoveGlobal(currtext,"class=\"[^\"]*\"");
+    currtext=dhtmlRemoveGlobal(currtext,"designtimesp = [0-9]+");
+    return currtext;
 }
 
 function dhtmlSave(formName,varName)
 {
-
-	range=dhtmlGetDHTMLByName(formName,varName).DOM.body.createTextRange();
-	var aText=range.htmlText;
-	aText=dhtmlCheckReplace(aText);
-	dhtmlGetTextVarByName(formName,varName).value=aText;
+    var range=dhtmlGetDHTMLByName(formName,varName).DOM.body.createTextRange();
+    var aText=range.htmlText;
+    aText=dhtmlCheckReplace(aText);
+    dhtmlGetTextVarByName(formName,varName).value=aText;
 }
 
-function dhtmlLoad(formName,varName)
+function dhtmlLoad(formName,varName,mytext)
 {
-	mytext=dhtmlGetTextVarByName(formName,varName).value;
-	dhtmlGetDHTMLByName(formName,varName).DocumentHTML='<html><head><style>body,td{color:#000000;background-color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:normal}</style></head><body>'+mytext+'</body></html>';
+    dhtmlGetDHTMLByName(formName,varName).DocumentHTML='<html><head><style>body,td{color:#000000;background-color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:normal}</style></head><body>'+mytext+'</body></html>';
 }
 
 function dhtmlSubmit(inform)
 {
-	var dhtmlRefs = inform.dhtmlControls;
-	if(dhtmlRefs)
-	{
-		for (var control in dhtmlRefs)
-		{
-			dhtmlSave(inform.name,control);
-		}
+    var dhtmlRefs = inform.dhtmlControls;
+    if(dhtmlRefs) {
+	for (var control in dhtmlRefs) {
+	    dhtmlSave(inform.name,control);
 	}
-	inform.submit();
+    }
+    inform.submit();
 }
 
 function dhtmlCommandCell(formName,varName,picPrefix,cmdPrefix,cmdPic,cmdValue)
 {
-	return '<td><a href="#" onClick="dhtmlCmd('+"'"+formName+"'"+','+"'"+varName+"'"+','+cmdPrefix+cmdValue+');">'+
-		'<img alt="'+picPrefix+'_'+cmdPic+'.gif" src="'+picPrefix+'_'+cmdPic+'.gif" border="0" height="20" width="21"></a></td>';
+    return '<td><a href="javascript:void(0);" onClick="dhtmlCmd('+"'"+formName+"'"+','+"'"+varName+"'"+','+cmdPrefix+cmdValue+');">'+
+    '<img alt="'+picPrefix+'_'+cmdPic+'.gif" src="'+picPrefix+'_'+cmdPic+'.gif" border="0" height="20" width="21"></a></td>';
 }
 
 function dhtmlCmdBar(formName,varName,picPrefix,cmdPrefix,cmdPicArray,cmdValueArray, isLast)
 {
-	var out = '<table cellspacing="0" cellpadding="0" border="0" '+(isLast?"":'align="left"')+'><tr>';
-	for(var i = 0; !(i >= cmdPicArray.length); i++)
-	{
-		out += dhtmlCommandCell(formName,varName,picPrefix,cmdPrefix,cmdPicArray[i],cmdValueArray[i]);
-	}
-	return  out += "</tr></table>";
+    var out = '<table cellspacing="0" cellpadding="0" border="0" '+(isLast?"":'align="left"')+'><tr>';
+    for(var i = 0; !(i >= cmdPicArray.length); i++) {
+	out += dhtmlCommandCell(formName,varName,picPrefix,cmdPrefix,cmdPicArray[i],cmdValueArray[i]);
+    }
+    return  out += "</tr></table>";
 }
 
-function s(what) 
+function s(what)
 {
-     var output = '';
-     var curr;
-     for (var i in what)
-     {
-         output += i+ ": '" + what[i] + "', ";
-     }
-     return output;
- }
+    var output = '';
+    var curr;
+    for (var i in what) {
+	output += i+ ": '" + what[i] + "', ";
+    }
+    return output;
+}
 
 function dhtmlGetPos(obj)
 {
-	var next = obj.offsetParent,pos = new Object();
-	pos.left = obj.offsetLeft;
-	pos.top = obj.offsetTop;
-	if(obj.clientWidth)
-	{
-		pos.width = obj.clientWidth;
-		pos.height = obj.clientHeight;
+    var pos = new Object(), save = obj;
+    pos.left = 0;
+    pos.top = 0;
+    pos.width = obj.offsetWidth;
+    pos.height = obj.offsetHeight;
+
+    while(obj.offsetParent) {
+	if(obj.offsetParent) {
+	    pos.left += obj.offsetLeft;
+	    pos.top += obj.offsetTop;
 	}
-	else
-	{
-		pos.width = obj.offsetWidth;
-		pos.height = obj.offsetHeight;
-	}
-	while(next)
-	{
-		pos.left += next.offsetLeft;
-		pos.top += next.offsetTop;
-		next = next.offsetParent;
-	}
-	if(navigator.appVersion.indexOf("Mac")!=-1)
-	{
-		pos.left += document.body.leftMargin - 2;
-	 	pos.top += document.body.topMargin - 2;
-		pos.width += 4;
-		pos.height += 4;
-	}
-	else
-	{
-		pos.width += 22;
-		pos.height += 5;
-	}
-	return pos;
+	obj = obj.offsetParent;
+    }
+
+    if(navigator.appVersion.indexOf("Mac")!=-1 && 0) {
+	pos.left -= document.body.leftMargin - 7;
+	pos.top -= document.body.topMargin - 9;
+	pos.width += 4;
+	pos.height += 4;
+    }
+    return pos;
 }
+
 function dhtmlCreate(formName,varName,baseUrl,hasToolbar)
 {
-	if((navigator.appName.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Explorer") >= 0) 
-		&& navigator.appVersion.indexOf("Mac") == -1)
- 	{
-	 	var dhtmlName = varName + "_dhtml";
-	 	var inform = dhtmlGetFormByName(formName);
-		var out = "";
-		var textVar = dhtmlGetTextVarByName(formName,varName);
-		var pos = dhtmlGetPos(textVar);
-		var width = pos.width, height = pos.height;
-		var left = pos.left, top = pos.top;
-		if(baseUrl == "") {
-			baseUrl = "DHTMLcontrol";
-		}
-		var last = baseUrl.lastIndexOf("s.gif");
-		if(last>0) {
-		    baseUrl = baseUrl.substring(0,last);
-		}
-		//alert(baseUrl);
-		out += '<div id="'+varName+'_div'+'" style="background-color:white;position:absolute;top:'+top+'px;left:'+left+'px;width:'+width+'px;height:'+height+'px;">';
-		out += '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
-		if(hasToolbar != 0)
-		{
-			out += '<tr ><td bgcolor="#f0f0f0">';
-			out += dhtmlCmdBar(formName,varName, baseUrl+"align","DECMD_JUSTIFY", new Array("left", "center", "right"), new Array("LEFT", "CENTER", "RIGHT"),0);
-		 	out += dhtmlCmdBar(formName,varName, baseUrl+"format","DECMD_", new Array("bold", "italic", "underline"), new Array("BOLD", "ITALIC", "UNDERLINE"),1);
-		 	out += '</td></tr>';
-		}
-	 	out += '<tr><td>';
-		out += '<object classid="clsid:2D360201-FFF5-11D1-8D03-00A0C959BC0A" id="'+dhtmlName+'" width="'+width+'" height="'+(height-20)+'">';
-		out += '<param name="ActivateApplets" value="0">';
-		out += '<param name="ActivateActiveXControls" value="0">';
-		out += '<param name="ActivateDTCs" value="-1">';
-		out += '<param name="ShowDetails" value="0">';
-		out += '<param name="ShowBorders" value="0">';
-		out += '<param name="Appearance" value="1">';
-		out += '<param name="Scrollbars" value="-1">';
-		out += '<param name="ScrollbarAppearance" value="1">';
-		out += '<param name="SourceCodePreservation" value="-1">';
-		out += '<param name="AbsoluteDropMode" value="0">';
-		out += '<param name="SnapToGrid" value="0">';
-		out += '<param name="SnapToGridX" value="50">';
-		out += '<param name="SnapToGridY" value="50">';
-		out += '<param name="UseDivOnCarriageReturn" value="0">';
-		out += '</object>';
-		out += '</td></tr></table></div>';
-
-		document.writeln(out);
-
-		if(!inform.dhtmlControls)
-		{
-			inform.dhtmlControls = new Object();
-		}
-		inform.dhtmlControls[varName] = dhtmlGetDHTMLByName(formName,varName);
- 		dhtmlLoad(formName,varName);
-		inform.onSubmit = inform.onsubmit = new Function("{dhtmlSubmit(this);};");
+    if((navigator.appName.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Explorer") >= 0)
+       && navigator.appVersion.indexOf("Mac") == -1 || 1)
+    {
+	var dhtmlName = varName + "_dhtml";
+	var inform = dhtmlGetFormByName(formName);
+	var out = "";
+	var textVar = dhtmlGetTextVarByName(formName,varName);
+	var pos = dhtmlGetPos(textVar);
+	// alert(varName +"," + textVar + "," + pos.left + "," + pos.top+ "," + pos.width + "," + pos.height + ":" + textVar.left);
+	var width = pos.width, height = pos.height;
+	var left = pos.left, top = pos.top;
+	if(baseUrl == "") {
+	    baseUrl = "DHTMLcontrol";
 	}
+	var last = baseUrl.lastIndexOf("s.gif");
+	if(last>0) {
+	    baseUrl = baseUrl.substring(0,last);
+	}
+	//alert(baseUrl);
+ // out += '<div id="'+varName+'_div'+'" style="background-color:white;position:absolute;top:'+top+'px;left:'+left+'px;width:'+width+'px;height:'+height+'px;">';
+	out += '<div id="'+varName+'_div'+'" style="background-color:white;position:absolute;top:'+top+'px;left:'+left+'px;width:'+width+'px;height:'+height+'px;">';
+	out += '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
+	if(hasToolbar != 0)
+	{
+	    out += '<tr ><td bgcolor="#f0f0f0">';
+	    out += dhtmlCmdBar(formName,varName, baseUrl+"align","DECMD_JUSTIFY", new Array("left", "center", "right"), new Array("LEFT", "CENTER", "RIGHT"),0);
+	    out += dhtmlCmdBar(formName,varName, baseUrl+"format","DECMD_", new Array("bold", "italic", "underline"), new Array("BOLD", "ITALIC", "UNDERLINE"),1);
+	    out += '</td></tr>';
+	}
+	out += '<tr><td>';
+	out += '<object classid="clsid:2D360201-FFF5-11D1-8D03-00A0C959BC0A" id="'+dhtmlName+'" width="'+width+'" height="'+(height-20)+'">';
+	out += '<param name="ActivateApplets" value="0">';
+	out += '<param name="ActivateActiveXControls" value="0">';
+	out += '<param name="ActivateDTCs" value="-1">';
+	out += '<param name="ShowDetails" value="0">';
+	out += '<param name="ShowBorders" value="0">';
+	out += '<param name="Appearance" value="1">';
+	out += '<param name="Scrollbars" value="-1">';
+	out += '<param name="ScrollbarAppearance" value="1">';
+	out += '<param name="SourceCodePreservation" value="-1">';
+	out += '<param name="AbsoluteDropMode" value="0">';
+	out += '<param name="SnapToGrid" value="0">';
+	out += '<param name="SnapToGridX" value="50">';
+	out += '<param name="SnapToGridY" value="50">';
+	out += '<param name="UseDivOnCarriageReturn" value="0">';
+	out += '</object>';
+	out += '</td></tr></table>';
+	out += '</div>';
+
+	var div = document.all['span_' + varName];
+	var text = dhtmlGetTextVarByName(formName,varName).value;
+	div.innerHTML += out;
+
+	// document.writeln(out);
+	if(navigator.appVersion.indexOf("Mac") == -1){
+	    if(!inform.dhtmlControls) {
+		inform.dhtmlControls = new Object();
+	    }
+	    inform.dhtmlControls[varName] = dhtmlGetDHTMLByName(formName,varName);
+	    dhtmlLoad(formName,varName,text);
+	    inform.onSubmit = inform.onsubmit = new Function("{dhtmlSubmit(this);};");
+	}
+    }
 }
+
+function dhtmlMake(formName,varName,baseUrl,hasToolbar)
+{
+    if(! document.dhtmlControls) {
+	document.dhtmlControls = new Object();
+	if(document.body.onload) {
+	    document.oldonload = document.body.onload;
+	}
+	document.body.onload = document.body.onLoad = new Function("{dhtmlAfterBodyLoad();};");
+    }
+    var params = new Object();
+    params.formName = formName;
+    params.varName = varName;
+    params.baseUrl = baseUrl;
+    params.hasToolbar = hasToolbar;
+    document.dhtmlControls[varName] = params;
+}
+
+function dhtmlAfterBodyLoad(inform)
+{
+    if(document.oldonload) {
+	document.oldonload();
+    }
+    var dhtmlRefs = document.dhtmlControls;
+    if(dhtmlRefs) {
+	for (var key in dhtmlRefs) {
+	    dhtmlCreate(dhtmlRefs[key].formName,dhtmlRefs[key].varName,dhtmlRefs[key].baseUrl,dhtmlRefs[key].hasToolbar);
+	}
+    }
+}
+
+
 </script><div style="position:absolute;top:-100px;left:-100px;">
-<webobject name=Image1/><webobject name=Image2/><webobject name=Image3/><webobject name=Image4/><webobject name=Image5/><webobject name=Image6/>
+<webobject name=Image1></WEBOBJECT><webobject name=Image2></WEBOBJECT><webobject name=Image3></WEBOBJECT><webobject name=Image4></WEBOBJECT><webobject name=Image5></WEBOBJECT><webobject name=Image6></WEBOBJECT>
 </div></WEBOBJECT>
-<script language="JavaScript1.2">dhtmlCreate("<WEBOBJECT NAME=FormName/>","<WEBOBJECT NAME=VarName/>","<WEBOBJECT NAME=BaseUrl/>",1);
+<script language="JavaScript1.2">dhtmlMake("<WEBOBJECT NAME=FormName></WEBOBJECT>","<WEBOBJECT NAME=VarName></WEBOBJECT>","<WEBOBJECT NAME=BaseUrl></WEBOBJECT>",1);
 </script>
