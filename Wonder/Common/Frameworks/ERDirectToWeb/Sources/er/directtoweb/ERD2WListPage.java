@@ -325,6 +325,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         // return isEntityReadOnly() && (isEntityInspectable!=null && isEntityInspectable.intValue()!=0);
     }
 
+    public boolean isEntityPrintable() {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityPrintable"), false);
+    }
+    
     public WOComponent deleteObjectAction() {
         String confirmDeleteConfigurationName=(String)d2wContext().valueForKey("confirmDeleteConfigurationName");
         ConfirmPageInterface nextPage;
