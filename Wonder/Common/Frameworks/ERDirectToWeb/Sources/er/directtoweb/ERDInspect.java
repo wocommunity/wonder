@@ -6,11 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 import com.webobjects.appserver.WOContext;
-import er.extensions.*;
 
 public class ERDInspect extends ERDCustomEditComponent {
-    static final ERXLogger log = ERXLogger.getLogger(ERDInspect.class,"components");
-	
     public ERDInspect(WOContext context) {
         super(context);
     }
