@@ -439,6 +439,7 @@
 				F531D2ED03658BC001AD0D07,
 				F692713F0365AD3301257492,
 				F5283C580365C94301CF0E76,
+				F592A40C036D480201AD0D07,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1350,6 +1351,18 @@
 			isa = PBXGroup;
 			name = KeyValueCodingProtectedAccessors;
 			refType = 4;
+		};
+		F592A409036D480201AD0D07 = {
+			isa = PBXFileReference;
+			name = ERXValueUtilities.java;
+			path = er/extensions/ERXValueUtilities.java;
+			refType = 4;
+		};
+		F592A40C036D480201AD0D07 = {
+			fileRef = F592A409036D480201AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F59C53D002C4555D01000102 = {
 			isa = PBXFileReference;
@@ -5806,14 +5819,14 @@
 			};
 		};
 		F5BC5D5B0349D8D101AD0D07 = {
-			buildArgumentsString = "-f Build/build.xml $ACTION";
+			buildArgumentsString = "-emacs -Dproject.name=\"ERExtensions\" -Dproject.type=\"framework\" -f ../../../Build/build/generic.xml generic.$ACTION";
 			buildPhases = (
 			);
 			buildSettings = {
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ant;
+				PRODUCT_NAME = Ant;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
@@ -5822,7 +5835,7 @@
 			dependencies = (
 			);
 			isa = PBXLegacyTarget;
-			name = ant;
+			name = Ant;
 			productName = ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
@@ -6655,6 +6668,7 @@
 				F59C57EC02C4565701000102,
 				F59C57EA02C4565701000102,
 				F6ED0C790361C03B01257492,
+				F592A409036D480201AD0D07,
 			);
 			isa = PBXGroup;
 			name = Utilities;

@@ -420,17 +420,7 @@ public class ERXUtilities {
      *		valueForBinding request.
      */
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
-        // CHECKME: I don't believe the statement below is true with WO 5
-        // this method is useful because binding=NO in fact sends null, which in turns
-        // leads booleanValueWithDefault(valueForBinding("binding", true) to return true when binding=NO was specified
-        boolean result=def;
-        if (component!=null) {
-            if (component.canGetValueForBinding(binding)) {
-                Object value=component.valueForBinding(binding);
-                result=value==null ? false : booleanValueWithDefault(value, def);
-            }
-        }
-        return result;
+        return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault(binding,component,def);
     }
     
     /**
@@ -444,7 +434,7 @@ public class ERXUtilities {
      * @return boolean evaluation of the given object
      */
     public static boolean booleanValue(Object obj) {
-        return booleanValueWithDefault(obj,false);
+        return ERXValueUtilities.booleanValue(obj);
     }
 
     /**
@@ -460,31 +450,7 @@ public class ERXUtilities {
      * @return boolean evaluation of the given object
      */
     public static boolean booleanValueWithDefault(Object obj, boolean def) {
-        boolean flag = true;
-        if (obj != null) {
-            // FIXME: Should add support for the BooleanOperation interface
-            if (obj instanceof Number) {
-                if (((Number)obj).intValue() == 0)
-                    flag = false;
-            } else if(obj instanceof String) {
-                String s = (String)obj;
-                if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false") || s.equalsIgnoreCase("n"))
-                    flag = false;
-		else if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("y"))
-                    flag = true;
-		else
-                    try {
-                        if (Integer.parseInt(s) == 0)
-                            flag = false;
-                    } catch(NumberFormatException numberformatexception) {
-                        throw new RuntimeException("error parsing boolean from value " + s);
-                    }
-            } else if (obj instanceof Boolean)
-                flag = ((Boolean)obj).booleanValue();
-        } else {
-            flag = def;
-        }
-        return flag;
+        return ERXValueUtilities.booleanValueWithDefault(obj,def);
     }
     
     /**
