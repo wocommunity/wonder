@@ -386,9 +386,12 @@ public class ERXMailAppender extends AppenderSkeleton {
      */
     public void append(LoggingEvent event) {
         if (conditionsChecked || checkConditions()) {
-            EOQualifier q = realQualifier();
-            if(q == null || q.evaluateWithObject(event)) {
-                subAppend(event);
+            if(event.getLevel().equals(Level.ERROR) 
+                    || event.getLevel().equals(Level.FATAL)) {
+                EOQualifier q = realQualifier();
+                if(q == null || q.evaluateWithObject(event)) {
+                    subAppend(event);
+                }
             }
         } else {
             LogLog.warn("Unable to log event: " + event.getMessage());
