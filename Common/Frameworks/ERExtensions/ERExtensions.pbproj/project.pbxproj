@@ -1814,6 +1814,7 @@
 			refType = 4;
 		};
 		F57EA68B01FF59BF019E57DA = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = ValidationTemplate.strings;
 			path = English.lproj/ValidationTemplate.strings;
@@ -3684,6 +3685,7 @@
 			refType = 4;
 		};
 		F597C1870263763401000102 = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/Localizable.strings;
@@ -4508,6 +4510,7 @@
 			};
 		};
 		F641B2FF026AF091014E589E = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = German;
 			path = German.lproj/ValidationTemplate.strings;
@@ -5496,6 +5499,7 @@
 			};
 		};
 		F6A85F97026AF1530146FA97 = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = German;
 			path = German.lproj/Localizable.strings;
