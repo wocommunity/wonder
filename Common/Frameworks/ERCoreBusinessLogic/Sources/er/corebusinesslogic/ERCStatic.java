@@ -32,18 +32,23 @@ public class ERCStatic extends _ERCStatic {
                 _staticsPerKey.setObjectForKey(result, key);
                 result = result == NSKeyValueCoding.NullValue ? null : result;
             }
-            result = result != null ? ERXUtilities.localInstanceOfObject(ec, (ERCStatic)result) : null;
+            result = result != null && !result.equals(NSKeyValueCoding.NullValue) ? ERXUtilities.localInstanceOfObject(ec, (ERCStatic)result) : null;
             return (ERCStatic)result;
         }
 
         public void invalidateCache() { _staticsPerKey.removeAllObjects(); }
 
-        // the STATIC table acts as a dictionary
-        private final static EOEditingContext _ec;
-
-        static {
-            _ec = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
-            _ec.setSharedEditingContext(null);
+        private static EOEditingContext _privateEditingContext;
+        private static EOEditingContext privateEditingContext() {
+            if (_privateEditingContext == null) {
+                if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStatic.UseSeparateChannel", true)) {
+                    _privateEditingContext = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
+                    _privateEditingContext.setSharedEditingContext(null);
+                } else {
+                    _privateEditingContext = ERXEC.newEditingContext();
+                }                
+            }
+            return _privateEditingContext;
         }
 
         public static String staticStoredValueForKey(EOEditingContext ec, String key) {
@@ -73,10 +78,10 @@ public class ERCStatic extends _ERCStatic {
         public static String staticStoredValueForKey(String key, boolean noCache) {
             String value = null;
             try {
-                _ec.lock();
-                value = staticStoredValueForKey(_ec, key, noCache);
+                privateEditingContext().lock();
+                value = staticStoredValueForKey(privateEditingContext(), key, noCache);
             } finally {
-                _ec.unlock();
+                privateEditingContext().unlock();
             }
             return value;
         }
@@ -92,10 +97,10 @@ public class ERCStatic extends _ERCStatic {
         public static int staticStoredIntValueForKey(String key, boolean noCache) {
             int value = 0;
             try {
-                _ec.lock();
-                value = staticStoredIntValueForKey(_ec, key, noCache);
+                privateEditingContext().lock();
+                value = staticStoredIntValueForKey(privateEditingContext(), key, noCache);
             } finally {
-                _ec.unlock();
+                privateEditingContext().unlock();
             }
             return value;
         }        
@@ -103,12 +108,12 @@ public class ERCStatic extends _ERCStatic {
         public static void takeStaticStoredValueForKey(String value,
                                                        String key) {
             try {
-                _ec.lock();
-                takeStaticStoredValueForKey(_ec, value, key);
+                privateEditingContext().lock();
+                takeStaticStoredValueForKey(privateEditingContext(), value, key);
                 // Clear out the stacks.
-                _ec.revert();
+                privateEditingContext().revert();
             } finally {
-                _ec.unlock();
+                privateEditingContext().unlock();
             }
         }
 
