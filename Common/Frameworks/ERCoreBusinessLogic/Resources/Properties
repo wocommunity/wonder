@@ -28,8 +28,7 @@
 #########################################################################
 # Problem Mails
 #########################################################################
-# If you want to use the Problem Email reporting facility then you need 
-* to set these values
+# If you want to use the Problem Email reporting facility then you need to set these values
 #er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain = foo.com
 #er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailRecipients = (foo@bar.com, food@bars.com)
 

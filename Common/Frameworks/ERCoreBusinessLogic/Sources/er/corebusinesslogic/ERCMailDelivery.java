@@ -14,20 +14,32 @@ import java.util.*;
 import er.extensions.*;
 
 /**
- * Utility class used for sending mails via the
+* Utility class used for sending mails via the
  * ERCMailMessage database tables. Actual emails
  * are then sent using the ERMailer application.
  */
 public class ERCMailDelivery {
 
-    /** holds a reference to the shared instance */
-    protected static ERCMailDelivery _sharedInstance;
+    //	===========================================================================
+    //	Class Constant(s)
+    //	---------------------------------------------------------------------------
 
     /** logging supprt */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailDelivery.class);
 
+    //	===========================================================================
+    //	Class Variable(s)
+    //	---------------------------------------------------------------------------
+
+    /** holds a reference to the shared instance */
+    protected static ERCMailDelivery _sharedInstance;
+
+    //	===========================================================================
+    //	Class Method(s)
+    //	---------------------------------------------------------------------------
+
     /**
-     * Gets the shared instance used to create
+        * Gets the shared instance used to create
      * ERCMailMessages.
      * @return shared instance used to create
      *		mail messages.
@@ -39,7 +51,7 @@ public class ERCMailDelivery {
     }
 
     /**
-     * Utilitiy method used to break an array of email addresses
+        * Utilitiy method used to break an array of email addresses
      * down into a comma separated list. Performs a bit of search
      * and replace to clean up the email addresses a bit.
      * @param a array of email addresses
@@ -51,10 +63,10 @@ public class ERCMailDelivery {
             for (Enumeration e=a.objectEnumerator(); e.hasMoreElements(); ) {
                 String address=(String)e.nextElement();
                 if (address.indexOf("\"")!=-1) {
-                    address=address.replace('\"', '\''); 
+                    address=address.replace('\"', '\'');
                 }
                 if (address.indexOf(",")!=-1) { // FIXME I am sure other characters than comma will cause problems
-                    address=address.replace(',', ' ');                    
+                    address=address.replace(',', ' ');
                     // address='\"'+address+'\"';
                 }
                 result.append(address);
@@ -67,15 +79,18 @@ public class ERCMailDelivery {
         return result.toString();
     }
 
-
     /**
         * Is  Mail turned on
      *
      * @return if the Mail is turned on
-     */ 
+     */
     public static boolean usesMail(){
         return ERXProperties.booleanForKey("er.corebusinesslogic.ERCUseMailFacility");
     }
+
+    //	===========================================================================
+    //	Instance Method(s)
+    //	---------------------------------------------------------------------------
 
     /**
      * Composes a mail message.
@@ -89,14 +104,14 @@ public class ERCMailDelivery {
      * @param ec editing context to create the mail
      *		message in.
      * @return created mail message for the given parameters
-     */    
+     */
     public ERCMailMessage composeEmail(String from,
-                                     NSArray to,
-                                     NSArray cc,
-                                     NSArray bcc,
-                                     String title,
-                                     String message,
-                                     EOEditingContext ec) {
+                                       NSArray to,
+                                       NSArray cc,
+                                       NSArray bcc,
+                                       String title,
+                                       String message,
+                                       EOEditingContext ec) {
         ERCMailMessage mailMessage = null;
 
         if (log.isDebugEnabled()) {
@@ -134,18 +149,19 @@ public class ERCMailDelivery {
      * @param ec editing context to create the mail
      *		message in.
      * @return created mail message for the given parameters
-     */    
+     */
     public ERCMailMessage composeEmailWithAttachments (String from,
-                                     NSArray to,
-                                     NSArray cc,
-                                     NSArray bcc,
-                                     String title,
-                                     String message,
-                                     NSArray filePaths,
-                                     EOEditingContext ec) {
+                                                       NSArray to,
+                                                       NSArray cc,
+                                                       NSArray bcc,
+                                                       String title,
+                                                       String message,
+                                                       NSArray filePaths,
+                                                       EOEditingContext ec) {
         ERCMailMessage mailMessage = this.composeEmail(from, to, cc, bcc, title, message, ec);
-        
-        for (Enumeration filePathEnumerator = filePaths.objectEnumerator(); filePathEnumerator.hasMoreElements();) {
+
+        for (Enumeration filePathEnumerator = filePaths.objectEnumerator();
+             filePathEnumerator.hasMoreElements();) {
             String filePath = (String)filePathEnumerator.nextElement();
             ERCMessageAttachment attachment = (ERCMessageAttachment)ERCMessageAttachment.messageAttachmentClazz().createAndInsertObject(ec);
             attachment.setFilePath(filePath);
@@ -215,47 +231,49 @@ public class ERCMailDelivery {
             log.debug("Created component with name \"" + componentName + "\" class name \""
                       + component.getClass().getName() + "\"");
         }
-        if (bindings != null && bindings.count() > 0)
+        if (bindings != null && bindings.count() > 0){
             EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(component, bindings);
+
+        }
         return composeComponentEmail(from, to, cc, bcc, title, component, ec);
     }
 
-	 	 /**
-		 * Composes a mail message from a given component.
-		  *
-		  * @param from email address
-		  * @param to email addresses
-		  * @param cc email addresses
-		  * @param bcc email addresses
-		  * @param title of the message
-		  * @param componentName name of the component to render
-		  * @param plainTextComponentName name of the component to render
-		  * @param ec editing context to create the mail
-		  *		message in.
-		  * @return created mail message for the given parameters
-		  */
+    /**
+     * Composes a mail message from a given component.
+     *
+     * @param from email address
+     * @param to email addresses
+     * @param cc email addresses
+     * @param bcc email addresses
+     * @param title of the message
+     * @param componentName name of the component to render
+     * @param plainTextComponentName name of the component to render
+     * @param ec editing context to create the mail
+     *		message in.
+     * @return created mail message for the given parameters
+     */
     public ERCMailMessage composeComponentEmail (String from,
                                                  NSArray to,
                                                  NSArray cc,
                                                  NSArray bcc,
                                                  String title,
                                                  String componentName,
-																 String plainTextComponentName,
+                                                 String plainTextComponentName,
                                                  NSDictionary bindings,
                                                  EOEditingContext ec) {
-		 ERCMailMessage result = composeComponentEmail(from, to , cc, bcc, title, componentName, bindings, ec);
-		 WOComponent plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
-		 try{
-			 plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
-		 }catch(WOPageNotFoundException exc){
-			 //Do nothing here since it is not mandatory to have a plain text version component
-		 }
-		 if(plainTextComponent!=null){
-			 EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(plainTextComponent, bindings);
-			 WOContext context = plainTextComponent.context();
-			 context._generateCompleteURLs ();
-			 result.setPlainText(plainTextComponent.generateResponse().contentString());
-		 }
-		 return result;
-    }  
+        ERCMailMessage result = composeComponentEmail(from, to , cc, bcc, title, componentName, bindings, ec);
+        WOComponent plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
+        try{
+            plainTextComponent = ERXApplication.instantiatePage(plainTextComponentName);
+        }catch(WOPageNotFoundException exc){
+            //Do nothing here since it is not mandatory to have a plain text version component
+        }
+        if(plainTextComponent!=null){
+            EOKeyValueCodingAdditions.DefaultImplementation.takeValuesFromDictionary(plainTextComponent, bindings);
+            WOContext context = plainTextComponent.context();
+            context._generateCompleteURLs ();
+            result.setPlainText(plainTextComponent.generateResponse().contentString());
+        }
+        return result;
+    }
 }
