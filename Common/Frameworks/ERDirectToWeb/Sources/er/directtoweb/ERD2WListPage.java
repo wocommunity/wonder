@@ -274,7 +274,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         NSArray sortOrderings=sortOrderings();
         displayGroup().setDataSource(eodatasource);
         setSortOrderingsOnDisplayGroup(sortOrderings, displayGroup());
-        displayGroup().fetch();
+        _hasToUpdate = true;
     }
     
     protected void setupPhase() {
@@ -294,6 +294,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                 dg.fetch();
                 dg.updateDisplayedObjects();
                 _hasBeenInitialized=true;
+                _hasToUpdate = false;
             }
             // this will have the side effect of resetting the batch # to sth correct, in case
             // the current index if out of range
