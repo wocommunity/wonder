@@ -80,6 +80,8 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
         _printWriter.flush();
     }
 
+    private static final String _lineEndingString = " " + System.getProperty("line.separator");
+
     private String _verboseHeader() {
         _verboseHeaderStream().reset();  // clear the stream.
 
@@ -88,9 +90,9 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
         _vervoseStreamLogger().appendln(" ");  
         String verboseHeader = _verboseHeaderStream().toString();
         
-        // remove " \n" at the end of line
-        int lastIndex = verboseHeader.lastIndexOf(" \n");
-        if (lastIndex > 0)   // ignores if " \n" is the first char (lastIndex == 0)
+        // remove the _lineEndingString (" \n", " \r" or " \r\n") from the end of the line
+        int lastIndex = verboseHeader.lastIndexOf(_lineEndingString);
+        if (lastIndex > 0)   // ignores if _lineEndingString is the first char (lastIndex == 0)
             verboseHeader = verboseHeader.substring(0, lastIndex);
         return verboseHeader;
     }
