@@ -18,7 +18,7 @@
     <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/NSProjectSearchPath.jar"/>
     <classpathentry kind="lib" path="/Library/Frameworks/ERJars.framework/Resources/Java/Tidy.jar"/>
     <classpathentry kind="lib" path="/Library/Java/Extensions/jce1_2_1.jar"/>
-    <classpathentry kind="lib" path="/System/Library/Frameworks/JavaVM.framework//Versions/1.4.1/Classes/classes.jar"/>
-    <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+    <classpathentry kind="lib" path="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.1/Classes/classes.jar"/>
+    <classpathentry kind="src" path="/ERExtensions"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>
