@@ -86,7 +86,6 @@ QueryResetButton: WOResetButton {
 QuerySubmitButton: WOActiveImage {
 	action = queryAction;
 	alt = "Find objects matching the query";
-	border = "0";
 	filename = "SearchDBMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	height = "31";
