@@ -113,6 +113,18 @@ public class ERXEOControlUtilities {
         return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,attribute);
     }
 
+    /**
+     * Returns the number of unique objects matching the given
+     * qualifier for a given entity name. Implementation
+     * wise this method will generate the correct sql to only
+     * perform a count, i.e. all of the objects wouldn't be
+     * pulled into memory.
+     * @param ec editing context to use for the count qualification
+     * @param entityName name of the entity to fetch
+     * @param qualifier to find the matching objects
+     * @return number of matching objects
+     * @attributeName name of attribute in same entity to consider in order to determine uniqueness
+     */
     public static Number objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOAttribute attribute = entity.attributeNamed(attributeName);
