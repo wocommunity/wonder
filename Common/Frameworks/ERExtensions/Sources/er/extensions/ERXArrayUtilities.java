@@ -12,10 +12,7 @@ import org.apache.log4j.*;
 import java.util.Enumeration;
 
 /**
- * Collection of {@link NSArray} utilities.<br/>
- * <br/>
- * Note that when this class is loaded it will register two new NSArray operators 
- * <b>sort</b> and <b>fetchSpec</b>.
+ * Collection of {@link NSArray} utilities.
  */
 public class ERXArrayUtilities extends Object {
     /**
@@ -220,8 +217,10 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
-    /** Registers the operators <b>sort<</b> and <b>fetchSpec</b> during class initialization. */
-    static {
+    /** Will register new NSArray operators
+    * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
+    * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b> and <b>fetchSpec</b> */
+    public static void initialize() {
         NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
         NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
         NSArray.setOperatorForKey("sortDesc", new SortOperator(EOSortOrdering.CompareDescending));
@@ -232,7 +231,7 @@ public class ERXArrayUtilities extends Object {
         NSArray.setOperatorForKey("unique", new UniqueOperator());
     }
 
-
+    
     /**
     * Filters out all of the duplicate objects in
      * a given array.<br/>
