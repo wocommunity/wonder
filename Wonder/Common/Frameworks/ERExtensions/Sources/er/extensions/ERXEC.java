@@ -821,7 +821,7 @@ public class ERXEC extends EOEditingContext {
     		if (useSharedEditingContext == null) {
     			useSharedEditingContext = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEC.useSharedEditingContext", true) 
 						? Boolean.TRUE : Boolean.FALSE;
-    			log.info("setting useSharedEditingContext to "+ useSharedEditingContext);
+    			log.debug("setting useSharedEditingContext to "+ useSharedEditingContext);
     		}
     		return useSharedEditingContext.booleanValue();
     	}
