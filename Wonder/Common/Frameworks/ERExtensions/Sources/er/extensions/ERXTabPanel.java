@@ -45,7 +45,8 @@ public class ERXTabPanel extends WOTabPanel  {
         Object result = null;
 
         if (submitActionName() != null && !submitActionName().equals("")) {
-            result = performParentAction(submitActionName());
+	    //FIXME: This should be more robust.
+	    result = parent() != null ? parent().valueForKey(submitActionName()) : null;
         }
 
         if (result==null || ERXUtilities.booleanValue(result)) {
