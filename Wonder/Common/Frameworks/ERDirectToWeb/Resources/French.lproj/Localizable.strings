@@ -6,12 +6,12 @@
         confirmLabel = "Confirmation du mot de passe.";
         confirmNewLabel = "Confirmation du nouveau mot de passe.";
     };
-    "ERD2W.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @displayNameForEntity@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @displayNameForEntity@.";
-     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @displayNameForEntity@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @displayNameForEntity@.";
-    "ERDEditListButton.editButtonName" = "Edition de la liste de @displayNameForProperty@";
-    "ERDEmptyListMessage.emptyListMessage" = "Aucune valeurs trouvée pour @displayNameForEntity@.</b>";
-    "ERDTrashcan.confirmDeletionMessage" = "<B>Etes-vous sur de vouloir éliminer ce @displayNameForEntity@</B>:<br> @object.userPresentableDescription@?";
+    "ERD2W.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
+     "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<B>Etes-vous sur de vouloir annuler la création de ce/cette @@displayNameForEntity@@?</B><br><br>Cliquer sur confirmation va éliminer vos changements et cliquer sur annulation retournera à l'édition de @@displayNameForEntity@@.";
+    "ERDEditListButton.editButtonName" = "Edition de la liste de @@displayNameForProperty@@";
+    "ERDEmptyListMessage.emptyListMessage" = "Aucune valeurs trouvée pour @@displayNameForEntity@@.</b>";
+    "ERDTrashcan.confirmDeletionMessage" = "<B>Etes-vous sur de vouloir éliminer ce @@displayNameForEntity@@</B>:<br> @@object.userPresentableDescription@@?";
     "ERDEditList.saveLabel" = "Enregistrer?";
-    "ERD2WEditToManyRelationship.noChoiceAvailable" = "Aucune valeur disponible pour @displayNameForEntity@";
+    "ERD2WEditToManyRelationship.noChoiceAvailable" = "Aucune valeur disponible pour @@displayNameForEntity@@";
     "ERDDatePopup.monthList" = ( "Jan",  "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 }
