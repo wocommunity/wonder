@@ -41,7 +41,6 @@ public class ERXMultiKey {
     public ERXMultiKey(Object[] keys) {
         this((short)keys.length);
         System.arraycopy(keys,0,_keys,0,(int)_keyCount);
-        //for (int i=0; i<_keyCount; i++) _keys[i]=keys[i];
     }
 
     /**
@@ -53,6 +52,7 @@ public class ERXMultiKey {
         this ((short)keys.count());
         for (int i=0; i<keys.count(); i++) _keys[i]=keys.objectAtIndex(i);
    }
+
     /**
      * Constructs a multi-key for a given
      * vector.
