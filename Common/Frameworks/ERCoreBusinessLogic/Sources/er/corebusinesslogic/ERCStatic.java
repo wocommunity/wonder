@@ -26,19 +26,21 @@ public class ERCStatic extends _ERCStatic {
 
         public ERCStatic objectMatchingKey(EOEditingContext ec, String value) {
             NSArray arr = preferencesWithKey(ec, value);
+            if (arr.count()>1) throw new IllegalStateException("Found "+arr.count()+" rows for key "+value);
             return (ERCStatic) (arr.count() == 1 ? arr.objectAtIndex(0) : null);
         }
 
 
         // the STATIC table acts as a dictionary
         private final static EOEditingContext _ec=ERXExtensions.newEditingContext();
-        public static String staticStoredValueForKey(String key) {
-            ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(_ec,key);
+
+        public static String staticStoredValueForKey(EOEditingContext ec, String key) {
+            ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(ec,key);
             return entry!=null ? entry.value() : null;
         }
-        public static int staticStoredIntValueForKey(String key) {
+        public static int staticStoredIntValueForKey(EOEditingContext ec, String key) {
             int result=-1;
-            String s= staticStoredValueForKey(key);
+            String s= staticStoredValueForKey(ec, key);
             if (s!=null) {
                 try {
                     result=Integer.parseInt(s);
@@ -47,14 +49,21 @@ public class ERCStatic extends _ERCStatic {
             return result;
         }
 
-        public static void takeStaticStoredValueForKey(String value,
-                                                       String key) {
-            takeStaticStoredValueForKey(value, key, _ec);
+        public static String staticStoredValueForKey(String key) {
+            return staticStoredValueForKey(_ec, key);
+        }
+        public static int staticStoredIntValueForKey(String key) {
+            return staticStoredIntValueForKey(_ec, key);
         }
 
         public static void takeStaticStoredValueForKey(String value,
-                                                       String key,
-                                                       EOEditingContext editingContext) {
+                                                       String key) {
+            takeStaticStoredValueForKey(_ec, value, key);
+        }
+
+        public static void takeStaticStoredValueForKey(EOEditingContext editingContext,
+                                                       String value,
+                                                       String key) {
             ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
             if (entry==null) {
                 entry=(ERCStatic)ERXUtilities.createEO("ERCStatic", editingContext);
