@@ -24,6 +24,50 @@ import com.webobjects.foundation.*;
  * this is useful for pre-fetching type uses.
  */
 public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
+    
+    public static String IsContainedInArraySelectorName = "isContainedInArray";
+    /**
+     * Support class that listens for EOKeyValueQualifiers that have an <code>isContainedInArray</code>-selector and replaces these
+     * with the ERXPrimaryKeyListQualifier. This means that when you set <code>isContainedInArray</code> as a display group
+     * queryOperator and an NSArray of EOs as the value, then this qualifier is magically replaced by
+     * one that selects objects with an IN qualifier.
+     * @author ak
+     */
+    public static class KeyValueQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
+        
+        private EOQualifierSQLGeneration.Support _old;
+
+        public KeyValueQualifierSQLGenerationSupport(EOQualifierSQLGeneration.Support old) {
+            _old = old;
+        }
+
+        public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
+            return _old.sqlStringForSQLExpression(eoqualifier, e);
+        }
+
+        public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+            EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
+            if(IsContainedInArraySelectorName.equals(qualifier.selector().name())) {
+                return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)qualifier.value());
+            }
+            return _old.schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
+        }
+
+        public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
+           return _old.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
+        }
+    }
+    
+    private static boolean _installedSupport = false;
+    
+    public static void installSupport() {
+        if(!_installedSupport) {
+            EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
+            EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
+            _installedSupport = true;
+        }
+    }
+    
 
     /**
      * Constructs a primary key list qualifer for a given
