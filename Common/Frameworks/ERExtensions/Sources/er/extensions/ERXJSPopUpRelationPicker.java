@@ -234,11 +234,11 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
         String children = "allChildren("+parentsChildrenId+")";
         if(selectedParent() != null) {
-            children = "getParentEntityForId(" + selectedParent().hashCode() + ").children()";
+            children = "getParentEntityForId(" + parentsChildrenId + "," + selectedParent().hashCode() + ").children";
         }
-        returnString.append("<script language=\"JavaScript\">\nsetSelectToArrayOfEntities(window.document." 
-                + formName() + "." + childSelectName + "," 
-                + children +",childPopUpStringForAll)\n</script>\n");
+        returnString.append("<script language=\"JavaScript\">\nsetSelectToArrayOfEntities("
+               +"window.document." + formName() + "." + childSelectName + "," 
+               + children +",childPopUpStringForAll)\n</script>\n");
         return returnString.toString();
     }
 
