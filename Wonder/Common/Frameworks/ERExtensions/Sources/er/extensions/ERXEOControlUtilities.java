@@ -129,6 +129,51 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Computes an aggregate function for a given attribute
+     * restricted by a given qualifier. For instance
+     * select MAX(AGE) from User where name like 'M*'
+     * 
+     * @param ec editing context used for the fetch
+     * @param entityName name of the entity
+     * @param attributeName attribute for the function to be performed on
+     * @param function name, ie MAX, MIN, AVG, etc.
+     * @param qualifier to restrict data set
+     * @return aggregate result of the fuction call
+     */
+    public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
+                                                        String entityName,
+                                                        String attributeName,
+                                                        String function,
+                                                        EOQualifier qualifier) {
+        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
+
+        NSArray results = null;
+
+        EOAttribute attribute = ERXEOAccessUtilities.createAggregateAttribute(ec,
+                                                                              function,
+                                                                              attributeName,
+                                                                              entityName);
+
+        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
+        synchronized (entity) {
+            entity.addAttribute(attribute);
+
+            fs.setFetchesRawRows(true);
+            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
+
+            results = ec.objectsWithFetchSpecification(fs);
+
+            entity.removeAttribute(attribute);
+        }
+        if ((results != null) && (results.count() == 1)) {
+            NSDictionary row = (NSDictionary) results.lastObject();
+            return (Number)row.objectForKey(attribute.name());
+        }
+        return null;        
+    }
+
+    /**
      * Finds an object  in the shared editing context matching a key
      * and value. This has the benifit of not requiring a database
      * round trip if the entity is shared.
