@@ -136,6 +136,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         _currentSection = value;
         if (value != null) {
             d2wContext().takeValueForKey(value.name, "sectionKey");
+            // we can fire rules from the WebAssistant when we push it the -remangled sectionName into the context
+            d2wContext().takeValueForKey( "(" + value.name +")", "propertyKey");
             if (log.isDebugEnabled())
                 log.debug("Setting sectionKey: " + value.name);
         }
