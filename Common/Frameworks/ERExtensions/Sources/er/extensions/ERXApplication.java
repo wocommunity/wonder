@@ -485,6 +485,8 @@ public abstract class ERXApplication extends WOApplication {
                 // We first log just in case the log4j call puts us in a bad state.
                 NSLog.err.appendln("Ran out of memory, killing this instance");
                 log.error("Ran out of memory, killing this instance");
+            } else if (throwable instanceof NoClassDefFoundError) {
+                shouldQuit = false;
             } else if (throwable instanceof StackOverflowError) {
                 // hm. could we do something reasonable here?
                 shouldQuit = false;
@@ -618,5 +620,68 @@ public abstract class ERXApplication extends WOApplication {
 
     public boolean isStreamingRequestHandlerKey(String s) {
         return _streamingRequestHandlerKeys.containsObject(s);
+    }
+
+    // deadlock in session-store detection
+    /** holds the info on checked-out sessions */
+    private Hashtable _sessions = new Hashtable();
+
+    /** Holds info about where and who checked out */
+    class SessionInfo {
+        Exception _trace = new Exception();
+        WOContext _context;
+        public SessionInfo(WOContext wocontext) {
+            _context = wocontext;
+        }
+        public Exception trace() {
+            return _trace;
+        }
+        public WOContext context() {
+            return _context;
+        }
+        public String exceptionMessageForCheckout(WOContext wocontext) {
+            log.error("There is an error in the session check-out: old contextID " + (_context == null ? "<NULL>" : _context.contextID()), _trace);
+            if(_context == null) {
+                return "Original context was null";
+            } else if(_context.equals(wocontext)) {
+                return "Same context did check out twice";
+            } else {
+                return "Context with id '" + wocontext.contextID() + "' did check out again";
+            }
+        }
+    }
+
+    /** Overridden to check the sessions */
+    public WOSession createSessionForRequest(WORequest worequest) {
+        WOSession wosession = super.createSessionForRequest(worequest);
+        _sessions.put(wosession.sessionID(), new SessionInfo(null));
+        return wosession;
+    }
+
+    /** Overridden to check the sessions */
+    public void saveSessionForContext(WOContext wocontext) {
+        WOSession wosession = wocontext._session();
+        if(wosession != null) {
+            String sessionID = wosession.sessionID();
+            SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+            if(sessionInfo == null) {
+                throw new IllegalStateException("Check-In of session that was not checked out");
+            }
+            _sessions.remove(sessionID);
+        }
+        super.saveSessionForContext(wocontext);
+    }
+
+    /** Overridden to check the sessions */
+    public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
+        SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+        if(sessionInfo != null) {
+            throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
+        }
+        WOSession session = super.restoreSessionWithID(sessionID,wocontext);
+        if(session != null) {
+            _sessions.put(session.sessionID(), new SessionInfo(wocontext));
+        }
+        return session;
     }
 }
