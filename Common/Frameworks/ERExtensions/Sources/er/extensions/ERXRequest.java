@@ -94,6 +94,7 @@ public  class ERXRequest extends WORequest {
         private static float q(String languageString) {
             float result=0f;
             if (languageString!=null) {
+                languageString = languageString.trim();
                 int semicolumn=languageString.indexOf(';');
                 if (semicolumn!=-1 &&
                     languageString.length()>semicolumn+2) {
