@@ -7,7 +7,6 @@
 package er.changenotification;
 
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 
 import javax.jms.*;
 
@@ -23,69 +22,72 @@ import javax.jms.*;
  * ERCNPublisher prepares a JMS session object per thread so that each worker  
  * threads can perform the operation concurrently. 
  */ 
-public class ERCNPublisher {
+class ERCNPublisher {
 
     private ERCNNotificationCoordinator _coordinator; 
-    private final ThreadLocal _topicSessionCollection = new ThreadLocal();
-    private final ThreadLocal _topicPublisherCollection = new ThreadLocal();
 
-    private ERCNPublisher() {
-        super();
-    }
-    
-    public ERCNPublisher(ERCNNotificationCoordinator coordinator) {
-        super();
+    ERCNPublisher(ERCNNotificationCoordinator coordinator) {
         _coordinator = coordinator;
     }
 
-    private TopicSession _topicSession() {
-        TopicSession topicSession = (TopicSession)_topicSessionCollection.get();
-        if (topicSession == null) {
+    public void publishChange(NSNotification notification) {
+        if (! _coordinator.isConnected())  return;
+
+        ERCNSnapshot snapshot = new ERCNSnapshot(notification);
+
+        if (snapshot.shouldPostChange()) {
+            final int deliveryMode = DeliveryMode.NON_PERSISTENT;
+            final int priority = 4; // 0:Low -- 9:High
+            // set TTL to 63 minutes; little longer than the default
+            // value of ec.defaultFetchTimestampLag()
+            final long timeToLive = 63 * 60 * 1000;
             try {
-                topicSession = _coordinator.connection().createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
-                _topicSessionCollection.set(topicSession);
+				TopicSession topicSession = _topicSession();
+				if (topicSession != null) {
+					ObjectMessage message = topicSession.createObjectMessage(snapshot);
+                    Topic topic = _coordinator.topic();
+					_topicPublisher(topic, topicSession).publish(topic, message, deliveryMode, priority, timeToLive);
+					if (NSLog.debug.isEnabled())
+						NSLog.debug.appendln(ERCNNotificationCoordinator.LOG_HEADER
+                                + "Posted a message with snapshot: " + snapshot);
+				}
+
+            // java.rmi.ConnectException  -- server is down (publish)
+            // java.rmi.UnmarshalException -- version
+			// javax.jms.IllegalStateException - Cannot perform operation - session has been closed
             } catch (JMSException ex) {
-                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-                ex.printStackTrace();
+                NSLog.err.appendln(ERCNNotificationCoordinator.LOG_HEADER
+                        + "Failed to poste a snapshot: " + ex.getMessage());
             }
+        }
+    }
+
+    private TopicSession _topicSession() {
+        TopicSession topicSession = null;
+        try {
+            TopicConnection connection = _coordinator.connection();
+            topicSession = connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
+         } catch (JMSException ex) {
+
+            // javax.jms.IllegalStateException - Cannot perform operation - session has been closed
+            NSLog.err.appendln(ERCNNotificationCoordinator.LOG_HEADER
+                    + "Failed to create a JMS topic session: " + ex.getMessage());
         }
         return topicSession;
     }
 
-    private TopicPublisher _topicPublisher() {
-        TopicPublisher topicPublisher = (TopicPublisher)_topicPublisherCollection.get();
-        if (topicPublisher == null) {
-            try {
-                topicPublisher = _topicSession().createPublisher(_coordinator.topic());
-                _topicPublisherCollection.set(topicPublisher);
-            } catch (JMSException ex) {
-                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            }
+    private TopicPublisher _topicPublisher(Topic topic, TopicSession topicSession) {
+        TopicPublisher topicPublisher = null;
+        try {
+            topicPublisher = topicSession.createPublisher(topic);
+        } catch (JMSException ex) {
+            NSLog.err.appendln(ERCNNotificationCoordinator.LOG_HEADER
+                    + "Failed to create a JMS topic publisher: " + ex.getMessage());
         }
         return topicPublisher;
     }
 
-    public void publishChange(NSNotification notification) {
-        ERCNSnapshot snapshot = new ERCNSnapshot(notification);
-
-        if (snapshot.shouldPostChange()) {
-            final int deliveryMode = DeliveryMode.PERSISTENT;
-            final int priority = 4; // 0:Low -- 9:High  
-            // set TTL to 63 minutes; little longer than the default  
-            // value of ec.defaultFetchTimestampLag()
-            final long timeToLive = 63 * 60 * 1000; 
-            try {
-                ObjectMessage message = _topicSession().createObjectMessage(snapshot);
-                _topicPublisher().publish(_coordinator.topic(), message, deliveryMode, priority, timeToLive);
-                if (NSLog.debug.isEnabled())
-                    NSLog.debug.appendln("Posted a message with snapshot: " + snapshot);
-            } catch (JMSException ex) {
-                NSLog.err.appendln("An exception occured: " + ex.getClass().getName() + " - " + ex.getMessage());
-            }
-        }
-    }
-
-    public synchronized void terminate() {
+    synchronized void terminate() {
         ;
     }
 
