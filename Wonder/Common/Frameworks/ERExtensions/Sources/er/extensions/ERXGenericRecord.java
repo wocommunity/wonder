@@ -220,6 +220,23 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
              }
         }
     }
+
+    /**
+        * Removes a collection of objects to a given relationship by calling
+     * <code>removeObjectFromPropertyWithKey</code> for all
+     * objects in the collection.
+     * @param objects objects to be removed from both sides of the given relationship
+     * @param key relationship key
+     */
+    public void removeObjectsFromPropertyWithKey(NSArray objects, String key) {
+        if (objects != null && objects.count() > 0) {
+            for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                removeObjectFromPropertyWithKey(eo, key);
+            }
+        }
+    }
+    
     /** 
      * caches the boolean value of the property key:
      *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>

@@ -794,4 +794,20 @@ public class ERXUtilities {
         }
         return result;
     }
+
+    /** Copies values from one EO to another using an array of Attributes */
+    public static void replicateDataFromEOToEO(ERXGenericRecord r1, ERXGenericRecord r2, NSArray attributeNames){
+        for(Enumeration e = attributeNames.objectEnumerator(); e.hasMoreElements();){
+            String attributeName = (String)e.nextElement();
+            r2.takeValueForKey(r1.valueForKey(attributeName), attributeName);
+        }
+    }
+
+    /** Copies a relationship from one EO to another using the name of the relationship */
+    public static void replicateRelationshipFromEOToEO(ERXGenericRecord r1, ERXGenericRecord r2, String relationshipName){
+        for(Enumeration e = ((NSArray)r1.valueForKey(relationshipName)).objectEnumerator(); e.hasMoreElements();){
+            ERXReplicableInterface replicableTarget = (ERXReplicableInterface)e.nextElement();
+            r2.addObjectToBothSidesOfRelationshipWithKey(replicableTarget.replicate(r2.editingContext()), relationshipName);
+        }
+    }
 }
