@@ -10,24 +10,35 @@ package er.extensions;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-/** Transparent replacement for WOForm.
- *  It adds the Forms name to the ERXContext's mutableUserInfo as as "formName" key,
- *  which makes writing JavaScript elements a bit easier.
- *  Also, it warns you when you have one Form embedded inside another.
- *  Additionally, it pushes the <code>enctype</code> into the userInfo, so that {@link ERXWOFileUpload}
- *  can check if it is set correctly.
- *  This subclass is installed when the frameworks loads. 
+/** 
+ * Transparent replacement for WOForm. You don't really need to do anything to use it, because it
+ * will get used instead of WOForm elements automagically. In addition, it has a few new features:
+ * <ul>
+ * <li> it adds the FORM's name to the ERXWOContext's mutableUserInfo as as "formName" key,
+ * which makes writing JavaScript elements a bit easier.
+ * <li> it warns you when you have one FORM embedded inside another and ommits the tags for the nested FORM.
+ * <li> it pushes the <code>enctype</code> into the userInfo, so that {@link ERXWOFileUpload}
+ * can check if it is set correctly. ERXFileUpload will throw an exception if the enctype is not set.
+ * <li> it has a "fragmentIdentifier" binding, which, when set spews out some javascript that appends 
+ * "#" + the value of the binding to the action. The obvious case comes when you have a form at the bottom of the page
+ * and want to jump to the error messages if there are any.  That javascript is used is an implementation 
+ * detail, though and shouldn't be relied on.
+ * </ul>
+ * This subclass is installed when the frameworks loads. 
+ * @author ak
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     static final ERXLogger log = ERXLogger.getERXLogger(ERXWOForm.class);
     WOAssociation _formName;
     WOAssociation _enctype;
+    WOAssociation _fragmentIdentifier;
     
     public ERXWOForm(String name, NSDictionary associations,
                      WOElement template) {
         super(name, associations, template);
         _formName = (WOAssociation) _associations.removeObjectForKey("name");
         _enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
+        _fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
@@ -71,7 +82,12 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
                 _appendCloseTagToResponse(response, context);
         }
         context.setInForm(false);
-        
+        if(_fragmentIdentifier != null) {
+            Object value = _fragmentIdentifier.valueInComponent(context.component());
+            if(value != null) {
+                response.appendContentString("<script language=\"javascript\">document.forms[document.forms.length-1].action+=\"#"+value.toString()+"\";</script>");
+            }
+        }
         if(context instanceof ERXMutableUserInfoHolderInterface) {
             NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
             
