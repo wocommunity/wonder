@@ -6,8 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WInspect;
+import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 // Only difference between this component and D2WInspect is that this one uses ERD2WSwitchComponent
 /**
@@ -31,4 +32,14 @@ public class ERXD2WInspect extends D2WInspect {
      * Calling super is a bad thing in 5.2 when used as an embedded inspect.
      */
     public void awake() {}
+    
+    public String entityName() {
+        String entityName = (String)valueForBinding("entityName");
+        if(entityName == null) {
+            EOEnterpriseObject eo = (EOEnterpriseObject)valueForBinding("object");
+            if(eo != null)
+                entityName = eo.entityName();
+        }
+        return entityName;
+    }
 }

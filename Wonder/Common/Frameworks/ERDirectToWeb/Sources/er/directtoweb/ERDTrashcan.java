@@ -15,7 +15,7 @@ import er.extensions.*;
 
 /**
  * A better trashcan.  As this component is named inconsistently with the
- * other buttons that operate on lists, {@see ERDDeleteButton} should be used instead.<br />
+ * other buttons that operate on lists, {@link ERDDeleteButton} should be used instead.<br />
  * 
  * @binding object
  * @binding dataSource

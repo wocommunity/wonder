@@ -135,7 +135,7 @@ public class ERDirectToWeb {
      * @param s the String to convert
      * @param start the start char
      * @param start the end char to check for
-     * @returns stripped String or null if the string does not start with <code>start</code> and ends with <code>end</code>.
+     * @return stripped String or null if the string does not start with <code>start</code> and ends with <code>end</code>.
      */
     public static String convertedPropertyKeyFromString(String s, char start, char end) {
         if(s.length()> 2) {
@@ -153,7 +153,7 @@ public class ERDirectToWeb {
      * @param keyArray the NSArray to convert
      * @param start the start char
      * @param start the end char to check for
-     * @returns nested NSMutableArray.
+     * @return nested NSMutableArray.
      */
     public static NSMutableArray convertedPropertyKeyArray(NSArray keyArray, char startChar, char endChar) {
         NSMutableArray result = new NSMutableArray();

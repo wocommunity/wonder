@@ -203,22 +203,22 @@ public class ERXComponentActionRedirector {
         ERXThreadStorage.takeValueForKey(this, "redirector");
     }
 
-    /** @returns the redirection response. */
+    /** @return the redirection response. */
     public WOResponse redirectionResponse() {
         return redirectionResponse;
     }
 
-    /** @returns the URL with which the component can be restored. */
+    /** @return the URL with which the component can be restored. */
     public String url() {
         return url;
     }
 
-    /** @returns the session ID for the Redirector. */
+    /** @return the session ID for the Redirector. */
     public String sessionID() {
         return sessionID;
     }
 
-    /** @returns the original response. */
+    /** @return the original response. */
     public WOResponse originalResponse() {
         return originalResponse;
     }

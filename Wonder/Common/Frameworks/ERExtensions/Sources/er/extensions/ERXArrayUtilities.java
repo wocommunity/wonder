@@ -916,7 +916,7 @@ public class ERXArrayUtilities extends Object {
      *		list is null or empty
      * @param separator string to be used for the first items
      * @param finalSeparator used between the last items
-     * @returns friendly display string
+     * @return friendly display string
      */
     public static String friendlyDisplayForKeyPath(NSArray list, String attribute, String nullArrayDisplay, String separator, String finalSeparator) {
         String result=null;

@@ -22,7 +22,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
     static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultsEmbeddedAssignment.class);
 
     /** holds the array of dependent keys */
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey"});
+    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey", "pageConfiguration"});
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver
@@ -120,6 +120,9 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
     // CHECKME: Should just be able to use 'smartRelationship.destinationEntity.name'
     public Object defaultEmbeddedEntityName(D2WContext c) {
+        if(c.valueForKeyPath("propertyKey") == null && c.entity() != null) {
+            return c.entity().name();
+        }
         Object result = c.valueForKeyPath("smartRelationship.destinationEntity.name");
         if(result == null) {
             Object rawObject=c.valueForKey("object");
@@ -158,7 +161,6 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
     public String defaultEmbeddedListPageConfiguration(D2WContext c) {
         String result = "ListEmbedded" + c.valueForKey("embeddedEntityName");
-        log.debug(result);
         return result;
     }
 
