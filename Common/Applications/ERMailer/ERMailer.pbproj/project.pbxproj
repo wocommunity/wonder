@@ -105,7 +105,7 @@
 			);
 			buildSettings = {
 				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
-				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "\"$(LOCAL_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(INSTALL_PREFIX)/Frameworks\"";
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
@@ -333,8 +333,9 @@
 				INFO_FILE = "$(CONTENTS_DIR)/$(INFO_FILE_NAME)";
 				INFO_FILE_NAME = Info.plist;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/WebObjects/Applications";
+				INSTALL_PATH = "$(INSTALL_PREFIX)/WebObjects/Applications";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
+				INSTALL_PREFIX = "$(LOCAL_LIBRARY_DIR)";
 				JAVA_DEBUGGER = jdb;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
