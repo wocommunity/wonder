@@ -8,8 +8,40 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import java.util.*;
-import org.apache.log4j.*;
 
+/**
+ * ERXBasicBrowser is a concrete subclass of ERXBrowser that 
+ * defines browser object. A browser object represents the web 
+ * browser that the current request-response loop is dealing 
+ * with. It holds the information retrieved from HTTP request's 
+ * "user-agent" header, and such information includes web 
+ * browser's name, version, Mozilla compatible version and 
+ * platform (OS). Also, a browser object can answer boolean 
+ * questions such as <code>isIE</code>, <code>isOmniWeb</code>, 
+ * <code>isVersion5</code> and <code>isMozilla40Compatible</code>, 
+ * and even more specific questions like <code>isIFrameSupported</code> 
+ * and <code>willRenderNestedTablesFast</code>. <br>
+ * 
+ * ERXBrowser is immutable and shared by different sessions and
+ * direct actions. 
+ * The shared instances are managed by ERXBrowserFactory which 
+ * is also responsible to parse "user-agent" header in a WORequest 
+ * object and to get an appropriate browser object. <br>
+ * 
+ * You can extends ERXBrowser or its concrete subclass ERXBasicBrowser 
+ * to implement more specific questions for your application. 
+ * One good example will be to have a question <code>isSupportedBrowser</code> 
+ * that checks if the client is using one of the supported 
+ * browsers for your application. <br>
+ * 
+ * ERXSession holds a browser object that represent the web 
+ * browser for that session and <code>browser</code> method 
+ * returns the object. 
+ * 
+ * To access ERXBasicBrowser's boolean questions from WOConditionals 
+ * on a web component, set the path like "session.brower.isIFrameSupported" 
+ * to their condition bindings. <br>
+ */ 
 public class ERXBasicBrowser extends ERXBrowser {
 
     /** logging support */
@@ -223,16 +255,4 @@ public class ERXBasicBrowser extends ERXBrowser {
         return isNotNetscape()  ||  isMozilla50Compatible();
     }
 
-    private String _toString;
-    public String toString() {
-        if (_toString == null) {
-            _toString = "<" + getClass().getName() + " - " 
-                        + "browserName = " + browserName()
-                        + ", version = " + version()
-                        + ", platform = " + platform()
-                        + ", cpu = " + cpu()
-                        + ">";
-        }
-        return _toString;
-    }
 }
