@@ -163,6 +163,69 @@ public class ERXValueUtilities {
     }
 
     /**
+     * This method resolves bindings from WOComponents to
+     * <code>long</code> values.
+     * Note: This is only needed for non-syncronizing components
+     * @param binding name of the binding
+     * @param component to resolve binding request
+     * @param def default value if binding is not set
+     * @return boolean resolution of the object returned from the
+     *		valueForBinding request.
+     */
+    public static long longValueForBindingOnComponentWithDefault(String binding, WOComponent component, long def) {
+        long result=def;
+        if (component!=null) {
+            if (component.canGetValueForBinding(binding)) {
+                Object value=component.valueForBinding(binding);
+                result=value==null ? def : longValueWithDefault(value, def);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Basic utility method for reading long values. The current
+     * implementation uses {@link #longValueWithDefault(Object, long)}
+     * with a default of <code>0</code>.
+     * @param obj object to be evaluated
+     * @return boolean evaluation of the given object
+     */
+    public static long longValue(Object obj) {
+        return longValueWithDefault(obj,0);
+    }
+
+    /**
+     * Basic utility method for reading <code>long</code> values. The current
+     * implementation tests if the object is an instance of
+     * a String, Number and Boolean. Booleans are 1 if they equal
+     * <code>true</code>. The default value is used if
+     * the object is null or the boolean value is false.
+     * @param obj object to be evaluated
+     * @param def default value if object is null
+     * @return long evaluation of the given object
+     */
+    public static long longValueWithDefault(Object obj, long def) {
+        long value = def;
+        if (obj != null) {
+            if (obj instanceof Number) {
+                value = ((Number)obj).longValue();
+            } else if(obj instanceof String) {
+                try {
+                    String s = ((String)obj).trim(); // Need to trim trailing space
+                    if(s.length() > 0)
+                        value = Long.parseLong(s);
+                } catch(NumberFormatException numberformatexception) {
+                    throw new IllegalStateException("Error parsing long from value : <" + obj + ">");
+                }
+            } else if (obj instanceof Boolean)
+                value = ((Boolean)obj).booleanValue() ? 1 : def;
+        } else {
+            value = def;
+        }
+        return value;
+    }
+
+    /**
      * Basic utility method for reading NSArray values which works also with Strings.
      * The current implementation uses {@link #arrayValueWithDefault(Object, NSArray)}
      * with a default of <code>null</code>.
