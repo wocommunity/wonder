@@ -3,4 +3,4 @@ Items: ERXPluralString {
 	value = "Item";
 }
 
-Section: WOString { value=^sectionTitle; }
+Section: WOString { value=sectionTitle; }

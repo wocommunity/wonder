@@ -1,51 +1,38 @@
-<webObject name=Wrapper><WEBOBJECT NAME=HasHeader><WEBOBJECT NAME=Header></WEBOBJECT></WEBOBJECT>
-   <WEBOBJECT NAME=ListNotEmpty>
-      <CENTER>
-        
-         <BR>
-         <WEBOBJECT NAME=ListTable>
-         	<TR>
-         		<TD COLSPAN=2><H4><WEBOBJECT NAME=EntityName2></WEBOBJECT></H4>
-         		</TD>
-         	</TR><WEBOBJECT NAME=ListTableHeaderRow>
-               <WEBOBJECT NAME=ColumnLabelRepetition><TH NOWRAP VALIGN=bottom><TABLE>
-                        <TR>
-                           <TH><WEBOBJECT NAME=PropertyName></WEBOBJECT></TH>
-                           <TH></TH>
-                        </TR>
-                     </TABLE></th></WEBOBJECT>
-               
-            </WEBOBJECT>
-           <webObject name=GroupingRepetition>
-<TR height=1>
-                    <webobject name=GenericContainer9><IMG ALT="" SRC="http://training.netstruxr.com/nsi/s.gif" HEIGHT=1></webobject>
-                    <TD></TD>
-                </TR>
-				<TR bgcolor="#dddddd">
-            		<WEBOBJECT NAME=GenericContainer4><WEBOBJECT NAME=SwitchComponent1></WEBOBJECT></WEBOBJECT>
-				</TR>            <WEBOBJECT NAME=EntityRepetition><WEBOBJECT NAME=ListTableRow>
-                  <WEBOBJECT NAME=AttributeRepetition><WEBOBJECT NAME=GenericContainer1>
-                        <WEBOBJECT NAME=AttributeDisplay></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-                  
-               </WEBOBJECT>
-            </WEBOBJECT>
-
-<WEBOBJECT NAME=HasTotal>
-	<TR HEIGHT=1>
-		<WEBOBJECT NAME=GenericContainer2><IMG ALT="" SRC=http://training.netstruxr.com/nsi/s.gif HEIGHT=1></WEBOBJECT>
-		<TD></TD>
-	</TR>
-	<TR>
-		<TD></TD>
-		<WEBOBJECT NAME=AttributeRepetition2><WEBOBJECT NAME=AttributeCell><WEBOBJECT NAME=IsTotallingKey><WEBOBJECT NAME=SumForSubList></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-			<TD>&nbsp;&nbsp;</TD>
-		</WEBOBJECT>
-	</TR>
-</WEBOBJECT><tr><td><IMG ALT="" SRC="http://training.netstruxr.com/nsi/s.gif" HEIGHT=30></td>
-<TD></TD></tr>
-
-</webObject></WEBOBJECT><BR>
-         
-      </CENTER>
-   </WEBOBJECT>
-</webObject>
+<webobject name=Wrapper><webobject name=HasHeader><webobject name=Header></webobject></webobject>
+	<webobject name=ListNotEmpty><webobject name=EntityName2></webobject>
+		<webobject name=ListTable>
+			<webobject name=ListTableHeaderRow>
+				<webobject name=ColumnLabelRepetition>
+					<th nowrap valign=bottom>
+						<webobject name=PropertyName></webobject>
+					</th>
+				</webobject>
+			</webobject>
+			<webobject name=GroupingRepetition>
+				<tr height=1>
+					<webobject name=GenericContainer9>
+						<spacer height=1>
+					</webobject>
+				</tr>
+				<tr bgcolor="#dddddd">
+					<webobject name=GenericContainer4><webobject name=SwitchComponent1></webobject></webobject>
+				</tr>
+				<webobject name=EntityRepetition><webobject name=ListTableRow>
+						<webobject name=AttributeRepetition><webobject name=GenericContainer1>
+								<webobject name=AttributeDisplay></webobject></webobject></webobject>
+					</webobject>
+				</webobject>
+				<webobject name=HasTotal>
+					<tr height=1>
+						<webobject name=GenericContainer2>
+							<spacer height=30 height=1>
+						</webobject>
+					</tr>
+					<tr>
+						<webobject name=AttributeRepetition2><webobject name=AttributeCell><webobject name=IsTotallingKey><webobject name=SumForSubList></webobject></webobject></webobject>
+						</webobject>
+					</tr>
+				</webobject>
+			</webobject></webobject>
+	</webobject>
+</webobject>
