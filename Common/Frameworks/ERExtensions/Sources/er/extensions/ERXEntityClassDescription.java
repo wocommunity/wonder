@@ -215,6 +215,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 EOModel model = (EOModel)ge.nextElement();
                 String frameworkName = null;
                 String modelPath = null;
+                log.debug("ApplicationDidFinishLaunching: " + model.name());
                 
                 if(isRapidTurnaroundEnabled()) {
                     for(Enumeration e = NSArray.componentsSeparatedByString(model.path(), File.separator).reverseObjectEnumerator(); e.hasMoreElements(); ) {
@@ -263,7 +264,12 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             // Don't want this guy getting in our way.
             // FIXME: This is done twice
             NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
-            registerDescriptionForEntitiesInModel((EOModel)n.object());
+            try {
+                registerDescriptionForEntitiesInModel((EOModel)n.object());
+            } catch (RuntimeException e) {
+                log.error("Error registering model: " + ((EOModel)n.object()).name(), e);
+                throw e;
+            }
         }
 
         /**
