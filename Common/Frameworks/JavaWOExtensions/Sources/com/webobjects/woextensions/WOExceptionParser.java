@@ -89,19 +89,21 @@ public class WOExceptionParser extends Object {
             sWriter.close();					// Added the try/catch as this throws in JDK 1.2 aB.
             string = sWriter.toString();
             i = _exception.toString().length(); // We skip the name of the exception and the message for our parse
-            string = string.substring(i+2); // Skip the exception type and message
-            lines = NSArray.componentsSeparatedByString(string, "\n");
-            ignoredPackage = _ignoredPackages();
-            size = lines.count();
-            _stackTrace = new NSMutableArray(size);
-            for (i = 0; i < size; i++) {
-                line = ((String) lines.objectAtIndex(i)).trim();
-                if (line.startsWith("at ")) {
-                    // If we don't have an open parenthesis it means that we
-                    // have probably reach the latest stack trace.
-                    aLine = new WOParsedErrorLine(line);
-                    _verifyPackageForLine(aLine, ignoredPackage);
-                    _stackTrace.addObject(aLine);
+            if(string.length() > i+2) { // certain errors don't contain a stack trace
+                string = string.substring(i+2); // Skip the exception type and message
+                lines = NSArray.componentsSeparatedByString(string, "\n");
+                ignoredPackage = _ignoredPackages();
+                size = lines.count();
+                _stackTrace = new NSMutableArray(size);
+                for (i = 0; i < size; i++) {
+                    line = ((String) lines.objectAtIndex(i)).trim();
+                    if (line.startsWith("at ")) {
+                        // If we don't have an open parenthesis it means that we
+                        // have probably reach the latest stack trace.
+                        aLine = new WOParsedErrorLine(line);
+                        _verifyPackageForLine(aLine, ignoredPackage);
+                        _stackTrace.addObject(aLine);
+                    }
                 }
             }
         } catch (Throwable e) {
