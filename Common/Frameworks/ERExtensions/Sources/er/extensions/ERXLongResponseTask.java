@@ -100,23 +100,25 @@ public interface ERXLongResponseTask extends Runnable {
 		 * Implementation of the {@link Runnable} interface.
 		 */
 		public void run() {
-			WOApplication app = WOApplication.application();
-
-			setResult(null);
-
-			_done = false;
-
-			log.debug("creating computation thread");
-
-			// called to start new thread
-			try {
-				setResult(performAction());
-			} catch (Exception localException) {
-				setException(localException);
-				log.error("long response thread raised : "+localException.getMessage(), localException);
-			}
-			log.debug("exiting computation thread");
-			_done = true;
+		    WOApplication app = WOApplication.application();
+		    
+		    setResult(null);
+		    
+		    _done = false;
+		    
+		    log.debug("creating computation thread");
+		    
+		    // called to start new thread
+		    try {
+		        setResult(performAction());
+		    } catch (Exception localException) {
+		        setException(localException);
+		        log.error("long response thread raised : "+localException.getMessage(), localException);
+		    } finally {
+			    ERXEC.unlockAllContextsForCurrentThread();
+		    }
+		    log.debug("exiting computation thread");
+		    _done = true;
 		}
 
 		/**
