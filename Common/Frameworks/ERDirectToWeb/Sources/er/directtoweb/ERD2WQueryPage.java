@@ -26,6 +26,17 @@ public class ERD2WQueryPage extends D2WQueryPage {
     protected NSDictionary branch;
     public String branchName() { return (String)branch.valueForKey("branchName"); }
 
+    public WOComponent queryAction() {
+        String listConfigurationName=(String)d2wContext().valueForKey("listPageConfiguration");
+        if(listConfigurationName!=null){
+            ListPageInterface listpageinterface = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, this.session());
+            listpageinterface.setDataSource(queryDataSource());
+            listpageinterface.setNextPage(this.context().page());
+            return (WOComponent) listpageinterface;
+        }
+        return super.queryAction();
+    }
+    
     // returning a null query data source if cancel was clicked
     private boolean _wasCancelled;
     public WOComponent cancelAction() {
