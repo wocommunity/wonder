@@ -1,0 +1,52 @@
+AttributeCell: WOGenericContainer {
+	CLASS = d2wContext.excelClassForProperty;
+	elementName = "td";
+	CELLTYPE = d2wContext.excelCellTypeForProperty;
+}
+
+AttributeDisplay: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = localContext;
+	object = object;
+}
+
+AttributeLabelCell: WOGenericContainer {
+	CLASS = d2wContext.excelClassForPropertyName;
+	elementName = "td";
+	CELLTYPE = d2wContext.excelCellTypeForPropertyName;
+}
+
+AttributeRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+ColumnLabelRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+EGWrapper: EGWrapper {
+	enabled = "true";
+	styles = styles.Styles;
+	fonts = styles.Fonts;
+	fileName = d2wContext.excelFileName;
+}
+
+EntityRepetition: WORepetition {
+	item = object;
+	list = objectsForSheet;
+}
+
+ListTable: WOGenericContainer {
+	name = d2wContext.excelSheetName;
+	elementName = "Table";
+	CELLFORMAT = d2wContext.excelCellFormatForSheet;
+	CLASS = d2wContext.excelClassForSheet;
+	CELLTYPE = d2wContext.excelCellTypeForSheet;
+}
+
+PropertyNameComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
+}
