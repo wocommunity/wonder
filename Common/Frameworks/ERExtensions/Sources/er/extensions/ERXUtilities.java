@@ -104,6 +104,15 @@ public class ERXUtilities {
                                                                    null);
     }
 
+    /**
+     * Gets the shared enterprise object with the given primary
+     * from the default shared editing context. This has the
+     * advantage of not requiring a roundtrip to the database to
+     * lookup the object.
+     * @param pk primary key of object to be found
+     * @param entityName name of the entity
+     * @return the shared object registered in the default shared editing context
+     */
     public static EOEnterpriseObject sharedObjectWithPrimaryKey(Object pk, String entityName) {
         return EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
                                                      entityName,
@@ -143,6 +152,9 @@ public class ERXUtilities {
 
 
     // Convenience method to get a unique ID from a sequence
+
+    // FIXME: In following with standard EOUtilities naming ec should be the first parameter.
+    //	      also shouldn't have throws RuntimeException
     public static int getNextValFromSequenceNamed(String sequenceName, EOEditingContext ec) throws RuntimeException{
         String sqlString = "select "+sequenceName+".nextVal from dual";
         NSArray array = EOUtilities.rawRowsForSQL( ec, "ER", sqlString);
@@ -152,7 +164,6 @@ public class ERXUtilities {
         NSArray valuesArray = dictionary.allValues();
         return ((Number)valuesArray.objectAtIndex(0)).intValue();
     }
-
     
     public static void makeEditableSharedEntityNamed(String entityName) {
         EOEntity e = EOModelGroup.defaultGroup().entityNamed(entityName);
@@ -176,6 +187,7 @@ public class ERXUtilities {
     }
 
     public static NSArray arrayFromDataSource(EODataSource dataSource) {
+        // FIXME: Now in WO 5 we can use fetchObjects() off of the dataSource and it should work (unlike 4.5).
         WODisplayGroup dg = new WODisplayGroup();
         dg.setDataSource(dataSource);
         dg.fetch(); // Have to fetch in the array, go figure.
