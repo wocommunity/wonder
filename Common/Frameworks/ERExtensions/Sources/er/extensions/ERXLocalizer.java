@@ -68,13 +68,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
 
-    private static Observer observer;
-    private static NSMutableArray monitoredFiles;
+    private static Observer observer = new Observer();
+    private static NSMutableArray monitoredFiles = new NSMutableArray();
 
     public static void initialize() {
         if(!isInitialized) {
-            observer = new Observer();
-            monitoredFiles = new NSMutableArray();
             isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
             if (isLocalizationEnabled) {
                 // To detect ERXLocalizer and its subclasses are recompiled at run-time. 
@@ -192,7 +190,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             Constructor constructor = localizerClass.getConstructor(ERXConstant.StringClassArray);
             localizer = (ERXLocalizer)constructor.newInstance(new Object[] {language});
         } catch (Exception e) {
-            log.error("Unable to create localizer for class name: " + className + " exception: " + e.getMessage() + " will use default classes");
+            log.error("Unable to create localizer for language \"" + language + "\" class name: " + className + " exception: " + e.getMessage() + ", will use default classes", e);
         }
         if (localizer == null) {
             if (pluralForm)
