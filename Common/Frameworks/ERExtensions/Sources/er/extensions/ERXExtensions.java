@@ -938,7 +938,8 @@ public class ERXExtensions {
     /**
      * Recursively flattens an array of arrays into a single
      * array of elements.<br/>
-     * @deprecated use {$link  ERXArrayUtilities.flatten} instead.
+     * @deprecated use {@link ERXArrayUtilities#flatten(NSArray) 
+     * ERXArrayUtilities.flatten} instead.
      */
     public static NSArray flatten(NSArray array) {
         return ERXArrayUtilities.flatten(array);
@@ -946,7 +947,8 @@ public class ERXExtensions {
 
     /**
      * Groups an array of objects by a given key path.
-     * @deprecated use {@link ERXArrayUtilities.arrayGroupedByKeyPath}
+     * @deprecated use {@link ERXArrayUtilities#arrayGroupedByKeyPath(NSArray, String)
+     * ERXArrayUtilities.arrayGroupedByKeyPath}
      */
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos, String keyPath) {
         return eosInArrayGroupedByKeyPath(eos,keyPath,true,null);
@@ -954,7 +956,8 @@ public class ERXExtensions {
 
     /**
      * Groups an array of objects by a given key path.
-     * @deprecated use {@link ERXArrayUtilities.arrayGroupedByKeyPath}
+     * @deprecated use {@link ERXArrayUtilities#arrayGroupedByKeyPath(NSArray, String, boolean, String)
+     * ERXArrayUtilities.arrayGroupedByKeyPath}
      */
     public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos,
                                                           String keyPath,
@@ -966,7 +969,7 @@ public class ERXExtensions {
     /**
      * Simple comparision method to see if two array
      * objects are identical sets.
-     * @deprecated use {@link ERXArrayUtilities.arraysAreIdenticalSets}
+     * @deprecated use {@link ERXArrayUtilities#arraysAreIdenticalSets(NSArray, NSArray)}
      */
     // MOVEME: ERXArrayUtilities
     public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
@@ -975,7 +978,8 @@ public class ERXExtensions {
 
     /**
      * Filters an array using the {@link EOQualifierEvaluation} interface.
-     * @deprecated use {@link ERXArrayUtilities.filteredArrayWithQualifierEvaluation}
+     * @deprecated use {@link ERXArrayUtilities#filteredArrayWithQualifierEvaluation(NSArray, EOQualifierEvaluation)
+     * ERXArrayUtilities.filteredArrayWithQualifierEvaluation}
      */
     public static NSArray filteredArrayWithQualifierEvaluation(NSArray a, EOQualifierEvaluation q) {
         return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(a,q);
@@ -1325,7 +1329,8 @@ public class ERXExtensions {
     /**
      * Filters out all of the duplicate objects in
      * a given array.<br/>
-     * @deprecated use {@link ERXArrayUtilities.arrayWithoutDuplicates}
+     * @deprecated use {@link ERXArrayUtilities#arrayWithoutDuplicates(NSArray)
+     * ERXArrayUtilities.arrayWithoutDuplicates}
      */
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
         return ERXArrayUtilities.arrayWithoutDuplicates(anArray);
@@ -1334,7 +1339,8 @@ public class ERXExtensions {
     /**
      * Filters out duplicates of an array of enterprise objects
      * based on the value of the given key off of those objects.
-     * @deprecated use {@link ERXArrayUtilities.arrayWithoutDuplicateKeyValue}
+     * @deprecated use {@link ERXArrayUtilities#arrayWithoutDuplicateKeyValue(NSArray, String)
+     * ERXArrayUtilities.arrayWithoutDuplicateKeyValue}
      */
     public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
         return ERXArrayUtilities.arrayWithoutDuplicateKeyValue(eos,key);
@@ -1342,7 +1348,8 @@ public class ERXExtensions {
 
     /**
      * Subtracts the contents of one array from another.
-     * @deprecated use {@link ERXArrayUtilities.arrayMinusArray}
+     * @deprecated use {@link ERXArrayUtilities#arrayMinusArray(NSArray, NSArray)
+     * ERXArrayUtilities.arrayMinusArray}
      */
     public static NSArray arrayMinusArray(NSArray main, NSArray minus){
         return ERXArrayUtilities.arrayMinusArray(main,minus);
@@ -1351,7 +1358,8 @@ public class ERXExtensions {
     /**
      * Creates an array preserving order by adding all of the
      * non-duplicate values from the second array to the first.
-     * @deprecated use {@link ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates}
+     * @deprecated use {@link ERXArrayUtilities#arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray, NSArray)
+     * ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates}
      */
     public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
         return ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(a1,a2);
@@ -1360,7 +1368,8 @@ public class ERXExtensions {
     /**
      * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
-     * @deprecated use {@link ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates}
+     * @deprecated use {@link ERXArrayUtilities#addObjectsFromArrayWithoutDuplicates(NSMutableArray, NSArray)
+     * ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates}
      */
     public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
         ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(a1,a2);
