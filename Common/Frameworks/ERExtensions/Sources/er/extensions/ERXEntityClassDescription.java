@@ -30,6 +30,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             cat.debug("classDescriptionNeededForEntityName: " + (String)n.object());
             String name = (String)n.object();
             EOEntity e = EOModelGroup.defaultGroup().entityNamed(name); //FIXME: This isn't the best way to get
+            if(e == null) cat.error("Entity " + name + " not found in this model!");
             ERXEntityClassDescription.registerDescriptionForEntity(e);
         }
         public void classDescriptionNeededForClass(NSNotification n) {
@@ -95,9 +96,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     public static void registerDescriptionForEntity(EOEntity entity) {
         try {
-            Class entityClass = entity.className().equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(entity.className());
+            String className = entity.className();
             if (cat.isDebugEnabled())
-                cat.debug("Registering description for entity: " + entity.name() + " with class: " + entity.className());
+                cat.debug("Registering description for entity: " + entity.name() + " with class: " + className);
+            Class entityClass = className.equals("EOGenericRecord") ? EOGenericRecord.class : Class.forName(className);
             ERXEntityClassDescription cd = new ERXEntityClassDescription(entity);
             EOClassDescription.registerClassDescription(cd, entityClass);
             _setClassDescriptionOnEntity(entity, cd);
