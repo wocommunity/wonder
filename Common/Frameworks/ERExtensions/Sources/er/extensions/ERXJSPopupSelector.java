@@ -10,9 +10,14 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import org.apache.log4j.*;
 
 public class ERXJSPopupSelector extends WOComponent {
 
+    ///////////////////////////////////////  log4j category  /////////////////////////////////////
+    public static final Category cat = Category.getInstance(ERXJSPopupSelector.class);
+    
+    
     public ERXJSPopupSelector(WOContext aContext) {
         super(aContext);
     }
@@ -26,10 +31,15 @@ public class ERXJSPopupSelector extends WOComponent {
         String popupName=(String)valueForBinding("popupName");
         if (list!=null && item!=null) {
             int index=list.indexOfObject(item);
+            if (index==-1) {
+                cat.info(item+" could not be found in "+list);
+            }
             // by default we assume that there is one more item on top of the list (i.e. - none - or - pick one -)
             // when the relationship is mandatory, this is not the case
-            Integer doNotAddOne=(Integer)valueForBinding("doNotAddOneToComputedIndex");
-            if (doNotAddOne==null || doNotAddOne.intValue()==0) index++;
+            boolean doNotAddOne=ERXUtilities.booleanValueForBindingOnComponentWithDefault("doNotAddOneToComputedIndex",
+                                                                                          this,
+                                                                                          false);
+            if (!doNotAddOne) index++;
 	    // FIXME the form index should NOT be hardcoded
             result="javascript:window.document.forms[2]."+popupName+".selectedIndex="+index+"; return false;";
         }
