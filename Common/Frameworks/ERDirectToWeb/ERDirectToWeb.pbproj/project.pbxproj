@@ -5,6 +5,124 @@
 	};
 	objectVersion = 38;
 	objects = {
+		4119063104EFBC3000A88C3C = {
+			children = (
+				4119063204EFBC3000A88C3C,
+				4119063304EFBC3000A88C3C,
+				4119063404EFBC3000A88C3C,
+			);
+			isa = PBXGroup;
+			name = ERDEditPassword;
+			path = "";
+			refType = 2;
+		};
+		4119063204EFBC3000A88C3C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDEditPassword.api;
+			path = Components/ERDEditPassword.api;
+			refType = 4;
+		};
+		4119063304EFBC3000A88C3C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDEditPassword.java;
+			path = Sources/er/directtoweb/ERDEditPassword.java;
+			refType = 4;
+		};
+		4119063404EFBC3000A88C3C = {
+			children = (
+				4119063504EFBC3000A88C3C,
+			);
+			isa = PBXVariantGroup;
+			name = ERDEditPassword.wo;
+			path = "";
+			refType = 4;
+		};
+		4119063504EFBC3000A88C3C = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDEditPassword.wo;
+			refType = 4;
+		};
+		4119063A04EFBC3000A88C3C = {
+			fileRef = 4119063204EFBC3000A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4119063B04EFBC3000A88C3C = {
+			fileRef = 4119063304EFBC3000A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4119063C04EFBC3000A88C3C = {
+			fileRef = 4119063404EFBC3000A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4119069D04EFC02A00A88C3C = {
+			children = (
+				4119069E04EFC02A00A88C3C,
+				4119069F04EFC02A00A88C3C,
+				411906A004EFC02A00A88C3C,
+			);
+			isa = PBXGroup;
+			name = ERDEditPasswordConfirmation;
+			path = "";
+			refType = 2;
+		};
+		4119069E04EFC02A00A88C3C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDEditPasswordConfirmation.api;
+			path = Components/ERDEditPasswordConfirmation.api;
+			refType = 4;
+		};
+		4119069F04EFC02A00A88C3C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDEditPasswordConfirmation.java;
+			path = Sources/er/directtoweb/ERDEditPasswordConfirmation.java;
+			refType = 4;
+		};
+		411906A004EFC02A00A88C3C = {
+			children = (
+				411906A104EFC02A00A88C3C,
+			);
+			isa = PBXVariantGroup;
+			name = ERDEditPasswordConfirmation.wo;
+			path = "";
+			refType = 4;
+		};
+		411906A104EFC02A00A88C3C = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDEditPasswordConfirmation.wo;
+			refType = 4;
+		};
+		411906A604EFC02A00A88C3C = {
+			fileRef = 4119069E04EFC02A00A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		411906A704EFC02A00A88C3C = {
+			fileRef = 4119069F04EFC02A00A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		411906A804EFC02A00A88C3C = {
+			fileRef = 411906A004EFC02A00A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		418CC2E8044306F500AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -8059,6 +8177,10 @@
 				9419C8D503D8D0C500CF0E7D,
 				9409EBFA047BFED200CF0E7D,
 				9409EC01047BFEEE00CF0E7D,
+				4119063A04EFBC3000A88C3C,
+				4119063C04EFBC3000A88C3C,
+				411906A604EFC02A00A88C3C,
+				411906A804EFC02A00A88C3C,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8275,6 +8397,8 @@
 				418CC2E9044306F500AD0D07,
 				41F217BD046EE09200000103,
 				9409EBF8047BFEC000CF0E7D,
+				4119063B04EFBC3000A88C3C,
+				411906A704EFC02A00A88C3C,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9745,6 +9869,8 @@
 				F6E7967502C877AF01AD0D07,
 				F6E7967602C877AF01AD0D07,
 				FBDED2D817EDBE5AD297D139,
+				4119063104EFBC3000A88C3C,
+				4119069D04EFC02A00A88C3C,
 				F6E7967702C877AF01AD0D07,
 				F6E7967802C877AF01AD0D07,
 				F6E796A102C877AF01AD0D07,
