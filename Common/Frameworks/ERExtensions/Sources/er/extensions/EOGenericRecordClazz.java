@@ -26,18 +26,29 @@ public class EOGenericRecordClazz extends Object {
     }
 
     public static void resetClazzCache() { allClazzes.removeAllObjects(); }
+    private static EOGenericRecordClazz classFromEntity(EOEntity entity) {
+        EOGenericRecordClazz clazz = null;
+        if(entity == null) {
+            if(entity.className().equals("ERXGenericRecord"))
+                clazz = new ERXGenericRecord.ERXGenericRecordClazz();
+            else
+                clazz = new EOGenericRecordClazz();
+        }
+        try {
+            String className = entity.className();
+            clazz = (EOGenericRecordClazz)Class.forName(className + "$" + entity.name() + "Clazz").newInstance();
+        } catch (InstantiationException ex) {
+        } catch (ClassNotFoundException ex) {
+        } catch (IllegalAccessException ex) {
+        }
+        if(clazz == null) return classFromEntity(entity.parentEntity());
+        return clazz;
+    }
     
     public static EOGenericRecordClazz clazzForEntityNamed(String entityName) {
         EOGenericRecordClazz clazz = (EOGenericRecordClazz)allClazzes.objectForKey(entityName);
         if(clazz == null) {
-            try {
-                String className = EOModelGroup.defaultGroup().entityNamed(entityName).className();
-                if(clazz == null) clazz = (EOGenericRecordClazz)Class.forName(className + "$" + entityName + "Clazz").newInstance();
-            } catch (InstantiationException ex) {
-            } catch (ClassNotFoundException ex) {
-            } catch (IllegalAccessException ex) {
-            }
-            if(clazz == null) clazz = new EOGenericRecordClazz();
+            clazz = classFromEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
             clazz.setEntityName(entityName);
             allClazzes.setObjectForKey(clazz,entityName);
         }
