@@ -215,7 +215,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 	    // so we have to check....
 	    EOEditingContext ec;
 	    
-	    if(_sourceObject instanceof EOEnterpriseObject)
+	    if(_sourceObject instanceof EOEnterpriseObject && ((EOEnterpriseObject)_sourceObject).editingContext() != null)
 		ec = ((EOEnterpriseObject)_sourceObject).editingContext();
 	    else
 		ec = session().defaultEditingContext();
