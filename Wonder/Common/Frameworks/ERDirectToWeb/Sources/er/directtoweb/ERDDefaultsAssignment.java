@@ -16,17 +16,47 @@ import org.apache.log4j.Category;
 // now that we use reflection to fire methods, there's no reason to have a lot a assignment classes
 public class ERDDefaultsAssignment extends ERDAssignment {
 
+    /** logging support */
+    public final static Category cat = Category.getInstance("er.directtoweb.ERDDefaultsAssignment");
+
+    /** holds the array of keys this assignmnet depends upon */
+    public static final NSArray _DEPENDENT_KEYS=new NSArray("smartAttribute");
+
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
+     // ENHANCEME: Only ever need one of these assignments.
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDefaultsAssignment(eokeyvalueunarchiver);
     }
     
-    //////////////////////////////////////////////  log4j category  //////////////////////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.ERDDefaultsAssignment");
-
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDDefaultsAssignment (EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDDefaultsAssignment (String key, Object value) { super(key,value); }
-
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "smartAttribute"});
+    
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment depends upon the context key: "smartAttribute". This array 
+     * of keys is used when constructing the 
+     * significant keys for the passed in keyPath.
+     * @param keyPath to compute significant keys for. 
+     * @return array of context keys this assignment depends upon.
+     */
     public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
     
     public String keyForMethodLookup(D2WContext c) { return (String)value(); }

@@ -31,18 +31,44 @@ import er.extensions.*;
 
 public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface  {
 
+    /** logging support */
+    public final static Category cat = Category.getInstance("er.directtoweb.rules.DelayedConditionalAssignment");
+
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDelayedConditionalAssignment(eokeyvalueunarchiver);
     }
     
-    ///////////////////////////  log4j category  ///////////////////////////
-    public final static Category cat = Category.getInstance("er.directtoweb.rules.DelayedConditionalAssignment");
-    ////////////////////////////////////////////////////////////////////////
-
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDDelayedConditionalAssignment(EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDDelayedConditionalAssignment(String key, Object value) { super(key,value); }
 
     public NSArray _dependentKeys;
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment depends upon all of the qualifier keys from the formed
+     * qualifier of the value of this assignment. This array of keys is 
+     * used when constructing the significant keys for the passed in keyPath.
+     * @param keyPath to compute significant keys for. 
+     * @return array of context keys this assignment depends upon.
+     */
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
             NSDictionary conditionAssignment = (NSDictionary)this.value();
@@ -53,7 +79,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
             EOQualifier qualifier =
                 EOQualifier.qualifierWithQualifierFormat(qualFormat, args);
             if (cat.isDebugEnabled())
-                System.err.println("Qualifier keys: " + qualifier.allQualifierKeys());
+                cat.debug("Qualifier keys: " + qualifier.allQualifierKeys());
             _dependentKeys=qualifier.allQualifierKeys().allObjects();
         }
         return _dependentKeys;
@@ -82,10 +108,10 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
             cat.debug("DelayedConditonalQualifier: " + qualifier);
         if (qualifier.evaluateWithObject(c)) {
             result = conditionAssignment.objectForKey("trueValue");
-            cat.debug("   trueValue = " + result);
+            cat.debug("trueValue = " + result);
         } else {
             result = conditionAssignment.objectForKey("falseValue");
-            cat.debug("   falseValue = " + result);
+            cat.debug("falseValue = " + result);
         }
         return result;
     }

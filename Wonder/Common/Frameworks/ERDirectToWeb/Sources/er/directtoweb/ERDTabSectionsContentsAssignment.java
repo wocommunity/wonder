@@ -12,18 +12,57 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
 import java.util.*;
 
+/**
+ * Assignment used to construct and cache the 
+ * tab sections containers used with tab insepct
+ * pages. See {@link ERD2WTabInspectPage} for 
+ * information on the formats of a tab section. 
+ */
+// FIXME: Should subclass Assignment instead
 public class ERDTabSectionsContentsAssignment extends ERDAssignment {
 
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDTabSectionsContentsAssignment(eokeyvalueunarchiver);
     }
     
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDTabSectionsContentsAssignment (EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDTabSectionsContentsAssignment (String key, Object value) { super(key,value); }
 
-    public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {});
-    public NSArray dependentKeys(String keyPath) { return _DEPENDENT_KEYS; }
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment is not dependent on any context keys.
+     * @return empty array.
+     */
+    public NSArray dependentKeys(String keyPath) { return NSArray.EmptyArray; }
 
+    /**
+     * Called when firing this assignment with the key-path:
+     * <b>tabSectionsContents</b>. Constructs an array of 
+     * {@link ERD2WContainer}s representing each tab and
+     * optionally another array of containers representing 
+     * each section. See {@link ERD2wTabInspectPage} for the
+     * exact format of the tabs and sections.
+     * @return array of containers for each tab
+     */
     public Object tabSectionsContents(D2WContext context) {
         NSMutableArray tabSectionsContents=new NSMutableArray();
         for (Enumeration e= ((NSArray)value()).objectEnumerator(); e.hasMoreElements();) {

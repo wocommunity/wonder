@@ -15,7 +15,7 @@ import org.apache.log4j.Category;
 
 public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePageInterface, ERDBranchInterface {
 
-    ///////////////////////////////////////  log4j category  ///////////////////////////////////////
+    /** logging support */
     public final static Category cat = Category.getInstance("er.directtoweb.templates.ERD2WMessagePage");
     
     protected String _message;
@@ -25,6 +25,10 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
     protected NextPageDelegate _cancelDelegate;
     protected NextPageDelegate _nextDelegate;
 
+    /**
+     * Public constructor
+     * @param c current context
+     */
     public ERD2WMessagePage(WOContext c) {
         super(c);
     }

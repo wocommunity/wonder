@@ -22,23 +22,46 @@ import er.extensions.ERXUtilities;
 ///////////////////////////////////////////////////////////////////////////////
 public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
 
+    /** logging support */
+    public static final Category cat = Category.getInstance("er.directtoweb.rules.DelayedBooleanAssignment");
+
+    /**
+     * Static constructor required by the EOKeyValueUnarchiver
+     * interface. If this isn't implemented then the default
+     * behavior is to construct the first super class that does
+     * implement this method. Very lame.
+     * @param eokeyvalueunarchiver to be unarchived
+     * @return decoded assignment of this class
+     */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
         return new ERDDelayedKeyValueAssignment(eokeyvalueunarchiver);
     }    
 
-    //////////////////////////////////////////////  log4j category  /////////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.directtoweb.rules.DelayedBooleanAssignment");
-
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */
     public ERDDelayedBooleanAssignment(EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDDelayedBooleanAssignment(String key, Object value) { super(key,value); }
 
-    public NSArray _dependentKeys;
+    /**
+     * Implementation of the {@link ERDComputingAssignmentInterface}. This
+     * assignment depends upon the value of the key "conditionKey" of the
+     * value of this assignment. This key is used when constructing the 
+     * significant keys for the passed in keyPath.
+     * @param keyPath to compute significant keys for. 
+     * @return array of context keys this assignment depends upon.
+     */
     public NSArray dependentKeys(String keyPath) {
-        if (_dependentKeys==null) {
-            NSDictionary booleanConditions = (NSDictionary)value();
-            _dependentKeys=new NSArray(booleanConditions.objectForKey("conditionKey"));
-        }
-        return _dependentKeys;
+        NSDictionary booleanConditions = (NSDictionary)value();
+        return new NSArray(booleanConditions.objectForKey("conditionKey"));
     }
 
     public Object fireNow(D2WContext c) {

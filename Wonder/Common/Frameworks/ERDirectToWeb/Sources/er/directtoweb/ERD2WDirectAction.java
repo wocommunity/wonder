@@ -15,8 +15,14 @@ import er.extensions.*;
 import java.util.Enumeration;
 
 public abstract class ERD2WDirectAction extends ERXDirectAction {
+
+    /** logging support */
     static final ERXLogger log = ERXLogger.getLogger(ERD2WDirectAction.class);
 
+    /**
+     * Public constructor
+     * @param r current request
+     */
     public ERD2WDirectAction(WORequest r) { super(r); }
 
     /** primaryKeyKey is used to identity a given object via it's primary key.

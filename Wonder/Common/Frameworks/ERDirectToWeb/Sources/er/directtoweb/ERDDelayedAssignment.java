@@ -13,11 +13,26 @@ import com.webobjects.directtoweb.*;
 //	cache the assignment instead of the value it returns.
 //	Interesting subclasses are DelayedBooleanAssignment and DelayedConditionalAssignment
 public abstract class ERDDelayedAssignment extends Assignment  {
-    
+
+    /** 
+     * Public constructor
+     * @param u key-value unarchiver used when unarchiving
+     *		from rule files. 
+     */    
     public ERDDelayedAssignment(EOKeyValueUnarchiver u) { super(u); }
+    
+    /** 
+     * Public constructor
+     * @param key context key
+     * @param value of the assignment
+     */
     public ERDDelayedAssignment(String key, Object value) { super(key,value); }
 
+    // ENHANCEME: Might want to make this method final
     public Object fire(D2WContext c) { return this; }
-    public abstract Object fireNow(D2WContext c);
     
+    /**
+     * Implemented by subclasses.
+     */
+    public abstract Object fireNow(D2WContext c);
 }
