@@ -101,3 +101,6 @@ although we tried to break as few things as possible.
   D2W model subclasses. Do not use them together in one application.
 - if you used EOGenericRecordClazz, change all references to EOEnterpriseObjectClazz. You
   can now use the Clazz-Pattern with EOCustomObject too.
+- all the keys for follow-up page configurations have been named consistently to "someTaskConfigurationName", ie
+  listConfigurationName, editConfigurationName etc. "listPageConfiguration", "listPageConfigurationName" and 
+  others are no longer supported. Please update your rule files accordingly. 
