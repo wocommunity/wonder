@@ -39,7 +39,6 @@
 				6CA8E86B0168DA0900A801D4,
 				6CA8E86C0168DA0900A801D4,
 				6CA8E86D0168DA0900A801D4,
-				6CA8E86E0168DA0900A801D4,
 				6CA8E86F0168DA0900A801D4,
 				6CA8E8700168DA0900A801D4,
 				6CA8E8710168DA0900A801D4,
@@ -53,8 +52,9 @@
 				6CA8E8790168DA0900A801D4,
 				6CA8E87A0168DA0900A801D4,
 				6CA8E87B0168DA0900A801D4,
-				6CA8E87C0168DA0900A801D4,
-				6CA8E87D0168DA0900A801D4,
+				F7B5866D0284678601A8010C,
+				F7B5866E0284678601A8010C,
+				F7B5866F0284678601A8010C,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -73,11 +73,6 @@
 		6CA8E86D0168DA0900A801D4 = {
 			isa = PBXFileReference;
 			path = ErrorPage.java;
-			refType = 4;
-		};
-		6CA8E86E0168DA0900A801D4 = {
-			isa = PBXFileReference;
-			path = Group.java;
 			refType = 4;
 		};
 		6CA8E86F0168DA0900A801D4 = {
@@ -143,16 +138,6 @@
 		6CA8E87B0168DA0900A801D4 = {
 			isa = PBXFileReference;
 			path = SuperSecretPage.java;
-			refType = 4;
-		};
-		6CA8E87C0168DA0900A801D4 = {
-			isa = PBXFileReference;
-			path = User.java;
-			refType = 4;
-		};
-		6CA8E87D0168DA0900A801D4 = {
-			isa = PBXFileReference;
-			path = UserPreferencesAssignment.java;
 			refType = 4;
 		};
 		6CA8E87E0168DA0900A801D4 = {
@@ -882,7 +867,6 @@
 				6CA8E8DC0168DA0900A801D4,
 				6CA8E8DD0168DA0900A801D4,
 				6CA8E8DE0168DA0900A801D4,
-				6CA8E8DF0168DA0900A801D4,
 				6CA8E8E00168DA0900A801D4,
 				6CA8E8E10168DA0900A801D4,
 				6CA8E8E20168DA0900A801D4,
@@ -896,8 +880,9 @@
 				6CA8E8EA0168DA0900A801D4,
 				6CA8E8EB0168DA0900A801D4,
 				6CA8E8EC0168DA0900A801D4,
-				6CA8E8ED0168DA0900A801D4,
-				6CA8E8EE0168DA0900A801D4,
+				F7B586700284678601A8010C,
+				F7B586710284678601A8010C,
+				F7B586720284678601A8010C,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -916,12 +901,6 @@
 		};
 		6CA8E8DE0168DA0900A801D4 = {
 			fileRef = 6CA8E86D0168DA0900A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6CA8E8DF0168DA0900A801D4 = {
-			fileRef = 6CA8E86E0168DA0900A801D4;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1000,18 +979,6 @@
 		};
 		6CA8E8EC0168DA0900A801D4 = {
 			fileRef = 6CA8E87B0168DA0900A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6CA8E8ED0168DA0900A801D4 = {
-			fileRef = 6CA8E87C0168DA0900A801D4;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6CA8E8EE0168DA0900A801D4 = {
-			fileRef = 6CA8E87D0168DA0900A801D4;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1468,6 +1435,52 @@
 		};
 		F5642A1D0218535C01A801D4 = {
 			fileRef = F5642A190218535C01A801D4;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F70
+//F71
+//F72
+//F73
+//F74
+		F7B5866D0284678601A8010C = {
+			isa = PBXFileReference;
+			name = Group.java;
+			path = wrox/Group.java;
+			refType = 4;
+		};
+		F7B5866E0284678601A8010C = {
+			isa = PBXFileReference;
+			name = User.java;
+			path = wrox/User.java;
+			refType = 4;
+		};
+		F7B5866F0284678601A8010C = {
+			isa = PBXFileReference;
+			name = UserPreferencesAssignment.java;
+			path = wrox/wo/UserPreferencesAssignment.java;
+			refType = 4;
+		};
+		F7B586700284678601A8010C = {
+			fileRef = F7B5866D0284678601A8010C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7B586710284678601A8010C = {
+			fileRef = F7B5866E0284678601A8010C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F7B586720284678601A8010C = {
+			fileRef = F7B5866F0284678601A8010C;
 			isa = PBXBuildFile;
 			settings = {
 			};

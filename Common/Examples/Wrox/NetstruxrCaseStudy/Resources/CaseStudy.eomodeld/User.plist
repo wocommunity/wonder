@@ -44,7 +44,7 @@
         }
     ); 
     attributesUsedForLocking = (id, firstName, lastName, email, username, encryptedPassword); 
-    className = er.wrox.eo.User; 
+    className = er.wrox.User; 
     classProperties = (firstName, lastName, email, groups, username, encryptedPassword, preferences); 
     externalName = user; 
     name = User; 

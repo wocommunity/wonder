@@ -8,11 +8,29 @@
             ANSI92_CONFORMANCE = ANSI92Full; 
             DBMS_NAME = OpenBase; 
             DRIVER_NAME = "OpenBase JDBC Driver"; 
-            DRIVER_VER = 1.0; 
+            DRIVER_VER = 1.7; 
             IDENTIFIER_QUOTE_STRING = "\""; 
             NON_NULLABLE_COLUMNS = T; 
-            STRING_FUNCTIONS = ""; 
+            STRING_FUNCTIONS = "ASCII,CHAR,CONCAT,DIFFERENCE,INSERT,LCASE,LEFT,LENGTH,LOCATE,LTRIM,REPEAT,REPLACE,RIGHT,RTRIM,SOUNDEX,SPACE,SUBSTRING,UCASE"; 
             typeInfo = {
+                binary = {
+                    createParams = 1; 
+                    defaultJDBCType = (BINARY); 
+                    isNullable = T; 
+                    isSearchable = T; 
+                    maxScale = 0; 
+                    minScale = 0; 
+                    precision = 2048; 
+                }; 
+                boolean = {
+                    createParams = 0; 
+                    defaultJDBCType = (BIT); 
+                    isNullable = T; 
+                    isSearchable = T; 
+                    maxScale = 0; 
+                    minScale = 0; 
+                    precision = 0; 
+                }; 
                 char = {
                     createParams = 1; 
                     defaultJDBCType = (CHAR); 
@@ -20,7 +38,7 @@
                     isSearchable = T; 
                     maxScale = 0; 
                     minScale = 0; 
-                    precision = 0; 
+                    precision = 4096; 
                 }; 
                 date = {
                     createParams = 0; 
@@ -36,7 +54,7 @@
                     defaultJDBCType = (TIMESTAMP); 
                     isNullable = T; 
                     isSearchable = T; 
-                    maxScale = 6; 
+                    maxScale = 8; 
                     minScale = 0; 
                     precision = 20; 
                 }; 
@@ -45,7 +63,7 @@
                     defaultJDBCType = (DOUBLE); 
                     isNullable = T; 
                     isSearchable = T; 
-                    maxScale = 0; 
+                    maxScale = 8; 
                     minScale = 0; 
                     precision = 20; 
                 }; 
@@ -54,7 +72,7 @@
                     defaultJDBCType = (DOUBLE); 
                     isNullable = T; 
                     isSearchable = T; 
-                    maxScale = 15; 
+                    maxScale = 8; 
                     minScale = 0; 
                     precision = 20; 
                 }; 
@@ -91,12 +109,12 @@
                     isNullable = T; 
                     isSearchable = T; 
                     maxScale = 2; 
-                    minScale = 2; 
+                    minScale = 0; 
                     precision = 20; 
                 }; 
                 object = {
                     createParams = 0; 
-                    defaultJDBCType = ("LONG VARBINARY"); 
+                    defaultJDBCType = (BLOB); 
                     isNullable = T; 
                     isSearchable = F; 
                     maxScale = 0; 
@@ -112,6 +130,15 @@
                     minScale = 0; 
                     precision = 0; 
                 }; 
+                varchar = {
+                    createParams = 1; 
+                    defaultJDBCType = (VARCHAR); 
+                    isNullable = T; 
+                    isSearchable = T; 
+                    maxScale = 0; 
+                    minScale = 0; 
+                    precision = 4096; 
+                }; 
             }; 
         }; 
         password = ""; 
@@ -119,9 +146,9 @@
         username = ""; 
     }; 
     entities = (
-        {className = er.wrox.eo.Group; name = Group; }, 
+        {className = er.wrox.Group; name = Group; }, 
         {className = EOGenericRecord; name = Preference; }, 
-        {className = er.wrox.eo.User; name = User; }, 
+        {className = er.wrox.User; name = User; }, 
         {className = EOGenericRecord; name = UserGroup; }
     ); 
     internalInfo = {}; 
