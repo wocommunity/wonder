@@ -9,8 +9,20 @@ var ggWinCal;
 isNav = (navigator.appName.indexOf("Netscape") != -1) ? true : false;
 isIE = (navigator.appName.indexOf("Microsoft") != -1) ? true : false;
 
+// items to localize
 Calendar.Months = ["January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December"];
+Calendar.TodayString = "Today";
+Calendar.CancelString = "Cancel";
+Calendar.ClearString = "Clear";
+Calendar.SundayString = "Sun";
+Calendar.MondayString = "Mon";
+Calendar.TuesdayString = "Tue";
+Calendar.WednesdayString = "Wed";
+Calendar.ThursdayString = "Thu";
+Calendar.FridayString = "Fri";
+Calendar.SaturdayString = "Sat";
+// end of items to localize
 
 // Non-Leap year Month days..
 Calendar.DOMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -173,62 +185,13 @@ Calendar.prototype.format_absolute_data = function(p_day, v_month, v_year) {
 	var vY2 = new String(v_year.substr(2,2));
 	var vDD = (p_day.toString().length < 2) ? "0" + p_day : p_day;
 
-	switch (gFormat) {
-		case "MM\/DD\/YYYY" :
-			vData = vMonth + "\/" + vDD + "\/" + vY4;
-			break;
-		case "MM\/DD\/YY" :
-			vData = vMonth + "\/" + vDD + "\/" + vY2;
-			break;
-		case "MM-DD-YYYY" :
-			vData = vMonth + "-" + vDD + "-" + vY4;
-			break;
-		case "MM-DD-YY" :
-			vData = vMonth + "-" + vDD + "-" + vY2;
-			break;
-
-		case "DD\/MON\/YYYY" :
-			vData = vDD + "\/" + vMon + "\/" + vY4;
-			break;
-		case "DD\/MON\/YY" :
-			vData = vDD + "\/" + vMon + "\/" + vY2;
-			break;
-		case "DD-MON-YYYY" :
-			vData = vDD + "-" + vMon + "-" + vY4;
-			break;
-		case "DD-MON-YY" :
-			vData = vDD + "-" + vMon + "-" + vY2;
-			break;
-
-		case "DD\/MONTH\/YYYY" :
-			vData = vDD + "\/" + vFMon + "\/" + vY4;
-			break;
-		case "DD\/MONTH\/YY" :
-			vData = vDD + "\/" + vFMon + "\/" + vY2;
-			break;
-		case "DD-MONTH-YYYY" :
-			vData = vDD + "-" + vFMon + "-" + vY4;
-			break;
-		case "DD-MONTH-YY" :
-			vData = vDD + "-" + vFMon + "-" + vY2;
-			break;
-
-		case "DD\/MM\/YYYY" :
-			vData = vDD + "\/" + vMonth + "\/" + vY4;
-			break;
-		case "DD\/MM\/YY" :
-			vData = vDD + "\/" + vMonth + "\/" + vY2;
-			break;
-		case "DD-MM-YYYY" :
-			vData = vDD + "-" + vMonth + "-" + vY4;
-			break;
-		case "DD-MM-YY" :
-			vData = vDD + "-" + vMonth + "-" + vY2;
-			break;
-
-		default :
-			vData = vMonth + "\/" + vDD + "\/" + vY4;
-	}
+        vData = gFormat;
+        vData = vData.replace(new RegExp("MONTH","gi"), vFMon);
+        vData = vData.replace(new RegExp("MON","gi"), vMon);
+        vData = vData.replace(new RegExp("MM","gi"), vMonth);
+        vData = vData.replace(new RegExp("YYYY","gi"), vY4);
+        vData = vData.replace(new RegExp("YY","gi"), vY2);
+        vData = vData.replace(new RegExp("DD","gi"), vDD);
 
 	return vData;
 }
@@ -291,7 +254,7 @@ Calendar.prototype.show = function() {
 	this.wwrite(vCode);
 	this.wwrite("</font><BR>");
 
-	this.wwrite("<table width='100%'><tr><td><A HREF=\"#\" onClick=\"self.opener.document." + gReturnItem + ".value='"+this.format_absolute_data(gNow.getDate(), gNow.getMonth(), ""+gNow.getFullYear())+"'; window.close();\">Today</a></td><td align=right><A HREF=\"#\" onClick=\"window.close();\" >Cancel<\/A></td></tr></table>");
+	this.wwrite("<table width='100%'><tr><td><A HREF=\"#\" onClick=\"self.opener.document." + gReturnItem + ".value='"+this.format_absolute_data(gNow.getDate(), gNow.getMonth(), ""+gNow.getFullYear())+"'; window.close();\">"+Calendar.TodayString+"</a></td><td align=center><A HREF=\"#\" onClick=\"self.opener.document." + gReturnItem + ".value='';window.close();\" >"+Calendar.ClearString+"<\/A></td><td align=right><A HREF=\"#\" onClick=\"window.close();\" >"+Calendar.CancelString+"<\/A></td></tr></table>");
 	this.wwrite("</body></html>");
 	gWinCal.document.close();
 }
@@ -389,13 +352,13 @@ Calendar.prototype.cal_header = function() {
 	var vCode = "";
 	
 	vCode = vCode + "<TR>";
-	vCode = vCode + "<TD WIDTH='14%' CLASS=Day bgcolor='e0e0e0'>Sun</TD>";
-	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>Mon</TD>";
-	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>Tue</TD>";
-	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>Wed</TD>";
-	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>Thu</TD>";
-	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>Fri</TD>";
-	vCode = vCode + "<TD WIDTH='16%' CLASS=Day bgcolor='e0e0e0'>Sat</TD>";
+	vCode = vCode + "<TD WIDTH='14%' CLASS=Day bgcolor='e0e0e0'>"+Calendar.SundayString+"</TD>";
+	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>"+Calendar.MondayString+"</TD>";
+	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>"+Calendar.TuesdayString+"</TD>";
+	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>"+Calendar.WednesdayString+"</TD>";
+	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>"+Calendar.ThursdayString+"</TD>";
+	vCode = vCode + "<TD WIDTH='14%' CLASS=Day>"+Calendar.FridayString+"</TD>";
+	vCode = vCode + "<TD WIDTH='16%' CLASS=Day bgcolor='e0e0e0'>"+Calendar.SaturdayString +"</TD>";
 	vCode = vCode + "</TR>";
 	
 	return vCode;
@@ -573,8 +536,7 @@ function show_calendar() {
 	if (arguments[3] == null)
 		p_format = "MM/DD/YYYY";
 	else
-		p_format = arguments[3];
-        
+		p_format = arguments[3].toUpperCase();
 	vWinCal = window.open("", "Calendar", 
 		"width=235,height=210,status=no,resizable=no,top=200,left=200");
 	vWinCal.opener = self;
