@@ -1,7 +1,6 @@
 
 ERChangeNotificationJMS framework 
-
-September 7, 2002 (Draft) - Tatsuya Kawano <tatsuyak@mac.com>
+Tatsuya Kawano <tatsuyak@mac.com>
 
 
 What is the ERChangeNotificationJMS framework?
@@ -31,15 +30,15 @@ Configuration (Mac OS X 10.x)
 -----------------------------
 Download OpenJMS
 
-1. Download the latest distribution of OpenJMS (openjms-0.7.2.tgz) from:  
+1. Download the latest distribution of OpenJMS (openjms-0.7.3.1.tgz) from:  
 http://openjms.sourceforge.net/download.html
 
 2. From Terminal, type: 
-gzip -cd ~/Desktop/openjms-0.7.2.tgz | tar xvf -
+gzip -cd ~/Desktop/openjms-0.7.3.1.tgz | tar xvf -
 
 3. From Finder, choose Go -> Go to Folder (Command + Shift + G); type /usr/local and press the Enter key. 
 4. Create "openjms" folder under /usr/local
-5. Move the contents of openjms-0.7.2 folder into /usr/local/openjms folder. 
+5. Move the contents of openjms-0.7.3.1 folder into /usr/local/openjms folder. 
 
 
 Setup Environment Variables
@@ -98,11 +97,12 @@ Optional: Startup and Shutdown the OpenJMS Server Automatically
 (not yet ready) Put OpenJMS folder under Support folder into /Library/StartupItems folder. 
 
 
-Optional: Improving Performance with MySQL, Oracle, etc.
+Optional: Improving Performance with MySQL, PostgreSQL, Oracle, etc.
 --------------------------------------------------------
 OpenJMS supports the following databases for persistent message store. They are faster databases than the embedded JDBM database, and using them should be able to improve performance. 
 
 MySQL
+PostgreSQL
 Oracle
 Sybase / Sybase Anywhere
 MS SQL Server
@@ -152,3 +152,5 @@ wonder-disc@sourceforge.net
 
 -_-_-_-_
 
+September 7, 2002 (Draft) - Tatsuya Kawano <tatsuyak@mac.com>
+December 11, 2002 (Draft) - Added PostgreSQL description. by Tatsuya Kawano 
