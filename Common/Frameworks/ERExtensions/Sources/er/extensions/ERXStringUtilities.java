@@ -590,6 +590,26 @@ public class ERXStringUtilities {
 
         return result.toString();
     }
+
+    /*
+     * Converts a byte array to hex string.
+     * @param block byte array
+     * @return hex string
+     */
+    public static String byteArrayToHexString(byte[] block) {
+        char[] hexChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+        StringBuffer buf = new StringBuffer();
+
+        int len = block.length;
+        for (int i = 0; i < len; i++) {
+            int high = ((block[i] & 0xf0) >> 4);
+            int low  =  (block[i] & 0x0f);
+            buf.append(hexChars[high]);
+            buf.append(hexChars[low]);
+        }
+        return buf.toString();
+    }
     
     /** 
      * Cleans up the given version string by removing extra 
