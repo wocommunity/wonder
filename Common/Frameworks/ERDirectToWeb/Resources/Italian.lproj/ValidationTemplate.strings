@@ -1,0 +1,15 @@
+{
+    NullPropertyException = "Specificare un valore per <b>@@displayNameForProperty@@</b>.";
+    MandatoryToOneRelationshipException = "<b>@@displayNameForEntity@@</b> deve avere un/a <b>@@displayNameForProperty@@</b>.";
+    MandatoryToManyRelationshipException = "<b>@@displayNameForEntity@@</b> deve avere almeno un/a <b>@@displayNameForDestinationEntity@@</b>.";
+    ObjectRemovalException = "Non posso eliminare questo/a <b>@@displayNameForEntity@@</b>. Dovresti prima cancellare <b>@@displayNameForProperty@@</b>.";
+    ObjectsRemovalException = "Non posso eliminare questo/a <b>@@displayNameForEntity@@</b>. Dovresti prima cancellare <b>@@displayNameForProperty@@</b>.";
+    
+    IllegalCharacterInNumberException = "Controlla il valore <b>@@value@@</b> fornito per <b>@@displayNameForProperty@@</b>.";
+    NotANumberException = "<b>@@value@@</b> non è interpretabile come numero.";
+    InvalidNumberException = "Numero non valido.";
+    InvalidDateFormatException="Controlla la data <b>@@value@@</b> fornita per <b>@@displayNameForProperty@@</b>.";
+
+    PasswordsFillBothFieldsException = "Completare entrambi i campi delle <b>password</b>.";
+    PasswordsDontMatchException = "Le <b>password</b> non corrispondono.";
+}

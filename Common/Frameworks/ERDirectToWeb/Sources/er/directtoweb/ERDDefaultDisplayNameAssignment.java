@@ -26,8 +26,8 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
         new NSArray(new Object[] {"tabKey"}), "displayNameForTabKey",
         new NSArray(new Object[] {"propertyKey"}), "displayNameForProperty",
         new NSArray(new Object[] {"propertyKey"}), "displayNameForKeyPath",
-        new NSArray(new Object[] {"destinationEntity"}), "displayNameForDestinationEntity",
-        new NSArray(new Object[] {"smartRelationship.destinationEntity"}), "displayNameForDestinationEntity",
+        //new NSArray(new Object[] {"destinationEntityName"}), "displayNameForDestinationEntity",
+        new NSArray(new Object[] {"smartRelationship.destinationEntity", "destinationEntityName"}), "displayNameForDestinationEntity",
         new NSArray(new Object[] {"editConfigurationName"}), "displayNameForEditConfiguration",
         new NSArray(new Object[] {"inspectConfigurationName"}), "displayNameForInspectConfiguration",
         new NSArray(new Object[] {"createConfigurationName"}), "displayNameForCreateConfiguration",
@@ -115,7 +115,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
         Object result = null;
 //        if(true) return null;
         EOEntity destinationEntity = (EOEntity)c.valueForKeyPath("smartRelationship.destinationEntity");
-//        EOEntity destinationEntity = (EOEntity)c.valueForKeyPath("destinationEntity");
+        //destinationEntity = (EOEntity)c.valueForKeyPath("destinationEntity");
         if(destinationEntity != null) {
             EOEntity entity = (EOEntity)c.valueForKey("entity");
             c.takeValueForKey(destinationEntity, "entity");
