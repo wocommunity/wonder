@@ -40,9 +40,12 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     /** corresponds to a model thrown 'objects removal' exception */
     public static final String ObjectsRemovalException = "ObjectsRemovalException";
 
-    /** corresponds to a model thrown 'objects removal' exception */
-    public static final String ExceedsMaximiumLengthException = "ExceedsMaximiumLengthException";
-    
+    /** corresponds to a model thrown 'maximum length of attribute exceeded' exception */
+    public static final String ExceedsMaximumLengthException = "ExceedsMaximumLengthException";
+
+    /** corresponds to a model thrown 'Error converting value of class' exception */
+    public static final String ValueConversionException = "ValueConversionException";
+
     /** corresponds to a custom method exception */
     public static final String CustomMethodException = "CustomMethodException";
 
