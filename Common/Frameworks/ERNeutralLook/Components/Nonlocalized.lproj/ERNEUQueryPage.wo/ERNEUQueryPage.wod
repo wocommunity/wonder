@@ -72,7 +72,7 @@ PageWrapper: WOSwitchComponent {
 
 QueryForm: WOForm {
 	action = queryAction;
-	name = "EditForm";
+	name = "QueryForm";
 }
 
 QueryResetButton: WOResetButton {
