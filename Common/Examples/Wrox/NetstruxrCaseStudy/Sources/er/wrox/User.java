@@ -11,13 +11,13 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import java.util.Enumeration;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class User extends ERXGenericRecord {
 
-    ///////////////////////////////////////////// log4j category ////////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance(User.class);
-    public static final Category userPrefCat = Category.getInstance("er.wrox.User.Preferences");
+    //////* logging support */////////////////
+    public static final Logger log = Logger.getLogger(User.class);
+    public static final Logger userPrefLog = Logger.getLogger("er.wrox.User.Preferences");
 
     ///////////////////////////////////////////// Static Methods ////////////////////////////////////////////////////
     // Full MT implementation
@@ -96,12 +96,12 @@ public class User extends ERXGenericRecord {
 
         public Object valueForKey(String key) {
             Object result=null;
-            userPrefCat.debug("VFK, key: " + key);
+            userPrefLog.debug("VFK, key: " + key);
             EOEnterpriseObject pref=preferenceRecordForKey(key);
             if (pref!=null) {
                 String encodedValue=(String)pref.valueForKey("value");
                 NSDictionary d=(NSDictionary)NSPropertyListSerialization.propertyListFromString(encodedValue);
-                userPrefCat.debug("Decoded dictionary: " + d + " value: " + result);
+                userPrefLog.debug("Decoded dictionary: " + d + " value: " + result);
                 EOKeyValueUnarchiver u=new EOKeyValueUnarchiver(d);
                 result=u.decodeObjectForKey(VALUE);
             }
@@ -112,8 +112,8 @@ public class User extends ERXGenericRecord {
             EOKeyValueArchiver archiver=new EOKeyValueArchiver();
             archiver.encodeObject(value,VALUE);
             String encodedValue=NSPropertyListSerialization.stringFromPropertyList(archiver.dictionary());
-            if (userPrefCat.isDebugEnabled())
-                userPrefCat.debug("Encoded value: " + value + " into dic: "
+            if (userPrefLog.isDebugEnabled())
+                userPrefLog.debug("Encoded value: " + value + " into dic: "
                      + archiver.dictionary() + " value: " + encodedValue);
             return encodedValue;
         }
@@ -125,22 +125,22 @@ public class User extends ERXGenericRecord {
             // so that if a user opens two sessions they don't get locking failures
             // this is OK for display style prefs (how many items, how they are sorted)
             // but might not be for more behavior-style prefs!!
-            userPrefCat.debug("TVFK, key: " + key + " value: " + value);
+            userPrefLog.debug("TVFK, key: " + key + " value: " + value);
             preferencesEditingContext().revert();
             EOEnterpriseObject pref=preferenceRecordForKey(key);
             User u=User.actor(preferencesEditingContext());
             if (pref!=null) {
                 if (value!=null) {
                     String encodedValue=encodedValue(value);
-                    cat.debug("Encoded value string: " + encodedValue);
+                    log.debug("Encoded value string: " + encodedValue);
                     if (ERXExtensions.safeDifferent(encodedValue,pref.valueForKey("value"))) {
-                        if (userPrefCat.isDebugEnabled())
-                            userPrefCat.debug("Updating preference "+u+": "+key+"="+encodedValue);
+                        if (userPrefLog.isDebugEnabled())
+                            userPrefLog.debug("Updating preference "+u+": "+key+"="+encodedValue);
                         pref.takeValueForKey(encodedValue,"value");
                     }
                 } else {
-                    if (userPrefCat.isDebugEnabled())
-                        userPrefCat.debug("Removing preference "+u+": "+key);
+                    if (userPrefLog.isDebugEnabled())
+                        userPrefLog.debug("Removing preference "+u+": "+key);
                     pref.removeObjectFromBothSidesOfRelationshipWithKey(u,"user");
                 }
             } else if (value!=null) {
@@ -150,8 +150,8 @@ public class User extends ERXGenericRecord {
                                                         u);
                 pref.takeValueForKey(key,"key");
                 pref.takeValueForKey(encodedValue(value),"value");
-                if (userPrefCat.isDebugEnabled())
-                    userPrefCat.debug("Creating preference "+u+": "+key + " pref: " + pref);
+                if (userPrefLog.isDebugEnabled())
+                    userPrefLog.debug("Creating preference "+u+": "+key + " pref: " + pref);
             }
             if (preferencesEditingContext().hasChanges())
                 preferencesEditingContext().saveChanges();
@@ -199,7 +199,7 @@ public class User extends ERXGenericRecord {
     }
     
     public String validateUsername(String newUsername) throws NSValidation.ValidationException {
-        cat.debug("Validating username: " + newUsername);
+        log.debug("Validating username: " + newUsername);
         validateForIllegalCharacters(newUsername,"usernames");
         if (_shouldValidateUsername || ERXExtensions.safeDifferent(newUsername, username())) {
             boolean found=false;

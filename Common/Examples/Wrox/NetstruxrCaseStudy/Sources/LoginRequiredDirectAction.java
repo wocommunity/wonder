@@ -10,11 +10,11 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class LoginRequiredDirectAction extends WODirectAction {
 
-    public static final Category cat = Category.getInstance("er.application.LoginRequiredDirectAction");
+    public static final Logger log = Logger.getLogger("er.application.LoginRequiredDirectAction");
     
     public static String bindingsFromURI(String uri) {
         int index = uri.indexOf("?");
@@ -25,14 +25,14 @@ public class LoginRequiredDirectAction extends WODirectAction {
 
     public WOActionResults performActionNamed(String actionName) {
         WOActionResults result;
-        cat.debug("In performActionNamed: " + actionName);
+        log.debug("In performActionNamed: " + actionName);
         if (existingSession() != null)
-            cat.debug("Has Session");
+            log.debug("Has Session");
         if (((Session)session()).user() != null) {
-            cat.debug("Has user: " + ((Session)session()).user());
+            log.debug("Has user: " + ((Session)session()).user());
             result = super.performActionNamed(actionName);
         } else {
-            cat.debug("No user");
+            log.debug("No user");
             LoginPage p=(LoginPage)pageWithName("LoginPage");
             p.takeValueForKey(bindingsFromURI(request().uri()), "rbindings");
             p.takeValueForKey((actionName == null) ? null : getClass().getName()+"/"+actionName, "raction");
