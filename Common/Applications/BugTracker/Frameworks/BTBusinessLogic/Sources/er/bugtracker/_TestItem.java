@@ -70,47 +70,47 @@ public abstract class _TestItem extends ERXGenericRecord {
         takeStoredValueForKey(aValue, "id");
     }
 
-    public er.bugtracker.People owner() {
-        return (er.bugtracker.People)storedValueForKey("owner");
+    public People owner() {
+        return (People)storedValueForKey("owner");
     }
 
-    public void setOwner(er.bugtracker.People aValue) {
+    public void setOwner(People aValue) {
         takeStoredValueForKey(aValue, "owner");
     }
-    public void addToBothSidesOfOwner(er.bugtracker.People object) {
+    public void addToBothSidesOfOwner(People object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "owner");
     }
-    public void removeFromBothSidesOfOwner(er.bugtracker.People object) {
+    public void removeFromBothSidesOfOwner(People object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
     }
 
 
-    public er.bugtracker.TestItemState state() {
-        return (er.bugtracker.TestItemState)storedValueForKey("state");
+    public TestItemState state() {
+        return (TestItemState)storedValueForKey("state");
     }
 
-    public void setState(er.bugtracker.TestItemState aValue) {
+    public void setState(TestItemState aValue) {
         takeStoredValueForKey(aValue, "state");
     }
-    public void addToBothSidesOfState(er.bugtracker.TestItemState object) {
+    public void addToBothSidesOfState(TestItemState object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "state");
     }
-    public void removeFromBothSidesOfState(er.bugtracker.TestItemState object) {
+    public void removeFromBothSidesOfState(TestItemState object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "state");
     }
 
 
-    public er.bugtracker.Component component() {
-        return (er.bugtracker.Component)storedValueForKey("component");
+    public Component component() {
+        return (Component)storedValueForKey("component");
     }
 
-    public void setComponent(er.bugtracker.Component aValue) {
+    public void setComponent(Component aValue) {
         takeStoredValueForKey(aValue, "component");
     }
-    public void addToBothSidesOfComponent(er.bugtracker.Component object) {
+    public void addToBothSidesOfComponent(Component object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "component");
     }
-    public void removeFromBothSidesOfComponent(er.bugtracker.Component object) {
+    public void removeFromBothSidesOfComponent(Component object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "component");
     }
 
@@ -121,22 +121,22 @@ public abstract class _TestItem extends ERXGenericRecord {
     public void setRequirements(NSMutableArray aValue) {
         takeStoredValueForKey(aValue, "requirements");
     }
-    public void addToRequirements(er.bugtracker.Requirement object) {
+    public void addToRequirements(Requirement object) {
         NSMutableArray array = (NSMutableArray)requirements();
 
         willChange();
         array.addObject(object);
     }
-    public void removeFromRequirements(er.bugtracker.Requirement object) {
+    public void removeFromRequirements(Requirement object) {
         NSMutableArray array = (NSMutableArray)requirements();
 
         willChange();
         array.removeObject(object);
     }
-    public void addToBothSidesOfRequirements(er.bugtracker.Requirement object) {
+    public void addToBothSidesOfRequirements(Requirement object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "requirements");
     }
-    public void removeFromBothSidesOfRequirements(er.bugtracker.Requirement object) {
+    public void removeFromBothSidesOfRequirements(Requirement object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "requirements");
     }
 
@@ -147,22 +147,22 @@ public abstract class _TestItem extends ERXGenericRecord {
     public void setBugs(NSMutableArray aValue) {
         takeStoredValueForKey(aValue, "bugs");
     }
-    public void addToBugs(er.bugtracker.Bug object) {
+    public void addToBugs(Bug object) {
         NSMutableArray array = (NSMutableArray)bugs();
 
         willChange();
         array.addObject(object);
     }
-    public void removeFromBugs(er.bugtracker.Bug object) {
+    public void removeFromBugs(Bug object) {
         NSMutableArray array = (NSMutableArray)bugs();
 
         willChange();
         array.removeObject(object);
     }
-    public void addToBothSidesOfBugs(er.bugtracker.Bug object) {
+    public void addToBothSidesOfBugs(Bug object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "bugs");
     }
-    public void removeFromBothSidesOfBugs(er.bugtracker.Bug object) {
+    public void removeFromBothSidesOfBugs(Bug object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "bugs");
     }
 

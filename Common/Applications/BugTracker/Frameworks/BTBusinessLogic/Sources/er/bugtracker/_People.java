@@ -103,22 +103,22 @@ public abstract class _People extends ERXGenericRecord {
     public void setBugs(NSMutableArray aValue) {
         takeStoredValueForKey(aValue, "bugs");
     }
-    public void addToBugs(er.bugtracker.Bug object) {
+    public void addToBugs(Bug object) {
         NSMutableArray array = (NSMutableArray)bugs();
 
         willChange();
         array.addObject(object);
     }
-    public void removeFromBugs(er.bugtracker.Bug object) {
+    public void removeFromBugs(Bug object) {
         NSMutableArray array = (NSMutableArray)bugs();
 
         willChange();
         array.removeObject(object);
     }
-    public void addToBothSidesOfBugs(er.bugtracker.Bug object) {
+    public void addToBothSidesOfBugs(Bug object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "bugs");
     }
-    public void removeFromBothSidesOfBugs(er.bugtracker.Bug object) {
+    public void removeFromBothSidesOfBugs(Bug object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "bugs");
     }
 
@@ -129,22 +129,22 @@ public abstract class _People extends ERXGenericRecord {
     public void setRequirements(NSMutableArray aValue) {
         takeStoredValueForKey(aValue, "requirements");
     }
-    public void addToRequirements(er.bugtracker.Requirement object) {
+    public void addToRequirements(Requirement object) {
         NSMutableArray array = (NSMutableArray)requirements();
 
         willChange();
         array.addObject(object);
     }
-    public void removeFromRequirements(er.bugtracker.Requirement object) {
+    public void removeFromRequirements(Requirement object) {
         NSMutableArray array = (NSMutableArray)requirements();
 
         willChange();
         array.removeObject(object);
     }
-    public void addToBothSidesOfRequirements(er.bugtracker.Requirement object) {
+    public void addToBothSidesOfRequirements(Requirement object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "requirements");
     }
-    public void removeFromBothSidesOfRequirements(er.bugtracker.Requirement object) {
+    public void removeFromBothSidesOfRequirements(Requirement object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "requirements");
     }
 

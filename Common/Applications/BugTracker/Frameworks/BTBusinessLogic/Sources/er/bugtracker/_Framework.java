@@ -46,17 +46,17 @@ public abstract class _Framework extends ERXGenericRecord {
         takeStoredValueForKey(aValue, "ownedSince");
     }
 
-    public er.bugtracker.People owner() {
-        return (er.bugtracker.People)storedValueForKey("owner");
+    public People owner() {
+        return (People)storedValueForKey("owner");
     }
 
-    public void setOwner(er.bugtracker.People aValue) {
+    public void setOwner(People aValue) {
         takeStoredValueForKey(aValue, "owner");
     }
-    public void addToBothSidesOfOwner(er.bugtracker.People object) {
+    public void addToBothSidesOfOwner(People object) {
         addObjectToBothSidesOfRelationshipWithKey(object, "owner");
     }
-    public void removeFromBothSidesOfOwner(er.bugtracker.People object) {
+    public void removeFromBothSidesOfOwner(People object) {
         removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
     }
 
