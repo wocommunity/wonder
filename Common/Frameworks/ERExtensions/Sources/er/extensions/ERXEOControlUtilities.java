@@ -518,7 +518,7 @@ public class ERXEOControlUtilities {
      * @param entityName name of the shared entity
      * @return the shared enterprise object fetch by the fetch spec named.
      */
-    public static EOEnterpriseObject sharedObjectWithFetchSpec(String fetchSpec, String entityName) {
+    public static EOEnterpriseObject sharedObjectWithFetchSpec(String entityName, String fetchSpec) {
         return EOUtilities.objectWithFetchSpecificationAndBindings(EOSharedEditingContext.defaultSharedEditingContext(), entityName, fetchSpec, null);
     }
 
