@@ -104,6 +104,12 @@ public class ERXExtensions {
             ERXCompilerProxy.defaultProxy().initialize();
             ERXLocalizer.initialize();
             ERXValidationFactory.defaultFactory().configureFactory();
+            // update configuration with system properties that might depend
+            // on others like 
+            // log4j.appender.SQL.File=@@loggingBasePath@@/@@port@@.sql
+            // loggingBasePath=/var/log/@@name@@
+            // name and port are resolved via WOApplication.application()
+            ERXLogger.configureLoggingWithSystemProperties();
             ERXPrimaryKeyListQualifier.installSupport();
             if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
@@ -149,7 +155,13 @@ public class ERXExtensions {
             try {
                 // This will load any optional configuration files, 
                 ERXConfigurationManager.defaultManager().initialize();
-                ERXLogger.configureLogging(System.getProperties());
+			    // ensures that WOOutputPath's was processed with this @@
+			    // variable substitution. WOApplication uses WOOutputPath in
+			    // its constructor so we need to modify it before calling
+			    // the constructor.
+                ERXSystem.updateProperties();
+                
+                ERXLogger.configureLoggingWithSystemProperties();
 
                 log().debug("Initializing framework: ERXExtensions");
                 ERXArrayUtilities.initialize();

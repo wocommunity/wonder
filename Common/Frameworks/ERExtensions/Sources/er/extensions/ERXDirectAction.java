@@ -178,7 +178,7 @@ public class ERXDirectAction extends WODirectAction {
             java.util.Properties p = System.getProperties();
             p.put(key, value);
             System.setProperties(p);
-            ERXLogger.configureLogging(System.getProperties());
+            ERXLogger.configureLoggingWithSystemProperties();
             r.appendContentString("<html><body>New System properties:<br>");
             for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
                 Object k = e.nextElement();

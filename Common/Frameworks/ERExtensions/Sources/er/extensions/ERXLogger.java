@@ -42,7 +42,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * configures the log4j logging system.
      */
     static {
-        configureLogging(System.getProperties());
+        configureLoggingWithSystemProperties();
     }
 
     /**
@@ -133,6 +133,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
         super(name);
     }
 
+    public static synchronized void configureLoggingWithSystemProperties() {
+        configureLogging(ERXSystem.getProperties());
+    }
     /** 
      * Sets up the logging system with the given configuration 
      * in {@link java.util.Properties} format. 
@@ -152,11 +155,17 @@ public class ERXLogger extends org.apache.log4j.Logger {
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
                 NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
             }
+            // HACKALERT dt: webObjectsVersionIs522OrHigher results in calling this whole method
+            // again. This means that at this point Line 167 was already called as _isFirstTimeConfig 
+            // was already set to false. Now we would overwrite log4j config with an older, incorrect 
+            // configuration if we use the original system properties.
+            properties = ERXSystem.getProperties();
         } else {
             LogManager.resetConfiguration();
             BasicConfigurator.configure();
             Logger.getRootLogger().setLevel(Level.INFO);                
         }
+        
         PropertyConfigurator.configure(properties);
         
         if (log == null) 

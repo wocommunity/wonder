@@ -216,6 +216,7 @@ public class ERXConfigurationManager {
                     try {
                         Properties props = ERXProperties.propertiesFromFile(file);
                         ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
+                        ERXSystem.updateProperties();
                     } catch (java.io.IOException ex) {
                         log.error("Unable to load optional configuration file: " + configFile, ex);
                     }
@@ -248,7 +249,8 @@ public class ERXConfigurationManager {
         _updateSystemPropertiesFromMonitoredProperties((File)n.object(), _monitoredProperties);
         if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) 
             _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
-        ERXLogger.configureLogging(System.getProperties());
+        
+        ERXLogger.configureLoggingWithSystemProperties();
         
         NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
     }
@@ -272,6 +274,7 @@ public class ERXConfigurationManager {
             String monitoredPropertiesPath = (String) _monitoredProperties.objectAtIndex(i);
             Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
             ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+            ERXSystem.updateProperties();
         }
     }
 
@@ -279,6 +282,7 @@ public class ERXConfigurationManager {
         Properties commandLineProperties = ERXProperties.propertiesFromArgv(commandLineArguments);
         Properties systemProperties = System.getProperties(); 
         ERXProperties.transferPropertiesFromSourceToDest(commandLineProperties, systemProperties);
+        ERXSystem.updateProperties();
         log.debug("Reinserted the command line arguments to the system properties.");
     }
 
@@ -318,12 +322,12 @@ public class ERXConfigurationManager {
                 return;
             }
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
-                String serverName= System.getProperty(aModelName + ".DBServer");
-                serverName=serverName==null ? System.getProperty("dbConnectServerGLOBAL") : serverName;
-                String userName= System.getProperty(aModelName + ".DBUser");
-                userName= userName ==null ? System.getProperty("dbConnectUserGLOBAL") : userName;
-                String passwd= System.getProperty(aModelName + ".DBPassword");
-                passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
+                String serverName= ERXSystem.getProperty(aModelName + ".DBServer");
+                serverName=serverName==null ? ERXSystem.getProperty("dbConnectServerGLOBAL") : serverName;
+                String userName= ERXSystem.getProperty(aModelName + ".DBUser");
+                userName= userName ==null ? ERXSystem.getProperty("dbConnectUserGLOBAL") : userName;
+                String passwd= ERXSystem.getProperty(aModelName + ".DBPassword");
+                passwd= passwd ==null ? ERXSystem.getProperty("dbConnectPasswordGLOBAL") : passwd;
 
                 if((serverName!=null) || (userName!=null) || (passwd!=null)) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
@@ -334,8 +338,8 @@ public class ERXConfigurationManager {
                 }
                 
             } else if (aModel.adaptorName().indexOf("Flat")!=-1) {
-                String path= System.getProperty(aModelName + ".DBPath");
-                path = path ==null ? System.getProperty("dbConnectPathGLOBAL") : path;
+                String path= ERXSystem.getProperty(aModelName + ".DBPath");
+                path = path ==null ? ERXSystem.getProperty("dbConnectPathGLOBAL") : path;
                 if (path!=null) {                    
                     if (path.indexOf(" ")!=-1) {
                         NSArray a=NSArray.componentsSeparatedByString(path," ");
@@ -355,10 +359,10 @@ public class ERXConfigurationManager {
                     newConnectionDictionary.setObjectForKey("\r\n","rowSeparator");
                 aModel.setConnectionDictionary(newConnectionDictionary);
             } else if (aModel.adaptorName().indexOf("OpenBase")!=-1) {
-                String db= System.getProperty(aModelName + ".DBDatabase");
-                db = db ==null ? System.getProperty("dbConnectDatabaseGLOBAL") : db;
-                String h= System.getProperty(aModelName + ".DBHostName");
-                h = h ==null ? System.getProperty("dbConnectHostNameGLOBAL") : h;
+                String db= ERXSystem.getProperty(aModelName + ".DBDatabase");
+                db = db ==null ? ERXSystem.getProperty("dbConnectDatabaseGLOBAL") : db;
+                String h= ERXSystem.getProperty(aModelName + ".DBHostName");
+                h = h ==null ? ERXSystem.getProperty("dbConnectHostNameGLOBAL") : h;
                 if (h!=null || db!=null) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
                     if (db!=null) newConnectionDictionary.setObjectForKey(db, "databaseName");
@@ -367,19 +371,19 @@ public class ERXConfigurationManager {
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
                 NSDictionary jdbcInfoDictionary = null;
-                String url= System.getProperty(aModelName + ".URL");
-                url = url ==null ? System.getProperty("dbConnectURLGLOBAL") : url;
-                String userName= System.getProperty(aModelName + ".DBUser");
-                userName= userName ==null ? System.getProperty("dbConnectUserGLOBAL") : userName;
-                String passwd= System.getProperty(aModelName + ".DBPassword");
-                passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
-                String driver= System.getProperty(aModelName + ".DBDriver");
-                driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
-                String serverName= System.getProperty(aModelName + ".DBServer");
-                serverName=serverName==null ? System.getProperty("dbConnectServerGLOBAL") : serverName;
-                String h= System.getProperty(aModelName + ".DBHostName");
-                h = h ==null ? System.getProperty("dbConnectHostNameGLOBAL") : h;
-                String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
+                String url= ERXSystem.getProperty(aModelName + ".URL");
+                url = url ==null ? ERXSystem.getProperty("dbConnectURLGLOBAL") : url;
+                String userName= ERXSystem.getProperty(aModelName + ".DBUser");
+                userName= userName ==null ? ERXSystem.getProperty("dbConnectUserGLOBAL") : userName;
+                String passwd= ERXSystem.getProperty(aModelName + ".DBPassword");
+                passwd= passwd ==null ? ERXSystem.getProperty("dbConnectPasswordGLOBAL") : passwd;
+                String driver= ERXSystem.getProperty(aModelName + ".DBDriver");
+                driver= driver ==null ? ERXSystem.getProperty("dbConnectDriverGLOBAL") : driver;
+                String serverName= ERXSystem.getProperty(aModelName + ".DBServer");
+                serverName=serverName==null ? ERXSystem.getProperty("dbConnectServerGLOBAL") : serverName;
+                String h= ERXSystem.getProperty(aModelName + ".DBHostName");
+                h = h ==null ? ERXSystem.getProperty("dbConnectHostNameGLOBAL") : h;
+                String jdbcInfo= ERXSystem.getProperty(aModelName + ".DBJDBCInfo");
                 if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
                     String modelName = jdbcInfo.substring(1, jdbcInfo.length());
                     EOModel modelForCopy = aModel.modelGroup().modelNamed(modelName);
@@ -391,9 +395,9 @@ public class ERXConfigurationManager {
                     }
                 }
                 
-                jdbcInfo= jdbcInfo ==null ? System.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
-                String plugin= System.getProperty(aModelName + ".DBPlugin");
-                plugin= plugin ==null ? System.getProperty("dbConnectPluginGLOBAL") : plugin;
+                jdbcInfo= jdbcInfo ==null ? ERXSystem.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
+                String plugin= ERXSystem.getProperty(aModelName + ".DBPlugin");
+                plugin= plugin ==null ? ERXSystem.getProperty("dbConnectPluginGLOBAL") : plugin;
                 
                 // build the URL if we have a Postgresql plugin
                 if ("Postgresql".equals(plugin) 
@@ -431,8 +435,8 @@ public class ERXConfigurationManager {
             
             
             // based on an idea from Stefan Apelt <stefan@tetlabors.de>
-            String f = System.getProperty(aModelName + ".EOPrototypesFile");
-            f = f ==null ? System.getProperty("EOPrototypesFileGLOBAL") : f;
+            String f = ERXSystem.getProperty(aModelName + ".EOPrototypesFile");
+            f = f ==null ? ERXSystem.getProperty("EOPrototypesFileGLOBAL") : f;
             if(f != null) {
                 NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
                 if(dict != null) {
@@ -448,9 +452,9 @@ public class ERXConfigurationManager {
                     }
                 }
             }
-            String e = System.getProperty(aModelName + ".EOPrototypesEntity");
+            String e = ERXSystem.getProperty(aModelName + ".EOPrototypesEntity");
             // global prototype setting not supported yet
-            //e = e ==null ? System.getProperty("EOPrototypesEntityGLOBAL") : e;
+            //e = e ==null ? ERXSystem.getProperty("EOPrototypesEntityGLOBAL") : e;
             if(e != null) {
                 // we look for the entity globally so we can have one prototype entity
                 EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
@@ -480,7 +484,7 @@ public class ERXConfigurationManager {
     private int _operatingSystem=0;
     public int operatingSystem() {
         if (_operatingSystem==0) {
-            String osName=System.getProperty("os.name").toLowerCase();
+            String osName=ERXSystem.getProperty("os.name").toLowerCase();
             if (osName.indexOf("windows")!=-1) _operatingSystem=WindowsOperatingSystem;
             else if (osName.indexOf("solaris")!=-1) _operatingSystem=SolarisOperatingSystem;
             else if (osName.indexOf("macos")!=-1 || osName.indexOf("mac os")!=-1) _operatingSystem=MacOSXOperatingSystem;
