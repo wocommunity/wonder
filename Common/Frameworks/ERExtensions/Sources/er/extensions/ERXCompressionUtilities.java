@@ -10,6 +10,8 @@ import er.extensions.*;
 
 public class ERXCompressionUtilities {
 
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXCompressionUtilities.class);
+    
     public static byte[] gzipByteArray(byte[] input) {
         try {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
@@ -73,22 +75,30 @@ public class ERXCompressionUtilities {
             return null;
         }
     }
-    
-    public static byte[] zipByteArray(byte[] input) {
+
+    public static byte[] zipByteArray(byte[] input, String zipEntryName) {
         try {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
-        ZipOutputStream out = new ZipOutputStream(bos);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
+            ZipOutputStream out = new ZipOutputStream(bos);
 
-        out.write(input, 0, input.length);
+            out.putNextEntry(new ZipEntry(zipEntryName));
+            
+            out.write(input, 0, input.length);
 
-        out.finish();
-        out.close();
+            out.closeEntry();
+            out.finish();
+            out.close();
 
-        byte[] compressedData = bos.toByteArray();
-        return compressedData;
+            byte[] compressedData = bos.toByteArray();
+            return compressedData;
         } catch (IOException e) {
+            log.error("Caught exception zipping byte array: " + e, e);
             return null;
         }
+    }    
+    
+    public static byte[] zipByteArray(byte[] input) {
+        return zipByteArray(input, "tmp");
     }
 
     public static byte[] unzipByteArray(byte[] input) {
