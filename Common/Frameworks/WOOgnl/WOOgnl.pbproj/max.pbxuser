@@ -1,13 +1,14 @@
 // !$*UTF8*$!
 {
 	F5274010017CADD2014387C8 = {
-		activeBuildStyle = F527406B017CADD2014387C8;
+		activeBuildStyle = F527406D017CADD2014387C8;
 		activeTarget = F5274036017CADD2014387C8;
 		addToTargets = (
 			F5274038017CADD2014387C8,
 			F5274053017CADD2014387C8,
 		);
 		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 49593484;
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{928, 643}";
 				LeftSlideOut = {
@@ -91,23 +92,20 @@
 					TabCount = 5;
 				};
 			};
+			PBXWorkspaceStateSaveDate = 49593484;
+		};
+		projectwideBuildSettings = {
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
 	};
 	F5274036017CADD2014387C8 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 	F5274038017CADD2014387C8 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 	F5274053017CADD2014387C8 = {
 		activeExec = 0;
-		customExecs = {
-		};
 	};
 }
