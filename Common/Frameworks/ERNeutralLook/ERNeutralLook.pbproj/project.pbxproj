@@ -120,7 +120,7 @@
 				F6EBF5E902DF4F960FCF0E72,
 				F6EBF5EA02DF4F960FCF0E72,
 				F6EBF5EB02DF4F960FCF0E72,
-				F6EBF5F002DF4FE70FCF0E72,
+				F65884B102DF5E010FCF0E72,
 			);
 			isa = PBXResourcesBuildPhase;
 		};
@@ -613,7 +613,7 @@
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
-				F6EBF5EF02DF4FE70FCF0E72,
+				F65884B002DF5E010FCF0E72,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -709,6 +709,18 @@
 //F62
 //F63
 //F64
+		F65884B002DF5E010FCF0E72 = {
+			isa = PBXFileReference;
+			name = d2w.d2wmodel;
+			path = Resources/d2w.d2wmodel;
+			refType = 4;
+		};
+		F65884B102DF5E010FCF0E72 = {
+			fileRef = F65884B002DF5E010FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F6EBF38B02DF4EFF0FCF0E72 = {
 			children = (
 				F6EBF38C02DF4EFF0FCF0E72,
@@ -876,17 +888,6 @@
 			isa = PBXGroup;
 			name = ERXNEUQueryPage;
 			refType = 4;
-		};
-		F6EBF5EF02DF4FE70FCF0E72 = {
-			isa = PBXFileReference;
-			path = d2w.d2wmodel;
-			refType = 4;
-		};
-		F6EBF5F002DF4FE70FCF0E72 = {
-			fileRef = F6EBF5EF02DF4FE70FCF0E72;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F6EBF5F102DF503D0FCF0E72 = {
 			isa = PBXFrameworkReference;
