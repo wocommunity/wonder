@@ -6,6 +6,10 @@
 
 package er.javamail;
 
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.ERXLogger;
@@ -15,8 +19,8 @@ import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import java.util.Enumeration;
 import java.util.Properties;
-
 
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
@@ -220,5 +224,127 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         if (email != null)
             return _matcher.matches (email, _pattern);
         return false;
+    }
+
+    //	===========================================================================
+    //	Black and White list email address filtering support
+    //	---------------------------------------------------------------------------    
+    
+    /** holds the array of white list email addresses */
+    protected NSArray whiteListEmailAddressPatterns;
+
+    /** holds the array of black list email addresses */
+    protected NSArray blakListEmailAddressPatterns;
+
+    /** holds the white list qualifier */
+    protected EOOrQualifier whiteListQualifier;
+
+    /** holds the black list qualifier */
+    protected EOOrQualifier blackListQualifier;
+    
+    /**
+     * Determines if a white list has been specified
+     * @return if the white list has any elements in it
+     */
+    public boolean hasWhiteList() {
+        return whiteListEmailAddressPatterns().count() > 0;
+    }
+
+    /**
+     * Determines if a black list has been specified
+     * @return if the black list has any elements in it
+     */    
+    public boolean hasBlackList() {
+        return blackListEmailAddressPatterns().count() > 0;
+    }
+
+    /**
+     * Gets the array of white list email address
+     * patterns.
+     * @return array of white list email address patterns
+     */
+    public NSArray whiteListEmailAddressPatterns() {
+        if (whiteListEmailAddressPatterns == null) {
+            whiteListEmailAddressPatterns =
+            ERXProperties.arrayForKeyWithDefault("er.javamail.WhiteListEmailAddressPatterns", NSArray.EmptyArray);
+        }
+        return whiteListEmailAddressPatterns;
+    }
+
+    /**
+     * Gets the array of black list email address
+     * patterns.
+     * @return array of black list email address patterns
+     */
+    public NSArray blackListEmailAddressPatterns() {
+        if (blakListEmailAddressPatterns == null) {
+            blakListEmailAddressPatterns =
+            ERXProperties.arrayForKeyWithDefault("er.javamail.BlackListEmailAddressPatterns", NSArray.EmptyArray);
+        }
+        return blakListEmailAddressPatterns;
+    }
+
+    /**
+     * Whilte list Or qualifier to match any of the
+     * patterns in the white list.
+     * @return Or qualifier for the white list
+     */
+    public EOOrQualifier whiteListQualifier() {
+        if (whiteListQualifier == null) {
+            whiteListQualifier = qualifierArrayForEmailPatterns(whiteListEmailAddressPatterns());
+        }
+        return whiteListQualifier;
+    }
+
+    /**
+     * Gets the Or qualifier to match any of the patterns
+     * in the black list.
+     * @return or qualifier
+     */
+    public EOOrQualifier blackListQualifier() {
+        if (blackListQualifier == null) {
+            blackListQualifier = qualifierArrayForEmailPatterns(blackListEmailAddressPatterns());
+        }
+        return blackListQualifier;
+    }
+
+    /**
+     * Constructs an Or qualifier for filtering an array of
+     * strings that might have the * wildcard character.
+     * Will be nice when we have regex in Java 1.4.
+     * @param emailPatterns array of email patterns
+     * @return or qualifier to match any of the given patterns
+     */
+    protected EOOrQualifier qualifierArrayForEmailPatterns(NSArray emailPatterns) {
+        NSMutableArray patternQualifiers = new NSMutableArray();
+        for (Enumeration patternEnumerator = emailPatterns.objectEnumerator(); patternEnumerator.hasMoreElements();) {
+            String pattern = (String)patternEnumerator.nextElement();
+            patternQualifiers.addObject(EOQualifier.qualifierWithQualifierFormat("toString caseInsensitiveLike '" + pattern + "'", null));
+        }
+        return new EOOrQualifier(patternQualifiers);
+    }
+
+    /**
+     * Filters an array of email addresses by the black and white
+     * lists.
+     * @param emailAddresses array of email addresses to be filtered
+     * @return array of filtered email addresses
+     */
+    public NSArray filterEmailAddresses(NSArray emailAddresses) {
+        NSMutableArray filteredAddresses = null;
+        if (emailAddresses != null && emailAddresses.count() > 0 && (hasWhiteList() || hasBlackList())) {
+            filteredAddresses = new NSMutableArray(emailAddresses);
+            if (hasWhiteList()) {
+                EOQualifier.filterArrayWithQualifier(filteredAddresses,
+                                                    whiteListQualifier());
+            }
+            if (hasBlackList()) {
+                NSArray filteredOutAddresses = EOQualifier.filteredArrayWithQualifier(filteredAddresses,
+                                                                                     blackListQualifier());
+                if (filteredOutAddresses.count() > 0)
+                    filteredAddresses.removeObjectsInArray(filteredOutAddresses);
+            }
+        }
+        return filteredAddresses != null ? filteredAddresses.immutableClone() : emailAddresses;
     }
 }
