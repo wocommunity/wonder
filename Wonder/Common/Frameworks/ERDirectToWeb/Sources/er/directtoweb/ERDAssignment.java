@@ -49,6 +49,11 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
     protected boolean booleanContextValueForKey(D2WContext c, String key, boolean defaultValue) {
         return ERXValueUtilities.booleanValueWithDefault(c.valueForKey(key), defaultValue);
     }
+
+
+    protected static void logDeprecatedMessage(Class oldClass, Class newClass) {
+        log.error(oldClass.getName() + " is deprecated, please fix your rules to use " + newClass.getName() + " instead");
+    }
     
     /**
      * Gets the localizer for a given context.
@@ -77,7 +82,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      */
     public Object localizedValueForKeyWithDefaultInContext(String key, D2WContext c) {
         if (key != null && ERXLocalizer.isLocalizationEnabled()) {
-            return localizerForContext(c).localizedStringForKeyWithDefault(key);
+            return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(key);
         } else {
             return key;
         }
@@ -94,7 +99,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      */
     public Object localizedValueForKeyInContext(String key, D2WContext c) {
         if(key != null && ERXLocalizer.isLocalizationEnabled()) {
-            return localizerForContext(c).valueForKeyPath(key);
+            return ERXLocalizer.currentLocalizer().valueForKeyPath(key);
         } else {
             return key;
         }
@@ -102,7 +107,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
     
     public Object localizedTemplateStringForKeyInContext(String key, D2WContext c) {
         if( key != null && ERXLocalizer.isLocalizationEnabled()) {
-            return localizerForContext(c).localizedTemplateStringForKeyWithObject(key, c);
+            return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);
         } else {
             return key;
         }
