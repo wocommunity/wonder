@@ -362,7 +362,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                          + relationship.name() + "' was switched to mandatory, because the foreign key '"
                          + attribute.name() + "' does NOT allow NULL values");
             } else {
-                log.error(eoentity.name() + ": relationship '"
+                log.warn(eoentity.name() + ": relationship '"
                           + relationship.name() + "' is marked to-one and optional, but the foreign key '"
                           + attribute.name() + "' does NOT allow NULL values");
             }
@@ -379,7 +379,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                           + relationship.name() + "' was switched to optional, because the foreign key '"
                           + attribute.name() + "' allows NULL values");
             } else {
-                log.error(eoentity.name() + ": relationship '"
+                log.warn(eoentity.name() + ": relationship '"
                           + relationship.name() + "' is marked to-one and mandatory, but the foreign key '"
                           + attribute.name() + "' allows NULL values");
             }
