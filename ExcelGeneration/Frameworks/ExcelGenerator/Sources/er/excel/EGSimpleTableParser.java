@@ -6,39 +6,17 @@
  */
 package er.excel;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.text.ParseException;
+import java.io.*;
+import java.text.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import javax.xml.parsers.*;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSNumberFormatter;
+import org.apache.poi.hssf.usermodel.*;
+import org.w3c.dom.*;
 
-import er.extensions.ERXDictionaryUtilities;
-import er.extensions.ERXKeyValueCodingUtilities;
-import er.extensions.ERXLogger;
-import er.extensions.ERXNumberFormatter;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 
 /**

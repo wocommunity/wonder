@@ -1,7 +1,9 @@
 package er.grouping;
 
 import java.util.*;
+
 import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 public class DRAttributeGroup extends DRAttribute  {

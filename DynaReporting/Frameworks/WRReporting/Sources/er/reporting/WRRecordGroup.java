@@ -1,15 +1,12 @@
 package er.reporting;
 
-import er.grouping.*;
-import java.lang.*;
-import java.util.*;
-import java.io.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
 import ognl.webobjects.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
+import er.grouping.*;
 
 /**
  * Contains a cell in the table that {@link WRReport} has set up.

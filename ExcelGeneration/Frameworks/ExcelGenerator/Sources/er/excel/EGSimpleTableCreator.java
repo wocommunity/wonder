@@ -5,17 +5,16 @@
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package er.excel;
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.*;
+import org.apache.poi.poifs.filesystem.*;
 
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
-import er.extensions.*;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.w3c.dom.*;
 
 /**
  * Dumps a workbook into the "HTML" needed to re-create it by the EGSimpleTableParser.
