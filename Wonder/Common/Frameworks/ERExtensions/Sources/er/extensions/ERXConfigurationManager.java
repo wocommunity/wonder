@@ -256,9 +256,6 @@ public class ERXConfigurationManager {
         log.info("Reinserted the command line arguments to the system properties.");
     }
 
-    //CHECKME: shouldn't this use ERXProperties.stringForKey?
-    private String stringForKey(String key) { return System.getProperty(key); }
-
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());
     }
@@ -278,12 +275,12 @@ public class ERXConfigurationManager {
             log.debug("Adjusting "+aModelName);
             NSMutableDictionary newConnectionDictionary=null;
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
-                String serverName= stringForKey(aModelName + ".DBServer");
-                serverName=serverName==null ? stringForKey("dbConnectServerGLOBAL") : serverName;
-                String userName= stringForKey(aModelName + ".DBUser");
-                userName= userName ==null ? stringForKey("dbConnectUserGLOBAL") : userName;
-                String passwd= stringForKey(aModelName + ".DBPassword");
-                passwd= passwd ==null ? stringForKey("dbConnectPasswordGLOBAL") : passwd;
+                String serverName= System.getProperty(aModelName + ".DBServer");
+                serverName=serverName==null ? System.getProperty("dbConnectServerGLOBAL") : serverName;
+                String userName= System.getProperty(aModelName + ".DBUser");
+                userName= userName ==null ? System.getProperty("dbConnectUserGLOBAL") : userName;
+                String passwd= System.getProperty(aModelName + ".DBPassword");
+                passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
 
                 if((serverName!=null) || (userName!=null) || (passwd!=null)) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
@@ -294,8 +291,8 @@ public class ERXConfigurationManager {
                 }
                 
             } else if (aModel.adaptorName().indexOf("Flat")!=-1) {
-                String path= stringForKey(aModelName + ".DBPath");
-                path = path ==null ? stringForKey("dbConnectPathGLOBAL") : path;
+                String path= System.getProperty(aModelName + ".DBPath");
+                path = path ==null ? System.getProperty("dbConnectPathGLOBAL") : path;
                 if (path!=null) {                    
                     if (path.indexOf(" ")!=-1) {
                         NSArray a=NSArray.componentsSeparatedByString(path," ");
@@ -317,10 +314,10 @@ public class ERXConfigurationManager {
                     newConnectionDictionary.setObjectForKey("\r\n","rowSeparator");
                 aModel.setConnectionDictionary(newConnectionDictionary);
             } else if (aModel.adaptorName().indexOf("OpenBase")!=-1) {
-                String db= stringForKey(aModelName + ".DBDatabase");
-                db = db ==null ? stringForKey("dbConnectDatabaseGLOBAL") : db;
-                String h= stringForKey(aModelName + ".DBHostName");
-                h = h ==null ? stringForKey("dbConnectHostNameGLOBAL") : h;
+                String db= System.getProperty(aModelName + ".DBDatabase");
+                db = db ==null ? System.getProperty("dbConnectDatabaseGLOBAL") : db;
+                String h= System.getProperty(aModelName + ".DBHostName");
+                h = h ==null ? System.getProperty("dbConnectHostNameGLOBAL") : h;
                 if (h!=null || db!=null) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
                     if (db!=null) newConnectionDictionary.setObjectForKey(db, "databaseName");
@@ -328,18 +325,18 @@ public class ERXConfigurationManager {
                     aModel.setConnectionDictionary(newConnectionDictionary);
                 }
             } else if (aModel.adaptorName().indexOf("JDBC")!=-1) {
-                String url= stringForKey(aModelName + ".URL");
-                url = url ==null ? stringForKey("dbConnectURLGLOBAL") : url;
-                String userName= stringForKey(aModelName + ".DBUser");
-                userName= userName ==null ? stringForKey("dbConnectUserGLOBAL") : userName;
-                String passwd= stringForKey(aModelName + ".DBPassword");
-                passwd= passwd ==null ? stringForKey("dbConnectPasswordGLOBAL") : passwd;
-                String driver= stringForKey(aModelName + ".DBDriver");
-                driver= driver ==null ? stringForKey("dbConnectDriverGLOBAL") : driver;
-                String jdbcInfo= stringForKey(aModelName + ".DBJDBCInfo");
-                jdbcInfo= jdbcInfo ==null ? stringForKey("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
-                String plugin= stringForKey(aModelName + ".DBPlugin");
-                plugin= plugin ==null ? stringForKey("dbConnectPluginGLOBAL") : plugin;
+                String url= System.getProperty(aModelName + ".URL");
+                url = url ==null ? System.getProperty("dbConnectURLGLOBAL") : url;
+                String userName= System.getProperty(aModelName + ".DBUser");
+                userName= userName ==null ? System.getProperty("dbConnectUserGLOBAL") : userName;
+                String passwd= System.getProperty(aModelName + ".DBPassword");
+                passwd= passwd ==null ? System.getProperty("dbConnectPasswordGLOBAL") : passwd;
+                String driver= System.getProperty(aModelName + ".DBDriver");
+                driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
+                String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
+                jdbcInfo= jdbcInfo ==null ? System.getProperty("dbConnectJDBCInfoGLOBAL") : jdbcInfo;
+                String plugin= System.getProperty(aModelName + ".DBPlugin");
+                plugin= plugin ==null ? System.getProperty("dbConnectPluginGLOBAL") : plugin;
                 if (url!=null || userName!=null || passwd!=null || driver!=null || jdbcInfo!=null || plugin!=null) {
                     newConnectionDictionary=new NSMutableDictionary(aModel.connectionDictionary());
                     if (url!=null) newConnectionDictionary.setObjectForKey(url, "URL");
@@ -366,8 +363,8 @@ public class ERXConfigurationManager {
             
             
             // based on an idea from Stefan Apelt <stefan@tetlabors.de>
-            String f = stringForKey(aModelName + ".EOPrototypesFile");
-            f = f ==null ? stringForKey("EOPrototypesFileGLOBAL") : f;
+            String f = System.getProperty(aModelName + ".EOPrototypesFile");
+            f = f ==null ? System.getProperty("EOPrototypesFileGLOBAL") : f;
             if(f != null) {
                 NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
                 if(dict != null) {
@@ -383,9 +380,9 @@ public class ERXConfigurationManager {
                     }
                 }
             }
-            String e = stringForKey(aModelName + ".EOPrototypesEntity");
+            String e = System.getProperty(aModelName + ".EOPrototypesEntity");
             // global prototype setting not supported yet
-            //e = e ==null ? stringForKey("EOPrototypesEntityGLOBAL") : e;
+            //e = e ==null ? System.getProperty("EOPrototypesEntityGLOBAL") : e;
             if(e != null) {
                 // we look for the entity globally so we can have one prototype entity
                 EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
