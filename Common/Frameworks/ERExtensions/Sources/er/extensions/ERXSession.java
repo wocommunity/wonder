@@ -323,4 +323,10 @@ public class ERXSession extends WOSession {
 
     public String wrapperPageName() { return "PageWrapper"; }
 
+    public void terminate() {
+        // work around a bug in WO 5.1.1 where the sessions EC will keep a lock on the SEC
+        defaultEditingContext().setSharedEditingContext(null);
+        super.terminate();
+    }
+
 }
