@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import java.io.PrintWriter;
 import java.io.PrintStream;
+import java.io.OutputStreamWriter;
 import java.io.ByteArrayOutputStream;
 
 /**
@@ -37,18 +38,29 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
     /** java.io.PrintWriter to print logs */ 
     private PrintWriter _printWriter; 
 
-    /** Apple built-in logger, used to generate a vervose header "[2002-01-31 09:01:00 EDT] <main> " */ 
+    /** 
+     * Apple built-in logger, used internally to generate 
+     * a vervose header "[2002-08-31 09:01:00 EDT] <main> " 
+     */ 
     private NSLog.PrintStreamLogger _vervoseStreamLogger; 
     
     /** an output from _vervoseStreamLogger */ 
     private ByteArrayOutputStream _verboseHeaderStream;
     
     public ERXNSPrintWriterLogger() {
-        throw new IllegalArgumentException("ERXNSPrintWriterLogger requires a PrintWriter as an argument.");
+        _printWriter = new PrintWriter(System.out);
     }
     
     public ERXNSPrintWriterLogger(PrintWriter printWriter) {
         _printWriter = printWriter;
+    }
+
+    public ERXNSPrintWriterLogger(PrintStream printStream) {
+        _printWriter = new PrintWriter(printStream);
+    }
+
+    public ERXNSPrintWriterLogger(String encodingName) throws java.io.UnsupportedEncodingException {
+        _printWriter = new PrintWriter(new OutputStreamWriter(System.out, encodingName));
     }
     
     public void appendln() {
@@ -69,10 +81,10 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
     }
 
     private String _verboseHeader() {
-        _verboseHeaderStream().reset();
+        _verboseHeaderStream().reset();  // clear the stream.
 
-        // NSLog.PrintStreamLogger will append below to _verboseHeaderStream ByteArrayOutputStream:
-        // "[2002-01-31 09:01:00 EDT] <main> " + " " + "\n" 
+        // NSLog.PrintStreamLogger will set below to _verboseHeaderStream ByteArrayOutputStream:
+        // "[2002-08-31 09:01:00 EDT] <main> " + " " + "\n" 
         _vervoseStreamLogger().appendln(" ");  
         String verboseHeader = _verboseHeaderStream().toString();
         
@@ -85,7 +97,7 @@ public class ERXNSPrintWriterLogger extends NSLog.Logger {
 
     private ByteArrayOutputStream _verboseHeaderStream() {
         if (_verboseHeaderStream == null) 
-            _verboseHeaderStream =  new ByteArrayOutputStream("[2002-01-31 09:01:00 EDT] <main> ".length() + 20);
+            _verboseHeaderStream =  new ByteArrayOutputStream("[2002-08-31 09:01:00 EDT] <main> ".length() + 20);
         return _verboseHeaderStream;
     }
 
