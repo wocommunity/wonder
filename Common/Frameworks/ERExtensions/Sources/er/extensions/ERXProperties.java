@@ -107,7 +107,8 @@ public class ERXProperties extends Properties {
      * @see #webObjectsVersion
      */
     public static String sourceVersionString() {
-        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework("version.plist", "JavaWebObjects", null);
+        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework
+        ("version.plist", "JavaWebObjects", (NSArray)null);
 
         String versionString = (String) versionDictionary.objectForKey("SourceVersion");
         return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
