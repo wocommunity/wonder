@@ -36,7 +36,10 @@ import java.lang.reflect.*;
  */
 
 public class ERXCheckboxMatrix extends WOComponent {
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXCheckboxMatrix.class);
 
+    
     private static final Integer DEFAULT_PADDING = new Integer(0);
     private static final Integer DEFAULT_SPACING = new Integer(0);
 
@@ -163,11 +166,15 @@ public class ERXCheckboxMatrix extends WOComponent {
 
     public NSArray maybeSortedList() {
         if (hasBinding("sortKey")) {
-            NSMutableArray sortedList = new NSMutableArray((NSArray)valueForBinding("list"));
-            ERXArrayUtilities.sortedArraySortedWithKey(sortedList, (String)valueForBinding("sortKey"));
-            return sortedList;
-        } else
-            return (NSArray)valueForBinding("list");
+            String sortKey = (String)valueForBinding("sortKey");
+            log.info(sortKey);
+            if(sortKey != null && sortKey.length() > 0) {
+                NSMutableArray sortedList = new NSMutableArray((NSArray)valueForBinding("list"));
+                ERXArrayUtilities.sortArrayWithKey(sortedList,sortKey);
+                return sortedList;
+            }
+        }
+        return (NSArray)valueForBinding("list");
     }
 
     public boolean isListEmpty() {
