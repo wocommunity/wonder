@@ -94,10 +94,10 @@ public abstract class ERD2WListPage extends D2WListPage {
             if (sortOrderingDefinition!=null) {
                 NSMutableArray so=new NSMutableArray();
                 for (int i=0; i< sortOrderingDefinition.count();) {
-                    EOSortOrdering sortOrdering=
-                       new EOSortOrdering((String)sortOrderingDefinition.objectAtIndex(i++),
-                                          new NSSelector((String)sortOrderingDefinition.objectAtIndex(i++),
-                                                         ERXConstant.ObjectClassArray));
+                    String sortKey=(String)sortOrderingDefinition.objectAtIndex(i++);
+                    String sortSelectorKey=(String)sortOrderingDefinition.objectAtIndex(i++);
+                    EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
+                                                                   ERXUtilities.sortSelectorWithKey(sortSelectorKey));
                     so.addObject(sortOrdering);
                 }
                 sortOrderings=so;
@@ -124,7 +124,7 @@ public abstract class ERD2WListPage extends D2WListPage {
             // D2WComponent.setLocalContext, which holds on to the first non null value it gets.
             // I swear if I could get my hands on the person who did that.. :-)
             _localContext=newValue;
-            cat.debug("SetLocalContext "+newValue);
+            if (cat.isDebugEnabled()) cat.debug("SetLocalContext "+newValue);
         }
         super.setLocalContext(newValue);
     }
