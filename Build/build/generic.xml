@@ -243,7 +243,6 @@ There are three ways to use this script:
             </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks" if="use.webobjects.d2w"> 
                 <include name="JavaDirectToWeb.framework" />
-                <include name="JavaEOGeneration.framework" />
                 <include name="JavaEOProject.framework" />
                 <include name="JavaDTWGeneration.framework" />
             </frameworks>
@@ -373,7 +372,6 @@ There are three ways to use this script:
             </frameworks>
             <frameworks root="${wo.woroot}/Library/Frameworks" if="use.webobjects.d2w"> 
                 <include name="JavaDirectToWeb.framework" />
-                <include name="JavaEOGeneration.framework" />
                 <include name="JavaEOProject.framework" />
                 <include name="JavaDTWGeneration.framework" />
             </frameworks>
