@@ -20,6 +20,7 @@ import java.util.Enumeration;
  * @binding isMandatory
  * @binding relationshipKey
  * @binding sourceEntityName
+ * @binding destinationEntityName
  * @binding sourceObject
  * @binding uiStyle
  * @binding destinationSortKey
@@ -64,27 +65,37 @@ public class ERXToOneRelationship extends WOToOneRelationship {
         if (null==dataSource()) {
             setDataSource((EODataSource)valueForBinding("dataSource"));
             if (dataSource() == null) {
-                String anEntityName = _localSourceEntityName();
-                // FIXME (msanchez, 08/00, 2520053): use modelGroup on ObjectStoreCoordinator of our editingContext
-                EOModelGroup aModelGroup = EOModelGroup.defaultGroup();
-                EOEntity anEntity = aModelGroup.entityNamed(anEntityName);
-
-                if (anEntity == null) {
-                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
-                }
+                String anEntityName = (String)valueForBinding("destinationEntityName");
                 EOEntity destinationEntity = null;
-                EOEditingContext anEditingContext = null;
+
                 Object _source = _localSourceObject();
+                EOEditingContext anEditingContext = null;
+
                 if (_source instanceof EOEnterpriseObject) {
-                    EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
-                                                                                               _localRelationshipKey());
-                    destinationEntity = relationship != null ? relationship.destinationEntity() : null;
                     anEditingContext = ((EOEnterpriseObject)_source).editingContext();
                 }
-                if (destinationEntity == null)
-                    destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
                 if (anEditingContext == null) {
                     anEditingContext = session().defaultEditingContext() ;
+                }
+                if(anEntityName == null) {
+                    anEntityName = _localSourceEntityName();
+                    EOEntity anEntity = EOUtilities.entityNamed(anEditingContext, anEntityName);
+
+                    if (anEntity == null) {
+                        throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
+                    }
+                    if (_source instanceof EOEnterpriseObject) {
+                        EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
+                                                                                                    _localRelationshipKey());
+                        destinationEntity = relationship != null ? relationship.destinationEntity() : null;
+                    }
+                    if (destinationEntity == null)
+                        destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
+                } else {
+                    destinationEntity = EOUtilities.entityNamed(anEditingContext, anEntityName);
+                    if (destinationEntity == null) {
+                        throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
+                    }
                 }
                 NSArray possibleChoices = (NSArray)valueForBinding("possibleChoices");
                 if (possibleChoices != null) {
