@@ -28,7 +28,7 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
     /** Pre-processes the mail before it gets sent.
         @see ERMailDelivery#prepareMail */
     protected DataHandler prepareMail () throws MessagingException {
-        return new DataHandler (textContent, "text/plain");
+        return new DataHandler (textContent, "text/plain; charset=\""  + charset () + "\"");
     }
 
 }
