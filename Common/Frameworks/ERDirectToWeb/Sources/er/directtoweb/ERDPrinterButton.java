@@ -30,7 +30,6 @@ public class ERDPrinterButton extends ERDCustomEditComponent {
     public String task() { return (String)valueForBinding("task");  }
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }
-    public D2WContext d2wContext() { return (D2WContext)valueForBinding("d2wContext"); }
     public EODataSource dataSource() { return (EODataSource)valueForBinding("dataSource"); }
     public WODisplayGroup displayGroup() { return (WODisplayGroup)valueForBinding("displayGroup"); }
 
