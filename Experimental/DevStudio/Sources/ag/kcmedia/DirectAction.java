@@ -8,9 +8,11 @@ package ag.kcmedia;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import er.extensions.*;
 import ag.kcmedia.Jode.*;
+import java.io.*;
 
 public class DirectAction extends ERXDirectAction {
     static ERXLogger log = ERXLogger.getERXLogger(DirectAction.class);
@@ -64,6 +66,19 @@ public class DirectAction extends ERXDirectAction {
             return nextPage;
         }
         return pageWithName("Main");
+    }
+
+    public WOComponent dumpRulesAction() {
+        WOComponent nextPage = pageWithName("ERXStringHolder");
+        String string = "Please a fileName parameter";
+        String fileName = context().request().stringFormValueForKey("fileName");
+        if(fileName != null) {
+            ERD2WRuleEditorModel model = new ERD2WRuleEditorModel(new File(fileName));
+            string = ((NSArray)model.publicRules().valueForKeyPath("description.@sort.toString")).componentsJoinedByString("\n");
+        }
+        nextPage.takeValueForKey(string, "value");
+        nextPage.takeValueForKey(Boolean.FALSE, "escapeHTML");
+        return nextPage;
     }
 
     public WOActionResults findAction() {
