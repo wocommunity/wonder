@@ -133,7 +133,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     }
 
     public static WOComponent printerFriendlyVersion(D2WContext d2wContext, WOSession session, EODataSource dataSource, WODisplayGroup displayGroup) {
-        ListPageInterface result=(ListPageInterface)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext,session);
+        ListPageInterface result=(ListPageInterface)ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext,session);
         result.setDataSource(dataSource);
         WODisplayGroup dg = null;
         if(result instanceof D2WListPage) {

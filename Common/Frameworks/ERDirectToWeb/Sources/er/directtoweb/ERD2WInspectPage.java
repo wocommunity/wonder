@@ -234,7 +234,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }
 
     public WOComponent printerFriendlyVersion() {
-        WOComponent result=ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }    
