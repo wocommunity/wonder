@@ -68,7 +68,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 * @see com.webobjects.foundation.NSNumberFormatter#setPattern(java.lang.String)
 	 */
 	public void setPattern(String pattern) {
-		int offset = pattern.indexOf("=)");
+		int offset = pattern == null ? -1 : pattern.indexOf("=)");
 		if(offset != -1) {
 			try {
 				setFactor(new BigDecimal(pattern.substring(2, offset)));
@@ -94,9 +94,9 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 */
 	protected BigDecimal performFormat(BigDecimal value) {
 		if("*".equals(_operator)) {
-			value = value.divide(_factor, value.scale(), BigDecimal.ROUND_HALF_EVEN);
-		} else if("/".equals(_operator)) {
 			value = value.multiply(_factor);
+		} else if("/".equals(_operator)) {
+			value = value.divide(_factor, value.scale(), BigDecimal.ROUND_HALF_EVEN);
 		}
 		return value;
 	}
@@ -108,9 +108,9 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	 */
 	protected BigDecimal performParse(BigDecimal value) {
 		if("*".equals(_operator)) {
-			value = value.multiply(_factor);
-		} else if("/".equals(_operator)) {
 			value = value.divide(_factor, value.scale(), BigDecimal.ROUND_HALF_EVEN);
+		} else if("/".equals(_operator)) {
+			value = value.multiply(_factor);
 		}
 		return value;
 	}
@@ -152,7 +152,7 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     }
     
     /**
-     *  Overridden to perform optional conversions on the value given.
+     * Overridden to perform optional conversions on the value given.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      */
     public StringBuffer format(Object value, StringBuffer buffer, FieldPosition position) {
