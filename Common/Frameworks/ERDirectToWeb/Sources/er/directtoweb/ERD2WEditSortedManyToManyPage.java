@@ -95,7 +95,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         }
         super.sleep();
     }
-
+    
     public EOEditingContext editingContext() {
         return _editingContext;
     }
@@ -226,13 +226,13 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                 }
             }
             relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
-            if(isSortedRelationship()){
+            if (isSortedRelationship()) {
                 //Now need to reindex the joins if the relationship is sorted
                 int i = 0;
                 for(Enumeration e = relationshipDisplayGroup.displayedObjects().objectEnumerator();
                     e.hasMoreElements();){
                     EOEnterpriseObject object = (EOEnterpriseObject)e.nextElement();
-                    object.takeValueForKey(new Integer(i), indexKey());
+                    object.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
                     i++;
                 }
             }
@@ -260,7 +260,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         relationshipDisplayGroup.fetch(); // updateDisplayedObjects is not doing the trick
         return null;
     }
-
 
     public WOComponent displayQueryAction() {
         _state = QUERY;        
@@ -389,7 +388,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         return destinationRelationship().destinationEntity();
     }
     
-    
     public String indexKey() {
         return (String)d2wContext().valueForKey("indexKey");
     }
@@ -499,4 +497,33 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         }
         super.appendToResponse(r,c);
     }
+
+    public int browserSize() {
+        int browserSize = 10;  // reasonable default value
+        int maxBrowserSize = 20;
+
+        String contextSize = (String)d2wContext().valueForKey("browserSize");
+        if(contextSize != null) {
+            try {
+                browserSize = Integer.parseInt(contextSize);
+            } catch(NumberFormatException nfe) {
+                log.error("browserSize not a number: "  browserSize);
+            }
+        }
+        String maxContextSize = (String)d2wContext().valueForKey("maxBrowserSize");
+        if(maxContextSize != null) {
+            try {
+                maxBrowserSize = Integer.parseInt(maxContextSize);
+            } catch(NumberFormatException nfe) {
+                log.error("maxBrowserSize not a number: "  maxBrowserSize);
+            }
+        }
+
+        NSArray sortedBrowserList = sortedBrowserList();
+        if(sortedBrowserList != null) {
+            int count = sortedBrowserList.count();
+            browserSize = (count > browserSize && count < maxBrowserSize) ? count : browserSize;
+        }
+        return browserSize;
+    }    
 }
