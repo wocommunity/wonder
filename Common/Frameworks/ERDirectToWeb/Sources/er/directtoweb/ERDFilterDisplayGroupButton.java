@@ -46,7 +46,7 @@ public class ERDFilterDisplayGroupButton extends WOComponent {
             if (eds!=null) {
                 if (eds instanceof EODatabaseDataSource) {
                     EODatabaseDataSource dbds=(EODatabaseDataSource)eds;
-                    EOQualifier q=dbds.auxiliaryQualifier();
+                    EOQualifier q=dbds.fetchSpecification().qualifier();
                     log.debug("Setting qualifier to "+q);
                     _displayGroup.setQualifier(q);
                     _displayGroup.updateDisplayedObjects();
