@@ -2,8 +2,6 @@ ToDo list:
 
 Things to Remove:
 ERXKeyValueCoding - Not needed now with WO 5. The one extra utility method can be moved to a utility class.
-Either ERXAutoClosePage or ERXJSCloseWindow - These components do the exact same thing. Could rename one of them to:
-    ERXJSAutoCloseWindow
 
 Stuff to correct:
 
