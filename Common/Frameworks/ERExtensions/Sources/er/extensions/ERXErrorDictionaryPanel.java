@@ -60,7 +60,7 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
     
     public boolean hasErrors() {
         boolean hasErrors = false;
-        hasErrors = errorMessages().count()>0 || extraErrorMessage() != null && extraErrorMessage().length() > 0;
+        hasErrors = errorMessages().count()>0 || (extraErrorMessage() != null && extraErrorMessage().length() > 0);
         return hasErrors;
     }
 
@@ -131,7 +131,7 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
             String value=(String)errorMessages().objectForKey(key);
             errorMessages().setObjectForKey(massageErrorMessage(value, key), key);
         }
-        extraErrorMessage=massageErrorMessage(extraErrorMessage, null);
+        extraErrorMessage=massageErrorMessage(extraErrorMessage(), null);
         super.appendToResponse(r,c);
     }
 }
