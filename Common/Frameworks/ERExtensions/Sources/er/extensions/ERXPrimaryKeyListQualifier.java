@@ -33,7 +33,12 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * @param eos array of enterprise objects
      */
     public ERXPrimaryKeyListQualifier(NSArray eos) {
-        this(primaryKeyNameForObjects(eos), ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(eos));
+        this(primaryKeyNameForObjects(eos), eos);
+    }
+
+    // Only used during cloning
+    private ERXPrimaryKeyListQualifier(String key, NSArray eos, boolean ignoreMe) {
+        super(key,eos);
     }
     
     /**
@@ -66,7 +71,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * @return cloned primary key list qualifier.
      */
     public Object clone() {
-        return new ERXPrimaryKeyListQualifier(key(), (NSArray)value());
+        return new ERXPrimaryKeyListQualifier(key(), (NSArray)value(), true);
     }
 
     /**
