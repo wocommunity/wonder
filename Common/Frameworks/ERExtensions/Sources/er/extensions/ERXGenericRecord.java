@@ -910,7 +910,6 @@ private static Method methodInSharedGSVEngineInstanceWithName(String name) {
         } catch (NoSuchMethodException e4) {
             throw new NSForwardException(e4);
         }
-    return null;
     }
 
     private static Object sharedGSVEngineInstance() {
