@@ -17,4 +17,8 @@ public class ERXSuccess extends WOComponent {
         super(context);
     }
 
+    public boolean isStateless() {
+        return true;
+    }
+    
 }
