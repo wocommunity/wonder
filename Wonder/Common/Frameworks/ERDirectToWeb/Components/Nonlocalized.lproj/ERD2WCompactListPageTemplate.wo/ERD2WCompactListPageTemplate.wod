@@ -19,12 +19,28 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
+AttributeSorter2: ERXSortOrder {
+	displayGroup = displayGroup;
+	displayKey = d2wContext.displayNameForProperty;
+	key = d2wContext.sortKeyForList;
+        d2wContext = d2wContext;
+}
+
 BackButton: WOHyperlink {
 	action = backAction;
 }
 
 BackLink: WOHyperlink {
 	action = backAction;
+}
+ColumnLabelRepetition: WORepetition {
+	_unroll = true;
+	item = d2wContext.propertyKey;
+	list = d2wContext.displayPropertyKeys;
+}
+
+Conditional1: WOConditional {
+	condition = ^d2wContext.hasHeader;
 }
 
 ERTrashcan1: ERDTrashcan {
@@ -106,6 +122,11 @@ IsListing2: WOConditional {
 	negate = true;
 }
 
+IsPropertySortable: WOConditional {
+	_unroll = true;
+	condition = d2wContext.propertyIsSortable;
+}
+
 IsSelecting: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
@@ -129,6 +150,11 @@ ListTable: WOGenericContainer {
 	elementName = "Table";
 }
 
+ListTableHeaderRow: WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+}
+
 ListTableRow: WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
@@ -142,6 +168,10 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+PropertyName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForProperty;
 }
 
 ReturnButton: WOImage {
