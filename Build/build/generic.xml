@@ -591,11 +591,11 @@ There are three ways to use this script:
     <target name="ERMailer.all">
         <antcall target="global.application" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
+            <param name="project.principal.class" value="er.javamail.mailer.Application" />
             <param name="project.name" value="ERMailer" />
             <param name="project.dir" value="Common/Applications/ERMailer" />
  
-            <param name="use.wonder.d2w" value="true" />
+            <param name="use.wonder.core" value="true" />
             <param name="use.wonder.logic" value="true" />
             <param name="use.wonder.mail" value="true" />
        </antcall>
