@@ -34,6 +34,7 @@ public class WRQuickReport extends WOComponent  {
     protected NSArray _objects;
     protected NSArray _attributeArray;
     protected NSArray _criteriaArray;
+    protected String _componentName;
     
     public WRQuickReport(WOContext c){
         super(c);
@@ -43,13 +44,23 @@ public class WRQuickReport extends WOComponent  {
     }
 
     public void synchModel(NSNotification notification) {
-        if(_model == notification.object() || notification.object() == null) {
+        if(_model == notification.object() && !dontSyncModel()) {
             DRReportModel model = _model;
             reset();
             model.initWithRawRecords(objects(), criteriaArray(), attributeArray());
             log.info("Model was re-set.");
             //reset();
         }
+    }
+
+    public String componentName() {
+        if(_componentName == null) {
+            _componentName = (String)valueForBinding("reportComponentName");
+            if(_componentName == null) {
+                _componentName = "WRRecordGroup";
+            }
+        }
+        return _componentName;
     }
 
     public void finalize() throws Throwable {
@@ -60,7 +71,16 @@ public class WRQuickReport extends WOComponent  {
     public void awake() {
         super.awake();
         _objects = null;
-        _model = null;
+        if(false) {
+            _model = null;
+            _modelDictionary = null;
+            _componentName = null;
+            _reportDictionary = null;
+            _settingsDictionary = null;
+            _attributeArray = null;
+            _criteriaArray = null;
+            _objects = null;
+        }
     }
     public void reset() {
         super.reset();
@@ -71,6 +91,7 @@ public class WRQuickReport extends WOComponent  {
         _attributeArray = null;
         _criteriaArray = null;
         _objects = null;
+        _componentName = null;
     }
     
     public boolean synchronizesVariablesWithBindings() {
@@ -222,6 +243,10 @@ public class WRQuickReport extends WOComponent  {
             log.debug("valueForBinding: "+ name + " : " + result);
         }
         return result;
+    }
+
+    public boolean dontSyncModel() {
+        return ERXValueUtilities.booleanValue(valueForBinding("dontSyncModel"));
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {

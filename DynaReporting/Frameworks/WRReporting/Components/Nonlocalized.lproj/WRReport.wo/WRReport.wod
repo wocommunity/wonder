@@ -40,12 +40,27 @@ attribsGroup: WRAttributeGroup{
 	model = model;
 	totalsOnly = false;
 	groups = model.vList;
-	bgcolor = "dedede";
+	bgcolor = "#dedede";
 }
+
+attributeTd:WOGenericContainer{
+	elementName = "th";
+	colspan = colSpan;
+	rowspan = rowSpan;
+	class = classAttributeTd;
+	id = idAttributeTd;
+}
+
 colSpanTd: WOGenericContainer{
-	elementName = "TD";
+	elementName = "td";
 	bgcolor = bgcolorColSpanTd;
 	colspan = horzColSpan;
+	class = classColSpanTd;
+}
+colSpanTdHead: WOGenericContainer{
+	elementName = "th";
+	colspan = horzColSpan;
+	class = "WRTitle";
 }
 collapseVertList: WOCollapsibleComponentContent { 
 	closedLabel = "Explode Vertical List"; 
@@ -76,7 +91,6 @@ editForm: WOForm{
 groupDepth: WORepetition{
 	count = vheadingIndex;
 }
-
 hCriteriaList: WRNestedList {
     list = topHorzGroupCriteriaList;
     item = topCriteria;
@@ -96,10 +110,22 @@ hCriteriaList2: WRNestedList {
     //isOrdered = YES;
 }
 
-horzDimensions: WORepetition { list=horzDimensions; item=hGroup;}
+hCriteriaNotNestedList: WORepetition {
+    list = topHorzGroupCriteriaList;
+    item = topCriteria;
+    index = currentIndex;
+}
+hasTitle: WOConditional {
+	condition = hasTitle;
+}
+
+horzDimensions: WORepetition { 
+	list=horzDimensions; 
+	item=hGroup;
+}
 numberOfCrits:WORepetition{
 	count = numberOfCrits;
-	//index = depth;
+	index = currentIndex;
 }
 
 recordGroupTest:WOSwitchComponent {
@@ -118,19 +144,22 @@ recordGroupTest:WOSwitchComponent {
 	reportStyle = selectedReportStyle;
 }
 rowSpanTd: WOGenericContainer{
-	elementName = "TD";
+	elementName = "td";
 	rowspan = vertRowSpan;
 	bgcolor = bgcolorRowSpanTd;
+	class = classRowSpanTd;
 }
 rowSpanTd2: WOGenericContainer{
-	elementName = "TD";
+	elementName = "td";
 	bgcolor = bgcolorRowSpanTd;
 	nowrap = "nowrap";
+	class = classRowSpanTd;
 }
 rowSpanTd2Span: WOGenericContainer{
-	elementName = "TD";
+	elementName = "td";
 	bgcolor = bgcolorRowSpanTd;
 	colspan= depthCountAllAttribs;
+	class = classRowSpanTd;
 }
 
 
@@ -183,10 +212,9 @@ showVerticalRows:WOConditional{
 	condition= showVerticalRows;
 }
 
-td:WOGenericContainer{
-	elementName = "TD";
-	colspan = colSpan;
-	rowspan = rowSpan;
+title: WOString {
+	value = title;
+	escapeHTML = false;
 }
 vCriteriaList: WRNestedList {
     list = topVertGroupCriteriaList;

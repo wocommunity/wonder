@@ -383,7 +383,7 @@ public class WRRecordGroup extends WOComponent  {
     }
 
     public int totalCount() {
-        if(_totalCount != -1) {
+        if(_totalCount == -1) {
             NSDictionary d = this.totalDict();
             if (d == null) {
                 _totalCount = 0;

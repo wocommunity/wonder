@@ -20,6 +20,7 @@
 		<binding name="showRecordGroupAsTable" defaults="Boolean"/>
 		<binding name="showRecordGroupHeadings" defaults="Boolean"/>
 		<binding name="showTopCriteriaLabel" defaults="Boolean"/>
+		<binding name="title"/>
 
 		<validation message="&apos;objects&apos; is a required binding">
 			<unbound name="objects"/>

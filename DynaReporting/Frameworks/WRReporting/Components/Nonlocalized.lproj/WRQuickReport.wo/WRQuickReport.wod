@@ -1,7 +1,8 @@
 ComponentContent1: WOComponentContent {
 }
 
-report: WRReport { 
+report: WOSwitchComponent {
+	WOComponentName = "LUReport"; 
 	model = model; 
 	recordGroupTotalToShow = ^recordGroupTotalToShow; 
 	recordGroupTotalFormat = ^recordGroupTotalFormat;
@@ -15,6 +16,7 @@ report: WRReport {
 	colors=^colors;
 	showTopCriteriaLabel = ^showTopCriteriaLabel;
 	recordGroupComponentName = ^recordGroupComponentName;
+	title = ^title;
 	keysInV = ^keysInV;
 	keysInH = ^keysInH;
 	keysInZ = ^keysInZ;

@@ -2,6 +2,7 @@ package er.grouping;
 
 import java.lang.*;
 import java.util.*;
+import java.text.*;
 import java.io.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
@@ -32,6 +33,8 @@ public class DRCriteria extends Object  {
     public static final double MAXNUMBER = 99999999999.0;
     public static final String MAXSTRING = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
 
+    public static String _defaultCalendarFormatString = "%m/%d/%Y";
+    
     protected boolean _isTotal;
     protected boolean _isOther;
     protected Object _score;
@@ -58,7 +61,10 @@ public class DRCriteria extends Object  {
         aVal.setMasterCriteria(mc);
         subMcs = aVal.masterCriteria().subCriteriaList();
         smc = (DRSubMasterCriteria)subMcs.objectAtIndex(0);
-        aVal.setValueDict( new NSDictionary(                                                                       new Object[]{"*", "|Other|" , "OTHER"},                                                                        new Object[]{ "OTHER" , "lookupKey" , smc.keyDesc()}));
+        aVal.setValueDict(new NSDictionary(
+                                            new Object[]{"*", "|Other|" , "OTHER"},
+                                            new Object[]{ "OTHER" , "lookupKey" , smc.keyDesc()})
+                           );
         if (lb != null) {
             aVal.setLabel(lb);
         } else {
@@ -139,7 +145,7 @@ public class DRCriteria extends Object  {
         if (v != null) {
             return v;
         }
-        return "%m/%d/%Y";
+        return _defaultCalendarFormatString;
     }
 
     public String rangeSeparator() {
@@ -162,15 +168,20 @@ public class DRCriteria extends Object  {
 
     static private NSMutableDictionary _calFormatDict = new NSMutableDictionary();
 
-    static public NSTimestampFormatter formatterForFormat(String calFormat) {
+    static public Format formatterForFormat(String calFormat) {
         synchronized(_calFormatDict) {
-            if(calFormat == null) calFormat = "%m/%d/%y";
+            if(calFormat == null) calFormat = _defaultCalendarFormatString;
             NSTimestampFormatter v = (NSTimestampFormatter)_calFormatDict.objectForKey(calFormat);
             if(v == null) {
                 v = new NSTimestampFormatter(calFormat);
-                _calFormatDict.setObjectForKey(v, calFormat);
+                setFormatterForFormat(v, calFormat);
             }
             return v;
+        }
+    }
+    static public void setFormatterForFormat(Format formatter, String calFormat) {
+        synchronized(_calFormatDict) {
+            _calFormatDict.setObjectForKey(formatter, calFormat);
         }
     }
     
@@ -181,25 +192,20 @@ public class DRCriteria extends Object  {
         Object low = dict.objectForKey("L");
 
         String calFormat = this.calendarFormatForDates();
-        NSTimestampFormatter formatter = DRCriteria.formatterForFormat(calFormat);
+        Format formatter = DRCriteria.formatterForFormat(calFormat);
+
         if (high instanceof NSTimestamp) {
             highString = formatter.format(high);
-            if (low instanceof NSTimestamp) {
-                lowString = formatter.format(low);
-            } else {
-                lowString = low.toString();
-            }
-
         } else {
             highString = high.toString();
-            if (low instanceof NSTimestamp) {
-                lowString = formatter.format(low);
-            } else {
-                lowString = low.toString();
-            }
-
         }
 
+        if (low instanceof NSTimestamp) {
+            lowString = formatter.format(low);
+        } else {
+            lowString = low.toString();
+        }
+        
         lbl = lbl + lowString + this.rangeSeparator() + highString;
         return lbl;
     }
