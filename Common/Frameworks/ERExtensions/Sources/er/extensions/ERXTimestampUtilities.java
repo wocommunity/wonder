@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import java.util.GregorianCalendar;
 
 /**
- * Collection of {@link NSTimestamp} utilities.
+ * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.
  */
 public class ERXTimestampUtilities extends Object {
 
