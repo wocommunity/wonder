@@ -28,6 +28,15 @@ NonZeroConditional2: ERXNonZeroConditional {
 	negate = true;
 }
 
+Select: WOSubmitButton {
+	action = createObjectAction;
+	value = session.localizer.ERDList.create;
+}
+
+ShowActions: WOConditional {
+	condition = ^showActions;
+}
+
 String1: WOString {
 	value = ^emptyListMessage;
 	escapeHTML = false;
