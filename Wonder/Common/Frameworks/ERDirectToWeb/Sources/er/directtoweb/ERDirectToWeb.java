@@ -14,6 +14,7 @@ import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.appserver.*;
 import er.extensions.*;
 import java.util.*;
+import java.net.URL;
 
 /**
  * Principle class of the ERDirectToWeb framework.
@@ -50,9 +51,19 @@ public class ERDirectToWeb {
                                                                             ERXConstant.NotificationClassArray),
                                                              ERXLocalizer.LocalizationDidResetNotification,
                                                              null);
+            NSNotificationCenter.defaultCenter().addObserver(this,
+                                                             new NSSelector("sortRules",
+                                                                            ERXConstant.NotificationClassArray),
+                                                             ERD2WModel.WillSortRules,
+                                                             null);
         }
         public void resetModel(NSNotification n) {
             ERD2WModel.erDefaultModel().resetModel();
+        }
+        public void sortRules(NSNotification n) {
+            ERD2WModel model = (ERD2WModel)n.object();
+            URL url = WOApplication.application().resourceManager().pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
+            model.mergePathURL(url);
         }
     }
     

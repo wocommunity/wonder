@@ -406,8 +406,11 @@ public class ERD2WModel extends D2WModel {
         if (_filePathRuleTraceCache!=null)
             _filePathRuleTraceCache.clear();
         NSNotificationCenter.defaultCenter().postNotification(ModelWillReset, this);
-        invalidateCaches();
-        sortRules();
+        setRules(new NSArray());
+        initializeClientConfiguration();
+        loadRules();
+        //invalidateCaches();
+        //sortRules();
     }
 
     protected File _currentFile;
