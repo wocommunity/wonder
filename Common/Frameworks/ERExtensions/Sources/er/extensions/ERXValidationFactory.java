@@ -259,7 +259,7 @@ public class ERXValidationFactory {
      * Converts a given model thrown validation exception into
      * an {@link ERXValidationException ERXValidationException}.
      * This method is used by {@link ERXEntityClassDescription ERXEntityClassDescription}
-     * to covert model thrown validation exceptions. This isn't 
+     * to convert model thrown validation exceptions. This isn't 
      * a very elegant solution, but until we can register our
      * our validation exception class this is what we have to do.
      * @param eov validation exception to be converted
@@ -288,26 +288,40 @@ public class ERXValidationFactory {
                     break;
                 }
             }
-            NSArray additionalExceptions = eov.additionalExceptions();
-            if (erve == null) {
-                log.error("Unable to convert validation exception: " + eov);
-            } else if (additionalExceptions != null && additionalExceptions.count() > 0) {
-                NSMutableArray erveAddtionalExceptions = new NSMutableArray();
-                for (Enumeration e = additionalExceptions.objectEnumerator(); e.hasMoreElements();) {
-                    ERXValidationException erven = convertException((NSValidation.ValidationException)e.nextElement());
-                    if (erven != null)
-                        erveAddtionalExceptions.addObject(erven);
-                }
-                if (erveAddtionalExceptions.count() > 0)
-                    erve.setAdditionalExceptions(erveAddtionalExceptions);
-            }
         } else {
-            log.warn("Attempting to convert validation exception: " + eov + " that is already of type ERXValidationException");
-            erve = (ERXValidationException)eov;
+            ERXValidationException original = (ERXValidationException)eov;
+            erve = createException(original.eoObject(), original.key(), value, original.type());            
+        }
+        if (erve == null) {
+            log.error("Unable to convert validation exception: " + eov);
+        } else {
+            NSArray erveAdditionalExceptions = convertAdditionalExceptions(eov);
+            if (erveAdditionalExceptions.count() > 0)
+                erve.setAdditionalExceptions(erveAdditionalExceptions);
         }
         return erve;
     }
 
+    /**
+     * Converts the additional exceptions contained in an Exception to ERXValidationException subclasses.
+     * @param ex validation exception
+     * @returns NSArray of converted exceptions
+     */
+    protected NSArray convertAdditionalExceptions(NSValidation.ValidationException ex) {
+        NSArray additionalExceptions = ex.additionalExceptions();
+        if (additionalExceptions == null || additionalExceptions.count() == 0) {
+            return NSArray.EmptyArray;
+        } else {
+            NSMutableArray erveAdditionalExceptions = new NSMutableArray();
+            for (Enumeration e = additionalExceptions.objectEnumerator(); e.hasMoreElements();) {
+                ERXValidationException erven = convertException((NSValidation.ValidationException)e.nextElement());
+                if (erven != null)
+                    erveAdditionalExceptions.addObject(erven);
+            }
+            return erveAdditionalExceptions;
+        }
+    }
+    
     /**
      * Entry point for generating an exception message
      * for a given message. The method <code>getMessage</code>
@@ -344,7 +358,7 @@ public class ERXValidationFactory {
             template = ((ExceptionDelegateInterface)erv.delegate()).templateForException(erv);
         }
         if (template == null) {
-            String entityName = erv.eoObject().entityName();
+            String entityName = erv.eoObject() == null ? null : erv.eoObject().entityName();
             String property = erv.isCustomMethodException() ? erv.method() : erv.propertyKey();
             String type = erv.type();
             String targetLanguage = erv.targetLanguage();
@@ -464,9 +478,9 @@ public class ERXValidationFactory {
         if (template == null)
             template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
-            log.error("Unable to find template for entity \"" + entityName + "\" property \"" + property + "\" type \""
-                      + type + "\" target language \"" + targetLanguage + "\"");
-            template = UNDEFINED_VALIDATION_TEMPLATE;
+            String message = "Undefined validation template for entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
+            template = message;
+            log.error(message);
         }
         return template;
     }
