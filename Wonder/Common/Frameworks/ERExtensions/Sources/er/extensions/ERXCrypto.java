@@ -31,11 +31,10 @@ public class ERXCrypto {
     
     public static final Category cat = Category.getInstance(ERXCrypto.class);
     
-
     private static SecretKey secretKey() throws NoSuchAlgorithmException {
         String blowfishKey = NSProperties.stringForKey("ERBlowfishCipherKey");
         if (blowfishKey == null) {
-            WOApplication.application().logString("WARNING: ERBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
+            NSLog.err.appendln("WARNING: ERBlowfishCipherKey not set in defaults.  Should be set before using the cipher.");
             blowfishKey = "DefaultBlowfishCipherKey";
         }
         return new SecretKeySpec(blowfishKey.getBytes(), "Blowfish");
@@ -70,8 +69,6 @@ public class ERXCrypto {
         }
         return _decryptCipher;
     }
-    
-
     
     private final static String hexDigits = "0123456789abcdef";
     public static String bytesToString(byte[] bytes) {
