@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="NO">
+
+		<binding name="height"/>
+		<binding name="width"/>
+		<binding name="items"/>
+		<binding name="type"/>
+		<binding name="nameKey"/>
+		<binding name="valueKey"/>
+		<binding name="categoryKey"/>
+		<binding name="xName"/>
+		<binding name="yName"/>
+
+		<validation message="&apos;nameKey&apos; is a required binding">
+			<unbound name="nameKey"/>
+		</validation>
+
+		<validation message="&apos;valueKey&apos; is a required binding">
+			<unbound name="valueKey"/>
+		</validation>
+
+		<validation message="&apos;items&apos; is a required binding">
+			<unbound name="items"/>
+		</validation>
+
+        </wo>
+</wodefinitions>
