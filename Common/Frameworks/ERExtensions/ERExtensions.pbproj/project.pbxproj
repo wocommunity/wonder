@@ -465,6 +465,8 @@
 				50287843040960A40043FCB8,
 				416B00E4040EC20100000106,
 				509531170512A4CF00CF0E76,
+				50F5D7F4051B72BE00CF0E76,
+				50F5D7F6051B754B00CF0E76,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1292,6 +1294,32 @@
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXImage.wo;
 			refType = 2;
+		};
+		50F5D7F3051B72BE00CF0E76 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXPathDirectActionRequestHandler.java;
+			path = er/extensions/ERXPathDirectActionRequestHandler.java;
+			refType = 4;
+		};
+		50F5D7F4051B72BE00CF0E76 = {
+			fileRef = 50F5D7F3051B72BE00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		50F5D7F5051B754B00CF0E76 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXPathDirectAction.java;
+			path = er/extensions/ERXPathDirectAction.java;
+			refType = 4;
+		};
+		50F5D7F6051B754B00CF0E76 = {
+			fileRef = 50F5D7F5051B754B00CF0E76;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 //500
 //501
@@ -7448,6 +7476,8 @@
 				F698E7CE030C6F6B01257492,
 				F59C57C002C4565701000102,
 				F59C57C202C4565701000102,
+				50F5D7F5051B754B00CF0E76,
+				50F5D7F3051B72BE00CF0E76,
 				F54C4C5B02C4E2A001000102,
 				F59C57D902C4565701000102,
 				F59C57E102C4565701000102,
