@@ -251,12 +251,15 @@ public class ERXSession extends WOSession {
         }
     }
 
-    // Subclasses override this method to provide their own navigation abilities
+    // CHECKME: Should be removed
     public ERXNavigation createNavigation() { return new ERXNavigation(); }
+    // CHECKME: Should be removed
     public ERXNavigation erxNavigation() { return _navigation; }
-
+    // CHECKME: Should be removed
     protected boolean _hideHelp=false;
+    // CHECKME: Should be removed
     public boolean hideHelp() { return _hideHelp; }
+    // CHECKME: Should be removed
     public void setHideHelp(boolean newValue) { _hideHelp=newValue; }
 
     public void sleep() {
@@ -272,8 +275,10 @@ public class ERXSession extends WOSession {
     public boolean didBackTrack = false;
     public boolean lastActionWasDA = false;
     /**
-        * Utility method that gets the context ID string
-     * from the passed in request
+     * Utility method that gets the context ID string
+     * from the passed in request.
+     * @param aRequest request to get the context id from
+     * @return the context id as a string
      */
     public String requestsContextID(WORequest aRequest){
         String uri = aRequest.uri();
@@ -287,10 +292,13 @@ public class ERXSession extends WOSession {
     }
 
     /**
-        * Method inspects the passed in request to see if
+     * Method inspects the passed in request to see if
      * the user backtracked. If the context ID for the request is 2 clicks
      * less than the context ID for the current WOContext, we know
      * the backtracked.
+     * @param aRequest request to check
+     * @param aContext context to check against request
+     * @return if the user has backtracked or not.
      */
     public boolean didBacktrack(WORequest aRequest, WOContext aContext){
         boolean didBacktrack = false;
@@ -314,34 +322,49 @@ public class ERXSession extends WOSession {
     }
 
     /**
-        * Overrides the ComponentAction handler to set the didBackTrack
-     * flag
+     * Overrides the ComponentAction handler to set the didBackTrack
+     * flag by calling the method <code>didBacktrack</code>/
+     * @param aRequest current request
+     * @param aContext current context
+     * @return super's implementation of <code>invokeAction</code>
      */
     public WOActionResults invokeAction(WORequest aRequest, WOContext aContext){
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack) cat.debug("User backtracking.");
+        if (didBackTrack) cat.debug("User backtracking in invokeAction.");
         return super.invokeAction(aRequest, aContext);
     }
 
+    /**
+     * Overrides the ComponentAction handler to set the didBackTrack
+     * flag by calling the method <code>didBacktrack</code>/
+     * @param aRequest current request
+     * @param aContext current context
+     * @return super's implementation of <code>invokeAction</code>
+     */
     public void takeValuesFromRequest (WORequest aRequest, WOContext aContext){
         String reqCID = requestsContextID(aRequest);
         didBackTrack = didBacktrack(aRequest, aContext);
-        if (didBackTrack) cat.debug("User backtracking.");
+        if (didBackTrack) cat.debug("User backtracking in takeValuesFromRequest.");
         super. takeValuesFromRequest (aRequest, aContext);
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        if (didBackTrack) cat.debug("User backtracking.");
+        if (didBackTrack) cat.debug("User backtracking in appendToResponse.");
         super.appendToResponse(r, c);
     }
 
+    // CHECKME: Should remove.
     public String wrapperPageName() { return "PageWrapper"; }
 
+    /**
+     * Ovverrides terminate to set the shared editing context of the default
+     * editing context to null to avoid a locking problem in WO 5.1.1.
+     */
     public void terminate() {
+        // WOFIX: 5.1.1
         // work around a bug in WO 5.1.1 where the sessions EC will keep a lock on the SEC
         defaultEditingContext().setSharedEditingContext(null);
         super.terminate();
     }
-
 }
