@@ -19,10 +19,17 @@ import er.extensions.ERXLogger;
 // the right way to go is probably to use EOSwitchComponent
 public class ERD2WSwitchComponent extends D2WSwitchComponent  {
 
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WSwitchComponent.class);
+    
     public ERD2WSwitchComponent(WOContext context) { super(context); }
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WSwitchComponent.class);
-
+    /**
+     * Calling super is a bad thing with 5.2. Will perform
+     * binding checks that shouldn't be done.
+     */
+    public void awake() {}
+    
     public void resetCaches() {
         log.debug("Resetting caches");
         takeValueForKey(null,"_task"); // this will break in 5.0 :-)
