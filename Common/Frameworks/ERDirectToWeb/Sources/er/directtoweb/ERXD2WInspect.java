@@ -17,4 +17,8 @@ public class ERXD2WInspect extends D2WInspect {
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e, value, keyPath);
     }
+    /**
+     * Calling super is a bad thing in 5.2 when used as an embedded inspect.
+     */
+    public void awake() {}
 }
