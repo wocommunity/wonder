@@ -84,5 +84,21 @@ public class ERXDictionaryUtilities extends Object {
             }
         }
         return result.immutableClone();
+    }
+
+    /**
+     * @param firstRow
+     * @return
+     */
+    public static NSDictionary removeNullValues(NSDictionary dict) {
+        NSMutableDictionary d = new NSMutableDictionary();
+        for (Enumeration e = dict.keyEnumerator(); e.hasMoreElements();) {
+            Object key = e.nextElement();
+            Object o = dict.objectForKey(key);
+            if (!(o instanceof NSKeyValueCoding.Null)) {
+                d.setObjectForKey(o, key);
+            }
+        }
+        return d;
     }    
 }
