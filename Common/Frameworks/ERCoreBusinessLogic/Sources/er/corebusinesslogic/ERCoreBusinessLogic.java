@@ -65,10 +65,11 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public static void setActor(EOEnterpriseObject actor) {
         if (log.isDebugEnabled())
             log.debug("Setting actor to : "+actor);
-        if (actor!=null)
+        if (actor != null) {
             ERXThreadStorage.takeValueForKey(actor, "actor");
-        else
+        } else {
             ERXThreadStorage.removeValueForKey("actor");
+        }
     }
 
     /**
@@ -79,8 +80,15 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      */
     public static EOEnterpriseObject actor(EOEditingContext ec) {
         EOEnterpriseObject result = actor();
-        if (result != null && result.editingContext() != ec)
-            result = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, result);
+        if (result != null && result.editingContext() != ec) {
+            EOEditingContext actorEc = result.editingContext();
+            actorEc.lock();
+            try {
+                result = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, result);
+            } finally {
+                actorEc.unlock();                
+            }
+        }
         return result;
     }
 
@@ -89,12 +97,13 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * @return current actor for the thread
      */
     public static EOEnterpriseObject actor() {
-        return (EOEnterpriseObject) ERXThreadStorage.valueForKey( "actor");
+        return (EOEnterpriseObject)ERXThreadStorage.valueForKey( "actor");
     }
 
     public static String staticStoredValueForKey(String key) {
         return ERCStatic.staticClazz().staticStoredValueForKey(key);
     }
+    
     public static int staticStoredIntValueForKey(String key) {
         return ERCStatic.staticClazz().staticStoredIntValueForKey(key);
     }
