@@ -162,7 +162,8 @@ public class ERXSession extends WOSession implements Serializable {
      * Also updates languages list with the new single language. 
      * 
      * @param language to set the current localizer for.
-     * @see #language, #setLanguages
+     * @see #language
+     * @see #setLanguages
      */
     public void setLanguage(String language) {
         ERXLocalizer newLocalizer = ERXLocalizer.localizerForLanguage(language);
@@ -191,7 +192,8 @@ public class ERXSession extends WOSession implements Serializable {
      * Also updates localizer and messageEncodings. 
      * 
      * @param languageList  the array of languages for the session
-     * @see #language, #setLanguage
+     * @see #language
+     * @see #setLanguage
      */ 
     public void setLanguages(NSArray languageList) {
         super.setLanguages(languageList);
@@ -215,8 +217,8 @@ public class ERXSession extends WOSession implements Serializable {
      * 
      * @return   NSArray of language name strings available 
      *           for this application
-     * @see      availableLanguagesForThisSession, 
-     *           ERXLocalizer#availableLanguages
+     * @see      #availableLanguagesForThisSession 
+     * @see      ERXLocalizer#availableLanguages
      * @TypeInfo java.lang.String 
      */ 
     public NSArray availableLanguagesForTheApplication() {
@@ -236,9 +238,9 @@ public class ERXSession extends WOSession implements Serializable {
      * 
      * @return   NSArray of language name strings available 
      *           for this particular session
-     * @see      availableLanguagesForTheApplication, 
-     *           ERXRequest#browserLanguages, 
-     *           ERXLocalizer#availableLanguages
+     * @see      #availableLanguagesForTheApplication 
+     * @see      ERXRequest#browserLanguages
+     * @see      ERXLocalizer#availableLanguages
      * @TypeInfo java.lang.String 
      */ 
     public NSArray availableLanguagesForThisSession() {

@@ -128,7 +128,7 @@ public class ERXConfigurationManager {
     
     /** 
      * Returns the command line arguments. 
-     * {@link ERXApplication.main} sets this value. 
+     * {@link ERXApplication#main} sets this value. 
      * 
      * @return the command line arguments as a String[]
      * @see #setCommandLineArguments
@@ -139,7 +139,7 @@ public class ERXConfigurationManager {
     
     /** 
      * Sets the command line arguments. 
-     * {@link ERXApplication.main} will call this method 
+     * {@link ERXApplication#main} will call this method 
      * when the application starts up. 
      * 
      * @see #commandLineArguments
@@ -203,7 +203,7 @@ public class ERXConfigurationManager {
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
-     * calls {@link ERXLogger.configureLogging} to reconfigure 
+     * calls {@link ERXLogger#configureLogging} to reconfigure 
      * the logging system. 
      * <p>
      * The configuration files: Properties and WebObjects.properties 
