@@ -101,6 +101,9 @@ static WebObjects_config_handler *parsers[] = {
    NULL,				/* list terminator */
 };
 
+void *apps;
+void *instances;
+
 typedef enum {
    CM_UNKNOWN, CM_FILE, CM_LIST, CM_MCAST
 } ConfigMethod;
