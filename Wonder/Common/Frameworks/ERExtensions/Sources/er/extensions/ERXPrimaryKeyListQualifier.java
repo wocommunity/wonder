@@ -23,21 +23,7 @@ import com.webobjects.eoaccess.*;
  *
  * this is useful for pre-fetching type uses.
  */
-// ENHANCEME: Should support the NOT operator, also should support handing
-//		off of an array of primary keys, not just eos.
-public class ERXPrimaryKeyListQualifier extends EOKeyValueQualifier {
-
-    /**
-     * Public constructor inherited by EOKeyValueQualifier.
-     * @param key to qualify against
-     * @param s selector to use
-     * @param v value object
-     */
-    public ERXPrimaryKeyListQualifier(String k,
-                                      NSSelector s,
-                                      Object v) {
-        super(k,s,v);
-    }    
+public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
 
     /**
      * Constructs a primary key list qualifer for a given
@@ -46,12 +32,10 @@ public class ERXPrimaryKeyListQualifier extends EOKeyValueQualifier {
      * enterprise object is named 'id'.
      * @param eos array of enterprise objects
      */
-    // FIXME: Given the array of eos we should be able to determine the primary key
-    //		attribute name.
     public ERXPrimaryKeyListQualifier(NSArray eos) {
-        super("id", EOQualifier.QualifierOperatorEqual, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(eos));
+        this(primaryKeyNameForObjects(eos), ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(eos));
     }
-
+    
     /**
      * Constructs a primary key list qualifer for a given
      * set of enterprise objects and the primary key
@@ -60,7 +44,7 @@ public class ERXPrimaryKeyListQualifier extends EOKeyValueQualifier {
      * @param eos array of enterprise objects
      */
     public ERXPrimaryKeyListQualifier(String key, NSArray eos) {
-        super(key, EOQualifier.QualifierOperatorEqual, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(eos));
+        super(key, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(eos));
     }
 
     /**
@@ -74,42 +58,46 @@ public class ERXPrimaryKeyListQualifier extends EOKeyValueQualifier {
      * @param eos array of enterprise objects
      */    
     public ERXPrimaryKeyListQualifier(String key, String foreignKey, NSArray eos) {
-        super(key, EOQualifier.QualifierOperatorEqual, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(foreignKey, eos));
+        this(key, ERXEOToManyQualifier.primaryKeysForObjectsFromSameEntity(foreignKey, eos));
     }
-
-    /**
-     * Constructs the sql string for the primary key
-     * list qualifier. See the description of the class
-     * for the format of the sql that is generated.
-     * @param e a sql expression
-     * @return sql string for primary key list
-     */ 
-    // FIXME: Need support for data primary keys 
-    public String sqlStringForSQLExpression(EOSQLExpression e) {
-        StringBuffer sb=new StringBuffer();
-        sb.append(e.sqlStringForAttributeNamed(key()));
-        sb.append(" IN ");
-        sb.append(value());
-        return sb.toString();
-    }
-
-    /**
-     * String representation of the primary key list
-     * qualifier.
-     * @return string description of the qualifier
-     */
-    public String toString() {
-        return " <primaryKey> IN '" + value() + "'";
-    }
-
+        
     /*
-     * EOF seems to be wanting to clone qualifiers when
-     * they are inside an and-or qualifier without this
-     * method, ERXPrimaryKeyListQualifier is cloned into
-     * an EOSQLQualifier and the generated SQL is incorrect..
+     * Implementation of the Cloneable interface.
      * @return cloned primary key list qualifier.
      */
     public Object clone() {
-        return new ERXPrimaryKeyListQualifier(key(),selector(),value());
+        return new ERXPrimaryKeyListQualifier(key(), (NSArray)value());
     }
+
+    /**
+     * Calculates the primary key attribute name for an
+     * array of enterprise objects. This method assumes
+     * that all the entities of the objects have the same
+     * primary key attribute name.
+     * @param eos array of enterprise objects
+     * @return primary key name for the enterprise objects
+     *		in the array.
+     */
+    protected static String primaryKeyNameForObjects(NSArray eos) {
+        validateObjects(eos);
+        EOEnterpriseObject eo = (EOEnterpriseObject)eos.lastObject();
+        EOEntity entity = ((EOEntityClassDescription)eo.classDescription()).entity();
+        if (entity.primaryKeyAttributeNames().count() != 1)
+            throw new IllegalStateException("Attempting to construct a qualifier for an entity with a compound primary key: " + entity);
+        return (String)entity.primaryKeyAttributeNames().lastObject();
+    }
+
+    /**
+     * Simple validation routine used to ensure that
+     * the objects being passed in are enterprise
+     * objects and have more than one in the array.
+     * @param eos array of objects to check
+     * @return the array of objects if they pass the
+     *		check.
+     */
+    protected static NSArray validateObjects(NSArray eos) {
+        if (eos == null || eos.count() == 0 || !(eos.lastObject() instanceof EOEnterpriseObject))
+            throw new IllegalStateException("Attempting to construct a qualifier for a bad array: " + eos);
+        return eos;
+    }    
 }
