@@ -1,0 +1,33 @@
+{
+    "Test message for unit test" = "FAIL - app comes before this";
+    "Test message for unit test in framework" = "SUCCESS";
+    "ERDEditPasswordConfirm" = {
+        infoMessage = "<i>Nota: Sia la login che la password tengono conto delle maiuscole. Sono richiesti dai 6 ai 16 caratteri, con almeno un numero.</i>";
+        newPasswordLabel = "Nuova password";
+        passwordLabel = "Password";
+        confirmLabel = "Conferma la Password";
+        confirmNewLabel = "Conferma la nuova Password";
+    };
+    "ERD2WWizardCreationPage.stepsMessage" = "Step @@currentStep@@ of Ê@@tabSectionsContents.count@@";
+    "ERD2WQueryPage.plainMessage" = "@@displayNameForEntity@@";
+    "ERD2WQueryPage.restrictedMessage" = "@@displayNameForEntity@@ (max @@fetchLimit@@)";
+    "ERD2W.cancelCreationMessage" = "<b>Sei sicuro di voler annullare la creazione di questo/a @@displayNameForEntity@@?</b><br><br>Cliccan sulla conferma per abbandonare le modifiche, Clicca su annulla per continuare le modifiche a @@displayNameForEntity@@.";
+    "ERDDefaultCancelCreationMessageAssignment.cancelCreationMessage" = "<b>Sei sicuro di voler annullare la creazione di questo/a @@displayNameForEntity@@?</b><br><br>Cliccan sulla conferma per abbandonare le modifiche, Clicca su annulla per continuare le modifiche a @@displayNameForEntity@@.";
+    "ERDEditListButton.editButtonName" = "Modifica l'elenco di @@displayNameForProperty@@";
+    "ERDEmptyListMessage.emptyListMessage" = "<b>Nessun record trovato.</b>";
+    "ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>Nessun record trovato.</b>";
+    "ERDTrashcan.confirmDeletionMessage" = "<b>Sei sicuro di voler eliminare questo/a @@displayNameForEntity@@?</b>";
+    "ERDEditList.saveLabel" = "Vuoi salvare @@pluralCount@@ @@pluralString@@?";
+    "ERD2WEditToManyRelationship.noChoiceAvailable" = "Nessun/a @@displayNameForEntity@@ attualmente disponibile";
+    "ERDDatePopup.monthList" = ( "Gen",  "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic");
+    "ERDEditDatePopupOrNull.none" = "Nessuno";
+    "ERDEditDatePopupOrNull.or" = "- o -";
+    "CouldNotSave" = "Non posso salvare le modifiche: @@message@@";
+    "CouldNotSavePleaseReapply" = "Non posso salvare le modifiche. Il/la @@displayNameForEntity@@ risulta giˆ  modificato/a nel database. Le tue modifiche sono state scartate, inviale nuovamente.";
+    "ERD2WInspect.alreadyAborted" = "<b>Hai giˆ annullato questa operazione</b>. Premi cancel e riprova dall'inizio.";
+    "ERD2WList.confirmDeletionMessage" = "<b>Sei sicuro di voler eliminare questo/a @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
+    "ERDInspect.objectUnsetMessage" = "Nessun @@displayNameForDestinationEntity@@ specificato.";
+    "ERDInspect.select" = "Seleziona...";
+    "ERDInspect.clear" = "Cancella";
+    "ERDList.create" = "Aggiungi";
+}
