@@ -45,7 +45,7 @@
             columnName = ""; 
             externalType = NUMBER; 
             name = id; 
-            serverTimeZone = Europe/Berlin; 
+            serverTimeZone = "Europe/Berlin"; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSNumber; 
             valueType = i; 
@@ -133,7 +133,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = BLOB; 
+            externalType = CLOB; 
             name = varcharLarge; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
             valueClassName = NSString; 
@@ -150,7 +150,8 @@
         varchar50, 
         varchar16, 
         varchar10, 
-        charFlag
+        charFlag, 
+        varcharLarge
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -167,14 +168,14 @@
         varchar50, 
         varchar16, 
         varchar10, 
-        varcharLarge, 
         dateTime, 
-        charFlag
+        charFlag, 
+        varcharLarge
     ); 
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 
     internalInfo = {
-        _clientClassPropertyNames = (
+        "_clientClassPropertyNames" = (
             shortString, 
             longText, 
             date, 
