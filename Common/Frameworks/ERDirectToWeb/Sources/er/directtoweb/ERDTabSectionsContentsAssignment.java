@@ -59,7 +59,7 @@ public class ERDTabSectionsContentsAssignment extends ERDAssignment {
      * <b>tabSectionsContents</b>. Constructs an array of 
      * {@link ERD2WContainer}s representing each tab and
      * optionally another array of containers representing 
-     * each section. See {@link ERD2wTabInspectPage} for the
+     * each section. See {@link ERD2WTabInspectPage} for the
      * exact format of the tabs and sections.
      * @return array of containers for each tab
      */
