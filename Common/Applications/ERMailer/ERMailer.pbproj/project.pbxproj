@@ -838,7 +838,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "if [ -z \"${PACKAGE_APPLICATION}\" ]; then\n  echo \"Copying frameworks into application wrapper...\"\n  BUILT_IN_FRAMEWORKS_DIR=\"${CONTENTS_DIR}/Library/Frameworks\"\n  mkdir -p \"${BUILT_IN_FRAMEWORKS_DIR}\"\n  for framework in $(cat ${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}-javac_framework_jars); do\n      cd $(dirname \"${framework}\") &&\n        pax -rw $(basename \"${framework}\") \"${BUILT_IN_FRAMEWORKS_DIR}\"\n  done\n  perl -i -pe \"s|${SYMROOT}|APPROOT/Library/Frameworks|\" \"${APPLICATION_DIR_MACOS}/MacOSClassPath.txt\"\n  BUILT_IN_EXTENSIONS_DIR=\"${CONTENTS_DIR}/Extensions\"\n  mkdir -p \"${BUILT_IN_EXTENSIONS_DIR}\"\n  cp $(find /Library/Java/Extensions -name '*.jar' -o -name '*.zip') \"${BUILT_IN_EXTENSIONS_DIR}\"\nfi";
+			shellScript = "if [ \"${WRAPPER_PACKAGING}\" ]; then\n  echo \"Copying frameworks into application wrapper...\"\n  BUILT_IN_FRAMEWORKS_DIR=\"${CONTENTS_DIR}/Library/Frameworks\"\n  mkdir -p \"${BUILT_IN_FRAMEWORKS_DIR}\"\n  for framework in $(cat ${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}-javac_framework_jars); do\n      cd $(dirname \"${framework}\") &&\n        pax -rw $(basename \"${framework}\") \"${BUILT_IN_FRAMEWORKS_DIR}\"\n  done\n  perl -i -pe \"s|${SYMROOT}|APPROOT/Library/Frameworks|\" \"${APPLICATION_DIR_MACOS}/MacOSClassPath.txt\"\n  BUILT_IN_EXTENSIONS_DIR=\"${CONTENTS_DIR}/Extensions\"\n  mkdir -p \"${BUILT_IN_EXTENSIONS_DIR}\"\n  cp $(find /Library/Java/Extensions -name '*.jar' -o -name '*.zip') \"${BUILT_IN_EXTENSIONS_DIR}\"\nfi";
 		};
 //500
 //501
