@@ -10,6 +10,16 @@
         }, 
         {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
         {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = VARCHAR; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = boolean; 
+            valueClassName = "java.lang.Boolean"; 
+            valueFactoryMethodName = valueOf; 
+            width = 5; 
+        }, 
+        {
             columnName = ""; 
             externalType = CHAR; 
             name = charFlag; 
@@ -186,7 +196,8 @@
         type, 
         mutableArray, 
         mutableDictionary, 
-        blob
+        blob, 
+        boolean
     ); 
     className = EOGenericRecord; 
     classProperties = (
@@ -210,7 +221,8 @@
         type, 
         mutableArray, 
         mutableDictionary, 
-        blob
+        blob, 
+        boolean
     ); 
     externalName = eooracleprototypes; 
     fetchSpecificationDictionary = {}; 
