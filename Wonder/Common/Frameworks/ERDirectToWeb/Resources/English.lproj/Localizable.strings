@@ -1,6 +1,4 @@
 {
-    "Test message for unit test" = "FAIL - app comes before this"; 
-    "Test message for unit test in framework" = SUCCESS; 
     "ERDEditPasswordConfirm" = {
         confirmLabel = "Confirm Password"; 
         confirmNewLabel = "Confirm New Password"; 

@@ -1,6 +1,4 @@
 {
-    "Test message for unit test" = "FAIL - app comes before this";
-    "Test message for unit test in framework" = "SUCCESS";
     "ERDEditPasswordConfirm" = {
          infoMessage = "<i>Veuillez noter que le login et le mot de passe sont sensible aux majuscules. Aussi un mot de passe doit avoir entre 6 et 16 caractères et au moins un chiffre.</i>";
         newPasswordLabel = "Nouveau mot de passe";
