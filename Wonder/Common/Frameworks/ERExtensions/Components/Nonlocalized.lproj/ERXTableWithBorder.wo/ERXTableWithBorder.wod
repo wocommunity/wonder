@@ -33,7 +33,7 @@ RenderBorder: WOConditional {
 }
 
 Table: WOGenericContainer {
-	border = 0;
+	border = 1;
 	cellpadding = 0;
 	cellspacing = 0;
 	elementName = "TABLE";
