@@ -131,6 +131,64 @@
 			settings = {
 			};
 		};
+		9419C8C903D8D07B00CF0E7D = {
+			children = (
+				9419C8CA03D8D09800CF0E7D,
+				9419C8CC03D8D0A700CF0E7D,
+				9419C8CE03D8D0C500CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryDateRange;
+			refType = 4;
+		};
+		9419C8CA03D8D09800CF0E7D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WQueryDateRange.java;
+			path = er/directtoweb/ERD2WQueryDateRange.java;
+			refType = 4;
+		};
+		9419C8CB03D8D09800CF0E7D = {
+			fileRef = 9419C8CA03D8D09800CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9419C8CC03D8D0A700CF0E7D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WQueryDateRange.api;
+			path = Components/ERD2WQueryDateRange.api;
+			refType = 2;
+		};
+		9419C8CD03D8D0A700CF0E7D = {
+			fileRef = 9419C8CC03D8D0A700CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9419C8CE03D8D0C500CF0E7D = {
+			children = (
+				9419C8CF03D8D0C500CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryDateRange.wo;
+			path = "";
+			refType = 4;
+		};
+		9419C8CF03D8D0C500CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryDateRange.wo;
+			refType = 2;
+		};
+		9419C8D503D8D0C500CF0E7D = {
+			fileRef = 9419C8CE03D8D0C500CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94AA72FC03D3504C00CF0E7D = {
 			children = (
 				94AA72FD03D3504C00CF0E7D,
@@ -7897,6 +7955,8 @@
 				50E9E1A303CBB5A700CF0E76,
 				94AA730403D3504C00CF0E7D,
 				94AA730F03D350FF00CF0E7D,
+				9419C8CD03D8D0A700CF0E7D,
+				9419C8D503D8D0C500CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8109,6 +8169,7 @@
 				9405BE5D03C9FC9600CF0E7D,
 				50E9E1A503CBB5BB00CF0E76,
 				94AA730503D3504C00CF0E7D,
+				9419C8CB03D8D09800CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9995,6 +10056,7 @@
 		};
 		F6E796A502C877AF01AD0D07 = {
 			children = (
+				9419C8C903D8D07B00CF0E7D,
 				50E9E19A03CBB56900CF0E76,
 				F6E7967E02C877AF01AD0D07,
 				F6E7967F02C877AF01AD0D07,

@@ -32,15 +32,12 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
         }
         super.appendToResponse(r,c);
     }
-    //Made the component stateful so that we can keep eroneous values
-    /*public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }*/
-    public String name() { return key()+"_datebox"; }
     public String propertyKey() { return (String)valueForBinding("propertyKey"); }
     public String displayNameForProperty() { return (String)valueForBinding("displayNameForProperty"); }
     public Object value() {return dateString;}
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
+        System.out.println("dateString = "+dateString);
         NSTimestamp date = null;
         try {
             if(dateString!=null) {
@@ -83,14 +80,4 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
         }
     }
 
-    private static String _datePickerJavaScriptUrl;
-    public String datePickerJavaScriptUrl() {
-        if (_datePickerJavaScriptUrl==null) {
-            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js",
-                                                                                          "ERExtensions",
-                                                                                          null,
-                                                                                          context().request());
-        }
-        return _datePickerJavaScriptUrl;
-    }
 }
