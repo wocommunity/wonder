@@ -1,5 +1,5 @@
 //
-// EOGenericRecordClazz.java
+// EOEnterpriseObjectClazz.java
 // Project ERExtensions
 //
 // Created by ak on Fri Apr 12 2002
@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * Adds class-level inheritance to EOF.<br />
- * Use subclasses of EOGenericRecordClazz as inner classes in your EO subclasses
+ * Use subclasses of EOEnterpriseObjectClazz as inner classes in your EO subclasses
  * to work around the missing class object inheritance of java. They <b>must</b>
  * be named XXX.XXXClazz to work.<br />
  * Every subclass of this class will get their own "ClazzObject" instance, so it's
@@ -29,7 +29,7 @@ public class EOEnterpriseObjectClazz extends Object {
     /**
      * logging support
      */
-    public static final ERXLogger log = ERXLogger.getERXLogger(EOEnterpriseObjectClazz .class);
+    public static final ERXLogger log = ERXLogger.getERXLogger(EOEnterpriseObjectClazz.class);
     
     /**
      * caches the clazz objects
@@ -82,7 +82,7 @@ public class EOEnterpriseObjectClazz extends Object {
     /**
      * Default public constructor
      */
-    public EOEnterpriseObjectClazz () {
+    public EOEnterpriseObjectClazz() {
     }
 
     /**
@@ -97,17 +97,17 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param entity to generate the clazz for
      * @return clazz object for the given entity
      */
-    private static EOEnterpriseObjectClazz  classFromEntity(EOEntity entity) {
-        EOEnterpriseObjectClazz  clazz = null;
+    private static EOEnterpriseObjectClazz classFromEntity(EOEntity entity) {
+        EOEnterpriseObjectClazz clazz = null;
         if(entity == null) {
-            return new EOEnterpriseObjectClazz ();
+            return new EOEnterpriseObjectClazz();
         }
         try {
             String className = entity.className();
             if(className.equals("ERXGenericRecord"))
                 clazz = new ERXGenericRecord.ERXGenericRecordClazz();
             else
-                clazz = (EOEnterpriseObjectClazz )Class.forName(className + "$" + entity.name() + "Clazz").newInstance();
+                clazz = (EOEnterpriseObjectClazz)Class.forName(className + "$" + entity.name() + "Clazz").newInstance();
         } catch (InstantiationException ex) {
         } catch (ClassNotFoundException ex) {
         } catch (IllegalAccessException ex) {
@@ -123,8 +123,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param entityName name of the entity to get the Clazz object for
      * @return clazz object for the given entity
      */
-    public static EOEnterpriseObjectClazz  clazzForEntityNamed(String entityName) {
-        EOEnterpriseObjectClazz  clazz = (EOEnterpriseObjectClazz )allClazzes.objectForKey(entityName);
+    public static EOEnterpriseObjectClazz clazzForEntityNamed(String entityName) {
+        EOEnterpriseObjectClazz clazz = (EOEnterpriseObjectClazz)allClazzes.objectForKey(entityName);
         if(clazz == null) {
             clazz = classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
             clazz.setEntityName(entityName);
@@ -317,7 +317,7 @@ public class EOEnterpriseObjectClazz extends Object {
         
         NSArray results = null;
 
-        EOAttribute attribute = EOEnterpriseObjectClazz .objectCountAttribute();
+        EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
         EOEntity entity = entity(ec);
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
