@@ -117,9 +117,8 @@ public class ERXStyleSheet extends WOComponent {
     }    
 
     private NSArray _languages() {
-        WOSession session = session();
-	if (session != null)
-	    return session.languages();
+        if(hasSession())
+            return session().languages();
 	WORequest request = context().request();
 	if (request != null)
 	    return request.browserLanguages();
