@@ -33,8 +33,8 @@ public class ERXDHTMLComponent extends ERXStatelessComponent {
 	if(varName == null) {
             varName = (String)valueForBinding("varName");
             if(varName == null)
-                varName = "dhtml_" + ERXExtensions.replaceStringByStringInString("-", "_", "" + context().elementID().hashCode());
-            varName = ERXExtensions.replaceStringByStringInString(".", "_", varName);
+                varName = "dhtml_" + ERXStringUtilities.replaceStringByStringInString("-", "_", "" + context().elementID().hashCode());
+            varName = ERXStringUtilities.replaceStringByStringInString(".", "_", varName);
 	}
 	return varName;
     }

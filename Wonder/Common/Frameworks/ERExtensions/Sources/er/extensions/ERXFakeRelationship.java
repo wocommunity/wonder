@@ -107,7 +107,7 @@ public class ERXFakeRelationship extends WOComponent {
 
 	    while(e.hasMoreElements()) {
 		EOEnterpriseObject rel = (EOEnterpriseObject)e.nextElement();
-		newValue.append(ERXExtensions.primaryKeyForObject(rel));
+		newValue.append(ERXEOControlUtilities.primaryKeyStringForObject(rel));
 		newValue.append(delimiter);
 	    }
 	    sourceObject.takeValueForKey(delimiter + newValue.toString(), relationshipKey);

@@ -41,8 +41,8 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
     
     public String varName()  {
 	if(varName == null) {
-	    varName = ERXExtensions.replaceStringByStringInString("-", "_", "dhtml-" + context().elementID().hashCode() + "-" + key());
-	    varName = ERXExtensions.replaceStringByStringInString(".", "_", varName);
+	    varName = ERXStringUtilities.replaceStringByStringInString("-", "_", "dhtml-" + context().elementID().hashCode() + "-" + key());
+	    varName = ERXStringUtilities.replaceStringByStringInString(".", "_", varName);
 	    log.debug(varName);
 	}
 	return varName;
