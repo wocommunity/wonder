@@ -167,6 +167,65 @@
 			settings = {
 			};
 		};
+		9409EBF6047BFEA300CF0E7D = {
+			children = (
+				9409EBF7047BFEC000CF0E7D,
+				9409EBF9047BFED200CF0E7D,
+				9409EBFB047BFEEE00CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryStringOperator;
+			path = "";
+			refType = 4;
+		};
+		9409EBF7047BFEC000CF0E7D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WQueryStringOperator.java;
+			path = er/directtoweb/ERD2WQueryStringOperator.java;
+			refType = 4;
+		};
+		9409EBF8047BFEC000CF0E7D = {
+			fileRef = 9409EBF7047BFEC000CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9409EBF9047BFED200CF0E7D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERD2WQueryStringOperator.api;
+			path = Components/ERD2WQueryStringOperator.api;
+			refType = 2;
+		};
+		9409EBFA047BFED200CF0E7D = {
+			fileRef = 9409EBF9047BFED200CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9409EBFB047BFEEE00CF0E7D = {
+			children = (
+				9409EBFC047BFEEE00CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryStringOperator.wo;
+			path = "";
+			refType = 4;
+		};
+		9409EBFC047BFEEE00CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryStringOperator.wo;
+			refType = 2;
+		};
+		9409EC01047BFEEE00CF0E7D = {
+			fileRef = 9409EBFB047BFEEE00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		9419C8C903D8D07B00CF0E7D = {
 			children = (
 				9419C8CA03D8D09800CF0E7D,
@@ -7998,6 +8057,8 @@
 				94AA730F03D350FF00CF0E7D,
 				9419C8CD03D8D0A700CF0E7D,
 				9419C8D503D8D0C500CF0E7D,
+				9409EBFA047BFED200CF0E7D,
+				9409EC01047BFEEE00CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8213,6 +8274,7 @@
 				9419C8CB03D8D09800CF0E7D,
 				418CC2E9044306F500AD0D07,
 				41F217BD046EE09200000103,
+				9409EBF8047BFEC000CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10140,6 +10202,7 @@
 				F6E7969902C877AF01AD0D07,
 				94AA72FC03D3504C00CF0E7D,
 				F6E7969A02C877AF01AD0D07,
+				9409EBF6047BFEA300CF0E7D,
 				F6E7969B02C877AF01AD0D07,
 				F6E7969C02C877AF01AD0D07,
 				F6E7969D02C877AF01AD0D07,
