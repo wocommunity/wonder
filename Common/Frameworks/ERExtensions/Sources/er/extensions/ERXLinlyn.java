@@ -273,7 +273,8 @@ public class ERXLinlyn {
 
     private String getAsString(InputStream is) {
         int c=0;
-        char lineBuffer[]=new char[128], buf[]=lineBuffer;
+        int doubler = 65536;
+        char lineBuffer[]=new char[doubler], buf[]=lineBuffer;
         int room= buf.length, offset=0;
         try {
           loop: while (true) {
@@ -282,7 +283,9 @@ public class ERXLinlyn {
                       case -1: break loop;
 
                       default: if (--room < 0) {
-                                   buf = new char[offset + 128];
+                                   if (log.isDebugEnabled()) { log.debug("Growing array by: " + doubler); }
+                                   buf = new char[offset + doubler];
+                                   doubler *= 2; // double the size of the array each time it grows.
                                    room = buf.length - offset - 1;
                                    System.arraycopy(lineBuffer, 0, 
                                             buf, 0, offset);
