@@ -1,0 +1,19 @@
+on createMenu(context)
+	if (the number of characters in context) < 50 then
+		return "Find in developer docs"
+	end if
+	return null
+end createMenu
+
+on handleMenu(context)
+	set newstring to ""
+	repeat with i from 1 to (the number of characters in context)
+		set c to character i of context
+		if c = " " then
+			c = "+"
+		end if
+		set newstring to newstring & c
+	end repeat
+	tell app "Internet Explorer" to openurl ("http://developer.apple.com/cgi-bin/search.pl?ie=utf8&oe=utf8&q=" & newstring) 
+	return null
+end handleMenu
