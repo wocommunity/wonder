@@ -16,10 +16,10 @@ public class ERXDateGrouper extends WODisplayGroup {
     /** logging support */
     private static ERXLogger log = ERXLogger.getERXLogger(ERXDateGrouper.class);
 
-    public static final int DAY = GregorianCalendar.DAY_OF_YEAR;
-    public static final int MONTH = GregorianCalendar.MONTH;
-    public static final int WEEK = GregorianCalendar.WEEK_OF_YEAR;
-    public static final int YEAR = GregorianCalendar.YEAR;
+    public static final int DAY = Calendar.DAY_OF_YEAR;
+    public static final int MONTH = Calendar.MONTH;
+    public static final int WEEK = Calendar.WEEK_OF_YEAR;
+    public static final int YEAR = Calendar.YEAR;
 
     static NSMutableDictionary cachedDays = new NSMutableDictionary();
     static int currentYear = ERXTimestampUtility.yearOfCommonEra(new NSTimestamp());
@@ -171,9 +171,9 @@ public class ERXDateGrouper extends WODisplayGroup {
         if(log.isDebugEnabled()) {
             log.debug("dayOfYear: " + dayOfYear);
             log.debug("dayOfWeek: " + dayOfWeek);
-            log.debug("SUNDAY: " + GregorianCalendar.SUNDAY);
+            log.debug("SUNDAY: " + Calendar.SUNDAY);
         }
-        if(dayOfWeek == (!weekStartsMonday() ? GregorianCalendar.SUNDAY : GregorianCalendar.MONDAY)) {
+        if(dayOfWeek == (!weekStartsMonday() ? Calendar.SUNDAY : Calendar.MONDAY)) {
             return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value));
         }
         return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value) - dayOfWeek + 1);
