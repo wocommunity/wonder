@@ -7,8 +7,6 @@
 	objects = {
 		F5274010017CADD2014387C8 = {
 			buildStyles = (
-				F527406B017CADD2014387C8,
-				F527406C017CADD2014387C8,
 				F527406D017CADD2014387C8,
 				F527406E017CADD2014387C8,
 				F527406F017CADD2014387C8,
@@ -62,6 +60,7 @@
 				F527402D017CADD2014387C8,
 				F527402F017CADD2014387C8,
 				F5274030017CADD2014387C8,
+				F69DF37802C8600901AD0D07,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -226,7 +225,7 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>Has_WOComponents</key>
-	<true/>
+	<string>YES</string>
 	<key>NSExecutable</key>
 	<string>WOOgnl</string>
 	<key>NSJavaNeeded</key>
@@ -261,7 +260,7 @@
 				F5274051017CADD2014387C8,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Users/max/roots";
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_VERSION = TMP;
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
@@ -356,6 +355,7 @@
 				F527404D017CADD2014387C8,
 				F527404F017CADD2014387C8,
 				F5274050017CADD2014387C8,
+				F69DF37902C8600A01AD0D07,
 			);
 			isa = PBXFrameworksBuildPhase;
 		};
@@ -641,31 +641,13 @@
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
-		F527406B017CADD2014387C8 = {
-			buildRules = (
-			);
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			isa = PBXBuildStyle;
-			name = Development;
-		};
-		F527406C017CADD2014387C8 = {
-			buildRules = (
-			);
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-			};
-			isa = PBXBuildStyle;
-			name = Deployment;
-		};
 		F527406D017CADD2014387C8 = {
 			buildRules = (
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
+				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -823,6 +805,32 @@
 			isa = PBXFileReference;
 			path = LICENSE.NPL;
 			refType = 4;
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F60
+//F61
+//F62
+//F63
+//F64
+		F69DF37802C8600901AD0D07 = {
+			includeInIndex = 1;
+			isa = PBXZipArchiveReference;
+			name = "ognl-2.0.1.jar";
+			path = "Libraries/ognl-2.0.1.jar";
+			refType = 2;
+		};
+		F69DF37902C8600A01AD0D07 = {
+			fileRef = F69DF37802C8600901AD0D07;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
 		};
 	};
 	rootObject = F5274010017CADD2014387C8;
