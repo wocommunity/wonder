@@ -257,7 +257,8 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 
             NSTimestamp stopDate=now.timestampByAddingGregorianUnits(0, 0, 0, 0, 0, s);
             WOTimer t=new WOTimer(stopDate, 0, this, "startRefusingSessions", null, null, false);
-            t.schedule();        }
+            t.schedule();
+        }
         super.run();
     }
 
@@ -302,19 +303,39 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 
     /**
      *  Stops the application from handling any new requests. Will still handle
-     *  requests from existing sessions. Also registers a kill timer that will
-     *  terminate the application thirty minutes from the time this method is
-     *  called
+     *  requests from existing sessions.
      */
     public void startRefusingSessions() {
         log.info("Refusing new sessions");
         NSLog.out.appendln("Refusing new sessions");
         refuseNewSessions(true);
-        log.info("Registering kill timer");
-        NSTimestamp now=new NSTimestamp();
-        NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, 1800);
-        WOTimer t=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
-        t.schedule();
+    }
+
+    protected WOTimer _killTimer;
+
+    /**
+     * Overridden to install/uninstall a timer that will terminate the application
+     * in (4*the session timeout) in minutes from the time this method is called.
+     * The timer will get uninstalled if you allow new sessions again during that
+     * time span.
+     */
+
+    public void refuseNewSessions(boolean value) {
+        super.refuseNewSessions(value);
+        // we assume that we changed our mind about killing the instance.
+        if(_killTimer != null) {
+            _killTimer.invalidate();
+            _killTimer = null;
+        }
+        if(isRefusingNewSessions()) {
+            int timeToKill=ERXProperties.intForKey("ERTimeToKill");
+            if (timeToKill > 0) {
+                log.info("Registering kill timer");
+                NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToKill);
+                _killTimer=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
+                _killTimer.schedule();
+            }
+        }
     }
 
     /**
@@ -325,6 +346,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         NSLog.out.appendln("Forcing exit");
         System.exit(1);
     }
+    
     /** cached name suffix */
     private String _nameSuffix;
     /** has the name suffix been cached? */
