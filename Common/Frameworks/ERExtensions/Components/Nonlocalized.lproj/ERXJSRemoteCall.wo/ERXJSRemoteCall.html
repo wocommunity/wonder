@@ -13,8 +13,16 @@ function <webobject name=Name></webobject>RPC(<webobject name=Repetition1><webob
 	else if(nav.indexOf("Safari") != -1) loc = frame.location;
 	else if(nav.indexOf("MSIE") != -1) { if (nav.indexOf("Mac") != -1) { loc = frame.document.location; } }
 	else loc = frame.document.location;
-        if(loc && loc.replace) loc.replace(url);
-        if(loc && !loc.replace) loc = url;
+        if(loc) {
+        	if (loc.replace) {
+        		 loc.replace(url);
+        	}
+        }
+        if(loc) {
+        	if (!loc.replace) {
+        		loc = url;
+        	}
+        }
 	return false
 }
 </script>
