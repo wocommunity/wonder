@@ -9,17 +9,19 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
+import org.apache.log4j.*;
+import org.apache.log4j.spi.*;
 
-// ATTENTION: to use ERXLogger.getLogger(), you must add to your config file
-//    log4j.categoryFactory=er.extensions.ERXLog4j$Factory
-
-public class ERXLogger extends org.apache.log4j.ERXLog4JCategory {
+public class ERXLogger extends org.apache.log4j.Category {
     public ERXLogger(String name) {
         super(name);
     }
 
     public static ERXLogger getLogger(String name) {
-        return (ERXLogger)org.apache.log4j.Category.getInstance(name);
+        org.apache.log4j.Category logger = org.apache.log4j.Category.getInstance(name);
+        if(logger != null && !(logger instanceof ERXLogger))
+            throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app.");
+        return (ERXLogger)logger;
     }
 
     public static ERXLogger getLogger(Class clazz) {

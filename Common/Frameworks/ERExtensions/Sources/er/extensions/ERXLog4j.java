@@ -17,13 +17,16 @@ import org.apache.log4j.*;
 // This class is used to configure the log4j system.  By calling ERXLog4j.configureLogging() will cause the log4j
 // configuration file to be loaded.  The file path is specified in a defaults write of ERConfigurationPath.
 // ConfigureLogging can be called many times as it will only be configured the first time.
-// ATTENTION: to use ERXLogger.getLogger(), you must add to your config file
-//    log4j.categoryFactory=er.extensions.ERXLog4j$Factory
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ERXLog4j {
-
+    static {
+        // (ak): this is *so* ugly...
+        Category.defaultHierarchy.setCategoryFactory(new ERXLog4j.Factory());
+        // System.out.println("Log4J: I set the Log4j factory to the right class...");
+    }
+    
     ///////////////////////////////////////////////  log4j category  ////////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.utilities.log4j.ERXLog4j");
+    public static Category cat;
 
     /////////////////////////////////////////////// Notification Titles /////////////////////////////////////////
     public static final String ConfigurationDidChangeNotification = "ConfigurationDidChangeNotification";
@@ -53,6 +56,7 @@ public class ERXLog4j {
             }
             setConfigurationFilePath(configurationPath);
             loadConfiguration();
+            cat = Category.getInstance("er.utilities.log4j.ERXLog4j");
             cat.info("Log4j configured.");
             setIsLoggingConfigured(true);
             _isInitialized = true;
@@ -61,7 +65,7 @@ public class ERXLog4j {
 
     public static class Factory implements org.apache.log4j.spi.CategoryFactory {
         public Category makeNewCategoryInstance(String name) {
-            if(cat.isDebugEnabled())
+            if(cat != null && cat.isDebugEnabled())
                 cat.debug("makeNewCategoryInstance: " + name);
             return new ERXLogger(name);
         }
