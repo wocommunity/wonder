@@ -12,6 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import er.extensions.*;
 
 /**
@@ -44,7 +45,50 @@ public class ERD2WEditNumber extends D2WEditNumber {
         return (java.text.Format)_numberFormatter;
     }
 
-    public Object convertNumber(Object anObject) {
+    public Object validateTakeValueForKeyPath (Object anObject, String aPath) throws NSValidation.ValidationException {
+        Number number = null;
+        try {
+            if (anObject instanceof String) {
+                number = (Number)numberFormatValueForString((String)anObject);
+            } else if (anObject!=null && !(anObject instanceof Number)) {
+                log.warn("Unable to read number: " + anObject);
+                throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
+            }
+        } catch(NSValidation.ValidationException ex) {
+            validationFailedWithException(ex, anObject, propertyKey());
+            throw ex;
+        }
+        return super.validateTakeValueForKeyPath(convertNumber(number), aPath);
+    }
+    /*
+     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
+        // This is for number formatting exceptions
+        String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
+        parent().validationFailedWithException(theException, convertNumber(numberFormatValueForString((String)theValue)), keyPath);
+    }
+*/
+    /* following needed because we do not want to leave control over our (light) numberFormatter to WebObjects, which needs a full fledged NSNumberFormatter */
+    public String stringValue() {
+        return value() != null ? numberFormatter().format(value()) : null;
+    }
+    public void setStringValue(String newStringValue) {
+        if (newStringValue != null)
+            setValue(numberFormatValueForString(newStringValue));
+        else
+            setValue(null);
+    }
+    protected Object numberFormatValueForString(String value) {
+        Object formatValue = null;
+        try {
+            if (value != null)
+                formatValue = numberFormatter().parseObject(value);
+        } catch (ParseException e) {
+            log.debug("Unable to parse number: " + value + " in " + propertyKey());
+            throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), value, "IllegalCharacterInNumberException");
+        }
+        return formatValue;
+    }
+    protected Object convertNumber(Object anObject) {
         Number newValue=null;
         if (anObject!=null && anObject instanceof Number) {
             newValue=(Number)anObject;
@@ -54,55 +98,5 @@ public class ERD2WEditNumber extends D2WEditNumber {
             }
         }
         return newValue;
-    }
-
-    public Object validateTakeValueForKeyPath (Object anObject, String aPath) throws com.webobjects.foundation.NSValidation.ValidationException {
-        Number number = null;
-        if (anObject instanceof String) {
-            try {
-                number = (Number)numberFormatter().parseObject((String)anObject);
-            } catch (Exception e) {
-                log.warn("Unable to parse number: " + anObject + " + " + propertyKey());
-                throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "IllegalCharacterInNumberException");
-            }
-        } else if (anObject!=null && !(anObject instanceof Number)) {
-            log.warn("Unable to read number: " + anObject);
-            throw ERXValidationFactory.defaultFactory().createException(object(), propertyKey(), anObject, "NotANumberException");
-        }
-        return super.validateTakeValueForKeyPath(convertNumber(number), aPath);
-    }
-/*
-    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
-        // This is for number formatting exceptions
-        String keyPath = theKeyPath.equals("stringValue") ? propertyKey() : theKeyPath;
-        parent().validationFailedWithException(theException, convertNumber(numberFormatValueForString((String)theValue)), keyPath);
-    }
-*/
-    /* following needed because we do not want to leave control over our (light) numberFormatter to WebObjects, which needs a full fledged NSNumberFormatter */
-    public String stringValue() {
-        String stringValue;
-        try {
-            stringValue = value() != null ? numberFormatter().format(value()) : null;
-        } catch (Exception e) {
-            throw new RuntimeException("A formatting error occured: " + e);
-        }
-        return stringValue;
-    }
-    public void setStringValue(String newStringValue) {
-            if (newStringValue != null)
-                setValue(numberFormatValueForString(newStringValue));
-            else
-                setValue(null);
-    }
-
-    public Object numberFormatValueForString(String value) {
-        Object formatValue = null;
-        try {
-            if (value != null)
-                formatValue = numberFormatter().parseObject(value);
-        } catch (Exception e) {
-            throw new RuntimeException("A formatting error occured: " + e);
-        }
-        return formatValue;
     }
 }
