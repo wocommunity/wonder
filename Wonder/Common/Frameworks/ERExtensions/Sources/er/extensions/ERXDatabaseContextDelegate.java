@@ -33,7 +33,7 @@ public class ERXDatabaseContextDelegate {
         if (_defaultDelegate == null) {
             _defaultDelegate = new ERXDatabaseContextDelegate();
             log.info("Created default delegate");
-            ERXRetainer.retain(_defaultDelegate); // Retaining the delegate on the ObjC side.  This might not be necessary.
+            //ERXRetainer.retain(_defaultDelegate); // Retaining the delegate on the ObjC side.  This might not be necessary.
         }
         return _defaultDelegate;
     }
