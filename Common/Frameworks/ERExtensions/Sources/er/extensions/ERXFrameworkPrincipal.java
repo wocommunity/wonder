@@ -72,7 +72,6 @@ public abstract class ERXFrameworkPrincipal {
     public final void finishInitialization(NSNotification n) {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         ERXRetainer.release(this);
-        initializedFrameworks.removeObjectForKey(getClass().getName());
         finishInitialization();
     }
 
