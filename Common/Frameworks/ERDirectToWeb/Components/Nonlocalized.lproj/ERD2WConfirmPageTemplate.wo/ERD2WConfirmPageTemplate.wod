@@ -1,3 +1,8 @@
+BranchButton: WOSubmitButton {
+	action = nextPageAction;
+	value = branch.branchButtonLabel;
+}
+
 Conditional2: ERXNonNullConditional {
 	condition = message;
 }
@@ -48,6 +53,15 @@ Form2: WOForm {
 	multipleSubmit = true;
 }
 
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+HasNoBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+	negate = true;
+}
+
 Image1: WOImage {
 	filename = "exclamation.gif";
 	framework = "JavaDirectToWeb";
@@ -60,14 +74,19 @@ Message: ERXLocalizedString {
 	templateString = message;
 }
 
-SubmitButton1: WOSubmitButton {
+OKButton: ERXSingleButton {
+	action = nextPageAction;
+	value = "OK";
+}
+
+OKButton2: ERXSingleButton {
 	action = cancelAction;
 	value = "Cancel";
 }
 
-SubmitButton2: WOSubmitButton {
-	action = confirmAction;
-	value = "Confirm";
+Repetition1: WORepetition {
+	item = branch;
+	list = branchChoices;
 }
 
 SwitchComponent3: WOSwitchComponent {
