@@ -7,6 +7,7 @@
 		<binding name="destinationDisplayKey"/>
 		<binding name="isMandatory"/>
 		<binding name="relationshipKey"/>
+		<binding name="destitationEntityName"/>
 		<binding name="sourceEntityName"/>
 		<binding name="sourceObject"/>
 		<binding name="uiStyle"/>
@@ -19,16 +20,23 @@
 		<binding name="goingVertically"/>
 		<binding name="localizeDisplayKeys" defaults="Boolean"/>
 
-		<validation message="&apos;sourceEntityName&apos; is a required binding">
-			<unbound name="sourceEntityName"/>
-		</validation>
 
 		<validation message="&apos;sourceObject&apos; is a required binding">
 			<unbound name="sourceObject"/>
 		</validation>
 
-		<validation message="&apos;relationshipKey&apos; is a required binding">
-			<unbound name="relationshipKey"/>
+		<validation message="&apos;sourceEntityName&apos; is required when &apos; destinationEntityName&apos; is not bound">
+			<and>
+                            <unbound name="sourceEntityName"/>
+                            <unbound name="destinationEntityName"/>
+			</and>
+		</validation>
+
+		<validation message="&apos;relationshipKey&apos; is required when &apos; destinationEntityName&apos; is not bound">
+			<and>
+                            <unbound name="relationshipKey"/>
+                            <unbound name="destinationEntityName"/>
+			</and>
 		</validation>
 	</wo>
 </wodefinitions>
