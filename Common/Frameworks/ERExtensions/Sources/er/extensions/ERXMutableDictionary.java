@@ -4,7 +4,6 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
-import com.sun.tools.javac.v8.comp.*;
 import com.webobjects.foundation.*;
 
 /**
