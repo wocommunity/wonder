@@ -9,11 +9,51 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import java.util.*;
-import org.apache.log4j.*;
 
-/**
- *  
- */
+/* All WebObjects applications have exactly one ERXBrowserFactory 
+ * instance. Its primary role is to manage ERXBrowser objects. 
+ * It provides facility to parse "user-agent" HTTP header and to 
+ * create an appropriate browser object. It also maintains the 
+ * browser pool to store shared ERXBrowser objects. Since ERXBrowser 
+ * object is immutable, it can be safely shared between sessions 
+ * and ERXBrowserFactory tries to have only one instance of 
+ * ERXBrowser for each kind of web browsers.<br>
+ * 
+ * The primary method called by ERXSession and ERXDirectAction is 
+ * <code>browserMatchingRequest</code> which takes a WORequest as 
+ * the parameter and returns a shared instance of browser object. 
+ * You actually wouldn't have to call this function by yourself 
+ * because ERXSession and ERXDirectAction provide <code>broser</code> 
+ * method that returns a browser object for the current request
+ * for you.<br>
+ * 
+ * Note that ERXSession and ERXDirectAction call ERXBrowserFactory's 
+ * <code>retainBrowser</code> and <code>releaseBrowser</code> 
+ * to put the browser object to the browser pool when it is 
+ * created and to remove the browser object from the pool when 
+ * it is no longer referred from sessions and direct actions. 
+ * ERXSession and ERXDirectAction automatically handle this and 
+ * you do not have to call these methods from your code.<br>
+ * 
+ * The current implementation of the parsers support variety of 
+ * Web browsers in the market such as Internet Explorer (IE), 
+ * OmniWeb, Netscape, iCab and Opera, versions between 2.0 and 7.0. <br>
+ * 
+ * To customize the parsers for "user-agent" HTTP header, subclass  
+ * ERXBrowserFactory and override methods like <code>parseBrowserName</code>, 
+ * <code>parseVersion</code>, <code>parseMozillaVersion</code> 
+ * and <code>parsePlatform</code>. Then put the following statement 
+ * into the application's constructor. <br>
+ * 
+ * <code>ERXBrowserFactory.setFactory(new SubClassOfERXBrowserFactory());</code><br>
+ * 
+ * If you want to use your own subclass of ERXBrowser, extend 
+ * ERXBrowserFactory and override <code>createBrowser</code> method. 
+ * This method will only have to contain <code>return new SubClassOfERXBrowser();</code> 
+ * statement and should not call super. Then, again, put 
+ * <code>ERXBrowserFactory.setFactory(new SubClassOfERXBrowserFactory)</code> 
+ * statement into the application's constructor. <br>
+ */ 
 
 // This implementation is tested with the following browsers (or "user-agent" strings)
 // Please ask the guy (tatsuyak@mac.com) for WOUnitTest test cases. 
@@ -129,7 +169,7 @@ public class ERXBrowserFactory {
         String key = _computeKey(browser);
         ERXMutableInteger count = _decrementReferenceCounterForKey(key);
         if (count == null) {
-            // Possibly forgot to call registerBrowser() but try to remove the browser for sure
+            // Perhaps forgot to call registerBrowser() but try to remove the browser for sure
             _browserPool().removeObjectForKey(key);
         } else if (count.intValue() <= 0) {
             _browserPool().removeObjectForKey(key);
