@@ -111,7 +111,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         try {
             //HACK ALERT: (ak) We push the cd rather rudely into the entity to have it ready when classDescriptionForNewInstances() is called on it. We will have to add a com.webobjects.eoaccess.KVCProtectedAccessor to make this work
             NSKeyValueCoding.Utility.takeValueForKey(entity, cd, "classDescription");
-        } catch(Exception ex) {
+        } catch(RuntimeException ex) {
             cat.warn("_setClassDescriptionOnEntity: " + ex);
         }
     }
