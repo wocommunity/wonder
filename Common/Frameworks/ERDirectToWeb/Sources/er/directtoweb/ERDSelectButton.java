@@ -28,27 +28,12 @@ public class ERDSelectButton extends ERDActionButton {
         super(context);
     }
 
-    protected ERD2WListPage selectingPage() {
-        WOComponent p = parent();
-        while(p != null) {
-            if(p instanceof ERD2WListPage)
-                return (ERD2WListPage)p;
-            p = p.parent();
-        }
-        return null;
-    }
-    
     public WOComponent selectObjectAction() {
-        ERD2WListPage parent = selectingPage();
+        SelectPageInterface parent = parentSelectPage();
         if(parent != null) {
-            // HACK ak: this is just a temporary fix until I can think of something better
-            context()._setCurrentComponent(parent);
-            try {
-                return parent.selectObjectAction();
-            } finally {
-                context()._setCurrentComponent(this);
-            }
+            parent.setSelectedObject(object());
+            return nextPageInPage((D2WPage)parent);
         }
-        throw new IllegalStateException("This page is not an instance of ERD2WListPage. I can't select here.");
+        throw new IllegalStateException("This page is not an instance of SelectPageInterface. I can't select here.");
     }
 }
