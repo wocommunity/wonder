@@ -14,7 +14,7 @@ import com.webobjects.directtoweb.*;
 import java.util.Enumeration;
 import er.extensions.*;
 
-public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, EditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface {
+public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface, ERDEditPageInterface, ERDObjectSaverInterface, ERDFollowPageInterface {
 
     /**
      * Public constructor
