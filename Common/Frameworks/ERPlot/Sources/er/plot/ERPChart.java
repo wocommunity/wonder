@@ -193,7 +193,6 @@ public abstract class ERPChart extends ERXStatelessComponent {
             _chart = (JFreeChart)valueForBinding("chart");
             if(_chart == null) {
                 _chart = createChart();
-                log.info(bindingKeys());
                 if(hasBinding("chart") && canSetValueForBinding("chart")) {
                     setValueForBinding(_chart, "chart");
                 }
