@@ -22,7 +22,7 @@ Conditional11: WOConditional {
 
 Conditional2: WOConditional {
 	condition = session.isLoggedIn;
-	negate = YES;
+	negate = true;
 }
 
 Conditional3: WOConditional {
@@ -41,7 +41,6 @@ Hyperlink1: WOHyperlink {
 
 Image2: WOImage {
 	filename = "exception_icon.gif";
-	framework = "WOBox";
 	height = 59;
 	width = 64;
 }
@@ -71,7 +70,7 @@ WBString2: WBString {
 	face = application.fontList;
 	size = 3;
 	value = errorMessage;
-	escapeHTML = NO;
+	escapeHTML = false;
 }
 
 WBString3: WBString {
