@@ -1,5 +1,6 @@
 package er.extensions;
 
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -170,6 +171,7 @@ public class ERXJDBCUtilities {
 					log.info("table "+tableName+", inserted "+rows.getRow()+" rows");
 				}
 				
+				NSMutableSet tempfilesToDelete = new NSMutableSet();
 				//call upps.setInt, upps.setBinaryStream, ...
 				for (int i = 0; i < columnNamesWithoutQuotes.length; i++) {
 					//first we need to get the type
@@ -195,7 +197,40 @@ public class ERXJDBCUtilities {
 						}
 					}
 
-					if (o != null) {
+					if (o instanceof Blob) {
+						Blob b = (Blob)o;
+						InputStream bis = b.getBinaryStream();
+						//stream this to a file, we need the length...
+						File tempFile = null;
+						try {
+						    tempFile = File.createTempFile("TempJDBC", ".blob");
+							ERXFileUtilities.writeInputStreamToFile(bis, tempFile);
+						} catch (IOException e5) {
+							log.error("could not create tempFile for row "+rows.getRow()+" and column "+columnName+", setting column value to null!");
+							EOAttribute at = attributes[i];
+							int type = typeFromAttribute(at);
+							upps.setNull(i + 1, type);
+							if (tempFile != null)
+							    if (!tempFile.delete()) tempFile.delete();
+							
+							continue;
+						}
+						FileInputStream fis;
+						try {
+							fis = new FileInputStream(tempFile);
+						} catch (FileNotFoundException e6) {
+							log.error("could not create FileInputStream from tempFile for row "+rows.getRow()+" and column "+columnName+", setting column value to null!");
+							EOAttribute at = attributes[i];
+							int type = typeFromAttribute(at);
+							upps.setNull(i + 1, type);
+							if (tempFile != null)
+							    if (!tempFile.delete()) tempFile.delete();
+							    
+							continue;
+						}
+						upps.setBinaryStream(i + 1, fis, (int)tempFile.length());
+						tempfilesToDelete.addObject(tempFile);
+					} else if (o != null) {
 						upps.setObject(i + 1, o);
 					} else {
 						EOAttribute at = attributes[i];
@@ -205,6 +240,10 @@ public class ERXJDBCUtilities {
 				}
 				upps.executeUpdate();
 				upps.clearParameters();
+				for (Enumeration e = tempfilesToDelete.objectEnumerator(); e.hasMoreElements();) {
+				    File f = (File)e.nextElement();
+				    if (!f.delete()) f.delete();
+				}
 			}
 			log.info("table "+tableName+", inserted "+rowsCount+" rows");
 			
