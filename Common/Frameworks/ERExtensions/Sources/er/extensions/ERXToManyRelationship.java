@@ -87,7 +87,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
             anEditingContext = session().defaultEditingContext() ;
         }
         
-        if(anEntityName != null) {
+        if(anEntityName == null) {
             anEntityName = _localSourceEntityName();
             EOEntity anEntity = EOUtilities.entityNamed(anEditingContext, anEntityName);
             if (anEntity == null) {
