@@ -11,7 +11,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
-import er.directtoweb.*;
 import org.apache.log4j.Category;
 
 public class ERDDHTMLComponent extends ERDCustomEditComponent {
