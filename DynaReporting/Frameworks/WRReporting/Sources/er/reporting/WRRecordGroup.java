@@ -305,7 +305,7 @@ public class WRRecordGroup extends WOComponent  {
 
     public String singleTotal() {
         if(recordGroup() == null)
-            return "";
+            return noTotalLabel();
         String totalKey = this.totalToShow();
 
         double doubleValue = 0.0;
