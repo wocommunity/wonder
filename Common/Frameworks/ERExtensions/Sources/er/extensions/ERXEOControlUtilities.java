@@ -142,7 +142,9 @@ public class ERXEOControlUtilities {
      *		before being inserted into the editing context.
      * @return created and inserted enterprise object
      */
-    public static EOEnterpriseObject createAndInsertObject(EOEditingContext editingContext, String entityName, NSDictionary objectInfo) {
+    public static EOEnterpriseObject createAndInsertObject(EOEditingContext editingContext,
+                                                           String entityName,
+                                                           NSDictionary objectInfo) {
         if (log.isDebugEnabled())
             log.debug("Creating object of type: " + entityName);
         EOClassDescription cd=EOClassDescription.classDescriptionForEntityName(entityName);
@@ -178,10 +180,13 @@ public class ERXEOControlUtilities {
      *		object before it is inserted into the editing context.
      * @return the newly created enterprise object
      */
-    public static EOEnterpriseObject createAndAddObjectToRelationship(EOEditingContext editingContext,  EOEnterpriseObject source, String relationshipName, String destinationEntityName, NSDictionary objectInfo) {
-        
-        EOEnterpriseObject newEO=createAndInsertObject(editingContext, destinationEntityName, objectInfo);
-        EOEnterpriseObject eoBis = editingContext!=source.editingContext() ?
+    public static EOEnterpriseObject createAndAddObjectToRelationship(EOEditingContext editingContext,
+                                                                      EOEnterpriseObject source,
+                                                                      String relationshipName,
+                                                                      String destinationEntityName,
+                                                                      NSDictionary objectInfo) {
+        EOEnterpriseObject newEO = createAndInsertObject(editingContext, destinationEntityName, objectInfo);
+        EOEnterpriseObject eoBis = editingContext != source.editingContext() ?
             EOUtilities.localInstanceOfObject(editingContext,source) : source;
         eoBis.addObjectToBothSidesOfRelationshipWithKey(newEO, relationshipName);
         return newEO;
@@ -195,7 +200,9 @@ public class ERXEOControlUtilities {
      * @param referenceObject object that has the relationship
      * @param key relationship key
      */
-    public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject, EOEnterpriseObject referenceObject, String key) {
+    public static void addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject addedObject,
+                                                                         EOEnterpriseObject referenceObject,
+                                                                         String key) {
         EOEditingContext referenceEc = referenceObject.editingContext();
         EOEditingContext ec = addedObject.editingContext();
         EOEnterpriseObject copy = addedObject;
