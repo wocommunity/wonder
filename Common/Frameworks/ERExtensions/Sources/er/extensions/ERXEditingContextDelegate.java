@@ -15,6 +15,12 @@ package er.extensions;
  * other delegates subclass this delegate. The main
  * delegate that is used is {@link ERXDefaultEditingContextDelegate}.
  */
-public class ERXEditingContextDelegate extends Object  {
+public class ERXEditingContextDelegate extends Object implements java.io.Serializable {
+
+    /**
+     * No arg constructor for Serializable.
+     */
+    public ERXEditingContextDelegate() {}
+    
 }
 
