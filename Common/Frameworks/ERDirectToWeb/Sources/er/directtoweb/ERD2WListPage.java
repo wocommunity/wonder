@@ -26,7 +26,19 @@ public abstract class ERD2WListPage extends D2WListPage {
     public ERD2WListPage(WOContext c) {
         super(c);
     }
-    
+
+    // debug helpers
+    public boolean d2wComponentNameDebuggingEnabled() {
+        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
+    }
+    public String d2wCurrentComponentName() {
+        String name = (String)d2wContext().valueForKey("componentName");
+        if(name.indexOf("CustomComponent")>=0) {
+            name = (String)d2wContext().valueForKey("customComponentName");
+        }
+        return name;
+    }
+
     public WOComponent printerFriendlyVersion() {
         D2WListPage result=(D2WListPage)ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
         result.setDataSource(dataSource());
@@ -200,15 +212,15 @@ public abstract class ERD2WListPage extends D2WListPage {
 
     public WOComponent deleteObjectAction() {
         // FIXME: Shouldn't ave a hard dependency on names here.
-        String confirmConfigurationName=(String)d2wContext().valueForKey("confirmConfigurationName");
-        if(confirmConfigurationName!=null){
-            ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed(confirmConfigurationName,session());
+        String confirmDeleteConfigurationName=(String)d2wContext().valueForKey("confirmDeleteConfigurationName");
+        if(confirmDeleteConfigurationName!=null){
+            ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed(confirmDeleteConfigurationName,session());
             nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
             nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
             if(nextPage instanceof ERD2WInspectPage) {
                 ((ERD2WInspectPage)nextPage).setObject(object());
             } else {
-                nextPage.setMessage("<B>Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+"</B>:<br> "+object().userPresentableDescription()+ " ?");
+                nextPage.setMessage("Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+":<br> "+object().userPresentableDescription()+ " ?");
             }
             return (WOComponent) nextPage;
         } else {
@@ -216,7 +228,7 @@ public abstract class ERD2WListPage extends D2WListPage {
             nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
             nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
 
-            nextPage.setMessage("<B>Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+"</B>:<br> "+object().userPresentableDescription()+ " ?");
+            nextPage.setMessage("Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+":<br> "+object().userPresentableDescription()+ " ?");
             return (WOComponent) nextPage;
         }
     }
