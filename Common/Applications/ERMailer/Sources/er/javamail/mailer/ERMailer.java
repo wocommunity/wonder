@@ -8,6 +8,7 @@ package er.javamail.mailer;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 
 import er.extensions.*;
 
@@ -64,33 +65,80 @@ public class ERMailer {
     public void sendMailMessages(NSArray mailMessages) {
         for (Enumeration messageEnumerator = mailMessages.objectEnumerator(); messageEnumerator.hasMoreElements();) {
             ERCMailMessage mailMessage = (ERCMailMessage)messageEnumerator.nextElement();
-            ERMailDelivery delivery = ERMailerUtilities.createMailDeliveryForMailMessage(mailMessage);
+            ERMailDelivery delivery = createMailDeliveryForMailMessage(mailMessage);
 
             if (log.isDebugEnabled())
                 log.debug("Sending mail message: " + mailMessage);
             
             if (delivery != null) {
                 try {
+                    mailMessage.setState(ERCMailState.PROCESSING_STATE);
+                    mailMessage.editingContext().saveChanges(); // This will throw if optimistic locking occurs
                     delivery.sendMail(true);
                     mailMessage.setState(ERCMailState.SENT_STATE);
                     mailMessage.setDateSent(new NSTimestamp());
+                } catch (EOGeneralAdaptorException ge) {
+                    log.warn("Caught general adaptor exception, reverting context : " + ge);
+                    mailMessage.editingContext().revert();
                 } catch (NSForwardException e) {
                     log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.originalException()));
                     // ENHANCEME: Need to implement a waiting state to retry sending mails.
                     mailMessage.setState(ERCMailState.EXCEPTION_STATE);
                     mailMessage.setExceptionReason(e.originalException().getMessage());
                     // Report the mailing error
-                    if (e.originalException() instanceof Exception)
-                        ERMailerUtilities.reportExceptionForMessage((Exception)e.originalException(), mailMessage);
+                    ERCoreBusinessLogic.sharedInstance().reportException(e.originalException(),
+                                                                         new NSDictionary(mailMessage.snapshot(),
+                                                                                          "Mail Message Snapshot"));
                 } finally {
-                    try {
-                        mailMessage.editingContext().saveChanges();
-                    } catch (RuntimeException runtime) {
-                        log.error("RuntimeException during save changes! Exception: " + runtime.getMessage());
-                        throw runtime;
+                    // The editingcontext will not have any changes if an optimistic error occurred
+                    if (mailMessage.editingContext().hasChanges()) {
+                        try {
+                            mailMessage.editingContext().saveChanges();
+                        } catch (RuntimeException runtime) {
+                            log.error("RuntimeException during save changes! Exception: " + runtime.getMessage());
+                            throw runtime;
+                        }                        
                     }
                 }
             }
+            break;
         }        
+    }
+    
+    /**
+     * Creates a ERMailDelivery for a given
+     * MailMessage.
+     * @param message mail message
+     * @return a mail delevery object
+     */
+    // ENHANCEME: Not handling hidden text, plain text, double byte (Japanese) language or file attachments.
+    public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) {
+        ERMailDeliveryHTML mail = new ERMailDeliveryHTML();
+
+        try {
+            // Add all of the addresses
+            mail.setFromAddress(message.fromAddress());
+            if (message.replyToAddress() != null)
+                mail.setReplyToAddress(message.replyToAddress());
+            mail.setToAddresses(message.toAddressesAsArray());
+            if (message.ccAddressesAsArray().count() > 0)
+                mail.setCCAddresses(message.ccAddressesAsArray());
+            if (message.bccAddressesAsArray().count() > 0)
+                mail.setBCCAddresses(message.bccAddressesAsArray());
+
+            // Set the xMailer if one is specified
+            // Note (tuscland): setXMailerHeader has a higher precedence over
+            // System property er.javamail.XMailerHeader
+            if (message.xMailer() != null)
+                mail.setXMailerHeader(message.xMailer());
+
+            // Set the content
+            mail.setSubject(message.title());
+            mail.setHTMLContent(message.text());
+        } catch (Exception e) {
+            log.error("Caught exception constructing mail to delevery: " + ERXUtilities.stackTrace(e));
+            mail = null;
+        }
+        return mail;
     }
 }
