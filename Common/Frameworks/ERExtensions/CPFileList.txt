@@ -7,6 +7,7 @@
 ./Sources/er/extensions/ERXBasicBrowser.java:er.extensions
 ./Sources/er/extensions/ERXBatchNavigationBar.java:er.extensions
 ./Sources/er/extensions/ERXBatchNavigationBarInForm.java:er.extensions
+./Sources/er/extensions/ERXBetweenQualifier.java:er.extensions
 ./Sources/er/extensions/ERXBrowser.java:er.extensions
 ./Sources/er/extensions/ERXBrowserFactory.java:er.extensions
 ./Sources/er/extensions/ERXCheckboxMatrix.java:er.extensions
