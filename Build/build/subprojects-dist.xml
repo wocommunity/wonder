@@ -13,7 +13,8 @@
             <fileset dir="${build.root}/${framework.name}" />
         </copy>
 
-        <copy todir="${dist}/WebServerResources/Frameworks/${framework.name}">
+        <mkdir dir="${build.root}/${framework.name}/WebServerResources" />
+        <copy todir="${dist}/WebServerResources/Frameworks/${framework.name}" includeEmptyDirs="false">
             <fileset dir="${build.root}/${framework.name}/WebServerResources" />
         </copy>
 
@@ -52,10 +53,7 @@
         
         <chmod file="${dist}/Applications/${application.name}/${project}" perm="ugo+rx"/>
 
-        <copy todir="${dist}/Applications/${application.name}" overwrite="true">
-            <fileset dir="${project.source.dir}/Support/ForDistribution" />
-        </copy>
-
+        <mkdir dir="${build.root}/${application.name}/Contents/WebServerResources" />
         <copy todir="${dist}/WebServerResources/${application.name}/Contents/WebServerResources" flatten="true" includeEmptyDirs="false">
             <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
         </copy>
@@ -85,6 +83,38 @@
         <antcall target="copy.framework" >
             <param name="project" value="WOPayPal" />
             <param name="project.dir" value="PayPal/Frameworks/WOPayPal" />
+        </antcall>
+    </target>
+
+    <!-- SVGObjects Framework -->
+    <target name="SVGObjects.framework.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="SVGObjects" />
+            <param name="project.dir" value="SVGObjects/Frameworks/SVGObjects" />
+        </antcall>
+    </target>
+
+    <!-- SVGObjects Example Applications -->
+    <target name="SVGObjects.example.all">
+        <antcall target="copy.application" >
+            <param name="project" value="SVGObjectsComponentTour" />
+            <param name="project.dir" value="SVGObjects/Examples/ComponentTour" />
+        </antcall>
+        <antcall target="copy.application" >
+            <param name="project" value="SVGObjectsECards" />
+            <param name="project.dir" value="SVGObjects/Examples/eCards" />
+        </antcall>
+        <antcall target="copy.application" >
+            <param name="project" value="SVGObjectsEZForms" />
+            <param name="project.dir" value="SVGObjects/Examples/EZForms" />
+        </antcall>
+        <antcall target="copy.application" >
+            <param name="project" value="SVGObjectsHello" />
+            <param name="project.dir" value="SVGObjects/Examples/Hello" />
+        </antcall>
+        <antcall target="copy.application" >
+            <param name="project" value="SVGObjectsPopIdol" />
+            <param name="project.dir" value="SVGObjects/Examples/PopIdol" />
         </antcall>
     </target>
 	
@@ -120,8 +150,9 @@
         </copy>
     </target>
     
+    <target name="SVGObjects.all" depends="SVGObjects.framework.all, SVGObjects.example.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
-    <target name="dist.prebuilt" depends="WOPayPal.all, Validity.all" />
+    <target name="dist.prebuilt" depends="WOPayPal.all, Validity.all, SVGObjects.all" />
 
     <target name="all" depends="dist.prebuilt" />
 	
