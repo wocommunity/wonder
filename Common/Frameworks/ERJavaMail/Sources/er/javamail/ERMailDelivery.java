@@ -1,8 +1,8 @@
 /*
  $Id$
- 
+
  ERMailDelivery.java - Camille Troillard - tuscland@mac.com
-*/
+ */
 
 package er.javamail;
 
@@ -13,6 +13,8 @@ import javax.activation.*;
 import javax.mail.internet.*;
 
 import er.extensions.ERXLogger;
+import er.extensions.ERXUtilities;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -45,7 +47,7 @@ try {
 */
 public abstract class ERMailDelivery {
 
-	static ERXLogger log = ERXLogger.getERXLogger (ERMailDelivery.class);
+    static ERXLogger log = ERXLogger.getERXLogger (ERMailDelivery.class);
 
     /** JavaMail session */
     private javax.mail.Session _session;
@@ -69,20 +71,21 @@ public abstract class ERMailDelivery {
     /** callbackObject to refer to in the calling program */
     public Object _callbackObject = null;
 
-	public static String DefaultCharset = "iso-8859-1";
+    public static String DefaultCharset = "iso-8859-1";
 
-	
-	protected javax.mail.Session session () {
-		return _session;
+
+    protected javax.mail.Session session () {
+        return _session;
     }
-	protected void setSession (javax.mail.Session aSession) {
-		_session = aSession;
+    protected void setSession (javax.mail.Session aSession) {
+        _session = aSession;
     }
 
-	/** Designated constructor */
+    /** Designated constructor */
     public ERMailDelivery (javax.mail.Session session) {
         super ();
-		this.setSession (session);
+        this.setSession (session);
+        this.setMimeMessage (new MimeMessage (this.session ()));
     }
 
     /** Default constructor */
@@ -92,17 +95,25 @@ public abstract class ERMailDelivery {
 
     /** Creates a new mail instance within ERMailDelivery */
     public void newMail () {
-        attachments.removeAllObjects ();
-        inlineAttachments.removeAllObjects ();
-        this.setMimeMessage (new MimeMessage (this.session ()));
+        reset ();
     }
 
-	protected MimeMessage mimeMessage () {
-		return _mimeMessage;
-	}
-	protected void setMimeMessage (MimeMessage message) {
-		_mimeMessage = message;
-	}
+    /**
+     * Resets the current instance of ERMailDelevery
+     * to handle sending another mail object.
+     */
+    public void reset () {
+        attachments.removeAllObjects ();
+        inlineAttachments.removeAllObjects ();
+        this.setMimeMessage (new MimeMessage (this.session ()));        
+    }
+    
+    protected MimeMessage mimeMessage () {
+        return _mimeMessage;
+    }
+    protected void setMimeMessage (MimeMessage message) {
+        _mimeMessage = message;
+    }
 
     public void addAttachment (ERMailAttachment attachment) {
         attachments.addObject (attachment);
@@ -130,7 +141,7 @@ public abstract class ERMailDelivery {
         callBackClassName = className;
         callBackMethodName = methodName;
     }
-    
+
     // </STATIC METHODS> --------------------------------------------------
 
     /** Sets the from address for the current message instance */
@@ -169,8 +180,8 @@ public abstract class ERMailDelivery {
         _callbackObject = obj;
     }
     public Object callbackObject () {
-		return _callbackObject;
-	}
+        return _callbackObject;
+    }
 
     /** Sets the subject for the current message instance */
     public void setSubject (String subject) throws MessagingException {
@@ -183,16 +194,61 @@ public abstract class ERMailDelivery {
         this.mimeMessage ().setSubject (encoded);
     }
 
-	protected ERMessage buildMessage () {
-		ERMessage message = new ERMessage ();
-		message.setMimeMessage (this.mimeMessage ());
-		message.setCallbackObject (this.callbackObject ());
-		return message;
-	}
+    /**
+     * Sets the X-Mailer header for the message. Useful for tracking
+     * which mailers are sending messages.
+     * @param xMailer value to set
+     */
+    public void setXMailerHeader (String xMailer) throws MessagingException {
+        this.mimeMessage ().setHeader("X-Mailer", xMailer);
+    }
 
-    /** Sends the mail immediately.  The message is put in a FIFO queue managed
-        by a static threaded inner class */
+    /**
+     * Gets the X-Mailer header set on the
+     * MimeMessage.
+     * @return X-Mailer header if it is set
+     */
+    public String xMailerHeader() throws MessagingException {
+        String[] headers = this.mimeMessage ().getHeader("X-Mailer");
+        return headers.length > 0 ? headers[0] : null;
+    }
+
+    /**
+     * Builds an ERMessage for the current
+     * MimeMessage.
+     * @return ERMessage for the current MimeMessage.
+     */
+    protected ERMessage buildMessage () {
+        ERMessage message = new ERMessage ();
+        message.setMimeMessage (this.mimeMessage ());
+        message.setCallbackObject (this.callbackObject ());
+        return message;
+    }
+
+    /**
+     * Sends the mail immediately.  The message is put in a FIFO queue managed
+     * by a static threaded inner class
+     */
     public void sendMail () {
+        try {
+            sendMail (false);
+        } catch (ERMailSender.ForwardException e) {
+            log.warn ("Sending mail in a non-blocking manner and a forward exception was thrown: "
+                      + ERXUtilities.stackTrace(e));
+        }
+    }   
+
+    /**
+     * Method used to construct a MimeMessage and then send
+     * it. This method can be specified to block until the
+     * message is sent or to add the message to a queue and have
+     * a callback object handle any exceptions that happen. If
+     * sending is blocking then any exception thrown will be
+     * wrapped in a general {@link ERMailSender.ForwardException ForwardException}.
+     * @param shouldBlock boolean to indicate if the message should be
+     *		added to a queue or sent directly.
+     */
+    public void sendMail (boolean shouldBlock) throws ERMailSender.ForwardException {
         DataHandler messageDataHandler = this.prepareMail ();
 
         try {
@@ -225,60 +281,65 @@ public abstract class ERMailDelivery {
         } catch (Exception e) {
             e.printStackTrace ();
         }
-        
-        // add the current message to the message stack
-		boolean mailAccepted = false;
-		try {
-			while (!mailAccepted) {
-				try {
-					this.mimeMessage ().setSentDate (new Date ());
-				} catch (MessagingException e) {
-					if (log.isDebugEnabled ()) {
-						log.debug ("Unable to set the date while sending a message.");
-						e.printStackTrace ();
-					}
-				}
 
-				try {
-					ERMailSender.sharedMailSender ().sendMessage (this.buildMessage ());
-					mailAccepted = true;
-				} catch (ERMailSender.SizeOverflowException e) {
-					// The mail sender is overflowed, we need to wait
-					try {
-						// Ask the current thread to stop computing for a little while
-						Thread.currentThread ().sleep (
-									 ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
-					} catch (InterruptedException ie) {
-						log.warn ("Caught InterruptedException in ERMailDelivery:");
-						ie.printStackTrace ();
-					}
-				} catch (ERMailSender.Exception e) {
-					// Handle another class of exception
-					// Because there is no other class of exception, ignore this one.
-					break;
-				}
-			}
-		} finally {
-			this.setMimeMessage (null);
-		}
+        // add the current message to the message stack
+        boolean mailAccepted = false;
+        try {
+            while (!mailAccepted) {
+                try {
+                    this.mimeMessage ().setSentDate (new Date ());
+                } catch (MessagingException e) {
+                    if (log.isDebugEnabled ()) {
+                        log.debug ("Unable to set the date while sending a message.");
+                        e.printStackTrace ();
+                    }
+                }
+
+                try {
+                    ERMailSender.sharedMailSender ().sendMessage (this.buildMessage (), shouldBlock);
+                    mailAccepted = true;
+                } catch (ERMailSender.SizeOverflowException e) {
+                    // The mail sender is overflowed, we need to wait
+                    try {
+                        // Ask the current thread to stop computing for a little while
+                        Thread.currentThread ().sleep (ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
+                    } catch (InterruptedException ie) {
+                        log.warn ("Caught InterruptedException in ERMailDelivery:");
+                        ie.printStackTrace ();
+                    }
+                } catch (ERMailSender.ForwardException e) {
+                    if (log.isDebugEnabled ())
+                        log.debug("Foward exception caught, re-throwing: " + ERXUtilities.stackTrace (e));
+                    throw e;
+                } catch (ERMailSender.Exception e) {
+                    // Handle another class of exception
+                    // Because there is no other class of exception, ignore this one.
+                    break;
+                }
+            }
+        } finally {
+            this.setMimeMessage (null);
+        }
     }
 
-    /** Called by subclasses for doing pre-processing before sending the mail.
-        @return the multipart used to put in the mail. */
+    /**
+     * Called by subclasses for doing pre-processing before sending the mail.
+     * @return the multipart used to put in the mail.
+     */
     protected abstract DataHandler prepareMail ();
 
     /** Sets addresses regarding their recipient type in current message */
     private void setAddresses (NSArray addressesArray, Message.RecipientType type)
-    throws MessagingException, AddressException {
-        InternetAddress [] addresses = null;
+        throws MessagingException, AddressException {
+            InternetAddress [] addresses = null;
 
-        if (!ERJavaMail.sharedInstance ().centralize ())
-            addresses = _nsarrayToInternetAddresses (addressesArray);
-        else
-            addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
+            if (!ERJavaMail.sharedInstance ().centralize ())
+                addresses = _nsarrayToInternetAddresses (addressesArray);
+            else
+                addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
 
-        this.mimeMessage ().setRecipients (type, addresses);
-    }
+            this.mimeMessage ().setRecipients (type, addresses);
+        }
 
     /** Private method that converts NSArray of String emails to InternetAddress []. */
     private InternetAddress [] _nsarrayToInternetAddresses (NSArray addressesArray) throws AddressException {
@@ -292,5 +353,4 @@ public abstract class ERMailDelivery {
 
         return addresses;
     }
-
 }
