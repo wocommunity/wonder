@@ -136,14 +136,11 @@ IsEditing2: WOKeyValueConditional {
 }
 
 LeftArrow: WOImageButton {
-//    filename="previous.gif";
     border = "0";
-//    height = "11";
-//    width = "16";
     action = previousStep;
     alt = "previous step";
-	filename = "PreviousMetalBtn.gif";
-	framework = "ERExtensionsJava";
+    filename = "PreviousMetalBtn.gif";
+    framework = "ERExtensions";
 }
 
 NoSectionHelp: ERXNonNullConditional {
@@ -176,14 +173,11 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 }
 
 RightArrow: WOImageButton {
-//    filename="next.gif";
     border = "0";
-//    height = "11";
-//    width = "16";
     action = nextStep;
     alt = "next step";    
-	filename = "NextMetalBtn.gif";
-	framework = "ERExtensionsJava";
+    filename = "NextMetalBtn.gif";
+    framework = "ERExtensions";
 }
 
 Script: WOJavaScript{	scriptString = tabScriptString;
