@@ -45,7 +45,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public NSArray browserSelections;
     public String sortedObjects;
     public int awakesMinusSleeps = 0;
-
+    public boolean isLocked = false;
+    
     public static boolean shouldLockEditingContext(){
         return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERD2WEditSortedManyToManyPage.shouldLockEditingContext", true);
     }
@@ -82,8 +83,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             if(log.isDebugEnabled()){
                 log.debug("in awake, awakesMinusSleeps:"+awakesMinusSleeps);
             }
-            if(shouldLockEditingContext()){
+            if(shouldLockEditingContext() && !isLocked){
+                if(log.isDebugEnabled()){
+                    log.debug("locking ec:"+editingContext().hashCode());
+                }
                 editingContext().lock();
+                isLocked = true;
             }
         }
     }
@@ -91,8 +96,12 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     
     public void sleep() {
         awakesMinusSleeps--;
-        if (editingContext() != null && shouldLockEditingContext()) {
+        if (editingContext() != null && shouldLockEditingContext() && isLocked) {
+            if(log.isDebugEnabled()){
+                log.debug("unlocking ec:"+editingContext().hashCode());
+            }
            editingContext().unlock();
+            isLocked = false;
         }
         super.sleep();
     }
@@ -105,11 +114,19 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
         if (newEditingContext != editingContext()) {
             if (editingContext() != null && shouldLockEditingContext()) {
+                if(log.isDebugEnabled()){
+                    log.debug("unlocking ec:"+editingContext().hashCode());
+                }
                 editingContext().unlock();
+                isLocked = false;
             }
             _editingContext = newEditingContext;
             if (editingContext() != null && shouldLockEditingContext()) {
+                if(log.isDebugEnabled()){
+                    log.debug("locking ec:"+editingContext().hashCode());
+                }
                 editingContext().lock();
+                isLocked = true;
             }
         }
     } 
@@ -138,9 +155,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if(entity().userInfo().valueForKey("isSortedJoinEntity") != null &&
             ((String)entity().userInfo().valueForKey("isSortedJoinEntity")).equals("true")){
             isSorted = true;
-        }
-        if(log.isDebugEnabled()){
-            log.debug("Sorted relationship entity: " + entity().name() + " is sorted? " + isSorted);
         }
         return isSorted;
     }
