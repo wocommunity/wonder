@@ -51,44 +51,63 @@ public class ERXToManyRelationship extends WOToManyRelationship {
         }
         return destinationSortKey();
     }
+
+    protected EOEntity destinationEntity() {
+        String anEntityName = _localSourceEntityName();
+        // FIXME (msanchez, 08/00, 2520053): use modelGroup on ObjectStoreCoordinator of our editingContext
+        EOModelGroup aModelGroup = EOModelGroup.defaultGroup();
+        EOEntity anEntity = aModelGroup.entityNamed(anEntityName);
+
+        if (anEntity == null) {
+            throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
+        }
+        EOEntity destinationEntity = null;
+
+        Object _source = _localSourceObject();
+
+        if (_source instanceof EOEnterpriseObject) {
+            EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
+                                                                                        _localRelationshipKey());
+            if(relationship!=null) {
+                destinationEntity = relationship.destinationEntity();
+            }
+        }
+        if (destinationEntity == null) {
+            destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
+        }
+
+        return destinationEntity;
+    }
+
     
+
     protected EODataSource _localDataSource() {
         if (null==dataSource()) {
             setDataSource((EODatabaseDataSource)valueForBinding("dataSource"));
             if (dataSource() == null) {
-                String anEntityName = _localSourceEntityName();
-                // FIXME (msanchez, 08/00, 2520053): use modelGroup on ObjectStoreCoordinator of our editingContext
-                EOModelGroup aModelGroup = EOModelGroup.defaultGroup();
-                EOEntity anEntity = aModelGroup.entityNamed(anEntityName);
-
-                if (anEntity == null) {
-                    throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
-                }
-                EOEntity destinationEntity = null;
                 EOEditingContext anEditingContext = null;
-                Object _source = _localSourceObject();                
+                Object _source = _localSourceObject();
+
                 if (_source instanceof EOEnterpriseObject) {
-                    EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source,
-                                                                                               _localRelationshipKey());
-                    if(relationship!=null){
-                        destinationEntity = relationship.destinationEntity();
-                    }
                     anEditingContext = ((EOEnterpriseObject)_source).editingContext();
                 }
-                if (destinationEntity == null)
-                    destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
+                
                 if (anEditingContext == null) {
                     anEditingContext = session().defaultEditingContext() ;
                 }
+
                 NSArray possibleChoices = (NSArray)valueForBinding("possibleChoices");
+
                 if (possibleChoices != null) {
-                    EOArrayDataSource ads = new EOArrayDataSource(destinationEntity.classDescriptionForInstances(), anEditingContext);
+                    EOArrayDataSource ads = new EOArrayDataSource(destinationEntity().classDescriptionForInstances(), anEditingContext);
                     ads.setArray(possibleChoices);
                     setDataSource(ads);
                 } else {
-                    EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntity.name());
-                    if (hasBinding("qualifier"))
+                    EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntity().name());
+
+                    if (hasBinding("qualifier")) {
                         aDatabaseDataSource.setAuxiliaryQualifier((EOQualifier)valueForBinding("qualifier"));
+                    }
                     setDataSource(aDatabaseDataSource);
                 }
             }
