@@ -19,6 +19,7 @@ import er.extensions.*;
 
 public class ERD2WEditYesNo extends D2WEditBoolean {
     public static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditYesNo.class);
+	private String _groupName;
 
     public ERD2WEditYesNo(WOContext context) { super(context); }
 
@@ -28,12 +29,19 @@ public class ERD2WEditYesNo extends D2WEditBoolean {
         return (Integer)bool;
     }
     
+    public void awake() {
+    	_groupName = "YesNoGroup_"+context().elementID();
+    }
+    public void sleep() {
+    	_groupName = null;
+    }
+    
     public void setYesNoBoolean(Integer newYesNoBoolean) {
         object().validateTakeValueForKeyPath(newYesNoBoolean, propertyKey());
     }
 
-    public String radioBoxGroupName(){
-        return ("YesNoGroup_"+d2wContext().propertyKey());
+    public String radioBoxGroupName() {
+        return _groupName;
     }
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
