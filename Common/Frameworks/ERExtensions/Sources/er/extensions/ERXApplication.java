@@ -133,6 +133,8 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
                                                                         ERXConstant.NotificationClassArray),
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
                                                          null);
+        ERXEC.setUseUnlocker(useEditingContextUnlocker());
+
         // Signal handling support
         if (ERXGracefulShutdown.isEnabled()) {
             ERXGracefulShutdown.installHandler();
@@ -140,6 +142,14 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     }
 
     /**
+     * Decides whether to use editing context unlocking.
+	 * @return true if ECs should be unlocked after each RR-loop
+	 */
+	public boolean useEditingContextUnlocker() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useEditingContextUnlocker", false);
+	}
+
+	/**
      * Configures the statistics logging for a given application. By default will log to a
      * file <base log directory>/<WOApp Name>-<host>-<port>.log if the base log path is defined. The
      * base log path is defined by the property <code>er.extensions.ERXApplication.StatisticsBaseLogPath</code>
@@ -576,6 +586,8 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         } finally {
             // We always want to get rid of the wocontext key.
             ERXThreadStorage.removeValueForKey("wocontext");
+            // We *always* want to unlock left over ECs.
+            ERXEC.unlockAllContextsForCurrentThread();
         }
         if (requestHandlingLog.isDebugEnabled()) {
             requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
