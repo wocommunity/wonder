@@ -123,7 +123,6 @@
 			files = (
 				6685560A01E84B5800CD2930,
 				504840DE040C01DE00CF0E76,
-				D777C4ED04571EB800000064,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,37 +258,11 @@
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
-		01D74EAB00210AE911CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Interfaces;
-			path = "";
-			refType = 4;
-		};
 //010
 //011
 //012
 //013
 //014
-//040
-//041
-//042
-//043
-//044
-		04B9D382FFD85E7B11CD2B8D = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "Web Server Resources";
-			path = "";
-			refType = 4;
-		};
-//040
-//041
-//042
-//043
-//044
 //0B0
 //0B1
 //0B2
@@ -333,13 +306,8 @@
 		};
 		40B5827FFFD5E7DB7F000001 = {
 			children = (
-				40B58288FFD5E82B7F000001,
-				40B58289FFD5E91B7F000001,
 				40B5828AFFD5E91B7F000001,
-				04B9D382FFD85E7B11CD2B8D,
-				01D74EAB00210AE911CD2B8D,
 				40B5828CFFD5E91B7F000001,
-				40B58293FFD5E91B7F000001,
 				40B58280FFD5E8187F000001,
 			);
 			isa = PBXGroup;
@@ -494,20 +462,6 @@
 			isa = PBXRezBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		40B58288FFD5E82B7F000001 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Classes;
-			refType = 4;
-		};
-		40B58289FFD5E91B7F000001 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = "Web Components";
-			refType = 4;
-		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
 				F6960A720369F81001257492,
@@ -521,17 +475,9 @@
 			children = (
 				6685560801E84B5700CD2930,
 				504840DD040C01DE00CF0E76,
-				D777C4EC04571EB800000064,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
-			refType = 4;
-		};
-		40B58293FFD5E91B7F000001 = {
-			children = (
-			);
-			isa = PBXGroup;
-			name = Documentation;
 			refType = 4;
 		};
 		40B5829AFFD5EB0D7F000001 = {
@@ -616,32 +562,6 @@
 //662
 //663
 //664
-//D70
-//D71
-//D72
-//D73
-//D74
-		D777C4EC04571EB800000064 = {
-			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
-			name = mail.jar;
-			path = Libraries/mail.jar;
-			refType = 4;
-		};
-		D777C4ED04571EB800000064 = {
-			fileRef = D777C4EC04571EB800000064;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
-//D70
-//D71
-//D72
-//D73
-//D74
 //F60
 //F61
 //F62
