@@ -11,6 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
+import er.corebusinesslogic.*;
 import java.util.*;
 
 public class BTBusinessLogic extends ERXFrameworkPrincipal {
@@ -29,21 +30,7 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
 
     public void finishInitialization() {
         initializeSharedData();
-        addPreferenceRelationship();
-    }
-
-    public void addPreferenceRelationship() {
-        EOEntity people = EOModelGroup.defaultGroup().entityNamed("People");
-        EOEntity preferences = EOModelGroup.defaultGroup().entityNamed("ERCPreference");
-
-        EOJoin preferencesJoin = new EOJoin(people.attributeNamed("id"),preferences.attributeNamed("userID"));
-        EORelationship preferencesRelationship = new EORelationship();
-
-        preferencesRelationship.setName("preferences");
-        people.addRelationship(preferencesRelationship);
-        preferencesRelationship.addJoin(preferencesJoin);
-        preferencesRelationship.setToMany(true);
-        preferencesRelationship.setJoinSemantic(EORelationship.InnerJoin);
+        ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity("People", "id");
     }
 
     // Shared Data Init Point.  Keep alphabetical
