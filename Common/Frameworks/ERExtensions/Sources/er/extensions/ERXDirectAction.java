@@ -97,13 +97,17 @@ public class ERXDirectAction extends WODirectAction {
             decimalFormatter.setMaximumFractionDigits(2);
            
             String info = "Before: ";
+            info += decimalFormatter.format(runtime.maxMemory()) + " max, ";
             info += decimalFormatter.format(runtime.totalMemory()) + " total, ";
+            info += decimalFormatter.format(runtime.totalMemory()-runtime.freeMemory()) + " used, ";
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
             
             ERXExtensions.forceGC(5);
   
             info += "After: ";
+            info += decimalFormatter.format(runtime.maxMemory()) + " max, ";
             info += decimalFormatter.format(runtime.totalMemory()) + " total, ";
+            info += decimalFormatter.format(runtime.totalMemory()-runtime.freeMemory()) + " used, ";
             info += decimalFormatter.format(runtime.freeMemory()) + " free\n";
 
             result.setValue(info);
