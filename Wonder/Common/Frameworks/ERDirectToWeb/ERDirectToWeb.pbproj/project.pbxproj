@@ -6885,16 +6885,8 @@
 	<string>YES</string>
 	<key>NSExecutable</key>
 	<string>ERDirectToWeb</string>
-	<key>NSJavaNeeded</key>
-	<true/>
-	<key>NSJavaPath</key>
-	<array>
-		<string>ERDirectToWeb.jar</string>
-	</array>
 	<key>NSJavaPathClient</key>
 	<string>ERDirectToWeb.jar</string>
-	<key>NSJavaRoot</key>
-	<string>Resources/Java</string>
 	<key>NSJavaRootClient</key>
 	<string>WebServerResources/Java</string>
 	<key>NSPrincipalClass</key>
@@ -7229,6 +7221,8 @@
 				F542048202C4674D01000102,
 				F542048302C4674D01000102,
 				F542048402C4674D01000102,
+				F639B99D02EF369E0FCF0E72,
+				F639B99F02EF369F0FCF0E72,
 			);
 			isa = PBXResourcesBuildPhase;
 		};
@@ -7427,6 +7421,7 @@
 				F581683F02E0070601000102,
 				F581684302E1453C01000102,
 				F57E9BF502E3398401CF0E76,
+				F639B99E02EF369F0FCF0E72,
 			);
 			isa = PBXSourcesBuildPhase;
 		};
@@ -7799,6 +7794,62 @@
 //F62
 //F63
 //F64
+		F639B94B02EF32F00FCF0E72 = {
+			isa = PBXFileReference;
+			name = ERD2WDebugFlags.api;
+			path = Components/ERD2WDebugFlags.api;
+			refType = 2;
+		};
+		F639B94D02EF33040FCF0E72 = {
+			isa = PBXFileReference;
+			name = ERD2WDebugFlags.java;
+			path = er/directtoweb/ERD2WDebugFlags.java;
+			refType = 4;
+		};
+		F639B95802EF33C70FCF0E72 = {
+			children = (
+				F639B95902EF33C70FCF0E72,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WDebugFlags.wo;
+			path = "";
+			refType = 4;
+		};
+		F639B95902EF33C70FCF0E72 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WDebugFlags.wo;
+			refType = 2;
+		};
+		F639B95F02EF33CE0FCF0E72 = {
+			children = (
+				F639B94B02EF32F00FCF0E72,
+				F639B94D02EF33040FCF0E72,
+				F639B95802EF33C70FCF0E72,
+			);
+			isa = PBXGroup;
+			name = ERD2WDebugFlags;
+			refType = 4;
+		};
+		F639B99D02EF369E0FCF0E72 = {
+			fileRef = F639B94B02EF32F00FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F639B99E02EF369F0FCF0E72 = {
+			fileRef = F639B94D02EF33040FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F639B99F02EF369F0FCF0E72 = {
+			fileRef = F639B95802EF33C70FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F6DC3ABC02E4A5520FCF0E72 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -7890,6 +7941,7 @@
 				F54206CE02C467E001000102,
 				F54206CF02C467E001000102,
 				F54206EA02C467E001000102,
+				F639B95F02EF33CE0FCF0E72,
 			);
 			isa = PBXGroup;
 			name = "D2W Base Additions";

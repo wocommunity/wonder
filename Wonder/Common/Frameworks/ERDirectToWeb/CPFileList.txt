@@ -12,6 +12,7 @@
 ./Sources/er/directtoweb/ERD2WCustomDisplayBoolean.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WCustomEditBoolean.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WCustomQueryComponentWithArgs.java:er.directtoweb
+./Sources/er/directtoweb/ERD2WDebugFlags.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WDirectAction.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WDisplayAddress.java:er.directtoweb
 ./Sources/er/directtoweb/ERD2WDisplayConstant.java:er.directtoweb
