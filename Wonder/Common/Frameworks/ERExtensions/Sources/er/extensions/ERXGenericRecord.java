@@ -447,7 +447,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             NSDictionary pk = primaryKeyDictionary(false);
             NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
             result = ERXArrayUtilities.valuesForKeyPaths(pk, primaryKeyAttributeNames);
-            if(((NSArray)result).count() == 0) result = ((NSArray)result).lastObject();
+            if(((NSArray)result).count() == 1) result = ((NSArray)result).lastObject();
         }
         return result;
     }
