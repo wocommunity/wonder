@@ -437,7 +437,8 @@ static void sendResponse(request_rec *r, HTTPResponse *resp) {
     /*
      *	actually transmit the response to the client
      */
-    ap_send_http_header(r);
+    /* This should cause Apache to send the headers */
+    ap_rflush(r);
 
     /* resp->content_valid will be 0 for HEAD requests and empty responses */
     if ( (!r->header_only) && (resp->content_valid) ) {
