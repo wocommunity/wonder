@@ -29,14 +29,15 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent  {
      * binding checks that shouldn't be done.
      */
     public void awake() {}
-    
+
+	 //FIXME restting the caches breaks the context in the embedded component
     public void resetCaches() {
-        log.debug("Resetting caches");
-        takeValueForKey(null,"_task"); // this will break in 5.0 :-)
-        takeValueForKey(null,"_entityName");
+        //log.debug("Resetting caches");
+        //takeValueForKey(null,"_task"); // this will break in 5.0 :-)
+        //takeValueForKey(null,"_entityName");
         // Finalizing a context is a protected method, hence the utiltiy.
-        ERD2WUtilities.finalizeContext((D2WContext)valueForKey("_context"));
-        takeValueForKey(null,"_context");
+        //ERD2WUtilities.finalizeContext((D2WContext)valueForKey("subContext"));
+        //takeValueForKey(null,"_context");
     }
 
     private String _pageConfiguration;
