@@ -27,7 +27,7 @@ content3: WOComponentContent {
 }
 
 form: WOForm {
-        multipleSubmit=true;
+        multipleSubmit= ^multipleSubmit;
 	name = ^name;
 	enctype = ^enctype;
 	directActionName = ^directActionName;
@@ -35,7 +35,7 @@ form: WOForm {
 }
 
 form2: WOForm {
-        multipleSubmit=true;
+        multipleSubmit= ^multipleSubmit;
 	name = ^name;
 	action = ^action;
 	enctype = ^enctype;

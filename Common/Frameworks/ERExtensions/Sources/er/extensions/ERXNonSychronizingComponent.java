@@ -117,4 +117,29 @@ public abstract class ERXNonSychronizingComponent extends WOComponent {
         }
         return result;
     }
+
+    /**
+     * Retrieves a given binding and if it is not null
+     * then returns <code>toString</code> called on the
+     * bound object.
+     * @param binding to be resolved
+     * @return resolved binding in string format
+     */
+    public String stringValueForBinding(String binding) {
+        return stringValueForBinding(binding, null);
+    }
+
+    /**
+     * Retrieves a given binding and if it is not null
+     * then returns <code>toString</code> called on the
+     * bound object.
+     * @param binding to be resolved
+     * @param defaultValue value to be used if <code>valueForBinding</code>
+     *        returns null.
+     * @return resolved binding in string format
+     */
+    public String stringValueForBinding(String binding, String defaultValue) {
+        Object v=objectValueForBinding(binding, defaultValue);
+        return v!=null ? v.toString() : null;
+    }
 }

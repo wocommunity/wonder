@@ -10,7 +10,8 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-
+//CHECKME: Do we need this? Why not use ERDEditDateJavascript from ERD2W?
+// otherwise, where is the dateString binding from the .api?
 public class ERXEditDateJavascript extends WOComponent {
     static final ERXLogger log = ERXLogger.getERXLogger(ERXEditDateJavascript.class);
     
@@ -33,10 +34,7 @@ public class ERXEditDateJavascript extends WOComponent {
     private static String _datePickerJavaScriptUrl;
     public String datePickerJavaScriptUrl() {
         if (_datePickerJavaScriptUrl==null) {
-            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js",
-                                                                                          "ERExtensions",
-                                                                                          null,
-                                                                                          context().request());
+            _datePickerJavaScriptUrl= application().resourceManager().urlForResourceNamed("date-picker.js", "ERExtensions", null, context().request());
         }
         return _datePickerJavaScriptUrl;
     }
