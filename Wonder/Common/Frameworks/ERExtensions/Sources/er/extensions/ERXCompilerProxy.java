@@ -251,7 +251,7 @@ public class ERXCompilerProxy {
             mainProject = new File(mainBundle.bundlePath()).getParentFile().getParentFile().getAbsolutePath();
         }
         if((new File(pathForCPFileList(mainProject))).exists()) {
-	    log.info("Found open project for app at path " + mainProject);
+	    log.debug("Found open project for app at path " + mainProject);
 	    projectPaths.addObject(mainProject);
 	}
 	for(Enumeration e = frameworkNames.objectEnumerator(); e.hasMoreElements();) {
@@ -271,7 +271,7 @@ public class ERXCompilerProxy {
             if(path != null) {
                 File f = new File(pathForCPFileList(path));
                 if(f.exists()) {
-                    log.info("Found open project for framework '" +name+ "' at path " + path);
+                    log.debug("Found open project for framework '" +name+ "' at path " + path);
                     projectPaths.addObject(path);
                 }
             }
@@ -309,18 +309,18 @@ public class ERXCompilerProxy {
 	if (initialized) {
 	    return;
 	}
-        log.info("initialize start");
+        log.debug("initialize start");
 
         initialized = true;
         
         if(WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
-            log.info("I assume this is deployment mode, rapid-turnaround mode is disabled");
+            log.debug("I assume this is deployment mode, rapid-turnaround mode is disabled");
             _filesToWatch = new NSMutableDictionary();
             return;
         }
 
         if(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCompilerProxyEnabled", false)) {
-            log.info("Rapid-turnaround mode is disabled, set 'er.extensions.ERXCompilerProxyEnabled=true' in your WebObjects.properties to enable it.");
+            log.debug("Rapid-turnaround mode is disabled, set 'er.extensions.ERXCompilerProxyEnabled=true' in your WebObjects.properties to enable it.");
             _filesToWatch = new NSMutableDictionary();
             return;
 	}
