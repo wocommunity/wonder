@@ -7,6 +7,8 @@ import com.webobjects.foundation.*;
 
 
 public class ERXRuntimeUtilities {
+
+    /** logging support */
     public static ERXLogger log = ERXLogger.getERXLogger(ERXRuntimeUtilities.class);
     
 
