@@ -10,7 +10,7 @@
     <property name="framework.name" value="${project.name}.framework" />
     
     <property name="build.root" value="${user.home}/Roots" />
-    <property name="build.classes" value="${build.root}/${project.name}.classes" />
+    <property name="build.classes" value="${build.root}/classes/${project.name}" />
     <property name="build.framework.dir" value="${build.root}/${framework.name}" />
     <property name="build.jar.file" value="${build.framework.dir}/Resources/Java/${project.name}.jar" />
     <!--property name="framework.dir" value="${wo.local.root}" if="env.INSTALL"/-->
@@ -50,12 +50,12 @@
     
       <target name="checkupdate">
         <uptodate property="no.changes" targetfile="${build.jar.file}">
-            <srcfiles dir="${project.dir}" includes="${project.dir}/Sources/**/*.java" />
+            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
         </uptodate>
       </target>
     <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
 		<mkdir dir="${build.classes}"/>
-        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="${project.dir}/Sources/**/*.java" debug="on"
+        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on"
              optimize="off" deprecation="on">
             <classpath refid="project.class.path" />
         </javac>
