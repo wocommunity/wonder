@@ -46,6 +46,7 @@
 ./Sources/er/extensions/ERXExceptionHolder.java:er.extensions
 ./Sources/er/extensions/ERXExtensions.java:er.extensions
 ./Sources/er/extensions/ERXFakeRelationship.java:er.extensions
+./Sources/er/extensions/ERXFetchSpecificationBatchIterator.java:er.extensions
 ./Sources/er/extensions/ERXFileNotificationCenter.java:er.extensions
 ./Sources/er/extensions/ERXFixedLengthString.java:er.extensions
 ./Sources/er/extensions/ERXFrameworkPrincipal.java:er.extensions
@@ -92,6 +93,7 @@
 ./Sources/er/extensions/ERXNonNullConditional.java:er.extensions
 ./Sources/er/extensions/ERXNonPluralFormLocalizer.java:er.extensions
 ./Sources/er/extensions/ERXNonZeroConditional.java:er.extensions
+./Sources/er/extensions/ERXNSLogLog4jBridge.java:er.extensions
 ./Sources/er/extensions/ERXNSPrintWriterLogger.java:er.extensions
 ./Sources/er/extensions/ERXNumberFormatter.java:er.extensions
 ./Sources/er/extensions/ERXOncePerRequestConditional.java:er.extensions
@@ -151,4 +153,3 @@
 ./Sources/er/testrunner/ERXTestRunner.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestInterface.java:er.testrunner
 ./Sources/er/testrunner/ERXWOTestResult.java:er.testrunner
-./Sources/er/extensions/ERXNSLogLog4jBridge.java:
