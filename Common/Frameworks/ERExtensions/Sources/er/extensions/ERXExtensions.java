@@ -92,6 +92,7 @@ public class ERXExtensions {
          * @param n notification posted when the app is done launching
          */
         public void finishedLaunchingApp(NSNotification n) {
+            ERXLog4j.configureLogging(); // Call this again to update configuration from ERConfigurationPath
             ERXLog4j.configureRapidTurnAround(); // Will only enable if WOCaching is off.
  	    // initialize compiler proxy
 	    ERXCompilerProxy.defaultProxy().initialize();
@@ -127,8 +128,6 @@ public class ERXExtensions {
      */
     static {
         if (!_isInitialized) {
-            // This will configure the Log4j system.
-            // This is OK to call multiple times as it will only be configured the first time.
             try {
                 ERXLog4j.configureLogging();
                 ERXConfigurationManager.initializeDefaults();
