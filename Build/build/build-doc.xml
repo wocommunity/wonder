@@ -105,19 +105,22 @@
                 <include name="**/*.css"/>
             </fileset>
         </copy>
+
     </target>
 
     <!-- ========================================== -->
     <!-- Builds API documentation.                  -->
     <!-- ========================================== -->
     <target name="api" depends="prepare">
-        <!--<copy todir="${dist}/doc">
-            <fileset dir="doc">
+        <!-- copy README's -->
+        <copy todir="${dist}/">
+            <fileset dir="${basedir}">
+                <include name="*.txt"/>
                 <include name="**/LICENSE*"/>
             </fileset>
-        </copy>-->
+        </copy>
 
-        <javadoc   packagenames="er.*, com.gammastream.*"
+        <javadoc packagenames="er.*, com.gammastream.*"
                    defaultexcludes="yes"
                    destdir="${dist}/Documentation/api"
                    author="true"
