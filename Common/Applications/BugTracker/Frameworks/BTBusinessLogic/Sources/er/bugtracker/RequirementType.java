@@ -24,5 +24,5 @@ public class RequirementType extends _RequirementType {
         
     }
 
-    public static final RequirementTypeClazz clazz = (RequirementTypeClazz)EOGenericRecordClazz.clazzForEntityNamed("RequirementType");
+    public static final RequirementTypeClazz clazz = (RequirementTypeClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("RequirementType");
 }

@@ -31,5 +31,5 @@ public class Requirement extends _Requirement {
         
     }
 
-    public static final RequirementClazz clazz = (RequirementClazz)EOGenericRecordClazz.clazzForEntityNamed("Requirement");
+    public static final RequirementClazz clazz = (RequirementClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Requirement");
 }

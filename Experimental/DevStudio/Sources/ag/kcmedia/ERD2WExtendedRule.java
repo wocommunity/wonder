@@ -13,6 +13,8 @@ import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderInterface {
+    private static ERXLogger log = ERXLogger.getERXLogger(DirectAction.class);
+
     public ERD2WExtendedRule() {
         super();
     }
@@ -23,6 +25,7 @@ public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderI
               ((Assignment) eokeyvalueunarchiver.decodeObjectForKey("rhs")));
         NSDictionary dict = (NSDictionary)eokeyvalueunarchiver.decodeObjectForKey("userInfo");
         setAuthor(eokeyvalueunarchiver.decodeIntForKey("author"));
+        assignmentClassName = (String)eokeyvalueunarchiver.decodeObjectForKey("assignmentClassName");
         if(dict != null)
             setMutableUserInfo(dict.mutableClone());
     }
@@ -32,7 +35,11 @@ public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderI
         try {
             rule = new ERD2WExtendedRule(eokeyvalueunarchiver);
         } catch(Throwable t) {
-            throw new IllegalArgumentException("Error with this rule: " + NSKeyValueCoding.Utility.valueForKey(eokeyvalueunarchiver,"propertyList") + "," + t.getMessage());
+            NSMutableDictionary dict = (NSMutableDictionary)NSKeyValueCoding.Utility.valueForKey(eokeyvalueunarchiver,"propertyList");
+            log.info("Problems with this rule: " + dict + "," + t.getMessage());
+            dict.takeValueForKeyPath(dict.valueForKeyPath("rhs.class"), "assignmentClassName");
+            dict.takeValueForKeyPath("com.webobjects.directtoweb.Assignment", "rhs.class");
+            rule = new ERD2WExtendedRule(eokeyvalueunarchiver);
         }
         return rule;
     }
@@ -63,10 +70,14 @@ public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderI
         author = value;
     }
 
+    String assignmentClassName;
     public String assignmentClassName() {
-        return rhs().getClass().getName();
+        if(assignmentClassName == null) {
+            assignmentClassName = rhs().getClass().getName();
+        }
+        return assignmentClassName;
     }
-
+    
     public ERD2WExtendedRule cloneRule() {
         EOKeyValueArchiver archiver = new EOKeyValueArchiver();
         encodeWithKeyValueArchiver(archiver);
@@ -78,7 +89,7 @@ public class ERD2WExtendedRule extends Rule implements ERXMutableUserInfoHolderI
     public String description() {
         String prefix = "      ";
         String authorString = "" + author();
-        String rhsClass = rhs().getClass().getName();
+        String rhsClass = assignmentClassName();
         return (
                 prefix.substring(0, prefix.length() - ("" + author()).length()) + author() + " : " + 
                 (lhs() == null ? "*true*" : lhs().toString()) +

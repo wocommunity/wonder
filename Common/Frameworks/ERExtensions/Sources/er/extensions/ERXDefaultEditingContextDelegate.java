@@ -50,7 +50,7 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
      * 		for.
      * @return verbose description of the object.
      */
-    // MOVEME: If this is usedful then it might be worth putting in EOGenericRecordClazz or ERXEOFUtilities
+    // MOVEME: If this is usedful then it might be worth putting in EOEnterpriseObjectClazz or ERXEOFUtilities
     private static String toDebugString(EOEnterpriseObject eo) {
         String result=null;
         if (eo!=null) {

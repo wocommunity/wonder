@@ -38,5 +38,5 @@ public class Release extends _Release {
         }
     }
 
-    public static final ReleaseClazz clazz = (ReleaseClazz)EOGenericRecordClazz.clazzForEntityNamed("Release");
+    public static final ReleaseClazz clazz = (ReleaseClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Release");
 }
