@@ -360,6 +360,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public NSDictionary createdKeys() { return createdKeys; }
 
     public Object localizedValueForKeyWithDefault(String key) {
+        if(key == null) {
+            log.warn("Attempt to insert null key!");
+            return null;
+        }
         Object result = localizedValueForKey(key);
         if(result == null) {
             if(createdKeysLog.isDebugEnabled())
@@ -373,7 +377,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public Object localizedValueForKey(String key) {
         Object result = cache.objectForKey(key);
-        if(result == NOT_FOUND) return null;
+        if(key == null || result == NOT_FOUND) return null;
         if(result != null) return result;
 
         if(createdKeysLog.isDebugEnabled())
