@@ -14,7 +14,19 @@ import com.webobjects.directtoweb.*;
 public class ERD2WQueryPage extends D2WQueryPage {
 
     public ERD2WQueryPage(WOContext context) { super(context); }
-    
+
+    // debug helpers
+    public boolean d2wComponentNameDebuggingEnabled() {
+        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
+    }
+    public String d2wCurrentComponentName() {
+        String name = (String)d2wContext().valueForKey("componentName");
+        if(name.indexOf("CustomComponent")>=0) {
+            name = (String)d2wContext().valueForKey("customComponentName");
+        }
+        return name;
+    }
+
     // add the ability to AND the existing qualifier from the DG
     public EOQualifier qualifier() {
         EOQualifier q=displayGroup.qualifier();

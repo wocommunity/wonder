@@ -40,7 +40,18 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         d2wContext().takeValueForKey(eo, "object");
         super.setObject(eo);
     }
-
+    // debug helpers
+    public boolean d2wComponentNameDebuggingEnabled() {
+        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
+    }
+    public String d2wCurrentComponentName() {
+        String name = (String)d2wContext().valueForKey("componentName");
+        if(name.indexOf("CustomComponent")>=0) {
+            name = (String)d2wContext().valueForKey("customComponentName");
+        }
+        return name;
+    }
+    
     // make kvc happy
     public void setD2wContext(D2WContext newValue) {}
     public void setLocalContext(D2WContext newValue) {
