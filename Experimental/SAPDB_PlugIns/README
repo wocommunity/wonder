@@ -4,11 +4,17 @@ EOF SAPDB PlugIns
 
 WARNING !!!!
 
-    Very preliminary stage of development.
+    Not tested enough - should be considered alpha.
     
-    Primary key generation from sequences should work
-    (like in Oracle PlugIn)
+    Things that should work:
+    - primary key generation
+    - creating tables, foreign keys and primary key support
+    
+    SapDB JDBC driver required: 7.4.00.04c (earlier versions had bug that prevented NSTImestamp values from working properly)
 
+		Things that surely DO NOT work:
+		- BLOB values
+    
 
 Please refer to: 
 
@@ -18,4 +24,4 @@ Please refer to:
 
 Contact:
     
-    wojtek at power.com.pl
+    marek at power.com.pl
