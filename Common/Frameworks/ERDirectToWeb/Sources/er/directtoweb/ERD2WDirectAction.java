@@ -72,6 +72,9 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         String cid = context().request().stringFormValueForKey(contextIDKey);
         if(cid == null) return context().page();
         WOComponent comp = session().restorePageForContextID(cid);
+        // (ak) we need to put the component to sleep again
+        if(comp != null)
+            comp._sleepInContext(comp.context());
         return comp;
     }
 
