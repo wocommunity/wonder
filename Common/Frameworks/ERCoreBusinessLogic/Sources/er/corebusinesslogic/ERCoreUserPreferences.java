@@ -35,6 +35,9 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     /** caches the singleton user preference object */
     private static ERCoreUserPreferences _userPreferences;
 
+    /** caches the singleton editingContext   */
+    private static EOEditingContext _editingContext;
+
     //	===========================================================================
     //	Class Method(s)
     //	---------------------------------------------------------------------------
@@ -45,9 +48,17 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
      * @return single instance of the user preferences
      */
     public static ERCoreUserPreferences userPreferences() {
-        if (_userPreferences == null)
+        if (_userPreferences == null){
             _userPreferences = new ERCoreUserPreferences();
+        }
         return _userPreferences;
+    }
+
+    public static EOEditingContext editingContext() {
+        if (_editingContext == null){
+            _editingContext = ERXEC.newEditingContext();
+        }
+        return _editingContext;
     }
 
     //	===========================================================================
@@ -118,18 +129,16 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     // FIXME -- unarchiving - archiving probably could use optimization
     public Object valueForKey(String key) {
         Object result=null;
-        EOEditingContext ec = ERXEC.newEditingContext();
-        ec.lock();
+        editingContext().lock();
         try {
-            EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
+            EOEnterpriseObject pref = preferenceRecordForKey(key, editingContext());
             if (pref != null) {
                 String encodedValue = (String)pref.valueForKey("value");
                 result = decodedValue(encodedValue);
             }
         } finally {
-            ec.unlock();
+            editingContext().unlock();
         }
-        ec.dispose();
         if (log.isDebugEnabled())
             log.debug("Prefs vfk " + key + " = " + result);
         return result;
@@ -142,11 +151,10 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         // so that if a user opens two sessions they don't get locking failures
         // this is OK for display style prefs (how many items, how they are sorted)
         // but might not be for more behavior-style prefs!!
-        EOEditingContext ec = ERXEC.newEditingContext();
-        ec.lock();
+        editingContext().lock();
         try {
-            EOEnterpriseObject pref = preferenceRecordForKey(key, ec);
-            ERCoreUserInterface u = (ERCoreUserInterface)ERCoreBusinessLogic.actor(ec);
+            EOEnterpriseObject pref = preferenceRecordForKey(key, editingContext());
+            ERCoreUserInterface u = (ERCoreUserInterface)ERCoreBusinessLogic.actor(editingContext());
             if (pref != null) {
                 if (value != null) {
                     String encodedValue = encodedValue(value);
@@ -158,10 +166,10 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 } else {
                     if (log.isDebugEnabled())
                         log.debug("Removing preference "+u+": "+key);
-                    ec.deleteObject(pref);
+                    editingContext().deleteObject(pref);
                 }
             } else if (value!=null) {
-                pref = ERXUtilities.createEO("ERCPreference", ec);
+                pref = ERXUtilities.createEO("ERCPreference", editingContext());
                 u.newPreference(pref);
                 // done this way to not force you to sub-class our User entity
                 pref.takeValueForKey(ERXExtensions.rawPrimaryKeyForObject((EOEnterpriseObject)u),"userID");
@@ -170,13 +178,17 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 if (log.isDebugEnabled())
                     log.debug("Creating preference "+u+": "+key+" - "+value+" -- "+encodedValue(value));
             }
-            if (ec.hasChanges()) {
-                ec.saveChanges();
+            if (editingContext().hasChanges()) {
+                editingContext().saveChanges();
+                editingContext().revert();
             }
-        } finally {
-            ec.unlock();
+        }catch(Throwable t){
+            log.error("Problem during ERCoreUserPreferences:takeValueForKey:"+t);
+            //We are throwing away that editing context because it may be hosed at that point
+            _editingContext = null;
+        }finally {
+            editingContext().unlock();
         }
-        ec.dispose();
         NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification,
                                                               new NSDictionary(value, key));
     }
