@@ -1,0 +1,8 @@
+EditDateJavascript: ERXEditDateJavascript {
+	dateString = minValue;
+}
+
+EditDateJavascript2: ERXEditDateJavascript {
+	dateString = maxValue;
+}
+
