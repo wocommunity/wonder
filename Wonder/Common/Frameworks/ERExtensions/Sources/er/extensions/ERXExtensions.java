@@ -202,6 +202,7 @@ public class ERXExtensions {
             sharedEOAdaptorCategory = Category.getInstance("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
             if (adaptorCategory.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+                NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
             }
             adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) ? Boolean.TRUE : Boolean.FALSE;
                                           // Allows rapid turn-around of adaptor debugging.
