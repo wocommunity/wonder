@@ -156,6 +156,10 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         ERCMailState.mailStateClazz().initializeSharedData();
     }
 
+    public boolean shouldMailReportedExceptions() {
+        return ERXProperties.booleanForKey("er.corebusinesslogic.ERCoreBusinessLogic.ShouldMailExceptions");
+    }
+    
     /**
      * Registers a run-time relationship called "preferences" on the actor 
      * entity of your business logic. The framework needs preferences 
@@ -267,9 +271,11 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             } else {
                 s.append(ERXUtilities.stackTrace(exception));
             }
-            if (!ERCMailDelivery.usesMail()) {
+            if (!WOApplication.application().isCachingEnabled() ||
+                !ERCMailDelivery.usesMail() ||
+                !shouldMailReportedExceptions()) {
                 log.error(s.toString());
-            } else if (WOApplication.application().isCachingEnabled()) {
+            } else {
                 // Usually the Mail appender is set to Threshold ERROR
                 log.warn(s.toString());
                 if (emailsForProblemRecipients().count() == 0 || problemEmailDomain() == null) {
