@@ -42,7 +42,7 @@ import com.webobjects.foundation.*;
  * returns the object. 
  * 
  * To access ERXBrowser's boolean questions from WOConditionals 
- * on a web component, set the path like "session.brower.isIFrameSupported" 
+ * on a web component, set the key path like "session.brower.isIFrameSupported" 
  * to their condition bindings. <br>
  * 
  * ERXDirectAction also holds a browser object for the current request. 
@@ -100,6 +100,8 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
      */
     public abstract NSDictionary userInfo();
 
+    public abstract boolean isUnknownBrowser();
+
     /**
      * Browser is iCab?
      * @return true if browser is iCab.
@@ -153,6 +155,11 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isVersion4();
     public abstract boolean isVersion3();
     public abstract boolean isVersion2();
+
+    public abstract boolean isUnknownPlatform();
+    public abstract boolean isMacOS();
+    public abstract boolean isWindows();
+    public abstract boolean isLinux();
 
     public Object valueForKey(String key) {
         return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
