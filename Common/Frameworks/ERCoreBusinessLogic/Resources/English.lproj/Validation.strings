@@ -1,0 +1,3 @@
+{
+    ERCMailMessage.toAddresses.nullValue = "You must set give at least one recipient.";
+}
