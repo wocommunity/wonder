@@ -746,4 +746,39 @@ public class ERXStringUtilities {
         }
     }
     
+    /**
+     * Tests if the string starts with the specified prefix ignoring case.  This method is
+     * optimized so that it only converts the relevant substring of stringToSearch to lowercase
+     * before comparing it to the lowercase version of prefix.
+     * @param stringToSearch string to check
+     * @param prefix prefix to look for
+     * @return true if stringToSearch case-insensitively starts with prefix
+     */
+    public static boolean caseInsensitiveStartsWith(String stringToSearch, String prefix) {
+        return caseInsensitiveStartsWith(stringToSearch, prefix, 0);
+    }
+    
+    /**
+     * Tests if the string starts with the specified prefix starting at the specified index ignoring case.
+     * This method is optimized so that it only converts the relevant substring of stringToSearch to lowercase
+     * before comparing it to the lowercase version of prefix.
+     * @param stringToSearch string to check
+     * @param prefix prefix to look for
+     * @param toffset starting offset to perform the search
+     * @return true if stringToSearch case-insensitively starts with prefix starting at toffset
+     */
+    public static boolean caseInsensitiveStartsWith(String stringToSearch, String prefix, int toffset) {
+        boolean result = false;
+        final int stringToSearchLength = stringToSearch.length();
+        final int prefixLength = prefix.length();
+        
+        if ( (toffset + prefixLength) <= stringToSearchLength ) {
+            final String slice = stringToSearch.substring(toffset, toffset+prefixLength);
+            
+            result = toLowerCase(slice).equals(toLowerCase(prefix));
+        }
+        
+        return result;
+    }
+    
 }
