@@ -19,78 +19,91 @@
 			shellScript = "sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
 		};
 		F529260603AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRAttribute.java;
 			path = Sources/er/grouping/DRAttribute.java;
 			refType = 4;
 		};
 		F529260703AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRAttributeGroup.java;
 			path = Sources/er/grouping/DRAttributeGroup.java;
 			refType = 4;
 		};
 		F529260803AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRCriteria.java;
 			path = Sources/er/grouping/DRCriteria.java;
 			refType = 4;
 		};
 		F529260903AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRGroup.java;
 			path = Sources/er/grouping/DRGroup.java;
 			refType = 4;
 		};
 		F529260A03AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRMasterCriteria.java;
 			path = Sources/er/grouping/DRMasterCriteria.java;
 			refType = 4;
 		};
 		F529260B03AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRRecord.java;
 			path = Sources/er/grouping/DRRecord.java;
 			refType = 4;
 		};
 		F529260C03AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRRecordGroup.java;
 			path = Sources/er/grouping/DRRecordGroup.java;
 			refType = 4;
 		};
 		F529260D03AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRReportModel.java;
 			path = Sources/er/grouping/DRReportModel.java;
 			refType = 4;
 		};
 		F529260E03AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRSubMasterCriteria.java;
 			path = Sources/er/grouping/DRSubMasterCriteria.java;
 			refType = 4;
 		};
 		F529260F03AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRValue.java;
 			path = Sources/er/grouping/DRValue.java;
 			refType = 4;
 		};
 		F529261003AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = DRValueGroup.java;
 			path = Sources/er/grouping/DRValueGroup.java;
 			refType = 4;
 		};
 		F529261103AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = EONull_DREONullAdditions.java;
 			path = Sources/er/grouping/EONull_DREONullAdditions.java;
 			refType = 4;
 		};
 		F529261203AABD1B01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NSDate_DRNSDateAdditions.java;
 			path = Sources/er/grouping/NSDate_DRNSDateAdditions.java;
@@ -196,6 +209,7 @@
 			refType = 4;
 		};
 		F529276403AAC81C01AD0D0B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = Sources/er/grouping/KeyValueCodingProtectedAccessor.java;
@@ -259,11 +273,11 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F5F3A9BE0160D23501000001 = {
 			buildStyles = (
@@ -271,6 +285,7 @@
 				F5F3AA0F0160D23501000001,
 				F5F3AA100160D23501000001,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = F5F3A9BF0160D23501000001;
 			productRefGroup = F5F3A9DD0160D23501000001;
@@ -454,7 +469,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5F3A9E20160D23501000001 = {
 			isa = PBXTargetDependency;
@@ -524,7 +538,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5F3A9E40160D23501000001 = {
 			buildActionMask = 2147483647;
@@ -673,7 +686,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5F3A9FD0160D23501000001 = {
 			buildActionMask = 2147483647;
