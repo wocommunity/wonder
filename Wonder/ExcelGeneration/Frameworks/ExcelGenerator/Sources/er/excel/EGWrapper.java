@@ -67,46 +67,49 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     	_fonts = value;
     }
     
-    
+
     public void appendToResponse(WOResponse response, WOContext context) {
-		if(isEnabled()) {
-			WOResponse newResponse = new WOResponse();
-			
-			super.appendToResponse(newResponse, context);
-			
-			String contentString = newResponse.contentString();
-			byte[] bytes;
+        if (isEnabled()) {
+            WOResponse newResponse = new WOResponse();
+
+            super.appendToResponse(newResponse, context);
+
+            String contentString = newResponse.contentString();
+
+            if (log.isDebugEnabled()) {
+                log.debug("Converting content string:\n" + contentString);
+            }
+            byte[] bytes;
             try {
                 bytes = contentString.getBytes("UTF-8");
             } catch (UnsupportedEncodingException e) {
-               throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
+                throw new NSForwardException(e, "Can't convert string to UTF-8...you should get a better VM");
             }
             InputStream stream = new ByteArrayInputStream(bytes);
 
-			EGSimpleTableParser parser = new EGSimpleTableParser(stream, fonts(), styles());
-			NSData data = parser.data();
-			if((hasBinding("data") && canSetValueForBinding("data")) ||
-				(hasBinding("stream") && canSetValueForBinding("stream"))
-			) {
-				if(hasBinding("data")) {
-					setValueForBinding(data, "data");
-				}
-				if(hasBinding("stream")) {
-					setValueForBinding(data.stream(), "stream");
-				}
-				response.appendContentString(contentString);
-			} else {
-				response.appendContentData(data);
-				String fileName = fileName();
-				if(fileName == null) {
-					fileName = "results.xls";
-				}
-				response.setHeader("inline; filename=" + fileName, "content-disposition");
-				response.setHeader("application/msexcel", "content-type");
-			}
-		} else {
-			super.appendToResponse(response, context);
-		}
+            EGSimpleTableParser parser = new EGSimpleTableParser(stream, fonts(), styles());
+            NSData data = parser.data();
+            if((hasBinding("data") && canSetValueForBinding("data")) ||
+               (hasBinding("stream") && canSetValueForBinding("stream"))
+               ) {
+                if(hasBinding("data")) {
+                    setValueForBinding(data, "data");
+                }
+                if(hasBinding("stream")) {
+                    setValueForBinding(data.stream(), "stream");
+                }
+                response.appendContentString(contentString);
+            } else {
+                response.appendContentData(data);
+                String fileName = fileName();
+                if(fileName == null) {
+                    fileName = "results.xls";
+                }
+                response.setHeader("inline; filename=" + fileName, "content-disposition");
+                response.setHeader("application/msexcel", "content-type");
+            }
+        } else {
+            super.appendToResponse(response, context);
+        }
     }
 }
-
