@@ -35,6 +35,7 @@ RadioButtonMatrix: ERXRadioButtonMatrix {
 	list = theList;
 	maxColumns = ^maxColumns;
 	selection = selection;
+	uniqueID = ^uniqueID;
 }
 
 String: WOString {
