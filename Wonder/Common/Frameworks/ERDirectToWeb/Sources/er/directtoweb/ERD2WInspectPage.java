@@ -29,7 +29,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WInspectPage.class);
-    public static final ERXLogger validationCat = ERXLogger.getERXLogger("er.directtoweb.validation.ERInspectPage");
+    public static final ERXLogger validationCat = ERXLogger.getERXLogger(ERD2WInspectPage.class, "validation");
 
     public String urlForCurrentState() {
         NSDictionary dict = null;
@@ -190,29 +190,14 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges())
                 object().editingContext().saveChanges();
             saved = true;
-        } catch (ERXValidationException ex) {
-            String propertyKey = ex.propertyKey();
-            ex.setContext(d2wContext());
-            ex.setTargetLanguage(ERXLocalizer.currentLocalizer().language());
-            Object o = ex.object();
-            if(o instanceof EOEnterpriseObject) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)o;
-                d2wContext().takeValueForKey(eo.entityName(), "entityName");
-                d2wContext().takeValueForKey(propertyKey, "propertyKey");
-            }
-            if(propertyKey != null && propertyKey.indexOf(",") > 0) {
-                keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString(propertyKey, ","));
-            }
-            errorMessage = " Could not save your changes: "+ex.getMessage()+" ";
-        } catch (NSValidation.ValidationException e) {
-            log.info(e.getMessage(), e);
-            errorMessage = " Could not save your changes: "+e.getMessage()+" ";
-        } catch(EOGeneralAdaptorException e) {
-            if(shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), e)) {
-                    errorMessage = "Could not save your changes. The "+d2wContext().valueForKey("displayNameForEntity")+
-                    " has changed in the database before you could save. Your changes have been lost. Please reapply them.";
+        } catch (NSValidation.ValidationException ex) {
+            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
+            validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
+        } catch(EOGeneralAdaptorException ex) {
+            if(shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), ex)) {
+                errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
             } else {
-                throw e;
+                throw ex;
             }
         }
 
@@ -223,16 +208,13 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         WOComponent returnComponent = null;
         // catch the case where the user hits cancel and then the back button
         if (object()!=null && object().editingContext()==null) {
-            errorMessage="<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
+            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2WInspect.alreadyAborted", d2wContext());
             clearValidationFailed();
         } else {
             if (errorMessages.count()==0) {
                 try {
                     _objectWasSaved=true;
                     returnComponent = tryToSaveChanges(true) ? nextPage() : null;
-                } catch (NSValidation.ValidationException e) {
-                    log.info(e.getMessage(), e);
-                    errorMessage = " Could not save your changes: "+e.getMessage()+" ";
                 } finally {
                     _objectWasSaved=false;
                 }
