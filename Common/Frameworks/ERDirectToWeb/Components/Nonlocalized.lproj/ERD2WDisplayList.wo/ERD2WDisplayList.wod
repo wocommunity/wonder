@@ -1,6 +1,6 @@
 listing: ERXListDisplay {
 	attribute = ^keyWhenRelationship;
 	list = listToDisplay;
-	nullArrayDisplay = d2wContext.emptyArrayDisplayString;
+	nullArrayDisplay = ^emptyArrayDisplayString;
 }
 
