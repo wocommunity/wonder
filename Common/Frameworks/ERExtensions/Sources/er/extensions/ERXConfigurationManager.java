@@ -14,77 +14,249 @@ import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// Configuration Manager
-//
-//     This object handles swizzling of the EOModel connection dictionaries
-//
-//   used to handle user default functionality rendered obsolete by the properties system
-//   as of WO 5.1 -- instead use ~/WebObjects.properties
-//
-//
-//
-// Changing the connection dictionary.
-//	To do this for Oracle you can either specify on a per model basis or on a global basis.
-//
-//	Global:
-//		dbConnectServerGLOBAL = myDatabaseServer
-//		dbConnectUserGLOBAL = me
-//		dbConnectPasswordGLOBAL = secret
-//	Per Model for say model ER:
-//		ER.DBServer = myDatabaseServer
-//		ER.DBUser = me
-//		ER.DBPassword = secret
-//
-//
-//
-// Openbase: same, with DBDatabase and DBHostname
-//
-// JDBC: same with urlGlobal, or db.url
-//
-//
-//
-//    Prototypes can be swapped globally or per model either by hydrating an archived
-//     prototype entity for a file or from another entity
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/** 
+ * <code>Configuration Manager</code> handles rapid turnaround for 
+ * system configuration as well as swizzling of the EOModel connection 
+ * dictionaries. 
+ * <p>
+ * <strong>Placing configuration parameters</strong>
+ * <p> 
+ * You can provide the system configuration by the following ways:<br/>
+ * Note: This is the standard way for WebObjects 5.x applications.
+ * <ul>
+ *   <li><code>Properties</code> file under the Reources group of the  
+ *       application and framework project. 
+ *       It's a {@link java.util.Properties} file and Project Wonder's 
+ *       standard project templates include it. (The templates won't 
+ *       be available on some platforms at this moment.)</li>
+ * 
+ *   <li><code>WebObjects.properties</code> under the user home directory; 
+ *       same format to Properties. <br/> 
+ *       Note that the user home directory depends on the user who 
+ *       launch the application. They may change between the 
+ *       developent and deployment time.</li>
+ * 
+ *   <li>Command line arguments<br/>
+ *       For example: <code>-WOCachingEnabled false -com.webobjects.pid $$</code></br>
+ *       Don't forget to put a dash "-" before the key.</li> 
+ * </ul>
+ * <p>
+ * <strong>Loading order of the configuration parameters</strong>
+ * <p>
+ * When the application launches, configuration parameters will 
+ * be loaded by the following order. ERXConfigurationManager trys 
+ * to reload them by the exactly same order when one of those 
+ * configuration files changes. 
+ * <p>
+ * 1. Properties in frameworks that the application links to<br/>
+ * 2. Properties in the application<br/>
+ * 3. WebObjects.properties under the home directory<br/>
+ * 4. Command line arguments<br/>
+ * <p>
+ * If there is a conflicting parameter between the files and 
+ * arguments, the latter one overrides the earlier one. 
+ * <p>
+ * Note that the order between frameworks does not seems 
+ * to be specified. You should not put conflicting parameters 
+ * between framework Properties files. On the other hand, 
+ * the application Properties should be always loaded after 
+ * all framework Properties are loaded. You can safely 
+ * override parameters on the frameworks from the applications
+ * Properties. 
+ * 
+ * 
+ * 
+ * <p>
+ * <strong>Changing the connection dictionary</strong>
+ * <p>
+ * To do this for Oracle you can either specify on a per model basis 
+ * or on a global basis.
+ * <pre>
+ * <strong>Global:</strong>
+ * 		dbConnectServerGLOBAL = myDatabaseServer
+ * 		dbConnectUserGLOBAL = me
+ * 		dbConnectPasswordGLOBAL = secret
+ * <strong>Per Model for say model ER:</strong>
+ * 		ER.DBServer = myDatabaseServer
+ * 		ER.DBUser = me
+ * 		ER.DBPassword = secret
+ * 
+ * <strong>Openbase:</strong> same, with DBDatabase and DBHostname
+ * 
+ * <strong>JDBC:</strong> same with urlGlobal, or db.url
+ * 
+ * </pre>
+ * <p>
+ * Prototypes can be swapped globally or per model either by 
+ * hydrating an archived prototype entity for a file or from 
+ * another entity.
+ */
 public class ERXConfigurationManager {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXConfigurationManager.class);
 
-    static ERXConfigurationManager defaultManager=null;
+    /** 
+     * Notification posted when the configuration is updated.  
+     * The Java system properties is the part of the configuration.
+     */ 
+    public static final String ConfigurationDidChangeNotification = "ConfigurationDidChangeNotification";        
+
+    /** Configuration manager singleton */ 
+    static ERXConfigurationManager defaultManager = null;
     
-    public static void initializeDefaults() {
-        try {
-            defaultManager();
-        } catch (Throwable e) {
-            // Too early to call WOApplication.application()
-            System.err.println("********* Caught exception trying to initialize Configuration Manager : "+e);
-            e.printStackTrace(System.err);
-            throw new RuntimeException(e.toString());
-        }
-    }
-    
+    private String[] _commandLineArguments; 
+    private NSMutableArray _monitoredProperties;
+    private boolean _isInitialized = false;
+    private boolean _isRapidTurnAroundInitialized = false;
+
+    /** Private constructor to prevent instantiation from outside the class */
     private ERXConfigurationManager() {
-        NSNotificationCenter.defaultCenter().addObserver(this,
-                                                         new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
-                                                         EOModelGroup.ModelAddedNotification,
-                                                         null);
-        
+        /* empty */
     }
 
-    /*
-     return the single instance of this class
+    /**
+     * Returns the single instance of this class
+     * 
+     * @return the configuration manager
      */
     public static ERXConfigurationManager defaultManager() {
-        if (defaultManager==null)
-            defaultManager=new ERXConfigurationManager();
+        if (defaultManager == null)
+            defaultManager = new ERXConfigurationManager();
         return defaultManager;
     }
     
-    public String stringForKey(String key) { return System.getProperty(key); }
+    /** 
+     * Returns the command line arguments. 
+     * {@link ERXApplication.main} sets this value. 
+     * 
+     * @return the command line arguments as a String[]
+     * @see #setCommandLineArguments
+     */
+    public String[] commandLineArguments() {
+        return _commandLineArguments;
+    }
+    
+    /** 
+     * Sets the command line arguments. 
+     * {@link ERXApplication.main} will call this method 
+     * when the application starts up. 
+     * 
+     * @see #commandLineArguments
+     */
+    public void setCommandLineArguments(String [] newCommandLineArguments) {
+        _commandLineArguments = newCommandLineArguments;
+    }
+
+    /**
+     * Initializes the configuration manager. 
+     * The framework principal {@link ERXExtensions} calles 
+     * this method when the ERExtensions framework is loaded. 
+     */
+    public void initialize() {
+        if (! _isInitialized) {
+            _isInitialized = true;
+            NSNotificationCenter.defaultCenter().addObserver(this,
+                    new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
+                    EOModelGroup.ModelAddedNotification,
+                    null);
+        }
+    }
+
+    /**
+     * Sets up the system for rapid turnaround mode. It will watch the 
+     * changes on Properties files in application and framework bundles 
+     * and WebObjects.properties under the home directory. 
+     * Rapid turnaround mode will only be enabled if there are such 
+     * files available and system has WOCaching disabled.
+     */
+    public void configureRapidTurnAround() {
+        if (_isRapidTurnAroundInitialized)      return;
+
+        _isRapidTurnAroundInitialized = true;
+        
+        if (WOApplication.application().isCachingEnabled()) {
+            log.info("WOCachingEnabled is true. Disabling the raphidTurnAround for Properties files");
+            return;
+        }
+        
+        NSArray propertyPaths = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
+        _monitoredProperties = new NSMutableArray();
+                 
+        Enumeration e = propertyPaths.objectEnumerator();
+        while (e.hasMoreElements()) {
+            String path = (String) e.nextElement();
+            try {
+                ERXFileNotificationCenter.defaultCenter().addObserver(this,
+                        new NSSelector("updateSystemProperties", ERXConstant.NotificationClassArray),
+                        path);
+                _monitoredProperties.addObject(path);
+                log.debug("Registered: " + path);
+            } catch (Exception ex) {
+                log.error("An exception occured while registering the observer for the "
+                            + "logging configuration file: " 
+                            + ex.getClass().getName() + " " + ex.getMessage());
+            }
+        }
+    }
+
+    /** 
+     * Updates the configuration from the current configuration and 
+     * posts {@link #ConfigurationDidChangeNotification}. It also  
+     * calls {@link ERXLogger.configureLogging} to reconfigure 
+     * the logging system. 
+     * <p>
+     * The configuration files: Properties and WebObjects.properties 
+     * files are reloaded to the Java system properties by the same 
+     * order to the when the system starts up. Then the command line 
+     * arguments will be applied to the properties again so that 
+     * the configuration will be consistent during the application 
+     * lifespan. 
+     * <p>
+     * This method is called when rapid turnaround is enabled and one 
+     * of the configuration files changes.
+     * 
+     * @param  n NSNotification object for the event 
+     */
+    public synchronized void updateSystemProperties(NSNotification n) {
+        _updateSystemPropertiesFromMonitoredProperties((File)n.object(), _monitoredProperties);
+        _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
+        ERXLogger.configureLogging(System.getProperties());
+        
+        NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
+    }
+
+    private void _updateSystemPropertiesFromMonitoredProperties(File updatedFile, NSArray monitoredProperties) {
+        if (monitoredProperties == null  ||  monitoredProperties.count() == 0)  return;
+        
+        String updatedFilePath = null;
+        try {
+            updatedFilePath = updatedFile.getCanonicalPath();
+        } catch (IOException ex) {
+            log.error(ex.toString());
+            return; 
+        }
+
+        Properties systemProperties = System.getProperties();
+        // Find the position of the updatedFile in the monitoredProperties list, 
+        // then reload it and everything after it on the list. 
+        for (int i = monitoredProperties.indexOfObject(updatedFilePath); 
+                  0 <= i  &&  i < _monitoredProperties.count(); i++) {
+            String monitoredPropertiesPath = (String) _monitoredProperties.objectAtIndex(i);
+            Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
+            ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+        }
+    }
+
+    private void _reinsertCommandLineArgumentsToSystemProperties(String[] commandLineArguments) {
+        Properties commandLineProperties = ERXProperties.propertiesFromArgv(commandLineArguments);
+        Properties systemProperties = System.getProperties(); 
+        ERXProperties.transferPropertiesFromSourceToDest(commandLineProperties, systemProperties);
+        log.info("Reinserted the command line arguments to the system properties.");
+    }
+
+
+    private String stringForKey(String key) { return System.getProperty(key); }
 
     public void modelAddedHandler(NSNotification n) {
         resetConnectionDictionaryInModel((EOModel)n.object());
