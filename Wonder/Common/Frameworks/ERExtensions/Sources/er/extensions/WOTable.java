@@ -122,7 +122,7 @@ public class WOTable extends WOComponent {
     public void pushItem()  {
         NSArray aList = list();
         int index = currentCol+maxColumns()*currentRow;
-        Object item = aList.objectAtIndex(index);
+        Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
         setValueForBinding(item, "item");
         setValueForBinding(ERXConstant.integerForInt(currentRow), "row");
         setValueForBinding(ERXConstant.integerForInt(currentCol), "col");
