@@ -2140,7 +2140,7 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_CLASS_SEARCH_PATHS = /Library/Java/Home/lib/ext/jce1_2_1.jar;
-				JAVA_COMPILER = /usr/bin/javac;
+				JAVA_COMPILER = /usr/bin/jikes;
 				JAVA_COMPILER_FLAGS = "-deprecation";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				OTHER_JAVA_CLASS_PATH = "";
@@ -3055,9 +3055,8 @@
 		};
 		F57EA85301FF5AC1019E57DA = {
 			isa = PBXFrameworkReference;
-			name = ERJars.framework;
-			path = /Library/Frameworks/ERJars.framework;
-			refType = 0;
+			path = ERJars.framework;
+			refType = 3;
 		};
 		F57EA85501FF5AC1019E57DA = {
 			fileRef = F57EA85301FF5AC1019E57DA;
