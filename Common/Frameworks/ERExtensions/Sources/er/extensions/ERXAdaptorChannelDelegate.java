@@ -1,10 +1,7 @@
 package er.extensions;
 
-import java.util.*;
-
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
 
 /**
  * Tracks and logs the SQL that gets sent to the database. If the logger
@@ -46,16 +43,12 @@ public class ERXAdaptorChannelDelegate {
         if(log.isDebugEnabled()) {
             long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;
             if(millisecondsNeeded > _maxMilliseconds) {
-                log.debug("Expression took " + millisecondsNeeded + " ms : " + expression);
+                log.info("Expression took " + millisecondsNeeded + " ms : " + expression);
             }
         }
     }
 
     public boolean adaptorChannelShouldEvaluateExpression(EOAdaptorChannel channel,  EOSQLExpression expression) {
-        if (expression.toString().indexOf("SELECT null FROM null") != -1) {
-            log.error("hier wars ", new Throwable());
-            
-        }
         _lastMilliseconds = System.currentTimeMillis();
         return true;
     }
