@@ -58,7 +58,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * when an ERXCompilerProxy did reset.
          */
         public void compilerProxyDidCompileClasses(NSNotification n) {
-            log.debug("compilerProxyDidCompileClasses: " + n);
+            log.debug("CompilerProxyDidCompileClasses: " + n);
             reset();
        }
 
@@ -71,8 +71,8 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @param n notification that has the EOModel that was loaded.
          */
         public void modelWasAddedNotification(NSNotification n) {
+            log.debug("ModelWasAddedNotification: " + ((EOModel)n.object()).name());
             // Don't want this guy getting in our way.
-            log.debug("modelWasAddedNotification: " + ((EOModel)n.object()).name());
             // FIXME: This is done twice
             NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
             registerDescriptionForEntitiesInModel((EOModel)n.object());
@@ -176,7 +176,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     if(array == null) {
                         array = new NSMutableArray();
                     }
-                    if(log.isDebugEnabled())
+                    if (log.isDebugEnabled())
                         log.debug("Adding entity " +eoentity.name()+ " with class " + eoentity.className());
                     array.addObject(eoentity);
                     _entitiesForClass.setObjectForKey(array, eoentity.className());
