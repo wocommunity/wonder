@@ -264,7 +264,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 returnString.append("selected=\"selected\" ");
             }
             returnString.append("value=\"" + idForParent(aEntity) + "\">");
-            returnString.append(NSKeyValueCoding.Utility.valueForKey(aEntity, parentDisplayValueName()));
+            returnString.append(NSKeyValueCodingAdditions.Utility.valueForKeyPath(aEntity, parentDisplayValueName()));
             returnString.append("</option>\n");
         }
         returnString.append("</select>\n");
@@ -289,7 +289,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         String prePendText = null;
         if (parentSelection().count() != 0) {
             if (childrenSelection().count() == 0 && defaultChildKey() != null)
-                setChildrenSelection((NSArray)NSKeyValueCoding.Utility.valueForKey(parentSelection(), defaultChildKey() + ".@flatten"));
+                setChildrenSelection((NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parentSelection(), defaultChildKey() + ".@flatten"));
             appendChildPopupStringWithParent(returnString, parentSelection());
         } else {
             // nothing is selected in the parent, so set the children array to all possible child values
@@ -301,7 +301,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 // of setting the parent to 'All'
                 Object aParent = parentEntitiesList().objectAtIndex(0);
                 setChildrenSelection(defaultChildKey()!=null ?
-                        (NSArray)NSKeyValueCoding.Utility.valueForKey(parentSelection(), defaultChildKey() + ".@flatten") : NSArray.EmptyArray);
+                        (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parentSelection(), defaultChildKey() + ".@flatten") : NSArray.EmptyArray);
                 appendChildPopupStringWithParent(returnString, new NSArray(aParent));
             }
         }
@@ -323,7 +323,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 returnString.append("selected=\"selected\" ");
             }
             returnString.append("value=\"" + idForChild(null, aChild) + "\">");
-            returnString.append(NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()));
+            returnString.append(NSKeyValueCodingAdditions.Utility.valueForKeyPath(aChild, childDisplayValueName()));
             returnString.append("</option>\n");
         }
     }
@@ -354,7 +354,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         for (int i=0;i<iCount;i++) {
             Object aParent = (Object)parentEntitiesList().objectAtIndex(i);
             returnString.append("\n\tnew Entity(");
-            returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aParent, parentDisplayValueName()) + "\",");
+            returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aParent, parentDisplayValueName()) + "\",");
             returnString.append(" \"" + idForParent(aParent) + "\",");
 
             // now do all the possible children of the parent. Each child should look like 'new Entity("poodle","4",null,false)'
@@ -362,13 +362,13 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             NSArray childrenOfAParent = sortedChildren(aParent);
 
             int jCount = childrenOfAParent.count();
-            Object defaultChild=defaultChildKey()!=null ? NSKeyValueCoding.Utility.valueForKey(aParent, defaultChildKey()) : null;
+            Object defaultChild=defaultChildKey()!=null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(aParent, defaultChildKey()) : null;
             int defaultChildIndex=-1;
 
             for (int j=0;j<jCount;j++) {
                 Object aChild = (Object)childrenOfAParent.objectAtIndex(j);
                 returnString.append("\n\t\t new Entity(");
-                returnString.append(" \"" + NSKeyValueCoding.Utility.valueForKey(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
+                returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
                 returnString.append(" \"" + idForChild(aParent, aChild) + "\","); // value text of pop-up
                 returnString.append(" null,");
                 if (isSelectedChild(aChild)) {
