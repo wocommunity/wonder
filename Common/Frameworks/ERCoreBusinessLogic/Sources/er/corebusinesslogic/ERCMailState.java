@@ -21,6 +21,7 @@ public class ERCMailState extends _ERCMailState {
     public static ERCMailState SENT_STATE;
     public static ERCMailState RECEIVED_STATE;
     public static ERCMailState WAIT_STATE;
+    public static ERCMailState PROCESSING_STATE;
 
     public ERCMailState() {
         super();
@@ -47,6 +48,7 @@ public class ERCMailState extends _ERCMailState {
                 ERCMailState.SENT_STATE = sharedMailStateForKey("sent");
                 ERCMailState.RECEIVED_STATE = sharedMailStateForKey("rcvd");
                 ERCMailState.WAIT_STATE = sharedMailStateForKey("wait");
+                ERCMailState.PROCESSING_STATE = sharedMailStateForKey("proc");
             } else {
                 // make ERCMailState non-shared so it does not get loaded
                 ERXUtilities.makeEditableSharedEntityNamed("ERCMailState");
