@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.*;
 import java.security.*;
 import javax.crypto.*;
 import java.util.*;
+import java.io.*;
 import javax.crypto.spec.*;
 
 /* Compilation problems? READ THIS
@@ -261,5 +262,197 @@ public class ERXCrypto {
             result.setObjectForKey(value, key);
         }
         return result;
-    }    
+    }
+
+
+
+
+    
+
+    private static String _secretKeyPathFramework;
+    public static String secretKeyPathFramework(){
+        return _secretKeyPathFramework;
+    }
+    public static void setSecretKeyPathFramework(String v){
+        _secretKeyPathFramework = v;
+    }
+
+
+    private static String _secretKeyPath;
+    public static String secretKeyPath(){
+        if(_secretKeyPath == null){
+            String fn = "SecretKey.ser";
+            WOResourceManager rm = ((WOApplication)WOApplication.application()).resourceManager();
+            _secretKeyPath = (String)rm.pathForResourceNamed( fn, secretKeyPathFramework(), null );
+            if(_secretKeyPath == null) _secretKeyPath = fn;
+        }
+        return _secretKeyPath;
+    }
+    public static void setSecretKeyPath(String v){
+        _secretKeyPath = v;
+    }
+
+
+    /*
+     * Hashing and encryption methods
+     */
+
+    /**
+        * Uses the SHA hash algorithm found in the Sun JCE to hash the
+     * passed in String. This String is then base64 encoded and
+     * returned.
+     */
+    public static String base64HashedString(String v){
+        String base64HashedPassword = null;
+        try{
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            md.update(v.getBytes());
+            String hashedPassword = new String(md.digest());
+            sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+            base64HashedPassword = enc.encode(hashedPassword.getBytes());
+        }catch(java.security.NoSuchAlgorithmException e){
+            System.out.println("Couldn't find the SHA hash algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+        }
+        return base64HashedPassword;
+    }
+
+    /**
+        * Returns the File object holding the secret key used by this class's
+     * DES encryption routines. The secret key is located in a file called
+     * "SecretKey.ser"
+     */
+    public static File secretKeyFile(){
+        File f = new File( secretKeyPath() );
+        return f;
+    }
+
+    /**
+        * Returns the DES java.security.Key found in the key file. The Key is
+     * cached once it's found so further hits to the disk are unnecessary.
+     * If the key file cannot be found, the method creates a
+     * key and writes out a key file.
+     */
+    private static Key _secretKey = null;
+    public static Key secretKey(File skFile){
+        if(_secretKey == null){
+            System.out.println("About to try to recover key");
+            try{
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(skFile));
+                try{
+                    _secretKey = (Key)in.readObject();
+                }catch(ClassNotFoundException e){
+                    System.out.println("Couldn't get class being decoded from file");
+                }
+                in.close();
+            }catch(FileNotFoundException e){
+                System.out.println("Couldn't recover Secret key file");
+                try{
+                    KeyGenerator gen = KeyGenerator.getInstance("DES");
+                    gen.init(new SecureRandom());
+                    _secretKey = gen.generateKey();
+                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(skFile));
+                    out.writeObject(_secretKey);
+                    out.close();
+                }catch(java.security.NoSuchAlgorithmException noSuchE){
+                    System.out.println("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+                }catch(FileNotFoundException outputFileNotFoundE){
+                    System.out.println("e:"+outputFileNotFoundE);
+                }catch(IOException ioe){
+                    System.out.println("e:"+ioe);
+                }
+            }catch(IOException e){
+                System.out.println("e:"+e);
+            }
+        }
+        return _secretKey;
+    }
+
+
+    /**
+        * DES Encrypts and then base64 encodes the passed in String using the
+     * secret key returned by <code>secretKey</code>. The base64 encoding is
+     * performed to ensure that the encrypted string can be stored in places
+     * that don't support extended character sets.
+     */
+    public static String base64EncryptedString(String v){
+        return base64EncryptedString(v, secretKey(secretKeyFile()));
+    }
+
+    /**
+        * DES Encrypts and then base64 encodes the passed in String using the
+     * passed in secret key. The base64 encoding is
+     * performed to ensure that the encrypted string can be stored in places
+     * that don't support extended character sets.
+     */
+    public static String base64EncryptedString(String v, Key sKey){
+        String encBase64String = null;
+        try{
+            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, sKey);
+            byte[] stringBytes = v.getBytes("UTF8");
+            stringBytes = ERXCompressionUtilities.deflateByteArray(stringBytes);
+            byte[] raw = cipher.doFinal(stringBytes);
+            sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+            encBase64String = enc.encode(raw);
+        }catch(java.security.NoSuchAlgorithmException e){
+            System.out.println("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+        }catch(javax.crypto.NoSuchPaddingException e){
+            System.out.println("e:"+e);
+        }catch(java.security.InvalidKeyException e){
+            System.out.println("e:"+e);
+        }catch(java.io.UnsupportedEncodingException e){
+            System.out.println("e:"+e);
+        }catch(javax.crypto.IllegalBlockSizeException e){
+            System.out.println("e:"+e);
+        }catch(javax.crypto.BadPaddingException e){
+            System.out.println("e:"+e);
+        }
+        return encBase64String;
+    }
+
+
+    /**
+        * Base64 decodes and then DES decrypts the passed in string using the
+     * secret key returned by <code>secretKey</code>.
+     */
+    public static String decryptedBase64String(String v){
+        return decryptedBase64String(v, secretKey(secretKeyFile()));
+    }
+
+    /**
+        * Base64 decodes and then DES decrypts the passed in string using the
+     * passed in secret key.
+     */
+    public static String decryptedBase64String(String v, Key sKey){
+        String decString = null;
+        try{
+            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey(secretKeyFile()));
+            sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
+            byte[] raw = enc.decodeBuffer(v);
+            byte[] stringBytes = cipher.doFinal(raw);
+            stringBytes = ERXCompressionUtilities.inflateByteArray(stringBytes);
+            decString = new String(stringBytes, "UTF8");
+        }catch(java.security.NoSuchAlgorithmException e){
+            System.out.println("Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
+        }catch(javax.crypto.NoSuchPaddingException e){
+            System.out.println("String="+v+"\ne:");
+            e.printStackTrace();
+        }catch(java.io.IOException e){
+            System.out.println("String="+v+"\ne:");
+            e.printStackTrace();
+        }catch(javax.crypto.IllegalBlockSizeException e){
+            System.out.println("String="+v+"\ne:");
+            e.printStackTrace();
+        }catch(javax.crypto.BadPaddingException e){
+            System.out.println("String="+v+"\ne:");
+            e.printStackTrace();
+        }catch(java.security.InvalidKeyException e){
+            System.out.println("String="+v+"\ne:");
+            e.printStackTrace();
+        }
+        return decString;
+    }
+
+    
 }
