@@ -80,7 +80,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         awakesMinusSleeps++;
         if (editingContext() != null) {
             if(log.isDebugEnabled()){
-                log.debug("awakesMinusSleeps:"+awakesMinusSleeps);
+                log.debug("in awake, awakesMinusSleeps:"+awakesMinusSleeps);
             }
             if(shouldLockEditingContext()){
                 editingContext().lock();
@@ -88,6 +88,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         }
     }
 
+    
     public void sleep() {
         awakesMinusSleeps--;
         if (editingContext() != null && shouldLockEditingContext()) {
@@ -101,9 +102,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     }
 
     protected void setEditingContext(EOEditingContext newEditingContext) {
-        if(log.isDebugEnabled()){
-            log.debug(ERXUtilities.stackTrace());
-        }
+
         if (newEditingContext != editingContext()) {
             if (editingContext() != null && shouldLockEditingContext()) {
                 editingContext().unlock();
@@ -274,7 +273,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     public Integer itemHashCode(){
         return new Integer(browserItem.hashCode());
     }
-
+ 
     public void updateEOsOrdering(){
         if(isSortedRelationship()){
             //If the session uses javascript then we need to update the EOs according
@@ -290,7 +289,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
                     if(eo!=null){
                         eo.takeValueForKey(ERXConstant.integerForInt(i), indexKey());
                     }else{
-                        log.warn("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
+                        log.debug("objectForHashCode: "+objectForHashCode+" doesn't have a corresponding object");
                     }
                     i++;
                 }
@@ -300,17 +299,16 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
 
 
     public WOComponent returnAction() {
+        WOComponent result = null;
         if(((ERXSession)session()).javaScriptEnabled())
-            updateEOsOrdering();	   
+            updateEOsOrdering();
         editingContext().saveChanges();
-        editingContext().revert();
-        WOComponent result = nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : super.nextPage();
+        result = nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : super.nextPage();
         if (result != null) {
             return result;
         }
         result = (WOComponent) D2W.factory().editPageForEntityNamed(object().entityName(), session());
         ((EditPageInterface) result).setObject(object());
-        editingContext().dispose();
         return result;
     }
 
