@@ -64,7 +64,7 @@ public class Application extends ERXApplication {
         if (frequency > 0) {
             log.debug("Scheduling timer for frequency: " + frequency + "(s)");
             mailTimer = new Timer(true);
-            mailTimer.schedule(new ERMailerTimerTask(), 1000000l, frequency*1000000l);
+            mailTimer.schedule(new ERMailerTimerTask(), frequency*1000l, frequency*1000l);
         } else {
             ERMailer.instance().processOutgoingMail();
             log.debug("Done processing mail. Exiting.");
