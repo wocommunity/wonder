@@ -229,7 +229,7 @@ public class ERXProperties {
                 aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
                 if (aPropertiesPath != null) {
                     projectsInfo.addObject("Framework:   " + frameworkName 
-                            + " (opened, developement-mode) " + aPropertiesPath);
+                            + " (opened, development-mode) " + aPropertiesPath);
                 }
             }
             
@@ -266,7 +266,7 @@ public class ERXProperties {
             aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
             if (aPropertiesPath != null) {
                 projectsInfo.addObject("Application: " + mainBundleName 
-                            + " (opened, developement-mode) " + aPropertiesPath); 
+                            + " (opened, development-mode) " + aPropertiesPath); 
             }
         }
 
