@@ -78,7 +78,8 @@ public class ERXGroupingRepetition extends WOComponent {
         }
         return result!=null ? result : NULL;        
     }
-    
+
+    public Object sectionItem() { return _sectionItem; }
     public void setSectionItem(Object section) {
         _sectionItem=section;
         setValueForBinding((_sectionItem!=NULL && (_sectionItem ==null || !_sectionItem.equals(NULL))) ?
