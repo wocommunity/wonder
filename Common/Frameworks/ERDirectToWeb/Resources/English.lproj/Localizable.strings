@@ -33,4 +33,6 @@
     "ERDList.create" = "Add";
     "ERDQueryTwoLevelRelationship.all" = "- all -";
     "ERD2W.pickButtonLabel" = "Select";
+    "ERDQueryDateRangeJavaScript.between" = "between";
+    "ERDQueryDateRangeJavaScript.and" = "and";
 }
