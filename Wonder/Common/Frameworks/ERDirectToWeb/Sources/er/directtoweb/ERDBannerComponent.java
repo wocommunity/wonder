@@ -5,10 +5,11 @@ import com.webobjects.appserver.*;
 import er.extensions.*;
 
 /**
- * Class for DirectToWeb Component ERDBannerComponent.
+ * Shows an image header matching the page. If no image is bound, none is shown.
  *
- * @binding sample sample binding explanation
- * @d2wKey sample sample d2w key
+ * @binding showBanner should we show the banner
+ * @binding bannerFileName which image to show
+ * @binding framework framework from where the image comes from
  *
  * @created ak on Tue Sep 02 2003
  * @project ERDirectToWeb
@@ -34,6 +35,6 @@ public class ERDBannerComponent extends ERDCustomComponent {
     public boolean isStateless() { return true; }
 
     public boolean showBanner() {
-        return booleanValueForBinding("showBanner");
+        return booleanValueForBinding("showBanner") && valueForBinding("bannerFileName") != null;
     }
 }
