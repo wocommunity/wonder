@@ -7,6 +7,7 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
+import com.webobjects.appserver.*;
 
 /** 
  * ERXBrowser is an abstract class that defines browser object. 
@@ -168,6 +169,47 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isWindows();
     public abstract boolean isLinux();
 
+    /**
+     * Gets the message encoding for a given request. Default implementation
+     * gets the message encoding for all of the browserLanguages off of
+     * the request.
+     * @param request to get the message encoding for
+     * @return message encoding
+     */
+    public ERXMessageEncoding messageEncodingForRequest(WORequest request) {
+        return messageEncodingForLanguages(request.browserLanguages());
+    }
+
+    /**
+     * Gets the message encoding for a given array of languages.
+     * @param languages array to get the correct encoding for
+     * @return message encoding
+     */    
+    public ERXMessageEncoding messageEncodingForLanguages(NSArray languages) {
+        return new ERXMessageEncoding(languages);
+    }
+    
+    /**
+     * Gets the message encoding for a given language.
+     * @param language to get the encoding for
+     * @return message encoding
+     */    
+    public ERXMessageEncoding messageEncodingForLanguage(String language) {
+        return new ERXMessageEncoding(language);
+    }    
+
+    /**
+     * If using ERXRequest objects allows one to override on a per browser basis
+     * what form value encoding to use. Default implementation defaults to null
+     * Note that you will need to enable the property:
+     * er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
+     * in order for the actual over ride to happen.
+     * @return form value encoding to use for this particular user-agent.
+     */
+    public String formValueEncoding() {
+        return null;
+    }
+    
     public Object valueForKey(String key) {
         return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
     }
