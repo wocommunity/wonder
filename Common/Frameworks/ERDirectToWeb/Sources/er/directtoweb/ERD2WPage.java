@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import java.util.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
@@ -15,9 +16,28 @@ import er.extensions.*;
 import org.apache.log4j.NDC;
 
 /**
- * Common superclass for all ERD2W templates.<br />
- * 
- */
+Common superclass for all ERD2W templates (except ERD2WEditRelationshipPage). Has tons of extra functionality:<br />
+<li>Debugging support.<br />
+ Special handlers add extra info in the request-response loop
+<li>Workflow extensions.<br />
+ If your NextPageDelegate is a {@see ERDBranchDelegate}, then all of the code for actions can be handled in your delegate.
+<li>Display key extensions. We support tab and sectioned pages via the d2wContext array.<br />
+
+In the case of a non-tab page, we expect d2wContext.sectionsContents to return one of the three following formats:
+ (( section1, key1, key2, key4 ), ( section2, key76, key 5, ..) .. )
+OR with the sections enclosed in "()" - this is most useful with the WebAssistant
+ ( "(section1)", key1, key2, key3, "(section2)", key3, key4, key5... )
+OR with normal displayPropertyKeys array in fact if sectionContents isn't found then it will look for displayPropertyKeys
+ ( key1, key2, key3, ... )
+
+In the case of a TAB page, we expect d2wContext.tabSectionsContents to return one of the two following formats:
+  ( ( tab1, key1, key2, key4 ), ( tab2, key76, key 5, ..) .. )
+OR with sections
+  ( ( tab1, ( section1, key1, key2 ..), (section3, key4, key..)  ), ... )
+OR with the alternate syntax, which ist most useful with the WebAssistant
+  ( "[tab1]", "(section1)", key1, key2, ... "[tab2]", "(section3)", key4, key..... )
+ 
+*/
 
 public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
 
@@ -44,18 +64,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
-    // error message handling
-    public NSMutableDictionary errorMessages() { return errorMessages; }
-    public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
-    
-    protected NSMutableDictionary errorMessages = new NSMutableDictionary();
-    protected NSMutableArray errorKeyOrder = new NSMutableArray();
-    protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
-
-    protected String errorMessage = "";
-    public String errorMessage() { return errorMessage; }
-    public void setErrorMessage(String message) { errorMessage = message; }
-
     /** {@see EOEditingContext} for the current object */
     protected EOEditingContext _context;
 
@@ -65,20 +73,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         // for SmartAssignment
         d2wContext().takeValueForKey(eo, "object");
         super.setObject(eo);
-    }
-    
-    /** debug helper */
-    public boolean d2wComponentNameDebuggingEnabled() {
-        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
-    }
-
-    /** debug helper */
-    public String d2wCurrentComponentName() {
-        String name = (String)d2wContext().valueForKey("componentName");
-        if(name.indexOf("CustomComponent")>=0) {
-            name = (String)d2wContext().valueForKey("customComponentName");
-        }
-        return name;
     }
 
     /**
@@ -110,6 +104,22 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         else
             log.warn("D2WContext was null!");
     }
+
+
+    // **************************************************************************
+    // Error handling extensions
+    // **************************************************************************
+
+    protected NSMutableDictionary errorMessages = new NSMutableDictionary();
+    protected NSMutableArray errorKeyOrder = new NSMutableArray();
+    protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
+    protected String errorMessage = "";
+
+    public NSMutableDictionary errorMessages() { return errorMessages; }
+    public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
+
+    public String errorMessage() { return errorMessage; }
+    public void setErrorMessage(String message) { errorMessage = message; }
 
     /** Should exceptions be propagated through to the parent page. If false, the validation errors are not shown at all. */
     public boolean shouldPropagateExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldPropogateExceptions")); }
@@ -171,22 +181,40 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return d2wContext().propertyKey() != null && keyPathsWithValidationExceptions.count() != 0 ?
         keyPathsWithValidationExceptions.containsObject(d2wContext().propertyKey()) : false;
     }
-    
+
+    // **************************************************************************
+    // Debugging extensions
+    // **************************************************************************
+
+    /** Holds the user info. */
+    protected NSMutableDictionary _userInfo = new NSMutableDictionary();
+
+    /** Implementation of the {@see ERDUserInfoInterface} */
+    public NSMutableDictionary userInfo() { return _userInfo; }
+
+    /** Checks is component names should be shown. */
+    public boolean d2wComponentNameDebuggingEnabled() {
+        return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
+    }
+
+    /** Helper to return the actual current component name, even when wrapped in a custom component. */
+    public String d2wCurrentComponentName() {
+        String name = (String)d2wContext().valueForKey("componentName");
+        if(name.indexOf("CustomComponent")>=0) {
+            name = (String)d2wContext().valueForKey("customComponentName");
+        }
+        return name;
+    }
+
     /** This will allow d2w pages to be listed on a per configuration basis in stats collecting. */
     public String descriptionForResponse(WOResponse aResponse, WOContext aContext) {
         String descriptionForResponse = (String)d2wContext().valueForKey("pageConfiguration");
         /*
-        if (descriptionForResponse == null)
-            log.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
+         if (descriptionForResponse == null)
+         log.info("Unable to find pageConfiguration in d2wContext: " + d2wContext());
          */
         return descriptionForResponse != null ? descriptionForResponse : super.descriptionForResponse(aResponse, aContext);
     }
-
-    /** Holds the user info. */
-    protected NSMutableDictionary _userInfo = new NSMutableDictionary();
-    
-    /** Implementation of the {@see ERDUserInfoInterface} */
-    public NSMutableDictionary userInfo() { return _userInfo; }
 
     /** Overridden from the parent for better logging. Also clears validation errors */
     public void takeValuesFromRequest(WORequest r, WOContext c) {
@@ -223,6 +251,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             NDC.pop();
         }
     }
+
+    // **************************************************************************
+    // Workflow extensions (Branches)
+    // **************************************************************************
 
     /** holds the chosen branch */
     protected NSDictionary _branch;
@@ -270,5 +302,161 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      */
     public boolean hasBranchChoices() {
         return nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface;
+    }
+
+    // **************************************************************************
+    // Display property key extensions (Sections)
+    // **************************************************************************
+
+    /** Holds the current section of display keys. */
+    private ERD2WContainer _currentSection;
+
+    /** The current section of display keys. */
+    public ERD2WContainer currentSection() { return _currentSection; }
+
+    /** Sets the current section of display keys. */
+    public void setCurrentSection(ERD2WContainer value) {
+        _currentSection = value;
+        if (value != null) {
+            d2wContext().takeValueForKey(value.name, "sectionKey");
+            // we can fire rules from the WebAssistant when we push it the -remangled sectionName into the context
+            d2wContext().takeValueForKey( "(" + value.name +")", "propertyKey");
+            if (log.isDebugEnabled())
+                log.debug("Setting sectionKey: " + value.name);
+        }
+    }
+
+    /**
+     * The display keys for the current section. You bind to this method.
+     * @returns array of {@see ERD2WContainer} holding the keys for the current section
+     */
+    public NSArray currentSectionKeys() {
+        if (log.isDebugEnabled())
+            log.debug("currentSectionKeys()");
+        NSArray keys = (NSArray)d2wContext().valueForKey("alternateKeyInfo");
+        if (log.isDebugEnabled())
+            log.debug("currentSectionKeys (from alternateKeyInfo):" +
+                      keys);
+        keys = keys == null ? (NSArray)this.currentSection().keys : keys;
+        if (log.isDebugEnabled())
+            log.debug("Setting sectionKey and keys: " + _currentSection.name + keys);
+        return keys;
+    }
+
+    /** Holds the section info */
+    private NSMutableArray _sectionsContents;
+    
+    /**
+     * The array of sections. You bind to this method.
+     * @returns array of arrays of {@see ERD2WContainer} holding the keys.
+     */
+    public NSArray sectionsContents() {
+        if (_sectionsContents ==null) {
+            NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
+            if (sectionsContentsFromRule==null) {
+                sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
+            }
+            if (sectionsContentsFromRule == null)
+                throw new RuntimeException("Could not find sectionsContents or displayPropertyKeys in "+d2wContext());
+            _sectionsContents = ERDirectToWeb.convertedPropertyKeyArray(sectionsContentsFromRule, '(', ')');
+
+        }
+        return _sectionsContents;
+    }
+
+    // **************************************************************************
+    // Display property key extensions (Tabs)
+    // **************************************************************************
+
+    /** Holds the array of {@see ERD2WContainer} defining the tabs.*/
+    private NSArray _tabSectionsContents;
+
+    /** Returns the array of {@see ERD2WContainer} defining the tabs. A tab is a key and an array of sections */
+    public NSArray tabSectionsContents() {
+        if (_tabSectionsContents ==null) {
+            NSArray tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("tabSectionsContents");
+            if (tabSectionContentsFromRule==null)
+                tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
+
+            if (tabSectionContentsFromRule==null)
+                throw new RuntimeException("Could not find tabSectionsContents in "+d2wContext());
+            _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
+            // Once calculated we then determine any displayNameForTabKey
+            String currentTabKey = (String)d2wContext().valueForKey("tabKey");
+            for (Enumeration e = _tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
+                ERD2WContainer c = (ERD2WContainer)e.nextElement();
+                if (c.name.length() > 0) {
+                    d2wContext().takeValueForKey(c.name, "tabKey");
+                    c.displayName = (String)d2wContext().valueForKey("displayNameForTabKey");
+                }
+                if (c.displayName == null)
+                    c.displayName = c.name;
+            }
+            d2wContext().takeValueForKey(currentTabKey, "tabKey");
+        }
+        return _tabSectionsContents;
+    }
+
+    /** Dummy denoting to sections. */
+    private final static NSArray _NO_SECTIONS=new NSArray("");
+    
+    /** Returns the sections on the current tab. */
+    public NSArray sectionsForCurrentTab() { return currentTab()!=null ? currentTab().keys : _NO_SECTIONS; }
+
+    /** Holds the current tab. */
+    private ERD2WContainer _currentTab;
+    
+    /** Returns the {@see ERD2WContainer} defining the current tab. */
+    public ERD2WContainer currentTab() { return _currentTab; }
+    
+    /** Sets the current tab. */
+    public void setCurrentTab(ERD2WContainer value) {
+        _currentTab = value;
+        if (value != null && value.name != null && !value.name.equals("")) {
+            d2wContext().takeValueForKey(value.name, "tabKey");
+            if (log.isDebugEnabled()) log.debug("Setting tabKey: " + value.name);
+        }
+    }
+
+    /** Helper method to calulate the tab key array */
+    protected static NSArray tabSectionsContentsFromRuleResult(NSArray tabSectionContentsFromRule) {
+        NSMutableArray tabSectionsContents=new NSMutableArray();
+
+        if(tabSectionContentsFromRule.count() > 0) {
+            Object firstValue = tabSectionContentsFromRule.objectAtIndex(0);
+            if(firstValue instanceof NSArray) {
+                for (Enumeration e= tabSectionContentsFromRule.objectEnumerator(); e.hasMoreElements();) {
+                    NSArray tab=(NSArray)e.nextElement();
+                    ERD2WContainer c=new ERD2WContainer();
+                    c.name=(String)tab.objectAtIndex(0);
+                    c.keys=new NSMutableArray();
+                    Object testObject=tab.objectAtIndex(1);
+                    if (testObject instanceof NSArray) { // format #2
+                        for (int i=1; i<tab.count(); i++) {
+                            NSArray sectionArray=(NSArray)tab.objectAtIndex(i);
+                            ERD2WContainer section=new ERD2WContainer();
+                            section.name=(String)sectionArray.objectAtIndex(0);
+                            section.keys=new NSMutableArray(sectionArray);
+                            section.keys.removeObjectAtIndex(0);
+                            c.keys.addObject(section);
+                        }
+                    } else { // format #1
+                        ERD2WContainer fakeTab=new ERD2WContainer();
+                        fakeTab.name="";
+                        fakeTab.keys=new NSMutableArray(tab);
+                        fakeTab.keys.removeObjectAtIndex(0);
+                        c.keys.addObject(fakeTab);
+                    }
+                    tabSectionsContents.addObject(c);
+                }
+            } else if(firstValue instanceof String) {
+                tabSectionsContents = ERDirectToWeb.convertedPropertyKeyArray(tabSectionContentsFromRule, '[', ']');
+                for (Enumeration e= tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
+                    ERD2WContainer tab= (ERD2WContainer)e.nextElement();
+                    tab.keys = ERDirectToWeb.convertedPropertyKeyArray(tab.keys, '(', ')');
+                }
+            }
+        }
+        return tabSectionsContents;
     }
 }
