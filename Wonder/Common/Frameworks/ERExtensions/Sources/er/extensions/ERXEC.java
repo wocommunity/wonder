@@ -460,14 +460,19 @@ public class ERXEC extends EOEditingContext {
         }
     }
     
-    /** Overriden to support autoLocking. */ 
+    /** Overriden to support autoLocking and a bugfix from Lenny Marks. */ 
     public void saveChanges() {
+        _EOAssertSafeMultiThreadedAccess("saveChanges()");
         boolean wasAutoLocked = autoLock("saveChanges");
+        savingChanges = true;
         try {
             super.saveChanges();
         } finally {
             autoUnlock(wasAutoLocked);
+            savingChanges = false;
         }
+
+        processQueuedNotifications();
     }
     
     /** Overriden to support autoLocking. */ 
@@ -659,7 +664,41 @@ public class ERXEC extends EOEditingContext {
             autoUnlock(wasAutoLocked);
         }
     }
+
     
+    private boolean savingChanges;
+    private NSMutableArray queuedNotifications = new NSMutableArray();
+
+    /**
+     * Overridden so add a bugfix from Lenny Marks
+     * 
+     */
+    public void _objectsChangedInStore(NSNotification nsnotification) {
+        if(savingChanges) {
+            queuedNotifications.addObject(nsnotification);
+        } else {
+            super._objectsChangedInStore(nsnotification);
+        }
+    }
+
+    /**
+     * Overridden so add a bugfix from Lenny Marks
+     * 
+     */
+    private void processQueuedNotifications() {
+        synchronized(queuedNotifications) {
+            for(Enumeration e = queuedNotifications.objectEnumerator();
+                e.hasMoreElements();) {
+
+                NSNotification n = (NSNotification)e.nextElement();
+
+                _objectsChangedInStore(n);
+
+            }
+            queuedNotifications.removeAllObjects();
+        }
+    }
+
     /**
      * Sets the delegate for this context.
      */
