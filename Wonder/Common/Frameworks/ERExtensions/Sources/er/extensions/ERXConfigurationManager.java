@@ -43,6 +43,11 @@ import org.apache.log4j.*;
 //
 // JDBC: same with urlGlobal, or db.url
 //
+//
+//
+//    Prototypes can be swapped globally or per model either by hydrating an archived
+//     prototype entity for a file or from another entity
+//
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 public class ERXConfigurationManager {
@@ -209,20 +214,19 @@ public class ERXConfigurationManager {
             String e = stringForKey(aModelName + ".EOPrototypesEntity");
             e = e ==null ? stringForKey("EOPrototypesEntityGLOBAL") : e;
             if(e != null) {
-                EOEntity newproto = aModel.entityNamed(e);
-                if (newproto == null) {
-                    cat.warn("No prototypes found in model named \"" + aModelName + "\", although the EOPrototypesEntity default was set!");
+                // we look for the entity globally so we can a one prototype entity
+                EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
+                if (newPrototypeEntity == null) {
+                    cat.warn("Prototype Entity named "+e+" not found in model "+aModel.name());
                 } else {
-                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes from " + e);
-                    NSMutableDictionary dict = new NSMutableDictionary();
-                    newproto.encodeIntoPropertyList(dict);
+                    if (cat.isDebugEnabled()) cat.debug("Adjusting prototypes from entity " + e);
+
                     EOEntity proto = aModel.entityNamed("EOPrototypes");
-                    if(proto != null)
-                        aModel.removeEntity(proto);
-                    aModel.removeEntity(newproto);
-                    proto = new EOEntity(dict, aModel);
-                    proto.awakeWithPropertyList(dict);
-                    aModel.addEntity(proto);
+                    if(proto != null) aModel.removeEntity(proto);
+                    
+                    aModel.removeEntity(newPrototypeEntity);
+                    newPrototypeEntity.setName("EOPrototypes");
+                    aModel.addEntity(newPrototypeEntity);
                 }
             }
         }
