@@ -251,11 +251,11 @@ public class ERXValidationFactory {
                                                                                                                  frameworkName,
                                                                                                                  new NSArray(targetLanguage));
                             ERXFileNotificationCenter.defaultCenter().addObserver(defaultFileObserver(),
-                                                                                  new NSSelector("didSave", ERXConstant.NotificationClassArray),
+                                                                                  new NSSelector("fileDidChange", ERXConstant.NotificationClassArray),
                                                                                   filePath);
                         }
                         if (cat.isDebugEnabled())
-                            cat.debug("Found validation template in file: " + fileName + " in framework: " + frameworkName + " for taget language: " +
+                            cat.debug("Found validation template in file: " + fileName + " in framework: " + frameworkName + " for target language: " +
                                       targetLanguage);
                     }
                 }
@@ -270,6 +270,14 @@ public class ERXValidationFactory {
                 if (template != null) {
                     addTemplatesFromDictionary(template, targetLanguage);
                     loadedTempaltes++;
+                    if (!cachingEnabled()) {
+                        String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
+                                                                                                             null,
+                                                                                                             new NSArray(targetLanguage));
+                        ERXFileNotificationCenter.defaultCenter().addObserver(defaultFileObserver(),
+                                                                              new NSSelector("fileDidChange", ERXConstant.NotificationClassArray),
+                                                                              filePath);
+                    }
                     if (cat.isDebugEnabled())
                         cat.debug("Found validation template in file: " + fileName + " for language: " + targetLanguage + " in application");
                 }                
