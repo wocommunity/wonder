@@ -1,3 +1,5 @@
+-- this sample script opens the selected text as a query on apple's developer docs
+
 on createMenu(context)
 	if (the number of characters in context) < 50 then
 		return "Find in developer docs"
