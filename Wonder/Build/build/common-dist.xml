@@ -143,6 +143,22 @@
         </antcall>
     </target>
 
+    <!-- ERWorkerChannel -->
+    <target name="ERWorkerChannel.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERWorkerChannel" />
+            <param name="project.dir" value="Common/Frameworks/ERWorkerChannel" />
+        </antcall>
+    </target>
+
+    <!-- ERPrototypes -->
+    <target name="ERPrototypes.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERPrototypes" />
+            <param name="project.dir" value="Common/Frameworks/ERPrototypes" />
+        </antcall>
+    </target>
+
     <!-- ERExcelLook -->
     <target name="ERExcelLook.all">
         <antcall target="copy.framework" >
@@ -233,7 +249,7 @@
 
 	
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all" />
 
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
