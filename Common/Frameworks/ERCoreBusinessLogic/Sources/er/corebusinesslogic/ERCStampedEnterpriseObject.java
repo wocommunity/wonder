@@ -101,8 +101,15 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
     
     private void touch() {
         Number n=ERXConstant.integerForInt(System.identityHashCode(editingContext()));
+        if(n==null){
+            log.error("Null number n in touch() for:"+this);
+            log.error("editingContext:"+editingContext());
+            log.error("System.identityHashCode(editingContext()):"+System.identityHashCode(editingContext()));
+        }
         NSTimestamp date=(NSTimestamp)_datesPerEcID.objectForKey(n);
-        if (date==null) throw new RuntimeException("Null modification date found in touch() call - EC delegate is probably missing");
+        if (date==null) {
+            log.error("Null modification date found in touch() call - EC delegate is probably missing");
+        }
         setLastModified(date);
     }
     
