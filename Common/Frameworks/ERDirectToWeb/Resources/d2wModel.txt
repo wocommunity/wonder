@@ -32,7 +32,7 @@
      0 : *true* => maxLength = 255
      0 : *true* => noChoiceAvailableMessage = 
      0 : *true* => noSelectionString = - none -
-     0 : *true* => pageConfigurationForFiltering = null
+     0 : *true* => pageConfigurationForFiltering = queryConfigurationName [er.directtoweb.ERDKeyValueAssignment]
      0 : *true* => passwordConfirmationValidates = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => possibleChoices = null
      0 : *true* => propertyIsSortable = 0 [com.webobjects.directtoweb.BooleanAssignment]
@@ -110,6 +110,7 @@
     10 : ((task = 'list') and (subTask = 'compare')) => pageName = templateNameForListComparePage [er.directtoweb.ERDKeyValueAssignment]
     10 : ((task = 'query') and (smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > (java.math.BigDecimal)'0') and (not (smartRelationship.isToMany = (java.math.BigDecimal)'1'))) => componentName = ERD2WQueryToOneRelationship
     10 : (isEmbeddedInForm = (java.math.BigDecimal)'1') => batchNavigationBarComponentName = ERXBatchNavigationBarInForm
+    10 : (pageConfiguration like '*') => displayNameForEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : (pageConfiguration like '*Embedded*') => showBanner = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (pageConfiguration like 'Confirm*') => task = confirm
     10 : (pageConfiguration like 'ConfirmDelete*') => inspectConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
@@ -152,9 +153,9 @@
     10 : *true* => customComponentName = ERDDefaultCustomComponent
     10 : *true* => destinationEntity = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
     10 : *true* => displayNameForConfirmDeleteConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
-    10 : *true* => displayNameForDestinationEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForCreateConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForDestinationEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : *true* => displayNameForEditConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
-    10 : *true* => displayNameForEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForInspectConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForPageConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => displayNameForProperty = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
@@ -199,7 +200,6 @@
     11 : (propertyKey = 'dummy') => displayNameForProperty = 
     11 : (task = 'queryAll') => pageName = templateNameForQueryAllPage [er.directtoweb.ERDKeyValueAssignment]
     15 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (propertyIsKeyPath = (java.math.BigDecimal)'1')) => componentName = ERD2WDisplayString
-    15 : (customComponentName = 'ERDList') => _displayNameForEntity = displayNameForDestinationEntity [er.directtoweb.ERDKeyValueAssignment]
     20 : (((task = 'inspect') or (task = 'list') or (task = 'select')) and (smartAttribute.allowsNull = (java.math.BigDecimal)'1') and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentName = ERD2WDisplayDateOrNull
     20 : (((task = 'inspect') or (task = 'list')) and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => formatter = ###,###.##;0;-###,###.##
     20 : (((task = 'list') and (subTask = 'groupPick')) or ((task = 'select') and (subTask = 'group'))) => pageName = ERD2WGroupingPickListPageTemplate
