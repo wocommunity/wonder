@@ -3,6 +3,6 @@
 <plist version="0.9">
 <dict>
 	<key>Starting OpenJMS</key>
-	<string>OpenJMS を起動中</string>
+	<string>OpenJMSを起動中</string>
 </dict>
 </plist>
