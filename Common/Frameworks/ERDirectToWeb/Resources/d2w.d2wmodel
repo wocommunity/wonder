@@ -2353,6 +2353,65 @@
         {
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "a*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "e*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "u*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "i*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "o*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "u*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = indefiniteArticleForProperty; 
+                value = an; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = indefiniteArticleForProperty; 
+                value = a; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
             rhs = {
                 class = er.directtoweb.ERDConfigurationAssignment; 
                 keyPath = inspectConfigurationNameForEntity; 
@@ -4886,6 +4945,65 @@
                 class = com.webobjects.directtoweb.Assignment; 
                 keyPath = uiStyle; 
                 value = radio; 
+            }; 
+        }, 
+        {
+            author = 10; 
+            class = com.webobjects.directtoweb.Rule; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOOrQualifier; 
+                qualifiers = (
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "a*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "e*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "u*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "i*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "o*"; 
+                    }, 
+                    {
+                        class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                        key = propertyKey; 
+                        selectorName = "isLike"; 
+                        value = "u*"; 
+                    }
+                ); 
+            }; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = upperIndefiniteArticleForProperty; 
+                value = An; 
+            }; 
+        }, 
+        {
+            author = 0; 
+            class = com.webobjects.directtoweb.Rule; 
+            rhs = {
+                class = com.webobjects.directtoweb.Assignment; 
+                keyPath = upperIndefiniteArticleForProperty; 
+                value = A; 
             }; 
         }, 
         {
