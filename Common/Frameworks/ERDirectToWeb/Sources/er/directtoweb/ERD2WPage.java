@@ -20,7 +20,7 @@ Common superclass for all ERD2W templates (except ERD2WEditRelationshipPage). Ha
 <li>Debugging support.<br />
  Special handlers add extra info in the request-response loop
 <li>Workflow extensions.<br />
- If your NextPageDelegate is a {@see ERDBranchDelegate}, then all of the code for actions can be handled in your delegate.
+ If your NextPageDelegate is a {@link ERDBranchDelegate}, then all of the code for actions can be handled in your delegate.
 <li>Display key extensions. We support tab and sectioned pages via the d2wContext array.<br />
 
 In the case of a non-tab page, we expect d2wContext.sectionsContents to return one of the three following formats:
@@ -45,6 +45,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public static interface Keys {
         public static final String object = "object";
         public static final String localContext = "localContext";
+        public static final String d2wContext = "d2wContext";
         public static final String keyPathsWithValidationExceptions = "keyPathsWithValidationExceptions";
         public static final String shouldPropagateExceptions = "shouldPropagateExceptions";
         public static final String shouldCollectValidationExceptions = "shouldCollectValidationExceptions";
@@ -76,20 +77,20 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }    
 
     /**
-     * Implementation of the {@see ERXComponentActionRedirector.Restorable} interface.
+     * Implementation of the {@link ERXComponentActionRedirector.Restorable} interface.
      * This implementation creates an URL with the name of the current pageConfiguration as a direct action,
-     * which assumes a {@see ERD2WDirectAction} as the default direct action.
+     * which assumes a {@link ERD2WDirectAction} as the default direct action.
      * Subclasses need to implement more sensible behaviour.
-     * @returns url for the current page
+     * @return url for the current page
      */
     public String urlForCurrentState() {
         return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
     }
 
-    /** {@see EOEditingContext} for the current object */
+    /** {@link EOEditingContext} for the current object */
     protected EOEditingContext _context;
 
-    /** Implementation of the {@see InspectPageInterface} */
+    /** Implementation of the {@link InspectPageInterface} */
     public void setObject(EOEnterpriseObject eo) {
         _context = (eo != null) ? eo.editingContext() : null;
         // for SmartAssignment
@@ -103,12 +104,14 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
     
     /**
-     * {@see} D2WContext for this page. Checks if there is a "d2wContext" binding, too.
-     * @returns d2wContext
+     * {@link D2WContext} for this page. Checks if there is a "d2wContext" binding, too.
+     * @return d2wContext
      */
     public D2WContext d2wContext() {
-        if(hasBinding(Keys.localContext) && super.d2wContext()==null) {
-            setLocalContext((D2WContext)valueForBinding(Keys.localContext));
+        if(super.d2wContext()==null) {
+            if(hasBinding(Keys.localContext)) {
+                setLocalContext((D2WContext)valueForBinding(Keys.localContext));
+            }
         }
         return super.d2wContext();
     }
@@ -154,7 +157,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Should exceptions also be handled here or only handled by the parent.*/
     public boolean shouldCollectValidationExceptions() { return ERXUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldCollectValidationExceptions)); }
 
-    /** Clears all of the collected validation exceptions. Implementation of the {@see ERXExceptionHolder} interface. */
+    /** Clears all of the collected validation exceptions. Implementation of the {@link ERXExceptionHolder} interface. */
     public void clearValidationFailed() {
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
@@ -216,7 +219,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Holds the user info. */
     protected NSMutableDictionary _userInfo = new NSMutableDictionary();
 
-    /** Implementation of the {@see ERDUserInfoInterface} */
+    /** Implementation of the {@link ERDUserInfoInterface} */
     public NSMutableDictionary userInfo() { return _userInfo; }
 
     /** Checks is component names should be shown. */
@@ -355,7 +358,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     /**
      * The display keys for the current section. You bind to this method.
-     * @returns array of {@see ERD2WContainer} holding the keys for the current section
+     * @return array of {@link ERD2WContainer} holding the keys for the current section
      */
     public NSArray currentSectionKeys() {
         if (log.isDebugEnabled())
@@ -375,7 +378,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     
     /**
      * The array of sections. You bind to this method.
-     * @returns array of arrays of {@see ERD2WContainer} holding the keys.
+     * @return array of arrays of {@link ERD2WContainer} holding the keys.
      */
     public NSArray sectionsContents() {
         if (_sectionsContents ==null) {
@@ -395,10 +398,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // Display property key extensions (Tabs)
     // **************************************************************************
 
-    /** Holds the array of {@see ERD2WContainer} defining the tabs.*/
+    /** Holds the array of {@link ERD2WContainer} defining the tabs.*/
     private NSArray _tabSectionsContents;
 
-    /** Returns the array of {@see ERD2WContainer} defining the tabs. A tab is a key and an array of sections */
+    /** Returns the array of {@link ERD2WContainer} defining the tabs. A tab is a key and an array of sections */
     public NSArray tabSectionsContents() {
         if (_tabSectionsContents ==null) {
             NSArray tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("tabSectionsContents");
@@ -433,7 +436,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Holds the current tab. */
     private ERD2WContainer _currentTab;
     
-    /** Returns the {@see ERD2WContainer} defining the current tab. */
+    /** Returns the {@link ERD2WContainer} defining the current tab. */
     public ERD2WContainer currentTab() { return _currentTab; }
     
     /** Sets the current tab. */

@@ -483,7 +483,7 @@ public class ERXConfigurationManager {
      * then the <code>ERXDocumentRoot</> property before
      * getting the <code>DocumentRoot</code> key in your WebServerConfig.plist in the
      * JavaWebObjects bundle.
-     * @returns to the web server's document root.
+     * @return to the web server's document root.
      */
     protected String documentRoot; 
     public String documentRoot() {

@@ -8,7 +8,7 @@ import er.extensions.*;
 
 /**
  * Provides a edit "password" service. Should be
- * used in conjunction with {$link ERDEditPasswordConfirmation}, as it puts the
+ * used in conjunction with {@link ERDEditPasswordConfirmation}, as it puts the
  * the  password value into the <code>context.mutableUserInfo</code>.
  * From where it can be confirmed against a second edit field.
  * In case you don't need a second field, then the routine is:
