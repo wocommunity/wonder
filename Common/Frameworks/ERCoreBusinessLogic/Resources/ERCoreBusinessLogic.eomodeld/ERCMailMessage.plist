@@ -12,6 +12,11 @@
             name = ccAddresses; 
             prototypeName = varchar1000; 
         }, 
+        {
+            columnName = "CONTENT_GZIPPED"; 
+            name = contentGzipped; 
+            prototypeName = intBoolean; 
+        }, 
         {columnName = CREATED; name = created; prototypeName = dateTime; }, 
         {
             allowsNull = Y; 
@@ -38,11 +43,33 @@
         }, 
         {
             allowsNull = Y; 
+            columnName = "plain_text_compressed"; 
+            name = plainTextCompressed; 
+            prototypeName = blob; 
+        }, 
+        {
+            allowsNull = Y; 
             columnName = "REPLY_TO_ADDR"; 
             name = replyToAddress; 
             prototypeName = varchar1000; 
         }, 
-        {columnName = "TEXT_"; name = text; prototypeName = varcharLarge; }, 
+        {
+            columnName = "SHOULD_ARCHIVE_SENT_MAIL"; 
+            name = shouldArchiveSentMail; 
+            prototypeName = intBoolean; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "TEXT_"; 
+            name = text; 
+            prototypeName = varcharLarge; 
+        }, 
+        {
+            allowsNull = Y; 
+            columnName = "TEXT_COMPRESSED"; 
+            name = textCompressed; 
+            prototypeName = blob; 
+        }, 
         {columnName = TITLE; name = title; prototypeName = varchar255; }, 
         {columnName = "TO_ADDR"; name = toAddresses; prototypeName = varchar1000; }, 
         {
@@ -61,7 +88,8 @@
         title, 
         xMailer, 
         isRead, 
-        exceptionReason
+        contentGzipped, 
+        shouldArchiveSentMail
     ); 
     className = "er.corebusinesslogic.ERCMailMessage"; 
     classProperties = (
@@ -80,7 +108,11 @@
         xMailer, 
         isRead, 
         exceptionReason, 
-        plainText
+        plainText, 
+        contentGzipped, 
+        shouldArchiveSentMail, 
+        plainTextCompressed, 
+        textCompressed
     ); 
     externalName = "ERCMAIL_MESSAG"; 
     name = ERCMailMessage; 
@@ -92,12 +124,10 @@
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = mailMessageId; sourceAttribute = id; }); 
             name = attachments; 
-            ownsDestination = Y; 
             userInfo = {modificationDate = "2002-06-04 14:00:54 +0200"; }; 
         }, 
         {
             destination = ERCMailState; 
-            isMandatory = Y; 
             isToMany = N; 
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = id; sourceAttribute = mailStateID; }); 
