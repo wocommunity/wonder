@@ -17,14 +17,6 @@ public class ERD2WEditLargeString extends D2WEditLargeString {
     // WOText however transforms this into "". WOTextField does not do this.
 
     public Object validateTakeValueForKeyPath(Object newValue, String keyPath) {
-        Object result=null;
-        if (newValue!=null && ((String)newValue).length()==0) {
-            if (value()!=null)
-                result=super.validateTakeValueForKeyPath(newValue,keyPath);
-            else
-                result=super.validateTakeValueForKeyPath(null,keyPath);
-        } else
-            result=super.validateTakeValueForKeyPath(newValue,keyPath);
-        return result;
+        return super.validateTakeValueForKeyPath((newValue!=null && ((String)newValue).length()==0) ? null : newValue, keyPath);
     }
 }
