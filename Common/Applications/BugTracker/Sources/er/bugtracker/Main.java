@@ -56,7 +56,7 @@ public class Main extends WOComponent {
             return null;
         }
         
-        People  userObject = People.peopleClazz().userWithUsernamePassword(editingContext, username, password);
+        People  userObject = People.clazz.userWithUsernamePassword(editingContext, username, password);
         //People  userObject = People.peopleClazz().anyUser(editingContext);
         if(userObject == null) {
             errorMessage="Sorry login incorrect!";

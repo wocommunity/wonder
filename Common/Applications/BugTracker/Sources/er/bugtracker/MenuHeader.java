@@ -176,7 +176,7 @@ public class MenuHeader extends WOComponent {
         EOEnterpriseObject user=((Session)sender.session()).getUser();
         QueryPageInterface qpi=(QueryPageInterface)D2W.factory().pageForConfigurationNamed("TrackRelease",sender.session());
         WODisplayGroup dg=(WODisplayGroup)((WOComponent)qpi).valueForKey("displayGroup");
-        Release defaultRelease = Release.releaseClazz().defaultRelease(sender.session().defaultEditingContext());
+        Release defaultRelease = Release.clazz.defaultRelease(sender.session().defaultEditingContext());
         if (defaultRelease!=null) dg.queryMatch().setObjectForKey(defaultRelease,"targetRelease");
         dg.setQualifier(new EOKeyValueQualifier("state",
                                                 EOQualifier.QualifierOperatorEqual,
@@ -199,7 +199,7 @@ public class MenuHeader extends WOComponent {
                                                State.ANALYZE);
         EOQualifier q2=new EOKeyValueQualifier("targetRelease",
                                                EOQualifier.QualifierOperatorEqual,
-                                               Release.releaseClazz().defaultRelease(sender.session().defaultEditingContext()));
+                                               Release.clazz.defaultRelease(sender.session().defaultEditingContext()));
         EOQualifier q=new EOAndQualifier(new NSArray(new Object[] {q1,q2}));
         EODatabaseDataSource ds=new EODatabaseDataSource(sender.session().defaultEditingContext(), "Bug");
         EOFetchSpecification fs=new EOFetchSpecification("Bug",q,null);
@@ -215,7 +215,7 @@ public class MenuHeader extends WOComponent {
                                                State.ANALYZE);
         EOQualifier q2=new EOKeyValueQualifier("targetRelease",
                                                EOQualifier.QualifierOperatorEqual,
-                                               Release.releaseClazz().defaultRelease(sender.session().defaultEditingContext()));
+                                               Release.clazz.defaultRelease(sender.session().defaultEditingContext()));
         EOQualifier q3=new EOKeyValueQualifier("owner",
                                                EOQualifier.QualifierOperatorEqual,
                                                me);        

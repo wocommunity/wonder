@@ -35,8 +35,8 @@ public class BTBusinessLogic extends ERXFrameworkPrincipal {
 
     // Shared Data Init Point.  Keep alphabetical
     public void initializeSharedData() {
-        State.stateClazz().initializeSharedData();
-        Priority.priorityClazz().initializeSharedData();
-        TestItemState.testItemStateClazz().initializeSharedData();
+        State.clazz.initializeSharedData();
+        Priority.clazz.initializeSharedData();
+        TestItemState.clazz.initializeSharedData();
     }
 }

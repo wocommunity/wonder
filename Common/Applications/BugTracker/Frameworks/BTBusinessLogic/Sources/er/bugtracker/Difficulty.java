@@ -24,5 +24,5 @@ public class Difficulty extends _Difficulty {
         
     }
 
-    public static DifficultyClazz difficultyClazz() { return (DifficultyClazz)EOGenericRecordClazz.clazzForEntityNamed("Difficulty"); }
+    public static DifficultyClazz clazz = (DifficultyClazz)EOGenericRecordClazz.clazzForEntityNamed("Difficulty");
 }
