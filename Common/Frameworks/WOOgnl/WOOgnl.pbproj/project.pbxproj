@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		F5274010017CADD2014387C8 = {
 			buildStyles = (
@@ -26,8 +26,8 @@
 		F5274011017CADD2014387C8 = {
 			children = (
 				F5274012017CADD2014387C8,
-				F527401C017CADD2014387C8,
 				F5274025017CADD2014387C8,
+				F54F866A02C7AFE401E168BF,
 				F5274032017CADD2014387C8,
 			);
 			isa = PBXGroup;
@@ -36,76 +36,18 @@
 		};
 		F5274012017CADD2014387C8 = {
 			children = (
-				F5274013017CADD2014387C8,
-				F5274014017CADD2014387C8,
-				F5274015017CADD2014387C8,
-				F5274016017CADD2014387C8,
-				F5274017017CADD2014387C8,
-				F5274018017CADD2014387C8,
-				F5274019017CADD2014387C8,
-				F527401A017CADD2014387C8,
-				F527401B017CADD2014387C8,
+				F54F865102C7AFA901E168BF,
+				F54F865202C7AFA901E168BF,
+				F54F865302C7AFA901E168BF,
+				F54F865402C7AFA901E168BF,
+				F54F865502C7AFA901E168BF,
+				F54F865602C7AFA901E168BF,
+				F54F865702C7AFA901E168BF,
+				F54F865802C7AFA901E168BF,
+				F54F865902C7AFA901E168BF,
 			);
 			isa = PBXGroup;
 			name = Classes;
-			refType = 4;
-		};
-		F5274013017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = NSArrayPropertyAccessor.java;
-			refType = 4;
-		};
-		F5274014017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = NSDictionaryPropertyAccessor.java;
-			refType = 4;
-		};
-		F5274015017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = NSFoundationElementsAccessor.java;
-			refType = 4;
-		};
-		F5274016017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = NSObjectPropertyAccessor.java;
-			refType = 4;
-		};
-		F5274017017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = WOOgnl.java;
-			refType = 4;
-		};
-		F5274018017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = WOOgnlHTMLTemplateParser.java;
-			refType = 4;
-		};
-		F5274019017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = WOOgnlAssociation.java;
-			refType = 4;
-		};
-		F527401A017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = NSClassResolver.java;
-			refType = 4;
-		};
-		F527401B017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = D2WOgnlAssignment.java;
-			refType = 4;
-		};
-		F527401C017CADD2014387C8 = {
-			children = (
-				F5274020017CADD2014387C8,
-			);
-			isa = PBXGroup;
-			name = "Other Sources";
-			refType = 4;
-		};
-		F5274020017CADD2014387C8 = {
-			isa = PBXFileReference;
-			path = LICENSE.NPL;
 			refType = 4;
 		};
 		F5274025017CADD2014387C8 = {
@@ -379,84 +321,27 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F527403A017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		F527403B017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
-				F527403C017CADD2014387C8,
-				F527403D017CADD2014387C8,
-				F527403E017CADD2014387C8,
-				F527403F017CADD2014387C8,
-				F5274040017CADD2014387C8,
-				F5274041017CADD2014387C8,
-				F5274042017CADD2014387C8,
-				F5274043017CADD2014387C8,
-				F5274044017CADD2014387C8,
+				F54F865A02C7AFA901E168BF,
+				F54F865B02C7AFA901E168BF,
+				F54F865C02C7AFA901E168BF,
+				F54F865D02C7AFA901E168BF,
+				F54F865E02C7AFA901E168BF,
+				F54F865F02C7AFA901E168BF,
+				F54F866002C7AFA901E168BF,
+				F54F866102C7AFA901E168BF,
+				F54F866202C7AFA901E168BF,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
-		};
-		F527403C017CADD2014387C8 = {
-			fileRef = F5274013017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F527403D017CADD2014387C8 = {
-			fileRef = F5274014017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F527403E017CADD2014387C8 = {
-			fileRef = F5274015017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F527403F017CADD2014387C8 = {
-			fileRef = F5274016017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5274040017CADD2014387C8 = {
-			fileRef = F5274017017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5274041017CADD2014387C8 = {
-			fileRef = F5274018017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5274042017CADD2014387C8 = {
-			fileRef = F5274019017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5274043017CADD2014387C8 = {
-			fileRef = F527401A017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5274044017CADD2014387C8 = {
-			fileRef = F527401B017CADD2014387C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F5274045017CADD2014387C8 = {
 			buildActionMask = 2147483647;
@@ -473,7 +358,6 @@
 				F5274050017CADD2014387C8,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F5274046017CADD2014387C8 = {
 			fileRef = F5274026017CADD2014387C8;
@@ -540,7 +424,6 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F5274052017CADD2014387C8 = {
 			isa = PBXTargetDependency;
@@ -609,21 +492,18 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F5274055017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		F5274056017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		F5274057017CADD2014387C8 = {
 			buildActionMask = 2147483647;
@@ -640,7 +520,6 @@
 				F5274062017CADD2014387C8,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F5274058017CADD2014387C8 = {
 			fileRef = F5274026017CADD2014387C8;
@@ -707,42 +586,36 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F5274064017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
 		};
 		F5274065017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
 		};
 		F5274066017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
 		};
 		F5274067017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
 		};
 		F5274068017CADD2014387C8 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
 		};
 		F5274069017CADD2014387C8 = {
 			buildActionMask = 2147483647;
@@ -751,7 +624,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -764,7 +636,6 @@
 			generatedFileNames = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			name = "Shell Script";
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
@@ -794,7 +665,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -830,6 +701,128 @@
 			};
 			isa = PBXBuildStyle;
 			name = WebServer;
+		};
+		F54F865102C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = D2WOgnlAssignment.java;
+			path = Sources/ognl/webobjects/D2WOgnlAssignment.java;
+			refType = 2;
+		};
+		F54F865202C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = WOOgnlHTMLTemplateParser.java;
+			path = Sources/ognl/webobjects/WOOgnlHTMLTemplateParser.java;
+			refType = 2;
+		};
+		F54F865302C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = NSArrayPropertyAccessor.java;
+			path = Sources/ognl/webobjects/NSArrayPropertyAccessor.java;
+			refType = 2;
+		};
+		F54F865402C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = NSFoundationElementsAccessor.java;
+			path = Sources/ognl/webobjects/NSFoundationElementsAccessor.java;
+			refType = 2;
+		};
+		F54F865502C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = NSObjectPropertyAccessor.java;
+			path = Sources/ognl/webobjects/NSObjectPropertyAccessor.java;
+			refType = 2;
+		};
+		F54F865602C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = NSClassResolver.java;
+			path = Sources/ognl/webobjects/NSClassResolver.java;
+			refType = 2;
+		};
+		F54F865702C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = NSDictionaryPropertyAccessor.java;
+			path = Sources/ognl/webobjects/NSDictionaryPropertyAccessor.java;
+			refType = 2;
+		};
+		F54F865802C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = WOOgnl.java;
+			path = Sources/ognl/webobjects/WOOgnl.java;
+			refType = 2;
+		};
+		F54F865902C7AFA901E168BF = {
+			isa = PBXFileReference;
+			name = WOOgnlAssociation.java;
+			path = Sources/ognl/webobjects/WOOgnlAssociation.java;
+			refType = 2;
+		};
+		F54F865A02C7AFA901E168BF = {
+			fileRef = F54F865102C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F865B02C7AFA901E168BF = {
+			fileRef = F54F865202C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F865C02C7AFA901E168BF = {
+			fileRef = F54F865302C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F865D02C7AFA901E168BF = {
+			fileRef = F54F865402C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F865E02C7AFA901E168BF = {
+			fileRef = F54F865502C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F865F02C7AFA901E168BF = {
+			fileRef = F54F865602C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F866002C7AFA901E168BF = {
+			fileRef = F54F865702C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F866102C7AFA901E168BF = {
+			fileRef = F54F865802C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F866202C7AFA901E168BF = {
+			fileRef = F54F865902C7AFA901E168BF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54F866A02C7AFE401E168BF = {
+			children = (
+				F54F866B02C7AFE401E168BF,
+			);
+			isa = PBXGroup;
+			name = Documentation;
+			path = Documentation;
+			refType = 2;
+		};
+		F54F866B02C7AFE401E168BF = {
+			isa = PBXFileReference;
+			path = LICENSE.NPL;
+			refType = 4;
 		};
 	};
 	rootObject = F5274010017CADD2014387C8;
