@@ -255,11 +255,15 @@ public class ERXUtilities {
             EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
             if (!adaptorChannel.isOpen())
                 adaptorChannel.openChannel();
-            primaryKey = (NSDictionary)adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity).lastObject();
+            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+            if(arr != null)
+                primaryKey = (NSDictionary)arr.lastObject();
+            else
+                log.warn("Could not get primary key for entity: " + entityName + " exception");
             dbContext.unlock();
         } catch (Exception e) {
             dbContext.unlock();
-            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e);
+            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
         }
         return primaryKey;
     }
