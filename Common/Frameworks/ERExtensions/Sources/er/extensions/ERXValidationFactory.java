@@ -18,26 +18,33 @@ public class ERXValidationFactory {
 
     /** logging support */
     public final static Category cat = Category.getInstance("er.validation.ERXValidationFactory");
+    
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;
+    
     /** holds a reference to the default validation delegate */
     // FIXME: This should be a weak reference
     private static Object _defaultValidationDelegate = null;
+    
     /** holds the default mappings that map model thrown validation strings to exception types */
     private static NSDictionary _mappings;
 
     /** holds the method name 'messageForException' */
     // FIXME: This is better done with an NSSelector and using the method: implementedByObject
     private static final String EDI_MFE_METHOD_NAME = "messageForException";
+    
     /** holds the method name 'templateForException' */
     private static final String EDI_TFE_METHOD_NAME = "templateForException";
+    
     /** holds the class argument array for delegate validation exception messages */    
     private static final Class[] EDI_FE_ARGS = new Class[] {ERXValidationException.class};
 
     /** NSValidation.ValidationException exception constructor paramaters */
     private static Class[] _exceptionConstructor = new Class[] { String.class, NSDictionary.class };
+    
     /** Regular ERXValidationException constructor parameters */
     private static Class[] _regularConstructor = new Class[] { EOEnterpriseObject.class, String.class, Object.class, String.class };
+    
     /** Custom ERXValidationException constructor parameters */
     private static Class[] _customConstructor = new Class[] { EOEnterpriseObject.class, String.class };
     
@@ -47,6 +54,7 @@ public class ERXValidationFactory {
      * @param aFactory new factory
      */
     public static void setDefaultFactory(ERXValidationFactory aFactory) { _defaultFactory = aFactory; }
+    
     /**
      * Returns the default factory. If one has not
      * been set then a factory is created of type
@@ -66,6 +74,7 @@ public class ERXValidationFactory {
      * @return the default validation exception delegate.
      */
     public static Object defaultDelegate() { return _defaultValidationDelegate; }
+    
     /**
      * Sets the default validation delegate that
      * will be set on all validation exceptions that
