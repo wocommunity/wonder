@@ -16,15 +16,18 @@ import er.extensions.*;
 // A VERY USEFUL COMPONENT - has some crusty stuff in it, but look mainly at valueForBinding and hasBinding.
 // 	this guy works in conjunction with D2WCustomComponentWithArgs
 public abstract class ERDCustomEditComponent extends WOComponent {
-   
+
+    /** logging support */
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomEditComponent.class);
+    
+    /**
+     * Public constructor
+     * @param context current context
+     */
    public ERDCustomEditComponent(WOContext context) {
         super(context);
     }
 
-    /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomEditComponent.class);
-
-    //////////////////////////////////////// Static Methods //////////////////////////////////////////////////////////////
     protected static Integer TRUE = ERXConstant.OneInteger;
     protected static Integer FALSE = ERXConstant.ZeroInteger;
 
