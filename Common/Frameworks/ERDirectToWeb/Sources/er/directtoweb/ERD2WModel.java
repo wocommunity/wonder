@@ -94,9 +94,12 @@ public class ERD2WModel extends D2WModel {
     
     protected void sortRules() {
         // This allows other non-d2wmodel file based rules to be loaded.
-        log.debug("posting WillSortRules.");
-        NSNotificationCenter.defaultCenter().postNotification(WillSortRules, this);
-        log.debug("posted WillSortRules.");
+        // but we only post for the main model
+        if(D2WModel.defaultModel() == this) {
+            log.debug("posting WillSortRules.");
+            NSNotificationCenter.defaultCenter().postNotification(WillSortRules, this);
+            log.debug("posted WillSortRules.");
+        }
         // We don't want dynamically loaded rules to cause rapid-turnaround to not work.
         setDirty(false);
         super.sortRules();
