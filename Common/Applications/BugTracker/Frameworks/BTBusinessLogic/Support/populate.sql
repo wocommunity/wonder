@@ -8,7 +8,7 @@ DELETE FROM STATE;
 insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('anzl', 1, 'Analyze');
 insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('buld', 2, 'Build');
 insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('vrfy', 3, 'Verify');
-insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('dmct', 4, 'Document');
+insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('dcmt', 4, 'Document');
 insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('clsd', 5, 'Closed');
 
 DELETE FROM TEST_ITEM_STATE;
