@@ -12,7 +12,6 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import java.util.*;
-import org.apache.log4j.NDC;
 
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder {
 
@@ -94,7 +93,11 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
         }
         return backAction();
     }
-
+    
+    public void validationFailedWithException (Throwable e, Object value, String keyPath) {
+        ERXValidation.validationFailedWithException(e, value, keyPath, currentErrorDictionary(), propertyKey(), ERXLocalizer.currentLocalizer(), d2wContext().entity(), shouldSetFailedValidationValue());
+    }
+    
     public void clearValidationFailed(){
         for(Enumeration e = errorMessagesDictionaries().objectEnumerator(); e.hasMoreElements();){
             ((NSMutableDictionary)e.nextElement()).removeAllObjects();
