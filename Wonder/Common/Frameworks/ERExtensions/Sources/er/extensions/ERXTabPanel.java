@@ -105,7 +105,7 @@ public class ERXTabPanel extends WOTabPanel  {
 
     public boolean useLinkForTabSwitch() {
         if (_useLinkForTabSwitch == null) {
-            _useLinkForTabSwitch = ERXUtilities.booleanValue(session().valueForKey("browserIsIE")) &&
+            _useLinkForTabSwitch = ERXUtilities.booleanValue(session().valueForKeyPath("browser.isIE")) &&
             ERXUtilities.booleanValue(session().valueForKey("javaScriptEnabled")) ? Boolean.TRUE : Boolean.FALSE;
         }
         return _useLinkForTabSwitch.booleanValue();
@@ -116,8 +116,5 @@ public class ERXTabPanel extends WOTabPanel  {
         _useLinkForTabSwitch=null;
         super.appendToResponse(aResponse, aContext);
     }
-
-
-    /************** Start Of MakeTheCompilerHappy ***************/
 
 }

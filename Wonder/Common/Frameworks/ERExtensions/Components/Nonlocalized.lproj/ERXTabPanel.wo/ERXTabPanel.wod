@@ -131,7 +131,7 @@ String1: WOString {
 }
 
 String2: WOString {
-	value = session.browserIsIE;
+	value = session.browser.isIE;
 }
 
 String3: WOString {
