@@ -54,7 +54,15 @@ public class ERXJSValidationErrors extends ERXStatelessComponent {
             if(page != null && true) {
                 eo = (EOEnterpriseObject)page.valueForKey("object");
                 eo.editingContext().lock();
-                eo.validateValueForKey(value, key);
+                int dotOffset = key.lastIndexOf('.');
+                if(dotOffset > 0) {
+                    Object otherEO = eo.valueForKeyPath(key.substring(0, dotOffset));
+                    if(otherEO != null) {
+                        NSValidation.Utility.validateValueForKey(otherEO, value, key.substring(dotOffset+1));
+                    }
+                } else {
+                    eo.validateValueForKey(value, key);
+                }
              } else {
                 EOClassDescription cd = EOClassDescription.classDescriptionForEntityName(entity);
                 if(cd != null)
