@@ -2,9 +2,17 @@ Conditional1: WOConditional {
 	condition = ^showNavigation;
 }
 
-HmoveV:WOImageButton{ border=0; filename="lft-OSarw.gif"; action = left;}
+HmoveV:WOImageButton{ border=0; filename="lft-OSarw.gif"; framework="WRReporting"; action = left;}
 
-HmoveZ:WOImageButton{ border=0; filename="rt-OSarw.gif"; action = right;}
+HmoveZ:WOImageButton{ border=0; filename="rt-OSarw.gif"; framework="WRReporting"; action = right;}
+
+Hyperlink1: WOHyperlink {
+	action = right;
+}
+
+Hyperlink2: WOHyperlink {
+	action = left;
+}
 
 String1: WOString {
 	value = ^listName;
@@ -25,19 +33,21 @@ criteriaLabelZ:WOString{
 
 dimHName:WOString {value= group.masterCriteria.label;}
 
-hDown:WOImageButton{border=0; filename="down.gif";action = down;}
+hDown:WOImageButton{border=0; filename="down.gif"; framework="WRReporting"; action = down;}
 
-hUp:WOImageButton{border=0; filename="up.gif";action = up;}
+hUp:WOImageButton{border=0; filename="up.gif"; framework="WRReporting"; action = up;}
 
 hlist: WORepetition { list=list; item=group;}
 
 nextZ:WOImageButton{border=0; 
 	filename="NextPage.gif";
-	action = nextZ;
+        framework="WRReporting"; 
+        action = nextZ;
 }
 
 prevZ:WOImageButton{border=0; 
 	filename="PreviousPage.gif";
+        framework="WRReporting"; 
 	action = prevZ;
 }
 

@@ -1,10 +1,21 @@
-Custom1: WOCollapsibleComponentContent { closedLabel = "Explode Layout"; openedLabel = "Collapse Layout";}
+Custom1: WOCollapsibleComponentContent { closedLabel = "Explode Layout"; openedLabel = "Collapse Layout";	condition = true;
+}
 Custom2: WOCollapsibleComponentContent { closedLabel = "Explode Navigation"; openedLabel = "Collapse Navigation";}
 
-
-allGroups:WORepetition{
-	list = model.groups;
-	item = aGrp;
+WRLayoutEditor1: WRLayoutEditor {
+	model = model;
+	recordGroupTotalFormat = recordGroupTotalFormat;
+	recordGroupTotalToShow = recordGroupTotalToShow;
+	selectedRecordGroupDisplayType = selectedRecordGroupDisplayType;
+	selectedReportStyle = selectedReportStyle;
+	shouldTotalCheck = shouldTotalCheck;
+	showCustomReportStyle = showCustomReportStyle;
+	showNavigation = showNavigation;
+	showRecordGroupHeadings = showRecordGroupHeadings;
+	showRecordGroupAsTable = showRecordGroupAsTable;
+	keysInH = ^keysInH;
+	keysInV = ^keysInV;
+	keysInZ = ^keysInZ;
 }
 attribHeading:WRAttributeGroup{
 	model=model;
@@ -43,7 +54,7 @@ depthList:WORepetition{
 	index = depth;
 }
 dontshowDefaultReportStyle:WOConditional{
-	condition= showDefaultReportStyleBool;
+	condition= showDefaultReportStyle;
 }
 dontshowVerticalRows:WOConditional{
 	condition= showVerticalRows;
@@ -56,12 +67,9 @@ editForm:WOForm{
 groupDepth:WORepetition{
 	count= vheadingIndex;
 }
-grpLabel:WOString{
-	value = aGrp.masterCriteria.label;
-}
 
 hCriteriaList: WRNestedList {
-    list = topHorzGroupCriteriaList.@sort.score;
+    list = topHorzGroupCriteriaList;
     item = topCriteria;
     index = currentIndex;
     level = currentLevel;
@@ -79,32 +87,14 @@ hCriteriaList2: WRNestedList {
     //isOrdered = YES;
 }
 
-horzDimensions: WORepetition { list= horzDimensions; item= hGroup;}
-
-keysInH: WOString {
-	value = ^keysInH;
-}
-
-keysInV: WOString {
-	value = ^keysInV;
-}
-
-keysInZ: WOString {
-	value = ^keysInZ;
-}
+horzDimensions: WORepetition { list=horzDimensions; item=hGroup;}
 numberOfCrits:WORepetition{
 	count = numberOfCrits;
 	//index = depth;
 }
 
-recGrpDisplayList:WOPopUpButton{
-	list = recordGroupDisplayTypes;
-	item = dispType;
-	value = dispType;
-	selection = selectedRecordGroupDisplayType;
-}
-
-recordGroupTest:WRRecordGroup{
+recordGroupTest:WOSwitchComponent {
+	WOComponentName = componentName;
 	model = model;
 	recordGroup= recordGroupTest;
 	showHeadings= showRecordGroupHeadings;
@@ -115,16 +105,6 @@ recordGroupTest:WRRecordGroup{
 	colors = colorDict;
 	totalDict = totalDict;
 	reportStyle = selectedReportStyle;
-}
-regenReport:WOSubmitButton{
-	action = regenReport;
-	value = "Regenerate Report";
-}
-reportStyle:WOPopUpButton{
-	list = reportStyles;
-	item = areportStyle;
-	value = areportStyle;
-	selection = selectedReportStyle;
 }
 rowSpanTd:WOGenericContainer{
 	elementName = "TD";
@@ -140,17 +120,10 @@ rowSpanTd2Span:WOGenericContainer{
 	bgcolor = bgcolorRowSpanTd;
 	colspan= depthCountAllAttribs;
 }
-shouldTotalCheck:WOCheckBox{
-	checked = shouldTotalCheck;
-}
-
-showCustomCheck:WOCheckBox{
-	checked = showDefaultReportStyleBool;
-}
 
 
 showDefaultReportStyle:WOConditional{
-	condition= showDefaultReportStyleBool;
+	condition= showDefaultReportStyle;
 	negate=true;
 }
 showEditing:WOConditional{
@@ -166,20 +139,11 @@ showHeadersForAsCells: WOConditional{
 showIndentCell:WOConditional{
 	condition= showIndentCell;
 }
-showNavigationCheck:WOCheckBox{
-	checked = showNavigation;
-}
 showNoColNoRow:WOConditional{
 	condition= showNoColNoRow;
 }
 showPresentationControls :WOConditional{
 	condition = showPresentationControls;
-}
-showRGAsTable:WOCheckBox{
-	checked = showRGAsTable;
-}
-showRGHeadings:WOCheckBox{
-	checked = showRGHeadings;
 }
 showSingleCol:WOConditional{
 	condition= showSingleCol;
@@ -207,13 +171,6 @@ td:WOGenericContainer{
 	elementName = "TD";
 	colspan = colSpan;
 	rowspan = rowSpan;
-}
-totToShow:WOTextField{
-	value = recordGroupTotalToShow;
-}
-
-totToShow2:WOTextField{
-	value = recordGroupTotalFormat;
 }
 vCriteriaList: WRNestedList {
     list = topVertGroupCriteriaList;

@@ -1,6 +1,6 @@
-ActiveImage1: WOActiveImage { action = addSubMasterCrit; border = "0"; filename = "cc1_addbutton_v2.gif";
+ActiveImage1: WOActiveImage { action = addSubMasterCrit; border = "0"; filename="cc1_addbutton_v2.gif";framework="WRReporting";
 }
-ActiveImage2: WOActiveImage { action = deleteSubMasterCrit; filename = "cc1_deletebutton.gif"; }
+ActiveImage2: WOActiveImage { action = deleteSubMasterCrit; filename="cc1_deletebutton.gif"; framework="WRReporting";}
 CheckBox1: WOCheckBox { checked = showTotal; }
 CheckBox2: WOCheckBox { checked = showOther; }
 CheckBox3: WOCheckBox { checked = isAString; }
