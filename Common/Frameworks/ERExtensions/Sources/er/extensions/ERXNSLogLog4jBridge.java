@@ -8,7 +8,14 @@ package er.extensions;
 import com.webobjects.foundation.NSLog;
 import org.apache.log4j.Level;
 
-public class ERXNSLogLog4jBridge extends NSLog.Logger {
+// CHECKME: A quick workaround for WO 5.1.x WOOutputPath issue. 
+//          Subclassing PrintStreamLogger instead of Logger to prevent 
+//          a ClassCastException. (WOApplication tries to cast the logger  
+//          as PrintStreamLogger when WOOutputPath is specified.) 
+//          Note that ERXNSLogLog4jBridge simply ignores the parameter 
+//          of setPrintStream(PrintStream stream) method. 
+
+public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLogger {
 
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXNSLogLog4jBridge.class);
     public static final int OUT = 1;
