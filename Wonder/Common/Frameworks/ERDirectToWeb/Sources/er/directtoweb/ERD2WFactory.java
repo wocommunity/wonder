@@ -99,7 +99,16 @@ public class ERD2WFactory extends D2W {
         D2WContext d2wcontext = ERD2WContext.newContext(s.context().session());
         d2wcontext.setDynamicPage(name);
         if (d2wcontext.task() == null || d2wcontext.entity() == null) {
-            throw new IllegalStateException("Couldn't find the dynamic page named " + name + " in your DirectToWeb model.");
+            String reason = null;
+            if (d2wcontext.task() == null && d2wcontext.entity() == null) {
+                reason = "task and entity is null, it seems that one model, maybe ERDirectToWeb d2w.d2wmodel is not loaded!";
+            } else if (d2wcontext.task() == null) {
+                reason = "task is null, it seems that one model, maybe ERDirectToWeb d2w.d2wmodel is not loaded!";
+            } else if (d2wcontext.entity() == null) {
+                reason = "entity is null, it seems that one model, maybe ERDirectToWeb d2w.d2wmodel is not loaded!";
+            }
+            throw new IllegalStateException("Couldn't find the dynamic page named " + name + " in your DirectToWeb model."+
+                    reason);
         } 
         return pageWithContextTaskEntity(d2wcontext, d2wcontext.task(), d2wcontext.entity().name(), s.context());
        
