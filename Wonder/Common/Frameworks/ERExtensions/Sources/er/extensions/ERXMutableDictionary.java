@@ -1,0 +1,33 @@
+package er.extensions;
+
+
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import java.io.*;
+
+/**
+usefull class in to automatically en- and decode an NSMutableDictionary
+ as blob into a database. ERPrototype name = mutableDictionary
+*/
+public class ERXMutableDictionary extends NSMutableDictionary {
+
+    public static NSData toBlob(C9MutableDictionary d) throws Exception {
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bout);
+        oos.writeObject(d);
+        oos.close();
+        NSData sp = new NSData(bout.toByteArray());
+        return sp;
+    }
+    public static ERXMutableDictionary fromBlob(NSData d) throws Exception {
+        ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
+        ObjectInputStream ois = new ObjectInputStream(bis);
+        ERXMutableDictionary dd = (ERXMutableDictionary) ois.readObject();
+        ois.close();
+        return dd;
+    }
+
+    public NSData toBlob() throws Exception {
+        return toBlob(this);
+    }
+}
