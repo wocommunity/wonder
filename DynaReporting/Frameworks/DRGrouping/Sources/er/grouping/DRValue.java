@@ -135,7 +135,7 @@ public class DRValue extends Object  {
         Object val = this.val();
 
         if (val != null) {
-            return DRCriteria.doubleForValue(val);
+            return DRValueConverter.converter().doubleForValue(val);
         }
 
         return 0.0;

@@ -266,49 +266,18 @@ public class DRCriteria extends Object  {
                         if (v instanceof String)
                             scr = new Double((String)v);
                         else
-                            scr = DRCriteria.numberForValue(v);
+                            scr = DRValueConverter.converter().numberForValue(v);
                     } catch(NumberFormatException e) {
                         scr = new Double(-1.0*MAXNUMBER);
                     }
                 } else if(rawVal instanceof String){
                     scr = rawVal;
                 } else {
-                    scr = DRCriteria.numberForValue(rawVal);
+                    scr = DRValueConverter.converter().numberForValue(rawVal);
                 }
                 _score = scr;
             }
         }
         return _score;
-    }
-
-    static public double doubleForValue(Object v){
-        double scr = 0.0;
-        if(v == null) {
-            return 0.0;
-        } else if (v instanceof String) {
-            try {
-                scr = (new Double((String)v)).doubleValue();
-            } catch(NumberFormatException e) {
-                //OWDebug.println(1, "v:"+v);
-                scr = 0.0;
-            }
-        } else if(v instanceof Number){
-            Number vv = (Number)v;
-            scr = vv.doubleValue();
-        } else if (v instanceof NSTimestamp) {
-            NSTimestamp vv = (NSTimestamp)v;
-            scr = (double)vv.getTime() / 1000.0;
-        } else if(v == NSKeyValueCoding.NullValue) {
-            scr = 0.0;
-        } else {
-            scr = (new Double(v.toString())).doubleValue();
-        }
-        return scr;
-    }
-
-    static public Number numberForValue(Object v) {
-        double vv = doubleForValue(v);
-        Number scr = new Double(vv);
-        return scr;
     }
 }
