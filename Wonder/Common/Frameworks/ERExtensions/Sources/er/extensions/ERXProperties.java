@@ -29,11 +29,11 @@ public class ERXProperties extends Properties {
     /** default string */
     public static final String DefaultString = "Default";
     
-    private static final boolean RetainDefaultsEnabled =
-            "true".equals(System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false"));
-
+    private static Boolean RetainDefaultsEnabled;
+    private static String UndefinedMarker = "-undefined-";
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
+    private static final Map AppSpecificPropertyNames = new HashMap(128);
 
     /** WebObjects version number as string */
     private static String _webObjectsVersion;
@@ -41,7 +41,16 @@ public class ERXProperties extends Properties {
     /** WebObjects version number as double */ 
     private static double _webObjectsVersionDouble; 
 
-    /** 
+    private static boolean retainDefaultsEnabled() {
+        if (RetainDefaultsEnabled == null) {
+            final String propertyValue = System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
+            final boolean isEnabled = "true".equals(propertyValue);
+            RetainDefaultsEnabled = Boolean.valueOf(isEnabled);
+        }
+        return RetainDefaultsEnabled.booleanValue();
+    }
+
+    /**
      * Puts handy properties such as <code>com.webobjects.version</code> 
      * into the system properties. This method is called when 
      * the framework is initialized  
@@ -204,6 +213,39 @@ public class ERXProperties extends Properties {
     }
 
     /**
+     * Converts the standard propertyName into one with a .<AppName> on the end, iff the property is defined with
+     * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
+     * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
+     * @param propertyName
+     * @return
+     */
+    private static String getApplicationSpecificPropertyName(final String propertyName) {
+        synchronized(AppSpecificPropertyNames) {
+            // only keep 128 of these around
+            if (AppSpecificPropertyNames.size() > 128) {
+                AppSpecificPropertyNames.clear();
+            }
+            String appSpecificPropertyName = (String)AppSpecificPropertyNames.get(propertyName);
+            if (appSpecificPropertyName == null) {
+                final WOApplication application = WOApplication.application();
+                if (application != null) {
+                    final String appName = application.name();
+                    appSpecificPropertyName = propertyName + "." + appName;
+                }
+                else {
+                    appSpecificPropertyName = propertyName;
+                }
+                final String propertyValue = System.getProperty(appSpecificPropertyName);
+                if (propertyValue == null) {
+                    appSpecificPropertyName = propertyName;
+                }
+                AppSpecificPropertyNames.put(propertyName, appSpecificPropertyName);
+            }
+            return appSpecificPropertyName;
+        }
+    }
+
+    /**
      * Cover method for returning an NSArray for a
      * given system property and set a default value if not given.
      * @param s system property
@@ -212,10 +254,11 @@ public class ERXProperties extends Properties {
      *      the system properties or default value
      */
     public static NSArray arrayForKeyWithDefault(final String s, final NSArray defaultValue) {
-        final String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        final String propertyValue = System.getProperty(propertyName);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
-            setArrayForKey(array == null ? NSArray.EmptyArray : array, s);
+        if (retainDefaultsEnabled() && propertyValue == null) {
+            setArrayForKey(array == null ? NSArray.EmptyArray : array, propertyName);
         }
         return array;
     }
@@ -244,11 +287,12 @@ public class ERXProperties extends Properties {
      *      system properties.
      */
     public static boolean booleanForKeyWithDefault(final String s, final boolean defaultValue) {
-        String propertyValue = ERXSystem.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final boolean booleanValue = ERXValueUtilities.booleanValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Boolean.toString(booleanValue);
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return booleanValue;
     }
@@ -273,10 +317,11 @@ public class ERXProperties extends Properties {
      *      the system properties
      */
     public static NSDictionary dictionaryForKeyWithDefault(final String s, final NSDictionary defaultValue) {
-        final String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        final String propertyValue = System.getProperty(propertyName);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
-            setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, s);
+        if (retainDefaultsEnabled() && propertyValue == null) {
+            setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, propertyName);
         }
         return dictionary;
     }
@@ -325,11 +370,12 @@ public class ERXProperties extends Properties {
      *      system properties. Scale is controlled by the string, ie "4.400" will have a scale of 3.
      */
     public static BigDecimal bigDecimalForKeyWithDefault(String s, BigDecimal defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = bigDecimal.toString();
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return bigDecimal;
     }
@@ -342,11 +388,12 @@ public class ERXProperties extends Properties {
      * @return int value of the system property or the default value
      */    
     public static int intForKeyWithDefault(final String s, final int defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Integer.toString(intValue);
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return intValue;
     }
@@ -359,11 +406,12 @@ public class ERXProperties extends Properties {
      * @return long value of the system property or the default value
      */    
     public static long longForKeyWithDefault(final String s, final long defaultValue) {
-        String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        String propertyValue = System.getProperty(propertyName);
         final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
-        if (RetainDefaultsEnabled && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Long.toString(longValue);
-            System.setProperty(s, propertyValue);
+            System.setProperty(propertyName, propertyValue);
         }
         return longValue;
     }
@@ -387,12 +435,13 @@ public class ERXProperties extends Properties {
      * @return string value of the system propery or null
      */
     public static String stringForKeyWithDefault(final String s, final String defaultValue) {
-        final String propertyValue = System.getProperty(s);
+        final String propertyName = getApplicationSpecificPropertyName(s);
+        final String propertyValue = System.getProperty(propertyName);
         final String stringValue = propertyValue == null ? defaultValue : propertyValue;
-        if (RetainDefaultsEnabled && propertyValue == null) {
-            System.setProperty(s, stringValue == null ? "" : stringValue);
+        if (retainDefaultsEnabled() && propertyValue == null) {
+            System.setProperty(propertyName, stringValue == null ? UndefinedMarker : stringValue);
         }
-        return stringValue;
+        return stringValue == UndefinedMarker ? null : stringValue;
     }
 
     /**
@@ -731,6 +780,8 @@ public class ERXProperties extends Properties {
      * Note that for a period when the application is starting up
      * application() will be null and name() will be null.
      * @return application name used for appending, for example ".ERMailer"
+     * Note: this is redundant with the scheme checked in on March 21, 2005 by clloyd (ben holt did checkin).
+     * This scheme requires the user to swizzle the existing properties file with a new one of this type.
      */
     protected String applicationNameForAppending() {
         if (applicationNameForAppending == null) {
