@@ -17,7 +17,18 @@ import com.webobjects.appserver._private.*;
  */
 
 public class ERXJSInputValidator extends WOComponent {
-
+    public static class Action extends WODirectAction {
+        public Action(WORequest r) { super(r); }
+        /**
+        * This action is used to validate attributes of eos.
+         *
+         * @return the error page containing localized error messages if there where any errors.
+         */
+        public WOActionResults validateValueForKeyInEntityAction() {
+            return pageWithName("ERXJSValidationErrors");
+        }
+    }
+    
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERXJSInputValidator.class,"components");
     public String _errorSpanID;
