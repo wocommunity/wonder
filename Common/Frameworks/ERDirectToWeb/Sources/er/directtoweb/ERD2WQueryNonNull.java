@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import er.extensions.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -22,17 +23,35 @@ public class ERD2WQueryNonNull extends QueryComponent {
     public Object item;
     public int index;
 
-    private final static String[] _queryValues={ "don't care", "yes", "no" };
     private final static Object YES_VALUE=new Object(); 
     private final static Object NO_VALUE=new Object(); 
     private final static Object DONT_CARE_VALUE=new Object(); 
     private final static Object[] _queryNumbers={ DONT_CARE_VALUE, YES_VALUE, NO_VALUE };
     protected final static NSArray _queryNumbersArray=new NSArray(_queryNumbers);
 
-
+    public NSArray choicesNames() {
+        return (NSArray) d2wContext().valueForKey("choicesNames");
+    }
     public NSArray queryNumbers() { return _queryNumbersArray; }
-    public String displayString() { return _queryValues[index]; }
-    public Object value() { return _queryNumbers[0]; }
+    public String displayString() { 
+        String label = (String)choicesNames().objectAtIndex(index);
+        if(ERXLocalizer.isLocalizationEnabled()) {
+            return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label); 
+        }
+        return label;
+    }
+    public Object value() { 
+        Object value = displayGroup().queryMatch().valueForKey(propertyKey());
+        Object operator = displayGroup().queryOperator().valueForKey(propertyKey());
+        if(value == null || operator == null) {
+            return DONT_CARE_VALUE; 
+        } else {
+            if("<>".equals(operator)) {
+                return YES_VALUE;
+            }
+            return NO_VALUE;
+        }
+    }
 
     public void setValue(Object newValue) {
         if (newValue==DONT_CARE_VALUE) {
