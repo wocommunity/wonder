@@ -5,8 +5,9 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.NSLog;
-import org.apache.log4j.Level;
+import org.apache.log4j.*;
+
+import com.webobjects.foundation.*;
 
 // CHECKME: A quick workaround for WO 5.1.x WOOutputPath issue. 
 //          Subclassing PrintStreamLogger instead of Logger to prevent 
@@ -17,7 +18,7 @@ import org.apache.log4j.Level;
 
 public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLogger {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXNSLogLog4jBridge.class);
+    public static final ERXLogger log = ERXLogger.getERXLogger("NSLog");
     public static final int OUT = 1;
     public static final int ERR = 2;
     public static final int DEBUG = 3;
@@ -37,12 +38,15 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
                     log.info(obj.toString());
                     break;
                 case ERR:
-                    log.info(obj.toString());
+                    log.warn(obj.toString());
                     break;
                 case DEBUG:
                     log.debug(obj.toString());
                     break;
             }
+        } else {
+            if(type == ERR)
+                log.warn(obj != null ? obj.toString() : "");
         }
     }
     
@@ -54,7 +58,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
     }
 
     public void appendln() {
-        log.info(""); // Assuming people will always put "%n" at the end of the layout pattern.  
+        appendln(""); // Assuming people will always put "%n" at the end of the layout pattern.  
     }
 
     public void flush() {
