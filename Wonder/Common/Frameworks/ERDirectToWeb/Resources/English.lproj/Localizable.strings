@@ -29,4 +29,5 @@
     "ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
     "ERDInspect.select" = "Select...";
     "ERDInspect.clear" = "Clear";
+    "ERDList.create" = "Add";
 }

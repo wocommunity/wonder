@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 /**
@@ -38,6 +39,18 @@ public class ERDList extends ERDCustomEditComponent {
         super.reset();
     }
 
+    public WOComponent createObjectAction() {
+        String editRelationshipConfigurationName = (String)valueForBinding("editRelationshipConfigurationName");
+        if(editRelationshipConfigurationName != null && editRelationshipConfigurationName.length() > 0) {
+            EditRelationshipPageInterface epi = (EditRelationshipPageInterface)D2W.factory().pageForConfigurationNamed(editRelationshipConfigurationName, session());
+            epi.setMasterObjectAndRelationshipKey(object(), key());
+            epi.setNextPage(context().page());
+            return (WOComponent)epi;
+        } else {
+            ERXEOControlUtilities.createAndAddObjectToRelationship(object().editingContext(), object(), key(), (String)valueForBinding("destinationEntityName"), null);
+        }
+        return context().page();
+    }
     // we will get asked quite a lot of times, so caching is in order
     
     public NSArray list() {

@@ -2,16 +2,19 @@
 function <webobject name=Name></webobject>RPC(<webobject name=Repetition1><webobject name=String1></webobject>,</webobject>callback) {
         var AMP = \u0026;
 	var url = "<webobject name=URL></webobject>" <webobject name=Repetition1> + AMP + "<webobject name=String1></webobject>=" + escape(<webobject name=String1></webobject>)</webobject> + AMP + "callback=" + escape(callback);
-	alert("url="+url);
+	//alert("url="+url);
         var nav = navigator.userAgent;
 
 	var frame;
 	if(!frame) { if(document.frames) { frame = document.frames["RSIFrame"] } }
 	if(!frame) frame = document.getElementById("RSIFrame");
-	if(nav.indexOf("Gecko") != -1) frame.contentDocument.location = url;
-	else if(nav.indexOf("Safari") != -1) frame.location = url;
-	else if(nav.indexOf("MSIE") != -1) { if (nav.indexOf("Mac") != -1) { frame.document.location = url; } }
-	else frame.document.location = url
+        var loc = null;
+	if(nav.indexOf("Gecko") != -1) loc = frame.contentDocument.location;
+	else if(nav.indexOf("Safari") != -1) loc = frame.location;
+	else if(nav.indexOf("MSIE") != -1) { if (nav.indexOf("Mac") != -1) { loc = frame.document.location; } }
+	else loc = frame.document.location;
+        if(loc && loc.replace) loc.replace(url);
+        if(loc && !loc.replace) loc = url;
 	return false
 }
 </script>
