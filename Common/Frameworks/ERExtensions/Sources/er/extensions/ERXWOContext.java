@@ -17,6 +17,11 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         super(worequest);
     }
 
+    public static ERXWOContext newContext(){
+        return new ERXWOContext (new WORequest ("GET", "", "HTTP/1.1", null, null, null));
+    }
+
+
     protected NSMutableDictionary mutableUserInfo;
     public NSMutableDictionary mutableUserInfo() {
         if(mutableUserInfo == null) {
