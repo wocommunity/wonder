@@ -3,6 +3,7 @@
 	<wo class="ERXDebugMarker" wocomponentcontent="false">
 
 		<binding name="object"/>
+		<binding name="debugPageProvider"/>
 
 		<validation message="&apos;object&apos; is a required binding">
 			<unbound name="object"/>

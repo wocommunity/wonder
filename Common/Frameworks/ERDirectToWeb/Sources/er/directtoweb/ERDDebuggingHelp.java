@@ -7,11 +7,9 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.*;
 import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.eocontrol.EOCooperatingObjectStore;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.*;
 
 import er.extensions.*;
 
@@ -22,7 +20,7 @@ import er.extensions.*;
  * @binding condition" defaults="Boolean
  */
 
-public class ERDDebuggingHelp extends WOComponent {
+public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.DebugPageProvider {
 
     public ERDDebuggingHelp(WOContext context) { super(context); }
 
@@ -57,13 +55,27 @@ public class ERDDebuggingHelp extends WOComponent {
     	}
     	return editingContext;
     }
-    
-    public WOComponent showEditingContext() {
-    	WOComponent nextPage = pageWithName("ERXEditingContextInspector");
-    	nextPage.takeValueForKey(editingContext(), "object");
-    	return nextPage;
+
+    protected WOComponent showEditingContext(EOEditingContext ec) {
+        WOComponent nextPage = pageWithName("ERXEditingContextInspector");
+        nextPage.takeValueForKey(ec, "object");
+        nextPage.takeValueForKey(this, "debugPageProvider");
+        return nextPage;
+    }
+    public WOComponent debugPageForObject(EOEnterpriseObject o, WOSession s) {
+        WOComponent page = (WOComponent)D2W.factory().inspectPageForEntityNamed(o.entityName(),s);
+        page.takeValueForKey(o, "object");
+        return page;
     }
     
+    public WOComponent showEditingContext() {
+        return showEditingContext(editingContext());
+    }
+
+    public WOComponent showDefaultEditingContext() {
+        return showEditingContext(session().defaultEditingContext());
+    }
+
     public boolean hasEditingContext() {
     	return editingContext() != null;
     }

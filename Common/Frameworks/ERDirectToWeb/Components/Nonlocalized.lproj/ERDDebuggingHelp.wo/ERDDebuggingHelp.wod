@@ -37,6 +37,11 @@ Hyperlink3: WOHyperlink {
 	target = "_inspector";
 }
 
+Hyperlink4: WOHyperlink {
+	action = showDefaultEditingContext;
+	target = "_inspector";
+}
+
 String1: WOString {
 	value = ^d2wContext.pageConfiguration;
 	valueWhenEmpty = "No Page Configuration";
@@ -77,6 +82,10 @@ String5: WOString {
 String6: WOString {
 	value = debugValueForKey;
 	valueWhenEmpty = "No value set or empty";
+}
+
+String7: WOString {
+	value = session.defaultEditingContext;
 }
 
 TextField1: WOTextField {
