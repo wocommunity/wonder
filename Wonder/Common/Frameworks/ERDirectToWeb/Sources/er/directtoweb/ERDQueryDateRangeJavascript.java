@@ -6,10 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import java.text.Format;
 
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXEditDateJavascript;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXTimestampFormatter;
+import er.extensions.ERXValidationFactory;
+import er.extensions.ERXWOForm;
 
 /**
  * Used for building date queries with javascript.<br />
@@ -19,7 +26,7 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
 
 	protected static String _datePickerJavaScriptUrl;
 	protected String key;
-	protected NSTimestampFormatter _dateFormatter;
+	protected Format _dateFormatter;
 	protected String _minValue;
 	protected String _maxValue;
 	protected String _minName;
@@ -38,9 +45,10 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
         return key;
     }
 
-    public NSTimestampFormatter dateFormatter() {
+    public Format dateFormatter() {
     	if(_dateFormatter == null) {
-    		_dateFormatter = new NSTimestampFormatter(formatter());
+    		_dateFormatter = ERXLocalizer.currentLocalizer().localizedDateFormatForKey(formatter());
+            log.info(_dateFormatter);
     	}
     	return _dateFormatter;
     }
@@ -141,17 +149,26 @@ public class ERDQueryDateRangeJavascript extends ERDCustomQueryComponent {
     	return "javascript:show_calendar('"+formName()+ "." + maxName() + "',null,null,'"+formatterStringForScript()+"')";
     }
     
+    public int formatLength() {
+        String formatter = formatterStringForScript();
+        return formatter.length() < 12 ? 12 : formatter.length();
+    }
+    
+    public String localizedFormatString() {
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(formatter());
+    }
+    
     public String formatter() {
 		if(_formatter == null) {
 			_formatter = (String)valueForBinding("formatter");
 			if(_formatter == null || _formatter.length() == 0) {
-				_formatter = "MM/dd/yyyy";
+				_formatter = ERXTimestampFormatter.DEFAULT_PATTERN;
 			}
-		}
+ 		}
 		return _formatter;
 	}
     
     public String formatterStringForScript() {
-    	return ERXEditDateJavascript.formatterStringForScript(formatter());
+    	return ERXEditDateJavascript.formatterStringForScript(localizedFormatString());
     }
 }

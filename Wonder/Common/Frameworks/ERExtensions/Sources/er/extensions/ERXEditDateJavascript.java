@@ -14,7 +14,7 @@ public class ERXEditDateJavascript extends WOComponent {
     
     protected int i = 0;
     public String dateString;
-    public String dateformat = "%m/%d/%Y";
+    public String dateformat = ERXTimestampFormatter.DEFAULT_PATTERN;
 
     public ERXEditDateJavascript(WOContext context) {
         super(context);

@@ -46,9 +46,8 @@
 			sourceTree = "<group>";
 		};
 		410A1F520508A4B500000104 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDSelectAllButton.wo;
@@ -241,9 +240,8 @@
 			sourceTree = "<group>";
 		};
 		4111BC3A0503812700000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDListPageRepetition.wo;
@@ -309,9 +307,8 @@
 			sourceTree = "<group>";
 		};
 		4111BC520503814D00000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQueryPageRepetition.wo;
@@ -377,9 +374,8 @@
 			sourceTree = "<group>";
 		};
 		4111BC660503816A00000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDInspectPageRepetition.wo;
@@ -445,9 +441,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		4111C1F60503900F00000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDeleteButton.wo;
@@ -545,9 +540,8 @@
 			sourceTree = "<group>";
 		};
 		4119063504EFBC3000A88C3C = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditPassword.wo;
@@ -613,9 +607,8 @@
 			sourceTree = "<group>";
 		};
 		411906A104EFC02A00A88C3C = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditPasswordConfirmation.wo;
@@ -681,9 +674,8 @@
 			sourceTree = "<group>";
 		};
 		412490EE0504123C00000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDBannerComponent.wo;
@@ -756,9 +748,8 @@
 			sourceTree = "<group>";
 		};
 		4131AAC005AEBF580066ECD8 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQuery.wo;
@@ -847,9 +838,8 @@
 			sourceTree = "<group>";
 		};
 		416008FA050715F400000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCalendarPageTemplate.wo;
@@ -921,9 +911,8 @@
 			sourceTree = "<group>";
 		};
 		418C6D77059700CA00E772A7 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomQueryBoolean.wo;
@@ -1169,9 +1158,8 @@
 			sourceTree = "<group>";
 		};
 		41B8F3F20503CAFE00000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDSelectButton.wo;
@@ -1237,9 +1225,8 @@
 			sourceTree = "<group>";
 		};
 		41B8F4720503D9E900000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryEntitiesPageTemplate.wo;
@@ -1326,9 +1313,8 @@
 			sourceTree = "<group>";
 		};
 		41C5E53405D0EFFC00F59489 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDActionBar.wo;
@@ -1409,9 +1395,8 @@
 			sourceTree = "<group>";
 		};
 		41C5E75A05D11C6D00F59489 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WProgressPageTemplate.wo;
@@ -1477,9 +1462,8 @@
 			sourceTree = "<group>";
 		};
 		41C5F51505D9066F00F59489 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WFlyOverCustomComponent.wo;
@@ -1560,9 +1544,8 @@
 			sourceTree = "<group>";
 		};
 		41D89E6406243AD00014C7B2 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryToManyRelationship.wo;
@@ -1628,9 +1611,8 @@
 			sourceTree = "<group>";
 		};
 		41D89E9006245AFD0014C7B2 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQueryIsContainedInArray.wo;
@@ -1711,9 +1693,8 @@
 			sourceTree = "<group>";
 		};
 		41E307C7056E1C8B0060148F = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQueryTwoLevelRelationship.wo;
@@ -1810,9 +1791,8 @@
 			sourceTree = "<group>";
 		};
 		50E9E19E03CBB5A700CF0E76 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditToManyFault.wo;
@@ -1903,9 +1883,8 @@
 			sourceTree = "<group>";
 		};
 		9405BE6303C9FE1E00CF0E7D = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDInspectButton.wo;
@@ -1971,9 +1950,8 @@
 			sourceTree = "<group>";
 		};
 		9409EBFC047BFEEE00CF0E7D = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryStringOperator.wo;
@@ -2039,9 +2017,8 @@
 			sourceTree = "<group>";
 		};
 		9419C8CF03D8D0C500CF0E7D = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryDateRange.wo;
@@ -2107,9 +2084,8 @@
 			sourceTree = "<group>";
 		};
 		94AA730A03D350FF00CF0E7D = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryEncryptedString.wo;
@@ -2203,9 +2179,8 @@
 			sourceTree = "<group>";
 		};
 		9D5BC63C033AB19910CF0E7D = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditSortedToManyFault.wo;
@@ -2286,9 +2261,8 @@
 			sourceTree = "<group>";
 		};
 		9D8628AB034E51C110CF0E7D = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditFlag.wo;
@@ -2327,9 +2301,8 @@
 //F53
 //F54
 		F518014F02022C9C01A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = file;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERExtensions.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -2351,9 +2324,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542000302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditYearsMonths.wo;
@@ -2371,9 +2343,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542000902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEmptyListMessage.wo;
@@ -2391,9 +2362,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542000F02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEmptyPageWrapper.wo;
@@ -2411,9 +2381,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542001502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDFilterDisplayGroupButton.wo;
@@ -2431,9 +2400,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542001B02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDInspect.wo;
@@ -2451,9 +2419,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542002102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDLinkToViewList.wo;
@@ -2471,9 +2438,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542002702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDList.wo;
@@ -2491,9 +2457,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542002D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDListOrganizer.wo;
@@ -2511,9 +2476,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542003302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDListPicker.wo;
@@ -2531,9 +2495,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542003902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDMassModifyButton.wo;
@@ -2551,9 +2514,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542003F02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDPrinterButton.wo;
@@ -2571,9 +2533,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542004502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDPrinterFriendlyWrapper.wo;
@@ -2591,9 +2552,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542004B02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQueryDateRangeJavascript.wo;
@@ -2611,9 +2571,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542005102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDQuestionPage.wo;
@@ -2631,9 +2590,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542005702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDRecoverableErrorPage.wo;
@@ -2651,9 +2609,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542005D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDSectionImage.wo;
@@ -2671,9 +2628,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542006302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDSectionText.wo;
@@ -2691,9 +2647,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542006902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDTabImage.wo;
@@ -2711,9 +2666,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542006F02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDTabText.wo;
@@ -2731,9 +2685,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542007502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDTrashcan.wo;
@@ -2751,9 +2704,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542007B02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDXMLPageWrapper.wo;
@@ -2771,9 +2723,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542008102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXD2WInspect.wo;
@@ -2791,9 +2742,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542008702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXD2WList.wo;
@@ -2811,9 +2761,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542008D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXD2WPick.wo;
@@ -6661,9 +6610,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDCD02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCompactInspectPageTemplate.wo;
@@ -6681,9 +6629,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDD302C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCompactListPageTemplate.wo;
@@ -6701,9 +6648,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDD902C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WConfirmPageTemplate.wo;
@@ -6721,9 +6667,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDDF02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCSVGroupingListPageTemplate.wo;
@@ -6741,9 +6686,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDE502C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCSVListPageTemplate.wo;
@@ -6761,9 +6705,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDEB02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomComponentWithArgs.wo;
@@ -6781,9 +6724,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDF102C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomDisplayBoolean.wo;
@@ -6801,9 +6743,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDF702C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WCustomEditBoolean.wo;
@@ -6821,9 +6762,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FDFD02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayAddress.wo;
@@ -6841,9 +6781,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE0302C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayConstant.wo;
@@ -6861,9 +6800,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE0902C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayDateOrNull.wo;
@@ -6881,9 +6819,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE0F02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayHTML.wo;
@@ -6901,9 +6838,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE1502C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayImage.wo;
@@ -6921,9 +6857,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE1B02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayImageWithUrl.wo;
@@ -6941,9 +6876,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE2102C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayList.wo;
@@ -6961,9 +6895,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE2702C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayNumber.wo;
@@ -6981,9 +6914,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE2D02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayNumberWithUnit.wo;
@@ -7001,9 +6933,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE3302C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayPassword.wo;
@@ -7021,9 +6952,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE3902C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayString.wo;
@@ -7041,9 +6971,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE3F02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayStringWithLineBreaks.wo;
@@ -7061,9 +6990,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE4502C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayTextFromHTML.wo;
@@ -7081,9 +7009,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE4B02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToManyCustom.wo;
@@ -7101,9 +7028,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE5102C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToManyList.wo;
@@ -7121,9 +7047,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE5702C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToManyTable.wo;
@@ -7141,9 +7066,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE5D02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayToOne.wo;
@@ -7161,9 +7085,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE6302C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayURL.wo;
@@ -7181,9 +7104,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE6902C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDisplayYesNo.wo;
@@ -7201,9 +7123,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE6F02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditableListTemplate.wo;
@@ -7221,9 +7142,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE7502C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditAllowRestrict.wo;
@@ -7241,9 +7161,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE7B02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditDateJavascript.wo;
@@ -7261,9 +7180,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE8102C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditLargeString.wo;
@@ -7281,9 +7199,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE8702C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditNumber.wo;
@@ -7301,9 +7218,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE8D02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditNumberOrDefault.wo;
@@ -7321,9 +7237,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE9302C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditNumberWithUnit.wo;
@@ -7341,9 +7256,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE9902C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditOrDefault.wo;
@@ -7361,9 +7275,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FE9F02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditPercentage.wo;
@@ -7381,9 +7294,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEA402C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditString.wo;
@@ -7401,9 +7313,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEAA02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditToManyRelationship.wo;
@@ -7421,9 +7332,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEB002C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditToOneRelationship.wo;
@@ -7441,9 +7351,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEB602C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditURL.wo;
@@ -7461,9 +7370,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEBC02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WEditYesNo.wo;
@@ -7481,9 +7389,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEC202C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WGroupingListPageTemplate.wo;
@@ -7501,9 +7408,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEC802C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WGroupingListXMLPageTemplate.wo;
@@ -7521,9 +7427,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FECE02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WGroupingPrinterFriendlyListPageTemplate.wo;
@@ -7541,9 +7446,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FED402C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WInspect.wo;
@@ -7561,9 +7465,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEDA02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WInspectPageTemplate.wo;
@@ -7581,9 +7484,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEE002C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WKeyMapper.wo;
@@ -7601,9 +7503,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEEC02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WListComparePageTemplate.wo;
@@ -7621,9 +7522,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEF202C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WListPageTemplate.wo;
@@ -7641,9 +7541,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEF802C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WListXMLPageTemplate.wo;
@@ -7661,9 +7560,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FEFE02C466C501000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WMessagePageTemplate.wo;
@@ -7681,9 +7579,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF0402C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPick.wo;
@@ -7701,9 +7598,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF0D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickFromEntities.wo;
@@ -7721,9 +7617,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF1302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickFromList.wo;
@@ -7741,9 +7636,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF1902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickListPageTemplate.wo;
@@ -7761,9 +7655,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF1F02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPickTypePageTemplate.wo;
@@ -7781,9 +7674,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF2502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPopUp.wo;
@@ -7801,9 +7693,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF2B02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPrinterFriendlyInspectPageTemplate.wo;
@@ -7821,9 +7712,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF3102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPrinterFriendlyListTemplate.wo;
@@ -7841,9 +7731,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF3702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WPropertyName.wo;
@@ -7861,9 +7750,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF3D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryNonNull.wo;
@@ -7881,9 +7769,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF4302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryPageTemplate.wo;
@@ -7901,9 +7788,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF4902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryPageWithFetchSpecification.wo;
@@ -7921,9 +7807,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF4F02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryPageWithFetchSpecificationTemplate.wo;
@@ -7941,9 +7826,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF5502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WQueryToOneRelationship.wo;
@@ -7961,9 +7845,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF5B02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WStatelessCustomComponentWithArgs.wo;
@@ -7981,9 +7864,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF6102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WSwitchComponent.wo;
@@ -8001,9 +7883,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF6702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WTabInspectPageTemplate.wo;
@@ -8021,9 +7902,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF6D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WTwoLevelEditToOneRelationship.wo;
@@ -8041,9 +7921,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF7302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WWizardCreationPageTemplate.wo;
@@ -8061,9 +7940,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF7902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WXMLDisplayNumber.wo;
@@ -8081,9 +7959,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF7F02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WXMLDisplayString.wo;
@@ -8101,9 +7978,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF8502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WXMLDisplayToMany.wo;
@@ -8121,9 +7997,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF8B02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDConfirmMessage.wo;
@@ -8141,9 +8016,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF9102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDCustomQueryComponentWithArgs.wo;
@@ -8161,9 +8035,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF9702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDebuggingHelp.wo;
@@ -8181,9 +8054,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FF9D02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultCustomComponent.wo;
@@ -8201,9 +8073,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFA302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultSectionComponent.wo;
@@ -8221,9 +8092,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFA902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultSectionComponentCSV.wo;
@@ -8241,9 +8111,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFAF02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDefaultSectionComponentPrinterFriendly.wo;
@@ -8261,9 +8130,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFB502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDHTMLComponent.wo;
@@ -8281,9 +8149,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFBB02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDisplayImageIfExists.wo;
@@ -8301,9 +8168,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFC102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDisplayMailTo.wo;
@@ -8321,9 +8187,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFC702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDDisplayYearsMonths.wo;
@@ -8341,9 +8206,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFCD02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditButton.wo;
@@ -8361,9 +8225,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFD302C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditDateJavascript.wo;
@@ -8381,9 +8244,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFD902C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditDatePopup.wo;
@@ -8401,9 +8263,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFDF02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditDatePopupOrNull.wo;
@@ -8421,9 +8282,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFE502C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditList.wo;
@@ -8441,9 +8301,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFEB02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditListButton.wo;
@@ -8461,9 +8320,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFF102C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditOwnedRelationship.wo;
@@ -8481,9 +8339,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFF702C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditPasswordConfirm.wo;
@@ -8501,9 +8358,8 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F542FFFD02C466C601000102 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERDEditStringWithChoices.wo;
@@ -8607,8 +8463,6 @@
 			};
 		};
 		F587AD4D02063F5701A80106 = {
-			buildRules = (
-			);
 			buildSettings = {
 			};
 			isa = PBXBuildStyle;
@@ -10474,8 +10328,7 @@
 			sourceTree = "<group>";
 		};
 		F5A1453C01FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
@@ -10483,8 +10336,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1453D01FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaDirectToWeb.framework;
 			path = /System/Library/Frameworks/JavaDirectToWeb.framework;
@@ -10492,8 +10344,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1453E01FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
@@ -10501,8 +10352,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454101FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
@@ -10510,8 +10360,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454201FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
@@ -10519,8 +10368,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454301FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
@@ -10528,8 +10376,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454401FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOProject.framework;
 			path = /System/Library/Frameworks/JavaEOProject.framework;
@@ -10537,8 +10384,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454501FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
@@ -10546,8 +10392,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454601FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
@@ -10555,8 +10400,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5A1454701FF7F8801A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = JavaDTWGeneration.framework;
 			path = /System/Library/Frameworks/JavaDTWGeneration.framework;
@@ -10577,24 +10421,21 @@
 		};
 		F5A1454A01FF7F8801A80106 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = ERDirectToWeb.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5A1454B01FF7F8801A80106 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERDirectToWeb.tmp";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5A1454C01FF7F8801A80106 = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERDirectToWeb.tmp";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -11643,8 +11484,6 @@
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
 		F5A1470801FF7F8801A80106 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -11660,8 +11499,6 @@
 			name = Development;
 		};
 		F5A1470901FF7F8801A80106 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
@@ -11676,8 +11513,6 @@
 			name = Deployment;
 		};
 		F5A1470A01FF7F8801A80106 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
@@ -11695,9 +11530,8 @@
 			name = WebServer;
 		};
 		F5A9FF090201F7A401A80106 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			lastKnownFileType = file;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -11746,9 +11580,8 @@
 			sourceTree = "<group>";
 		};
 		F5E94DD1038C3D5101CF0E76 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WList.wo;
@@ -11921,9 +11754,8 @@
 			sourceTree = "<group>";
 		};
 		F639B95902EF33C70FCF0E72 = {
-			fallbackIsa = PBXFileReference;
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
 			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERD2WDebugFlags.wo;

@@ -14,7 +14,11 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 
 	/** holds a reference to the repository */
 	private static Hashtable _repository = new Hashtable();
+    
 	protected static final String DefaultKey = "ERXTimestampFormatter.DefaultKey";
+    
+    /** The default pattern used in the UI */
+    public static String DEFAULT_PATTERN = "%m/%d/%Y";
 	
 	static {
 		_repository.put(DefaultKey, new ERXTimestampFormatter());
@@ -22,6 +26,8 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	
 
 	/**
+     * The default pattern used by WOString and friends when no pattern is set. 
+     * Looks like this only for compatibility's sake.
 	 * @param object
 	 * @return
 	 */
