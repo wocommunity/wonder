@@ -44,7 +44,7 @@ public class ERXNavigationItem {
             } else {
                 _conditions=NSArray.componentsSeparatedByString((String)values.valueForKey("conditions"),",");
             }
-            _directActionName=(String)values.valueForKey("_directActionName");
+            _directActionName=(String)values.valueForKey("directActionName");
             if (values.valueForKey("height")!=null)
                 _height=Integer.valueOf((String)values.valueForKey("height")).intValue();
             if (values.valueForKey("width")!=null)
