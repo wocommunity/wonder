@@ -183,9 +183,8 @@ public class ERXConfigurationManager {
         
         NSArray propertyPaths = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
         _monitoredProperties = new NSMutableArray();
-                 
-        Enumeration e = propertyPaths.objectEnumerator();
-        while (e.hasMoreElements()) {
+
+        for (Enumeration e = propertyPaths.objectEnumerator(); e.hasMoreElements();) {
             String path = (String) e.nextElement();
             try {
                 ERXFileNotificationCenter.defaultCenter().addObserver(this,
@@ -373,7 +372,7 @@ public class ERXConfigurationManager {
                 String driver= System.getProperty(aModelName + ".DBDriver");
                 driver= driver ==null ? System.getProperty("dbConnectDriverGLOBAL") : driver;
                 String jdbcInfo= System.getProperty(aModelName + ".DBJDBCInfo");
-                if (jdbcInfo != null && jdbcInfo.charAt(0) == '^') {
+                if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
                     String modelName = jdbcInfo.substring(1, jdbcInfo.length());
                     EOModel modelForCopy = aModel.modelGroup().modelNamed(modelName);
                     if (modelForCopy != null) {
