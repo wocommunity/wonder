@@ -5,11 +5,11 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
+import java.text.*;
 
-import java.text.ParseException;
+import com.webobjects.appserver.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 
 public class WOAnyField extends WOComponent {
     protected static String DEFAULT_DATE_FORMAT = "YYYY/MM/DD";

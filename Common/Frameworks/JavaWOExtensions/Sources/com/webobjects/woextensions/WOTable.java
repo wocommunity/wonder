@@ -8,7 +8,6 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
-import java.util.*;
 import com.webobjects.foundation.*;
 
 public class WOTable extends WOComponent {

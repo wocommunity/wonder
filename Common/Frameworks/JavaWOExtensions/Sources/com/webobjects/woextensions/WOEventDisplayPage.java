@@ -7,10 +7,11 @@
 
 package com.webobjects.woextensions;
 
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import java.util.Enumeration;
+import com.webobjects.foundation.*;
 
 public class WOEventDisplayPage extends WOEventPage {
     public EOEvent 		currentEvent;

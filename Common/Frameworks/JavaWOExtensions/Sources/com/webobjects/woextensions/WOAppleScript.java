@@ -8,7 +8,6 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 
 /** @deprecated
     The WOAppleScript component is deprecated.
