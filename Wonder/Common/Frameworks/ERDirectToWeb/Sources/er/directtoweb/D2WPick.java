@@ -69,7 +69,7 @@ public D2WPick(WOContext context) { super(context); }
 
     public EODataSource internalDataSource() {
         EODataSource ds = dataSource();
-        ds = (ds == null) ? er.extensions.ERXExtensions.dataSourceForArray(list()) : ds;
+        ds = (ds == null) ? ERXEOControlUtilities.dataSourceForArray(list()) : ds;
         return ds;
     }
     public void setInternalDataSource(Object foo) { /* do nothing you silly D2WPick! */ }
