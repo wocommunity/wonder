@@ -48,20 +48,35 @@
     <!-- ==================================================== -->
     <!-- Main "build-all" target.                             -->
     <!-- ==================================================== -->
-    <target name="all" depends="prepare,common,doc"/>
+    <target name="all" depends="prepare,common,subprojects"/>
     
     
     <!-- ==================================================== -->
     <!-- Build Wonder documenatation.                         -->
     <!-- ==================================================== -->
     <target name="doc">
- 		<ant antfile="Build/build/build-doc.xml"/>
+        <ant antfile="Build/build/build-doc.xml"/>
     </target>
     
     <!-- ==================================================== -->
     <!-- Build Wonder Common.                             -->
     <!-- ==================================================== -->
     <target name="common">
- 		<ant antfile="Build/build/common.xml"/>
+        <ant antfile="Build/build/common.xml"/>
     </target>
+
+    <!-- ==================================================== -->
+    <!-- Build Wonder Sub Projects.                           -->
+    <!-- ==================================================== -->
+    <target name="subprojects">
+        <ant antfile="Build/build/subprojects.xml"/>
+    </target>
+
+   <!-- ==================================================== -->
+    <!-- Create Wonder Destribution.                          -->
+    <!-- ==================================================== -->
+    <target name="dist" depends="prepare,common,subprojects,doc">
+        <ant antfile="Build/build/common-dist.xml"/>
+    </target>
+
 </project>
