@@ -203,9 +203,9 @@ public abstract class ERXApplication extends WOApplication {
         */
     public static WOComponent instantiatePage (String pageName) {
         // Create a context from a fake request
-        WOContext context = new WOContext
-        (new WORequest ("GET", "", "HTTP/1.1", null, null, null));
-        return WOApplication.application ().pageWithName (pageName, context);
+        WORequest fakeRequest = new WORequest("GET", "", "HTTP/1.1", null, null, null);
+        WOContext context = application().createContextForRequest( fakeRequest );
+        return application().pageWithName(pageName, context);
     }
 
     /**
