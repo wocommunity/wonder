@@ -60,6 +60,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public static final String OMNIWEB 	= "OmniWeb";
     public static final String OPERA 	= "Opera";
     public static final String SAFARI	= "Safari";
+    public static final String MOZILLA	= "Mozilla";
 
     public static final String UNKNOWN_VERSION = "Unknown Version";
 
@@ -71,6 +72,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
 
     public static final String POWER_PC	= "PowerPC";
     public static final String UNKNOWN_CPU = "Unknown CPU";
+    public static final String NO_GECKO = "No Gecko";
 
     /**
      * Browser name string
@@ -89,6 +91,12 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
      * @return what Mozilla version equivement to the browser's version
      */
     public abstract String mozillaVersion();
+
+    /**
+     * The revision of the gecko rendering engine. 1.0.2 and up support xslt.
+     * @return what gecko revision equivement to the browser's version
+     */
+    public abstract String geckoRevision();
 
     /**
      * Platform string

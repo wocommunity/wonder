@@ -189,7 +189,9 @@ public class ERXBrowserFactory {
             String version 		= parseVersion(ua);
             String mozillaVersion	= parseMozillaVersion(ua);
             String platform 		= parsePlatform(ua);
-            NSDictionary userInfo 	= new NSDictionary(parseCPU(ua), "cpu");
+            NSDictionary userInfo 	= new NSDictionary(
+                new Object[] {parseCPU(ua), parseGeckoVersion(ua)},
+                new Object[] {"cpu", "geckoRevision"});
             
             return getBrowserInstance(browserName, version, mozillaVersion, platform, userInfo);
         }
@@ -324,12 +326,29 @@ public class ERXBrowserFactory {
         else if (browserString.indexOf("iCab") > -1)		browser  = ERXBrowser.ICAB;
         else if (browserString.indexOf("Opera") > -1)		browser  = ERXBrowser.OPERA;
         else if (browserString.indexOf("Netscape") > -1)	browser  = ERXBrowser.NETSCAPE;
+        else if (browserString.startsWith("Mozilla") && (browserString.indexOf("compatible") == -1))	browser  = ERXBrowser.MOZILLA;
 
         // This condition should always come last because *all* browsers have 
         // the word Mozilla at the beginning of their user-agent string. 
         else if (browserString.indexOf("Mozilla") > -1)		browser  = ERXBrowser.NETSCAPE;
 
         return browser;
+    }
+
+    public String parseGeckoVersion(String userAgent) {
+        if(userAgent.indexOf("Gecko") == -1) {
+            return ERXBrowser.NO_GECKO;
+        }
+    
+        int startPos = userAgent.indexOf("; rv:") + 5;
+
+        if(startPos == 4) {
+            return ERXBrowser.NO_GECKO;
+        }
+
+        int endPos = userAgent.indexOf(")", startPos);
+
+        return userAgent.substring(startPos, endPos);
     }
 
     public String parseVersion(String userAgent) {
