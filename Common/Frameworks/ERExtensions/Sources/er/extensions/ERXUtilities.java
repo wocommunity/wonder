@@ -83,7 +83,7 @@ public class ERXUtilities {
     }    
 
     /**
-     * @deprecated use ERXEOControlUtilities.sharedObjectWithPrimaryKey(String, object)
+     * @deprecated use ERXEOControlUtilities.sharedObjectWithFetchSpec(String, String)
      */
     public static EOEnterpriseObject sharedObjectWithFetchSpec(String fetchSpec, String entityName) {
         return ERXEOControlUtilities.sharedObjectWithFetchSpec(entityName, fetchSpec);
