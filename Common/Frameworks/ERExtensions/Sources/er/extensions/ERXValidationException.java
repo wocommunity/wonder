@@ -40,6 +40,9 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     /** corresponds to a model thrown 'objects removal' exception */
     public static final String ObjectsRemovalException = "ObjectsRemovalException";
 
+    /** corresponds to a model thrown 'objects removal' exception */
+    public static final String ExceedsMaximiumLengthException = "ExceedsMaximiumLengthException";
+    
     /** corresponds to a custom method exception */
     public static final String CustomMethodException = "CustomMethodException";
 
@@ -170,6 +173,22 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      */
     public String propertyKey() { return key(); }
 
+    /**
+     * Cover method for getting the attribute corresponding
+     * to the <b>propertyKey</b> and <b>entity</b> off of
+     * the objet.
+     * @return EOAttribute corresponding to the propertyKey
+     *		and entity.
+     */
+    public EOAttribute attribute() {
+        EOAttribute attribute = null;
+        if (eoObject() != null) {
+            EOEntity entity = EOUtilities.entityForObject(eoObject().editingContext(), eoObject());
+            attribute = entity != null ? entity.attributeNamed(propertyKey()) : null;
+        }
+        return attribute;
+    }
+    
     /**
      * Cover method to return the type of the validation
      * exception. The corresponds to one of the constant
