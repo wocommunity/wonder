@@ -75,12 +75,18 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
      ( ( tab1, key1, key2, key4 ), ( tab2, key76, key 5, ..) .. )
      OR with sections
      ( ( tab1, ( section1, key1, key2 ..), (section3, key4, key..)  ), ... )
+     OR with the alternate syntax, which ist most useful with the WebAssistant
+     ( "[tab1]", "(section1)", key1, key2, ... "[tab2]", "(section3)", key4, key..... )
 
      */
+
     private NSArray _tabSectionsContents;
     public NSArray tabSectionsContents() {
         if (_tabSectionsContents ==null) {
             NSArray tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("tabSectionsContents");
+            if (tabSectionContentsFromRule==null)
+                tabSectionContentsFromRule=(NSArray)d2wContext().valueForKey("displayPropertyKeys");
+
             if (tabSectionContentsFromRule==null)
                 throw new RuntimeException("Could not find tabSectionsContents in "+d2wContext());
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
@@ -105,29 +111,41 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
 
     public static NSArray tabSectionsContentsFromRuleResult(NSArray tabSectionContentsFromRule) {
         NSMutableArray tabSectionsContents=new NSMutableArray();
-        for (Enumeration e= tabSectionContentsFromRule.objectEnumerator(); e.hasMoreElements();) {
-            NSArray tab=(NSArray)e.nextElement();
-            ERD2WContainer c=new ERD2WContainer();
-            c.name=(String)tab.objectAtIndex(0);
-            c.keys=new NSMutableArray();
-            Object testObject=tab.objectAtIndex(1);
-            if (testObject instanceof NSArray) { // format #2
-                for (int i=1; i<tab.count(); i++) {
-                    NSArray sectionArray=(NSArray)tab.objectAtIndex(i);
-                    ERD2WContainer section=new ERD2WContainer();
-                    section.name=(String)sectionArray.objectAtIndex(0);
-                    section.keys=new NSMutableArray(sectionArray);
-                    section.keys.removeObjectAtIndex(0);
-                    c.keys.addObject(section);
+
+        if(tabSectionContentsFromRule.count() > 0) {
+            Object firstValue = tabSectionContentsFromRule.objectAtIndex(0);
+            if(firstValue instanceof NSArray) {
+                 for (Enumeration e= tabSectionContentsFromRule.objectEnumerator(); e.hasMoreElements();) {
+                    NSArray tab=(NSArray)e.nextElement();
+                    ERD2WContainer c=new ERD2WContainer();
+                    c.name=(String)tab.objectAtIndex(0);
+                    c.keys=new NSMutableArray();
+                    Object testObject=tab.objectAtIndex(1);
+                    if (testObject instanceof NSArray) { // format #2
+                        for (int i=1; i<tab.count(); i++) {
+                            NSArray sectionArray=(NSArray)tab.objectAtIndex(i);
+                            ERD2WContainer section=new ERD2WContainer();
+                            section.name=(String)sectionArray.objectAtIndex(0);
+                            section.keys=new NSMutableArray(sectionArray);
+                            section.keys.removeObjectAtIndex(0);
+                            c.keys.addObject(section);
+                        }
+                    } else { // format #1
+                        ERD2WContainer fakeTab=new ERD2WContainer();
+                        fakeTab.name="";
+                        fakeTab.keys=new NSMutableArray(tab);
+                        fakeTab.keys.removeObjectAtIndex(0);
+                        c.keys.addObject(fakeTab);
+                    }
+                    tabSectionsContents.addObject(c);
                 }
-            } else { // format #1
-                ERD2WContainer fakeTab=new ERD2WContainer();
-                fakeTab.name="";
-                fakeTab.keys=new NSMutableArray(tab);
-                fakeTab.keys.removeObjectAtIndex(0);
-                c.keys.addObject(fakeTab);
+            } else if(firstValue instanceof String) {
+                tabSectionsContents = ERDirectToWeb.convertedPropertyKeyArray(tabSectionContentsFromRule, '[', ']');
+                for (Enumeration e= tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
+                    ERD2WContainer tab= (ERD2WContainer)e.nextElement();
+                    tab.keys = ERDirectToWeb.convertedPropertyKeyArray(tab.keys, '(', ')');
+                }
             }
-            tabSectionsContents.addObject(c);
         }
         return tabSectionsContents;
     }

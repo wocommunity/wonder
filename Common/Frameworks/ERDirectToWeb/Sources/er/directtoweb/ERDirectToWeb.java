@@ -130,6 +130,75 @@ public class ERDirectToWeb {
         return userInfoUnitString;
     }
 
+    /**
+     * Checks if a given property key is in the format (foo) or [foo] and returns the stripped string.
+     * @param s the String to convert
+     * @param start the start char
+     * @param start the end char to check for
+     * @returns stripped String or null if the string does not start with <code>start</code> and ends with <code>end</code>.
+     */
+    public static String convertedPropertyKeyFromString(String s, char start, char end) {
+        if(s.length()> 2) {
+            if(s.charAt(0) == start && s.charAt(s.length()-1) == end) {
+                return s.substring(1, s.length() - 1);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Converts a given array of keys to a format usable for section and tab display.
+     * For example ("(foo)", bar, baz) is transformed to a list of ERD2WContainers usable for section display.
+     * The format ((foo, bar, baz)) is also understood.
+     * @param keyArray the NSArray to convert
+     * @param start the start char
+     * @param start the end char to check for
+     * @returns nested NSMutableArray.
+     */
+    public static NSMutableArray convertedPropertyKeyArray(NSArray keyArray, char startChar, char endChar) {
+        NSMutableArray result = new NSMutableArray();
+        Object firstValue = null;
+        if(keyArray.count() > 0) {
+            firstValue = keyArray.objectAtIndex(0);
+        }
+        if(firstValue != null) {
+            boolean isKeyArrayFormat = false;
+            if(firstValue instanceof String)
+                isKeyArrayFormat = convertedPropertyKeyFromString((String)firstValue, startChar, endChar) != null;
+            if(firstValue instanceof String && !isKeyArrayFormat) {
+                ERD2WContainer c=new ERD2WContainer();
+                c.name = "";
+                c.keys = new NSMutableArray(keyArray);
+                result.addObject(c);
+            } else {
+                NSMutableArray tmp = null;
+                for (Enumeration e = keyArray.objectEnumerator(); e.hasMoreElements();) {
+                    if(isKeyArrayFormat) {
+                        String currentValue = (String)e.nextElement();
+                        String currentLabel = convertedPropertyKeyFromString(currentValue, startChar, endChar);
+                        if(currentLabel != null) {
+                            ERD2WContainer c=new ERD2WContainer();
+                            c.name = currentLabel;
+                            tmp = new NSMutableArray();
+                            c.keys = tmp;
+                            result.addObject(c);
+                        } else {
+                            tmp.addObject(currentValue);
+                        }
+                    } else {
+                        NSArray current = (NSArray)e.nextElement();
+                        ERD2WContainer c=new ERD2WContainer();
+                        c.name = (String)current.objectAtIndex(0);
+                        c.keys = current.mutableClone();
+                        c.keys.removeObjectAtIndex(0);
+                        result.addObject(c);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
         // FIXME: Should use ERXUtilities.booleanValue
