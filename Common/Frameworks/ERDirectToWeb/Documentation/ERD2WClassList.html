@@ -20,7 +20,7 @@ framework.</dd>
 <dt>ERDAssignment</dt>
 <dd>This assignment works around an issue with d2w andentity inheritance.
  See class for details.</dd>
-<dt>SmartRelationshipAssignment</dt>
+<dt>ERDSmartRelationshipAssignment</dt>
 <dd>This assignment works around an issue with d2w andentity inheritance.
  See class for details.</dd>
 <h3>D2W Interfaces</h3>
@@ -35,7 +35,7 @@ branch delegate.</dd>
 needs to be implemented so the caching system can take them in to account.</dd>
 <dt>ERDEditPageInterface</dt>
 <dd>Small improvements to the EditPageInterface.</dd>
-<dt>ERDEditTabInterface</dt>
+<dt>ERDTabEditPageInterface</dt>
 <dd>Used to identify tab edit pages, not requiring common superclass.</dd>
 <dt>ERDObjectSaverInterface</dt>
 <dd>Nice interface implemented by all ER edit pages.  In a next page delegate
@@ -50,8 +50,7 @@ it before saving.</dd>
 <dt>ERDPickPageInterface</dt>
 <dd>Formal interface for multiple object selection.</dd>
 <dt>ERDLocalizableAssignmentInterface</dt>
-<dt>For localized assignments<br>
-</dt>
+<dd>For localized assignments</dd>
 <dt>ERDUserInfoInterface</dt>
 <dd>Interface implemented by templates to allow stuff and retriving of transient
 information.</dd>
@@ -179,8 +178,6 @@ nesting configurations.</dd>
 <dd>Superclass for all list/pick pages.</dd>
 <dt>ERD2WMessagePage</dt>
 <dd>Superclass for all message pages.  Still a work in progress.</dd>
-<dt>#ERNumberFormatter</dt>
-<dd>Better formatter for editing numbers in D2W.</dd>
 <dt>ERD2WQueryPage</dt>
 <dd>Superclass for all query pages.</dd>
 <dt>ERD2WTabInspectPage</dt>
@@ -366,17 +363,11 @@ is already in the rules.</dd>
 <dt>ERD2WDisplayList</dt>
 <dd>Used to display a an NSArray of the form "A, B and C", useful for toMany
 relationships  or propertyKeys that return arrays.</dd>
-<dt>ERD2WDisplayNumber</dt>
-<dd>Common superclass of all ER's display number components.</dd>
 <dt>ERD2WDisplayString</dt>
 <dd>Full blown dislay string with all the bells and whistles.</dd>
-<dt>#ERD2WDisplayStringWithUnit</dt>
-<dd>Displays a string with an optional unit.</dd>
 <dt>ERD2WDisplayToOne</dt>
 <dd>Same as original except allows display of noSelectionString if relationship
 is null.</dd>
-<dt>#ERD2WEditNumberOrDefault</dt>
-<dd>Component used to edit number offering a default value.</dd>
 <dt>ERD2WEditOrDefault</dt>
 <dd>Generic edit or default value component, uses other components like editNumber
 or editString.</dd>
@@ -453,7 +444,7 @@ months.</dd>
 with D2W instead.</dd>
 <dt>ERDMassModifyButton</dt>
 <dd>Button used to apply one modification to a bunch of objects.</dd>
-<dt>ERDQueryDataRangeJavascript</dt>
+<dt>ERDQueryDateRangeJavascript</dt>
 <dd>Used for building date queries with javascript.</dd>
 <br>
 <br>
