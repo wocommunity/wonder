@@ -1,0 +1,24 @@
+KeyPopup: WOPopUpButton {
+	item = selectedKeyItem;
+	list = ^keyList;
+	selection = selectedKey;
+}
+
+OperatorPopup: WOPopUpButton {
+	item = selectedOperatorItem;
+	list = displayGroup.relationalQualifierOperators;
+	selection = selectedOperator;
+}
+
+String1: WOString {
+	value = session.localizer.ERD2WQueryToManyField.where;
+}
+
+String2: WOString {
+	value = session.localizer.ERD2WQueryToManyField.is;
+}
+
+TextField: WOTextField {
+	size = 10;
+	value = textFieldValue;
+}
