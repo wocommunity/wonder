@@ -40,5 +40,5 @@ public class State extends _State {
         }
     }
 
-    public static StateClazz stateClazz() { return (StateClazz)EOGenericRecordClazz.clazzForEntityNamed("State"); }
+    public static final StateClazz clazz = (StateClazz)EOGenericRecordClazz.clazzForEntityNamed("State");
 }

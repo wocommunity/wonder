@@ -34,7 +34,7 @@ public class Session extends ERXSession {
     private NSArray _activeUsers;
     public NSArray activeUsers() {
         if (_activeUsers==null) {
-            _activeUsers=People.peopleClazz().activeUsers(defaultEditingContext());
+            _activeUsers=People.clazz.activeUsers(defaultEditingContext());
         }
         return _activeUsers;
     }    

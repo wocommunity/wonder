@@ -26,5 +26,5 @@ public class TestItem extends _TestItem {
         
     }
 
-    public static TestItemClazz testItemClazz() { return (TestItemClazz)EOGenericRecordClazz.clazzForEntityNamed("TestItem"); }
+    public static final TestItemClazz clazz = (TestItemClazz)EOGenericRecordClazz.clazzForEntityNamed("TestItem");
 }

@@ -17,7 +17,7 @@ public class Bug extends _Bug {
         super.awakeFromInsertion(ec);
         setPriority(Priority.MEDIUM);
         setState(State.ANALYZE);
-        addToBothSidesOfTargetRelease(Release.releaseClazz().defaultRelease(ec));
+        addToBothSidesOfTargetRelease(Release.clazz.defaultRelease(ec));
         setReadAsBoolean(true);
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
@@ -81,12 +81,12 @@ public class Bug extends _Bug {
         if (newState==State.CLOSED && isFeatureRequest() && oldState==State.VERIFY)
             newState=State.DOCUMENT;
         super.setState(newState);
-        People documenter = People.peopleClazz().defaultDocumenter(editingContext());
+        People documenter = People.clazz.defaultDocumenter(editingContext());
         if (documenter!=null && newState==State.DOCUMENT && !_ownerChanged) {
             setOwner((People)EOUtilities.localInstanceOfObject(editingContext(), documenter));
             setReadAsBoolean(false);
         }
-        People verifier = People.peopleClazz().defaultVerifier(editingContext());
+        People verifier = People.clazz.defaultVerifier(editingContext());
         if (verifier!=null && newState==State.VERIFY && !_ownerChanged) {
             // setOwner((EOEnterpriseObject)valueForKey("originator")); // we send the bug back to its originator
             setOwner((People)EOUtilities.localInstanceOfObject(editingContext(),verifier));
@@ -95,7 +95,7 @@ public class Bug extends _Bug {
     }
 
     public Object validateTargetReleaseForNewBugs() throws NSValidation.ValidationException {
-        Release release = Release.releaseClazz().targetRelease(editingContext());
+        Release release = Release.clazz.targetRelease(editingContext());
         if (release != null) {
             if (!release.isOpenAsBoolean())
                 throw new NSValidation.ValidationException("Sorry, the release <b>"+release.valueForKey("name")+"</b> is closed. Bugs/Requirements can only be attached to open releases" );
@@ -153,7 +153,7 @@ public class Bug extends _Bug {
         
     }
 
-    public static BugClazz bugClazz() { return (BugClazz)EOGenericRecordClazz.clazzForEntityNamed("Bug"); }
+    public static final BugClazz clazz = (BugClazz)EOGenericRecordClazz.clazzForEntityNamed("Bug");
 }
 
 
