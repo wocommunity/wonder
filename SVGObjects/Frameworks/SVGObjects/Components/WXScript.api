@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1252" standalone="yes"?>
+<wodefinitions>
+	<wo class="WXScript" wocomponentcontent="NO">
+
+		<binding name="scriptString"/>
+		<binding name="scriptSource"/>
+		<binding name="scriptFile" defaults="Resources"/>
+		<binding name="type"/>
+
+		<validation message="One of &apos;scriptString&apos;, &apos;scriptFile&apos; or &apos;scriptSource&apos; is required">
+			<and>
+				<unbound name="scriptString"/>
+				<unbound name="scriptSource"/>
+				<unbound name="scriptFile"/>
+			</and>
+		</validation>
+
+		<validation message="Only one of &apos;scriptString&apos;, &apos;scriptFile&apos; or &apos;scriptSource&apos; is required.">
+			<or>
+				<and>
+					<bound name="scriptString"/>
+					<bound name="scriptSource"/>
+				</and>
+				<and>
+					<bound name="scriptString"/>
+					<bound name="scriptFile"/>
+				</and>
+				<and>
+					<bound name="scriptSource"/>
+					<bound name="scriptFile"/>
+				</and>
+			</or>
+		</validation>
+
+		<validation message="&apos;type&apos; is a required binding">
+			<unbound name="type"/>
+		</validation>
+	</wo>
+</wodefinitions>

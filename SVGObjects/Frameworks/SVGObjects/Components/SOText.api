@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1252" standalone="yes"?>
+<wodefinitions>
+	<wo class="SOText" wocomponentcontent="YES">
+
+		<binding name="style"/>
+		<binding name="x"/>
+		<binding name="y"/>
+		<binding name="class"/>
+		<binding name="transform"/>
+	</wo>
+</wodefinitions>

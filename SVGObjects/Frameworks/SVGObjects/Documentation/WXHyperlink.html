@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+	<TITLE>Documentation WXHyperlink</TITLE>
+</HEAD>
+	
+<BODY bgcolor=#ffffff>
+
+<h1><FONT COLOR=\"#000066\"><a name="//svgobjects_ref/WXHyperlink">WXHyperlink</a></FONT></h1>
+<br>
+<br>
+
+<h2>Element Description</h2>
+<p>WXHyperlink generates a hypertext link in an XML document.</p>
+
+<br><h2>Synopsis</h2>
+
+<tt>WXHyperlink { 
+action=<em>aMethod</em> |
+href=<em>aURL</em>; | 
+pageName=<em>aString</em>;
+| directActionName=<em>anActionName</em>; 
+actionClass=<em>className</em>;
+[fragmentIdentifier=<em>anchorFragment</em>;]
+[string=<em>aString</em>;]
+ [target=<em>frameName</em>;]
+[disabled=<em>aBoolean</em>;]...};</tt>
+
+<br><h2>Bindings</h2>
+
+<dl><dt>action</dt>
+<dd>Action method to invoke when this element is activated.
+The method must return a WOElement.</dd></dl>
+<dl><dt>href</dt>
+<dd>URL to direct the browser to when the link is clicked.</dd></dl>
+
+<dl><dt>pageName</dt>
+<dd>Name of WebObjects page to display when the link is
+clicked.</dd></dl>
+
+<dl><dt>directActionName </dt>
+<dd>The name of the direct action method (minus the "Action"
+suffix) to invoke when this element is activated.</dd></dl>
+
+<dl><dt>actionClass</dt>
+<dd>The name of the class in which the method designated
+in <b>directActionName</b> can be found.  Defaults
+to DirectAction.</dd></dl>
+
+<dl><dt>fragmentIdentifier</dt>
+<dd>Named location to display in the destination page.</dd></dl>
+
+<dl><dt>target</dt>
+<dd>Frame in a frameset that will receive the page returned
+as a result of the user's click.</dd></dl>
+
+<dl><dt>disabled</dt>
+<dd>If evaluates to <code>true</code> (or <code>YES</code>),
+the content string is displayed, but the hyperlink is not active.</dd></dl>
+<br>
+<a href="SVGObjectsTOC.html">[Table of Contents]</a> 
+
+</BODY>
+
+</HTML>

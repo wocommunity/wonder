@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<wodefinitions>
+        <wo class="SOLine" wocomponentcontent="YES">
+
+		<binding name="x1"/>
+		<binding name="y1"/>
+		<binding name="x2"/>
+		<binding name="y2"/>
+		<binding name="transform"/>
+		<binding name="class"/>
+		<binding name="style"/>
+
+        </wo>
+</wodefinitions>
