@@ -26,4 +26,7 @@
     "CouldNotSavePleaseReapply" = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them.";
     "ERD2WInspect.alreadyAborted" = "<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
     "ERD2WList.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
+    "ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
+    "ERDInspect.select" = "Select...";
+    "ERDInspect.clear" = "Clear";
 }

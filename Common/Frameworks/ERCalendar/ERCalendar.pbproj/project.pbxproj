@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
 			buildRules = (
@@ -25,18 +25,25 @@
 			name = WebServer;
 		};
 		017C7B2CFFD7144B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERCalendar.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2DFFD7144B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERCalendar.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2EFFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B2FFFD7144B7F000001;
+			targetProxy = 417E1AAF05445BDB0014B698;
 		};
 		017C7B2FFFD7144B7F000001 = {
 			buildPhases = (
@@ -105,7 +112,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B30FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -156,6 +162,7 @@
 		017C7B35FFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B36FFD7144B7F000001;
+			targetProxy = 417E1AAE05445BDB0014B698;
 		};
 		017C7B36FFD7144B7F000001 = {
 			buildPhases = (
@@ -215,7 +222,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		017C7B37FFD7144B7F000001 = {
 			buildActionMask = 2147483647;
@@ -262,11 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
@@ -305,11 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
@@ -325,10 +323,13 @@
 //023
 //024
 		022D130B0059B6D511CD2978 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		022D130C0059B6D611CD2978 = {
 			fileRef = 022D130B0059B6D511CD2978;
@@ -359,6 +360,7 @@
 			name = "Web Server Resources";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		04B9D3C4FFD8653E11CD2B8D = {
 			fileRef = 40B5828DFFD5E91B7F000001;
@@ -408,6 +410,7 @@
 			isa = PBXGroup;
 			name = Intermediates;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //0B0
 //0B1
@@ -420,11 +423,14 @@
 //403
 //404
 		40B5827EFFD5E7DB7F000001 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				40B5829AFFD5EB0D7F000001,
 				40B5829BFFD5EB0D7F000001,
 				01735AADFFDED26B11CD2B8D,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -454,6 +460,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58280FFD5E8187F000001 = {
 			children = (
@@ -463,11 +470,15 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58281FFD5E8187F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			path = ERCalendar.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		40B58282FFD5E8187F000001 = {
 			buildPhases = (
@@ -567,7 +578,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		40B58283FFD5E8187F000001 = {
 			buildActionMask = 2147483647;
@@ -611,6 +621,7 @@
 			isa = PBXGroup;
 			name = Sources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828AFFD5E91B7F000001 = {
 			children = (
@@ -619,6 +630,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828CFFD5E91B7F000001 = {
 			children = (
@@ -633,36 +645,52 @@
 			name = Frameworks;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828DFFD5E91B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828EFFD5E91B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828FFFD5E91B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58291FFD5E91B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58292FFD5E91B7F000001 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58293FFD5E91B7F000001 = {
 			children = (
@@ -671,15 +699,21 @@
 			isa = PBXGroup;
 			name = Documentation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5829AFFD5EB0D7F000001 = {
 			buildRules = (
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -689,9 +723,11 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -701,6 +737,30 @@
 //402
 //403
 //404
+//410
+//411
+//412
+//413
+//414
+		417E1AAE05445BDB0014B698 = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B36FFD7144B7F000001;
+			remoteInfo = "Web Server";
+		};
+		417E1AAF05445BDB0014B698 = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B2FFFD7144B7F000001;
+			remoteInfo = "Application Server";
+		};
+//410
+//411
+//412
+//413
+//414
 //F50
 //F51
 //F52
@@ -717,12 +777,16 @@
 			isa = PBXGroup;
 			name = "iCalendar WOComponent";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F58BCA2C036AE30901002A02 = {
+			expectedFileType = text.woapi;
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERPublishCalendarPage.api;
 			path = Components/ERPublishCalendarPage.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F58BCA32036AE30901002A02 = {
 			fileRef = F58BCA2C036AE30901002A02;
@@ -731,22 +795,31 @@
 			};
 		};
 		F58BCA34036AE36501002A02 = {
+			expectedFileType = sourcecode.java;
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERCalendarEvent.java;
 			path = Sources/er/calendar/ERCalendarEvent.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F58BCA35036AE36501002A02 = {
+			expectedFileType = sourcecode.java;
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERPublishCalendarPage.java;
 			path = Sources/er/calendar/ERPublishCalendarPage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F58BCA36036AE36501002A02 = {
+			expectedFileType = sourcecode.java;
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERSimpleEvent.java;
 			path = Sources/er/calendar/ERSimpleEvent.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F58BCA37036AE36501002A02 = {
 			fileRef = F58BCA34036AE36501002A02;
@@ -767,11 +840,14 @@
 			};
 		};
 		F5D12333036DD0E301002A02 = {
+			expectedFileType = folder;
+			fallbackIsa = PBXFileReference;
 			includeInIndex = 1;
 			isa = PBXFolderReference;
 			name = ERPublishCalendarPage.wo;
 			path = Components/ERPublishCalendarPage.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5D12338036DD0E301002A02 = {
 			fileRef = F5D12333036DD0E301002A02;
@@ -797,17 +873,20 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F5D1233C036E5DAA01002A02 = {
+			expectedFileType = text;
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = README.txt;
 			path = Documentation/README.txt;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
