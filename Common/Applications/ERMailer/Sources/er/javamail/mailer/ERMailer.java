@@ -95,6 +95,7 @@ public class ERMailer {
                         mailMessage.editingContext().revert();
                     } catch (NSForwardException e) {
                         log.warn("Caught exception when sending mail: " + ERXUtilities.stackTrace(e.originalException()));
+                        log.warn("Message trying to send: " + mailMessage + " pk: " + mailMessage.rawPrimaryKey());
                         // ENHANCEME: Need to implement a waiting state to retry sending mails.
                         mailMessage.setState(ERCMailState.EXCEPTION_STATE);
                         mailMessage.setExceptionReason(e.originalException().getMessage());
