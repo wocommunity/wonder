@@ -15,6 +15,6 @@ public class ERXMandatoryFieldMarker extends WOComponent {
         super(aContext);
     }
 
-    public boolean synchronizesBindingsWithVariables() { return false; }
+    public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
 }
