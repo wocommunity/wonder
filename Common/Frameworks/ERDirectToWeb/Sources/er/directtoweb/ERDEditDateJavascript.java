@@ -37,7 +37,6 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     public Object value() {return dateString;}
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
-        System.out.println("dateString = "+dateString);
         NSTimestamp date = null;
         try {
             if(dateString!=null) {
