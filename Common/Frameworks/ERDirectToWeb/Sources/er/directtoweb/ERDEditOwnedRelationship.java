@@ -176,7 +176,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         if (eo == null) {
             parent().validationFailedWithException(new NSValidation.ValidationException(errorMessage()),objectPropertyValue(), key());
         } else {
-            String editConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("editConfigurationNameForEntity", eo.entityName());
+            String editConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("editConfigurationName", eo.entityName());
             epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
             epi.setNextPage(context().page());
             if (((er.extensions.ERXGenericRecord)eo).isNewObject())
@@ -215,7 +215,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
         public WOComponent nextPage() {
             EOEnterpriseObject newEO = createEO();
             NSDictionary extraValues=currentPageConfiguration!=null ? new NSDictionary(currentPageConfiguration, "pageConfiguration") : null;
-            String createPageConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("createConfigurationNameForEntity",
+            String createPageConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("createConfigurationName",
                                                                                              entityNameForNewInstances,
                                                                                              extraValues);
             if (log.isDebugEnabled())
