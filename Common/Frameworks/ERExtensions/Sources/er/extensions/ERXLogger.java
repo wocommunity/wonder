@@ -143,12 +143,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
         if (_isFirstTimeConfig) {
             boolean is522OrHigher = false;
             _isFirstTimeConfig = false;
-            try {
-                is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
-            } catch(NullPointerException ex) {
-                System.err.println("*** Exception while installing logger!");
-                (new RuntimeException()).printStackTrace(System.err);
-            }
+            is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
             if (!is522OrHigher) {
                 BasicConfigurator.configure();
                 Logger.getRootLogger().setLevel(Level.INFO);                
