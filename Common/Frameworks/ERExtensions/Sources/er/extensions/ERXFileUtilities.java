@@ -294,7 +294,8 @@ public class ERXFileUtilities {
         * Copys all of the files in a given directory to another directory.
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
-     * @param deleteOriginals tells if the original files
+     * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
+     * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
      */
     // ENHANCEME: Should support recursive directory copying.
     public static void copyFilesFromDirectory(File srcDirectory, File dstDirectory, boolean deleteOriginals)
@@ -309,37 +310,49 @@ public class ERXFileUtilities {
 
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];
-                    if (srcFile.exists() && srcFile.isFile()) {
-                        in = new FileInputStream(srcFile);
-                        File dstFile = null;
-                        try {
-                            dstFile =new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
-                            out = new FileOutputStream(dstFile);
-
-                            //50 KBytes buffer
-                            byte buf[] = new byte[1024 * 50];
-                            int read = -1;
-                            while ((read = in.read(buf)) != -1) {
-                                out.write(buf, 0, read);
-                            }
-                                                        
-                            if (deleteOriginals)
-                                srcFile.delete();
-                        } finally {
-                            if (out != null)
-                                try {
-                                    out.close();
-                                } catch (IOException io) {}
-                            if (in != null) {
-                                try {
-                                    in.close();
-                                } catch (IOException io) {}
-                            }
-                        }
-                    }
+                    File dstFile =new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
+                    copyFileToFile(srcFile, dstFile, deleteOriginals, true);
                 }
             }
         }
+
+/** Copys the source file to the destination
+  *
+  * @param srcFile source file
+  * @param dstFile destination file
+  * @param deleteOriginals tells if original file will be deleted. Note that if the appuser has no write rights
+        * on the file it is NOT deleted unless force delete is true
+        * @param forceDelete if true then missing write rights are ignored and the file is deleted.
+  */
+public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)  throws FileNotFoundException, IOException {
+        if (srcFile.exists() && srcFile.isFile()) {
+            FileInputStream in = new FileInputStream(srcFile);
+            FileOutputStream out = new FileOutputStream(dstFile);
+            try {
+
+                //50 KBytes buffer
+                byte buf[] = new byte[1024 * 50];
+                int read = -1;
+                while ((read = in.read(buf)) != -1) {
+                    out.write(buf, 0, read);
+                }
+
+                if (deleteOriginals && (srcFile.canWrite() || forceDelete))
+                    srcFile.delete();
+            } finally {
+                if (out != null)
+                    try {
+                        out.close();
+                    } catch (IOException io) {}
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException io) {}
+                }
+            }
+        }
+        
+    }
 
 
     /** Creates a new NSArray which contains all files in the specified directory.
