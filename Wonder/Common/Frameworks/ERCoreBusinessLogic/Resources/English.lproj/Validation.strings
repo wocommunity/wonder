@@ -1,4 +1,4 @@
 {
-    ERCMailMessage.toAddresses.nullValue = "You must set give at least one recipient.";
-    ERCMailMessage.text = "The text of the mail message can not be null or empty!";
+    ERCMailMessage.emptytoAddresses = "You must set give at least one recipient.";
+    ERCMailMessage.emptytext = "The text of the mail message can not be null or empty!";
 }
