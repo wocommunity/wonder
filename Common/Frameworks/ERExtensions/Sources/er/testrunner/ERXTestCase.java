@@ -28,7 +28,7 @@ import er.extensions.*;
 
 public class ERXTestCase extends TestCase {
     static ERXLogger log = ERXLogger.getERXLogger(ERXTestCase.class);
-    protected EOEditingContext editingContext = new EOEditingContext();
+    protected EOEditingContext editingContext = ERXEC.newEditingContext();
     protected NSMutableArray persistentRootObjects = new NSMutableArray();
 
     public ERXTestCase(String name){
@@ -37,7 +37,6 @@ public class ERXTestCase extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        ERXExtensions.setDefaultDelegate(editingContext());
         editingContext.lock();
     }
 
