@@ -23,12 +23,12 @@ AttributeValue2: WOSwitchComponent { WODebug=false;
 Border: ERXTableWithBorder { WODebug=false;
    color="#999999";
    bgcolor="#CCCCCC";
-renderBorder=session.browserRenderNestedTablesFast;
+renderBorder=session.browser.willRenderNestedTablesFast;
 	doNotRenderTop = true;
 }
 
 BorderWasRendered: WOConditional {
-condition=session.browserRenderNestedTablesFast;
+condition=session.browser.willRenderNestedTablesFast;
 negate=true;
 }
 
