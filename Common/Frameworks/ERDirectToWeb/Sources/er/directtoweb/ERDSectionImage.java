@@ -6,18 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.*;
 
 /**
  * Used to display sections as images instead of text.<br />
- * 
- * @binding d2wContext
  */
 
-public class ERDSectionImage extends WOComponent {
+public class ERDSectionImage extends ERDCustomComponent {
 
     public ERDSectionImage(WOContext context) { super(context); }
 
     public boolean isStateless() { return true; }
+    public boolean synchronizesVariablesWithBindings() { return false; }
 }
