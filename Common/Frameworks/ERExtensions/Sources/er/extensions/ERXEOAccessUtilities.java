@@ -634,7 +634,11 @@ public class ERXEOAccessUtilities {
                 sb.append(", ");
             }
             Object value = valueArray.objectAtIndex(i);
-            value = e.formatValueForAttribute(value, attribute);
+            // The Postgres Expression has a problem using bind variables so we have to get the formatted
+            // SQL string for a value instead.  All Apple provided plugins must use the bind variables
+            // however.  Frontbase can go either way
+            boolean isPostgres = e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
+            value = isPostgres ? e.formatValueForAttribute(value, attribute) : e.sqlStringForValue(value, key);
             sb.append(value);
         }
         sb.append(")");
