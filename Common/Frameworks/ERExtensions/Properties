@@ -1,0 +1,56 @@
+
+# Framework Properties
+
+# These properties are pushed into the Java system properties for 
+# applications linking against to this framework
+# You can override them from the application's Properties file or 
+# command-line arguments.
+# Remove the leading '#' to uncomment a property
+
+#########################################################################
+# Compiler Proxy
+#########################################################################
+er.extensions.ERXCompilerProxyEnabled = false
+CPRaiseOnError = false
+
+#########################################################################
+# Localizer
+#########################################################################
+er.extensions.ERXLocalizer.frameworkSearchPath = app, ERDirectToWeb, ERExtensions
+
+er.extensions.ERXLocalizer.defaultLanguage = English
+er.extensions.ERXLocalizer.availableLanguages = English, German, Japanese
+#er.extensions.ERXLocalizer.availableLanguages = English, German, French, Norwegian, Japanese
+
+#er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
+#er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.ERXNonPluralFormLocalizer
+
+#er.extensions.WOToManyRelationship.localizeDisplayKeysDefault = true
+#er.extensions.WOToOneRelationship.localizeDisplayKeysDefault = true
+
+#########################################################################
+# Enterprise Object
+#########################################################################
+er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
+#er.extensions.ERXClassDescription.factoryClass = 
+
+#########################################################################
+# Cryptgraphy
+#########################################################################
+ERBlowfishCipherKey = DefaultBlowfishCipherKey
+#er.extensions.ERXBlowfishCipherKey = DefaultBlowfishCipherKey
+
+#########################################################################
+# Direct Action 
+#########################################################################
+# Direct Action Passwords
+#er.extensions.ERXJUnitPassword = pw
+#er.extensions.ERXLog4JPassword = pw
+
+#########################################################################
+# Log4j Configuration
+#########################################################################
+# Don't change this
+log4j.loggerFactory = er.extensions.ERXLogger$Factory
+
+
