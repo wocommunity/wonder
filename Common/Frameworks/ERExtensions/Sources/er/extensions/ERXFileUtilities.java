@@ -315,10 +315,14 @@ public class ERXFileUtilities {
                         try {
                             dstFile =new File(dstDirectory.getAbsolutePath() + File.separator + srcFile.getName());
                             out = new FileOutputStream(dstFile);
-                            int c;
-                            while ((c = in.read()) != -1) {
-                                out.write(c);
+
+                            //50 KBytes buffer
+                            byte buf[] = new byte[1024 * 50];
+                            int read = -1;
+                            while ((read = in.read(buf)) != -1) {
+                                out.write(buf, 0, read);
                             }
+                                                        
                             if (deleteOriginals)
                                 srcFile.delete();
                         } finally {
