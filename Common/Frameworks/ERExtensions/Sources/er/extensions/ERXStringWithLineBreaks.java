@@ -60,7 +60,7 @@ public class ERXStringWithLineBreaks extends ERXStatelessComponent {
         String result = null;
         if (value != null) {
             result = (value instanceof String) ? (String)value : value.toString();
-            result = WOResponse.stringByEscapingHTMLString(result);
+            result = WOMessage.stringByEscapingHTMLString(result);
             // FIXME: This could be optimized
             result = ERXStringUtilities.replaceStringByStringInString("\r\n", "\r", result);
             result = ERXStringUtilities.replaceStringByStringInString("\n", "\r", result);
