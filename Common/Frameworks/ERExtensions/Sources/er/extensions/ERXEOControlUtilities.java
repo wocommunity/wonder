@@ -132,15 +132,22 @@ public class ERXEOControlUtilities {
         if (eo == null) throw new IllegalArgumentException("EO can't be null");
         EOEditingContext ec = eo.editingContext();
 
-        if (ec == null)
-                throw new IllegalArgumentException("EO must live in an EC");
 
-        EOEnterpriseObject localObject = eo;
-
+        if (ec == null) throw new IllegalArgumentException("EO must live in an EC");
+        
+        boolean isNewObject = ERXExtensions.isNewObject(eo);
+        
         // Check for old EOF bug and do nothing as we can't localInstance
         // anything here
-        if (!(ERXProperties.webObjectsVersionAsDouble() < 5.21d || ERXExtensions
-                .isNewObject(localObject))) {
+        if (ERXProperties.webObjectsVersionAsDouble() < 5.21d && isNewObject) {
+            return eo;
+        }
+
+        EOEnterpriseObject localObject = eo;
+        
+        // Either we have an already saved object or a new one and create a nested context.
+        // Otherwise (new object and a peer) we should probably raise, but simple return the EO
+        if((isNewObject && createNestedContext) || !isNewObject) {
             // create either peer or nested context
             EOEditingContext newEc = ERXEC
                     .newEditingContext(createNestedContext ? ec : ec
