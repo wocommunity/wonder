@@ -19,7 +19,7 @@ import java.util.*;
  * 
  */
 
-public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
+public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditPageInterface {
 
     public final static String WILL_SWITCH_TAB = "willSwitchTab";
     public static String IMAGE_TAB_COMPONENT_NAME = "ERXImageTabPanel";
@@ -30,7 +30,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
     }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WTabInspectPage");
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WTabInspectPage.class, "templates,components");
     public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WTabInspectPage");
 
 
@@ -38,7 +38,8 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
     public boolean switchTabAction() {
         boolean switchTab = true;
         if (shouldSaveChangesForTab()) {
-            if (validationLog.isDebugEnabled()) validationLog.debug("ERTabInspectPage calling tryToSaveChanges");
+            if (validationLog.isDebugEnabled())
+                validationLog.debug("Calling tryToSaveChanges");
             switchTab = tryToSaveChanges(true);
         }
         if (switchTab && errorMessages.count()==0 && object().editingContext().hasChanges() && shouldNotSwitchIfHasChanges()) {
@@ -77,18 +78,51 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
             "];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
     }
 
+    private boolean d2wContextValueForKey(String key, boolean defaultValue) {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey(key), defaultValue);
+    }
     // These style rules should definately be restricted to tabKeys if needed.
-    public boolean shouldNotSwitchIfHasChanges() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldNotSwitchIfHasChanges")); }
-    public boolean shouldSaveChangesForTab() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldSaveChangesForTab")); }
-    public boolean shouldShowNextPreviousButtons() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowNextPreviousButtons")); }
-    public boolean shouldShowPreviousButton() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowPreviousButton")); }
-    public boolean shouldShowNextButton() { return ERXUtilities.booleanValue(d2wContext().valueForKey("shouldShowNextButton")); }
-    public boolean useSubmitImages() { return ERXUtilities.booleanValue(d2wContext().valueForKey("useSubmitImages")); }
-    
-    public boolean useTabImages() { return ERXUtilities.booleanValue(d2wContext().valueForKey("useTabImages")); }
-    public boolean useTabSectionImages() { return ERXUtilities.booleanValue(d2wContext().valueForKey("useTabSectionImages")); }
+    // CHECKME ak is this default correct?
+    public boolean shouldNotSwitchIfHasChanges() {
+        return d2wContextValueForKey("shouldNotSwitchIfHasChanges", false);
+    }
+    // CHECKME ak is this default correct?
+    public boolean shouldSaveChangesForTab() {
+        return d2wContextValueForKey("shouldSaveChangesForTab", false);
+    }
+    // CHECKME ak What's all this??? Why not simply show the buttons and en-/disable them??
+    public boolean shouldShowNextPreviousButtons() {
+        return d2wContextValueForKey("shouldShowNextPreviousButtons", true);
+    }
+    public boolean shouldShowPreviousButton() {
+        return d2wContextValueForKey("shouldShowPreviousButton", !currentTabIsFirstTab());
+    }
+    public boolean shouldShowNextButton() {
+        return d2wContextValueForKey("shouldShowNextButton", !currentTabIsLastTab());
+    }
 
+    //CHECKME ak Is this needed? 
+    public boolean useSubmitImages() {
+        return d2wContextValueForKey("useSubmitImages", false);
+    }
+    public boolean useTabImages() {
+        return d2wContextValueForKey("useTabImages", false);
+    }
+    public boolean useTabSectionImages() {
+        return d2wContextValueForKey("useTabSectionImages", false);
+    }
+
+
+    /** @deprecated use nextTabAction */
     public WOComponent nextTab() {
+        return nextTabAction();
+    }
+    /** @deprecated use previousTabAction */
+    public WOComponent previousTab() {
+        return previousTabAction();
+    }
+    
+    public WOComponent nextTabAction() {
         if (switchTabAction()) {
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());
             if (tabSectionsContents().count() >= currentIndex + 2 && currentIndex >= 0) {
@@ -102,7 +136,7 @@ public abstract class ERD2WTabInspectPage extends ERD2WInspectPage implements ER
         return null;
     }
 
-    public WOComponent previousTab() {
+    public WOComponent previousTabAction() {
         if (switchTabAction()) {
             int currentIndex = tabSectionsContents().indexOfObject(currentTab());
             if (tabSectionsContents().count() >= currentIndex && currentIndex > 0)
