@@ -7,4 +7,6 @@
     "unittest" = {"key" = { "path" = { "as" = {"dict"="SUCCESS";};};};};
     WOToOneRelationship.noneString = "- none -";
     "Could not save your changes: " = "Could not save your changes: ";
+    ERXCheckboxMatrix.deselectAll = "None";
+    ERXCheckboxMatrix.selectAll = "All";
 }

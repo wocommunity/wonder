@@ -79,11 +79,11 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         setValueForBinding(currentItem, "item");
     }
 
-    public EOEnterpriseObject getRelationshipOwner() {
+    public EOEnterpriseObject relationshipOwner() {
         return (EOEnterpriseObject)valueForBinding("relationshipOwner");
     }
 
-    public String getRelationshipName() {
+    public String relationshipName() {
         Object o = valueForBinding("relationshipName");
         return o == null ? null : o.toString();
     }
@@ -135,11 +135,11 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
             }
         }
         // dt: this can be used with a subset as array for the checkboxes.
-        if (getRelationshipName() != null && getRelationshipName().length() > 0 && getRelationshipOwner() != null) {
+        if (relationshipName() != null && relationshipName().length() > 0 && relationshipOwner() != null) {
             NSSet objectsToRemove = new NSSet(_selections).setBySubtractingSet(new NSSet(aSelectionsArray));
             NSSet objectsToAdd = new NSSet(aSelectionsArray).setBySubtractingSet(new NSSet(_selections));
-            EOEnterpriseObject owner = getRelationshipOwner();
-            String relname = getRelationshipName();
+            EOEnterpriseObject owner = relationshipOwner();
+            String relname = relationshipName();
             for (Enumeration e = objectsToRemove.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 owner.removeObjectFromBothSidesOfRelationshipWithKey(eo, relname);
