@@ -5,7 +5,7 @@
 		<binding name="showAddButton" defaults="Boolean"/>
 		<binding name="key"/>
 		<binding name="object"/>
-		<binding name="listConfigurationNameForEntity"/>
+		<binding name="listConfigurationName"/>
 		<binding name="entityNamesForNewInstances"/>
 		<binding name="explanationComponentName"/>
 		<binding name="uiStyle"/>

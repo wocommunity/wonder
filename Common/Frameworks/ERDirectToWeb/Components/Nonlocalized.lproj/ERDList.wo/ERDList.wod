@@ -15,10 +15,8 @@ GenericContainer1: WOGenericContainer {
 }
 
 List1: ERXD2WList { 	
-	pageConfiguration = ^embeddedPageConfiguration;
-	entityName = ^embeddedEntityName;
+	pageConfiguration = ^listConfigurationName;
 	list = list;
-	displayKeys = ^embeddedDisplayPropertyKeys;
 }
 
 NoEmptyListMessage: ERXNonNullConditional {
@@ -46,6 +44,10 @@ NonZeroConditional2: ERXNonZeroConditional {
 String1: WOString {
 	value = ^emptyListMessage;
 	escapeHTML = false;
+}
+
+String2: WOString {
+	value = ^destinationEntity.name;
 }
 
 SwitchComponent2: WOSwitchComponent {

@@ -16,10 +16,10 @@ GenericContainer1: WOGenericContainer {
 }
 
 List1: ERXD2WList { 	
-	pageConfiguration = ^embeddedPageConfiguration;
-	entityName = ^embeddedEntityName;
+	pageConfiguration = ^listConfigurationName;
+//	entityName = ^destinationEntity.name;
 	list = list;
-	displayKeys = ^embeddedDisplayPropertyKeys;
+//	displayKeys = ^embeddedDisplayPropertyKeys;
 }
 
 NoEmptyListMessage: ERXNonNullConditional {
