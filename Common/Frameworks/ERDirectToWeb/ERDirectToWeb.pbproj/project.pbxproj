@@ -131,6 +131,64 @@
 			settings = {
 			};
 		};
+		94AA72FC03D3504C00CF0E7D = {
+			children = (
+				94AA72FD03D3504C00CF0E7D,
+				94AA72FE03D3504C00CF0E7D,
+				94AA730903D350FF00CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERD2WQueryEncryptedString;
+			refType = 4;
+		};
+		94AA72FD03D3504C00CF0E7D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WQueryEncryptedString.api;
+			path = Components/ERD2WQueryEncryptedString.api;
+			refType = 2;
+		};
+		94AA72FE03D3504C00CF0E7D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERD2WQueryEncryptedString.java;
+			path = er/directtoweb/ERD2WQueryEncryptedString.java;
+			refType = 4;
+		};
+		94AA730403D3504C00CF0E7D = {
+			fileRef = 94AA72FD03D3504C00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94AA730503D3504C00CF0E7D = {
+			fileRef = 94AA72FE03D3504C00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94AA730903D350FF00CF0E7D = {
+			children = (
+				94AA730A03D350FF00CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WQueryEncryptedString.wo;
+			path = "";
+			refType = 4;
+		};
+		94AA730A03D350FF00CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WQueryEncryptedString.wo;
+			refType = 2;
+		};
+		94AA730F03D350FF00CF0E7D = {
+			fileRef = 94AA730903D350FF00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //940
 //941
 //942
@@ -7837,6 +7895,8 @@
 				9405BE6803C9FE1E00CF0E7D,
 				50E9E19C03CBB58C00CF0E76,
 				50E9E1A303CBB5A700CF0E76,
+				94AA730403D3504C00CF0E7D,
+				94AA730F03D350FF00CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8048,6 +8108,7 @@
 				F5E94DE1038C3D9E01CF0E76,
 				9405BE5D03C9FC9600CF0E7D,
 				50E9E1A503CBB5BB00CF0E76,
+				94AA730503D3504C00CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9970,6 +10031,7 @@
 				F6E7969702C877AF01AD0D07,
 				F6E7969802C877AF01AD0D07,
 				F6E7969902C877AF01AD0D07,
+				94AA72FC03D3504C00CF0E7D,
 				F6E7969A02C877AF01AD0D07,
 				F6E7969B02C877AF01AD0D07,
 				F6E7969C02C877AF01AD0D07,
