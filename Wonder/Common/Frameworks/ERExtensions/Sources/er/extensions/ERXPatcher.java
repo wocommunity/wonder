@@ -48,6 +48,7 @@ public class ERXPatcher  {
         ERXPatcher.setClassForName(DynamicElementsPatches.ResetButton.class, "WOResetButton");
         ERXPatcher.setClassForName(DynamicElementsPatches.TextField.class, "WOTextField");
         ERXPatcher.setClassForName(DynamicElementsPatches.GenericElement.class, "WOGenericElement");
+        ERXPatcher.setClassForName(DynamicElementsPatches.GenericContainer.class, "WOGenericContainer");
         ERXPatcher.setClassForName(DynamicElementsPatches.Image.class, "WOImage");
         ERXPatcher.setClassForName(DynamicElementsPatches.ActiveImage.class, "WOActiveImage");
         ERXPatcher.setClassForName(DynamicElementsPatches.Text.class, "WOText");
@@ -151,6 +152,26 @@ public class ERXPatcher  {
                 int offset = woresponse.contentString().length();
                 super.appendToResponse(woresponse, wocontext);
                 processResponse(this, woresponse, wocontext, offset, nameInContext(wocontext, wocontext.component()));
+            }
+        }
+
+        public static class GenericContainer extends WOGenericContainer {
+            protected WOAssociation _id;
+
+            public GenericContainer(String aName, NSDictionary associations, WOElement element) {
+                super(aName, associations, element);
+                _id = (WOAssociation)super._associations.removeObjectForKey("id");
+            }
+
+            public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+                super.appendAttributesToResponse(woresponse, wocontext);
+                appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+            }
+
+            public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+                int offset = woresponse.contentString().length();
+                super.appendToResponse(woresponse, wocontext);
+                processResponse(this, woresponse, wocontext, offset, null);
             }
         }
 
@@ -450,16 +471,21 @@ public class ERXPatcher  {
             }
         }
 
+        /**
+         * Allows you to set the component ID without actually touching the HTML code, by adding a
+         * <code>componentIdentifier</code> entry in the context's mutableUserInfo. This is useful for
+         * setting CSS entries you don't have to code for.
+         */
         public static void appendIdentifierTagAndValue(WODynamicElement element, WOAssociation id, WOResponse response, WOContext context) {
             if(id != null) {
                 Object idValue = id.valueInComponent(context.component());
                 if(idValue != null)
-                    response._appendTagAttributeAndValue("id", idValue.toString(), false);
+                    response._appendTagAttributeAndValue("id", idValue.toString(), true);
             } else if(context instanceof ERXMutableUserInfoHolderInterface) {
                 NSMutableDictionary dict   = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
                 String componentIdentifier = (String)dict.objectForKey("componentIdentifier");
                 if(componentIdentifier != null) {
-                    response._appendTagAttributeAndValue("id", componentIdentifier, false);
+                    response._appendTagAttributeAndValue("id", componentIdentifier, true);
                 }
             }
         }
