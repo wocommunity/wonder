@@ -1,6 +1,5 @@
 JavaScript1: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
-	WODebug = false;
 }
 
 String1: WOString {

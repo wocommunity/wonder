@@ -82,7 +82,7 @@ HasSectionName: ERXNonZeroConditional {
 	condition = currentSection.name.length;
 }
 
-Help: ERD2WDebuggingHelp {
+Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

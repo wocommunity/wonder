@@ -38,7 +38,7 @@ Conditional3: WOConditional {
 	negate = true;
 }
 
-ERPrinterButton: ERXPrinterButton {
+ERPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	displayGroup = displayGroup;

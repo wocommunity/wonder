@@ -41,7 +41,7 @@ public class ERD2WPick extends ERDCustomEditComponent {
                 Method m = session().getClass().getMethod(branchDelegateMethod, ERXConstant.EmptyClassArray);
                 delegate = (ERDBranchDelegate)m.invoke(session(), ERXConstant.EmptyObjectArray);
             } catch (Exception e) {
-                WOApplication.application().logString("EXCEPTION:  Unable to find branch delegate for method named: "
+                NSLog.err.appendln("EXCEPTION:  Unable to find branch delegate for method named: "
                                         + branchDelegateMethod + " on session.");
             }            
         }

@@ -64,14 +64,14 @@ Conditional1: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
 
-ERPrinterButton: ERXPrinterButton {
+ERPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	displayGroup = displayGroup;
 	task = "list";
 }
 
-ERTrashcan1: ERXTrashcan {
+ERTrashcan1: ERDTrashcan {
 	dataSource = dataSource;
 	object = object;
 	d2wContext = d2wContext;
@@ -98,7 +98,7 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
-Help: ERD2WDebuggingHelp {
+Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

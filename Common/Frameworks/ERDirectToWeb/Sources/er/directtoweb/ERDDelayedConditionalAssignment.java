@@ -45,7 +45,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
     public NSArray _dependentKeys;
     public NSArray dependentKeys(String keyPath) {
         if (_dependentKeys==null) {
-            NSDictionary conditionAssignment = (NSDictionary)this.value(null);
+            NSDictionary conditionAssignment = (NSDictionary)this.value();
             String qualFormat =
                 (String)conditionAssignment.objectForKey("qualifierFormat");
             NSArray args = (NSArray)conditionAssignment.objectForKey("args");
@@ -65,7 +65,7 @@ public class ERDDelayedConditionalAssignment extends ERDDelayedAssignment implem
      */
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSDictionary conditionAssignment = (NSDictionary)this.value(c);
+        NSDictionary conditionAssignment = (NSDictionary)this.value();
         String qualFormat =
             (String)conditionAssignment.objectForKey("qualifierFormat");
         NSArray args = (NSArray)conditionAssignment.objectForKey("args");

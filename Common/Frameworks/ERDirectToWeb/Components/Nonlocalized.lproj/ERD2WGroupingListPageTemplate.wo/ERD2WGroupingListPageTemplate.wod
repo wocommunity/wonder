@@ -46,7 +46,7 @@ Conditional1: WOConditional {
 	negate = true;
 }
 
-ERPrinterButton: ERXPrinterButton {
+ERPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	displayGroup = displayGroup;
@@ -57,7 +57,7 @@ ERTableWithBorder1: ERXTableWithBorder {
 	color = "#999999";
 }
 
-ERTrashcan1: ERXTrashcan {
+ERTrashcan1: ERDTrashcan {
 	dataSource = dataSource;
 	object = object;
 	d2wContext = d2wContext;
@@ -101,7 +101,7 @@ GenericContainer3: WOGenericContainer {
 	height = 1;
 }
 
-Help: ERD2WDebuggingHelp {
+Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 

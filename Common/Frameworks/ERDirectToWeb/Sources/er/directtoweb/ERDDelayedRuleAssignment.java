@@ -40,7 +40,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
      */
     public Object fireNow(D2WContext c) {
         Object result = null;
-        NSArray rules = (NSArray)this.value(c);
+        NSArray rules = (NSArray)this.value();
         Enumeration ruleEnumerator = rules.objectEnumerator();
         Rule rule;
         while (ruleEnumerator.hasMoreElements()) {
@@ -48,7 +48,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
             EOQualifierEvaluation eval = rule.lhs();
             cat.debug("Qualifier eval: \n" + eval);
             if (eval.evaluateWithObject(c)) {
-                result = ((Assignment)rule.rhs()).value(c);
+                result = ((Assignment)rule.rhs()).value();
                 cat.debug("RHS value: " +  result);
                 break;
             }

@@ -27,7 +27,7 @@ BackLink: WOHyperlink {
 	action = backAction;
 }
 
-ERTrashcan1: ERXTrashcan {
+ERTrashcan1: ERDTrashcan {
 	dataSource = dataSource;
 	object = object;
 	d2wContext = d2wContext;

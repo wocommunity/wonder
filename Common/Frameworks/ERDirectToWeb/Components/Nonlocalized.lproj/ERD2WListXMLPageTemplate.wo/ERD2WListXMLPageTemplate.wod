@@ -15,7 +15,6 @@ AttributeDisplay: WOSwitchComponent {
 }
 
 Conditional1: WOConditional {
-	WODebug = false;
 	condition = d2wContext.showHeader;
 }
 
@@ -25,7 +24,6 @@ Conditional2: WOConditional {
 
 Conditional3: WOConditional {
 	condition = d2wContext.hasThirdLevel;
-	WODebug = false;
 }
 
 Generic1: WOGenericContainer {
@@ -83,7 +81,6 @@ IsThereATitle2: ERXEqualConditional {
 Repetition1: WORepetition {
 	item = object;
 	list = displayGroup.displayedObjects;
-	WODebug = false;
 }
 
 Repetition2: WORepetition {

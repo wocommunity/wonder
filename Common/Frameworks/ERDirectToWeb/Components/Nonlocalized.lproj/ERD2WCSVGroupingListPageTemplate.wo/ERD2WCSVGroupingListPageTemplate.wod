@@ -61,7 +61,6 @@ EntityRepetition: ERXGroupingRepetition {
 	list = displayGroup.allObjects;
 	subListSection = sublistSection;
 	subList = sublist;
-	WODebug = false;
 	sectionForItem = section;
 	sectionKey = "primaryKey";
 }
