@@ -196,6 +196,15 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             }
             return _isRapidTurnaroundEnabled.booleanValue();
         }
+
+        private static Boolean _isFixingRelationshipsEnabled;
+        public boolean isFixingRelationshipsEnabled() {
+            if(_isFixingRelationshipsEnabled == null) {
+                _isFixingRelationshipsEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled") ? Boolean.TRUE : Boolean.FALSE;
+            }
+            return _isFixingRelationshipsEnabled.booleanValue();
+        }
+
         /**
          * Method called by the {@link com.webobjects.appserver.WOApplication WOApplication}
          * has finished launching.
@@ -342,6 +351,40 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
 
         /**
+         * Handles errors when an optional relationship has a source attribute
+         * that is set to allow null values. Subclasses can override this to do more specific handling.
+         */
+        protected void handleOptionalRelationshipError(EOEntity eoentity, EORelationship relationship, EOAttribute attribute) {
+            if(isFixingRelationshipsEnabled()) {
+                relationship.setIsMandatory(true);
+                log.info(eoentity.name() + ": relationship '"
+                         + relationship.name() + "' was switched to mandatory, because the foreign key '"
+                         + attribute.name() + "' does NOT allow NULL values");
+            } else {
+                log.error(eoentity.name() + ": relationship '"
+                          + relationship.name() + "' is marked to-one and optional, but the foreign key '"
+                          + attribute.name() + "' does NOT allow NULL values");
+            }
+        }
+
+        /**
+         * Handles errors when a mandatory relationship has a source attribute
+         * that is set to not allow null values. Subclasses can override this to do more specific handling.
+         */
+        protected void handleMandatoryRelationshipError(EOEntity eoentity, EORelationship relationship, EOAttribute attribute) {
+            if(isFixingRelationshipsEnabled()) {
+                relationship.setIsMandatory(false);
+                log.info(eoentity.name() + ": relationship '"
+                          + relationship.name() + "' was switched to optional, because the foreign key '"
+                          + attribute.name() + "' allows NULL values");
+            } else {
+                log.error(eoentity.name() + ": relationship '"
+                          + relationship.name() + "' is marked to-one and mandatory, but the foreign key '"
+                          + attribute.name() + "' allows NULL values");
+            }
+        }
+
+        /**
          * Checks for foreign keys that are <code>NOT NULL</code>,
          * but whose relationship is marked as non-mandatory and vice-versa. This
          * error is not checked by EOModeler, so we do it here.
@@ -355,18 +398,14 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                         for(Enumeration attributes = relationship.sourceAttributes().objectEnumerator(); attributes.hasMoreElements(); ) {
                             EOAttribute attribute = (EOAttribute)attributes.nextElement();
                             if(attribute.allowsNull()) {
-                                log.error(eoentity.name() + ": relationship '"
-                                          + relationship.name() + "' is marked to-one and mandatory, but the foreign key '"
-                                          + attribute.name() + "' allows NULL values");
+                                handleMandatoryRelationshipError(eoentity, relationship, attribute);
                             }
                         }
                     } else {
                         for(Enumeration attributes = relationship.sourceAttributes().objectEnumerator(); attributes.hasMoreElements(); ) {
                             EOAttribute attribute = (EOAttribute)attributes.nextElement();
                             if(!attribute.allowsNull()) {
-                                log.error(eoentity.name() + ": relationship '"
-                                          + relationship.name() + "' is marked to-one and optional, but the foreign key '"
-                                          + attribute.name() + "' does NOT allow NULL values");
+                                handleOptionalRelationshipError(eoentity, relationship, attribute);
                             }
                         }
                     }
