@@ -38,39 +38,6 @@ public class ERXDatabaseContextDelegate {
         return _defaultDelegate;
     }
     
-    // Automatically register this singleton object as a EODatabaseContext delegate 
-    // whenever CooperatingObjectStoreWasAddedNotification posted (see addedObjectStore).  
-    // --kai
-    // CHECKME: I believe this is going to be removed by kai
-    public void registerCooperatingObjectStoreWasAddedNotification() {
-        try {
-            // Create a selector that can be used to define
-            // a callback to our addedObjectStore method
-            Class params[]={Class.forName("com.webobjects.foundation.NSNotification")};
-            NSSelector selector=new NSSelector("addedObjectStore", params);
-
-            // Register as a CooperatingObjectStoreWasAdded
-            // observer with our callback
-            NSNotificationCenter.defaultCenter().addObserver(this,selector, EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            e = null;
-        }
-    }
-    
-    // CHECKME: I believe this is going to be removed by kai    
-    public void addedObjectStore(NSNotification notification) {
-        EOObjectStoreCoordinator coordinator = (EOObjectStoreCoordinator) notification.object();
-        NSArray stores=coordinator.cooperatingObjectStores();
-        Enumeration anEnum=stores.objectEnumerator();
-        // make sure all of our stores have our this object as its delegate.
-        while (anEnum.hasMoreElements()) {
-            EODatabaseContext store=(EODatabaseContext) anEnum.nextElement();
-            store.setDelegate(this);
-        }
-    }
-
     /**
      * Provides the ability for new enterprise objects that implement the interface {@link ERXGeneratesPrimaryKeyInterface}
      * to provide their own primary key dictionary. If the enterprise object implements the above interface then the
