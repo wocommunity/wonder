@@ -762,6 +762,7 @@
 		};
 		4198EB910526E4660048E379 = {
 			children = (
+				41E307C4056E1C8B0060148F,
 				F6E7969B02C877AF01AD0D07,
 				F6E7968502C877AF01AD0D07,
 				FBD20D3C95A2D86A72DEDD96,
@@ -1011,6 +1012,65 @@
 		};
 		41E12C8E0501CA0A00000102 = {
 			fileRef = 41E12C8D0501CA0A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41E307C4056E1C8B0060148F = {
+			children = (
+				41E307C5056E1C8B0060148F,
+				41E307C6056E1C8B0060148F,
+				41E307CC056E1C8B0060148F,
+			);
+			isa = PBXGroup;
+			name = ERDQueryTwoLevelRelationship;
+			path = "";
+			refType = 2;
+		};
+		41E307C5056E1C8B0060148F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDQueryTwoLevelRelationship.api;
+			path = Components/ERDQueryTwoLevelRelationship.api;
+			refType = 4;
+		};
+		41E307C6056E1C8B0060148F = {
+			children = (
+				41E307C7056E1C8B0060148F,
+			);
+			isa = PBXVariantGroup;
+			name = ERDQueryTwoLevelRelationship.wo;
+			path = "";
+			refType = 4;
+		};
+		41E307C7056E1C8B0060148F = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDQueryTwoLevelRelationship.wo;
+			refType = 4;
+		};
+		41E307CC056E1C8B0060148F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDQueryTwoLevelRelationship.java;
+			path = Sources/er/directtoweb/ERDQueryTwoLevelRelationship.java;
+			refType = 4;
+		};
+		41E307CD056E1C8B0060148F = {
+			fileRef = 41E307C5056E1C8B0060148F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41E307CE056E1C8B0060148F = {
+			fileRef = 41E307C6056E1C8B0060148F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41E307CF056E1C8B0060148F = {
+			fileRef = 41E307CC056E1C8B0060148F;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -9080,6 +9140,8 @@
 				410A1F570508A4B500000104,
 				410A1F590508A4B500000104,
 				4198F0380526ED710048E379,
+				41E307CD056E1C8B0060148F,
+				41E307CE056E1C8B0060148F,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9317,6 +9379,7 @@
 				410CB69E05250FCD0051BB32,
 				410CBB5C052594850051BB32,
 				417A1B58052CCCE200000105,
+				41E307CF056E1C8B0060148F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
