@@ -30,6 +30,9 @@ import org.apache.log4j.Logger;
  */
 public class ERXExtensions {
 
+    /** Notification name, posted before object will change in an editing context */
+    public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
+    
     /** logging support */
     private static Logger _log;
 
@@ -44,9 +47,9 @@ public class ERXExtensions {
     }
 
     /** holds references to default editing context delegate */
-    private static ERXEditingContextDelegate _defaultEditingContextDelegate;
+    //private static ERXEditingContextDelegate _defaultEditingContextDelegate;
     /** holds references to default editing context delegate without validation */
-    private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
+    //private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
 
     /**
      * This public observer is used to perform basic functions in
@@ -107,20 +110,25 @@ public class ERXExtensions {
          * out. It allows us to release references to all the
          * editing contexts that were created when that particular
          * session was active.
+         * Not used in WO 5.2+
          * @param n notification that contains the session ID.
          */
         public void sessionDidTimeOut(NSNotification n) {
             String sessionID=(String)n.object();
             ERXExtensions.sessionDidTimeOut(sessionID);
         }
+
+        /**
+         * This is needed for WO pre-5.2 when ec's were not
+         * retained by their eos. Not called in 5.2+ systems.
+         * @param n notification posted when an ec is created
+         */
+        public void editingContextDidCreate(NSNotification n) {
+            EOEditingContext ec = (EOEditingContext)n.object();
+            ERXExtensions.retainEditingContextForCurrentSession(ec);
+        }
     }
     
-    /** We only ever want the framework to be init's once. */
-    // CHECKME: This was needed back in the 4.5 days because initialize() might be called multiple
-    //          times on a given object (very rare, but boy when it happened it caused problems).
-    //		Now with statics I don't think that this is needed.
-    private static boolean _isInitialized=false;
-
     /**
      * Configures the framework. All the bits and pieces that need
      * to be configured are configured, those that need to happen
@@ -128,7 +136,6 @@ public class ERXExtensions {
      * that are posted when the application is finished launching.
      */
     static {
-        if (!_isInitialized) {
             try {
                 ERXLogger.configureLogging(System.getProperties());
                 
@@ -142,15 +149,7 @@ public class ERXExtensions {
                 // False by default
                 if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
                     ERXSharedEOLoader.patchSharedEOLoading();
-                }
-                
-                // Initing defaultEditingContext delegates
-                _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
-                _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
-                // CHECKME: This shouldn't be needed now with WO 5
-                ERXRetainer.retain(_defaultEditingContextDelegate);
-                ERXRetainer.retain(_defaultECNoValidationDelegate);
-            
+                }            
             } catch (Exception e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
@@ -179,29 +178,38 @@ public class ERXExtensions {
                                                                  new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
                                                                  WOApplication.ApplicationWillFinishLaunchingNotification,
                                                                  null);
-                NSNotificationCenter.defaultCenter().addObserver(observer,
+                if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
+                    NSNotificationCenter.defaultCenter().addObserver(observer,
                                                                  new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
                                                                  WOSession.SessionDidTimeOutNotification,
                                                                  null);
-                _isInitialized=true;
+                    NSNotificationCenter.defaultCenter().addObserver(observer,
+                                                                     new NSSelector("editingContextDidCreate",
+                                                                                    ERXConstant.NotificationClassArray),
+                                                                     ERXEC.EditingContextDidCreateNotification,
+                                                                     null);                    
+                }
             } catch (Exception e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
             }
-        }
     }
 
     /** logging support for the adaptor channel */
     public static ERXLogger adaptorLogger;
+
     /** logging support for shared object loading */
     public static ERXLogger sharedEOadaptorLogger;
+
     /** flag to indicate if adaptor channel logging is enabled */
     private static Boolean adaptorEnabled;
+
     /** 
      * flag to inidicate if rapid turn around is enabled for the
      * adaptor channel logging. 
      */
     private static boolean _isConfigureAdaptorContextRapidTurnAround = false;
+
     /**
      * Configures the passed in observer to register a call back 
      * when the configuration file is changed. This allows one to 
@@ -266,225 +274,143 @@ public class ERXExtensions {
         }
     }
 
-    // MOVEME: All of these editing context creation methods and delegates should be moved to
-    //		ERXECFactory
     /**
-     * Returns the default editing context delegate.
-     * This delegate is used by default for all editing
-     * contexts that are created.
-     * @return the default editing context delegate
+     * deprecated see {@link ERXEC}
      */
-    // MOVEME: ERXECFactory
-    public static ERXEditingContextDelegate defaultEditingContextDelegate() { return _defaultEditingContextDelegate; }
+    public static ERXEditingContextDelegate defaultEditingContextDelegate() {
+        return (ERXEditingContextDelegate)ERXEC.factory().defaultEditingContextDelegate();
+    }
 
     /**
-     * Sets the default editing context delegate to be
-     * used for editing context creation.
-     * @param delegate to be set on every created editing
-     *		context by default.
+     * deprecated see {@link ERXEC}
      */
-     // ENHANCEME: Shouldn't require the editing context delegate to be a subclass of ours.
     public static void setDefaultEditingContextDelegate(ERXEditingContextDelegate delegate) {
-        _defaultEditingContextDelegate = delegate;
+        ERXEC.factory().setDefaultEditingContextDelegate(delegate);
     }
 
     /**
-     * Default delegate that does not perform validation.
-     * Not performing validation can be a good thing when
-     * using nested editing contexts as sometimes you only
-     * want to validation one object, not all the objects.
-     * @returns default delegate that doesn't perform validation
+     * deprecated see {@link ERXEC}
      */
-    // MOVEME: ERXECFactory
-    public static ERXECNoValidationDelegate defaultECNoValidationDelegate() { return _defaultECNoValidationDelegate; }
+    public static ERXECNoValidationDelegate defaultECNoValidationDelegate() {
+        return (ERXECNoValidationDelegate)ERXEC.factory().defaultNoValidationDelegate();
+    }
 
     /**
-     * Sets the default editing context delegate to be
-     * used for editing context creation that does not
-     * allow validation.
-     * @param delegate to be set on every created editing
-     *		context that doesn't allow validation.
+     * deprecated see {@link ERXEC}
      */
-     // ENHANCEME: Shouldn't require the editing context delegate to be a subclass of ours.
     public static void setDefaultECNoValidationDelegate(ERXECNoValidationDelegate delegate) {
-        _defaultECNoValidationDelegate = delegate;
+        ERXEC.factory().setDefaultNoValidationDelegate(delegate);
     }
 
-    public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
-
     /**
-     * Factory method to create a new editing context. Sets
-     * the current default delegate on the newly created
-     * editing context.
-     * @return a newly created editing context with the
-     *		default delegate set.
+     * deprecated see {@link ERXEC}
      */
-    // MOVEME: ERXECFactory
     public static EOEditingContext newEditingContext() {
-        return ERXExtensions.newEditingContext(EOEditingContext.defaultParentObjectStore(), true);
+        return ERXEC.newEditingContext();
     }
 
     /**
-     * Factory method to create a new editing context with
-     * validation disabled. Sets the default no validation
-     * delegate on the editing context. Becareful an
-     * editing context that does not perform validation
-     * means that none of the usual validation methods are
-     * called on the enterprise objects before they are saved
-     * to the database.
-     * @param validation flag that determines if validation
-     *		should or should not be enabled.
-     * @return a newly created editing context with a delegate
-     *		set that has disabled validation.
-     */
-    // MOVEME: ERXECFactory
+     * deprecated see {@link ERXEC}
+     */    
     public static EOEditingContext newEditingContext(boolean validation) {
-        return ERXExtensions.newEditingContext(EOEditingContext.defaultParentObjectStore(), validation);
+        return ERXEC.newEditingContext(validation);
     }
 
     /**
-     * Creates a new editing context with the specified object
-     * store as the parent object store. This method is useful
-     * when creating nested editing contexts. After creating
-     * the editing context the default delegate is set on the
-     * editing context.<br/>
-     * <br/>
-     * Note: an {@link EOEditingContext} is a subclass of EOObjectStore
-     * so passing in another editing context to this method is
-     * completely kosher.
-     * @param objectStore parent object store for the newly created
-     *		editing context.
-     * @return new editing context with the given parent object store
+     * deprecated see {@link ERXEC}
      */
-    // MOVEME: ERXECFactory
     public static EOEditingContext newEditingContext(EOObjectStore objectStore) {
-        return ERXExtensions.newEditingContext(objectStore, true);
+        return ERXEC.newEditingContext(objectStore);
     }
 
     /**
-     * Utility method used to execute arbitrary SQL. This
-     * has the advantage over the 
-     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
-     * <code>rawRowsForSQL</code> in that it can be used with
-     * other statements besides just SELECT without throwing
-     * exceptions.
-     * @param entityName name of an entity in the model connected
-     *		to the database you wish to execute SQL against
-     * @param exp SQL expression
-     * @param ec editing context that determines which model group
-     *		and database context to use.
+     * deprecated see {@link ERXEC}
+     */    
+    public static EOEditingContext newEditingContext(EOObjectStore objectStore, boolean validation) {
+        return ERXEC.newEditingContext(objectStore, validation);
+    }
+
+    /**
+     * @deprecated see { @link ERXEOAccessUtilities#evaluateSQLWithEntityNamed}
      */
-    // FIXME: To conform to naming conventions, should have the ec as the first parameter.
-    //		also should be passing in the model name and not an entityName
-    // ENHANCEME: Should support the use of bindings
-    // MOVEME: ERXEOFUtilities
     public static void evaluateSQLWithEntityNamed(String entityName, String exp, EOEditingContext ec) {
-        // FIXME: Should be getting the model group from the ec
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-        if (!adaptorChannel.isOpen())
-            adaptorChannel.openChannel();
-        EOSQLExpressionFactory factory=adaptorChannel.adaptorContext().adaptor().expressionFactory();
-        adaptorChannel.evaluateExpression(factory.expressionForString(exp));
+        ERXEOAccessUtilities.evaluateSQLWithEntityNamed(ec, entityName, exp);
     }
 
     /**
      * Retaining the editing contexts explicitly until the session that was active
      * when they were created goes away
      * this hopefully will go some way towards avoiding the 'attempted to send
-     * message to EO whose EditingContext is gone. 
+     * message to EO whose EditingContext is gone. Only used in pre-5.2 systems.
      */
-    // FIXME: This feature/bug fix should be able to be disabled
-    private static NSMutableDictionary _editingContextsPerSession=new NSMutableDictionary();
-
-    /**
-     * Creates a new editing context with the specified object
-     * store as the parent object store and with validation turned
-     * on or off depending on the flag passed in. This method is useful
-     * when creating nested editing contexts. After creating
-     * the editing context the default delegate is set on the
-     * editing context if validation is enabled or the default no
-     * validation delegate is set if validation is disabled.<br/>
-     * <br/>
-     * Note: an {@link EOEditingContext} is a subclass of EOObjectStore
-     * so passing in another editing context to this method is
-     * completely kosher.
-     * @param objectStore parent object store for the newly created
-     *		editing context.
-     * @param validation determines if the editing context should perform
-     *		validation
-     * @return new editing context with the given parent object store
-     *		and the delegate corresponding to the validation flag
-     */
-    // MOVEME: ERXECFactory
-    public static EOEditingContext newEditingContext(EOObjectStore objectStore, boolean validation) {
-        EOEditingContext ec = new EOEditingContext(objectStore);
-        ERXExtensions.setDefaultDelegate(ec, validation);
-        WOSession s=session();
-        if (s!=null) {
-            NSMutableArray a=(NSMutableArray)_editingContextsPerSession.objectForKey(s.sessionID());
-            if (a==null) {
-                a=new NSMutableArray();
-                _editingContextsPerSession.setObjectForKey(a,s.sessionID());
-                if (log().isDebugEnabled()) log().debug("Creating array for "+s.sessionID());
-            }
-            a.addObject(ec);
-            if (log().isDebugEnabled()) log().debug("Added new ec to array for "+s.sessionID());
-        } else if (log().isDebugEnabled()) {
-            log().debug("Editing Context created with null session.");
-        }
-        return ec;
-    }
-
+    private static NSMutableDictionary _editingContextsPerSession;
+    
     /**
      * This method is called when a session times out.
      * Calling this method will release references to
      * all editing contexts that were created when this
-     * session was active.
+     * session was active. This method is only called in
+     * pre-WO 5.2 versions of WebObjects.
      * @param sessionID of the session that timed out
      */
     public static void sessionDidTimeOut(String sessionID) {
-        if (sessionID!=null) {
-            if (log().isDebugEnabled()) {
-                NSArray a=(NSArray)_editingContextsPerSession.objectForKey(sessionID);
-                log().debug("Session "+sessionID+" is timing out ");
-                log().debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
+        if (sessionID != null) {
+            if (_editingContextsPerSession != null) {
+                if (log().isDebugEnabled()) {
+                    NSArray a=(NSArray)_editingContextsPerSession.objectForKey(sessionID);
+                    log().debug("Session "+sessionID+" is timing out ");
+                    log().debug("Found "+ ((a == null) ? 0 : a.count()) + " editing context(s)");
+                }
+                NSArray ecs = (NSArray)_editingContextsPerSession.removeObjectForKey(sessionID);
+                // Just helping things along.
+                if (ecs != null && ecs.count() > 0) {
+                    for (Enumeration ecEnumerator = ecs.objectEnumerator(); ecEnumerator.hasMoreElements();) {
+                        ((EOEditingContext)ecEnumerator.nextElement()).dispose();
+                    }
+                }                
             }
-            // FIXME: Should help things along by calling dispose on all the ecs being held here.
-            _editingContextsPerSession.removeObjectForKey(sessionID);
         }
     }
 
     /**
-     * Sets the default editing context delegate on
-     * the given editing context.
-     * @param ec editing context to have it's delegate set.
+     * Retains an editing context for the current session. This is only needed or
+     * used for versions of WO pre-5.2. If you use ERXEC to create your editing
+     * contexts then you never need to call this method yourself.
+     * @param ec to be retained.
      */
-    // FIXME: Misleading name, sounds like we are setting the actual delegate and not setting the delegate on
-    //		an editing context
-    // MOVEME: ERXECFactory
-    public static void setDefaultDelegate(EOEditingContext ec) { ERXExtensions.setDefaultDelegate(ec, true); }
+    public static void retainEditingContextForCurrentSession(EOEditingContext ec) {
+         WOSession s=session();
+         if (s != null) {
+             if (_editingContextsPerSession == null) {
+                 _editingContextsPerSession = new NSMutableDictionary();
+             }
+             NSMutableArray a = (NSMutableArray)_editingContextsPerSession.objectForKey(s.sessionID());
+             if (a == null) {
+                 a = new NSMutableArray();
+                 _editingContextsPerSession.setObjectForKey(a, s.sessionID());
+                 if (log().isDebugEnabled())
+                     log().debug("Creating array for "+s.sessionID());
+             }
+             a.addObject(ec);
+             if (log().isDebugEnabled())
+                 log().debug("Added new ec to array for "+s.sessionID());
+         } else if (log().isDebugEnabled()) {
+             log().debug("Editing Context created with null session.");
+         }
+    }
 
     /**
-     * Sets either the default editing context delegate
-     * that does or does not allow validation based on
-     * the validation flag passed in on the given editing context.
-     * @param ec editing context to have it's delegate set.
-     * @param validation flag that determines if the editing context
-     * 		should perform validation on objects being saved.
+     * deprecated see {@link ERXEC}
      */
-    // FIXME: Misleading name, sounds like we are setting the actual delegate and not setting the delegate on
-    //		an editing context
-    // MOVEME: ERXECFactory
+    public static void setDefaultDelegate(EOEditingContext ec) {
+        ERXEC.factory().setDefaultDelegateOnEditingContext(ec);
+    }
+
+    /**
+     * deprecated see {@link ERXEC}
+     */
     public static void setDefaultDelegate(EOEditingContext ec, boolean validation) {
-        log().debug("Setting default delegate...");
-        if (ec != null) {
-            if (validation)
-                ec.setDelegate(ERXExtensions.defaultEditingContextDelegate());
-            else
-                ec.setDelegate(ERXExtensions.defaultECNoValidationDelegate());
-        }
+        ERXEC.factory().setDefaultDelegateOnEditingContext(ec, validation);
     }
 
     // DELETEME: This is duplicated in ERXUtilities
