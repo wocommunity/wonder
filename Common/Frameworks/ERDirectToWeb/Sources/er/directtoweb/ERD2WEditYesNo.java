@@ -24,7 +24,7 @@ public class ERD2WEditYesNo extends D2WEditBoolean {
     }
 
     public String radioBoxGroupName(){
-        return ("YesNoGroup_"+d2wContext().displayNameForProperty());
+        return ("YesNoGroup_"+d2wContext().propertyKey());
     }
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
