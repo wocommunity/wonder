@@ -279,7 +279,6 @@ public class ERXUtilities {
             else
                 cat.warn("Null framework name for bundle: " + bundle);
         }
-        cat.info(frameworkNames);
         return frameworkNames;
     }
 
