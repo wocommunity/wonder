@@ -1,90 +1,23 @@
-     0 : (((task = 'edit') or (task = 'inspect')) and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'0')) => componentAvailable = ERD2WInspect
-     0 : (((task = 'list') or (task = 'select')) and (propertyType <> 'a') and (propertyType <> 'r')) => componentAvailable = ERDEditButton
-     0 : (((task = 'list') or (task = 'select')) and (propertyType <> 'a') and (propertyType <> 'r')) => componentAvailable = ERDEditListButton
-     0 : (((task = 'list') or (task = 'select')) and (propertyType <> 'a') and (propertyType <> 'r')) => componentAvailable = ERDInspectButton
-     0 : (((task = 'list') or (task = 'select')) and (propertyType <> 'a') and (propertyType <> 'r')) => componentAvailable = ERDMassModifyButton
-     0 : (((task = 'list') or (task = 'select')) and (propertyType <> 'a') and (propertyType <> 'r')) => componentAvailable = ERDTrashcan
-     0 : ((task <> 'query') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WDisplayNumber
-     0 : ((task <> 'query') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WDisplayNumberWithUnit
-     0 : ((task <> 'query') and (attribute.className = 'com.webobjects.foundation.NSData')) => componentAvailable = ERD2WDisplayImage
-     0 : ((task <> 'query') and (attribute.className = 'com.webobjects.foundation.NSData')) => componentAvailable = ERDDisplayImageIfExists
-     0 : ((task <> 'query') and (attribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentAvailable = ERD2WDisplayDateOrNull
-     0 : ((task <> 'query') and (attribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentAvailable = ERDDisplayYearsMonths
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.Number')) => componentAvailable = ERD2WCustomDisplayBoolean
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.Number')) => componentAvailable = ERD2WDisplayYesNo
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String') and (propertyKey like '*assword')) => componentAvailable = ERD2WDisplayPassword
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = D2WDisplayMailTo
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WDisplayHTML
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WDisplayImageWithUrl
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WDisplayString
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WDisplayStringWithLineBreaks
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WDisplayTextFromHTML
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WDisplayURL
-     0 : ((task <> 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERDDisplayMailTo
-     0 : ((task <> 'query') and (pageConfiguration like '*XML*') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WXMLDisplayNumber
-     0 : ((task <> 'query') and (pageConfiguration like '*XML*') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WXMLDisplayString
-     0 : ((task <> 'query') and (pageConfiguration like '*XML*') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WXMLDisplayToMany
-     0 : ((task <> 'query') and (propertyType <> 'a') and (propertyType <> 'r')) => componentAvailable = ERD2WDisplayConstant
-     0 : ((task <> 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'0')) => componentAvailable = ERD2WDisplayAddress
-     0 : ((task <> 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'0')) => componentAvailable = ERD2WDisplayToOne
-     0 : ((task <> 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WDisplayToManyCustom
-     0 : ((task <> 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WDisplayToManyList
-     0 : ((task <> 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WDisplayToManyTable
-     0 : ((task <> 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERDLinkToViewList
-     0 : ((task = 'edit') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WEditNumber
-     0 : ((task = 'edit') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WEditNumberOrDefault
-     0 : ((task = 'edit') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WEditNumberWithUnit
-     0 : ((task = 'edit') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WEditPercentage
-     0 : ((task = 'edit') and ((attribute.className = 'java.lang.Number') or (attribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WPopUp
-     0 : ((task = 'edit') and (attribute.className = 'com.webobjects.foundation.NSTimestamp') and (attribute.allowsNull <> (java.math.BigDecimal)'0')) => componentAvailable = ERDEditDatePopupOrNull
-     0 : ((task = 'edit') and (attribute.className = 'com.webobjects.foundation.NSTimestamp') and (attribute.allowsNull = (java.math.BigDecimal)'0')) => componentAvailable = ERDEditDatePopup
-     0 : ((task = 'edit') and (attribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentAvailable = ERDEditDateJavascript
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.Number')) => componentAvailable = ERD2WCustomEditBoolean
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.Number')) => componentAvailable = ERD2WEditAllowRestrict
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.Number')) => componentAvailable = ERD2WEditYesNo
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String') and (attribute.externalSize = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WEditFlag
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String') and (propertyKey like '*assword')) => componentAvailable = ERDEditPassword
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String') and (propertyKey like '*assword')) => componentAvailable = ERDEditPasswordConfirm
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WEditLargeString
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WEditOrDefault
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WEditString
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WEditURL
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String')) => componentAvailable = ERDDHTMLComponent
-     0 : ((task = 'edit') and (attribute.className = 'java.lang.String')) => componentAvailable = ERDEditStringWithChoices
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'0')) => componentAvailable = ERD2WEditToOneRelationship
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'0')) => componentAvailable = ERD2WTwoLevelEditToOneRelationship
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WEditSortedToManyFault
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WEditToManyRelationship
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERD2WList
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERDList
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERDListOrganizer
-     0 : ((task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentAvailable = ERDListPicker
-     0 : ((task = 'edit') and (propertyType = 'r')) => componentAvailable = ERDEditOwnedRelationship
      0 : ((task = 'inspect') or (task = 'edit')) => repetitionComponentName = ERDInspectPageRepetition
-     0 : ((task = 'query') and (attribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentAvailable = ERDQueryDateRangeJavascript
-     0 : ((task = 'query') and (attribute.className = 'java.lang.String')) => componentAvailable = ERD2WQueryEncryptedString
-     0 : ((task = 'query') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'0')) => componentAvailable = ERD2WQueryToOneRelationship
-     0 : ((task = 'query') and (propertyType = 'r')) => componentAvailable = ERD2WPickFromEntities
-     0 : ((task = 'query') and (propertyType = 'r')) => componentAvailable = ERD2WPickFromList
      0 : (pageConfiguration like 'Confirm*') => explanationComponent = ERXD2WInspect
-     0 : (propertyType = 'r') => sortKeyForList = <RelationshipSortAssignment> [er.directtoweb.ERDRelationshipSortAssignment]
+     0 : (propertyType = 'r') => sortKeyForList = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : (smartAttribute.width > (java.math.BigDecimal)'0') => maxLength = smartAttribute.width [er.directtoweb.ERDKeyValueAssignment]
      0 : (subTask = 'printerFriendly') => pageWrapperName = ERDPrinterFriendlyWrapper
      0 : (task = 'editRelationship') => templateNameForEditRelationshipPage = ERD2WEditRelationshipTemplate
      0 : (task = 'inspect') => escapeHTML = 1 [com.webobjects.directtoweb.BooleanAssignment]
-     0 : (task = 'list') => defaultActions = <computed> [er.directtoweb.ERDDefaultActionAssignment]
+     0 : (task = 'list') => defaultActions = <ERDDefaultActionAssignment> [er.directtoweb.ERDDefaultActionAssignment]
      0 : (task = 'message') => displayPropertyKeys = ()
      0 : (task = 'query') => repetitionComponentName = ERDQueryPageRepetition
      0 : (task = 'select') => actions = (("selectAction"), ())
-     0 : *true* => actions = defaultActions [er.directtoweb.ERDDefaultPropertyNameAssignment]
+     0 : *true* => actions = defaultActions [er.directtoweb.ERDKeyValueAssignment]
      0 : *true* => allowsFiltering = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => batchNavigationBarComponentName = ERXBatchNavigationBar
      0 : *true* => choicesNames = ("Yes", "No")
-     0 : *true* => componentAvailable = ERD2WCustomComponentWithArgs
-     0 : *true* => componentAvailable = ERD2WStatelessCustomComponentWithArgs
      0 : *true* => defaultSortOrdering = ()
      0 : *true* => displayValueForNull = N/A
-     0 : *true* => emptyListMessage = ERDEmptyListMessage.emptyListMessage [er.directtoweb.ERDLocalizedMessageAssignment]
+     0 : *true* => emptyListMessage = ERDEmptyListMessage.emptyListMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
+     0 : *true* => entityForControllerName = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+     0 : *true* => entityForPageConfiguration = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : *true* => flushPropertyValue = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => footerComponentName = ERXEmptyComponent
      0 : *true* => formEncoding = null
@@ -100,16 +33,18 @@
      0 : *true* => noChoiceAvailableMessage = 
      0 : *true* => noSelectionString = - none -
      0 : *true* => pageConfigurationForFiltering = null
-     0 : *true* => passwordConfirmationValidates = 0
+     0 : *true* => passwordConfirmationValidates = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => possibleChoices = null
      0 : *true* => propertyIsSortable = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => renderBorder = 1 [com.webobjects.directtoweb.BooleanAssignment]
-     0 : *true* => resolvedUnit = <UnitResolverAssignment> [er.directtoweb.ERDUnitResolverAssignment]
+     0 : *true* => resolvedUnit = <ERDUnitResolverAssignment> [er.directtoweb.ERDUnitResolverAssignment]
      0 : *true* => shouldCollectValidationExceptions = 1 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => showEditButton = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => singleSelection = 0 [com.webobjects.directtoweb.BooleanAssignment]
-     0 : *true* => smartAttribute = <computedAttribute> [er.directtoweb.ERDSmartAttributeAssignment]
-     0 : *true* => smartRelationship = <computedRelationship> [er.directtoweb.ERDSmartRelationshipAssignment]
+     0 : *true* => smartAttribute = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+     0 : *true* => smartDefaultAttributeWidth = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+     0 : *true* => smartDefaultRows = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+     0 : *true* => smartRelationship = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : *true* => sortKey = 
      0 : *true* => sortKeyForList = propertyKey [er.directtoweb.ERDKeyValueAssignment]
      0 : *true* => targetOutput = html
@@ -142,13 +77,11 @@
      0 : *true* => useFocus = 1 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => useMatrixLayout = 0 [com.webobjects.directtoweb.BooleanAssignment]
      1 : ((task = 'list') or (task = 'select') or ((task = 'edit') and (subTask = 'list'))) => repetitionComponentName = ERDListPageRepetition
-     5 : (((task = 'edit') or (task = 'inspect')) and (propertyKey like '(*)')) => componentAvailable = ERDDefaultSectionComponent
      5 : ((not (targetOutput = 'xml')) and (not (targetOutput = 'rtf'))) => valueWhenEmpty = &nbsp;
-     5 : ((task = 'edit') and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => componentAvailable = ERD2WEditNumber
      5 : ((task = 'edit') and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => componentName = ERD2WEditNumber
      5 : (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp') => displayValueForNull = None
-     5 : (smartAttribute.className = 'java.lang.String') => length = smartDefaultAttributeWidth [er.directtoweb.ERDDefaultModelAssignment]
-     5 : (smartAttribute.className = 'java.lang.String') => rows = smartDefaultRows [er.directtoweb.ERDDefaultModelAssignment]
+     5 : (smartAttribute.className = 'java.lang.String') => length = smartDefaultAttributeWidth [er.directtoweb.ERDKeyValueAssignment]
+     5 : (smartAttribute.className = 'java.lang.String') => rows = smartDefaultRows [er.directtoweb.ERDKeyValueAssignment]
      5 : *true* => useTabImages = 0 [com.webobjects.directtoweb.BooleanAssignment]
      5 : *true* => useTabSectionImages = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartAttribute.className = 'java.lang.String') and (not (targetOutput = 'xml')) and (not (targetOutput = 'rtf'))) => componentName = ERD2WDisplayString
@@ -177,16 +110,9 @@
     10 : ((task = 'list') and (subTask = 'compare')) => pageName = templateNameForListComparePage [er.directtoweb.ERDKeyValueAssignment]
     10 : ((task = 'query') and (smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > (java.math.BigDecimal)'0') and (not (smartRelationship.isToMany = (java.math.BigDecimal)'1'))) => componentName = ERD2WQueryToOneRelationship
     10 : (isEmbeddedInForm = (java.math.BigDecimal)'1') => batchNavigationBarComponentName = ERXBatchNavigationBarInForm
-    10 : (pageConfiguration like '*') => confirmConfigurationName = confirmConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
-    10 : (pageConfiguration like '*') => confirmDeleteConfigurationName = confirmDeleteConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
-    10 : (pageConfiguration like '*') => createConfigurationName = createConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
-    10 : (pageConfiguration like '*') => editConfigurationName = editConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
-    10 : (pageConfiguration like '*') => inspectConfigurationName = inspectConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
-    10 : (pageConfiguration like '*') => listConfigurationName = listConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
-    10 : (pageConfiguration like '*') => queryConfigurationName = queryConfigurationNameForEntity [er.directtoweb.ERDKeyValueAssignment]
     10 : (pageConfiguration like '*Embedded*') => showBanner = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (pageConfiguration like 'Confirm*') => task = confirm
-    10 : (pageConfiguration like 'ConfirmDelete*') => embeddedPageConfiguration = defaultEmbeddedInspectPageConfiguration [er.directtoweb.ERDDefaultsEmbeddedAssignment]
+    10 : (pageConfiguration like 'ConfirmDelete*') => inspectConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : (pageConfiguration like 'Error*') => task = error
     10 : (pageConfiguration like 'Filter*') => taskVerb = Filter
     10 : (pageConfiguration like 'Inspect*') => task = inspect
@@ -196,12 +122,13 @@
     10 : (pageConfiguration like 'Message*') => task = message
     10 : (pageConfiguration like 'Pick*') => subTask = pick
     10 : (pageConfiguration like 'Select*') => task = select
-    10 : (propertyKey = 'deleteAction') => componentName = ERDTrashcan
+    10 : (propertyKey = 'deleteAction') => componentName = ERDDeleteButton
     10 : (propertyKey = 'editAction') => componentName = ERDEditButton
     10 : (propertyKey = 'inspectAction') => componentName = ERDInspectButton
     10 : (propertyKey = 'printAction') => componentName = ERDPrinterButton
     10 : (propertyKey = 'selectAction') => componentName = ERDSelectButton
     10 : (propertyKey = 'selectAllAction') => componentName = ERDSelectAllButton
+    10 : (propertyType = 'r') => emptyListMessage = ERDEmptyListMessage.emptyEmbeddedListMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : (propertyType = 'r') => isMandatory = smartRelationship.isMandatory [er.directtoweb.ERDKeyValueAssignment]
     10 : (smartAttribute.className = 'java.math.BigDecimal') => maxLength = 30
     10 : (subTask = 'compact') => shouldRenderBorder = 1 [com.webobjects.directtoweb.BooleanAssignment]
@@ -210,43 +137,47 @@
     10 : (subTask = 'printerFriendly') => disabled = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'edit') => hasForm = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'edit') => shouldValidateBeforeSave = 1 [com.webobjects.directtoweb.BooleanAssignment]
-    10 : (task = 'inspect') => permissionToEdit = 0
+    10 : (task = 'inspect') => permissionToEdit = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'list') => isEmbeddedInForm = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'list') => readOnly = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (task = 'queryAll') => displayPropertyKeys = visibleEntityNames [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => branchChoices = ()
     10 : *true* => browserSize = 5
-    10 : *true* => cancelMessage = ERD2W.cancelCreationMessage [er.directtoweb.ERDLocalizedMessageAssignment]
+    10 : *true* => cancelMessage = ERD2W.cancelCreationMessage [er.directtoweb.ERDLocalizedAssignment]
     10 : *true* => componentsToShowAtEndOfList = ("ERD2WCustomComponentWithArgs", "ERD2WStatelessCustomComponentWithArgs", "D2WCustomQueryComponent", "D2WCustomComponent", "D2WKeyPathContainer")
-    10 : *true* => confirmConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
-    10 : *true* => confirmDeleteConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => confirmConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => confirmDeleteConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => confirmRows = 4
-    10 : *true* => createConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => createConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => customComponentName = ERDDefaultCustomComponent
-    10 : *true* => displayNameForDestinationEntity = <computed> [er.directtoweb.ERDLocalizedAssignment]
-    10 : *true* => displayNameForEntity = <computed> [er.directtoweb.ERDLocalizedAssignment]
-    10 : *true* => displayNameForPageConfiguration = <computed> [er.directtoweb.ERDLocalizedAssignment]
-    10 : *true* => displayNameForProperty = <computed> [er.directtoweb.ERDLocalizedAssignment]
-    10 : *true* => displayNameForSectionKey = <computed> [er.directtoweb.ERDLocalizedAssignment]
-    10 : *true* => displayNameForTabKey = <computed> [er.directtoweb.ERDLocalizedAssignment]
-    10 : *true* => editConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
-    10 : *true* => embeddedEntityName = defaultEmbeddedEntityName [er.directtoweb.ERDDefaultsEmbeddedAssignment]
+    10 : *true* => destinationEntity = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+    10 : *true* => displayNameForConfirmDeleteConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForDestinationEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForEditConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForInspectConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForPageConfiguration = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForProperty = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForSectionKey = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => displayNameForTabKey = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
+    10 : *true* => editConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => embeddedEntityName = destinationEntity.name [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => emptyListComponentName = ERDEmptyListMessage
-    10 : *true* => entity = pageConfiguration [er.directtoweb.ERDEntityAssignment]
+    10 : *true* => entity = entityForPageConfiguration [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => hasCSVVersion = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => hasPrinterFriendlyVersion = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => hasThirdLevel = 0 [com.webobjects.directtoweb.BooleanAssignment]
-    10 : *true* => inspectConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => inspectConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => isEntityDeletable = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => isEntityPrintable = 0 [com.webobjects.directtoweb.BooleanAssignment]
-    10 : *true* => listConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => listConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => nextButtonName = Next
-    10 : *true* => permissionToEdit = 0
+    10 : *true* => permissionToEdit = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => previousButtonName = Previous
-    10 : *true* => queryConfigurationNameForEntity = <computed> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => queryConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => saveButtonLabel = Save
     10 : *true* => sectionComponentName = ERDSectionText
-    10 : *true* => sectionImageName = <computed> [er.directtoweb.ERDImageNameAssignment]
+    10 : *true* => sectionImageName = <ERDImageNameAssignment> [er.directtoweb.ERDImageNameAssignment]
     10 : *true* => shouldRevertChanges = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => shouldSaveChanges = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => shouldSetFailedValidationValue = 0 [com.webobjects.directtoweb.BooleanAssignment]
@@ -259,8 +190,8 @@
     10 : *true* => showPublicNavigation = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => styleSheetFrameworkName = lookFrameworkName [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => submitButtonName = Submit
-    10 : *true* => tabContents = <ERTabDictionaryComputer> [er.directtoweb.ERDTabDictionaryComputer]
-    10 : *true* => tabs = <ERTabDictionaryComputer> [er.directtoweb.ERDTabDictionaryComputer]
+    10 : *true* => tabContents = <ERDTabDictionaryComputer> [er.directtoweb.ERDTabDictionaryComputer]
+    10 : *true* => tabs = <ERDTabDictionaryComputer> [er.directtoweb.ERDTabDictionaryComputer]
     10 : *true* => useSubmitImages = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => yearRangeBottom = 2001
     10 : *true* => yearRangeTop = 2030
@@ -268,14 +199,13 @@
     11 : (propertyKey = 'dummy') => displayNameForProperty = 
     11 : (task = 'queryAll') => pageName = templateNameForQueryAllPage [er.directtoweb.ERDKeyValueAssignment]
     15 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (propertyIsKeyPath = (java.math.BigDecimal)'1')) => componentName = ERD2WDisplayString
-    15 : (customComponentName = 'ERDList') => displayNameForEntity = defaultEmbeddedEntityDisplayName [er.directtoweb.ERDDefaultsEmbeddedAssignment]
+    15 : (customComponentName = 'ERDList') => _displayNameForEntity = displayNameForDestinationEntity [er.directtoweb.ERDKeyValueAssignment]
     20 : (((task = 'inspect') or (task = 'list') or (task = 'select')) and (smartAttribute.allowsNull = (java.math.BigDecimal)'1') and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp')) => componentName = ERD2WDisplayDateOrNull
     20 : (((task = 'inspect') or (task = 'list')) and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => formatter = ###,###.##;0;-###,###.##
     20 : (((task = 'list') and (subTask = 'groupPick')) or ((task = 'select') and (subTask = 'group'))) => pageName = ERD2WGroupingPickListPageTemplate
     20 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > (java.math.BigDecimal)'0') and (not (smartRelationship.isToMany = (java.math.BigDecimal)'1'))) => componentName = ERD2WDisplayToOne
     20 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > (java.math.BigDecimal)'0') and (smartRelationship.isToMany = (java.math.BigDecimal)'1')) => componentName = ERD2WDisplayToManyTable
-    20 : ((not (task = 'edit')) and (propertyKey like '*email') and (not (task = 'query'))) => componentName = ERD2WStatelessCustomComponentWithArgs
-    20 : ((not (task = 'edit')) and (propertyKey like '*email') and (not (task = 'query'))) => customComponentName = ERDDisplayMailTo
+    20 : ((not (task = 'edit')) and (propertyKey like '*email') and (not (task = 'query'))) => componentName = ERDDisplayMailTo
     20 : ((relationship.destinationEntity.userInfo.isSortedJoinEntity = 'true') and (task = 'edit') and (propertyType = 'r') and (relationship.isToMany = (java.math.BigDecimal)'1')) => componentName = ERD2WEditSortedToManyFault
     20 : ((subTask = 'printerFriendly') or (task = 'inspect')) => allowCollapsing = false
     20 : ((task = 'edit') and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => formatter = ###,##0.##;0;-###,###.##
@@ -284,7 +214,7 @@
     20 : ((task = 'list') and (subTask = 'group')) => groupingComponentName = ERDDefaultSectionComponent
     20 : ((task = 'list') and (subTask = 'printerFriendly')) => groupingComponentName = ERDDefaultSectionComponentPrinterFriendly
     20 : ((task = 'query') and (subTask = 'fetchSpecification')) => pageName = ERD2WQueryPageWithFetchSpecification
-    20 : (entity.userInfo.isSortedJoinEntity = 'true') => keyWhenRelationship = <computed> [er.directtoweb.ERDSortedManyToManyAssignment]
+    20 : (entity.userInfo.isSortedJoinEntity = 'true') => keyWhenRelationship = <ERDSortedManyToManyAssignment> [er.directtoweb.ERDSortedManyToManyAssignment]
     20 : (pageConfiguration like 'PickGroup*') => subTask = groupPick
     20 : (pageConfiguration like 'SelectPickType*') => subTask = pickType
     20 : (propertyKey like '*primaryKey') => componentName = ERD2WDisplayString
@@ -312,7 +242,7 @@
     25 : ((task = 'query') and (smartAttribute.userInfo.erPrototype = 'BooleanYesNo') and ((smartAttribute.className = 'java.math.BigDecimal') or (smartAttribute.className = 'java.lang.Number'))) => componentName = D2WQueryBoolean
     25 : (propertyKey = 'url') => componentName = ERD2WDisplayURL
     30 : ((not (task = 'edit')) and (smartAttribute.userInfo.unit = 'months')) => componentName = ERD2WStatelessCustomComponentWithArgs
-    30 : ((not (task = 'edit')) and (smartAttribute.userInfo.unit = 'months')) => customComponentName = ERDDisplayYearsMonths
+    30 : ((not (task = 'edit')) and (smartAttribute.userInfo.unit = 'months')) => componentName = ERDDisplayYearsMonths
     30 : ((propertyKey like '*rawPrimaryKey') or (propertyKey like '*RawPrimaryKey')) => propertyIsSortable = 1 [com.webobjects.directtoweb.BooleanAssignment]
     30 : ((smartAttribute.userInfo.unit = '%') and (smartAttribute.className = 'java.lang.Number')) => formatter = ##.###;0;-##.###
     30 : ((smartAttribute.userInfo.unit = '%') and (smartAttribute.className = 'java.math.BigDecimal')) => formatter = ##.###;0;-##.###
@@ -337,25 +267,13 @@
     50 : ((task = 'edit') and (attribute.className = 'java.lang.String') and (attribute.externalType = 'CLOB')) => componentName = ERD2WEditLargeString
     50 : ((task = 'edit') and (attribute.className = 'java.lang.String') and (attribute.externalType = 'CLOB')) => length = 50
     50 : ((task = 'edit') and (attribute.className = 'java.lang.String') and (attribute.externalType = 'CLOB')) => rows = 10
-    50 : ((task = 'edit') or (task = 'inspect')) => pageAvailable = ERD2WCompactInspectPageTemplate
-    50 : ((task = 'edit') or (task = 'inspect')) => pageAvailable = ERD2WInspectPageTemplate
-    50 : ((task = 'edit') or (task = 'inspect')) => pageAvailable = ERD2WTabInspectPageTemplate
-    50 : ((task = 'edit') or (task = 'inspect')) => pageAvailable = ERD2WWizardCreationPageTemplate
-    50 : ((task = 'list') or (task = 'select')) => pageAvailable = ERD2WCompactListPageTemplate
-    50 : ((task = 'list') or (task = 'select')) => pageAvailable = ERD2WEditableListPageTemplate
-    50 : ((task = 'list') or (task = 'select')) => pageAvailable = ERD2WGroupingListPageTemplate
-    50 : ((task = 'list') or (task = 'select')) => pageAvailable = ERD2WListPageTemplate
     50 : ((task = 'message')) => pageName = templateNameForMessagePage [er.directtoweb.ERDKeyValueAssignment]
     50 : (pageConfiguration like 'EditList*') => subTask = list
     50 : (subTask = 'massModify') => isMandatory = 0 [com.webobjects.directtoweb.BooleanAssignment]
     50 : (subTask = 'massModify') => shouldCollectValidationExceptions = 0 [com.webobjects.directtoweb.BooleanAssignment]
     50 : (subTask = 'massModify') => shouldSaveChanges = 0 [com.webobjects.directtoweb.BooleanAssignment]
     50 : (subTask = 'massModify') => shouldValidateBeforeSave = 0 [com.webobjects.directtoweb.BooleanAssignment]
-    50 : (task = 'edit') => permissionToEdit = 1
-    50 : (task = 'query') => pageAvailable = ERD2WQueryPageTemplate
-    50 : (task = 'query') => pageAvailable = ERD2WQueryPageWithFetchSpecificationTemplate
-    50 : (task = 'queryAll') => pageAvailable = ERD2WQueryEntitiesPageTemplate
-    50 : (task = 'select') => pageAvailable = ERD2WSelectPageTemplate
+    50 : (task = 'edit') => permissionToEdit = 1 [com.webobjects.directtoweb.BooleanAssignment]
     50 : *true* => backgroundColorForTable = #ebebeb
     50 : *true* => defaultBatchSize = 10
     51 : ((task = 'edit') or (task = 'inspect')) => pageName = templateNameForInspectPage [er.directtoweb.ERDKeyValueAssignment]
@@ -394,4 +312,6 @@
    600 : ((targetOutput = 'xml') and (frame <> (java.math.BigDecimal)'1')) => pageWrapperName = ERDXMLPageWrapper
    600 : (targetOutput = 'xml') => batchSize = 0
    600 : (targetOutput = 'xml') => defaultBatchSize = 0
+  1000 : (smartRelationship.isToMany = (java.math.BigDecimal)'0') => embeddedPageConfiguration = inspectConfigurationName [er.directtoweb.ERDKeyValueAssignment]
+  1000 : (smartRelationship.isToMany = (java.math.BigDecimal)'1') => embeddedPageConfiguration = listConfigurationName [er.directtoweb.ERDKeyValueAssignment]
   5000 : (forcedSubTask <> null) => subTask = forcedSubTask [er.directtoweb.ERDKeyValueAssignment]
