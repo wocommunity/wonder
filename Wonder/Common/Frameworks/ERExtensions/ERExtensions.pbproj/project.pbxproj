@@ -286,6 +286,14 @@
 				509AC52B03EB36CB00CF0E76,
 				416B00E3040EC20100000106,
 				416B00E5040EC20100000106,
+				413BCBA80463102A00000102,
+				413BCBAA0463102A00000102,
+				413BCC78046311A700000102,
+				413BCC7A046311A700000102,
+				413BCCF904631A7F00000102,
+				413BCCFB04631A7F00000102,
+				413BE5AB0463315E00000102,
+				413BE5AD0463315E00000102,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +474,10 @@
 				41FF21B00461C69F00000102,
 				41FF22E40461CEF300000102,
 				413BCAE70462E51800000102,
+				413BCBA90463102A00000102,
+				413BCC79046311A700000102,
+				413BCCFA04631A7F00000102,
+				413BE5AC0463315E00000102,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1124,6 +1136,242 @@
 		};
 		413BCAE70462E51800000102 = {
 			fileRef = 413BCAE60462E51800000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCB9F0463102A00000102 = {
+			children = (
+				413BCBA00463102A00000102,
+				413BCBA10463102A00000102,
+				413BCBA20463102A00000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSValidationErrors;
+			path = "";
+			refType = 2;
+		};
+		413BCBA00463102A00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSValidationErrors.api;
+			path = Components/ERXJSValidationErrors.api;
+			refType = 4;
+		};
+		413BCBA10463102A00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSValidationErrors.java;
+			path = Sources/er/extensions/ERXJSValidationErrors.java;
+			refType = 4;
+		};
+		413BCBA20463102A00000102 = {
+			children = (
+				413BCBA30463102A00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERXJSValidationErrors.wo;
+			path = "";
+			refType = 4;
+		};
+		413BCBA30463102A00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXJSValidationErrors.wo;
+			refType = 4;
+		};
+		413BCBA80463102A00000102 = {
+			fileRef = 413BCBA00463102A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCBA90463102A00000102 = {
+			fileRef = 413BCBA10463102A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCBAA0463102A00000102 = {
+			fileRef = 413BCBA20463102A00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCC6F046311A700000102 = {
+			children = (
+				413BCC70046311A700000102,
+				413BCC71046311A700000102,
+				413BCC72046311A700000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSRemoteCall;
+			path = "";
+			refType = 2;
+		};
+		413BCC70046311A700000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSRemoteCall.api;
+			path = Components/ERXJSRemoteCall.api;
+			refType = 4;
+		};
+		413BCC71046311A700000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSRemoteCall.java;
+			path = Sources/er/extensions/ERXJSRemoteCall.java;
+			refType = 4;
+		};
+		413BCC72046311A700000102 = {
+			children = (
+				413BCC73046311A700000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERXJSRemoteCall.wo;
+			path = "";
+			refType = 4;
+		};
+		413BCC73046311A700000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXJSRemoteCall.wo;
+			refType = 4;
+		};
+		413BCC78046311A700000102 = {
+			fileRef = 413BCC70046311A700000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCC79046311A700000102 = {
+			fileRef = 413BCC71046311A700000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCC7A046311A700000102 = {
+			fileRef = 413BCC72046311A700000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCCF004631A7F00000102 = {
+			children = (
+				413BCCF104631A7F00000102,
+				413BCCF204631A7F00000102,
+				413BCCF304631A7F00000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSInputValidator;
+			path = "";
+			refType = 2;
+		};
+		413BCCF104631A7F00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSInputValidator.api;
+			path = Components/ERXJSInputValidator.api;
+			refType = 4;
+		};
+		413BCCF204631A7F00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSInputValidator.java;
+			path = Sources/er/extensions/ERXJSInputValidator.java;
+			refType = 4;
+		};
+		413BCCF304631A7F00000102 = {
+			children = (
+				413BCCF404631A7F00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERXJSInputValidator.wo;
+			path = "";
+			refType = 4;
+		};
+		413BCCF404631A7F00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXJSInputValidator.wo;
+			refType = 4;
+		};
+		413BCCF904631A7F00000102 = {
+			fileRef = 413BCCF104631A7F00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCCFA04631A7F00000102 = {
+			fileRef = 413BCCF204631A7F00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BCCFB04631A7F00000102 = {
+			fileRef = 413BCCF304631A7F00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BE5A20463315E00000102 = {
+			children = (
+				413BE5A30463315E00000102,
+				413BE5A40463315E00000102,
+				413BE5A50463315E00000102,
+			);
+			isa = PBXGroup;
+			name = ERXJSVariables;
+			path = "";
+			refType = 2;
+		};
+		413BE5A30463315E00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSVariables.api;
+			path = Components/ERXJSVariables.api;
+			refType = 4;
+		};
+		413BE5A40463315E00000102 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERXJSVariables.java;
+			path = Sources/er/extensions/ERXJSVariables.java;
+			refType = 4;
+		};
+		413BE5A50463315E00000102 = {
+			children = (
+				413BE5A60463315E00000102,
+			);
+			isa = PBXVariantGroup;
+			name = ERXJSVariables.wo;
+			path = "";
+			refType = 4;
+		};
+		413BE5A60463315E00000102 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXJSVariables.wo;
+			refType = 4;
+		};
+		413BE5AB0463315E00000102 = {
+			fileRef = 413BE5A30463315E00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BE5AC0463315E00000102 = {
+			fileRef = 413BE5A40463315E00000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		413BE5AD0463315E00000102 = {
+			fileRef = 413BE5A50463315E00000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6951,6 +7199,10 @@
 				F57059B902E3E27301000102,
 				FB13D999F9BE5AD29792D4FB,
 				F6E7989D02C8799401AD0D07,
+				413BE5A20463315E00000102,
+				413BCC6F046311A700000102,
+				413BCCF004631A7F00000102,
+				413BCB9F0463102A00000102,
 			);
 			isa = PBXGroup;
 			name = "Javascript & DHTML Components";
