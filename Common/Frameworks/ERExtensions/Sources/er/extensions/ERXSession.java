@@ -174,7 +174,10 @@ public class ERXSession extends WOSession implements Serializable {
             ERXLocalizer.setCurrentLocalizer(_localizer);
             _messageEncoding = new ERXMessageEncoding(_localizer.language());
 
-            setLanguages(new NSArray(_localizer.language()));
+            NSMutableArray languageList = new NSMutableArray(_localizer.language());
+            if (! languageList.containsObject("Nonlocalized")) 
+                languageList.addObject("Nonlocalized");
+            setLanguages(languageList);
         }
     }
 
