@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 //import com.webobjects.appserver._private.ERXSubmitButton;
+import com.webobjects.appserver._private.WOProperties;
 import java.util.*;
 
 /**
@@ -30,6 +31,19 @@ public abstract class ERXApplication extends WOApplication {
     // FIXME: Should correct all references to WORequestHandler.DidHandleRequestNotification and then delete this ivar.
     public static final String WORequestHandlerDidHandleRequestNotification = WORequestHandler.DidHandleRequestNotification;
 
+    private static boolean _wasERXApplicationMainInvoked = false;
+
+    /** 
+     * Called when the application starts up and saves the command line 
+     * arguments for {@link ERXConfigurationManger}. 
+     * 
+     * @see com.webobjects.appserver.WOApplication#main(String[], Class)
+     */
+    public static void main(String argv[], Class applicationClass) {
+        _wasERXApplicationMainInvoked = true;
+        ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
+        WOApplication.main(argv, applicationClass);
+    }
 
     /**
      * Installs several bufixes and enhancements to WODynamicElements.
@@ -51,6 +65,8 @@ public abstract class ERXApplication extends WOApplication {
      */
     public ERXApplication() {
         super();
+        if (! _wasERXApplicationMainInvoked)  _displayWarningAboutTheMainMethod();
+        
         installPatches();
 
         ERXModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
@@ -59,6 +75,33 @@ public abstract class ERXApplication extends WOApplication {
         Long timestampLag=Long.getLong("EOEditingContextDefaultFetchTimestampLag");
         if (timestampLag!=null)
             EOEditingContext.setDefaultFetchTimestampLag(timestampLag.longValue());
+            
+        NSNotificationCenter.defaultCenter().addObserver(
+                        this,
+                        new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
+                        WOApplication.ApplicationWillFinishLaunchingNotification,
+                        null);
+    }
+
+    /**
+     * Notification method called when the application posts
+     * the notification {@link WOApplicaiton#ApplicationWillFinishLaunchingNotification}. 
+     * This method calls subclasse's {@link #finishInitialization} method. 
+     * 
+     * @param n notification that is posted after the WOApplication
+     *      has been constructed, but before the application is
+     *      ready for accepting requests.
+     */
+    public final void finishInitialization(NSNotification n) {
+        finishInitialization();
+    }
+
+    /**
+     * Called when the application posts {@link WOApplicaiton#ApplicationWillFinishLaunchingNotification}.  
+     * Override this to perform application initialization. (optional)
+     */
+    public void finishInitialization() {
+        // empty
     }
     
     /**
@@ -206,7 +249,7 @@ public abstract class ERXApplication extends WOApplication {
 
 
     /**
-        *  Puts together a dictionary with a bunch of useful information relative to the current state when the exception
+     *  Puts together a dictionary with a bunch of useful information relative to the current state when the exception
      *  occurred. Potentially added information:<br/>
      * <ol>
      * <li>the current page name</li>
@@ -262,6 +305,24 @@ public abstract class ERXApplication extends WOApplication {
         log.error("Exception caught, " + exception.getMessage() + " extra info: " + extraInfo);
         return super.handleException(exception, context);
     }    
+
+    /** 
+     * Logs the warning message if the main method was not called 
+     * during the startup.
+     */
+    private void _displayWarningAboutTheMainMethod() {
+        log.warn("\n\nIt seems that your applicaiton class " 
+            + application().getClass().getName() + " did not call "   
+            + ERXApplication.class.getName()
+            + ".main(argv[], applicationClass) method. "
+            + "Please modify your Application.java as the followings so that "
+            + ERXConfigurationManager.class.getName() + " can provide its "
+            + "rapid turnaround feature completely. \n\n"
+            + "Please change Application.java like this: \n" 
+            + "public static void main(String argv[]) { \n"
+            + "    ERXApplication.main(argv, Application.class); \n"
+            + "}\n\n");
+    }
 
     /*
     public D2WContext d2wContext() {
