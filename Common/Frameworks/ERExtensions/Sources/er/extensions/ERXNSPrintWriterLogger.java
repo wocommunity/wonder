@@ -14,9 +14,9 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * <code>ERXNSPrintWriterLogger</code> is an alternative of 
- * {@link: com.webobjects.foundation.NSLog.PrintStreamLogger NSLog.PrintStreamLogger} 
- * but accepts character oriented {@link: java.io.PrintWriter} instead of 
- * byte oriented {@link: java.io.PrintStream}
+ * {@link com.webobjects.foundation.NSLog.PrintStreamLogger NSLog.PrintStreamLogger} 
+ * but accepts character oriented {@link java.io.PrintWriter} instead of 
+ * byte oriented {@link java.io.PrintStream}
  * so that the character encoding for logging can be 
  * explicitly set. 
  * <p>
