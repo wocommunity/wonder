@@ -8,7 +8,7 @@ import Person;
 import com.webobjects.eoaccess.*;
 import com.uw.shared.*;
 
-public class Application extends WOApplication { 
+public class Application extends UWApplication { 
 
 
     public NSDictionary settings;	// dictionary of app settings read from Properties
@@ -18,88 +18,9 @@ public class Application extends WOApplication {
         WOApplication.main(argv, Application.class);
     }
 
-    public WOResponse handleSessionRestorationErrorInContext(WOContext aContext) {
-        return pageWithName("Main",aContext).generateResponse();
-    }
-
-    public NSTimestamp todaysDate() {
-        return new NSTimestamp();
-    }
-
-
-    // overridden because sometimes there are malformed cookies that throw exceptions in WO 5.1.x
-    // it can be commented out in 5.2
-    public WOResponse dispatchRequest(WORequest aRequest) {
-        /* this piece of code solves several problems with cookies in 5.1.x
-        1. does not include cookies that have multiple = signs
-        2. does not include cookies that have no cookie value
-        3. ensures cookie keys are unique */
-
-        String cHeader = aRequest.headerForKey("cookie");
-
-        if (cHeader!=null) {
-
-
-            // we use a dictionary to ensure that all cookie keys are unique
-            NSMutableDictionary cookieDictionary = new NSMutableDictionary();
-
-            // parse and reconstruct cookie header removing any malformed cookies
-            StringReader stringReader = new StringReader(cHeader);
-            StreamTokenizer tokenizer = new StreamTokenizer(stringReader);
-
-            // set up the tokenizer
-            tokenizer.resetSyntax();
-            tokenizer.wordChars(' ','~');
-            tokenizer.whitespaceChars(';',';');
-            tokenizer.eolIsSignificant(true);
-
-
-            int token=0;
-            try {
-                token = tokenizer.nextToken();
-            }
-            catch (Exception e) {
-                System.out.println(e);
-                return null;
-            }
-
-            // continue to read tokens until the End of File is encountered
-            while (token == tokenizer.TT_WORD) {
-
-                try {
-                    String currentCookie = tokenizer.sval.trim();
-                    
-                    if (currentCookie.indexOf('=')==currentCookie.lastIndexOf('=',currentCookie.length())) {
-                        int equalsIndex = currentCookie.indexOf('=');
-                        String cookieHeader = currentCookie.substring(0,equalsIndex).trim();
-                        String cookieValue = currentCookie.substring(equalsIndex+1,currentCookie.length()).trim();
-
-                        if (cookieValue.length()>0) {
-                            cookieDictionary.takeValueForKey(cookieValue,cookieHeader);
-                        }
-                    }
-
-                    token = tokenizer.nextToken();
-
-                }
-                catch (Exception e) {
-                    System.out.println(e);
-                    return null;
-                }
-            }
-
-            String cookieString = cookieDictionary.toString();
-            aRequest.setHeader(cookieString.substring(1,cookieString.length()-1),"cookie");
-
-        }
-        return super.dispatchRequest(aRequest);
-    }
-
-
     /** Constructor */
     public Application() {
         super();
-        // this.setCachingEnabled(true);
 
         // Cause the app to present the first page via the default directaction.  This is more efficient than overriding pageForName.
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
@@ -108,10 +29,6 @@ public class Application extends WOApplication {
 
         try {
             String settingsDictionaryName = System.getProperty("SettingsDictionaryName");
-            if(settingsDictionaryName == null)
-                settingsDictionaryName = "MyLiveSettings";
-            System.out.println(settingsDictionaryName);
-            
             settings = NSPropertyListSerialization.dictionaryForString(System.getProperty(settingsDictionaryName));
             setSMTPHost((String) settings.objectForKey("SMTPHost"));
 
