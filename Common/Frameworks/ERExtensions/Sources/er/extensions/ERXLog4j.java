@@ -35,7 +35,7 @@ public class ERXLog4j {
     public static Category log;
 
     //CHECKME: (tatsuya) This will be moved to ERXProperties, ERXPropertyUtilities or ERXConfigurationManager
-    protected static String ERConfigurationPathPropertyName = "ERConfigurationPath";
+    protected final static String ERConfigurationPathPropertyName = "ERConfigurationPath";
 
     /**
      * holds the notification that is posted after
