@@ -142,11 +142,12 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * Helper method to init the smtpHost property.  This method
      * first check is <code>er.javamail.smtpHost</code> is set.  If
      * it is not set, then it looks for <code>mail.smtp.host</code>
-     * (standard JavaMail property).  When a correct property is
+     * (standard JavaMail property) and finally the <code>WOSMTPHost</code> property.
+     * When a correct property is
      * found, then it sets both properties to the found value.  If no
      * properties are found, a RuntimeException is thrown.
      * @throws RuntimeException if neither one of
-     * <code>er.javamail.smtpHost</code> nor mail.smtp.host is set.
+     * <code>er.javamail.smtpHost</code>, <code>mail.smtp.host</code> or <code>WOSMTPHost</code> is set.
      */
     protected void setupSmtpHostSafely () {
         // Smtp host
@@ -156,7 +157,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
             smtpHost = System.getProperty ("mail.smtp.host");
     
             if ((smtpHost == null) || (smtpHost.length () == 0)) {
-                throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
+                // use the standard WO host
+                smtpHost = System.getProperty ("WOSMTPHost");
+                if ((smtpHost == null) || (smtpHost.length () == 0)) {
+                    throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
+                }
             } else
                 System.setProperty ("er.javamail.smtpHost", smtpHost);
         } else
