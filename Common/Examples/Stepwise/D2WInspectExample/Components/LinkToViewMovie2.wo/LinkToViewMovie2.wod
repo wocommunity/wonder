@@ -1,0 +1,8 @@
+Hyperlink1: WOHyperlink {
+	action = view;
+}
+
+String1: WOString {
+	value = movie.title;
+}
+
