@@ -145,6 +145,13 @@ public class ERXLinlyn {
         } catch(IOException ioe) {ioe.printStackTrace();}
     }
 
+    /**
+     * Returns a list of files and associated attributes in a given directory.
+     * There is no FTP-server independent way to retrieve only the file name
+     * portion of the result, but calling
+     * substring(lastIndexOf(' ')+1)
+     * on each element in the array will work so long as there are no spaces in filenames.
+     */
     public String[] listFiles(String dir) throws IOException {
         ftpSetTransferType(false);
         dsock = ftpGetDataSock();
@@ -162,7 +169,7 @@ public class ERXLinlyn {
 
     public String download(String dir, String file, boolean asc)
         throws IOException {
-        return download(dir, file, asc, false);
+        return download(dir, file, asc, true);
     }
 
     public String download(String dir, String file, boolean asc, boolean keepAlive)
@@ -200,7 +207,7 @@ public class ERXLinlyn {
     }
 
     public void upload(String dir, String file, byte[] bytes) throws IOException {
-        upload(dir, file, bytes, false);
+        upload(dir, file, bytes, true);
     }
 
     public void upload(String dir, String file, byte[] bytes, boolean keepAlive) throws IOException {
@@ -219,7 +226,7 @@ public class ERXLinlyn {
     }
     
     public void upload(String dir, String file, String what, boolean asc) throws IOException {
-        upload(dir, file, what, asc, false);
+        upload(dir, file, what, asc, true);
     }
 
     public void upload(String dir, String file, String what, boolean asc, boolean keepAlive) throws IOException {
@@ -236,6 +243,28 @@ public class ERXLinlyn {
             ftpLogout();
         }
     }
+
+    /**
+     * Removes a file from a directory on the server.
+     * @return true if the file was deleted (response 250), false otherwise.
+     */
+    public boolean deleteFile(String dir, String file) throws IOException {
+        return deleteFile(dir, file, true);
+    }
+
+    public boolean deleteFile(String dir, String file, boolean keepAlive) throws IOException {
+        ftpSetDir(dir);
+        String response = ftpSendCmd("DELE "+file);
+        if (!keepAlive) {
+            ftpLogout();
+        }
+        if (response.startsWith("250")) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     ///////////////// private fields ////////////////////
     private boolean pauser = false;  // it's a hack. We're going to 
