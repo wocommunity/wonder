@@ -99,7 +99,7 @@ public abstract class ERXApplication extends WOApplication {
 
     /**
      * Creates the request object for this loop.
-     * Overridden to use an {link ERXRequest} object that fixes a bug
+     * Overridden to use an {@link ERXRequest} object that fixes a bug
      * with localization.
      * @param aMethod the HTTP method object used to send the request, must be one of "GET", "POST" or "HEAD"
      * @param aURL - must be non-null
