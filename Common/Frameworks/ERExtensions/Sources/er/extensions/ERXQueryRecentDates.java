@@ -60,14 +60,7 @@ public class ERXQueryRecentDates extends WOComponent {
         NSTimestamp dateFromQueryMin=(NSTimestamp)displayGroup.queryMin().valueForKey(key);
         if (dateFromQueryMin!=null) {
             NSTimestamp now=new NSTimestamp();
-            NSTimestamp.IntRef days=new NSTimestamp.IntRef();
-            now.gregorianUnitsSinceTimestamp( null,
-                                              null,
-                                              days,
-                                              null,
-                                              null,
-                                              null, dateFromQueryMin);
-            int d=days.value;
+            int d = (int)ERXTimestampUtility.differenceByDay(now, dateFromQueryMin);
             if (d>0) {
                 for (int i=0;i<daysAgoArray.length-1;i++) {
                     if (d>=daysAgoArray[i] && d<= daysAgoArray[i+1]) {
