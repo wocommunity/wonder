@@ -33,7 +33,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         }
     }
     
-    public ERXObjectStoreCoordinatorSynchronizer synchronizer() {
+    public static ERXObjectStoreCoordinatorSynchronizer synchronizer() {
         if(_synchronizer == null) {
             initialize();
         }
@@ -68,15 +68,22 @@ public class ERXObjectStoreCoordinatorSynchronizer {
     }
     
     public void addObjectStore(EOObjectStoreCoordinator osc) {
-        _coordinators.addObject(osc);
-        
-        NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class } );
-        NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+        if(!_coordinators.containsObject(osc)) {
+            _coordinators.addObject(osc);
+            NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class } );
+            NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+        } else {
+            log.error("Adding same coodinator twice!");
+        }
     }
     
     public void removeObjectStore(EOObjectStoreCoordinator osc) {
-        _coordinators.removeObject(osc);
-        NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+        if(_coordinators.containsObject(osc)) {
+            _coordinators.removeObject(osc);
+            NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStoreCoordinator.ObjectsChangedInStoreNotification, osc);
+        } else {
+            log.error("Coordinator not found!");
+        }
     }
     
     public void publishChange(NSNotification n) {
@@ -102,25 +109,28 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         private class DeleteProcessor extends SnapshotProcessor {
             public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.forgetSnapshotForGlobalID(globalID);
+                log.info("forget: " + globalID);
             }
         }
         private class UpdateProcessor extends SnapshotProcessor {
             public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.forgetSnapshotForGlobalID(globalID);
                 database.recordSnapshotForGlobalID(snapshot, globalID);
-           }
+                log.info("update: " + globalID);
+            }
         }
         private class InsertProcessor extends SnapshotProcessor {
             public void processSnapshotForGlobalID(EODatabaseContext database,  NSDictionary snapshot, EOGlobalID globalID) {
                 database.recordSnapshotForGlobalID(snapshot, globalID);
-           }
+                log.info("insert: " + globalID);
+            }
         }
         
-        List _elements = new LinkedList();
+        private List _elements = new LinkedList();
         
-        SnapshotProcessor _deleteProcessor = new DeleteProcessor();
-        SnapshotProcessor _insertProcessor = new InsertProcessor();
-        SnapshotProcessor _updateProcessor = new UpdateProcessor();
+        private SnapshotProcessor _deleteProcessor = new DeleteProcessor();
+        private SnapshotProcessor _insertProcessor = new InsertProcessor();
+        private SnapshotProcessor _updateProcessor = new UpdateProcessor();
         
         private ProcessChangesQueue() {
         }
@@ -128,28 +138,30 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         private void addChange(Change changes) {
             synchronized (_elements) {
                 _elements.add(changes);
-                notify();
+                _elements.notify();
             }
         }
         
         public void run() {
             boolean run = true;
             while (true) {
-                try {
-                    if(_elements.isEmpty()) {
-                        wait(10);
+                Change changes = null;
+                synchronized(_elements) {
+                    try {
+                        if(_elements.isEmpty()) {
+                            _elements.wait();
+                        }
+                        if(!_elements.isEmpty()) {
+                            changes = (Change)_elements.remove(0);
+                        }
+                    } catch (InterruptedException e) {
+                        run = false;
+                        log.info("Interrupted: " + e, e);
                     }
-                } catch (InterruptedException e) {
-                    run = false;
-                    log.info("Interrupted: " + e, e);
                 }
-                if (!_elements.isEmpty()) {
-                    Change changes = null;
-                    synchronized(_elements) {
-                        changes = (Change)_elements.remove(0);
-                    }
+                if(changes != null) {
                     EOObjectStoreCoordinator sender = changes.coordinator();
-  
+                    
                     process(sender, _deleteProcessor, changes.deleted());
                     process(sender, _insertProcessor, changes.inserted());
                     process(sender, _updateProcessor, changes.updated());
@@ -225,7 +237,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
          * @return
          */
         private NSDictionary snapshotsGroupedByEntity(NSArray objects, EOObjectStoreCoordinator osc) {
-            if(objects != null) {
+            if(objects == null || objects.count() == 0) {
                 return NSDictionary.EmptyDictionary;
             }
             
