@@ -514,4 +514,17 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
         return tabSectionsContents;
     }
+
+    // (ak) these actually belong to CompactEdit and PrinterFriendlyInspect
+    // moved them here to avoid to much subclassing
+    public boolean isEmbedded() {
+        return ERXUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
+    }
+
+    /*    // FIXME: Should be dynamic
+        public String pageTitle() {
+            return "NetStruxr - "+d2wContext().valueForKey("displayNameForEntity")+" View";
+        }
+    */
+    public NSTimestamp now() { return new NSTimestamp(); }
 }
