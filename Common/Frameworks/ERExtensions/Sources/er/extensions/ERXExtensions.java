@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
+import java.lang.reflect.Method;
 import java.lang.*;
 import java.util.*;
 import java.io.*;
@@ -1962,4 +1963,25 @@ public class ERXExtensions {
             } catch (IOException e) {}
         }
     }
+    
+    /**
+     * Determines if a given object implements a method given
+     * the name and the array of input parameters.
+     * @param object to determine if it implements a method
+     * @param methodName name of the method
+     * @param parameters array of parameters
+     * @return if the object implements a method with the given name
+     * 		and class parameters
+     */
+    public static boolean objectImplementsMethod(Object object, String methodName, Class[] parameters) {
+        boolean implementsMethod = false;
+        for (Enumeration e = (new NSArray(object.getClass().getMethods())).objectEnumerator(); e.hasMoreElements();) {
+            Method m = (Method)e.nextElement();
+            if (m.getName().equals(methodName) && m.getParameterTypes().equals(parameters)) {
+                implementsMethod = true; break;
+            }
+        }
+        return implementsMethod;
+    }
+
 }

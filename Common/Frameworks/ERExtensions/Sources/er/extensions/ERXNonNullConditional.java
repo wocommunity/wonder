@@ -16,7 +16,7 @@ import com.webobjects.appserver.WOContext;
  * Synopsis:<br/>
  * condition=<i>aCondition</i>;[negate=<i>aBoolean</i>;]
  * 
- * @binding list array of objects
+ * @binding condtion object to test for nullality
  * @binding negate inverts the sense of the conditional.
  */
 public class ERXNonNullConditional extends WOComponent {
