@@ -4,6 +4,7 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import com.sun.tools.javac.v8.comp.*;
 import com.webobjects.foundation.*;
 
 /**
@@ -27,6 +28,21 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
         ERXMutableDictionary dd = (ERXMutableDictionary) ois.readObject();
         ois.close();
         return dd;
+    }
+
+    public static ERXMutableDictionary fromPropertyList(String plist) {
+    		NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(plist);
+    		return new ERXMutableDictionary(dict);
+    }
+
+    public static String toPropertyList(ERXMutableDictionary dict) {
+		String plist = NSPropertyListSerialization.stringFromPropertyList(dict);
+		return plist;
+    }
+
+    public String toPropertyList() {
+		String plist = NSPropertyListSerialization.stringFromPropertyList(this);
+		return plist;
     }
 
     public NSData toBlob() throws Exception {
@@ -123,6 +139,5 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
         NSArray av = super.allValues();
         return new ERXMutableArray(av);
     }
-    
     
 }
