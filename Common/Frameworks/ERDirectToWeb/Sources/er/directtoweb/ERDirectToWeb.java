@@ -15,7 +15,7 @@ import com.webobjects.directtoweb.*;
 import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.appserver.*;
 import er.extensions.*;
-import org.apache.log4j.*;
+import org.apache.log4j.Category;
 import java.util.*;
 
 // Primary Package Class
@@ -37,17 +37,18 @@ public class ERDirectToWeb {
     }
     
     private static boolean _isInitialized=false;
-    public static void initialize() {
+    static {
         // called implicitely because ERDirectToWeb is the principal class of the framework
         if (!_isInitialized) {
             if (cat.isDebugEnabled()) cat.debug("Initializing framework: ERDirectToWeb");
             Class c=ERD2WModel.class;        // force initialization
                                              // Configures the system for trace rule firing.
-            ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
+            //ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
             Observer observer=new Observer();
             ERXRetainer.retain(observer); // has to be retained on the objC side!!
             NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("didFinishedLaunchingApp", ERXConstant.NotificationClassArray),
+                                                             new NSSelector("didFinishedLaunchingApp",
+                                                                            ERXConstant.NotificationClassArray),
                                                              WOApplication.ApplicationDidFinishLaunchingNotification,
                                                              null);
             _isInitialized = true;
@@ -159,7 +160,7 @@ public class ERDirectToWeb {
         newContext.takeValueForKey(context.valueForKey("subTask"),"existingSubTask");
         newContext.takeValueForKey(context.valueForKey("pageConfiguration"),"pageConfiguration");
         newContext.takeValueForKey(context.entity(),"entity");
-        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context()) /* JC_WARNING - Please check: in WO 5.1 the method pageWithName(String, WORequest) on WOApplication has been removed. If this invocation has a WORequest parameter, please replace it with WOApplication.application().createContextForRequest(WORequest). */;
+        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context());
         ((D2WPage)result).setLocalContext(newContext);
         return result;
     }
@@ -174,7 +175,7 @@ public class ERDirectToWeb {
         newContext.takeValueForKey(context.valueForKey("subTask"),"existingSubTask");
         newContext.takeValueForKey(context.valueForKey("pageConfiguration"),"pageConfiguration");
         newContext.takeValueForKey(context.entity(),"entity");
-        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context()) /* JC_WARNING - Please check: in WO 5.1 the method pageWithName(String, WORequest) on WOApplication has been removed. If this invocation has a WORequest parameter, please replace it with WOApplication.application().createContextForRequest(WORequest). */;
+        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context());
         ((D2WPage)result).setLocalContext(newContext);
         return result;
     }
@@ -185,7 +186,7 @@ public class ERDirectToWeb {
         newContext.setTask(task);
         newContext.setEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
         newContext.takeValueForKey(subtask, "subTask");
-        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context()) /* JC_WARNING - Please check: in WO 5.1 the method pageWithName(String, WORequest) on WOApplication has been removed. If this invocation has a WORequest parameter, please replace it with WOApplication.application().createContextForRequest(WORequest). */;
+        WOComponent result=WOApplication.application().pageWithName((String)newContext.valueForKey("pageName"),session.context());
         ((D2WPage)result).setLocalContext(newContext);
         return result;        
     }
@@ -242,7 +243,8 @@ public class ERDirectToWeb {
     public static final Category trace = Category.getInstance("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
 
     // This enables us to turn trace rule firing on or off at will.
-    private static boolean _initializedTraceRuleFiring = false;
+    // FIXME: Disabled for now
+    private static boolean _initializedTraceRuleFiring = true;
     public static void configureTraceRuleFiringRapidTurnAround() {
         if (!_initializedTraceRuleFiring) {
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
@@ -259,13 +261,14 @@ public class ERDirectToWeb {
             };
             ERXRetainer.retain(observer); // has to be retained on the objC side!!
             NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("configureTraceRuleFiring", ERXConstant.NotificationClassArray),
+                                                             new NSSelector("configureTraceRuleFiring",
+                                                                            ERXConstant.NotificationClassArray),
                                                              ERXLog4j.ConfigurationDidChangeNotification,
                                                              null);
             _initializedTraceRuleFiring = true;
         }
     }
-
+    
     // This is the actual method that turns trace rule firign on and off.
     public static void configureTraceRuleFiring() {
         if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
