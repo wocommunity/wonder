@@ -359,7 +359,7 @@ public class ERDirectToWeb {
 
     
     public static String createConfigurationForEntityNamed(String entityName) {
-        return (String)d2wContextValueForKey("createConfigurationNameForEntity", entityName);
+        return (String)d2wContextValueForKey("createConfigurationName", entityName);
     }
 
     public static void warmUpRuleCache() {
