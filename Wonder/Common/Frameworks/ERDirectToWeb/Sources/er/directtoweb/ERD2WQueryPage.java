@@ -23,12 +23,19 @@ import er.extensions.*;
 
 public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
 
-    public WODisplayGroup displayGroup = new WODisplayGroup();
+    public WODisplayGroup displayGroup;
     protected boolean didLoadQueryBindings;
     protected NSDictionary queryBindings;
     
-    public ERD2WQueryPage(WOContext context) { super(context); }
+    public ERD2WQueryPage(WOContext context) { 
+        super(context); 
+        createDisplayGroup();
+    }
 
+    protected void createDisplayGroup() {
+        displayGroup = new WODisplayGroup();
+    }
+    
     protected void pullQueryBindingsForName(String name) {
     	NSDictionary queryBindings = queryBindings();
     	if(queryBindings != null) {
