@@ -80,8 +80,14 @@ public class ERXProperties {
         return s1 != null ? NSPropertyListSerialization.intForString(s1) : 0;
     }
 
-    // DELETEME: This isn't needed any more
-    //public static String stringForKey(String s) { return System.getProperty(s); }
+    /**
+     * Returning an string for a given system 
+     * property. This is a cover method of 
+     * {@link java.util.System#getProperty}
+     * @param s system property
+     * @return string value of the system propery or null
+     */
+    public static String stringForKey(String s) { return System.getProperty(s); }
 
     /**
      * Sets an array in the System properties for
@@ -110,8 +116,6 @@ public class ERXProperties {
      * @param key to be used to get the value
      */
     public static void setStringForKey(String string, String key) {
-        //Properties properties = System.getProperties();
-        //properties.put(key, string);
         System.setProperty(key, string);
     }
     
