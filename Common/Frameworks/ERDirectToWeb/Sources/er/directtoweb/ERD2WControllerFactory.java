@@ -14,10 +14,10 @@ import er.directtoweb.*;
  * The major benefit against simply using pageConfigurations and NextPageDelegates is that it is very confusing to link them together in a flow of pages. The second benefit is that it inherits from branchDelegate, which lets you make up a very flexible UI, you can have page-level actions mixed into the property repetitions for example. Also, you get much more control of the flow of complex tasks where you simply would get lost when you use bare NextPageDelegates and you can more easily create custom pages in between the flow. And finally, they make for great re-use and testing, because you can simply fake the actions the user took.<br />
  * Controllers are instatiated via something like:<br /><code><pre>
  public WOActionResults TestEditAction() {
-     ERCEdit erc = (ERCEdit)ERD2WControllerFactory.factory().controllerForName("EditDocument", session());
-     erc.setReturnPage(previousPageFromRequest());
+     ERD2WControllerFactory.ERCCreate erc = (ERD2WControllerFactory.ERCCreate)ERD2WControllerFactory.controllerFactory().controllerForName("CreateUser", session());
+     erc.setFinalPage(previousPageFromRequest());
      erc.setPrimaryKeyValue(primaryKeyFromRequest());
-     return (WOActionResults)erc.run();
+     return (WOActionResults)erc.firstPage();
  }
  * </pre></code>
  * They can be subclassed and you can change the flow of your app without the need to create subclasses of your pages - which spares you the hassle to deal with the duplicated HTML.
@@ -66,6 +66,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
             c.setD2WContext(d2wContext);
             c.setSession((WOSession)d2wContext.valueForKey("session"));
             c.setControllerName((String)d2wContext.valueForKey("controllerName"));
+            c.d2wContext().setDynamicPage((String)d2wContext.valueForKey("pageConfiguration"));
         }
         return c;
     }
@@ -160,7 +161,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         public ERCCore() {
         }
 
-        protected WOComponent pageWithContextTaskEntity(String task, String entityName, WOSession session) {
+        protected WOComponent pageWithContextTaskEntity(String task, String entityName) {
             D2WModel.defaultModel().checkRules();
             EOEntity eoentity = (entityName == null ? null : EOModelGroup.defaultGroup().entityNamed(entityName));
             if (eoentity == null && entityName != null && !entityName.equals("")
@@ -168,39 +169,28 @@ public class ERD2WControllerFactory extends ERD2WFactory {
                 throw new IllegalArgumentException("Could not find entity named " + entityName);
             d2wContext().setTask(task);
             d2wContext().setEntity(eoentity);
-            WOComponent wocomponent = WOApplication.application().pageWithName(d2wContext().pageName(), session.context());
+            WOComponent wocomponent = WOApplication.application().pageWithName(d2wContext().pageName(), session().context());
             if (wocomponent instanceof D2WComponent)
                 ((D2WComponent) wocomponent).setLocalContext(d2wContext());
             return wocomponent;
         }
 
-        protected WOComponent pageForConfigurationNamed(String pageConfiguration, WOSession session) {
+        protected WOComponent pageForConfigurationNamed(String pageConfiguration) {
             D2WModel.defaultModel().checkRules();
             d2wContext().setDynamicPage(pageConfiguration);
             if (d2wContext().entity() == null || d2wContext().task() == null)
                 throw new IllegalArgumentException("Either no entity or task for pc: " + pageConfiguration);
-            WOComponent wocomponent = WOApplication.application().pageWithName(d2wContext().pageName(), returnPage().context());
+            WOComponent wocomponent = WOApplication.application().pageWithName(d2wContext().pageName(), session().context());
             if (wocomponent instanceof D2WComponent)
                 ((D2WComponent) wocomponent).setLocalContext(d2wContext());
             return wocomponent;
-        }
-
-        public D2WContext d2wContext() {
-            if(d2wContext == null) {
-                d2wContext = new D2WContext(session());
-            }
-            return d2wContext;
-        }
-
-        public WOSession session() {
-            return finalPage == null ? null : returnPage().session();
         }
 
         public WOComponent firstPage() {
             return runWithPageConfiguration((String)d2wContext().valueForKey("pageConfiguration"));
         }
         public WOComponent runWithPageConfiguration(String value) {
-            WOComponent page = pageForConfigurationNamed(value, session());
+            WOComponent page = pageForConfigurationNamed(value);
             page.takeValueForKey(this, "nextPageDelegate");
             return page;
         }
@@ -333,7 +323,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
             if(listConfigurationName==null) {
                 listConfigurationName = "__list__" + d2wContext().entity().name();
             }
-            listpageinterface = (ListPageInterface)pageForConfigurationNamed(listConfigurationName, currentPage.session());
+            listpageinterface = (ListPageInterface)pageForConfigurationNamed(listConfigurationName);
             listpageinterface.setDataSource(ds);
             listpageinterface.setNextPage(returnPage());
             return (WOComponent) listpageinterface;
@@ -344,7 +334,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         }
 
         public WOComponent firstPage(String pageConfiguration) {
-            QueryPageInterface qpi = (QueryPageInterface)pageForConfigurationNamed(pageConfiguration, returnPage().session());
+            QueryPageInterface qpi = (QueryPageInterface)pageForConfigurationNamed(pageConfiguration);
             qpi.setNextPageDelegate(this);
             return (WOComponent) qpi;
         }
