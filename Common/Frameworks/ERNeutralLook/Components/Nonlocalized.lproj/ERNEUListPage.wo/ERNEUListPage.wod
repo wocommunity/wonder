@@ -114,18 +114,9 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
-InspectEO: WOHyperlink {
-	action = inspectObjectAction;
-}
-
-InspectImage: WOImage {
-	alt = "Inspect that Object";
-	border = "0";
-	filename = "magglass-btn.gif";
-	framework = "JavaDirectToWeb";
-	height = "16";
-	name = "Inspect that Object";
-	width = "16";
+InspectButton: ERDInspectButton {
+	d2wContext = d2wContext;
+	object = object;
 }
 
 IsEntityNotWritable: WOConditional {
