@@ -19,7 +19,7 @@ import er.extensions.*;
  * 
  */
 
-public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface, DTWGeneration  {
+public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
 
     public WODisplayGroup displayGroup = new WODisplayGroup();
 
@@ -135,18 +135,4 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface, DTW
     public void setQueryDataSource(EODataSource datasource) {
         setDataSource(datasource);
     }
-    
-    public String fetchSpecOptions() {
-        String fetchSpecOptions
-        = ("_queryDataSource.fetchSpecification().setIsDeep(" + isDeep()
-           + ");\n\t_queryDataSource.fetchSpecification().setUsesDistinct("
-           + usesDistinct()
-           + ");\n\t_queryDataSource.fetchSpecification().setRefreshesRefetchedObjects("
-           + refreshRefetchedObjects() + ");\n");
-        if (fetchLimit() != 0)
-            fetchSpecOptions += ("\t_queryDataSource.fetchSpecification().setFetchLimit("
-                       + fetchLimit() + ");\n");
-        return fetchSpecOptions;
-    }
-
 }
