@@ -166,7 +166,7 @@ public class ERXMessageEncoding implements Serializable {
                                 listingMethod,	"listingMethod" });
         ERXSimpleTemplateParser parser = ERXSimpleTemplateParser.sharedInstance();
         String message = parser.parseTemplateWithObject(
-                    "@value@ isn't a supported @target@. (Not listed under @listingMethod@)", null, d, null);
+                    "@@value@@ isn't a supported @@target@@. (Not listed under @@listingMethod@@)", null, d, null);
         return new IllegalArgumentException(message);
     }
 
