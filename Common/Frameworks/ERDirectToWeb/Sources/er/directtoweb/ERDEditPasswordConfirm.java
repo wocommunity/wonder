@@ -13,7 +13,7 @@ import er.extensions.*;
 
 /**
  * Used to edit passwords where when changed the changed value must be confirmed.<br />
- * 
+ *
  * @binding errorMessage
  * @binding password
  * @binding passwordConfirm
@@ -26,53 +26,9 @@ public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERDEditPasswordConfirm.class);
-    
+
+    public int length;
+
     public ERDEditPasswordConfirm(WOContext context) { super(context); }
-
-    public String password;
-    public String passwordConfirm;
-
-    public void fail(String errorCode) {
-        if(log.isDebugEnabled())
-            log.debug("fail:<object:" + object() + "; key:" + key() + ";  password: " + password + "; code:" + errorCode + ";>");
-        validationFailedWithException(ERXValidationFactory.defaultFactory().createException(object(), key(), password, errorCode), password, key());
-    }
-    
     public boolean passwordExists() { return objectKeyPathValue() != null ? true : false; }
-
-    public void setObject(EOEnterpriseObject newObject) {
-        if (newObject!=object()) {
-            password=passwordConfirm=null;
-        }
-        super.setObject(newObject);
-    }
-
-    public void takeValuesFromRequest(WORequest r, WOContext c){
-        super.takeValuesFromRequest(r,c);
-        if (password==null || password.equals("") ||
-            passwordConfirm==null || passwordConfirm.equals("")) {
-            // one or both is null or empty
-            if (objectKeyPathValue()==null)
-                fail ("PasswordsFillBothFieldsException");
-            else {
-                // if we already have a value, then they need to both be null||empty
-                if (!(password==null || password.equals("")) && (passwordConfirm==null || passwordConfirm.equals("")))
-                    fail("PasswordsFillBothFieldsException");
-            }
-        } else {
-            // they are both non-null
-            if(!password.equals(passwordConfirm))
-                fail("PasswordsDontMatchException");
-            else {
-                if (object() instanceof NSValidation) {
-                    try {
-                        object().validateTakeValueForKeyPath(password, key());
-                    } catch (NSValidation.ValidationException e) {
-                        validationFailedWithException(e, password, key());
-                    }
-                } else
-                    object().validateTakeValueForKeyPath(password, key());
-            }
-        }
-    }
 }
