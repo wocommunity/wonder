@@ -10,7 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import er.directtoweb.*;
 
-public class BTListPage extends ERD2WListPageTemplate {
+public class BTListPage extends ERD2WListPage {
 
     public BTListPage(WOContext c) {
         super(c);
