@@ -10,18 +10,35 @@ import com.webobjects.eocontrol.*;
  * The request is created via ${link ERXApplication$createRequest()}.
  */
 public  class ERXRequest extends WORequest {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERXRequest.class);
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXRequest.class);
+
+    protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
+    public boolean isBrowserFormValueEncodingOverrideEnabled() {
+        if (isBrowserFormValueEncodingOverrideEnabled == null) {
+            isBrowserFormValueEncodingOverrideEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return isBrowserFormValueEncodingOverrideEnabled.booleanValue();
+    }
+    
     /** Simply call superclass constructor */
     public ERXRequest(String string, String string0, String string1,
                       NSDictionary nsdictionary, NSData nsdata,
                       NSDictionary nsdictionary2) {
         super(string, string0, string1, nsdictionary,
               nsdata, nsdictionary2);
+        if (isBrowserFormValueEncodingOverrideEnabled() && browser().formValueEncoding() != null) {
+            setDefaultFormValueEncoding(browser().formValueEncoding());
+        }
     }
 
     /** NSArray to keep browserLanguages in. */
     protected  NSArray _browserLanguages;
 
+    /** holds a reference to the browser object */
+    protected ERXBrowser _browser;
+    
     /** Returns a cooked version of the languages the user has set in his Browser.
      * Adds "Nonlocalized" and {link ERXLocalizer$defaultLanguage()} if not
      * already present.
@@ -47,8 +64,29 @@ public  class ERXRequest extends WORequest {
         return _browserLanguages;
     }
 
+    /**
+     * Gets the ERXBrowser associated with the user-agent of
+     * the request.
+     * @return browser object for the request
+     */
+    public ERXBrowser browser() {
+        if (_browser == null) {
+            ERXBrowserFactory browserFactory = ERXBrowserFactory.factory();
+            _browser = browserFactory.browserMatchingRequest(this);
+            browserFactory.retainBrowser(_browser);            
+        }
+        return _browser;
+    }
 
-
+    /**
+     * Cleaning up retian count on the browser.
+     */
+    public void finalize() throws Throwable {
+        if (_browser != null)
+            ERXBrowserFactory.factory().releaseBrowser(_browser);
+        super.finalize();
+    }
+    
     private static class _LanguageComparator extends NSComparator {
         
         private static float q(String languageString) {
