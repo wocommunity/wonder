@@ -15,6 +15,9 @@ import java.util.*;
 // ported from WebScript - Corrected nil context problem.
 public class ERXCheckboxMatrix extends WOComponent {
 
+    private static final Integer DEFAULT_PADDING = new Integer(0);
+    private static final Integer DEFAULT_SPACING = new Integer(0);
+
     public ERXCheckboxMatrix(WOContext aContext) {
         super(aContext);
     }
@@ -101,4 +104,25 @@ public class ERXCheckboxMatrix extends WOComponent {
         NSArray anItemList = (NSArray)valueForBinding("list");
         return (anItemList == null || anItemList.count() == 0);
     }
+
+    public Object cellpadding() {
+        Object v = valueForBinding("cellpadding");
+
+        if(v != null) {
+            return v;
+        } else {
+            return DEFAULT_PADDING;
+        }
+    }
+
+    public Object cellspacing() {
+        Object v = valueForBinding("cellspacing");
+
+        if(v != null) {
+            return v;
+        } else {
+            return DEFAULT_SPACING;
+        }
+    }
+
 }

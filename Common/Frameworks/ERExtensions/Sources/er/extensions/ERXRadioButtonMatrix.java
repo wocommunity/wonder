@@ -13,6 +13,9 @@ import com.webobjects.appserver.*;
 
 public class ERXRadioButtonMatrix extends WOComponent {
 
+    private static final Integer DEFAULT_PADDING = new Integer(0);
+    private static final Integer DEFAULT_SPACING = new Integer(0);
+
     public ERXRadioButtonMatrix(WOContext aContext) {
         super(aContext);
     }
@@ -20,26 +23,38 @@ public class ERXRadioButtonMatrix extends WOComponent {
     protected Object currentItem;
     protected Object _selection;
     protected Number index;
-    protected String uniqueID;
 
-    public boolean isStateless() { return true; }
+    public boolean isStateless() {
+        return true;
+    }
 
-    public void reset() { invalidateCaches(); }
+    public void reset() {
+        invalidateCaches();
+    }
 
-    public Object currentItem() { return currentItem; } 
+    public Object currentItem() {
+        return currentItem;
+    }
+
     public void setCurrentItem(Object aValue) {
         currentItem = aValue;
         setValueForBinding(aValue, "item");
     }
 
-    public Number index() { return index; } 
-    public void setIndex(Number newIndex) { index = newIndex; }
+    public Number index() {
+        return index;
+    }
+
+    public void setIndex(Number newIndex) {
+        index = newIndex;
+    }
 
     public Object selection() {
         if (_selection == null) {
             // ** only pull this one time
             _selection = valueForBinding("selection");
         }
+
         return _selection;
     }
 
@@ -49,8 +64,9 @@ public class ERXRadioButtonMatrix extends WOComponent {
             NSArray anItemList = (NSArray)valueForBinding("list");
             Object aSelectedObject = anItemList.objectAtIndex(Integer.parseInt(anIndex));
             setValueForBinding(aSelectedObject, "selection");
-            // ** and force it to be pulled if there's a next time.            
+            // ** and force it to be pulled if there's a next time.
         }
+
         _selection = null;
     }
 
@@ -58,21 +74,19 @@ public class ERXRadioButtonMatrix extends WOComponent {
         if (selection()!=null && selection().equals(currentItem)) {
             return "checked";
         }
+
         return "";
     }
 
 
     public void invalidateCaches() {
         _selection=null;
-        uniqueID=null;
         currentItem=null;
         index=null;
     }
 
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-        // it is essential to call uniqueID so that the elemenent ID is set for the whole set of radio buttons
         reset();
-        uniqueID();
         super.appendToResponse(aResponse, aContext);
     }
 
@@ -83,9 +97,34 @@ public class ERXRadioButtonMatrix extends WOComponent {
     }
 
     public String uniqueID() {
-        if (uniqueID==null) {
-            uniqueID = context().elementID();
+        Object id = valueForBinding("uniqueID");
+
+        if(id == null) {
+            return context().elementID();
+
+        } else {
+            return id.toString();
         }
-        return uniqueID;
-    }    
+    }
+
+    public Object cellpadding() {
+        Object v = valueForBinding("cellpadding");
+
+        if(v != null) {
+            return v;
+        } else {
+            return DEFAULT_PADDING;
+        }
+    }
+
+    public Object cellspacing() {
+        Object v = valueForBinding("cellspacing");
+
+        if(v != null) {
+            return v;
+        } else {
+            return DEFAULT_SPACING;
+        }
+    }
+
 }
