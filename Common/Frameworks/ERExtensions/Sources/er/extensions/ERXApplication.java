@@ -622,12 +622,34 @@ public abstract class ERXApplication extends WOApplication {
         return _streamingRequestHandlerKeys.containsObject(s);
     }
 
-    // deadlock in session-store detection
+    /** use the redirect feature */
+    protected Boolean _useSessionStoreDeadlockDetection;
+
+    /**
+     * Deadlock in session-store detection.
+     * Note that the detection only work in singlethreaded mode, and is mostly
+     * useful to find cases when a session is checked out twice in a single RR-loop,
+     * which will lead to a session store lockup.
+     * Set the <code>er.extensions.ERXApplication.useSessionStoreDeadlockDetection=true</code>
+     * property to actually the this feature.
+     * @return flag if to use the this feature
+     */
+    public boolean useSessionStoreDeadlockDetection() {
+        if(_useSessionStoreDeadlockDetection == null) {
+            _useSessionStoreDeadlockDetection = ERXProperties.booleanForKey("er.extensions.ERXApplication.useSessionStoreDeadlockDetection") ? Boolean.TRUE : Boolean.FALSE;
+            if(isConcurrentRequestHandlingEnabled() && _useSessionStoreDeadlockDetection.booleanValue()) {
+                log.error("Sorry, useSessionStoreDeadlockDetection does not work with concurrent request handling enabled.");
+                _useSessionStoreDeadlockDetection = Boolean.FALSE;
+            }
+        }
+        return _useSessionStoreDeadlockDetection.booleanValue();
+    }
+
     /** holds the info on checked-out sessions */
     private Hashtable _sessions = new Hashtable();
 
     /** Holds info about where and who checked out */
-    class SessionInfo {
+    private class SessionInfo {
         Exception _trace = new Exception();
         WOContext _context;
         public SessionInfo(WOContext wocontext) {
@@ -654,33 +676,42 @@ public abstract class ERXApplication extends WOApplication {
     /** Overridden to check the sessions */
     public WOSession createSessionForRequest(WORequest worequest) {
         WOSession wosession = super.createSessionForRequest(worequest);
-        _sessions.put(wosession.sessionID(), new SessionInfo(null));
+        if(useSessionStoreDeadlockDetection()) {
+            _sessions.put(wosession.sessionID(), new SessionInfo(null));
+        }
         return wosession;
     }
 
     /** Overridden to check the sessions */
     public void saveSessionForContext(WOContext wocontext) {
-        WOSession wosession = wocontext._session();
-        if(wosession != null) {
-            String sessionID = wosession.sessionID();
-            SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
-            if(sessionInfo == null) {
-                throw new IllegalStateException("Check-In of session that was not checked out");
+        if(useSessionStoreDeadlockDetection()) {
+            WOSession wosession = wocontext._session();
+            if(wosession != null) {
+                String sessionID = wosession.sessionID();
+                SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+                if(sessionInfo == null) {
+                    throw new IllegalStateException("Check-In of session that was not checked out");
+                }
+                _sessions.remove(sessionID);
             }
-            _sessions.remove(sessionID);
         }
         super.saveSessionForContext(wocontext);
     }
 
     /** Overridden to check the sessions */
     public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
-        SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
-        if(sessionInfo != null) {
-            throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
-        }
-        WOSession session = super.restoreSessionWithID(sessionID,wocontext);
-        if(session != null) {
-            _sessions.put(session.sessionID(), new SessionInfo(wocontext));
+        WOSession session;
+        if(useSessionStoreDeadlockDetection()) {
+            SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+            if(sessionInfo != null) {
+                throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
+            }
+            session = super.restoreSessionWithID(sessionID,wocontext);
+            if(session != null) {
+                _sessions.put(session.sessionID(), new SessionInfo(wocontext));
+            }
+        } else {
+            session = super.restoreSessionWithID(sessionID,wocontext);
         }
         return session;
     }
