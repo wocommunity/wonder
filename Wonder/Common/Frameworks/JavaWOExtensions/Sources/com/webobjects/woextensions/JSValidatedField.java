@@ -7,9 +7,9 @@
 
 package com.webobjects.woextensions;
 
+import java.util.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import java.util.Random;
 
 public class JSValidatedField extends WOComponent {
     public String uniqueID;

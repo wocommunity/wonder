@@ -7,11 +7,11 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import java.util.*;
 
-import java.util.Enumeration;
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 public class WXSortOrder extends WOComponent {
     protected WODisplayGroup _displayGroup;

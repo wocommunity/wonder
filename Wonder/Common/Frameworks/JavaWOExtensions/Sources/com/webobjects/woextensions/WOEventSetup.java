@@ -8,8 +8,6 @@
 package com.webobjects.woextensions;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 
 public class WOEventSetup extends WODirectAction {
     public WOEventSetup(WORequest aRequest)  {

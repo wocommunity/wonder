@@ -7,9 +7,7 @@
  
 package com.webobjects.woextensions;
 
-import java.util.*;
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 
 public class WOBatchNavigationBar extends WOComponent {
 
