@@ -297,7 +297,12 @@ public class ERXSession extends WOSession {
             setJavaScriptEnabled(js!=null && js.equals("1") && (_browser==null || _browser.indexOf("Netscape3.")==-1));
         }
         if (request!=null && /* !_javaScriptInitialized */true) {
-            String js=request.cookieValueForKey(JAVASCRIPT_ENABLED_COOKIE_NAME);
+            String js=null;
+            try {
+                request.cookieValueForKey(JAVASCRIPT_ENABLED_COOKIE_NAME);
+            } catch (StringIndexOutOfBoundsException e) {
+                // malformed cookies cause WO 5.1.3 to raise here
+            }
             if (js!=null) { // a friend sent us a cookie!
                 if (cat.isDebugEnabled()) cat.debug("Got JAVASCRIPT_ENABLED_COOKIE from a friend "+js);
                 setJavaScriptEnabled(js.equals("1") && (_browser==null || _browser.indexOf("Netscape3.")==-1));
