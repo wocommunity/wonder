@@ -1,3 +1,9 @@
+Span: WOGenericContainer {
+        elementName = "span";
+        id = spanName; 
+        name = spanName; 
+}
+
 BaseUrl: WOResourceURL {
 	filename = "s.gif";
 	framework = "ERExtensions";

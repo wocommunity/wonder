@@ -18,14 +18,20 @@ import org.apache.log4j.Category;
   */
 public class ERXDHTMLComponent extends ERXStatelessComponent {
     static final Category cat = Category.getInstance(ERXDHTMLComponent.class);
-    NSMutableArray arr = new NSMutableArray();
     
     public ERXDHTMLComponent(WOContext context) {
         super(context);
     }
 
+    public String spanName() {
+	return "span_" + varName();
+    }
+    
     public String varName()  {
 	String varName = (String)valueForBinding("varName");
+	if(varName == null) {
+	    varName = "dhtml_" + ERXExtensions.replaceStringByStringInString("-", "_", "" + context().elementID().hashCode());
+	}
 	return varName;
     }
 }
