@@ -441,7 +441,7 @@
         }; 
         ERDEditButton = {
             comment = "needs to be more generic, for example having text instead of the edit button image"; 
-            editors = (editConfigurationNameForEntity); 
+            editors = (editConfigurationName); 
             inspectionInformation = "Nice edit button for editing a toMany relationship in another page."; 
         }; 
         ERDEditDateJavascript = {
@@ -675,7 +675,7 @@
             title = "Edit Button Name"; 
             type = stringEmptyIsNull; 
         }; 
-        editConfigurationNameForEntity = {
+        editConfigurationName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
@@ -804,7 +804,7 @@
             inputSize = 20; 
             title = "Inner Component"; 
         }; 
-        inspectConfigurationNameForEntity = {
+        inspectConfigurationName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
             editingFor = property; 
             inputSize = 20; 
