@@ -176,7 +176,7 @@ public class ERXConfigurationManager {
         _isRapidTurnAroundInitialized = true;
         
         if (WOApplication.application().isCachingEnabled()) {
-            log.info("WOCachingEnabled is true. Disabling the raphidTurnAround for Properties files");
+            log.info("WOCachingEnabled is true. Disabling the rapid turnaround for Properties files");
             return;
         }
         
