@@ -1,2 +1,4 @@
-
+TabName: WOString {
+	value = tabText;
+}
 

@@ -6,12 +6,23 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSKeyValueCoding;
+import er.extensions.*;
 
-public class ERDTabText extends WOComponent {
+public class ERDTabText extends ERXStatelessComponent {
+    String tabText;
 
     public ERDTabText(WOContext context) { super(context); }
-    
-    public boolean isStateless() { return true; }
+
+    public void reset() { tabText = null; }
+
+    public String tabText() {
+        if(tabText == null) {
+            tabText = (String)((NSKeyValueCoding)valueForBinding("d2wContext")).valueForKey("tabName");
+            tabText = ((ERXSession)session()).localizer().localizedStringForKeyWithDefault(tabText);
+        }
+        return tabText;
+    }
 }
