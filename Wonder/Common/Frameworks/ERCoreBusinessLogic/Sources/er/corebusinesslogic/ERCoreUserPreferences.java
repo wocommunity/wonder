@@ -48,7 +48,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     
     public NSArray preferences() {
         ERCoreUserInterface user = (ERCoreUserInterface)ERCoreBusinessLogic.actor(preferencesEditingContext());
-        return user!=null ? user.preferences() : ERXConstant.EmptyArray;
+        return user!=null ? user.preferences() : NSArray.EmptyArray;
     }
 
     // FIXME: this EC will end up collecting a *lot* of stuff over the course of its life
