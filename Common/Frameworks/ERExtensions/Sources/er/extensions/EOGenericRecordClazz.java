@@ -11,14 +11,14 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
 /**
- * WARNING: this is alpha and untested!
+ * Adds class-level inheritance to EOF.<br />
  * Use subclasses of EOGenericRecordClazz as inner classes in your EO subclasses
  * to work around the missing class object inheritance of java. They <b>must</b>
- * be named XXX.XXXClazz to work!
+ * be named XXX.XXXClazz to work.<br />
  * Every subclass of this class will get their own "ClazzObject" instance, so it's
  * OK to store things which might be different in superclasses. That is, the "User"'s
  * implementation can override the "Person"'s and because Person.clazz() will get
- * it's own instance, it will do only "Person" things.
+ * it's own instance, it will do only "Person" things.<br />
  * The methods from EOUtilities are mirrored here so you don't have to import EOAccess
  * in your subclasses, which is not legal for client-side classes. The implementation
  * for a client-side class could then be easily switched to use the server-side EOUtilites
