@@ -202,7 +202,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             if(language != null)
                 return localizerForLanguage((String)language);
         }
-        return ((ERXSession)session).localizer();
+        return localizerForLanguage(defaultLanguage());
     }
     
     public String language() {return language;}
