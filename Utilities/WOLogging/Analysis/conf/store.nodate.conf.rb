@@ -6,6 +6,6 @@ OUTPUT_FILE_NAME = "Store"
 
 
 AddStatistics "SessionTrack", "Session Tracking"
-AddStatistics "Page", 				"Page Stats"
+AddStatisticsWithParams "SessionTrack", "Session Tracking", Array.new(1,"Main,LoginPage,OrderInfoInputPage,ConfirmationPage,ReceiptPage")
 
 APPNAME_PATTERN = /^Store$/ # put your regular expression here
