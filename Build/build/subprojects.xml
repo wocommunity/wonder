@@ -1,0 +1,257 @@
+<project name="common" default="all" basedir="../..">
+
+    <!-- don't touch from here on -->
+    <property name="build.compiler" value="jikes" />
+    <property name="build.compiler.emacs" value="true" />
+    <property name="build.compiler.fulldepend" value="false" />
+
+    <property file="Build/build/build.properties" />
+    <property file="${user.home}/build.properties" />
+    <property file="Build/build/default.properties" />
+    <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+
+    <property name="wo.system.root" value="/System/Library/Frameworks" />
+    <property name="wo.local.root" value="/Library/Frameworks" />
+    <property name="wo.server.root" value="/Library/WebServer/Documents/WebObjects/Frameworks" />
+    <property name="wonder.root" value="${basedir}" />
+
+    <target name="properties">
+        <property name="framework.name" value="${project.name}.framework" />
+        <property name="build.root" value="${user.home}/Roots" />
+        <property name="build.classes" value="${build.root}/classes/${project.name}" />
+        <property name="build.framework.dir" value="${build.root}/${framework.name}" />
+        <property name="build.jar.file" value="${build.framework.dir}/Resources/Java/${project.name}.jar" />
+
+        <path id="project.class.path">
+            <fileset dir="${wo.system.root}">
+                <include name="JavaFoundation.*/Resources/Java/*.jar" />
+                <include name="JavaEOControl.*/Resources/Java/*.jar" />
+                <include name="JavaEOAccess.*/Resources/Java/*.jar" />
+                <include name="JavaWebObjects.*/Resources/Java/*.jar" />
+                <include name="JavaJDBCAdaptor.*/Resources/Java/*.jar" />
+                <include name="JavaXML.*/Resources/Java/*.jar" />
+            </fileset>
+            <fileset dir="${build.root}">
+                <include name="JavaWOExtensions.*/Resources/Java/*.jar" />
+                <include name="Validity.*/Resources/Java/*.jar" />
+            </fileset>
+        </path>
+    </target>
+
+    <target name="usage">
+        <echo message="-------------------------------------" />
+        <echo message="Valid target-commands" />
+        <echo message="---------------------" />
+        <echo message="  all       --> create framework in ${build.root} " />
+        <echo message="  install   --> copy framework to ${wo.local.root} " />
+        <echo message="  web       --> copy framework to ${wo.server.root} " />
+        <echo message="  clean     --> remove .classes and .framework" />
+        <echo message="  allclean  --> remove .classes and .framework and installed framework" />
+        <echo message="--------------------------------------" />
+    </target>
+    <target name="prepare" depends="properties">
+        <mkdir dir="${project.dir}/Libraries" />
+        <mkdir dir="${project.dir}/Sources" />
+        <mkdir dir="${project.dir}/Resources" />
+        <mkdir dir="${project.dir}/Components" />
+        <mkdir dir="${project.dir}/WebServerResources" />
+        <mkdir dir="${build.root}" />
+        <mkdir dir="${build.classes}" />
+    </target>
+        
+    <target name="checkupdate">
+        <uptodate property="no.changes" targetfile="${build.jar.file}">
+            <srcfiles dir="${project.dir}" includes="Sources/**/*.java" />
+        </uptodate>
+    </target>
+
+    <target name="compile" depends="prepare,checkupdate" description="Default compile target" unless="no.changes">
+        <mkdir dir="${build.classes}" />
+        <javac srcdir="${project.dir}" destdir="${build.classes}" includes="Sources/**/*.java" debug="on" optimize="off" deprecation="on">
+            <classpath> 
+                <fileset dir="${project.dir}/Libraries">
+                    <include name="**/*.jar" />
+                </fileset>
+                <path refid="project.class.path" />
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="framework" depends="properties,compile" description="Default compile target">
+        <mkdir dir="${build.framework.dir}" />
+        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
+            <classpath refid="project.class.path" />
+        </taskdef>
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+            <lib dir="${project.dir}/Libraries">
+                <include name="**/*.jar" />
+            </lib>
+            <classes dir="${build.classes}">
+                <include name="**/*.class" />
+            </classes>
+            <resources dir="${project.dir}/Components">
+                <include name="**.api" />
+                <include name="**/*.wo/**" />
+            </resources>
+            <resources dir="${project.dir}/Resources">
+                <include name="*.eomodeld/**" />
+                <include name="**/*.plist" />
+                <include name="**/*.d2wmodel" />
+                <include name="**/*.strings" />
+                <include name="**/*.sh" />
+            </resources>
+            <wsresources dir="${project.dir}/WebServerResources">
+                <include name="**/*.gif" />
+                <include name="**/*.jpeg" />
+                <include name="**/*.js" />
+                <include name="**/*.css" />
+            </wsresources>
+        </woframework>
+
+        <copy todir="${dist}/Documentation/${project.name}">
+            <fileset dir="${project.dir}/Documentation">
+                <exclude name="**/CVS" />
+            </fileset>
+        </copy>
+
+        <copy todir="${dist}/Support/${project.name}">
+            <fileset dir="${project.dir}/Support">
+                <exclude name="**/CVS" />
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="Validity.application" depends="properties,compile" description="Default compile target">
+        <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
+            <classpath refid="project.class.path" />
+        </taskdef>
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+            <classes dir="${build.classes}">
+                <include name="**/*.class" />
+            </classes>
+            <resources dir="${project.dir}/Components">
+                <include name="**.api" />
+                <include name="**/*.wo/**" />
+            </resources>
+            <resources dir="${project.dir}/Resources">
+                <include name="*.eomodeld/**" />
+                <include name="**/*.plist" />
+                <include name="**/*.d2wmodel" />
+                <include name="**/*.strings" />
+                <include name="**/*.sh" />
+            </resources>
+            <wsresources dir="${project.dir}/WebServerResources">
+                <include name="**/*.gif" />
+                <include name="**/*.jpeg" />
+                <include name="**/*.js" />
+                <include name="**/*.css" />
+            </wsresources>
+            <frameworks root="${wo.system.root}">
+                <include name="Java*.framework"/>
+                <exclude name="Java*Cocoa.framework"/>
+                <exclude name="JavaOpen*.framework"/>
+                <exclude name="JavaEOGeneration*.framework"/>
+                <exclude name="JavaEOInterface.framework"/>
+                <exclude name="JavaEODistribution.framework"/>
+            </frameworks>
+            <frameworks root="${build.root}">
+                <include name="Validity.framework" />
+            </frameworks>
+        </woapplication>
+        <echo message="-------------------------------------" />
+        <echo message="${build.root}" />
+        <echo message="-------------------------------------" />
+    </target>
+
+    <target name="install" depends="all">
+        <copy todir="${wo.local.root}/${framework.name}">
+            <fileset dir="${build.framework.dir}" />
+        </copy>
+    </target>
+
+    <target name="web" depends="framework">
+        <copy todir="${wo.server.root}/${framework.name}/WebServerResources">
+            <fileset dir="${build.framework.dir}/WebServerResources" />
+        </copy>
+    </target>
+	
+    <target name="clean" depends="properties">
+        <echo message="-------------------------------------" />
+        <echo message="${project.dir}" />
+        <echo message="-------------------------------------" />
+        <delete dir="${build.classes}" />
+        <delete dir="${build.framework.dir}" />
+    </target>
+	
+    <!-- WOPayPal -->
+    <target name="WOPayPal.all">
+        <antcall target="framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="WOPayPal" />
+            <param name="project.dir" value="${wonder.root}/PayPal/Frameworks/WOPayPal" />
+        </antcall>
+    </target>
+    <target name="WOPayPal.clean">
+        <antcall target="clean" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="WOPayPal" />
+            <param name="project.dir" value="${wonder.root}/PayPal/Frameworks/WOPayPal" />
+        </antcall>
+    </target>
+
+    <!-- Validity Framework -->
+    <target name="Validity.framework.all">
+        <antcall target="framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="Validity" />
+            <param name="project.dir" value="${wonder.root}/Validity/Frameworks/Validity" />
+        </antcall>
+    </target>
+    <target name="Validity.framework.clean">
+        <antcall target="clean" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="Validity" />
+            <param name="project.dir" value="${wonder.root}/Validity/Frameworks/Validity" />
+        </antcall>
+    </target>
+
+    <!-- Validity Application -->
+    <target name="Validity.application.all">
+        <antcall target="Validity.application" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="Validity" />
+            <param name="project.dir" value="${wonder.root}/Validity/Frameworks/Validity" />
+        </antcall>
+    </target>
+    <target name="Validity.application.clean">
+        <antcall target="clean" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="Validity" />
+            <param name="project.dir" value="${wonder.root}/Validity/Frameworks/Validity" />
+        </antcall>
+    </target>
+
+    <!-- Validity Example -->
+    <target name="Validity.example.all">
+        <antcall target="Validity.application" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ValidityExample" />
+            <param name="project.dir" value="${wonder.root}/Validity/Examples/ValidityExample" />
+        </antcall>
+    </target>
+    <target name="Validity.example.clean">
+        <antcall target="clean" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ValidityExample" />
+            <param name="project.dir" value="${wonder.root}/Validity/Examples/ValidityExample" />
+        </antcall>
+    </target>
+	
+    <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
+    <target name="Validity.all" depends="Validity.base, Validity.example.all" />
+
+    <target name="all" depends="WOPayPal.all, Validity.all" />
+	
+    <target name="all.clean" depends="WOPayPal.clean,Validity.framework.clean,Validity.application.clean,Validity.example.clean" />
+</project>
