@@ -2,7 +2,7 @@
     rules = (
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -21,32 +21,32 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = allowCollapsing; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = allowsFiltering; 
                 value = false; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = backgroundColorForTable; 
                 value = "#ebebeb"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = isEmbeddedInForm; 
@@ -54,23 +54,23 @@
                 value = {class = java.lang.Number; value = 1; }; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = batchNavigationBarComponentName; 
                 value = ERXBatchNavigationBarInForm; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = batchNavigationBarComponentName; 
                 value = ERXBatchNavigationBar; 
             }; 
         }, 
         {
             author = 600; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = targetOutput; 
@@ -78,14 +78,14 @@
                 value = xml; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = batchSize; 
                 value = 0; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -93,32 +93,32 @@
                 value = select; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = batchSize; 
                 value = 10; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = branchChoices; 
                 value = (); 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDLocalizedMessageAssignment; 
+                class = "er.directtoweb.ERDLocalizedMessageAssignment"; 
                 keyPath = cancelMessage; 
-                value = ERD2W.cancelCreationMessage; 
+                value = "ERD2W.cancelCreationMessage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -126,14 +126,14 @@
                 value = pickType; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = choiceDisplayKey; 
                 value = toString; 
             }; 
         }, 
         {
             author = 250; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -145,7 +145,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
                     }, 
@@ -158,14 +158,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = choicesNames; 
                 value = (Y, N); 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -180,29 +180,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentAvailable; 
                 value = ERD2WEditNumber; 
             }; 
         }, 
         {
             author = 250; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -211,13 +211,13 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = relationship.isToMany; 
+                                key = "relationship.isToMany"; 
                                 selectorName = "isEqualTo"; 
                                 value = {class = java.lang.Number; value = 1; }; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartRelationship.isToMany; 
+                                key = "smartRelationship.isToMany"; 
                                 selectorName = "isEqualTo"; 
                                 value = {class = java.lang.Number; value = 1; }; 
                             }
@@ -238,14 +238,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WXMLDisplayToMany; 
             }; 
         }, 
         {
             author = 250; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -257,7 +257,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
                     }, 
@@ -270,14 +270,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WCustomDisplayBoolean; 
             }; 
         }, 
         {
             author = 250; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = propertyKey; 
@@ -285,14 +285,14 @@
                 value = "*primaryKey"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayString; 
             }; 
         }, 
         {
             author = 220; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -330,29 +330,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WXMLDisplayNumber; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -381,7 +381,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.allowsNull; 
+                        key = "smartAttribute.allowsNull"; 
                         selectorName = "isNotEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }, 
@@ -390,29 +390,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = D2WDisplayDate; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -460,14 +460,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WXMLDisplayString; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -495,14 +495,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WXMLDisplayString; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -523,7 +523,7 @@
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.userInfo.erPrototype; 
+                                key = "smartAttribute.userInfo.erPrototype"; 
                                 selectorName = "isEqualTo"; 
                                 value = password; 
                             }
@@ -532,14 +532,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WCustomComponentWithArgs; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -554,21 +554,21 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = months; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WStatelessCustomComponentWithArgs; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -594,7 +594,7 @@
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                            key = smartAttribute.userInfo.unit; 
+                            key = "smartAttribute.userInfo.unit"; 
                             selectorName = "isEqualTo"; 
                             value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
                         }; 
@@ -604,29 +604,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayNumberWithUnit; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -645,20 +645,20 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditURL; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
                     }, 
@@ -685,35 +685,35 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = D2WDisplayBoolean; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = BooleanYesNo; 
                     }, 
@@ -722,29 +722,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayYesNo; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -758,7 +758,7 @@
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                            key = smartAttribute.userInfo.unit; 
+                            key = "smartAttribute.userInfo.unit"; 
                             selectorName = "isEqualTo"; 
                             value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
                         }; 
@@ -768,29 +768,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditNumberWithUnit; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -802,27 +802,27 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.className; 
+                        key = "smartAttribute.className"; 
                         selectorName = "isEqualTo"; 
-                        value = java.lang.String; 
+                        value = "java.lang.String"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.width; 
+                        key = "smartAttribute.width"; 
                         selectorName = "isGreaterThanOrEqualTo"; 
                         value = {class = java.lang.Number; value = 110; }; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditLargeString; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -834,7 +834,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
                     }, 
@@ -843,29 +843,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = D2WEditBoolean; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -877,7 +877,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = BooleanYesNo; 
                     }, 
@@ -886,29 +886,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditYesNo; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -920,7 +920,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
                     }, 
@@ -929,29 +929,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = D2WQueryBoolean; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -963,7 +963,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = BooleanYesNo; 
                     }, 
@@ -972,29 +972,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = D2WQueryBoolean; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = propertyKey; 
@@ -1002,14 +1002,14 @@
                 value = url; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayURL; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1038,7 +1038,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.allowsNull; 
+                        key = "smartAttribute.allowsNull"; 
                         selectorName = "isEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }, 
@@ -1047,29 +1047,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayDateOrNull; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1098,7 +1098,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        key = "smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count"; 
                         selectorName = "isGreaterThan"; 
                         value = {class = java.lang.Number; value = 0; }; 
                     }, 
@@ -1106,7 +1106,7 @@
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                            key = smartRelationship.isToMany; 
+                            key = "smartRelationship.isToMany"; 
                             selectorName = "isEqualTo"; 
                             value = {class = java.lang.Number; value = 1; }; 
                         }; 
@@ -1114,14 +1114,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayToOne; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1150,27 +1150,27 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        key = "smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count"; 
                         selectorName = "isGreaterThan"; 
                         value = {class = java.lang.Number; value = 0; }; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.isToMany; 
+                        key = "smartRelationship.isToMany"; 
                         selectorName = "isEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayToManyTable; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1201,14 +1201,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WStatelessCustomComponentWithArgs; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1220,21 +1220,21 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.className; 
+                        key = "smartAttribute.className"; 
                         selectorName = "isEqualTo"; 
-                        value = java.lang.String; 
+                        value = "java.lang.String"; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditString; 
             }; 
         }, 
         {
             author = 15; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1270,14 +1270,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayString; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1306,9 +1306,9 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.className; 
+                        key = "smartAttribute.className"; 
                         selectorName = "isEqualTo"; 
-                        value = java.lang.String; 
+                        value = "java.lang.String"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EONotQualifier; 
@@ -1331,14 +1331,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WDisplayString; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1353,29 +1353,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WStatelessCustomComponentWithArgs; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1387,7 +1387,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = session.javaScriptEnabled; 
+                        key = "session.javaScriptEnabled"; 
                         selectorName = "isEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }, 
@@ -1396,29 +1396,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WCustomComponentWithArgs; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1436,7 +1436,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        key = "smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count"; 
                         selectorName = "isGreaterThan"; 
                         value = {class = java.lang.Number; value = 0; }; 
                     }, 
@@ -1444,7 +1444,7 @@
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                            key = smartRelationship.isToMany; 
+                            key = "smartRelationship.isToMany"; 
                             selectorName = "isEqualTo"; 
                             value = {class = java.lang.Number; value = 1; }; 
                         }; 
@@ -1452,14 +1452,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditToOneRelationship; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1471,27 +1471,27 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        key = "smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count"; 
                         selectorName = "isGreaterThan"; 
                         value = {class = java.lang.Number; value = 0; }; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.isToMany; 
+                        key = "smartRelationship.isToMany"; 
                         selectorName = "isEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditToManyRelationship; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1503,7 +1503,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        key = "smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count"; 
                         selectorName = "isGreaterThan"; 
                         value = {class = java.lang.Number; value = 0; }; 
                     }, 
@@ -1511,7 +1511,7 @@
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                            key = smartRelationship.isToMany; 
+                            key = "smartRelationship.isToMany"; 
                             selectorName = "isEqualTo"; 
                             value = {class = java.lang.Number; value = 1; }; 
                         }; 
@@ -1519,14 +1519,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WQueryToOneRelationship; 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1541,29 +1541,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = componentName; 
                 value = ERD2WEditNumber; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -1571,23 +1571,23 @@
                 value = "*"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = confirmConfigurationName; 
                 value = confirmConfigurationNameForEntity; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDConfigurationAssignment; 
+                class = "er.directtoweb.ERDConfigurationAssignment"; 
                 keyPath = confirmConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -1595,14 +1595,14 @@
                 value = "*"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = confirmDeleteConfigurationName; 
                 value = confirmConfigurationNameForEntity; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -1610,23 +1610,23 @@
                 value = confirm; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = confirmMessageManditory; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = confirmRows; 
                 value = 4; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -1634,23 +1634,23 @@
                 value = "*"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = createConfigurationName; 
                 value = createConfigurationNameForEntity; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDConfigurationAssignment; 
+                class = "er.directtoweb.ERDConfigurationAssignment"; 
                 keyPath = createConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1671,7 +1671,7 @@
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.userInfo.erPrototype; 
+                                key = "smartAttribute.userInfo.erPrototype"; 
                                 selectorName = "isEqualTo"; 
                                 value = password; 
                             }
@@ -1680,14 +1680,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = customComponentName; 
                 value = ERDEditPasswordConfirm; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1702,21 +1702,21 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = months; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = customComponentName; 
                 value = ERDDisplayYearsMonths; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1747,23 +1747,23 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = customComponentName; 
                 value = ERDDisplayMailTo; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = customComponentName; 
                 value = ERDDefaultCustomComponent; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1775,7 +1775,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = session.javaScriptEnabled; 
+                        key = "session.javaScriptEnabled"; 
                         selectorName = "isNotEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }, 
@@ -1784,29 +1784,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = customComponentName; 
                 value = ERDEditDatePopup; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1818,7 +1818,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = session.javaScriptEnabled; 
+                        key = "session.javaScriptEnabled"; 
                         selectorName = "isEqualTo"; 
                         value = {class = java.lang.Number; value = 1; }; 
                     }, 
@@ -1827,29 +1827,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = com.webobjects.foundation.NSTimestamp; 
+                                value = "com.webobjects.foundation.NSTimestamp"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = customComponentName; 
                 value = ERDEditDateJavascript; 
             }; 
         }, 
         {
             author = 600; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = targetOutput; 
@@ -1857,31 +1857,31 @@
                 value = xml; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = defaultBatchSize; 
                 value = 0; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = defaultBatchSize; 
                 value = 10; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = defaultSortOrdering; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -1917,14 +1917,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = disabled; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -1932,14 +1932,14 @@
                 value = printerFriendly; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = disabled; 
                 value = true; 
             }; 
         }, 
         {
             author = 15; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = customComponentName; 
@@ -1947,23 +1947,23 @@
                 value = ERDList; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDDefaultsEmbeddedAssignment; 
+                class = "er.directtoweb.ERDDefaultsEmbeddedAssignment"; 
                 keyPath = displayNameForEntity; 
                 value = defaultEmbeddedEntityDisplayName; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDDefaultEntityNameAssignment; 
+                class = "er.directtoweb.ERDDefaultEntityNameAssignment"; 
                 keyPath = displayNameForEntity; 
                 value = defaultDisplayNameForEntity; 
             }; 
         }, 
         {
             author = 11; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = propertyKey; 
@@ -1971,47 +1971,47 @@
                 value = dummy; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = displayNameForProperty; 
                 value = ""; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDDefaultPropertyNameAssignment; 
+                class = "er.directtoweb.ERDDefaultPropertyNameAssignment"; 
                 keyPath = displayNameForProperty; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.className; 
+                key = "smartAttribute.className"; 
                 selectorName = "isEqualTo"; 
-                value = com.webobjects.foundation.NSTimestamp; 
+                value = "com.webobjects.foundation.NSTimestamp"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = displayValueForNull; 
                 value = None; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = displayValueForNull; 
-                value = N/A; 
+                value = "N/A"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -2019,187 +2019,187 @@
                 value = "*"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = editConfigurationName; 
                 value = editConfigurationNameForEntity; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDConfigurationAssignment; 
+                class = "er.directtoweb.ERDConfigurationAssignment"; 
                 keyPath = editConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = emptyListComponentName; 
                 value = ERDEmptyListMessage; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDLocalizedMessageAssignment; 
+                class = "er.directtoweb.ERDLocalizedMessageAssignment"; 
                 keyPath = emptyListMessage; 
-                value = ERDEmptyListMessage.emptyListMessage; 
+                value = "ERDEmptyListMessage.emptyListMessage"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDEntityAssignment; 
+                class = "er.directtoweb.ERDEntityAssignment"; 
                 keyPath = entity; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = flushPropertyValue; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = formEncoding; }; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {class = "com.webobjects.directtoweb.Assignment"; keyPath = formEncoding; }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = "%"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.className; 
+                        key = "smartAttribute.className"; 
                         selectorName = "isEqualTo"; 
-                        value = java.lang.Number; 
+                        value = "java.lang.Number"; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "##.###;0;-##.###"; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = "%"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.className; 
+                        key = "smartAttribute.className"; 
                         selectorName = "isEqualTo"; 
-                        value = java.math.BigDecimal; 
+                        value = "java.math.BigDecimal"; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "##.###;0;-##.###"; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = "USD in Mills"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = "USD in Millions."; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = rsf; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = spaces; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "######;0;-######"; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = usf; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -2211,21 +2211,21 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isCaseInsensitiveLike"; 
                         value = "USD*"; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "#,##0.00"; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -2251,29 +2251,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "###,###.##;0;-###,###.##"; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -2288,44 +2288,44 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "###,##0.##;0;-###,###.##"; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.className; 
+                key = "smartAttribute.className"; 
                 selectorName = "isEqualTo"; 
-                value = com.webobjects.foundation.NSTimestamp; 
+                value = "com.webobjects.foundation.NSTimestamp"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = formatter; 
                 value = "%b %d,%Y"; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -2344,14 +2344,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = groupingComponentName; 
                 value = ERDDefaultSectionComponentCSV; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -2370,14 +2370,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = groupingComponentName; 
                 value = ERDDefaultSectionComponent; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -2396,23 +2396,23 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = groupingComponentName; 
                 value = ERDDefaultSectionComponentPrinterFriendly; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = hasCSVVersion; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -2420,32 +2420,32 @@
                 value = edit; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = hasForm; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = hasPrinterFriendlyVersion; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = hasThirdLevel; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -2488,23 +2488,32 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = indefiniteArticleForProperty; 
                 value = an; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = indefiniteArticleForProperty; 
                 value = a; 
             }; 
         }, 
         {
+            author = 0; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = indexKey; 
+                value = index; 
+            }; 
+        }, 
+        {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -2512,23 +2521,23 @@
                 value = "*"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = inspectConfigurationName; 
                 value = inspectConfigurationNameForEntity; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDConfigurationAssignment; 
+                class = "er.directtoweb.ERDConfigurationAssignment"; 
                 keyPath = inspectConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -2536,32 +2545,32 @@
                 value = list; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = isEmbeddedInForm; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = isEntityDeletable; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = isEntityEditable; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -2569,23 +2578,23 @@
                 value = list; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = isEntityInspectable; 
                 value = 0; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = isEntityInspectable; 
                 value = true; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -2593,14 +2602,14 @@
                 value = massModify; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = isMandatory; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = propertyType; 
@@ -2608,20 +2617,20 @@
                 value = r; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = isMandatory; 
-                value = smartRelationship.isMandatory; 
+                value = "smartRelationship.isMandatory"; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = Boolean; 
                     }, 
@@ -2630,35 +2639,35 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = justification; 
                 value = center; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.erPrototype; 
+                        key = "smartAttribute.userInfo.erPrototype"; 
                         selectorName = "isEqualTo"; 
                         value = BooleanYesNo; 
                     }, 
@@ -2667,29 +2676,29 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = justification; 
                 value = center; 
             }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -2708,14 +2717,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = justification; 
                 value = left; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -2750,132 +2759,175 @@
                         qualifiers = (
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.lang.Number; 
+                                value = "java.lang.Number"; 
                             }, 
                             {
                                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                                key = smartAttribute.className; 
+                                key = "smartAttribute.className"; 
                                 selectorName = "isEqualTo"; 
-                                value = java.math.BigDecimal; 
+                                value = "java.math.BigDecimal"; 
                             }
                         ); 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = justification; 
                 value = right; 
             }; 
         }, 
         {
+            author = 20; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = "entity.userInfo.isJoinEntity"; 
+                selectorName = "isEqualTo"; 
+                value = true; 
+            }; 
+            rhs = {
+                class = "er.directtoweb.ERDSortedManyToManyAssignment"; 
+                keyPath = keyWhenRelationship; 
+                value = "<computed>"; 
+            }; 
+        }, 
+        {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = Volts; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = Amps; 
                     }
                 ); 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 6; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 6; 
+            }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = "%"; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 5; }; 
-        }, 
-        {
-            author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
-                selectorName = "isEqualTo"; 
-                value = cf/h; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 5; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 6; }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
+                selectorName = "isEqualTo"; 
+                value = "cf/h"; 
+            }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = ft; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 6; }; 
-        }, 
-        {
-            author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
-                selectorName = "isEqualTo"; 
-                value = pounds/sf; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 6; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 6; }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
+                selectorName = "isEqualTo"; 
+                value = "pounds/sf"; 
+            }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 6; 
+            }; 
+        }, 
+        {
+            author = 30; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            lhs = {
+                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = spaces; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 6; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 6; 
+            }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = sqft; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = length; value = 9; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = length; 
+                value = 9; 
+            }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.className; 
+                key = "smartAttribute.className"; 
                 selectorName = "isEqualTo"; 
-                value = java.lang.String; 
+                value = "java.lang.String"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDDefaultsAssignment; 
+                class = "er.directtoweb.ERDDefaultsAssignment"; 
                 keyPath = length; 
                 value = smartDefaultAttributeWidth; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -2883,259 +2935,263 @@
                 value = "*"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = listConfigurationName; 
                 value = listConfigurationNameForEntity; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDConfigurationAssignment; 
+                class = "er.directtoweb.ERDConfigurationAssignment"; 
                 keyPath = listConfigurationNameForEntity; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = matrixLayoutVertical; 
                 value = true; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = maxColumns; 
                 value = 2; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = "%"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = maxLength; 
                 value = 6; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = spaces; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = maxLength; 
                 value = 6; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.className; 
+                key = "smartAttribute.className"; 
                 selectorName = "isEqualTo"; 
-                value = java.math.BigDecimal; 
+                value = "java.math.BigDecimal"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = maxLength; 
                 value = 30; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = maxLength; 
                 value = 255; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.width; 
+                key = "smartAttribute.width"; 
                 selectorName = "isGreaterThan"; 
                 value = {class = java.lang.Number; value = 0; }; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = maxLength; 
-                value = smartAttribute.width; 
+                value = "smartAttribute.width"; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = "%"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = maxValue; 
                 value = 100; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
-                        value = USD/SF/Yr.; 
+                        value = "USD/SF/Yr."; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = USD; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = "USD / Month"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
-                        value = USD/SF; 
+                        value = "USD/SF"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
-                        value = USD/RSF/Year; 
+                        value = "USD/RSF/Year"; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isEqualTo"; 
                         value = "USD / RSF"; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = minValue; 
                 value = 0; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isLike"; 
                         value = usf; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isLike"; 
                         value = rsf; 
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartAttribute.userInfo.unit; 
+                        key = "smartAttribute.userInfo.unit"; 
                         selectorName = "isLike"; 
                         value = feet; 
                     }
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = minValue; 
                 value = 0; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.userInfo.unit; 
+                key = "smartAttribute.userInfo.unit"; 
                 selectorName = "isEqualTo"; 
                 value = "%"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = minValue; 
                 value = 0; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = nextButtonName; 
                 value = Next; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = noSelectionString; 
                 value = "- none -"; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = targetOutput; 
                 selectorName = "isEqualTo"; 
                 value = xml; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = offset; value = 0; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = offset; 
+                value = 0; 
+            }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageConfigurationForFiltering; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3160,14 +3216,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForGroupingListXMLPage; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3186,14 +3242,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForListXMLPage; 
             }; 
         }, 
         {
             author = 70; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3246,14 +3302,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForPrinterFriendlyInspectPage; 
             }; 
         }, 
         {
             author = 70; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3283,14 +3339,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForPrinterFriendlyInspectPage; 
             }; 
         }, 
         {
             author = 70; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3326,14 +3382,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForGroupingPrinterFriendlyListPage; 
             }; 
         }, 
         {
             author = 70; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3363,14 +3419,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForPrinterFriendlyList; 
             }; 
         }, 
         {
             author = 60; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3389,14 +3445,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForEditableList; 
             }; 
         }, 
         {
             author = 57; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3421,14 +3477,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForCSVGroupingListPageTemplate; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3469,14 +3525,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForCompactInspectPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3517,14 +3573,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForCompactListPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3554,14 +3610,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForPickListPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3591,14 +3647,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForTabInspectPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3628,14 +3684,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForWizardCreationPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3654,14 +3710,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForListComparePage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3680,14 +3736,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForCSVListPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3706,14 +3762,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForGroupingListPage; 
             }; 
         }, 
         {
             author = 55; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3732,14 +3788,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForPickTypePage; 
             }; 
         }, 
         {
             author = 51; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -3758,14 +3814,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForInspectPage; 
             }; 
         }, 
         {
             author = 51; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -3784,14 +3840,14 @@
                 ); 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForListPage; 
             }; 
         }, 
         {
             author = 51; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -3799,14 +3855,14 @@
                 value = confirm; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForConfirmPage; 
             }; 
         }, 
         {
             author = 51; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -3814,14 +3870,14 @@
                 value = error; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForErrorPage; 
             }; 
         }, 
         {
             author = 51; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -3829,14 +3885,14 @@
                 value = query; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = pageName; 
                 value = templateNameForQueryPage; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -3877,14 +3933,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageName; 
                 value = ERD2WGroupingPickListPageTemplate; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3903,14 +3959,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageName; 
                 value = ERD2WCalendarPage; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3929,14 +3985,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageName; 
                 value = ERD2WQueryPageWithFetchSpecification; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -3944,14 +4000,14 @@
                 value = error; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageName; 
                 value = ERDRecoverableErrorPage; 
             }; 
         }, 
         {
             author = 600; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -3970,14 +4026,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageWrapperName; 
                 value = ERDXMLPageWrapper; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -3985,14 +4041,14 @@
                 value = printerFriendly; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = pageWrapperName; 
                 value = ERDPrinterFriendlyWrapper; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -4000,23 +4056,23 @@
                 value = edit; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = permissionToEdit; 
                 value = 1; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = permissionToEdit; 
                 value = 0; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -4024,28 +4080,28 @@
                 value = inspect; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = permissionToEdit; 
                 value = 0; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = possibleChoices; }; 
+            class = "com.webobjects.directtoweb.Rule"; 
+            rhs = {class = "com.webobjects.directtoweb.Assignment"; keyPath = possibleChoices; }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = previousButtonName; 
                 value = Previous; 
             }; 
         }, 
         {
             author = 500; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -4053,14 +4109,14 @@
                 value = "group*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = propertyIsSortable; 
                 value = false; 
             }; 
         }, 
         {
             author = 30; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4079,23 +4135,23 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = propertyIsSortable; 
                 value = true; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = propertyIsSortable; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4126,23 +4182,23 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = propertyIsSortable; 
                 value = true; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = propertyNameComponentName; 
                 value = ERD2WPropertyName; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -4150,74 +4206,74 @@
                 value = list; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = readOnly; 
                 value = 1; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = renderBorder; 
                 value = true; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDUnitResolverAssignment; 
+                class = "er.directtoweb.ERDUnitResolverAssignment"; 
                 keyPath = resolvedUnit; 
                 value = "<UnitResolverAssignment>"; 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = smartAttribute.className; 
+                key = "smartAttribute.className"; 
                 selectorName = "isEqualTo"; 
-                value = java.lang.String; 
+                value = "java.lang.String"; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDDefaultsAssignment; 
+                class = "er.directtoweb.ERDDefaultsAssignment"; 
                 keyPath = rows; 
                 value = smartDefaultRows; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = saveButtonLabel; 
                 value = Save; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = sectionComponentName; 
                 value = ERDSectionText; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDImageNameAssignment; 
+                class = "er.directtoweb.ERDImageNameAssignment"; 
                 keyPath = sectionImageName; 
                 value = "<computed>"; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -4225,14 +4281,14 @@
                 value = pickType; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = selectionManditory; 
                 value = 1; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -4240,23 +4296,23 @@
                 value = massModify; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldCollectValidationExceptions; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldCollectValidationExceptions; 
                 value = true; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -4264,14 +4320,14 @@
                 value = confirm; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldProvideConfirmMessage; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -4279,14 +4335,14 @@
                 value = compact; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldRenderBorder; 
                 value = 1; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -4294,41 +4350,41 @@
                 value = massModify; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldSaveChanges; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldSaveChanges; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldSetFailedValidationValue; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldShowActionButtons; 
                 value = 1; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4347,50 +4403,50 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldShowCancelButton; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldShowNextButton; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldShowPreviousButton; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldShowSubmitButton; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldShowUnits; 
                 value = true; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -4398,14 +4454,14 @@
                 value = massModify; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldValidateBeforeSave; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = task; 
@@ -4413,14 +4469,14 @@
                 value = edit; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = shouldValidateBeforeSave; 
                 value = 1; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4428,86 +4484,86 @@
                 value = "List*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = showBanner; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = showEditButton; 
                 value = 0; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = showHeader; 
                 value = true; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = showPublicNavigation; 
                 value = 0; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = singleSelection; 
                 value = false; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDSmartAttributeAssignment; 
+                class = "er.directtoweb.ERDSmartAttributeAssignment"; 
                 keyPath = smartAttribute; 
                 value = "<computedAttribute>"; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDSmartRelationshipAssignment; 
+                class = "er.directtoweb.ERDSmartRelationshipAssignment"; 
                 keyPath = smartRelationship; 
                 value = "<computedRelationship>"; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = sortKey; 
                 value = ""; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = sortKeyForList; 
                 value = propertyKey; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = propertyType; 
@@ -4515,23 +4571,23 @@
                 value = r; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDRelationshipSortAssignment; 
+                class = "er.directtoweb.ERDRelationshipSortAssignment"; 
                 keyPath = sortKeyForList; 
                 value = "<RelationshipSortAssignment>"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = styleSheetFrameworkName; 
                 value = lookFrameworkName; 
             }; 
         }, 
         {
             author = 5000; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = forcedSubTask; 
@@ -4539,14 +4595,14 @@
                 value = {class = com.webobjects.foundation.NSKeyValueCoding$Null; }; 
             }; 
             rhs = {
-                class = er.directtoweb.ERDKeyValueAssignment; 
+                class = "er.directtoweb.ERDKeyValueAssignment"; 
                 keyPath = subTask; 
                 value = forcedSubTask; 
             }; 
         }, 
         {
             author = 50; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4554,14 +4610,14 @@
                 value = "EditList*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = list; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4569,14 +4625,14 @@
                 value = "PickGroup*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = groupPick; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4584,14 +4640,14 @@
                 value = "SelectPickType*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = pickType; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4616,14 +4672,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = wizard; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4648,14 +4704,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = compact; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4674,14 +4730,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = tab; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4700,14 +4756,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = group; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4715,14 +4771,14 @@
                 value = "ListCalendar*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = calendar; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4730,14 +4786,14 @@
                 value = "ListCompare*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = compare; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4745,41 +4801,41 @@
                 value = "Pick*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = subTask; 
                 value = pick; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = submitButtonName; 
                 value = Submit; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDTabDictionaryComputer; 
+                class = "er.directtoweb.ERDTabDictionaryComputer"; 
                 keyPath = tabContents; 
                 value = "<ERTabDictionaryComputer>"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = er.directtoweb.ERDTabDictionaryComputer; 
+                class = "er.directtoweb.ERDTabDictionaryComputer"; 
                 keyPath = tabs; 
                 value = "<ERTabDictionaryComputer>"; 
             }; 
         }, 
         {
             author = 200; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4787,23 +4843,23 @@
                 value = "*XML*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = targetOutput; 
                 value = xml; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = targetOutput; 
                 value = html; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4821,11 +4877,15 @@
                     }
                 ); 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = task; value = edit; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = task; 
+                value = edit; 
+            }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4843,11 +4903,15 @@
                     }
                 ); 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = task; value = list; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = task; 
+                value = list; 
+            }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4872,14 +4936,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = task; 
                 value = query; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4887,14 +4951,14 @@
                 value = "Confirm*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = task; 
                 value = confirm; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4902,14 +4966,14 @@
                 value = "Error*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = task; 
                 value = error; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4917,14 +4981,14 @@
                 value = "Inspect*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = task; 
                 value = inspect; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4932,14 +4996,14 @@
                 value = "Message*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = task; 
                 value = message; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4947,14 +5011,14 @@
                 value = "Select*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = task; 
                 value = select; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -4973,14 +5037,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = taskVerb; 
                 value = Search; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = pageConfiguration; 
@@ -4988,232 +5052,236 @@
                 value = "Filter*"; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = taskVerb; 
                 value = Filter; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForCSVGroupingListPage; 
                 value = ERD2WCSVGroupingListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForCSVGroupingListPage; 
                 value = ERD2WCSVGroupingListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForCSVListPage; 
                 value = ERD2WCSVListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForCompactInspectPage; 
                 value = ERD2WCompactInspectPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForCompactListPage; 
                 value = ERD2WCompactListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForConfirmPage; 
                 value = ERD2WConfirmPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForEditableList; 
                 value = ERD2WEditableListTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForErrorPage; 
                 value = ERDRecoverableErrorPage; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForGroupingListPage; 
                 value = ERD2WGroupingListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForGroupingListXMLPage; 
                 value = ERD2WGroupingListXMLPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForGroupingPrinterFriendlyListPage; 
                 value = ERD2WGroupingPrinterFriendlyListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForInspectPage; 
                 value = ERD2WInspectPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForListComparePage; 
                 value = ERD2WListComparePageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForListPage; 
                 value = ERD2WListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForListXMLPage; 
                 value = ERD2WListXMLPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForMessagePage; 
                 value = ERD2WMessagePageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForPickListPage; 
                 value = ERD2WPickListPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForPickTypePage; 
                 value = ERD2WPickTypePageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForPrinterFriendlyInspectPage; 
                 value = ERD2WPrinterFriendlyInspectPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForPrinterFriendlyList; 
                 value = ERD2WPrinterFriendlyListTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForQueryPage; 
                 value = ERD2WQueryPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForTabInspectPage; 
                 value = ERD2WTabInspectPageTemplate; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = templateNameForWizardCreationPage; 
                 value = ERD2WWizardCreationPageTemplate; 
             }; 
         }, 
         {
             author = 20; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = targetOutput; 
                 selectorName = "isEqualTo"; 
                 value = xml; 
             }; 
-            rhs = {class = com.webobjects.directtoweb.Assignment; keyPath = title; value = ""; }; 
+            rhs = {
+                class = "com.webobjects.directtoweb.Assignment"; 
+                keyPath = title; 
+                value = ""; 
+            }; 
         }, 
         {
             author = 25; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -5225,7 +5293,7 @@
                     }, 
                     {
                         class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                        key = smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count; 
+                        key = "smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count"; 
                         selectorName = "isGreaterThan"; 
                         value = {class = java.lang.Number; value = 0; }; 
                     }, 
@@ -5233,7 +5301,7 @@
                         class = com.webobjects.eocontrol.EONotQualifier; 
                         qualifier = {
                             class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                            key = smartRelationship.isToMany; 
+                            key = "smartRelationship.isToMany"; 
                             selectorName = "isEqualTo"; 
                             value = {class = java.lang.Number; value = 1; }; 
                         }; 
@@ -5241,14 +5309,14 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = toOneUIStyle; 
                 value = popup; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
                 key = subTask; 
@@ -5256,14 +5324,14 @@
                 value = pickType; 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = uiStyle; 
                 value = radio; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOOrQualifier; 
                 qualifiers = (
@@ -5306,68 +5374,68 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = upperIndefiniteArticleForProperty; 
                 value = An; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = upperIndefiniteArticleForProperty; 
                 value = A; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useFocus; 
                 value = true; 
             }; 
         }, 
         {
             author = 0; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useMatrixLayout; 
                 value = false; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useSubmitImages; 
                 value = true; 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useTabImages; 
                 value = false; 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
+                class = "com.webobjects.directtoweb.BooleanAssignment"; 
                 keyPath = useTabSectionImages; 
                 value = false; 
             }; 
         }, 
         {
             author = 5; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             lhs = {
                 class = com.webobjects.eocontrol.EOAndQualifier; 
                 qualifiers = (
@@ -5392,25 +5460,25 @@
                 ); 
             }; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = valueWhenEmpty; 
                 value = "&nbsp;"; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = yearRangeBottom; 
                 value = 2001; 
             }; 
         }, 
         {
             author = 10; 
-            class = com.webobjects.directtoweb.Rule; 
+            class = "com.webobjects.directtoweb.Rule"; 
             rhs = {
-                class = com.webobjects.directtoweb.Assignment; 
+                class = "com.webobjects.directtoweb.Assignment"; 
                 keyPath = yearRangeTop; 
                 value = 2030; 
             }; 
