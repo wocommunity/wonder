@@ -31,6 +31,7 @@ There are three ways to use this script:
 		-Duse.wonder.logic=true \
 		-Duse.wonder.mail=true \
 		-Duse.wonder.changenotification=true \
+		-Duse.svgobjects=true \
 		-Duse.validity=true \
 		-Duse.woogln=true \
 		-Duse.mysql=true \
@@ -105,13 +106,16 @@ There are three ways to use this script:
             <param name="use.additional.framework.3" value="BT*" />
             <param name="use.additional.framework.4" value="BTBusinessLogic" />
 
+            <!-- set this if you want to use SVGObjects, or leave out if not -->
+            <param name="use.svgobjects" value="true" />
+
             <!-- set this if you want to use Validity, or leave out if not -->
             <param name="use.validity" value="true" />
 
             <!-- set this if you want to use WOOgnl, or leave out if not -->
             <param name="use.woogln" value="true" />
 
-            <!-- set this if you want to use Validity, or leave out if not -->
+            <!-- set this if you want to use MySQL, or leave out if not -->
             <param name="use.mysql" value="true" />
         </antcall>
     </target>
@@ -203,6 +207,9 @@ There are three ways to use this script:
             </frameworks>
             <frameworks root="${build.root}" if="use.wonder.changenotification"> 
                 <include name="ERChangeNotificationJMS.framework" />
+            </frameworks>
+            <frameworks root="${build.root}" if="use.svgobjects"> 
+                <include name="SVGObjects.framework" />
             </frameworks>
             <frameworks root="${build.root}" if="use.validity"> 
                 <include name="Validity.framework" />
@@ -337,6 +344,9 @@ There are three ways to use this script:
             </frameworks>
             <frameworks root="${build.root}" if="use.wonder.changenotification"> 
                 <include name="ERChangeNotificationJMS.framework" />
+            </frameworks>
+            <frameworks root="${build.root}" if="use.svgobjects"> 
+                <include name="SVGObjects.framework" />
             </frameworks>
             <frameworks root="${build.root}" if="use.validity"> 
                 <include name="Validity.framework" />
@@ -559,16 +569,6 @@ There are three ways to use this script:
         </antcall>
     </target>
 
-    <target name="D2WInspectExample.all">
-        <antcall target="global.application" >
-            <param name="project.principal.class" value="Application" />
-            <param name="project.name" value="D2WInspectExample" />
-            <param name="project.dir" value="Common/Examples/Stepwise/D2WInspectExample" />
- 
-            <param name="use.webobjects.d2w" value="true" />
-       </antcall>
-    </target>
-
     <target name="ERMailer.all">
         <antcall target="global.application" >
             <param name="project.principal.class" value="Application" />
@@ -578,6 +578,16 @@ There are three ways to use this script:
             <param name="use.wonder.d2w" value="true" />
             <param name="use.wonder.logic" value="true" />
             <param name="use.wonder.mail" value="true" />
+       </antcall>
+    </target>
+
+    <target name="D2WInspectExample.all">
+        <antcall target="global.application" >
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="D2WInspectExample" />
+            <param name="project.dir" value="Common/Examples/Stepwise/D2WInspectExample" />
+ 
+            <param name="use.webobjects.d2w" value="true" />
        </antcall>
     </target>
 
@@ -650,6 +660,64 @@ There are three ways to use this script:
         </antcall>
     </target>
 	
+    <target name="SVGObjects.framework.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="SVGObjects" />
+            <param name="project.dir" value="SVGObjects/Frameworks/SVGObjects" />
+        </antcall>
+    </target>
+
+    <target name="SVGObjects.ComponentTour.all">
+        <antcall target="global.application" >
+            <param name="project.principal.class" value="org.svgobjects.examples.componenttour.Application" />
+            <param name="project.name" value="SVGObjectsComponentTour" />
+            <param name="project.dir" value="SVGObjects/Examples/ComponentTour" />
+
+            <param name="use.svgobjects" value="true" />
+        </antcall>
+    </target>
+	
+    <target name="SVGObjects.eCards.all">
+        <antcall target="global.application" >
+            <param name="project.principal.class" value="org.svgobjects.examples.ecard.Application" />
+            <param name="project.name" value="SVGObjectsECards" />
+            <param name="project.dir" value="SVGObjects/Examples/eCards" />
+
+            <param name="use.svgobjects" value="true" />
+        </antcall>
+    </target>
+	
+    <target name="SVGObjects.EZForms.all">
+        <antcall target="global.application" >
+            <param name="project.principal.class" value="org.svgobjects.examples.ezforms.Application" />
+            <param name="project.name" value="SVGObjectsEZForms" />
+            <param name="project.dir" value="SVGObjects/Examples/EZForms" />
+
+            <param name="use.svgobjects" value="true" />
+        </antcall>
+    </target>
+	
+    <target name="SVGObjects.Hello.all">
+        <antcall target="global.application" >
+            <param name="project.principal.class" value="org.svgobjects.examples.hello.Application" />
+            <param name="project.name" value="SVGObjectsHello" />
+            <param name="project.dir" value="SVGObjects/Examples/Hello" />
+
+            <param name="use.svgobjects" value="true" />
+        </antcall>
+    </target>
+	
+    <target name="SVGObjects.PopIdol.all">
+        <antcall target="global.application" >
+            <param name="project.principal.class" value="org.svgobjects.examples.popidol.Application" />
+            <param name="project.name" value="SVGObjectsPopIdol" />
+            <param name="project.dir" value="SVGObjects/Examples/PopIdol" />
+
+            <param name="use.svgobjects" value="true" />
+        </antcall>
+    </target>
+	
     <target name="DevStudio.all">
         <antcall target="global.application" >
             <param name="project.principal.class" value="ag.kcmedia.Application" />
@@ -680,7 +748,11 @@ There are three ways to use this script:
 
     <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
-    <target name="subprojects.all" depends="WOPayPal.all, Validity.all" />
+
+    <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
+    <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
+
+    <target name="subprojects.all" depends="WOPayPal.all, Validity.all, SVGObjects.all" />
 
     <target name="experimental.all" depends="DevStudio.all" />
 
@@ -710,6 +782,9 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="JavaWOExtensions" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="SVGObjects" />
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="Validity" />
@@ -744,6 +819,21 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.clean.application" >
             <param name="project.name" value="ValidityExample" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="SVGObjectsComponentTour" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="SVGObjectsECards" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="SVGObjectsEZForms" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="SVGObjectsHello" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="SVGObjectsPopIdol" />
         </antcall>
         <antcall target="global.clean.application" >
             <param name="project.name" value="DevStudio" />
@@ -790,6 +880,9 @@ There are three ways to use this script:
             <param name="project.name" value="Validity" />
         </antcall>
         <antcall target="global.web.framework" >
+            <param name="project.name" value="SVGObjects" />
+        </antcall>
+        <antcall target="global.web.framework" >
             <param name="project.name" value="WOOgnl" />
         </antcall>
         <antcall target="global.web.framework" >
@@ -818,7 +911,19 @@ There are three ways to use this script:
             <param name="project.name" value="ValidityModeler" />
         </antcall>
         <antcall target="global.web.application" >
-            <param name="project.name" value="ValidityExample" />
+            <param name="project.name" value="SVGObjectsComponentTour" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="SVGObjectsECards" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="SVGObjectsEZForms" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="SVGObjectsHello" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="SVGObjectsPopIdol" />
         </antcall>
         <antcall target="global.web.application" >
             <param name="project.name" value="DevStudio" />
@@ -863,6 +968,9 @@ There are three ways to use this script:
             <param name="project.name" value="Validity" />
         </antcall>
         <antcall target="global.install.framework" >
+            <param name="project.name" value="SVGObjects" />
+        </antcall>
+        <antcall target="global.install.framework" >
             <param name="project.name" value="WOOgnl" />
         </antcall>
         <antcall target="global.install.framework" >
@@ -892,6 +1000,21 @@ There are three ways to use this script:
         </antcall>
         <antcall target="global.install.application" >
             <param name="project.name" value="ValidityExample" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="SVGObjectsComponentTour" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="SVGObjectsECards" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="SVGObjectsEZForms" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="SVGObjectsHello" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="SVGObjectsPopIdol" />
         </antcall>
         <antcall target="global.install.application" >
             <param name="project.name" value="DevStudio" />
