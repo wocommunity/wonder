@@ -326,6 +326,8 @@ public class ERXFileUtilities {
   */
 public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)  throws FileNotFoundException, IOException {
         if (srcFile.exists() && srcFile.isFile()) {
+            File  parent = dstFile.getParentFile();
+            parent.mkdirs();
             FileInputStream in = new FileInputStream(srcFile);
             FileOutputStream out = new FileOutputStream(dstFile);
             try {
