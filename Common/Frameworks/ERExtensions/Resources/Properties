@@ -10,7 +10,9 @@
 #########################################################################
 # Signal Handling
 #########################################################################
-er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM)
+# By default not enabled
+er.extensions.ERXGracefulShutdown.Enabled=false
+er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM, INT)
 
 #########################################################################
 # Compiler Proxy
