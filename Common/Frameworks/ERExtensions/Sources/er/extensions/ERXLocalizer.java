@@ -45,10 +45,13 @@ TODO: chaining of Localizers
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     static final ERXLogger cat = ERXLogger.getLogger(ERXLocalizer.class);
-
+    private static boolean isLocalizationEnabled = false;
+    public static final String LocalizationDidResetNotification = "LocalizationDidReset";
+    
     public static class Observer {
-        public void fileDidChange() {
+        public void fileDidChange(NSNotification n) {
             ERXLocalizer.resetCache();
+            NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
         }
     }
 
@@ -58,7 +61,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public static void initialize() {
         observer = new Observer();
         monitoredFiles = new NSMutableArray();
+        isLocalizationEnabled = ERXUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLocalizer.isLocalizationEnabled"), true);
     }
+
+    public static boolean isLocalizationEnabled() { return isLocalizationEnabled; }
+    public static void setIsLocalizationEnabled(boolean value) { isLocalizationEnabled = value; }
     
     static NSArray fileNamesToWatch;
     static NSArray frameworkSearchPath;
@@ -116,6 +123,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizedStringForKey(key);
     }
     public Object valueForKeyPath(String key) {
+        if("localizerLanguage".equals(key)) return localizerLanguage();
         Object result = valueForKey(key);
         if(result == null) {
             int indexOfDot = key.indexOf(".");
@@ -165,7 +173,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 String path = rm.pathForResourceNamed(fileName, framework, languages);
                 if(path != null) {
                     if(!monitoredFiles.containsObject(path)) {
-                        ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange"), path);
+                        ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
                         monitoredFiles.addObject(path);
                     }
                     try {
@@ -188,6 +196,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return result;
     }
+    public String localizerLanguage() {return language;}
     
     public String localizedStringForKey(String key) {
         String result = (String)cache.objectForKey(key);
@@ -209,7 +218,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public String toString() {return "<ERXLocalizer "+language+">";}
-    public String description() {return "<ERXLocalizer "+language+"=" +cache + ";>";}
 
 
     public static String defaultLanguage() {
