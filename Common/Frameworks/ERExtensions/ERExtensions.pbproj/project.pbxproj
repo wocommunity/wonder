@@ -512,6 +512,7 @@
 				50643C66060BB1DB00C5E0A5,
 				50643C69060BB25100C5E0A5,
 				50643C6A060BB25100C5E0A5,
+				50E98BEF06DC0B5500D36AF7,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1793,6 +1794,7 @@
 				F59C57EB02C4565701000102,
 				F59C57EC02C4565701000102,
 				F592A409036D480201AD0D07,
+				50E98BEE06DC0B5500D36AF7,
 			);
 			isa = PBXGroup;
 			name = Utilities;
@@ -2152,6 +2154,19 @@
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXImage.wo;
 			refType = 2;
+		};
+		50E98BEE06DC0B5500D36AF7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXKeyValueCodingUtilities.java;
+			path = er/extensions/ERXKeyValueCodingUtilities.java;
+			refType = 4;
+		};
+		50E98BEF06DC0B5500D36AF7 = {
+			fileRef = 50E98BEE06DC0B5500D36AF7;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		50EB03A9055EBAD2007F93C2 = {
 			fileEncoding = 30;
