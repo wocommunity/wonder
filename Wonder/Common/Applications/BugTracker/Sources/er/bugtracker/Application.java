@@ -39,16 +39,13 @@ public class Application extends ERXApplication {
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
         ERXLocalizer.setFrameworkSearchPath(new NSArray(new Object [] {
             "app", "BTBusinessLogic", "ERDirectToWeb", "ERExtensions"} ));
-        NSNotificationCenter.defaultCenter().addObserver(this,
-                                                         new NSSelector("finishInitialization", ERXConstant.NotificationClassArray),
-                                                         WOApplication.ApplicationDidFinishLaunchingNotification,
-                                                         null);
         setTimeOut(8*60*60); //set the timeout to 8 hours.
         Class core = er.corebusinesslogic.ERCoreBusinessLogic.class;
         Class bug = er.bugtracker.BTBusinessLogic.class;
     }
 
-    public void finishInitialization(NSNotification n) {
+    public void finishInitialization() {
+        NSLog.debug.appendln("finishInitialization called.");
         try {
             adjustConnectionDictionary(EOModelGroup.defaultGroup().modelNamed("BugTracker"));
             boolean runBatchReport=ERXProperties.booleanForKey("BTRunBatchReport");
