@@ -59,8 +59,8 @@
         </tstamp>
         <!-- Create directories -->
         <mkdir dir="${dist}"/>
-        <mkdir dir="${dist}/doc"/>
-        <mkdir dir="${dist}/doc/api"/>
+        <mkdir dir="${dist}/Documentation"/>
+        <mkdir dir="${dist}/Documentation/api"/>
     </target>
 
 
@@ -68,7 +68,7 @@
     <!-- Clean Wonder                                         -->
     <!-- ==================================================== -->
     <target name="clean">
-        <delete dir="${dist}/doc"/>
+        <delete dir="${dist}/Documentation"/>
     </target>
 
 
@@ -114,7 +114,7 @@
 
         <javadoc   packagenames="er.*"
                    defaultexcludes="yes"
-                   destdir="${dist}/doc/api"
+                   destdir="${dist}/Documentation/api"
                    author="true"
                    version="true"
                    use="true"
