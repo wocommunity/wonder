@@ -7,10 +7,21 @@ function Entity(n,id,ch,sel,def) {
 	this.selected = sel;
 	this.def = def;
 }
-function getParentEntityForId(parent_id) {
+function getParentEntityForId(parentschildren,parent_id) {
 	for(loop = 0; loop < parentschildren.length; loop++) {
 		if (parentschildren[loop].entityId == parent_id) {
 			return parentschildren[loop];
+		}
+	}
+	return null;
+}
+function getParentEntityForChildId(parentschildren,child_id) {
+	for(loop = 0; loop < parentschildren.length; loop++) {
+		var parent = parentschildren[loop];
+		for(loop2 = 0; parent.children != null && loop2 < parent.children.length; loop2++) {
+			if (parent.children[loop2].entityId == child_id) {
+				return parent.entityId;
+			}
 		}
 	}
 	return null;
@@ -20,7 +31,7 @@ function compareEntities(a, b) {
 	if( a.name == b.name) return 0;
 	return 1;
 }
-function allChildren() {
+function allChildren(parentschildren) {
 	var allChildren = new Array();
 	for (loop=0; loop < parentschildren.length; loop++) {
 		if (parentschildren[loop].children != null) {
@@ -30,23 +41,37 @@ function allChildren() {
 	return allChildren.sort(compareEntities);
 }
 
-function parentSwapped(new_parent_id,children_select,selected_parent,selected_child) {
-	var parent_entity = getParentEntityForId(new_parent_id);
-	selected_parent.value = new_parent_id;
-	var children_array = null;
-	var def = 0;
-	if (parent_entity != null) {
-		children_array = parent_entity.children;
-		def = parent_entity.def;
-	} else {
-		children_array = allChildren();
+function parentSwapped(parentschildren,new_parent_id,children_select,selected_parent,selected_child) {
+	var parent_entity = getParentEntityForId(parentschildren,new_parent_id);
+	if(selected_parent.value != new_parent_id) {
+		selected_parent.value = new_parent_id;
+		var children_array = null;
+		var def = 0;
+		if (parent_entity != null) {
+			children_array = parent_entity.children;
+			def = parent_entity.def;
+		} else {
+			children_array = allChildren(parentschildren);
+		}
+		if(children_select != null) {
+			setSelectToArrayOfEntities(children_select, children_array, childPopUpStringForAll);
+			children_select.options[def].selected = true;
+			childSwapped(children_select.options[def].value,selected_child,null,selected_parent,selected_child);
+		}
 	}
-	setSelectToArrayOfEntities(children_select, children_array, childPopUpStringForAll);
-	children_select.options[def].selected = true;
-	childSwapped(children_select.options[def].value,selected_child)
 }
-function childSwapped(new_child_id,selected_child) {
-	selected_child.value = new_child_id;
+function childSwapped(parentschildren,new_child_id,parent_select,selected_parent,selected_child) {
+	if(selected_child.value != new_child_id) {
+		selected_child.value = new_child_id;
+		if(("null" != new_child_id || new_child_id != null) && parent_select != null) {
+			var new_parent_id = getParentEntityForChildId(parentschildren,new_child_id);
+			for (loop=0; loop < parentschildren.length; loop++) {
+				parentschildren[loop].selected = (parentschildren[loop].entityId == new_parent_id);
+			}
+			setSelectToArrayOfEntities(parent_select,parentschildren,parentPopUpStringForAll);
+			parentSwapped(parentschildren,new_parent_id,null,selected_parent,selected_child);
+		}
+	}
 }
 function setSelectToArrayOfEntities(the_select, the_entities_array, allString) {
 	var isSelectedEntity = false;
