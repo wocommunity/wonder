@@ -365,10 +365,12 @@ public class ERXSession extends WOSession {
     }
 
     /*
-     * Serialization support - enables to use a variety of session store 
+     * Serialization support - enables to use a variety of session stores
      */ 
     private void writeObject(ObjectOutputStream stream) throws IOException {
-        if (_localizer != null) 
+        if (_localizer == null) 
+            _serializableLanguageName = null;
+        else 
             _serializableLanguageName = language();
         stream.defaultWriteObject();
     }
