@@ -74,7 +74,7 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
      }
      */
     public WOComponent printerFriendlyVersion() {
-        WOComponent result=ERDirectToWeb.printerFriendlyPageForD2WContext(d2wContext(),session());
+        WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
     }
