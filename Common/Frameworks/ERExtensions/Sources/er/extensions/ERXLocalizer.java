@@ -261,7 +261,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                       + fileNamesToWatch() + " with search path: " + frameworkSearchPath());
         
         NSArray languages = new NSArray(language);
-        WOResourceManager rm = WOApplication.application().resourceManager();
         Enumeration fn = fileNamesToWatch().objectEnumerator();
         while(fn.hasMoreElements()) {
             String fileName = (String)fn.nextElement();
@@ -269,7 +268,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             while(fr.hasMoreElements()) {
                 String framework = (String)fr.nextElement();
                 
-                String path = rm.pathForResourceNamed(fileName, framework, languages);
+                String path = ERXFileUtilities.pathForResourceNamed(fileName, framework, languages);
                 if(path != null) {
                     if(!monitoredFiles.containsObject(path)) {
                         ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path);
@@ -279,8 +278,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                         framework = "app".equals(framework) ? null : framework;
                         log.debug("Loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
-                            + languages + WOApplication.application().resourceManager()
-                                                .pathForResourceNamed(fileName, framework, languages));
+                            + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
                        NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
                         cache.addEntriesFromDictionary(dict);
                     } catch(Exception ex) {

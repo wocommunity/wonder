@@ -76,8 +76,24 @@ public class ERXFileUtilities {
         return new String(bytesFromFile(f), encoding);
     }
 
+
+
     /**
-        * Determines the last modification date for a given file
+     * Determines the path of the specified Resource. This is done
+     * to get a single entry point due to the deprecation of pathForResourceNamed
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *		for the application bundle
+     * @return the absolutePath method off of the
+     *		file object
+     */
+    public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+       return WOApplication.application().resourceManager().pathForResourceNamed(fileName, frameworkName, languages);
+    }
+    
+
+    /**
+     * Determines the last modification date for a given file
      * in a framework. Note that this method will only test for
      * the global resource not the localized resources.
      * @param fileName name of the file
@@ -89,9 +105,7 @@ public class ERXFileUtilities {
     // ENHANCEME: Should be able to specify the language to check
     public static long lastModifiedDateForFileInFramework(String fileName, String frameworkName) {
         long lastModified = 0;
-        String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
-                                                                                             frameworkName,
-                                                                                             null);
+        String filePath = pathForResourceNamed(fileName, frameworkName, null);
         if (filePath!=null) {
             lastModified = new File(filePath).lastModified();
         }
@@ -99,7 +113,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Reads a file in from the file system and then parses
+     * Reads a file in from the file system and then parses
      * it as if it were a property list.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
@@ -112,7 +126,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Reads a file in from the file system for the given set
+     * Reads a file in from the file system for the given set
      * of languages and then parses the file as if it were a
      * property list.
      * @param fileName name of the file
@@ -127,9 +141,7 @@ public class ERXFileUtilities {
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
-        String filePath = WOApplication.application().resourceManager().pathForResourceNamed(fileName,
-                                                                                             aFrameWorkName,
-                                                                                             languageList);
+        String filePath = pathForResourceNamed(fileName, aFrameWorkName, languageList);
         Object result=null;
         if (filePath!=null) {
             File file = new File(filePath);
