@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) NetStruxr, Inc. All rights reserved.
+ *
+ * This software is published under the terms of the NetStruxr
+ * Public Software License version 0.5, a copy of which has been
+ * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -11,9 +17,11 @@ import er.extensions.*;
 import org.apache.log4j.Category;
 
 public class ERDListOrganizer extends ERDCustomEditComponent {
-public ERDListOrganizer(WOContext context) {super(context);}
+
+    public ERDListOrganizer(WOContext context) { super(context); }
+    
     ////////////////////////////////////////////  log4j category  ///////////////////////////////////////////////////
-    public static final Category cat = Category.getInstance("er.directtoweb.D2WListOrganizer");
+    public static final Category cat = Category.getInstance(ERDListOrganizer.class);
 
     protected String availableObject;
     protected NSMutableArray selectedObjects;   
@@ -102,5 +110,4 @@ public ERDListOrganizer(WOContext context) {super(context);}
             }
         }
     }
-
 }

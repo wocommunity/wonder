@@ -4,22 +4,18 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-
-import er.extensions.*;
-import java.lang.*;
-import org.apache.log4j.*;
+import er.extensions.ERXExtensions;
+import org.apache.log4j.Category;
 
 public class ERDLinkToViewList extends ERDCustomEditComponent {
 
-    public ERDLinkToViewList(WOContext context) {super(context);}
+    public ERDLinkToViewList(WOContext context) { super(context); }
     
     public static final Category cat = Category.getInstance("er.directtoweb.components.ERDLinkToViewList");
 

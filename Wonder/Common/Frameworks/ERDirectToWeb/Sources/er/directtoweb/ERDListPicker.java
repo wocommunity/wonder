@@ -4,7 +4,6 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
@@ -12,15 +11,13 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
-
 public class ERDListPicker extends ERDCustomEditComponent {
 
-    public ERDListPicker(WOContext context) {super(context);}
+    public ERDListPicker(WOContext context) { super(context); }
     
-    public String  iFrameName() { return "someName"; }
+    public String iFrameName() { return "someName"; }
     
     public EOEnterpriseObject item;
-
 
     private String _pickComponentName; // can either be filled by binding or by the method below
     public String pickComponentName() {
@@ -39,7 +36,7 @@ public class ERDListPicker extends ERDCustomEditComponent {
     protected NSArray list;
     public WOComponent listComponent() {
         if (_listComponent==null) {
-            _listComponent=pageWithName(listComponentName()) /* JC_WARNING - Please check: since WO4.5, using pageWithName on the application or session instance requires two parameters (the name of the page and a WOContext). If this pageWithName is in a component or direct action instance, it is valid as is. */;
+            _listComponent=pageWithName(listComponentName());
             _listComponent.takeValueForKey(object(),"object");
             _listComponent.takeValueForKey(key(),"key");
         }
@@ -52,5 +49,4 @@ public class ERDListPicker extends ERDCustomEditComponent {
             ((EOEnterpriseObject)object()).addObjectToBothSidesOfRelationshipWithKey(item,key());        
         return listComponent();
     }
-
 }

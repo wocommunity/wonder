@@ -6,6 +6,8 @@
 		addToTargets = (
 			F5A1454F01FF7F8801A80106,
 		);
+		breakpoints = (
+		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{830, 619}";
@@ -93,6 +95,11 @@
 		};
 		wantsIndex = 1;
 		wantsSCM = -1;
+	};
+	F5A1443201FF7F8801A80106 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{77, 239}, {750, 502}}";
+		};
 	};
 	F5A1454D01FF7F8801A80106 = {
 		activeExec = 0;

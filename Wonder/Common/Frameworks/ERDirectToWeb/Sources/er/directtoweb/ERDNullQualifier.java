@@ -4,17 +4,14 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* NullQualifier.java created by jd on Wed 18-Apr-2001 */
 package er.directtoweb;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
-public class ERDNullQualifier extends Object /* JC_WARNING - Please advise: this could be a subclass of EOCustomObject. If needed, add 'implements NSKeyValueCoding' and implementations for valueForKey & takeValueForKey. */ implements EOQualifierEvaluation {
+// FIXME: This may need to subclass EOQualifier now.
+public class ERDNullQualifier extends Object implements EOQualifierEvaluation {
 
     private String _keyPath;
     
@@ -35,12 +32,6 @@ public class ERDNullQualifier extends Object /* JC_WARNING - Please advise: this
         return result;
     }
     
-    public java.lang.String description() {
-        return this.toString();
-    }
-
-    public java.lang.String toString() {
-        return "NullQualifier: " + _keyPath + " is null.";
-    }
-
+    public java.lang.String description() { return this.toString(); }
+    public java.lang.String toString() { return "NullQualifier: " + _keyPath + " is null."; }
 }

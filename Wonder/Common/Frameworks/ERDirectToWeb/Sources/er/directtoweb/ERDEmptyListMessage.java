@@ -6,11 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOComponent;
 
 public class ERDEmptyListMessage extends WOComponent {
 
-public ERDEmptyListMessage(WOContext context) {super(context);}
+    public ERDEmptyListMessage(WOContext context) { super(context); }
 
     public boolean isStateless() { return true; }
 }
