@@ -438,6 +438,7 @@
 				F6ED0C7A0361C03B01257492,
 				F5F0454A0364AFE801CF0E76,
 				F531D2ED03658BC001AD0D07,
+				F692713F0365AD3301257492,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5922,6 +5923,18 @@
 			settings = {
 			};
 		};
+		F692713E0365AD3301257492 = {
+			isa = PBXFileReference;
+			name = ERXNSLogLog4jBridge.java;
+			path = er/extensions/ERXNSLogLog4jBridge.java;
+			refType = 4;
+		};
+		F692713F0365AD3301257492 = {
+			fileRef = F692713E0365AD3301257492;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F698E7CE030C6F6B01257492 = {
 			isa = PBXFileReference;
 			name = ERXDirectActionRequestHandler.java;
@@ -6162,6 +6175,7 @@
 				F59C57BA02C4565701000102,
 				F59C57BC02C4565701000102,
 				F69DE4010313E86B01257492,
+				F692713E0365AD3301257492,
 				F59C57CD02C4565701000102,
 			);
 			isa = PBXGroup;
