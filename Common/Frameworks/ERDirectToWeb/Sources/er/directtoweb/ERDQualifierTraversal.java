@@ -28,7 +28,6 @@ public class ERDQualifierTraversal {
      * @param cb call back
      * @return if the traversal was successful
      */
-    // MOVEME: ERXQualifierUtilities
     public static boolean traverseQualifier(EOQualifierEvaluation q, ERDQualifierTraversalCallback cb) {
         Boolean result=null;
         if (q==null)
@@ -54,13 +53,14 @@ public class ERDQualifierTraversal {
                         break;
                     }
                 }
+            } else if (q instanceof EONotQualifier) {
+                EONotQualifier nq = (EONotQualifier)q;
+                cb.traverseNotQualifier((EONotQualifier)q);
+                result = traverseQualifier((EOQualifierEvaluation)nq.qualifier(),cb) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof EOKeyValueQualifier) {
                 result=cb.traverseKeyValueQualifier((EOKeyValueQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof EOKeyComparisonQualifier) {
                 result=cb.traverseKeyComparisonQualifier((EOKeyComparisonQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
-                // FIXME: Should continue to traverse a Not qualifier.
-            } else if (q instanceof EONotQualifier) {
-                result=cb.traverseNotQualifier((EONotQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof BooleanQualifier) {
                 result=cb.traverseBooleanQualifier((BooleanQualifier)q) ? Boolean.TRUE : Boolean.FALSE;
             } else if (q instanceof NonNullQualifier) {
