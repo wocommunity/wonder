@@ -94,6 +94,27 @@ public class ERXProperties {
         return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
     }
 
+    /**
+     * Returns the version string of the given framework.
+     * It checks <code>SourceVersion</code> property
+     * in the <code>info.plist</code> resource and returns
+     * a trimmed version of the value.
+     *
+     * @return version number as string; can be null-string when
+     * 			the framework is not found or the framework
+     *			doesn't have the value of
+     *                 	<code>SourceVersion</code> in its
+     *                 	<code>info.plist</code> resource.
+     * @see #versionStringForApplication
+     * @see #webObjectsVersion
+     */
+    public static String sourceVersionString() {
+        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework("version.plist", "JavaWebObjects", null);
+
+        String versionString = (String) versionDictionary.objectForKey("SourceVersion");
+        return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
+    }
+
     /** 
      * Returns WebObjects version as string. If it's one of those 
      * version 5.1s (5.1, 5.1.1, 5.1.2...), this method will only 
@@ -156,7 +177,14 @@ public class ERXProperties {
      * @return if the version of webobjects is 5.22 or better
      */
     public static boolean webObjectsVersionIs522OrHigher() {
-        return webObjectsVersionAsDouble() >= 5.22d;
+        String webObjectsVersion = webObjectsVersion();
+        if("5.2".equals(webObjectsVersion)) {
+            String sourceVersion = sourceVersionString();
+            if("9260000".equals(sourceVersion)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     
