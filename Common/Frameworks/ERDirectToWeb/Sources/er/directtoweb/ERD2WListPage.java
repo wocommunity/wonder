@@ -129,7 +129,17 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     }
 
     public WOComponent backAction() {
-        return nextPageDelegate() == null ? nextPage() == null ? (WOComponent)D2W.factory().queryPageForEntityNamed(entity().name(), session()) : nextPage() : nextPageDelegate().nextPage(this);
+        WOComponent result = null;
+        if(nextPageDelegate() == null) {
+            if(nextPage() == null) {
+                result = (WOComponent)D2W.factory().queryPageForEntityNamed(entity().name(), session());
+            } else {
+                result = nextPage();
+            }
+        } else {
+            result = nextPageDelegate().nextPage(this);
+        }
+        return  result;
     }
 
     /*** end of reimplementation */
