@@ -30,7 +30,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
 
     // this one normally belongs to ERDLocaizableInterface, but we can't have implementations in interfaces..
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return (ERXLocalizer) c.valueForKeyPath("session.localizer");
+        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
     }
     public Object localizedValueForKeyWithDefaultInContext(String key, D2WContext c) {
         if(key != null && ERXLocalizer.isLocalizationEnabled()) {

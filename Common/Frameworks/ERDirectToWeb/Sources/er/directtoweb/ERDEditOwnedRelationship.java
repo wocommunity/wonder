@@ -141,7 +141,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             NSMutableArray choices = new NSMutableArray();
             for (Enumeration e = entityNamesForNewInstances().objectEnumerator(); e.hasMoreElements();) {
                 String entityName = (String)e.nextElement();
-                String displayNameForEntity = (String)ERDirectToWeb.d2wContextValueForKey("displayNameForEntity", entityName);
+                String displayNameForEntity = (String)ERDirectToWeb.d2wContextValueForKey("displayNameForEntity", entityName, ERXLocalizer.fakeSessionForSession(session()));
                 if (entityName != null && displayNameForEntity != null) {
                     choices.addObject(new EOCreationMultipleChoice(displayNameForEntity, entityName));
                 }

@@ -21,7 +21,7 @@ public class ERDSectionText extends ERXStatelessComponent {
     public String sectionText() {
         if(sectionText == null) {
             sectionText = (String)((NSKeyValueCoding)valueForBinding("d2wContext")).valueForKey("sectionKey");
-            sectionText = ((ERXSession)session()).localizer().localizedStringForKeyWithDefault(sectionText);
+            sectionText = ERXLocalizer.localizerForSession(session()).localizedStringForKeyWithDefault(sectionText);
         }
         return sectionText;
     }

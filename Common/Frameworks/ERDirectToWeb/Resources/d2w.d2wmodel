@@ -111,9 +111,9 @@
             author = 10; 
             class = com.webobjects.directtoweb.Rule; 
             rhs = {
-                class = er.directtoweb.ERDDefaultCancelCreationMessageAssignment; 
+                class = er.directtoweb.ERDLocalizedMessageAssignment; 
                 keyPath = cancelMessage; 
-                value = "<computed>"; 
+                value = ERD2W.cancelCreationMessage; 
             }; 
         }, 
         {
@@ -1973,7 +1973,7 @@
             rhs = {
                 class = er.directtoweb.ERDLocalizedMessageAssignment; 
                 keyPath = emptyListMessage; 
-                value = "No matching @displayNameForEntity@ records found."; 
+                value = ERDEmptyListMessage.emptyListMessage; 
             }; 
         }, 
         {

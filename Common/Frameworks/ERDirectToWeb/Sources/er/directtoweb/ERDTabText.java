@@ -21,7 +21,7 @@ public class ERDTabText extends ERXStatelessComponent {
     public String tabText() {
         if(tabText == null) {
             tabText = (String)((NSKeyValueCoding)valueForBinding("d2wContext")).valueForKey("tabName");
-            tabText = ((ERXSession)session()).localizer().localizedStringForKeyWithDefault(tabText);
+            tabText = ERXLocalizer.localizerForSession(session()).localizedStringForKeyWithDefault(tabText);
         }
         return tabText;
     }

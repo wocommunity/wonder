@@ -218,6 +218,7 @@ public class ERDirectToWeb {
         ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         d2wContext().setPropertyKey(key);
+        d2wContext().takeValueForKey(ERXLocalizer.fakeSessionForLanguage(language), "session");
         return d2wContext().displayNameForProperty();
     }
 
