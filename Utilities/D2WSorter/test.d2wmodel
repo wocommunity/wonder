@@ -1,7 +1,7 @@
 {
     rules = (
         {
-            author = 100; 
+            author = 1010; 
             class = com.webobjects.directtoweb.Rule; 
             lhs = {
                 class = com.webobjects.eocontrol.EOKeyValueQualifier; 
