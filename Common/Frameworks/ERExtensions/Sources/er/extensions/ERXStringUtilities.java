@@ -529,12 +529,14 @@ public class ERXStringUtilities {
     }
     
     /** 
-     * Crean-ups version string by removing extra dots(.), 
-     * for example, 5.1.3 becomes 5.13, so that the string 
-     * can be converted to a double or BigDecimal type. 
+     * Cleans up the given version string by removing extra 
+     * dots(.), for example, 5.1.3 becomes 5.13, so that 
+     * the string can be converted to a double or BigDecimal 
+     * type easily. 
      * 
-     * @return version string that contains only first dot(.) 
-     *           as the floating point indicator. 
+     * @param version string 
+     * @return cleaned-up string that only contains the 
+     *           first dot(.) as the floating point indicator. 
      */
     public static String removeExtraDotsFromVersionString(String version) {
         int floatingPointIndex = version.indexOf("."); 
