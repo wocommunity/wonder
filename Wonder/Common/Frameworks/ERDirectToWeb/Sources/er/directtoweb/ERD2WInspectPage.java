@@ -36,14 +36,17 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public WOComponent nextPage() { return nextPage(true); }
 
     public WOComponent nextPage(boolean doConfirm) {
-        if(doConfirm && d2wContext().valueForKey("inspectConfirmConfigurationName") != null) {
-            InspectPageInterface ipi = (InspectPageInterface)D2W.factory().pageForConfigurationNamed((String)d2wContext().valueForKey("inspectConfirmConfigurationName"), session());
-            ipi.setObject((EOEnterpriseObject)d2wContext().valueForKey("object"));
-            ipi.setNextPageDelegate(nextPageDelegate());
-            ipi.setNextPage(super.nextPage());
-            if (ipi instanceof ERDFollowPageInterface) 
+        Object inspectConfirmConfigurationName = d2wContext().valueForKey("inspectConfirmConfigurationName");
+        if(doConfirm && inspectConfirmConfigurationName != null && ! "".equals(inspectConfirmConfigurationName)) {
+            WOComponent ipi = D2W.factory().pageForConfigurationNamed((String)d2wContext().valueForKey("inspectConfirmConfigurationName"), session());
+            if (ipi instanceof InspectPageInterface) {
+                ((InspectPageInterface)ipi).setObject((EOEnterpriseObject)d2wContext().valueForKey("object"));
+                ((InspectPageInterface)ipi).setNextPageDelegate(nextPageDelegate());
+                ((InspectPageInterface)ipi).setNextPage(super.nextPage());
+            }
+            if (ipi instanceof ERDFollowPageInterface)
                 ((ERDFollowPageInterface)ipi).setPreviousPage(context().page());
-             return (WOComponent)ipi;
+            return (WOComponent)ipi;
         }
         return (nextPageDelegate() != null) ? nextPageDelegate().nextPage(this) : super.nextPage();
     }
