@@ -199,31 +199,11 @@ public abstract class ERXApplication extends WOApplication {
     }    
 
     // DELETE ME
-     public String mailWrapperName() { return "PageWrapper"; }
-
-    // DELETE ME
     protected D2WContext _d2wContext;
     // DELETE ME
     public D2WContext d2wContext() {
         if (_d2wContext == null)
             _d2wContext = new D2WContext();
         return _d2wContext;
-    }
-
-    // DELETE ME
-    public void resetSignificantKeys() {}
-    // DELETE ME
-    public void warmUpRuleCache() {
-        // Moved to ERDirectToWeb
-        //ERD2WModel.erDefaultModel().prepareDataStructures();
-    }
-
-    // DELETE ME
-    public ERXSimpleHTMLFormatter formatter() { return ERXSimpleHTMLFormatter.formatter(); }
-   
-    // DELETE ME
-    public WOComponent pageWithName(String name) {
-        // Was: pageWithName(name, new WOContext());
-        return pageWithName(name, null);
     }
 }
