@@ -288,6 +288,22 @@
 		</antcall>
 	</target>
 	
+	<!-- ERJavaMail -->
+	<target name="ERJavaMail.all">
+		<antcall target="framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERJavaMail" />
+            <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJavaMail" />
+		</antcall>
+	</target>
+	<target name="ERJavaMail.clean">
+		<antcall target="clean" >
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="ERJavaMail" />
+            <param name="project.dir" value="${wonder.root}/Common/Frameworks/ERJavaMail" />
+		</antcall>
+	</target>
+	
 	<!-- ERNeutralLook -->
 	<target name="ERNeutralLook.all">
 		<antcall target="framework" >
@@ -418,7 +434,7 @@
 	</target>
 	
 	<target name="core.all" depends="ERJars.all,JavaWOExtensions.all,ERExtensions.all,ERDirectToWeb.all" />
-	<target name="frameworks.all" depends="core.all,ERNeutralLook.all,WOOgnl.all,ERCoreBusinessLogic.all" />
+	<target name="frameworks.all" depends="core.all,ERNeutralLook.all,WOOgnl.all,ERCoreBusinessLogic.all,ERJavaMail.all" />
 
 	<target name="bugtracker.all" depends="frameworks.all,BTBusinessLogic.all,BugTracker.all" />
 	<target name="applications.all" depends="frameworks.all,bugtracker.all" />
