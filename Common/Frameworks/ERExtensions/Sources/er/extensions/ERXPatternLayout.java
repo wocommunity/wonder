@@ -309,7 +309,7 @@ class ERXPatternParser extends PatternParser {
          * values by defauilt. 
          */
         private final NSDictionary _defaultLabels = 
-            ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object[] {"@sessionCount@", "sessionCount"});
+            ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object[] {"@@sessionCount@@", "sessionCount"});
         
         /**
          * Default package level constructor
@@ -326,7 +326,7 @@ class ERXPatternParser extends PatternParser {
             _templateParser.isLoggingDisabled = true;
             _appInfo = new NSMutableDictionary();
             // work in progress; this is the fixed template.
-            _template = "@appName@[@pid@:@portNumber@ @sessionCount@]";
+            _template = "@@appName@@[@@pid@@:@@portNumber@@ @@sessionCount@@]";
         }
         
         /**
@@ -364,13 +364,13 @@ class ERXPatternParser extends PatternParser {
                         }                        
                     }
                     
-                    _template = _templateParser.parseTemplateWithObject(_template, "@", _appInfo, _defaultLabels);
+                    _template = _templateParser.parseTemplateWithObject(_template, "@@", _appInfo, _defaultLabels);
                     _constantsInitialized = true;
                 }
                 
                 _appInfo.setObjectForKey(String.valueOf(app.activeSessionsCount()), "sessionCount");
             }
-            return _templateParser.parseTemplateWithObject(_template, "@", _appInfo);
+            return _templateParser.parseTemplateWithObject(_template, "@@", _appInfo);
         }
     }
 
@@ -429,7 +429,7 @@ class ERXPatternParser extends PatternParser {
             _templateParser.isLoggingDisabled = true;
             _jvmInfo = new NSMutableDictionary();
             // work in progress; this is the fixed template.
-            _template = "@usedMemory@ used/@freeMemory@ free";
+            _template = "@@usedMemory@@ used/@@freeMemory@@ free";
         }
         
         /**
@@ -454,7 +454,7 @@ class ERXPatternParser extends PatternParser {
             _jvmInfo.setObjectForKey(_decimalFormatter.format(freeMemory),  "freeMemory" );
             _jvmInfo.setObjectForKey(_decimalFormatter.format(usedMemory),  "usedMemory" );
 
-            return _templateParser.parseTemplateWithObject(_template, "@", _jvmInfo);
+            return _templateParser.parseTemplateWithObject(_template, "@@", _jvmInfo);
         }
     }
 
