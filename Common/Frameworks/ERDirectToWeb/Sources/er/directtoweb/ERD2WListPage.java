@@ -171,6 +171,12 @@ public abstract class ERD2WListPage extends D2WListPage {
         if (dg!=null) {
             if (!_hasBeenInitialized) {
                 cat.debug("Initializing display group");
+                String fetchspecName = (String)d2wContext().valueForKey("restrictingFetchSpecification");
+                if(fetchspecName != null) {
+                    EODataSource ds = dataSource();
+                    if(ds instanceof EODatabaseDataSource)
+                        ((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
+                }
                 NSArray sortOrderings=sortOrderings();
                 displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : ERXConstant.EmptyArray);
                 displayGroup().setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
@@ -194,14 +200,27 @@ public abstract class ERD2WListPage extends D2WListPage {
 
     public WOComponent deleteObjectAction() {
         // FIXME: Shouldn't ave a hard dependency on names here.
-        ConfirmPageInterface nextPage = (ConfirmPageInterface)pageWithName("ERQuestionPage2") /* JC_WARNING - Please check: since WO4.5, using pageWithName on the application or session instance requires two parameters (the name of the page and a WOContext). If this pageWithName is in a component or direct action instance, it is valid as is. */;
-        nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
-        nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
+        String confirmConfigurationName=(String)d2wContext().valueForKey("confirmConfigurationName");
+        if(confirmConfigurationName!=null){
+            ConfirmPageInterface nextPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed(confirmConfigurationName,session());
+            nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
+            nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
+            if(nextPage instanceof ERD2WInspectPage) {
+                ((ERD2WInspectPage)nextPage).setObject(object());
+            } else {
+                nextPage.setMessage("<B>Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+"</B>:<br> "+object().userPresentableDescription()+ " ?");
+            }
+            return (WOComponent) nextPage;
+        } else {
+            ConfirmPageInterface nextPage = (ConfirmPageInterface)pageWithName("ERD2WConfirmPageTemplate");
+            nextPage.setConfirmDelegate(new ERDDeletionDelegate(object(),dataSource(),context().page()));
+            nextPage.setCancelDelegate(new ERDDeletionDelegate(null,null,context().page()));
 
-        nextPage.setMessage("<B>Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+"</B>:<br> "+object().userPresentableDescription()+ " ?");
-        return (WOComponent) nextPage;
+            nextPage.setMessage("<B>Are you sure you want to delete the following "+d2wContext().valueForKey("displayNameForEntity")+"</B>:<br> "+object().userPresentableDescription()+ " ?");
+            return (WOComponent) nextPage;
+        }
     }
-
+    
     public WOComponent editObjectAction() {
         WOComponent result = null;
         String editConfigurationName=(String)d2wContext().valueForKey("editConfigurationName");
