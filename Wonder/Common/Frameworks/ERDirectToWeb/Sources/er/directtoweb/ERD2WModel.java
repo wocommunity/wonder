@@ -38,7 +38,7 @@ public class ERD2WModel extends D2WModel {
     static NSMutableArray BACKSTOP_KEYS=new NSMutableArray(new Object[] { "pageConfiguration", "entity", "task" });
     static {
         Class c=D2WFastModel.class; // force initialization
-        D2WModel.setDefaultModel(new ERD2WModel(ERXConstant.EmptyArray));
+        D2WModel.setDefaultModel(new ERD2WModel(NSArray.EmptyArray));
     }
 
     public static ERD2WModel erDefaultModel() { return (ERD2WModel)D2WModel.defaultModel(); }
