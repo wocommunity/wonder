@@ -12,8 +12,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import java.math.BigDecimal;
-import org.apache.log4j.*;
-
+import org.apache.log4j.Category;
 import er.extensions.*;
 
 public class ERD2WEditNumber extends D2WEditNumber {
@@ -32,11 +31,11 @@ public class ERD2WEditNumber extends D2WEditNumber {
         return super.attribute() != null ? super.attribute() : (EOAttribute)d2wContext().valueForKey("smartAttribute");
     }
     
-    private ERDNumberFormatter _numberFormatter;
+    private ERXNumberFormatter _numberFormatter;
     protected java.text.Format numberFormatter() {
         if (_numberFormatter == null) {
-            _numberFormatter = ERDNumberFormatter.sharedInstance();
-            _numberFormatter.setFormat(formatter());
+            _numberFormatter = ERXNumberFormatter.sharedInstance();
+            _numberFormatter.setPattern(formatter());
         }
         return (java.text.Format)_numberFormatter;
     }
