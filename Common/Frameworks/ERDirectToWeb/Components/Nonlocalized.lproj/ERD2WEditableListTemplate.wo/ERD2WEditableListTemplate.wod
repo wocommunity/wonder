@@ -5,27 +5,6 @@ ActiveImage1: WOActiveImage {
 	framework = "ERDirectToWeb";
 }
 
-AttributeCell: WOGenericContainer {
-	_unroll = true;
-	align = d2wContext.justification;
-	elementName = "td";
-	valign = "middle";
-}
-
-AttributeDisplay: WOSwitchComponent { 
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = d2wContext;
-	object = object;
-}
-
-AttributeRepetition: WORepetition {
-	_unroll = true;
-	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
-}
-
 BackButton: WOHyperlink {
 	action = backAction;
 }
@@ -42,25 +21,12 @@ CancelActiveImage: WOActiveImage {
 	framework = "JavaDirectToWeb";
 }
 
-ColumnLabelRepetition: WORepetition {
-	_unroll = true;
-	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
-}
-
 Conditional1: WOConditional {
 	condition = false;
 }
 
 Conditional2: WOConditional {
 	condition = d2wContext.showBanner;
-}
-
-ERSortOrder: ERXSortOrder {
-	d2wContext = d2wContext;
-	displayGroup = displayGroup;
-	displayKey = d2wContext.displayNameForProperty;
-	key = d2wContext.sortKeyForList;
 }
 
 ERTableWithBorder1: ERXTableWithBorder {
@@ -72,12 +38,6 @@ EntityName: WOString {
 	value = d2wContext.displayNameForEntity;
 }
 
-EntityRepetition: WORepetition {
-	item = object;
-	list = displayGroup.displayedObjects;
-	index = index;
-}
-
 ErrorDictionaryPanel: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
@@ -85,10 +45,8 @@ ErrorDictionaryPanel: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = false;
 }
 
-ErrorDictionaryPanel1: ERXErrorDictionaryPanel {
+ErrorDictionaryPanel2: ERXErrorDictionaryPanel {
 	errorMessages = currentErrorDictionary;
-	shouldShowNewLineAbove = true;
-	shouldShowNewLineBelow = true;
 }
 
 ExclamationImage: WOImage {
@@ -122,24 +80,6 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
-InspectImage: WOActiveImage {
-	alt = "Inspect that Object";
-	border = "0";
-	filename = "magglass-btn.gif";
-	framework = "JavaDirectToWeb";
-	action = inspectObjectAction;
-}
-
-IsEntityNotWritable: WOConditional {
-	_unroll = true;
-	condition = isEntityInspectable;
-}
-
-IsPropertySortable: WOConditional {
-	_unroll = true;
-	condition = d2wContext.propertyIsSortable;
-}
-
 ListEmpty: WOConditional {
 	condition = isListEmpty;
 }
@@ -149,6 +89,12 @@ ListNotEmpty: WOConditional {
 	negate = true;
 }
 
+ListPageRepetition2: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
+}
+
 ListTable: WOGenericContainer {
 	_unroll = true;
 	bgcolor = d2wContext.backgroundColorForTable;
@@ -156,18 +102,6 @@ ListTable: WOGenericContainer {
 	cellpadding = 0;
 	cellspacing = 0;
 	elementName = "Table";
-}
-
-ListTableHeaderRow: WOGenericContainer {
-	_unroll = "YES";
-	bgcolor = "#999999";
-	elementName = "TR";
-}
-
-ListTableRow: WOGenericContainer {
-	_unroll = "YES";
-	elementName = "TR";
-	bgcolor = "#ffffff";
 }
 
 NavBar2: ERXBatchNavigationBarInForm {
@@ -187,11 +121,6 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-PropertyName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForProperty;
 }
 
 ReturnActiveImage: WOActiveImage {
