@@ -31,21 +31,6 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
     }
 
-
-    public NSTimestamp created() {
-        return (NSTimestamp)storedValueForKey("created");
-    }
-    public void setCreated(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "created");
-    }
-
-    public NSTimestamp lastModified() {
-        return (NSTimestamp)storedValueForKey("lastModified");
-    }
-    public void setLastModified(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "lastModified");
-    }
-
     public String fromAddress() {
         return (String)storedValueForKey("fromAddress");
     }
@@ -74,6 +59,13 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, "bccAddresses");
     }
 
+    public String exceptionReason() {
+        return (String)storedValueForKey("exceptionReason");
+    }
+    public void setExceptionReason(String aValue) {
+        takeStoredValueForKey(aValue, "exceptionReason");
+    }    
+    
     public String title() {
         return (String)storedValueForKey("title");
     }
@@ -95,11 +87,11 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, "dateSent");
     }
 
-    public String replyToAddresses() {
-        return (String)storedValueForKey("replyToAddresses");
+    public String replyToAddress() {
+        return (String)storedValueForKey("replyToAddress");
     }
-    public void setReplyToAddresses(String aValue) {
-        takeStoredValueForKey(aValue, "replyToAddresses");
+    public void setReplyToAddress(String aValue) {
+        takeStoredValueForKey(aValue, "replyToAddress");
     }
 
     public String xMailer() {
@@ -116,10 +108,10 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, "contentType");
     }
 
-    public String isRead() {
-        return (String)storedValueForKey("isRead");
+    public Number isRead() {
+        return (Number)storedValueForKey("isRead");
     }
-    public void setIsRead(String aValue) {
+    public void setIsRead(Number aValue) {
         takeStoredValueForKey(aValue, "isRead");
     }
 
