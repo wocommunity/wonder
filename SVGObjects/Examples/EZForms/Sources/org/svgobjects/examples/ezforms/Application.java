@@ -5,7 +5,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 
 public class Application extends WOApplication {
-    protected NSArray accountTypes = Account.Types;
+    public NSArray accountTypes = Account.Types;
 
     /*
     * main
