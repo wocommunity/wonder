@@ -84,6 +84,7 @@
                 <include name="*.eomodeld/**" />
                 <include name="**/*.plist" />
                 <include name="**/*.d2wmodel" />
+                <include name="**/Properties" />
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
                 <include name="**/mime.types" /> <!-- ERJavaMail specific --> 
@@ -124,6 +125,7 @@
                 <include name="*.eomodeld/**" />
                 <include name="**/*.plist" />
                 <include name="**/*.d2wmodel" />
+                <include name="**/Properties" />
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
@@ -187,6 +189,7 @@
                 <include name="*.eomodeld/**" />
                 <include name="**/*.plist" />
                 <include name="**/*.d2wmodel" />
+                <include name="**/Properties" />
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
             </resources>
