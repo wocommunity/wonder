@@ -23,15 +23,20 @@ public class CreateTestItemFromReq extends WOComponent {
 
     public WOComponent createTestItem() {
         ERXLocalizer localizer = ERXLocalizer.localizerForSession(session());
-        EOEditingContext peer = new EOEditingContext(bug.editingContext().parentObjectStore());
-        People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).getUser());
+        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
+            People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).getUser());
 
-        String description = localizer.localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", bug);
-        TestItem testItem = user.createTestItemFromRequestWithDescription(bug, (Component)valueForKey("component"), description);
-
-        EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("CreateNewTestItemFromReq",session());
-        epi.setObject(testItem);
-        epi.setNextPage(context().page());
+            String description = localizer.localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", bug);
+            TestItem testItem = user.createTestItemFromRequestWithDescription(bug, (Component)valueForKey("component"), description);
+            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("CreateNewTestItemFromReq",session());
+            epi.setObject(testItem);
+            epi.setNextPage(context().page());
+        } finally {
+            peer.unlock();
+        }
 
         return (WOComponent)epi;
     }

@@ -11,7 +11,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
-import er.extensions.ERXConstant;
+import er.extensions.*;
 
 public class FileBugFromTestItem extends WOComponent {
 
@@ -23,52 +23,31 @@ public class FileBugFromTestItem extends WOComponent {
     public String key;
     public Object extraBindings;
 
-    // FIXME: This could be much cleaner.
     public WOComponent fileBug() {
-        EOEntity entity=EOModelGroup.defaultGroup().entityNamed("Bug");
-        EOClassDescription aClassDesc=entity.classDescriptionForInstances();
-        EOEditingContext peerContext=new EOEditingContext(object.editingContext().parentObjectStore());
-        EOEnterpriseObject localObject=EOUtilities.localInstanceOfObject(peerContext,object);
-        localObject.addObjectToBothSidesOfRelationshipWithKey(TestItemState.BUG,"state");
-        EOEnterpriseObject aNewEO=(EOEnterpriseObject)aClassDesc.createInstanceWithEditingContext(peerContext, null);
-        peerContext.insertObject(aNewEO);
-        String entityName = object.entityName();
-        localObject.addObjectToBothSidesOfRelationshipWithKey(aNewEO,"bugs");
-        EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(aNewEO.editingContext(),
-                                                                       ((Session)session()).getUser());
-        aNewEO.addObjectToBothSidesOfRelationshipWithKey(localUser,"originator");
-        aNewEO.addObjectToBothSidesOfRelationshipWithKey((EOEnterpriseObject)localObject.valueForKey("component"),"component");
-        String pKey=object.primaryKey();
-        aNewEO.takeValueForKey("[From Test #"+pKey+"]","textDescription");
-        //aNewEO.takeValueForKey("[From Test #"+pKey+"]","subject");
-        
-        EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewBug",session());
-        epi.setObject(aNewEO);
-        epi.setNextPage(context().page());
-        /*
-        if(0)     {
-            EOEditingContext peer = new EOEditingContext(object.editingContext().parentObjectStore());
+        EOEditingContext peer = ERXEC.newEditingContext(object.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
             TestItem testItem = (TestItem)EOUtilities.localInstanceOfObject(peer,object);
             People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).getUser());
-            Component component = valueForKey("component");
+            Component component = (Component)valueForKey("component");
 
             Bug bug = new Bug();
             peer.insertObject(bug);
-            testItem.setState(TestItem.BUG_STATE);
+            testItem.setState(TestItemState.BUG);
 
-            bug.setTextDescription("[From Test #"testItem.primaryKey()+"]");
-            bug.addtoBothSidesOfTestItems(testItem);
-            bug.addtoBothSidesOfOriginator(user);
-            bug.addtoBothSidesOfComponents(component);
+            bug.setTextDescription("[From Test #" + testItem.primaryKey()+"]");
+            bug.addToBothSidesOfTestItems(testItem);
+            bug.addToBothSidesOfOriginator(user);
+            bug.addToBothSidesOfComponent(component);
 
-            EditPageInterface epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewBug",session());
+            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewBug",session());
             epi.setObject(bug);
             epi.setNextPage(context().page());
-
-            return (WOComponent)epi;
-        }*/
-        
-        return (WOComponent)epi;        
+        } finally {
+            peer.unlock();
+        }
+         return (WOComponent)epi;        
     }
     
     

@@ -19,11 +19,16 @@ public class OnlineHatSystem extends WOComponent {
     }
 
     private EOEditingContext ec = ERXExtensions.newEditingContext();
-    
+    public void awake() {
+        ec.lock();
+    }
+    public void sleep() {
+        ec.unlock();
+    }
     protected NSArray _directtowebfiles;
     public NSArray directtowebfiles(){
         if(_directtowebfiles == null){
-            _directtowebfiles = Framework.frameworkClazz().orderedFrameworks(ec);
+            _directtowebfiles = Framework.clazz.orderedFrameworks(ec);
         }
         return _directtowebfiles;
     }
