@@ -205,8 +205,13 @@ public class ERXCompilerProxy {
                         }
                         if(WODirectAction.class.isAssignableFrom(class_)) {
                             WOApplication app = WOApplication.application();
-                            WODirectActionRequestHandler handler = new WODirectActionRequestHandler(cacheEntry.className(), "default", false);
-                            boolean directActionIsDefault = app.requestHandlerForKey(app.directActionRequestHandlerKey()) == app.defaultRequestHandler();
+                            WORequestHandler currentDAHandler = app.requestHandlerForKey(app.directActionRequestHandlerKey());
+                            WODirectActionRequestHandler handler = null;
+                            if (currentDAHandler instanceof ERXDirectActionRequestHandler) 
+                                handler = new ERXDirectActionRequestHandler(cacheEntry.className(), "default", false);
+                            else 
+                                handler = new WODirectActionRequestHandler(cacheEntry.className(), "default", false);
+                            boolean directActionIsDefault = currentDAHandler == app.defaultRequestHandler();
                             app.registerRequestHandler(handler, app.directActionRequestHandlerKey());
                             if(directActionIsDefault)
                                 app.setDefaultRequestHandler(handler);
