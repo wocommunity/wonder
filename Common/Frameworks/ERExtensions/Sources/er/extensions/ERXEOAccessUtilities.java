@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.jdbcadaptor.*;
+import java.util.*;
 
 /**
  * Collection of EOAccess related utilities.
@@ -134,7 +135,6 @@ public class ERXEOAccessUtilities {
         EOAdaptorContext ac = dc.adaptorContext();
         JDBCAdaptor a = (JDBCAdaptor) ac.adaptor();
         JDBCPlugIn plugin = a.plugIn();
-        log.debug("plugin name = "+plugin.databaseProductName());
         EOSynchronizationFactory sf = plugin.createSynchronizationFactory();
         EOModel m = EOModelGroup.defaultGroup().modelNamed(modelName);
         Enumeration e = m.entities().objectEnumerator();
