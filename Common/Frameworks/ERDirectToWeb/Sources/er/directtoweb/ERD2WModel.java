@@ -57,7 +57,13 @@ public class ERD2WModel extends D2WModel {
      * Gets the default D2W model cast as an ERD2WModel.
      * @return the default ERD2Model
      */
-    public static ERD2WModel erDefaultModel() { return (ERD2WModel)D2WModel.defaultModel(); }
+    public static ERD2WModel erDefaultModel() {
+        if(!(D2WModel.defaultModel() instanceof ERD2WModel)) {
+            D2WModel.setDefaultModel(new ERD2WModel(NSArray.EmptyArray));
+            log.warn("erDefaultModel had wrong class, fixing to ERD2WModel");
+        }
+        return (ERD2WModel)D2WModel.defaultModel();
+    }
 
     private final static EOSortOrdering _prioritySortOrdering=new EOSortOrdering("priority",EOSortOrdering.CompareDescending);
     private final static EOSortOrdering _descriptionSortOrdering=new EOSortOrdering("toString",EOSortOrdering.CompareDescending);
