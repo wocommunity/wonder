@@ -43,7 +43,7 @@ public class ERXCompilerProxy {
     /** Path to the jikes binary.<br/>
      * Note that the Compilerproxy currently only works on unix based systems.
      */
-    protected static final String _jikesPath = "/usr/bin/jikes";
+    protected static String _jikesPath = "/usr/bin/jikes";
 
     /** Holds the Compilerproxy singleton
      */
@@ -204,18 +204,30 @@ public class ERXCompilerProxy {
             return;
         }
 
-	if(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCompilerProxyEnabled", false)) {
+        if(!ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCompilerProxyEnabled", false)) {
             log.info("Rapid-turnaround mode is disabled, set 'er.extensions.ERXCompilerProxyEnabled=true' in your WebObjects.properties to enable it.");
             _filesToWatch = new NSMutableDictionary();
             return;
 	}
 
+        boolean isWindows = !("/".equals(File.fileSeparator));
+        // Oh, yuck! Please comebody come up with a better way...
+        if(isWindows) {
+            _jikesPath = System.getProperty("NEXT_ROOT") + "/Local/Library/Executables/jikes.exe";
+        }
 
-	//david teran: fixes a bug with some WebObjects version...
+        if(!(new File(_jikesPath)).exists()) {
+            log.error("Can't use compiler proxy, no jikes found at path :<" + _jikesPath + ">");
+            return;
+        }
+        
+        String classPathSeparator = ":";
+        if(isWindows)
+            classPathSeparator = ";";
 	_classPath = System.getProperty("com.webobjects.classpath");
 	if ( _classPath != null && _classPath.length() > 0) {
 	    if (System.getProperty("java.class.path") != null && System.getProperty("java.class.path").length() > 0) {
-		System.setProperty("java.class.path", _classPath + ":" + System.getProperty("java.class.path"));
+		System.setProperty("java.class.path", _classPath + classPathSeparator + System.getProperty("java.class.path"));
 	    } else {
 		System.setProperty("java.class.path", _classPath);
 	    }
@@ -225,12 +237,12 @@ public class ERXCompilerProxy {
 	}
 	//end of fix
 	
-        if(_classPath.indexOf("Classes/classes.jar") < 0) {
+        if(_classPath.indexOf("Classes/classes.jar") < 0 && !isWindows) {
             // (ak) We need this when we do an Ant build, until WOProject is fixed to include classes.jar
             // This wouldn't work on windows of course, but then again, the rest of this class doesn't, too.
             String systemRoot = "/System/Library/Frameworks/JavaVM.framework/Classes/";
-            _classPath += ":" + systemRoot + "classes.jar";
-            _classPath += ":" + systemRoot + "ui.jar";
+            _classPath += classPathSeparator + systemRoot + "classes.jar";
+            _classPath += classPathSeparator + systemRoot + "ui.jar";
         }
 
         _raiseOnError = ERXProperties.booleanForKey("CPRaiseOnError");
