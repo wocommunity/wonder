@@ -4,23 +4,17 @@
  * This software is published under the terms of the NetStruxr
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
-
-/* ERValidation.java created by patrice on Mon 27-Mar-2000 */
 package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import java.lang.*;
-import java.lang.reflect.*;
-import java.util.*;
+//import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 
 public class ERXValidation {
 
-    /////////////////////////////////////////////  log4j category  /////////////////////////////////////////
+    /** logging support */
     public static final Category cat = Category.getInstance("er.validation.ERValidation");
 
     public final static boolean PUSH_INCORRECT_VALUE_ON_EO=true;
@@ -31,13 +25,14 @@ public class ERXValidation {
         pushChangesDefault = val;
     }
 
+    /*
     private static D2WContext _propertyNameContext;
     private static D2WContext propertyNameContext() {
         if (_propertyNameContext==null) {
             _propertyNameContext=new D2WContext();
         }
         return _propertyNameContext;
-    }
+    }*/
 
     public static void validationFailedWithException(Throwable e,
                                                      Object value,
@@ -75,8 +70,7 @@ public class ERXValidation {
         String key = null;
         String newErrorMessage=e.getMessage();
         // Need to reset the context for each validation exception.
-        propertyNameContext().setEntity(null);
-        
+        //propertyNameContext().setEntity(null);
         if (e instanceof NSValidation.ValidationException && ((NSValidation.ValidationException)e).key() != null
             && ((NSValidation.ValidationException)e).object() != null) {
             NSValidation.ValidationException nve = (NSValidation.ValidationException)e;
@@ -92,34 +86,41 @@ public class ERXValidation {
                 if (pushChanges)  {
                     ((EOEnterpriseObject)eo).takeValueForKeyPath(value, key);
                 }
+                entity = EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),(EOEnterpriseObject)eo);
                 // Setting the entity on the context
-                propertyNameContext().setEntity(EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),
-                                                                          (EOEnterpriseObject)eo));
+                //propertyNameContext().setEntity(EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),
+                //                                                          (EOEnterpriseObject)eo));
             } else {
                 //the exception is coming from a formatter
                 key=(String)NSArray.componentsSeparatedByString(displayPropertyKeyPath,".").lastObject();
                 newErrorMessage="<b>"+key+"</b>:"+newErrorMessage;
-                if (entity!=null)
-                    propertyNameContext().setEntity(entity);
+                //if (entity!=null)
+                //    propertyNameContext().setEntity(entity);
             }
         } else {
             key = keyPath;
-            if (entity!=null)
-                propertyNameContext().setEntity(entity);
+            //if (entity!=null)
+            //    propertyNameContext().setEntity(entity);
+        }
+        if (key != null && newErrorMessage != null) {
+            String niceDisplay = entity != null ?
+            entity.classDescriptionForInstances().displayNameForKey(key) : ERXStringUtilities.displayNameForKey(key);
+            String localDisplayName = localizer != null ? localizer.localizedStringForKey(niceDisplay) : niceDisplay;
+            errorMessages.setObjectForKey(newErrorMessage, localDisplayName);
         }
         // Leveraging the power of D2WContext to generate great looking error messages.
-        if (propertyNameContext().entity() != null && key != null) {
-            propertyNameContext().setPropertyKey(key);
-            //FIXME: (ak) this is just until I can rethink the whole message processing
-            NSMutableDictionary fakeSession = new NSMutableDictionary(localizer, "localizer");
-            propertyNameContext().takeValueForKey( fakeSession, "session");
-            if(newErrorMessage != null)
-                errorMessages.setObjectForKey(newErrorMessage, propertyNameContext().displayNameForProperty());
-        } else {
+        //if (propertyNameContext().entity() != null && key != null) {
+        //    propertyNameContext().setPropertyKey(key);
+        //FIXME: (ak) this is just until I can rethink the whole message processing
+        //     NSMutableDictionary fakeSession = new NSMutableDictionary(localizer, "localizer");
+        //     propertyNameContext().takeValueForKey( fakeSession, "session");
+        //     if(newErrorMessage != null)
+        //         errorMessages.setObjectForKey(newErrorMessage, propertyNameContext().displayNameForProperty());
+        else {
             errorMessages.setObjectForKey(newErrorMessage, key);
         }
     }
-
+    /* Let's ditch these.
     public static String displayNameForPropertyWithEO(String propertyKey, EOEnterpriseObject eo){
         EOEntity entity = EOUtilities.entityForObject(eo.editingContext(),
                                                       eo);
@@ -136,5 +137,5 @@ public class ERXValidation {
             result = propertyKey;
         }
         return result;
-    }
+    } */
 }
