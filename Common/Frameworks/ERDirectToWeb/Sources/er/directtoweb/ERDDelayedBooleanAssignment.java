@@ -34,7 +34,7 @@ public class ERDDelayedBooleanAssignment extends ERDDelayedAssignment implements
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
-        return new ERDDelayedKeyValueAssignment(eokeyvalueunarchiver);
+        return new ERDDelayedBooleanAssignment(eokeyvalueunarchiver);
     }    
 
     /** 
