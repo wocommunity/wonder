@@ -184,7 +184,7 @@ public abstract class ERD2WListPage extends D2WListPage {
             log.info("Exception when setting datasource", ex);
             NSArray sortOrderings=sortOrderings();
             displayGroup().setDataSource(eodatasource);
-            displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : ERXConstant.EmptyArray);
+            displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
             displayGroup().fetch();
         }
     }
@@ -200,7 +200,7 @@ public abstract class ERD2WListPage extends D2WListPage {
                         ((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
                 }
                 NSArray sortOrderings=sortOrderings();
-                displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : ERXConstant.EmptyArray);
+                displayGroup().setSortOrderings(sortOrderings!=null ? sortOrderings : NSArray.EmptyArray);
                 displayGroup().setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
                 displayGroup().fetch();
                 displayGroup().updateDisplayedObjects();
