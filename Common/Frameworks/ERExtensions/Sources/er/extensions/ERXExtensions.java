@@ -31,6 +31,10 @@ public class ERXExtensions {
     private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
 
     public static class Observer {
+        public void configureAdaptorContext(NSNotification n) {
+            ERXExtensions.configureAdaptorContext();
+        }
+
         public void didSave(NSNotification n) {
             ERXGenericRecord.didSave(n);
         }
@@ -48,7 +52,7 @@ public class ERXExtensions {
             ERXExtensions.sessionDidTimeOut(sessionID);
         }
     }
-
+    
     // called implicitely because ERXExtensions is the principal class of the framework
     private static boolean _isInitialized=false;
     static {
@@ -68,15 +72,15 @@ public class ERXExtensions {
 
             // Super-screwy error caused by da bridge, app hangs when attempting to init the objc side of
             // SimpleHTMLFormatter used in one of our eos.  Very, very strange.  This works around the issue
-            //ERXExtensions.configureAdaptorContextRapidTurnAround();
+            Observer observer = new Observer();
+            ERXRetainer.retain(observer); // has to be retained on the objC side!!
+            ERXExtensions.configureAdaptorContextRapidTurnAround(observer);
             EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
             ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
 	    ERXEntityClassDescription.registerDescription();
             // This patches shared eo loading so cross model relationships to shared eos work.
             //ERXSharedEOLoader.patchSharedEOLoading();
-            Observer observer = new Observer();
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("didSave", ERXConstant.NotificationClassArray),
                                                              EOEditingContext.EditingContextDidSaveChangesNotification,
@@ -97,24 +101,20 @@ public class ERXExtensions {
         }
     }
 
-    public static Category adaptorCategory = Category.getInstance("er.transaction.adaptor.EOAdaptorDebugEnabled");
-    public static Category sharedEOAdaptorCategory = Category.getInstance("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
+    public static Category adaptorCategory;
+    public static Category sharedEOAdaptorCategory;
     private static Boolean adaptorEnabled;
 
     private static boolean _isConfigureAdaptorContextRapidTurnAround = false;
-    public static void configureAdaptorContextRapidTurnAround() {
+    public static void configureAdaptorContextRapidTurnAround(Object observer) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
-            if (adaptorCategory.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration))
+            adaptorCategory = Category.getInstance("er.transaction.adaptor.EOAdaptorDebugEnabled");
+            sharedEOAdaptorCategory = Category.getInstance("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
+            if (adaptorCategory.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration)) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+            }
             adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) ? Boolean.TRUE : Boolean.FALSE;
-
-            Object observer=new Object() {
-                public void configureAdaptorContext(NSNotification n) {
-                    ERXExtensions.configureAdaptorContext();
-                }
-            };
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
                                           // Allows rapid turn-around of adaptor debugging.
             NSNotificationCenter.defaultCenter().addObserver(observer,
                                                              new NSSelector("configureAdaptorContext", ERXConstant.NotificationClassArray),
@@ -137,10 +137,12 @@ public class ERXExtensions {
             if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration) != targetState.booleanValue())
                 if (targetState.booleanValue()) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
                 } else {
                     NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration);
+                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
                 }
-                    ec.hasChanges();
+                ec.hasChanges();
             if (targetState.booleanValue()) {
                 adaptorCategory.info("Adaptor debug on");
             } else {
