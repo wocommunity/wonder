@@ -34,7 +34,7 @@ public class ERXEditDateJavascript extends WOComponent {
         if(context() instanceof ERXMutableUserInfoHolderInterface) {
             formName = (String)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().objectForKey("formName");
         }
-        return "javascript:show_calendar('"+formName+"."+name()+ "');";
+        return "show_calendar('"+formName+"."+name()+ "'); return false;";
     }
     //public Object value() {return dateString;}
 
