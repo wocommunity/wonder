@@ -20,7 +20,8 @@ public class ERXDirectActionRequestHandler extends com.webobjects.appserver._pri
         
         ERXMessageEncoding messageEncoding = null;
         
-        // Remember request handler should be on the same thread to the session it handles. 
+        // This should retrieve the session object belonging to the same 
+        // worker thread that's been calling handleRequest method. 
         WOSession session = ERXExtensions.session();   // get it from the thread local 
         if (session != null  &&  session instanceof ERXSession) 
             messageEncoding = ((ERXSession)session).messageEncoding();
