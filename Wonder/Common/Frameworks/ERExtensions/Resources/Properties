@@ -40,6 +40,7 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 #er.extensions.ERXApplication.DefaultMessageEncoding=ISO8859_1
 er.extensions.ERXMessageEncoding.Enabled=true
 #er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
+
 #########################################################################
 # Enterprise Object
 #########################################################################
@@ -97,6 +98,8 @@ er.extensions.ERXPatcher.cleanupXHTML=false
 #########################################################################
 # ERXComponentActionRedirector 
 #########################################################################
+# decides if the component actions should get redirected to a DA automatically
+# this is experimental
 er.extensions.ERXComponentActionRedirector.enabled=false
 
 #########################################################################
@@ -116,3 +119,17 @@ er.extensions.ERXEC.useSharedEditingContext=true
 #########################################################################
 # decides if locked editing contexts should be unlocked after the RR-loop.
 er.extensions.ERXApplication.useEditingContextUnlocker=false
+
+# decides if the session store deadlock detection (session can't get 
+# checked out because it already was) should be enabled. This is useful 
+# for debugging, experimental and doesn't work when concurrent request
+# handling is enabled
+er.extensions.ERXApplication.useSessionStoreDeadlockDetection=false
+
+### run control
+# time in seconds in how long the app should stay alive
+# ERTimeToLive=180000
+# time in seconds after which the app should start to refuse new sessions
+# ERTimeToDie=180000
+# time in seconds in which to kill the app after starting to refuse new sessions
+# ERTimeToKill=1800
