@@ -1,6 +1,9 @@
 package er.extensions;
 
-public class ERXFormatterFactory {
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSNumberFormatter;
+
+public class ERXFormatterFactory implements NSKeyValueCoding {
 
     public ERXFormatterFactory() {
         super();
@@ -14,28 +17,34 @@ public class ERXFormatterFactory {
         return new ERXDividingNumberFormatter();
     }
     
-    public ERXDividingNumberFormatter bytesToKilobytesFormatter() {
-        ERXDividingNumberFormatter d = new ERXDividingNumberFormatter();
-        d.setPattern("(1024=)0.00");
-        return d;
+    public NSNumberFormatter bytesToKilobytesFormatter() {
+    	return ERXNumberFormatter.numberFormatterForPattern("(/1024=)0.00");
     }
 
-    public ERXDividingNumberFormatter bytesToMegabytesFormatter() {
-        ERXDividingNumberFormatter d = new ERXDividingNumberFormatter();
-        d.setPattern("(1048576=)0.00");
-        return d;
+    public NSNumberFormatter megabytesToKilobytesFormatter() {
+    	return ERXNumberFormatter.numberFormatterForPattern("(*1024=)0.00");
+    }
+    
+    public NSNumberFormatter bytesToMegabytesFormatter() {
+    	return ERXNumberFormatter.numberFormatterForPattern("(/1048576=)0.00");
     }
 
-    public ERXMultiplyingNumberFormatter megabytesToBytesFormatter() {
-        ERXMultiplyingNumberFormatter d = new ERXMultiplyingNumberFormatter();
-        d.setPattern("(1048576=)0.00");
-        return d;
+    public NSNumberFormatter megabytesToBytesFormatter() {
+    	return ERXNumberFormatter.numberFormatterForPattern("(*1048576=)0.00");
     }
 
-    public ERXMultiplyingNumberFormatter megabytesToKilobytesFormatter() {
-        ERXMultiplyingNumberFormatter d = new ERXMultiplyingNumberFormatter();
-        d.setPattern("(1024=)0.00");
-        return d;
-    }
+	public Object valueForKey(String key) {
+		Object result = null;
+		try {
+			result = NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
+		} catch (UnknownKeyException ex) {
+			result = ERXNumberFormatter.numberFormatterForPattern(key);
+		}
+		return result;
+	}
+
+	public void takeValueForKey(Object object, String key) {
+		ERXNumberFormatter.setNumberFormatterForPattern((NSNumberFormatter)object, key);
+	}
     
 }
