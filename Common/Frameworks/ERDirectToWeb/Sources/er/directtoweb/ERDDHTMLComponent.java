@@ -33,7 +33,7 @@ public class ERDDHTMLComponent extends ERDCustomEditComponent {
     public String varName()  {
 	if(varName == null) {
 	    varName = ERXExtensions.replaceStringByStringInString("-", "_", "dhtml-" + context().elementID().hashCode() + "-" + key());
-	    cat.info(varName);
+	    cat.debug(varName);
 	}
 	return varName;
     }
