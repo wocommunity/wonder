@@ -37,13 +37,25 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
         return PostgresqlExpression.class;
     }
 
+
+    /**
+     * Overridden to create a subclass of our synchronization factory.
+     */
+    public EOSynchronizationFactory createSynchronizationFactory() {
+        return new PostgresqlSynchronizationFactory(adaptor());
+    }
+
+    protected static String sequenceNameForEntity(EOEntity entity) {
+        return entity.primaryKeyRootName() + "_SEQ";
+    }
+    
     /**
      * Creates a sequence for the supplied entity.
      */
     //ENHANCEME get the starting number from the pk of the entity
     private void createSequence(EOEntity entity, JDBCChannel channel) {
         EOSQLExpression expression = expressionFactory().createExpression(entity);
-        expression.setStatement("create sequence " + entity.primaryKeyRootName() + "_seq");
+        expression.setStatement("create sequence " + PostgresqlPlugIn.sequenceNameForEntity(entity));
         channel.evaluateExpression(expression);
         channel.cancelFetch();
     }
@@ -59,7 +71,7 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
             EOAttribute attribute = (EOAttribute)entity.primaryKeyAttributes().lastObject();
             if(attribute.adaptorValueType() == EOAttribute.AdaptorNumberType) {
                 String pkName = attribute.name();
-                String sequenceSQL = "select nextval('" + entity.primaryKeyRootName() + "_seq')";
+                String sequenceSQL = "select nextval('" + PostgresqlPlugIn.sequenceNameForEntity(entity) +"')";
                 results = new NSMutableArray();
                 EOSQLExpression expression = expressionFactory().createExpression(entity);
                 expression.setStatement(sequenceSQL);
