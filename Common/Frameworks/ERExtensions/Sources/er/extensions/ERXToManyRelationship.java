@@ -152,7 +152,7 @@ public class ERXToManyRelationship extends WOToManyRelationship {
             }
             */
             if (_localSortKey() != null && _localSortKey().length() > 0)
-                ERXUtilities.sortEOsUsingSingleKey(aSortedArray, _localSortKey());
+                ERXArrayUtilities.sortedArraySortedWithKey(aSortedArray, _localSortKey());
 
             // if there is a value on the EO, then we need to make sure that the list's EOs are in the same EC
             // otherwise the popup selection will be wrong (will default to the first element)

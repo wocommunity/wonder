@@ -403,7 +403,7 @@ public class WOToManyRelationship extends WOComponent {
             try {
                 // WO 5
                 //_RelationshipSupport._sortEOsUsingSingleKey(aSortedArray, _localDestinationDisplayKey());
-                ERXUtilities.sortEOsUsingSingleKey(aSortedArray, _localDestinationDisplayKey());
+                ERXArrayUtilities.sortedArraySortedWithKey(aSortedArray, _localDestinationDisplayKey());
             // WO 5    
             // catch (NSComparator.ComparisonException e)
             //    throw new NSForwardException(e);
