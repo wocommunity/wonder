@@ -10,28 +10,31 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
-// generates a subquery for the qualifier given in argument
+/**
+ * Generates a subquery for the qualifier given in argument
+ *
+ *   ...  t0.ID IN (SELECT t0.ID FROM X WHERE <your qualifier here> ) ..
+ *
+ *
+ * this class can be used to work around the EOF bug where OR
+ * queries involving many-to-manies are incorrectly generated
+ *
+ *
+ * It will also generate
+ *
+ *  ... t0.FOREIGN_KEY_ID in (select t1.ID from X where <your qualifier here>)
+ *
+ * with the 3 arg constructor
+ */
+ 
+//FIXME: Dues to the way the SQL is generated the three arguement constructor has conflicts in the
+//       table names used for instance, this bit of code:
+//       EOQualifier q = EOQualifier.qualifierWithQualifierFormat("firstName = 'Max'", null);
+//       ERXQualifierInSubquery qq = new ERXQualifierInSubquery(q, "User", "groupId");
+//       EOFetchSpecification fs = new EOFetchSpecification("Group", qq, null);
 //
-//   ...  t0.ID IN (SELECT t0.ID FROM X WHERE <your qualifier here> ) ..
-//
-//
-// this class can be used to work around the EOF bug where OR
-// queries involving many-to-manies are incorrectly generated
-//
-//
-// It will also generate
-//
-//  ... t0.FOREIGN_KEY_ID in (select t1.ID from X where <your qualifier here>)
-//
-// with the 3 arg constructor
-
-// FIXME: Dues to the way the SQL is generated the three arguement constructor has conflicts in the
-//	  table names used for instance, this bit of code:
-//        EOQualifier q = EOQualifier.qualifierWithQualifierFormat("firstName = 'Max'", null);
-//	  ERXQualifierInSubquery qq = new ERXQualifierInSubquery(q, "User", "groupId");
-//	  EOFetchSpecification fs = new EOFetchSpecification("Group", qq, null);
-//
-// Would generate: "SELECT t0.GROUP_ID, t0.NAME FROM GROUP t0 WHERE t0.GROUP_ID IN ( SELECT t0.GROUP_ID FROM GROUP t0 WHERE t0.NAME = ? ) "
+// Would generate: "SELECT t0.GROUP_ID, t0.NAME FROM GROUP t0 WHERE t0.GROUP_ID IN 
+//                    ( SELECT t0.GROUP_ID FROM GROUP t0 WHERE t0.NAME = ? ) "
 public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable {
 
     /** holds the subqualifier */
@@ -73,20 +76,46 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
     //	===========================================================================
     //	EOQualifier method(s)
     //	---------------------------------------------------------------------------
+    
+    /**
+     * Only used with qualifier keys which are not supported in
+     * this qualifier at this time. Does nothing.
+     * @param aSet of qualifier keys
+     */
     // FIXME: Should do something here ...
     public void addQualifierKeysToSet(NSMutableSet aSet) {
     }
 
+    /**
+     * Creates another qualifier after replacing the values of the bindings.
+     * Since this qualifier does not support qualifier binding keys a clone
+     * of the qualifier is returned.
+     * @param someBindings some bindings
+     * @param requiresAll tells if the qualifier requires all bindings
+     * @return clone of the current qualifier.
+     */    
     public EOQualifier qualifierWithBindings(NSDictionary someBindings, boolean requiresAll) {
         return (EOQualifier)clone();
     }
 
+    /**
+     * This qualifier does not perform validation. This
+     * is a no-op method.
+     * @param aClassDescription to validation the qualifier keys
+     *		against.
+     */
     // FIXME: Should do something here ...
     public void validateKeysWithRootClassDescription(EOClassDescription aClassDescription)
     {
     }    
-
     
+    /**
+     * Generates the sql string for the given sql expression.
+     * Bulk of the logic for generating the sub-query is in 
+     * this method.
+     * @param e a given sql expression
+     * @return sql string for the current sub-query.
+     */
     public String sqlStringForSQLExpression(EOSQLExpression e) {
         StringBuffer sb = new StringBuffer();
         if (attributeName != null)
@@ -119,16 +148,37 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
         return sb.toString();
     }
 
+    /**
+     * Implementation of the EOQualifierSQLGeneration interface. Just
+     * clones the qualifier.
+     * @param anEntity an entity.
+     * @return clone of the current qualifier.
+     */
     public EOQualifier schemaBasedQualifierWithRootEntity(EOEntity anEntity) {
         return (EOQualifier)clone();
     }
 
+    /**
+     * Implementation of the EOQualifierSQLGeneration interface. Just
+     * clones the qualifier.
+     * @param anEntity an entity
+     * @param aPath relationship path
+     * @return clone of the current qualifier.
+     */
     public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOEntity anEntity, String aPath) {
         return (EOQualifier)clone();
     }    
     
+    /**
+     * Description of the qualifier
+     * @return human readable description of the qualifier.
+     */
     public String toString() { return " <" + getClass().getName() +"> '" + qualifier.toString() + "'"; }
 
+    /**
+     * Implementation of the Clonable interface. Clones the current qualifier.
+     * @return cloned qualifier.
+     */
     public Object clone() {
         return new ERXQualifierInSubquery(qualifier, entityName, attributeName);
     }    
