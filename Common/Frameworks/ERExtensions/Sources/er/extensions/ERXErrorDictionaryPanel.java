@@ -22,32 +22,53 @@ import java.util.Enumeration;
  * @binding errorKeyOrder
  */
 
-public class ERXErrorDictionaryPanel extends WOComponent {
+public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
+
+    protected NSMutableDictionary errorMessages;
+    protected NSMutableArray errorKeyOrder;
+    protected String extraErrorMessage;
+
+    public String errorKey;
 
     public ERXErrorDictionaryPanel(WOContext aContext) {
         super(aContext);
     }
-    
-    public NSMutableDictionary errorMessages=new NSMutableDictionary();
-    public NSMutableArray errorKeyOrder;
-    public String errorKey;
+
+    public NSMutableDictionary errorMessages() {
+        if(errorMessages == null) {
+            errorMessages = (NSMutableDictionary)valueForBinding("errorMessages");
+            if(errorMessages == null) {
+                errorMessages = new NSMutableDictionary(); 
+            }
+        }
+        return errorMessages;
+    }
+
+    public NSMutableArray errorKeyOrder() {
+        if(errorKeyOrder == null)
+            errorKeyOrder = (NSMutableArray)valueForBinding("errorKeyOrder");
+        return errorKeyOrder;
+    }
     //protected String errorMessageItem;
-    public String extraErrorMessage;
-    public boolean shouldShowNewLineAbove;
-    public boolean shouldShowNewLineBelow;
+    public String extraErrorMessage() {
+        if(extraErrorMessage == null)
+            extraErrorMessage = (String)valueForBinding("extraErrorMessage");
+        return extraErrorMessage;
+    }
+    //public boolean shouldShowNewLineAbove;
+    //public boolean shouldShowNewLineBelow;
     
     public boolean hasErrors() {
         boolean hasErrors = false;
-        if (errorMessages!=null)
-            hasErrors = errorMessages.count()>0 || extraErrorMessage!=null && extraErrorMessage.length()>0;
+        hasErrors = errorMessages().count()>0 || extraErrorMessage() != null && extraErrorMessage().length() > 0;
         return hasErrors;
     }
 
     public NSArray errorKeys() {
-        return errorKeyOrder != null ? errorKeyOrder : (errorMessages != null ? errorMessages.allKeys() : NSArray.EmptyArray);
+        return errorKeyOrder() != null ? errorKeyOrder() : errorMessages().allKeys();
     }
 
-    public String errorMessageItem() { return (String)errorMessages.objectForKey(errorKey); }
+    public String errorMessageItem() { return (String)errorMessages().objectForKey(errorKey); }
     
     private final static String eliminable = "Could not save your changes: null";
     private final static String couldNotSave = "Could not save your changes: ";
@@ -92,16 +113,23 @@ public class ERXErrorDictionaryPanel extends WOComponent {
         }
         return result;
     }
-    
+
+    public Object value;
+
+    public void reset() {
+        super.reset();
+        errorMessages = null;
+        errorKeyOrder = null;
+        extraErrorMessage = null;
+    }
+
     public void appendToResponse(WOResponse r, WOContext c) {
         // this is a little silly but has the advantage of minimizing impact
         // on other pieces of code
-        if(errorMessages!=null) {
-            for (Enumeration e=errorMessages.keyEnumerator(); e.hasMoreElements();) {
-                String key=(String)e.nextElement();
-                String value=(String)errorMessages.objectForKey(key);
-                errorMessages.setObjectForKey(massageErrorMessage(value, key), key);
-            }
+        for (Enumeration e=errorMessages().keyEnumerator(); e.hasMoreElements();) {
+            String key=(String)e.nextElement();
+            String value=(String)errorMessages().objectForKey(key);
+            errorMessages().setObjectForKey(massageErrorMessage(value, key), key);
         }
         extraErrorMessage=massageErrorMessage(extraErrorMessage, null);
         super.appendToResponse(r,c);
