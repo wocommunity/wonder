@@ -86,6 +86,7 @@
                 <include name="**/*.d2wmodel" />
                 <include name="**/*.strings" />
                 <include name="**/*.sh" />
+                <include name="**/mime.types" /> <!-- ERJavaMail specific --> 
             </resources>
             <wsresources dir="${build.temp.dir}/${project.name}/WebServerResources">
                 <include name="**/*.gif" />
