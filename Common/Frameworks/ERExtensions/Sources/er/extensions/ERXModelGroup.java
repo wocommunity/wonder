@@ -70,7 +70,7 @@ public class ERXModelGroup extends EOModelGroup {
         if(intersection.count() != 0) {
             log.warn("The model '" + name + "' (path: " + eomodel.path()
                      + ") has an entity name conflict with the entities "
-                     + nsmutableset + " already in the model group " + this);
+                     + intersection + " already in the model group " + this);
             Enumeration e = intersection.objectEnumerator();
             while(e.hasMoreElements()) {
                 String entityName = (String)e.nextElement();
