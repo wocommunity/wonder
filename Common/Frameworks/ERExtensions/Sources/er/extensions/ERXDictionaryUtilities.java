@@ -41,7 +41,8 @@ public class ERXDictionaryUtilities extends Object {
      * @return NSDictionary de-serialized from the property list.
      */
     public static NSDictionary dictionaryFromPropertyList(String name, NSBundle bundle) {
-        return (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(name, "plist", bundle));
+        String string = ERXStringUtilities.stringFromResource(name, "plist", bundle);
+        return (NSDictionary)NSPropertyListSerialization.propertyListFromString(string);
     }
 
     /**
