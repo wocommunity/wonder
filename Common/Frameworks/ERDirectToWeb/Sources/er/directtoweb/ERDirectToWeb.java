@@ -230,7 +230,8 @@ public class ERDirectToWeb {
     
     public static String displayNameForPropertyKey(String key, String entityName, String language) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        ERD2WUtilities.resetContextCache(d2wContext());
+        d2wContext()._localValues().clear();
+        //ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         d2wContext().setPropertyKey(key);
         d2wContext().takeValueForKey(ERXLocalizer.fakeSessionForLanguage(language), "session");
@@ -251,13 +252,16 @@ public class ERDirectToWeb {
 
     public static Object d2wContextValueForKey(String key, String entityName, NSDictionary extraValuesForContext) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-        ERD2WUtilities.resetContextCache(d2wContext());
+        d2wContext()._localValues().clear();
+        //ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         if (extraValuesForContext!=null) {
+            d2wContext().takeValuesFromDictionary(extraValuesForContext);
+            /*
             for (Enumeration e=extraValuesForContext.allKeys().objectEnumerator(); e.hasMoreElements();) {
                 String k=(String)e.nextElement();
                 d2wContext().takeValueForKey(extraValuesForContext.objectForKey(k),k);
-            }
+            }*/
         }
         return d2wContext().valueForKey(key);
     }
