@@ -136,7 +136,7 @@ public abstract class ERD2WListPage extends D2WListPage {
         try {
             super.takeValuesFromRequest(r, c);
         } finally {
-            /*NDC.pop(); JC_INFO - NSAutoreleasePools do not exist in pure Java. */
+            NDC.pop();
         }
     }
 
@@ -147,7 +147,7 @@ public abstract class ERD2WListPage extends D2WListPage {
         try {
             result= super.invokeAction(r, c);
         } finally {
-            /*NDC.pop(); JC_INFO - NSAutoreleasePools do not exist in pure Java. */
+            NDC.pop();
         }
         return result;
     }
@@ -158,7 +158,7 @@ public abstract class ERD2WListPage extends D2WListPage {
         try {
             super.appendToResponse(r,c);
         } finally {
-            /*NDC.pop(); JC_INFO - NSAutoreleasePools do not exist in pure Java. */
+            NDC.pop();
         }
     }
 
