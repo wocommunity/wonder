@@ -15,8 +15,16 @@ import junit.runner.*;
 import org.apache.log4j.Category;
 import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
+import com.webobjects.woextensions.*;
 
 public class ERXWOTestResult extends WOComponent {
+    public Throwable exception;
+    private NSArray _reasonLines;
+    public String currentReasonLine;
+
+    public WOExceptionParser error;
+    public WOParsedErrorLine errorline;
+
 
     public ERXWOTestResult(WOContext aContext) {
         super(aContext);
@@ -48,7 +56,9 @@ public class ERXWOTestResult extends WOComponent {
     /////////////////////////////////////
     public String currentErrorStackTrace() {
         ByteArrayOutputStream byos = new ByteArrayOutputStream();
-        currentError.thrownException().printStackTrace(new PrintStream(byos));
+        exception = currentError.thrownException();
+        error = new WOExceptionParser(exception);
+        exception.printStackTrace(new PrintStream(byos));
         return byos.toString();
     }
     public String currentErrorTestName() {

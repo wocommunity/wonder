@@ -10,6 +10,7 @@ import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+
 import junit.framework.*;
 import junit.runner.*;
 import org.apache.log4j.Category;
@@ -17,7 +18,6 @@ import java.io.PrintStream;
 import java.util.*;
 
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
-    
     //////////////////////////////////////  log4j category  /////////////////////////////////////
     public static final Category cat = Category.getInstance(ERXWOTestInterface.class);
 
@@ -110,7 +110,7 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
             throw new Exception("Could not create and run test suite: "+e);
         }
     }
-
+    
     public ERXTestResult doRun(Test suite) {
         testResult.addListener(this);
         long startTime = System.currentTimeMillis();
