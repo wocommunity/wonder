@@ -41,7 +41,7 @@ public abstract class ERXApplication extends WOApplication {
         int timeToLive=NSProperties.integerForKey("ERTimeToLive");
         if (timeToLive!=0) {
             cat.info("Instance will live "+timeToLive+" seconds.");
-            logString("Instance will live "+timeToLive+" seconds.");
+            NSLog.out.appendln("Instance will live "+timeToLive+" seconds.");
             NSTimestamp now=new NSTimestamp();
             NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
             WOTimer t=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
@@ -51,7 +51,7 @@ public abstract class ERXApplication extends WOApplication {
         if (timeToDie!=0) {
             // FIXME we could randomize this (30mn?) to help with restart related downtime problems?
             cat.info("Instance will not live past "+timeToDie+":00.");
-            logString("Instance will not live past "+timeToDie+":00.");
+            NSLog.out.appendln("Instance will not live past "+timeToDie+":00.");
             NSTimestamp now=new NSTimestamp();
             int s=(timeToDie-now.hourOfDay())*3600-now.minuteOfHour()*60;
             if (s<0) s+=24*3600; // how many seconds to the deadline
@@ -68,7 +68,7 @@ public abstract class ERXApplication extends WOApplication {
 
     public void startRefusingSessions() {
         cat.info("Refusing new sessions");
-        logString("Refusing new sessions");
+        NSLog.out.appendln("Refusing new sessions");
         refuseNewSessions(true);
         cat.info("Registering kill timer");
         NSTimestamp now=new NSTimestamp();
@@ -79,7 +79,7 @@ public abstract class ERXApplication extends WOApplication {
 
     public void killInstance() {
         cat.info("Forcing exit");
-        logString("Forcing exit");
+        NSLog.out.appendln("Forcing exit");
         System.exit(1);
     }
 

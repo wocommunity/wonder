@@ -123,13 +123,10 @@ public class WOToManyRelationship extends WOComponent {
 
     public void setIsMandatory(Object aValue) {
         try {
-            // WO 5
-            //_isMandatory = _RelationshipSupport.booleanValue(aValue);
             _isMandatory = ERXUtilities.booleanValue(aValue);
         } catch (Throwable e) {
             String error = "WOToOneRelationship (setIsMandatory) - unable to set isMandatory value "+e.getMessage();
-            logString(error);
-            //NSLog.err.appendln(error);
+            NSLog.err.appendln(error);
         }
     }
     

@@ -124,7 +124,7 @@ import org.apache.log4j.Category;
 public class ERXLinlyn {
 
     /////////////////////////////////////  log4j category  /////////////////////////////////////////
-    public static Category cat  = Category.getInstance("er.extensions.Linlyn");
+    public static Category cat  = Category.getInstance(ERXLinlyn.class);
     
     // FOR DEBUGGING: set the variable to "true"
     private boolean DEBUG = false;
