@@ -12,7 +12,7 @@ import er.extensions.*;
 import er.corebusinesslogic.*;
 
 public class People extends _People implements ERCoreUserInterface {
-    static final ERXLogger log = ERXLogger.getLogger(People.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(People.class);
 
     public People() {
         super();

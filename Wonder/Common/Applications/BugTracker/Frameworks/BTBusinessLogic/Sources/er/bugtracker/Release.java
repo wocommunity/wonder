@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class Release extends _Release {
-    static final ERXLogger log = ERXLogger.getLogger(Release.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(Release.class);
 
     public Release() {
         super();

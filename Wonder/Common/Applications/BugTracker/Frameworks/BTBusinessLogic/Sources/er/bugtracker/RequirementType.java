@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class RequirementType extends _RequirementType {
-    static final ERXLogger log = ERXLogger.getLogger(RequirementType.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(RequirementType.class);
 
     public RequirementType() {
         super();

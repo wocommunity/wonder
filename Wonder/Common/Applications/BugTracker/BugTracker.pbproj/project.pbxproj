@@ -156,7 +156,7 @@
 				6662574A0203C81E00CEE8E5,
 				6662574B0203C81E00CEE8E5,
 				6662574C0203C81E00CEE8E5,
-				F59C855102350F4301000102,
+				F5D271050321D19601864B48,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -543,7 +543,6 @@
 				F6025980023E712E01AD0D07,
 				F6025982023E714801AD0D07,
 				F602597E023E712E01AD0D07,
-				F59C855702350F4301000102,
 				666257AB0203C81E00CEE8E5,
 				666257AC0203C81E00CEE8E5,
 				666257AD0203C81E00CEE8E5,
@@ -554,6 +553,7 @@
 				666257B50203C81E00CEE8E5,
 				666257B60203C81E00CEE8E5,
 				666257B70203C81E00CEE8E5,
+				F5D271070321D19601864B48,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -915,7 +915,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -1727,7 +1727,7 @@
 			refType = 2;
 		};
 		F55BB6DB02C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ComponentPicker.wo;
@@ -1743,7 +1743,7 @@
 			refType = 2;
 		};
 		F55BB6E002C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/BTListPage.wo;
@@ -1759,7 +1759,7 @@
 			refType = 2;
 		};
 		F55BB6E602C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/BugReportEmail.wo;
@@ -1775,7 +1775,7 @@
 			refType = 2;
 		};
 		F55BB6EC02C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/BugsPerUser.wo;
@@ -1791,7 +1791,7 @@
 			refType = 2;
 		};
 		F55BB6F202C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ComponentReport.wo;
@@ -1807,7 +1807,7 @@
 			refType = 2;
 		};
 		F55BB6F802C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/CreateTestItemFromReq.wo;
@@ -1823,7 +1823,7 @@
 			refType = 2;
 		};
 		F55BB6FE02C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/EditBug.wo;
@@ -1839,7 +1839,7 @@
 			refType = 2;
 		};
 		F55BB70402C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/EditOwner.wo;
@@ -1855,7 +1855,7 @@
 			refType = 2;
 		};
 		F55BB70A02C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/EditRequirement.wo;
@@ -1871,7 +1871,7 @@
 			refType = 2;
 		};
 		F55BB71002C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/FileBugFromTestItem.wo;
@@ -1887,7 +1887,7 @@
 			refType = 2;
 		};
 		F55BB71602C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/FileReqFromTicket.wo;
@@ -1903,7 +1903,7 @@
 			refType = 2;
 		};
 		F55BB71C02C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/FreeQuery.wo;
@@ -1919,7 +1919,7 @@
 			refType = 2;
 		};
 		F55BB72202C4DCA001000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/HomePage.wo;
@@ -1935,7 +1935,7 @@
 			refType = 2;
 		};
 		F55BB72802C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/Inspectbug.wo;
@@ -1951,7 +1951,7 @@
 			refType = 2;
 		};
 		F55BB72E02C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/LinkToBookmarkBug.wo;
@@ -1967,7 +1967,7 @@
 			refType = 2;
 		};
 		F55BB73402C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/Main.wo;
@@ -1983,7 +1983,7 @@
 			refType = 2;
 		};
 		F55BB73B02C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/MarkReadFly.wo;
@@ -1999,7 +1999,7 @@
 			refType = 2;
 		};
 		F55BB74102C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/MenuHeader.wo;
@@ -2015,7 +2015,7 @@
 			refType = 2;
 		};
 		F55BB74802C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/OnlineHatSystem.wo;
@@ -2031,7 +2031,7 @@
 			refType = 2;
 		};
 		F55BB74E02C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/PageWrapper.wo;
@@ -2047,7 +2047,7 @@
 			refType = 2;
 		};
 		F55BB75402C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/PriorityComponent.wo;
@@ -2063,7 +2063,7 @@
 			refType = 2;
 		};
 		F55BB75902C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/PushRelease.wo;
@@ -2079,7 +2079,7 @@
 			refType = 2;
 		};
 		F55BB75F02C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ReadMarker.wo;
@@ -2095,7 +2095,7 @@
 			refType = 2;
 		};
 		F55BB76502C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/StatusComponent.wo;
@@ -2111,7 +2111,7 @@
 			refType = 2;
 		};
 		F55BB76A02C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TextForEdit.wo;
@@ -2127,7 +2127,7 @@
 			refType = 2;
 		};
 		F55BB77002C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TextForInspect.wo;
@@ -2143,7 +2143,7 @@
 			refType = 2;
 		};
 		F55BB77602C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TextForNew.wo;
@@ -2159,7 +2159,7 @@
 			refType = 2;
 		};
 		F55BB77C02C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TicketReportEmail.wo;
@@ -2175,7 +2175,7 @@
 			refType = 2;
 		};
 		F55BB78202C4DCA101000102 = {
-			includeInIndex = 1;
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ViewUser.wo;
@@ -2488,18 +2488,6 @@
 			settings = {
 			};
 		};
-		F59C855102350F4301000102 = {
-			isa = PBXFrameworkReference;
-			name = MysqlPlugIn.framework;
-			path = /Library/Frameworks/MysqlPlugIn.framework;
-			refType = 0;
-		};
-		F59C855702350F4301000102 = {
-			fileRef = F59C855102350F4301000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5C9444A02840D1601000104 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -2512,6 +2500,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
+		};
+		F5D271050321D19601864B48 = {
+			isa = PBXFrameworkReference;
+			name = FrontBasePlugIn.framework;
+			path = /Library/Frameworks/FrontBasePlugIn.framework;
+			refType = 0;
+		};
+		F5D271070321D19601864B48 = {
+			fileRef = F5D271050321D19601864B48;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 //F50
 //F51

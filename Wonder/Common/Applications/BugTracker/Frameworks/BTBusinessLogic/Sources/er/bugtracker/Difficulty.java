@@ -7,7 +7,7 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 public class Difficulty extends _Difficulty {
-    static final ERXLogger log = ERXLogger.getLogger(Difficulty.class);
+    static final ERXLogger log = ERXLogger.getERXLogger(Difficulty.class);
 
     public Difficulty() {
         super();

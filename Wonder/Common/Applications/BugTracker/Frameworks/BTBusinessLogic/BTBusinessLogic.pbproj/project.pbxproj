@@ -193,8 +193,8 @@
 			productName = BTBusinessLogic;
 			productReference = F555990B02836FA601000104;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -264,8 +264,8 @@
 			productName = "Application Server";
 			productReference = F555990C02836FA601000104;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -307,6 +307,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FE602038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -316,6 +317,7 @@
 				F5B4426B02C5088701000102,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FE802038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -349,6 +351,7 @@
 				F55AF2C602C4D92601000102,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FEE02038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -365,6 +368,7 @@
 				F5A318A10283953801000104,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FF002038090000C9FB2 = {
 			fileRef = 66DC2FD602038090000C9FB2;
@@ -413,6 +417,7 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FF802038090000C9FB2 = {
 			isa = PBXTargetDependency;
@@ -446,8 +451,8 @@
 			productName = "Web Server";
 			productReference = F555990D02836FA601000104;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -481,18 +486,21 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FFB02038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FFC02038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FFD02038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -506,6 +514,7 @@
 				66DC300502038090000C9FB2,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC2FFF02038090000C9FB2 = {
 			fileRef = 66DC2FD602038090000C9FB2;
@@ -554,36 +563,42 @@
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC300702038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC300802038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC300902038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC300A02038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC300B02038090000C9FB2 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		66DC300C02038090000C9FB2 = {
 			buildActionMask = 2147483647;
@@ -594,6 +609,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
 		};
@@ -606,6 +622,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
@@ -615,7 +632,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				INSTALL_MODE_FLAG = "a+rX";
-				INSTALL_PATH_FOR_STYLE = "$(SYMROOT)";
+				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
 			};
 			isa = PBXBuildStyle;
@@ -720,7 +737,6 @@
 				F55AF28F02C4D92601000102,
 			);
 			isa = PBXGroup;
-			name = Sources;
 			path = Sources;
 			refType = 2;
 		};
@@ -1118,6 +1134,7 @@
 			isa = PBXShellScriptBuildPhase;
 			neededFileNames = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
 		};
