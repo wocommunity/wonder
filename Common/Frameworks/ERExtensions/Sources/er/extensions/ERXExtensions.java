@@ -174,6 +174,7 @@ public class ERXExtensions {
             
             try {
                 EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+                ERXAdaptorChannelDelegate.setupDelegate();
                 ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
                 ERXEntityClassDescription.registerDescription();
