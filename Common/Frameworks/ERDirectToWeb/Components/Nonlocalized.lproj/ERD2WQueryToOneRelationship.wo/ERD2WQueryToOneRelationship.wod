@@ -9,5 +9,6 @@ ToOneRelationship: ERXToOneRelationship {
 	displayGroup = displayGroup;
 	uiStyle = d2wContext.toOneUIStyle;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
+	destinationEntityName = d2wContext.destinationEntityName;
 }
 
