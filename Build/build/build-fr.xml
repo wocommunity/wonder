@@ -20,7 +20,7 @@
     </path>
         
     <!-- ==================================================== -->
-    <!-- Sets up build and distribution directories.          -->
+    <!-- Set up build and distribution directories.          -->
     <!-- ==================================================== -->
     <target name="prepare">
         <mkdir dir="${dist}"/>
@@ -29,9 +29,9 @@
 
 
     <!-- ==================================================== -->
-    <!-- Compile and install Frameworks with WOProject.       -->
+    <!-- Install Frameworks with WOProject.       -->
     <!-- ==================================================== -->
-    <target name="frameworks" depends="prepare">
+    <target name="frameworks" depends="prepare,compile">
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="classpath"/>
         </taskdef>
@@ -41,5 +41,12 @@
 				<include name="*.jar"/>
 			</lib>
 		</woframework>
+    </target>
+    
+    
+    <!-- ==================================================== -->
+    <!-- Compile Frameworks.                                  -->
+    <!-- ==================================================== -->
+    <target name="compile" depends="prepare">
     </target>
 </project>
