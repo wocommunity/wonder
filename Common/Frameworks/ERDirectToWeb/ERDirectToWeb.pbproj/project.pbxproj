@@ -6768,6 +6768,7 @@
 				F542046C02C4672F01000102,
 				F542046802C4671901000102,
 				F542046602C4671901000102,
+				F6B782B70345524F01257492,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -7311,6 +7312,7 @@
 				F639B99F02EF369F0FCF0E72,
 				9D5BC633033AB0C210CF0E7D,
 				9D5BC641033AB19910CF0E7D,
+				F6B782B80345524F01257492,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7995,6 +7997,18 @@
 		};
 		F6B41516032D7E020FCF0E72 = {
 			fileRef = F6B41515032D7E020FCF0E72;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F6B782B70345524F01257492 = {
+			isa = PBXFileReference;
+			name = Properties;
+			path = Resources/Properties;
+			refType = 4;
+		};
+		F6B782B80345524F01257492 = {
+			fileRef = F6B782B70345524F01257492;
 			isa = PBXBuildFile;
 			settings = {
 			};
