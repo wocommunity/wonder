@@ -6,11 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
+import com.webobjects.directtoweb.*;
 import org.apache.log4j.Category;
 import java.util.Enumeration;
 import java.util.TimeZone;
@@ -534,7 +534,7 @@ public class ERXUtilities {
         NSMutableArray frameworkNames = new NSMutableArray();
         for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
             NSBundle bundle = (NSBundle)e.nextElement();
-            String frameworkName = D2WModel.nameFromFrameworkBundle(bundle);
+            String frameworkName = nameFromFrameworkBundle(bundle);
             if (frameworkName != null)
                 frameworkNames.addObject(frameworkName);
             else
@@ -543,6 +543,15 @@ public class ERXUtilities {
         return frameworkNames;
     }
 
+
+    public static String nameFromFrameworkBundle(NSBundle nsbundle) {
+        String s = nsbundle.bundlePath();
+        return !s.endsWith(".framework") ? null :
+            s.substring(s.lastIndexOf(File.separator) + 1, s.lastIndexOf("."));
+    }
+    
+
+    
     /**
      * Performs a basic intersection between two arrays.
      * @param array1 first array

@@ -30,9 +30,16 @@ public class ERXValidation {
     public static void setPushChangesDefault(boolean val) {
         pushChangesDefault = val;
     }
-    
-    private static D2WContext propertyNameContext = new D2WContext();
 
+    private static D2WContext _propertyNameContext;
+    private static D2WContext propertyNameContext() {
+        if (_propertyNameContext==null) {
+            _propertyNameContext=new D2WContext();
+        }
+        return _propertyNameContext;
+    }
+
+    
     public static void validationFailedWithException(Throwable e,
                                                      Object value,
                                                      String keyPath,
@@ -69,7 +76,7 @@ public class ERXValidation {
         String key = null;
         String newErrorMessage=e.getMessage();
         // Need to reset the context for each validation exception.
-        propertyNameContext.setEntity(null);
+        propertyNameContext().setEntity(null);
         
         if (e instanceof NSValidation.ValidationException && ((NSValidation.ValidationException)e).key() != null
             && ((NSValidation.ValidationException)e).object() != null) {
@@ -87,28 +94,28 @@ public class ERXValidation {
                     ((EOEnterpriseObject)eo).takeValueForKeyPath(value, key);
                 }
                 // Setting the entity on the context
-                propertyNameContext.setEntity(EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),
+                propertyNameContext().setEntity(EOUtilities.entityForObject(((EOEnterpriseObject)eo).editingContext(),
                                                                           (EOEnterpriseObject)eo));
             } else {
                 //the exception is coming from a formatter
                 key=(String)NSArray.componentsSeparatedByString(displayPropertyKeyPath,".").lastObject();
                 newErrorMessage="<b>"+key+"</b>:"+newErrorMessage;
                 if (entity!=null)
-                    propertyNameContext.setEntity(entity);
+                    propertyNameContext().setEntity(entity);
             }
         } else {
             key = keyPath;
             if (entity!=null)
-                propertyNameContext.setEntity(entity);
+                propertyNameContext().setEntity(entity);
         }
         // Leveraging the power of D2WContext to generate great looking error messages.
-        if (propertyNameContext.entity() != null && key != null) {
-            propertyNameContext.setPropertyKey(key);
+        if (propertyNameContext().entity() != null && key != null) {
+            propertyNameContext().setPropertyKey(key);
             //FIXME: (ak) this is just until I can rethink the whole message processing
             NSMutableDictionary fakeSession = new NSMutableDictionary(localizer, "localizer");
-            propertyNameContext.takeValueForKey( fakeSession, "session");
+            propertyNameContext().takeValueForKey( fakeSession, "session");
             if(newErrorMessage != null)
-                errorMessages.setObjectForKey(newErrorMessage, propertyNameContext.displayNameForProperty());
+                errorMessages.setObjectForKey(newErrorMessage, propertyNameContext().displayNameForProperty());
         } else {
             errorMessages.setObjectForKey(newErrorMessage, key);
         }
@@ -123,9 +130,9 @@ public class ERXValidation {
     public static String displayNameForPropertyWithEntity(String propertyKey, EOEntity entity){
         String result = null;
         if (entity != null && propertyKey != null) {
-            propertyNameContext.setPropertyKey(propertyKey);
-            propertyNameContext.setEntity(entity);
-            result = propertyNameContext.displayNameForProperty();
+            propertyNameContext().setPropertyKey(propertyKey);
+            propertyNameContext().setEntity(entity);
+            result = propertyNameContext().displayNameForProperty();
         } else {
             result = propertyKey;
         }
