@@ -144,4 +144,8 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
         Object v=objectValueForBinding(binding, defaultValue);
         return v!=null ? v.toString() : null;
     }
+    
+    public ERXLocalizer localizer() {
+        return ERXLocalizer.currentLocalizer();
+    }
 }
