@@ -470,6 +470,8 @@ public class ERXSession extends WOSession {
         // WOFIX: 5.1.2
         // work around a bug in WO 5.1.2 where the sessions EC will keep a lock on the SEC
         defaultEditingContext().setSharedEditingContext(null);
+        if (browser != null) 
+            ERXBrowserFactory.factory().releaseBrowser(browser);
         super.terminate();
     }
 
