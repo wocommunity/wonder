@@ -13,6 +13,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 
 import com.webobjects.eocontrol.EOEditingContext;
@@ -94,6 +95,26 @@ public class ERXEOControlUtilities {
     public static NSArray primaryKeysMatchingQualifier(EOEditingContext ec, String entityName, EOQualifier eoqualifier, NSArray sortOrderings) {
         EOFetchSpecification fs = ERXEOControlUtilities.primaryKeyFetchSpecificationForEntity(ec, entityName, eoqualifier, sortOrderings, null);
         return ec.objectsWithFetchSpecification(fs);
+    }
+
+    /**
+     * Returns an {@link NSArray} containing the objects from the resulting rows starting
+     * at start and stopping at end using a custom SQL, derived from the SQL
+     * which the {@link EOFetchSpecification} would use normally {@link EOFetchSpecification.setHints}
+     *
+     * @param ec editingcontext to fetch objects into
+     * @param spec fetch specification for the fetch
+     * @param start
+     * @param end
+     *
+     * @return objects in the given range
+     */
+    public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecificationAndEditingContext(spec, ec, start, end);
+        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
+        spec.setHints(hints);
+
+        return ec.objectsWithFetchSpecification(spec);
     }
 
     /**
