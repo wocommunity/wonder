@@ -59,9 +59,9 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
         return (sectionsContents().count() > 1 && (sectionsContents().objectAtIndex(0) instanceof ERD2WContainer));
     }
 
-    private NSMutableArray _sectionsContents;
+    protected NSMutableArray _sectionsContents;
 
-    private ERD2WContainer _currentSection;
+    protected ERD2WContainer _currentSection;
     public ERD2WContainer currentSection() { return _currentSection; }
     public void setCurrentSection(ERD2WContainer value) {
         _currentSection = value;
@@ -86,7 +86,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     }
 
     public NSArray sectionsContents() {
-        if (_sectionsContents ==null) {
+        if (_sectionsContents == null || true) {
             NSArray sectionsContentsFromRule=(NSArray)d2wContext().valueForKey("sectionsContents");
             if (sectionsContentsFromRule==null) {
                 sectionsContentsFromRule=(NSArray)displayPropertyKeys();
@@ -100,5 +100,15 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
 
         }
         return _sectionsContents;
+    }
+    public void appendToResponse(WOResponse r, WOContext c) {
+        //HACK ak we should clean this on every step of the phase or not cache at all...
+        _sectionsContents=null;
+        super.appendToResponse(r,c);
+    }
+    public void awake() {
+        //HACK ak we should clean this on every step of the phase or not cache at all...
+        _sectionsContents=null;
+        super.awake();
     }
 }
