@@ -133,8 +133,14 @@ public class ERXExtensions {
             try {
                 //ERXLog4j.configureLogging();
                 ERXLogger.configureLogging(System.getProperties());
-                ERXConfigurationManager.defaultManager().initialize();
+                
                 log().info("Initializing framework: ERXExtensions");
+                ERXConfigurationManager.defaultManager().initialize();
+
+                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+
                 // Initing defaultEditingContext delegates
                 _defaultEditingContextDelegate = new ERXDefaultEditingContextDelegate();
                 _defaultECNoValidationDelegate = new ERXECNoValidationDelegate();
