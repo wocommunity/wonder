@@ -10,7 +10,6 @@ import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
-//import com.webobjects.appserver._private.ERXSubmitButton;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -117,7 +116,13 @@ public abstract class ERXApplication extends WOApplication {
         NSNotificationCenter.defaultCenter().addObserver(this,
                                                          new NSSelector("didFinishLaunching",  ERXConstant.NotificationClassArray),
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
-                                                         null);        
+                                                         null);
+        if (isConcurrentRequestHandlingEnabled()) {
+            _sessions = Collections.synchronizedMap(new HashMap());
+        } else {
+            _sessions = new HashMap();
+        }
+        
     }
 
     /**
@@ -528,4 +533,68 @@ public abstract class ERXApplication extends WOApplication {
             + "    ERXApplication.main(argv, Application.class); \n"
             + "}\n\n");
     }
+
+    // deadlock in session-store detection
+    /** holds the info on checked-out sessions */
+    private Map _sessions;
+
+    /** Holds info about where and who checked out */
+    private static class SessionInfo {
+        Exception _trace = new Exception();
+        WOContext _context;
+        public SessionInfo(WOContext wocontext) {
+            _context = wocontext;
+        }
+        public Exception trace() {
+            return _trace;
+        }
+        public WOContext context() {
+            return _context;
+        }
+        public String exceptionMessageForCheckout(WOContext wocontext) {
+            log.error("There is an error in the session check-out: old contextID " + (_context == null ? "<NULL>" : _context.contextID()), _trace);
+            if(_context == null) {
+                return "Original context was null";
+            } else if(_context.equals(wocontext)) {
+                return "Same context did check out twice";
+            } else {
+                return "Context with id '" + wocontext.contextID() + "' did check out again";
+            }
+        }
+    }
+
+    /** Overridden to check the sessions */
+    public WOSession createSessionForRequest(WORequest worequest) {
+        WOSession wosession = super.createSessionForRequest(worequest);
+        _sessions.put(wosession.sessionID(), new SessionInfo(null));
+        return wosession;
+    }
+
+    /** Overridden to check the sessions */
+    public void saveSessionForContext(WOContext wocontext) {
+        WOSession wosession = wocontext._session();
+        if(wosession != null) {
+            String sessionID = wosession.sessionID();
+            SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+            if(sessionInfo == null) {
+                throw new IllegalStateException("Check-In of session that was not checked out");
+            }
+            _sessions.remove(sessionID);
+        }
+        super.saveSessionForContext(wocontext);
+    }
+
+    /** Overridden to check the sessions */
+    public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
+        SessionInfo sessionInfo = (SessionInfo)_sessions.get(sessionID);
+        if(sessionInfo != null) {
+            throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
+        }
+        WOSession session = super.restoreSessionWithID(sessionID,wocontext);
+        if(session != null) {
+            _sessions.put(session.sessionID(), new SessionInfo(wocontext));
+        }
+        return session;
+    }
+    
 }
