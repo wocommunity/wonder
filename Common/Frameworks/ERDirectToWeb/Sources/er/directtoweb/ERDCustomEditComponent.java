@@ -147,21 +147,21 @@ public abstract class ERDCustomEditComponent extends WOComponent {
         return booleanForBinding(binding) ? ERDCustomEditComponent.TRUE : ERDCustomEditComponent.FALSE;
     }
 
-    protected NSKeyValueCoding d2wContext;
-    public void setD2wContext(NSKeyValueCoding value) {
+    protected D2WContext d2wContext;
+    public void setD2wContext(D2WContext value) {
         d2wContext = value;
     }
-    public void setLocalContext(NSKeyValueCoding value) {
+    public void setLocalContext(D2WContext value) {
         setD2wContext(value);
     }
-    public NSKeyValueCoding localContext() {
+    public D2WContext localContext() {
         return d2wContext();
     }
-    public NSKeyValueCoding d2wContext() {
+    public D2WContext d2wContext() {
         if (d2wContext == null && !synchronizesVariablesWithBindings()) {
-            d2wContext = (NSKeyValueCoding)valueForBinding("localContext");
+            d2wContext = (D2WContext)valueForBinding("localContext");
             if(d2wContext == null) {
-                d2wContext = (NSKeyValueCoding)valueForBinding("d2wContext");
+                d2wContext = (D2WContext)valueForBinding("d2wContext");
             }
         }
         return d2wContext;
