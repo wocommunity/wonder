@@ -317,6 +317,29 @@ public class ERXCompilerProxy {
         }
     }
 
+    /** 
+     * Tests whether or not the class name with package is contained in the set of 
+     * CacheEntry objects. Convenient to check if a specific class was recompiled 
+     * in a CompilerProxyDidCompileClassesNotification. 
+     *
+     * @param classNameWithPackage   string of the class name
+     * @param cacheEntries   NSSet contains CacheEntry objects; 
+     *                       typically obtained by a notification's object() method 
+     * @return if the classNameWithPackage is contained by cacheEntries
+     */ 
+    public static boolean isClassContainedBySet(String classNameWithPackage, NSSet cacheEntries) {
+        boolean isContained = false;
+        Enumeration e = cacheEntries.objectEnumerator();
+        while (e.hasMoreElements()) {
+            CacheEntry cacheEntry = (CacheEntry)e.nextElement();
+            if (cacheEntry.classNameWithPackage().equals(classNameWithPackage)) {
+                isContained = true;
+                break;
+            }
+        }
+        return isContained;
+    }
+
     class CacheEntry {
         String _path;
         String _className;
@@ -384,7 +407,7 @@ public class ERXCompilerProxy {
             _lastModified = _sourceFile.lastModified();
             log.info("Did refresh " + _path);
         }
-
+        
         public String toString() {
             return "( className = '" + _className + "'; path = '" + _path + "';)\n";
         }
