@@ -7,6 +7,7 @@
 package er.extensions;
 
 import java.util.Hashtable;
+import java.util.*;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for
  * a particular thread. This can be especially handy for storing objects
@@ -80,12 +81,12 @@ public class ERXThreadStorage {
      * Only used internally.
      * @param create should create the map storage if it isn't found.
      */
-    private Map storageMap(boolean create) {
+    private static Map storageMap(boolean create) {
         Map map = (Map)threadMap.get();
         if (map == null && create) {
             // CHECKME: Does this need to be synchronized?
             map = Collections.synchronizedMap(new HashMap(DefaultHashMapSize));
-            threadMap.set(ht);
+            threadMap.set(map);
         }
         return map;
     }
