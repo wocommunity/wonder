@@ -29,10 +29,6 @@ Conditional4: WOConditional {
 	condition = hasBranchChoices;
 }
 
-Conditional5: ERXNonZeroConditional {
-	condition = d2wContext.displayPropertyKeys.count;
-}
-
 ERSingleButton1: ERXSingleButton {
 	action = nextPageAction;
 	value = "OK";
@@ -50,8 +46,8 @@ Form1: WOForm {
 	multipleSubmit = true;
 }
 
-HasExplanationComponent: ERXNonNullConditional {
-	condition = d2wContext.explanationComponentName;
+HasPropertyKeys: ERXNonZeroConditional {
+	condition = d2wContext.displayPropertyKeys.count;
 }
 
 Help: ERDDebuggingHelp {
@@ -63,7 +59,7 @@ InspectTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 2;
 	cellspacing = 1;
-	elementName = "Table";
+	elementName = "table";
 }
 
 NoTitleAvailable: ERXNonNullConditional {
