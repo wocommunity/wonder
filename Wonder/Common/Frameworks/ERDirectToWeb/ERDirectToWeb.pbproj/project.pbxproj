@@ -2273,6 +2273,7 @@
 			name = BuildStyle;
 		};
 		F597C18B026376E601000102 = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/Localizable.strings;
@@ -6913,6 +6914,7 @@
 //F63
 //F64
 		F604FCA3025B37CD01AD0D07 = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = ValidationTemplate.strings;
 			path = English.lproj/ValidationTemplate.strings;
@@ -6982,6 +6984,7 @@
 			};
 		};
 		F641B2F7026AE126014E589E = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = German;
 			path = German.lproj/Localizable.strings;
@@ -7003,6 +7006,7 @@
 			};
 		};
 		F641B2FA026AE203014E589E = {
+			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = German;
 			path = German.lproj/ValidationTemplate.strings;
