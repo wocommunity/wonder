@@ -1,6 +1,33 @@
+Clear: WOSubmitButton {
+	action = clearAction;
+	value = session.localizer.ERDInspect.clear;
+}
+
 Inspect: ERXD2WInspect { 	
 	pageConfiguration = ^inspectConfigurationName;
 	entityName = ^destinationEntity.name;
 //	displayKeys = ^embeddedDisplayPropertyKeys;
 	object = objectKeyPathValue;
+}
+
+NonNull: ERXNonNullConditional {
+	condition = objectKeyPathValue;
+}
+
+Null: ERXNonNullConditional {
+	negate = true;
+	condition = objectKeyPathValue;
+}
+
+Select: WOSubmitButton {
+	action = editRelationshipAction;
+	value = session.localizer.ERDInspect.select;
+}
+
+ShowActions: WOConditional {
+	condition = ^showActions;
+}
+
+String1: WOString {
+	value = ^objectUnsetMessage;
 }

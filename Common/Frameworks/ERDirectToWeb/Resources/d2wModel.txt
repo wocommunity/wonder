@@ -89,6 +89,7 @@
     10 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartAttribute.className = 'java.lang.String') and (not (targetOutput = 'xml')) and (not (targetOutput = 'rtf'))) => componentName = ERD2WDisplayString
     10 : (((task = 'list') or (task = 'select') or (task = 'inspect')) and (smartRelationship <> null)) => disabled = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (((task = 'list') or (task = 'select')) and (not (smartAttribute = null)) and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => justification = right
+    10 : ((pageConfiguration like 'ConfirmDelete*') or (pageConfiguration like 'ConfirmCancelCreation*')) => inspectConfigurationName = inspectEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
     10 : ((pageConfiguration like 'Create*') or (pageConfiguration like 'Edit*')) => task = edit
     10 : ((pageConfiguration like 'Create*') or (pageConfiguration like 'EditWizard*') or (pageConfiguration like 'InspectWizard*')) => subTask = wizard
     10 : ((pageConfiguration like 'EditCompact*') or (pageConfiguration like 'InspectCompact*') or (pageConfiguration like 'ListCompact*')) => subTask = compact
@@ -119,7 +120,6 @@
     10 : (pageConfiguration like '*') => displayNameForEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : (pageConfiguration like '*Embedded*') => showBanner = 0 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (pageConfiguration like 'Confirm*') => task = confirm
-    10 : (pageConfiguration like 'ConfirmDelete*') => inspectConfigurationName = inspectEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment]
     10 : (pageConfiguration like 'Error*') => task = error
     10 : (pageConfiguration like 'Filter*') => taskVerb = Filter
     10 : (pageConfiguration like 'Inspect*') => task = inspect
@@ -170,6 +170,7 @@
     10 : *true* => displayNameForTabKey = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment]
     10 : *true* => editConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => editEmbeddedConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
+    10 : *true* => editRelationshipConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => embeddedEntityName = destinationEntity.name [er.directtoweb.ERDKeyValueAssignment]
     10 : *true* => emptyListComponentName = ERDEmptyListMessage
     10 : *true* => entity = entityForPageConfiguration [er.directtoweb.ERDKeyValueAssignment]
@@ -183,6 +184,7 @@
     10 : *true* => listConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => listEmbeddedConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
     10 : *true* => nextButtonName = Next
+    10 : *true* => objectUnsetMessage = ERDInspect.objectUnsetMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : *true* => permissionToEdit = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : *true* => previousButtonName = Previous
     10 : *true* => queryConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment]
