@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
 			buildRules = (
@@ -805,6 +805,7 @@
 			refType = 4;
 		};
 		9D2B3D6E02EE2A1A10CF0CA3 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUQueryAllPage.wo;
@@ -826,6 +827,7 @@
 			refType = 4;
 		};
 		9D2B3D7502EE2A7710CF0CA3 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUEditRelationshipPage.wo;
@@ -869,6 +871,7 @@
 			refType = 4;
 		};
 		F6EBF38C02DF4EFF0FCF0E72 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUInspectPage.wo;
@@ -884,6 +887,7 @@
 			refType = 4;
 		};
 		F6EBF39702DF4EFF0FCF0E72 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUListPage.wo;
@@ -899,6 +903,7 @@
 			refType = 4;
 		};
 		F6EBF3A202DF4EFF0FCF0E72 = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUQueryPage.wo;
@@ -1123,6 +1128,7 @@
 			refType = 4;
 		};
 		F7C7CAF802EF1E87014AF50A = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUTabInspectPage.wo;
@@ -1160,6 +1166,7 @@
 			refType = 4;
 		};
 		F7C7CAFD02EF1E87014AF50A = {
+			includeInIndex = 0;
 			isa = PBXFolderReference;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERNEUWizardCreationPage.wo;
