@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
@@ -117,23 +118,59 @@ public class ERXArrayUtilities extends Object {
 
     /**
      * Filters an array using the {@link EOQualifierEvaluation} interface.
-     * @param a array to be filtered
-     * @param q qualifier to do the filtering
+     * 
+     * @param array to be filtered
+     * @param qualifier to do the filtering
      * @return array of filtered results.
      */
-    // CHECKME: Is this a value add? EOQualifier has filteredArrayWithQualifier
-    public static NSArray filteredArrayWithQualifierEvaluation(NSArray a, EOQualifierEvaluation q) {
-        NSMutableArray result=null;
-        if (a!=null) {
-            result=new NSMutableArray();
-            for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
-                Object o=e.nextElement();
-                if (q.evaluateWithObject(o)) result.addObject(o);
-            }
+    public static NSArray filteredArrayWithQualifierEvaluation(NSArray array, EOQualifierEvaluation qualifier) {
+        if (array == null) 
+            return NSArray.EmptyArray;
+        else 
+            return filteredArrayWithQualifierEvaluation(array.objectEnumerator(), qualifier);
+    }
+
+    /**
+     * Filters any kinds of collections that implements {@Enumeration} 
+     * interface such as {@NSArray}, {@NSSet}, {@Vector} and {@Hashtable} 
+     * using the {@link EOQualifierEvaluation} interface. 
+     *
+     * @param enumeration to be filtered; to obtain an enumeration, 
+     *             use objectEnumerator() for the collections in 
+     *             com.webobjects.foundation package 
+     *             and use elements() for the Vector and Hashtable
+     * @param qualifier to do the filtering
+     * @return array of filtered results.
+     */
+    public static NSArray filteredArrayWithQualifierEvaluation(Enumeration enumeration, EOQualifierEvaluation qualifier) {
+        NSMutableArray result = new NSMutableArray();
+        while (enumeration.hasMoreElements()) {
+            Object object = enumeration.nextElement();
+            if (qualifier.evaluateWithObject(object)) 
+                result.addObject(object);
         }
         return result;
     }
 
+    /**
+     * Filters any kind of collections that implements {@Iterator} interface 
+     * such as {@ArrayList}, {@HashMap}, {@SortedSet} and {@TreeSet}
+     * using the {@link EOQualifierEvaluation} interface. 
+     *
+     * @param iterator to be filtered; use itarator() to obtain 
+     *             an iterator from the collections
+     * @param qualifier to do the filtering
+     * @return array of filtered results.
+     */
+    public static NSArray filteredArrayWithQualifierEvaluation(Iterator iterator, EOQualifierEvaluation qualifier) {
+        NSMutableArray result = new NSMutableArray();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            if (qualifier.evaluateWithObject(object)) 
+                result.addObject(object);
+        }
+        return result;
+    }
 
     /**
      * Filters out duplicates of an array of enterprise objects
