@@ -40,8 +40,7 @@ public class ERXGraph extends WOComponent {
     
     public NSData newImage() {
         GIFPlot plot = new GIFPlot();
-        String path = ERXFileUtilities.pathForResourceNamed("erDefault.graph", "ERExtensions", null);
-        plot.addContentsOfFile(path);
+        plot.addContentsOfDictionary(ERXDictionaryUtilities.dictionaryFromPropertyList("graphDefault", NSBundle.bundleForName("ERExtensions")));
         if(hasBinding("extraBindings"))
             plot.addContentsOfDictionary((NSDictionary)valueForBinding("extraBindings"));
         plot.addContentsOfDictionary(plotsDictionary());
