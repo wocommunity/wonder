@@ -1,0 +1,8 @@
+Hyperlink1: WOHyperlink {
+	action = editUser;
+}
+
+String1: WOString {
+	value = user.fullName;
+}
+
