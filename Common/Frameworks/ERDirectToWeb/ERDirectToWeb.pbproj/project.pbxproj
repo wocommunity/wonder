@@ -5,13 +5,83 @@
 	};
 	objectVersion = 38;
 	objects = {
+		9405BE5403C9FC9600CF0E7D = {
+			children = (
+				9405BE5503C9FC9600CF0E7D,
+				9405BE5603C9FC9600CF0E7D,
+				9405BE6203C9FE1E00CF0E7D,
+			);
+			isa = PBXGroup;
+			name = ERDInspectButton;
+			refType = 4;
+		};
+		9405BE5503C9FC9600CF0E7D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDInspectButton.api;
+			path = Components/ERDInspectButton.api;
+			refType = 2;
+		};
+		9405BE5603C9FC9600CF0E7D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = ERDInspectButton.java;
+			path = er/directtoweb/ERDInspectButton.java;
+			refType = 4;
+		};
+		9405BE5C03C9FC9600CF0E7D = {
+			fileRef = 9405BE5503C9FC9600CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9405BE5D03C9FC9600CF0E7D = {
+			fileRef = 9405BE5603C9FC9600CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9405BE6203C9FE1E00CF0E7D = {
+			children = (
+				9405BE6303C9FE1E00CF0E7D,
+			);
+			isa = PBXVariantGroup;
+			name = ERDInspectButton.wo;
+			path = "";
+			refType = 4;
+		};
+		9405BE6303C9FE1E00CF0E7D = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERDInspectButton.wo;
+			refType = 2;
+		};
+		9405BE6803C9FE1E00CF0E7D = {
+			fileRef = 9405BE6203C9FE1E00CF0E7D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//940
+//941
+//942
+//943
+//944
+//9D0
+//9D1
+//9D2
+//9D3
+//9D4
 		9D2E0C6F032FFE0A10CF0CA3 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = French;
 			path = Resources/French.lproj/ValidationTemplate.strings;
 			refType = 4;
 		};
 		9D2E0C70032FFE2310CF0CA3 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = French;
 			path = Resources/French.lproj/Localizable.strings;
@@ -29,12 +99,14 @@
 			refType = 4;
 		};
 		9D5BC62C033AB0C210CF0E7D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditSortedToManyFault.api;
 			path = Components/ERD2WEditSortedToManyFault.api;
 			refType = 2;
 		};
 		9D5BC632033AB0C210CF0E7D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditSortedToManyFault.java;
 			path = Sources/er/directtoweb/ERD2WEditSortedToManyFault.java;
@@ -75,6 +147,7 @@
 			};
 		};
 		9D8078520360BD4610CF0E7D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQueryPageInterface.java;
 			path = er/directtoweb/ERDQueryPageInterface.java;
@@ -97,12 +170,14 @@
 			refType = 4;
 		};
 		9D86289C034E504C10CF0E7D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditFlag.api;
 			path = Components/ERD2WEditFlag.api;
 			refType = 2;
 		};
 		9D8628A2034E504C10CF0E7D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditFlag.java;
 			path = er/directtoweb/ERD2WEditFlag.java;
@@ -143,6 +218,7 @@
 			};
 		};
 		9DA572350356469710CF0E7D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedSwitchAssignment.java;
 			path = er/directtoweb/ERDDelayedSwitchAssignment.java;
@@ -1275,48 +1351,57 @@
 			refType = 2;
 		};
 		F54202E302C466E501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ERD2WClassList.html;
 			refType = 4;
 		};
 		F54202E402C466E501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GettingStarted;
 			refType = 4;
 		};
 		F54202E502C466E501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = LICENSE.NPL;
 			refType = 4;
 		};
 		F54202E602C466E501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = README;
 			refType = 4;
 		};
 		F54202E702C466E501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ReleaseNotes.txt;
 			refType = 4;
 		};
 		F54202E802C466E501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ToDo;
 			refType = 4;
 		};
 		F542046602C4671901000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = d2wclientConfiguration.plist;
 			path = Resources/d2wclientConfiguration.plist;
 			refType = 2;
 		};
 		F542046702C4671901000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = CustomInfo.plist;
 			path = Resources/CustomInfo.plist;
 			refType = 2;
 		};
 		F542046802C4671901000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = d2w.d2wmodel;
 			path = Resources/d2w.d2wmodel;
@@ -1353,6 +1438,7 @@
 			refType = 2;
 		};
 		F542046D02C4672F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/ValidationTemplate.strings;
@@ -1371,30 +1457,35 @@
 			refType = 2;
 		};
 		F542046F02C4672F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = German;
 			path = Resources/German.lproj/Localizable.strings;
 			refType = 2;
 		};
 		F542047002C4672F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = Resources/English.lproj/ValidationTemplate.strings;
 			refType = 2;
 		};
 		F542047102C4672F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = Resources/English.lproj/Localizable.strings;
 			refType = 2;
 		};
 		F542047202C4672F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Japanese;
 			path = Resources/Japanese.lproj/ValidationTemplate.strings;
 			refType = 2;
 		};
 		F542047302C4672F01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Japanese;
 			path = Resources/Japanese.lproj/Localizable.strings;
@@ -1524,6 +1615,7 @@
 			refType = 2;
 		};
 		F542066602C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WUtilities.java;
 			path = Sources/com/webobjects/directtoweb/ERD2WUtilities.java;
@@ -1539,1116 +1631,1302 @@
 			refType = 4;
 		};
 		F542066902C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = D2WPick.java;
 			path = Sources/er/directtoweb/D2WPick.java;
 			refType = 2;
 		};
 		F542066A02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCalendarPage.java;
 			path = Sources/er/directtoweb/ERD2WCalendarPage.java;
 			refType = 2;
 		};
 		F542066B02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCompactInspectPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WCompactInspectPageTemplate.java;
 			refType = 2;
 		};
 		F542066C02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCompactListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WCompactListPageTemplate.java;
 			refType = 2;
 		};
 		F542066D02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WConfirmPage.java;
 			path = Sources/er/directtoweb/ERD2WConfirmPage.java;
 			refType = 2;
 		};
 		F542066E02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WConfirmPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WConfirmPageTemplate.java;
 			refType = 2;
 		};
 		F542066F02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WContainer.java;
 			path = Sources/er/directtoweb/ERD2WContainer.java;
 			refType = 2;
 		};
 		F542067002C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCSVGroupingListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WCSVGroupingListPageTemplate.java;
 			refType = 2;
 		};
 		F542067102C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCSVListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WCSVListPageTemplate.java;
 			refType = 2;
 		};
 		F542067202C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomComponentWithArgs.java;
 			path = Sources/er/directtoweb/ERD2WCustomComponentWithArgs.java;
 			refType = 2;
 		};
 		F542067302C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomDisplayBoolean.java;
 			path = Sources/er/directtoweb/ERD2WCustomDisplayBoolean.java;
 			refType = 2;
 		};
 		F542067402C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomEditBoolean.java;
 			path = Sources/er/directtoweb/ERD2WCustomEditBoolean.java;
 			refType = 2;
 		};
 		F542067502C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomQueryComponentWithArgs.java;
 			path = Sources/er/directtoweb/ERD2WCustomQueryComponentWithArgs.java;
 			refType = 2;
 		};
 		F542067602C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDirectAction.java;
 			path = Sources/er/directtoweb/ERD2WDirectAction.java;
 			refType = 2;
 		};
 		F542067702C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayAddress.java;
 			path = Sources/er/directtoweb/ERD2WDisplayAddress.java;
 			refType = 2;
 		};
 		F542067802C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayConstant.java;
 			path = Sources/er/directtoweb/ERD2WDisplayConstant.java;
 			refType = 2;
 		};
 		F542067902C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayDateOrNull.java;
 			path = Sources/er/directtoweb/ERD2WDisplayDateOrNull.java;
 			refType = 2;
 		};
 		F542067A02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayHTML.java;
 			path = Sources/er/directtoweb/ERD2WDisplayHTML.java;
 			refType = 2;
 		};
 		F542067B02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayImage.java;
 			path = Sources/er/directtoweb/ERD2WDisplayImage.java;
 			refType = 2;
 		};
 		F542067C02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayImageWithUrl.java;
 			path = Sources/er/directtoweb/ERD2WDisplayImageWithUrl.java;
 			refType = 2;
 		};
 		F542067D02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayList.java;
 			path = Sources/er/directtoweb/ERD2WDisplayList.java;
 			refType = 2;
 		};
 		F542067E02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayNumberWithUnit.java;
 			path = Sources/er/directtoweb/ERD2WDisplayNumberWithUnit.java;
 			refType = 2;
 		};
 		F542067F02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayPassword.java;
 			path = Sources/er/directtoweb/ERD2WDisplayPassword.java;
 			refType = 2;
 		};
 		F542068002C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayString.java;
 			path = Sources/er/directtoweb/ERD2WDisplayString.java;
 			refType = 2;
 		};
 		F542068102C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayStringWithLineBreaks.java;
 			path = Sources/er/directtoweb/ERD2WDisplayStringWithLineBreaks.java;
 			refType = 2;
 		};
 		F542068202C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayTextFromHTML.java;
 			path = Sources/er/directtoweb/ERD2WDisplayTextFromHTML.java;
 			refType = 2;
 		};
 		F542068302C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToManyCustom.java;
 			path = Sources/er/directtoweb/ERD2WDisplayToManyCustom.java;
 			refType = 2;
 		};
 		F542068402C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToManyList.java;
 			path = Sources/er/directtoweb/ERD2WDisplayToManyList.java;
 			refType = 2;
 		};
 		F542068502C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToManyTable.java;
 			path = Sources/er/directtoweb/ERD2WDisplayToManyTable.java;
 			refType = 2;
 		};
 		F542068602C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToOne.java;
 			path = Sources/er/directtoweb/ERD2WDisplayToOne.java;
 			refType = 2;
 		};
 		F542068702C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayURL.java;
 			path = Sources/er/directtoweb/ERD2WDisplayURL.java;
 			refType = 2;
 		};
 		F542068802C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayYesNo.java;
 			path = Sources/er/directtoweb/ERD2WDisplayYesNo.java;
 			refType = 2;
 		};
 		F542068902C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditableListPage.java;
 			path = Sources/er/directtoweb/ERD2WEditableListPage.java;
 			refType = 2;
 		};
 		F542068A02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditableListTemplate.java;
 			path = Sources/er/directtoweb/ERD2WEditableListTemplate.java;
 			refType = 2;
 		};
 		F542068B02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditAllowRestrict.java;
 			path = Sources/er/directtoweb/ERD2WEditAllowRestrict.java;
 			refType = 2;
 		};
 		F542068C02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditDateJavascript.java;
 			path = Sources/er/directtoweb/ERD2WEditDateJavascript.java;
 			refType = 2;
 		};
 		F542068D02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditLargeString.java;
 			path = Sources/er/directtoweb/ERD2WEditLargeString.java;
 			refType = 2;
 		};
 		F542068E02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditNumber.java;
 			path = Sources/er/directtoweb/ERD2WEditNumber.java;
 			refType = 2;
 		};
 		F542068F02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditNumberWithUnit.java;
 			path = Sources/er/directtoweb/ERD2WEditNumberWithUnit.java;
 			refType = 2;
 		};
 		F542069002C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditOrDefault.java;
 			path = Sources/er/directtoweb/ERD2WEditOrDefault.java;
 			refType = 2;
 		};
 		F542069102C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditPercentage.java;
 			path = Sources/er/directtoweb/ERD2WEditPercentage.java;
 			refType = 2;
 		};
 		F542069202C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditString.java;
 			path = Sources/er/directtoweb/ERD2WEditString.java;
 			refType = 2;
 		};
 		F542069302C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditToManyRelationship.java;
 			path = Sources/er/directtoweb/ERD2WEditToManyRelationship.java;
 			refType = 2;
 		};
 		F542069402C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditToOneRelationship.java;
 			path = Sources/er/directtoweb/ERD2WEditToOneRelationship.java;
 			refType = 2;
 		};
 		F542069502C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditURL.java;
 			path = Sources/er/directtoweb/ERD2WEditURL.java;
 			refType = 2;
 		};
 		F542069602C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditYesNo.java;
 			path = Sources/er/directtoweb/ERD2WEditYesNo.java;
 			refType = 2;
 		};
 		F542069702C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WFactory.java;
 			path = Sources/er/directtoweb/ERD2WFactory.java;
 			refType = 2;
 		};
 		F542069802C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingListPage.java;
 			path = Sources/er/directtoweb/ERD2WGroupingListPage.java;
 			refType = 2;
 		};
 		F542069902C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WGroupingListPageTemplate.java;
 			refType = 2;
 		};
 		F542069A02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingListXMLPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WGroupingListXMLPageTemplate.java;
 			refType = 2;
 		};
 		F542069B02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingPrinterFriendlyListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WGroupingPrinterFriendlyListPageTemplate.java;
 			refType = 2;
 		};
 		F542069C02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WInspect.java;
 			path = Sources/er/directtoweb/ERD2WInspect.java;
 			refType = 2;
 		};
 		F542069D02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WInspectPage.java;
 			path = Sources/er/directtoweb/ERD2WInspectPage.java;
 			refType = 2;
 		};
 		F542069E02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WInspectPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WInspectPageTemplate.java;
 			refType = 2;
 		};
 		F542069F02C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WKeyMapper.java;
 			path = Sources/er/directtoweb/ERD2WKeyMapper.java;
 			refType = 2;
 		};
 		F54206A002C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListComparePage.java;
 			path = Sources/er/directtoweb/ERD2WListComparePage.java;
 			refType = 2;
 		};
 		F54206A102C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListComparePageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WListComparePageTemplate.java;
 			refType = 2;
 		};
 		F54206A202C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListPage.java;
 			path = Sources/er/directtoweb/ERD2WListPage.java;
 			refType = 2;
 		};
 		F54206A302C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WListPageTemplate.java;
 			refType = 2;
 		};
 		F54206A402C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListXMLPage.java;
 			path = Sources/er/directtoweb/ERD2WListXMLPage.java;
 			refType = 2;
 		};
 		F54206A502C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListXMLPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WListXMLPageTemplate.java;
 			refType = 2;
 		};
 		F54206A602C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WMessagePage.java;
 			path = Sources/er/directtoweb/ERD2WMessagePage.java;
 			refType = 2;
 		};
 		F54206A702C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WMessagePageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WMessagePageTemplate.java;
 			refType = 2;
 		};
 		F54206A802C467DF01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WModel.java;
 			path = Sources/er/directtoweb/ERD2WModel.java;
 			refType = 2;
 		};
 		F54206A902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPage.java;
 			path = Sources/er/directtoweb/ERD2WPage.java;
 			refType = 2;
 		};
 		F54206AA02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPick.java;
 			path = Sources/er/directtoweb/ERD2WPick.java;
 			refType = 2;
 		};
 		F54206AB02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickFromEntities.java;
 			path = Sources/er/directtoweb/ERD2WPickFromEntities.java;
 			refType = 2;
 		};
 		F54206AC02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickFromList.java;
 			path = Sources/er/directtoweb/ERD2WPickFromList.java;
 			refType = 2;
 		};
 		F54206AD02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickListPage.java;
 			path = Sources/er/directtoweb/ERD2WPickListPage.java;
 			refType = 2;
 		};
 		F54206AE02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickListPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WPickListPageTemplate.java;
 			refType = 2;
 		};
 		F54206AF02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickTypePage.java;
 			path = Sources/er/directtoweb/ERD2WPickTypePage.java;
 			refType = 2;
 		};
 		F54206B002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickTypePageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WPickTypePageTemplate.java;
 			refType = 2;
 		};
 		F54206B102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPopUp.java;
 			path = Sources/er/directtoweb/ERD2WPopUp.java;
 			refType = 2;
 		};
 		F54206B202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPrinterFriendlyInspectPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WPrinterFriendlyInspectPageTemplate.java;
 			refType = 2;
 		};
 		F54206B302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPrinterFriendlyListTemplate.java;
 			path = Sources/er/directtoweb/ERD2WPrinterFriendlyListTemplate.java;
 			refType = 2;
 		};
 		F54206B402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPropertyName.java;
 			path = Sources/er/directtoweb/ERD2WPropertyName.java;
 			refType = 2;
 		};
 		F54206B502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryNonNull.java;
 			path = Sources/er/directtoweb/ERD2WQueryNonNull.java;
 			refType = 2;
 		};
 		F54206B602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPage.java;
 			path = Sources/er/directtoweb/ERD2WQueryPage.java;
 			refType = 2;
 		};
 		F54206B702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WQueryPageTemplate.java;
 			refType = 2;
 		};
 		F54206B802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPageWithFetchSpecification.java;
 			path = Sources/er/directtoweb/ERD2WQueryPageWithFetchSpecification.java;
 			refType = 2;
 		};
 		F54206B902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPageWithFetchSpecificationTemplate.java;
 			path = Sources/er/directtoweb/ERD2WQueryPageWithFetchSpecificationTemplate.java;
 			refType = 2;
 		};
 		F54206BA02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryToOneRelationship.java;
 			path = Sources/er/directtoweb/ERD2WQueryToOneRelationship.java;
 			refType = 2;
 		};
 		F54206BB02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WStatelessCustomComponentWithArgs.java;
 			path = Sources/er/directtoweb/ERD2WStatelessCustomComponentWithArgs.java;
 			refType = 2;
 		};
 		F54206BC02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WSwitchComponent.java;
 			path = Sources/er/directtoweb/ERD2WSwitchComponent.java;
 			refType = 2;
 		};
 		F54206BD02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WTabInspectPage.java;
 			path = Sources/er/directtoweb/ERD2WTabInspectPage.java;
 			refType = 2;
 		};
 		F54206BE02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WTabInspectPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WTabInspectPageTemplate.java;
 			refType = 2;
 		};
 		F54206BF02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WTwoLevelEditToOneRelationship.java;
 			path = Sources/er/directtoweb/ERD2WTwoLevelEditToOneRelationship.java;
 			refType = 2;
 		};
 		F54206C002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WWizardCreationPage.java;
 			path = Sources/er/directtoweb/ERD2WWizardCreationPage.java;
 			refType = 2;
 		};
 		F54206C102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WWizardCreationPageTemplate.java;
 			path = Sources/er/directtoweb/ERD2WWizardCreationPageTemplate.java;
 			refType = 2;
 		};
 		F54206C202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WXMLDisplayNumber.java;
 			path = Sources/er/directtoweb/ERD2WXMLDisplayNumber.java;
 			refType = 2;
 		};
 		F54206C302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WXMLDisplayString.java;
 			path = Sources/er/directtoweb/ERD2WXMLDisplayString.java;
 			refType = 2;
 		};
 		F54206C402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WXMLDisplayToMany.java;
 			path = Sources/er/directtoweb/ERD2WXMLDisplayToMany.java;
 			refType = 2;
 		};
 		F54206C502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDAssignment.java;
 			path = Sources/er/directtoweb/ERDAssignment.java;
 			refType = 2;
 		};
 		F54206C602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDBranchDelegate.java;
 			path = Sources/er/directtoweb/ERDBranchDelegate.java;
 			refType = 2;
 		};
 		F54206C702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDBranchInterface.java;
 			path = Sources/er/directtoweb/ERDBranchInterface.java;
 			refType = 2;
 		};
 		F54206C802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDComputingAssignmentInterface.java;
 			path = Sources/er/directtoweb/ERDComputingAssignmentInterface.java;
 			refType = 2;
 		};
 		F54206C902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDConfigurationAssignment.java;
 			path = Sources/er/directtoweb/ERDConfigurationAssignment.java;
 			refType = 2;
 		};
 		F54206CA02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDConfirmMessage.java;
 			path = Sources/er/directtoweb/ERDConfirmMessage.java;
 			refType = 2;
 		};
 		F54206CB02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDConfirmObjectDelegate.java;
 			path = Sources/er/directtoweb/ERDConfirmObjectDelegate.java;
 			refType = 2;
 		};
 		F54206CC02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDConfirmObjectWasSavedDelegate.java;
 			path = Sources/er/directtoweb/ERDConfirmObjectWasSavedDelegate.java;
 			refType = 2;
 		};
 		F54206CD02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDCustomComponent.java;
 			path = Sources/er/directtoweb/ERDCustomComponent.java;
 			refType = 2;
 		};
 		F54206CE02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDCustomEditComponent.java;
 			path = Sources/er/directtoweb/ERDCustomEditComponent.java;
 			refType = 2;
 		};
 		F54206CF02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDCustomQueryComponent.java;
 			path = Sources/er/directtoweb/ERDCustomQueryComponent.java;
 			refType = 2;
 		};
 		F54206D002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDCustomQueryComponentWithArgs.java;
 			path = Sources/er/directtoweb/ERDCustomQueryComponentWithArgs.java;
 			refType = 2;
 		};
 		F54206D102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDebuggingHelp.java;
 			path = Sources/er/directtoweb/ERDDebuggingHelp.java;
 			refType = 2;
 		};
 		F54206D202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultCancelCreationMessageAssignment.java;
 			path = Sources/er/directtoweb/ERDDefaultCancelCreationMessageAssignment.java;
 			refType = 2;
 		};
 		F54206D302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultCustomComponent.java;
 			path = Sources/er/directtoweb/ERDDefaultCustomComponent.java;
 			refType = 2;
 		};
 		F54206D402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultEntityNameAssignment.java;
 			path = Sources/er/directtoweb/ERDDefaultEntityNameAssignment.java;
 			refType = 2;
 		};
 		F54206D502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultPropertyNameAssignment.java;
 			path = Sources/er/directtoweb/ERDDefaultPropertyNameAssignment.java;
 			refType = 2;
 		};
 		F54206D602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultsAssignment.java;
 			path = Sources/er/directtoweb/ERDDefaultsAssignment.java;
 			refType = 2;
 		};
 		F54206D702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultSectionComponent.java;
 			path = Sources/er/directtoweb/ERDDefaultSectionComponent.java;
 			refType = 2;
 		};
 		F54206D802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultSectionComponentCSV.java;
 			path = Sources/er/directtoweb/ERDDefaultSectionComponentCSV.java;
 			refType = 2;
 		};
 		F54206D902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultSectionComponentPrinterFriendly.java;
 			path = Sources/er/directtoweb/ERDDefaultSectionComponentPrinterFriendly.java;
 			refType = 2;
 		};
 		F54206DA02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultsEmbeddedAssignment.java;
 			path = Sources/er/directtoweb/ERDDefaultsEmbeddedAssignment.java;
 			refType = 2;
 		};
 		F54206DB02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedAssignment.java;
 			path = Sources/er/directtoweb/ERDDelayedAssignment.java;
 			refType = 2;
 		};
 		F54206DC02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedBooleanAssignment.java;
 			path = Sources/er/directtoweb/ERDDelayedBooleanAssignment.java;
 			refType = 2;
 		};
 		F54206DD02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedConditionalAssignment.java;
 			path = Sources/er/directtoweb/ERDDelayedConditionalAssignment.java;
 			refType = 2;
 		};
 		F54206DE02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedKeyValueAssignment.java;
 			path = Sources/er/directtoweb/ERDDelayedKeyValueAssignment.java;
 			refType = 2;
 		};
 		F54206DF02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedNonNullConditionalAssignment.java;
 			path = Sources/er/directtoweb/ERDDelayedNonNullConditionalAssignment.java;
 			refType = 2;
 		};
 		F54206E002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedRuleAssignment.java;
 			path = Sources/er/directtoweb/ERDDelayedRuleAssignment.java;
 			refType = 2;
 		};
 		F54206E102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDeletionDelegate.java;
 			path = Sources/er/directtoweb/ERDDeletionDelegate.java;
 			refType = 2;
 		};
 		F54206E202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDHTMLComponent.java;
 			path = Sources/er/directtoweb/ERDDHTMLComponent.java;
 			refType = 2;
 		};
 		F54206E302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayImageIfExists.java;
 			path = Sources/er/directtoweb/ERDDisplayImageIfExists.java;
 			refType = 2;
 		};
 		F54206E402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayMailTo.java;
 			path = Sources/er/directtoweb/ERDDisplayMailTo.java;
 			refType = 2;
 		};
 		F54206E502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayNumberWithUnit.java;
 			path = Sources/er/directtoweb/ERDDisplayNumberWithUnit.java;
 			refType = 2;
 		};
 		F54206E602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayYearsMonths.java;
 			path = Sources/er/directtoweb/ERDDisplayYearsMonths.java;
 			refType = 2;
 		};
 		F54206E702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditButton.java;
 			path = Sources/er/directtoweb/ERDEditButton.java;
 			refType = 2;
 		};
 		F54206E802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDateJavascript.java;
 			path = Sources/er/directtoweb/ERDEditDateJavascript.java;
 			refType = 2;
 		};
 		F54206E902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDatePopup.java;
 			path = Sources/er/directtoweb/ERDEditDatePopup.java;
 			refType = 2;
 		};
 		F54206EA02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDatePopupCommon.java;
 			path = Sources/er/directtoweb/ERDEditDatePopupCommon.java;
 			refType = 2;
 		};
 		F54206EB02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDatePopupOrNull.java;
 			path = Sources/er/directtoweb/ERDEditDatePopupOrNull.java;
 			refType = 2;
 		};
 		F54206EC02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditList.java;
 			path = Sources/er/directtoweb/ERDEditList.java;
 			refType = 2;
 		};
 		F54206ED02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditListButton.java;
 			path = Sources/er/directtoweb/ERDEditListButton.java;
 			refType = 2;
 		};
 		F54206EE02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditOwnedRelationship.java;
 			path = Sources/er/directtoweb/ERDEditOwnedRelationship.java;
 			refType = 2;
 		};
 		F54206EF02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditPageInterface.java;
 			path = Sources/er/directtoweb/ERDEditPageInterface.java;
 			refType = 2;
 		};
 		F54206F002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditPasswordConfirm.java;
 			path = Sources/er/directtoweb/ERDEditPasswordConfirm.java;
 			refType = 2;
 		};
 		F54206F102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditStringWithChoices.java;
 			path = Sources/er/directtoweb/ERDEditStringWithChoices.java;
 			refType = 2;
 		};
 		F54206F202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditYearsMonths.java;
 			path = Sources/er/directtoweb/ERDEditYearsMonths.java;
 			refType = 2;
 		};
 		F54206F302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEmptyListMessage.java;
 			path = Sources/er/directtoweb/ERDEmptyListMessage.java;
 			refType = 2;
 		};
 		F54206F402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEmptyPageWrapper.java;
 			path = Sources/er/directtoweb/ERDEmptyPageWrapper.java;
 			refType = 2;
 		};
 		F54206F502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEntityAssignment.java;
 			path = Sources/er/directtoweb/ERDEntityAssignment.java;
 			refType = 2;
 		};
 		F54206F602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDFilterDisplayGroupButton.java;
 			path = Sources/er/directtoweb/ERDFilterDisplayGroupButton.java;
 			refType = 2;
 		};
 		F54206F702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDFollowPageInterface.java;
 			path = Sources/er/directtoweb/ERDFollowPageInterface.java;
 			refType = 2;
 		};
 		F54206F802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDImageNameAssignment.java;
 			path = Sources/er/directtoweb/ERDImageNameAssignment.java;
 			refType = 2;
 		};
 		F54206F902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDInspect.java;
 			path = Sources/er/directtoweb/ERDInspect.java;
 			refType = 2;
 		};
 		F54206FA02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDirectToWeb.java;
 			path = Sources/er/directtoweb/ERDirectToWeb.java;
 			refType = 2;
 		};
 		F54206FB02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDIsKindOfEntityQualifier.java;
 			path = Sources/er/directtoweb/ERDIsKindOfEntityQualifier.java;
 			refType = 2;
 		};
 		F54206FC02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDKeyValueAssignment.java;
 			path = Sources/er/directtoweb/ERDKeyValueAssignment.java;
 			refType = 2;
 		};
 		F54206FD02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDLinkToViewList.java;
 			path = Sources/er/directtoweb/ERDLinkToViewList.java;
 			refType = 2;
 		};
 		F54206FE02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDList.java;
 			path = Sources/er/directtoweb/ERDList.java;
 			refType = 2;
 		};
 		F54206FF02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDListOrganizer.java;
 			path = Sources/er/directtoweb/ERDListOrganizer.java;
 			refType = 2;
 		};
 		F542070002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDListPicker.java;
 			path = Sources/er/directtoweb/ERDListPicker.java;
 			refType = 2;
 		};
 		F542070102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDLocalizableAssignmentInterface.java;
 			path = Sources/er/directtoweb/ERDLocalizableAssignmentInterface.java;
 			refType = 2;
 		};
 		F542070202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDLocalizedAssignment.java;
 			path = Sources/er/directtoweb/ERDLocalizedAssignment.java;
 			refType = 2;
 		};
 		F542070302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDLocalizedMessageAssignment.java;
 			path = Sources/er/directtoweb/ERDLocalizedMessageAssignment.java;
 			refType = 2;
 		};
 		F542070402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDMassModifyButton.java;
 			path = Sources/er/directtoweb/ERDMassModifyButton.java;
 			refType = 2;
 		};
 		F542070502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDMessagePageInterface.java;
 			path = Sources/er/directtoweb/ERDMessagePageInterface.java;
 			refType = 2;
 		};
 		F542070602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDNullQualifier.java;
 			path = Sources/er/directtoweb/ERDNullQualifier.java;
 			refType = 2;
 		};
 		F542070702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDObjectSaverInterface.java;
 			path = Sources/er/directtoweb/ERDObjectSaverInterface.java;
 			refType = 2;
 		};
 		F542070802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPageDelegate.java;
 			path = Sources/er/directtoweb/ERDPageDelegate.java;
 			refType = 2;
 		};
 		F542070902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPageNameDelegate.java;
 			path = Sources/er/directtoweb/ERDPageNameDelegate.java;
 			refType = 2;
 		};
 		F542070A02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPickPageInterface.java;
 			path = Sources/er/directtoweb/ERDPickPageInterface.java;
 			refType = 2;
 		};
 		F542070B02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPrinterButton.java;
 			path = Sources/er/directtoweb/ERDPrinterButton.java;
 			refType = 2;
 		};
 		F542070C02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPrinterFriendlyWrapper.java;
 			path = Sources/er/directtoweb/ERDPrinterFriendlyWrapper.java;
 			refType = 2;
 		};
 		F542070D02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQueryDateRangeJavascript.java;
 			path = Sources/er/directtoweb/ERDQueryDateRangeJavascript.java;
 			refType = 2;
 		};
 		F542070E02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQuestionPage.java;
 			path = Sources/er/directtoweb/ERDQuestionPage.java;
 			refType = 2;
 		};
 		F542070F02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDRecoverableErrorPage.java;
 			path = Sources/er/directtoweb/ERDRecoverableErrorPage.java;
 			refType = 2;
 		};
 		F542071002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDRelationshipSortAssignment.java;
 			path = Sources/er/directtoweb/ERDRelationshipSortAssignment.java;
 			refType = 2;
 		};
 		F542071102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSectionImage.java;
 			path = Sources/er/directtoweb/ERDSectionImage.java;
 			refType = 2;
 		};
 		F542071202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSectionText.java;
 			path = Sources/er/directtoweb/ERDSectionText.java;
 			refType = 2;
 		};
 		F542071302C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSmartAttributeAssignment.java;
 			path = Sources/er/directtoweb/ERDSmartAttributeAssignment.java;
 			refType = 2;
 		};
 		F542071402C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSmartRelationshipAssignment.java;
 			path = Sources/er/directtoweb/ERDSmartRelationshipAssignment.java;
 			refType = 2;
 		};
 		F542071502C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabConfigurationAssignment.java;
 			path = Sources/er/directtoweb/ERDTabConfigurationAssignment.java;
 			refType = 2;
 		};
 		F542071602C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabDictionaryComputer.java;
 			path = Sources/er/directtoweb/ERDTabDictionaryComputer.java;
 			refType = 2;
 		};
 		F542071702C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabEditPageInterface.java;
 			path = Sources/er/directtoweb/ERDTabEditPageInterface.java;
 			refType = 2;
 		};
 		F542071802C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabImage.java;
 			path = Sources/er/directtoweb/ERDTabImage.java;
 			refType = 2;
 		};
 		F542071902C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabSectionsContentsAssignment.java;
 			path = Sources/er/directtoweb/ERDTabSectionsContentsAssignment.java;
 			refType = 2;
 		};
 		F542071A02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabText.java;
 			path = Sources/er/directtoweb/ERDTabText.java;
 			refType = 2;
 		};
 		F542071B02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTrashcan.java;
 			path = Sources/er/directtoweb/ERDTrashcan.java;
 			refType = 2;
 		};
 		F542071C02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDUnitResolverAssignment.java;
 			path = Sources/er/directtoweb/ERDUnitResolverAssignment.java;
 			refType = 2;
 		};
 		F542071D02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDUserInfoInterface.java;
 			path = Sources/er/directtoweb/ERDUserInfoInterface.java;
 			refType = 2;
 		};
 		F542071E02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDXMLPageWrapper.java;
 			path = Sources/er/directtoweb/ERDXMLPageWrapper.java;
 			refType = 2;
 		};
 		F542071F02C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERXD2WInspect.java;
 			path = Sources/er/directtoweb/ERXD2WInspect.java;
 			refType = 2;
 		};
 		F542072002C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERXD2WList.java;
 			path = Sources/er/directtoweb/ERXD2WList.java;
 			refType = 2;
 		};
 		F542072102C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERXD2WPick.java;
 			path = Sources/er/directtoweb/ERXD2WPick.java;
 			refType = 2;
 		};
 		F542072202C467E001000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = Sources/er/directtoweb/KeyValueCodingProtectedAccessor.java;
@@ -5282,13 +5560,14 @@
 			);
 			isa = PBXLegacyTarget;
 			name = Ant;
+			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F57E9BF402E3398401CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQualifierTraversal.java;
 			path = er/directtoweb/ERDQualifierTraversal.java;
@@ -5301,18 +5580,21 @@
 			};
 		};
 		F581683A02E0070601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDNextPageDelegate.java;
 			path = er/directtoweb/ERDNextPageDelegate.java;
 			refType = 4;
 		};
 		F581683B02E0070601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDObjectSaveDelegate.java;
 			path = er/directtoweb/ERDObjectSaveDelegate.java;
 			refType = 4;
 		};
 		F581683C02E0070601000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDObjectWasCreatedDelegate.java;
 			path = er/directtoweb/ERDObjectWasCreatedDelegate.java;
@@ -5337,6 +5619,7 @@
 			};
 		};
 		F581684202E1453C01000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQualifierTraversalCallback.java;
 			path = er/directtoweb/ERDQualifierTraversalCallback.java;
@@ -5367,702 +5650,819 @@
 			refType = 4;
 		};
 		F59C5CD602C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERXD2WPick.api;
 			path = Components/ERXD2WPick.api;
 			refType = 2;
 		};
 		F59C5CD702C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCompactInspectPageTemplate.api;
 			path = Components/ERD2WCompactInspectPageTemplate.api;
 			refType = 2;
 		};
 		F59C5CD802C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCompactListPageTemplate.api;
 			path = Components/ERD2WCompactListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5CD902C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WConfirmPageTemplate.api;
 			path = Components/ERD2WConfirmPageTemplate.api;
 			refType = 2;
 		};
 		F59C5CDA02C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCSVGroupingListPageTemplate.api;
 			path = Components/ERD2WCSVGroupingListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5CDB02C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCSVListPageTemplate.api;
 			path = Components/ERD2WCSVListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5CDC02C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomComponentWithArgs.api;
 			path = Components/ERD2WCustomComponentWithArgs.api;
 			refType = 2;
 		};
 		F59C5CDD02C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomDisplayBoolean.api;
 			path = Components/ERD2WCustomDisplayBoolean.api;
 			refType = 2;
 		};
 		F59C5CDE02C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WCustomEditBoolean.api;
 			path = Components/ERD2WCustomEditBoolean.api;
 			refType = 2;
 		};
 		F59C5CDF02C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayAddress.api;
 			path = Components/ERD2WDisplayAddress.api;
 			refType = 2;
 		};
 		F59C5CE002C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayConstant.api;
 			path = Components/ERD2WDisplayConstant.api;
 			refType = 2;
 		};
 		F59C5CE102C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayDateOrNull.api;
 			path = Components/ERD2WDisplayDateOrNull.api;
 			refType = 2;
 		};
 		F59C5CE202C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayHTML.api;
 			path = Components/ERD2WDisplayHTML.api;
 			refType = 2;
 		};
 		F59C5CE302C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayImage.api;
 			path = Components/ERD2WDisplayImage.api;
 			refType = 2;
 		};
 		F59C5CE402C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayImageWithUrl.api;
 			path = Components/ERD2WDisplayImageWithUrl.api;
 			refType = 2;
 		};
 		F59C5CE502C4667101000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayList.api;
 			path = Components/ERD2WDisplayList.api;
 			refType = 2;
 		};
 		F59C5CE602C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayNumber.api;
 			path = Components/ERD2WDisplayNumber.api;
 			refType = 2;
 		};
 		F59C5CE702C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayNumberWithUnit.api;
 			path = Components/ERD2WDisplayNumberWithUnit.api;
 			refType = 2;
 		};
 		F59C5CE802C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayPassword.api;
 			path = Components/ERD2WDisplayPassword.api;
 			refType = 2;
 		};
 		F59C5CE902C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayString.api;
 			path = Components/ERD2WDisplayString.api;
 			refType = 2;
 		};
 		F59C5CEA02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayStringWithLineBreaks.api;
 			path = Components/ERD2WDisplayStringWithLineBreaks.api;
 			refType = 2;
 		};
 		F59C5CEB02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayTextFromHTML.api;
 			path = Components/ERD2WDisplayTextFromHTML.api;
 			refType = 2;
 		};
 		F59C5CEC02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToManyCustom.api;
 			path = Components/ERD2WDisplayToManyCustom.api;
 			refType = 2;
 		};
 		F59C5CED02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToManyList.api;
 			path = Components/ERD2WDisplayToManyList.api;
 			refType = 2;
 		};
 		F59C5CEE02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToManyTable.api;
 			path = Components/ERD2WDisplayToManyTable.api;
 			refType = 2;
 		};
 		F59C5CEF02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayToOne.api;
 			path = Components/ERD2WDisplayToOne.api;
 			refType = 2;
 		};
 		F59C5CF002C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayURL.api;
 			path = Components/ERD2WDisplayURL.api;
 			refType = 2;
 		};
 		F59C5CF102C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDisplayYesNo.api;
 			path = Components/ERD2WDisplayYesNo.api;
 			refType = 2;
 		};
 		F59C5CF202C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditableListTemplate.api;
 			path = Components/ERD2WEditableListTemplate.api;
 			refType = 2;
 		};
 		F59C5CF302C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditAllowRestrict.api;
 			path = Components/ERD2WEditAllowRestrict.api;
 			refType = 2;
 		};
 		F59C5CF402C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditDateJavascript.api;
 			path = Components/ERD2WEditDateJavascript.api;
 			refType = 2;
 		};
 		F59C5CF502C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditLargeString.api;
 			path = Components/ERD2WEditLargeString.api;
 			refType = 2;
 		};
 		F59C5CF602C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditNumber.api;
 			path = Components/ERD2WEditNumber.api;
 			refType = 2;
 		};
 		F59C5CF702C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditNumberOrDefault.api;
 			path = Components/ERD2WEditNumberOrDefault.api;
 			refType = 2;
 		};
 		F59C5CF802C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditNumberWithUnit.api;
 			path = Components/ERD2WEditNumberWithUnit.api;
 			refType = 2;
 		};
 		F59C5CF902C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditOrDefault.api;
 			path = Components/ERD2WEditOrDefault.api;
 			refType = 2;
 		};
 		F59C5CFA02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditPercentage.api;
 			path = Components/ERD2WEditPercentage.api;
 			refType = 2;
 		};
 		F59C5CFB02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditString.api;
 			path = Components/ERD2WEditString.api;
 			refType = 2;
 		};
 		F59C5CFC02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditToManyRelationship.api;
 			path = Components/ERD2WEditToManyRelationship.api;
 			refType = 2;
 		};
 		F59C5CFD02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditToOneRelationship.api;
 			path = Components/ERD2WEditToOneRelationship.api;
 			refType = 2;
 		};
 		F59C5CFE02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditURL.api;
 			path = Components/ERD2WEditURL.api;
 			refType = 2;
 		};
 		F59C5CFF02C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditYesNo.api;
 			path = Components/ERD2WEditYesNo.api;
 			refType = 2;
 		};
 		F59C5D0002C4667201000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingListPageTemplate.api;
 			path = Components/ERD2WGroupingListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0102C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingListXMLPageTemplate.api;
 			path = Components/ERD2WGroupingListXMLPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0202C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WGroupingPrinterFriendlyListPageTemplate.api;
 			path = Components/ERD2WGroupingPrinterFriendlyListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0302C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WInspect.api;
 			path = Components/ERD2WInspect.api;
 			refType = 2;
 		};
 		F59C5D0402C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WInspectPageTemplate.api;
 			path = Components/ERD2WInspectPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0502C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WKeyMapper.api;
 			path = Components/ERD2WKeyMapper.api;
 			refType = 2;
 		};
 		F59C5D0602C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListComparePageTemplate.api;
 			path = Components/ERD2WListComparePageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0702C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListPageTemplate.api;
 			path = Components/ERD2WListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0802C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WListXMLPageTemplate.api;
 			path = Components/ERD2WListXMLPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0902C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WMessagePageTemplate.api;
 			path = Components/ERD2WMessagePageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0A02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPick.api;
 			path = Components/ERD2WPick.api;
 			refType = 2;
 		};
 		F59C5D0B02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickFromEntities.api;
 			path = Components/ERD2WPickFromEntities.api;
 			refType = 2;
 		};
 		F59C5D0C02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickFromList.api;
 			path = Components/ERD2WPickFromList.api;
 			refType = 2;
 		};
 		F59C5D0D02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickListPageTemplate.api;
 			path = Components/ERD2WPickListPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0E02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPickTypePageTemplate.api;
 			path = Components/ERD2WPickTypePageTemplate.api;
 			refType = 2;
 		};
 		F59C5D0F02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPopUp.api;
 			path = Components/ERD2WPopUp.api;
 			refType = 2;
 		};
 		F59C5D1002C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPrinterFriendlyInspectPageTemplate.api;
 			path = Components/ERD2WPrinterFriendlyInspectPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D1102C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPrinterFriendlyListTemplate.api;
 			path = Components/ERD2WPrinterFriendlyListTemplate.api;
 			refType = 2;
 		};
 		F59C5D1202C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WPropertyName.api;
 			path = Components/ERD2WPropertyName.api;
 			refType = 2;
 		};
 		F59C5D1302C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryNonNull.api;
 			path = Components/ERD2WQueryNonNull.api;
 			refType = 2;
 		};
 		F59C5D1402C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPageTemplate.api;
 			path = Components/ERD2WQueryPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D1502C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPageWithFetchSpecification.api;
 			path = Components/ERD2WQueryPageWithFetchSpecification.api;
 			refType = 2;
 		};
 		F59C5D1602C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryPageWithFetchSpecificationTemplate.api;
 			path = Components/ERD2WQueryPageWithFetchSpecificationTemplate.api;
 			refType = 2;
 		};
 		F59C5D1702C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WQueryToOneRelationship.api;
 			path = Components/ERD2WQueryToOneRelationship.api;
 			refType = 2;
 		};
 		F59C5D1802C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WStatelessCustomComponentWithArgs.api;
 			path = Components/ERD2WStatelessCustomComponentWithArgs.api;
 			refType = 2;
 		};
 		F59C5D1902C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WSwitchComponent.api;
 			path = Components/ERD2WSwitchComponent.api;
 			refType = 2;
 		};
 		F59C5D1A02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WTabInspectPageTemplate.api;
 			path = Components/ERD2WTabInspectPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D1B02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WTwoLevelEditToOneRelationship.api;
 			path = Components/ERD2WTwoLevelEditToOneRelationship.api;
 			refType = 2;
 		};
 		F59C5D1C02C4667301000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WWizardCreationPageTemplate.api;
 			path = Components/ERD2WWizardCreationPageTemplate.api;
 			refType = 2;
 		};
 		F59C5D1D02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WXMLDisplayNumber.api;
 			path = Components/ERD2WXMLDisplayNumber.api;
 			refType = 2;
 		};
 		F59C5D1E02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WXMLDisplayString.api;
 			path = Components/ERD2WXMLDisplayString.api;
 			refType = 2;
 		};
 		F59C5D1F02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WXMLDisplayToMany.api;
 			path = Components/ERD2WXMLDisplayToMany.api;
 			refType = 2;
 		};
 		F59C5D2002C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDConfirmMessage.api;
 			path = Components/ERDConfirmMessage.api;
 			refType = 2;
 		};
 		F59C5D2102C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDCustomQueryComponentWithArgs.api;
 			path = Components/ERDCustomQueryComponentWithArgs.api;
 			refType = 2;
 		};
 		F59C5D2202C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDebuggingHelp.api;
 			path = Components/ERDDebuggingHelp.api;
 			refType = 2;
 		};
 		F59C5D2302C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultCustomComponent.api;
 			path = Components/ERDDefaultCustomComponent.api;
 			refType = 2;
 		};
 		F59C5D2402C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultSectionComponent.api;
 			path = Components/ERDDefaultSectionComponent.api;
 			refType = 2;
 		};
 		F59C5D2502C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultSectionComponentCSV.api;
 			path = Components/ERDDefaultSectionComponentCSV.api;
 			refType = 2;
 		};
 		F59C5D2602C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDefaultSectionComponentPrinterFriendly.api;
 			path = Components/ERDDefaultSectionComponentPrinterFriendly.api;
 			refType = 2;
 		};
 		F59C5D2702C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDHTMLComponent.api;
 			path = Components/ERDDHTMLComponent.api;
 			refType = 2;
 		};
 		F59C5D2802C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayImageIfExists.api;
 			path = Components/ERDDisplayImageIfExists.api;
 			refType = 2;
 		};
 		F59C5D2902C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayMailTo.api;
 			path = Components/ERDDisplayMailTo.api;
 			refType = 2;
 		};
 		F59C5D2A02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDisplayYearsMonths.api;
 			path = Components/ERDDisplayYearsMonths.api;
 			refType = 2;
 		};
 		F59C5D2B02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditButton.api;
 			path = Components/ERDEditButton.api;
 			refType = 2;
 		};
 		F59C5D2C02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDateJavascript.api;
 			path = Components/ERDEditDateJavascript.api;
 			refType = 2;
 		};
 		F59C5D2D02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDatePopup.api;
 			path = Components/ERDEditDatePopup.api;
 			refType = 2;
 		};
 		F59C5D2E02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditDatePopupOrNull.api;
 			path = Components/ERDEditDatePopupOrNull.api;
 			refType = 2;
 		};
 		F59C5D2F02C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditList.api;
 			path = Components/ERDEditList.api;
 			refType = 2;
 		};
 		F59C5D3002C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditListButton.api;
 			path = Components/ERDEditListButton.api;
 			refType = 2;
 		};
 		F59C5D3102C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditOwnedRelationship.api;
 			path = Components/ERDEditOwnedRelationship.api;
 			refType = 2;
 		};
 		F59C5D3202C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditPasswordConfirm.api;
 			path = Components/ERDEditPasswordConfirm.api;
 			refType = 2;
 		};
 		F59C5D3302C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditStringWithChoices.api;
 			path = Components/ERDEditStringWithChoices.api;
 			refType = 2;
 		};
 		F59C5D3402C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEditYearsMonths.api;
 			path = Components/ERDEditYearsMonths.api;
 			refType = 2;
 		};
 		F59C5D3502C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEmptyListMessage.api;
 			path = Components/ERDEmptyListMessage.api;
 			refType = 2;
 		};
 		F59C5D3602C4667401000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDEmptyPageWrapper.api;
 			path = Components/ERDEmptyPageWrapper.api;
 			refType = 2;
 		};
 		F59C5D3702C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDFilterDisplayGroupButton.api;
 			path = Components/ERDFilterDisplayGroupButton.api;
 			refType = 2;
 		};
 		F59C5D3802C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDInspect.api;
 			path = Components/ERDInspect.api;
 			refType = 2;
 		};
 		F59C5D3902C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDLinkToViewList.api;
 			path = Components/ERDLinkToViewList.api;
 			refType = 2;
 		};
 		F59C5D3A02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDList.api;
 			path = Components/ERDList.api;
 			refType = 2;
 		};
 		F59C5D3B02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDListOrganizer.api;
 			path = Components/ERDListOrganizer.api;
 			refType = 2;
 		};
 		F59C5D3C02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDListPicker.api;
 			path = Components/ERDListPicker.api;
 			refType = 2;
 		};
 		F59C5D3D02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDMassModifyButton.api;
 			path = Components/ERDMassModifyButton.api;
 			refType = 2;
 		};
 		F59C5D3E02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPrinterButton.api;
 			path = Components/ERDPrinterButton.api;
 			refType = 2;
 		};
 		F59C5D3F02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDPrinterFriendlyWrapper.api;
 			path = Components/ERDPrinterFriendlyWrapper.api;
 			refType = 2;
 		};
 		F59C5D4002C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQueryDateRangeJavascript.api;
 			path = Components/ERDQueryDateRangeJavascript.api;
 			refType = 2;
 		};
 		F59C5D4102C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDQuestionPage.api;
 			path = Components/ERDQuestionPage.api;
 			refType = 2;
 		};
 		F59C5D4202C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDRecoverableErrorPage.api;
 			path = Components/ERDRecoverableErrorPage.api;
 			refType = 2;
 		};
 		F59C5D4302C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSectionImage.api;
 			path = Components/ERDSectionImage.api;
 			refType = 2;
 		};
 		F59C5D4402C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSectionText.api;
 			path = Components/ERDSectionText.api;
 			refType = 2;
 		};
 		F59C5D4502C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabImage.api;
 			path = Components/ERDTabImage.api;
 			refType = 2;
 		};
 		F59C5D4602C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTabText.api;
 			path = Components/ERDTabText.api;
 			refType = 2;
 		};
 		F59C5D4702C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDTrashcan.api;
 			path = Components/ERDTrashcan.api;
 			refType = 2;
 		};
 		F59C5D4802C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDXMLPageWrapper.api;
 			path = Components/ERDXMLPageWrapper.api;
 			refType = 2;
 		};
 		F59C5D4902C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERXD2WInspect.api;
 			path = Components/ERXD2WInspect.api;
 			refType = 2;
 		};
 		F59C5D4A02C4667501000102 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERXD2WList.api;
 			path = Components/ERXD2WList.api;
@@ -6777,6 +7177,7 @@
 				F5A1470A01FF7F8801A80106,
 				F587AD4D02063F5701A80106,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			knownRegions = (
 				English,
@@ -7027,7 +7428,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5A1454E01FF7F8801A80106 = {
 			isa = PBXTargetDependency;
@@ -7100,7 +7500,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5A1455001FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7365,6 +7764,8 @@
 				9D8628B0034E51C110CF0E7D,
 				F5E94DDE038C3D5101CF0E76,
 				F5E94DE3038C3DB101CF0E76,
+				9405BE5C03C9FC9600CF0E7D,
+				9405BE6803C9FE1E00CF0E7D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7574,6 +7975,7 @@
 				9D8078530360BD4610CF0E7D,
 				F5E94DA8038C045301CF0E76,
 				F5E94DE1038C3D9E01CF0E76,
+				9405BE5D03C9FC9600CF0E7D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7725,7 +8127,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5A146EC01FF7F8801A80106 = {
 			buildActionMask = 2147483647;
@@ -7955,6 +8356,7 @@
 			};
 		};
 		F5E94DA7038C045301CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDDelayedObjectCreationAssignment.java;
 			path = er/directtoweb/ERDDelayedObjectCreationAssignment.java;
@@ -8000,6 +8402,7 @@
 			};
 		};
 		F5E94DE0038C3D9E01CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WList.java;
 			path = er/directtoweb/ERD2WList.java;
@@ -8012,6 +8415,7 @@
 			};
 		};
 		F5E94DE2038C3DB101CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WList.api;
 			path = Components/ERD2WList.api;
@@ -8098,6 +8502,7 @@
 			refType = 2;
 		};
 		F5ED7AE40340E87101CF0E76 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDBranchDelegateInterface.java;
 			path = er/directtoweb/ERDBranchDelegateInterface.java;
@@ -8114,12 +8519,14 @@
 //F63
 //F64
 		F639B94B02EF32F00FCF0E72 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDebugFlags.api;
 			path = Components/ERD2WDebugFlags.api;
 			refType = 2;
 		};
 		F639B94D02EF33040FCF0E72 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WDebugFlags.java;
 			path = er/directtoweb/ERD2WDebugFlags.java;
@@ -8170,6 +8577,7 @@
 			};
 		};
 		F686D4E4033285420FCF0E72 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERDSortedManyToManyAssignment.java;
 			path = er/directtoweb/ERDSortedManyToManyAssignment.java;
@@ -8182,6 +8590,7 @@
 			};
 		};
 		F6A30E2C02F8BFCB0FCF0E72 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditRelationshipPage.java;
 			path = er/directtoweb/ERD2WEditRelationshipPage.java;
@@ -8194,6 +8603,7 @@
 			};
 		};
 		F6B41515032D7E020FCF0E72 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ERD2WEditSortedManyToManyPage.java;
 			path = er/directtoweb/ERD2WEditSortedManyToManyPage.java;
@@ -8206,6 +8616,7 @@
 			};
 		};
 		F6B782B70345524F01257492 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Properties;
 			path = Resources/Properties;
@@ -8597,6 +9008,7 @@
 				F6E7964902C877AF01AD0D07,
 				F6E7964A02C877AF01AD0D07,
 				F6E7964B02C877AF01AD0D07,
+				9405BE5403C9FC9600CF0E7D,
 				F6E7964C02C877AF01AD0D07,
 				F6E7964D02C877AF01AD0D07,
 				F6E7964E02C877AF01AD0D07,
