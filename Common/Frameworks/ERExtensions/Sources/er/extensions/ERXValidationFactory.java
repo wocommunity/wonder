@@ -215,12 +215,25 @@ public class ERXValidationFactory {
     }
 
     /**
+     * Decides if an existing {@link ERXValidationException ERXValidationException}
+     * should be re-created. This is useful if you have several subclasses of
+     * exceptions for different types of objects or messages and the framework can
+     * only convert to the base type given the information it has at that point.
+     * @param erv previous validation exception
+     * @param value value that failed validating
+     * @return yes if the exception should be recreated
+     */
+    public boolean shouldRecreateException(ERXValidationException erv, Object value) {
+        return false;
+    }
+
+    /**
      * Creates a custom validation exception for a given
      * enterprise object and method. This method is just
      * a cover method for calling the four arguement method
      * specifying <code>null</code> for proptery and value.
      * @param eo enterprise object failing validation
-     * @param name of the method to use to look up the validation
+     * @param name name of the method to use to look up the validation
      *		exception template, for instance "FirstNameCanNotMatchLastNameValidationException"
      * @return a custom validation exception for the given criteria
      */
@@ -296,8 +309,12 @@ public class ERXValidationFactory {
             }
         } else {
             ERXValidationException original = (ERXValidationException)eov;
-            erve = createException(original.eoObject(), original.key(), original.value(), original.type());
-            log.debug("Converting exception: " + original + " value: " + (original.value() != null ? original.value() : "<NULL>"));
+            if(shouldRecreateException(original, value)) {
+                erve = createException(original.eoObject(), original.key(), original.value(), original.type());
+                log.debug("Converting exception: " + original + " value: " + (original.value() != null ? original.value() : "<NULL>"));
+            } else {
+                erve = original;
+            }
         }
         if (erve == null) {
             log.error("Unable to convert validation exception: " + eov, eov);
