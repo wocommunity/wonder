@@ -55,9 +55,7 @@
     project directory will be put into the <code>CPFileList.txt</code> file.<br>
 </ul>
 That's all. Now build your app, make a change in Main.java and reload. You should 
-see the changed version and a message from ERXCompilerProxy in the console. (Temp 
-Note: PBX April beta does not find the opened projects, you either need the patched 
-PBXUtil class, use the december tools or wait for Jaguar) 
+see the changed version and a message from ERXCompilerProxy in the console.
 <h2>What it does</h2>
 <p>The ERXCompilerProxy does several things to works it's magic. First, on startup, it registers for the <code>ApplicationDidFinishLaunching</code> Notification. When the App starts, it reads the <code>CPFileList.txt</code> files from your <b>currently opened</b> projects to find out about the files to watch. So remember to have your framework projects open in PB.</p>
 <p>It also registers for the <code>ApplicationWillDispatchRequest</code> Notification, which gets triggered whenever a page is requested. It tries to compile the files that have changed and throws an Exception describing the errors if there where any and then aborts further handling of the request - you will get an error from your browser. However, if everything went well, it creates a new ClassLoader and throws away the component definition cache and a few other things. Then, when the next "pageWithName" is called, the updated class will be used.</p>
@@ -77,7 +75,7 @@ PBXUtil class, use the december tools or wait for Jaguar)
     are in a package hierarchy and you have a KeyValueCodingProtectedAccessor 
     subclass for this package. 
   <li>You must have the respective projects opened in Project Builder. If you 
-    don't, ERXCompilerProxy can't find the sources. 
+    don't, ERXCompilerProxy can't find the sources. Alternately, you can set the NSProjectSearchPath argument.
   <li>You must reload after making changes and before stopping your application, 
     because the file modification times are read only at start. If you stop the 
     application before reloading, your last changes will not be recognized. 
@@ -88,6 +86,22 @@ PBXUtil class, use the december tools or wait for Jaguar)
   <li>If you make changes in your EO's classes, you should definitely restart 
     your application after pressing reload. You may seriously mess up your data 
     if you have a mix of previously instaniated Objects and new ones. 
+  <li>Try not to use casts, use WOComponents and KeyValueCoding instead. Say you 
+    have a List page and a Detail page and you change the Detail page. Further 
+    you have code like:<br>
+    <pre>    public WOComponent detailsAction() {
+    	Details newPage = (Details)pageWithName(&quot;Details&quot;);
+    	newPage.setObject(currentObject);
+    	return newPage;
+    } </pre>
+    <br>
+    This doesn't work because List and the reference to Details is in the old 
+    class loader, but pageWithName() instantiates from the new class loader. Rather use this code:
+    <pre>    public WOComponent detailsAction() {
+    	WOComponent newPage = pageWithName(&quot;Details&quot;);
+    	newPage.takeValueForKey(currentObject, "object");
+    	return newPage;
+    } </pre>
 </ul>
 
 
