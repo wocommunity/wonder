@@ -6,13 +6,13 @@
 <!-- Called from "build.xml", normally shouldn't be used as   --> 
 <!-- a standalone buildfile.                                  -->
 <!-- ======================================================== -->
-<project name="wonder-fr" default="frameworks" basedir="..">  
+<project name="wonder-fr" default="frameworks" basedir="../..">  
   
     <!-- ==================================================== -->
     <!--              CLASSPATH settings                      -->
     <!-- ==================================================== -->
     <path id="classpath">
-        <fileset dir="lib">
+        <fileset dir="Build/lib">
             <include name="woproject.jar"/>
             <include name="cayenne.jar"/>
             <include name="log4j*.jar"/>
@@ -37,7 +37,7 @@
         </taskdef>
         
 		<woframework name="ERJarsJava" destDir="${dist}/Frameworks">
-			<lib dir="Frameworks/ERJarsJava">
+			<lib dir="Common/Frameworks/ERJarsJava">
 				<include name="*.jar"/>
 			</lib>
 		</woframework>
