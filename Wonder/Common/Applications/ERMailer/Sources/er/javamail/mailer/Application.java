@@ -58,8 +58,8 @@ public class Application extends ERXApplication {
      * <b>er.javamail.mailer.ERBatchMailerDaemonFrequency</b>
      */
     public void didFinishLaunching() {
-        //if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail"));
-        //    testSendingMail();
+        if (ERXProperties.booleanForKey("er.javamail.mailer.ERTestSendingMail"));
+            testSendingMail();
         int frequency = ERXProperties.intForKey("er.javamail.mailer.ERBatchMailerDaemonFrequency");
         if (frequency > 0) {
             log.debug("Scheduling timer for frequency: " + frequency + "(s)");
