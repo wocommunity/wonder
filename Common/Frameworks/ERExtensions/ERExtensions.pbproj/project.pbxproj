@@ -376,8 +376,6 @@
 				F59C586602C4565701000102,
 				F59C586702C4565701000102,
 				F59C586802C4565701000102,
-				F59C586902C4565701000102,
-				F59C586A02C4565701000102,
 				F59C586B02C4565701000102,
 				F59C586C02C4565701000102,
 				F59C586D02C4565701000102,
@@ -4723,18 +4721,6 @@
 			path = Sources/er/extensions/ERXSession.java;
 			refType = 2;
 		};
-		F59C57DA02C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXSessionAddition.java;
-			path = Sources/er/extensions/ERXSessionAddition.java;
-			refType = 2;
-		};
-		F59C57DB02C4565701000102 = {
-			isa = PBXFileReference;
-			name = ERXSessionAdditionInterface.java;
-			path = Sources/er/extensions/ERXSessionAdditionInterface.java;
-			refType = 2;
-		};
 		F59C57DC02C4565701000102 = {
 			isa = PBXFileReference;
 			name = ERXSharedEOLoader.java;
@@ -5529,18 +5515,6 @@
 		};
 		F59C586802C4565701000102 = {
 			fileRef = F59C57D902C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C586902C4565701000102 = {
-			fileRef = F59C57DA02C4565701000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F59C586A02C4565701000102 = {
-			fileRef = F59C57DB02C4565701000102;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6489,7 +6463,6 @@
 				F59C57C202C4565701000102,
 				F54C4C5B02C4E2A001000102,
 				F59C57D902C4565701000102,
-				F59C57DA02C4565701000102,
 				F59C57E102C4565701000102,
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
@@ -6502,7 +6475,6 @@
 			children = (
 				F59C579902C4565701000102,
 				F54C4C5D02C4E2F101000102,
-				F59C57DB02C4565701000102,
 			);
 			isa = PBXGroup;
 			name = "WOF Interfaces";
