@@ -117,7 +117,3 @@ SectionRepetition: WORepetition {
 SectionTitle: WOString {
 	value = sectionTitle;
 }
-
-String1: WOString {
-	value = sectionsContents.count;
-}
