@@ -41,29 +41,40 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent  {
         //takeValueForKey(null,"_entityName");
         // Finalizing a context is a protected method, hence the utiltiy.
         //ERD2WUtilities.finalizeContext((D2WContext)valueForKey("subContext"));
-        //takeValueForKey(null,"_context");
+    	//takeValueForKey(null,"_context");
+   	
+    	//HACK HACK HACK ak: When you have several embedded list components in a tab page
+    	// D2W gets very confused about the keys. It will assume that the objects on the second tab somehow belong to the first
+    	// resetting the cache when setting a new page configuration prevents this
+    	D2WContext subContext = (D2WContext)valueForKey("subContext");
+    	ERD2WUtilities.resetContextCache(subContext);
+    	subContext.setDynamicPage((String)valueForBinding("_dynamicPage"));
     }
 
     private String _pageConfiguration;
     public void maybeResetCaches() {
-        String currentPageConfiguration=(String)valueForBinding("_dynamicPage");
-        log.debug("currentPageConfiguration="+ currentPageConfiguration + ", _pageConfiguration="+ _pageConfiguration);
-        if (_pageConfiguration!=null &&
-            currentPageConfiguration!=null &&
-            !_pageConfiguration.equals(currentPageConfiguration))
-            resetCaches();
-        if (currentPageConfiguration!=null) _pageConfiguration=currentPageConfiguration;
+    	String currentPageConfiguration=(String)valueForBinding("_dynamicPage");
+    	if (_pageConfiguration!=null &&
+    			currentPageConfiguration!=null &&
+				!_pageConfiguration.equals(currentPageConfiguration)) {
+    		resetCaches();
+    	}
+    	if (currentPageConfiguration!=null) _pageConfiguration=currentPageConfiguration;
     }
-
+    
     public void appendToResponse(WOResponse r, WOContext c) {
-        try {
-            maybeResetCaches();
-            super.appendToResponse(r,c);
-        } catch(Exception ex) {
-            ERDirectToWeb.reportException(ex, subContext());
-        }
+    	try {
+    		maybeResetCaches();
+    		super.appendToResponse(r,c);
+    	} catch(Exception ex) {
+    		ERDirectToWeb.reportException(ex, subContext());
+    	}
     }
-
+    public D2WContext subContext() {
+    	D2WContext context = super.subContext();
+    	if(log.isDebugEnabled()) log.debug(hashCode() + ": context: " + context);
+		return context;
+    }
     public void validationFailedWithException(Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e, value, keyPath);
     }
