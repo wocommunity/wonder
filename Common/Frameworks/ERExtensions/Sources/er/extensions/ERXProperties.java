@@ -272,6 +272,16 @@ public class ERXProperties {
     }
 
     /**
+     * Cover method for returning a long for a
+     * given system property.
+     * @param s system property
+     * @return long value of the system property or 0
+     */
+    public static long longForKey(String s) {
+        return longForKeyWithDefault(s, 0);
+    }
+
+    /**
      * Cover method for returning a BigDecimal for a
      * given system property. This method uses the
      * method <code>bigDecimalValueWithDefault</code> from
@@ -307,6 +317,17 @@ public class ERXProperties {
      */    
     public static int intForKeyWithDefault(String s, int defaultValue) {
         return ERXValueUtilities.intValueWithDefault(System.getProperty(s), defaultValue);        
+    }
+
+    /**
+     * Cover method for returning a long for a
+     * given system property with a default value.
+     * @param s system property
+     * @param defaultValue default value
+     * @return long value of the system property or the default value
+     */    
+    public static long longForKeyWithDefault(String s, long defaultValue) {
+        return ERXValueUtilities.longValueWithDefault(System.getProperty(s), defaultValue);        
     }
     
     /**
