@@ -596,7 +596,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * Determines if this object is a new object and
+        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
+     */
+    public boolean isNewEO() {
+        return isNewObject();
+    }
+
+    /**
+        * Determines if this object is a new object and
      * hasn't been saved to the database yet. This
      * method just calls the method ERExtensions.isNewObject
      * passing in this object as the current parameter. Note
@@ -605,10 +612,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * a null editingcontext.
      * @return if the object is a new enterprise object.
      */
-    public boolean isNewEO() {
+
+    public boolean isNewObject() {
         return ERXExtensions.isNewObject(this);
     }
-
+    
+    
     /**
      * Called by an observer after an editing context has
      * successfully saved changes to a database. This method
@@ -761,40 +770,22 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     // These methods are used to catch the classic mistake of:
     // public String foo() { return (String)valueForKey("foo"); }
     // CHECKME: These methods need a once over as they have a boat load more stuff in them than I remember.
-/*
+
     public Object storedValueForKey(String key) {
         // FIXME: turn this off during production
         if (!allPropertyKeys().containsObject(key))
             throw new RuntimeException("********* Tried to access storedValueForKey on "+entityName()+" on a non class property: "+key);
         Object value = super.storedValueForKey(key);
-        if (toManyRelationshipKeys().containsObject(key)) {
-            if (value instanceof EONullValue) {
-                System.err.println(entityName() + ".storedValueForKey(" + key + ") = EONullValue");
-            }
-            if (value == null) {
-                System.err.println(entityName() + ".storedValueForKey(" + key + ") = null");
-            }
-        }
         return value;
     }
-    public void takeStoredValueForKey(Object value, String key) {
+
+ public void takeStoredValueForKey(Object value, String key) {
         // FIXME: turn this off during production
         if (!allPropertyKeys().containsObject(key)) {
-            System.err.println("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
             throw new RuntimeException("********* Tried to takeStoredValueForKey on "+entityName()+" on a non class property: "+key);
-        }
-        if (value == null && toManyRelationshipKeys().containsObject(key)) {
-            System.err.println(new RuntimeException("********* Tried to takeStoredValueForKey of null on "
-                                                    +entityName()+" on a toManyRelationship key: "+key));
-        }
-        if (value != null &&
-            (value instanceof EONullValue) &&
-            toManyRelationshipKeys().containsObject(key)) {
-            System.err.println( new RuntimeException("********* Tried to takeStoredValueForKey of EONullValue on "+entityName()
-                                                     +" on a toManyRelationship key: "+key));
         }
         super.takeStoredValueForKey(value,key);
     }
-*/
+
 
 }
