@@ -1,23 +1,28 @@
-{
-    /*
-       This file describes the keys (methods and variables) that are exported 
-       as possible bindings for a WebObject of this component type. Any keys
-       listed here will appear in the bindings inspector in WebObjectsBuilder.
-       The format is a comma separated list of strings:
-         (key1, key2, key3)
-       The required bindings should list any that must have values for the
-       component to function correctly. The optional list is for those bindings
-       which are not needed by the component (i.e. can be nil/null) but can be
-       used to supply additional information to the component.
-    */
-    Required = (criteriaArray, attributeArray, objects, plistString, pathString
-	);
-    Optional = (recordGroupTotalToShow,
-	selectedRecordGroupDisplayType, 
-	selectedReportStyle, 
-	showCustomReportStyle, 
-	showNavigation,
-	showPresentationControls,
-	showRecordGroupAsTable, 
-	showRecordGroupHeadings);
-}
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="WRQuickReport" wocomponentcontent="true">
+
+		<binding name="reportDictionary"/>
+		<binding name="objects"/>
+		<binding name="dataSource"/>
+		<binding name="attributeArray"/>
+		<binding name="criteriaArray"/>
+		<binding name="modelDictionary"/>
+		<binding name="pathString"/>
+		<binding name="plistString"/>
+		<binding name="recordGroupTotalToShow"/>
+		<binding name="recordGroupTotalFormat"/>
+		<binding name="selectedRecordGroupDisplayType"/>
+		<binding name="selectedReportStyle"/>
+		<binding name="showCustomReportStyle" defaults="Boolean"/>
+		<binding name="showNavigation" defaults="Boolean"/>
+		<binding name="showPresentationControls" defaults="Boolean"/>
+		<binding name="showRecordGroupAsTable" defaults="Boolean"/>
+		<binding name="showRecordGroupHeadings" defaults="Boolean"/>
+		<binding name="showTopCriteriaLabel" defaults="Boolean"/>
+
+		<validation message="&apos;objects&apos; is a required binding">
+			<unbound name="objects"/>
+		</validation>
+	</wo>
+</wodefinitions>

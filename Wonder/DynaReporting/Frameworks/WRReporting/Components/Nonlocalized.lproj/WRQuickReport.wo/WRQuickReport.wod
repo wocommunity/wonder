@@ -1,8 +1,10 @@
-
+ComponentContent1: WOComponentContent {
+}
 
 report: WRReport { 
 	model = model; 
 	recordGroupTotalToShow = ^recordGroupTotalToShow; 
+	recordGroupTotalFormat = ^recordGroupTotalFormat;
 	selectedRecordGroupDisplayType = ^selectedRecordGroupDisplayType; 
 	selectedReportStyle = ^selectedReportStyle; 
 	showCustomReportStyle = ^showCustomReportStyle; 
@@ -11,4 +13,9 @@ report: WRReport {
 	showRecordGroupAsTable = ^showRecordGroupAsTable; 
 	showRecordGroupHeadings = ^showRecordGroupHeadings; 
 	colors=^colors;
+	showTopCriteriaLabel = ^showTopCriteriaLabel;
+	recordGroupComponentName = ^recordGroupComponentName;
+	keysInV = ^keysInV;
+	keysInH = ^keysInH;
+	keysInZ = ^keysInZ;
 }
