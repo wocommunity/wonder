@@ -43,6 +43,14 @@ er.extensions.ERXLocalizer.fileNamesToWatch=("Localizable.strings","ValidationTe
 er.extensions.ERXLocalizer.availableLanguages=(English,German)
 er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERDirectToWeb,ERExtensions)
 
+You can provide your own plural strings by using a dict entry
+
+  localizerExceptions = {"Foo.0"="Foo"; "Foo" = "Foos"; ...};
+
+in your Localizable.strings. <code>Foo.0</code> meaning no "Foo", <code>Foo.1</code> one foo and <code>Foo</code> any other number.
+NOTE: unlike all other keys, you need to give the translated value ("Foo" in German) as the key, not the untranlasted one. This is
+becuase this method is mainly called via d2wContext.displayNameForProperty which is already localized.
+
 TODO: chaining of Localizers
 */
 
@@ -76,28 +84,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             ERXLocalizer.resetCache();
             NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
         }
-
-        public void compilerProxyDidCompileClasses(NSNotification n) {
-            // ENHANCEME: Should deal with ERXLocalizer subclasses too. 
-            if (! ERXCompilerProxy.isClassContainedBySet("er.extensions.ERXLocalizer", (NSSet)n.object())) {
-                return;
-            }
-            ERXLocalizer.resetCache();
-            NSNotificationCenter.defaultCenter().postNotification(LocalizationDidResetNotification, null);
-        }
     }
 
     public static void initialize() {
         if (!isInitialized) {
             isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
-            if (isLocalizationEnabled) {
-                // To detect ERXLocalizer and its subclasses are recompiled at run-time.
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("compilerProxyDidCompileClasses",
-                                                                                ERXConstant.NotificationClassArray),
-                                                                 ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
-                                                                 null);
-            }
             isInitialized = true;
         }
     }
@@ -160,6 +151,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizerForLanguage(defaultLanguage());
     }
     
+    /**
+     * Gets the localizer for a session. 
+     * @param session
+     * @return
+     */
     public static ERXLocalizer localizerForSession(Object session) {
         if(session instanceof ERXSession) return ((ERXSession)session).localizer();
         if(session instanceof WOSession) return localizerForLanguages(((WOSession)session).languages());
@@ -197,6 +193,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
     
+    /**
+     * Gets the best localizer for a set of languages.
+     * @param languages
+     * @return
+     */
     public static ERXLocalizer localizerForLanguages(NSArray languages) {
         if (! isLocalizationEnabled)   
             return createLocalizerForLanguage("Nonlocalized", false);
@@ -245,14 +246,22 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return l;
     }
-
-
+    
+    /**
+     * Returns the default language (English) or the contents of the 
+     * <code>er.extensions.ERXLocalizer.defaultLanguage</code> property.
+     * @return
+     */
     public static String defaultLanguage() {
         if (defaultLanguage == null) {
             defaultLanguage = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer.defaultLanguage", "English");
         }
         return defaultLanguage;
     }
+    /**
+     * Sets the default language.
+     * @param value
+     */
     public static void setDefaultLanguage(String value) {
         defaultLanguage = value;
         resetCache();
@@ -529,7 +538,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return key;
     }
 
-    private String _plurify(String s, int howMany) {
+    protected String plurify(String s, int howMany) {
         String result=s;
         if (s!=null && howMany!=1) {
             if (s.endsWith("y"))
@@ -546,7 +555,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return result;
     }
 
-    private String _singularify(String value) {
+    protected String singularify(String value) {
         String result = value;
         if (value!=null) {
             if (value.endsWith("ies"))
@@ -566,9 +575,27 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                                               new Object[] {"pluralString", "pluralCount"});
         return localizedTemplateStringForKeyWithObjectOtherObject(key, dict, helper);
     }
-
+    
+    /**
+     * Returns a plurified string
+     * @param name
+     * @param count
+     * @return
+     */
     public String plurifiedString(String name, int count) {
-        return _plurify(name, count);
+        if(name != null) {
+            NSKeyValueCoding exceptions = (NSKeyValueCoding) valueForKey("localizerExceptions");
+            if(exceptions != null) {
+                String exception = (String) exceptions.valueForKey(name + "." + count);
+                if(exception == null) {
+                    exception = (String) exceptions.valueForKey(name);
+                }
+                if(exception != null) {
+                    return exception;
+                }
+            }
+        }
+        return plurify(name, count);
     }
     
     public String toString() { return "<" + getClass().getName() + " " + language + ">"; }
