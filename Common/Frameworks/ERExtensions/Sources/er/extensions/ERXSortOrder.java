@@ -111,7 +111,7 @@ public class ERXSortOrder extends WOSortOrder {
     }
     
     public String frameworkName() {
-        return hasCustomImageNameForCurrentState() ? (hasBinding("frameworkName") ? (String)valueForBinding("frameworkName") : null) : "WOExtensions";
+        return hasCustomImageNameForCurrentState() ? (hasBinding("frameworkName") ? (String)valueForBinding("frameworkName") : null) : "JavaWOExtensions";
     }
 
     public String unsortedImageName() { return hasBinding("unsortedImageName") ? (String)valueForBinding("unsortedImageName") : "Unsorted.gif"; }

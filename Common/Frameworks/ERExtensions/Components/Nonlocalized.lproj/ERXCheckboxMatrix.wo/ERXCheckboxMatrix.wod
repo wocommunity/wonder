@@ -14,7 +14,6 @@ CheckBoxRepetition: ERXTable {
 	list = maybeSortedList;
 	maxColumns = ^maxColumns;
 	tableWidth = 0;
-	WODebug = false;
 	border = 0;
 	goingVertically = ^goingVertically;
 }
