@@ -8,7 +8,6 @@ package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.ERXValueUtilities;
 
