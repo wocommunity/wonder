@@ -25,23 +25,25 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     protected String day;
     protected String month;
     protected String year;
+    protected String currentMonth;
     protected NSMutableArray yearList;
     protected static NSArray monthList;
+    protected NSArray monthNameList;
     protected static NSArray dayList;
 
     protected static final NSTimestampFormatter DAY_FORMAT =
         new NSTimestampFormatter("%d");
     protected static final NSTimestampFormatter MONTH_FORMAT =
-        new NSTimestampFormatter("%b");
+        new NSTimestampFormatter("%m");
     protected static final NSTimestampFormatter YEAR_FORMAT =
         new NSTimestampFormatter("%Y");
     protected static final NSTimestampFormatter TIME_FORMAT =
         new NSTimestampFormatter("%H:%M");
     protected static final NSTimestampFormatter ALL_FORMAT =
-        new NSTimestampFormatter("%d %b %Y");
+        new NSTimestampFormatter("%d %m %Y");
 
     protected static final NSTimestampFormatter ALL_FORMAT_AND_TIME =
-        new NSTimestampFormatter("%d %b %Y %H:%M");
+        new NSTimestampFormatter("%d %m %Y %H:%M");
 
     protected String time;
 
@@ -55,6 +57,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
         day=null;
         month=null;
         year=null;
+        monthNameList = null;
     }
 
     public NSArray dayList() {
@@ -68,11 +71,18 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
         return dayList;
     }
 
+    public NSArray monthNameList() {
+        if (monthNameList == null) {
+            monthNameList = (NSArray)ERXLocalizer.currentLocalizer().valueForKey("ERDDatePopup.monthList");
+        }
+        return monthNameList;
+    }
+
     public NSArray monthList() {
         if (monthList == null) {
             monthList = new NSArray(new Object[] {
-                "Jan","Feb","Mar","Apr","May","Jun",
-                "Jul","Aug","Sep","Oct","Nov","Dec"
+                "01","02","03","04","05","06",
+                "07","08","09","10","11","12"
             });
         }
         return monthList;
@@ -124,6 +134,10 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     }
     public void setDay(String newDay) throws Exception { day = newDay; }
 
+    public String monthName() throws Exception {
+        return (String)monthNameList().objectAtIndex(Integer.parseInt(currentMonth)-1);
+    }
+    
     public String month() throws Exception {
         NSTimestamp date = (NSTimestamp)objectPropertyValue();
         if (date != null)
