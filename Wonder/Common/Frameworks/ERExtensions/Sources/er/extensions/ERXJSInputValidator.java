@@ -75,6 +75,8 @@ public class ERXJSInputValidator extends WOComponent {
         Class clazz = classForCurrentItem();
         boolean canBlur = WOText.class.isAssignableFrom(clazz);
         canBlur |= WOTextField.class.isAssignableFrom(clazz);
+        canBlur |= ERXWOText.class.isAssignableFrom(clazz);
+        canBlur |= ERXWOTextField.class.isAssignableFrom(clazz);
         return canBlur;
     }
 }
