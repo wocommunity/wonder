@@ -308,6 +308,10 @@
 				4198E3CA052634260048E379,
 				41D6423705CF9CC600BB3C39,
 				41D6423805CF9CC600BB3C39,
+				41ECD1CA079FBFDC00E8D65A,
+				41ECD1CB079FBFDC00E8D65A,
+				4148FB730805497300F0229B,
+				4148FB740805497300F0229B,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,6 +535,8 @@
 				44BF5503076A11EE007EDBCB,
 				44BF5504076A11EE007EDBCB,
 				448647E5076F592100AF8000,
+				41ECD1CC079FBFDC00E8D65A,
+				4148FB750805497300F0229B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1624,6 +1630,72 @@
 			settings = {
 			};
 		};
+		4148FB6E0805497200F0229B = {
+			children = (
+				4148FB6F0805497200F0229B,
+				4148FB700805497200F0229B,
+				4148FB720805497200F0229B,
+			);
+			isa = PBXGroup;
+			name = ERXSLTWrapper;
+			path = "";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4148FB6F0805497200F0229B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERXSLTWrapper.api;
+			path = Components/ERXSLTWrapper.api;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4148FB700805497200F0229B = {
+			children = (
+				4148FB710805497200F0229B,
+			);
+			isa = PBXVariantGroup;
+			name = ERXSLTWrapper.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4148FB710805497200F0229B = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXSLTWrapper.wo;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4148FB720805497200F0229B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXSLTWrapper.java;
+			path = Sources/er/extensions/ERXSLTWrapper.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4148FB730805497300F0229B = {
+			fileRef = 4148FB6F0805497200F0229B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4148FB740805497300F0229B = {
+			fileRef = 4148FB700805497200F0229B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4148FB750805497300F0229B = {
+			fileRef = 4148FB720805497200F0229B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4150A86E050324B700000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1916,7 +1988,6 @@
 		};
 		419935750528DDCB0081353A = {
 			children = (
-				44BF54FC076A11EE007EDBCB,
 				44BF54FA076A11EE007EDBCB,
 				44BF54F5076A11EE007EDBCB,
 				F59C577802C4565601000102,
@@ -1941,6 +2012,7 @@
 				F54C4C5702C4E24A01000102,
 				F54C4C5802C4E24A01000102,
 				F50C03910354549D014B9BC9,
+				44BF54FC076A11EE007EDBCB,
 				F522D6CC03A0397701CAC43C,
 				F59BE09403A5883C01CF0E76,
 				416E92DA05E4BD3800F3D01E,
@@ -2200,6 +2272,72 @@
 		};
 		41E8155A04F05D5B00A88C3C = {
 			fileRef = 41E8155904F05D5B00A88C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41ECD1C5079FBFDC00E8D65A = {
+			children = (
+				41ECD1C6079FBFDC00E8D65A,
+				41ECD1C7079FBFDC00E8D65A,
+				41ECD1C9079FBFDC00E8D65A,
+			);
+			isa = PBXGroup;
+			name = ERXCachingWrapper;
+			path = "";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		41ECD1C6079FBFDC00E8D65A = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERXCachingWrapper.api;
+			path = Components/ERXCachingWrapper.api;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41ECD1C7079FBFDC00E8D65A = {
+			children = (
+				41ECD1C8079FBFDC00E8D65A,
+			);
+			isa = PBXVariantGroup;
+			name = ERXCachingWrapper.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41ECD1C8079FBFDC00E8D65A = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERXCachingWrapper.wo;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41ECD1C9079FBFDC00E8D65A = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXCachingWrapper.java;
+			path = Sources/er/extensions/ERXCachingWrapper.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		41ECD1CA079FBFDC00E8D65A = {
+			fileRef = 41ECD1C6079FBFDC00E8D65A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41ECD1CB079FBFDC00E8D65A = {
+			fileRef = 41ECD1C7079FBFDC00E8D65A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		41ECD1CC079FBFDC00E8D65A = {
+			fileRef = 41ECD1C9079FBFDC00E8D65A;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -9597,8 +9735,10 @@
 		};
 		F6E798C902C8799401AD0D07 = {
 			children = (
+				4148FB6E0805497200F0229B,
 				F6E798A102C8799401AD0D07,
 				F6E798A202C8799401AD0D07,
+				41ECD1C5079FBFDC00E8D65A,
 				F6E798D002C8799401AD0D07,
 				F6E798A302C8799401AD0D07,
 				F6E798A402C8799401AD0D07,
