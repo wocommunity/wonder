@@ -123,9 +123,9 @@ public  class ERXRequest extends WORequest {
         try {
             languages=languages.sortedArrayUsingComparator(COMPARE_Qs);
         } catch (NSComparator.ComparisonException e) {
-            log.error("Couldn't sort language array "+languages+": "+e);
+            log.warn("Couldn't sort language array "+languages+": "+e);
         } catch (NumberFormatException e2) {
-            log.error("Couldn't sort language array "+languages+": "+e2);
+            log.warn("Couldn't sort language array "+languages+": "+e2);
         }
         NSMutableArray nsmutablearray = new NSMutableArray(languages.count());
         int cnt = languages.count();
