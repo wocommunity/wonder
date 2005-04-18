@@ -112,7 +112,7 @@ public class ERXProperties extends Properties {
     /**
      * Returns the version string of the given framework.
      * It checks <code>SourceVersion</code> property
-     * in the <code>info.plist</code> resource and returns
+     * in the <code>version.plist</code> resource and returns
      * a trimmed version of the value.
      *
      * @return version number as string; can be null-string when
@@ -124,8 +124,10 @@ public class ERXProperties extends Properties {
      * @see #webObjectsVersion
      */
     public static String sourceVersionString() {
-        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework
-        ("version.plist", "JavaWebObjects", (NSArray)null);
+        NSBundle bundle = NSBundle.bundleForName("JavaWebObjects");
+        if (bundle == null)  return "";
+        String dictString = new String(bundle.bytesForResourcePath("version.plist"));
+        NSDictionary versionDictionary = NSPropertyListSerialization.dictionaryForString(dictString);
 
         String versionString = (String) versionDictionary.objectForKey("SourceVersion");
         return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
