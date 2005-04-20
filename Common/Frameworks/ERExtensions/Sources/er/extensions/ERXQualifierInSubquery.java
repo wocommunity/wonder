@@ -132,7 +132,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
             sb.append(e.sqlStringForAttribute(pk));            
         }
         sb.append(" IN ( ");
-        EOEntity entity=entityName == null ? e.entity() : e.entity().model().entityNamed(entityName);
+        EOEntity entity=entityName == null ? e.entity() : e.entity().model().modelGroup().entityNamed(entityName);
 
         EOFetchSpecification fs=new EOFetchSpecification(entity.name(),
                                                          qualifier,
