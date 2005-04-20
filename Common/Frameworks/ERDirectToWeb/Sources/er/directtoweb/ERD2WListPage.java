@@ -290,7 +290,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                 NSArray sortOrderings=sortOrderings();
                 setSortOrderingsOnDisplayGroup(sortOrderings, dg);
                 dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-                dg.fetch();
+		// Disabling to prevent double fetching
+                //dg.fetch();
                 dg.updateDisplayedObjects();
                 _hasBeenInitialized=true;
             }
