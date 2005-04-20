@@ -6,11 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
-
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import java.util.Enumeration;
 
 /**
  * Generates a subquery for the qualifier given in argument
@@ -133,7 +132,7 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
             sb.append(e.sqlStringForAttribute(pk));            
         }
         sb.append(" IN ( ");
-        EOEntity entity=entityName == null ? e.entity() : e.entity().model().entityNamed(entityName);
+        EOEntity entity=entityName == null ? e.entity() : e.entity().model().modelGroup().entityNamed(entityName);
 
         EOFetchSpecification fs=new EOFetchSpecification(entity.name(),
                                                          qualifier,
