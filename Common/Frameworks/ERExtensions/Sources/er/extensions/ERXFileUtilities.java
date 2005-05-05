@@ -822,18 +822,19 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Generate an MD5 hash from a file.
+     * Generate an MD5 hash from a file.
      *
      * @param file the file to sum
      * @return the MD5 sum of the bytes in file
      * @exception IOException
      */
     public static byte[] md5(File file) throws IOException {
+        FileInputStream fis = new FileInputStream(file);
         try {
-            java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");
-            return md5.digest(bytesFromFile(file));
-        } catch (java.security.NoSuchAlgorithmException e) {
-            throw new NSForwardException(e);
+            return md5(fis);            
+        }
+        finally {
+            fis.close();
         }
     }
 
@@ -846,8 +847,14 @@ public class ERXFileUtilities {
      */
     public static byte[] md5(InputStream in) throws IOException {
         try {
-            java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");
-            return md5.digest(bytesFromInputStream(in));
+            java.security.MessageDigest md5 = java.security.MessageDigest.getInstance("MD5");            
+            byte[] buf = new byte[50 * 1024];
+            int numRead;
+            
+            while ((numRead = in.read(buf)) != -1) {
+                md5.update(buf, 0, numRead);
+            }
+            return md5.digest();
         } catch (java.security.NoSuchAlgorithmException e) {
             throw new NSForwardException(e);
         }
