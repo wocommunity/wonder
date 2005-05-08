@@ -31,6 +31,8 @@ public class ERXStringUtilities {
     /** Holds the ascending <code>EOSortOrdering</code>s */
     public static final NSArray SORT_DESCENDING = 
         new NSArray(new Object [] { new EOSortOrdering(_DISTANCE, EOSortOrdering.CompareDescending) });
+    /** Holds characters that have special meaning for regex */
+    public static final String SpecialRegexCharacters        = ".*[]{}()?\\_+%$!@^";
     
     /** 
      * Holds the array of default display languages. Holds
@@ -844,6 +846,21 @@ public class ERXStringUtilities {
             if (!Character.isDigit(c)) return false;
         }
         return true;
+    }
+
+    /** checks if the String contains a character that has a special meaning
+     * in regex. This could used to ensure that username and passwords have no
+     * such characters.
+     * 
+     * @param s the string to check
+     * @return <code>true</code> if s contains one or multiple characters that have special
+     * meanings in regex.
+     */
+    public static boolean stringContainsSpecialRegexCharacters(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (SpecialRegexCharacters.indexOf(s.charAt(i)) > -1) { return true; }
+        }
+        return false;
     }
     
 }
