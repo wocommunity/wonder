@@ -36,12 +36,16 @@ import er.extensions.*;
  * In addition, you can specify an attribute in any &lt;table&gt;, &lt;tr&gt;, &lt;th&gt; and &lt;td&gt; tag,
  * when this happens a new style is created and it applies to the contents of this tag.<br />
  * The value is copied as text from the cell's content, so you better take care that it is parsable
- * and matches the <code>cellStyle</code> and <code>cellFormat</code> definition.
+ * and matches the <code>cellStyle</code> and <code>cellFormat</code> definition.<br />
  * 
- * A client would use this class like: 
+ * The parser also supports the <code>some-name</code> attribute names in addition to <code>someName</code> as using the <b>Reformat</b> command
+ * in WOBuilder messes up the case of the tags. When used in .wod files, the attributes must be enclosed in quotes 
+ * (<code>"cell-type"=foo;</code>). Some care must be taken when the attributes in the current node override the ones 
+ * from the parent as this is not thouroughly tested.<br />
+ * A client would use this class like: <pre><code>
  * EGSimpleTableParser parser = new EGSimpleTableParser(new ByteArrayInputStream(someContentString));
  * NSData result = parser.data();
- * 
+ * </code></pre>
  * @author ak
  */
 public class EGSimpleTableParser {
@@ -100,19 +104,75 @@ public class EGSimpleTableParser {
     private String nodeValueForKey(Node node, String key, String defaultValue) {
     	NamedNodeMap attributes = node.getAttributes();
     	String result = defaultValue;
-    	
-		if(attributes.getNamedItem(key) != null) {
-			result = attributes.getNamedItem(key).getNodeValue();
-                    if (result == null || result.length() == 0) {
-                        result = defaultValue;
-                    }
+        
+        if(attributes.getNamedItem(key) != null) {
+            result = attributes.getNamedItem(key).getNodeValue();
+            if (result == null || result.length() == 0) {
+                result = defaultValue;
+            }
 		}    
 		return result;
 	}
     
+    private String keyPathToAttributeString(String aString) {
+        int i, cnt = aString.length();
+        StringBuffer result = new StringBuffer(cnt*2);
+        for(i = 0; i < cnt; i++) {
+            char c = aString.charAt(i);
+            if(Character.isUpperCase(c)) {
+                result.append('-');
+                result.append(Character.toLowerCase(c));
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+    
+    private String attributeStringToKeyPath(String aString) {
+        int i, cnt = aString.length();
+        boolean upperNext = false;
+        StringBuffer result = new StringBuffer(cnt*2);
+        for(i = 0; i < cnt; i++) {
+            char c = aString.charAt(i);
+            if(upperNext) {
+                if(Character.isLowerCase(c)) {
+                    c = Character.toUpperCase(c);
+                }
+                result.append(c);
+                upperNext = false;
+            } else if(c == '-') {
+                upperNext = true;
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+    
+    /**
+     * @param fontDictionary
+     * @param tableNode
+     */
+    private void addEntriesFromNode(NSMutableDictionary dictionary, Node node) {
+        NamedNodeMap attributes = node.getAttributes();
+        for(int i = 0; i < attributes.getLength(); i ++) {
+            Node n = attributes.item(i);
+            String key = attributeStringToKeyPath(n.getNodeName());
+            String value = n.getNodeValue();
+            if("".equals(value)) {
+                dictionary.removeObjectForKey(key);
+            } else {
+                dictionary.setObjectForKey(value, key);
+            }
+        }
+    }
+
     private String dictValueForKey(NSDictionary dict, String key, String defaultValue) {
     	String result = (String)dict.objectForKey(key);
-    	
+    	if(result == null) {
+            result = (String)dict.objectForKey(keyPathToAttributeString(key));
+        }
 		if(result == null) {
 			result = defaultValue;
 		}    
@@ -467,21 +527,4 @@ public class EGSimpleTableParser {
     	return cellStyle;
     }
     
-    /**
-	 * @param fontDictionary
-	 * @param tableNode
-	 */
-	private void addEntriesFromNode(NSMutableDictionary dictionary, Node node) {
-		NamedNodeMap attributes = node.getAttributes();
-		for(int i = 0; i < attributes.getLength(); i ++) {
-			Node n = attributes.item(i);
-			String key = n.getNodeName();
-			String value = n.getNodeValue();
-			if("".equals(value)) {
-				dictionary.removeObjectForKey(key);
-			} else {
-				dictionary.setObjectForKey(value, key);
-			}
-		}
-	}
 }
