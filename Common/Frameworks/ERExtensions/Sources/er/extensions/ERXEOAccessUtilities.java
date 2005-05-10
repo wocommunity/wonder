@@ -735,7 +735,9 @@ public class ERXEOAccessUtilities {
             EORelationship rel = entity.anyRelationshipNamed(key);
             if(rel == null) {
                 if(entity.anyAttributeNamed(key) == null) {
-                    log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
+                    if(key.indexOf("@") != 0) {
+                        log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
+                    }
                 }
                 return null;
             }
