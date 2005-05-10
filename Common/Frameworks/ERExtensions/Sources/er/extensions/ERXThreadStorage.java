@@ -6,7 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for
  * a particular thread. This can be especially handy for storing objects
@@ -42,7 +45,27 @@ public class ERXThreadStorage {
     }
 
     /**
-     * Gets the object associated with the key in the storage
+     * Gets the object associated with the keypath in the storage
+     * map off of the current thread.
+     * @param keypath key path to be used to retrieve value from map.
+     * @return the value stored in the map for the given key.
+     */
+    public static Object valueForKeyPath(String keyPath) {
+        int dot = keyPath.indexOf(".");
+        Object value = null;
+        if(dot > 1) {
+            value = valueForKey(keyPath.substring(0, dot));
+            if(value != null) {
+                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keyPath.substring(dot+1));
+            }
+        } else {
+            value = valueForKey(keyPath);
+        }
+        return value;
+    }
+    
+    /**
+        * Gets the object associated with the key in the storage
      * map off of the current thread.
      * @param key key to be used to retrieve value from map.
      * @return the value stored in the map for the given key.
@@ -51,7 +74,7 @@ public class ERXThreadStorage {
         Map map = storageMap(false);
         return map != null ? map.get(key) : null;
     }
-
+    
     /**
      * Gets the storage map from the current thread.
      * At the moment this Map is syncronized for thread
