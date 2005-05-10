@@ -603,7 +603,7 @@ public class ERXFileUtilities {
                     if (srcFile.isDirectory() && recursiveCopy) {
                         // Create the destination directory
                         if (deleteOriginals) {
-                            srcFile.renameTo(dstFile);
+                            renameTo(srcFile, dstFile);
                         } else {
                             dstFile.mkdir();
                             copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, recursiveCopy, filter);
