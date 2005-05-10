@@ -14,46 +14,54 @@ import java.util.*;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
-/** KVC access to localization.
-Monitors a set of files in all frameworks and returns a string given a key for a language.
-In the current state, it's more a stub for things to come.
-
-These types of keys are acceptable in the monitored files:
-
-    "this is a test" = "some test";
-    "unittest.key.path.as.string" = "some test";
-    "unittest" = {"key" = { "path" = { "as" = {"dict"="some test";};};};};
-
-Note that if you only call for "unittest", you'll get a dictionary. So you can localize more complex objects than strings.
-
-If you set the base class of your session to ERXSession, you can then use this code in your components:
-
-   valueForKeyPath("session.localizer.this is a test")
-   valueForKeyPath("session.localizer.unittest.key.path.as.string")
-   valueForKeyPath("session.localizer.unittest.key.path.as.dict")
-
-For sessionless Apps, you must use another method to get at the requested language and then call the localizer via
-
-  ERXLocalizer l = ERXLocalizer.localizerForLanguages(languagesThisUserCanHandle) or
-  ERXLocalizer l = ERXLocalizer.localizerForLanguage("German")
-
-These defaults can be set (listed with their current defaults):
-
-er.extensions.ERXLocalizer.defaultLanguage=English
-er.extensions.ERXLocalizer.fileNamesToWatch=("Localizable.strings","ValidationTemplate.strings")
-er.extensions.ERXLocalizer.availableLanguages=(English,German)
-er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERDirectToWeb,ERExtensions)
-
-You can provide your own plural strings by using a dict entry
-
-  localizerExceptions = {"Foo.0"="Foo"; "Foo" = "Foos"; ...};
-
-in your Localizable.strings. <code>Foo.0</code> meaning no "Foo", <code>Foo.1</code> one foo and <code>Foo</code> any other number.
-NOTE: unlike all other keys, you need to give the translated value ("Foo" in German) as the key, not the untranlasted one. This is
-becuase this method is mainly called via d2wContext.displayNameForProperty which is already localized.
-
-TODO: chaining of Localizers
-*/
+/** 
+ * Provides KVC access to localization.
+ *  
+ * Monitors a set of files in all loaded frameworks and returns a string given a key for a language.
+ * These types of keys are acceptable in the monitored files: <pre><code>
+ *   "this is a test" = "some test";
+ *   "unittest.key.path.as.string" = "some test";
+ *   "unittest" = {
+ *      "key" = { 
+ *          "path" = { 
+ *              "as" = {
+ *                  "dict"="some test";
+ *               };
+ *          };
+ *      };
+ *   };
+ * </code></pre>
+ * Note that if you only call for <code>unittest</code>, you'll get a dictionary not a string. So you can localize more 
+ * complex objects than strings. <br />
+ * If you set the base class of your session to ERXSession, you can then use this code in your components:<pre><code>
+ *  valueForKeyPath("session.localizer.this is a test")
+ *  valueForKeyPath("session.localizer.unittest.key.path.as.string")
+ *  valueForKeyPath("session.localizer.unittest.key.path.as.dict")
+ * </code></pre>
+ * For sessionless Apps, you must use another method to get at the requested language and 
+ * then call the localizer via:<pre><code>
+ *  ERXLocalizer l = ERXLocalizer.localizerForLanguages(languagesThisUserCanHandle) or
+ *  ERXLocalizer l = ERXLocalizer.localizerForLanguage("German")
+ * </code></pre>
+ * These are the defaults can be set (listed with their current defaults):<pre><code>
+ *  er.extensions.ERXLocalizer.defaultLanguage=English
+ *  er.extensions.ERXLocalizer.fileNamesToWatch=("Localizable.strings","ValidationTemplate.strings")
+ *  er.extensions.ERXLocalizer.availableLanguages=(English,German)
+ *  er.extensions.ERXLocalizer.frameworkSearchPath=(app,ERDirectToWeb,ERExtensions)
+ *</code></pre>
+ * There are also methods that pluralize using normal english pluralizing rules (y->ies, x -> xes etc). 
+ * You can provide your own plural strings by using a dict entry: <pre><code>
+ *  localizerExceptions = {
+ *      "Table.0" = "Table"; 
+ *      "Table" = "Tables";
+ *      ...
+ *  };
+ * </code></pre>
+ * in your Localizable.strings. <code>Table.0</code> meaning no "Table", <code>Table.1</code> one table and <code>Table</code> 
+ * any other number. <b>Note:</b> unlike all other keys, you need to give the translated value ("Tisch" for "Table" in German) as the key, not the 
+ * untranslated one. This is because this method is mainly called via d2wContext.displayNameForProperty 
+ * which is already localized. <br />
+ */
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     
@@ -163,11 +171,13 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(session instanceof NSDictionary) {
             NSDictionary dict = ((NSDictionary)session);
             Object l = dict.valueForKey("localizer");
-            if(l != null)
+            if(l != null) {
                 return (ERXLocalizer)l;
+            }
             Object language = dict.valueForKey("language");
-            if(language != null)
+            if(language != null) {
                 return localizerForLanguage((String)language);
+            }
         }
         return localizerForLanguage(defaultLanguage());
     }
@@ -464,8 +474,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                 String firstComponent = key.substring(0, indexOfDot);
                 String otherComponents = key.substring(indexOfDot+1, key.length());
                 result = cache.objectForKey(firstComponent);
-                if(log.isDebugEnabled())
+                if(log.isDebugEnabled()) {
                     log.debug("Trying " + firstComponent + " . " + otherComponents);
+                }
                 if(result != null) {
                     try {
                         result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
@@ -485,9 +496,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return result;
     }
+
     public void takeValueForKey(Object value, String key) {
         cache.setObjectForKey(value, key);
     }
+    
     public void takeValueForKeyPath(Object value, String key) {
         cache.setObjectForKey(value, key);
     }
@@ -502,8 +515,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         Object result = localizedValueForKey(key);
         if(result == null) {
-            if(createdKeysLog.isDebugEnabled())
+            if(createdKeysLog.isDebugEnabled()) {
                 createdKeysLog.debug("Default key inserted: '"+key+"'/"+language);
+            }
             cache.setObjectForKey(key, key);
             createdKeys.setObjectForKey(key, key);
             result = key;
@@ -516,8 +530,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(key == null || result == NOT_FOUND) return null;
         if(result != null) return result;
 
-        if(createdKeysLog.isDebugEnabled())
+        if(createdKeysLog.isDebugEnabled()) {
             log.debug("Key not found: '"+key+"'/"+language);
+        }
         cache.setObjectForKey(NOT_FOUND, key);
         return null;
     }
