@@ -893,11 +893,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             Object defaultValue = this.stringValue;
             if(stringValue.startsWith("@threadStorage.")) {
                 String keyPath = stringValue.substring("@threadStorage.".length());
-                defaultValue = ERXThreadStorage.valueForKey(keyPath);
-                if(keyPath.indexOf(".") > 0) {
-                    keyPath = stringValue.substring(keyPath.indexOf(".")+1);
-                    defaultValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(defaultValue, keyPath);
-                }
+                defaultValue = ERXThreadStorage.valueForKeyPath(keyPath);
             } else {
                 // nothing for strings so far...
             }
