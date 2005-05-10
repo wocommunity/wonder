@@ -3,9 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		013357CCFF5DD5F011CD2B9D = {
+			buildSettings = {
+			};
 			buildStyles = (
 				01A3BF6FFFB0C37D11CD2B9D,
 				01A3BF70FFB0C37D11CD2B9D,
@@ -42,6 +44,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		013357CEFF5DD64811CD2B9D = {
 			children = (
@@ -51,6 +54,7 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		013357D6FF5DD68111CD2B9D = {
 			children = (
@@ -60,10 +64,9 @@
 			isa = PBXGroup;
 			name = "Web Components";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		015E5C37FFDDB4DD11CD2B8D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a+rX";
@@ -84,24 +87,24 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/ComputeTargetClasspath.sh\" \"NO\" \"${SERVER_UNIQUIFIER}\"";
 		};
 		017C60B1FFD2F2BB7F000001 = {
-			isa = PBXBundleReference;
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)EGSampleApp.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C60B2FFD2F2BB7F000001 = {
-			isa = PBXBundleReference;
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)EGSampleApp.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C60B4FFD2F2BB7F000001 = {
 			buildPhases = (
@@ -112,10 +115,11 @@
 				0171C3300017AA3E11CD2B8D,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\" /Volumes/Home/Roots";
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -230,12 +234,13 @@
 			);
 			buildSettings = {
 				BUILD_CLIENT_LAUNCH_SCRIPT = NO;
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				CLIENT_UNIQUIFIER = Client;
 				COMPILE_JAVA_SOURCES_IN_NIB_FILES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_CLASSES = BOTH;
 				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = WebServerResources;
 				JAVA_ONLY = YES;
 				JAVA_SOURCE_SUBDIR = .;
@@ -314,9 +319,11 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		017C60FFFFD43DA37F000001 = {
-			isa = PBXApplicationReference;
+			explicitFileType = wrapper.application;
+			isa = PBXFileReference;
 			path = EGSampleApp.woa;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C6100FFD43DA37F000001 = {
 			buildPhases = (
@@ -333,7 +340,7 @@
 				APPLICATION_DIR_MACOS = "$(CONTENTS_DIR)/MacOS";
 				APPLICATION_DIR_UNIX = "$(CONTENTS_DIR)/UNIX";
 				APPLICATION_DIR_WINDOWS = "$(CONTENTS_DIR)/Windows";
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(WRAPPER_DIR)/Contents";
 				COPY_PHASE_STRIP = NO;
@@ -421,10 +428,12 @@
 		017C6101FFD43DA37F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C60B4FFD2F2BB7F000001;
+			targetProxy = 4193D27F0815013400706566;
 		};
 		017C6102FFD43DA37F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C60D6FFD2F2BB7F000001;
+			targetProxy = 4193D2800815013400706566;
 		};
 		017C6103FFD43DA37F000001 = {
 			buildActionMask = 2147483647;
@@ -458,11 +467,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleApplication.sh\"";
@@ -471,35 +476,36 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Create the run scripts and classpath files for all platforms\n. \"${BUILD_FILES_DIR}/CreateRunFiles.sh\"";
 		};
 		01A3BF6FFFB0C37D11CD2B9D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		01A3BF70FFB0C37D11CD2B9D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -508,11 +514,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
@@ -524,6 +526,7 @@
 			name = Interfaces;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //010
 //011
@@ -536,10 +539,12 @@
 //023
 //024
 		022D13060059B68211CD2978 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		022D13070059B68211CD2978 = {
 			fileRef = 022D13060059B68211CD2978;
@@ -638,30 +643,39 @@
 			name = Frameworks;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		096CB46FFF7BFC8111CD2B9D = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		096CB471FF7BFD6311CD2B9D = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		096CB472FF7BFD6311CD2B9D = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		096CB473FF7BFD6311CD2B9D = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 //090
 //091
@@ -681,6 +695,7 @@
 			isa = PBXGroup;
 			name = Intermediates;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //0B0
 //0B1
@@ -698,6 +713,7 @@
 			isa = PBXGroup;
 			name = "Web Server Resources";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		15D0BC7BFF5EC4B811CD2B9D = {
 			children = (
@@ -708,6 +724,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //150
 //151
@@ -723,11 +740,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\nif [ \"${BUILD_CLIENT_LAUNCH_SCRIPT}\" = \"YES\" ]; then\n    . \"${BUILD_FILES_DIR}/ComputeTargetClasspath.sh\" \"YES\" \"${CLIENT_UNIQUIFIER}\"\nfi";
@@ -750,13 +763,16 @@
 			name = SampleTable.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41004ACC05F791AD00EF4E33 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/SampleTable.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41004AD105F791AD00EF4E33 = {
 			fileRef = 41004ACB05F791AD00EF4E33;
@@ -765,9 +781,11 @@
 			};
 		};
 		41004AD205F7999F00EF4E33 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ExcelGenerator.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		41004AD305F7999F00EF4E33 = {
 			fileRef = 41004AD205F7999F00EF4E33;
@@ -794,44 +812,51 @@
 			name = "Ant App";
 			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
-			settingsToExpand = 6;
-			settingsToPassInEnvironment = 287;
-			settingsToPassOnCommandLine = 280;
 		};
 		4164D8CA05F77CBD00BD460D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Application.java;
 			path = er/excel/Application.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8CB05F77CBD00BD460D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = DirectAction.java;
 			path = er/excel/DirectAction.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8CC05F77CBD00BD460D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = er/excel/KeyValueCodingProtectedAccessor.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8CD05F77CBD00BD460D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Main.java;
 			path = Sources/er/excel/Main.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8CE05F77CBD00BD460D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Session.java;
 			path = er/excel/Session.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8CF05F77CBD00BD460D = {
 			fileRef = 4164D8CA05F77CBD00BD460D;
@@ -866,9 +891,11 @@
 		4164D8F905F77F8F00BD460D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			name = Styles.plist;
 			path = Resources/Styles.plist;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8FA05F77F8F00BD460D = {
 			fileRef = 4164D8F905F77F8F00BD460D;
@@ -886,20 +913,25 @@
 			name = SampleTable;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D8FC05F7812B00BD460D = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = SampleTable.api;
 			path = Components/SampleTable.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D90205F7812B00BD460D = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = SampleTable.java;
 			path = Sources/er/excel/SampleTable.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4164D90305F7812B00BD460D = {
 			fileRef = 4164D8FC05F7812B00BD460D;
@@ -913,6 +945,20 @@
 			settings = {
 			};
 		};
+		4193D27F0815013400706566 = {
+			containerPortal = 013357CCFF5DD5F011CD2B9D;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C60B4FFD2F2BB7F000001;
+			remoteInfo = "Application Server";
+		};
+		4193D2800815013400706566 = {
+			containerPortal = 013357CCFF5DD5F011CD2B9D;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C60D6FFD2F2BB7F000001;
+			remoteInfo = "Web Server";
+		};
 //410
 //411
 //412
@@ -925,9 +971,11 @@
 //C64
 		C65E1ED80072974704CD2B8D = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
 			name = WOAfile.icns;
 			path = Resources/WOAfile.icns;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		C65E1ED90072974704CD2B8D = {
 			fileRef = C65E1ED80072974704CD2B8D;
@@ -949,20 +997,18 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". ${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
 		};
 		F55FCB7E0273548001000105 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F55FCB890273548001000105 = {
 			fileRef = F55FCB7E0273548001000105;
@@ -971,10 +1017,12 @@
 			};
 		};
 		F55FCB90027354F701000105 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F55FCB91027354F701000105 = {
 			fileRef = F55FCB90027354F701000105;
@@ -992,16 +1040,21 @@
 			isa = PBXGroup;
 			path = Sources;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DDF0D902EEFB8901795284 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERExtensions.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5DDF0DB02EEFB8901795284 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5DDF0DF02EEFB8901795284 = {
 			fileRef = F5DDF0D902EEFB8901795284;
@@ -1024,13 +1077,16 @@
 			isa = PBXGroup;
 			name = Main;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DDF0E302EEFBCD01795284 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = Main.api;
 			path = Components/Main.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DDF0E402EEFBCD01795284 = {
 			fileRef = F5DDF0E302EEFBCD01795284;
@@ -1046,13 +1102,16 @@
 			name = Main.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5DDF0E602EEFBD801795284 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/Main.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5DDF0EF02EEFBD801795284 = {
 			fileRef = F5DDF0E502EEFBD801795284;
