@@ -5,7 +5,8 @@ import com.webobjects.foundation.*;
 
 /**
  * Client side part of the JavaScript validation.
- * Simply wrap your text-based input component with this component and whenever the user leaves the field, the value is validated via a RPC call on the server side and an error message is displayed if it does not validate.
+ * Simply wrap your text-based input component with this component and whenever the user leaves the field, 
+ * the value is validated via a RPC call on the server side and an error message is displayed if it does not validate.
  *
  * @binding keyName the key to validate against
  * @binding entityName the entity to validate against
