@@ -3,11 +3,9 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a+rX";
@@ -25,18 +23,23 @@
 			name = WebServer;
 		};
 		017C7B2CFFD7144B7F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERChangeNotificationJMS.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2DFFD7144B7F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERChangeNotificationJMS.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2EFFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B2FFFD7144B7F000001;
+			targetProxy = 4101D794081F74E4005DCDFD;
 		};
 		017C7B2FFFD7144B7F000001 = {
 			buildPhases = (
@@ -171,6 +174,7 @@
 		017C7B35FFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B36FFD7144B7F000001;
+			targetProxy = 4101D793081F74E4005DCDFD;
 		};
 		017C7B36FFD7144B7F000001 = {
 			buildPhases = (
@@ -277,11 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
@@ -320,11 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
@@ -340,10 +336,12 @@
 //023
 //024
 		022D130B0059B6D511CD2978 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		022D130C0059B6D611CD2978 = {
 			fileRef = 022D130B0059B6D511CD2978;
@@ -374,6 +372,7 @@
 			name = "Web Server Resources";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		04B9D3C4FFD8653E11CD2B8D = {
 			fileRef = 40B5828DFFD5E91B7F000001;
@@ -423,6 +422,7 @@
 			isa = PBXGroup;
 			name = Intermediates;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //0B0
 //0B1
@@ -435,6 +435,8 @@
 //403
 //404
 		40B5827EFFD5E7DB7F000001 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				40B5829AFFD5EB0D7F000001,
 				40B5829BFFD5EB0D7F000001,
@@ -463,6 +465,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58280FFD5E8187F000001 = {
 			children = (
@@ -472,11 +475,14 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58281FFD5E8187F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = ERChangeNotificationJMS.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		40B58282FFD5E8187F000001 = {
 			buildPhases = (
@@ -489,7 +495,7 @@
 				01CC6D580020D11E11CD2B8D,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
@@ -614,6 +620,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828CFFD5E91B7F000001 = {
 			children = (
@@ -629,36 +636,47 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828DFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828EFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828FFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58291FFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58292FFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58293FFD5E91B7F000001 = {
 			children = (
@@ -668,29 +686,33 @@
 			isa = PBXGroup;
 			name = Documentation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5829AFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		40B5829BFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -700,6 +722,30 @@
 //402
 //403
 //404
+//410
+//411
+//412
+//413
+//414
+		4101D793081F74E4005DCDFD = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B36FFD7144B7F000001;
+			remoteInfo = "Web Server";
+		};
+		4101D794081F74E4005DCDFD = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B2FFFD7144B7F000001;
+			remoteInfo = "Application Server";
+		};
+//410
+//411
+//412
+//413
+//414
 //770
 //771
 //772
@@ -708,20 +754,26 @@
 		774A641B05FCBC62007CEC6B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNConfigurationV2.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		774A641C05FCBC62007CEC6B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNConfigurationV1.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		774A641D05FCBC62007CEC6B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNConfiguration.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		774A641E05FCBC62007CEC6B = {
 			fileRef = 774A641B05FCBC62007CEC6B;
@@ -744,14 +796,18 @@
 		774A642105FCBC70007CEC6B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNSubscriberDelegate.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		774A642205FCBC70007CEC6B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNConnectionKeeper.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		774A642305FCBC70007CEC6B = {
 			fileRef = 774A642105FCBC70007CEC6B;
@@ -772,6 +828,7 @@
 			isa = PBXGroup;
 			path = StartupItemsMacOSX;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A25A03BFDA5B00257492 = {
 			children = (
@@ -782,12 +839,15 @@
 			isa = PBXGroup;
 			path = OpenJMS;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A25C03BFDA5B00257492 = {
 			fileEncoding = 30;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
 			path = OpenJMS;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A25D03BFDA5B00257492 = {
 			children = (
@@ -796,6 +856,7 @@
 			isa = PBXGroup;
 			path = Resources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A26103BFDA5B00257492 = {
 			children = (
@@ -806,26 +867,33 @@
 			name = Localizable.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A26203BFDA5B00257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/Localizable.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A26403BFDA5B00257492 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = Japanese;
 			path = Japanese.lproj/Localizable.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A26503BFDA5B00257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			path = StartupParameters.plist;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77A5A26803BFDA5B00257492 = {
 			fileRef = 77A5A25C03BFDA5B00257492;
@@ -848,8 +916,10 @@
 		77BC206C03B5303400257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
 			path = rmi_jms_frontbase.xml;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77BC206D03B5303400257492 = {
 			fileRef = 77BC206C03B5303400257492;
@@ -860,8 +930,10 @@
 		77BC206E03B5304000257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
 			path = rmi_jms_postgres.xml;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77BC206F03B5304000257492 = {
 			fileRef = 77BC206E03B5304000257492;
@@ -872,8 +944,10 @@
 		77BC207003B5307100257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = create_frontbase.sql;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77BC207103B5307100257492 = {
 			fileRef = 77BC207003B5307100257492;
@@ -883,10 +957,12 @@
 		};
 		77D32F7904DBF74F00EFBD10 = {
 			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
 			name = jndi_1.2.1.jar;
 			path = Libraries/jndi_1.2.1.jar;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		77D32F7A04DBF75000EFBD10 = {
 			fileRef = 77D32F7904DBF74F00EFBD10;
@@ -908,10 +984,12 @@
 //F64
 		F604989903212E6101257492 = {
 			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
 			name = jms_1.0.2a.jar;
 			path = Libraries/jms_1.0.2a.jar;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F604989B03212E6101257492 = {
 			fileRef = F604989903212E6101257492;
@@ -924,16 +1002,20 @@
 		F6668DED032A9CC701257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = GettingStartedMacOSX.txt;
 			path = Documentation/GettingStartedMacOSX.txt;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6B7839B0345539001257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = Properties;
 			path = Resources/Properties;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6B7839C0345539001257492 = {
 			fileRef = F6B7839B0345539001257492;
@@ -948,6 +1030,7 @@
 			isa = PBXGroup;
 			name = Sources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA02032A532D01257492 = {
 			children = (
@@ -961,18 +1044,23 @@
 			isa = PBXGroup;
 			path = Support;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA03032A532D01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
 			path = rmi_jms_mysql.xml;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA05032A537401257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
 			path = rmi_jms_jdbm.xml;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA07032A547B01257492 = {
 			children = (
@@ -982,6 +1070,7 @@
 			name = er;
 			path = Sources/er;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA09032A547B01257492 = {
 			children = (
@@ -998,30 +1087,39 @@
 			isa = PBXGroup;
 			path = changenotification;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA0B032A547B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNNotificationCoordinator.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA0C032A547B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNPublisher.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA0D032A547B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNSnapshot.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA0E032A547B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERCNSubscriber.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6DCAA11032A547B01257492 = {
 			fileRef = F6DCAA0B032A547B01257492;
@@ -1050,9 +1148,11 @@
 		F6DCAA15032A552A01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = SampleProperties.txt;
 			path = Documentation/SampleProperties.txt;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
