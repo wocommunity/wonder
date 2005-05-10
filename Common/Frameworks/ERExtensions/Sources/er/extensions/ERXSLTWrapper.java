@@ -106,6 +106,8 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
                         System.setProperty("javax.xml.transform.TransformerFactory", oldTransformerFactoryName);
                     }
                     transformer = transformerFactory.newTransformer(xslt);
+                    // transformer.setOutputProperty("indent", "no");
+                    // transformer.setOutputProperty("method", "xml");
                     
                     cache.put(key, transformer);
                 }
@@ -145,16 +147,16 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
             ByteArrayInputStream bis = new ByteArrayInputStream(response.content().bytes());
             saxSource.setInputSource(new InputSource(bis));
             xml = saxSource;
-            //log.info("DOM: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+            log.info("DOM: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
             
             Transformer transformer = transformer();
-            //log.info("Stylesheet: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+            log.info("Stylesheet: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Result result = new StreamResult(os);
             
             transformer.transform(xml, result);
-            //log.info("Transform: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+            log.info("Transform: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
             
             NSData data = new NSData(os.toByteArray());
             return data;
