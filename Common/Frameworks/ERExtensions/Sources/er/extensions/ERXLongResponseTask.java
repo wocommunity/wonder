@@ -115,6 +115,7 @@ public interface ERXLongResponseTask extends Runnable {
 		        log.error("long response thread raised : "+localException.getMessage(), localException);
 		    } finally {
 			    ERXEC.unlockAllContextsForCurrentThread();
+                _thread = null;
 		    }
 		    log.debug("exiting computation thread");
 		    _done = true;
@@ -202,6 +203,7 @@ public interface ERXLongResponseTask extends Runnable {
 		public void stop() {
 			synchronized(this) {
 				_cancelled = true;
+                _thread = null;
 			}
 		}
 
@@ -213,8 +215,9 @@ public interface ERXLongResponseTask extends Runnable {
 			try {
 				if(_thread == null) {
 					_thread = new Thread(this);
-					_thread.start();
+                    _thread.setName(this.toString());
 				}
+                _thread.start();
 			} catch (Exception localException) {
 				throw new NSForwardException(localException, "<ERXLongResponse> Exception occurred while creating long response thread: "+localException.toString());
 			}
