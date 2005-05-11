@@ -75,7 +75,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
     }
 
     public static String toPropertyList(ERXMutableArray array) {
-        return array.toString();
+        return NSPropertyListSerialization.stringFromPropertyList(array);
     }
 
     public NSData toBlob() throws Exception {
