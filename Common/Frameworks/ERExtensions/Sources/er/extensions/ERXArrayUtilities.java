@@ -322,6 +322,17 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Adds the object to the mutable array if the object is not null.
+     * @param array mutable array where non-null object will be added
+     * @param object to be added to array
+     */
+    public static void safeAddObject(NSMutableArray array, Object object) {
+        if (array != null && object != null) {
+            array.addObject(object);
+        }
+    }
+
+    /**
      * Adds all of the non-duplicate elements from the second
      * array to the mutable array.
      * @param a1 mutable array where non-duplicate objects are
@@ -335,36 +346,14 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
-    /**
-     * Recursively flattens an array of arrays into a single
-     * array of elements.<br/>
+    /** 
+     * Recursively flattens an array of arrays and individual
+     * objects into a single array of elements.<br/>
      * <br/>
      * For example:<br/>
      * <code>NSArray foos;</code> //Assume exists<br/>
      * <code>NSArray bars = (NSArray)foos.valueForKey("toBars");</code>
-     * In this case if <code>foos</code> contained five elements
-     * then the array <code>bars</code> will contain five arrays
-     * each corresponding to what <code>aFoo.toBars</code> would
-     * return. To have the entire collection of <code>bars</code>
-     * in one single array you would call:
-     * <code>NSArray allBars = flatten(bars)</code>
-     * @param array to be flattened
-     * @return an array containing all of the elements from
-     *		all of the arrays contained within the array
-     *		passed in.
-     */    
-    public static NSArray flatten(NSArray array) {
-        return flatten(array, false);
-    }
-    
-    /**
-     * Recursively flattens an array of arrays into a single
-     * array of elements.<br/>
-     * <br/>
-     * For example:<br/>
-     * <code>NSArray foos;</code> //Assume exists<br/>
-     * <code>NSArray bars = (NSArray)foos.valueForKey("toBars");</code>
-     * In this case if <code>foos</code> contained five elements
+     * In this case if <code>foos</code> contained five elements 
      * then the array <code>bars</code> will contain five arrays
      * each corresponding to what <code>aFoo.toBars</code> would
      * return. To have the entire collection of <code>bars</code>
@@ -372,38 +361,76 @@ public class ERXArrayUtilities extends Object {
      * <code>NSArray allBars = flatten(bars)</code>
      * @param array to be flattened
      * @param filterDuplicates determines if the duplicate values
-     * 		should be filtered
+     *      should be filtered
      * @return an array containing all of the elements from
-     *		all of the arrays contained within the array
-     *		passed in.
+     *      all of the arrays contained within the array
+     *      passed in. (Optionally, with duplicate elements filtered out)
      */
-    public static NSArray flatten(NSArray array, boolean filterDuplicates) {
-        NSMutableArray newArray = null;
-        for (int i=0; i < array.count(); i++) {
-            Object element = array.objectAtIndex(i);
-            if (element instanceof NSArray) {
-                if (newArray==null) {
-                    newArray = new NSMutableArray();
-                    for (int j = 0; j < i; j++) {
-                        if (array.objectAtIndex(j) != null) {
-                            if (!filterDuplicates || !newArray.containsObject(array.objectAtIndex(j))) {
-                                newArray.addObject(array.objectAtIndex(j));                                
-                            }
-                        }
-                    }
-                }
-                NSArray a = flatten((NSArray)element);
-                for (int j = 0; j < a.count(); j++) {
-                    if (a.objectAtIndex(j) != null) {
-                        if (!filterDuplicates || !newArray.containsObject(array.objectAtIndex(j))) {
-                            newArray.addObject(a.objectAtIndex(j));
-                        }
-                    }
-                }
-            }
+    public static NSArray flatten(NSArray originalArray, boolean filterDuplicates) {
+        NSArray flattenedArray = flatten(originalArray);
+        
+        if (filterDuplicates) {
+            // it should be faster (Approximately O(N*log(N)) vs O(N^2)) to strip the 
+            // duplicates in one pass here rather than piecemeal as we flatten.  
+            // Moreover, until someone actually measures one vs. the other, one pass 
+            // is a lot cleaner and more readable. (Though if someone is sufficently 
+            // motivated, it would be possible to make it fairly readable, piecemeal and 
+            // O(N*log(N)), but it's probably better to optimize arrayWithoutDuplicates
+            // first.)
+            return arrayWithoutDuplicates(flattenedArray);
+        } else {
+            return flattenedArray;
         }
-        return (newArray !=null) ? newArray : array;
     }
+    
+
+    /** 
+     * Recursively flattens an array of arrays and individual
+     * objects into a single array of elements.<br/>
+     * <br/>
+     * For example:<br/>
+     * <code>NSArray foos;</code> //Assume exists<br/>
+     * <code>NSArray bars = (NSArray)foos.valueForKey("toBars");</code>
+     * In this case if <code>foos</code> contained five elements 
+     * then the array <code>bars</code> will contain five arrays
+     * each corresponding to what <code>aFoo.toBars</code> would
+     * return. To have the entire collection of <code>bars</code>
+     * in one single array you would call:
+     * <code>NSArray allBars = flatten(bars)</code>
+     * @param array to be flattened
+     * @return an array containing all of the elements from
+     *      all of the arrays contained within the array
+     *      passed in.
+     */
+    public static NSArray flatten(NSArray originalArray) {
+        if (originalArray == null || originalArray.count() < 1) {
+            return originalArray;
+        }
+        
+        NSMutableArray newArray = null;  // Not gonna create a new array if we don't actually need to flatten
+        for (int i = 0; i < originalArray.count(); i++) {
+            Object element = originalArray.objectAtIndex(i);
+            if (element instanceof NSArray) {
+                if (newArray == null) {
+                    // Turns out we actually need to flatten
+                    newArray = new NSMutableArray();
+                    for (int backfillIndex = 0; backfillIndex < i; backfillIndex++) {
+                        // backfill any singles we put off copying
+                        newArray.addObject(originalArray.objectAtIndex(backfillIndex));
+                    }
+                }
+                
+                NSArray flattenedChildArray = flatten((NSArray)element);
+                newArray.addObjectsFromArray(flattenedChildArray);
+            } else if (newArray != null) {
+                newArray.addObject(element);
+            }  // Otherwise let's put off copying the elment, the backfill section above will take care of it.
+        }
+        
+        // CLEANUP: Arguably safer to return the immutable array we are declared as returning
+        return (newArray != null ? newArray : originalArray);
+    }
+    
 
     /**
      * Creates an NSArray from a resource associated with a given bundle
