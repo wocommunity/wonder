@@ -193,7 +193,7 @@ public final class GSVEntity extends Object implements WOXMLCoding {
                         eoenterpriseobject.valueForKeyPath(attribute.name());
                         
 		    }
-		} catch (com.webobjects.foundation.NSKeyValueCoding$UnknownKeyException e1) {
+		} catch (com.webobjects.foundation.NSKeyValueCoding.UnknownKeyException e1) {
 		    //NSLog.debug.appendln(e1);
 		    NSLog.out.appendln("attribute "+attribute.name() + " does not exist in entity " + name() + " anymore, deleted from Valididy model");
 		    removeAttribute(attribute);
