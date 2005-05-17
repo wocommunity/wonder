@@ -513,6 +513,9 @@
 				50643C69060BB25100C5E0A5,
 				50643C6A060BB25100C5E0A5,
 				50E98BEF06DC0B5500D36AF7,
+				748E82F30838F6240024FF2D,
+				748E82F40838F6240024FF2D,
+				748E82F50838F6240024FF2D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1715,6 +1718,9 @@
 				F59C579202C4565701000102,
 				F59C579802C4565701000102,
 				F5283C570365C94301CF0E76,
+				748E82F00838F6240024FF2D,
+				748E82F10838F6240024FF2D,
+				748E82F20838F6240024FF2D,
 				F59C57A102C4565701000102,
 				4105E4A705C7CBA9003BA93B,
 				F69DF13F02C76B3F01AD0D07,
@@ -2312,6 +2318,55 @@
 //632
 //633
 //634
+//740
+//741
+//742
+//743
+//744
+		748E82F00838F6240024FF2D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXForwardingAdaptor.java;
+			path = er/extensions/ERXForwardingAdaptor.java;
+			refType = 4;
+		};
+		748E82F10838F6240024FF2D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXForwardingAdaptorChannel.java;
+			path = er/extensions/ERXForwardingAdaptorChannel.java;
+			refType = 4;
+		};
+		748E82F20838F6240024FF2D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = ERXForwardingAdaptorContext.java;
+			path = er/extensions/ERXForwardingAdaptorContext.java;
+			refType = 4;
+		};
+		748E82F30838F6240024FF2D = {
+			fileRef = 748E82F00838F6240024FF2D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		748E82F40838F6240024FF2D = {
+			fileRef = 748E82F10838F6240024FF2D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		748E82F50838F6240024FF2D = {
+			fileRef = 748E82F20838F6240024FF2D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//740
+//741
+//742
+//743
+//744
 //770
 //771
 //772

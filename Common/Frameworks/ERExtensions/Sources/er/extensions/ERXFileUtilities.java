@@ -74,7 +74,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns the byte array for a given file.
+     * Returns the byte array for a given file.
      * @param f file to get the bytes from
      * @throws IOException if things go wrong
      * @return byte array of the file.
@@ -85,7 +85,23 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns an array of the first n bytes for a given file.
+     * Returns the byte array for a given gzipped file.
+     * @param f file to get the bytes from
+     * @throws IOException if things go wrong
+     * @return byte array of the file.
+     */
+    public static byte[] bytesFromGZippedFile(File f) throws IOException {
+        if (f == null) throw new IllegalArgumentException("null file");
+        FileInputStream fis = new FileInputStream(f);
+        GZIPInputStream gis = new GZIPInputStream(fis);
+        byte[] result = bytesFromInputStream(gis);
+        fis.close();
+        gis.close();
+        return result;
+    }
+
+    /**
+     * Returns an array of the first n bytes for a given file.
      * @param f file to get the bytes from
      * @param n number of bytes to read from input file
      * @throws IOException if things go wrong
@@ -94,11 +110,23 @@ public class ERXFileUtilities {
     public static byte[] bytesFromFile(File f, int n) throws IOException {
         if (f == null) throw new IllegalArgumentException("null file");
         FileInputStream fis = new FileInputStream(f);
+        byte[] result = bytesFromInputStream(fis,n);
+        fis.close();
+        return result;
+    }
+
+    /**
+     * Returns an array of the first n bytes for a given input stream
+     * @param fis inputstream to get the bytes from
+     * @param n number of bytes to read from input stream
+     * @throws IOException if things go wrong
+     * @return byte array of the first n bytes from the file.
+     */
+    public static byte[] bytesFromInputStream(InputStream fis, int n) throws IOException {
         byte[] data = new byte[n];
         int bytesRead = 0;
         while (bytesRead < n)
             bytesRead += fis.read(data, bytesRead, n - bytesRead);
-        fis.close();
         return data;
     }
     
@@ -119,6 +147,13 @@ public class ERXFileUtilities {
         if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
         FileOutputStream out = new FileOutputStream(file);
         writeInputStreamToOutputStream(stream, out);
+    }
+
+    public static void writeInputStreamToGZippedFile(InputStream stream, File file) throws IOException {
+        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
+        FileOutputStream out = new FileOutputStream(file);
+        writeInputStreamToOutputStream(stream, new GZIPOutputStream(out));
+        out.close();
     }
     
     public static void writeInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
@@ -141,6 +176,16 @@ public class ERXFileUtilities {
         byte[] bytes = s.getBytes();
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         writeInputStreamToFile(bais, f);
+    }
+
+
+    public static void stringToGZippedFile(String s, File f) throws IOException {
+        if (s == null) throw new NullPointerException("string argument cannot be null");
+        if (f == null) throw new NullPointerException("file argument cannot be null");
+
+        byte[] bytes = s.getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        writeInputStreamToGZippedFile(bais, f);
     }
 
     /**
@@ -203,7 +248,7 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Returns a string from the file using the default
+     * Returns a string from the file using the default
      * encoding.
      * @param f file to read
      * @return string representation of that file.
@@ -211,6 +256,17 @@ public class ERXFileUtilities {
     public static String stringFromFile(File f) throws IOException {
         return new String(bytesFromFile(f));
     }
+
+    /**
+     * Returns a string from the gzipped file using the default
+     * encoding.
+     * @param f file to read
+     * @return string representation of that file.
+     */
+    public static String stringFromGZippedFile(File f) throws IOException {
+        return new String(bytesFromGZippedFile(f));
+    }
+
 
     /**
         * Returns a string from the file using the specified
