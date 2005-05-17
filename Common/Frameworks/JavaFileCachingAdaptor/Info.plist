@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>foo</key>
+	<string>bar</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaFileCachingAdaptor</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleSignature</key>
+	<string>webo</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>Has_WOComponents</key>
+	<true/>
+	<key>Java</key>
+	<dict>
+		<key>JVMVersion</key>
+		<string>1.4+</string>
+	</dict>
+	<key>NSExecutable</key>
+	<string>JavaFileCachingAdaptor</string>
+	<key>NSJavaClientRoot</key>
+	<string>WebServerResources/Java</string>
+	<key>NSJavaNeeded</key>
+	<true/>
+	<key>NSJavaPath</key>
+	<array>
+		<string>javafilecachingadaptor.jar</string>
+	</array>
+	<key>NSJavaPathClient</key>
+	<string>JavaFileCachingAdaptor.jar</string>
+	<key>NSJavaRoot</key>
+	<string>Resources/Java</string>
+</dict>
+</plist>
