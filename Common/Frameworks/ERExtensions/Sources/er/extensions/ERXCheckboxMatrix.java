@@ -118,41 +118,43 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     }
     
     public void setSelections(NSArray aFormValuesArray) throws IllegalAccessException, InvocationTargetException {
-        // ** This is where we accept the formValues.  Kind of weird.
-        NSMutableArray aSelectionsArray = new NSMutableArray();
-        if (aFormValuesArray != null && aFormValuesArray.count() > 0) {
-            Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
-            NSArray anItemList = (NSArray)valueForBinding("list");
-            int anItemCount = anItemList.count();
-            while (anIndexEnumerator.hasMoreElements()) {
-                int anIndex = Integer.parseInt((String)anIndexEnumerator.nextElement());
-                if (anIndex < anItemCount) {
-                    Object anObject = anItemList.objectAtIndex(anIndex);
-                    aSelectionsArray.addObject(anObject);
-                } else {
-                    // ** serious problem here. Raise an exception?
+        if(aFormValuesArray!=null){
+            // ** This is where we accept the formValues.  Kind of weird.
+            NSMutableArray aSelectionsArray = new NSMutableArray();
+            if (aFormValuesArray != null && aFormValuesArray.count() > 0) {
+                Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
+                NSArray anItemList = (NSArray)valueForBinding("list");
+                int anItemCount = anItemList.count();
+                while (anIndexEnumerator.hasMoreElements()) {
+                    int anIndex = Integer.parseInt((String)anIndexEnumerator.nextElement());
+                    if (anIndex < anItemCount) {
+                        Object anObject = anItemList.objectAtIndex(anIndex);
+                        aSelectionsArray.addObject(anObject);
+                    } else {
+                        // ** serious problem here. Raise an exception?
+                    }
                 }
             }
-        }
-        // dt: this can be used with a subset as array for the checkboxes.
-        if (relationshipName() != null && relationshipName().length() > 0 && relationshipOwner() != null) {
-            NSSet objectsToRemove = new NSSet(_selections).setBySubtractingSet(new NSSet(aSelectionsArray));
-            NSSet objectsToAdd = new NSSet(aSelectionsArray).setBySubtractingSet(new NSSet(_selections));
-            EOEnterpriseObject owner = relationshipOwner();
-            String relname = relationshipName();
-            for (Enumeration e = objectsToRemove.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                owner.removeObjectFromBothSidesOfRelationshipWithKey(eo, relname);
+            // dt: this can be used with a subset as array for the checkboxes.
+            if (relationshipName() != null && relationshipName().length() > 0 && relationshipOwner() != null) {
+                NSSet objectsToRemove = new NSSet(_selections).setBySubtractingSet(new NSSet(aSelectionsArray));
+                NSSet objectsToAdd = new NSSet(aSelectionsArray).setBySubtractingSet(new NSSet(_selections));
+                EOEnterpriseObject owner = relationshipOwner();
+                String relname = relationshipName();
+                for (Enumeration e = objectsToRemove.objectEnumerator(); e.hasMoreElements();) {
+                    EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                    owner.removeObjectFromBothSidesOfRelationshipWithKey(eo, relname);
+                }
+                for (Enumeration e = objectsToAdd.objectEnumerator(); e.hasMoreElements();) {
+                    EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
+                    owner.addObjectToBothSidesOfRelationshipWithKey(eo, relname);
+                }
+                
+            } else {
+                setValueForBinding(aSelectionsArray, "selections");
             }
-            for (Enumeration e = objectsToAdd.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                owner.addObjectToBothSidesOfRelationshipWithKey(eo, relname);
-            }
-            
-        } else {
-            setValueForBinding(aSelectionsArray, "selections");
+            _selections = null;
         }
-        _selections = null;
     }
 
     public String isCurrentItemChecked() {
