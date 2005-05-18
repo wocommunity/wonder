@@ -101,6 +101,18 @@
 			settings = {
 			};
 		};
+		50BD308A083BC11C006ECE48 = {
+			isa = PBXFileReference;
+			name = ERMail.eomodeld;
+			path = Resources/ERMail.eomodeld;
+			refType = 4;
+		};
+		50BD308B083BC11C006ECE48 = {
+			fileRef = 50BD308A083BC11C006ECE48;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //500
 //501
 //502
@@ -209,6 +221,7 @@
 				F5DD885402C4D56E01000102,
 				F6B782BC034552CD01257492,
 				F5DD885802C4D57F01000102,
+				50BD308A083BC11C006ECE48,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -489,6 +502,7 @@
 				F5DD885B02C4D57F01000102,
 				F5DD885C02C4D57F01000102,
 				F6B782BD034552CD01257492,
+				50BD308B083BC11C006ECE48,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
