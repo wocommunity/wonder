@@ -1,6 +1,7 @@
 
 # ERCoreBusinessLogic Framework Properties
 
+
 # These properties are pushed into the Java system properties for 
 # applications linking against to this framework
 # You can override them from the application's Properties file or 
