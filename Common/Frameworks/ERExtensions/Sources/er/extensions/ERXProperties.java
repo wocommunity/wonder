@@ -417,7 +417,7 @@ public class ERXProperties {
         
         String propertyValue = System.getProperty(propertyName);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null) {
+        if (retainDefaultsEnabled() && propertyValue == null && bigDecimal != null) {
             propertyValue = bigDecimal.toString();
             System.setProperty(propertyName, propertyValue);
         }
