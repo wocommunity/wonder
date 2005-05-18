@@ -73,6 +73,11 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
+FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
 Form1: WOForm {
 	multipleSubmit = true;
 }
