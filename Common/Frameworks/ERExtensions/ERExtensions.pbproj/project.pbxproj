@@ -537,6 +537,7 @@
 				448647E5076F592100AF8000,
 				41ECD1CC079FBFDC00E8D65A,
 				4148FB750805497300F0229B,
+				05F23C97083D28BB00057A6C,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -866,6 +867,31 @@
 //042
 //043
 //044
+//050
+//051
+//052
+//053
+//054
+		05F23C96083D28BB00057A6C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXEqualator.java;
+			path = er/extensions/ERXEqualator.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05F23C97083D28BB00057A6C = {
+			fileRef = 05F23C96083D28BB00057A6C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//050
+//051
+//052
+//053
+//054
 //0B0
 //0B1
 //0B2
@@ -9195,6 +9221,7 @@
 				F59C578202C4565601000102,
 				F59C578302C4565701000102,
 				7752CFA503D67F4D00257492,
+				05F23C96083D28BB00057A6C,
 				F59C579C02C4565701000102,
 				F59C579F02C4565701000102,
 				F59C579E02C4565701000102,
