@@ -516,7 +516,7 @@ public class ERXExtensions {
     // MOVEME: ERXStringUtilities 
     public static String removeHTMLTagsFromString(String s) {
         StringBuffer result=new StringBuffer();
-        if (s.length()>0) {
+        if (s != null && s.length()>0) {
             int position=0;
             while (position<s.length()) {
                 int indexOfOpeningTag=s.indexOf("<",position);
