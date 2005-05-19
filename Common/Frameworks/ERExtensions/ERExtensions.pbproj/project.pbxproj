@@ -3,11 +3,9 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a+rX";
@@ -25,18 +23,23 @@
 			name = WebServer;
 		};
 		017C7B2CFFD7144B7F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERExtensions.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2DFFD7144B7F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERExtensions.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2EFFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B2FFFD7144B7F000001;
+			targetProxy = 0575A19E07FE07FC003BC921;
 		};
 		017C7B2FFFD7144B7F000001 = {
 			buildPhases = (
@@ -516,6 +519,7 @@
 				748E82F30838F6240024FF2D,
 				748E82F40838F6240024FF2D,
 				748E82F50838F6240024FF2D,
+				05D19B5A083CFC44004F8749,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -547,6 +551,7 @@
 		017C7B35FFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B36FFD7144B7F000001;
+			targetProxy = 0575A19D07FE07FC003BC921;
 		};
 		017C7B36FFD7144B7F000001 = {
 			buildPhases = (
@@ -684,11 +689,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
@@ -727,11 +728,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
@@ -747,10 +744,12 @@
 //023
 //024
 		022D130B0059B6D511CD2978 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		022D130C0059B6D611CD2978 = {
 			fileRef = 022D130B0059B6D511CD2978;
@@ -813,6 +812,7 @@
 			name = "Web Server Resources";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		04B9D3C4FFD8653E11CD2B8D = {
 			fileRef = 40B5828DFFD5E91B7F000001;
@@ -849,6 +849,45 @@
 //042
 //043
 //044
+//050
+//051
+//052
+//053
+//054
+		0575A19D07FE07FC003BC921 = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B36FFD7144B7F000001;
+			remoteInfo = "Web Server";
+		};
+		0575A19E07FE07FC003BC921 = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B2FFFD7144B7F000001;
+			remoteInfo = "Application Server";
+		};
+		05D19B59083CFC44004F8749 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXEqualator.java;
+			path = er/extensions/ERXEqualator.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05D19B5A083CFC44004F8749 = {
+			fileRef = 05D19B59083CFC44004F8749;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//050
+//051
+//052
+//053
+//054
 //0B0
 //0B1
 //0B2
@@ -862,6 +901,7 @@
 			isa = PBXGroup;
 			name = Intermediates;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //0B0
 //0B1
@@ -874,6 +914,8 @@
 //403
 //404
 		40B5827EFFD5E7DB7F000001 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				40B5829AFFD5EB0D7F000001,
 				40B5829BFFD5EB0D7F000001,
@@ -909,6 +951,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58280FFD5E8187F000001 = {
 			children = (
@@ -918,11 +961,14 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58281FFD5E8187F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = ERExtensions.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		40B58282FFD5E8187F000001 = {
 			buildPhases = (
@@ -936,7 +982,7 @@
 				F6DC3ABB02E4A3A40FCF0E72,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
@@ -1069,6 +1115,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828CFFD5E91B7F000001 = {
 			children = (
@@ -1086,36 +1133,47 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828DFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828EFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828FFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58291FFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58292FFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58293FFD5E91B7F000001 = {
 			children = (
@@ -1132,30 +1190,34 @@
 			isa = PBXGroup;
 			name = Documentation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5829AFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				ANT_HOME = /usr/local/ant;
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		40B5829BFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -1173,9 +1235,11 @@
 		4105E4A505C7C933003BA93B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = EOEnterpriseObjectClazz.java;
 			path = er/extensions/EOEnterpriseObjectClazz.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4105E4A605C7C933003BA93B = {
 			fileRef = 4105E4A505C7C933003BA93B;
@@ -1186,9 +1250,11 @@
 		4105E4A705C7CBA9003BA93B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCustomObject.java;
 			path = er/extensions/ERXCustomObject.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4105E4A805C7CBA9003BA93B = {
 			fileRef = 4105E4A705C7CBA9003BA93B;
@@ -1199,9 +1265,11 @@
 		4105EC4405C81354003BA93B = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXHyperlink.java;
 			path = er/extensions/ERXHyperlink.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4105EC4505C81354003BA93B = {
 			fileRef = 4105EC4405C81354003BA93B;
@@ -1212,9 +1280,11 @@
 		413B78DE04AB575F00000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXComponentActionRedirector.java;
 			path = er/extensions/ERXComponentActionRedirector.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413B78DF04AB575F00000102 = {
 			fileRef = 413B78DE04AB575F00000102;
@@ -1232,20 +1302,25 @@
 			name = ERXJSValidationErrors;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		413BCBA00463102A00000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSValidationErrors.api;
 			path = Components/ERXJSValidationErrors.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCBA10463102A00000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSValidationErrors.java;
 			path = Sources/er/extensions/ERXJSValidationErrors.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCBA20463102A00000102 = {
 			children = (
@@ -1255,13 +1330,16 @@
 			name = ERXJSValidationErrors.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCBA30463102A00000102 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSValidationErrors.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCBA80463102A00000102 = {
 			fileRef = 413BCBA00463102A00000102;
@@ -1291,20 +1369,25 @@
 			name = ERXJSRemoteCall;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		413BCC70046311A700000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSRemoteCall.api;
 			path = Components/ERXJSRemoteCall.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCC71046311A700000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSRemoteCall.java;
 			path = Sources/er/extensions/ERXJSRemoteCall.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCC72046311A700000102 = {
 			children = (
@@ -1314,13 +1397,16 @@
 			name = ERXJSRemoteCall.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCC73046311A700000102 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSRemoteCall.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCC78046311A700000102 = {
 			fileRef = 413BCC70046311A700000102;
@@ -1350,20 +1436,25 @@
 			name = ERXJSInputValidator;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		413BCCF104631A7F00000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSInputValidator.api;
 			path = Components/ERXJSInputValidator.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCCF204631A7F00000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSInputValidator.java;
 			path = Sources/er/extensions/ERXJSInputValidator.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCCF304631A7F00000102 = {
 			children = (
@@ -1373,13 +1464,16 @@
 			name = ERXJSInputValidator.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCCF404631A7F00000102 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSInputValidator.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BCCF904631A7F00000102 = {
 			fileRef = 413BCCF104631A7F00000102;
@@ -1409,20 +1503,25 @@
 			name = ERXJSVariables;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		413BE5A30463315E00000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSVariables.api;
 			path = Components/ERXJSVariables.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BE5A40463315E00000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSVariables.java;
 			path = Sources/er/extensions/ERXJSVariables.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BE5A50463315E00000102 = {
 			children = (
@@ -1432,13 +1531,16 @@
 			name = ERXJSVariables.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BE5A60463315E00000102 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSVariables.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		413BE5AB0463315E00000102 = {
 			fileRef = 413BE5A30463315E00000102;
@@ -1468,20 +1570,25 @@
 			name = ERXDebugTimer;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		414045ED0521B01000000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXDebugTimer.api;
 			path = Components/ERXDebugTimer.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		414045EE0521B01000000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDebugTimer.java;
 			path = Sources/er/extensions/ERXDebugTimer.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		414045EF0521B01000000102 = {
 			children = (
@@ -1491,13 +1598,16 @@
 			name = ERXDebugTimer.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		414045F00521B01000000102 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDebugTimer.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		414045F50521B01000000102 = {
 			fileRef = 414045ED0521B01000000102;
@@ -1520,9 +1630,11 @@
 		4150A86E050324B700000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXAssert.java;
 			path = er/extensions/ERXAssert.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4150A86F050324B700000102 = {
 			fileRef = 4150A86E050324B700000102;
@@ -1533,9 +1645,11 @@
 		41600220046856BD00000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXDirectActionHyperlink.api;
 			path = Components/ERXDirectActionHyperlink.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		41600221046856BD00000102 = {
 			fileRef = 41600220046856BD00000102;
@@ -1554,13 +1668,16 @@
 			name = "Dates & Grouping";
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		416009A40507C9D800000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDateGrouper.java;
 			path = Sources/er/extensions/ERXDateGrouper.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		416009A50507C9D800000102 = {
 			fileRef = 416009A40507C9D800000102;
@@ -1578,20 +1695,25 @@
 			name = ERXAnyField;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		416B00DB040EC20100000106 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXAnyField.api;
 			path = Components/ERXAnyField.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		416B00DC040EC20100000106 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXAnyField.java;
 			path = Sources/er/extensions/ERXAnyField.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		416B00DD040EC20100000106 = {
 			children = (
@@ -1601,13 +1723,16 @@
 			name = ERXAnyField.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		416B00DE040EC20100000106 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXAnyField.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		416B00E3040EC20100000106 = {
 			fileRef = 416B00DB040EC20100000106;
@@ -1630,9 +1755,11 @@
 		416E92DA05E4BD3800F3D01E = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOServletContext.java;
 			path = er/extensions/ERXWOServletContext.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		416E92DB05E4BD3800F3D01E = {
 			fileRef = 416E92DA05E4BD3800F3D01E;
@@ -1641,10 +1768,12 @@
 			};
 		};
 		416E92DC05E4BD7000F3D01E = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOJSPServlet.framework;
 			path = /System/Library/Frameworks/JavaWOJSPServlet.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		416E92DD05E4BD7000F3D01E = {
 			fileRef = 416E92DC05E4BD7000F3D01E;
@@ -1662,20 +1791,25 @@
 			name = ERXStringHolder;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4198E3C0052634260048E379 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXStringHolder.api;
 			path = Components/ERXStringHolder.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4198E3C1052634260048E379 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXStringHolder.java;
 			path = Sources/er/extensions/ERXStringHolder.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4198E3C2052634260048E379 = {
 			children = (
@@ -1685,13 +1819,16 @@
 			name = ERXStringHolder.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4198E3C3052634260048E379 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStringHolder.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4198E3C8052634260048E379 = {
 			fileRef = 4198E3C0052634260048E379;
@@ -1734,6 +1871,7 @@
 			isa = PBXGroup;
 			name = EOF;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419935750528DDCB0081353A = {
 			children = (
@@ -1773,6 +1911,7 @@
 			isa = PBXGroup;
 			name = WOF;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419935A80528DF270081353A = {
 			children = (
@@ -1783,6 +1922,7 @@
 			isa = PBXGroup;
 			name = Validation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4199376B0528DF820081353A = {
 			children = (
@@ -1806,6 +1946,7 @@
 			name = Utilities;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419E56420507E29500000104 = {
 			children = (
@@ -1817,20 +1958,25 @@
 			name = ERXMonthView;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419E56430507E29500000104 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXMonthView.api;
 			path = Components/ERXMonthView.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419E56440507E29500000104 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMonthView.java;
 			path = Sources/er/extensions/ERXMonthView.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419E56450507E29500000104 = {
 			children = (
@@ -1840,13 +1986,16 @@
 			name = ERXMonthView.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419E56460507E29500000104 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXMonthView.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		419E564B0507E29500000104 = {
 			fileRef = 419E56430507E29500000104;
@@ -1876,13 +2025,16 @@
 			name = ERXLongResponse;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		41D6422F05CF9CC600BB3C39 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXLongResponse.api;
 			path = Components/ERXLongResponse.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41D6423005CF9CC600BB3C39 = {
 			children = (
@@ -1892,20 +2044,25 @@
 			name = ERXLongResponse.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41D6423105CF9CC600BB3C39 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLongResponse.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41D6423605CF9CC600BB3C39 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLongResponse.java;
 			path = Sources/er/extensions/ERXLongResponse.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41D6423705CF9CC600BB3C39 = {
 			fileRef = 41D6422F05CF9CC600BB3C39;
@@ -1928,9 +2085,11 @@
 		41E14A2905EF5EF100DE10B6 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMailAppender.java;
 			path = er/extensions/ERXMailAppender.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41E14A2A05EF5EF100DE10B6 = {
 			fileRef = 41E14A2905EF5EF100DE10B6;
@@ -1941,9 +2100,11 @@
 		41E8155904F05D5B00A88C3C = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			name = Navigation.html;
 			path = Documentation/Navigation.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41E8155A04F05D5B00A88C3C = {
 			fileRef = 41E8155904F05D5B00A88C3C;
@@ -1954,9 +2115,11 @@
 		41FF21AF0461C69F00000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNonSychronizingComponent.java;
 			path = er/extensions/ERXNonSychronizingComponent.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41FF21B00461C69F00000102 = {
 			fileRef = 41FF21AF0461C69F00000102;
@@ -1967,9 +2130,11 @@
 		41FF22E30461CEF300000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXPatcher.java;
 			path = er/extensions/ERXPatcher.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41FF22E40461CEF300000102 = {
 			fileRef = 41FF22E30461CEF300000102;
@@ -1990,9 +2155,11 @@
 		500567410408508100CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEOAccessUtilities.java;
 			path = er/extensions/ERXEOAccessUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		500567420408508100CF0E76 = {
 			fileRef = 500567410408508100CF0E76;
@@ -2003,9 +2170,11 @@
 		500D40B803CDFC7100CF0E76 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFileUtilities.java;
 			path = Sources/er/extensions/ERXFileUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		500D40B903CDFC7100CF0E76 = {
 			fileRef = 500D40B803CDFC7100CF0E76;
@@ -2016,9 +2185,11 @@
 		50287842040960A40043FCB8 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEC.java;
 			path = er/extensions/ERXEC.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50287843040960A40043FCB8 = {
 			fileRef = 50287842040960A40043FCB8;
@@ -2029,30 +2200,38 @@
 		50643C5F060BB1DB00C5E0A5 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDividingNumberFormatter.java;
 			path = er/extensions/ERXDividingNumberFormatter.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50643C60060BB1DB00C5E0A5 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFormatterFactory.java;
 			path = er/extensions/ERXFormatterFactory.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50643C61060BB1DB00C5E0A5 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMultiplyingNumberFormatter.java;
 			path = er/extensions/ERXMultiplyingNumberFormatter.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50643C62060BB1DB00C5E0A5 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTimestampFormatter.java;
 			path = er/extensions/ERXTimestampFormatter.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50643C63060BB1DB00C5E0A5 = {
 			fileRef = 50643C5F060BB1DB00C5E0A5;
@@ -2081,16 +2260,20 @@
 		50643C67060BB25100C5E0A5 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOString.java;
 			path = er/extensions/ERXWOString.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50643C68060BB25100C5E0A5 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOTextField.java;
 			path = er/extensions/ERXWOTextField.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50643C69060BB25100C5E0A5 = {
 			fileRef = 50643C67060BB25100C5E0A5;
@@ -2113,20 +2296,25 @@
 			isa = PBXGroup;
 			name = ERXImage;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		509AC52003EB364B00CF0E76 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXImage.api;
 			path = Components/ERXImage.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		509AC52103EB364B00CF0E76 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXImage.java;
 			path = Sources/er/extensions/ERXImage.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		509AC52703EB364B00CF0E76 = {
 			fileRef = 509AC52003EB364B00CF0E76;
@@ -2147,6 +2335,7 @@
 			isa = PBXVariantGroup;
 			name = ERXImage.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		509AC52B03EB36CB00CF0E76 = {
 			fileRef = 509AC52A03EB36CB00CF0E76;
@@ -2156,17 +2345,21 @@
 		};
 		509AC53C03EB36CB00CF0E76 = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXImage.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		50E98BEE06DC0B5500D36AF7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXKeyValueCodingUtilities.java;
 			path = er/extensions/ERXKeyValueCodingUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50E98BEF06DC0B5500D36AF7 = {
 			fileRef = 50E98BEE06DC0B5500D36AF7;
@@ -2177,9 +2370,11 @@
 		50EB03A9055EBAD2007F93C2 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGracefulShutdown.java;
 			path = er/extensions/ERXGracefulShutdown.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50EB03AA055EBAD2007F93C2 = {
 			fileRef = 50EB03A9055EBAD2007F93C2;
@@ -2190,16 +2385,20 @@
 		50EB03AB055ED28E007F93C2 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXPathDirectAction.java;
 			path = er/extensions/ERXPathDirectAction.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50EB03AC055ED28E007F93C2 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXPathDirectActionRequestHandler.java;
 			path = er/extensions/ERXPathDirectActionRequestHandler.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		50EB03AD055ED28E007F93C2 = {
 			fileRef = 50EB03AB055ED28E007F93C2;
@@ -2226,9 +2425,11 @@
 		633FC07B040A414D00AE7795 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXRuntimeUtilities.java;
 			path = er/extensions/ERXRuntimeUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		633FC07C040A414D00AE7795 = {
 			fileRef = 633FC07B040A414D00AE7795;
@@ -2239,9 +2440,11 @@
 		637DFBC504A0B26800A83704 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBatchingDisplayGroup.java;
 			path = er/extensions/ERXBatchingDisplayGroup.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		637DFBC604A0B26800A83704 = {
 			fileRef = 637DFBC504A0B26800A83704;
@@ -2250,10 +2453,12 @@
 			};
 		};
 		639E08E50466746E00A83704 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		639E08E60466746E00A83704 = {
 			fileRef = 639E08E50466746E00A83704;
@@ -2264,9 +2469,11 @@
 		63AB6FEF048CBC1F00A83704 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCompressionUtilities.java;
 			path = er/extensions/ERXCompressionUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		63AB6FF0048CBC1F00A83704 = {
 			fileRef = 63AB6FEF048CBC1F00A83704;
@@ -2277,9 +2484,11 @@
 		63BE1727048D10E200A83704 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXObjectStoreCoordinatorPool.java;
 			path = er/extensions/ERXObjectStoreCoordinatorPool.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		63BE1728048D10E200A83704 = {
 			fileRef = 63BE1727048D10E200A83704;
@@ -2290,16 +2499,20 @@
 		63C4CD0B04AA430500A83704 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMutableDictionary.java;
 			path = er/extensions/ERXMutableDictionary.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		63C4CD0E04AA445700A83704 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMutableArray.java;
 			path = er/extensions/ERXMutableArray.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		63C4CD0F04AA445700A83704 = {
 			fileRef = 63C4CD0E04AA445700A83704;
@@ -2326,23 +2539,29 @@
 		748E82F00838F6240024FF2D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXForwardingAdaptor.java;
 			path = er/extensions/ERXForwardingAdaptor.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		748E82F10838F6240024FF2D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXForwardingAdaptorChannel.java;
 			path = er/extensions/ERXForwardingAdaptorChannel.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		748E82F20838F6240024FF2D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXForwardingAdaptorContext.java;
 			path = er/extensions/ERXForwardingAdaptorContext.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		748E82F30838F6240024FF2D = {
 			fileRef = 748E82F00838F6240024FF2D;
@@ -2375,9 +2594,11 @@
 		7752CFA503D67F4D00257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCrypterInterface.java;
 			path = er/extensions/ERXCrypterInterface.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		7752CFA603D67F4D00257492 = {
 			fileRef = 7752CFA503D67F4D00257492;
@@ -2404,20 +2625,25 @@
 			isa = PBXGroup;
 			name = ERXEditDateJavascript;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		9419AD2803D792BD00CF0E7D = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXEditDateJavascript.api;
 			path = Components/ERXEditDateJavascript.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		9419AD2903D792BD00CF0E7D = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEditDateJavascript.java;
 			path = er/extensions/ERXEditDateJavascript.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		9419AD2F03D792BD00CF0E7D = {
 			fileRef = 9419AD2803D792BD00CF0E7D;
@@ -2439,13 +2665,16 @@
 			name = ERXEditDateJavascript.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		9419AD3503D7938200CF0E7D = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEditDateJavascript.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		9419AD3A03D7938200CF0E7D = {
 			fileRef = 9419AD3403D7938200CF0E7D;
@@ -2466,9 +2695,11 @@
 		9DFF48B402E7404E10CF0CA3 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXReplicableInterface.java;
 			path = er/extensions/ERXReplicableInterface.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		9DFF48B502E7404E10CF0CA3 = {
 			fileRef = 9DFF48B402E7404E10CF0CA3;
@@ -2499,6 +2730,7 @@
 			name = Conditionals;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //D80
 //D81
@@ -2513,9 +2745,11 @@
 		F50C03910354549D014B9BC9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOFileUpload.java;
 			path = er/extensions/ERXWOFileUpload.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F50C03940354549D014B9BC9 = {
 			fileRef = F50C03910354549D014B9BC9;
@@ -2524,9 +2758,11 @@
 			};
 		};
 		F510755F02C453E501000102 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F510756102C453E601000102 = {
 			fileRef = F510755F02C453E501000102;
@@ -2537,9 +2773,11 @@
 		F522D6CC03A0397701CAC43C = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOResponseCache.java;
 			path = er/extensions/ERXWOResponseCache.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F522D6CD03A0397701CAC43C = {
 			fileRef = F522D6CC03A0397701CAC43C;
@@ -2550,9 +2788,11 @@
 		F5283C570365C94301CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFetchSpecificationBatchIterator.java;
 			path = er/extensions/ERXFetchSpecificationBatchIterator.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5283C580365C94301CF0E76 = {
 			fileRef = F5283C570365C94301CF0E76;
@@ -2563,9 +2803,11 @@
 		F531D2EC03658BC001AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOText.java;
 			path = er/extensions/ERXWOText.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F531D2ED03658BC001AD0D07 = {
 			fileRef = F531D2EC03658BC001AD0D07;
@@ -2576,16 +2818,20 @@
 		F54C4C5702C4E24A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOContext.java;
 			path = Sources/er/extensions/ERXWOContext.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54C4C5802C4E24A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOForm.java;
 			path = Sources/er/extensions/ERXWOForm.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54C4C5902C4E24A01000102 = {
 			fileRef = F54C4C5702C4E24A01000102;
@@ -2602,9 +2848,11 @@
 		F54C4C5B02C4E2A001000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXRequest.java;
 			path = Sources/er/extensions/ERXRequest.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54C4C5C02C4E2A001000102 = {
 			fileRef = F54C4C5B02C4E2A001000102;
@@ -2615,9 +2863,11 @@
 		F54C4C5D02C4E2F101000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMutableUserInfoHolderInterface.java;
 			path = Sources/er/extensions/ERXMutableUserInfoHolderInterface.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54C4C5E02C4E2F101000102 = {
 			fileRef = F54C4C5D02C4E2F101000102;
@@ -2628,9 +2878,11 @@
 		F56937BC03561CDA01CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCloneableEnterpriseObject.java;
 			path = er/extensions/ERXCloneableEnterpriseObject.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F56937BD03561CDA01CF0E76 = {
 			fileRef = F56937BC03561CDA01CF0E76;
@@ -2647,6 +2899,7 @@
 			isa = PBXGroup;
 			name = ERXJSAutoClosePage;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57059B702E3E22201000102 = {
 			children = (
@@ -2657,6 +2910,7 @@
 			isa = PBXGroup;
 			name = ERXJSCookiesConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57059B802E3E24801000102 = {
 			children = (
@@ -2667,6 +2921,7 @@
 			isa = PBXGroup;
 			name = ERXJSFormForTarget;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57059B902E3E27301000102 = {
 			children = (
@@ -2677,6 +2932,7 @@
 			isa = PBXGroup;
 			name = ERXJSOpenWindowHyperlink;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57059BA02E3E29001000102 = {
 			children = (
@@ -2687,13 +2943,16 @@
 			isa = PBXGroup;
 			name = ERXJSOpenWindowSubmitButton;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57D5EAD02E538B901000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXInQualifier.java;
 			path = er/extensions/ERXInQualifier.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57D5EAE02E538B901000102 = {
 			fileRef = F57D5EAD02E538B901000102;
@@ -2710,6 +2969,7 @@
 			isa = PBXGroup;
 			name = ERXLocalizedString;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F584E53902E52AE101000102 = {
 			children = (
@@ -2724,6 +2984,7 @@
 			isa = PBXGroup;
 			name = Testing;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F584E53A02E52B0901000102 = {
 			children = (
@@ -2734,6 +2995,7 @@
 			isa = PBXGroup;
 			name = ERXWOTestResult;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F584E53B02E52B2801000102 = {
 			children = (
@@ -2744,13 +3006,16 @@
 			isa = PBXGroup;
 			name = ERXWOTestInterface;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F592A409036D480201AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXValueUtilities.java;
 			path = er/extensions/ERXValueUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F592A40C036D480201AD0D07 = {
 			fileRef = F592A409036D480201AD0D07;
@@ -2761,9 +3026,11 @@
 		F59BE09403A5883C01CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOResponseCacheKeyPolicy.java;
 			path = er/extensions/ERXWOResponseCacheKeyPolicy.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59BE09503A5883C01CF0E76 = {
 			fileRef = F59BE09403A5883C01CF0E76;
@@ -2774,415 +3041,533 @@
 		F59C53D002C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXWOTestResult.api;
 			path = Components/ERXWOTestResult.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D102C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXBatchNavigationBar.api;
 			path = Components/ERXBatchNavigationBar.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D202C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXBatchNavigationBarInForm.api;
 			path = Components/ERXBatchNavigationBarInForm.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D302C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXCheckboxMatrix.api;
 			path = Components/ERXCheckboxMatrix.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D402C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXCollapsibleComponentContent.api;
 			path = Components/ERXCollapsibleComponentContent.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D502C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXColoredTabPanel.api;
 			path = Components/ERXColoredTabPanel.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D602C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXDebugMarker.api;
 			path = Components/ERXDebugMarker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D702C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXDHTMLComponent.api;
 			path = Components/ERXDHTMLComponent.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D802C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXDisplayDataAsString.api;
 			path = Components/ERXDisplayDataAsString.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53D902C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXEditingContextInspector.api;
 			path = Components/ERXEditingContextInspector.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53DA02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXEditURL.api;
 			path = Components/ERXEditURL.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53DB02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXEmptyComponent.api;
 			path = Components/ERXEmptyComponent.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53DC02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXEqualConditional.api;
 			path = Components/ERXEqualConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53DD02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXErrorDictionaryPanel.api;
 			path = Components/ERXErrorDictionaryPanel.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53DE02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXFakeRelationship.api;
 			path = Components/ERXFakeRelationship.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53DF02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXFixedLengthString.api;
 			path = Components/ERXFixedLengthString.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E002C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXGraph.api;
 			path = Components/ERXGraph.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E102C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXGroupingRepetition.api;
 			path = Components/ERXGroupingRepetition.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E202C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXGroupingTable.api;
 			path = Components/ERXGroupingTable.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E302C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXHyperlinkKeyValueSetter.api;
 			path = Components/ERXHyperlinkKeyValueSetter.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E402C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXImageTabPanel.api;
 			path = Components/ERXImageTabPanel.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E502C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXInstanceOfConditional.api;
 			path = Components/ERXInstanceOfConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E602C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSAutoClosePage.api;
 			path = Components/ERXJSAutoClosePage.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E702C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSConfirmPanel.api;
 			path = Components/ERXJSConfirmPanel.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E802C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSCookiesConditional.api;
 			path = Components/ERXJSCookiesConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53E902C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSFormForTarget.api;
 			path = Components/ERXJSFormForTarget.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53EA02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSOpenWindowHyperlink.api;
 			path = Components/ERXJSOpenWindowHyperlink.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53EB02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSOpenWindowSubmitButton.api;
 			path = Components/ERXJSOpenWindowSubmitButton.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53EC02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSPopUpRelationPicker.api;
 			path = Components/ERXJSPopUpRelationPicker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53ED02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSPopupSelector.api;
 			path = Components/ERXJSPopupSelector.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53EE02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXJSTwoLevelEditToOneRelationship.api;
 			path = Components/ERXJSTwoLevelEditToOneRelationship.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53EF02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXLinkRandomizer.api;
 			path = Components/ERXLinkRandomizer.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F002C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXListContainsItemConditional.api;
 			path = Components/ERXListContainsItemConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F102C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXListDisplay.api;
 			path = Components/ERXListDisplay.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F202C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXLocalizedString.api;
 			path = Components/ERXLocalizedString.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F302C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXLog4JConfiguration.api;
 			path = Components/ERXLog4JConfiguration.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F402C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXMailTo.api;
 			path = Components/ERXMailTo.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F502C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXMandatoryFieldMarker.api;
 			path = Components/ERXMandatoryFieldMarker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F702C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXNonNullConditional.api;
 			path = Components/ERXNonNullConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F802C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXNonZeroConditional.api;
 			path = Components/ERXNonZeroConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53F902C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXOncePerRequestConditional.api;
 			path = Components/ERXOncePerRequestConditional.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53FA02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXOptionalForm.api;
 			path = Components/ERXOptionalForm.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53FB02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXPluralString.api;
 			path = Components/ERXPluralString.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53FC02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXQueryRecentDates.api;
 			path = Components/ERXQueryRecentDates.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53FD02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXRadioButtonMatrix.api;
 			path = Components/ERXRadioButtonMatrix.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53FE02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXRepeatingTable.api;
 			path = Components/ERXRepeatingTable.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C53FF02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXSingleButton.api;
 			path = Components/ERXSingleButton.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540002C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXSortOrder.api;
 			path = Components/ERXSortOrder.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540102C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXStringListPicker.api;
 			path = Components/ERXStringListPicker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540202C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXStringWithLineBreaks.api;
 			path = Components/ERXStringWithLineBreaks.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540302C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXStyleSheet.api;
 			path = Components/ERXStyleSheet.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540402C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXSuccess.api;
 			path = Components/ERXSuccess.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540502C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXTable.api;
 			path = Components/ERXTable.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540602C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXTableWithBorder.api;
 			path = Components/ERXTableWithBorder.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540702C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXTabPanel.api;
 			path = Components/ERXTabPanel.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540802C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXToManyRelationship.api;
 			path = Components/ERXToManyRelationship.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540902C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXToOneRelationship.api;
 			path = Components/ERXToOneRelationship.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540A02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXUnreadMarker.api;
 			path = Components/ERXUnreadMarker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540B02C4555D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXWOTestInterface.api;
 			path = Components/ERXWOTestInterface.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C540C02C4555D01000102 = {
 			fileRef = F59C53D002C4555D01000102;
@@ -3546,13 +3931,16 @@
 			name = ERXBatchNavigationBar.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C544902C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXBatchNavigationBar.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C544E02C4557A01000102 = {
 			children = (
@@ -3562,13 +3950,16 @@
 			name = ERXBatchNavigationBarInForm.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C544F02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXBatchNavigationBarInForm.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C545402C4557A01000102 = {
 			children = (
@@ -3578,13 +3969,16 @@
 			name = ERXCheckboxMatrix.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C545502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXCheckboxMatrix.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C545A02C4557A01000102 = {
 			children = (
@@ -3594,13 +3988,16 @@
 			name = ERXCollapsibleComponentContent.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C545B02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXCollapsibleComponentContent.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C546002C4557A01000102 = {
 			children = (
@@ -3610,13 +4007,16 @@
 			name = ERXColoredTabPanel.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C546102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXColoredTabPanel.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C546602C4557A01000102 = {
 			children = (
@@ -3626,13 +4026,16 @@
 			name = ERXDebugMarker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C546702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDebugMarker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C546C02C4557A01000102 = {
 			children = (
@@ -3642,13 +4045,16 @@
 			name = ERXDHTMLComponent.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C546D02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDHTMLComponent.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C547202C4557A01000102 = {
 			children = (
@@ -3658,13 +4064,16 @@
 			name = ERXDirectActionHyperlink.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C547302C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDirectActionHyperlink.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C547702C4557A01000102 = {
 			children = (
@@ -3674,13 +4083,16 @@
 			name = ERXDirectActionImage.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C547802C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDirectActionImage.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C547D02C4557A01000102 = {
 			children = (
@@ -3690,13 +4102,16 @@
 			name = ERXDisplayDataAsString.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C547E02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXDisplayDataAsString.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C548302C4557A01000102 = {
 			children = (
@@ -3706,13 +4121,16 @@
 			name = ERXEditingContextInspector.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C548402C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEditingContextInspector.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C548902C4557A01000102 = {
 			children = (
@@ -3722,13 +4140,16 @@
 			name = ERXEditURL.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C548A02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEditURL.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C548F02C4557A01000102 = {
 			children = (
@@ -3738,13 +4159,16 @@
 			name = ERXEmptyComponent.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C549002C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEmptyComponent.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C549502C4557A01000102 = {
 			children = (
@@ -3754,13 +4178,16 @@
 			name = ERXEqualConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C549602C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXEqualConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C549B02C4557A01000102 = {
 			children = (
@@ -3770,13 +4197,16 @@
 			name = ERXErrorDictionaryPanel.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C549C02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXErrorDictionaryPanel.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54A102C4557A01000102 = {
 			children = (
@@ -3786,13 +4216,16 @@
 			name = ERXFakeRelationship.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54A202C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXFakeRelationship.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54A702C4557A01000102 = {
 			children = (
@@ -3802,13 +4235,16 @@
 			name = ERXFixedLengthString.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54A802C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXFixedLengthString.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54AD02C4557A01000102 = {
 			children = (
@@ -3818,13 +4254,16 @@
 			name = ERXGraph.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54AE02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXGraph.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54B402C4557A01000102 = {
 			children = (
@@ -3834,13 +4273,16 @@
 			name = ERXGroupingRepetition.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54B502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXGroupingRepetition.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54BA02C4557A01000102 = {
 			children = (
@@ -3850,13 +4292,16 @@
 			name = ERXGroupingTable.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54BB02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXGroupingTable.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54C002C4557A01000102 = {
 			children = (
@@ -3866,13 +4311,16 @@
 			name = ERXHyperlinkKeyValueSetter.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54C102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXHyperlinkKeyValueSetter.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54C602C4557A01000102 = {
 			children = (
@@ -3882,13 +4330,16 @@
 			name = ERXImageTabPanel.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54C702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXImageTabPanel.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54CC02C4557A01000102 = {
 			children = (
@@ -3898,13 +4349,16 @@
 			name = ERXInstanceOfConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54CD02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXInstanceOfConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54D202C4557A01000102 = {
 			children = (
@@ -3914,13 +4368,16 @@
 			name = ERXJSAutoClosePage.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54D302C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSAutoClosePage.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54D802C4557A01000102 = {
 			children = (
@@ -3930,13 +4387,16 @@
 			name = ERXJSConfirmPanel.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54D902C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSConfirmPanel.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54DE02C4557A01000102 = {
 			children = (
@@ -3946,13 +4406,16 @@
 			name = ERXJSCookiesConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54DF02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSCookiesConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54E402C4557A01000102 = {
 			children = (
@@ -3962,13 +4425,16 @@
 			name = ERXJSFormForTarget.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54E502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSFormForTarget.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54EA02C4557A01000102 = {
 			children = (
@@ -3978,13 +4444,16 @@
 			name = ERXJSOpenWindowHyperlink.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54EB02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSOpenWindowHyperlink.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54F002C4557A01000102 = {
 			children = (
@@ -3994,13 +4463,16 @@
 			name = ERXJSOpenWindowSubmitButton.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54F102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSOpenWindowSubmitButton.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54F602C4557A01000102 = {
 			children = (
@@ -4010,13 +4482,16 @@
 			name = ERXJSPopUpRelationPicker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54F702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSPopUpRelationPicker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54FC02C4557A01000102 = {
 			children = (
@@ -4026,13 +4501,16 @@
 			name = ERXJSPopupSelector.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C54FD02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSPopupSelector.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C550202C4557A01000102 = {
 			children = (
@@ -4042,13 +4520,16 @@
 			name = ERXJSTwoLevelEditToOneRelationship.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C550302C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXJSTwoLevelEditToOneRelationship.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C550802C4557A01000102 = {
 			children = (
@@ -4058,13 +4539,16 @@
 			name = ERXLinkRandomizer.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C550902C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLinkRandomizer.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C550E02C4557A01000102 = {
 			children = (
@@ -4074,13 +4558,16 @@
 			name = ERXListContainsItemConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C550F02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXListContainsItemConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C551402C4557A01000102 = {
 			children = (
@@ -4090,13 +4577,16 @@
 			name = ERXListDisplay.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C551502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXListDisplay.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C551A02C4557A01000102 = {
 			children = (
@@ -4106,13 +4596,16 @@
 			name = ERXLocalizedString.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C551B02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLocalizedString.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C552002C4557A01000102 = {
 			children = (
@@ -4122,13 +4615,16 @@
 			name = ERXLog4JConfiguration.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C552102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXLog4JConfiguration.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C552602C4557A01000102 = {
 			children = (
@@ -4138,13 +4634,16 @@
 			name = ERXMailTo.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C552702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXMailTo.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C552C02C4557A01000102 = {
 			children = (
@@ -4154,13 +4653,16 @@
 			name = ERXMandatoryFieldMarker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C552D02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXMandatoryFieldMarker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C553802C4557A01000102 = {
 			children = (
@@ -4170,13 +4672,16 @@
 			name = ERXNonNullConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C553902C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXNonNullConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C553E02C4557A01000102 = {
 			children = (
@@ -4186,13 +4691,16 @@
 			name = ERXNonZeroConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C553F02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXNonZeroConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C554402C4557A01000102 = {
 			children = (
@@ -4202,13 +4710,16 @@
 			name = ERXOncePerRequestConditional.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C554502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXOncePerRequestConditional.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C554A02C4557A01000102 = {
 			children = (
@@ -4218,13 +4729,16 @@
 			name = ERXOptionalForm.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C554B02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXOptionalForm.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C555002C4557A01000102 = {
 			children = (
@@ -4234,13 +4748,16 @@
 			name = ERXPluralString.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C555102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXPluralString.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C555602C4557A01000102 = {
 			children = (
@@ -4250,13 +4767,16 @@
 			name = ERXQueryRecentDates.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C555702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXQueryRecentDates.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C555C02C4557A01000102 = {
 			children = (
@@ -4266,13 +4786,16 @@
 			name = ERXRadioButtonMatrix.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C555D02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXRadioButtonMatrix.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C556202C4557A01000102 = {
 			children = (
@@ -4282,13 +4805,16 @@
 			name = ERXRepeatingTable.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C556302C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXRepeatingTable.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C556802C4557A01000102 = {
 			children = (
@@ -4298,13 +4824,16 @@
 			name = ERXSingleButton.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C556902C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXSingleButton.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C556E02C4557A01000102 = {
 			children = (
@@ -4314,13 +4843,16 @@
 			name = ERXSortOrder.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C556F02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXSortOrder.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C557402C4557A01000102 = {
 			children = (
@@ -4330,13 +4862,16 @@
 			name = ERXStringListPicker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C557502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStringListPicker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C557A02C4557A01000102 = {
 			children = (
@@ -4346,13 +4881,16 @@
 			name = ERXStringWithLineBreaks.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C557B02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStringWithLineBreaks.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C558002C4557A01000102 = {
 			children = (
@@ -4362,13 +4900,16 @@
 			name = ERXStyleSheet.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C558102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXStyleSheet.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C558602C4557A01000102 = {
 			children = (
@@ -4378,13 +4919,16 @@
 			name = ERXSuccess.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C558702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXSuccess.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C558C02C4557A01000102 = {
 			children = (
@@ -4394,13 +4938,16 @@
 			name = ERXTable.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C558D02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXTable.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C559202C4557A01000102 = {
 			children = (
@@ -4410,13 +4957,16 @@
 			name = ERXTableWithBorder.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C559302C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXTableWithBorder.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C559802C4557A01000102 = {
 			children = (
@@ -4426,13 +4976,16 @@
 			name = ERXTabPanel.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C559902C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXTabPanel.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C559E02C4557A01000102 = {
 			children = (
@@ -4442,13 +4995,16 @@
 			name = ERXToManyRelationship.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C559F02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXToManyRelationship.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55A402C4557A01000102 = {
 			children = (
@@ -4458,13 +5014,16 @@
 			name = ERXToOneRelationship.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55A502C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXToOneRelationship.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55AA02C4557A01000102 = {
 			children = (
@@ -4474,13 +5033,16 @@
 			name = ERXUnreadMarker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55AB02C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXUnreadMarker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55B002C4557A01000102 = {
 			children = (
@@ -4490,13 +5052,16 @@
 			name = ERXWOTestInterface.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55B102C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXWOTestInterface.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55B602C4557A01000102 = {
 			children = (
@@ -4506,13 +5071,16 @@
 			name = ERXWOTestResult.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C55B702C4557A01000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXWOTestResult.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56B402C4557A01000102 = {
 			fileRef = F59C544802C4557A01000102;
@@ -4883,30 +5451,38 @@
 		F59C56F202C455BF01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			name = jikesSpec.plist;
 			path = Resources/jikesSpec.plist;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56F302C455BF01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			name = CustomInfo.plist;
 			path = Resources/CustomInfo.plist;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56F402C455BF01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = erDefault.graph;
 			path = Resources/erDefault.graph;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56F502C455BF01000102 = {
 			fileEncoding = 30;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
 			name = InstallCompilerProxySupport.sh;
 			path = Resources/InstallCompilerProxySupport.sh;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56F602C455BF01000102 = {
 			fileRef = F59C56F202C455BF01000102;
@@ -4942,13 +5518,16 @@
 			name = ValidationTemplate.strings;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56FB02C455DB01000102 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = Japanese;
 			path = Resources/Japanese.lproj/ValidationTemplate.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56FC02C455DB01000102 = {
 			children = (
@@ -4960,41 +5539,52 @@
 			name = Localizable.strings;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56FD02C455DB01000102 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = Japanese;
 			path = Resources/Japanese.lproj/Localizable.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56FE02C455DB01000102 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = German;
 			path = Resources/German.lproj/ValidationTemplate.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C56FF02C455DB01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = German;
 			path = Resources/German.lproj/Localizable.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570002C455DB01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = Resources/English.lproj/Localizable.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570102C455DB01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = Resources/English.lproj/ValidationTemplate.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570202C455DB01000102 = {
 			fileRef = F59C56FA02C455DB01000102;
@@ -5011,250 +5601,330 @@
 		F59C570402C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			name = ERXClassList.html;
 			path = Documentation/ERXClassList.html;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570502C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = ReleaseNotes.txt;
 			path = Documentation/ReleaseNotes.txt;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570602C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = GettingStarted.txt;
 			path = Documentation/GettingStarted.txt;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570702C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			name = SampleConfiguration.config;
 			path = Documentation/SampleConfiguration.config;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570802C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = README.txt;
 			path = Documentation/README.txt;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570902C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			name = CompilerProxy.html;
 			path = Documentation/CompilerProxy.html;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570A02C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			name = LICENSE.NPL;
 			path = Documentation/LICENSE.NPL;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570B02C4560D01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = ToDo.txt;
 			path = Documentation/ToDo.txt;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570C02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = spider.gif;
 			path = WebServerResources/spider.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570D02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = s.gif;
 			path = WebServerResources/s.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570E02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = printer.gif;
 			path = WebServerResources/printer.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C570F02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = PreviousMetalBtn.gif;
 			path = WebServerResources/PreviousMetalBtn.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571002C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = magnifier.gif;
 			path = WebServerResources/magnifier.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571102C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = info.gif;
 			path = WebServerResources/info.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571202C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = help.gif;
 			path = WebServerResources/help.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571302C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = graph09.gif;
 			path = WebServerResources/graph09.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571402C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = folder.gif;
 			path = WebServerResources/folder.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571502C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = floppy.gif;
 			path = WebServerResources/floppy.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571602C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = format_bold.gif;
 			path = WebServerResources/format_bold.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571702C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = folders.gif;
 			path = WebServerResources/folders.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571802C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = bulb.gif;
 			path = WebServerResources/bulb.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571902C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = cle.gif;
 			path = WebServerResources/cle.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571A02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = previous.gif;
 			path = WebServerResources/previous.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571B02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = prefs.gif;
 			path = WebServerResources/prefs.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571C02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = pen.gif;
 			path = WebServerResources/pen.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571D02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = ERDownTriangle.gif;
 			path = WebServerResources/ERDownTriangle.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571E02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = eye.gif;
 			path = WebServerResources/eye.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C571F02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = ERRightTriangle.gif;
 			path = WebServerResources/ERRightTriangle.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572002C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
 			name = dhtml.js;
 			path = WebServerResources/dhtml.js;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572102C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = danger.gif;
 			path = WebServerResources/danger.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572202C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
 			name = "date-picker.js";
 			path = "WebServerResources/date-picker.js";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572302C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = align_right.gif;
 			path = WebServerResources/align_right.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572402C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = calendar.gif;
 			path = WebServerResources/calendar.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572502C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = align_center.gif;
 			path = WebServerResources/align_center.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572602C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = align_left.gif;
 			path = WebServerResources/align_left.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572702C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = format_underline.gif;
 			path = WebServerResources/format_underline.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572802C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = format_italic.gif;
 			path = WebServerResources/format_italic.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572902C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = NextMetalBtn.gif;
 			path = WebServerResources/NextMetalBtn.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572A02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = next.gif;
 			path = WebServerResources/next.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572B02C4562A01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = NewMarker.gif;
 			path = WebServerResources/NewMarker.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C572C02C4562A01000102 = {
 			fileRef = F59C570C02C4562A01000102;
@@ -5655,6 +6325,7 @@
 			isa = PBXGroup;
 			path = Sources;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C576D02C4565601000102 = {
 			children = (
@@ -5666,6 +6337,7 @@
 			name = "KVC Accessors";
 			path = com;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59C576F02C4565601000102 = {
 			children = (
@@ -5675,13 +6347,16 @@
 			name = eoaccess;
 			path = webobjects/eoaccess;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59C577002C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = Sources/com/webobjects/eoaccess/KeyValueCodingProtectedAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577102C4565601000102 = {
 			children = (
@@ -5691,13 +6366,16 @@
 			name = eocontrol;
 			path = webobjects/eocontrol;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59C577202C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = Sources/com/webobjects/eocontrol/KeyValueCodingProtectedAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577302C4565601000102 = {
 			children = (
@@ -5707,902 +6385,1159 @@
 			name = woextensions;
 			path = webobjects/woextensions;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59C577402C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = Sources/com/webobjects/woextensions/KeyValueCodingProtectedAccessor.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577802C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXApplication.java;
 			path = Sources/er/extensions/ERXApplication.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577902C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXArrayUtilities.java;
 			path = Sources/er/extensions/ERXArrayUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577A02C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBatchNavigationBar.java;
 			path = Sources/er/extensions/ERXBatchNavigationBar.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577B02C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBatchNavigationBarInForm.java;
 			path = Sources/er/extensions/ERXBatchNavigationBarInForm.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577C02C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCheckboxMatrix.java;
 			path = Sources/er/extensions/ERXCheckboxMatrix.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577D02C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCloneableThreadLocal.java;
 			path = Sources/er/extensions/ERXCloneableThreadLocal.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577E02C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCollapsibleComponentContent.java;
 			path = Sources/er/extensions/ERXCollapsibleComponentContent.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C577F02C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXColoredTabPanel.java;
 			path = Sources/er/extensions/ERXColoredTabPanel.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578002C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCompilerProxy.java;
 			path = Sources/er/extensions/ERXCompilerProxy.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578102C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXConfigurationManager.java;
 			path = Sources/er/extensions/ERXConfigurationManager.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578202C4565601000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXConstant.java;
 			path = Sources/er/extensions/ERXConstant.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578302C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXCrypto.java;
 			path = Sources/er/extensions/ERXCrypto.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578402C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDatabaseContextDelegate.java;
 			path = Sources/er/extensions/ERXDatabaseContextDelegate.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDebugMarker.java;
 			path = Sources/er/extensions/ERXDebugMarker.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDefaultEditingContextDelegate.java;
 			path = Sources/er/extensions/ERXDefaultEditingContextDelegate.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDHTMLComponent.java;
 			path = Sources/er/extensions/ERXDHTMLComponent.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDictionaryUtilities.java;
 			path = Sources/er/extensions/ERXDictionaryUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDirectAction.java;
 			path = Sources/er/extensions/ERXDirectAction.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578A02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDirectActionHyperlink.java;
 			path = Sources/er/extensions/ERXDirectActionHyperlink.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578B02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDirectActionImage.java;
 			path = Sources/er/extensions/ERXDirectActionImage.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578C02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDisplayDataAsString.java;
 			path = Sources/er/extensions/ERXDisplayDataAsString.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578D02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXECNoValidationDelegate.java;
 			path = Sources/er/extensions/ERXECNoValidationDelegate.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578E02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEditingContextDelegate.java;
 			path = Sources/er/extensions/ERXEditingContextDelegate.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C578F02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEditingContextInspector.java;
 			path = Sources/er/extensions/ERXEditingContextInspector.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEditURL.java;
 			path = Sources/er/extensions/ERXEditURL.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEmptyComponent.java;
 			path = Sources/er/extensions/ERXEmptyComponent.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579202C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEntityClassDescription.java;
 			path = Sources/er/extensions/ERXEntityClassDescription.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579302C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEOFAppender.java;
 			path = Sources/er/extensions/ERXEOFAppender.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579402C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEOFLogEntryInterface.java;
 			path = Sources/er/extensions/ERXEOFLogEntryInterface.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEOToManyQualifier.java;
 			path = Sources/er/extensions/ERXEOToManyQualifier.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEqualConditional.java;
 			path = Sources/er/extensions/ERXEqualConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXErrorDictionaryPanel.java;
 			path = Sources/er/extensions/ERXErrorDictionaryPanel.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEventRecordingDefaultHandler.java;
 			path = Sources/er/extensions/ERXEventRecordingDefaultHandler.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXExceptionHolder.java;
 			path = Sources/er/extensions/ERXExceptionHolder.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579A02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXExtensions.java;
 			path = Sources/er/extensions/ERXExtensions.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579B02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFakeRelationship.java;
 			path = Sources/er/extensions/ERXFakeRelationship.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579C02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFileNotificationCenter.java;
 			path = Sources/er/extensions/ERXFileNotificationCenter.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579D02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFixedLengthString.java;
 			path = Sources/er/extensions/ERXFixedLengthString.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579E02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFrameworkPrincipal.java;
 			path = Sources/er/extensions/ERXFrameworkPrincipal.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C579F02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXFuzzyMatchCleaner.java;
 			path = Sources/er/extensions/ERXFuzzyMatchCleaner.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGeneratesPrimaryKeyInterface.java;
 			path = Sources/er/extensions/ERXGeneratesPrimaryKeyInterface.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGenericRecord.java;
 			path = Sources/er/extensions/ERXGenericRecord.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A202C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGraph.java;
 			path = Sources/er/extensions/ERXGraph.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A302C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGraphUtilities.java;
 			path = Sources/er/extensions/ERXGraphUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A402C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGroupingRepetition.java;
 			path = Sources/er/extensions/ERXGroupingRepetition.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGroupingTable.java;
 			path = Sources/er/extensions/ERXGroupingTable.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXGuardedObjectInterface.java;
 			path = Sources/er/extensions/ERXGuardedObjectInterface.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXHyperlinkKeyValueSetter.java;
 			path = Sources/er/extensions/ERXHyperlinkKeyValueSetter.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXImageTabPanel.java;
 			path = Sources/er/extensions/ERXImageTabPanel.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57A902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXInstanceOfConditional.java;
 			path = Sources/er/extensions/ERXInstanceOfConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57AA02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSAutoClosePage.java;
 			path = Sources/er/extensions/ERXJSAutoClosePage.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57AB02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSConfirmPanel.java;
 			path = Sources/er/extensions/ERXJSConfirmPanel.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57AC02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSCookiesConditional.java;
 			path = Sources/er/extensions/ERXJSCookiesConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57AD02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSFormForTarget.java;
 			path = Sources/er/extensions/ERXJSFormForTarget.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57AE02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSOpenWindowHyperlink.java;
 			path = Sources/er/extensions/ERXJSOpenWindowHyperlink.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57AF02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSOpenWindowSubmitButton.java;
 			path = Sources/er/extensions/ERXJSOpenWindowSubmitButton.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSPopUpRelationPicker.java;
 			path = Sources/er/extensions/ERXJSPopUpRelationPicker.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSPopupSelector.java;
 			path = Sources/er/extensions/ERXJSPopupSelector.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B202C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXJSTwoLevelEditToOneRelationship.java;
 			path = Sources/er/extensions/ERXJSTwoLevelEditToOneRelationship.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B302C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXKeyValuePair.java;
 			path = Sources/er/extensions/ERXKeyValuePair.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B402C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLinkRandomizer.java;
 			path = Sources/er/extensions/ERXLinkRandomizer.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLinlyn.java;
 			path = Sources/er/extensions/ERXLinlyn.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXListContainsItemConditional.java;
 			path = Sources/er/extensions/ERXListContainsItemConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXListDisplay.java;
 			path = Sources/er/extensions/ERXListDisplay.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLocalizedString.java;
 			path = Sources/er/extensions/ERXLocalizedString.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57B902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLocalizer.java;
 			path = Sources/er/extensions/ERXLocalizer.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57BB02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLog4JConfiguration.java;
 			path = Sources/er/extensions/ERXLog4JConfiguration.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57BC02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXLogger.java;
 			path = Sources/er/extensions/ERXLogger.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57BD02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMacBinarySwissArmyKnife.java;
 			path = Sources/er/extensions/ERXMacBinarySwissArmyKnife.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57BE02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMailTo.java;
 			path = Sources/er/extensions/ERXMailTo.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57BF02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMandatoryFieldMarker.java;
 			path = Sources/er/extensions/ERXMandatoryFieldMarker.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMessageEncoding.java;
 			path = Sources/er/extensions/ERXMessageEncoding.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMultiKey.java;
 			path = Sources/er/extensions/ERXMultiKey.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C202C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigation.java;
 			path = Sources/er/extensions/ERXNavigation.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNonNullConditional.java;
 			path = Sources/er/extensions/ERXNonNullConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNonPluralFormLocalizer.java;
 			path = Sources/er/extensions/ERXNonPluralFormLocalizer.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNonZeroConditional.java;
 			path = Sources/er/extensions/ERXNonZeroConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57C802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNumberFormatter.java;
 			path = Sources/er/extensions/ERXNumberFormatter.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57CB02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXOncePerRequestConditional.java;
 			path = Sources/er/extensions/ERXOncePerRequestConditional.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57CC02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXOptionalForm.java;
 			path = Sources/er/extensions/ERXOptionalForm.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57CD02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXPatternLayout.java;
 			path = Sources/er/extensions/ERXPatternLayout.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57CE02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXPluralString.java;
 			path = Sources/er/extensions/ERXPluralString.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57CF02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXPrimaryKeyListQualifier.java;
 			path = Sources/er/extensions/ERXPrimaryKeyListQualifier.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXProperties.java;
 			path = Sources/er/extensions/ERXProperties.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXQualifierInSubquery.java;
 			path = Sources/er/extensions/ERXQualifierInSubquery.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXQueryRecentDates.java;
 			path = Sources/er/extensions/ERXQueryRecentDates.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXRadioButtonMatrix.java;
 			path = Sources/er/extensions/ERXRadioButtonMatrix.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXRepeatingTable.java;
 			path = Sources/er/extensions/ERXRepeatingTable.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXRetainer.java;
 			path = Sources/er/extensions/ERXRetainer.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57D902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSession.java;
 			path = Sources/er/extensions/ERXSession.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57DC02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSharedEOLoader.java;
 			path = Sources/er/extensions/ERXSharedEOLoader.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57DD02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSimpleHTMLFormatter.java;
 			path = Sources/er/extensions/ERXSimpleHTMLFormatter.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57DE02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSimpleTemplateParser.java;
 			path = Sources/er/extensions/ERXSimpleTemplateParser.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57DF02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSingleButton.java;
 			path = Sources/er/extensions/ERXSingleButton.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSortOrder.java;
 			path = Sources/er/extensions/ERXSortOrder.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXStatelessComponent.java;
 			path = Sources/er/extensions/ERXStatelessComponent.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E202C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXStringListPicker.java;
 			path = Sources/er/extensions/ERXStringListPicker.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E302C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXStringUtilities.java;
 			path = Sources/er/extensions/ERXStringUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E402C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXStringWithLineBreaks.java;
 			path = Sources/er/extensions/ERXStringWithLineBreaks.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXStyleSheet.java;
 			path = Sources/er/extensions/ERXStyleSheet.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXSuccess.java;
 			path = Sources/er/extensions/ERXSuccess.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTable.java;
 			path = Sources/er/extensions/ERXTable.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTableWithBorder.java;
 			path = Sources/er/extensions/ERXTableWithBorder.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57E902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTabPanel.java;
 			path = Sources/er/extensions/ERXTabPanel.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57EA02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXThreadStorage.java;
 			path = Sources/er/extensions/ERXThreadStorage.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57EB02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTimestampUtilities.java;
 			path = Sources/er/extensions/ERXTimestampUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57EC02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTimestampUtility.java;
 			path = Sources/er/extensions/ERXTimestampUtility.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57ED02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTolerantSaver.java;
 			path = Sources/er/extensions/ERXTolerantSaver.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57EE02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXToManyRelationship.java;
 			path = Sources/er/extensions/ERXToManyRelationship.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57EF02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXToOneRelationship.java;
 			path = Sources/er/extensions/ERXToOneRelationship.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXUnreadMarker.java;
 			path = Sources/er/extensions/ERXUnreadMarker.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXUtilities.java;
 			path = Sources/er/extensions/ERXUtilities.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F202C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXValidation.java;
 			path = Sources/er/extensions/ERXValidation.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F302C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXValidationException.java;
 			path = Sources/er/extensions/ERXValidationException.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F402C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXValidationFactory.java;
 			path = Sources/er/extensions/ERXValidationFactory.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F502C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOCollapsibleComponentContent.java;
 			path = Sources/er/extensions/WOCollapsibleComponentContent.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F602C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOSortOrder.java;
 			path = Sources/er/extensions/WOSortOrder.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F702C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOTable.java;
 			path = Sources/er/extensions/WOTable.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F802C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOToManyRelationship.java;
 			path = Sources/er/extensions/WOToManyRelationship.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57F902C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = WOToOneRelationship.java;
 			path = Sources/er/extensions/WOToOneRelationship.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57FB02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBatchTestInterface.java;
 			path = Sources/er/testrunner/ERXBatchTestInterface.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57FC02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTestCase.java;
 			path = Sources/er/testrunner/ERXTestCase.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57FD02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTestListener.java;
 			path = Sources/er/testrunner/ERXTestListener.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57FE02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTestResult.java;
 			path = Sources/er/testrunner/ERXTestResult.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C57FF02C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXTestRunner.java;
 			path = Sources/er/testrunner/ERXTestRunner.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C580002C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOTestInterface.java;
 			path = Sources/er/testrunner/ERXWOTestInterface.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C580102C4565701000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXWOTestResult.java;
 			path = Sources/er/testrunner/ERXWOTestResult.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F59C580302C4565701000102 = {
 			fileRef = F59C577002C4565601000102;
@@ -7385,10 +8320,12 @@
 			};
 		};
 		F59C599802C4575701000102 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaPlot.framework;
 			path = /System/Library/Frameworks/JavaPlot.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F59C599A02C4575701000102 = {
 			fileRef = F59C599802C4575701000102;
@@ -7416,9 +8353,6 @@
 			name = Ant;
 			passBuildSettingsInEnvironment = 1;
 			productName = ant;
-			settingsToExpand = 6;
-			settingsToPassInEnvironment = 287;
-			settingsToPassOnCommandLine = 280;
 		};
 		F5E3A81303707FA4013FACDE = {
 			children = (
@@ -7434,13 +8368,16 @@
 			name = Navigation;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A814037085C2013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigationManager.java;
 			path = er/extensions/ERXNavigationManager.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A815037085C2013FACDE = {
 			fileRef = F5E3A814037085C2013FACDE;
@@ -7451,9 +8388,11 @@
 		F5E3A816037086C0013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigationComponent.java;
 			path = er/extensions/ERXNavigationComponent.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A817037086C0013FACDE = {
 			fileRef = F5E3A816037086C0013FACDE;
@@ -7464,9 +8403,11 @@
 		F5E3A81803708848013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigationItem.java;
 			path = er/extensions/ERXNavigationItem.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A81903708848013FACDE = {
 			fileRef = F5E3A81803708848013FACDE;
@@ -7483,13 +8424,16 @@
 			isa = PBXGroup;
 			name = ERXNavigationMenuItem;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A82103708A21013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigationMenuItem.java;
 			path = er/extensions/ERXNavigationMenuItem.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A82403708A21013FACDE = {
 			fileRef = F5E3A82103708A21013FACDE;
@@ -7506,13 +8450,16 @@
 			isa = PBXGroup;
 			name = ERXNavigationMenu;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A83003708BCC013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXNavigationMenuItem.api;
 			path = Components/ERXNavigationMenuItem.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5E3A83103708BCC013FACDE = {
 			fileRef = F5E3A83003708BCC013FACDE;
@@ -7528,13 +8475,16 @@
 			name = ERXNavigationMenuItem.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A83303708BED013FACDE = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXNavigationMenuItem.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5E3A83803708BED013FACDE = {
 			fileRef = F5E3A83203708BED013FACDE;
@@ -7545,9 +8495,11 @@
 		F5E3A83903708C13013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigationMenu.java;
 			path = er/extensions/ERXNavigationMenu.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A83A03708C13013FACDE = {
 			fileRef = F5E3A83903708C13013FACDE;
@@ -7558,9 +8510,11 @@
 		F5E3A83B03708C27013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ERXNavigationMenu.api;
 			path = ../Components/ERXNavigationMenu.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A83C03708C27013FACDE = {
 			fileRef = F5E3A83B03708C27013FACDE;
@@ -7576,13 +8530,16 @@
 			name = ERXNavigationMenu.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A83E03708C4D013FACDE = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ERXNavigationMenu.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5E3A84303708C4D013FACDE = {
 			fileRef = F5E3A83D03708C4D013FACDE;
@@ -7593,9 +8550,11 @@
 		F5E3A84403708E6E013FACDE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNavigationState.java;
 			path = er/extensions/ERXNavigationState.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3A84503708E6E013FACDE = {
 			fileRef = F5E3A84403708E6E013FACDE;
@@ -7606,9 +8565,11 @@
 		F5E3B46803480557016A5D3F = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBetweenQualifier.java;
 			path = er/extensions/ERXBetweenQualifier.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3B46903480557016A5D3F = {
 			fileRef = F5E3B46803480557016A5D3F;
@@ -7619,9 +8580,11 @@
 		F5E3B46A034823BF016A5D3F = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEOEncodingUtilities.java;
 			path = er/extensions/ERXEOEncodingUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3B46B034823BF016A5D3F = {
 			fileRef = F5E3B46A034823BF016A5D3F;
@@ -7632,9 +8595,11 @@
 		F5E99BAF0354DE4F01CF0E76 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXEOControlUtilities.java;
 			path = er/extensions/ERXEOControlUtilities.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E99BB00354DE4F01CF0E76 = {
 			fileRef = F5E99BAF0354DE4F01CF0E76;
@@ -7655,30 +8620,38 @@
 		F64DCF6102EF3A4001257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBrowserFactory.java;
 			path = er/extensions/ERXBrowserFactory.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F64DCF6202EF3A4001257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBrowser.java;
 			path = er/extensions/ERXBrowser.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F64DCF6302EF3A4001257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXMutableInteger.java;
 			path = er/extensions/ERXMutableInteger.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F64DCF6402EF3A4001257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXBasicBrowser.java;
 			path = er/extensions/ERXBasicBrowser.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F64DCF6502EF3A4001257492 = {
 			fileRef = F64DCF6102EF3A4001257492;
@@ -7707,9 +8680,11 @@
 		F692713E0365AD3301257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNSLogLog4jBridge.java;
 			path = er/extensions/ERXNSLogLog4jBridge.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F692713F0365AD3301257492 = {
 			fileRef = F692713E0365AD3301257492;
@@ -7720,9 +8695,11 @@
 		F698E7CE030C6F6B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXDirectActionRequestHandler.java;
 			path = er/extensions/ERXDirectActionRequestHandler.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F698E7CF030C6F6B01257492 = {
 			fileRef = F698E7CE030C6F6B01257492;
@@ -7733,9 +8710,11 @@
 		F69DE4010313E86B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXNSPrintWriterLogger.java;
 			path = er/extensions/ERXNSPrintWriterLogger.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F69DE4020313E86B01257492 = {
 			fileRef = F69DE4010313E86B01257492;
@@ -7746,9 +8725,11 @@
 		F69DF13F02C76B3F01AD0D07 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXModelGroup.java;
 			path = Sources/er/extensions/ERXModelGroup.java;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F69DF14002C76B3F01AD0D07 = {
 			fileRef = F69DF13F02C76B3F01AD0D07;
@@ -7760,11 +8741,7 @@
 			buildActionMask = 12;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". \"${TARGET_BUILD_DIR}/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh\"";
@@ -7781,6 +8758,7 @@
 			name = "Backport from WOExtensions";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989202C8799401AD0D07 = {
 			children = (
@@ -7791,6 +8769,7 @@
 			isa = PBXGroup;
 			name = ERXEqualConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989302C8799401AD0D07 = {
 			children = (
@@ -7801,6 +8780,7 @@
 			isa = PBXGroup;
 			name = ERXListContainsItemConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989402C8799401AD0D07 = {
 			children = (
@@ -7811,6 +8791,7 @@
 			isa = PBXGroup;
 			name = ERXNonNullConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989502C8799401AD0D07 = {
 			children = (
@@ -7821,6 +8802,7 @@
 			isa = PBXGroup;
 			name = ERXNonZeroConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989602C8799401AD0D07 = {
 			children = (
@@ -7831,6 +8813,7 @@
 			isa = PBXGroup;
 			name = ERXOncePerRequestConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989802C8799401AD0D07 = {
 			children = (
@@ -7843,6 +8826,7 @@
 			name = Delegates;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989902C8799401AD0D07 = {
 			children = (
@@ -7855,6 +8839,7 @@
 			name = Interfaces;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989A02C8799401AD0D07 = {
 			children = (
@@ -7865,6 +8850,7 @@
 				F59C578202C4565601000102,
 				F59C578302C4565701000102,
 				7752CFA503D67F4D00257492,
+				05D19B59083CFC44004F8749,
 				F59C579C02C4565701000102,
 				F59C579F02C4565701000102,
 				F59C579E02C4565701000102,
@@ -7893,6 +8879,7 @@
 			isa = PBXGroup;
 			name = Foundation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989B02C8799401AD0D07 = {
 			children = (
@@ -7903,6 +8890,7 @@
 			isa = PBXGroup;
 			name = ERXDHTMLComponent;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989C02C8799401AD0D07 = {
 			children = (
@@ -7913,6 +8901,7 @@
 			isa = PBXGroup;
 			name = ERXJSConfirmPanel;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989D02C8799401AD0D07 = {
 			children = (
@@ -7923,6 +8912,7 @@
 			isa = PBXGroup;
 			name = ERXJSPopupSelector;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989E02C8799401AD0D07 = {
 			children = (
@@ -7945,6 +8935,7 @@
 			name = "Javascript & DHTML Components";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E7989F02C8799401AD0D07 = {
 			children = (
@@ -7955,6 +8946,7 @@
 			isa = PBXGroup;
 			name = ERXLog4JConfiguration;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A002C8799401AD0D07 = {
 			children = (
@@ -7970,6 +8962,7 @@
 			isa = PBXGroup;
 			name = Logging;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A102C8799401AD0D07 = {
 			children = (
@@ -7980,6 +8973,7 @@
 			isa = PBXGroup;
 			name = ERXBatchNavigationBar;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A202C8799401AD0D07 = {
 			children = (
@@ -7990,6 +8984,7 @@
 			isa = PBXGroup;
 			name = ERXBatchNavigationBarInForm;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A302C8799401AD0D07 = {
 			children = (
@@ -8000,6 +8995,7 @@
 			isa = PBXGroup;
 			name = ERXCollapsibleComponentContent;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A402C8799401AD0D07 = {
 			children = (
@@ -8010,6 +9006,7 @@
 			isa = PBXGroup;
 			name = ERXColoredTabPanel;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A502C8799401AD0D07 = {
 			children = (
@@ -8020,6 +9017,7 @@
 			isa = PBXGroup;
 			name = ERXDebugMarker;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A602C8799401AD0D07 = {
 			children = (
@@ -8029,6 +9027,7 @@
 			isa = PBXGroup;
 			name = ERXDirectActionImage;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A702C8799401AD0D07 = {
 			children = (
@@ -8039,6 +9038,7 @@
 			isa = PBXGroup;
 			name = ERXDisplayDataAsString;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A802C8799401AD0D07 = {
 			children = (
@@ -8049,6 +9049,7 @@
 			isa = PBXGroup;
 			name = ERXEditURL;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798A902C8799401AD0D07 = {
 			children = (
@@ -8059,6 +9060,7 @@
 			isa = PBXGroup;
 			name = ERXEditingContextInspector;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798AA02C8799401AD0D07 = {
 			children = (
@@ -8069,6 +9071,7 @@
 			isa = PBXGroup;
 			name = ERXEmptyComponent;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798AB02C8799401AD0D07 = {
 			children = (
@@ -8079,6 +9082,7 @@
 			isa = PBXGroup;
 			name = ERXErrorDictionaryPanel;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798AC02C8799401AD0D07 = {
 			children = (
@@ -8089,6 +9093,7 @@
 			isa = PBXGroup;
 			name = ERXFakeRelationship;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798AD02C8799401AD0D07 = {
 			children = (
@@ -8099,6 +9104,7 @@
 			isa = PBXGroup;
 			name = ERXFixedLengthString;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798AE02C8799401AD0D07 = {
 			children = (
@@ -8109,6 +9115,7 @@
 			isa = PBXGroup;
 			name = ERXGraph;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798AF02C8799401AD0D07 = {
 			children = (
@@ -8120,6 +9127,7 @@
 			name = ERXGroupingRepetition;
 			path = Sources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B002C8799401AD0D07 = {
 			children = (
@@ -8131,6 +9139,7 @@
 			name = ERXGroupingTable;
 			path = Sources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B102C8799401AD0D07 = {
 			children = (
@@ -8141,6 +9150,7 @@
 			isa = PBXGroup;
 			name = ERXHyperlinkKeyValueSetter;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B202C8799401AD0D07 = {
 			children = (
@@ -8151,6 +9161,7 @@
 			isa = PBXGroup;
 			name = ERXImageTabPanel;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B302C8799401AD0D07 = {
 			children = (
@@ -8162,6 +9173,7 @@
 			name = ERXJSTwoLevelEditToOneRelationship;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B402C8799401AD0D07 = {
 			children = (
@@ -8172,6 +9184,7 @@
 			isa = PBXGroup;
 			name = ERXLinkRandomizer;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B502C8799401AD0D07 = {
 			children = (
@@ -8182,6 +9195,7 @@
 			isa = PBXGroup;
 			name = ERXListDisplay;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B602C8799401AD0D07 = {
 			children = (
@@ -8192,6 +9206,7 @@
 			isa = PBXGroup;
 			name = ERXMailTo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B702C8799401AD0D07 = {
 			children = (
@@ -8202,6 +9217,7 @@
 			isa = PBXGroup;
 			name = ERXMandatoryFieldMarker;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798B902C8799401AD0D07 = {
 			children = (
@@ -8212,6 +9228,7 @@
 			isa = PBXGroup;
 			name = ERXOptionalForm;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798BA02C8799401AD0D07 = {
 			children = (
@@ -8222,6 +9239,7 @@
 			isa = PBXGroup;
 			name = ERXPluralString;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798BB02C8799401AD0D07 = {
 			children = (
@@ -8232,6 +9250,7 @@
 			isa = PBXGroup;
 			name = ERXQueryRecentDates;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798BC02C8799401AD0D07 = {
 			children = (
@@ -8242,6 +9261,7 @@
 			isa = PBXGroup;
 			name = ERXRepeatingTable;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798BD02C8799401AD0D07 = {
 			children = (
@@ -8252,6 +9272,7 @@
 			isa = PBXGroup;
 			name = ERXSingleButton;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798BE02C8799401AD0D07 = {
 			children = (
@@ -8262,6 +9283,7 @@
 			isa = PBXGroup;
 			name = ERXSortOrder;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798BF02C8799401AD0D07 = {
 			children = (
@@ -8272,6 +9294,7 @@
 			isa = PBXGroup;
 			name = ERXStringListPicker;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C002C8799401AD0D07 = {
 			children = (
@@ -8282,6 +9305,7 @@
 			isa = PBXGroup;
 			name = ERXStringWithLineBreaks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C102C8799401AD0D07 = {
 			children = (
@@ -8292,6 +9316,7 @@
 			isa = PBXGroup;
 			name = ERXStyleSheet;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C202C8799401AD0D07 = {
 			children = (
@@ -8302,6 +9327,7 @@
 			isa = PBXGroup;
 			name = ERXSuccess;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C302C8799401AD0D07 = {
 			children = (
@@ -8312,6 +9338,7 @@
 			isa = PBXGroup;
 			name = ERXTabPanel;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C402C8799401AD0D07 = {
 			children = (
@@ -8322,6 +9349,7 @@
 			isa = PBXGroup;
 			name = ERXTable;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C502C8799401AD0D07 = {
 			children = (
@@ -8332,6 +9360,7 @@
 			isa = PBXGroup;
 			name = ERXTableWithBorder;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C602C8799401AD0D07 = {
 			children = (
@@ -8342,6 +9371,7 @@
 			isa = PBXGroup;
 			name = ERXToManyRelationship;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C702C8799401AD0D07 = {
 			children = (
@@ -8352,6 +9382,7 @@
 			isa = PBXGroup;
 			name = ERXToOneRelationship;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C802C8799401AD0D07 = {
 			children = (
@@ -8362,6 +9393,7 @@
 			isa = PBXGroup;
 			name = ERXUnreadMarker;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798C902C8799401AD0D07 = {
 			children = (
@@ -8415,6 +9447,7 @@
 			name = "Misc WOComponents";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798CA02C8799401AD0D07 = {
 			children = (
@@ -8423,6 +9456,7 @@
 			isa = PBXGroup;
 			name = "KVC Classes";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798CB02C8799401AD0D07 = {
 			children = (
@@ -8436,6 +9470,7 @@
 			name = Qualifiers;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798CF02C8799401AD0D07 = {
 			children = (
@@ -8446,6 +9481,7 @@
 			name = Interfaces;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798D002C8799401AD0D07 = {
 			children = (
@@ -8457,6 +9493,7 @@
 			name = ERXCheckboxMatrix;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798D102C8799401AD0D07 = {
 			children = (
@@ -8468,6 +9505,7 @@
 			name = ERXRadioButtonMatrix;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6E798D202C8799401AD0D07 = {
 			children = (
@@ -8479,13 +9517,16 @@
 			name = Workarounds/Bugfixes;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6ED0C790361C03B01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ERXUnitAwareDecimalFormat.java;
 			path = er/extensions/ERXUnitAwareDecimalFormat.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6ED0C7A0361C03B01257492 = {
 			fileRef = F6ED0C790361C03B01257492;
@@ -8496,9 +9537,11 @@
 		F6FA743C0343CC1A01257492 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = Properties;
 			path = Resources/Properties;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F6FA743D0343CC1A01257492 = {
 			fileRef = F6FA743C0343CC1A01257492;
@@ -8525,6 +9568,7 @@
 			isa = PBXGroup;
 			name = ERXInstanceOfConditional;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		FB13D999F9BE5AD29792D4FB = {
 			children = (
@@ -8535,6 +9579,7 @@
 			isa = PBXGroup;
 			name = ERXJSPopUpRelationPicker;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		FB1D3BECDADD387139FB5274 = {
 			children = (
@@ -8545,6 +9590,7 @@
 			isa = PBXGroup;
 			name = ERXDirectActionHyperlink;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;

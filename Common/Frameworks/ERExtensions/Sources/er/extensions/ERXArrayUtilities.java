@@ -513,8 +513,36 @@ public class ERXArrayUtilities extends Object {
         final int index = indexOfFirstObjectWithValueForKeyPath(array, value, keyPath);
         
         return index >= 0 ? array.objectAtIndex(index) : null;
-    }    
+    }
     
+    /**
+     * Locates an object within an array using a custom equality check provided as an ERXEqualator.  This
+     * is useful if you have an array of EOs and want to find a particular EO in it without regard to editing
+     * contexts.
+     * @param array the array to search.
+     * @param object the object to look for.
+     * @param equalator the equalator to use for performing the equality check between object and each object
+     *        in the array.
+     * @return index of first occuring object in the array that is defined as equal by the equalator. -1
+     *         if no such object is found.
+     */
+    public static int indexOfObjectUsingEqualator(NSArray array, Object object, ERXEqualator equalator) {
+        final int count = array.count();
+        int result = -1;
+        int i = 0;
+        
+        while ( i < count && result == -1 ) {
+            final Object currentObject = array.objectAtIndex(i);
+            
+            if ( equalator.objectIsEqualToObject(currentObject, object) )
+                result = i;
+            
+            i++;
+        }
+        
+        return result;
+    }
+
     /**
      * Sorts a given array with a key in ascending fashion and returns a mutable clone of the result.
      * @param array array to be sorted.
