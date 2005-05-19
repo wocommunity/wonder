@@ -504,6 +504,38 @@ public class ERXStringUtilities {
         }
         return convertedString.toString();
     }
+    
+    /**
+     * Replaces the first occurrence of a string with another string in a string.
+     *
+     * @param sourceString string to use on which to perform the replacement
+     * @param stringToReplace string to replace in sourceString if it exists.
+     * @param replacementString the string with which to replace stringToReplace.
+     * @return sourceString with stringToReplace replaced with replacementString if it
+     *         existed in sourceString.  otherwise, sourceString is returned.
+     */
+    public static String stringByReplacingFirstOccurrenceOfStringWithString(final String sourceString, final String stringToReplace, final String replacementString) {
+        final int indexOfMatch = sourceString.indexOf(stringToReplace);
+        final String result;
+        
+        if ( indexOfMatch >= 0 ) {
+            final int sourceStringLength = sourceString.length();
+            final int stringToReplaceLength = stringToReplace.length();
+            final int replacementStringLength = replacementString.length();
+            final StringBuffer buffer = new StringBuffer(sourceStringLength - stringToReplaceLength + replacementStringLength);
+            
+            buffer.append(sourceString.substring(0, indexOfMatch));
+            buffer.append(replacementString);
+            buffer.append(sourceString.substring(indexOfMatch + stringToReplaceLength, sourceStringLength));
+            
+            result = buffer.toString();
+        }
+        else {
+            result = sourceString;
+        }
+        
+        return result;
+    }    
 
     /**
      * Removes the spaces in a given String
