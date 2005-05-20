@@ -52,15 +52,11 @@ public class ERXForwardingAdaptorContext extends EOAdaptorContext {
     private static final NSSelector _rollbackTransactionSelector = new NSSelector("_rollbackTransaction", _NSUtilities._NotificationClassArray);
 
     public void _beginTransaction(NSNotification notification) {
-        System.out.println("before _beginTransaction");
         NSNotificationCenter.defaultCenter().postNotification(EOAdaptorContext.AdaptorContextBeginTransactionNotification, this);
-        System.out.println("after _beginTransaction");
     }
 
     public void _commitTransaction(NSNotification notification) {
-        System.out.println("before _commitTransaction");
         NSNotificationCenter.defaultCenter().postNotification(EOAdaptorContext.AdaptorContextCommitTransactionNotification, this);
-        System.out.println("after _commitTransaction");
     }
 
     public void _rollbackTransaction(NSNotification notification) {
