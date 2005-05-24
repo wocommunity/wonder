@@ -489,7 +489,11 @@ public class ERXJDBCConnectionBroker {
             ERXJDBCConnectionBroker.log.debug("Handing out connection " + idOfConnection(conn) + " --> "
                         + (new SimpleDateFormat("MM/dd/yyyy  hh:mm:ss a")).format(new java.util.Date()));
             }
-
+            try {
+                if (conn.isReadOnly()) conn.setReadOnly(false);
+            } catch (SQLException e) {
+                log.error("could not set read only to false for connection "+conn, e);
+            }
             return conn;
 
         }
