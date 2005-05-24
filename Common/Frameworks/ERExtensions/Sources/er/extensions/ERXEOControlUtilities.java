@@ -436,6 +436,43 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the primary keys from the resulting rows starting
+     * at start and stopping at end using a custom SQL, derived from the SQL
+     * which the {@link com.webobjects.eocontrol.EOFetchSpecification EOFetchSpecification} would use normally {@link com.webobjects.eocontrol.EOFetchSpecification#setHints(NSDictionary) setHints()}
+     *
+     * @param ec editingcontext to fetch objects into
+     * @param spec fetch specification for the fetch
+     * @param start
+     * @param end
+     *
+     * @return primary keys in the given range
+     */
+    public static NSArray primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+        
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
+        String sqlString = sql.statement();
+        StringBuffer buf = new StringBuffer();
+        buf.append("select ");
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        NSArray attributesColumnNames = (NSArray) entity.primaryKeyAttributes().valueForKey("columnName");
+        for (Enumeration e = attributesColumnNames.objectEnumerator(); e.hasMoreElements();) {
+            buf.append(e.nextElement());
+            if (e.hasMoreElements()) {
+                buf.append(", ");
+            } else {
+                buf.append(" ");
+            }
+        }
+        buf.append(sqlString.substring(sqlString.toLowerCase().indexOf("from")));
+        sql.setStatement(buf.toString());
+        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
+        spec.setHints(hints);
+        spec.setFetchesRawRows(true);
+        spec.setRawRowKeyPaths(entity.primaryKeyAttributeNames());
+        return ec.objectsWithFetchSpecification(spec);
+    }
+    
+    /**
      * Returns the number of objects matching the given
      * qualifier for a given entity name. Implementation
      * wise this method will generate the correct sql to only
@@ -971,6 +1008,17 @@ public class ERXEOControlUtilities {
         }
         return a;
     }  
+
+    public static NSArray faultsForRawRowsFromEntityInEditingContext(NSArray primKeys, String entityName, EOEditingContext ec) {
+        int c = primKeys.count();
+        NSMutableArray a = new NSMutableArray(c);
+        for (int i = 0; i < c; i++) {
+            NSDictionary pkDict = (NSDictionary)primKeys.objectAtIndex(i);
+            EOEnterpriseObject eo = ec.faultForRawRow(pkDict, entityName);
+            a.addObject(eo);
+        }
+        return a;
+    }
     
     /**
      * Tests if an enterprise object is a new object by
@@ -1038,5 +1086,4 @@ public class ERXEOControlUtilities {
         result.addObjectsFromArray(loadedObjects);
         return result;
     }
-
 }
