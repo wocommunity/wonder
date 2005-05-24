@@ -329,13 +329,24 @@ public class ERXStringUtilities {
      * @param path to the file in the file system
      * @return the contents of the file in a string
      */
-    public static String stringWithContentsOfFile(String path) {
+    public static String stringWithContentsOfFile(File file) {
         try {
-            if(path != null)
-                return ERXFileUtilities.stringFromFile(new File(path));
+            if(file != null)
+                return ERXFileUtilities.stringFromFile(file);
         } catch (IOException e) {
-        	log.error(e, e);
+            log.error(e, e);
         }
+        return null;
+    }
+    /**
+     * Reads the contents of a file given by a path
+     * into a string.
+     * @param path to the file in the file system
+     * @return the contents of the file in a string
+     */
+    public static String stringWithContentsOfFile(String path) {
+        if(path != null)
+            return ERXStringUtilities.stringWithContentsOfFile(new File(path));
         return null;
     }
 
@@ -894,5 +905,25 @@ public class ERXStringUtilities {
         }
         return false;
     }
-    
+
+        /**
+         * Returns a string from the input stream using the default
+          * encoding.
+          * @param in stream to read
+          * @return string representation of the stream.
+      */
+     public static String stringFromInputStream(InputStream in) throws IOException {
+         return new String(ERXFileUtilities.bytesFromInputStream(in));
+     }
+
+     /**
+      * Returns a string from the input stream using the default
+       * encoding.
+       * @param in stream to read
+       * @param encoding to be used, null will use the default
+       * @return string representation of the stream.
+   */
+  public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
+      return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
+  }
 }
