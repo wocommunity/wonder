@@ -64,7 +64,6 @@ public class ERXFileUtilities {
         * Returns a string from the input stream using the default
      * encoding.
      * @param in stream to read
-     * @param encoding to be used, null will use the default
      * @return string representation of the stream.
      */
     public static String stringFromInputStream(InputStream in) throws IOException {
