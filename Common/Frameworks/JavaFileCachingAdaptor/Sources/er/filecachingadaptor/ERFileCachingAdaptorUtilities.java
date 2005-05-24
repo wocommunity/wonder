@@ -310,6 +310,7 @@ public class ERFileCachingAdaptorUtilities {
     }
 
     private static NSMutableDictionary _kvCaches = new NSMutableDictionary();
+    private static final NSArray _NOT_FOUND = new NSArray();
 
     public static NSArray cacheDataForEntityWithKeyValue(EOEntity entity, String key, Object value) {
         _getCache();
@@ -318,25 +319,34 @@ public class ERFileCachingAdaptorUtilities {
         NSArray result = (NSArray)_kvCaches.valueForKey(kvCacheKey);
         if (result == null) {
             NSArray rows = cacheDataForEntity(entity);
-            for (int i=0;i<rows.count();i++) {
-                NSDictionary row = (NSDictionary)rows.objectAtIndex(i);
-                Object thisValue = row.valueForKey(key);
-                NSMutableArray newRowOrder = (NSMutableArray)_kvCaches.valueForKey(kvCacheKeyPrefix+thisValue);
-                if (newRowOrder == null) {
-                    newRowOrder = new NSMutableArray();
-                    _kvCaches.takeValueForKey(newRowOrder,kvCacheKeyPrefix+thisValue);
+            if (rows != null) {
+                if (rows.count() == 0) {
+                    _kvCaches.takeValueForKey(NSArray.EmptyArray,kvCacheKey);
+                } else {
+                    for (int i=0;i<rows.count();i++) {
+                        NSDictionary row = (NSDictionary)rows.objectAtIndex(i);
+                        Object thisValue = row.valueForKey(key);
+                        NSMutableArray newRowOrder = (NSMutableArray)_kvCaches.valueForKey(kvCacheKeyPrefix+thisValue);
+                        if (newRowOrder == null) {
+                            newRowOrder = new NSMutableArray();
+                            _kvCaches.takeValueForKey(newRowOrder,kvCacheKeyPrefix+thisValue);
+                        }
+                        newRowOrder.addObject(row);
+                    }
                 }
-                newRowOrder.addObject(row);
+            } else {
+                _kvCaches.takeValueForKey(_NOT_FOUND,kvCacheKey);
             }
             if (log.isDebugEnabled()) {
                 log.debug("Getting "+kvCacheKey+", kvCaches is "+_kvCaches);
             }
             result = (NSArray)_kvCaches.valueForKey(kvCacheKey);
-            if (result == null) {
-                result = NSArray.EmptyArray;
-                _kvCaches.takeValueForKey(result,kvCacheKey);
-            }
         }
+
+        if (result == _NOT_FOUND) {
+            result = null;
+        }
+
         return result;
     }
 
