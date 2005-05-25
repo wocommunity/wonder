@@ -233,22 +233,24 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 	keyPath = ""+d2wContext().valueForKey("propertyKey");
                 }
                 erv.setContext(d2wContext());
-                errorKeyOrder.addObject(d2wContext().displayNameForProperty());
-                errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
-                //DT: the propertyKey from the validationException is important because keyPath might only be saveChangesExceptionKey
-                //which is not enough
-                keyPathsWithValidationExceptions.addObject(erv.propertyKey());
-                if (erv.eoObject() != null && erv.propertyKey() != null && shouldSetFailedValidationValue()) {
-                	try {
-                		erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
-                	} catch(NSKeyValueCoding.UnknownKeyException  ex) {
-                		// AK: as we could have custom components that have non-existant keys
-                		// we of course can't push a value, so we discard the resulting exception
-                	} catch(NoSuchElementException  ex) {
-                		// AK: as we could have custom components that have non-existant keys
-                		// we of course can't push a value, so we discard the resulting exception
-                	}
-                }   
+                if ( d2wContext().propertyKey() != null ) {
+                    errorKeyOrder.addObject(d2wContext().displayNameForProperty());
+                    errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
+                    //DT: the propertyKey from the validationException is important because keyPath might only be saveChangesExceptionKey
+                    //which is not enough
+                    keyPathsWithValidationExceptions.addObject(erv.propertyKey());
+                    if (erv.eoObject() != null && erv.propertyKey() != null && shouldSetFailedValidationValue()) {
+                        try {
+                            erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
+                        } catch(NSKeyValueCoding.UnknownKeyException  ex) {
+                            // AK: as we could have custom components that have non-existant keys
+                            // we of course can't push a value, so we discard the resulting exception
+                        } catch(NoSuchElementException  ex) {
+                            // AK: as we could have custom components that have non-existant keys
+                            // we of course can't push a value, so we discard the resulting exception
+                        }
+                    }   
+                }
             } else {
                 _temp.removeAllObjects();
                 ERXValidation.validationFailedWithException(e, value, keyPath, _temp, propertyKey(), ERXLocalizer.currentLocalizer(), d2wContext().entity(), shouldSetFailedValidationValue());
