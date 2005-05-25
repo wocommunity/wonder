@@ -52,11 +52,23 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
             if(IsContainedInArraySelectorName.equals(qualifier.selector().name())) {
-                Object value = qualifier.value();
-                if(!(value instanceof NSArray)) {
-                    value = new NSArray(value);
+                // FIXME AK: This is not really the correct thing to do
+                // we should have a means to register new operators and this has nothing to do with 
+                // PK qualifiers per se...
+                if(qualifier.key().indexOf('.') < 0) {
+                    Object value = qualifier.value();
+                    if(!(value instanceof NSArray)) {
+                        value = new NSArray(value);
+                    }
+                    if(((NSArray)value).lastObject() instanceof EOEnterpriseObject) {
+                        return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)value);
+                    } else {
+                        return new ERXInQualifier(qualifier.key(), (NSArray)value);
+                    }
+                } else {
+                    EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXInQualifier.class);
+                    return support.schemaBasedQualifierWithRootEntity(qualifier, eoentity);
                 }
-                return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)value);
             }
             EOQualifier result = _old.schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
             return result;
