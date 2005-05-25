@@ -629,27 +629,69 @@ public class ERXEOAccessUtilities {
         }
         return result;
     }
+    
+    /**
+     * Crude hack to get at the end of a relationship path.
+     * @param relationship
+     * @return
+     */
+    public static EORelationship lastRelationship(EORelationship relationship) {
+        return (EORelationship) NSKeyValueCoding.Utility.valueForKey(relationship, "lastRelationship");
+    }
 
     /**
-     * Creates a where clause string " someKey IN ( someValue1,...)".
+     * Creates an array of relationships and attributes from the given keypath to give to the
+     * EOSQLExpression method <code>sqlStringForAttributePath</code>. If the last element is a
+     * relationship, then the relationship's source attribute will get chosen. As such, this can only 
+     * work for single-value relationships in the last element.
+     * @param entity
+     * @param keyPath
+     * @return
+     */
+    public static NSArray attributePathForKeyPath(EOEntity entity, String keyPath) {
+        NSMutableArray result = new NSMutableArray();
+        String[] parts = keyPath.split("\\.");
+        String part;
+        for (int i = 0; i < parts.length - 1; i++) {
+            part = parts[i];
+            EORelationship relationship = entity.anyRelationshipNamed(part);
+            entity = relationship.destinationEntity();
+            result.addObject(relationship);
+        }
+        part = parts[parts.length-1];
+        EOAttribute attribute = entity.anyAttributeNamed(part);
+        if(attribute == null) {
+            EORelationship relationship = entity.anyRelationshipNamed(part);
+            if(relationship == null) {
+                throw new IllegalArgumentException("Last element is not an attribute nor a relationship: " + keyPath);
+            }
+            if (relationship.isFlattened()) {
+                //FIXME!
+            } else {
+                attribute = ((EOJoin) relationship.joins().lastObject()).sourceAttribute();
+            }
+         }
+        result.addObject(attribute);
+        return result;
+    }
+    
+    
+    /**
+     * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
         if(valueArray.count() == 0) {
             return "0=1";
         }
         StringBuffer sb = new StringBuffer();
-        EOAttribute attribute = e.entity().attributeNamed(key);
-        if (attribute == null) {
-            EORelationship relationship = e.entity().relationshipNamed(key);
-            if (relationship == null) { throw new IllegalArgumentException(key + " is neither an attribute nor a relationship of entity "
-                    + e.entity().name()); }
-            if (relationship.isFlattened()) {
-                //FIXME!
-            } else {
-                attribute = ((EOJoin) relationship.joins().lastObject()).sourceAttribute();
-            }
+        
+        NSArray attributePath = attributePathForKeyPath(e.entity(), key);
+        EOAttribute attribute = (EOAttribute) attributePath.lastObject();
+        if(attributePath.count() > 1) {
+            sb.append(e.sqlStringForAttributePath(attributePath));
+        } else {
+            sb.append(e.sqlStringForAttribute(attribute));
         }
-        sb.append(e.sqlStringForAttribute(attribute));
         sb.append(" IN ");
         sb.append("(");
         for (int i = 0; i < valueArray.count(); i++) {
