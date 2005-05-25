@@ -6,9 +6,27 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.util.Enumeration;
+
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierVariable;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * The ERXInQualifier is useful for creating qualifiers that
@@ -124,7 +142,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
      * Adds SQL generation support. Note that the database needs to support
      * the IN operator.
      */
-    public static class InQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
+    public static class InQualifierSQLGenerationSupport extends EOQualifierSQLGeneration._KeyValueQualifierSupport {
 
         /**
          * Public constructor
@@ -132,7 +150,8 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
         public InQualifierSQLGenerationSupport() {
             super();
         }
-
+       
+        
         /**
          * Generates the SQL string for an ERXInQualifier.
          * @param eoqualifier an in qualifier
@@ -143,7 +162,8 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
             ERXInQualifier inqualifier = (ERXInQualifier)eoqualifier;
             String result;
             if (inqualifier.value() instanceof NSArray) {
-                result = ERXEOAccessUtilities.sqlWhereClauseStringForKey(e, inqualifier.key(),  (NSArray)inqualifier.value());
+                String key = inqualifier.key();
+                result = ERXEOAccessUtilities.sqlWhereClauseStringForKey(e, key,  (NSArray)inqualifier.value());
             } else {
                 throw new RuntimeException("Unsupported value type: " + inqualifier.value().getClass().getName());
             }
@@ -152,12 +172,81 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
 
         // ENHANCEME: This should support restrictive qualifiers on the root entity
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
-            return (EOQualifier)eoqualifier.clone();
+            EOKeyValueQualifier eokeyvaluequalifier = (EOKeyValueQualifier)eoqualifier;
+            String key = eokeyvaluequalifier.key();
+            EORelationship eorelationship = eoentity._relationshipForPath(key);
+            if(eorelationship == null) {
+                return eokeyvaluequalifier;
+            }
+            if(eorelationship.isFlattened()) {
+                eorelationship = ERXEOAccessUtilities.lastRelationship(eorelationship);
+            }
+            NSArray joins = eorelationship.joins();
+            int l = joins.count();
+            NSMutableArray destinationAttibuteNames = new NSMutableArray(l);
+            for(int i = l - 1; i >= 0; i--) {
+                destinationAttibuteNames.addObject(((EOJoin)joins.objectAtIndex(i)).destinationAttribute().name());
+            }
+            
+            Object value = eokeyvaluequalifier.value();
+            Object obj;
+            if(value == NSKeyValueCoding.NullValue || (value instanceof EOQualifierVariable)) {
+                NSMutableDictionary mapping = new NSMutableDictionary(l);
+                 for(int j = 0; j < l; j++) {
+                    mapping.setObjectForKey(value, destinationAttibuteNames.objectAtIndex(j));
+                }
+                obj = mapping;
+            } else {
+                NSMutableDictionary mapping = new NSMutableDictionary(l);
+                for(int j = 0; j < l; j++) {
+                    NSArray values = (NSArray)value;
+                    NSMutableArray realValues = new NSMutableArray();
+                    for(Enumeration e = ((NSArray)value).objectEnumerator(); e.hasMoreElements();) {
+                        Object o = e.nextElement();
+                        NSDictionary dict =  null;
+                        String currentKey = (String) destinationAttibuteNames.objectAtIndex(j);
+                        Object v;
+                        if (o instanceof EOEnterpriseObject) {
+                            EOEnterpriseObject new_name = (EOEnterpriseObject) o;
+                            EOEnterpriseObject eoenterpriseobject = (EOEnterpriseObject)o;
+                            EOObjectStoreCoordinator osc = ((EOObjectStoreCoordinator)eoenterpriseobject.editingContext().rootObjectStore());
+                            dict = osc.valuesForKeys(new NSArray(currentKey), eoenterpriseobject);
+                            v = dict.objectForKey(currentKey);
+                         } else {
+                            v = o; 
+                         }
+                        realValues.addObject(v);
+                    }
+                    mapping.setObjectForKey(realValues, destinationAttibuteNames.objectAtIndex(j));
+                }
+                
+                obj = mapping;
+            }
+            
+            NSMutableArray qualifiers = null;
+            ERXInQualifier result = null;
+            l = destinationAttibuteNames.count();
+            for(int k = 0; k < l; k++) {
+                String s1 = (String)destinationAttibuteNames.objectAtIndex(k);
+                String s2 = _optimizeQualifierKeyPath(eoentity, key, s1);
+                Object o = ((NSDictionary) (obj)).objectForKey(s1);
+                result = new ERXInQualifier(s2, (NSArray) o);
+                if(l <= 1)
+                    continue;
+                if(qualifiers == null) {
+                    qualifiers = new NSMutableArray();
+                    qualifiers.addObject(result);
+                }
+            }
+            if(qualifiers == null) {
+                return result;
+            }
+            return new EOAndQualifier(qualifiers);
         }
 
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
             // the key migration is the same as for EOKeyValueQualifier
-	    ERXInQualifier inQualifier=(ERXInQualifier)eoqualifier;
+            ERXInQualifier inQualifier=(ERXInQualifier)eoqualifier;
             String newPath = EOQualifierSQLGeneration.Support._translateKeyAcrossRelationshipPath(inQualifier.key(), s, eoentity);
             return new ERXInQualifier(newPath, inQualifier.values());
         }

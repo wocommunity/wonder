@@ -81,7 +81,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
             return null;
         if(objects.count() == 0)
             return new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, null);
-        if(true) {
+        if(false) {
             NSMutableArray qualifiers = new NSMutableArray();
             for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ) {
                 qualifiers.addObject(new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, e.nextElement()));
