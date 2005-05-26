@@ -5,6 +5,81 @@
 	};
 	objectVersion = 39;
 	objects = {
+		0514CEFB08467C5900CF7015 = {
+			children = (
+				0514CF0208467CD200CF7015,
+				0514CF0008467CC500CF7015,
+				0514CF0408467CF000CF7015,
+			);
+			isa = PBXGroup;
+			name = ERD2WDisplayDictionary;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		0514CF0008467CC500CF7015 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WDisplayDictionary.java;
+			path = er/directtoweb/ERD2WDisplayDictionary.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		0514CF0108467CC500CF7015 = {
+			fileRef = 0514CF0008467CC500CF7015;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		0514CF0208467CD200CF7015 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WDisplayDictionary.api;
+			path = Components/ERD2WDisplayDictionary.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		0514CF0308467CD200CF7015 = {
+			fileRef = 0514CF0208467CD200CF7015;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		0514CF0408467CF000CF7015 = {
+			children = (
+				0514CF0508467CF000CF7015,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WDisplayDictionary.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		0514CF0508467CF000CF7015 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WDisplayDictionary.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		0514CF0A08467CF000CF7015 = {
+			fileRef = 0514CF0408467CF000CF7015;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//050
+//051
+//052
+//053
+//054
+//410
+//411
+//412
+//413
+//414
 		410A1F4E0508A4B500000104 = {
 			children = (
 				410A1F4F0508A4B500000104,
@@ -1057,6 +1132,7 @@
 				F6E7966F02C877AF01AD0D07,
 				F6E7966D02C877AF01AD0D07,
 				F6E7968702C877AF01AD0D07,
+				0514CEFB08467C5900CF7015,
 				F6E7968802C877AF01AD0D07,
 				F6E7968302C877AF01AD0D07,
 				FBD20D3C95A2DE1DFB961D75,
@@ -11366,6 +11442,8 @@
 				44CF05C607C4B69A000D10E7,
 				44CF067A07C4D583000D10E7,
 				44CF068107C4D599000D10E7,
+				0514CF0308467CD200CF7015,
+				0514CF0A08467CF000CF7015,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11619,6 +11697,7 @@
 				440E911207C26D4E0078A7AF,
 				44CF050607C4B4FB000D10E7,
 				44CF067807C4D574000D10E7,
+				0514CF0108467CC500CF7015,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
