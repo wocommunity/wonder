@@ -414,13 +414,25 @@ public class ERXFileUtilities {
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
+        return readPropertyListFromFileInFramework(fileName,aFrameWorkName,languageList,null);
+    }
+
+    public static Object readPropertyListFromFileInFramework(String fileName,
+                                                             String aFrameWorkName,
+                                                             NSArray languageList,
+                                                             String encoding
+                                                             ) {
         String filePath = pathForResourceNamed(fileName, aFrameWorkName, languageList);
         Object result=null;
         if (filePath!=null) {
             File file = new File(filePath);
             try {
                 try {
-                    result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file));
+                    if (encoding == null) {
+                        result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file));                        
+                    } else {
+                        result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, encoding));
+                    }
                 } catch (IllegalArgumentException iae) {
                     result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
                 }

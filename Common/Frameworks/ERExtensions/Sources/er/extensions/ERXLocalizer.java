@@ -179,7 +179,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return localizerForLanguages(request.browserLanguages());
     }    
     
-
     /**
      * Resets the localizer cache. If WOCaching is
      * enabled then after being reinitialize all of
@@ -398,7 +397,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                         log.debug("Loading: " + fileName + " - " 
                             + (framework == null ? "app" : framework) + " - " 
                             + languages + ERXFileUtilities.pathForResourceNamed(fileName, framework, languages));
-                       NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
+                        String encoding = ERXProperties.stringForKey("er.extensions.ERXLocalizer.encodingForLocalizationFiles");
+                       NSDictionary dict = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework(fileName, framework, languages,encoding);
                        // HACK: ak we have could have a collision between the search path for validation strings and
                        // the normal localized strings.
                        if(fileName.indexOf(ERXValidationFactory.VALIDATION_TEMPLATE_PREFIX) == 0) {
