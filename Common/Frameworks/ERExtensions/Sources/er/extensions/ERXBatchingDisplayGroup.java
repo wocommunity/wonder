@@ -1,10 +1,8 @@
 package er.extensions;
 
 import com.webobjects.appserver.WODisplayGroup;
-import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eocontrol.EODataSource;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
@@ -20,6 +18,7 @@ import com.webobjects.foundation.NSNotificationCenter;
  * @author ak gross hacks, made functional and usable.
  */
 public class ERXBatchingDisplayGroup extends WODisplayGroup {
+
 
     /** Logging support */
     private static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchingDisplayGroup.class);
@@ -131,8 +130,12 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         }
         
         spec.setSortOrderings(sortOrderings());
-        NSArray objects = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
         
+        // fetch the primary keys
+        int i = 1;
+        NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
+        NSArray objects = ERXEOControlUtilities.faultsForRawRowsFromEntityInEditingContext(primKeys, spec.entityName(), ec);
+        //NSArray objects = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
         _displayedObjects = objects;
     }
     
