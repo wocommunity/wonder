@@ -121,18 +121,16 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         if(aFormValuesArray!=null){
             // ** This is where we accept the formValues.  Kind of weird.
             NSMutableArray aSelectionsArray = new NSMutableArray();
-            if (aFormValuesArray != null && aFormValuesArray.count() > 0) {
-                Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
-                NSArray anItemList = (NSArray)valueForBinding("list");
-                int anItemCount = anItemList.count();
-                while (anIndexEnumerator.hasMoreElements()) {
-                    int anIndex = Integer.parseInt((String)anIndexEnumerator.nextElement());
-                    if (anIndex < anItemCount) {
-                        Object anObject = anItemList.objectAtIndex(anIndex);
-                        aSelectionsArray.addObject(anObject);
-                    } else {
-                        // ** serious problem here. Raise an exception?
-                    }
+            Enumeration anIndexEnumerator = aFormValuesArray.objectEnumerator();
+            NSArray anItemList = (NSArray)valueForBinding("list");
+            int anItemCount = anItemList.count();
+            while (anIndexEnumerator.hasMoreElements()) {
+                int anIndex = Integer.parseInt((String)anIndexEnumerator.nextElement());
+                if (anIndex != -1 && anIndex < anItemCount) {
+                    Object anObject = anItemList.objectAtIndex(anIndex);
+                    aSelectionsArray.addObject(anObject);
+                } else {
+                    // ** serious problem here. Raise an exception?
                 }
             }
             // dt: this can be used with a subset as array for the checkboxes.
@@ -177,7 +175,7 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
         invalidateCaches();
         super.appendToResponse(aResponse, aContext);
     }
-
+    
     public NSArray maybeSortedList() {
         if (hasBinding("sortKey")) {
             String sortKey = (String)valueForBinding("sortKey");
