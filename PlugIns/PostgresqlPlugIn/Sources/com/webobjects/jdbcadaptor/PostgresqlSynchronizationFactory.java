@@ -48,9 +48,6 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return !rel.isFlattened()
             && destinationEntity.externalName() != null
             && rel.entity().model() == destinationEntity.model();
-//            && (destinationEntity.subEntities() == null
-//                || destinationEntity.subEntities().count() == 0
-//                || destinationEntity.subEntities().containsObject(rel.entity()));          
     }
     
     /**
@@ -151,7 +148,6 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         int count;
         int i;
         NSMutableArray results;
-        String statement;
         NSArray priKeyAttributes;
         EOAttribute priKeyAttribute;
         int priKeyAttributeCount;
@@ -161,19 +157,23 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         count = entityGroup.count();
         for ( i = 0 ; i < count ; i++ ) {
             entity = (EOEntity)entityGroup.objectAtIndex(i);
-            statement = "ALTER TABLE " + entity.externalName() + " ADD CONSTRAINT " + entity.externalName() + "_PK PRIMARY KEY (";
+            StringBuffer statement = new StringBuffer("ALTER TABLE ");
+            statement.append(entity.externalName());
+            statement.append(" ADD CONSTRAINT ");
+            statement.append(entity.externalName());
+            statement.append("_PK PRIMARY KEY (");
             priKeyAttributes = entity.primaryKeyAttributes();
             priKeyAttributeCount = priKeyAttributes.count();
             for ( j = 0 ; j < priKeyAttributeCount ; j++ ) {
                 priKeyAttribute = (EOAttribute)priKeyAttributes.objectAtIndex(j);
-                statement += priKeyAttribute.columnName();
+                statement.append(priKeyAttribute.columnName());
                 if ( j < priKeyAttributeCount - 1 ) {
-                    statement += ", ";
+                    statement.append(", ");
                 } else {
-                    statement += ")";
+                    statement.append(")");
                 }
             }
-            results.addObject( createExpression( entity, statement) );
+            results.addObject(createExpression(entity, statement.toString()));
         }
         return results;
     }
