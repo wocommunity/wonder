@@ -6,6 +6,13 @@ CheckBox: WOGenericElement {
 	value = index;
 }
 
+HiddenInput: WOGenericElement {
+    elementName = "input";
+	name = wrapperElementID;
+    type = "hidden";
+    value = "-1";
+}
+
 CheckBoxRepetition: ERXTable {
 	cellpadding = cellpadding;
 	cellspacing = cellspacing;
