@@ -317,7 +317,6 @@ public class ERXCrypto {
      */
     private static Key _secretDESKey = null;
     private static Key secretDESKey() {
-        _secretDESKey = null;
         if(_secretDESKey == null){
             InputStream is = null;
             if(_secretKeyPath != null) {
