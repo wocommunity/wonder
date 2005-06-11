@@ -20,6 +20,8 @@ import javax.mail.internet.*;
     @author Camille Troillard <tuscland@mac.com> */
 public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 {
+    protected static Factory factory;
+
     /** Holds the HTML content */
     protected String _htmlContent;
     
@@ -29,6 +31,31 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 
     /** True if this the current message has a plain text preamble. */
     private boolean _hasHiddenPlainTextContent = false;
+
+    /**
+     * Gets the current factory.  If the factory is unset, sets it to the default factory.
+     *
+     * @return the current factory
+     */
+    public static Factory factory() {
+        if ( factory == null )
+            factory = new DefaultFactory();
+
+        return factory;
+    }
+
+    /**
+     * Sets the factory.
+     *
+     * @param value the factory to use
+     */
+    public static void setFactory(Factory value) {
+        factory = value;
+    }
+
+    public static ERMailDeliveryHTML newMailDelivery() {
+        return factory().newHTMLMailDelivery();
+    }
 
     /** Sets the Plain text preamble that will be displayed set in top of HTML source.
         Non-HTML compliant mail readers can at least display this message. */
@@ -109,6 +136,23 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 	}
 
         return new DataHandler (multipart, multipart.getContentType ());
+    }
+
+    public static interface Factory {
+        /**
+         * Vends a new instance of an HTML mail delivery.
+         * @return a new instance
+         */
+        public ERMailDeliveryHTML newHTMLMailDelivery();
+    }
+
+    /**
+     * The default factory.  Vends the ERMailDeliveryHTML object back.
+     */
+    public static class DefaultFactory implements Factory {
+        public ERMailDeliveryHTML newHTMLMailDelivery() {
+            return new ERMailDeliveryHTML();
+        }
     }
 
 }
