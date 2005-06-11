@@ -215,7 +215,7 @@ public class ERMailer {
      */
     // ENHANCEME: Not handling double byte (Japanese) language
     public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) throws MessagingException {
-        ERMailDeliveryHTML mail = new ERMailDeliveryHTML();
+        ERMailDeliveryHTML mail = ERMailDeliveryHTML.newMailDelivery();
 
         // Add all of the addresses
         mail.setFromAddress(message.fromAddress());
