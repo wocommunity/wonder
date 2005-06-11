@@ -281,7 +281,7 @@ public class ERMailer {
     /**
      * Default factory.  Just vends back an ERMailer instance.
      */
-    protected static class DefaultFactory implements Factory {
+    public static class DefaultFactory implements Factory {
         public ERMailer newMailer() {
             return new ERMailer();
         }
