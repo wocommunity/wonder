@@ -28,7 +28,7 @@ use cases.<BR>
 Here is an example of its usage.
 
 <PRE>
-ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
+ERMailDeliveryHTML mail = ERMailDeliveryHTML.newMailDelivery();
 mail.setWOComponentContent (mailPage);
 
 try {

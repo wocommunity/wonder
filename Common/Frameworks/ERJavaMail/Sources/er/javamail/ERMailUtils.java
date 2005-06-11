@@ -42,7 +42,7 @@ public class ERMailUtils extends Object {
      */
     public static ERMailDeliveryHTML sharedDeliverer () {
         if (sharedDeliverer == null) {
-            sharedDeliverer = new ERMailDeliveryHTML ();
+            sharedDeliverer = ERMailDeliveryHTML.newMailDelivery();
         }
 
         return sharedDeliverer;
