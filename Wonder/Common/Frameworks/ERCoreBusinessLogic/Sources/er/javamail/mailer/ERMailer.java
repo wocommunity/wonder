@@ -39,9 +39,42 @@ public class ERMailer {
     /** holds a reference to the shared instance */
     protected static ERMailer instance;
 
+    protected static Factory factory;
+
     //	===========================================================================
     //	Class Method(s)
     //	---------------------------------------------------------------------------
+
+    /**
+     * Gets the current factory.  If the factory is unset, sets the factory to the default
+     * factory.
+     *
+     * @return the factory
+     */
+    public static Factory factory() {
+        if ( factory == null )
+            factory = new DefaultFactory();
+
+        return factory;
+    }
+
+    /**
+     * Sets the factory.
+     *
+     * @param value new factory value
+     */
+    public static void setFactory(Factory value) {
+        factory = value;
+    }
+
+    /**
+     * Instantiates a new mailer instance using the factory and returns it.
+     *
+     * @return a new mailer instance.
+     */
+    public static ERMailer newMailer() {
+        return factory().newMailer();
+    }
 
     protected static boolean shouldDeleteSentMail() {
         return ERXProperties.booleanForKeyWithDefault("er.javamail.mailer.ERMailer.ShouldDeleteSentMail", true);
@@ -52,8 +85,9 @@ public class ERMailer {
      * @return mailer singleton
      */
     public static ERMailer instance() {
-        if (instance == null)
-            instance = new ERMailer();
+        if ( instance == null )
+            instance = newMailer();
+
         return instance;
     }
 
@@ -222,5 +256,28 @@ public class ERMailer {
             }
         }
         return messageTitlePrefix;
+    }
+
+    //	===========================================================================
+    //	Factory-related things
+    //	---------------------------------------------------------------------------
+
+    public static interface Factory {
+        /**
+         * Vends new instances of a mailer.  This is primarily used to set the static instance
+         * of ERMailer.
+         *
+         * @return A new instance of an ERMailer or a subclass.
+         */
+        public ERMailer newMailer();
+    }
+
+    /**
+     * Default factory.  Just vends back an ERMailer instance.
+     */
+    protected static class DefaultFactory implements Factory {
+        public ERMailer newMailer() {
+            return new ERMailer();
+        }
     }
 }
