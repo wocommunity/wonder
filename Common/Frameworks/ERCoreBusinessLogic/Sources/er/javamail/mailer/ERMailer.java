@@ -213,7 +213,7 @@ public class ERMailer {
     public ERMailDelivery createMailDeliveryForMailMessage(ERCMailMessage message) throws MessagingException {
         ERMailDelivery mail = null;
         if (message.text() != null) {
-            mail = new ERMailDeliveryHTML();
+            mail = ERMailDeliveryHTML.newMailDelivery();
             ((ERMailDeliveryHTML)mail).setHTMLContent(message.text());
 
             if (message.plainText() != null)
