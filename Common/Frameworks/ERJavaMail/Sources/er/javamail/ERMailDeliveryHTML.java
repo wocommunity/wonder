@@ -78,7 +78,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
     public void newMail () {
         super.newMail ();
         _hasHiddenPlainTextContent = false;
-        _htmlContent = null;
+        setHTMLContent(null);
     }
 
     protected String htmlContent () {
