@@ -159,7 +159,9 @@ public class ERXSimpleTemplateParser {
             log.debug("otherObject: " + otherObject);
         }
         if (delimiter.equals("@@") && template.indexOf(delimiter) < 0 && template.indexOf("@") >= 0) {
-            log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
+            if (!isLoggingDisabled) {
+                log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
+            }
             delimiter = "@";
         }
         StringBuffer buffer = new StringBuffer();
@@ -176,7 +178,7 @@ public class ERXSimpleTemplateParser {
                     throw new RuntimeException("\"\" is not a valid keypath in template: " + template);
                 Object obj;
                 try {
-                    if (log.isDebugEnabled()) {
+                    if (!isLoggingDisabled && log.isDebugEnabled()) {
                         log.debug("calling valueForKeyPath("+object+", "+element+")");
                     }
                     obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element); 
@@ -190,7 +192,7 @@ public class ERXSimpleTemplateParser {
                     	try {
                     		obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(otherObject, element);
                     	} catch (NSKeyValueCoding.UnknownKeyException t1) {
-                    		if (log.isDebugEnabled()) {
+                    		if (!isLoggingDisabled && log.isDebugEnabled()) {
                     			log.debug("Could not find a value for \"" + element + "\" of template, \"" + template + "\" in either the object or extra data: " + t1.getMessage());
                     		}
                     		obj = null;
