@@ -28,7 +28,6 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     
     public String entityForReportName;
     public ERXKeyValuePair currentElement;
-    public ERXKeyValuePair selectedElement;
 
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
@@ -74,34 +73,32 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
         super.reset();
         _availableElements = null;
         entityForReportName = null;
-        selectedElement = null;
         currentElement = null;
     }
 
+    public ERXKeyValuePair selectedElement() {
+        return new ERXKeyValuePair(objectPropertyValue(), ERXLocalizer.currentLocalizer()
+                                   .localizedValueForKeyWithDefault((String) objectPropertyValue()));        
+    }
+    
     public void setSelectedElement(Object value) {
-        selectedElement = (ERXKeyValuePair)value;
-        if (selectedElement!=null) {
-            object().takeValueForKey(selectedElement.key(), key());
+        ERXKeyValuePair kvp  = (ERXKeyValuePair)value;
+        if (kvp!=null) {
+            object().validateTakeValueForKeyPath(kvp.key(), key());
         } else {
-            object().takeValueForKey(null, key());
+            object().validateTakeValueForKeyPath(null, key());
         }
    }
- 
-    public void appendToResponse(WOResponse r, WOContext c) {
-        String chosenKey = (String)objectPropertyValue();
-        if(log.isDebugEnabled()) log.debug("chosenKey = "+chosenKey);
-        if(chosenKey!=null){
-            for(Enumeration e = availableElements().objectEnumerator(); e.hasMoreElements();){
-                ERXKeyValuePair keyValue = (ERXKeyValuePair)e.nextElement();
-                if(keyValue.key().equals(chosenKey))
-                   selectedElement = keyValue;
-            }
-            if(log.isDebugEnabled()) {
-                if(selectedElement != null) {
-                    log.debug("selectedElement = "+selectedElement.key()+" , "+selectedElement.value());
-                }
-            }
+
+    /** Extends the parent implementation in order to force validation. */
+    public void takeValuesFromRequest(WORequest r, WOContext c) {
+        super.takeValuesFromRequest(r,c);
+        try {
+            object().validateTakeValueForKeyPath(objectPropertyValue(), key());
+        } catch (NSValidation.ValidationException e) {
+            validationFailedWithException(e, objectPropertyValue(), key());
         }
-        super.appendToResponse(r,c);
+        
     }
+    
 }
