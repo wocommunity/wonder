@@ -24,7 +24,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
-<<<<<<< ERMailDelivery.java
 import er.extensions.ERXLogger;
 
 /** 
@@ -50,32 +49,6 @@ import er.extensions.ERXLogger;
       // do something ...
    }
    </code></PRE>
-=======
-/** This is the main class for sending mail with the JavaMail API.
-You typically don't create instances of this class since it is abstract.
-You should create instances of its subclasses that fitted with specifical
-use cases.<BR>
-
-Here is an example of its usage.
-
-<PRE>
-ERMailDeliveryHTML mail = ERMailDeliveryHTML.newMailDelivery();
-mail.setWOComponentContent (mailPage);
-
-try {
-    mail.newMail ();
-    mail.setFromAddress    (emailFrom);
-    mail.setReplyToAddress (emailReplyTo);
-    mail.setSubject 	   (emailSubject);
-    mail.setToAddresses    (new NSArray (toEmailAddresses));
-
-    // Send the mail
-    mail.sendMail ();
-} catch (Exception e) {
-    // do something ...
-}
-</PRE>
->>>>>>> 1.9
 
 @author Camille Troillard <tuscland@mac.com>
 @author ak fixes
