@@ -11,13 +11,13 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.objectstyle.wolips.antbuilder</name>
+			<name>org.objectstyle.wolips.incrementalbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.objectstyle.wolips.antframeworknature</nature>
+		<nature>org.objectstyle.wolips.incrementalframeworknature</nature>
 	</natures>
 </projectDescription>
