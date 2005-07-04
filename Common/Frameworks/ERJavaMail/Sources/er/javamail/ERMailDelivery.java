@@ -6,20 +6,51 @@
 
 package er.javamail;
 
-import java.util.*;
-import java.io.*;
-import javax.mail.*;
-import javax.activation.*;
-import javax.mail.internet.*;
+import java.util.Date;
+import java.util.Enumeration;
 
-import er.extensions.ERXLogger;
-import er.extensions.ERXUtilities;
+import javax.activation.DataHandler;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
+<<<<<<< ERMailDelivery.java
+import er.extensions.ERXLogger;
+
+/** 
+ * This is the main class for sending mail with the JavaMail API.
+ * You typically don't create instances of this class since it is abstract. Instead, you should create instances of its 
+ * subclasses that fitted with specifical use cases.<BR>
+ * Here is an example of its usage.
+ 
+ <PRE><code>
+ ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
+ mail.setWOComponentContent (mailPage);
+ 
+  try {
+     mail.newMail ();
+     mail.setFromAddress    (emailFrom);
+     mail.setReplyToAddress (emailReplyTo);
+     mail.setSubject 	   (emailSubject);
+     mail.setToAddresses    (new NSArray (toEmailAddresses));
+ 
+     // Send the mail
+      mail.sendMail ();
+   } catch (Exception e) {
+      // do something ...
+   }
+   </code></PRE>
+=======
 /** This is the main class for sending mail with the JavaMail API.
 You typically don't create instances of this class since it is abstract.
 You should create instances of its subclasses that fitted with specifical
@@ -44,8 +75,10 @@ try {
     // do something ...
 }
 </PRE>
+>>>>>>> 1.9
 
 @author Camille Troillard <tuscland@mac.com>
+@author ak fixes
 */
 public abstract class ERMailDelivery {
 
@@ -54,7 +87,7 @@ public abstract class ERMailDelivery {
     /** JavaMail session */
     private javax.mail.Session _session;
 
-    /** Content of sent mail.  In one instance of OMailDelivery, when creating multiple mails,
+    /** Content of sent mail.  In one instance of ERMailDelivery, when creating multiple mails,
         you must be sure to call newMail () method before send a new mail in order to have a
         cleared fresh mail */
     protected MimeMessage _mimeMessage;
@@ -65,26 +98,8 @@ public abstract class ERMailDelivery {
     /** NSArray of ERMailAttachment that must be binded to the message as INLINE. */
     protected NSMutableArray _inlineAttachments;
 
-    /** Callback class name. Used to have ERMail call a method on a class
-        after a message has been sent 
-        @deprecated*/
-    public static String callBackClassName = null;
-    /** @deprecated */
-    public static String callBackMethodName = null;
-
     public static String DefaultCharset = System.getProperty ("er.javamail.defaultEncoding");
     public String _charset = DefaultCharset;
-
-    /** callbackObject to refer to in the calling program 
-        @deprecated */
-    public Object _callbackObject = null;
-
-    /** Sets the callback class and method name
-        @deprecated*/
-    public static void setCallBackClassWithMethod (String className, String methodName) {
-        callBackClassName = className;
-        callBackMethodName = methodName;
-    }
 
     public String charset () {
         return _charset;
@@ -188,24 +203,22 @@ public abstract class ERMailDelivery {
 
     /** Sets the from address for the current message instance */
     public void setFromAddress (String fromAddress) throws MessagingException, AddressException {
-        this.mimeMessage ().setFrom (new InternetAddress (fromAddress));
+        setFromAddress(fromAddress, null);
     }
 
     /** Sets the from address for the current message instance using an email and the personal name. */
     public void setFromAddress (String fromAddress, String personalName) throws MessagingException, AddressException {
-        InternetAddress address =
-        this.internetAddressWithEmailAndPersonal (fromAddress, personalName);
+        InternetAddress address = this.internetAddressWithEmailAndPersonal (fromAddress, personalName);
         this.mimeMessage ().setFrom (address);
     }
 
     public void setToAddress (String toAddress) throws MessagingException, AddressException {
-        this.setToAddresses (new NSArray (toAddress));
+        this.setToAddress (toAddress, null);
     }
 
     /** Sets the to address for the current message instance using an email and the personal name. */
     public void setToAddress (String toAddress, String personalName) throws MessagingException, AddressException {
-        InternetAddress address =
-        this.internetAddressWithEmailAndPersonal (toAddress, personalName);
+        InternetAddress address = this.internetAddressWithEmailAndPersonal (toAddress, personalName);
         setInternetAddresses (new NSArray (address), Message.RecipientType.TO);
     }
 
@@ -215,10 +228,14 @@ public abstract class ERMailDelivery {
     }
 
     /** Sets the reply-to address for the current message instance */
-    public void setReplyToAddress (String replyToAddress) throws MessagingException, AddressException {
-        this.mimeMessage ().setReplyTo  (new InternetAddress [] {
-			new InternetAddress (replyToAddress)
-		});
+    public void setReplyToAddress (String toAddress) throws MessagingException, AddressException {
+        setReplyToAddress(toAddress, null);
+    }
+
+    /** Sets the reply-to address for the current message instance */
+    public void setReplyToAddress (String toAddress, String personalName) throws MessagingException, AddressException {
+        InternetAddress addresses[] = new InternetAddress[] {this.internetAddressWithEmailAndPersonal (toAddress, personalName)};
+        this.mimeMessage ().setReplyTo  (addresses);
     }
 
     /** Sets the cc-addresses array for the current message instance */
@@ -229,16 +246,6 @@ public abstract class ERMailDelivery {
     /** Sets the bcc-addresses array for the current message instance */
     public void setBCCAddresses (NSArray bccAddresses) throws MessagingException, AddressException {
         setAddresses (bccAddresses, Message.RecipientType.BCC, true);
-    }
-
-    /** Sets the object for the message. This is the identifying object from the calling program.
-        @deprecated */
-    public void setCallbackObject (Object obj) {
-        _callbackObject = obj;
-    }
-    /** @deprecated */
-    public Object callbackObject () {
-        return _callbackObject;
     }
 
     /** Sets the subject for the current message instance */
@@ -299,10 +306,23 @@ public abstract class ERMailDelivery {
      */
     public void sendMail (boolean shouldBlock) {
         try {
-            this.finishMessagePreparation ();
-            ERMailSender sender = ERMailSender.sharedMailSender ();
-            ERMessage message    = this.buildMessage ();
+            if (ERJavaMail.sharedInstance ().centralize ()) {
+                if(ERJavaMail.sharedInstance ().adminEmail () == null) {
+                    throw new IllegalArgumentException("When setting 'er.javamail.centralize=true' (which means you just test sending mails), you must also give a valid 'er.javamail.adminEmail=foo@bar.com' to which the mails are sent.");
+                }
+                InternetAddress [] addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
+                mimeMessage ().setRecipients (Message.RecipientType.TO, addresses);
+                mimeMessage ().setRecipients (Message.RecipientType.CC, new InternetAddress []{});
+                mimeMessage ().setRecipients (Message.RecipientType.BCC, new InternetAddress []{});
+            }
+            if(mimeMessage().getAllRecipients().length == 0) {
+                return;
+            }
 
+             this.finishMessagePreparation ();
+             ERMailSender sender = ERMailSender.sharedMailSender ();
+             ERMessage message    = this.buildMessage ();
+             
             if (shouldBlock)
                 sender.sendMessageNow (message);
             else {
@@ -320,7 +340,7 @@ public abstract class ERMailDelivery {
                             // Here, we make the assumption that
                             // the current thread is the one that
                             // feeds the ERMailSender.
-                            Thread.currentThread ().sleep
+                            Thread.sleep
                                 (ERJavaMail.sharedInstance ().milliSecondsWaitIfSenderOverflowed ());
                         } catch (InterruptedException ie) {
                             log.warn ("Caught InterruptedException.", ie);
@@ -376,16 +396,8 @@ public abstract class ERMailDelivery {
         this.mimeMessage ().saveChanges ();
     }
 
-    /** Sets addresses regarding their recipient type in current message */
-    private void setAddresses (NSArray addressesArray, Message.RecipientType type)
-        throws MessagingException, AddressException {
-        setAddresses (addressesArray, type, false);
-    }
-
     /**
      * Sets addresses using an NSArray of InternetAddress objects.
-     * This method, unlike 'setAddresses' does not have the ability to
-     * filter black & white list.
      */
     public void setInternetAddresses (NSArray addresses,
                                       Message.RecipientType type) throws MessagingException {
@@ -408,27 +420,54 @@ public abstract class ERMailDelivery {
      * lists.
      */
     private void setAddresses (NSArray addressesArray,
-                               Message.RecipientType type,
-                               boolean filterAddresses)
-        throws MessagingException, AddressException {
-            InternetAddress [] addresses = null;
-
-            if (filterAddresses) {
-                addressesArray = ERJavaMail.sharedInstance().filterEmailAddresses(addressesArray);
-            }
-
-            if (!ERJavaMail.sharedInstance ().centralize ()) {
-                addresses = ERMailUtils.convertNSArrayToInternetAddresses (addressesArray);
-            } else {
-                addresses = new InternetAddress [] { new InternetAddress (ERJavaMail.sharedInstance ().adminEmail ()) };
-            }
-
-            this.mimeMessage ().setRecipients (type, addresses);
+            Message.RecipientType type,
+            boolean filterAddresses)
+    throws MessagingException, AddressException {
+        if (filterAddresses) {
+            addressesArray = ERJavaMail.sharedInstance().filterEmailAddresses(addressesArray);
         }
+        if (addressesArray.count () == 0) {
+            // don't do anything.
+            return;
+        }
+        InternetAddress [] addresses = ERMailUtils.convertNSArrayToInternetAddresses (addressesArray);
+        this.mimeMessage ().setRecipients (type, addresses);
+    }
 
     /**
      * Abstract method called by subclasses for doing pre-processing before sending the mail.
      * @return the multipart used to put in the mail.
      */
     protected abstract DataHandler prepareMail () throws MessagingException;
+    
+    /** Callback class name. Used to have ERMail call a method on a class
+     after a message has been sent 
+     @deprecated*/
+    public static String callBackClassName = null;
+    /** @deprecated */
+    public static String callBackMethodName = null;
+    /** callbackObject to refer to in the calling program 
+     @deprecated */
+    public Object _callbackObject = null;
+    
+    /** Sets the callback class and method name
+     @deprecated*/
+    public static void setCallBackClassWithMethod (String className, String methodName) {
+        callBackClassName = className;
+        callBackMethodName = methodName;
+    }
+    
+    
+    /** Sets the object for the message. This is the identifying object from the calling program.
+     @deprecated */
+    public void setCallbackObject (Object obj) {
+        _callbackObject = obj;
+    }
+    /** @deprecated */
+    public Object callbackObject () {
+        return _callbackObject;
+    }
+    
 }
+
+
