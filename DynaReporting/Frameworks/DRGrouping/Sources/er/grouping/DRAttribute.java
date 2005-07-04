@@ -1,8 +1,25 @@
 package er.grouping;
 
+import ognl.webobjects.WOOgnl;
+
 import com.webobjects.foundation.*;
 
+/**
+ * DRAttributes are to display what EOAttributes are to the back-end.  
+ * Each DRAttribute can be defined with:
+ * <li>'keyPath' (what you want to ask the dictionary or EO)
+ * <li>'label' (what you want to call the attribute for display)
+ * <li>a boolean for 'shouldTotal'
+ * <li>a boolean for 'shouldSort'
+ * <li>'format' for formatting dates
+ * <li> a toggle turning a attribute into a group. 
+ * 
+ * Each group can have 0 or more DRAttributes within it.
+ * @author david neumann
+ *
+ */
 public class DRAttribute extends Object  {
+    
     protected String _keyPath;
     protected String _format;
     protected boolean _shouldTotal;
@@ -14,19 +31,42 @@ public class DRAttribute extends Object  {
     protected DRAttributeGroup _attributeGroup;
     protected boolean _isPlaceHolderTotal;
     protected boolean _isTotal;
+    protected boolean _isComputed;
     protected NSArray _emptyArray = NSArray.EmptyArray;
     private NSMutableArray __attributes = new NSMutableArray();
 
-    static public DRAttribute withAttributeGroup(DRAttributeGroup attributeGroup) {
+    /**
+     * Creates a new DRAttributes from a DRAttributeGroup.
+     * @param attributeGroup
+     * @return
+     */
+    public static DRAttribute withAttributeGroup(DRAttributeGroup attributeGroup) {
         DRAttribute attribute = new DRAttribute(attributeGroup);
         return attribute;
     }
-
-    static public DRAttribute withKeyPathFormatLabelTotalUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSDictionary userInfo) {
+    
+    /**
+     * Creates a new DRAttribute from the supplied parmeters.
+     * @param keyPath
+     * @param format
+     * @param label
+     * @param shouldTotal
+     * @param userInfo
+     * @return
+     */
+    public static DRAttribute withKeyPathFormatLabelTotalUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSDictionary userInfo) {
         DRAttribute attribute = new DRAttribute(keyPath, format, label, shouldTotal, userInfo);
         return attribute;
     }
 
+    /**
+     * Constructor with parameters.
+     * @param keyPath
+     * @param format
+     * @param label
+     * @param shouldTotal
+     * @param userInfo
+     */
     public DRAttribute(String keyPath, String format, String label, boolean shouldTotal, NSDictionary userInfo) {
         this();
         setKeyPath(keyPath);
@@ -36,6 +76,10 @@ public class DRAttribute extends Object  {
         setUserInfo(userInfo);
     }
 
+    /**
+     * Constructor with DRAttributeGroup.
+     * @param attributeGroup
+     */
     public DRAttribute(DRAttributeGroup attributeGroup) {
         this();
         setAttributeGroup(attributeGroup);
@@ -68,6 +112,9 @@ public class DRAttribute extends Object  {
     }
     public void setKeyPath(String value) {
         _keyPath = value;
+        if(value != null) {
+            _isComputed = value.indexOf("~") == 0 || value.indexOf("@") == 0;
+        }
     }
 
     public String format() {
@@ -156,7 +203,28 @@ public class DRAttribute extends Object  {
         _isPlaceHolderTotal = value;
     }
 
-    public String toString() {
+    public boolean isComputed() {
+        return _isComputed;
+    }
+    
+     public String toString() {
         return "<DRAttribute label:\"" + label() + "\"; keyPath:\"" + keyPath() + "\"; format:\"" + format() + "\"; >";
+    }
+
+    public double computeFromRawRecords(NSArray rawRecords) {
+        String totalKey = keyPath();
+        double doubleValue = 0.0;
+        if(totalKey.indexOf("~") == 0) {
+            Object result = WOOgnl.factory().getValue(totalKey.substring(1), rawRecords);
+            doubleValue = DRValueConverter.converter().doubleForValue(result);
+        } else if(totalKey.indexOf("@") == 0) {
+            Object result = rawRecords.valueForKeyPath(totalKey);
+            doubleValue = DRValueConverter.converter().doubleForValue(result);
+            if(doubleValue == 0.0 && totalKey.indexOf("@count") == 0) {
+                // FIXME: ak, we should return "-" on not found... probably possible via a formatter 
+                return 0.0;
+            }
+        }
+        return doubleValue;
     }
 }

@@ -6,13 +6,16 @@ import com.webobjects.foundation.*;
 
 import er.extensions.*;
 
+/**
+ * Group of attributes which is also an attribute by itself.
+ */
 public class DRAttributeGroup extends DRAttribute  {
 
     protected NSMutableArray _attributes;
     protected NSMutableArray _flatAttributes;
     protected NSMutableArray _flatAttributesTotal;
 
-    static public DRAttributeGroup withKeyPathFormatLabelTotalListUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSArray attributes, NSDictionary userInfo) {
+    public static DRAttributeGroup withKeyPathFormatLabelTotalListUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSArray attributes, NSDictionary userInfo) {
         DRAttributeGroup attributeGroup = new DRAttributeGroup(keyPath, format, label, shouldTotal, attributes, userInfo);
         return attributeGroup;
     }

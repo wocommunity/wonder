@@ -2,6 +2,8 @@ package er.grouping;
 
 import java.util.*;
 
+import ognl.webobjects.WOOgnl;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -19,8 +21,7 @@ public class DRRecordGroup extends Object  {
     protected DRRecordGroup _parent;
     protected boolean _staleTotal;
     protected boolean _pregroupedListFound;
-    protected double _total;
-
+    
     // not used
     protected NSMutableDictionary _lookUpCoordinates;
     
@@ -80,7 +81,6 @@ public class DRRecordGroup extends Object  {
         _recordList = new NSMutableArray();
         _recordGroupDict = new NSMutableDictionary();
         _totalsByKey = new NSMutableDictionary();
-        _total = 0.0;
         _staleTotal = true;
         _pregroupedListFound = false;
         _sortedRecordList = null;
@@ -98,58 +98,58 @@ public class DRRecordGroup extends Object  {
         return _group;
     }
 
-    public DRValue totalForKey(String ky) {
-        return (DRValue)_totalsByKey.objectForKey(ky);
+    public DRValue totalForKey(String totalKey) {
+        DRValue value = (DRValue)_totalsByKey.objectForKey(totalKey);
+        return value;
     }
 
     public NSDictionary totals() {
         // Loop over all DRRecords and ask each 'total-able' key for its value
         // and sum up into a dictionary of totals. keys in dict are keys into records
         // values are NSNumbers. Once computed, cache.
-        //OWDebug.println(1, "_staleTotal:"+_staleTotal);
-
+ 
+        //AK: there are two types of totals, the one is the simple sum we had earlier,
+        // it gets stored in the _totals under (index number of the current record*index number of 
         if (_staleTotal) {
-            //OWDebug.println(1, "entered: this:"+toString());
-            Enumeration en = this.recordList().objectEnumerator();
-            //OWDebug.println(1, "entered: this.recordList().count():"+recordList().count());
-            while (en.hasMoreElements()) {
+            for(Enumeration en = this.recordList().objectEnumerator(); en.hasMoreElements(); ) {
                 int i = 0;
                 DRRecord rec = (DRRecord)en.nextElement();
                 NSArray flatlist = rec.flatValueList();
-                Enumeration en2 = flatlist.objectEnumerator();
-                //OWDebug.println(1, "flatlist.count():"+flatlist.count());
-                while (en2.hasMoreElements()) {
+                for(Enumeration en2 = flatlist.objectEnumerator(); en2.hasMoreElements(); ) {
                     DRValue val = (DRValue)en2.nextElement();
+                    boolean isComputed = val.attribute().isComputed();
                     double subTot, lastTot, newTot;
                     Number indexNum = new Integer(i);
                     DRValue totalValue = (DRValue)_totals.objectForKey(indexNum);
-                    //OWDebug.println(1, "totalValue:"+totalValue);
                     if (totalValue == null) {
                         if (val.shouldTotal()) {
-                            totalValue = DRValue.withTotalAttribute(0, val.attribute());
-                            String key = totalValue.key();
-                            //OWDebug.println(1, "key:"+key);
+                            if(!isComputed) {
+                                totalValue = DRValue.withTotalAttribute(0, val.attribute());
+                            } else {
+                                final NSArray rawRecords = rawRecordList();
+                                totalValue = new DRValue(0, val.attribute()) {
+                                    public double total() {
+                                        return attribute().computeFromRawRecords(rawRecords);
+                                    }
+                                };
+                            }
                             _totalsByKey.setObjectForKey(totalValue, totalValue.key());
                         } else {
                             totalValue = DRValue.nullTotal();
                         }
-
                         _totals.setObjectForKey(totalValue, indexNum);
                     }
-
-                    lastTot = totalValue.total();
-                    //OWDebug.println(1, "lastTot:"+lastTot);
-                    subTot = val.total();
-                    //OWDebug.println(1, "subTot:"+subTot);
-                    newTot = lastTot+subTot;
-                    //OWDebug.println(1, "newTot:"+newTot);
-                    totalValue.setTotal(newTot);
+                    if(!isComputed) {
+                        lastTot = totalValue.total();
+                        subTot = val.total();
+                        newTot = lastTot+subTot;
+                        totalValue.setTotal(newTot);
+                    }
                     i++;
                 }
             }
-            _staleTotal = false;
-            //OWDebug.println(1, "_totals:"+_totals);
-        }
+             _staleTotal = false;
+         }
 
         return _totals;
     }
