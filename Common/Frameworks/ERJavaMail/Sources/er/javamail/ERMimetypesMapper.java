@@ -6,29 +6,23 @@
 
 package er.javamail;
 
-import com.webobjects.appserver.WOResourceManager;
-import com.webobjects.appserver.WOApplication;
-import javax.activation.*;
-import java.io.*;
+import java.io.InputStream;
 
-import er.extensions.ERXLogger;
+import javax.activation.MimetypesFileTypeMap;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOResourceManager;
 
 public class ERMimetypesMapper
 {
-    private static final ERXLogger log = ERXLogger.getERXLogger (ERMimetypesMapper.class);
-
-	private static MimetypesFileTypeMap mimetypesMapper = null;
+ 	private static MimetypesFileTypeMap mimetypesMapper = null;
     protected static MimetypesFileTypeMap mapper () {
         if (mimetypesMapper == null) {
             WOResourceManager resourceManager = WOApplication.application ().resourceManager ();
-            String path = resourceManager.pathForResourceNamed ("mime.types", "ERJavaMail", null);
+            InputStream is = resourceManager.inputStreamForResourceNamed("mime.types", "ERJavaMail", null);
 
-            try {
-                mimetypesMapper = new MimetypesFileTypeMap (path);
-            } catch (IOException e) {
-                log.error ("Error when opening 'mime.types' file.\nInstanciating a default MimetypesFileTypeMap ...");
-                mimetypesMapper = new MimetypesFileTypeMap ();
-            }
+            mimetypesMapper = new MimetypesFileTypeMap (is);
+            is = null;
         }
 
         return mimetypesMapper;
