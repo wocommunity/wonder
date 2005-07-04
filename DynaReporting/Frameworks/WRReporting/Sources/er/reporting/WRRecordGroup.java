@@ -139,14 +139,6 @@ public class WRRecordGroup extends WOComponent  {
 
     public double totalValueTotal() {
         if(totalValue != null) {
-            if(totalValue.key().indexOf("~") == 0) {
-                return DRValueConverter.converter().doubleForValue(WOOgnl.factory().getValue(totalValue.key().substring(1), recordGroup().rawRecordList()));
-            } else {
-                String totalKey = (String)totalValue.attribute().userInfo().objectForKey("total");
-                if(totalKey != null) {
-                    return DRValueConverter.converter().doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
-                }
-            }
             return totalValue.total();
         }
         return 0;
@@ -273,25 +265,16 @@ public class WRRecordGroup extends WOComponent  {
         String totalKey = this.totalToShow();
 
         double doubleValue = 0.0;
-
+        
         if(totalKey != null) {
-            if(totalKey.indexOf("~") == 0) {
-                doubleValue = DRValueConverter.converter().doubleForValue(WOOgnl.factory().getValue(totalKey.substring(1), recordGroup().rawRecordList()));
-            } else if(totalKey.indexOf("@") == 0) {
-                doubleValue = DRValueConverter.converter().doubleForValue(recordGroup().rawRecordList().valueForKeyPath(totalKey));
-                if(doubleValue == 0.0 && totalKey.indexOf("@count") == 0) {
+            NSArray tots = this.recordGroup().totalList();
+            
+            if (tots != null && tots.count() > 0) {
+                DRValue v = this.recordGroup().totalForKey(this.totalToShow());
+                if(v != null) {
+                    doubleValue = v.total();
+                } else {
                     return this.noTotalLabel();
-                }
-            } else {
-                NSArray tots = this.recordGroup().totalList();
-
-                if (tots != null && tots.count() > 0) {
-                    DRValue v = this.recordGroup().totalForKey(this.totalToShow());
-                    if(v != null) {
-                        doubleValue = v.total();
-                    } else {
-                        return this.noTotalLabel();
-                    }
                 }
             }
         }
