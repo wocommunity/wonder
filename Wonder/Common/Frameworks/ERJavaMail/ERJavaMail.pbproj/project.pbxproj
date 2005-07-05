@@ -3,11 +3,9 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		01735AADFFDED26B11CD2B8D = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a+rX";
@@ -25,18 +23,23 @@
 			name = WebServer;
 		};
 		017C7B2CFFD7144B7F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)ERJavaMail.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2DFFD7144B7F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)ERJavaMail.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		017C7B2EFFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B2FFFD7144B7F000001;
+			targetProxy = 41BF320108753B4100093C6C;
 		};
 		017C7B2FFFD7144B7F000001 = {
 			buildPhases = (
@@ -173,6 +176,7 @@
 		017C7B35FFD7144B7F000001 = {
 			isa = PBXTargetDependency;
 			target = 017C7B36FFD7144B7F000001;
+			targetProxy = 41BF320208753B4100093C6C;
 		};
 		017C7B36FFD7144B7F000001 = {
 			buildPhases = (
@@ -278,11 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleFramework.sh\"";
@@ -321,11 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
@@ -341,10 +337,12 @@
 //023
 //024
 		022D130B0059B6D511CD2978 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		022D130C0059B6D611CD2978 = {
 			fileRef = 022D130B0059B6D511CD2978;
@@ -416,6 +414,7 @@
 			isa = PBXGroup;
 			name = Intermediates;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //0B0
 //0B1
@@ -428,6 +427,8 @@
 //403
 //404
 		40B5827EFFD5E7DB7F000001 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				40B5829AFFD5EB0D7F000001,
 				40B5829BFFD5EB0D7F000001,
@@ -455,6 +456,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58280FFD5E8187F000001 = {
 			children = (
@@ -464,11 +466,14 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B58281FFD5E8187F000001 = {
-			isa = PBXFrameworkReference;
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
 			path = ERJavaMail.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		40B58282FFD5E8187F000001 = {
 			buildPhases = (
@@ -482,7 +487,7 @@
 				01CC6D580020D11E11CD2B8D,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				BUILD_VERSION_DIR = "$(VERSIONS_DIR)/$(FRAMEWORK_VERSION)";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(BUILD_VERSION_DIR)";
@@ -619,6 +624,7 @@
 			isa = PBXGroup;
 			path = Resources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828CFFD5E91B7F000001 = {
 			children = (
@@ -637,36 +643,47 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5828DFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828EFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B5828FFFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58291FFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58292FFD5E91B7F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWOExtensions.framework;
 			path = /System/Library/Frameworks/JavaWOExtensions.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		40B58293FFD5E91B7F000001 = {
 			children = (
@@ -675,29 +692,33 @@
 			isa = PBXGroup;
 			path = Documentation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		40B5829AFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		40B5829BFFD5EB0D7F000001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(DSTROOT)/$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -707,6 +728,30 @@
 //402
 //403
 //404
+//410
+//411
+//412
+//413
+//414
+		41BF320108753B4100093C6C = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B2FFFD7144B7F000001;
+			remoteInfo = "Application Server";
+		};
+		41BF320208753B4100093C6C = {
+			containerPortal = 40B5827EFFD5E7DB7F000001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 017C7B36FFD7144B7F000001;
+			remoteInfo = "Web Server";
+		};
+//410
+//411
+//412
+//413
+//414
 //4E0
 //4E1
 //4E2
@@ -714,17 +759,21 @@
 //4E4
 		4E16E64A0392AC7300CF0E72 = {
 			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
 			name = "activation-1.0.2.jar";
 			path = "Libraries/activation-1.0.2.jar";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4E16E64B0392AC7300CF0E72 = {
 			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
 			name = "mail-1.3.jar";
 			path = "Libraries/mail-1.3.jar";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4E16E64C0392AC7300CF0E72 = {
 			fileRef = 4E16E64A0392AC7300CF0E72;
@@ -783,14 +832,18 @@
 		F5109A2E03816A5701000107 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailDeliveryComponentBased.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5109A2F03816A5701000107 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERWOMailDelivery.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5109A3003816A5701000107 = {
 			fileRef = F5109A2E03816A5701000107;
@@ -811,6 +864,7 @@
 			isa = PBXGroup;
 			path = Sources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D71032D489E019C4BA9 = {
 			children = (
@@ -819,6 +873,7 @@
 			isa = PBXGroup;
 			path = er;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D72032D48A0019C4BA9 = {
 			children = (
@@ -841,72 +896,95 @@
 			isa = PBXGroup;
 			path = javamail;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D74032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailAttachment.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D75032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailDelivery.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D76032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailDeliveryHTML.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D77032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailDeliveryPlainText.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D79032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailDeliveryWOComponentPlainText.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D7A032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailFileAttachment.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D7B032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailSender.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D7C032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailTextAttachment.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D7D032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMailUtils.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D7E032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMessage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D7F032D49E1019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERQueue.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D80032D49E1019C4BA9 = {
 			fileRef = F5251D74032D49E1019C4BA9;
@@ -977,8 +1055,10 @@
 		F5251D8E032D4AD5019C4BA9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERJavaMail.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5251D8F032D4AD5019C4BA9 = {
 			fileRef = F5251D8E032D4AD5019C4BA9;
@@ -987,14 +1067,18 @@
 			};
 		};
 		F5251D99032D60A4019C4BA9 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERExtensions.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5251D9A032D60A4019C4BA9 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5251D9D032D60A4019C4BA9 = {
 			fileRef = F5251D99032D60A4019C4BA9;
@@ -1010,10 +1094,12 @@
 		};
 		F53788A50335ADF401000010 = {
 			includeInIndex = 1;
-			isa = PBXZipArchiveReference;
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
 			name = "jakarta-oro-2.0.6.jar";
 			path = "Libraries/jakarta-oro-2.0.6.jar";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53788A60335ADF401000010 = {
 			fileRef = F53788A50335ADF401000010;
@@ -1026,8 +1112,10 @@
 		F54ECDF6033CEEC501000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			path = ERMimetypesMapper.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54ECDF7033CEEC501000102 = {
 			fileRef = F54ECDF6033CEEC501000102;
@@ -1038,8 +1126,10 @@
 		F54ECDF8033CEF3101000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = mime.types;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54ECDF9033CEF3101000102 = {
 			fileRef = F54ECDF8033CEF3101000102;
@@ -1062,8 +1152,10 @@
 		F5B3FE230348539E01AC65B4 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = Properties;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5B3FE25034853A301AC65B4 = {
 			fileRef = F5B3FE230348539E01AC65B4;
@@ -1078,18 +1170,23 @@
 			isa = PBXGroup;
 			path = Support;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FE9179032D70B2017B0907 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = SampleConfiguration.txt;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FE917B032D718F017B0907 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = README.txt;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 	};
 	rootObject = 40B5827EFFD5E7DB7F000001;
