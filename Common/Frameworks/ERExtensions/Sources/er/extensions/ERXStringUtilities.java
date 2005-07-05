@@ -736,6 +736,58 @@ public class ERXStringUtilities {
         return result.toString();
     }
 
+    /**
+     * Escapes the given characters with the given escape character in _sourceString.  This 
+     * implementation is specifically designed for large strings.  In the event that no characters 
+     * are escaped, the original string will be returned with no new object creation.  A null
+     * _sourceString will return null.
+     * 
+     * Example: sourceString = Mike's, escape chars = ', escape with = \, returns Mike\'s
+     * 
+     * @param _escapeChars the list of characters to escape
+     * @param _escapeWith the escape character to use
+     * @param _sourceString the string to escape the characters in.
+     * @return the escaped string
+     */
+    public static String escape(char[] _escapeChars, char _escapeWith, String _sourceString) {
+      String targetString;
+      if (_sourceString == null) {
+        targetString = null;
+      }
+      else {
+        StringBuffer targetBuffer = null;
+        int lastMatch = 0;
+        int length = _sourceString.length();
+        for (int sourceIndex = 0; sourceIndex < length; sourceIndex++) {
+          char ch = _sourceString.charAt(sourceIndex);
+          boolean escape = false;
+          for (int escapeNum = 0; !escape && escapeNum < _escapeChars.length; escapeNum++) {
+            if (ch == _escapeChars[escapeNum]) {
+              escape = true;
+            }
+          }
+          if (escape) {
+            if (targetBuffer == null) {
+              targetBuffer = new StringBuffer(length + 100);
+            }
+            if (sourceIndex - lastMatch > 0) {
+              targetBuffer.append(_sourceString.substring(lastMatch, sourceIndex));
+            }
+            targetBuffer.append(_escapeWith);
+            lastMatch = sourceIndex;
+          }
+        }
+        if (targetBuffer == null) {
+          targetString = _sourceString;
+        }
+        else {
+          targetBuffer.append(_sourceString.substring(lastMatch, length));
+          targetString = targetBuffer.toString();
+        }
+      }
+      return targetString;
+    }
+
     public static String toHexString(char c) {
         StringBuffer result = new StringBuffer("\u005C\u005Cu9999".length());
         String u = Long.toHexString((int) c).toUpperCase();
