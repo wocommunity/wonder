@@ -131,11 +131,11 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
         
         spec.setSortOrderings(sortOrderings());
         
-        // fetch the primary keys
-        int i = 1;
+        // fetch the primary keys, turn them into faults, then batch-fetch all the non-resident objects
         NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
-        NSArray objects = ERXEOControlUtilities.faultsForRawRowsFromEntityInEditingContext(primKeys, spec.entityName(), ec);
-        //NSArray objects = ERXEOControlUtilities.objectsInRange(ec, spec, start, end);
+        NSArray faults = ERXEOControlUtilities.faultsForRawRowsFromEntity(ec, primKeys, spec.entityName());
+        NSArray objects = ERXEOControlUtilities.objectsForFaults(ec, faults);
+        
         _displayedObjects = objects;
     }
     
