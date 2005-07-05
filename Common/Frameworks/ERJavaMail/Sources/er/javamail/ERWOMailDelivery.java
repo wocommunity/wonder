@@ -22,9 +22,11 @@ import er.extensions.ERXLogger;
 
 /** Drop-in replacement for WOMailDelivery.
 
-<P>ERWOMailDelivery operates just the same as WOMailDelivery, and has all of the same limitations and weird API. However, instead of using the Sun's broken* and unsupported sun.net.smtp.SmtpClient, it uses JavaMail.</P>
+<P>ERWOMailDelivery operates just the same as WOMailDelivery, and has all of the same limitations and weird API. 
+However, instead of using the Sun's broken* and unsupported sun.net.smtp.SmtpClient, it uses JavaMail.</P>
 
-<P><I>*sun.net.smtp.SmtpClient doesn't put addresses in angle brackets when sending the SMTP MAIL FROM command. Many SMTP servers won't work with it.</I></P>
+<P><I>*sun.net.smtp.SmtpClient doesn't put addresses in angle brackets when sending the SMTP MAIL FROM command. 
+Many SMTP servers won't work with it.</I></P>
 
 @author Jonathan 'Wolf' Rentzsch (jon at redshed dot net)
 @see <A HREF="file://localhost/Ten/Developer/Documentation/WebObjects/Reference/com/webobjects/appserver/WOMailDelivery.html">com.webobjects.appserver.WOMailDelivery</A>
