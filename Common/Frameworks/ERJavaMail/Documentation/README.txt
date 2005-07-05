@@ -44,6 +44,48 @@ CONFIGURATION
 
 Copy and customize the properties given in SampleConfiguration.txt under 'Support' group in the project files.
 
+er.javamail.centralize = true
+Centralize sends all emails to the er.javamail.adminEmail user.
+
+er.javamail.debugEnabled = true
+Determines whether or not email debugging is displayed.  This contains protocol-level debug information.
+
+er.javamail.adminEmail = user@domain.com
+The email address of the admin user to send centralized emails to.  This is a required property.
+
+er.javamail.smtpHost = smtp.domain.com
+The SMTP host name to use.  If this isn't set, mail.smtp.host will be checked and ultimately WOHost will be used.
+
+er.javamail.senderQueue.size = 50
+The number of messages that the sender queue can hold. Defaults to 50.
+
+er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
+The number of milliseconds to wait if the sender queue is full. Default is 6000.
+
+er.javamail.smtpAuth = true
+Sets whether or not Authenticated SMTP is used to send outgoing mail.  If set, er.javamail.smtpUser MUST 
+also be set (and preferably er.javamail.smtpPassword).
+
+er.javamail.smtpUser = smtpusername
+The username to use to login to the authenticated SMTP server.
+
+er.javamail.smtpPassword = smtppassword
+The password to use to login to the authenticated SMTP server.
+
+er.javamail.XMailerHeader = 
+The X-Mailer header to put into all outgoing mail messages. Defaults to nothing.
+
+er.javamail.defaultEncoding = UTF-8
+The default character encoding to use for message content.  Defaults to ???.
+
+er.javamail.WhiteListEmailAddressPatterns = 
+A comma-separated list of whitelisted email address patterns.  If set, then only addresses that match one of the whitelisted 
+patterns will delivered to.  Pattern syntax is the same as EOQualifier's caseInsensitiveLike.
+
+er.javamail.BlackListEmailAddressPatterns =
+A comma-separated list of blacklisted email address patterns.  If set, then any email addresses that match a blacklist pattern 
+will not be delivered to.  Pattern syntax is the same as EOQualifier's caseInsensitiveLike. The blacklist filter is processed 
+last, so a blacklist pattern beats a whitelist pattern.
 
 CODE SAMPLE
 - - - - - - 
@@ -52,28 +94,48 @@ CODE SAMPLE
 ERMailDeliveryHTML mail = new ERMailDeliveryHTML ();
 
 // Here ERMailDeliveryHTML needs a WOComponent to render the HTML text content.
-mail.setWOComponentContent (mailPage);
+mail.setComponent(mailPage);
 
 // Here you create a new instance of the message
 // You can loop over this fragment of code, not forgetting to use newMail ()
 // before you set the attributes of the message.
 try {
-    mail.newMail ();
-    mail.setFromAddress    (emailFrom);
-    mail.setReplyToAddress (emailReplyTo);
-    mail.setSubject 	   (emailSubject);
-    mail.setToAddresses    (new NSArray (toEmailAddresses));
-
-    // Send the mail
-    mail.sendMail ();
+    mail.newMail();
+    mail.setFromAddress(emailFrom);
+    mail.setReplyToAddress(emailReplyTo);
+    mail.setSubject(emailSubject);
+    mail.setToAddresses(new NSArray (toEmailAddresses));
+    // Send the mail.  There is an optional sendMail(boolean) that optionally blocks during the send.
+    mail.sendMail();
 } catch (Exception e) {
     // handle the exception ...
 }
 
 
-CHANGES
+GOTCHAS
 - - - -
 
+Be careful of the WOContext that contains the component you are sending.  If you use
+ERMailDeliveryHTML inside of the normal request-response loop with the default WOContext,
+it is very likely that the next page that is sent to the user will be the emailed component
+rather than the page you WANTED to send.  There are several possible workarounds for this.
+One is to return a specific component rather than null from your action method.  I have
+had better and more consistent success with the following code:
+
+    WOContext context = (WOContext) context().clone();
+    MyComponent component = (MyComponent) WOApplication.application().pageWithName(MyComponent.class.getName(), context);
+    ERMailDeliveryHTML mail = new ERMailDeliveryHTML();
+    mail.setComponent(component);
+    ...
+
+This seems to properly isolate the email to a clone of the current context rather than the
+actual active context.  Your mileage may vary :)
+
+CHANGES
+- - - -
+06/29/2005:
+    Added support for authenticated SMTP and updated the documentation.
+    
 10/09/2002:
     Made API more consistent with Project Wonder.
 
