@@ -4,3 +4,6 @@ er.javamail.debugEnabled = true
 er.javamail.adminEmail = user@domain.com
 er.javamail.smtpHost = smtp.domain.com
 er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
+er.javamail.smtpAuth=true
+er.javamail.smtpUser=smtpusername
+er.javamail.smtpPassword=smtppassword

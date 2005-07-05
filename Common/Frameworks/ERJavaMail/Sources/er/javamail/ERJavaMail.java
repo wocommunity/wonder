@@ -166,8 +166,25 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
                 System.setProperty ("er.javamail.smtpHost", smtpHost);
         } else
             System.setProperty ("mail.smtp.host", smtpHost);
-
         log.debug ("er.javamail.smtpHost: " + smtpHost);
+
+        boolean smtpAuth = ERXProperties.booleanForKey("er.javamail.smtpAuth");
+        log.debug("ERJavaMail will use authenticated SMTP connections.");
+        if (smtpAuth) {
+          System.setProperty("mail.smtp.auth", String.valueOf(smtpAuth));
+          String user = ERXProperties.stringForKey("er.javamail.smtpUser");
+          if (user == null || user.length() == 0) {
+            throw new RuntimeException("You specified er.javamail.smtpAuth=true, but you didn't specify an er.javamail.smtpUser to use as the login name.");
+          }
+          System.setProperty("mail.smtp.user", user);
+          String password = ERXProperties.stringForKey("er.javamail.smtpPassword");
+          if (password == null || password.length() == 0) {
+            log.warn("You specified er.javamail.smtpAuth=true, but you didn't set er.javamail.smtpPassword for the " + user + " mail user.");
+          }
+          if (password != null) {
+            System.setProperty("mail.smtp.password", password);
+          }
+        }
     }
 
     /**

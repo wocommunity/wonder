@@ -114,29 +114,32 @@ public class ERMailSender extends Thread {
     /** Sends a message immediately.<br>
         This means that the thread could be blocked if the message takes time to be delivered. */
     public void sendMessageNow (ERMessage message) {
-        Transport transport = this._connectedTransportForSession (ERJavaMail.sharedInstance ().defaultSession ());
-
-        try {
-            this._sendMessageNow (message, transport);
-        } catch (MessagingException e) {
-            if (log.isDebugEnabled ())
-                log.debug ("Caught exception when sending mail in a non-blocking manner.", e);
-            throw new NSForwardException (e);
-        } finally {
-            // CHECKME (camille):
-            // Should we really close this default transport instance?
-            // I think there is no need to do so and that it should be closed
-            // when the ERMailSender is finalized
-            if (transport != null) {
-                try {
-                    transport.close ();
-                } catch (MessagingException e) {
-                    // Fatal exception ... we must at least notify the use
-                    log.error ("Caught exception when closing transport.", e);
-                    throw new RuntimeException ("Unable to open nor close the messaging transport channel.");
-                }
+      Transport transport = null;
+      try {
+        transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().defaultSession(), false);
+        this._sendMessageNow(message, transport);
+      }
+      catch (MessagingException e) {
+        if (log.isDebugEnabled()) {
+          log.debug("Caught exception when sending mail in a non-blocking manner.", e);
+        }
+        throw new NSForwardException(e);
+      }
+      finally {
+        // CHECKME (camille):
+        // Should we really close this default transport instance?
+        // I think there is no need to do so and that it should be closed
+        // when the ERMailSender is finalized
+        if (transport != null) {
+            try {
+                transport.close ();
+            } catch (MessagingException e) {
+                // Fatal exception ... we must at least notify the use
+                log.error ("Caught exception when closing transport.", e);
+                throw new RuntimeException ("Unable to open nor close the messaging transport channel.");
             }
         }
+      }
     }
 
     /** Common method used by 'sendMessageNow' and
@@ -217,18 +220,29 @@ public class ERMailSender extends Thread {
 
     /** Utility method that gets the SMTP Transport method for a session and
         connects the Transport before returning it. */
-    protected Transport _connectedTransportForSession (javax.mail.Session session) {
-        Transport transport = null;
-        try {
-            transport = session.getTransport ("smtp");
-            if (!transport.isConnected())
-                transport.connect();
-        } catch (MessagingException e) {
-            log.error ("Unable to connect to SMTP Transport. MessagingException: "
-                       + e.getMessage (), e);
+    protected Transport _connectedTransportForSession(javax.mail.Session session, boolean _throwExceptionIfConnectionFails) throws MessagingException {
+      Transport transport = null;
+      try {
+        transport = session.getTransport("smtp");
+        if (!transport.isConnected()) {
+          String userName = session.getProperty("mail.smtp.user");
+          String password = session.getProperty("mail.smtp.password");
+          if (userName != null && password != null) {
+            transport.connect(session.getProperty("mail.smtp.host"), userName, password);
+          }
+          else {
+            transport.connect();
+          }
         }
+      }
+      catch (MessagingException e) {
+        log.error("Unable to connect to SMTP Transport. MessagingException: " + e.getMessage(), e);
+        if (_throwExceptionIfConnectionFails) {
+          throw e;
+        }
+      }
 
-        return transport;
+      return transport;
     }
 
     /** Don't call this method, this is the thread run loop
@@ -253,7 +267,15 @@ public class ERMailSender extends Thread {
                 Session session     = null;
                 Transport transport = null;
                 session   = ERJavaMail.sharedInstance ().newSession ();
-                transport = this._connectedTransportForSession (session);
+                try {
+                  transport = this._connectedTransportForSession(session, true);
+                }
+                catch (MessagingException e) {
+                  if (log.isDebugEnabled()) {
+                    log.debug("Caught exception when sending mail in a non-blocking manner.", e);
+                  }
+                  throw new NSForwardException(e);
+                }
 
                 try {
                     if (!transport.isConnected ()) {
