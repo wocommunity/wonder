@@ -227,9 +227,14 @@ public class ERXEOAccessUtilities {
         EOAdaptor adaptor = dbc.adaptorContext().adaptor();
         EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
         
-        NSArray attributes = spec.rawRowKeyPaths();
-        if (attributes == null || attributes.count() == 0) {
-            attributes = entity.attributesToFetch();
+        NSArray attributes =  entity.attributesToFetch();
+        if(spec.fetchesRawRows()) {
+            NSMutableArray arr = new NSMutableArray();
+            for(Enumeration e = spec.rawRowKeyPaths().objectEnumerator(); e.hasMoreElements(); ) {
+                String keyPath = (String)e.nextElement();
+                arr.addObject(entity.anyAttributeNamed(keyPath));
+            }
+            attributes = arr.immutableClone();
         }
         
         EOQualifier qualifier = spec.qualifier();

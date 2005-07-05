@@ -448,27 +448,13 @@ public class ERXEOControlUtilities {
      * @return primary keys in the given range
      */
     public static NSArray primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
-        
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
-        String sqlString = sql.statement();
-        StringBuffer buf = new StringBuffer();
-        buf.append("select ");
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
-        NSArray attributesColumnNames = (NSArray) entity.primaryKeyAttributes().valueForKey("columnName");
-        for (Enumeration e = attributesColumnNames.objectEnumerator(); e.hasMoreElements();) {
-            buf.append(e.nextElement());
-            if (e.hasMoreElements()) {
-                buf.append(", ");
-            } else {
-                buf.append(" ");
-            }
-        }
-        buf.append(sqlString.substring(sqlString.toLowerCase().indexOf("from")));
-        sql.setStatement(buf.toString());
+        NSArray pkNames = (NSArray) entity.primaryKeyAttributes().valueForKey("name");
+        spec.setFetchesRawRows(true);
+        spec.setRawRowKeyPaths(pkNames);
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
         NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
         spec.setHints(hints);
-        spec.setFetchesRawRows(true);
-        spec.setRawRowKeyPaths(entity.primaryKeyAttributeNames());
         return ec.objectsWithFetchSpecification(spec);
     }
     
@@ -994,11 +980,11 @@ public class ERXEOControlUtilities {
     }
 
     /** returns a NSArray containing EOEnterpriseObjects (actually faults...) for the provided EOGlobalIDs.
-     * @param gids the EOGlobalIDs
      * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
+     * @param gids the EOGlobalIDs
      * @return a NSArray of EOEnterpriseObjects
      */
-    public static NSArray faultsForGlobalIDsInEditingContext(NSArray gids, EOEditingContext ec) {
+    public static NSArray faultsForGlobalIDs(EOEditingContext ec, NSArray gids) {
         int c = gids.count();
         NSMutableArray a = new NSMutableArray(c);
         for (int i = 0; i < c; i++) {
@@ -1009,7 +995,7 @@ public class ERXEOControlUtilities {
         return a;
     }  
 
-    public static NSArray faultsForRawRowsFromEntityInEditingContext(NSArray primKeys, String entityName, EOEditingContext ec) {
+    public static NSArray faultsForRawRowsFromEntity(EOEditingContext ec, NSArray primKeys, String entityName) {
         int c = primKeys.count();
         NSMutableArray a = new NSMutableArray(c);
         for (int i = 0; i < c; i++) {
