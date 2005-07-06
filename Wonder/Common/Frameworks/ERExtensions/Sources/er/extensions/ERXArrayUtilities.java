@@ -724,7 +724,7 @@ public class ERXArrayUtilities extends Object {
                 return array;
             }
             EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            return filteredArrayWithFetchSpecificationNamedEntityNamed(array, keypath, eo.entityName());
+            return filteredArrayWithEntityFetchSpecification(array, keypath, eo.entityName());
         }
     }
 
@@ -965,6 +965,52 @@ public class ERXArrayUtilities extends Object {
             return array;
         }
     }
+    /**
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>median</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@median.someMorePath");</code><br/>
+     * <br/>
+     * which return the median of the array elements at the given key path.
+     * The median is the value for which half of the elements are above and half the elements are below.
+     * As such, an array sort is needed and this might be very costly depending of the size of the array.
+     */
+    static class MedianOperator extends BaseOperator {
+        /** public empty constructor */
+        public MedianOperator() {}
+
+        /**
+         * returns the median value for the values of the keypath.
+         * @param array array to be checked.
+         * @param keypath value of reverse.
+         * @return reversed array for keypath.
+         */
+        public Object compute(NSArray array, String keypath) {
+            int count = array.count();
+            Object value;
+            if(count == 0) {
+                value = null;
+            } else if(count == 1) {
+                value = array.valueForKeyPath(keypath);
+            } else {
+                // array = (NSArray) array.valueForKeyPath(keypath);
+                // array = ERXArrayUtilities.sortedArraySortedWithKey(array, "doubleValue");
+                array = ERXArrayUtilities.sortedArraySortedWithKey(array, keypath);
+                int mid = count / 2;
+                if(count % 2 == 0) {
+                    Object o = array.objectAtIndex(mid-1);
+                    Number a = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
+                    o = array.objectAtIndex(mid);
+                    Number b = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
+                    value = new Double((a.doubleValue()+b.doubleValue())/2);
+                } else {
+                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(array.objectAtIndex(mid), keypath);
+                }
+            }
+            return value;
+        }
+    }
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
@@ -990,6 +1036,7 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
             NSArray.setOperatorForKey("reverse", new ReverseOperator());
             NSArray.setOperatorForKey("removeNullValues", new RemoveNullValuesOperator());
+            NSArray.setOperatorForKey("median", new MedianOperator());
         }
     }
 
