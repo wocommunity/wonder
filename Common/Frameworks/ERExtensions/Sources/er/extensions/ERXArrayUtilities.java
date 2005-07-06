@@ -261,30 +261,25 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Filters out duplicates of an array of enterprise objects
-     * based on the value of the given key off of those objects.
-     * Note: Current implementation depends on the key returning a
-     * cloneable object. Also the order is not preseved from the
-     * original array.
-     * @param eos array of enterprise objects
-     * @param key key path to be evaluated off of every enterprise
-     *		object
-     * @return filter array of objects based on the value of a key-path.
+     * Filters out duplicates of an array of objects
+     * based on the value of the given key path off of those objects.
+     * Objects with a null value will be skipped, too.
+     * @param objects array of objects
+     * @param key keypath to be evaluated off of every object
+     * @return filter array of objects based on the value of a keypath.
      */
-    // FIXME: Broken implementation, relies on the value returned by the key to be Cloneable
-    //		also doesn't handle the case of the key returning null or an actual keyPath
-    //		and has the last object in the array winning the duplicate tie.
-    // FIXME: Does not preserve order.
-    public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
-        NSMutableDictionary dico = new NSMutableDictionary();
-        for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements(); ){
-            NSKeyValueCoding eo = (NSKeyValueCoding)e.nextElement();
-            Object value = eo.valueForKey(key);
-            if(value != null){
-                dico.setObjectForKey(eo, value);
+    public static NSArray arrayWithoutDuplicateKeyValue(NSArray objects, String key){
+        NSMutableSet present = new NSMutableSet();
+        NSMutableArray result = new NSMutableArray();
+        for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ){
+            Object o = e.nextElement();
+            Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, key);
+            if(value != null && !present.containsObject(value)) {
+                present.addObject(value);
+                result.addObject(o);
             }
         }
-        return dico.allValues();
+        return result;
     }
 
     /**
@@ -987,28 +982,7 @@ public class ERXArrayUtilities extends Object {
          * @return reversed array for keypath.
          */
         public Object compute(NSArray array, String keypath) {
-            int count = array.count();
-            Object value;
-            if(count == 0) {
-                value = null;
-            } else if(count == 1) {
-                value = array.valueForKeyPath(keypath);
-            } else {
-                // array = (NSArray) array.valueForKeyPath(keypath);
-                // array = ERXArrayUtilities.sortedArraySortedWithKey(array, "doubleValue");
-                array = ERXArrayUtilities.sortedArraySortedWithKey(array, keypath);
-                int mid = count / 2;
-                if(count % 2 == 0) {
-                    Object o = array.objectAtIndex(mid-1);
-                    Number a = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
-                    o = array.objectAtIndex(mid);
-                    Number b = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
-                    value = new Double((a.doubleValue()+b.doubleValue())/2);
-                } else {
-                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(array.objectAtIndex(mid), keypath);
-                }
-            }
-            return value;
+            return median(array, keypath);
         }
     }
     /** 
@@ -1039,7 +1013,41 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("median", new MedianOperator());
         }
     }
-
+    
+    
+    /**
+     * Calculates the median value of an array.
+     * The median is the value for which half of the elements are above and half the elements are below.
+     * As such, an array sort is needed and this might be very costly depending of the size of the array.
+     * @param array array of objects
+     * @param keypath key path for the median
+     * @return
+     */
+    public static Number median(NSArray array, String keypath) {
+        int count = array.count();
+        Number value;
+        if(count == 0) {
+            value = null;
+        } else if(count == 1) {
+            value = (Number) array.valueForKeyPath(keypath);
+        } else {
+            // array = (NSArray) array.valueForKeyPath(keypath);
+            // array = ERXArrayUtilities.sortedArraySortedWithKey(array, "doubleValue");
+            array = ERXArrayUtilities.sortedArraySortedWithKey(array, keypath);
+            int mid = count / 2;
+            if(count % 2 == 0) {
+                Object o = array.objectAtIndex(mid-1);
+                Number a = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
+                o = array.objectAtIndex(mid);
+                Number b = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
+                value = new Double((a.doubleValue()+b.doubleValue())/2);
+            } else {
+                value = (Number) NSKeyValueCodingAdditions.Utility.valueForKeyPath(array.objectAtIndex(mid), keypath);
+            }
+        }
+        return value;
+    }
+    
     
     /**
      * Filters out all of the duplicate objects in
@@ -1140,6 +1148,7 @@ public class ERXArrayUtilities extends Object {
     public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
         return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
+    
     /**
      * shifts a given object in an array one value to the left (index--).
      *
