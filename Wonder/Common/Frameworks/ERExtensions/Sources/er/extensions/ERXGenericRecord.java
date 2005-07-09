@@ -34,12 +34,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static final ERXLogger tranLogDidDelete = ERXLogger.getERXLogger("er.transaction.eo.did.delete.ERXGenericRecord");
     /** logging support. Called after an object is successfully updated */
     public static final ERXLogger tranLogDidUpdate = ERXLogger.getERXLogger("er.transaction.eo.did.update.ERXGenericRecord");
+    /** logging support. Called after an object is reverted. **/
+    public static final ERXLogger tranLogDidRevert = ERXLogger.getERXLogger("er.transaction.eo.did.revert.ERXGenericRecord");
     /** logging support. Called before an object is inserted */
     public static final ERXLogger tranLogWillInsert = ERXLogger.getERXLogger("er.transaction.eo.will.insert.ERXGenericRecord");
     /** logging support. Called before an object is deleted */
     public static final ERXLogger tranLogWillDelete = ERXLogger.getERXLogger("er.transaction.eo.will.delete.ERXGenericRecord");
     /** logging support. Called before an object is updated */
     public static final ERXLogger tranLogWillUpdate = ERXLogger.getERXLogger("er.transaction.eo.will.update.ERXGenericRecord");
+    /** logging support. Called before an object is reverted. **/
+    public static final ERXLogger tranLogWillRevert = ERXLogger.getERXLogger("er.transaction.eo.will.revert.ERXGenericRecord");
     /** logging support for validation information */
     public static final ERXLogger validation = ERXLogger.getERXLogger("er.eo.validation.ERXGenericRecord");
     /** logging support for validation exceptions */
@@ -264,6 +268,36 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public void didInsert() {
         if (tranLogDidInsert.isDebugEnabled())
             tranLogDidInsert.debug("Object:" + description());
+    }
+
+    /**
+     * Called on the object before it will be reverted.
+     *
+     * Default implementation does nothing other than log.
+     */
+    public void willRevert() {
+        if ( tranLogWillRevert.isDebugEnabled() )
+            tranLogWillRevert.debug("Object: " + description());
+    }
+
+    /**
+     * Called on the object after it has been reverted.
+     * The editing context is passed to the object because
+     * if the object was in the insertedObjects list before
+     * the revert, the object has had its editingContext
+     * nulled.
+     *
+     * Default implementation calls <code>flushCaches</code>.
+     *
+     * @param ec editing context that is either currently associated
+     * with the object if the object was marked as changed or deleted before
+     * the revert, otherwise the editing context that was associated with the object
+     * before the revert.
+     */
+    public void didRevert(EOEditingContext ec) {
+        if ( tranLogDidRevert.isDebugEnabled() )
+            tranLogDidRevert.debug("Object: " + description());
+        flushCaches();
     }
 
     /**
