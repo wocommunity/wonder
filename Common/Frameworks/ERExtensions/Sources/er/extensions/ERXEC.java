@@ -6,6 +6,7 @@
 //
 package er.extensions;
 import java.util.*;
+import java.lang.reflect.InvocationTargetException;
 
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -55,6 +56,13 @@ public class ERXEC extends EOEditingContext {
     
     /** key for the thread storage used by the unlocker. */
     private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
+    
+    private static final NSSelector EditingContextWillRevertObjectsDelegateSelector =
+            new NSSelector("editingContextWillRevertObjects",
+                           new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
+    private static final NSSelector EditingContextDidRevertObjectsDelegateSelector =
+            new NSSelector("editingContextDidRevertObjects",
+                           new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
     
     public static void setUseUnlocker(boolean value) {
     	useUnlocker = value;
@@ -134,6 +142,44 @@ public class ERXEC extends EOEditingContext {
     			}
     		}
     	}
+    }
+
+    /**
+     * Extensions for the EOEditingContext.Delegate interface.
+     */
+    public static interface Delegate extends EOEditingContext.Delegate {
+
+        /**
+         * If the delegate implements this method, this method is invoked before a revert of an editing
+         * context.  We pass the objects that are marked as inserted, updated and deleted.
+         *
+         * @param ec the editing context that just reverted.
+         * @param insertedObjects objects that were marked as inserted in the editing context before the revert
+         * took place.
+         * @param updatedObjects objects that were marked as updated in the editing context before the revert
+         * took place.
+         * @param deletedObjects objects that were marked as deleted in the editing context before the revert
+         * took place.
+         */
+        public void editingContextWillRevertObjects(EOEditingContext ec, NSArray insertedObjects,
+                                                    NSArray updatedObjects, NSArray deletedObjects);
+
+        /**
+         * If the delegate implements this method, this method is invoked following a revert of an editing
+         * context.  We pass the objects that were marked as inserted, updated and deleted before the revert
+         * took place.
+         *
+         * @param ec the editing context that just reverted.
+         * @param insertedObjects objects that were marked as inserted in the editing context before the revert
+         * took place.
+         * @param updatedObjects objects that were marked as updated in the editing context before the revert
+         * took place.
+         * @param deletedObjects objects that were marked as deleted in the editing context before the revert
+         * took place.
+         */
+        public void editingContextDidRevertObjects(EOEditingContext ec, NSArray insertedObjects,
+                                                   NSArray updatedObjects, NSArray deletedObjects);
+
     }
 
     public static interface Factory {
@@ -599,12 +645,45 @@ public class ERXEC extends EOEditingContext {
             autoUnlock(wasAutoLocked);
         }
     }
-    
-    /** Overriden to support autoLocking. */ 
+
+    private void _safeInvokeSelectorOnObjectWithParameters(NSSelector sel, Object delegate, Object[] parameters) {
+        try {
+            sel.invoke(delegate, parameters);
+        }
+        catch ( IllegalAccessException e ) {
+            throw new RuntimeException("Caught " + e + ", Reason: " + e.getMessage(), e);
+        }
+        catch ( InvocationTargetException e ) {
+            throw new RuntimeException("Caught " + e + ", Reason: " + e.getMessage(), e);
+        }
+        catch ( NoSuchMethodException e ) {
+            throw new RuntimeException("Caught " + e + ", Reason: " + e.getMessage(), e);
+        }
+    }
+
+    /** Overriden to support autoLocking and will/did revert delegate methods. **/
     public void revert() {
         boolean wasAutoLocked = autoLock("revert");
         try {
+            final Object delegate = delegate();
+            final boolean delegateImplementsWillRevert =
+                    delegate != null && EditingContextWillRevertObjectsDelegateSelector.implementedByObject(delegate);
+            final boolean delegateImplementsDidRevert =
+                    delegate != null && EditingContextDidRevertObjectsDelegateSelector.implementedByObject(delegate);
+            final boolean needToCallDelegate = delegateImplementsWillRevert || delegateImplementsDidRevert;
+            final NSArray insertedObjects = needToCallDelegate ? insertedObjects().immutableClone() : null;
+            final NSArray updatedObjects = needToCallDelegate ? updatedObjects().immutableClone() : null;
+            final NSArray deletedObjects = needToCallDelegate ? deletedObjects().immutableClone() : null;
+            final Object[] parameters = needToCallDelegate ? new Object[] {this, insertedObjects,updatedObjects, deletedObjects} : null;
+
+            if( delegateImplementsWillRevert )
+                _safeInvokeSelectorOnObjectWithParameters(EditingContextWillRevertObjectsDelegateSelector, delegate, parameters);
+
             super.revert();
+
+            if ( delegateImplementsDidRevert )
+                _safeInvokeSelectorOnObjectWithParameters(EditingContextDidRevertObjectsDelegateSelector, delegate, parameters);
+            
         } finally {
             autoUnlock(wasAutoLocked);
         }

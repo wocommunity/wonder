@@ -220,4 +220,59 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
         }
         return true;
     }
+
+    public void editingContextWillRevertObjects(EOEditingContext ec, NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
+        final NSMutableArray objects = new NSMutableArray();
+
+        if ( log.isDebugEnabled() )
+            log.debug("editingContextWillRevertObjects: inserted count: " + insertedObjects.count() +
+                      ", updated count: " + updatedObjects.count() + ", deleted count: " + deletedObjects.count());
+
+        objects.addObjectsFromArray(insertedObjects);
+        objects.addObjectsFromArray(updatedObjects);
+        objects.addObjectsFromArray(deletedObjects);
+
+        if ( objects.count() > 0 ) {
+            final Enumeration e = objects.objectEnumerator();
+
+            while ( e.hasMoreElements() ) {
+                final Object theObject = e.nextElement();
+
+                if ( theObject instanceof ERXGenericRecord )
+                    ((ERXGenericRecord)theObject).willRevert();
+            }
+        }
+    }
+
+    /**
+     * Called by the editing context following a revert.  This delegate method calls <code>didRevert</code>
+     * on any EO that is an instance of ERXGenericRecord.
+     * @param ec current editing context.
+     * @param insertedObjects objects that were marked as inserted before the revert.
+     * @param updatedObjects objects that were marked as updated before the revert.
+     * @param deletedObjects objects that were marked as deleted before the revert.
+     */
+    public void editingContextDidRevertObjects(EOEditingContext ec, NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
+        final NSMutableArray objects = new NSMutableArray();
+
+        if ( log.isDebugEnabled() )
+            log.debug("editingContextDidRevertObjects: inserted count: " + insertedObjects.count() +
+                      ", updated count: " + updatedObjects.count() + ", deleted count: " + deletedObjects.count());
+
+        objects.addObjectsFromArray(insertedObjects);
+        objects.addObjectsFromArray(updatedObjects);
+        objects.addObjectsFromArray(deletedObjects);
+
+        if ( objects.count() > 0 ) {
+            final Enumeration e = objects.objectEnumerator();
+
+            while ( e.hasMoreElements() ) {
+                final Object theObject = e.nextElement();
+
+                if ( theObject instanceof ERXGenericRecord )
+                    ((ERXGenericRecord)theObject).didRevert(ec);
+            }
+        }
+    }
+
 }
