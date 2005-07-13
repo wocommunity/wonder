@@ -20,23 +20,39 @@ public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
         super(context);
     }
 
+    /**
+     * Computes the destination entity that we're editing.  Hits the "destinationEntityName"
+     * rule.
+     *
+     * @return destination entity
+     */
+    public EOEntity destinationEntity() {
+        final String destinationEntityName = (String)d2wContext().valueForKey("destinationEntityName");
+        EOEntity result = null;
+
+        if ( destinationEntityName != null )
+            result = EOUtilities.entityNamed(object().editingContext(), destinationEntityName);
+
+        return result;
+    }
+
     public String indexKey(){
+        final EOEntity destinationEntity = destinationEntity();
         String indexKey = null;
-        EORelationship relationship = entity().relationshipNamed(propertyKey());
-        if (relationship!=null) {
-            EOEntity destinationEntity = relationship.destinationEntity();
-            if(destinationEntity!=null &&
-               destinationEntity.userInfo().valueForKey("isSortedJoinEntity") != null &&
-               ((String)destinationEntity.userInfo().valueForKey("isSortedJoinEntity")).equals("true")) {
+
+        if ( destinationEntity != null ) {
+            final String isSortedJoinValue = (String)destinationEntity.userInfo().valueForKey("isSortedJoinEntity");
+
+            if ( "true".equals(isSortedJoinValue) ) {
                 synchronized (_context) {
                     _context.setEntity(destinationEntity);
                     indexKey = (String)_context.valueForKey("indexKey");
                 }
             }
         }
+
         return indexKey;
     }
-
 
     private static D2WContext _context=new D2WContext();
     public NSArray sortedBrowserList() {
