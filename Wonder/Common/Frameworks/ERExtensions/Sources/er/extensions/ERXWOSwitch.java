@@ -17,6 +17,74 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with
  * their case bound to a value.
+ <code><pre>
+ ==========================
+ Example.wo/Example.html
+ ==========================
+ &lt;webobject name=Switch&gt;
+    &lt;webobject name=CaseOne&gt;
+        &lt;h2&gt;One: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
+    &lt;/webobject&gt;
+
+    &lt;webobject name=CaseTwo&gt;
+        &lt;h2&gt;Two: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
+    &lt;/webobject&gt;
+
+    &lt;webobject name=CaseThree&gt;
+        &lt;h2&gt;Three: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
+    &lt;/webobject&gt;
+
+    &lt;webobject name=CaseFour&gt;
+        &lt;h2&gt;Four: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
+    &lt;/webobject&gt;    
+
+    &lt;webobject name=DefaultCase&gt;
+        &lt;h2&gt;Default: &lt;webobject name=ChosenCaseString&gt;&lt;/webobject&gt;&lt;/h2&gt;
+    &lt;/webobject&gt;    
+&lt;/webobject&gt;
+
+ ==========================
+ Example.wo/Example.wod
+ ==========================
+
+Switch: ERXWOSwitch {
+    case = chosenCase;
+}
+
+CaseFour: ERXWOCase {
+    case = "Fourth";
+}
+
+CaseOne: ERXWOCase {
+    case = "First";
+}
+
+CaseThree: ERXWOCase {
+    case = "Third";
+}
+
+CaseTwo: ERXWOCase {
+    case = 2;
+}
+
+DefaultCase: WXCase {
+    case = "default";
+}
+
+ChosenCaseString: WOString {
+    value = chosenCase;
+}
+
+ ==========================
+ Example.java
+ ==========================
+
+public Object chosenCase() {
+    Object objects = new Object[] {"Fourth", "Third", "First", new Integer(2), "dummy"};
+    return objects[(new Random()).nextInt(objects.length)];
+}
+
+ </code></pre>
  * @author ak (Java port)
  * @author Charles Lloyd
  */
