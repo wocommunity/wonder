@@ -16,7 +16,7 @@ import com.webobjects.foundation.NSDictionary;
  * Note that if you also have a plain WOComponentContent in your wrapper, it will get appended
  * a second time.
  * @author ak (Java port)
- * @author unknown
+ * @author Charles Lloyd
  */
 public class ERXWOTemplate extends WODynamicElement {
 

@@ -1,9 +1,3 @@
-//
-// EOEnterpriseObjectClazz.java
-// Project ERExtensions
-//
-// Created by ak on Fri Apr 12 2002
-//
 package er.extensions;
 
 import java.util.Enumeration;
@@ -24,7 +18,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with
  * their case bound to a value.
  * @author ak (Java port)
- * @author unknown
+ * @author Charles Lloyd
  */
 public class ERXWOSwitch extends WODynamicElement {
     

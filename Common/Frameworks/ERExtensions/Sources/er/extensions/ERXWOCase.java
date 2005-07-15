@@ -1,9 +1,3 @@
-//
-// EOEnterpriseObjectClazz.java
-// Project ERExtensions
-//
-// Created by ak on Fri Apr 12 2002
-//
 package er.extensions;
 
 import com.webobjects.appserver.WOActionResults;
@@ -19,7 +13,7 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * Contains one case of a ERXWOSwitch.
  * @author ak (Java port)
- * @author unknown
+ * @author Charles Lloyd
  */
 public class ERXWOCase extends WODynamicElement {
 
