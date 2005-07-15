@@ -520,6 +520,10 @@
 				748E82F40838F6240024FF2D,
 				748E82F50838F6240024FF2D,
 				05D19B5A083CFC44004F8749,
+				05AE6FB20888299B00A99852,
+				05AE6FB30888299B00A99852,
+				05AE6FB40888299B00A99852,
+				05AE6FB50888299B00A99852,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -867,6 +871,66 @@
 			proxyType = 1;
 			remoteGlobalIDString = 017C7B2FFFD7144B7F000001;
 			remoteInfo = "Application Server";
+		};
+		05AE6FAE0888299B00A99852 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXWOCase.java;
+			path = er/extensions/ERXWOCase.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05AE6FAF0888299B00A99852 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXWOComponentContent.java;
+			path = er/extensions/ERXWOComponentContent.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05AE6FB00888299B00A99852 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXWOSwitch.java;
+			path = er/extensions/ERXWOSwitch.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05AE6FB10888299B00A99852 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXWOTemplate.java;
+			path = er/extensions/ERXWOTemplate.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05AE6FB20888299B00A99852 = {
+			fileRef = 05AE6FAE0888299B00A99852;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		05AE6FB30888299B00A99852 = {
+			fileRef = 05AE6FAF0888299B00A99852;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		05AE6FB40888299B00A99852 = {
+			fileRef = 05AE6FB00888299B00A99852;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		05AE6FB50888299B00A99852 = {
+			fileRef = 05AE6FB10888299B00A99852;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		05D19B59083CFC44004F8749 = {
 			fileEncoding = 4;
@@ -1892,7 +1956,11 @@
 				F59C57E102C4565701000102,
 				41FF21AF0461C69F00000102,
 				4105EC4405C81354003BA93B,
+				05AE6FAE0888299B00A99852,
+				05AE6FAF0888299B00A99852,
 				F54C4C5702C4E24A01000102,
+				05AE6FB00888299B00A99852,
+				05AE6FB10888299B00A99852,
 				F54C4C5802C4E24A01000102,
 				F50C03910354549D014B9BC9,
 				F522D6CC03A0397701CAC43C,
