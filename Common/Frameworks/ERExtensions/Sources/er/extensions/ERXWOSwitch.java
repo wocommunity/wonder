@@ -1,0 +1,77 @@
+//
+// EOEnterpriseObjectClazz.java
+// Project ERExtensions
+//
+// Created by ak on Fri Apr 12 2002
+//
+package er.extensions;
+
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicElement;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.appserver._private.WOHTMLBareString;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+
+/**
+ * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with
+ * their case bound to a value.
+ * @author ak (Java port)
+ * @author unknown
+ */
+public class ERXWOSwitch extends WODynamicElement {
+    
+    private NSDictionary _childCases;
+    private WOAssociation _case;
+    
+    public ERXWOSwitch(String name, NSDictionary associations, WOElement template) {
+        super(name, associations, template);
+        NSMutableDictionary dict = new NSMutableDictionary();
+        _case = (WOAssociation) associations.objectForKey("case");
+        for(Enumeration e = ((WODynamicGroup)template).childrenElements().objectEnumerator(); e.hasMoreElements(); ) {
+            WOElement child = (WOElement)e.nextElement();
+            if(child instanceof ERXWOCase) {
+                Object value = ((ERXWOCase)child).caseValue();
+                dict.setObjectForKey(child, value);
+            } else if(!(child instanceof WOHTMLBareString)) {
+                throw new IllegalStateException("Direct children must be ERXWOCase");
+            }
+        }
+        _childCases = dict.immutableClone();
+    }
+
+    protected WOElement childCaseInContext(WOContext context) {
+        Object value = _case.valueInComponent(context.component());
+        value = (value == null ? "default" : value);
+        
+        WOElement result = (WOElement) _childCases.objectForKey(value);
+        
+        if(result == null) {
+            result = (WOElement) _childCases.objectForKey("default");
+        }
+        if(result == null) {
+            result = new WOHTMLBareString("");
+        }
+        return result;
+    }
+    
+    public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+        childCaseInContext(wocontext).appendToResponse(woresponse, wocontext);
+    }
+    
+    public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
+        return childCaseInContext(wocontext).invokeAction(worequest, wocontext);
+    }
+    
+    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+        childCaseInContext(wocontext).takeValuesFromRequest(worequest, wocontext);
+    }
+    
+}
