@@ -1,9 +1,3 @@
-//
-// EOEnterpriseObjectClazz.java
-// Project ERExtensions
-//
-// Created by ak on Fri Apr 12 2002
-//
 package er.extensions;
 
 import java.util.Enumeration;
@@ -24,7 +18,7 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * Allows for multiple contents in a component. 
  * @author ak (Java port)
- * @author unknown
+ * @author Charles Lloyd
  */
 public class ERXWOComponentContent extends WODynamicElement {
     
