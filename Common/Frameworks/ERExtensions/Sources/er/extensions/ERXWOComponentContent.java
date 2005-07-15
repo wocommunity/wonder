@@ -16,7 +16,113 @@ import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Allows for multiple contents in a component. 
+ * Allows for multiple Component Contents.
+
+Currently, WOComponentContent can only access a single subtemplate.  We need a way to pass several 
+named contents.
+<code><pre>
+==============================
+Parent component:
+==============================
+
+&lt;webobject name=SomeComponent&gt;
+    This text will be ignored (unless you use WOComponentContent without templateName
+    in which case the templates will get appended twice!)
+    &lt;webobject name=Template1&gt;
+        This is the first template
+    &lt;/webobject&gt;
+
+    &lt;webobject name=Template2&gt;
+        This is the second template
+    &lt;/webobject&gt;
+
+    &lt;webobject name=Template3&gt;
+        This is the third template
+    &lt;/webobject&gt;
+&lt;/webobject&gt;
+
+===========
+Parent wod:
+===========
+
+SomeComponent: SomeComponent {
+    someIvar = someValue;
+}
+
+Template1: ERXWOTemplate {
+    name = "firstTemplate";
+}
+
+Template2: ERXWOTemplate {
+    name = "secondTemplate";
+}
+
+Template3: ERXWOTemplate {
+    name = "thirdTemplate";
+}
+
+==============================
+Child Component (SomeComponent)
+==============================
+Some static html
+&lt;webobject name=ComponentContent1&gt;
+    This is the default content if "firstTemplate" is not defined by parent
+&lt;/webobject&gt;
+
+&lt;webobject name=Repetition&gt;
+    &lt;webobject name=ComponentContent3&gt;
+        This is the default content if "thirdTemplate" is not defined by parent
+    &lt;/webobject&gt;
+&lt;/webobject&gt;
+
+&lt;webobject name=ComponentContent2&gt;
+    This is the default content if "secondTemplate" is not defined by parent
+&lt;/webobject&gt;
+some more static html
+
+===========
+Child wod:
+===========
+ComponentContent1: ERXWOComponentContent {
+    templateName = "firstTemplate";
+}
+
+ComponentContent2: ERXWOComponentContent {
+    templateName = "secondTemplate";
+}
+
+ComponentContent3: ERXWOComponentContent {
+    templateName = "thirdTemplate";
+}
+</pre></code>
+
+So, the way this could work is to add functionality to WOComponentContent which allows 
+it to iterate through its elements and locate the named templates.  It also needs to be extended 
+so that it takes the contents of its refernce as a default if no named template is provided/found.
+
+<code><pre>
+&lt;webobject name=IfThenElse&gt;
+    &lt;webobject name=TrueBlock&gt;
+        This is true block
+    &lt;/webobject&gt;
+    &lt;webobject name=FalseBlock&gt;
+        This is false block
+    &lt;/webobject&gt;
+&lt;/webobject&gt;
+
+
+IfThenElse: IfThenElseComponent {
+    condition = someCondition;
+}
+
+Template1: ERXWOTemplate {
+    name = "true";
+}
+
+Template2: ERXWOTemplate {
+    name = "false";
+}
+</pre></code>
  * @author ak (Java port)
  * @author Charles Lloyd
  */
