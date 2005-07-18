@@ -21,15 +21,15 @@ Image2: WOImage {
 }
 
 IsNotPrinterFriendly: ERXEqualConditional {
-	negated = true;
 	value1 = d2wContext.forcedSubTask;
 	value2 = "printerFriendly";
+	negate = true;
 }
 
 IsNotPrinterFriendly2: ERXEqualConditional {
-	negated = false;
 	value1 = d2wContext.forcedSubTask;
 	value2 = "printerFriendly";
+	negate = false;
 }
 
 PrintButton: ERXSingleButton {
@@ -45,6 +45,7 @@ PrinterFriendlyLink2: ERXJSOpenWindowHyperlink {
 	target = "PrinterFriendly";
 	height = ^height;
 	width = ^width;
+	menubar = ^menubar;
 }
 
 
