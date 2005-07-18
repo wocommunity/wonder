@@ -11,14 +11,11 @@ package ognl.webobjects;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-//import org.apache.log4j.Logger;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import ognl.*;
 
 public class WOOgnl {
-
-    //public static final Logger log = Logger.getLogger("ognl.webobjects.WOOgnl");
 
     public static final String DefaultWOOgnlBindingFlag = "~";
 
@@ -33,7 +30,7 @@ public class WOOgnl {
                                                              WOApplication.ApplicationWillFinishLaunchingNotification,
                                                              null);
         } catch (Exception e) {
-            System.err.println("Exception: " + e.getMessage());
+            NSLog.err.appendln("Exception: " + e.getMessage());
         }
     }
 
@@ -75,8 +72,10 @@ public class WOOgnl {
         OgnlRuntime.setElementsAccessor(NSArray.class, e);
         OgnlRuntime.setElementsAccessor(NSDictionary.class, e);
         OgnlRuntime.setElementsAccessor(NSSet.class, e);
-        // Register template parser.
-        WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
+        // Register template parser
+        if (!"false".equals(System.getProperty("ognl.active"))) {
+            WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
+        }
     }
 
     public void convertOgnlConstantAssociations(NSMutableDictionary associations) {
@@ -114,4 +113,13 @@ public class WOOgnl {
         }
         return value;
     } 
+    
+    public void setValue(String expression, Object obj, Object value) {
+        try {
+            Ognl.setValue(expression, newDefaultContext(), obj, value);
+        } catch (OgnlException ex) {
+            throw new IllegalStateException(ex.getMessage());
+        }
+    } 
+    
 }	
