@@ -154,7 +154,6 @@ public class ERXWOComponentContent extends WODynamicElement {
                 }
             }
         }
-        
         return _defaultTemplate;
     }
     
@@ -170,8 +169,7 @@ public class ERXWOComponentContent extends WODynamicElement {
         WOComponent component = wocontext.component();
         WOElement template = template(component);
         wocontext._setCurrentComponent(component.parent());
-        WOActionResults result;
-        result = template.invokeAction(worequest, wocontext);
+        WOActionResults result = template.invokeAction(worequest, wocontext);
         wocontext._setCurrentComponent(component);
         return result;
     }
