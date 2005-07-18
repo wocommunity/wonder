@@ -23,16 +23,13 @@ public class ERD2WDisplayToManyTable extends D2WDisplayToManyTable {
 
     public WOComponent inspectAction() {
         if(item!=null){
-            D2WContext newContext=ERD2WContext.newContext(session());
-            newContext.takeValueForKey(item, "object");
-            EOEntity entity = EOModelGroup.defaultGroup().entityNamed(item.entityName());
-            newContext.takeValueForKey(entity, "entity");
-            String inspectConfigurationName = (String)newContext.valueForKey("inspectConfigurationName");
+            String inspectConfigurationName=(String)d2wContext().valueForKey("inspectConfigurationName");
             if(inspectConfigurationName!=null && item!=null){
                 InspectPageInterface inspectPage=(InspectPageInterface)D2W.factory().pageForConfigurationNamed(inspectConfigurationName,
                                                                                                                session());
                 inspectPage.setObject(item);
                 inspectPage.setNextPage(context().page());
+                System.out.println(inspectPage);
                 return (WOComponent)inspectPage;
             }
         }
