@@ -23,15 +23,18 @@ import com.webobjects.foundation.*;
  * "#" + the value of the binding to the action. The obvious case comes when you have a form at the bottom of the page
  * and want to jump to the error messages if there are any.  That javascript is used is an implementation 
  * detail, though and shouldn't be relied on.
+ * <li> it adds the <code>secure</code> boolean binding that rewrites the URL to use <code>https</code>.
  * </ul>
  * This subclass is installed when the frameworks loads. 
  * @author ak
+ * @author Mike Schrag (idea to secure binding)
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     static final ERXLogger log = ERXLogger.getERXLogger(ERXWOForm.class);
     WOAssociation _formName;
     WOAssociation _enctype;
     WOAssociation _fragmentIdentifier;
+    WOAssociation _secure;
     
     public ERXWOForm(String name, NSDictionary associations,
                      WOElement template) {
@@ -39,6 +42,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         _formName = (WOAssociation) _associations.removeObjectForKey("name");
         _enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
         _fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
+        _secure = (WOAssociation) _associations.removeObjectForKey("secure");
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
@@ -59,9 +63,24 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
                 }
             }
         }
-        super.appendAttributesToResponse(response, context);
+        boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
+        if (secure) {
+            //FIXME: (ak) we assume that relative URL creation is on by default, so we may restore the wrong type 
+            WOResponse newResponse = new WOResponse();
+            context._generateCompleteURLs();
+            super.appendAttributesToResponse(newResponse, context);
+            context._generateRelativeURLs();
+            
+            String action = newResponse.contentString();
+            if(action.indexOf("action=\"http://") >= 0) {
+                action = action.replaceFirst("action=\"http://", "action=\"https://");
+            }
+            response.appendContentString(action);
+        } else {
+            super.appendAttributesToResponse(response, context);
+        }
     }
-
+     
     public void appendToResponse(WOResponse response, WOContext context) {
         boolean inForm = context.isInForm();
         
