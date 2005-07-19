@@ -260,7 +260,7 @@ public class DRCriteria extends Object  {
                         scr = new Double(MAXNUMBER+2);
                     }
                 } else if (subMcs.count() > 1) {
-                    scr = this.label();
+                    scr = this.label().toLowerCase();
                 } else if (rawVal instanceof NSDictionary) {
                     Object v = ((NSDictionary)rawVal).objectForKey("L");
                     //OWDebug.println(1, "v:"+v);
@@ -273,7 +273,7 @@ public class DRCriteria extends Object  {
                         scr = new Double(-1.0*MAXNUMBER);
                     }
                 } else if(rawVal instanceof String){
-                    scr = rawVal;
+                    scr = ((String)rawVal).toLowerCase();
                 } else {
                     scr = DRValueConverter.converter().numberForValue(rawVal);
                 }
