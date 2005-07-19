@@ -224,6 +224,7 @@
 				F5E94DA7038C045301CF0E76,
 				F54206E002C467E001000102,
 				9DA572350356469710CF0E7D,
+				44C07301088D4ED400CD424D,
 			);
 			isa = PBXGroup;
 			name = "Delayed Assigments";
@@ -1099,6 +1100,7 @@
 				FBDED2D817EDBE5AD297D139,
 				F6E7967602C877AF01AD0D07,
 				50E9E19A03CBB56900CF0E76,
+				44C072F5088D4D7800CD424D,
 				F6E7969402C877AF01AD0D07,
 				F6E7969302C877AF01AD0D07,
 				9D5BC62B033AB0C210CF0E7D,
@@ -2107,6 +2109,86 @@
 		};
 		440E911207C26D4E0078A7AF = {
 			fileRef = 440E911107C26D4E0078A7AF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44C072EA088D4D2D00CD424D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERD2WEditToOneFault.java;
+			path = er/directtoweb/ERD2WEditToOneFault.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44C072EB088D4D2D00CD424D = {
+			fileRef = 44C072EA088D4D2D00CD424D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44C072EC088D4D4600CD424D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
+			name = ERD2WEditToOneFault.api;
+			path = Components/ERD2WEditToOneFault.api;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		44C072ED088D4D4600CD424D = {
+			fileRef = 44C072EC088D4D4600CD424D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44C072EE088D4D6F00CD424D = {
+			children = (
+				44C072EF088D4D6F00CD424D,
+			);
+			isa = PBXVariantGroup;
+			name = ERD2WEditToOneFault.wo;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44C072EF088D4D6F00CD424D = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = Nonlocalized;
+			path = Components/Nonlocalized.lproj/ERD2WEditToOneFault.wo;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		44C072F4088D4D6F00CD424D = {
+			fileRef = 44C072EE088D4D6F00CD424D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		44C072F5088D4D7800CD424D = {
+			children = (
+				44C072EE088D4D6F00CD424D,
+				44C072EC088D4D4600CD424D,
+				44C072EA088D4D2D00CD424D,
+			);
+			isa = PBXGroup;
+			name = ERD2WEditToOneFault;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44C07301088D4ED400CD424D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERDInstanceCreationAssignment.java;
+			path = er/directtoweb/ERDInstanceCreationAssignment.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		44C07302088D4ED400CD424D = {
+			fileRef = 44C07301088D4ED400CD424D;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -11064,7 +11146,6 @@
 				JAVA_ARCHIVE_CLASSES = YES;
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
-				JAVA_COMPILER_DEPRECATED_WARNINGS = YES;
 				JAVA_COMPILER_FLAGS = "-extdirs /Library/WebObjects/Extensions:/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Frameworks/JavaVM.framework/Home/lib/ext";
 				JAVA_FRAMEWORK_RESOURCES_DIRS = Resources;
 				JAVA_SOURCE_SUBDIR = Sources;
@@ -11444,6 +11525,8 @@
 				44CF068107C4D599000D10E7,
 				0514CF0308467CD200CF7015,
 				0514CF0A08467CF000CF7015,
+				44C072ED088D4D4600CD424D,
+				44C072F4088D4D6F00CD424D,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11698,6 +11781,8 @@
 				44CF050607C4B4FB000D10E7,
 				44CF067807C4D574000D10E7,
 				0514CF0108467CC500CF7015,
+				44C072EB088D4D2D00CD424D,
+				44C07302088D4ED400CD424D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
