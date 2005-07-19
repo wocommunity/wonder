@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaFoundation/JavaWOExtensions/JavaPlot/JavaWOJSPServlet/JavaWebObjects/JavaXML/JavaEOAccess/JavaEOControl/JavaEOProject/JavaJDBCAdaptor/ERJars/WOOgnl/ERExtensions/DRGrouping"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/ERExtensions/ERJars/JavaWOExtensions/WOOgnl/JavaEOAccess/JavaEOControl/JavaEOProject/JavaFoundation/JavaJDBCAdaptor/JavaPlot/JavaWebObjects/JavaWOJSPServlet/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DRGrouping"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
