@@ -524,6 +524,7 @@
 				05AE6FB30888299B00A99852,
 				05AE6FB40888299B00A99852,
 				05AE6FB50888299B00A99852,
+				0599CE53088DD7A800447E6D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -871,6 +872,21 @@
 			proxyType = 1;
 			remoteGlobalIDString = 017C7B2FFFD7144B7F000001;
 			remoteInfo = "Application Server";
+		};
+		0599CE52088DD7A800447E6D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXSelectorUtilities.java;
+			path = er/extensions/ERXSelectorUtilities.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		0599CE53088DD7A800447E6D = {
+			fileRef = 0599CE52088DD7A800447E6D;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		05AE6FAE0888299B00A99852 = {
 			fileEncoding = 30;
@@ -2004,6 +2020,7 @@
 				500D40B803CDFC7100CF0E76,
 				F59C57A302C4565701000102,
 				633FC07B040A414D00AE7795,
+				0599CE52088DD7A800447E6D,
 				F59C57E302C4565701000102,
 				F59C57EB02C4565701000102,
 				F59C57EC02C4565701000102,
