@@ -646,21 +646,6 @@ public class ERXEC extends EOEditingContext {
         }
     }
 
-    private void _safeInvokeSelectorOnObjectWithParameters(NSSelector sel, Object delegate, Object[] parameters) {
-        try {
-            sel.invoke(delegate, parameters);
-        }
-        catch ( IllegalAccessException e ) {
-            throw new RuntimeException("Caught " + e + ", Reason: " + e.getMessage(), e);
-        }
-        catch ( InvocationTargetException e ) {
-            throw new RuntimeException("Caught " + e + ", Reason: " + e.getMessage(), e);
-        }
-        catch ( NoSuchMethodException e ) {
-            throw new RuntimeException("Caught " + e + ", Reason: " + e.getMessage(), e);
-        }
-    }
-
     /** Overriden to support autoLocking and will/did revert delegate methods. **/
     public void revert() {
         boolean wasAutoLocked = autoLock("revert");
@@ -677,13 +662,13 @@ public class ERXEC extends EOEditingContext {
             final Object[] parameters = needToCallDelegate ? new Object[] {this, insertedObjects,updatedObjects, deletedObjects} : null;
 
             if( delegateImplementsWillRevert )
-                _safeInvokeSelectorOnObjectWithParameters(EditingContextWillRevertObjectsDelegateSelector, delegate, parameters);
+                ERXSelectorUtilities.invoke(EditingContextWillRevertObjectsDelegateSelector, delegate, parameters);
 
             super.revert();
 
             if ( delegateImplementsDidRevert )
-                _safeInvokeSelectorOnObjectWithParameters(EditingContextDidRevertObjectsDelegateSelector, delegate, parameters);
-            
+                ERXSelectorUtilities.invoke(EditingContextDidRevertObjectsDelegateSelector, delegate, parameters);
+
         } finally {
             autoUnlock(wasAutoLocked);
         }
