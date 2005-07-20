@@ -494,7 +494,18 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      */
     // NOTE: if you use WO 5.1, comment out this method, otherwise it won't compile. 
     public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
-        return handleException(exception, actionInstance != null ? actionInstance.context() : null);
+        WOContext context = actionInstance != null ? actionInstance.context() : null;
+        WOResponse response = handleException(exception, context);
+        // AK: bugfix for #4186886 (Session store deadlock with DAs). The bug occurs in 5.2.3, I'm not sure about other versions.
+        // It may create other problems, but this one is very severe to begin with
+        // The crux of the matter is that for certain exceptions, the DA request handler does not check sessions back in
+        // which leads to a deadlock in the session store when the session is accessed again.
+        if(context != null && context.hasSession() && 
+                ("InstantiationError".equals(reason) || "InvocationError".equals(reason))) {
+            context._putAwakeComponentsToSleep();
+            saveSessionForContext(context);
+        }
+        return response;
     }
     
     /**
@@ -504,7 +515,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * @return the WOResponse of the generated exception page.
      */
     public WOResponse handleException(Exception exception, WOContext context) {
-        // We first want to test if we ran out of memory. If so we need to quite ASAP.
+        // We first want to test if we ran out of memory. If so we need to quit ASAP.
         handlePotentiallyFatalException(exception);
 
         // Not a fatal exception, business as usual.
