@@ -19,6 +19,23 @@
 			remoteGlobalIDString = F5274053017CADD2014387C8;
 			remoteInfo = "Web Server";
 		};
+		05DB074D088EE3F70039F5D8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.jar;
+			name = "ognl-2.6.7.jar";
+			path = "Libraries/ognl-2.6.7.jar";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		05DB074E088EE3F70039F5D8 = {
+			fileRef = 05DB074D088EE3F70039F5D8;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Merge,
+				);
+			};
+		};
 //050
 //051
 //052
@@ -29,24 +46,6 @@
 //F52
 //F53
 //F54
-		F524E65603AADF3901AD0D0B = {
-			includeInIndex = 1;
-			isa = PBXFileReference;
-			lastKnownFileType = archive.jar;
-			name = "ognl-2.3.2.jar";
-			path = "Libraries/ognl-2.3.2.jar";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F524E65703AADF3901AD0D0B = {
-			fileRef = F524E65603AADF3901AD0D0B;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Merge,
-				);
-			};
-		};
 		F5274010017CADD2014387C8 = {
 			buildSettings = {
 			};
@@ -97,6 +96,7 @@
 		};
 		F5274025017CADD2014387C8 = {
 			children = (
+				05DB074D088EE3F70039F5D8,
 				F5274026017CADD2014387C8,
 				F5274027017CADD2014387C8,
 				F5274028017CADD2014387C8,
@@ -107,7 +107,6 @@
 				F527402D017CADD2014387C8,
 				F527402F017CADD2014387C8,
 				F5274030017CADD2014387C8,
-				F524E65603AADF3901AD0D0B,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -433,7 +432,7 @@
 				F527404D017CADD2014387C8,
 				F527404F017CADD2014387C8,
 				F5274050017CADD2014387C8,
-				F524E65703AADF3901AD0D0B,
+				05DB074E088EE3F70039F5D8,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
