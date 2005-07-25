@@ -289,9 +289,6 @@ public class EGSimpleTableParser {
     
     private void parseTable(Node tableNode) {
     	String sheetName = nodeValueForKey(tableNode, "name", "Unnamed Sheet " + (_workbook.getNumberOfSheets() + 1));
-    	
-    	String sheetCellStyle = nodeValueForKey(tableNode, "class", null);
-    	
     	NSMutableDictionary sheetDict = new NSMutableDictionary();
     	addEntriesFromNode(sheetDict, tableNode);
         if(sheetName.matches("[\\/\\\\\\*\\?\\[\\]]")) {
@@ -412,10 +409,10 @@ public class EGSimpleTableParser {
     							cell.setCellStyle(style);
     						}
     					}
-
-                                        if(log.isDebugEnabled()) {
-                                            log.debug("Cell: " + value);
-                                        }
+    					
+    					if(log.isDebugEnabled()) {
+    					    log.debug("Cell: " + value);
+    					}
     				}
     			}
     		}
@@ -466,16 +463,20 @@ public class EGSimpleTableParser {
     	
     	log.debug("before - " + cellStyleName + ": " + dict);
     	dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(dict, STYLE_KEYS);
-    	log.debug(cellStyleName + ": " + dict);
-    	if(cellStyleName != null) {
-    		NSDictionary immutableStyleDict = ((NSDictionary)_styleDicts.objectForKey(cellStyleName));
-    		if(immutableStyleDict == null) {
-    			throw new IllegalArgumentException("Cell Style not found: " + cellStyleName);
-    		}
-    		NSMutableDictionary styleDict = immutableStyleDict.mutableClone();
-    		styleDict.addEntriesFromDictionary(dict);
-    		dict = styleDict;
-    	}
+        log.debug(cellStyleName + ": " + dict);
+        if(cellStyleName != null) {
+            String styles[] = cellStyleName.split(" +");
+            NSMutableDictionary styleDict = new NSMutableDictionary();
+            for (int i = 0; i < styles.length; i++) {
+                String string = styles[i];
+                NSDictionary immutableStyleDict = ((NSDictionary)_styleDicts.objectForKey(string));
+                if(immutableStyleDict == null) {
+                    throw new IllegalArgumentException("Cell Style not found: " + cellStyleName);
+                }
+            }
+            styleDict.addEntriesFromDictionary(dict);
+            dict = styleDict.immutableClone();
+        }
     	
     	
     	HSSFCellStyle cellStyle = (HSSFCellStyle)_styles.objectForKey(dict);
