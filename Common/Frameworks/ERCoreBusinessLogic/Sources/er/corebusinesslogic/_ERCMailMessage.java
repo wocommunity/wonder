@@ -141,10 +141,17 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
     }
 
     public void takeStoredGzippedValueForKey(String aValue, String key) {
-        byte bytes[] = ERXCompressionUtilities.gzipStringAsByteArray(aValue);
-        if (bytes.length > 0) {
-            takeStoredValueForKey(new NSData(bytes), key);
+        NSData valueToSet = null;
+        
+        if ( aValue != null ) {
+            byte bytes[] = ERXCompressionUtilities.gzipStringAsByteArray(aValue);
+            
+            if (bytes.length > 0) {
+                valueToSet = new NSData(bytes);
+            }
         }
+        
+        takeStoredValueForKey(valueToSet, key);
     }
     
     public NSTimestamp dateSent() {
