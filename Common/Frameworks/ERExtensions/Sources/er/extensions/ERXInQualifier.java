@@ -93,6 +93,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
     }
 
     /** Tests if the given object's key is in the supplied values */ 
+    // FIXME: this doesn't work right with EOs when the key() is keypath across a relationship
     public boolean evaluateWithObject(Object object) {
         Object value = null;
         if(object instanceof EOEnterpriseObject) {
@@ -101,6 +102,8 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
             if(eo.classDescription().attributeKeys().containsObject(key())) {
                 value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo, key());
             } else if(EOUtilities.entityNamed(ec, eo.entityName()).primaryKeyAttributeNames().containsObject(key())) {
+                // when object is an EO and key() is a cross-relationship keypath, we drop through to this case
+                // and we'll fail.
                 value = EOUtilities.primaryKeyForObject(ec,eo).objectForKey(key());
             }
         } else {
