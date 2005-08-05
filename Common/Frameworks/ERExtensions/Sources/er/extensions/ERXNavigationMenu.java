@@ -44,6 +44,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         _level3Items=null;
         _menuIsSetUp=false;
         _renderLevelCount=0;
+        aNavigationItem = null;
         _navigationState = null;
         _navigationContext = null;
         super.reset();
