@@ -15,7 +15,10 @@ import com.webobjects.foundation.*;
  * @binding list
  * @binding attribute
  * @binding nullArrayDisplay
- * @binding escapeHTML" defaults="Boolean
+ * @binding item current item if in content mode
+ * @binding separator separator to use for the first items (default ", ")
+ * @binding finalSeparator separator for the last items (default localized " and ")
+ * @binding escapeHTML
  */
 
 public class ERXListDisplay extends WOComponent {
