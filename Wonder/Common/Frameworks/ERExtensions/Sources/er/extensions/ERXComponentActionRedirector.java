@@ -5,18 +5,21 @@ import com.webobjects.foundation.*;
 
 /**
 Allows you to develop your app using component actions while still providing bookmarkable URLs.
-It should be considered <b>highly</b> experimental and it uses a few very dirty shortcuts, but no private API to work it's magic. The main problems may be garbabe collection or space requirements. You might be better of to compress the responses.
-
+It should be considered <b>highly</b> experimental and it uses a few very dirty shortcuts, but no private API to work it's magic. 
+The main problems may be garbabe collection or space requirements. You might be better of to compress the responses.
+<br>
  The mode of operation is as follows; given a component action in a typical page:
-
+<br>
+<code><pre>
  public WOComponent myAction() {
      WOComponent nextPage = pageWithName("Main");
      nextPage.takeValueForKey(new Integer(100), "someValue");
      return nextPage;
  }
 
+ </pre></code>
  then Main could be implemented something like this:
-
+<code><pre>
  public class Main extends WOComponent implements ERXComponentActionRedirector.Restorable {
      static ERXLogger log = ERXLogger.getERXLogger(Main.class);
 
@@ -50,21 +53,29 @@ It should be considered <b>highly</b> experimental and it uses a few very dirty 
          }
      }
  }
- 
- But this is just one possibility. It only locates all the code in one place.
+ </pre></code>
+ But this is just one possibility. It only locates all the code in one place. <br>
 
 The actual workings are:
-You create a page with typical component action links
- URL in browser: /cgi-bin/WebObjects/myapp.woa/
- Links on page: /cgi-bin/WebObjects/myapp.woa/0.1.2.3
-
-When you click on a link, the request-response loop gets executed, but instead of returning the response, we save it in a session-based cache and return a redirect instead. The current page is asked for the URL for the redirect when it implements the Restorable interface.
-So the users browser receives redirection to a "reasonable" URL like "/article/1234/edit?wosid=..." or "../wa/EditArticle?__key=1234&wosid=...". This URL is intercepted and looked up in the cache. If found, the stored response is returned, else the request is handled normally.
-
- The major thing about this class is that you can detach URLs from actions. For example, it is very hard to create a direct action that creates a page that uses a Tab panel or a collapsible component because you need to store a tremendous amount of state in the URL. With this class, you say: "OK, I won't be able to totally restore everything, but I'll show the first page with everything collapsed.
+<ul>
+<li>You create a page with typical component action links
+<li>URL in browser: /cgi-bin/WebObjects/myapp.woa/
+<li>Links on page: /cgi-bin/WebObjects/myapp.woa/0.1.2.3
+</ul>
+When you click on a link, the request-response loop gets executed, but instead of returning the response, we save it in a 
+session-based cache and return a redirect instead. The current page is asked for the URL for the redirect when it implements 
+the Restorable interface.<br>
+So the users browser receives redirection to a "reasonable" URL like "/article/1234/edit?wosid=..." or 
+"../wa/EditArticle?__key=1234&wosid=...". This URL is intercepted and looked up in the cache. If found, the stored 
+response is returned, else the request is handled normally.
+<br>
+ The major thing about this class is that you can detach URLs from actions. For example, it is very hard to create a 
+ direct action that creates a page that uses a Tab panel or a collapsible component because you need to store a 
+ tremendous amount of state in the URL. With this class, you say: "OK, I won't be able to totally restore everything, 
+ but I'll show the first page with everything collapsed."<br>
 
  For all of this to work, your application should override the request-response loop like:
-
+<code><pre>
  public WOActionResults invokeAction(WORequest request, WOContext context) {
      WOActionResults results = super.invokeAction(request, context);
      ERXComponentActionRedirector.createRedirectorInContext(results, context);
@@ -93,8 +104,9 @@ So the users browser receives redirection to a "reasonable" URL like "/article/1
      }
      return response;
  }
-
-Instead of the code above, you should be able to simply use ERXApplication and set the <code>er.extensions.ERXComponentActionRedirector.enabled=true</code> property.
+</pre></code>
+Instead of the code above, you should be able to simply use ERXApplication and set the 
+<code>er.extensions.ERXComponentActionRedirector.enabled=true</code> property.
  
 @author ak
  */
@@ -105,7 +117,8 @@ public class ERXComponentActionRedirector {
 
     /** implemented by the pages that want to be restorable */
     public static interface Restorable {
-        /** url for the current state. This method will be called directly after invokeAction(), so any temporary variables should have the same setting as they had when the action was invoked. */
+        /** url for the current state. This method will be called directly after invokeAction(), so any temporary variables 
+         * should have the same setting as they had when the action was invoked. */
         public String urlForCurrentState();
     }
 
