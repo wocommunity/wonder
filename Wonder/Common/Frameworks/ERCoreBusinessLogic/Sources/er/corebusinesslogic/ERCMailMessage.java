@@ -223,8 +223,15 @@ public class ERCMailMessage extends _ERCMailMessage {
         return validateEmptyStringForKey(newValue, "toAddresses");
     }
 
-    public Object validateText(String newValue) {
-        return validateEmptyStringForKey(newValue, "text");
+    public void validateForSave() throws NSValidation.ValidationException {
+        final String text = text();
+        final String plainText = plainText();
+        
+        super.validateForSave();
+        
+        if ( (text == null || text.length() == 0) && (plainText == null || plainText.length() == 0) ) {
+            throw new NSValidation.ValidationException("Both text and plainText are empty or null.  At least one must be set.");
+        }
     }
 
     public void attachFileWithMimeType(String filePath, String mimeType) {
