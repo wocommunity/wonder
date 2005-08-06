@@ -24,6 +24,7 @@ import com.webobjects.foundation.*;
  * and want to jump to the error messages if there are any.  That javascript is used is an implementation 
  * detail, though and shouldn't be relied on.
  * <li> it adds the <code>secure</code> boolean binding that rewrites the URL to use <code>https</code>.
+ * <li> it adds the <code>disabled</code> boolean binding allows you to omit the form tag.
  * </ul>
  * This subclass is installed when the frameworks loads. 
  * @author ak
@@ -35,6 +36,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     WOAssociation _enctype;
     WOAssociation _fragmentIdentifier;
     WOAssociation _secure;
+    WOAssociation _disabled;
     
     public ERXWOForm(String name, NSDictionary associations,
                      WOElement template) {
@@ -43,6 +45,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         _enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
         _fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
         _secure = (WOAssociation) _associations.removeObjectForKey("secure");
+        _disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
@@ -82,13 +85,14 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     }
      
     public void appendToResponse(WOResponse response, WOContext context) {
-        boolean inForm = context.isInForm();
+        boolean wasInForm = context.isInForm();
         
         context.setInForm(true);
         if (context != null && response != null) {
 
             String elementName = elementName();
-            boolean shouldAppendFormTags = !inForm  && (elementName != null);
+            boolean disable = _disabled != null && _disabled.booleanValueInComponent(context.component());
+            boolean shouldAppendFormTags = !disable && !wasInForm  && (elementName != null);
 
             if (shouldAppendFormTags)
                 _appendOpenTagToResponse(response, context);
@@ -100,7 +104,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
             if (shouldAppendFormTags)
                 _appendCloseTagToResponse(response, context);
         }
-        context.setInForm(false);
+        context.setInForm(wasInForm);
         if(_fragmentIdentifier != null) {
             Object value = _fragmentIdentifier.valueInComponent(context.component());
             if(value != null) {
