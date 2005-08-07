@@ -7,8 +7,6 @@
 
 package er.extensions;
 
-import sun.tools.tree.*;
-
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -28,7 +26,10 @@ import com.webobjects.foundation.*;
  * <li> it adds the <code>secure</code> boolean binding that rewrites the URL to use <code>https</code>.
  * <li> it adds the <code>disabled</code> boolean binding allows you to omit the form tag.
  * </ul>
- * This subclass is installed when the frameworks loads. 
+ * This subclass is installed when the frameworks loads. <br />
+ * If you actually want to see those new bindings in WOBuilder, edit the file 
+ * <code>WebObjects Builder.app/Contents/Resources/WebObjectDefinitions.xml</code>, which 
+ * contains the .api for the dynamic elements.
  * @author ak
  * @author Mike Schrag (idea to secure binding)
  */  
@@ -90,6 +91,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         boolean wasInForm = context.isInForm();
         
         context.setInForm(true);
+        
         boolean disable = _disabled != null && _disabled.booleanValueInComponent(context.component());
         boolean shouldAppendFormTags = !disable && !wasInForm;
         
@@ -97,6 +99,20 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
             _appendOpenTagToResponse(response, context);
             appendChildrenToResponse(response, context);
             _appendCloseTagToResponse(response, context);
+            if(_fragmentIdentifier != null) {
+                Object value = _fragmentIdentifier.valueInComponent(context.component());
+                if(value != null) {
+                    String formName = "document.forms.length-1";
+                    formName = (_formName != null ? "'" +_formName.valueInComponent(context.component()) + "'" : formName);
+                    response.appendContentString("<script language=\"javascript\">document.forms["+formName+"].action+=\"#"+value.toString()+"\";</script>");
+                }
+            }
+            if(context instanceof ERXMutableUserInfoHolderInterface) {
+                NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
+                
+                ui.removeObjectForKey("formName");
+                ui.removeObjectForKey("enctype");
+            }
         } else {
             if(!disable) {
                 log.warn("This FORM is embedded inside another FORM. Omitting Tags: " + this.toString());
@@ -105,18 +121,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         }
 
         context.setInForm(wasInForm);
-        if(_fragmentIdentifier != null) {
-            Object value = _fragmentIdentifier.valueInComponent(context.component());
-            if(value != null) {
-                response.appendContentString("<script language=\"javascript\">document.forms[document.forms.length-1].action+=\"#"+value.toString()+"\";</script>");
-            }
-        }
-        if(context instanceof ERXMutableUserInfoHolderInterface) {
-            NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
-            
-            ui.removeObjectForKey("formName");
-            ui.removeObjectForKey("enctype");
-        }
     }
     
     /**
