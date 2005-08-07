@@ -7,6 +7,8 @@
 
 package er.extensions;
 
+import sun.tools.tree.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -49,7 +51,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
-        if(context != null && context instanceof ERXMutableUserInfoHolderInterface) {
+        if(context instanceof ERXMutableUserInfoHolderInterface) {
             NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
             if(_formName != null) {
                 String formName = (String)_formName.valueInComponent(context.component());
@@ -88,22 +90,20 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         boolean wasInForm = context.isInForm();
         
         context.setInForm(true);
-        if (context != null && response != null) {
-
-            String elementName = elementName();
-            boolean disable = _disabled != null && _disabled.booleanValueInComponent(context.component());
-            boolean shouldAppendFormTags = !disable && !wasInForm  && (elementName != null);
-
-            if (shouldAppendFormTags)
-                _appendOpenTagToResponse(response, context);
-            else
-                log.warn("This FORM is embedded inside another FORM. Omitting Tags.");
-
-            this.appendChildrenToResponse(response, context);
-
-            if (shouldAppendFormTags)
-                _appendCloseTagToResponse(response, context);
+        boolean disable = _disabled != null && _disabled.booleanValueInComponent(context.component());
+        boolean shouldAppendFormTags = !disable && !wasInForm;
+        
+        if (shouldAppendFormTags) {
+            _appendOpenTagToResponse(response, context);
+            appendChildrenToResponse(response, context);
+            _appendCloseTagToResponse(response, context);
+        } else {
+            if(!disable) {
+                log.warn("This FORM is embedded inside another FORM. Omitting Tags: " + this.toString());
+            }
+            appendChildrenToResponse(response, context);
         }
+
         context.setInForm(wasInForm);
         if(_fragmentIdentifier != null) {
             Object value = _fragmentIdentifier.valueInComponent(context.component());
@@ -128,10 +128,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
      * @return form name in context or default value
      */
     public static String formName(WOContext context, String defaultName) {
-    	String formName = defaultName;
-    	if(context instanceof ERXMutableUserInfoHolderInterface) {
-        	formName = (String) ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().objectForKey("formName");
+        String formName = defaultName;
+        if(context instanceof ERXMutableUserInfoHolderInterface) {
+            formName = (String) ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().objectForKey("formName");
         }
-    	return formName;
+        return formName;
     }
 }
