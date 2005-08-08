@@ -42,6 +42,7 @@ public class ERXModelGroup extends
      * Default public constructor
      */
     public ERXModelGroup() {
+        cache = new Hashtable();
     }
 
     /**
@@ -181,11 +182,12 @@ public class ERXModelGroup extends
         if (cachedValue == null) {
             NSDictionary d = entity.userInfo();
             if (d == null) d = NSDictionary.EmptyDictionary;
-            cachedValue = (Integer) d.objectForKey("entityCode");
+            Object o = d.objectForKey("entityCode");
+            cachedValue = o == null ? null : new Integer(o.toString()); 
             if (cachedValue == null) {
                 cachedValue = new Integer(0);
-                cache.put(entity, cachedValue);
             }
+            cache.put(entity, cachedValue);
         }
         return cachedValue.intValue();
     }
