@@ -10,54 +10,48 @@ import com.webobjects.foundation.*;
 import er.extensions.*;
 
 /**
- * @author david@cluster9.com<br/>
- *<br/>
- * Automatically generates Long primary keys for entities. Features a cache
- * which reduces database roundtrips as well as optionally encoding Entity type
- * in PK value.<br/>
- * <br/>
- * usage:<br/>
- * <br/>
- * override either the ERXGeneratesPrimaryKey interface like this:<br/>
- * <code><pre>
+ * @author david@cluster9.com<br/> <br/> Automatically generates Long primary
+ *         keys for entities. Features a cache which reduces database roundtrips
+ *         as well as optionally encoding Entity type in PK value.<br/> <br/>
+ *         usage:<br/> <br/> override either the ERXGeneratesPrimaryKey
+ *         interface like this:<br/> <code><pre>
  * private NSDictionary _primaryKeyDictionary = null;
- * public NSDictionary primaryKeyDictionary(boolean inTransaction) {
- *     if (_primaryKeyDictionary == null) {
- *         _primaryKeyDictionary = ERXLongPrimaryKeyFactory.primaryKeyDictionary(this);
- *     }
- *     return _primaryKeyDictionary;
- * }
+ * 
+ *                                                    public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+ *                                                        if (_primaryKeyDictionary == null) {
+ *                                                            _primaryKeyDictionary = ERXLongPrimaryKeyFactory.primaryKeyDictionary(this);
+ *                                                        }
+ *                                                        return _primaryKeyDictionary;
+ *                                                    }
  * </pre>
- * </code><br/>
- * or manually call<br/> 
- * <code>ERXLongPrimaryKeyFactory.primaryKeyDictionary(EOEnterpriseObject eo);</code><br/>
- * <br/>
- * the necessary database table is generated on the fly.<br/>
- * <br/>
- * <b>Encoding Entity in PK values</b><br/>
- * If the system property <code>ERXIntegerPrimaryKeyFactory.encodeEntityInPkValue</code> is 
- * set to <code>true</code> then the last 6 bits from the 64 bit primary key is
- * used to encode the Subentity in the pk value. This speeds up inheritance with multiple tables.
- * In order to support this you must add an entry to the userInfo from the Subentities:<br/>
- * <br/>
- * <code>key=entityCode</code><br/>
- * <code>value= %lt;%lt; an unique integer, no longer than 6 bit - 1</code><br/>
+ * </code><br/> or manually call<br/>
+ *         <code>ERXLongPrimaryKeyFactory.primaryKeyDictionary(EOEnterpriseObject eo);</code><br/>
+ *         <br/> the necessary database table is generated on the fly.<br/>
+ *         <br/> <b>Encoding Entity in PK values</b><br/> If the system
+ *         property
+ *         <code>ERXIntegerPrimaryKeyFactory.encodeEntityInPkValue</code> is
+ *         set to <code>true</code> then the last 6 bits from the 64 bit
+ *         primary key is used to encode the Subentity in the pk value. This
+ *         speeds up inheritance with multiple tables. In order to support this
+ *         you must add an entry to the userInfo from the Subentities:<br/>
+ *         <br/> <code>key=entityCode</code><br/>
+ *         <code>value= %lt;%lt; an unique integer, no longer than 6 bit - 1</code><br/>
  * 
  */
 public class ERXLongPrimaryKeyFactory {
 
     public static final int       CODE_LENGTH  = 6;
     public static final ERXLogger log          = ERXLogger.getERXLogger(ERXLongPrimaryKeyFactory.class);
-    private static Object         lock         = new Object();
     public static long            MAX_PK_VALUE = (long) Math.pow(2, 58);
     public static Boolean         encodeEntityInPkValue;
+    private static Hashtable      pkCache      = new Hashtable();
+    private static int            increaseBy   = 0;
 
-    public static Long getNextPkValueForEntity(String ename) {
+    private static Long getNextPkValueForEntity(String ename) {
         Long pk = cachedPkValue(ename);
         if (encodeEntityInPkValue()) {
             long l = pk.longValue();
-            if (l > MAX_PK_VALUE) { throw new IllegalStateException("max PK value reached for entity " + ename
-                    + " cannot continue!");
+            if (l > MAX_PK_VALUE) { throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
 
             }
 
@@ -67,6 +61,9 @@ public class ERXLongPrimaryKeyFactory {
             long realPk = l << CODE_LENGTH;
             // now add the entity code
             realPk = realPk | ((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(ename);
+            if (log.isDebugEnabled()) {
+                log.debug("new pk value for "+ename+"("+((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+            }
             pk = new Long(realPk);
         }
         return pk;
@@ -75,19 +72,29 @@ public class ERXLongPrimaryKeyFactory {
     /**
      * @return
      */
-    static boolean encodeEntityInPkValue() {
+    public synchronized static boolean encodeEntityInPkValue() {
         if (encodeEntityInPkValue == null) {
-            synchronized (lock) {
-                boolean b = ERXValueUtilities.booleanValueWithDefault(System
-                        .getProperty("ERXIntegerPrimaryKeyFactory.encodeEntityInPkValue"), false);
-                encodeEntityInPkValue = b ? Boolean.TRUE : Boolean.FALSE;
-            }
+            boolean b = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLongPrimaryKeyFactory.encodeEntityInPkValue"),
+                    false);
+            encodeEntityInPkValue = b ? Boolean.TRUE : Boolean.FALSE;
         }
         return encodeEntityInPkValue.booleanValue();
     }
 
+    public static Object primaryKeyValue(EOEnterpriseObject eo) {
+        return primaryKeyDictionary(eo).objectEnumerator().nextElement();
+    }
+
+    public static Object primaryKeyValue(String entityName) {
+        return primaryKeyDictionary(entityName).objectEnumerator().nextElement();
+    }
+
     public static NSDictionary primaryKeyDictionary(EOEnterpriseObject eo) {
         String entityName = eo.entityName();
+        return primaryKeyDictionary(entityName);
+    }
+
+    public static synchronized NSDictionary primaryKeyDictionary(String entityName) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         while (entity.parentEntity() != null) {
             entity = entity.parentEntity();
@@ -95,7 +102,8 @@ public class ERXLongPrimaryKeyFactory {
         entityName = entity.name();
 
         Long pk = getNextPkValueForEntity(entityName);
-        return new NSDictionary(new Object[] { pk}, new Object[] { "id"});
+        String pkName = (String) entity.primaryKeyAttributeNames().objectAtIndex(0);
+        return new NSDictionary(new Object[] { pk}, new Object[] { pkName});
     }
 
     /**
@@ -128,78 +136,68 @@ public class ERXLongPrimaryKeyFactory {
         String where = "where eoentity_name = '" + ename + "'";
 
         try {
-            Object entityLock = entityLock(ename);
-            synchronized (entityLock) {
-                ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
-                con.commit();
+            ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
+            con.commit();
 
-                boolean hastNext = resultSet.next();
-                int pk = 1;
-                if (hastNext) {
-                    pk = resultSet.getInt("pk_value");
-                    pk += increaseBy;
-                    //now execute the update
-                    con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
-                } else {
-                    //first time, we need to set i up
-                    con.createStatement().executeUpdate(
-                            "insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', "
-                                    + maxIdFromTable(ename) + ")");
-                    pk = maxIdFromTable(ename) + 1;
-                }
-                con.commit();
-                return new Long(pk);
+            boolean hastNext = resultSet.next();
+            int pk = 1;
+            if (hastNext) {
+                pk = resultSet.getInt("pk_value");
+                pk += increaseBy;
+                // now execute the update
+                con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
+            } else {
+                // first time, we need to set i up
+                con.createStatement().executeUpdate(
+                        "insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + maxIdFromTable(ename) + ")");
+                pk = maxIdFromTable(ename) + 1;
             }
+            con.commit();
+            return new Long(pk);
         } catch (SQLException e) {
-            synchronized (lock) {
-                String s = NSLog.throwableAsString(e).toLowerCase();
-                if ((s.indexOf("error code 116") != -1)
-                        || (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1)) {
-                    try {
-                        con.rollback();
-                        log.info("creating pk table");
+            String s = NSLog.throwableAsString(e).toLowerCase();
+            if ((s.indexOf("error code 116") != -1) || (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1)) {
+                try {
+                    con.rollback();
+                    log.info("creating pk table");
+                    con.createStatement().executeUpdate("create table pk_table (eoentity_name varchar(100) not null, pk_value integer)");
+                    con.createStatement().executeUpdate("alter table pk_table add primary key (eoentity_name)");// NOT
+                    // DEFERRABLE
+                    // INITIALLY
+                    // IMMEDIATE");
+                    con.commit();
+
+                    ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
+                    con.commit();
+
+                    boolean hastNext = resultSet.next();
+                    int pk = 1;
+                    if (hastNext) {
+                        pk = resultSet.getInt("pk_value");
+                        pk++;
+                        // now execute the update
+                        con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
+                    } else {
+                        // first time, we need to set i up
                         con.createStatement().executeUpdate(
-                                "create table pk_table (eoentity_name varchar(100) not null, pk_value integer)");
-                        con.createStatement().executeUpdate("alter table pk_table add primary key (eoentity_name)");// NOT
-                        // DEFERRABLE
-                        // INITIALLY
-                        // IMMEDIATE");
-                        con.commit();
-
-                        ResultSet resultSet = con.createStatement().executeQuery(
-                                "select pk_value from pk_table " + where);
-                        con.commit();
-
-                        boolean hastNext = resultSet.next();
-                        int pk = 1;
-                        if (hastNext) {
-                            pk = resultSet.getInt("pk_value");
-                            pk++;
-                            //now execute the update
-                            con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
-                        } else {
-                            //first time, we need to set i up
-                            con.createStatement().executeUpdate(
-                                    "insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + pk
-                                            + ")");
-                        }
-                        con.commit();
-                        return new Long(pk);
-                    } catch (SQLException ee) {
-                        ee.printStackTrace();
-                        throw new RuntimeException("could not create pk table");
-                    } finally {
-                        ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
+                                "insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + pk + ")");
                     }
+                    con.commit();
+                    return new Long(pk);
+                } catch (SQLException ee) {
+                    ee.printStackTrace();
+                    throw new RuntimeException("could not create pk table");
+                } finally {
+                    ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
                 }
-                if (count < 10) {
-                    log.error("could not get primkey, trying again " + count + ", error was " + e.getMessage());
-                    return getNextPkValueForEntity(ename);
-                }
-                log.error(e, e);
-                throw new RuntimeException("could not get primkey, original message was " + e.getMessage());
-
             }
+            if (count < 10) {
+                log.error("could not get primkey, trying again " + count + ", error was " + e.getMessage());
+                return getNextPkValueForEntity(ename);
+            }
+            log.error(e, e);
+            throw new RuntimeException("could not get primkey, original message was " + e.getMessage());
+
         } finally {
             ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
         }
@@ -229,7 +227,8 @@ public class ERXLongPrimaryKeyFactory {
             boolean hastNext = resultSet.next();
             if (hastNext) {
                 int v = resultSet.getInt(1);
-                log.info("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
+                if (log.isDebugEnabled())
+                    log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
 
                 return v;
             }
@@ -242,33 +241,6 @@ public class ERXLongPrimaryKeyFactory {
             ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
         }
     }
-
-    private static Hashtable entityLock = new Hashtable();
-    private static Object    globalLock = new Object();
-
-    /**
-     * Returns an Object for a specified entity. There is one lock for each
-     * entity because we only need to lock the code if two threads try to get a
-     * pk value for one and the same entity at a time.
-     * 
-     * @param ename,
-     *            the name of the entity
-     * @return the Object which is used as lock
-     */
-    private static Object entityLock(String ename) {
-        Object o = entityLock.get(ename);
-        if (o == null) {
-            synchronized (globalLock) {
-                entityLock.put(ename, ename);
-            }
-            return ename;
-        } else {
-            return o;
-        }
-    }
-
-    private static Hashtable pkCache    = new Hashtable();
-    private static int       increaseBy = 0;
 
     /**
      * Returns a new integer based PkValue for the specified entity. If the
@@ -283,32 +255,13 @@ public class ERXLongPrimaryKeyFactory {
     private static Long cachedPkValue(String ename) {
         Stack s = cacheStack(ename);
         if (s.empty()) {
-            synchronized (entityLock(ename)) {
-                //we need to check again because after entering the
-                // synchronized statement
-                //it might be possible that another thread filled the stack
-                // already
-                //this is very likeley for entities which are heavily generated
-                // such as
-                //Download entities. These are generated by the
-                // RSRequestHandler, a ResourceRequestHandler
-                //subclass which logs every resource download. As
-                // resourcedownloading is always
-                //multithreadded this means that two new Download primary keys
-                // might be needed
-                //within a millisecond, got it?
-                //If we do not do this then its also OK, it just means that the
-                // stack has about 2000
-                //objects and not only 1000 ones
+            synchronized (s) {
                 if (s.empty()) {
                     fillPkCache(s, ename);
                 }
             }
         }
         Long pkValue = (Long) s.pop();
-        if (log.isDebugEnabled()) {
-            log.debug("returning " + pkValue + " for " + ename);
-        }
         return pkValue;
     }
 
@@ -325,10 +278,8 @@ public class ERXLongPrimaryKeyFactory {
     private static Stack cacheStack(String ename) {
         Stack s = (Stack) pkCache.get(ename);
         if (s == null) {
-            synchronized (entityLock(ename)) {
-                s = new Stack();
-                pkCache.put(ename, s);
-            }
+            s = new Stack();
+            pkCache.put(ename, s);
         }
         return s;
     }
@@ -343,29 +294,17 @@ public class ERXLongPrimaryKeyFactory {
      *            the entity name for which the pk values should be generated
      */
     private static void fillPkCache(Stack s, String ename) {
-        synchronized (entityLock(ename)) {
-            Long pkValueStart = getNextPkValueForEntityIncreaseBy(ename, 10, increaseBy());
-            long value = pkValueStart.longValue();
-            log.debug("filling pkCache for " + ename + ", starting at " + value);
-            for (int i = increaseBy(); i-- > 0;) {
-                s.push(new Long(i + value));
-            }
+        Long pkValueStart = getNextPkValueForEntityIncreaseBy(ename, 10, increaseBy());
+        long value = pkValueStart.longValue();
+        log.debug("filling pkCache for " + ename + ", starting at " + value);
+        for (int i = increaseBy(); i-- > 1;) {
+            s.push(new Long(i + value));
         }
     }
 
     private static int increaseBy() {
         if (increaseBy == 0) {
-            String s = ERXSystem.getProperty("com.cluster9.webobjects.eof.C9ThreadSafePrimaryKeySupport.increaseBy");
-            if (s == null) {
-                increaseBy = 1000;
-
-            } else {
-                try {
-                    increaseBy = Integer.parseInt(s);
-                } catch (NumberFormatException e) {
-                    increaseBy = 1000;
-                }
-            }
+            increaseBy = 1000;
         }
         return increaseBy;
     }
