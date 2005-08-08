@@ -19,10 +19,9 @@ import com.webobjects.foundation.*;
  * <li> it warns you when you have one FORM embedded inside another and ommits the tags for the nested FORM.
  * <li> it pushes the <code>enctype</code> into the userInfo, so that {@link ERXWOFileUpload}
  * can check if it is set correctly. ERXFileUpload will throw an exception if the enctype is not set.
- * <li> it has a "fragmentIdentifier" binding, which, when set spews out some javascript that appends 
- * "#" + the value of the binding to the action. The obvious case comes when you have a form at the bottom of the page
- * and want to jump to the error messages if there are any.  That javascript is used is an implementation 
- * detail, though and shouldn't be relied on.
+ * <li> it has a "fragmentIdentifier" binding, which appends "#" + the value of the binding to the action. 
+ * The obvious case comes when you have a form at the bottom of the page
+ * and want to jump to the error messages if there are any.  
  * <li> it adds the <code>secure</code> boolean binding that rewrites the URL to use <code>https</code>.
  * <li> it adds the <code>disabled</code> boolean binding allows you to omit the form tag.
  * </ul>
@@ -70,18 +69,26 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
             }
         }
         boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
-        if (secure) {
+        Object fragmentIdentifier = (_fragmentIdentifier != null ? _fragmentIdentifier.valueInComponent(context.component()) : null);
+        if (secure || fragmentIdentifier != null) {
             //FIXME: (ak) we assume that relative URL creation is on by default, so we may restore the wrong type 
             WOResponse newResponse = new WOResponse();
-            context._generateCompleteURLs();
-            super.appendAttributesToResponse(newResponse, context);
-            context._generateRelativeURLs();
-            
-            String action = newResponse.contentString();
-            if(action.indexOf("action=\"http://") >= 0) {
-                action = action.replaceFirst("action=\"http://", "action=\"https://");
+            if(secure) {
+                context._generateCompleteURLs();
+                super.appendAttributesToResponse(newResponse, context);
+                context._generateRelativeURLs();
+            } else {
+                super.appendAttributesToResponse(newResponse, context);
             }
-            response.appendContentString(action);
+            String attributes = newResponse.contentString();
+            if(secure && attributes.indexOf("action=\"http://") >= 0) {
+                attributes = attributes.replaceFirst("action=\"http://", "action=\"https://");
+            }
+            if(fragmentIdentifier != null) {
+                attributes = attributes.replaceFirst("action=\"([^\"]*)\"", "action=\"$1#" + fragmentIdentifier + "\"");
+            }
+            
+            response.appendContentString(attributes);
         } else {
             super.appendAttributesToResponse(response, context);
         }
@@ -99,14 +106,6 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
             _appendOpenTagToResponse(response, context);
             appendChildrenToResponse(response, context);
             _appendCloseTagToResponse(response, context);
-            if(_fragmentIdentifier != null) {
-                Object value = _fragmentIdentifier.valueInComponent(context.component());
-                if(value != null) {
-                    String formName = "document.forms.length-1";
-                    formName = (_formName != null ? "'" +_formName.valueInComponent(context.component()) + "'" : formName);
-                    response.appendContentString("<script language=\"javascript\">document.forms["+formName+"].action+=\"#"+value.toString()+"\";</script>");
-                }
-            }
             if(context instanceof ERXMutableUserInfoHolderInterface) {
                 NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
                 
