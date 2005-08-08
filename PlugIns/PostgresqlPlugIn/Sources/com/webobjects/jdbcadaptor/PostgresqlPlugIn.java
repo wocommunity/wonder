@@ -84,9 +84,18 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
         row = channel.fetchRow();
         channel.cancelFetch();
         long maxValue = ((Number) row.objectForKey("SETVAL")).longValue();
-        String attrName = ( (EOAttribute) entity.primaryKeyAttributes().lastObject() ).name();
+        EOAttribute attribute =  (EOAttribute) entity.primaryKeyAttributes().lastObject();
+        String attrName = attribute.name();
+        boolean isIntType = "i".equals(attribute.valueType());
         for( int i = 0; i < count; i++ ) {
-            results.addObject(new NSDictionary( new Long(maxValue - count + 1 + i), attrName));
+            long newPK = maxValue - count + 1 + i;
+            Number value;
+            if(isIntType) { 
+                value = new Integer((int) newPK);
+            } else {
+                value = new Long(newPK);
+            }
+            results.addObject(new NSDictionary( value, attrName));
         }            
         return results;
     }
