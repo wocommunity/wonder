@@ -227,10 +227,8 @@ public class ERXDatabaseContextDelegate {
      @param isReadWrite true if the connection should be set to read/write, false if it should be set to read only
      @param dbc the EODatabaseContext to use to get the java.sql.Connection object
 
-     FIXME: should support per-model sql statements in order to support different databases
      **/
     public void setReadWriteForConnectionInDatabaseContext(boolean isReadWrite, EODatabaseContext dbc) {
-        if (_readOnlySessionProperties().length() > 0 && _readWriteSessionProperties().length() > 0) {
             if(log.isDebugEnabled()) {
                 log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
             }
@@ -238,11 +236,7 @@ public class ERXDatabaseContextDelegate {
 
                 Connection connection = _getConnection(dbc);
                 if (connection != null) {
-                    if (isReadWrite) {
-                        _configureReadWrite(connection);
-                    } else {
-                        _configureReadOnly(connection);
-                    }
+                    connection.setReadOnly(!isReadWrite);
                 } else {
                     log.warn("Cannot change read only/read write level since the connection for the database context is null!!");
                 }
@@ -250,48 +244,9 @@ public class ERXDatabaseContextDelegate {
             } catch (java.sql.SQLException e) {
                 log.error("Cannot change transaction level for databse, received " + e.getMessage(), e);
             } 
-        }
     }
     
     public Connection _getConnection(EODatabaseContext dbc) {
         return ((com.webobjects.jdbcadaptor.JDBCContext) dbc.adaptorContext()).connection();
-    }
-
-    
-    public void _configureReadWrite(Connection aConnection) throws SQLException {
-        if (log.isDebugEnabled()) {
-            log.debug("Setting the JDBC connection "+aConnection+" to read / write, current state:"+
-                      " isReadOnly="+aConnection.isReadOnly()+
-                      ", isolation level="+aConnection.getTransactionIsolation());
-        }
-        aConnection.commit();
-        aConnection.createStatement().executeUpdate(_readWriteSessionProperties());
-        aConnection.commit();
-    }
-
-    public void _configureReadOnly(Connection aConnection) throws SQLException {
-        if (log.isDebugEnabled())
-            log.debug("Setting the JDBC connection "+aConnection+" to read only, current state:"+
-                      " isReadOnly="+aConnection.isReadOnly()+
-                      ", isolation level="+aConnection.getTransactionIsolation());
-        aConnection.commit();
-        aConnection.createStatement().executeUpdate(_readOnlySessionProperties());
-        aConnection.commit();
-    }
-
-    private String _readOnlySessionProperties;
-    public String _readOnlySessionProperties() {
-        if (_readOnlySessionProperties == null) {
-            _readOnlySessionProperties = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties","");
-        }
-        return _readOnlySessionProperties;
-    }
-
-    private String _readWriteSessionProperties;
-    public String _readWriteSessionProperties() {
-        if (_readWriteSessionProperties == null) {
-            _readWriteSessionProperties = ERXProperties.stringForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties","");
-        }
-        return _readWriteSessionProperties;
     }
 }
