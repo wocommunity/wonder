@@ -194,9 +194,6 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 #########################################################################
 # ERXDatabaseContextDelegate 
 #########################################################################
-er.extensions.ERXDatabaseContextDelegate.readOnlySessionProperties=
-er.extensions.ERXDatabaseContextDelegate.readWriteSessionProperties=
-
 # if set to true then all database operations are serialized to disk
 #er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk=
 # files are written to the directory specified in the following directory
@@ -302,7 +299,7 @@ dbMinConnectionsGLOBAL=1
 # if set to true the following conventions are mandatory:
 # 1) all entities must have only one PK value whose external type is 
 #    comparable to java.lang.Long, for example int8 with Postgresql
-# ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
+# er.extensions.ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
 
 #########################################################################
 # ERXWOResponseCache 
