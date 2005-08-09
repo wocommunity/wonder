@@ -109,7 +109,10 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
     public void editingContextWillSaveChanges(EOEditingContext ec) throws Throwable {
         try {
             if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: start calling will*");            
-            _isInWillSaveChanges=true;                      
+            _isInWillSaveChanges=true;
+            // david on 07/31/05: ensure every deleted object gets its willDelete method called
+            ec.processRecentChanges();
+            
             if (ec != null && ec.hasChanges()) {
                 NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, ec);
                 // Changed objects
