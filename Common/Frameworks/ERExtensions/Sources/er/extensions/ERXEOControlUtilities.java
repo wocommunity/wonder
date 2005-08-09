@@ -1,4 +1,3 @@
-//
 // ERXEOControlUtilities.java
 // Project ERExtensions
 //
@@ -1071,5 +1070,31 @@ public class ERXEOControlUtilities {
         NSArray loadedObjects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, faultGIDs);
         result.addObjectsFromArray(loadedObjects);
         return result;
+    }
+
+    /** Returns the name from the root entity from the EOEnterpriseObject
+     * 
+     * @param eo the EOEnterpriseObject from which to the the root entity
+     * 
+     * @return the name from the root entity from the EOEnterpriseObject 
+     */
+    public static String rootEntityName(EOEnterpriseObject eo) {
+        EOEntity entity = rootEntity(eo);
+        return entity.name();
+    }
+
+    /** Returns the root entity from the EOEnterpriseObject
+     * 
+     * @param eo the EOEnterpriseObject from which to the the root entity
+     * 
+     * @return the root entity from the EOEnterpriseObject
+     */
+    public static EOEntity rootEntity(EOEnterpriseObject eo) {
+        EOModelGroup m = EOUtilities.modelGroup(eo.editingContext());
+        EOEntity entity = m.entityForObject(eo);
+        while (entity.parentEntity() != null) {
+            entity = entity.parentEntity();
+        }
+        return entity;
     }
 }
