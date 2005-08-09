@@ -32,11 +32,10 @@ public class ERXEOAccessUtilities {
      *            string to look into
      * @return found entity or null
      */
-    protected static NSArray      entityNames;
-
     public static EOEntity entityMatchingString(EOEditingContext ec, String string) {
         EOEntity result = null;
         if (string != null) {
+            NSArray entityNames = null;
             String lowerCaseName = string.toLowerCase();
             if (entityNames == null) {
                 EOModelGroup group = modelGroup(ec);
@@ -906,4 +905,33 @@ public class ERXEOAccessUtilities {
         }
     }
 
+    public static NSArray externalNamesForEntity(EOEntity entity, boolean includeParentEntities) {
+        if (includeParentEntities) { 
+            entity = rootEntityForEntity(entity);
+        }
+        NSMutableArray entityNames = new NSMutableArray();
+        if (entity.subEntities().size() > 0) {
+            for (Iterator it = entity.subEntities().iterator(); it.hasNext();) {
+                EOEntity entity1 = (EOEntity) it.next();
+                entityNames.addObjectsFromArray(externalNamesForEntity(entity1, includeParentEntities));
+            }
+        }
+        entityNames.addObject(entity.name());
+        return ERXArrayUtilities.arrayWithoutDuplicates(entityNames);
+    }
+    
+    public static NSArray externalNamesForEntityNamed(String entityName, boolean includeParentEntities) {
+        return externalNamesForEntity(EOModelGroup.defaultGroup().entityNamed(entityName), includeParentEntities);
+    }
+
+    public static EOEntity rootEntityForEntity(EOEntity entity) {
+        while (entity.parentEntity() != null) {
+            entity = entity.parentEntity();
+        }
+        return entity;
+    }
+
+    public static EOEntity rootEntityForEntityNamed(String entityName) {
+        return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
+    }
 }
