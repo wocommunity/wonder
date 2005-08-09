@@ -166,8 +166,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void willDelete() throws NSValidation.ValidationException {
         if (canDelete() == false) {
-            // FIXME: This shouldn't be a RuntimeException seeing as these are difficult to catch
-            throw new RuntimeException("The ERXGenericRecord "+this+" cannot be deleted.");
+            throw ERXValidationFactory.defaultFactory().createException(this, null, null, "ObjectCannotBeDeletedException");            
         }
         if (tranLogWillDelete.isDebugEnabled())
             tranLogWillDelete.debug("Object:" + description());
@@ -427,7 +426,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             insertionTrackingLog.debug("inserted "+getClass().getName()+" at "+insertionStackTrace);
         }            
         super.awakeFromInsertion(editingContext);
+        EOGlobalID gid = editingContext.globalIDForObject(this);
+        if (gid.isTemporary()) {
+            init(editingContext);
+        }
     }
+
+    /**
+     * used for initialization stuff instead of awakeFromInsertion.
+     * <code>awakeFromInsertions</code> is buggy because if an EO is
+     * deleted and then its EOEditingContext is reverted using 'revert' 
+     * for example then EOF will -insert- this EO again in its EOEditingContext
+     * which in turn calls awakeFromInsertion again.
+     * 
+     * @param ec the EOEditingContext in which this new EO is inserted
+     */
+    protected void init(EOEditingContext ec) {
+        
+    }
+    
     /**
      * Checks the editing context delegate before calling
      * super's implementation. See the method <code>
