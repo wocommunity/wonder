@@ -48,7 +48,7 @@ public class ERXDefaultModelGroupDelegate {
                 throw new IllegalArgumentException("subEntityForEntity in its default implementation"+
                 " works only with single pk long values, expected a java.lang.Number but got a "+values.objectAtIndex(0));
             }
-            long entityCode = pkValueWithCode & (1 << ERXLongPrimaryKeyFactory.CODE_LENGTH) - 1;
+            long entityCode = pkValueWithCode & ((1 << ERXLongPrimaryKeyFactory.CODE_LENGTH) - 1);
             if (entityCode == 0) return null;
             for (Enumeration subEntities = entity.subEntities().objectEnumerator(); subEntities.hasMoreElements();) {
                 EOEntity subEntity = (EOEntity) subEntities.nextElement();
