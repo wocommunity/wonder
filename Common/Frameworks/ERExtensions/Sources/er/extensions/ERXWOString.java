@@ -69,7 +69,7 @@ public class ERXWOString extends WODynamicElement {
                         }
                     } else if (_numberFormat != null) {
                         String formatString = (String) _numberFormat.valueInComponent(component);
-                        if (ERXStringUtilities.stringIsNullOrEmpty(formatString)) {
+                        if (formatString == null) {
                             format = ERXNumberFormatter.defaultNumberFormatterForObject(valueInComponent);
                         } else {
                             format = ERXNumberFormatter.numberFormatterForPattern(formatString);
