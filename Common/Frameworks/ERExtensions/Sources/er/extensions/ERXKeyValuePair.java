@@ -58,6 +58,10 @@ public class ERXKeyValuePair {
         return false;
     }
     
+    public int hashCode() {
+        return (key() != null ? key().hashCode() : 1) * (value() != null ? value().hashCode() : 1);
+    }
+    
     public String toString() {
         return "[ "+ key() +": "+ value() +" ]";
     }
