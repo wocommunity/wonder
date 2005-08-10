@@ -77,8 +77,15 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     }
 
     public ERXKeyValuePair selectedElement() {
-        return new ERXKeyValuePair(objectPropertyValue(), ERXLocalizer.currentLocalizer()
-                                   .localizedValueForKeyWithDefault((String) objectPropertyValue()));        
+        Object value = objectPropertyValue();
+        ERXKeyValuePair selectedElement = null;
+        for(Enumeration e = availableElements().objectEnumerator(); e.hasMoreElements() && selectedElement == null;) {
+            ERXKeyValuePair current = (ERXKeyValuePair) e.nextElement();
+            if(current.key().equals(value)) {
+                selectedElement = current;
+            }
+        }
+        return selectedElement;
     }
     
     public void setSelectedElement(Object value) {
