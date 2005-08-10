@@ -38,7 +38,9 @@ public class ERXConstant {
     public static final Class[] ObjectClassArray = { Object.class };
     public static final Class[] StringClassArray = new Class[] { String.class };
     public static final Object[] EmptyObjectArray = new Object[] {};
-
+    /** an empty gif image */
+    public static final NSData EmptyImage = (NSData) NSPropertyListSerialization.propertyListFromString("<47494638396101000100800000ffffff00000021f90401000000002c00000000010001000002024401003b00>");
+    
     /**
      * Returns an Integer for a given int
      * @return potentially cache Integer for a given int
