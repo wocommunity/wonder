@@ -910,10 +910,11 @@ public class ERXEOAccessUtilities {
             entity = rootEntityForEntity(entity);
         }
         NSMutableArray entityNames = new NSMutableArray();
-        if (entity.subEntities().size() > 0) {
-            for (Iterator it = entity.subEntities().iterator(); it.hasNext();) {
-                EOEntity entity1 = (EOEntity) it.next();
-                entityNames.addObjectsFromArray(externalNamesForEntity(entity1, includeParentEntities));
+        if (entity.subEntities().count() > 0) {
+            for (Enumeration it = entity.subEntities().objectEnumerator(); it.hasMoreElements();) {
+                EOEntity entity1 = (EOEntity) it.nextElement();
+                NSArray names = externalNamesForEntity(entity1, includeParentEntities);
+                entityNames.addObjectsFromArray(names);
             }
         }
         entityNames.addObject(entity.name());
