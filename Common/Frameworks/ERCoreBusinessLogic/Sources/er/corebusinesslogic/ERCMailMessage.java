@@ -229,9 +229,8 @@ public class ERCMailMessage extends _ERCMailMessage {
         
         super.validateForSave();
         
-        if ( (text == null || text.length() == 0) && (plainText == null || plainText.length() == 0) ) {
-            throw new NSValidation.ValidationException("Both text and plainText are empty or null.  At least one must be set.");
-        }
+        if ( (text == null || text.length() == 0) && (plainText == null || plainText.length() == 0) )
+            throw ERXValidationFactory.defaultFactory().createException(this, "plainText,text", text, "eitherPlainTextOrText");
     }
 
     public void attachFileWithMimeType(String filePath, String mimeType) {
