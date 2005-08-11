@@ -508,7 +508,7 @@
         }; 
         ERDEditStringWithChoices = {
             comment = "the component uses a key() + 'Available' of of the object??"; 
-            editors = (entityNameForReport); 
+            editors = (possibleChoices); 
             inspectionInformation = "Provides a toOne relationship-like component except the value is pushed in as a string."; 
         }; 
         ERDEditYearsMonths = {
@@ -929,6 +929,12 @@
             editingFor = page; 
             inputSize = 15; 
             title = "Pick Button Label"; 
+        }; 
+        possibleChoices = {
+            class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
+            editingFor = property; 
+            inputSize = 15; 
+            title = "Choices"; 
         }; 
         pickComponentName = {
             class = "com.apple.client.directtoweb.TextFieldComponentConfigurationPanel"; 
