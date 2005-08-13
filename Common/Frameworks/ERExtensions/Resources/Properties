@@ -198,7 +198,10 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 #er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk=
 # files are written to the directory specified in the following directory
 #er.extensions.ERXDatabaseContextDelegate.transactionFileLocation=/tmp/wonder/transactionLogs/@@ApplicationName@@_@@WOPort@@
-
+# if set to true then the JDBC connection used by EOF are switched to read only or read write 
+# depending on the database operation. This can speed up database queries because a read only
+# connection produces less overhead in a transaction based database.
+#er.extensions.ERXDatabaseContextDelegate.switchReadWrite=false
 
 #########################################################################
 # ERXAdaptorChannelDelegate 
