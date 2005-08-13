@@ -35,6 +35,9 @@ public class ERXDatabaseContextDelegate {
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();
     
+    /** defines if the JDBC connection should be switched to read only on certain database operations or not. Default is not. */
+    private Boolean switchReadWrite = null;
+    
     /** Returns the singleton of the database context delegate */
     public static ERXDatabaseContextDelegate defaultDelegate() {
         return _defaultDelegate;
@@ -229,7 +232,8 @@ public class ERXDatabaseContextDelegate {
 
      **/
     public void setReadWriteForConnectionInDatabaseContext(boolean isReadWrite, EODatabaseContext dbc) {
-            if(log.isDebugEnabled()) {
+        if (!switchReadWrite()) return;
+        if(log.isDebugEnabled()) {
                 log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
             }
             try {
@@ -248,5 +252,12 @@ public class ERXDatabaseContextDelegate {
     
     public Connection _getConnection(EODatabaseContext dbc) {
         return ((com.webobjects.jdbcadaptor.JDBCContext) dbc.adaptorContext()).connection();
+    }
+    
+    private boolean switchReadWrite() {
+        if (switchReadWrite == null) {
+            switchReadWrite = "false".equals(ERXSystem.getProperty("er.extensions.ERXDatabaseContextDelegate.switchReadWrite", "false")) ? Boolean.FALSE : Boolean.TRUE;
+        }
+        return switchReadWrite.booleanValue();
     }
 }
