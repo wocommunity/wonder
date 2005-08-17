@@ -164,6 +164,33 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     /** Holds the default factory instance */
     public static Factory _factory;
     
+    /** holds validity Methods */
+    private static Method[] validityMethods = null;
+
+    /** index of validity save method */ 
+    private static int VALIDITY_SAVE = 0;
+
+    /** index of validity delete method */ 
+    private static int VALIDITY_DELETE = 1;
+
+    /** index of validity insert method */
+    private static int VALIDITY_INSERT = 2;
+
+    /** index of validity update method */
+    private static int VALIDITY_UPDATE = 3;
+
+    /** the shared validity engine instance as Object to eliminate compile errors
+        * if validity is not linked and should not be used
+        */ 
+    private static Object sharedGSVEngineInstance;
+
+    /** Boolean that gets initialized on first use to indicate if validity should
+        * be used or not, remember that the call System.getProperty acts synchronized
+        * so this saves some time in multithreaded apps.
+        */
+    private static Boolean useValidity;
+    
+
     /**
      * This factory inner class is registered as the observer
      * for three notifications: modelWasAdded, classDescriptionNeededForEntity
@@ -612,6 +639,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_DELETE);
+            }
             super.validateObjectForDelete(obj);
             validateObjectWithUserInfo(obj, null, "validateForDelete", "validateForDelete");
         } catch (ERXValidationException eov) {
@@ -671,6 +701,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public void validateObjectForUpdate(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_UPDATE);
+            }
             validateObjectWithUserInfo(obj, null, "validateForUpdate", "validateForUpdate");
         } catch (ERXValidationException eov) {
             throw eov;
@@ -693,6 +726,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      */
     public void validateObjectForInsert(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_INSERT);
+            }
             validateObjectWithUserInfo(obj, null, "validateForInsert", "validateForInsert");
         } catch (ERXValidationException eov) {
             throw eov;
@@ -749,6 +785,10 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
+            if (useValidity()) {
+                invokeValidityMethodWithType(VALIDITY_SAVE);
+            }
+            
             if(_validationInfo != null) {
                 NSArray additionalValidationKeys = (NSArray)_validationInfo.objectForKey("additionalValidationKeys");
                 if(additionalValidationKeys != null) {
@@ -1043,5 +1083,85 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void awakeObjectFromInsertion(EOEnterpriseObject eo, EOEditingContext ec) {
         super.awakeObjectFromInsertion(eo, ec);
         setDefaultValuesInObject(eo, ec);
+    }
+
+
+    private static boolean useValidity() {
+        if (useValidity == null) {
+            useValidity = "true".equals(System.getProperty("er.extensions.ERXGenericRecord.useValidity")) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return useValidity.booleanValue();
+    }
+
+
+    private void invokeValidityMethodWithType(int type) throws NSValidation.ValidationException{
+        try {
+            Object dummy = null;
+            Method m = validityMethods()[type];
+            m.invoke(sharedGSVEngineInstance(), new Object[]{this});
+        } catch (IllegalAccessException e1) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e1);
+        } catch (IllegalArgumentException e2) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e2);
+        } catch (NullPointerException e3) {
+            log.error("an exception occured in validityValidateEOObjectOnSave", e3);
+        } catch (InvocationTargetException e4) {
+            Throwable targetException = e4.getTargetException();
+            if (targetException instanceof NSValidation.ValidationException) {
+                throw (NSValidation.ValidationException)targetException;
+            } else {
+                log.error("an exception occured in validityValidateEOObjectOnSave", e4);
+            }
+        }
+    }
+
+    private Method[] validityMethods() {
+        if (validityMethods == null) {
+            validityMethods = new Method[4];
+            Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
+            validityMethods[0] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
+            validityMethods[1] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
+            validityMethods[2] = m;
+            
+            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
+            validityMethods[3] = m;
+        }
+        return validityMethods;
+    }
+    
+    private static Method methodInSharedGSVEngineInstanceWithName(String name) {
+        try {
+            return sharedGSVEngineInstance().getClass().getMethod(name, new Class[]{EOEnterpriseObject.class});
+        } catch (IllegalArgumentException e2) {
+            throw new NSForwardException(e2);
+        } catch (NullPointerException e3) {
+            throw new NSForwardException(e3);
+        } catch (NoSuchMethodException e4) {
+            throw new NSForwardException(e4);
+        }
+    }
+    
+    private static Object sharedGSVEngineInstance() {
+        if (sharedGSVEngineInstance == null) {
+            try {
+                Class gsvEngineClass = Class.forName("com.gammastream.validity.GSVEngine");
+                Method m = gsvEngineClass.getMethod("sharedValidationEngine", new Class[]{});
+                Object dummy = null;
+                sharedGSVEngineInstance = m.invoke(dummy, new Object[]{});
+            } catch (ClassNotFoundException e1) {
+                throw new NSForwardException(e1);
+            } catch (NoSuchMethodException e2) {
+                throw new NSForwardException(e2);
+            } catch (IllegalAccessException e3) {
+                throw new NSForwardException(e3);
+            } catch (InvocationTargetException e4) {
+                throw new NSForwardException(e4);
+            }
+        }
+        return sharedGSVEngineInstance;
     }
 }
