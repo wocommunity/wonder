@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import com.webobjects.eoaccess.*;
@@ -53,35 +52,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /** general logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger("er.eo.ERXGenericRecord");
 
-    /** holds validity Methods */
-    private static Method[] validityMethods = null;
-
-    /** index of validity save method */ 
-    private static int VALIDITY_SAVE = 0;
-
-    /** index of validity delete method */ 
-    private static int VALIDITY_DELETE = 1;
-
-    /** index of validity insert method */
-    private static int VALIDITY_INSERT = 2;
-
-    /** index of validity update method */
-    private static int VALIDITY_UPDATE = 3;
-
-    /** the shared validity engine instance as Object to eliminate compile errors
-        * if validity is not linked and should not be used
-        */ 
-    private static Object sharedGSVEngineInstance;
-
-    /** Boolean that gets initialized on first use to indicate if validity should
-        * be used or not, remember that the call System.getProperty acts synchronized
-        * so this saves some time in multithreaded apps.
-        */
-    private static Boolean useValidity;
-    
-    /** holds all subclass related ERXLogger's */
-    public static NSMutableDictionary classLogs = new NSMutableDictionary();
-    public static final Object lock = new Object();
+     /** holds all subclass related ERXLogger's */
+    private static NSMutableDictionary classLogs = new NSMutableDictionary();
+    private static final Object lock = new Object();
     
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
@@ -308,7 +281,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void addObjectsToBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
-            for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.immutableClone() : objects;
+            for (Enumeration e = objectsSafe.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 addObjectToBothSidesOfRelationshipWithKey(eo, key);
             }
@@ -324,7 +298,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
-            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.clone() : objects;
+            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.immutableClone() : objects;
             for (Enumeration e = objectsSafe.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 removeObjectFromBothSidesOfRelationshipWithKey(eo, key);
@@ -333,7 +307,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-        * Removes a collection of objects to a given relationship by calling
+     * Removes a collection of objects to a given relationship by calling
      * <code>removeObjectFromPropertyWithKey</code> for all
      * objects in the collection.
      * @param objects objects to be removed from both sides of the given relationship
@@ -341,7 +315,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public void removeObjectsFromPropertyWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
-            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.clone() : objects;
+            NSArray objectsSafe = objects instanceof NSMutableArray ? (NSArray)objects.immutableClone() : objects;
             for (Enumeration e = objectsSafe.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
                 removeObjectFromPropertyWithKey(eo, key);
@@ -354,7 +328,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>
      */
     // MOVEME: Need to have a central repository of all of these keys and what they mean
-    static boolean _raiseOnMissingEditingContextDelegate = 	ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXRaiseOnMissingEditingContextDelegate"), true);
+    static boolean _raiseOnMissingEditingContextDelegate = 	ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
     /**
      * By default, and this should change in the future, all editing contexts that
      * are created and use ERXGenericRecords or subclasses need to have a delegate
@@ -369,35 +343,35 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
         Object delegate=editingContext.delegate();
-
+        
         if (delegate==null) {
-	    EOObjectStore parent = editingContext.parentObjectStore();
-	    if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
-		Object parentDelegate=((EOEditingContext)parent).delegate();
-		if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
-		    editingContext.setDelegate(parentDelegate);
-		    log.info("Found null delegate. Setting to the parent's delegate.");
-		    return true;
-		}
-	    }
-	    if(!_raiseOnMissingEditingContextDelegate) {
-		log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
-		ERXEC.factory().setDefaultDelegateOnEditingContext(editingContext);
-		return true;
-	    } else {
-		throw new RuntimeException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
-	    }
-	}
-	if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
-	    if(!_raiseOnMissingEditingContextDelegate) {
-		log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
-		return true;
-	    } else {
-		throw new RuntimeException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
-	    }
-	}
-	return false;
-
+            EOObjectStore parent = editingContext.parentObjectStore();
+            if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
+                Object parentDelegate=((EOEditingContext)parent).delegate();
+                if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
+                    editingContext.setDelegate(parentDelegate);
+                    log.info("Found null delegate. Setting to the parent's delegate.");
+                    return true;
+                }
+            }
+            if(!_raiseOnMissingEditingContextDelegate) {
+                log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
+                ERXEC.factory().setDefaultDelegateOnEditingContext(editingContext);
+                return true;
+            } else {
+                throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
+            }
+        }
+        if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
+            if(!_raiseOnMissingEditingContextDelegate) {
+                log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
+                return true;
+            } else {
+                throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
+            }
+        }
+        return false;
+        
     }
     /**
      * Checks the editing context delegate before calling
@@ -833,12 +807,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         } catch (NSValidation.ValidationException e) {
             if (e.key() == null || e.object() == null)
                 e = new NSValidation.ValidationException(e.getMessage(), this, key);
-            validationException.debug("Exception: " + e.getMessage() + " raised while validating object: "
-                                      + this + " class: " + getClass() + " pKey: " + primaryKey() + "\n" + e);
+            if(validationException.isDebugEnabled()) {
+                validationException.debug("Exception: " + e.getMessage() + " raised while validating object: "
+                                      + this + " class: " + getClass() + " pKey: " + primaryKey(), e);
+            }
             throw e;
         } catch (RuntimeException e) {
-            log.error("**** During validateValueForKey "+key);
-            log.error("**** caught "+e);
+            log.error("**** During validateValueForKey "+key, e);
             throw e;
         }
         return result;
@@ -858,10 +833,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (editingContext() != null && editingContext().deletedObjects().containsObject(this)) {
             validation.warn("Calling validate for save on an eo: " + this + " that has been marked for deletion!");
         }
-        if (useValidity()) {
-            invokeValidityMethodWithType(VALIDITY_SAVE);
-        }
-        
         super.validateForSave();
         // FIXME: Should move all of the keys into on central place for easier management.
         // 	  Also might want to have a flag off of ERXApplication is debugging is enabled.
@@ -871,15 +842,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * This method uses Validity if the property key
-     * <b>er.extensions.ERXGenericRecord.useValidity</b> is set to true
+     *  Calls up validateForInsert() on the class description if it supports it.
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
     public void validateForInsert() throws NSValidation.ValidationException {
-        if (useValidity()) {
-            invokeValidityMethodWithType(VALIDITY_INSERT);
-        }
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForInsert(this);
@@ -888,15 +855,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * This method uses Validity if the property key
-     * <b>er.extensions.ERXGenericRecord.useValidity</b> is set to true
+     * Calls up validateForUpdate() on the class description if it supports it.
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
     public void validateForUpdate() throws NSValidation.ValidationException {
-        if (useValidity()) {
-            invokeValidityMethodWithType(VALIDITY_UPDATE);
-        }
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForUpdate(this);
@@ -905,100 +868,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /**
-     * This method uses Validity if the property key
-     * <b>er.extensions.ERXGenericRecord.useValidity</b> is set to true
-     * @throws NSValidation.ValidationException if the object does not
-     *		pass validation for saving to the database.
-     */
-    public void validateForDelete() throws NSValidation.ValidationException {
-        if (useValidity()) {
-            invokeValidityMethodWithType(VALIDITY_DELETE);
-        }
-        super.validateForDelete();
-    }
-
-    private static boolean useValidity() {
-        if (useValidity == null) {
-            useValidity = "true".equals(System.getProperty("er.extensions.ERXGenericRecord.useValidity")) ? Boolean.TRUE : Boolean.FALSE;
-        }
-        return useValidity.booleanValue();
-    }
-
-
-    private void invokeValidityMethodWithType(int type) throws NSValidation.ValidationException{
-        try {
-            Object dummy = null;
-            Method m = validityMethods()[type];
-            m.invoke(sharedGSVEngineInstance(), new Object[]{this});
-        } catch (IllegalAccessException e1) {
-            log.error("an exception occured in validityValidateEOObjectOnSave", e1);
-        } catch (IllegalArgumentException e2) {
-            log.error("an exception occured in validityValidateEOObjectOnSave", e2);
-        } catch (NullPointerException e3) {
-            log.error("an exception occured in validityValidateEOObjectOnSave", e3);
-        } catch (InvocationTargetException e4) {
-            Throwable targetException = e4.getTargetException();
-            if (targetException instanceof NSValidation.ValidationException) {
-                throw (NSValidation.ValidationException)targetException;
-            } else {
-                log.error("an exception occured in validityValidateEOObjectOnSave", e4);
-            }
-        }
-    }
-
-    private Method[] validityMethods() {
-        if (validityMethods == null) {
-            validityMethods = new Method[4];
-            Method m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnSave");
-            validityMethods[0] = m;
-            
-            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnDelete");
-            validityMethods[1] = m;
-            
-            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnInsert");
-            validityMethods[2] = m;
-            
-            m = methodInSharedGSVEngineInstanceWithName("validateEOObjectOnUpdate");
-            validityMethods[3] = m;
-        }
-        return validityMethods;
-    }
-    
-    private static Method methodInSharedGSVEngineInstanceWithName(String name) {
-        try {
-            return sharedGSVEngineInstance().getClass().getMethod(name, new Class[]{EOEnterpriseObject.class});
-        } catch (IllegalArgumentException e2) {
-            throw new NSForwardException(e2);
-        } catch (NullPointerException e3) {
-            throw new NSForwardException(e3);
-        } catch (NoSuchMethodException e4) {
-            throw new NSForwardException(e4);
-        }
-    }
-    
-    private static Object sharedGSVEngineInstance() {
-        if (sharedGSVEngineInstance == null) {
-            try {
-                Class gsvEngineClass = Class.forName("com.gammastream.validity.GSVEngine");
-                Method m = gsvEngineClass.getMethod("sharedValidationEngine", new Class[]{});
-                Object dummy = null;
-                sharedGSVEngineInstance = m.invoke(dummy, new Object[]{});
-            } catch (ClassNotFoundException e1) {
-                throw new NSForwardException(e1);
-            } catch (NoSuchMethodException e2) {
-                throw new NSForwardException(e2);
-            } catch (IllegalAccessException e3) {
-                throw new NSForwardException(e3);
-            } catch (InvocationTargetException e4) {
-                throw new NSForwardException(e4);
-            }
-        }
-        return sharedGSVEngineInstance;
-    }
-    
-    
-    /**
-        * Debugging method that will be called on an object before it is
+     * Debugging method that will be called on an object before it is
      * saved to the database if the property key: <b>ERDebuggingEnabled</b>
      * is enabled. This allows for adding in a bunch of expensive validation
      * checks that should only be enabled in developement and testing
