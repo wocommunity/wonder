@@ -39,7 +39,7 @@ public class ERXRuntimeUtilities {
             String[] command, String[] envp, File dir) throws IOException {
         try {
             return execute(command, envp, dir, 0);
-        } catch (ERXTimeoutException e) {
+        } catch (TimeoutException e) {
             // this will never happen so we can return null here.
             return null;
         }
@@ -83,7 +83,7 @@ public class ERXRuntimeUtilities {
         for (int i = 0; i < commands.length; i++) {
             try {
                 results[i] = execute(commands[i], envp, dir, 0);
-            } catch (ERXTimeoutException e) {
+            } catch (TimeoutException e) {
                 // will never happen
                 return null;
             }
@@ -138,7 +138,7 @@ public class ERXRuntimeUtilities {
      *                if something went wrong
      */
     public final static Result execute(String[] command, String[] envp,
-            File dir, long timeout) throws IOException, ERXTimeoutException {
+            File dir, long timeout) throws IOException, TimeoutException {
         File outputFile = null;
 
         Runtime rt = Runtime.getRuntime();
@@ -183,7 +183,7 @@ public class ERXRuntimeUtilities {
                 }
                 timer.cancel();
                 if (task.hasTimeout()) {
-                    throw new ERXTimeoutException("process did't exit after "
+                    throw new TimeoutException("process did't exit after "
                             + timeout + " milliseconds");
                 }
             } else {
@@ -243,7 +243,7 @@ public class ERXRuntimeUtilities {
     }
 
     public static class StreamReader {
-        String result = null;
+        byte[] result = null;
         boolean finished = false;
         
         public StreamReader(final InputStream is) {
@@ -251,10 +251,8 @@ public class ERXRuntimeUtilities {
             Runnable r = new Runnable() {
 
                 public void run() {
-                    String s;
                     try {
-                        s = ERXStringUtilities.stringFromInputStream(is);
-                        result = s;
+                        result = ERXFileUtilities.bytesFromInputStream(is);
                         finished = true;
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
@@ -266,7 +264,7 @@ public class ERXRuntimeUtilities {
             Thread t = new Thread(r);
             t.start();
         }
-        public String getResult() {
+        public byte[] getResult() {
             return result;
         }
         public boolean isFinished() {
@@ -276,17 +274,27 @@ public class ERXRuntimeUtilities {
 
     public static class Result {
 
-        public String response, error;
+        private byte[] response, error;
 
-        public Result(String response, String error) {
+        public Result(byte[] response, byte[] error) {
             this.response = response;
             this.error = error;
         }
+        
+        public byte[] getResponse() {
+            return response;
+        }
+        public byte[] getError() {
+            return error;
+        }
+        public String getResponseAsString() {
+            return getResponse() == null ? null : new String(getResponse());
+        }
     }
 
-    public static class ERXTimeoutException extends Exception {
+    public static class TimeoutException extends Exception {
 
-        public ERXTimeoutException(String string) {
+        public TimeoutException(String string) {
             super(string);
         }
     }
