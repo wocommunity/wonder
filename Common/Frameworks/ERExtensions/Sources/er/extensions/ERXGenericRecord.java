@@ -25,43 +25,15 @@ import com.webobjects.foundation.*;
  * need to subclass this class. Hopefully in the future we can
  * get rid of this requirement.
  */
-public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface {
+public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
 
-    /** logging support. Called after an object is successfully inserted */
-    public static final ERXLogger tranLogDidInsert = ERXLogger.getERXLogger("er.transaction.eo.did.insert.ERXGenericRecord");
-    /** logging support. Called after an object is successfully deleted */
-    public static final ERXLogger tranLogDidDelete = ERXLogger.getERXLogger("er.transaction.eo.did.delete.ERXGenericRecord");
-    /** logging support. Called after an object is successfully updated */
-    public static final ERXLogger tranLogDidUpdate = ERXLogger.getERXLogger("er.transaction.eo.did.update.ERXGenericRecord");
-    /** logging support. Called after an object is reverted. **/
-    public static final ERXLogger tranLogDidRevert = ERXLogger.getERXLogger("er.transaction.eo.did.revert.ERXGenericRecord");
-    /** logging support. Called before an object is inserted */
-    public static final ERXLogger tranLogWillInsert = ERXLogger.getERXLogger("er.transaction.eo.will.insert.ERXGenericRecord");
-    /** logging support. Called before an object is deleted */
-    public static final ERXLogger tranLogWillDelete = ERXLogger.getERXLogger("er.transaction.eo.will.delete.ERXGenericRecord");
-    /** logging support. Called before an object is updated */
-    public static final ERXLogger tranLogWillUpdate = ERXLogger.getERXLogger("er.transaction.eo.will.update.ERXGenericRecord");
-    /** logging support. Called before an object is reverted. **/
-    public static final ERXLogger tranLogWillRevert = ERXLogger.getERXLogger("er.transaction.eo.will.revert.ERXGenericRecord");
-    /** logging support for validation information */
-    public static final ERXLogger validation = ERXLogger.getERXLogger("er.eo.validation.ERXGenericRecord");
-    /** logging support for validation exceptions */
-    public static final ERXLogger validationException = ERXLogger.getERXLogger("er.eo.validationException.ERXGenericRecord");
-    /** logging support for insertion tracking */
-    public static final ERXLogger insertionTrackingLog = ERXLogger.getERXLogger("er.extensions.ERXGenericRecord.insertion");
-    /** general logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.eo.ERXGenericRecord");
-
-     /** holds all subclass related ERXLogger's */
+    /** holds all subclass related ERXLogger's */
     private static NSMutableDictionary classLogs = new NSMutableDictionary();
-    
+
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
     }
     
-    // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
-    public final static String KEY_MARKER="** KEY_MARKER **";
-
     /**
      * Clazz object implementation for ERXGenericRecord. See
      * {@link EOEnterpriseObjectClazz} for more information on this
@@ -73,29 +45,24 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     public String insertionStackTrace = null;
     
-    /** This methods checks if we already have created an ERXLogger for this class
-        * If not, one will be created, stored and returned on next request.
-        * This method eliminates individual static variables for ERXLogger's in all
-        * subclasses. We use an NSDictionary here because static fields are class specific
-        * and thus something like lazy initialization would not work in this case.
-        *
-        * @return an {@link ERXLogger} for this objects class
-        */
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#getClassLog()
+     */
     public ERXLogger getClassLog() {
-        ERXLogger log1 = (ERXLogger)classLogs.objectForKey(this.getClass());
-        if ( log1 == null) {
+        ERXLogger log = (ERXLogger)classLogs.objectForKey(this.getClass());
+        if ( log == null) {
             synchronized(classLogs) {
-                log1 = ERXLogger.getERXLogger(this.getClass());
-                classLogs.setObjectForKey(log1, this.getClass());
+                log = ERXLogger.getERXLogger(this.getClass());
+                classLogs.setObjectForKey(log, this.getClass());
             }
         }
         return log1;
     }
 
-    /**
-        * self is usefull for directtoweb purposes
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#self()
      */
-    public ERXGenericRecord self(){
+    public ERXEnterpriseObject self(){
         return this;
     }
 
@@ -125,16 +92,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         editingContext().deleteObject(this);
     }
 
-    /**
-     * Called as part of the augmented transaction process.
-     * This method is called after saveChanges is called on
-     * the editing context, but before the object is actually
-     * deleted from the database. This method is also called
-     * before <code>validateForDelete</code> is called on this
-     * object. This method is called by the editing context
-     * delegate {@link ERXDefaultEditingContextDelegate}.
-     * @throws NSValidation.ValidationException to stop the object
-     *		from being deleted.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#willDelete()
      */
     public void willDelete() throws NSValidation.ValidationException {
         if (canDelete() == false) {
@@ -144,14 +103,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             tranLogWillDelete.debug("Object:" + description());
     }
     
-    /**
-     * Called as part of the augmented transaction process.
-     * This method is called after saveChanges is called on
-     * the editing context, but before the object is actually
-     * inserted into the database. This method is also called
-     * before <code>validateForInsert</code> is called on this
-     * object. This method is called by the editing context
-     * delegate {@link ERXDefaultEditingContextDelegate}.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#willInsert()
      */
     public void willInsert() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
@@ -171,14 +124,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             trimSpaces();
     }
 
-    /**
-     * Called as part of the augmented transaction process.
-     * This method is called after saveChanges is called on
-     * the editing context, but before the object is actually
-     * updated in the database. This method is also called
-     * before <code>validateForSave</code> is called on this
-     * object. This method is called by the editing context
-     * delegate {@link ERXDefaultEditingContextDelegate}.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#willUpdate()
      */
     public void willUpdate() {
         /* Disabling this check by default -- it's causing problems for objects created and deleted
@@ -199,71 +146,43 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             trimSpaces();
     }
 
-    /**
-     * This is called when an object has had
-     * changes merged into it by the editing context.
-     * This is called by {@link ERXDefaultEditingContextDelegate}
-     * after it merges changes. Any caches that an object
-     * keeps based on any of it's values it should flush.
-     * The default implementation of this method does
-     * nothing.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#flushCaches()
      */
     public void flushCaches() {}
 
-    /**
-     * Called on the object after is has been deleted.
-     * The editing context is passed to the object since
-     * by this point the editingContext of the object is
-     * null. You should check if the <code>ec</code>
-     * is a child context when doing something here that
-     * can't be undone.
-     * @param ec editing context that used to be associated
-     *		with the object.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#didDelete(com.webobjects.eocontrol.EOEditingContext)
      */
     public void didDelete(EOEditingContext ec) {
         if (tranLogDidDelete.isDebugEnabled())
             tranLogDidDelete.debug("Object:" + description());
     }
-    /**
-     * Called on the object after is has successfully
-     * been updated in the database.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#didUpdate()
      */
     public void didUpdate() {
         if (tranLogDidUpdate.isDebugEnabled())
             tranLogDidUpdate.debug("Object:" + description());
     }
-    /**
-     * Called on the object after is has successfully
-     * been inserted into the database.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#didInsert()
      */
     public void didInsert() {
         if (tranLogDidInsert.isDebugEnabled())
             tranLogDidInsert.debug("Object:" + description());
     }
 
-    /**
-     * Called on the object before it will be reverted.
-     *
-     * Default implementation does nothing other than log.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#willRevert()
      */
     public void willRevert() {
         if ( tranLogWillRevert.isDebugEnabled() )
             tranLogWillRevert.debug("Object: " + description());
     }
 
-    /**
-     * Called on the object after it has been reverted.
-     * The editing context is passed to the object because
-     * if the object was in the insertedObjects list before
-     * the revert, the object has had its editingContext
-     * nulled.
-     *
-     * Default implementation calls <code>flushCaches</code>.
-     *
-     * @param ec editing context that is either currently associated
-     * with the object if the object was marked as changed or deleted before
-     * the revert, otherwise the editing context that was associated with the object
-     * before the revert.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#didRevert(com.webobjects.eocontrol.EOEditingContext)
      */
     public void didRevert(EOEditingContext ec) {
         if ( tranLogDidRevert.isDebugEnabled() )
@@ -271,12 +190,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         flushCaches();
     }
 
-    /**
-     * Adds a collection of objects to a given relationship by calling
-     * <code>addObjectToBothSidesOfRelationshipWithKey</code> for all
-     * objects in the collection.
-     * @param objects objects to add to both sides of the given relationship
-     * @param key relationship key
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#addObjectsToBothSidesOfRelationshipWithKey(com.webobjects.foundation.NSArray, java.lang.String)
      */
     public void addObjectsToBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
@@ -288,12 +203,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-    /**
-     * Removes a collection of objects to a given relationship by calling
-     * <code>removeObjectFromBothSidesOfRelationshipWithKey</code> for all
-     * objects in the collection.
-     * @param objects objects to be removed from both sides of the given relationship
-     * @param key relationship key
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#removeObjectsFromBothSidesOfRelationshipWithKey(com.webobjects.foundation.NSArray, java.lang.String)
      */
     public void removeObjectsFromBothSidesOfRelationshipWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
@@ -305,12 +216,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-    /**
-     * Removes a collection of objects to a given relationship by calling
-     * <code>removeObjectFromPropertyWithKey</code> for all
-     * objects in the collection.
-     * @param objects objects to be removed from both sides of the given relationship
-     * @param key relationship key
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#removeObjectsFromPropertyWithKey(com.webobjects.foundation.NSArray, java.lang.String)
      */
     public void removeObjectsFromPropertyWithKey(NSArray objects, String key) {
         if (objects != null && objects.count() > 0) {
@@ -322,15 +229,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
     
-    /** 
-     * caches the boolean value of the property key:
-     *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>
-     */
-    // MOVEME: Need to have a central repository of all of these keys and what they mean
-    static boolean _raiseOnMissingEditingContextDelegate = 	ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
     /**
      * By default, and this should change in the future, all editing contexts that
-     * are created and use ERXGenericRecords or subclasses need to have a delegate
+     * are created and use ERXEnterpriseObjects or subclasses need to have a delegate
      * set of instance {@link ERXEditingContextDelegate}. These delegates provide
      * the augmentation to the regular transaction mechanism, all of the will* methods
      * plus the flushCaching method. To change the default behaviour set the property:
@@ -340,38 +241,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @param editingContext to check for the correct delegate.
      * @return if the editing context has the correct delegate set.
      */
-    public boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
-        Object delegate=editingContext.delegate();
-        
-        if (delegate==null) {
-            EOObjectStore parent = editingContext.parentObjectStore();
-            if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
-                Object parentDelegate=((EOEditingContext)parent).delegate();
-                if(parentDelegate != null && (parentDelegate instanceof ERXEditingContextDelegate)) {
-                    editingContext.setDelegate(parentDelegate);
-                    log.info("Found null delegate. Setting to the parent's delegate.");
-                    return true;
-                }
-            }
-            if(!_raiseOnMissingEditingContextDelegate) {
-                log.warn("Found null delegate. I will fix this for now by setting it to ERXExtensions.defaultDelegate");
-                ERXEC.factory().setDefaultDelegateOnEditingContext(editingContext);
-                return true;
-            } else {
-                throw new IllegalStateException("Found null delegate. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
-            }
-        }
-        if (delegate!=null && !(delegate instanceof ERXEditingContextDelegate)) {
-            if(!_raiseOnMissingEditingContextDelegate) {
-                log.warn("Found unexpected delegate class: "+delegate.getClass().getName());
-                return true;
-            } else {
-                throw new IllegalStateException("Found unexpected delegate class. You can disable this check by setting er.extensions.ERXRaiseOnMissingEditingContextDelegate=false in your WebObjects.properties");
-            }
-        }
-        return false;
-        
+    private boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
+        return ERXEditingContextDelegate._checkEditingContextDelegate(editingContext);
     }
+
     /**
      * Checks the editing context delegate before calling
      * super's implementation. See the method <code>
@@ -455,23 +328,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         super.addObjectToBothSidesOfRelationshipWithKey(eo,key);
     }
 
-    /**
-     * Primary key of the object as a String.
-     * @return primary key for the given object as a String
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#primaryKey()
      */
     public String primaryKey() {
         return ERXEOControlUtilities.primaryKeyStringForObject(this);
     }
 
-    /**
-     * Calling this method will return the primary key of the
-     * given enterprise object or if one has not been asigned
-     * to it yet, then it will have the adaptor channel generate
-     * one for it, cache it and then use that primary key when it
-     * is saved to the database. If you just want the
-     * primary key of the object or null if it doesn't have one
-     * yet, use the method <code>rawPrimaryKey</code>.
-     * @return the primary key of this object.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#rawPrimaryKeyInTransaction()
      */
     public Object rawPrimaryKeyInTransaction() {
         Object result = rawPrimaryKey();
@@ -484,45 +349,30 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return result;
     }
 
-    /**
-     * Calling this method will return the primary key of the
-     * given enterprise object or if one has not been assigned
-     * to it yet, then it will have the adaptor channel generate
-     * one for it, cache it and then use that primary key when it
-     * is saved to the database. This method returns the string
-     * representation of the primary key. If you just want the
-     * primary key of the object or null if it doesn't have one
-     * yet, use the method <code>primaryKey</code>.
-     * @return string representation of the primary key of this
-     *		object.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#primaryKeyInTransaction()
      */
     public String primaryKeyInTransaction() {
         return ERXEOControlUtilities._stringForPrimaryKey(rawPrimaryKeyInTransaction());
     }
 
-    /**
-     * Gives the raw primary key of the object. This could be anything from
-     * an NSData to a BigDecimal.
-     * @return the raw primary key of this object.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#rawPrimaryKey()
      */
     public Object rawPrimaryKey() {
         return ERXEOControlUtilities.primaryKeyObjectForObject(this);
     }
 
-    /**
-     * Takes the primary key of the object and encrypts it
-     * with the blowfish cipher using {@link ERXCrypto ERXCrypto}.
-     * @return blowfish encrypted primary key
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#encryptedPrimaryKey()
      */
     public String encryptedPrimaryKey() {
         String pk = ERXEOControlUtilities.primaryKeyStringForObject(this);
         return pk==null ? null : ERXCrypto.blowfishEncode(pk);
     }
         
-    /**
-     * Returns the foreign key for a given relationship.
-     * @param rel relationship key
-     * @return foreign key for a given relationship.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#foreignKeyForRelationshipWithKey(java.lang.String)
      */
     public Object foreignKeyForRelationshipWithKey(String rel) {
         NSDictionary d=EOUtilities.destinationKeyForSourceObject(editingContext(), this, rel);
@@ -530,6 +380,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
 
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#primaryKeyAttributeNames()
+     */
     public NSArray primaryKeyAttributeNames() {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext(), entityName());
         return entity.primaryKeyAttributeNames();
@@ -577,70 +430,54 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return _primaryKeyDictionary;
     }
     
-    /**
-     * Determines what the value of the given key is in the committed
-     * snapshot
-     * @param key to be checked in committed snapshot
-     * @return the committed snapshot value for the given key
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#committedSnapshotValueForKey(java.lang.String)
      */
     public Object committedSnapshotValueForKey(String key) {
         NSDictionary snapshot = editingContext().committedSnapshotForObject(this);
         return snapshot != null ? snapshot.objectForKey(key) : null;
     }
 
-    /**
-     * Returns an EO in the same editing context as the caller.
-     * @return an EO in the same editing context as the caller.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#localInstanceOf(com.webobjects.eocontrol.EOEnterpriseObject)
      */
     public EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo) {
         return ERXEOControlUtilities.localInstanceOfObject(editingContext(), eo);
     }
 
-    /**
-     * Returns an array of EOs in the same editing context as the caller.
-     * @return  array of EOs in the same editing context as the caller.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#localInstancesOf(com.webobjects.foundation.NSArray)
      */
     public NSArray localInstancesOf(NSArray eos) {
         return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
     }
 
-    /**
-        * Computes the current set of changes that this object has from the
-     * currently committed snapshot.
-     * @return a dictionary holding the changed values from the currently
-     *         committed snapshot.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#changesFromCommittedSnapshot()
      */
     public NSDictionary changesFromCommittedSnapshot() {
         return changesFromSnapshot(editingContext().committedSnapshotForObject(this));
     }
 
-    /**
-     * Simple method that will return if the parent object store of this object's editing
-     * context is an instance of {@link com.webobjects.eocontrol.EOObjectStoreCoordinator EOObjectStoreCoordinator}. The reason this is important
-     * is because if this condition evaluates to true then when changes are saved in this
-     * editing context they will be propagated to the database.
-     * @return if the parent object store of this object's editing context is an EOObjectStoreCoordinator.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#parentObjectStoreIsObjectStoreCoordinator()
      */
     public boolean parentObjectStoreIsObjectStoreCoordinator() {
         return editingContext().parentObjectStore() instanceof EOObjectStoreCoordinator;
     }
 
-    /**
-     * Method that will make sure to fetch an eo from the Database and
-     * place it in the editingContext provided
-     * as an argument
-     * @param the editing context in which the result will be placed
-     * @return a fresh instance of an EO fetched from the DB and placed in the editing context argument
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#refetchObjectFromDBinEditingContext(com.webobjects.eocontrol.EOEditingContext)
      */
-    public ERXGenericRecord refetchObjectFromDBinEditingContext(EOEditingContext ec){
+    public ERXEnterpriseObject refetchObjectFromDBinEditingContext(EOEditingContext ec){
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName());
         EOQualifier qual = entity.qualifierForPrimaryKey(primaryKeyDictionary(false));
         EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName(), qual, null);
         fetchSpec.setRefreshesRefetchedObjects(true);
         NSArray results = ec.objectsWithFetchSpecification(fetchSpec);
-        ERXGenericRecord freshObject = null;
+        ERXEnterpriseObject freshObject = null;
         if(results.count()>0){
-            freshObject = (ERXGenericRecord)results.objectAtIndex(0);
+            freshObject = (ERXEnterpriseObject)results.objectAtIndex(0);
         }
         return freshObject;
     }
@@ -664,17 +501,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
     }
 
-    /**
-     * Cover method to return <code>toString</code>.
-     * @return the results of calling toString.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#description()
      */
     public String description() { return toString(); }
-    /**
-     * Returns the super classes implementation of toString
-     * which prints out the current key-value pairs for all
-     * of the attributes and relationships for the current
-     * object. Very verbose.
-     * @return super's implementation of <code>toString</code>.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#toLongString()
      */
     public String toLongString() { return super.toString(); }
 
@@ -708,12 +540,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return result;
     }
 
-    /**
-     * This method will trim the leading and trailing white
-     * space from any attributes that are mapped to a String
-     * object. This method is called before the object is saved
-     * to the database. Override this method to do nothing if
-     * you wish to preserve your leading and trailing white space.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#trimSpaces()
      */
     public void trimSpaces() {
         for (Enumeration e=stringAttributeListForEntityNamed(entityName()).objectEnumerator(); e.hasMoreElements();) {
@@ -727,40 +555,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
     }
 
-    /**
-     * Determines if this object is a deleted object by
-     * checking to see if it is included in the deletedObjects
-     * array of the editing context or if it's editing context
-     * is null.<br/>
-     * <br/>
-     * Note: An object that has just been created will also not
-     * have an editing context and by this method would test
-     * positive for being a deleted object.
-     * @return if the object is a deleted object
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#isDeletedEO()
      */
-    // CHECKME: Might be able to tell better by checking EOGlobalIDs
     public boolean isDeletedEO() {
         if (log.isDebugEnabled())
             log.debug("editingContext() = " + editingContext() + " this object: " + this);
-        return editingContext() != null && editingContext().deletedObjects().containsObject(this);
+        boolean isDeleted = editingContext() == null;
+        return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
     }
 
     /**
-        * @deprecated use {@link ERXGenericRecord#isNewObject() ERXGenericRecord#isNewObject}
+        * @deprecated use {@link ERXGenericRecord#isNewObject}
      */
     public boolean isNewEO() {
         return isNewObject();
     }
 
-    /**
-        * Determines if this object is a new object and
-     * hasn't been saved to the database yet. This
-     * method just calls the method ERExtensions.isNewObject
-     * passing in this object as the current parameter. Note
-     * that an object that has been successfully deleted will
-     * also look as if it is a new object because it will have
-     * a null editingcontext.
-     * @return if the object is a new enterprise object.
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#isNewObject()
      */
 
     public boolean isNewObject() {
@@ -866,27 +679,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         super.validateForUpdate();
     }
 
-    /**
-     * Debugging method that will be called on an object before it is
-     * saved to the database if the property key: <b>ERDebuggingEnabled</b>
-     * is enabled. This allows for adding in a bunch of expensive validation
-     * checks that should only be enabled in developement and testing
-     * environments.
-     * @throws NSValidation.ValidationException if the object is not consistent
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#checkConsistency()
      */
     // CHECKME: This method was very useful at NS, might not be as useful here.
     public void checkConsistency() throws NSValidation.ValidationException {}
     
-    /**
-        * This method is very similiar to the <code>checkConsistency</code> method
-     * except that this method is only called from an outside process, usually
-     * a batch process, to verify that the data this object holds is consistent.
-     * JUnit tests are great for testing that all of the methods of a single
-     * object function correctly, batch checking of consistency is a good way
-     * of checking that all of the data in a given database is consistent. Hopefully
-     * in the future we will add a batch check consistency application to demonstrate
-     * the use of this method.
-     * @throws NSValidation.ValidationException if the object fails consisntency
+    /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#batchCheckConsistency()
      */
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
     
