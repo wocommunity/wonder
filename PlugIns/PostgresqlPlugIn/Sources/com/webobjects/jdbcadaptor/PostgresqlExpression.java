@@ -121,12 +121,8 @@ public class PostgresqlExpression extends JDBCExpression {
             return super.assembleJoinClause(leftName, rightName, semantic);
         }
         
-        StringBuffer sb = new StringBuffer();
         String leftAlias = leftName.substring(0, leftName.indexOf("."));
         String rightAlias = rightName.substring(0, rightName.indexOf("."));
-        
-        String leftCol = leftName.substring(leftName.indexOf(".") + 1);
-        String rightCol = rightName.substring(rightName.indexOf(".") + 1);
         
         NSArray k;
         EOEntity rightEntity;
@@ -182,8 +178,6 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         
         jc.table2 = rightTable + " " + rightAlias;
-        NSArray destCols = (NSArray) r.destinationAttributes().valueForKey( "columnName" );
-        NSArray sourceCols = (NSArray) r.sourceAttributes().valueForKey( "columnName" );
         NSArray joins = r.joins();
         int joinsCount = joins.count();
         NSMutableArray joinStrings = new NSMutableArray( joinsCount );

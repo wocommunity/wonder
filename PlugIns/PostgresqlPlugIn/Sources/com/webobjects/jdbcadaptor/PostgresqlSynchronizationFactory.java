@@ -28,8 +28,6 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 			EORelationship currentRelationship
                         = ((EORelationship)
                            relationships.objectAtIndex(j));
-			EOEntity destinationEntity
-			    = currentRelationship.destinationEntity();
 			if (_shouldGenerateForeignKeyConstraints(currentRelationship)) {
                             NSArray statements = foreignKeyConstraintStatementsForRelationship(currentRelationship);
                             if(!generatedStatements.containsObject(statements.valueForKey("statement"))) {
