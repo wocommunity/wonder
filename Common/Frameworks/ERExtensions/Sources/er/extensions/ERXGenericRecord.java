@@ -54,7 +54,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
      /** holds all subclass related ERXLogger's */
     private static NSMutableDictionary classLogs = new NSMutableDictionary();
-    private static final Object lock = new Object();
     
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
@@ -83,14 +82,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         * @return an {@link ERXLogger} for this objects class
         */
     public ERXLogger getClassLog() {
-        ERXLogger log = (ERXLogger)classLogs.objectForKey(this.getClass());
-        if ( log == null) {
-            synchronized(lock) {
-                log = ERXLogger.getERXLogger(this.getClass());
-                classLogs.setObjectForKey(log, this.getClass());
+        ERXLogger log1 = (ERXLogger)classLogs.objectForKey(this.getClass());
+        if ( log1 == null) {
+            synchronized(classLogs) {
+                log1 = ERXLogger.getERXLogger(this.getClass());
+                classLogs.setObjectForKey(log1, this.getClass());
             }
         }
-        return log;
+        return log1;
     }
 
     /**
