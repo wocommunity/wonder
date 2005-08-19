@@ -82,7 +82,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
                                           objectKeyPathValue());
         NSArray result = null;
         if (initialArray != null) {
-            localContext=((ERXGenericRecord)object()).isNewObject() ?
+            localContext=((ERXEnterpriseObject)object()).isNewObject() ?
             ERXEC.newEditingContext(object().editingContext(), false) :
             ERXEC.newEditingContext(object().editingContext().parentObjectStore());
             result = EOUtilities.localInstancesOfObjects(localContext, initialArray);
@@ -181,7 +181,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             String editConfigurationName = (String)ERDirectToWeb.d2wContextValueForKey("editConfigurationName", eo.entityName());
             epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName, session());
             epi.setNextPage(context().page());
-            if (((er.extensions.ERXGenericRecord)eo).isNewObject())
+            if (((ERXEnterpriseObject)eo).isNewObject())
                 localContext = ERXEC.newEditingContext(object().editingContext(), false);
             else
                 localContext = ERXEC.newEditingContext(object().editingContext().parentObjectStore());
@@ -248,7 +248,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
             if (log.isDebugEnabled()) log.debug("Creating "+entityNameForNewInstances);
             EOEnterpriseObject newEO = ERXEOControlUtilities.createAndInsertObject(localContext, entityNameForNewInstances);
             // If the object already exists, then hookup the relationship, if not do it after the object is saved.
-            if (!((er.extensions.ERXGenericRecord)object).isNewObject()) {
+            if (!((ERXEnterpriseObject)object).isNewObject()) {
                 EOEnterpriseObject localEO = EOUtilities.localInstanceOfObject(localContext, object);
                 if (localEO != null)
                     localEO.addObjectToBothSidesOfRelationshipWithKey(newEO, key);

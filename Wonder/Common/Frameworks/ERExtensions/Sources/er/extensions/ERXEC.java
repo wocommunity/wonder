@@ -852,22 +852,22 @@ public class ERXEC extends EOEditingContext {
             NSArray updatedObjects=(NSArray)n.userInfo().objectForKey("updated");
             for (Enumeration e = updatedObjects.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                if (eo instanceof ERXGenericRecord)
-                    ((ERXGenericRecord)eo).didUpdate();
+                if (eo instanceof ERXEnterpriseObject)
+                    ((ERXEnterpriseObject)eo).didUpdate();
             }
             // Deleted objects
             NSArray deletedObjects=(NSArray)n.userInfo().objectForKey("deleted");
             for (Enumeration e = deletedObjects.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                if (eo instanceof ERXGenericRecord)
-                    ((ERXGenericRecord)eo).didDelete(ec);
+                if (eo instanceof ERXEnterpriseObject)
+                    ((ERXEnterpriseObject)eo).didDelete(ec);
             }
             // Inserted objects
             NSArray insertedObjects=(NSArray)n.userInfo().objectForKey("inserted");
             for (Enumeration e = insertedObjects.objectEnumerator(); e.hasMoreElements();) {
                 EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                if (eo instanceof ERXGenericRecord)
-                    ((ERXGenericRecord)eo).didInsert();
+                if (eo instanceof ERXEnterpriseObject)
+                    ((ERXEnterpriseObject)eo).didInsert();
             }
         }
         

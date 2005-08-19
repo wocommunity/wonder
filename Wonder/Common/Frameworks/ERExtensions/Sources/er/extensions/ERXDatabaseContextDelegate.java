@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.io.*;
 import java.sql.*;
+import java.util.*;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
