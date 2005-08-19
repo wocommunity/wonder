@@ -56,7 +56,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
                 classLogs.setObjectForKey(log, this.getClass());
             }
         }
-        return log1;
+        return log;
     }
 
     /* (non-Javadoc)
