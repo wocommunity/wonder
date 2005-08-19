@@ -106,14 +106,14 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         * @return an {@link ERXLogger} for this objects class
         */
     public ERXLogger getClassLog() {
-        ERXLogger log = (ERXLogger)classLogs.objectForKey(this.getClass());
-        if ( log == null) {
+        ERXLogger log1 = (ERXLogger)classLogs.objectForKey(this.getClass());
+        if ( log1 == null) {
             synchronized(lock) {
-                log = ERXLogger.getERXLogger(this.getClass());
-                classLogs.setObjectForKey(log, this.getClass());
+                log1 = ERXLogger.getERXLogger(this.getClass());
+                classLogs.setObjectForKey(log1, this.getClass());
             }
         }
-        return log;
+        return log1;
     }
 
     /**
