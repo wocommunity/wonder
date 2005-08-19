@@ -75,7 +75,7 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
         String result=ERXExtensions.substituteStringByStringInString("EOValidationException:",
                                                                     "",
                                                                     initialMessage);
-        if (displayErrorKey!=null) result=ERXExtensions.substituteStringByStringInString(ERXGenericRecord.KEY_MARKER,
+        if (displayErrorKey!=null) result=ERXExtensions.substituteStringByStringInString(ERXEnterpriseObject.KEY_MARKER,
                                                                                         displayErrorKey,
                                                                                         result);
         

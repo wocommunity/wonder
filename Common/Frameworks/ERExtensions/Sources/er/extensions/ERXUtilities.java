@@ -117,8 +117,8 @@ public class ERXUtilities {
         NSMutableArray result = new NSMutableArray();
         for (Enumeration e = ec.deletedObjects().objectEnumerator(); e.hasMoreElements();) {
             EOEnterpriseObject eo=(EOEnterpriseObject)e.nextElement();
-            if (eo instanceof ERXGenericRecord)
-                result.addObject(((ERXGenericRecord)eo).primaryKeyInTransaction());
+            if (eo instanceof ERXEnterpriseObject)
+                result.addObject(((ERXEnterpriseObject)eo).primaryKeyInTransaction());
             else
                 result.addObject(EOUtilities.primaryKeyForObject(ec, eo));
         }

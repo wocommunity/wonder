@@ -65,8 +65,8 @@ public class ERXDebugMarker extends WOComponent {
             result=debugPageForObject((EOEnterpriseObject)object(),session());
             if(result != null) {
                 result.takeValueForKey(object(),"object");
-            } else if(object() instanceof ERXGenericRecord) {
-                log.info("Object: " + ((ERXGenericRecord)object()).toLongString());
+            } else if(object() instanceof ERXEnterpriseObject) {
+                log.info("Object: " + ((ERXEnterpriseObject)object()).toLongString());
             } else {
                 log.info("Object: " + object());
             }
