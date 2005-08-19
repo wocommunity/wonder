@@ -249,7 +249,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         if (timeToLive > 0) {
             log.info("Instance will live "+timeToLive+" seconds.");
             NSLog.out.appendln("Instance will live "+timeToLive+" seconds.");
-            NSTimestamp now=new NSTimestamp();
             NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
             WOTimer t=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
             t.schedule();
@@ -568,6 +567,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             } else if (throwable instanceof com.webobjects.eocontrol._private.TokenMgrError) {
                 // this means something went wrong while parsing an EOQualifier string
                 // no reason to quit
+                shouldQuit = false;
+            } else if (throwable.toString().indexOf("Unresolved compilation problem:") > -1) {
+                // this means eclipse did errors with code swapping, no reason to quit
+                // just try it again
                 shouldQuit = false;
             } else {
                 // We first log just in case the log4j call puts us in a bad state.
