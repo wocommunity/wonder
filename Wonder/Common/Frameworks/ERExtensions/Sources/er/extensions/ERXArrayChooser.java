@@ -132,7 +132,6 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                 EOEntity destinationEntity = null;
                 
                 if(_source instanceof EOEnterpriseObject) {
-                    EOEnterpriseObject eo = ((EOEnterpriseObject)_source);
                     EORelationship relationship = ERXUtilities.relationshipWithObjectAndKeyPath((EOEnterpriseObject)_source, relationshipKey());
                     
                     destinationEntity = relationship != null ? relationship.destinationEntity() : null;

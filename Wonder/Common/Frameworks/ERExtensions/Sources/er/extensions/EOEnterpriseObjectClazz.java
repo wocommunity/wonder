@@ -353,7 +353,6 @@ public class EOEnterpriseObjectClazz extends Object {
      *     bindings
      */
     public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
-        String entityName = entityName();
         EOFetchSpecification unboundFetchSpec;
         EOFetchSpecification boundFetchSpec;
 
@@ -408,7 +407,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of primary keys matching a given qualifier
      */
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        String entityName = entityName();
         EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
         //NSArray nsarray = EOUtilities.rawRowsForQualifierFormat(ec, fs.qualifier(), );
         NSArray nsarray = ec.objectsWithFetchSpecification(fs);
@@ -426,7 +424,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of primary keys matching the given criteria.
      */
     public NSArray primaryKeysMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
-        String entityName = entityName();
         return primaryKeysMatchingQualifier(ec, EOQualifier.qualifierToMatchAllValues(nsdictionary), sortOrderings);
     }
 
@@ -439,7 +436,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults for an array of primary key dictionaries.
      */
     public NSArray faultsFromRawRows(EOEditingContext ec, NSArray nsarray) {
-        String entityName = entityName();
         int count = nsarray.count();
         NSMutableArray faults = new NSMutableArray(count);
         for( int i = 0; i < count; i ++ ) {
@@ -455,7 +451,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults that match the given qualifier
      */
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier) {
-        String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, null);
         return faultsFromRawRows(ec, nsarray);
     }
@@ -469,7 +464,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults that match the given qualifier
      */
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }
@@ -482,7 +476,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults that match the given criteria
      */
     public NSArray faultsMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
-        String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingValues(ec, nsdictionary, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }
