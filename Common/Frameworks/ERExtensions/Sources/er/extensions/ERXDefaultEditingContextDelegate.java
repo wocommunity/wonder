@@ -16,12 +16,12 @@ import com.webobjects.foundation.*;
  * Default editing context delegate. This delegate
  * augments the regular transaction process by adding
  * the calling of willInsert, willUpdate or willDelete
- * on enterprise objects that are of type ERXGenericRecord
+ * on enterprise objects that are of type ERXEnterpriseObject
  * after saveChanges is called on the editing context, but
  * before validateForSave is called on the object. These
  * methods can give the object a last chance to modify itself
  * before validation occurs. The second enhancement is a built
- * in flushing of caches on subclasses of ERXGenericRecords
+ * in flushing of caches on subclasses of ERXEnterpriseObject
  * when objects have changes merged in or are invalidated.
  * Being able to maintain caches on enterprise objects that
  * are flushed when the underlying values change can be very
@@ -54,8 +54,8 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
     private static String toDebugString(EOEnterpriseObject eo) {
         String result=null;
         if (eo!=null) {
-            if (eo instanceof ERXGenericRecord) {
-                ERXGenericRecord rec = (ERXGenericRecord)eo;
+            if (eo instanceof ERXEnterpriseObject) {
+                ERXEnterpriseObject rec = (ERXEnterpriseObject)eo;
                 result="PKey: " + rec.primaryKey() + " - " + rec.toLongString();
             } else {
                 result="Pkey: "+EOUtilities.primaryKeyForObject(eo.editingContext(),eo)+" - "+eo;
@@ -101,7 +101,7 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
      * Enumerates through all of the objects that have been
      * changed, inserted and deleted calling the appropriate
      * will* method, willInsert, etc. on each of the objects
-     * if they are of type ERXGenericRecord. Note that this
+     * if they are of type ERXEnterpriseObject. Note that this
      * method is called before validateForSave is called on
      * any of the objects.
      * @param ec editing context that is about to be saved.
@@ -119,24 +119,24 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
                 if (ec.updatedObjects()!=null && ec.updatedObjects().count()>0) {
                     for (Enumeration e = ec.updatedObjects().objectEnumerator(); e.hasMoreElements();) {
                         EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                        if (eo instanceof ERXGenericRecord)
-                            ((ERXGenericRecord)eo).willUpdate();
+                        if (eo instanceof ERXEnterpriseObject)
+                            ((ERXEnterpriseObject)eo).willUpdate();
                     }
                 }
                 // Deleted objects
                 if (ec.deletedObjects()!=null && ec.deletedObjects().count()>0) {
                     for (Enumeration e = ec.deletedObjects().objectEnumerator(); e.hasMoreElements();) {
                         EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                        if (eo instanceof ERXGenericRecord)
-                            ((ERXGenericRecord)eo).willDelete();
+                        if (eo instanceof ERXEnterpriseObject)
+                            ((ERXEnterpriseObject)eo).willDelete();
                     }                    
                 }
                 // Inserted objects
                 if (ec.insertedObjects()!=null && ec.insertedObjects().count()>0) {
                     for (Enumeration e = ec.insertedObjects().objectEnumerator(); e.hasMoreElements();) {
                         EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                        if (eo instanceof ERXGenericRecord && !ec.deletedObjects().containsObject(eo))
-                            ((ERXGenericRecord)eo).willInsert();
+                        if (eo instanceof ERXEnterpriseObject && !ec.deletedObjects().containsObject(eo))
+                            ((ERXEnterpriseObject)eo).willInsert();
                     }
                 }                
                 if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: done calling will*");
@@ -191,7 +191,7 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
      * When invalidating an object their local
      * cache is flushed by calling the method: <code>
      * flushCaches</code> on the enterprise object if
-     * it is an instance of ERXGenericRecord.
+     * it is an instance of ERXEnterpriseObject.
      * @param anEditingContext current editing context
      * @param anObject enterprise object to be invlidated
      * @param anEOGlobalID global id to be invalidated
@@ -200,8 +200,8 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
     public boolean editingContextShouldInvalidateObject(EOEditingContext anEOEditingContext,
                                                         EOEnterpriseObject anObject,
                                                         EOGlobalID anEOGlobalID) {
-        if (anObject instanceof ERXGenericRecord) {
-            ((ERXGenericRecord)anObject).flushCaches();
+        if (anObject instanceof ERXEnterpriseObject) {
+            ((ERXEnterpriseObject)anObject).flushCaches();
         }
         return true;
     }
@@ -210,7 +210,7 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
      * When merging changes into an object their local
      * cache is flushed by calling the method: <code>
      * flushCaches</code> on the enterprise object if
-     * it is an instance of ERXGenericRecord.
+     * it is an instance of ERXEnterpriseObject.
      * @param anEditingContext current editing context
      * @param object enterprise object to have changes
      *		merged into it.
@@ -218,8 +218,8 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
      */
     public boolean editingContextShouldMergeChangesForObject(EOEditingContext anEditingContext,
                                                              EOEnterpriseObject object) {
-        if (object instanceof ERXGenericRecord) {
-            ((ERXGenericRecord)object).flushCaches();
+        if (object instanceof ERXEnterpriseObject) {
+            ((ERXEnterpriseObject)object).flushCaches();
         }
         return true;
     }
@@ -241,15 +241,15 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
             while ( e.hasMoreElements() ) {
                 final Object theObject = e.nextElement();
 
-                if ( theObject instanceof ERXGenericRecord )
-                    ((ERXGenericRecord)theObject).willRevert();
+                if ( theObject instanceof ERXEnterpriseObject )
+                    ((ERXEnterpriseObject)theObject).willRevert();
             }
         }
     }
 
     /**
      * Called by the editing context following a revert.  This delegate method calls <code>didRevert</code>
-     * on any EO that is an instance of ERXGenericRecord.
+     * on any EO that is an instance of ERXEnterpriseObject.
      * @param ec current editing context.
      * @param insertedObjects objects that were marked as inserted before the revert.
      * @param updatedObjects objects that were marked as updated before the revert.
@@ -272,8 +272,8 @@ public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate 
             while ( e.hasMoreElements() ) {
                 final Object theObject = e.nextElement();
 
-                if ( theObject instanceof ERXGenericRecord )
-                    ((ERXGenericRecord)theObject).didRevert(ec);
+                if ( theObject instanceof ERXEnterpriseObject )
+                    ((ERXEnterpriseObject)theObject).didRevert(ec);
             }
         }
     }

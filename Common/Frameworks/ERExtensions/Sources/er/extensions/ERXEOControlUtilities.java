@@ -1097,4 +1097,47 @@ public class ERXEOControlUtilities {
         }
         return entity;
     }
+
+    /** Caches the string attribute keys on a per entity name basis */
+    private static NSMutableDictionary _attributeKeysPerEntityName=new NSMutableDictionary();
+    
+    /**
+     * Calculates all of the EOAttributes of a given entity that
+     * are mapped to String objects.
+     * @return array of all attribute names that are mapped to
+     *      String objects.
+     */
+    public static synchronized NSArray stringAttributeListForEntityNamed(String entityName) {
+        // FIXME: this will need to be synchronized if you go full-MT
+        NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);
+        if (result==null) {
+            // FIXME: Bad way of getting the entity.
+            EOEntity entity=ERXEOAccessUtilities.entityNamed(null, entityName);
+            NSMutableArray attList=new NSMutableArray();
+            _attributeKeysPerEntityName.setObjectForKey(attList,entityName);
+            result=attList;
+            for (Enumeration e=entity.classProperties().objectEnumerator();e.hasMoreElements();) {
+                Object property=e.nextElement();
+                if (property instanceof EOAttribute) {
+                    EOAttribute a=(EOAttribute)property;
+                    if (a.className().equals("java.lang.String"))
+                        attList.addObject(a.name());
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void trimSpaces(ERXCustomObject object) {
+        for (Enumeration e=ERXEOControlUtilities.stringAttributeListForEntityNamed(object.entityName()).objectEnumerator(); e.hasMoreElements();) {
+            String key=(String)e.nextElement();
+            String value=(String)object.storedValueForKey(key);
+            if (value!=null) {
+                String trimmedValue=value.trim();
+                if (trimmedValue.length()!=value.length())
+                    object.takeStoredValueForKey(trimmedValue,key);
+            }
+        }
+    }
+
 }
