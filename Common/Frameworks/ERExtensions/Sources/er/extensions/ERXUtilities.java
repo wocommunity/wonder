@@ -498,7 +498,7 @@ public class ERXUtilities {
     }
 
     /** Copies values from one EO to another using an array of Attributes */
-    public static void replicateDataFromEOToEO(ERXGenericRecord r1, ERXGenericRecord r2, NSArray attributeNames){
+    public static void replicateDataFromEOToEO(EOEnterpriseObject r1, EOEnterpriseObject r2, NSArray attributeNames){
         for(Enumeration e = attributeNames.objectEnumerator(); e.hasMoreElements();){
             String attributeName = (String)e.nextElement();
             r2.takeValueForKey(r1.valueForKey(attributeName), attributeName);
@@ -506,7 +506,7 @@ public class ERXUtilities {
     }
 
     /** Copies a relationship from one EO to another using the name of the relationship */
-    public static void replicateRelationshipFromEOToEO(ERXGenericRecord r1, ERXGenericRecord r2, String relationshipName){
+    public static void replicateRelationshipFromEOToEO(EOEnterpriseObject r1, EOEnterpriseObject r2, String relationshipName){
         for(Enumeration e = ((NSArray)r1.valueForKey(relationshipName)).objectEnumerator(); e.hasMoreElements();){
             ERXReplicableInterface replicableTarget = (ERXReplicableInterface)e.nextElement();
             r2.addObjectToBothSidesOfRelationshipWithKey(replicableTarget.replicate(r2.editingContext()), relationshipName);
@@ -514,7 +514,7 @@ public class ERXUtilities {
     }
 
     /** Copies a relationship from one EO to another using the name of the relationship */
-    public static void deplicateRelationshipFromEO(ERXGenericRecord r1, String relationshipName){
+    public static void deplicateRelationshipFromEO(EOEnterpriseObject r1, String relationshipName){
         //System.out.println("r1 "+r1);
         //System.out.println("relationshipName "+relationshipName);
         //System.out.println("array "+r1.valueForKey(relationshipName));

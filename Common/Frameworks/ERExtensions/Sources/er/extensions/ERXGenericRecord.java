@@ -56,7 +56,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                 classLogs.setObjectForKey(log, this.getClass());
             }
         }
-        return log1;
+        return log;
     }
 
     /* (non-Javadoc)
