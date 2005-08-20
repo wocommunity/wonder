@@ -1,9 +1,4 @@
-//
-// PayPalNotificationLogger.java
-// Project WOPayPal
-//
-// Created by travis on Tue Feb 12 2002
-//
+package er.wopaypal;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;

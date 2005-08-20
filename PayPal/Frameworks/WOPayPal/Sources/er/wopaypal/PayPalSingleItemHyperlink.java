@@ -121,17 +121,17 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
     /** Manually synchronizes the values from the WOComponent.  It does this by enumerating first through the baseBindingList() and then the additionalBindingList()
      */
     protected void pullBindings() {
-	Enumeration enum = baseBindingList().objectEnumerator();
+	Enumeration enumeration = baseBindingList().objectEnumerator();
 
-	while (enum.hasMoreElements()) {
-	    String key = (String) enum.nextElement();
+	while (enumeration.hasMoreElements()) {
+	    String key = (String) enumeration.nextElement();
 	    takeValueForKey(valueForBinding(key), key);
 	}
 
-	enum = additionalBindingList().objectEnumerator();
+	enumeration = additionalBindingList().objectEnumerator();
 
-	while (enum.hasMoreElements()) {
-	    String key = (String) enum.nextElement();
+	while (enumeration.hasMoreElements()) {
+	    String key = (String) enumeration.nextElement();
 	    takeValueForKey(valueForBinding(key), key);
 	}
     }
@@ -139,17 +139,17 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
     /** Resets the values pulled from the WOComponent to null.
      */
     public void reset() {
-	Enumeration enum = baseBindingList().objectEnumerator();
+	Enumeration enumeration = baseBindingList().objectEnumerator();
 
-	while (enum.hasMoreElements()) {
-	    String key = (String) enum.nextElement();
+	while (enumeration.hasMoreElements()) {
+	    String key = (String) enumeration.nextElement();
 	    takeValueForKey(null, key);
 	}
 
-	enum = additionalBindingList().objectEnumerator();
+	enumeration = additionalBindingList().objectEnumerator();
 
-	while (enum.hasMoreElements()) {
-	    String key = (String) enum.nextElement();
+	while (enumeration.hasMoreElements()) {
+	    String key = (String) enumeration.nextElement();
 	    takeValueForKey(null, key);
 	}
     }
