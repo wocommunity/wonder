@@ -528,6 +528,53 @@ public class ERXSession extends WOSession implements Serializable {
         super.terminate();
     }
 
+    /** This is a cover method which enables use of the session's object store
+     * which is usually access with setObjectForKey and objectForKey. One can use
+     * this method with KVC, like for example in .wod bindings:
+     * 
+     * <code>
+     * myString: WOString {
+     *      value = session.objectStore.myLastSearchResult.count;
+     * }
+     * </code>
+     * 
+     * @return an Object which implements KVC + KVC additions
+     */
+    public Object objectStore() {
+        return new NSKeyValueCodingAdditions() {
+
+            public void takeValueForKey(Object arg0, String arg1) {
+                setObjectForKey(arg0, arg1);
+            }
+
+            public Object valueForKey(String arg0) {
+                return objectForKey(arg0);
+            }
+
+            public void takeValueForKeyPath(Object arg0, String arg1) {
+                setObjectForKey(arg0, arg1);
+            }
+
+            public Object valueForKeyPath(String arg0) {
+                Object theObject = objectForKey(arg0);
+                if (theObject == null) {
+                    String key = "";
+                    String oriKey = arg0;
+                    do {
+                        key = key + oriKey.substring(0, oriKey.indexOf("."));
+                        oriKey = oriKey.substring(oriKey.indexOf(".") + 1);
+                        theObject = objectForKey(key);
+                        key += ".";
+                    } while (theObject == null && oriKey.indexOf(".") > -1);
+                    if (theObject != null && !ERXStringUtilities.stringIsNullOrEmpty(oriKey)) { 
+                        theObject = NSKeyValueCodingAdditions.Utility
+                            .valueForKeyPath(theObject, oriKey); }
+                }
+                return theObject;
+            }
+        };
+    }
+    
     /*
      * Serialization support - enables to use a variety of session stores
      */ 
