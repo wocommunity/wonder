@@ -1058,13 +1058,13 @@ There are many ways to use this script:
     
 
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all" />
-    <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
-    <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
-    <target name="wrox.all" depends="frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
-    <target name="stepwise.all" depends="D2WListExample.all ,D2WInspectExample.all" />
-    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all, ERMovies.all" />
-    <target name="common.all" depends="frameworks.all, applications.all, examples.all" />
+    <target name="common.frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all" />
+    <target name="bugtracker.all" depends="common.frameworks.all, BTBusinessLogic.all, BugTracker.all" />
+    <target name="common.applications.all" depends="common.frameworks.all, bugtracker.all, ERMailer.all" />
+    <target name="wrox.all" depends="common.frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
+    <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
+    <target name="common.examples.all" depends="common.frameworks.all, wrox.all, stepwise.all, ERMovies.all" />
+    <target name="common.all" depends="common.frameworks.all, common.applications.all, examples.all" />
     <target name="dynareporting.base" depends="core.all, WOOgnl.all, DynaReporting.base" />
     <target name="dynareporting.all" depends="core.all, WOOgnl.all, dynareporting.base" />
     <target name="excelgeneration.all" depends="core.all, ExcelGenerator.all, EGSampleApp.all" />
@@ -1073,7 +1073,9 @@ There are many ways to use this script:
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
 
     <target name="DynaReporting.base" depends="DRGrouping.all, WRReporting.all" />
-    <target name="DynaReporting.all" depends="DynaReporting.base, DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
+    <target name="DynaReporting.apps" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
+    <target name="DynaReporting.all" depends="DynaReporting.base, DynaReporting.apps" />
+    
     <target name="ExcelGeneration.all" depends="ExcelGenerator.all, EGSampleApp.all" />
 
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
@@ -1083,6 +1085,10 @@ There are many ways to use this script:
     <target name="subprojects.all" depends="WOPayPal.all, Validity.all, SVGObjects.all, DynaReporting.all, ExcelGeneration.all, PlugIns.all" />
 
     <target name="experimental.all" depends="DevStudio.all" />
+
+    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
+    <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
+    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all "/>
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
 
@@ -1216,7 +1222,7 @@ There are many ways to use this script:
         </antcall>
      </target>
 
-    <target name="all.web">
+    <target name="frameworks.web">
         <!--ERJars does not have WebServerResources -->
         <!--antcall target="global.web.framework" >
             <param name="project.name" value="ERJars" />
@@ -1273,10 +1279,28 @@ There are many ways to use this script:
         <antcall target="global.web.framework" >
             <param name="project.name" value="ERCalendar" />
         </antcall>
-
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="DRGrouping" />
+        </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="WRReporting" />
+        </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="ExcelGenerator" />
+        </antcall>
+    </target>
+    <target name="applications.web">
         <antcall target="global.web.application" >
             <param name="project.name" value="BugTracker" />
         </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="DevStudio" />
+        </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="ERMailer" />
+        </antcall>
+    </target>
+    <target name="examples.web">
         <antcall target="global.web.application" >
             <param name="project.name" value="D2WInspectExample" />
         </antcall>
@@ -1305,19 +1329,7 @@ There are many ways to use this script:
             <param name="project.name" value="SVGObjectsPopIdol" />
         </antcall>
         <antcall target="global.web.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="ERMailer" />
-        </antcall>
-        <antcall target="global.web.application" >
             <param name="project.name" value="NetStruxrCaseStudy" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="DevStudio" />
         </antcall>
         <antcall target="global.web.application" >
             <param name="project.name" value="DocsByExample" />
@@ -1328,19 +1340,12 @@ There are many ways to use this script:
         <antcall target="global.web.application" >
             <param name="project.name" value="DRGroupingTest" />
         </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="DRGrouping" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="WRReporting" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ExcelGenerator" />
-        </antcall>
         <antcall target="global.web.application" >
             <param name="project.name" value="EGSampleApp" />
         </antcall>
-      </target>
+    </target>
+    
+    <target name="all.web" depends="frameworks.web, applications.web, examples.web" />
 
     <target name="frameworks.all.install">
         <antcall target="global.install.framework" >
@@ -1414,10 +1419,7 @@ There are many ways to use this script:
         </antcall>
     </target>
 
-    <target name="applications.all.install">
-        <antcall target="global.install.application" >
-            <param name="project.name" value="BugTracker" />
-        </antcall>
+    <target name="examples.all.install">
         <antcall target="global.install.application" >
             <param name="project.name" value="D2WInspectExample" />
         </antcall>
@@ -1449,16 +1451,7 @@ There are many ways to use this script:
             <param name="project.name" value="SVGObjectsPopIdol" />
         </antcall>
         <antcall target="global.install.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="ERMailer" />
-        </antcall>
-        <antcall target="global.install.application" >
             <param name="project.name" value="NetStruxrCaseStudy" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="DevStudio" />
         </antcall>
         <antcall target="global.install.application" >
             <param name="project.name" value="DocsByExample" />
@@ -1474,7 +1467,23 @@ There are many ways to use this script:
         </antcall>
     </target>
 
-    <target name="all.install" depends="frameworks.all.install, applications.all.install" />
+
+    <target name="applications.all.install">
+        <antcall target="global.install.application" >
+            <param name="project.name" value="DevStudio" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="BugTracker" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="ValidityModeler" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="ERMailer" />
+        </antcall>
+    </target>
+
+    <target name="all.install" depends="frameworks.all.install, applications.all.install, examples.all.install" />
 
     <target name="all" depends="all.compile" />
     <target name="install" depends="all.install" />
