@@ -1,4 +1,4 @@
-<project name="Wonder" default="compile">
+<project name="Wonder" default="all">
     <!-- 
      this file is just a tiny wrapper around the core file Build/build/generic.xml
      more info about the builds can be found there
@@ -6,9 +6,46 @@
     <target name="clean">
         <ant antFile="Build/build/generic.xml" target="all.clean" />
     </target>
-    <target name="compile">
-        <ant antFile="Build/build/generic.xml" target="all.compile" />
+
+    <target name="frameworks">
+        <ant antFile="Build/build/generic.xml" target="frameworks.all" />
     </target>
+    <target name="frameworks.install">
+        <ant antFile="Build/build/generic.xml" target="frameworks.all.install" />
+        <ant antFile="Build/build/generic.xml" target="frameworks.web" />
+    </target>
+
+    <target name="applications">
+        <ant antFile="Build/build/generic.xml" target="applications.all">
+            <property name="wonder.development" value="false" />
+        </ant>
+    </target>
+    <target name="applications.install">
+        <ant antFile="Build/build/generic.xml" target="applications.all.install" />
+        <ant antFile="Build/build/generic.xml" target="applications.web" />
+    </target>
+    
+    <target name="examples">
+        <ant antFile="Build/build/generic.xml" target="examples.all">
+            <property name="wonder.development" value="false" />
+        </ant>
+    </target>
+    <target name="examples.install">
+        <ant antFile="Build/build/generic.xml" target="examples.all.install" />
+        <ant antFile="Build/build/generic.xml" target="examples.web" />
+    </target>
+    
+    <target name="all">
+        <echo message="please use the sequence:" />
+        <echo message="  ant frameworks" />
+        <echo message="  sudo ant frameworks.install" />
+        <echo message="  ant applications" />
+        <echo message="  sudo ant applications.install" />
+        <echo message="  ant examples" />
+        <echo message="  sudo ant examples.install" />
+    </target>
+    
+    <!-- these are just for convenience -->
     <target name="install">
         <ant antFile="Build/build/generic.xml" target="all.install" />
         <ant antFile="Build/build/generic.xml" target="all.web" />
@@ -17,16 +54,10 @@
         <ant antFile="Build/build/common-dist.xml" target="all" />
         <ant antFile="Build/build/subprojects-dist.xml" target="all" />
     </target>
-    <target name="all" depends="clean,compile,install" />
-    
-    <!-- these are just for convenience -->
     <target name="reporting">
         <ant antFile="Build/build/generic.xml" target="DynaReporting.all" />
     </target>
     <target name="excel">
         <ant antFile="Build/build/generic.xml" target="excelgeneration.all" />
-    </target>
-    <target name="core">
-        <ant antFile="Build/build/generic.xml" target="frameworks.all" />
     </target>
 </project>

@@ -38,11 +38,14 @@ wo.dir.system=/System
 
 - then call up
 
-  sudo ant all
-
-or
-
- ant clean compile; sudo ant install
+   ant frameworks
+   sudo ant frameworks.install
+   
+   ant applications
+   sudo ant applications.install
+   
+   ant examples
+   sudo ant examples.install
 
 at the top-level folder. 
 
