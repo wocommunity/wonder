@@ -545,7 +545,11 @@ public class ERXSession extends WOSession implements Serializable {
         if(_objectStore == null) {
             _objectStore = new NSKeyValueCodingAdditions() {
                 public void takeValueForKey(Object arg0, String arg1) {
-                    setObjectForKey(arg0, arg1);
+                    if (arg0 == null) {
+                        removeObjectForKey(arg1);
+                    } else {
+                        setObjectForKey(arg0, arg1);
+                    }
                 }
     
                 public Object valueForKey(String arg0) {
@@ -553,7 +557,11 @@ public class ERXSession extends WOSession implements Serializable {
                 }
     
                 public void takeValueForKeyPath(Object arg0, String arg1) {
-                    setObjectForKey(arg0, arg1);
+                    if (arg0 == null) {
+                        removeObjectForKey(arg1);
+                    } else {
+                        setObjectForKey(arg0, arg1);
+                    }
                 }
     
                 public Object valueForKeyPath(String arg0) {
