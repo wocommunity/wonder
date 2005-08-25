@@ -58,9 +58,13 @@ public class ERXAdaptorChannelDelegate {
             } else if(millisecondsNeeded > warnMilliseconds) {
                 log.warn(description);
             } else if(millisecondsNeeded > infoMilliseconds) {
-                log.info(description);
+                if (log.isInfoEnabled()) {
+                    log.info(description);
+                }
             } else if(millisecondsNeeded > debugMilliseconds) {
-                log.debug(description);
+                if (log.isDebugEnabled()) {
+                    log.debug(description);
+                }
             }
         }
     }
