@@ -309,3 +309,12 @@ dbMinConnectionsGLOBAL=1
 #########################################################################
 ## Enable response caching
 # er.extensions.ERXWOResponseCache.Enabled = true
+
+#########################################################################
+# ERXWORepetition 
+#########################################################################
+## Add hash codes to element IDs so backtracking can be controlled.
+# er.extensions.ERXWORepetition.checkHashCodes = true
+## If an object wasn't found, raise an exception (if unset, the wrong object is used)
+# er.extensions.ERXWORepetition.raiseOnUnmatchedObject = true
+
