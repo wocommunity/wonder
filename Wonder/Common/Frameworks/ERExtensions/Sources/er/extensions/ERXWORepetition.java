@@ -2,10 +2,18 @@ package er.extensions;
 
 import java.util.List;
 
-import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Replacement for WORepetition. Is installed via ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition")
@@ -137,7 +145,7 @@ public class ERXWORepetition extends WODynamicGroup {
     }
     
     private int hashCodeForObject(Object object) {
-        return (object == null ? 0 : Math.abs(System.identityHashCode(object)));
+        return (object == null || !(object instanceof EOEnterpriseObject) ? 0 : Math.abs(System.identityHashCode(object)));
     }
     
     /** Prepares the WOContext for the loop iteration. */
@@ -151,20 +159,23 @@ public class ERXWORepetition extends WODynamicGroup {
             Integer integer = ERXConstant.integerForInt(index);
             _index._setValueNoValidation(integer, wocomponent);
         }
+        boolean didAppend = false;
         if(checkHashCodes(wocontext)) {
+            
             if(object != null) {
-                if (index != 0) {
-                    wocontext.deleteLastElementIDComponent();
-                }
-                wocontext.appendElementIDComponent(index + "-" + hashCodeForObject(object));
-            } else {
-                if (index != 0) {
-                    wocontext.incrementLastElementIDComponent();
-                } else {
-                    wocontext.appendZeroElementIDComponent();
+                int hashCode = hashCodeForObject(object);
+                if(hashCode != 0) {
+                    if (index != 0) {
+                        wocontext.deleteLastElementIDComponent();
+                    }
+                    String elementID = index + "-" + hashCode;
+//                  log.info("prepare " +  elementID + "->" + object);
+                    wocontext.appendElementIDComponent(elementID);
+                    didAppend = true;
                 }
             }
-        } else {
+        }
+        if(!didAppend) {
             if (index != 0) {
                 wocontext.incrementLastElementIDComponent();
             } else {
@@ -236,13 +247,28 @@ public class ERXWORepetition extends WODynamicGroup {
         Context context = createContext(wocomponent);
         
         int count = _count(context, wocomponent);
-        
+//      log.info("TAKEVALUESE:" + wocontext.elementID());
         for (int index = 0; index < count; index++) {
             _prepareForIterationWithIndex(context, index, wocontext, wocomponent);
             super.takeValuesFromRequest(worequest, wocontext);
         }
         if (count > 0) {
             _cleanupAfterIteration(count, wocontext, wocomponent);
+        }
+    }
+    
+    public void takeChildrenValuesFromRequest(WORequest worequest, WOContext wocontext) {
+        if(hasChildrenElements()) {
+            int i = _children.count();
+            wocontext.appendZeroElementIDComponent();
+            for(int j = 0; j < i; j++) {
+                WOElement woelement = (WOElement)_children.objectAtIndex(j);
+//              log.info(wocontext.elementID());
+                woelement.takeValuesFromRequest(worequest, wocontext);
+                wocontext.incrementLastElementIDComponent();
+            }
+            
+            wocontext.deleteLastElementIDComponent();
         }
     }
     
@@ -264,10 +290,10 @@ public class ERXWORepetition extends WODynamicGroup {
                     hashCode = Integer.parseInt(indexString.substring(sep+1));
                     index = Integer.parseInt(indexString.substring(0, sep));
                 } else {
+                    index = Integer.parseInt(indexString);
                 }
             } else {
                 index = Integer.parseInt(indexString);
-                
             }
         }
         if(indexString != null) {
@@ -305,6 +331,7 @@ public class ERXWORepetition extends WODynamicGroup {
                 _index._setValueNoValidation(integer, wocomponent);
             }
             wocontext.appendElementIDComponent(indexString);
+//          log.info("INVOKEACTION:" + wocontext.elementID());
             woactionresults = super.invokeAction(worequest, wocontext);
             wocontext.deleteLastElementIDComponent();
         } else {
@@ -334,6 +361,7 @@ public class ERXWORepetition extends WODynamicGroup {
         WOComponent wocomponent = wocontext.component();
         Context context = createContext(wocomponent);
         
+//      log.info("APPENTOTRESPONSE:" + wocontext.elementID());
         int count = _count(context,wocomponent);
         
         for (int index = 0; index < count; index++) {
