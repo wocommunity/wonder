@@ -917,7 +917,7 @@ public class ERXEOAccessUtilities {
                 entityNames.addObjectsFromArray(names);
             }
         }
-        entityNames.addObject(entity.name());
+        entityNames.addObject(entity.externalName()); 
         return ERXArrayUtilities.arrayWithoutDuplicates(entityNames);
     }
     
