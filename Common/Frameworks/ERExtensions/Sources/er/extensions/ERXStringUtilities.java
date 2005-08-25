@@ -932,13 +932,26 @@ public class ERXStringUtilities {
 
     /** checks if the specified String contains only digits. 
      * 
-     * @param name
-     * @return
+     * @param aString, the string to check
+     * @return true if the string contains only digits, false otherwise
      */
-    public static boolean isDigitsOnly(String name) {
-        for (int i = name.length(); i-- > 0;) {
-            char c = name.charAt(i);
+    public static boolean isDigitsOnly(String aString) {
+        for (int i = aString.length(); i-- > 0;) {
+            char c = aString.charAt(i);
             if (!Character.isDigit(c)) return false;
+        }
+        return true;
+    }
+
+    /** checks if the specified String contains only Letters. 
+     * 
+     * @param aString, the string to check
+     * @return true if the string contains only Letters, false otherwise
+     */
+    public static boolean isLettersOnly(String aString) {
+        for (int i = aString.length(); i-- > 0;) {
+            char c = aString.charAt(i);
+            if (!Character.isLetter(c)) return false;
         }
         return true;
     }
@@ -975,7 +988,26 @@ public class ERXStringUtilities {
        * @param encoding to be used, null will use the default
        * @return string representation of the stream.
    */
-  public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
-      return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
-  }
+     public static String stringFromInputStream(InputStream in, String encoding) throws IOException {
+         return new String(ERXFileUtilities.bytesFromInputStream(in), encoding);
+     }
+
+  
+      /** Returns a String by invoking toString() on each object from the array. After each toString() call
+       * the separator is appended to the buffer
+       * 
+       * @param array an object array from which to get a nice String representation
+       * @param separator a separator which is displayed between the objects toString() value
+       *
+       * @return a string representation from the array
+       */
+    public static String toString(Object[] array, String separator) {
+          StringBuffer buf = new StringBuffer();
+          for (int i = 0; i < array.length; i++) {
+              Object o = array[i];
+              buf.append(o.toString());
+              buf.append(separator);
+          }
+          return buf.toString();
+      }
 }
