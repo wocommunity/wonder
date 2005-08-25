@@ -573,7 +573,7 @@ public class ERXJDBCConnectionBroker {
                 ERXJDBCConnectionBroker.log.error("Error creating connection: " + e2);
             }
 
-            ERXJDBCConnectionBroker.log.error(now.toString() + "  Opening connection " + String.valueOf(i) + " " + connPool[i].toString() + ":");
+            ERXJDBCConnectionBroker.log.info(now.toString() + "  Opening connection " + String.valueOf(i) + " " + connPool[i].toString() + ":");
         }
 
         /**
@@ -755,7 +755,7 @@ public class ERXJDBCConnectionBroker {
                                         connStatus[i] = IN_USE;
                                         ERXJDBCConnectionBroker.log.debug("pinging connection " + connStatus[i]);
                                         try {
-                                            c.setAutoCommit(false);
+                                            c.isClosed();
                                             c.setReadOnly(false);
                                             ResultSet rs = c.createStatement().executeQuery(sql);
                                         } catch (Exception e) {
