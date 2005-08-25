@@ -143,10 +143,6 @@ public class ERXRuntimeUtilities {
 
         Runtime rt = Runtime.getRuntime();
         Process p = null;
-        int exitValue = 0;
-        StringBuffer response = new StringBuffer();
-        String input = "";
-        String error = "";
         StreamReader isr = null;
         StreamReader esr = null;
         try {
@@ -193,8 +189,16 @@ public class ERXRuntimeUtilities {
                 } catch (InterruptedException ex) {
                 }
             }
-
-            response.append(isr.getResult());
+            if (isr.getException() != null) {
+                log.error("input stream reader got exception,\n      "+
+                        "command = "+ERXStringUtilities.toString(command, " ")+
+                        "result = "+isr.getResultAsString(), isr.getException());
+            }
+            if (esr.getException() != null) {
+                log.error("error stream reader got exception,\n      "+
+                        "command = "+ERXStringUtilities.toString(command, " ")+
+                        "result = "+esr.getResultAsString(), esr.getException());
+            }
 
         } finally {
 
@@ -245,19 +249,26 @@ public class ERXRuntimeUtilities {
     public static class StreamReader {
         byte[] result = null;
         boolean finished = false;
+        IOException iox;
         
         public StreamReader(final InputStream is) {
 
             Runnable r = new Runnable() {
 
                 public void run() {
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
                     try {
-                        result = ERXFileUtilities.bytesFromInputStream(is);
-                        finished = true;
+                        int read = -1;
+                        byte[] buf = new byte[1024 * 50];
+                        while ((read = is.read(buf)) != -1) {
+                            bout.write(buf, 0, read);
+                        }
+
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        iox = e;
                     }
+                    result = bout.toByteArray();
+                    finished = true;
                 }
 
             };
@@ -270,15 +281,21 @@ public class ERXRuntimeUtilities {
         public boolean isFinished() {
             return finished;
         }
+        public IOException getException() {
+            return iox;
+        }
+        public String getResultAsString() {
+            return getResult() == null ? null : new String(getResult());
+        }
     }
 
     public static class Result {
 
         private byte[] response, error;
 
-        public Result(byte[] response, byte[] error) {
-            this.response = response;
-            this.error = error;
+        public Result(byte[] _response, byte[] _error) {
+            this.response = _response;
+            this.error = _error;
         }
         
         public byte[] getResponse() {
@@ -304,8 +321,8 @@ public class ERXRuntimeUtilities {
 
         boolean hasTimeout = false;
 
-        public TimeoutTimerTask(Process p) {
-            this.p = p;
+        public TimeoutTimerTask(Process _p) {
+            this.p = _p;
         }
 
         public boolean hasTimeout() {
