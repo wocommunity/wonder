@@ -122,8 +122,8 @@ public class ERXLongPrimaryKeyFactory {
      *            caching. Removes a lot of db roundtrips.
      * @return a new pk values for the specified entity.
      */
-    private static Long getNextPkValueForEntityIncreaseBy(String ename, int count, int increaseBy) {
-        if (increaseBy < 1) increaseBy = 1;
+    private static Long getNextPkValueForEntityIncreaseBy(String ename, int count, int _increaseBy) {
+        if (_increaseBy < 1) _increaseBy = 1;
 
         Connection con = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).getConnection();
         try {
@@ -143,7 +143,7 @@ public class ERXLongPrimaryKeyFactory {
             int pk = 1;
             if (hastNext) {
                 pk = resultSet.getInt("pk_value");
-                pk += increaseBy;
+                pk += _increaseBy;
                 // now execute the update
                 con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
             } else {
