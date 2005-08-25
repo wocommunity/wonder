@@ -243,7 +243,7 @@ public class ERXExtensions {
     //		to do something like this, but much more generic, i.e. have a mapping
     //		between logger names and NSLog groups, for example com.webobjects.logging.DebugGroupSQLGeneration we should
     //		be able to get the last part of the logger name and look up that log group and turn 
-    public static void configureAdaptorContextRapidTurnAround(Object observer) {
+    public static void configureAdaptorContextRapidTurnAround(Object anObserver) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
             adaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
@@ -254,7 +254,7 @@ public class ERXExtensions {
             }
             adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) ? Boolean.TRUE : Boolean.FALSE;
                                           // Allows rapid turn-around of adaptor debugging.
-            NSNotificationCenter.defaultCenter().addObserver(observer,
+            NSNotificationCenter.defaultCenter().addObserver(anObserver,
                                                              new NSSelector("configureAdaptorContext", ERXConstant.NotificationClassArray),
                                                              ERXConfigurationManager.ConfigurationDidChangeNotification,
                                                              null);
