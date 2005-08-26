@@ -157,7 +157,8 @@ public class ERXWORepetition extends WODynamicGroup {
     }
     
     private int hashCodeForObject(Object object) {
-        return (object == null /*|| !(object instanceof EOEnterpriseObject) */? 0 : Math.abs(System.identityHashCode(object)));
+        return (object == null ? 0 : Math.abs(System.identityHashCode(object)));
+        // return (object == null ? 0 : Math.abs(object.hashCode()));
     }
     
     /** Prepares the WOContext for the loop iteration. 
@@ -181,7 +182,9 @@ public class ERXWORepetition extends WODynamicGroup {
                         wocontext.deleteLastElementIDComponent();
                     }
                     String elementID = index + "-" + hashCode;
-                    // log.info("prepare " +  elementID + "->" + object);
+                    if(log.isDebugEnabled()) {
+                        log.debug("prepare " +  elementID + "->" + object);
+                    }
                     wocontext.appendElementIDComponent(elementID);
                     didAppend = true;
                 }
@@ -260,28 +263,15 @@ public class ERXWORepetition extends WODynamicGroup {
         
         int count = _count(context, wocomponent);
         boolean checkHashCodes = checkHashCodes(wocomponent, wocontext);
-      // log.info("takeValuesFromRequest: " + wocontext.elementID() + " - " + wocontext.request().formValueKeys());
+        if(log.isDebugEnabled()) {
+            log.debug("takeValuesFromRequest: " + wocontext.elementID() + " - " + wocontext.request().formValueKeys());
+        }
         for (int index = 0; index < count; index++) {
             _prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);
             super.takeValuesFromRequest(worequest, wocontext);
         }
         if (count > 0) {
             _cleanupAfterIteration(count, wocontext, wocomponent);
-        }
-    }
-    
-    public void takeChildrenValuesFromRequest(WORequest worequest, WOContext wocontext) {
-        if(hasChildrenElements()) {
-            int i = _children.count();
-            wocontext.appendZeroElementIDComponent();
-            for(int j = 0; j < i; j++) {
-                WOElement woelement = (WOElement)_children.objectAtIndex(j);
-//              log.info("takeChildrenValuesFromRequest: " + wocontext.elementID());
-                woelement.takeValuesFromRequest(worequest, wocontext);
-                wocontext.incrementLastElementIDComponent();
-            }
-            
-            wocontext.deleteLastElementIDComponent();
         }
     }
     
@@ -346,7 +336,9 @@ public class ERXWORepetition extends WODynamicGroup {
                 _index._setValueNoValidation(integer, wocomponent);
             }
             wocontext.appendElementIDComponent(indexString);
-//          log.info("invokeAction:" + wocontext.elementID());
+            if(log.isDebugEnabled()) {
+                log.debug("invokeAction:" + wocontext.elementID());
+            }
             woactionresults = super.invokeAction(worequest, wocontext);
             wocontext.deleteLastElementIDComponent();
         } else {
@@ -368,7 +360,7 @@ public class ERXWORepetition extends WODynamicGroup {
         if(_checkHashCodes != null) {
             return _checkHashCodes.booleanValueInComponent(wocomponent);
         }
-        return _checkHashCodesDefault|| true;
+        return _checkHashCodesDefault;
     }
 
     private boolean raiseOnUnmatchedObject(WOComponent wocomponent, WOContext wocontext) {
@@ -382,10 +374,12 @@ public class ERXWORepetition extends WODynamicGroup {
         WOComponent wocomponent = wocontext.component();
         Context context = createContext(wocomponent);
         
-//      log.info("appendToResponse:" + wocontext.elementID());
         int count = _count(context,wocomponent);
         boolean checkHashCodes = checkHashCodes(wocomponent, wocontext);
-        
+        if(log.isDebugEnabled()) {
+            log.debug("appendToResponse:" + wocontext.elementID());
+        }
+       
         for (int index = 0; index < count; index++) {
             _prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);
             super.appendChildrenToResponse(woresponse, wocontext);
