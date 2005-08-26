@@ -30,7 +30,7 @@ public class ERXRecursiveBatchFetching {
      * @param keypaths
      */
     public static void batchFetch(NSArray sourceObjects, NSArray keypaths) {
-        if (sourceObjects.isEmpty()) return;
+        if (sourceObjects.count() == 0) return;
         EOEnterpriseObject sample = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
 
         EOEditingContext ec = sample.editingContext();
