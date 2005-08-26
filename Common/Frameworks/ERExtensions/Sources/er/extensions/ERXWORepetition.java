@@ -11,7 +11,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -27,7 +26,16 @@ import com.webobjects.foundation.NSDictionary;
  * If they don't match when invokeAction is called, the list is searched for 
  * a matching object. If none is found, then either original object is used or - when the property 
  * <code>er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true</code> - an {@link ERXWORepetition.UnmatchedObjectException} is thrown.<br />
- * This feature is turned on if <code>er.extensions.ERXWORepetition.checkHashCodes=true</code>.
+ * This feature is turned on globally if <code>er.extensions.ERXWORepetition.checkHashCodes=true</code> or
+ * on a per-component basis by setting the <code>checkHashCodes</code> binding to true or false.<br />
+ * <em>Known issues:</em><ul>
+ * <li>you can't re-generate your list by creating new objects between the appendToReponse 
+ * and the next takeValuesFromRequest. <br />
+ * When doing this by fetching EOs, this is should not a be problem, as the EO most probably has the same hashCode if the EC stays the same.
+ * </li>
+ * <li>Your moved object should still be in the list.</li>
+ * <li>Form values are currently not fixed, which may lead to NullpointerExceptions or other failures. However, if they happen, 
+ * by default you would have used the wrong values, so it may be arguable that having an error is better...</li>
  * </li>
  * </ul>
  * Note that this implementation adds a small amount of overhead due to the creation of the Context for each
@@ -43,9 +51,11 @@ public class ERXWORepetition extends WODynamicGroup {
     protected WOAssociation _item;
     protected WOAssociation _count;
     protected WOAssociation _index;
+    protected WOAssociation _checkHashCodes;
+    protected WOAssociation _raiseOnUnmatchedObject;
 
-    private static boolean _checkHashCodes = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes");
-    private static boolean _raiseOnUnmatchedObject = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".raiseOnUnmatchedObject");
+    private static boolean _checkHashCodesDefault = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes");
+    private static boolean _raiseOnUnmatchedObjectDefault = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".raiseOnUnmatchedObject");
     
     public static class UnmatchedObjectException extends RuntimeException {
         public UnmatchedObjectException() {
@@ -114,6 +124,8 @@ public class ERXWORepetition extends WODynamicGroup {
         _item  = (WOAssociation) associations.objectForKey("item");
         _count = (WOAssociation) associations.objectForKey("count");
         _index = (WOAssociation) associations.objectForKey("index");
+        _checkHashCodes = (WOAssociation) associations.objectForKey("checkHashCodes");
+        _raiseOnUnmatchedObject = (WOAssociation) associations.objectForKey("raiseOnUnmatchedObject");
         
         if (_list == null && _count == null)
             _failCreation("Missing 'list' or 'count' attribute.");
@@ -145,11 +157,12 @@ public class ERXWORepetition extends WODynamicGroup {
     }
     
     private int hashCodeForObject(Object object) {
-        return (object == null || !(object instanceof EOEnterpriseObject) ? 0 : Math.abs(System.identityHashCode(object)));
+        return (object == null /*|| !(object instanceof EOEnterpriseObject) */? 0 : Math.abs(System.identityHashCode(object)));
     }
     
-    /** Prepares the WOContext for the loop iteration. */
-    protected void _prepareForIterationWithIndex(Context context, int index, WOContext wocontext, WOComponent wocomponent) {
+    /** Prepares the WOContext for the loop iteration. 
+     * @param checkHashCodes */
+    protected void _prepareForIterationWithIndex(Context context, int index, WOContext wocontext, WOComponent wocomponent, boolean checkHashCodes) {
         Object object = null;
         if (_item != null) {
             object = context.objectAtIndex(index);
@@ -160,8 +173,7 @@ public class ERXWORepetition extends WODynamicGroup {
             _index._setValueNoValidation(integer, wocomponent);
         }
         boolean didAppend = false;
-        if(checkHashCodes(wocontext)) {
-            
+        if(checkHashCodes) {
             if(object != null) {
                 int hashCode = hashCodeForObject(object);
                 if(hashCode != 0) {
@@ -169,7 +181,7 @@ public class ERXWORepetition extends WODynamicGroup {
                         wocontext.deleteLastElementIDComponent();
                     }
                     String elementID = index + "-" + hashCode;
-//                  log.info("prepare " +  elementID + "->" + object);
+                    // log.info("prepare " +  elementID + "->" + object);
                     wocontext.appendElementIDComponent(elementID);
                     didAppend = true;
                 }
@@ -247,9 +259,10 @@ public class ERXWORepetition extends WODynamicGroup {
         Context context = createContext(wocomponent);
         
         int count = _count(context, wocomponent);
-//      log.info("TAKEVALUESE:" + wocontext.elementID());
+        boolean checkHashCodes = checkHashCodes(wocomponent, wocontext);
+      // log.info("takeValuesFromRequest: " + wocontext.elementID() + " - " + wocontext.request().formValueKeys());
         for (int index = 0; index < count; index++) {
-            _prepareForIterationWithIndex(context, index, wocontext, wocomponent);
+            _prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);
             super.takeValuesFromRequest(worequest, wocontext);
         }
         if (count > 0) {
@@ -263,7 +276,7 @@ public class ERXWORepetition extends WODynamicGroup {
             wocontext.appendZeroElementIDComponent();
             for(int j = 0; j < i; j++) {
                 WOElement woelement = (WOElement)_children.objectAtIndex(j);
-//              log.info(wocontext.elementID());
+//              log.info("takeChildrenValuesFromRequest: " + wocontext.elementID());
                 woelement.takeValuesFromRequest(worequest, wocontext);
                 wocontext.incrementLastElementIDComponent();
             }
@@ -283,8 +296,10 @@ public class ERXWORepetition extends WODynamicGroup {
         
         int index = 0;
         int hashCode = 0;
+        boolean checkHashCodes = checkHashCodes(wocomponent, wocontext);
+        
         if(indexString != null) {
-            if(checkHashCodes(wocontext)) {
+            if(checkHashCodes) {
                 int sep = indexString.indexOf("-");
                 if(sep > 0) {
                     hashCode = Integer.parseInt(indexString.substring(sep+1));
@@ -299,7 +314,7 @@ public class ERXWORepetition extends WODynamicGroup {
         if(indexString != null) {
             if (_item != null) {
                 Object object = context.objectAtIndex(index);
-                if(checkHashCodes(wocontext)) {
+                if(checkHashCodes) {
                     if(object != null && hashCode != 0) {
                         int objectHashCode = hashCodeForObject(object);
                         if(objectHashCode != hashCode) {
@@ -314,7 +329,7 @@ public class ERXWORepetition extends WODynamicGroup {
                                 }
                             }
                             if(!found) {
-                                if(raiseOnUnmatchedObject(wocontext)) {
+                                if(raiseOnUnmatchedObject(wocomponent, wocontext)) {
                                     throw new UnmatchedObjectException();
                                 }
                                 log.warn("Wrong object: " + objectHashCode + " vs " + hashCode);
@@ -331,7 +346,7 @@ public class ERXWORepetition extends WODynamicGroup {
                 _index._setValueNoValidation(integer, wocomponent);
             }
             wocontext.appendElementIDComponent(indexString);
-//          log.info("INVOKEACTION:" + wocontext.elementID());
+//          log.info("invokeAction:" + wocontext.elementID());
             woactionresults = super.invokeAction(worequest, wocontext);
             wocontext.deleteLastElementIDComponent();
         } else {
@@ -339,7 +354,7 @@ public class ERXWORepetition extends WODynamicGroup {
             int end   = indexString == null ? count : (index + 1);
             
             for (int i = start; i < end && woactionresults == null; i++) {
-                _prepareForIterationWithIndex(context, i, wocontext, wocomponent);
+                _prepareForIterationWithIndex(context, i, wocontext, wocomponent, checkHashCodes);
                 woactionresults = super.invokeAction(worequest, wocontext);
             }
             if (count > 0) {
@@ -349,23 +364,30 @@ public class ERXWORepetition extends WODynamicGroup {
         return woactionresults;
     }
     
-    private boolean checkHashCodes(WOContext wocontext) {
-        return _checkHashCodes;
+    private boolean checkHashCodes(WOComponent wocomponent, WOContext wocontext) {
+        if(_checkHashCodes != null) {
+            return _checkHashCodes.booleanValueInComponent(wocomponent);
+        }
+        return _checkHashCodesDefault|| true;
     }
 
-    private boolean raiseOnUnmatchedObject(WOContext wocontext) {
-        return _raiseOnUnmatchedObject;
+    private boolean raiseOnUnmatchedObject(WOComponent wocomponent, WOContext wocontext) {
+        if(_raiseOnUnmatchedObject != null) {
+            return _raiseOnUnmatchedObject.booleanValueInComponent(wocomponent);
+        }
+        return _raiseOnUnmatchedObjectDefault;
     }
 
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOComponent wocomponent = wocontext.component();
         Context context = createContext(wocomponent);
         
-//      log.info("APPENTOTRESPONSE:" + wocontext.elementID());
+//      log.info("appendToResponse:" + wocontext.elementID());
         int count = _count(context,wocomponent);
+        boolean checkHashCodes = checkHashCodes(wocomponent, wocontext);
         
         for (int index = 0; index < count; index++) {
-            _prepareForIterationWithIndex(context, index, wocontext, wocomponent);
+            _prepareForIterationWithIndex(context, index, wocontext, wocomponent, checkHashCodes);
             super.appendChildrenToResponse(woresponse, wocontext);
         }
         if (count > 0) {
