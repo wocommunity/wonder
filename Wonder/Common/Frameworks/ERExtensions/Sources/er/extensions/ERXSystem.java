@@ -78,8 +78,10 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
         Properties converted = new Properties();
         for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
             String key = (String) e.nextElement();
-            String value = getProperty(key);
-            converted.put(key, value);
+            if(key != null && key.length() > 0) {
+                String value = getProperty(key);
+                converted.put(key, value);
+            }
         }
         return converted;
     }
@@ -88,8 +90,10 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
         Properties ori = System.getProperties();
         for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
             String key = (String) e.nextElement();
-            String value = getProperty(key);
-            ori.put(key, value);
+            if(key != null && key.length() > 0) {
+                    String value = getProperty(key);
+                ori.put(key, value);
+            }
         }
     }
 }
