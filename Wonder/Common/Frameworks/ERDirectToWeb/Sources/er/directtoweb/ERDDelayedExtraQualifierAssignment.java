@@ -43,6 +43,9 @@ import er.extensions.*;
  }
  * This should guarantee that the user can only see the Movies that
  * are made by studios contained in his studio relationship.
+ * If the value is null, then this qualifier will not be added. To search for NULL,
+ * return NSKeyValueCoding.NullValue. 
+ * @author ak
  */
 
 public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
@@ -81,16 +84,7 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
             return null;
         if(objects.count() == 0)
             return new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, null);
-        if(false) {
-            NSMutableArray qualifiers = new NSMutableArray();
-            for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ) {
-                qualifiers.addObject(new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, e.nextElement()));
-            }
-            return new EOOrQualifier(qualifiers);
-        } else {
-            // FIXME ak doesn't work with derived attributes
-            return new ERXPrimaryKeyListQualifier(key, objects);
-        }
+        return new ERXPrimaryKeyListQualifier(key, objects);
     }
 
     protected EOQualifier qualifierForObject(String key, Object object) {
@@ -103,13 +97,18 @@ public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
         for(Enumeration e = dict.keyEnumerator(); e.hasMoreElements(); ) {
             String key = (String)e.nextElement();
             Object value = c.valueForKeyPath((String)dict.objectForKey(key));
-            EOQualifier q;
-            if(value instanceof NSArray) {
-                q = qualifierForArray(key, (NSArray)value);
-            } else {
-                q = qualifierForObject(key, value);
+            if(value != null) {
+                EOQualifier q;
+                if(value instanceof NSArray) {
+                    q = qualifierForArray(key, (NSArray)value);
+                } else {
+                    if(value == NSKeyValueCoding.NullValue) {
+                        value = null;
+                    }
+                    q = qualifierForObject(key, value);
+                }
+                if(q != null) qualifiers.addObject(q);
             }
-            if(q != null) qualifiers.addObject(q);
         }
         if(qualifiers.count() > 0)
             result = new EOAndQualifier(qualifiers);
