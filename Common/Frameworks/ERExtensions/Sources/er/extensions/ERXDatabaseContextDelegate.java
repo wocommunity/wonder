@@ -6,13 +6,30 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.Enumeration;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * This delegate implements several methods from the formal interface
@@ -130,7 +147,27 @@ public class ERXDatabaseContextDelegate {
                 context.refaultObject((EOEnterpriseObject)object, gid, ec);
             }
         }
-        throw new EOObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gid);            
+        String gidString;
+        if(gid instanceof EOKeyGlobalID) {
+            // ak: when you use 24 byte PKs, the output is unreadable otherwise 
+            EOKeyGlobalID kgid = (EOKeyGlobalID)gid;
+            gidString = "<" +  kgid.entityName() + ": [" ;
+            EOEntity entity = ERXEOAccessUtilities.entityNamed(null, kgid.entityName());
+            NSArray pks = entity.primaryKeyAttributes();
+            NSArray values = kgid.keyValuesArray();
+            EOSQLExpression expression = context.database().adaptor().expressionFactory().expressionForEntity(entity);
+            for(int i = 0; i < pks.count(); i++) {
+                Object value = values.objectAtIndex(i);
+                EOAttribute attribute = (EOAttribute) pks.objectAtIndex(i);
+                gidString += attribute.name() + ": \'" +  expression.formatValueForAttribute(value, attribute) + "\'"
+                + (i == pks.count() - 1 ? "" : ", ");
+            }
+            gidString += "] >";
+            
+        } else {
+            gidString = gid.toString();
+        }
+        throw new EOObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString);            
     }
     
     /**
