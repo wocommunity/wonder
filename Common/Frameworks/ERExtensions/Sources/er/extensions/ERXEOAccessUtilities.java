@@ -249,6 +249,20 @@ public class ERXEOAccessUtilities {
             spec.setFetchLimit(0);
             spec.setPromptsAfterFetchLimit(false);
         }
+        if(spec.sortOrderings() != null ) {
+            NSMutableArray ommitedOrderings = new NSMutableArray();
+            for(Enumeration e = spec.sortOrderings().objectEnumerator(); e.hasMoreElements();) {
+                EOSortOrdering ordering = (EOSortOrdering) e.nextElement();
+                if(ordering.key().indexOf(".") > 0) {
+                    ommitedOrderings.addObject(ordering);
+                }
+            }
+            if(ommitedOrderings.count() > 0) {
+                log.warn("Dropped some sort key as key paths are not supported here: " + ommitedOrderings);
+                spec = (EOFetchSpecification)spec.clone();
+                spec.setSortOrderings(ERXArrayUtilities.arrayMinusArray(spec.sortOrderings(), ommitedOrderings));
+           }
+        }
         EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
         String sql = sqlExpr.statement();
         if (end >= 0) {
