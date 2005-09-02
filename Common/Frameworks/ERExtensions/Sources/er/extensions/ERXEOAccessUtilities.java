@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -71,7 +72,8 @@ public class ERXEOAccessUtilities {
      * @return if the entity is a shared entity
      */
     public static boolean entityWithNamedIsShared(EOEditingContext ec, String entityName) {
-        if (entityName == null) throw new IllegalStateException("Entity name argument is null for method: entityWithNamedIsShared");
+        if (entityName == null)
+            throw new IllegalStateException("Entity name argument is null for method: entityWithNamedIsShared");
         EOEntity entity = entityNamed(ec, entityName);
         return entity.sharedObjectFetchSpecificationNames().count() > 0;
     }
@@ -143,7 +145,7 @@ public class ERXEOAccessUtilities {
     // ENHANCEME: Should support the use of bindings
     // ENHANCEME: Could also support the option of using a seperate EOF stack so
     // as to execute
-    //		sql in a non-blocking fashion.
+    // sql in a non-blocking fashion.
     public static void evaluateSQLWithEntity(EOEditingContext ec, EOEntity entity, String exp) {
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
         EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
@@ -420,6 +422,75 @@ public class ERXEOAccessUtilities {
         return aggregate;
     }
 
+    /** oracle 9 has a maximum length of 30 characters for table names, column names and constraint names
+     * Foreign key constraint names are defined like this from the plugin:<br/><br/>
+     * 
+     * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
+     * 
+     * The whole statement looks like this:<br/><br/>
+     * 
+     * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY DEFERRED
+     * 
+     * THIS means that the tablename and the columnname together cannot
+     * be longer than 26 characters.<br/><br/>
+     * 
+     * This method checks each foreign key constraint name and if it is longer than 30 characters its replaced
+     * with a unique name.
+     * 
+     * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
+     */
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName,
+            NSDictionary optionsCreate) {
+        String oldConstraintName = null;
+        int i = 0;
+        String s = createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+        NSArray a = NSArray.componentsSeparatedByString(s, "/");
+        StringBuffer buf = new StringBuffer(s.length());
+        Pattern pattern = Pattern.compile(".*ALTER TABLE .* ADD CONSTRAINT (.*) FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*");
+        Pattern pattern2 = Pattern.compile("(.*ALTER TABLE .* ADD CONSTRAINT ).*( FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*)");
+        String lineSeparator = System.getProperty("line.separator");
+
+        for (Enumeration e = a.objectEnumerator(); e.hasMoreElements();) {
+            String statementLine = (String)e.nextElement();
+            NSArray b = NSArray.componentsSeparatedByString(statementLine, lineSeparator);
+            for (Enumeration e1 = b.objectEnumerator(); e1.hasMoreElements();) {
+                String statement = (String)e1.nextElement();
+                if (!pattern.matcher(statement).matches()) {
+                    buf.append(statement);
+                    buf.append(lineSeparator);
+                    continue;
+                }
+                
+                String constraintName = pattern.matcher(statement).replaceAll("$1");
+                if (constraintName.length() <= 30) {
+                    buf.append(statement);
+                    buf.append(lineSeparator);
+                    continue;
+                }
+                
+                constraintName = "fk" + System.currentTimeMillis() + new NSTimestamp().getNanos();
+                String newConstraintName = i == 0 ? constraintName : constraintName + "_" + i; 
+
+                if (oldConstraintName == null) {
+                    oldConstraintName = constraintName;
+                } else if (oldConstraintName.equals(newConstraintName)) {
+                    constraintName += "_" + ++i;
+                } else {
+                    i = 0;
+                }
+                oldConstraintName = constraintName;
+                
+                String newConstraint = pattern2.matcher(statement).replaceAll("$1"+constraintName+"$2");
+                buf.append(newConstraint);
+                buf.append(lineSeparator);
+            }
+            if (e.hasMoreElements())
+                buf.append("/");
+        }
+        System.out.println("finished!");
+        return buf.toString();
+    }
+    
     /**
      * creates SQL to create tables for the specified Entities. This can be used
      * with EOUtilities rawRowsForSQL method to create the tables.
@@ -434,32 +505,33 @@ public class ERXEOAccessUtilities {
      *            a NSDictionary containing the different options. Possible keys
      *            are
      *            <ol>
-     *            <li>DropTablesKey</li>
+     *            <li>EOSchemaGeneration.DropTablesKey</li>
      *            <ol>
-     *            <li>DropPrimaryKeySupportKey</li>
+     *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey</li>
      *            <ol>
-     *            <li>CreateTablesKey</li>
+     *            <li>EOSchemaGeneration.CreateTablesKey</li>
      *            <ol>
-     *            <li>CreatePrimaryKeySupportKey</li>
+     *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey</li>
      *            <ol>
-     *            <li>PrimaryKeyConstraintsKey</li>
+     *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
      *            <ol>
-     *            <li>ForeignKeyConstraintsKey</li>
+     *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
      *            <ol>
-     *            <li>CreateDatabaseKey</li>
+     *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
      *            <ol>
-     *            <li>DropDatabaseKey</li>
+     *            <li>EOSchemaGeneration.DropDatabaseKey</li>
      *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
      * 
      * @return a <code>String</code> containing SQL statements to create
      *         tables
      */
-    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
-        //get the JDBCAdaptor
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName,
+            NSDictionary optionsCreate) {
+        // get the JDBCAdaptor
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         EOAdaptorContext ac = dc.adaptorContext();
-        //ak: stupid trick to get around having to link to JDBCAdaptor
+        // ak: stupid trick to get around having to link to JDBCAdaptor
         EOSynchronizationFactory sf = (EOSynchronizationFactory) NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac,
                 "adaptor.plugIn.createSynchronizationFactory");
         EOModel m = modelGroup(null).modelNamed(modelName);
@@ -471,7 +543,7 @@ public class ERXEOAccessUtilities {
             while (e.hasMoreElements()) {
                 EOEntity currentEntity = (EOEntity) e.nextElement();
                 if (!(currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
-                    //we do not want to add EOXXXPrototypes entities
+                    // we do not want to add EOXXXPrototypes entities
                     ar.addObject(currentEntity);
                 }
             }
@@ -492,21 +564,21 @@ public class ERXEOAccessUtilities {
      *            the name of the EOModel <br/><br/>This method uses the
      *            following defaults options:
      *            <ol>
-     *            <li>DropTablesKey=YES</li>
+     *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
      *            <ol>
-     *            <li>DropPrimaryKeySupportKey=YES</li>
+     *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES</li>
      *            <ol>
-     *            <li>CreateTablesKey=YES</li>
+     *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
      *            <ol>
-     *            <li>CreatePrimaryKeySupportKey=YES</li>
+     *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
      *            <ol>
-     *            <li>PrimaryKeyConstraintsKey=YES</li>
+     *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
      *            <ol>
-     *            <li>ForeignKeyConstraintsKey=YES</li>
+     *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
      *            <ol>
-     *            <li>CreateDatabaseKey=NO</li>
+     *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
      *            <ol>
-     *            <li>DropDatabaseKey=NO</li>
+     *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
      *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
      * 
@@ -515,15 +587,181 @@ public class ERXEOAccessUtilities {
      */
     public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
         NSMutableDictionary optionsCreate = new NSMutableDictionary();
-        optionsCreate.setObjectForKey("YES", "DropTablesKey");
-        optionsCreate.setObjectForKey("YES", "DropPrimaryKeySupportKey");
-        optionsCreate.setObjectForKey("YES", "CreateTablesKey");
-        optionsCreate.setObjectForKey("YES", "CreatePrimaryKeySupportKey");
-        optionsCreate.setObjectForKey("YES", "PrimaryKeyConstraintsKey");
-        optionsCreate.setObjectForKey("YES", "ForeignKeyConstraintsKey");
-        optionsCreate.setObjectForKey("NO", "CreateDatabaseKey");
-        optionsCreate.setObjectForKey("NO", "DropDatabaseKey");
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropTablesKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropPrimaryKeySupportKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
         return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    }
+
+    public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
+        NSMutableArray a = new NSMutableArray();
+        a.addObject("BLOB");
+        a.addObject("CLOB");
+        return createIndexSQLForEntities(entities, a);
+    }
+
+    public static String createIndexSQLForEntities(NSArray entities) {
+        return createIndexSQLForEntities(entities, null);
+    }
+    public static String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
+        if (externalTypesToIgnore == null) externalTypesToIgnore = NSArray.EmptyArray;
+        if (entities == null || entities.count() == 0) return "";
+        int i = 0;
+        String oldIndexName = null;
+        String lineSeparator = System.getProperty("line.separator");
+        StringBuffer buf = new StringBuffer();
+
+        EOEntity ent = (EOEntity)entities.objectAtIndex(0);
+        String commandSeparator = null;
+        String modelName = ent.model().name();
+        String plugin= ERXSystem.getProperty(modelName + ".DBPlugin");
+        plugin= plugin ==null ? ERXSystem.getProperty("dbConnectPluginGLOBAL") : plugin;
+        if ("Oracle".equals(plugin)) {
+            commandSeparator = lineSeparator + "/" + lineSeparator; 
+        } else {
+            commandSeparator = ";" + lineSeparator;
+        }
+        for (Enumeration entitiesEnum = entities.objectEnumerator(); entitiesEnum.hasMoreElements();) {
+            EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+            // only use this entity if it has its own table
+            if (!entityUsesSeparateTable(entity)) continue;
+            
+            NSDictionary d = entity.userInfo();
+            NSMutableArray usedColumns = new NSMutableArray();
+            for (Enumeration keys = d.keyEnumerator(); keys.hasMoreElements();) {
+                String key = (String) keys.nextElement();
+                if (key.startsWith("index")) {
+                    String numbers = key.substring("index".length());
+                    if (ERXStringUtilities.isDigitsOnly(numbers)) {
+                        String attributeNames = (String) d.objectForKey(key);
+                        if (ERXStringUtilities.stringIsNullOrEmpty(attributeNames)) continue;
+                        String indexName = "c" + System.currentTimeMillis() + new NSTimestamp().getNanos();
+                        String newIndexName = i == 0 ? indexName : indexName + "_" + i; 
+                        if (oldIndexName == null) {
+                            oldIndexName = indexName;
+                        } else if (oldIndexName.equals(newIndexName)) {
+                            indexName += "_" + ++i;
+                        } else {
+                            i = 0;
+                        }
+                        oldIndexName = indexName;
+                        StringBuffer localBuf = new StringBuffer();
+                        StringBuffer columnBuf = new StringBuffer();
+                        boolean validIndex = false;
+                        localBuf.append("create index " + indexName + " on " + entity.externalName() + "(");
+                        for (Enumeration attributes = NSArray.componentsSeparatedByString(attributeNames, ",")
+                                .objectEnumerator(); attributes.hasMoreElements();) {
+                            String attributeName = (String) attributes.nextElement();
+                            attributeName = attributeName.trim();
+                            EOAttribute attribute = entity.attributeNamed(attributeName);
+                            if (attribute == null) {
+                                attribute = attributeWithColumnNameFromEntity(attributeName, entity);
+                            }
+                            if (attribute != null && externalTypesToIgnore.indexOfObject(attribute.externalType()) != NSArray.NotFound) {
+                                continue;
+                            }
+                            validIndex = true;
+                            String columnName = attribute == null ? attributeName : attribute.columnName();
+                            columnBuf.append(columnName);
+                            if (attributes.hasMoreElements()) {
+                                columnBuf.append(", ");
+                            }
+                        }
+                        if (validIndex) {
+                            String l = columnBuf.toString();
+                            if (l.endsWith(", ")) l = l.substring(0, l.length() - 2);
+                            if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
+                                buf.append(localBuf).append(l);
+                                usedColumns.addObject(l);
+                                buf.append(")").append(commandSeparator).append(lineSeparator);
+                            }
+                        }
+                    }
+                } else if (key.equals("additionalIndexes")) {
+                    // this is a space separated list of column or attribute
+                    // names
+                    String value = (String) d.objectForKey(key);
+                    for (Enumeration indexes = NSArray.componentsSeparatedByString(value, " ").objectEnumerator(); indexes
+                            .hasMoreElements();) {
+                        String indexValues = (String) indexes.nextElement();
+                        if (ERXStringUtilities.stringIsNullOrEmpty(indexValues)) continue;
+
+                        // this might be a comma separate list
+                        String indexName = "c"+System.currentTimeMillis()+new NSTimestamp().getNanos();
+                        String newIndexName = i == 0 ? indexName : indexName + "_" + i; 
+                        if (oldIndexName == null) {
+                            oldIndexName = indexName;
+                        } else if (oldIndexName.equals(newIndexName)) {
+                            indexName += "_" + ++i;
+                        } else {
+                            i = 0;
+                        }
+                        oldIndexName = indexName;
+                        
+                        StringBuffer localBuf = new StringBuffer();
+                        StringBuffer columnBuf = new StringBuffer();
+                        boolean validIndex = false;
+                        localBuf.append("create index "+indexName+" on "+entity.externalName()+"(");
+                        for (Enumeration e = NSArray.componentsSeparatedByString(indexValues, ",").objectEnumerator(); e.hasMoreElements();) {
+                            String attributeName = (String)e.nextElement();
+                            attributeName = attributeName.trim();
+                            EOAttribute attribute = entity.attributeNamed(attributeName);
+
+                            if (attribute == null) {
+                                attribute = attributeWithColumnNameFromEntity(attributeName, entity);
+                            }
+                            if (attribute != null && externalTypesToIgnore.indexOfObject(attribute.externalType()) != NSArray.NotFound) {
+                                continue;
+                            }
+                            validIndex = true;
+                            
+                            
+                            String columnName = attribute == null ? attributeName : attribute.columnName();
+                            columnBuf.append(columnName);
+                            if (e.hasMoreElements()) {
+                                columnBuf.append(", ");
+                            }
+                        }
+                        if (validIndex) {
+                            String l = columnBuf.toString();
+                            if (l.endsWith(", ")) l = l.substring(0, l.length() - 2);
+                            if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
+                                buf.append(localBuf).append(l);
+                                usedColumns.addObject(l);
+                                buf.append(")").append(commandSeparator).append(lineSeparator);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return buf.toString();
+    }
+
+    public static boolean entityUsesSeparateTable(EOEntity entity) {
+        if (entity.parentEntity() == null) return true;
+        EOEntity parent = entity.parentEntity();
+        while (parent != null) {
+            if (!entity.externalName().equals(parent.externalName())) return true;
+            entity = parent;
+            parent = entity.parentEntity();
+        }
+        return false;
+    }
+
+    public static EOAttribute attributeWithColumnNameFromEntity(String columnName, EOEntity entity) {
+        for (Enumeration e = entity.attributes().objectEnumerator(); e.hasMoreElements();) {
+            EOAttribute att = (EOAttribute)e.nextElement();
+            if (columnName.equalsIgnoreCase(att.columnName())) {
+                return att;
+            }
+        }
+        return null;
     }
 
     /**
@@ -647,7 +885,7 @@ public class ERXEOAccessUtilities {
         }
         return result;
     }
-    
+
     /**
      * Crude hack to get at the end of a relationship path.
      * @param relationship
@@ -692,8 +930,7 @@ public class ERXEOAccessUtilities {
         result.addObject(attribute);
         return result;
     }
-    
-    
+
     /**
      * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
      */
@@ -778,7 +1015,7 @@ public class ERXEOAccessUtilities {
         }
         return couldClose;
     }
-    
+
     /**
      * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
      * @param entity
@@ -852,7 +1089,7 @@ public class ERXEOAccessUtilities {
         }
         return ret;
     }
- 
+
     public static void writeAdaptorOperationsToDisk(NSArray adaptorOps, File file) throws IOException {
         adaptorOperationsLock.lock();
         try {
@@ -934,7 +1171,7 @@ public class ERXEOAccessUtilities {
         entityNames.addObject(entity.externalName()); 
         return ERXArrayUtilities.arrayWithoutDuplicates(entityNames);
     }
-    
+
     public static NSArray externalNamesForEntityNamed(String entityName, boolean includeParentEntities) {
         return externalNamesForEntity(EOModelGroup.defaultGroup().entityNamed(entityName), includeParentEntities);
     }
@@ -949,4 +1186,5 @@ public class ERXEOAccessUtilities {
     public static EOEntity rootEntityForEntityNamed(String entityName) {
         return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
     }
+
 }
