@@ -110,9 +110,22 @@ InspectImage: WOActiveImage {
 	action = inspectObjectAction;
 }
 
+InspectImage2: WOActiveImage {
+	alt = "Inspect that Object";
+	border = 0;
+	filename = "write-btn.gif";
+	framework = "JavaDirectToWeb";
+	action = editObjectAction;
+}
+
 IsEntityNotWritable: WOConditional {
 	_unroll = true;
 	condition = isEntityInspectable;
+}
+
+IsEntityNotWritable2: WOConditional {
+	_unroll = true;
+	condition = isEntityEditable;
 }
 
 IsPropertySortable: WOConditional {
