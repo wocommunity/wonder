@@ -40,6 +40,10 @@ import er.extensions.*;
  *   ListArticle?__fs=recentArticles&authorName=*foo*
  * will list the articles by calling the fetch spec "recentArticles". When the
  * fetch spec has an "authorName" binding, it is set to "*foo*".
+ *
+ *   ListArticle?__fs=&author.name=*foo*
+ * will list the articles by creating a fetch spec with the supplied attributes. 
+ * When the value contains "*", then it will be regarded as a LIKE query, otherwise as a EQUAL 
  * 
  */
 
@@ -83,25 +87,62 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     /** Retrieves and executes the fetch specification given in the request. */
     public EOFetchSpecification fetchSpecificationFromRequest(String entityName) {
-        String fsName = context().request().stringFormValueForKey(fetchSpecificationKey);
-        if(fsName != null) {
-            EOFetchSpecification fs = EOFetchSpecification.fetchSpecificationNamed(fsName, entityName);
-            NSMutableDictionary bindings = new NSMutableDictionary();
-            Enumeration e = fs.qualifier().bindingKeys().objectEnumerator();
-            while(e.hasMoreElements()) {
-                String key = (String)e.nextElement();
-                String formValue = context().request().stringFormValueForKey(key);
-                if(formValue != null)
-                    bindings.setObjectForKey(formValue,key);
-            }
-
-            if(bindings.count() > 0) {
-                return fs.fetchSpecificationWithQualifierBindings(bindings);
-            } else {
-                return fs;
-            }
-        }
-        return null;
+    	EOFetchSpecification fs = null;
+    	if(context().request().formValueKeys().containsObject(fetchSpecificationKey)) {
+    		String fsName = context().request().stringFormValueForKey(fetchSpecificationKey);
+    		if(ERXStringUtilities.stringIsNullOrEmpty(fsName)) {
+    			EOEntity rootEntity = ERXEOAccessUtilities.entityNamed(session().defaultEditingContext(), entityName);
+    			
+    			NSMutableArray qualifiers = new NSMutableArray();
+    			for(Enumeration e = context().request().formValueKeys().objectEnumerator(); e.hasMoreElements(); ) {
+    				String key = (String)e.nextElement();
+    				EOEntity entity = rootEntity;
+    				EOAttribute attribute = null;
+    				if(key.indexOf(".") > 0) {
+    					String path = ERXStringUtilities.keyPathWithoutLastProperty(key);
+    					key = ERXStringUtilities.lastPropertyKeyInKeyPath(key);
+    					entity = ERXEOAccessUtilities.destinationEntityForKeyPath(rootEntity, path);
+    				}
+    				if(entity != null) {
+    					attribute = entity.attributeNamed(key);
+    					if(attribute != null) {
+    						String stringValue = context().request().stringFormValueForKey(attribute.name());
+    						if(stringValue != null) {
+    							Object value = attribute.newValueForString(stringValue);
+    							NSSelector selector = EOKeyValueQualifier.QualifierOperatorEqual;
+    							if(stringValue.indexOf('*') >= 0) {
+    								selector = EOKeyValueQualifier.QualifierOperatorCaseInsensitiveLike;
+    							}
+    							qualifiers.addObject(new EOKeyValueQualifier(attribute.name(), selector, value));
+    						}
+    					}
+    				}
+    			}
+    			EOQualifier qualifier = null;
+    			if(qualifiers.count() > 0) {
+    				qualifier = new EOAndQualifier(qualifiers);
+    			}
+    			fs = new EOFetchSpecification(entityName, qualifier, null);
+    			fs.setUsesDistinct(true);
+    		} else {
+    			fs = EOFetchSpecification.fetchSpecificationNamed(fsName, entityName);
+    			NSMutableDictionary bindings = new NSMutableDictionary();
+    			Enumeration e = fs.qualifier().bindingKeys().objectEnumerator();
+    			while(e.hasMoreElements()) {
+    				String key = (String)e.nextElement();
+    				String formValue = context().request().stringFormValueForKey(key);
+    				if(formValue != null) {
+    					bindings.setObjectForKey(formValue, key);
+    				}
+    			}
+    			
+    			if(bindings.count() > 0) {
+    				fs = fs.fetchSpecificationWithQualifierBindings(bindings);
+    			}
+    		}
+    	}
+    	log.info(fs);
+    	return fs;
     }
 
     /** @deprecated use primaryKeyFromRequest(EOEditingContext ec, String entityName) */
