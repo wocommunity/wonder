@@ -141,7 +141,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     			}
     		}
     	}
-    	log.info(fs);
     	return fs;
     }
 
