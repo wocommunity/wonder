@@ -41,7 +41,9 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * if true, don't use typecasting. 
      */
-    private boolean _disableTypeCasting = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting");
+    private Boolean disableTypeCasting = null;
+    
+    private Boolean disableBindVariables = null;
     
     /**
      * Holds array of join clauses.
@@ -465,7 +467,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param kp    the keypath associated with the value
      */
     public String sqlStringForValue(Object v, String kp) {
-        if(_disableTypeCasting) {
+        if(disableTypeCasting()) {
             return super.sqlStringForValue(v,kp);
         }
         EOAttribute attribute;
@@ -478,7 +480,11 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
             String s = columnTypeStringForAttribute(attribute);
-            return super.sqlStringForValue(v,kp) + "::" + s;
+            String c = "";
+            if (attribute.className().equals("String") || attribute.className().equals("java.lang.String")) {
+                c = "'";
+            }
+            return new StringBuffer(c).append(super.sqlStringForValue(v,kp)).append("'::").append(s).toString();
         } 
         
         return super.sqlStringForValue(v,kp);
@@ -514,5 +520,35 @@ public class PostgresqlExpression extends JDBCExpression {
             return table1.substring( table1.indexOf( " " ) + 1 );
         }
     }
-        
+    
+    private boolean disableTypeCasting() {
+        if (disableTypeCasting == null) {
+            synchronized (this)  {
+                if (disableTypeCasting == null) {
+                    disableTypeCasting = "true".equals(System.getProperty("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting")) ? Boolean.TRUE : Boolean.FALSE;
+                }
+            }
+        }
+        return disableTypeCasting.booleanValue();
+    }
+
+    private boolean disableBindVariables() {
+        if (disableBindVariables == null) {
+            synchronized (this)  {
+                if (disableBindVariables == null) {
+                    disableBindVariables = "true".equals(System.getProperty("com.webobjects.jdbcadaptor.PostgresqlExpression.disableBindVariables")) ? Boolean.TRUE : Boolean.FALSE;
+                }
+            }
+        }
+        return disableBindVariables.booleanValue();
+    }
+    public boolean useBindVariables() {
+        return !disableBindVariables();
+    }
+    public boolean shouldUseBindVariableForAttribute(EOAttribute arg0) {
+        return !disableBindVariables();
+    }
+    public boolean mustUseBindVariableForAttribute(EOAttribute arg0) {
+        return !disableBindVariables();
+    }
 }
