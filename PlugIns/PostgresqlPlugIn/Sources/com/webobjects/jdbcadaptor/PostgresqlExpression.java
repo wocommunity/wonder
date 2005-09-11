@@ -484,7 +484,7 @@ public class PostgresqlExpression extends JDBCExpression {
             if (attribute.className().equals("String") || attribute.className().equals("java.lang.String")) {
                 c = "'";
             }
-            return new StringBuffer(c).append(super.sqlStringForValue(v,kp)).append("'::").append(s).toString();
+            return new StringBuffer(c).append(super.sqlStringForValue(v,kp)).append(c).append("::").append(s).toString();
         } 
         
         return super.sqlStringForValue(v,kp);
