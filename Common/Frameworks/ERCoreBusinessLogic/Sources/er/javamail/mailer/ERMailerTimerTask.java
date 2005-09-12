@@ -24,6 +24,12 @@ public class ERMailerTimerTask extends TimerTask {
      */
     public void run() {
         if (log.isDebugEnabled()) log.debug("Timer firing to process outgoing mail.");
-        ERMailer.instance().processOutgoingMail();
+
+        try {
+            ERMailer.instance().processOutgoingMail();
+        }
+        catch ( Exception e ) {
+            log.error("run(): caught exception: " + e);    
+        }
     }
 }
