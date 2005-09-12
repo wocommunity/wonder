@@ -7,3 +7,5 @@ ant.classpaths.wo.wosystemroot
 ant.classpaths.wo.wolocalroot
 ant.classpaths.user.home
 woproject
+.settings
+build
