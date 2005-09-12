@@ -9,3 +9,5 @@ ant.classpaths.user.home
 woproject
 .settings
 build
+.WOLips
+ERDirectToWeb.xcodeproj
