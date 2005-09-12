@@ -868,7 +868,7 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Styles.plist;
-			path = ../../../Volumes/Macintosh/Users/max/Development/Wonder/Common/Frameworks/ERExcelLook/Resources/Styles.plist;
+			path = Resources/Styles.plist;
 			refType = 3;
 		};
 		502010C8063DD3BE008A37F5 = {
@@ -966,7 +966,7 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = d2w.d2wmodel;
-			path = ../../../Volumes/Macintosh/Users/max/Development/Wonder/Common/Frameworks/ERExcelLook/Resources/d2w.d2wmodel;
+			path = Resources/d2w.d2wmodel;
 			refType = 3;
 		};
 		50201CE4063DFB7F008A37F5 = {
