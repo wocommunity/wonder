@@ -13,6 +13,9 @@ import javax.xml.parsers.*;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.w3c.dom.*;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.webobjects.foundation.*;
 
@@ -231,6 +234,7 @@ public class EGSimpleTableParser {
     private void parseNode(Node node) {
     	String tagName = node.getLocalName().toLowerCase();
     	if("font".equals(tagName)) {
+    		parseFont(node);
     	} else if("style".equals(tagName)) {
     		parseStyle(node);
     	} else if("table".equals(tagName)) {
@@ -250,7 +254,7 @@ public class EGSimpleTableParser {
     private void parseStyle(Node node) {
 		String id =  nodeValueForKey(node, "id", null);
 		if(id != null) {
-			// we're only handling stalyes with IDs
+			// we're only handling styles with IDs
 			NSMutableDictionary dict = new NSMutableDictionary();
 			
 			String extendsID = nodeValueForKey(node, "extends", null);
@@ -341,10 +345,10 @@ public class EGSimpleTableParser {
     					
     					String cellTypeName = dictValueForKey(cellDict, "cellType", "CELL_TYPE_NUMERIC");
     					String cellFormatName = dictValueForKey(cellDict, "cellFormat", "0.00;-;-0.00");
-
-                                        if(log.isDebugEnabled()) {
-                                            log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
-                                        }
+    					
+    					if(log.isDebugEnabled()) {
+    						log.debug(value + ": " + cellFormatName + "-" + cellTypeName);
+    					}
     					Integer cellType = (Integer)ERXKeyValueCodingUtilities.classValueForKey(HSSFCell.class, cellTypeName);
     					
     					switch(cellType.intValue()) {
@@ -357,13 +361,14 @@ public class EGSimpleTableParser {
     								if(value != null) {
     									NSNumberFormatter f = ERXNumberFormatter.numberFormatterForPattern(cellFormatName);
     									Number numberValue = (Number)f.parseObject(value.toString());
-    									log.debug(f.pattern() + ": " + numberValue);
+    									if(log.isDebugEnabled()) {
+    										log.debug(f.pattern() + ": " + numberValue);
+    									}
     									if(numberValue != null) {
     										cell.setCellValue(numberValue.doubleValue());
     									}
     								}
-    								cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-    								break;
+     								break;
     							} catch (ParseException e1) {
     								log.info(e1);
     							}
@@ -454,30 +459,38 @@ public class EGSimpleTableParser {
 			"leftBorderColor","rightBorderColor","topBorderColor","bottomBorderColor",
 			"borderLeft","borderRight","borderTop","borderBottom",
 			"fillBackgroundColor","fillPattern",
-			"rotation","indention",
+			"rotation","indention", "wrapText",
 			"alignment","verticalAlignment","format"
 	});
     
     private HSSFCellStyle styleWithDictionary(NSDictionary dict) {
-    	String cellStyleName = dictValueForKey(dict, "class", null);
+    	String cellClass = dictValueForKey(dict, "class", null);
     	
-    	log.debug("before - " + cellStyleName + ": " + dict);
+    	if(log.isDebugEnabled()) {
+        	log.debug("before - " + cellClass + ": " + dict);
+    	}
     	dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(dict, STYLE_KEYS);
-        log.debug(cellStyleName + ": " + dict);
-        if(cellStyleName != null) {
-            String styles[] = cellStyleName.split(" +");
-            NSMutableDictionary styleDict = new NSMutableDictionary();
-            for (int i = 0; i < styles.length; i++) {
-                String string = styles[i];
-                NSDictionary immutableStyleDict = ((NSDictionary)_styleDicts.objectForKey(string));
-                if(immutableStyleDict == null) {
-                    throw new IllegalArgumentException("Cell Style not found: " + cellStyleName);
-                }
-            }
-            styleDict.addEntriesFromDictionary(dict);
-            dict = styleDict.immutableClone();
-        }
-    	
+    	if(cellClass != null) {
+    		// first, we pull in the default named styles, remembering
+    		// we can have multiple styles like 'class="header bold"
+    		String styles[] = cellClass.split(" +");
+    		NSMutableDictionary stylesFromClass = new NSMutableDictionary();
+    		for (int i = 0; i < styles.length; i++) {
+    			String string = styles[i];
+    			NSDictionary current = ((NSDictionary)_styleDicts.objectForKey(string));
+    			if(current == null) {
+    				throw new IllegalArgumentException("Cell Style not found: " + cellClass);
+    			} else {
+    				stylesFromClass.addEntriesFromDictionary(current);
+    			}
+    		}
+    		stylesFromClass = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(stylesFromClass, STYLE_KEYS).mutableClone();
+    		stylesFromClass.addEntriesFromDictionary(dict);
+    		dict = stylesFromClass.immutableClone();
+    	}
+    	if(log.isDebugEnabled()) {
+        	log.debug("after - " + cellClass + ": " + dict);
+    	}
     	
     	HSSFCellStyle cellStyle = (HSSFCellStyle)_styles.objectForKey(dict);
     	if(cellStyle == null) {
@@ -522,7 +535,7 @@ public class EGSimpleTableParser {
     		
     		_styles.setObjectForKey(cellStyle, dict);
                 if(log.isDebugEnabled()) {
-                    log.debug("Created style (" + cellStyleName + "): " + dict);
+                    log.debug("Created style (" + cellClass + "): " + dict);
                 }
     	}
     	return cellStyle;
