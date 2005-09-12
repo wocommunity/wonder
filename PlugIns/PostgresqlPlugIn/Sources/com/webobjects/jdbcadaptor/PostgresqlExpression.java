@@ -480,11 +480,17 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
             String s = columnTypeStringForAttribute(attribute);
-            String c = "";
-            if (attribute.className().equals("String") || attribute.className().equals("java.lang.String")) {
-                c = "'";
+            if (!shouldUseBindVariableForAttribute(attribute)) {
+                String c = "";
+                if (attribute.className().endsWith("String") || 
+                        attribute.externalType().indexOf("char") > -1
+                        ) {
+                    c = "'";
+                }
+                return c + super.sqlStringForValue(v,kp) + c + "::" + s;
+            } else {
+                return super.sqlStringForValue(v, kp) + "::" + s;
             }
-            return new StringBuffer(c).append(super.sqlStringForValue(v,kp)).append(c).append("::").append(s).toString();
         } 
         
         return super.sqlStringForValue(v,kp);
@@ -546,9 +552,17 @@ public class PostgresqlExpression extends JDBCExpression {
         return !disableBindVariables();
     }
     public boolean shouldUseBindVariableForAttribute(EOAttribute arg0) {
-        return !disableBindVariables();
+        return (!disableBindVariables()) || 
+        arg0.className().equals("com.webobjects.foundation.NSData") ||
+        arg0.externalType().equals("bytea") ||
+        arg0.externalType().equals("bit")
+        ;
     }
     public boolean mustUseBindVariableForAttribute(EOAttribute arg0) {
-        return !disableBindVariables();
+        return (!disableBindVariables()) || 
+        arg0.className().equals("com.webobjects.foundation.NSData") ||
+        arg0.externalType().equals("bytea") ||
+        arg0.externalType().equals("bit")
+        ;
     }
 }
