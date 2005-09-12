@@ -11,7 +11,7 @@ import com.webobjects.eocontrol.*;
 import er.extensions.*;
 
 /**
- * Principal class of the framework. Not rgistered yet because it doesn't do anything yet.
+ * Principal class of the framework. Not registered yet because it doesn't do anything yet.
  */
 public class ERExcelLook {
 
