@@ -7,3 +7,5 @@ ant.classpaths.wo.wolocalroot
 ant.classpaths.user.home
 bin
 woproject
+.WOLips
+build
