@@ -28,7 +28,6 @@ public class ERExcelListPage extends ERD2WListPage {
     			excelStyleFrameworkName = "app";
     		}
     		styles = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework(excelStyleFileName, excelStyleFrameworkName);
-    		log.info(styles);
     	}  
     	if(styles == null) {
     		styles = ERExcelLook.styles();
