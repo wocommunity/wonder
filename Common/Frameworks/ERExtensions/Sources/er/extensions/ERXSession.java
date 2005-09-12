@@ -566,7 +566,7 @@ public class ERXSession extends WOSession implements Serializable {
     
                 public Object valueForKeyPath(String arg0) {
                     Object theObject = objectForKey(arg0);
-                    if (theObject == null) {
+                    if (theObject == null && arg0.indexOf(".") > -1) {
                         String key = "";
                         String oriKey = arg0;
                         do {
