@@ -10,6 +10,7 @@
             selectorName = "isEqualTo:"; 
             value = rtbs; 
         }; 
+        refreshesRefetchedObjects = YES; 
     }; 
     ripeMessages = {
         class = EOFetchSpecification; 
@@ -33,5 +34,6 @@
                 }
             ); 
         }; 
+        refreshesRefetchedObjects = YES; 
     }; 
 }
