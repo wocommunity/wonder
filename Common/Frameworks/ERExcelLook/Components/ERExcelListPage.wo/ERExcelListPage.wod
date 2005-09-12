@@ -17,8 +17,8 @@ AttributeLabelCell: WOGenericContainer {
 	class = d2wContext.excelClassForPropertyName;
 	elementName = "td";
 	cellType = d2wContext.excelCellTypeForPropertyName;
-    width = d2wContext.excelCellWidthForHeader;
-    height = d2wContext.excelCellHeightForHeader;
+    width = d2wContext.excelCellWidthForPropertyName;
+    height = d2wContext.excelCellHeightForPropertyName;
 }
 
 AttributeRepetition: WORepetition {

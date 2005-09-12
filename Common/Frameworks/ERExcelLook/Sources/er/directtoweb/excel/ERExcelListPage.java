@@ -32,7 +32,7 @@ public class ERExcelListPage extends ERD2WListPage {
     	if(styles == null) {
     		styles = ERExcelLook.styles();
     	}
-     	return styles; 
+    	return styles; 
     }
     
     public NSArray objectsForSheet() {
