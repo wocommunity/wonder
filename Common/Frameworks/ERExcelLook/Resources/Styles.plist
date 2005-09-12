@@ -52,6 +52,7 @@ Styles:
         "bold" = {
             font="bold";
             alignment="ALIGN_LEFT";
+            wrapText="true";
         };
     };
 }
