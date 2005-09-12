@@ -155,10 +155,10 @@ public class ERXLongPrimaryKeyFactory {
             con.commit();
             return new Long(pk);
         } catch (SQLException e) {
-            String s = e.getMessage();
+            String s = e.getMessage().toLowerCase();
             if ((s.indexOf("error code 116") != -1) || (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1) || 
                     // this is for Oracle
-                    s.indexOf("ORA-00942: table or view does not exist") != -1) {
+                    s.indexOf("ora-00942") != -1) {
                 try {
                     con.rollback();
                     log.info("creating pk table");
