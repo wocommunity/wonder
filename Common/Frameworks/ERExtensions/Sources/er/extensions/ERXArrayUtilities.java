@@ -533,7 +533,44 @@ public class ERXArrayUtilities extends Object {
         
         return index >= 0 ? array.objectAtIndex(index) : null;
     }
-    
+
+    /**
+     * Walks over an array and returns an array of objects from that array that have a particular
+     * value for a particular key path.  Treats null and NSKeyValueCoding.NullValue equivalently.
+     * Any NSKeyValueCoding.NullValue objects in the array are skipped.  If array is null or empty,
+     * an empty array is returned.
+     *
+     * @param array array to search
+     * @param valueToLookFor value to look for
+     * @param keyPath key path to apply on each object on the array to compare against valueToLookFor
+     * @return an array of matching objects
+     */
+    public static NSArray objectsWithValueForKeyPath(final NSArray array, final Object valueToLookFor, final String keyPath) {
+        final boolean valueToLookForIsNull = valueToLookFor == null || valueToLookFor == NSKeyValueCoding.NullValue;
+        NSArray result = null;
+
+        if ( array != null && array.count() > 0 ) {
+            final NSMutableArray a = new NSMutableArray();
+            final Enumeration arrayEnumerator = array.objectEnumerator();
+
+            while ( arrayEnumerator.hasMoreElements() ) {
+                final Object theObject = arrayEnumerator.nextElement();
+
+                if ( theObject != NSKeyValueCoding.NullValue ) {
+                    final Object theValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theObject, keyPath);
+                    final boolean theValueIsNull = theValue == null || theValue == NSKeyValueCoding.NullValue;
+
+                    if ( (theValueIsNull && valueToLookForIsNull) || ERXExtensions.safeEquals(valueToLookFor, theValue) )
+                        a.addObject(theObject);
+                }
+            }
+
+            result = a.immutableClone();
+        }
+
+        return result != null ? result : NSArray.EmptyArray;
+    }
+
     /**
      * Locates an object within an array using a custom equality check provided as an ERXEqualator.  This
      * is useful if you have an array of EOs and want to find a particular EO in it without regard to editing
@@ -1399,4 +1436,81 @@ public class ERXArrayUtilities extends Object {
         for (int i = a.count(); i-- > 0; b[i] = a.objectAtIndex(i).toString());
         return b;
     }
+
+    /**
+     * Calls dictionaryOfObjectsIndexedByKeyPathThrowOnCollision() passing false for throwOnCollision.
+     */
+    public static NSDictionary dictionaryOfObjectsIndexedByKeyPath(final NSArray array, final String keyPath) {
+        return dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(array, keyPath, false);
+    }
+
+    /**
+     * Given an array of objects, returns a dictionary mapping the value by performing valueForKeyPath on each object in
+     * the array to the object in the array.  This is similar in concept to but different in semantic from
+     * <code>arrayGroupedByKeyPath()</code>.  That method is focused on multiple objects returning the same value for the keypath
+     * and, so, objects are grouped into arrays.  That is not particularly useful when there aren't collisions in the array or when
+     * you don't care if there are collisions.  For example, with a CreditCard EO object, one could rely on the paymentType.name value
+     * to be unique and thus you're more interested in being able to rapidly get to the EO.  <code>arrayGroupedByKeyPath()</code>
+     * would require either flattening out the arrays or navigating them everytime.
+     *
+     * @param array array to index
+     * @param keyPath keyPath to index.  if any object returns null of NSKeyValueCoding.NullValue for this keyPath, the
+     *        object is not put into the resulting dictionary.
+     * @param throwOnCollision if true and two objects in the array have the same non-null (or non-NullValue) value for keyPath,
+     *        an exception is thrown.  if false, the last object in the array wins.
+     * @return a dictionary indexing the given array.  if array is null, an empty dictionary is returned.
+     */
+    public static NSDictionary dictionaryOfObjectsIndexedByKeyPathThrowOnCollision(final NSArray array, final String keyPath, final boolean throwOnCollision) {
+        final NSMutableDictionary result = new NSMutableDictionary();
+        final Enumeration e = array.objectEnumerator();
+
+        while ( e.hasMoreElements() ) {
+            final Object theObject = e.nextElement();
+            final Object theKey = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theObject, keyPath);
+
+            if ( theKey != null && theKey != NSKeyValueCoding.NullValue ) {
+                final Object existingObject = throwOnCollision ? result.objectForKey(theKey) : null;
+
+                if ( existingObject != null ) {
+                    throw new RuntimeException("Collision with value ('" + theKey + "') for keyPath '" + keyPath + "'.  Initial object: '" +
+                                               existingObject + ", subsequent object: " + theObject);
+                }
+
+                result.setObjectForKey(theObject, theKey);
+            }
+        }
+
+        return result.immutableClone();
+    }
+
+    /**
+     * Prunes an array for only instances of the given class.
+     *
+     * @param array array to process
+     * @param aClass class to use.  null results in the result being a copy of the <code>array</code>.
+     * @return an array which is a subset of the <code>array</code> where each object in the result is
+     *         an instance of <code>aClass</code>.
+     */
+    public static NSArray arrayBySelectingInstancesOfClass(final NSArray array, final Class aClass) {
+        NSArray result = null;
+
+        if ( array != null && array.count() > 0 ) {
+            final NSMutableArray a = new NSMutableArray();
+            final Enumeration e = array.objectEnumerator();
+
+            while ( e.hasMoreElements() ) {
+                final Object theObject = e.nextElement();
+
+                if ( aClass == null || aClass.isInstance(theObject) )
+                    a.addObject(theObject);
+            }
+
+            if ( a.count() > 0 )
+                result = a.immutableClone();
+        }
+
+        return result != null ? result : NSArray.EmptyArray;
+    }
+
+
 }
