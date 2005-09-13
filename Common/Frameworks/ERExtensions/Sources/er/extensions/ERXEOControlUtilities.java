@@ -871,6 +871,21 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Calls <code>objectsWithQualifierFormat(ec, entityName, qualifierFormat, args, prefetchKeyPaths, includeNewObjects, false)</code>
+     * <p>
+     * That is, passes false for <code>includeNewObjectsInParentEditingContexts</code>.  This method exists
+     * to maintain API compatability.
+     */
+    public static NSArray objectsWithQualifierFormat(EOEditingContext ec,
+                                                     String entityName,
+                                                     String qualifierFormat,
+                                                     NSArray args,
+                                                     NSArray prefetchKeyPaths,
+                                                     boolean includeNewObjects) {
+        return objectsWithQualifierFormat(ec, entityName, qualifierFormat, args, prefetchKeyPaths, includeNewObjects, false);
+    }
+    
+    /**
      * Enhanced version of the utility method found in EOUtilities. Adds
      * support for including newly created objects in the fetch as well
      * as prefetching key paths.
@@ -880,6 +895,7 @@ public class ERXEOControlUtilities {
      * @param args qualifier arguments
      * @param prefetchKeyPaths prefetching key paths
      * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContexts option to include newly inserted objects in parent editing contexts
      * @return array of objects matching the constructed qualifier
      */
     public static NSArray objectsWithQualifierFormat(EOEditingContext ec,
@@ -887,21 +903,38 @@ public class ERXEOControlUtilities {
                                                      String qualifierFormat,
                                                      NSArray args,
                                                      NSArray prefetchKeyPaths,
-                                                     boolean includeNewObjects) {
+                                                     boolean includeNewObjects,
+                                                     boolean includeNewObjectsInParentEditingContexts) {
         EOQualifier qual = EOQualifier.qualifierWithQualifierFormat(qualifierFormat, args);
-        return objectsWithQualifier(ec, entityName, qual, prefetchKeyPaths, includeNewObjects);
+        return objectsWithQualifier(ec, entityName, qual, prefetchKeyPaths, includeNewObjects, includeNewObjectsInParentEditingContexts);
     }
 
     /**
+     * Calls objectsWithQualifier(ec, entityName, qualifier, prefetchKeyPaths, includeNewObjects, false).
+     * <p>
+     * That is, passes false for <code>includeNewObjectsInParentEditingContexts</code>.  This method
+     * exists to maintain API compatability.
+     */
+    public static NSArray objectsWithQualifier(EOEditingContext ec,
+                                               String entityName,
+                                               EOQualifier qualifier,
+                                               NSArray prefetchKeyPaths,
+                                               boolean includeNewObjects) {
+        return objectsWithQualifier(ec, entityName, qualifier, prefetchKeyPaths, includeNewObjects, false);
+    }
+    
+    /**
      * Utility method used to fetch an array of objects given a qualifier. Also
-     * has support for filtering the newly inserted objects as well as specifying
-     * prefetching key paths.
+     * has support for filtering the newly inserted objects in the passed editing context or
+     * any parent editing contexts as well as specifying prefetching key paths.
      * @param ec editing context to fetch it into
      * @param entityName name of the entity
-     * @param qualifierFormat format of the qualifier string
-     * @param args qualifier arguments
+     * @param qualifier qualifier
      * @param prefetchKeyPaths prefetching key paths
      * @param includeNewObjects option to include newly inserted objects in the result set
+     * @param includeNewObjectsInParentEditingContexts option to include newly inserted objects in parent editing
+     *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
+     *        qualifier are collected and faulted down through all parent editing contexts of ec.
      * @return array of objects matching the constructed qualifier
      */
     // ENHANCEME: This should handle entity inheritance for in memory filtering
@@ -909,8 +942,10 @@ public class ERXEOControlUtilities {
                                                String entityName,
                                                EOQualifier qualifier,
                                                NSArray prefetchKeyPaths,
-                                               boolean includeNewObjects) {
+                                               boolean includeNewObjects,
+                                               boolean includeNewObjectsInParentEditingContexts) {
         NSMutableArray result = null;
+
         if (includeNewObjects) {
             NSDictionary insertedObjects = ERXArrayUtilities.arrayGroupedByKeyPath(ec.insertedObjects(), "entityName");
             NSArray insertedObjectsForEntity = (NSArray)insertedObjects.objectForKey(entityName);
@@ -921,6 +956,45 @@ public class ERXEOControlUtilities {
                     result = inMemory.mutableClone();
             }
         }
+
+        if ( includeNewObjectsInParentEditingContexts && ! (ec.parentObjectStore() instanceof EOObjectStoreCoordinator) ) {
+            final NSMutableArray parentEditingContexts = new NSMutableArray();
+            EOObjectStore objectStore = ec.parentObjectStore();
+            NSArray objects = NSArray.EmptyArray;
+            int i;
+
+            while ( ! (objectStore instanceof EOObjectStoreCoordinator) ) {
+                final EOEditingContext theEC = (EOEditingContext)objectStore;
+
+                parentEditingContexts.addObject(theEC);
+                objectStore = theEC.parentObjectStore();
+            }
+
+            i = parentEditingContexts.count();
+
+            while ( i-- > 0 ) {
+                final EOEditingContext theEC = (EOEditingContext)parentEditingContexts.objectAtIndex(i);
+                final NSArray insertedObjects = ERXArrayUtilities.objectsWithValueForKeyPath(theEC.insertedObjects(), entityName, "entityName");
+                NSArray objectsMatchingQualifier = NSArray.EmptyArray;
+
+                if ( insertedObjects != null && insertedObjects.count() > 0 )
+                    objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, qualifier);
+
+                // fault the previous batch down
+                objects = EOUtilities.localInstancesOfObjects(theEC, objects);
+
+                if ( objectsMatchingQualifier.count() > 0 )
+                    objects = objects.arrayByAddingObjectsFromArray(objectsMatchingQualifier);
+            }
+
+            if ( objects.count() > 0 ) {
+                objects = EOUtilities.localInstancesOfObjects(ec, objects);
+                if ( result == null )
+                    result = new NSMutableArray();
+                result.addObjectsFromArray(objects);
+            }
+        }
+
         EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
         fs.setPrefetchingRelationshipKeyPaths(prefetchKeyPaths);
         NSArray fromDb = ec.objectsWithFetchSpecification(fs);
@@ -967,7 +1041,7 @@ public class ERXEOControlUtilities {
      * @return a NSArray of EOGlobalIDs
      */
     public static NSArray globalIDsForObjects(NSArray eos) {
-        int c = eos.count();
+        int c = eos != null ? eos.count() : 0;
         NSMutableArray ids = new NSMutableArray(c);
         for (int i = 0; i < c; i++) {
             EOEnterpriseObject eo = (EOEnterpriseObject)eos.objectAtIndex(i);
@@ -977,6 +1051,154 @@ public class ERXEOControlUtilities {
         }
         return ids;
     }
+    
+    /**
+     * Aggregate method for <code>EOEditingContext.objectForGlobalID()</code>.
+     *
+     * @see com.webobjects.eocontrol.EOEditingContext#objectForGlobalID(EOGlobalID)
+     */
+    public static NSArray objectsForGlobalIDs(final EOEditingContext ec, final NSArray globalIDs) {
+        NSArray result = null;
+        
+        if ( globalIDs != null && globalIDs.count() > 0 ) {
+            final NSMutableArray a = new NSMutableArray();
+            final Enumeration e = globalIDs.objectEnumerator();
+            
+            while ( e.hasMoreElements() ) {
+                final EOGlobalID theGID = (EOGlobalID)e.nextElement();
+                final EOEnterpriseObject theObject = ec.objectForGlobalID(theGID);
+                
+                if ( theObject != null )
+                    a.addObject(theObject);
+            }
+            
+            result = a.immutableClone();
+        }
+        
+        return result != null ? result : NSArray.EmptyArray;
+    }
+    
+    /**
+     * Smarter version of normal <code>saveChanges()</code> method that corrects issues with
+     * <code>flushCaches()</code> needing to be called on objects in the parent context when
+     * committing the child context to the parent. If the editing context is a child of the object-store
+     * coordinator---that is, it's not a nested context---this method
+     * behaves exactly the same as <code>EOEditingContext.saveChanges()</code>. Otherwise,
+     * this method looks over the changed objects in <code>ec</code> (<code>updatedObjects()</code>,
+     * <code>insertedObjects()</code> and <code>deletedObjects()</code>).  The changed objects lists
+     * are filtered for instances of <code>ERXGenericRecord</code>.  The order of operations then becomes:
+     *
+     * <ol>
+     * <li> Call <code>processRecentChanges()</code> on the child context to propogate changes.
+     * <li> Lock the parent editing context.
+     * <li> On the deleted objects list in the child editing context, call <code>flushCaches()</code> on
+     *      each corresponding EO in the parent context.
+     * <li> Unlock the parent editing context.
+     * <li> Call <code>saveChanges()</code> on the child, commiting the child changes to the
+     *      parent editing context.
+     * <li> Lock the parent editing context.
+     * <li> On the objects that were updated or inserted in the child, call <code>flushCaches()</code>
+     *      on each corresponding EO in the parent context.
+     * <li> Unlock the parent editing context.
+     * </ol>
+     *
+     * <p>
+     *
+     * The order of operations is a bit peculiar: flush deletes, save, flush inserts and updates.  This
+     * is done because deletes must be flushed because there may be dependant computed state that needs to
+     * be reset.  But following the delete being committed, the relationships to other objects cannot be
+     * relied upon so it isn't reliable to call flushCaches after the commit.  It's not entirely correct to
+     * flush the deletes like this, but it's the best we can do.
+     *
+     * <p>
+     *
+     * This works around an issue in EOF that we don't get a merge notification when a child
+     * EC saves to its parent.  Because there's no merge notification, <code>flushCaches()</code>
+     * isn't called by the EC delegate and we're essentially screwed vis-a-vis resetting computed
+     * state.
+     *
+     * <p>
+     *
+     * This method assumes that the <code>ec</code> is locked before this method is invoked, but this
+     * method will take the lock on the parent editing context if the <code>ec</code> is a
+     * nested context before and after the save in order to get the objects and to flush caches on
+     * them.
+     *
+     * @param ec editing context to save
+     */
+    public static void saveChanges(final EOEditingContext ec) {
+        final EOObjectStore parentObjectStore = ec.parentObjectStore();
+        final boolean isNestedEditingContext = ! (parentObjectStore instanceof EOObjectStoreCoordinator);
+        final EOEditingContext parentEC = isNestedEditingContext ? (EOEditingContext)parentObjectStore : null;
+        NSArray insertedObjectGIDs = null;
+        NSArray updatedObjectGIDs = null;
+        
+        // we don't need to lock ec because we can assume that we're locked before this method
+        // is called, but we do need to lock our parent
+        
+        if ( isNestedEditingContext ) {
+            ec.processRecentChanges();  // need to do this to make sure the updated objects list is current
+            
+            try {
+                parentEC.lock();
+                
+                final NSArray insertedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.insertedObjects(), ERXGenericRecord.class);
+                final NSArray updatedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.updatedObjects(), ERXGenericRecord.class);
+                final NSArray deletedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.deletedObjects(), ERXGenericRecord.class);
+                
+                insertedObjectGIDs = globalIDsForObjects(insertedFlushableObjects);
+                updatedObjectGIDs = globalIDsForObjects(updatedFlushableObjects);
+                
+                if ( deletedFlushableObjects.count() > 0 ) {
+                    final NSArray deletedFlushableGIDs = globalIDsForObjects(deletedFlushableObjects);
+                    final NSArray deletedObjectsToFlushInParent = objectsForGlobalIDs(parentEC, deletedFlushableGIDs);
+                    
+                    if ( log.isDebugEnabled() ) {
+                        log.debug("saveChanges: before save to child context " + ec +
+                                  ", need to flush caches on deleted objects in parent context " + parentEC + ": " + deletedObjectsToFlushInParent);
+                    }
+                    deletedObjectsToFlushInParent.makeObjectsPerformSelector(ERXGenericRecord.FlushCachesSelector, null);
+                }
+            }
+            finally {
+                parentEC.unlock();
+            }
+        }
+        
+        ec.saveChanges();
+        
+        if ( isNestedEditingContext ) {
+            // we can assume insertedObjectGIDs and updatedObjectGIDs are non null.  if we execute this branch, they're at
+            // least empty arrays.
+            
+            if ( insertedObjectGIDs.count() > 0 || updatedObjectGIDs.count() > 0 ) {
+                try {
+                    parentEC.lock();
+                    
+                    final NSArray insertedObjectsInParent = objectsForGlobalIDs(parentEC, insertedObjectGIDs);
+                    final NSArray updatedObjectsInParent = objectsForGlobalIDs(parentEC, updatedObjectGIDs);
+                    
+                    if ( log.isDebugEnabled() ) {
+                        if ( insertedObjectsInParent.count() > 0 ) {
+                            log.debug("saveChanges: before save to child context " + ec +
+                                      ", need to flush caches on inserted objects in parent context " + parentEC + ": " + insertedObjectsInParent);
+                        }
+                        if ( updatedObjectsInParent.count() > 0 ) {
+                            log.debug("saveChanges: before save to child context " + ec +
+                                      ", need to flush caches on updated objects in parent context " + parentEC + ": " + updatedObjectsInParent);
+                        }
+                    }
+                    
+                    insertedObjectsInParent.makeObjectsPerformSelector(ERXGenericRecord.FlushCachesSelector, null);
+                    updatedObjectsInParent.makeObjectsPerformSelector(ERXGenericRecord.FlushCachesSelector, null);
+                }
+                finally {
+                    parentEC.unlock();
+                }
+            }
+        }
+    }
+    
 
     /** returns a NSArray containing EOEnterpriseObjects (actually faults...) for the provided EOGlobalIDs.
      * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
