@@ -91,6 +91,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
     public final static String KEY_MARKER="** KEY_MARKER **";
 
+    public static final NSSelector FlushCachesSelector = new NSSelector("flushCaches");
+
     /**
      * Clazz object implementation for ERXGenericRecord. See
      * {@link EOEnterpriseObjectClazz} for more information on this
