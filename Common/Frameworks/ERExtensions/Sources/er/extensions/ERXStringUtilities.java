@@ -11,12 +11,21 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import java.io.*;
 import java.util.*;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.MalformedInputException;
+import java.nio.charset.CharacterCodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 
 /**
  * Collection of {@link java.lang.String String} utilities. Contains
  * the base localization support.
  */
 public class ERXStringUtilities {
+
+    /** logging support */
+    public static final ERXLogger log = ERXLogger.getERXLogger(ERXStringUtilities.class);
 
     /** Holds the default display language, which is English */
     private static final String DEFAULT_TARGET_DISPLAY_LANGUAGE = "English";
@@ -818,5 +827,117 @@ public class ERXStringUtilities {
         
         return result;
     }
-    
+
+    /**
+     * This method takes a string and returns a string which is the first string such that the
+     * result byte length in the specified encoding does not exceed the byte limit.  This tends
+     * to be an issue with UTF-8 and Japanese characters because they're double- or triple-byte
+     * in UTF-8 and you need to be careful not to split in the middle of a multi-byte sequence.
+     *
+     * <p>
+     *
+     * This method is optimized for the UTF-8 case.  If <code>encoding</code> is either "UTF-8" or "UTF8",
+     * the optimized case will kick in.
+     *
+     * @param inputString string to truncate
+     * @param byteLength maximum byte length
+     * @param encoding encoding to use
+     * @return string truncated appropriately.
+     */
+    public static String stringByTruncatingStringToByteLengthInEncoding(final String inputString, final int byteLength, final String encoding) {
+        String result = null;
+
+        if ( log.isDebugEnabled() ) {
+            log.debug("stringByTruncatingStringToByteLengthInEncoding: encoding='" + encoding + "', byteLength=" +
+                      byteLength + ", inputString='" + inputString + "'");
+        }
+
+        if ( inputString != null ) {
+            final byte[] bytes;
+
+            try {
+                bytes = inputString.getBytes(encoding);
+            }
+            catch ( UnsupportedEncodingException e ) {
+                // this is bad, throw a runtime exception
+                throw new RuntimeException("Caught " + e.getClass() + " exception.  Encoding: '" + encoding + "'.  Reason: " + e.getMessage(), e);
+            }
+
+            if ( bytes != null ) {
+                if ( bytes.length > byteLength ) {
+                    // we gotta do some work
+                    if ( "UTF-8".equals(encoding) || "UTF8".equals(encoding) ) {
+                        // if the encoding is UTF-8, we can be smarter about this than in the general case.
+                        // UTF-8 defines three types of bytes: those that begin in 0, those that begin in 11 and
+                        // those that begin in 10.  0 means ASCII, 11 means the beginning of a multi-byte sequence,
+                        // 10 means in the middle or end of a multi-byte sequence.
+                        //
+                        // so, we hit the byte at index byteLength which is one past our target byte length.  while
+                        // that byte begins with 10, we walk backwards until the next byte doesn't begin with 10.  at that
+                        // point, we're at the end of a character.
+                        if ( byteLength >= 1 ) {
+                            int index = byteLength - 1;
+
+                            while ( index >= 0 && ((bytes[index+1] & 0xC0) == 0x80) ) {
+                                index--;
+                            }
+
+                            if ( index > 0 ) {
+                                try {
+                                    result = new String(bytes, 0, index+1, encoding);
+                                }
+                                catch ( UnsupportedEncodingException e ) {
+                                    throw new RuntimeException("Got " + e.getClass() + " exception.  byteLength=" + byteLength + ", encoding='" +
+                                                               encoding + "', inputString='"+ inputString + "'.", e);
+                                }
+                            }
+                        }
+
+                        result = result != null ? result : "";
+                    }
+                    else {
+                        final Charset charset = Charset.forName(encoding);
+                        final CharsetDecoder decoder = charset.newDecoder();
+                        final ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+                        int currentLength = byteLength;
+                        CharBuffer charBuffer = null;
+
+                        do {
+                            byteBuffer.position(0);
+                            byteBuffer.limit(currentLength);
+
+                            try {
+                                charBuffer = decoder.decode(byteBuffer);
+                            }
+                            catch ( MalformedInputException e ) {
+                                // this exception we expect to get if when we slice the byte buffer to
+                                // the intended byte length, we end up mid-way through a byte sequence.
+                                currentLength--;
+                            }
+                            catch (CharacterCodingException e ) {
+                                // we're not expecting to get this exception.  the javadoc doesn't say
+                                // under what circumstances it happens and it would be surprising it this happened
+                                // and the conversion to byte array worked earlier.
+                                log.error("Got " + e.getClass() + " exception. byteLength=" + byteLength + ", encoding='" + encoding +
+                                          "', inputString='"+ inputString + "'.", e);
+                                break;
+                            }
+                        } while ( charBuffer == null && currentLength > 0 );
+
+                        result = charBuffer != null ? charBuffer.toString() : "";
+                    }
+                }
+                else {
+                    result = inputString;
+                }
+            }
+        }
+
+        if ( log.isDebugEnabled() )
+            log.debug("stringByTruncatingStringToByteLengthInEncoding: result='" + result + "'");
+
+        return result;
+    }
+
+
 }
