@@ -1329,12 +1329,10 @@ public class ERXEOControlUtilities {
      * @return array of all attribute names that are mapped to
      *      String objects.
      */
-    public static synchronized NSArray stringAttributeListForEntityNamed(String entityName) {
-        // FIXME: this will need to be synchronized if you go full-MT
+    public static synchronized NSArray stringAttributeListForEntityNamed(EOEditingContext ec, String entityName) {
         NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);
         if (result==null) {
-            // FIXME: Bad way of getting the entity.
-            EOEntity entity=ERXEOAccessUtilities.entityNamed(null, entityName);
+            EOEntity entity=ERXEOAccessUtilities.entityNamed(ec, entityName);
             NSMutableArray attList=new NSMutableArray();
             _attributeKeysPerEntityName.setObjectForKey(attList,entityName);
             result=attList;
@@ -1350,8 +1348,12 @@ public class ERXEOControlUtilities {
         return result;
     }
 
-    public static void trimSpaces(ERXCustomObject object) {
-        for (Enumeration e=ERXEOControlUtilities.stringAttributeListForEntityNamed(object.entityName()).objectEnumerator(); e.hasMoreElements();) {
+    /**
+     * Trims all values from string attributes from the given EO.
+     * @param object
+     */
+    public static void trimSpaces(EOEnterpriseObject object) {
+        for (Enumeration e=ERXEOControlUtilities.stringAttributeListForEntityNamed(object.editingContext(), object.entityName()).objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
             String value=(String)object.storedValueForKey(key);
             if (value!=null) {
@@ -1361,5 +1363,5 @@ public class ERXEOControlUtilities {
             }
         }
     }
-
+    
 }
