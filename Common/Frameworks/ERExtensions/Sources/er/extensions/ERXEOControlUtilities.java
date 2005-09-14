@@ -881,10 +881,7 @@ public class ERXEOControlUtilities {
             while ( i-- > 0 ) {
                 final EOEditingContext theEC = (EOEditingContext)parentEditingContexts.objectAtIndex(i);
                 final NSArray insertedObjects = ERXArrayUtilities.objectsWithValueForKeyPath(theEC.insertedObjects(), entityName, "entityName");
-                NSArray objectsMatchingQualifier = NSArray.EmptyArray;
-
-                if ( insertedObjects != null && insertedObjects.count() > 0 )
-                    objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, qualifier);
+                final NSArray objectsMatchingQualifier = EOQualifier.filteredArrayWithQualifier(insertedObjects, qualifier);
 
                 // fault the previous batch down
                 objects = EOUtilities.localInstancesOfObjects(theEC, objects);
