@@ -135,21 +135,26 @@ public class ERXEOGlobalIDUtilities {
      * @return
      */
     public static NSArray objectsForGlobalIDs(EOEditingContext ec, 
-            NSArray globalIDs, NSArray prefetchingKeypaths) {
-        NSArray result = new NSArray();
-        if(globalIDs.count() > 0) {
-            result = objectsForGlobalIDs(ec, globalIDs);
-            String entityName = ((EOEnterpriseObject)result.lastObject()).entityName();
-            EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-            for (Enumeration keyPaths = prefetchingKeypaths.objectEnumerator(); keyPaths.hasMoreElements();) {
-                String keypath = (String) keyPaths.nextElement();
-                EORelationship relationship = entity.relationshipNamed(keypath);
-                EODatabaseContext dbc = ERXEOAccessUtilities.databaseContextForEntityNamed((EOObjectStoreCoordinator) ec.rootObjectStore(), entityName);
-                dbc.batchFetchRelationship(relationship, result, ec);
-            }
-        }
-        return result;
-        
+    		NSArray globalIDs, NSArray prefetchingKeypaths) {
+    	NSArray result = new NSArray();
+    	if(globalIDs.count() > 0) {
+    		result = objectsForGlobalIDs(ec, globalIDs);
+    		String entityName = ((EOEnterpriseObject)result.lastObject()).entityName();
+    		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+    		for (Enumeration keyPaths = prefetchingKeypaths.objectEnumerator(); keyPaths.hasMoreElements();) {
+    			String keypath = (String) keyPaths.nextElement();
+    			EORelationship relationship = entity.relationshipNamed(keypath);
+    			EODatabaseContext dbc = ERXEOAccessUtilities.databaseContextForEntityNamed((EOObjectStoreCoordinator) ec.rootObjectStore(), entityName);
+    			dbc.lock();
+    			try {
+    				dbc.batchFetchRelationship(relationship, result, ec);
+    			} finally {
+    				dbc.unlock();
+    			}
+    		}
+    	}
+    	return result;
+    	
     }
     
     /**
