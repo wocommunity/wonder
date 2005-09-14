@@ -815,22 +815,27 @@ public class ERXEOAccessUtilities {
      */
     //CHECKME ak is this description correct?
     public static NSArray snapshotsForObjectsFromRelationshipNamed(NSArray eos, String relKey) {
-        NSMutableArray result = new NSMutableArray();
-        if (eos.count() > 0) {
-            String entityName = ((EOEnterpriseObject) eos.objectAtIndex(0)).entityName();
-            EOEditingContext ec = ((EOEnterpriseObject) eos.objectAtIndex(0)).editingContext();
-            EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-            EORelationship relationship = entity.relationshipNamed(relKey);
-            EOAttribute attribute = (EOAttribute) relationship.sourceAttributes().objectAtIndex(0);
-            EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
-            String name = attribute.name();
-            for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject target = (EOEnterpriseObject) e.nextElement();
-                Object value = (context.snapshotForGlobalID(ec.globalIDForObject(target))).valueForKey(name);
-                result.addObject(value);
-            }
-        }
-        return result;
+    	NSMutableArray result = new NSMutableArray();
+    	if (eos.count() > 0) {
+    		EOEnterpriseObject eo = (EOEnterpriseObject)eos.lastObject();
+    		String entityName = eo.entityName();
+    		EOEditingContext ec = eo.editingContext();
+    		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+    		EORelationship relationship = entity.relationshipNamed(relKey);
+    		if(relationship.sourceAttributes().count() == 1) {
+    			EOAttribute attribute = (EOAttribute) relationship.sourceAttributes().lastObject();
+    			EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, entity.model().name());
+    			String name = attribute.name();
+    			for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
+    				EOEnterpriseObject target = (EOEnterpriseObject) e.nextElement();
+    				Object value = (context.snapshotForGlobalID(ec.globalIDForObject(target))).valueForKey(name);
+    				result.addObject(value);
+    			}
+    		} else {
+    			throw new IllegalArgumentException("Has more than one relationship attribute: " + relKey);
+    		}
+    	}
+    	return result;
     }
 
     /**
@@ -848,26 +853,29 @@ public class ERXEOAccessUtilities {
      * @return a dictionary containing a new primary key for the given entity.
      */
     public static NSDictionary primaryKeyDictionaryForEntity(EOEditingContext ec, String entityName) {
-        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-        EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        NSDictionary primaryKey = null;
-        try {
-            dbContext.lock();
-            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-            if (!adaptorChannel.isOpen()) adaptorChannel.openChannel();
-            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
-            if (arr != null)
-                primaryKey = (NSDictionary) arr.lastObject();
-            else
-                log.warn("Could not get primary key for entity: " + entityName + " exception");
-            dbContext.unlock();
-        } catch (Exception e) {
-            dbContext.unlock();
-            log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
-        }
-        return primaryKey;
+    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+    	EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+    	NSDictionary primaryKey = null;
+    	dbContext.lock();
+    	try {
+    		EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
+    		if (!adaptorChannel.isOpen()) {
+    			adaptorChannel.openChannel();
+    		}
+    		NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+    		if (arr != null) {
+    			primaryKey = (NSDictionary) arr.lastObject();
+    		} else {
+    			log.warn("Could not get primary key for entity: " + entityName + " exception");
+    		}
+    	} catch (Exception e) {
+    		log.error("Caught exception when generating primary key for entity: " + entityName + " exception: " + e, e);
+    	} finally {
+    		dbContext.unlock();
+    	}
+    	return primaryKey;
     }
-
+    
     /**
      * Creates an array containing all of the primary keys of the given objects.
      * 
@@ -1022,6 +1030,8 @@ public class ERXEOAccessUtilities {
      * @param keyPath
      * @return
      */
+    private static Set _keysWithWarning = Collections.synchronizedSet(new HashSet());
+    
     public static EOEntity destinationEntityForKeyPath(EOEntity entity, String keyPath) {
         if(keyPath == null || keyPath.length() == 0) {
             return entity;
@@ -1032,9 +1042,12 @@ public class ERXEOAccessUtilities {
             EORelationship rel = entity.anyRelationshipNamed(key);
             if(rel == null) {
                 if(entity.anyAttributeNamed(key) == null) {
-                    if(key.indexOf("@") != 0) {
-                        log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
-                    }
+                	if(key.indexOf("@") != 0) {
+                		if(!_keysWithWarning.contains(key + "-" + entity)) {
+                			_keysWithWarning.add(key + "-" + entity);
+                			log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
+                		}
+                	}
                 }
                 return null;
             }
