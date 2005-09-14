@@ -512,49 +512,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      */
     public String toLongString() { return super.toString(); }
 
-    /** Caches the string attribute keys on a per entity name basis */
-    private static NSMutableDictionary _attributeKeysPerEntityName=new NSMutableDictionary();
-    /**
-     * Calculates all of the EOAttributes of a given entity that
-     * are mapped to String objects.
-     * @return array of all attribute names that are mapped to
-     *		String objects.
-     */
-    // MOVEME: Might be a canidate for EOEnterpriseObjectClazz
-    private static synchronized NSArray stringAttributeListForEntityNamed(String entityName) {
-        // FIXME: this will need to be synchronized if you go full-MT
-        NSArray result=(NSArray)_attributeKeysPerEntityName.objectForKey(entityName);
-        if (result==null) {
-            // FIXME: Bad way of getting the entity.
-            EOEntity entity=ERXEOAccessUtilities.entityNamed(null, entityName);
-            NSMutableArray attList=new NSMutableArray();
-            _attributeKeysPerEntityName.setObjectForKey(attList,entityName);
-            result=attList;
-            for (Enumeration e=entity.classProperties().objectEnumerator();e.hasMoreElements();) {
-                Object property=e.nextElement();
-                if (property instanceof EOAttribute) {
-                    EOAttribute a=(EOAttribute)property;
-                    if (a.className().equals("java.lang.String"))
-                        attList.addObject(a.name());
-                }
-            }
-        }
-        return result;
-    }
-
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#trimSpaces()
      */
     public void trimSpaces() {
-        for (Enumeration e=stringAttributeListForEntityNamed(entityName()).objectEnumerator(); e.hasMoreElements();) {
-            String key=(String)e.nextElement();
-            String value=(String)storedValueForKey(key);
-            if (value!=null) {
-                String trimmedValue=value.trim();
-                if (trimmedValue.length()!=value.length())
-                    takeStoredValueForKey(trimmedValue,key);
-            }
-        }
+        ERXEOControlUtilities.trimSpaces(this);
     }
 
     /* (non-Javadoc)
