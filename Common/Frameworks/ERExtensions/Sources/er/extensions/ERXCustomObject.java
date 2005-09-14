@@ -31,7 +31,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     private static NSMutableDictionary classLogs = new NSMutableDictionary();
      
     public static boolean shouldTrimSpaces(){
-        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenerixRecord.shouldTrimSpaces", false);
+        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCustomObject.shouldTrimSpaces", false);
     }
     
    /**
