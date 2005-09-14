@@ -987,9 +987,8 @@ public class ERXStringUtilities {
                         if ( byteLength >= 1 ) {
                             int index = byteLength - 1;
                             
-                            while ( index >= 0 && ((bytes[index+1] & 0xC0) == 0x80) ) {
+                            while ( index >= 0 && ((bytes[index+1] & 0xC0) == 0x80) )
                                 index--;
-                            }
                             
                             if ( index > 0 ) {
                                 try {
@@ -1016,7 +1015,7 @@ public class ERXStringUtilities {
                             byteBuffer.limit(currentLength);
                             
                             try {
-                                charBuffer = decoder.decode(byteBuffer);
+                                charBuffer = decoder.reset().decode(byteBuffer);
                             }
                             catch ( MalformedInputException e ) {
                                 // this exception we expect to get if when we slice the byte buffer to
