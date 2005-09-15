@@ -224,44 +224,10 @@ public class ERXTolerantSaver {
                 String eType = (String)userInfo.objectForKey("EOAdaptorFailureKey");
                 if (!(eType == null)) {
                     if (eType.equals("EOAdaptorOptimisticLockingFailure")) {
-                        //if (log.isDebugEnabled()) log.debug("about to get EOFailedAdaptorOperationKey");
                         EOAdaptorOperation op = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
                         EODatabaseOperation dbop = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
-                        //if (log.isDebugEnabled()) log.debug("about to get _changedValues");
                         if (op != null && dbop != null) {
-                            NSDictionary changedValues =  op.changedValues();
-                            //if (log.isDebugEnabled()) log.debug("about to get _entity: _changedValues"+ changedValues);
-                            NSDictionary snapshot = dbop.dbSnapshot();
-                            if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
-                            EOEntity ent = op.entity();
-                            String entName = ent.name();
-                            if (log.isDebugEnabled()) log.debug("entName"+ entName);
-                            NSArray pkAttribs = ent.primaryKeyAttributes();
-                            EOQualifier qual = ERXTolerantSaver.qualifierWithSnapshotAndPks(pkAttribs, snapshot);
-                            EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
-                            fs.setRefreshesRefetchedObjects(true);
-                            NSArray objs = ec.objectsWithFetchSpecification(fs);
-                            if (objs.count() > 0) {
-                                failedEO = (EOEnterpriseObject) objs.objectAtIndex(0);
-                                if (log.isDebugEnabled()) log.debug("failedEO"+ failedEO);
-                                if (merge) {
-                                    //EODatabaseContext dbcontext = ChangeCatcher.databaseContextForEntityNamed (entName, ec);
-                                    //EODatabase db = dbcontext.database();
-                                    //EOGlobalID gid = ec.globalIDForObject(failedEO);
-                                    //NSMutableDictionary ss = new NSMutableDictionary(snapshot);
-                                    //ss. addEntriesFromDictionary(changedValues);
-                                    //db.forgetSnapshotForGlobalID(gid);
-                                    //db.recordSnapshotForGlobalID(ss, gid);
-                                    applyChangesToEO(changedValues, failedEO, ent);
-                                }
-                            } else {
-                                if (log.isDebugEnabled()) log.debug("TolerantSaver: EO was NOT there anymore!");
-                                failedEO = null;
-                            }
-                            if (writeAnyWay) {
-                                log.warn("TolerantSaver: about to save changes again");
-                                save(ec, writeAnyWay, merge);                                    
-                            }
+                            recoverFromOptimisticLockingFailure(ec, writeAnyWay, merge, op, dbop);
                             return "EOAdaptorOptimisticLockingFailure";
                         } else {
                             log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey. "+e+"\n\n"+e.userInfo());
@@ -281,6 +247,50 @@ public class ERXTolerantSaver {
         }
         if (log.isDebugEnabled()) log.debug("TolerantSaver: save... done");
         return null;
+    }
+
+    /**
+     * @param ec
+     * @param writeAnyWay
+     * @param merge
+     * @param op
+     * @param dbop
+     * @return
+     */
+    public static void recoverFromOptimisticLockingFailure(EOEditingContext ec, boolean writeAnyWay, boolean merge, EOAdaptorOperation op, EODatabaseOperation dbop) {
+        EOEnterpriseObject failedEO;
+        NSDictionary changedValues =  op.changedValues();
+        NSDictionary snapshot = dbop.dbSnapshot();
+        if (log.isDebugEnabled()) log.debug("snapshot"+ snapshot);
+        EOEntity ent = op.entity();
+        String entName = ent.name();
+        if (log.isDebugEnabled()) log.debug("entName"+ entName);
+        NSArray pkAttribs = ent.primaryKeyAttributes();
+        EOQualifier qual = ERXTolerantSaver.qualifierWithSnapshotAndPks(pkAttribs, snapshot);
+        EOFetchSpecification fs = new EOFetchSpecification(entName, qual, null);
+        fs.setRefreshesRefetchedObjects(true);
+        NSArray objs = ec.objectsWithFetchSpecification(fs);
+        if (objs.count() > 0) {
+            failedEO = (EOEnterpriseObject) objs.objectAtIndex(0);
+            if (log.isDebugEnabled()) log.debug("failedEO"+ failedEO);
+            if (merge) {
+                //EODatabaseContext dbcontext = ChangeCatcher.databaseContextForEntityNamed (entName, ec);
+                //EODatabase db = dbcontext.database();
+                //EOGlobalID gid = ec.globalIDForObject(failedEO);
+                //NSMutableDictionary ss = new NSMutableDictionary(snapshot);
+                //ss. addEntriesFromDictionary(changedValues);
+                //db.forgetSnapshotForGlobalID(gid);
+                //db.recordSnapshotForGlobalID(ss, gid);
+                applyChangesToEO(changedValues, failedEO, ent);
+            }
+        } else {
+            if (log.isDebugEnabled()) log.debug("TolerantSaver: EO was NOT there anymore!");
+            failedEO = null;
+        }
+        if (writeAnyWay) {
+            log.warn("TolerantSaver: about to save changes again");
+            save(ec, writeAnyWay, merge);                                    
+        }
     }
 
     public static String save(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
