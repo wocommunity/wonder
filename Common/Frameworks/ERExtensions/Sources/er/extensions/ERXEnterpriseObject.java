@@ -1,12 +1,12 @@
 package er.extensions;
 
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSValidation;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 public interface ERXEnterpriseObject {
+	
+	/** Selector for flushCaches() */
+    public static final NSSelector FlushCachesSelector = new NSSelector("flushCaches");
 
     /** logging support. Called after an object is successfully inserted */
     public static final ERXLogger tranLogDidInsert = ERXLogger

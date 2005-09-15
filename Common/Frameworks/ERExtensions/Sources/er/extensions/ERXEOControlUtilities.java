@@ -1136,12 +1136,12 @@ public class ERXEOControlUtilities {
         if ( isNestedEditingContext ) {
             ec.processRecentChanges();  // need to do this to make sure the updated objects list is current
             
+            parentEC.lock();
+            
             try {
-                parentEC.lock();
-                
-                final NSArray insertedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.insertedObjects(), ERXGenericRecord.class);
-                final NSArray updatedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.updatedObjects(), ERXGenericRecord.class);
-                final NSArray deletedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.deletedObjects(), ERXGenericRecord.class);
+                final NSArray insertedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.insertedObjects(), ERXEnterpriseObject.class);
+                final NSArray updatedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.updatedObjects(), ERXEnterpriseObject.class);
+                final NSArray deletedFlushableObjects = ERXArrayUtilities.arrayBySelectingInstancesOfClass(ec.deletedObjects(), ERXEnterpriseObject.class);
                 
                 insertedObjectGIDs = globalIDsForObjects(insertedFlushableObjects);
                 updatedObjectGIDs = globalIDsForObjects(updatedFlushableObjects);
@@ -1154,7 +1154,7 @@ public class ERXEOControlUtilities {
                         log.debug("saveChanges: before save to child context " + ec +
                                   ", need to flush caches on deleted objects in parent context " + parentEC + ": " + deletedObjectsToFlushInParent);
                     }
-                    deletedObjectsToFlushInParent.makeObjectsPerformSelector(ERXGenericRecord.FlushCachesSelector, null);
+                    deletedObjectsToFlushInParent.makeObjectsPerformSelector(ERXEnterpriseObject.FlushCachesSelector, null);
                 }
             }
             finally {
@@ -1167,12 +1167,11 @@ public class ERXEOControlUtilities {
         if ( isNestedEditingContext ) {
             // we can assume insertedObjectGIDs and updatedObjectGIDs are non null.  if we execute this branch, they're at
             // least empty arrays.
-            
-            if ( insertedObjectGIDs.count() > 0 || updatedObjectGIDs.count() > 0 ) {
-                try {
-                    parentEC.lock();
-                    
-                    final NSArray insertedObjectsInParent = objectsForGlobalIDs(parentEC, insertedObjectGIDs);
+        	
+        	if ( insertedObjectGIDs.count() > 0 || updatedObjectGIDs.count() > 0 ) {
+        		parentEC.lock();
+        		try {
+        			final NSArray insertedObjectsInParent = objectsForGlobalIDs(parentEC, insertedObjectGIDs);
                     final NSArray updatedObjectsInParent = objectsForGlobalIDs(parentEC, updatedObjectGIDs);
                     
                     if ( log.isDebugEnabled() ) {

@@ -245,8 +245,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return ERXEditingContextDelegate._checkEditingContextDelegate(editingContext);
     }
 
-    public static final NSSelector FlushCachesSelector = new NSSelector("flushCaches");
-
     /**
      * Checks the editing context delegate before calling
      * super's implementation. See the method <code>
