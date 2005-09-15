@@ -782,23 +782,7 @@ public class ERXEOAccessUtilities {
                 EOAdaptorOperation adaptorOperation = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
                 EODatabaseOperation databaseOperation = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
                 if (adaptorOperation != null && databaseOperation != null) {
-                    NSDictionary changedValues = adaptorOperation.changedValues();
-                    NSDictionary snapshot = databaseOperation.dbSnapshot();
-
-                    if (log.isDebugEnabled()) log.debug("snapshot" + snapshot);
-
-                    EOEntity entity = adaptorOperation.entity();
-                    String entityName = entity.name();
-
-                    if (log.isDebugEnabled()) log.debug("entityName: " + entityName);
-
-                    NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
-                    EOQualifier qualifier = ERXTolerantSaver.qualifierWithSnapshotAndPks(primaryKeyAttributes, snapshot);
-                    EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
-                    fs.setRefreshesRefetchedObjects(true);
-
-                    NSArray objects = editingContext.objectsWithFetchSpecification(fs);
-                    editingContext.revert();
+                    ERXTolerantSaver.recoverFromOptimisticLockingFailure(editingContext, false, true, adaptorOperation, databaseOperation);
                     wasHandled = true;
                 } else {
                     log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey in " + exception + ": "
