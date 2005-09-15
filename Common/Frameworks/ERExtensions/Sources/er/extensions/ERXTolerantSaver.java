@@ -183,7 +183,7 @@ public class ERXTolerantSaver {
 
     /**
      * Entry point for saving an editing context in a tolerant
-     * manner. The two flags for this methad are <code>writeAnyWay</code>
+     * manner. The two flags for this method are <code>writeAnyWay</code>
      * and <code>merge</code>. The writeAnyWay flag controls if a second
      * save should be performed if the first operation fails due to a general
      * adaptor operation. Note that even if this option is specified as
