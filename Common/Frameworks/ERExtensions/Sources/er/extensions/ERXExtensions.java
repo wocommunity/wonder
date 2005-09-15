@@ -247,8 +247,11 @@ public class ERXExtensions {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
             adaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
+            
             sharedEOadaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
-            if (adaptorLogger.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess)) {
+            if ((adaptorLogger.isDebugEnabled() 
+            		&& !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess))
+            		|| ERXProperties.booleanForKey("EOAdaptorDebugEnabled")) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
                 NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
             }
@@ -276,23 +279,32 @@ public class ERXExtensions {
             targetState = Boolean.FALSE;
         }
         if (targetState != null) {
-            // We set the default, so all future adaptor contexts are either enabled or disabled.
-            if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue())
-                if (targetState.booleanValue()) {
-                    NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
-                } else {
-                    NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
-                }
-            if (targetState.booleanValue()) {
-                adaptorLogger.info("Adaptor debug on");
-            } else {
-                adaptorLogger.info("Adaptor debug off");
-            }
-            adaptorEnabled = targetState;
+        	setAdaptorLogging(targetState.booleanValue());
         }
     }
+    
+    /**
+     * Turn EOAdaptor logging on and off.
+     * @param onOff
+     */
+    public static void setAdaptorLogging(boolean onOff) {
+    	Boolean targetState = onOff ? Boolean.TRUE : Boolean.FALSE;
+    	if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue()) {
+    		if (targetState.booleanValue()) {
+    			NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
+    			NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
+    		} else {
+    			NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
+    			NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
+    		}
+    	}
+    	if (targetState.booleanValue()) {
+    		adaptorLogger.info("Adaptor debug on");
+    	} else {
+    		adaptorLogger.info("Adaptor debug off");
+    	}
+    	adaptorEnabled = targetState;
+   }
 
     /**
      * @deprecated see {@link ERXEC}
