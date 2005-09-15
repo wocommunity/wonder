@@ -25,16 +25,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * Utilities that help with batch loading sets of global IDs. Unless otherwise noted, the 
- * supplied global ids must all be from the same entity.
+ * Utilities that help with batch loading sets of global IDs. 
  * 
  * @author ak
  */
 public class ERXEOGlobalIDUtilities {
-    //  ===========================================================================
-    //  Class Constants
-    //  ---------------------------------------------------------------------------
-
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOGlobalIDUtilities.class);
     
@@ -54,22 +49,25 @@ public class ERXEOGlobalIDUtilities {
      * @return
      */
     public static NSArray primaryKeyValuesWithGlobalIDs(NSArray globalIDs) {
-        NSMutableArray result = new NSMutableArray();
-        if(globalIDs.count() > 0) {
-            EOGlobalID gid = (EOGlobalID) globalIDs.lastObject();
-            if((gid instanceof EOKeyGlobalID) && (((EOKeyGlobalID)gid).keyCount() == 1)) {
-                EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
-                NSMutableArray primaryKeys = new NSMutableArray();
-                String entityName = keyGID.entityName();
-                for (Enumeration gids = globalIDs.objectEnumerator(); gids.hasMoreElements();) {
-                    keyGID = (EOKeyGlobalID) gids.nextElement();
-                    result.addObject(keyGID.keyValues()[0]);
-                }
-            } else {
-                return null;
-            }
-        }
-        return result;
+    	NSMutableArray result = new NSMutableArray();
+    	if(globalIDs.count() > 0) {
+    		NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
+    		for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
+    			String entityName = (String) e.nextElement();
+    			NSArray gidsForEntity = (NSArray) gidsByEntity.objectForKey(entityName);
+    			
+    			NSMutableArray primaryKeys = new NSMutableArray();
+    			for (Enumeration gids = gidsForEntity.objectEnumerator(); gids.hasMoreElements();) {
+    				EOKeyGlobalID keyGID = (EOKeyGlobalID) gids.nextElement();
+    				if(keyGID.keyCount() == 1) {
+    					result.addObject(keyGID.keyValues()[0]);
+    				} else {
+    					throw new IllegalArgumentException("GID has more than one key: " + keyGID);
+    				}
+    			}
+    		}
+    	}
+    	return result;
     }
     
     /**
@@ -91,93 +89,91 @@ public class ERXEOGlobalIDUtilities {
     }
     
     /**
-     * Fetches an array of objects defined by the globalIDs in a single fetch. This is very useful
-     * as a replacement for batch-faulting.
+     * Fetches an array of objects defined by the globalIDs in a single fetch per entity.
      * @param ec
      * @param globalIDs
      * @return
      */
     public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
-        NSMutableArray result = new NSMutableArray();
-        EOGlobalID gid = (EOGlobalID) globalIDs.lastObject();
-        if(gid instanceof EOKeyGlobalID) {
-            EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
-            NSMutableArray qualifiers = new NSMutableArray();
-            String entityName = keyGID.entityName();
-            
-            EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-            for (Enumeration gids = globalIDs.objectEnumerator(); gids.hasMoreElements();) {
-                EOGlobalID g = (EOGlobalID) gids.nextElement();
-                EOQualifier qualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(g));
-                qualifiers.addObject(qualifier);
-            }
-            EOQualifier qualifier = new EOOrQualifier(qualifiers);
-            EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
-            NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
-            result.addObjectsFromArray(details);
-        } else {
-            if(gid != null) {
-                throw new IllegalArgumentException("Can't fetch because GIDs are not EOKeyValueGlobalIDs: " + gid);
-            }
-        }
-        return result;
+    	NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
+    	NSMutableArray result = new NSMutableArray();
+    	for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
+    		String entityName = (String) e.nextElement();
+    		NSArray gidsForEntity = (NSArray) gidsByEntity.objectForKey(entityName);
+    		
+    		NSMutableArray qualifiers = new NSMutableArray();
+        	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+    		for (Enumeration gids = gidsForEntity.objectEnumerator(); gids.hasMoreElements();) {
+    			EOGlobalID g = (EOGlobalID) gids.nextElement();
+    			EOQualifier qualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(g));
+    			qualifiers.addObject(qualifier);
+    		}
+    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
+    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
+    		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
+    		result.addObjectsFromArray(details);
+    	}
+    	return result;
     }
-    
-    
-    
+
     /**
-     * If needed, batch fetches a set of global IDs together with a set of relationships. This is much more efficient than
-     * triggering the individual faults and relationships later on. The method should use only 1 fetch for all objects 
-     * and one for each relationship.
+     * Fires all faults in the given global IDs on one batch together with their relationships.
+     * This is much more efficient than triggering the individual faults and relationships later on. 
+     * The method should use only 1 fetch for all objects per entity
+     * and then one for each relationship per entity.
      * @param ec
      * @param globalIDs
      * @param prefetchingKeypaths
      * @return
      */
-    public static NSArray objectsForGlobalIDs(EOEditingContext ec, 
+    public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, 
     		NSArray globalIDs, NSArray prefetchingKeypaths) {
-    	NSArray result = new NSArray();
+    	NSMutableArray result = new NSMutableArray();
     	if(globalIDs.count() > 0) {
-    		result = objectsForGlobalIDs(ec, globalIDs);
-    		String entityName = ((EOEnterpriseObject)result.lastObject()).entityName();
-    		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-    		for (Enumeration keyPaths = prefetchingKeypaths.objectEnumerator(); keyPaths.hasMoreElements();) {
-    			String keypath = (String) keyPaths.nextElement();
-    			EORelationship relationship = entity.relationshipNamed(keypath);
-    			EODatabaseContext dbc = ERXEOAccessUtilities.databaseContextForEntityNamed((EOObjectStoreCoordinator) ec.rootObjectStore(), entityName);
-    			dbc.lock();
-    			try {
-    				dbc.batchFetchRelationship(relationship, result, ec);
-    			} finally {
-    				dbc.unlock();
+    		NSMutableArray faults = new NSMutableArray();
+    		for (Enumeration ids = globalIDs.objectEnumerator(); ids.hasMoreElements();) {
+    			EOGlobalID gid = (EOGlobalID) ids.nextElement();
+    			EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+    			if(EOFaultHandler.isFault(eo)) {
+    				faults.addObject(gid);
+    			} else {
+    				result.addObject(eo);
+    			}
+    		}
+    		NSArray loadedObjects = fetchObjectsWithGlobalIDs(ec, faults);
+    		result.addObjectsFromArray(loadedObjects);
+    		
+    		if(prefetchingKeypaths != null && prefetchingKeypaths.count() > 0) {
+    			NSDictionary objectsByEntity = ERXArrayUtilities.arrayGroupedByKeyPath(result, "entityName");
+    			for(Enumeration e = objectsByEntity.keyEnumerator(); e.hasMoreElements();) {
+    				String entityName = (String) e.nextElement();
+    				NSArray objects = (NSArray) objectsByEntity.objectForKey(entityName);
+    				EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+    				for (Enumeration keyPaths = prefetchingKeypaths.objectEnumerator(); keyPaths.hasMoreElements();) {
+    					String keypath = (String) keyPaths.nextElement();
+    					EORelationship relationship = entity.relationshipNamed(keypath);
+    					EODatabaseContext dbc = ERXEOAccessUtilities.databaseContextForEntityNamed((EOObjectStoreCoordinator) ec.rootObjectStore(), entityName);
+    					dbc.lock();
+    					try {
+    						dbc.batchFetchRelationship(relationship, objects, ec);
+    					} finally {
+    						dbc.unlock();
+    					}
+    				}
     			}
     		}
     	}
     	return result;
-    	
     }
     
     /**
-     * If needed, batch fetches a set of global IDs. This is much more efficient than
-     * triggering the individual faults later on. The method should use only 1 fetch for all objects.
+     * Fires all faults in the given global IDs on one batch. This is much more efficient than
+     * triggering the individual faults later on. The method should use only 1 fetch for all objects per entity.
      * @param ec
      * @param globalIDs
      * @return
      */
-    public static NSArray objectsForGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
-        NSMutableArray result = new NSMutableArray();
-        NSMutableArray faults = new NSMutableArray();
-        for (Enumeration ids = globalIDs.objectEnumerator(); ids.hasMoreElements();) {
-            EOGlobalID gid = (EOGlobalID) ids.nextElement();
-            EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
-            if(EOFaultHandler.isFault(eo)) {
-                faults.addObject(gid);
-            } else {
-                result.addObject(eo);
-            }
-        }
-        NSArray loadedObjects = fetchObjectsWithGlobalIDs(ec, faults);
-        result.addObjectsFromArray(loadedObjects);
-        return result;
+    public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
+        return fireFaultsForGlobalIDs(ec, globalIDs, NSArray.EmptyArray);
     }
 }
