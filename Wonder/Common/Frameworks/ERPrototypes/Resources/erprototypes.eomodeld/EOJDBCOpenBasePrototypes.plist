@@ -1,7 +1,6 @@
 {
     attributes = (
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = float; 
             name = amount; 
@@ -10,7 +9,6 @@
             valueType = d; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = object; 
             name = blob; 
@@ -18,7 +16,6 @@
         }, 
         {
             adaptorValueConversionMethodName = toString; 
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
@@ -29,7 +26,6 @@
             width = 5; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = charFlag; 
@@ -39,7 +35,6 @@
             width = 1; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = timestamp; 
             name = date; 
@@ -48,7 +43,6 @@
             valueType = D; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = timestamp; 
             name = dateTime; 
@@ -57,7 +51,6 @@
             valueType = T; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = double; 
             name = doubleNumber; 
@@ -66,7 +59,6 @@
             valueType = d; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = int; 
             name = flag; 
@@ -86,7 +78,6 @@
         }, 
         {
             adaptorValueConversionMethodName = toString; 
-            allowsNull = Y; 
             columnName = ""; 
             externalType = bool; 
             factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
@@ -96,7 +87,6 @@
             valueType = c; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = long; 
             name = intNumber; 
@@ -105,7 +95,6 @@
             valueType = i; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = text; 
             name = longText; 
@@ -115,7 +104,6 @@
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
-            allowsNull = Y; 
             columnName = ""; 
             externalType = object; 
             name = mutableArray; 
@@ -124,7 +112,6 @@
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
-            allowsNull = Y; 
             columnName = ""; 
             externalType = object; 
             name = mutableDictionary; 
@@ -132,7 +119,6 @@
             valueFactoryMethodName = fromBlob; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = osType; 
@@ -142,7 +128,6 @@
             width = 4; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = shortString; 
@@ -152,7 +137,6 @@
             width = 50; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = type; 
@@ -162,7 +146,6 @@
             width = 4; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = varchar10; 
@@ -172,7 +155,6 @@
             width = 10; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = varchar100; 
@@ -183,7 +165,6 @@
             width = 100; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = varchar1000; 
@@ -193,7 +174,6 @@
             width = 1000; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = varchar16; 
@@ -204,7 +184,6 @@
             width = 16; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = varchar255; 
@@ -215,7 +194,6 @@
             width = 255; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = varchar; 
             name = varchar50; 
@@ -226,7 +204,6 @@
             width = 50; 
         }, 
         {
-            allowsNull = Y; 
             columnName = ""; 
             externalType = text; 
             name = varcharLarge; 
