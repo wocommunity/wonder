@@ -105,19 +105,22 @@
                 <include name="**/*.css"/>
             </fileset>
         </copy>
+
     </target>
 
     <!-- ========================================== -->
     <!-- Builds API documentation.                  -->
     <!-- ========================================== -->
     <target name="api" depends="prepare">
-        <!--<copy todir="${dist}/doc">
-            <fileset dir="doc">
+        <!-- copy README's -->
+        <copy todir="${dist}/" flatten="true">
+            <fileset dir="${basedir}">
+                <include name="*.txt"/>
                 <include name="**/LICENSE*"/>
             </fileset>
-        </copy>-->
+        </copy>
 
-        <javadoc   packagenames="er.*, com.gammastream.*"
+        <javadoc packagenames="er.*, com.gammastream.*"
                    defaultexcludes="yes"
                    destdir="${dist}/Documentation/api"
                    author="true"
@@ -132,19 +135,26 @@
                 <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERCalendar/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERCoreBusinessLogic/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS/Sources/"/>
-                <!--pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERWorkerChannel/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/WOOgnl/Sources/"/>
+                <pathelement path="${wonder.root}/PlugIns/PostgresqlPlugIn/Sources/"/>
+                <pathelement path="${wonder.root}/ExcelGeneration/Frameworks/ExcelGenerator/Sources/"/>
+                <pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
                 <pathelement path="${wonder.root}/Validity/Frameworks/Validity/Sources"/>
-                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/-->
+                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
-            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2003 Project Wonder.]]></bottom>
+            <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2004  Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
-            <link href="http://java.sun.com/j2se/1.3/docs/api/"/>
-            <link offline="true" href="http://developer.apple.com/documentation/WebObjects/Reference/API/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
+            <link href="http://java.sun.com/j2se/1.4/docs/api/"/>
+            <link href="http://developer.apple.com/documentation/WebObjects/Reference/API/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://www.junit.org/junit/javadoc/3.7/"/>
+            <taglet name="BindingTaglet" path="${wonder.root}/Build/lib/" />
+            <taglet name="D2WKeyTaglet" path="${wonder.root}/Build/lib/" />
         </javadoc>
     </target>
 

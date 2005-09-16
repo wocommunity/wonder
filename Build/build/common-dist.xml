@@ -95,6 +95,14 @@
         </antcall>
     </target>
 
+    <!-- JavaFileCachingAdaptor -->
+    <target name="JavaFileCachingAdaptor.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="JavaFileCachingAdaptor" />
+            <param name="project.dir" value="Common/Frameworks/JavaFileCachingAdaptor" />
+        </antcall>
+    </target>
+
     <!-- ERExtensions -->
     <target name="ERExtensions.all">
         <antcall target="copy.framework" >
@@ -132,6 +140,38 @@
         <antcall target="copy.framework" >
             <param name="project" value="ERJavaMail" />
             <param name="project.dir" value="Common/Frameworks/ERJavaMail" />
+        </antcall>
+    </target>
+
+    <!-- ERPlot -->
+    <target name="ERPlot.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERPlot" />
+            <param name="project.dir" value="Common/Frameworks/ERPlot" />
+        </antcall>
+    </target>
+
+    <!-- ERWorkerChannel -->
+    <target name="ERWorkerChannel.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERWorkerChannel" />
+            <param name="project.dir" value="Common/Frameworks/ERWorkerChannel" />
+        </antcall>
+    </target>
+
+    <!-- ERPrototypes -->
+    <target name="ERPrototypes.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERPrototypes" />
+            <param name="project.dir" value="Common/Frameworks/ERPrototypes" />
+        </antcall>
+    </target>
+
+    <!-- ERExcelLook -->
+    <target name="ERExcelLook.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ERExcelLook" />
+            <param name="project.dir" value="Common/Frameworks/ERExcelLook" />
         </antcall>
     </target>
 
@@ -216,8 +256,8 @@
     </target>
 
 	
-    <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERCoreBusinessLogic.all, ERJavaMail.all, ERChangeNotificationJMS.all" />
+    <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, JavaFileCachingAdaptor.all, ERExtensions.all, ERDirectToWeb.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all" />
 
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />

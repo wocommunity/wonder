@@ -78,6 +78,8 @@
         <ant antfile="Build/build/generic.xml" target="Validity.framework.all" />
         <ant antfile="Build/build/generic.xml" target="WOPayPal.all" />
         <ant antfile="Build/build/generic.xml" target="WRReporting.all" />
+        <ant antfile="Build/build/generic.xml" target="ExcelGenerator.all" />
+        <ant antfile="Build/build/generic.xml" target="PostgresqlPlugIn.all" />
     </target>
 
     <!-- ==================================================== -->
@@ -101,6 +103,7 @@
         <ant antfile="Build/build/generic.xml" target="DRGroupingTest.all" />
         <ant antfile="Build/build/generic.xml" target="DynaReporter.all" />
         <ant antfile="Build/build/generic.xml" target="ERMailer.all" />
+        <ant antfile="Build/build/generic.xml" target="EGSampleApp.all" />
         <ant antfile="Build/build/generic.xml" target="NetStruxrCaseStudy.all" />
         <ant antfile="Build/build/generic.xml" target="SVGObjects.example.all" />
         <ant antfile="Build/build/generic.xml" target="Validity.application.all" />
@@ -125,6 +128,39 @@
         <ant antfile="Build/build/common-dist.xml" target="dist.prebuilt" />
         <ant antfile="Build/build/subprojects-dist.xml" />
         <ant antfile="Build/build/dist-generic.xml" target="all" />
+        
+    </target>
+    
+    <!-- ==================================================== -->
+    <!-- Deploy Wonder Frameworks.                          -->
+    <!-- ==================================================== -->
+    <target name="deploy" depends="init, prepare">
+        <ant antfile="Build/build/generic.xml" target="all.clean" />
+        <antcall target="clean" />
+
+        <property name="wonder.development" value="false" />
+
+        <antcall target="frameworks" />
+
+        <ant antfile="Build/build/common-dist.xml" target="frameworks.all" />
+        <ant antfile="Build/build/subprojects-dist.xml" target="WOPayPal.all"/>
+        <ant antfile="Build/build/subprojects-dist.xml" target="ExcelGeneration.framework.all"/>
+        <ant antfile="Build/build/deploy-artifacts.xml" target="all" />
+        
+    </target>    
+    
+    <!-- ==================================================== -->
+    <!-- Deploy Wonder Frameworks.                            -->
+    <!-- deploy a single project by its name, avoid cleaning  -->
+    <!-- and building everything again:                       -->
+    <!-- ant -Dsingle.project.name=JavaFileCachingAdaptor -f Build/build/build.xml deploy.single -->
+    <!-- ==================================================== -->
+
+    <target name="deploy.single" depends="init, prepare">
+        <property name="wonder.development" value="false" />
+
+        <ant antfile="Build/build/common-dist.xml" target="${single.project.name}.all" />
+        <ant antfile="Build/build/deploy-artifacts.xml" target="${single.project.name}.all" />
         
     </target>
     
