@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+
+<!-- ****************************************************************** -->
+<!-- This deploy maven artifacts (see http://maven.apache.org web site) -->
+<!-- for each Wonder framework as .zip archive .                        -->
+<!-- ****************************************************************** -->
+<project name="deploy-artifacts" default="all" basedir="../.." xmlns:artifact="urn:maven-artifact-ant">
+
+   <target name="global.environment">
+        <property name="wonder.root" value="${basedir}" />
+        <property file="${wonder.root}/Build/build/build.properties" />
+        <property file="${user.home}/build.properties" />
+        <property file="${wonder.root}/Build/build/default.properties" />
+        <property file="${wonder.root}/Build/build/${os.name}.properties" />
+        <property file="${wonder.root}/Build/build/default-os.properties" />
+
+        <!-- default values. can be overridden by *.properties files or -D options. -->
+        <property name="repository.hostname" value="localhost"/>
+        <property name="repository.username" value="${user.name}"/>
+        <property name="repository.localpath" value="${wo.server.root}/repository"/>
+    </target>
+
+    <target name="global.taskdefs" depends="global.environment">
+        <path id="ant.classpath">
+           	<fileset dir="${basedir}/Build/">
+               	<include name="lib/*.jar"/>
+	           </fileset>
+   	    </path>
+       	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant">
+           	<classpath refid="ant.classpath"/>
+        </typedef>
+   	</target>    
+
+	
+    <target name="deploy.framework" depends="global.taskdefs">
+        <property name="dist" value="${dist.base}/${project.name}-${project.version}"/>
+        
+        <zip destfile="${dist.base}/${artifact.name}-${project.version}.zip" 
+            basedir="${dist.base}/${project.name}-${project.version}/Frameworks"
+            excludes="**/CVS/*, **/dist/**" includes="${artifact.name}.framework/**"/>
+            
+            
+            <echo file="${dist}/pom_${artifact.name}.xml">
+&lt;project&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;Wonder&lt;/groupId&gt;
+  &lt;artifactId&gt;${artifact.name}&lt;/artifactId&gt;
+  &lt;version&gt;${project.version}-SNAPSHOT&lt;/version&gt;
+  &lt;packaging&gt;zip&lt;/packaging&gt;
+  &lt;dependencies&gt;
+  &lt;/dependencies&gt;
+&lt;/project>            
+            </echo>
+        
+        <artifact:pom id="maven.artifact.name" file="${dist}/pom_${artifact.name}.xml" />
+
+    <artifact:install-provider artifactId="wagon-ssh" version="1.0-alpha-4"/>
+
+    <artifact:deploy file="${dist.base}/${artifact.name}-${project.version}.zip">
+        <remoteRepository id="deploy.repository" url="scp://${repository.hostname}${repository.localpath}">
+            <authentication username="${repository.username}" privateKey="${user.home}/.ssh/id_dsa"/>
+            <snapshots enabled="true"/>
+            <releases enabled="false"/>
+        </remoteRepository>
+        <remoteSnapshotRepository id="deploy.repository" url="scp://${repository.hostname}${repository.localpath}">
+            <authentication username="${repository.username}" privateKey="${user.home}/.ssh/id_dsa"/>
+            <snapshots enabled="true"/>
+            <releases enabled="false"/>
+        </remoteSnapshotRepository>
+        <pom refid="maven.artifact.name"/>
+    </artifact:deploy>        
+
+    </target>
+
+
+    <!-- ERJars -->
+    <target name="ERJars.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERJars" />
+        </antcall>
+    </target>
+	
+    <!-- JavaWOExtensions -->
+    <target name="JavaWOExtensions.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="JavaWOExtensions" />
+        </antcall>
+    </target>
+
+    <!-- JavaFileCachingAdaptor -->
+    <target name="JavaFileCachingAdaptor.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="JavaFileCachingAdaptor" />
+        </antcall>
+    </target>
+
+    <!-- ERExtensions -->
+    <target name="ERExtensions.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERExtensions" />
+        </antcall>
+    </target>
+	
+    <!-- ERDirectToWeb -->
+    <target name="ERDirectToWeb.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERDirectToWeb" />
+        </antcall>
+    </target>
+	
+    <!-- ERCalendar -->
+    <target name="ERCalendar.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERCalendar" />
+        </antcall>
+    </target>
+	
+    <!-- ERCoreBusinessLogic -->
+    <target name="ERCoreBusinessLogic.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERCoreBusinessLogic" />
+        </antcall>
+    </target>
+	
+    <!-- ERJavaMail -->
+    <target name="ERJavaMail.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERJavaMail" />
+        </antcall>
+    </target>
+
+    <!-- ERPlot -->
+    <target name="ERPlot.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERPlot" />
+        </antcall>
+    </target>
+
+    <!-- ERWorkerChannel -->
+    <target name="ERWorkerChannel.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERWorkerChannel" />
+        </antcall>
+    </target>
+
+    <!-- ERPrototypes -->
+    <target name="ERPrototypes.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERPrototypes" />
+        </antcall>
+    </target>
+
+    <!-- ERExcelLook -->
+    <target name="ERExcelLook.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERExcelLook" />
+        </antcall>
+    </target>
+
+    <!-- ERChangeNotificationJMS -->
+    <target name="ERChangeNotificationJMS.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERChangeNotificationJMS" />
+        </antcall>
+    </target>
+	
+    <!-- ERNeutralLook -->
+    <target name="ERNeutralLook.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERNeutralLook" />
+        </antcall>
+    </target>
+	
+    <!-- WOOgnl -->
+    <target name="WOOgnl.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="WOOgnl" />
+        </antcall>
+    </target>
+
+    <!-- BTBusinessLogic -->
+    <target name="BTBusinessLogic.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="BTBusinessLogic" />
+        </antcall>
+    </target>
+
+    <!-- BugTracker -->
+    <target name="BugTracker.all">
+        <antcall target="copy.application" >
+            <param name="artifact.name" value="BugTracker" />
+        </antcall>
+    </target>
+
+    <!-- ERMailer -->
+    <target name="ERMailer.all">
+        <antcall target="copy.application" >
+            <param name="artifact.name" value="ERMailer" />
+        </antcall>
+    </target>
+
+    <!-- D2WInspectExample -->
+    <target name="D2WInspectExample.all">
+        <antcall target="copy.application" >
+            <param name="artifact.name" value="D2WInspectExample" />
+        </antcall>
+    </target>
+
+    <!-- D2WListExample -->
+    <target name="D2WListExample.all">
+        <antcall target="copy.application" >
+            <param name="artifact.name" value="D2WListExample" />
+        </antcall>
+    </target>
+
+    <!-- NetStruxrCaseStudy -->
+    <target name="NetStruxrCaseStudy.all">
+        <antcall target="copy.application" >
+            <param name="artifact.name" value="NetStruxrCaseStudy" />
+        </antcall>
+    </target>
+	
+    <!-- ERMiniUglyLook -->
+    <target name="ERMiniUglyLook.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ERMiniUglyLook" />
+        </antcall>
+    </target>
+    
+    <!-- WOPayPal -->
+    <target name="WOPayPal.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="WOPayPal" />
+        </antcall>
+    </target>
+    
+    <!-- ExcelGenerator -->
+    <target name="ExcelGenerator.all">
+        <antcall target="deploy.framework" >
+            <param name="artifact.name" value="ExcelGenerator" />
+        </antcall>
+    </target>
+    
+
+	
+    <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, JavaFileCachingAdaptor.all, ERExtensions.all, ERDirectToWeb.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all, WOPayPal.all, ExcelGenerator.all" />
+    
+
+    <target name="all" depends="frameworks.all" />
+	
+</project>
