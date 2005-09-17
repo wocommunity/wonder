@@ -79,17 +79,23 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * @return actor instance in the given editing context
      */
     public static EOEnterpriseObject actor(EOEditingContext ec) {
-        EOEnterpriseObject result = actor();
-        if (result != null && result.editingContext() != ec) {
-            EOEditingContext actorEc = result.editingContext();
+        EOEnterpriseObject actor = actor();
+        if (actor != null && actor.editingContext() != ec) {
+            EOEditingContext actorEc = actor.editingContext();
             actorEc.lock();
             try {
-                result = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, result);
+                EOEnterpriseObject localActor = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, actor);
+                if(actor instanceof ERCoreUserInterface) {
+                    NSArray prefs = ((ERCoreUserInterface)actor).preferences();
+                    prefs = ERXEOControlUtilities.localInstancesOfObjects(ec, prefs);
+                    ((ERCoreUserInterface)localActor).setPreferences(prefs);
+                }
+                actor = localActor;
             } finally {
                 actorEc.unlock();                
             }
         }
-        return result;
+        return actor;
     }
 
     /**

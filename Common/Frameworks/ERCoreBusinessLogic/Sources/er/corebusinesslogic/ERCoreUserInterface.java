@@ -12,5 +12,6 @@ import com.webobjects.eoaccess.*;
 
 public interface ERCoreUserInterface {
     public NSArray preferences();
+    public void setPreferences(NSArray array);
     public void newPreference(EOEnterpriseObject pref);
 }
