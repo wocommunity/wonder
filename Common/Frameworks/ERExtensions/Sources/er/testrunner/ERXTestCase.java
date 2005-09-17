@@ -26,11 +26,14 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
-
+/**
+ * Basic test case class to do unit testing inside of WO. 
+ * Provides an editingContext that is disposed on every setup/tearDown.
+ */
 public class ERXTestCase extends TestCase {
     static ERXLogger log = ERXLogger.getERXLogger(ERXTestCase.class);
-    protected EOEditingContext editingContext = ERXEC.newEditingContext();
-    protected NSMutableArray persistentRootObjects = new NSMutableArray();
+    private EOEditingContext editingContext;
+    private NSMutableArray persistentRootObjects;
 
     public ERXTestCase(String name){
         super(name);
@@ -38,7 +41,9 @@ public class ERXTestCase extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        editingContext.lock();
+        persistentRootObjects = new NSMutableArray();
+        editingContext = ERXEC.newEditingContext();
+        editingContext().lock();
     }
 
     protected void registerPersistentRootObjectForDeletion(EOEnterpriseObject anEnterpriseObject) {
@@ -47,7 +52,8 @@ public class ERXTestCase extends TestCase {
 
     protected void deletePersistentObjects() {
         boolean errorOccured = false;
-        editingContext().saveChanges();
+        if(editingContext().hasChanges())
+            editingContext().saveChanges();
         Enumeration persistentObjectEnum = persistentRootObjects.reverseObjectEnumerator();
         while (persistentObjectEnum.hasMoreElements()) {
             EOEnterpriseObject eo = (EOEnterpriseObject)persistentObjectEnum.nextElement();
@@ -71,12 +77,14 @@ public class ERXTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        editingContext.revert();
+        editingContext().revert();
         try {
             deletePersistentObjects();
         } finally {
-            editingContext.unlock();
+            editingContext().unlock();
         }
+        editingContext().dispose();
+        editingContext = null;
         super.tearDown();
     }
 
