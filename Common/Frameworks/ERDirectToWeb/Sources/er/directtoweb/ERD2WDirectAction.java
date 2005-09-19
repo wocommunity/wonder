@@ -98,22 +98,23 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     				String key = (String)e.nextElement();
     				EOEntity entity = rootEntity;
     				EOAttribute attribute = null;
+    				String attributeName = key;
     				if(key.indexOf(".") > 0) {
     					String path = ERXStringUtilities.keyPathWithoutLastProperty(key);
-    					key = ERXStringUtilities.lastPropertyKeyInKeyPath(key);
+    					attributeName = ERXStringUtilities.lastPropertyKeyInKeyPath(key);
     					entity = ERXEOAccessUtilities.destinationEntityForKeyPath(rootEntity, path);
     				}
     				if(entity != null) {
-    					attribute = entity.attributeNamed(key);
+    					attribute = entity.attributeNamed(attributeName);
     					if(attribute != null) {
-    						String stringValue = context().request().stringFormValueForKey(attribute.name());
+    						String stringValue = context().request().stringFormValueForKey(key);
     						if(stringValue != null) {
     							Object value = attribute.newValueForString(stringValue);
     							NSSelector selector = EOKeyValueQualifier.QualifierOperatorEqual;
     							if(stringValue.indexOf('*') >= 0) {
     								selector = EOKeyValueQualifier.QualifierOperatorCaseInsensitiveLike;
     							}
-    							qualifiers.addObject(new EOKeyValueQualifier(attribute.name(), selector, value));
+    							qualifiers.addObject(new EOKeyValueQualifier(key, selector, value));
     						}
     					}
     				}
