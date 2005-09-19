@@ -250,7 +250,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                 for (int i=0; i< sortOrderingDefinition.count();) {
                     String sortKey=(String)sortOrderingDefinition.objectAtIndex(i++);
                     String sortSelectorKey=(String)sortOrderingDefinition.objectAtIndex(i++);
-                    if(displayPropertyKeys.containsObject(sortKey)) {
+                    if(displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null) {
                         EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
                                                                        ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
                         so.addObject(sortOrdering);
