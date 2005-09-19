@@ -61,6 +61,13 @@ public class People extends _People implements ERCoreUserInterface {
     public void newPreference(EOEnterpriseObject pref) {
         addToPreferences((ERCPreference)pref);
     }
+    
+    //FIXME ak: this is only here so that I don't have to change the generated source in _People.java
+    // but actually the templates are broken because they take an NSMutableArray and make all sorts of strange
+    // assumptions
+    public void setPreferences(NSArray array) {
+        super.setPreferences(array.mutableClone());
+    }
 
     // make ERD2WPropertyName happy
     public boolean isDemoUser() { return false; }
