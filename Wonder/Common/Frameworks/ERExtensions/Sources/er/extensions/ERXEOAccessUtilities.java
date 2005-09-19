@@ -621,7 +621,7 @@ public class ERXEOAccessUtilities {
         String modelName = ent.model().name();
         String plugin= ERXSystem.getProperty(modelName + ".DBPlugin");
         plugin= plugin ==null ? ERXSystem.getProperty("dbConnectPluginGLOBAL") : plugin;
-        if ("Oracle".equals(plugin)) {
+        if ("Oracle".equals(plugin) || "EROracle".equals(plugin)) {
             commandSeparator = lineSeparator + "/" + lineSeparator; 
         } else {
             commandSeparator = ";" + lineSeparator;
