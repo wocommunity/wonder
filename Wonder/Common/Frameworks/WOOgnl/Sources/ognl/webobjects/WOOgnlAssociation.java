@@ -29,7 +29,6 @@ public class WOOgnlAssociation extends WOKeyValueAssociation {
 	try {
 	    value = WOOgnl.factory().getValue(keyPath(), component);
 	} catch(Exception e) {
-            boolean shouldThrowException = NSPropertyListSerialization.booleanForString(NSProperties.getProperty("ognl.webobjects.WOAssociation.shouldThrowExceptions"));
             if(shouldThrowException())
                 throw new RuntimeException( e );
 	    NSLog.err.appendln("Exception invoking valueInComponent on WOOgnlAssociation with keyPath '" + keyPath() + "' "+ e );
