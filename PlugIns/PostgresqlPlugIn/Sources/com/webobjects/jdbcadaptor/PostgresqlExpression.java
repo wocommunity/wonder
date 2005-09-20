@@ -482,12 +482,15 @@ public class PostgresqlExpression extends JDBCExpression {
             String s = columnTypeStringForAttribute(attribute);
             if (!shouldUseBindVariableForAttribute(attribute)) {
                 String c = "";
+                String superValue = super.sqlStringForValue(v,kp);
                 if (attribute.className().endsWith("String") || 
                         attribute.externalType().indexOf("char") > -1
                         ) {
                     c = "'";
+                    superValue = replaceStringByStringInString(_SQL_ESCAPE_CHAR+"", _SQL_ESCAPE_CHAR+""+_SQL_ESCAPE_CHAR, superValue);
+                    superValue = replaceStringByStringInString("'", _SQL_ESCAPE_CHAR+"'", superValue);
                 }
-                return c + super.sqlStringForValue(v,kp) + c + "::" + s;
+                return c + superValue + c + "::" + s;
             } else {
                 return super.sqlStringForValue(v, kp) + "::" + s;
             }
@@ -565,4 +568,38 @@ public class PostgresqlExpression extends JDBCExpression {
         arg0.externalType().equals("bit")
         ;
     }
+
+    /**
+     * Replaces a given string by another string in a string.
+     * @param old string to be replaced
+     * @param newString to be inserted
+     * @param buffer string to have the replacement done on it
+     * @return string after having all of the replacement done.
+     */
+    public static String replaceStringByStringInString(String old, String newString, String buffer) {
+        int begin, end;
+        int oldLength = old.length();
+        int length = buffer.length();
+        StringBuffer convertedString = new StringBuffer(length + 100);
+
+        begin = 0;
+        while(begin < length)
+        {
+            end = buffer.indexOf(old, begin);
+            if(end == -1)
+            {
+                convertedString.append(buffer.substring(begin));
+                break;
+            }
+            if(end == 0)
+                convertedString.append(newString);
+            else {
+                convertedString.append(buffer.substring(begin, end));
+                convertedString.append(newString);
+            }
+            begin = end+oldLength;
+        }
+        return convertedString.toString();
+    }
+
 }
