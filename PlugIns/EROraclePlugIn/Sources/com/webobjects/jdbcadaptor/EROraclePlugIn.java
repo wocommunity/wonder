@@ -14,6 +14,7 @@ public class EROraclePlugIn extends OraclePlugIn {
 
     public EROraclePlugIn(JDBCAdaptor jdbcadaptor) {
         super(jdbcadaptor);
+        System.out.println("loading EROracle PlugIn");
     }
 
     
@@ -28,10 +29,11 @@ public class EROraclePlugIn extends OraclePlugIn {
      * @see com.webobjects.jdbcadaptor.JDBCPlugIn#createSynchronizationFactory()
      */
     public EOSynchronizationFactory createSynchronizationFactory() {
-        try {
-            return new EROracleSynchronizationFactory(adaptor());
-        } catch ( Exception e ) {
-            throw new NSForwardException(e, "Couldn't create synchronization factory");
-        }
+        return super.createSynchronizationFactory();
+//        try {
+//            return new EROracleSynchronizationFactory(adaptor());
+//        } catch ( Exception e ) {
+//            throw new NSForwardException(e, "Couldn't create synchronization factory");
+//        }
     }
 }
