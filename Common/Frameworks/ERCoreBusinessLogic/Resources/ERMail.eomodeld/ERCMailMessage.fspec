@@ -4,6 +4,7 @@
         entityName = ERCMailMessage; 
         fetchLimit = 0; 
         isDeep = YES; 
+        prefetchingRelationshipKeyPaths = (attachments); 
         qualifier = {
             class = EOKeyValueQualifier; 
             key = mailStateID; 
