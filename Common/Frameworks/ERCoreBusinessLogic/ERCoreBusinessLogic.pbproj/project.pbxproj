@@ -5,6 +5,30 @@
 	};
 	objectVersion = 39;
 	objects = {
+		052FC78D08E0871000B1DCA7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			name = ERMail.eomodeld;
+			path = Resources/ERMail.eomodeld;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		052FC79808E0871000B1DCA7 = {
+			fileRef = 052FC78D08E0871000B1DCA7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//050
+//051
+//052
+//053
+//054
+//410
+//411
+//412
+//413
+//414
 		4125674106F82C8600EB9DF2 = {
 			containerPortal = F5C403A702022B0501A801D4;
 			isa = PBXContainerItemProxy;
@@ -240,6 +264,7 @@
 		F5C403BC02022B0501A801D4 = {
 			children = (
 				F5DD885902C4D57F01000102,
+				052FC78D08E0871000B1DCA7,
 				F5DD885702C4D57F01000102,
 				F5DD885402C4D56E01000102,
 				F6B782BC034552CD01257492,
@@ -549,6 +574,7 @@
 				F5DD885B02C4D57F01000102,
 				F5DD885C02C4D57F01000102,
 				F6B782BD034552CD01257492,
+				052FC79808E0871000B1DCA7,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
