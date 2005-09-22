@@ -328,13 +328,39 @@ public class PostgresqlExpression extends JDBCExpression {
             value = sqlStringForData((NSData)obj);
         } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
             value = "'" + _TIMESTAMP_FORMATTER.format(obj) + "'";
+        } else if(obj instanceof String) {
+        	value = formatStringValue((String)obj);
+        } else if(obj instanceof Number) {
+        	value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
+        } else if(obj instanceof Boolean) {
+        	value = ((Boolean)obj).toString();
+        } else if (obj == null || obj == NSKeyValueCoding.NullValue) {
+        	value = "NULL";
         } else {
-            value = ((obj == null || obj == NSKeyValueCoding.NullValue) ? "NULL" : obj.toString());
+        	// AK: I don't really like this, but we might want to prevent infinite recursion
+            Object adaptorValue = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+            if(adaptorValue instanceof NSData || adaptorValue instanceof NSTimestamp
+            		|| adaptorValue instanceof String || adaptorValue instanceof Number 
+            		|| adaptorValue instanceof Boolean) {
+            	value = formatValueForAttribute(adaptorValue, eoattribute);
+            } else {
+                System.err.println("Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
+            	value = obj.toString();
+            }
         }
         return value;
     }
     
+
     /**
+     * Overridden to take a diffenerent quoting scheme into account.
+     */
+	public String formatStringValue(String value) {
+		// value = "'" + value.replaceAll("([|'])", "|$1") + "'";
+		return super.formatStringValue(value);
+	}
+
+   /**
      * Helper to check for timestamp columns that have a "T" value type.
      * @param eoattribute
      * @return
@@ -344,25 +370,15 @@ public class PostgresqlExpression extends JDBCExpression {
     }
 
     /**
-     * Helper to check for data columns.
+     * Helper to check for data columns that are not keys.
      * @param eoattribute
      * @return
      */
     private boolean isDataAttribute(EOAttribute attribute) {
-        return attribute.className().equals("com.webobjects.foundation.NSData") ||
+        return (attribute.className().equals("com.webobjects.foundation.NSData") ||
     	attribute.externalType().equals("bytea") ||
-    	attribute.externalType().equals("bit");
-    }
-
-    /**
-     * Helper to check for string columns.
-     * @param eoattribute
-     * @return
-     */
-    private boolean isStringAttribute(EOAttribute attribute) {
-        return attribute.className().equals("com.webobjects.foundation.NSData") ||
-    	attribute.externalType().equals("bytea") ||
-    	attribute.externalType().equals("bit");
+    	attribute.externalType().equals("bit")) 
+    	&& entity().classProperties().containsObject(attribute);
     }
 
     /**
@@ -496,25 +512,14 @@ public class PostgresqlExpression extends JDBCExpression {
         EOAttribute attribute;
         int lastDotIdx = kp.lastIndexOf(".");
         if (lastDotIdx == -1) {
-            attribute = entity().attributeNamed(kp);
+        	attribute = entity().attributeNamed(kp);
         } else {
-            EOEntity kpEntity = entityForKeyPath(kp);
-            attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
+        	EOEntity kpEntity = entityForKeyPath(kp);
+        	attribute = kpEntity.attributeNamed(kp.substring(lastDotIdx+1));
         }
         if(attribute != null && v != null && v != NSKeyValueCoding.NullValue) {
-            String s = columnTypeStringForAttribute(attribute);
-            if (!shouldUseBindVariableForAttribute(attribute)) {
-                String c = "";
-                String superValue = super.sqlStringForValue(v,kp);
-                if (isStringAttribute(attribute)) {
-                    c = "'";
-                    superValue = replaceStringByStringInString(_SQL_ESCAPE_CHAR+"", _SQL_ESCAPE_CHAR+""+_SQL_ESCAPE_CHAR, superValue);
-                    superValue = replaceStringByStringInString("'", _SQL_ESCAPE_CHAR+"'", superValue);
-                }
-                return c + superValue + c + "::" + s;
-            } else {
-                return super.sqlStringForValue(v, kp) + "::" + s;
-            }
+        	String s = columnTypeStringForAttribute(attribute);
+        	return super.sqlStringForValue(v, kp) + "::" + s;
         } 
         
         return super.sqlStringForValue(v,kp);
@@ -636,5 +641,4 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         return convertedString.toString();
     }
-
 }
