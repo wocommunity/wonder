@@ -344,6 +344,28 @@ public class PostgresqlExpression extends JDBCExpression {
     }
 
     /**
+     * Helper to check for data columns.
+     * @param eoattribute
+     * @return
+     */
+    private boolean isDataAttribute(EOAttribute attribute) {
+        return attribute.className().equals("com.webobjects.foundation.NSData") ||
+    	attribute.externalType().equals("bytea") ||
+    	attribute.externalType().equals("bit");
+    }
+
+    /**
+     * Helper to check for string columns.
+     * @param eoattribute
+     * @return
+     */
+    private boolean isStringAttribute(EOAttribute attribute) {
+        return attribute.className().equals("com.webobjects.foundation.NSData") ||
+    	attribute.externalType().equals("bytea") ||
+    	attribute.externalType().equals("bit");
+    }
+
+    /**
      * Overrides the parent implementation to compose the final string
      * expression for the join clauses.
      */
@@ -458,6 +480,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * <li>add typecasts after the value, i.e. '2'::char,
      * which is required with certain PostgreSQL versions (<=7.4.x) for the correct query processing, 
      * particularly with index usage. 
+     * <li>quotes values if bind variables are disabled on this attribute. 
      * </ul>
      * NULL values are excluded from casting. <br/>
      * You can set the System default <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting</code>
@@ -483,9 +506,7 @@ public class PostgresqlExpression extends JDBCExpression {
             if (!shouldUseBindVariableForAttribute(attribute)) {
                 String c = "";
                 String superValue = super.sqlStringForValue(v,kp);
-                if (attribute.className().endsWith("String") || 
-                        attribute.externalType().indexOf("char") > -1
-                        ) {
+                if (isStringAttribute(attribute)) {
                     c = "'";
                     superValue = replaceStringByStringInString(_SQL_ESCAPE_CHAR+"", _SQL_ESCAPE_CHAR+""+_SQL_ESCAPE_CHAR, superValue);
                     superValue = replaceStringByStringInString("'", _SQL_ESCAPE_CHAR+"'", superValue);
@@ -530,44 +551,58 @@ public class PostgresqlExpression extends JDBCExpression {
         }
     }
     
+    /**
+     * Checks the system property <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting</code> to enable or
+     * disable typecasting (appending ::somepostgrestype) for attributes.
+     * @return
+     */
     private boolean disableTypeCasting() {
         if (disableTypeCasting == null) {
-            synchronized (this)  {
-                if (disableTypeCasting == null) {
-                    disableTypeCasting = "true".equals(System.getProperty("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting")) ? Boolean.TRUE : Boolean.FALSE;
-                }
-            }
+        	disableTypeCasting = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting") ? Boolean.TRUE : Boolean.FALSE;
         }
         return disableTypeCasting.booleanValue();
     }
-
+    
+    /**
+     * Checks the system property <code>com.webobjects.jdbcadaptor.PostgresqlExpression.disableBindVariables</code> to enable
+     * or disable bind variables in general.
+     * @return
+     */
     private boolean disableBindVariables() {
-        if (disableBindVariables == null) {
-            synchronized (this)  {
-                if (disableBindVariables == null) {
-                    disableBindVariables = "true".equals(System.getProperty("com.webobjects.jdbcadaptor.PostgresqlExpression.disableBindVariables")) ? Boolean.TRUE : Boolean.FALSE;
-                }
-            }
-        }
-        return disableBindVariables.booleanValue();
+    	if (disableBindVariables == null) {
+    		disableBindVariables = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableBindVariables") ? Boolean.TRUE : Boolean.FALSE;
+    	}
+    	return disableBindVariables.booleanValue();
     }
+    
+    /**
+     * Overriddden to return the negated value of {@see #disableBindVariables()}.
+     */
     public boolean useBindVariables() {
         return !disableBindVariables();
     }
-    public boolean shouldUseBindVariableForAttribute(EOAttribute arg0) {
-        return (!disableBindVariables()) || 
-        arg0.className().equals("com.webobjects.foundation.NSData") ||
-        arg0.externalType().equals("bytea") ||
-        arg0.externalType().equals("bit")
-        ;
+    
+    /**
+     * Overridden to set the <code>disableBindVariables</code> value correctly.
+     * @param value
+     */
+    public void setUseBindVariables(boolean value) {
+    	disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
     }
-    public boolean mustUseBindVariableForAttribute(EOAttribute arg0) {
-        return (!disableBindVariables()) || 
-        arg0.className().equals("com.webobjects.foundation.NSData") ||
-        arg0.externalType().equals("bytea") ||
-        arg0.externalType().equals("bit")
-        ;
+
+    /**
+     * Overridden to return true only if bind variables are enabled or the is a data type.
+     */
+    public boolean shouldUseBindVariableForAttribute(EOAttribute attribute) {
+        return useBindVariables() || isDataAttribute(attribute);
     }
+
+    /**
+     * Overridden to return true only if bind variables are enabled or the is a data type.
+     */
+    public boolean mustUseBindVariableForAttribute(EOAttribute attribute) {
+    	return useBindVariables() || isDataAttribute(attribute);
+     }
 
     /**
      * Replaces a given string by another string in a string.
