@@ -29,11 +29,13 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
     public static String getProperty(String key) {
         String oriValue = (String) sharedInstance.valueForKey(key);
         String convertedValue = oriValue;
+        if (oriValue == null || oriValue.indexOf("@@") == -1) return oriValue;
         String lastConvertedValue = null;
         while (convertedValue != lastConvertedValue && convertedValue.indexOf("@@") > -1) {
             lastConvertedValue = convertedValue;
-            convertedValue = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(convertedValue, "@@", sharedInstance, WOApplication.application());
+            convertedValue = new ERXSimpleTemplateParser("ERXSystem:KEY_NOT_FOUND").parseTemplateWithObject(convertedValue, "@@", sharedInstance, WOApplication.application());
         }
+        if (convertedValue.indexOf("ERXSystem:KEY_NOT_FOUND") > -1) return oriValue;//not all keys are present
         return convertedValue;
     }
 
