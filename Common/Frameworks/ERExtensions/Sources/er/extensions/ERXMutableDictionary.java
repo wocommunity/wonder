@@ -59,7 +59,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		return plist;
     }
 
-    public NSData toBlob() throws Exception {
+    public NSData toBlob() {
         return toBlob(this);
     }
 
