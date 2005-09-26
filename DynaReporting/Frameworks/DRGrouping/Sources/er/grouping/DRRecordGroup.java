@@ -1,11 +1,12 @@
 package er.grouping;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import ognl.webobjects.WOOgnl;
-
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /* DRRecordGroup.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
@@ -128,8 +129,12 @@ public class DRRecordGroup extends Object  {
                             } else {
                                 final NSArray rawRecords = rawRecordList();
                                 totalValue = new DRValue(0, val.attribute()) {
+                                    private Double total;
                                     public double total() {
-                                        return attribute().computeFromRawRecords(rawRecords);
+                                        if(total == null) { 
+                                            total = new Double(attribute().computeFromRawRecords(rawRecords));
+                                        }
+                                        return total.doubleValue();
                                     }
                                 };
                             }
