@@ -53,20 +53,34 @@ public class ERXMutableArray extends NSMutableArray implements List {
        super(vector, range, flag);
     }
     
-    public static NSData toBlob(ERXMutableArray d) throws Exception {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bout);
-        oos.writeObject(d);
-        oos.close();
-        NSData sp = new NSData(bout.toByteArray());
-        return sp;
+    public static NSData toBlob(ERXMutableArray d) {
+    	try {
+    		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    		ObjectOutputStream oos = new ObjectOutputStream(bout);
+    		oos.writeObject(d);
+    		oos.close();
+    		NSData sp = new NSData(bout.toByteArray());
+    		return sp;
+    	} catch (IOException e) {
+    		// shouldn't ever happen, as we only write to memory
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
     }
-    public static ERXMutableArray fromBlob(NSData d) throws Exception {
-        ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        ERXMutableArray dd = (ERXMutableArray) ois.readObject();
-        ois.close();
-        return dd;
+    
+    public static ERXMutableArray fromBlob(NSData d) {
+    	try {
+    		ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
+    		ObjectInputStream ois = new ObjectInputStream(bis);
+    		ERXMutableArray dd = (ERXMutableArray) ois.readObject();
+    		ois.close();
+    		return dd;
+    	} catch (IOException e) {
+    		// shouldn't ever happen, as we only read from memory
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	} catch (ClassNotFoundException e) {
+    		// might happen, but it doesn't help us much to know it
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
     }
 
     public static ERXMutableArray fromPropertyList(String arrayAsString) {
@@ -78,7 +92,7 @@ public class ERXMutableArray extends NSMutableArray implements List {
         return NSPropertyListSerialization.stringFromPropertyList(array);
     }
 
-    public NSData toBlob() throws Exception {
+    public NSData toBlob() {
         return toBlob(this);
     }
 
