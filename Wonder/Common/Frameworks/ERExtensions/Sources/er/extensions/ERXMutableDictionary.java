@@ -7,26 +7,41 @@ import java.util.*;
 import com.webobjects.foundation.*;
 
 /**
-usefull class in to automatically en- and decode an NSMutableDictionary
- as blob into a database. ERPrototype name = mutableDictionary
+ * Adds {@link java.util.Map} functionality to NSMutableDictionary and
+ * has helpers to en- and decode from database field. <code>ERPrototype name = mutableDictionary</code>
 */
 public class ERXMutableDictionary extends NSMutableDictionary implements Map {
+	
     public static final long serialVersionUID = 8091318522043166356L;
     
-    public static NSData toBlob(ERXMutableDictionary d) throws Exception {
+    public static NSData toBlob(ERXMutableDictionary d) {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bout);
-        oos.writeObject(d);
-        oos.close();
-        NSData sp = new NSData(bout.toByteArray());
-        return sp;
-    }
-    public static ERXMutableDictionary fromBlob(NSData d) throws Exception {
-        ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        ERXMutableDictionary dd = (ERXMutableDictionary) ois.readObject();
-        ois.close();
-        return dd;
+		try {
+	        ObjectOutputStream oos = new ObjectOutputStream(bout);
+	        oos.writeObject(d);
+	        oos.close();
+	        NSData sp = new NSData(bout.toByteArray());
+	        return sp;
+		} catch (IOException e) {
+			// shouldn't ever happen, as we only write to memory
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
+     }
+    
+    public static ERXMutableDictionary fromBlob(NSData d) {
+		try {
+	        ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
+	        ObjectInputStream ois = new ObjectInputStream(bis);
+	        ERXMutableDictionary dd = (ERXMutableDictionary) ois.readObject();
+	        ois.close();
+	        return dd;
+		} catch (IOException e) {
+			// shouldn't ever happen, as we only read from memory
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		} catch (ClassNotFoundException e) {
+			// might happen, but it doesn't help us much to know it
+			throw NSForwardException._runtimeExceptionForThrowable(e);
+		}
     }
 
     public static ERXMutableDictionary fromPropertyList(String plist) {
