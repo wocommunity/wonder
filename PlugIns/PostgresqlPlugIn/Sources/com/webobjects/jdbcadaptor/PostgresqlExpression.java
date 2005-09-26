@@ -12,6 +12,7 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
@@ -334,31 +335,30 @@ public class PostgresqlExpression extends JDBCExpression {
         	value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
         } else if(obj instanceof Boolean) {
         	value = ((Boolean)obj).toString();
+        } else if(obj instanceof Timestamp) {
+        	value = "'" + ((Timestamp)obj).toString() + "'";
         } else if (obj == null || obj == NSKeyValueCoding.NullValue) {
         	value = "NULL";
         } else {
         	// AK: I don't really like this, but we might want to prevent infinite recursion
-            Object adaptorValue = eoattribute.adaptorValueByConvertingAttributeValue(obj);
-            if(adaptorValue instanceof NSData || adaptorValue instanceof NSTimestamp
-            		|| adaptorValue instanceof String || adaptorValue instanceof Number 
-            		|| adaptorValue instanceof Boolean) {
-            	value = formatValueForAttribute(adaptorValue, eoattribute);
-            } else {
-                System.err.println("Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
-            	value = obj.toString();
-            }
+        	try {
+        		Object adaptorValue = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+        		if(adaptorValue instanceof NSData || adaptorValue instanceof NSTimestamp
+        				|| adaptorValue instanceof String || adaptorValue instanceof Number 
+        				|| adaptorValue instanceof Boolean) {
+        			value = formatValueForAttribute(adaptorValue, eoattribute);
+        		} else {
+        			NSLog.err.appendln(this.getClass().getName() +  ": Can't convert: " + obj + ":" + obj.getClass() + " -> " + adaptorValue + ":" +adaptorValue.getClass() );
+        			value = obj.toString();
+        		}
+        	} catch(Exception ex) {
+        		NSLog.err.appendln(this.getClass().getName() +  ": Exception while converting " + obj.getClass().getName());
+        		NSLog.err.appendln(ex);
+        		value = obj.toString();
+        	}
         }
         return value;
     }
-    
-
-    /**
-     * Overridden to take a diffenerent quoting scheme into account.
-     */
-	public String formatStringValue(String value) {
-		// value = "'" + value.replaceAll("([|'])", "|$1") + "'";
-		return super.formatStringValue(value);
-	}
 
    /**
      * Helper to check for timestamp columns that have a "T" value type.
