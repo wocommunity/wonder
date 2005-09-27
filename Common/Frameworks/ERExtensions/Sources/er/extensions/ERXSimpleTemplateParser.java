@@ -60,6 +60,9 @@ public class ERXSimpleTemplateParser {
     /** The label that will be appeared where an undefined key is found */ 
     private final String _undefinedKeyLabel;
 
+    /** Defines if @ can be used as alternative delimiter */
+    private boolean _useOldDelimiter = true;
+    
     /** 
      * Returns a parser object with the default undefined label
      * 
@@ -80,6 +83,20 @@ public class ERXSimpleTemplateParser {
         _undefinedKeyLabel = undefinedKeyLabel;
     }
 
+    /** 
+     * Returns a parser object with the given string as the undefined key label. 
+     * Depending on useOldDelimiter value @ can be used as delimiter if @@ is not present 
+     * in the template.
+     * 
+     * @param undefinedKeyLabel  string as the undefined key label, 
+     *                            for example, "?", "N/A"
+     * @param useOldDelimiter   boolean defining if @ is used as delimiter if @@ is not available in the template
+     */
+    public ERXSimpleTemplateParser(String undefinedKeyLabel, boolean useOldDelimiter) {
+        this(undefinedKeyLabel);
+        _useOldDelimiter = useOldDelimiter;
+    }
+    
     /**
      * Calculates the set of keys used in a given template
      * for a given delimiter.
@@ -157,7 +174,7 @@ public class ERXSimpleTemplateParser {
             log.debug("Delim: " + delimiter);
             log.debug("otherObject: " + otherObject);
         }
-        if (delimiter.equals("@@") && template.indexOf(delimiter) < 0 && template.indexOf("@") >= 0) {
+        if (_useOldDelimiter && delimiter.equals("@@") && template.indexOf(delimiter) < 0 && template.indexOf("@") >= 0) {
             if (!isLoggingDisabled) {
 	        log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
             }
