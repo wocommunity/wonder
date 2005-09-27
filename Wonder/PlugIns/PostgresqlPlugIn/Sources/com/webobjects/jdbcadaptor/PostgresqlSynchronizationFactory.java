@@ -120,9 +120,13 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 
         results = new NSMutableArray();
         superResults = super.foreignKeyConstraintStatementsForRelationship(relationship);
+        
         count = superResults.count();
         for ( i = 0 ; i < count ; i++ ) {
             expression = (EOSQLExpression) superResults.objectAtIndex(i);
+            String s = expression.statement();
+            s = replaceStringByStringInString(") INITIALLY DEFERRED", ") DEFERRABLE INITIALLY DEFERRED", s);
+            expression.setStatement(s);
             results.addObject( expression );
             String tableName = expression.entity().externalName();
             NSArray columNames = ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) );
@@ -155,6 +159,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         count = entityGroup.count();
         for ( i = 0 ; i < count ; i++ ) {
             entity = (EOEntity)entityGroup.objectAtIndex(i);
+            if (!entityUsesSeparateTable(entity)) continue;
             StringBuffer statement = new StringBuffer("ALTER TABLE ");
             statement.append(entity.externalName());
             statement.append(" ADD CONSTRAINT ");
@@ -224,4 +229,48 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return results;
     }
 
+    public static boolean entityUsesSeparateTable(EOEntity entity) {
+        if (entity.parentEntity() == null) return true;
+        EOEntity parent = entity.parentEntity();
+        while (parent != null) {
+            if (!entity.externalName().equals(parent.externalName())) return true;
+            entity = parent;
+            parent = entity.parentEntity();
+        }
+        return false;
+    }
+
+    /**
+     * Replaces a given string by another string in a string.
+     * @param old string to be replaced
+     * @param newString to be inserted
+     * @param buffer string to have the replacement done on it
+     * @return string after having all of the replacement done.
+     */
+    public static String replaceStringByStringInString(String old, String newString, String buffer) {
+        int begin, end;
+        int oldLength = old.length();
+        int length = buffer.length();
+        StringBuffer convertedString = new StringBuffer(length + 100);
+
+        begin = 0;
+        while(begin < length)
+        {
+            end = buffer.indexOf(old, begin);
+            if(end == -1)
+            {
+                convertedString.append(buffer.substring(begin));
+                break;
+            }
+            if(end == 0)
+                convertedString.append(newString);
+            else {
+                convertedString.append(buffer.substring(begin, end));
+                convertedString.append(newString);
+            }
+            begin = end+oldLength;
+        }
+        return convertedString.toString();
+    }
+    
 }
