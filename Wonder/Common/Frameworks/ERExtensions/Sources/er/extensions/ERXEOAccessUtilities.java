@@ -542,10 +542,14 @@ public class ERXEOAccessUtilities {
             NSMutableArray ar = new NSMutableArray();
             while (e.hasMoreElements()) {
                 EOEntity currentEntity = (EOEntity) e.nextElement();
-                if (!(currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
+                if ((currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
                     // we do not want to add EOXXXPrototypes entities
-                    ar.addObject(currentEntity);
+                    continue;
                 }
+                if (!entityUsesSeparateTable(currentEntity)) {
+                    continue;
+                }
+                ar.addObject(currentEntity);
             }
             entities = ar;
         }
@@ -1102,6 +1106,19 @@ public class ERXEOAccessUtilities {
             os.writeObject(ops);
             os.flush();
             os.close();
+            if (file.exists()) {
+                int counter = 0;
+                String path = file.getAbsolutePath();
+                path = path + "." + counter;
+                file = new File(path);
+                while (file.exists()) {
+                    counter++;
+                    path = file.getAbsolutePath();
+                    path = path.substring(0, path.lastIndexOf(".") + 1) + counter;
+                    file = new File(path);
+                }
+            }
+            
             file.createNewFile();
             ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(bous.toByteArray()), file);
         } finally {
