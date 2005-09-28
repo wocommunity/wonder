@@ -39,7 +39,7 @@ public class ERXStringUtilities {
     public static final NSArray SORT_DESCENDING = 
         new NSArray(new Object [] { new EOSortOrdering(_DISTANCE, EOSortOrdering.CompareDescending) });
     /** Holds characters that have special meaning for regex */
-    public static final String SpecialRegexCharacters        = ".*[]{}()?\\+%$!@^";
+    public static final String SpecialRegexCharacters        = ".*[]{}()?\\+%$!^";
     
     /** 
      * Holds the array of default display languages. Holds
