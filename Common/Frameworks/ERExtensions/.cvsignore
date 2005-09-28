@@ -9,3 +9,6 @@ ant.classpaths.user.home
 *~
 build
 woproject
+ERExtensions.xcodeproj
+PB.project
+.WOLips
