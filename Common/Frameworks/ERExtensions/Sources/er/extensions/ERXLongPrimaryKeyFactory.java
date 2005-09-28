@@ -41,14 +41,35 @@ import er.extensions.*;
 public class ERXLongPrimaryKeyFactory {
 
     public static final int       CODE_LENGTH  = 6;
+    public static final int		HOST_CODE_LENGTH = 10;
+    
     public static final ERXLogger log          = ERXLogger.getERXLogger(ERXLongPrimaryKeyFactory.class);
-    public static long            MAX_PK_VALUE = (long) Math.pow(2, 58);
+    public static long            MAX_PK_VALUE = (long) Math.pow(2, 48);
     public static Boolean         encodeEntityInPkValue;
+    public static Boolean         encodeHostInPkValue;
+    public static Integer 		hostCode;
     private static Hashtable      pkCache      = new Hashtable();
     private static int            increaseBy   = 0;
 
     private static Long getNextPkValueForEntity(String ename) {
         Long pk = cachedPkValue(ename);
+        if (encodeHostInPkValue()) {
+            long l = pk.longValue();
+            if (l > MAX_PK_VALUE) { throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
+
+            }
+
+            // we are assuming 64 bit int values
+            // and we are using the last 10 bits for
+            // hostCode
+            long realPk = l << HOST_CODE_LENGTH;
+            // now add the hostCode
+            realPk = realPk | hostCode();
+            if (log.isDebugEnabled()) {
+                log.debug("new pk value for "+ename+"("+((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+            }
+            pk = new Long(realPk);
+        }
         if (encodeEntityInPkValue()) {
             long l = pk.longValue();
             if (l > MAX_PK_VALUE) { throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
@@ -72,6 +93,12 @@ public class ERXLongPrimaryKeyFactory {
     /**
      * @return
      */
+    public synchronized static int hostCode() {
+        if (hostCode == null) {
+            hostCode = new Integer(ERXSystem.getProperty("er.extensions.ERXLongPrimaryKeyFactory.hostCode"));
+        }
+        return hostCode.intValue();
+    }
     public synchronized static boolean encodeEntityInPkValue() {
         if (encodeEntityInPkValue == null) {
             boolean b = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLongPrimaryKeyFactory.encodeEntityInPkValue"),
@@ -79,6 +106,14 @@ public class ERXLongPrimaryKeyFactory {
             encodeEntityInPkValue = b ? Boolean.TRUE : Boolean.FALSE;
         }
         return encodeEntityInPkValue.booleanValue();
+    }
+    public synchronized static boolean encodeHostInPkValue() {
+        if (encodeHostInPkValue == null) {
+            boolean b = ERXValueUtilities.booleanValueWithDefault(System.getProperty("er.extensions.ERXLongPrimaryKeyFactory.encodeHostInPkValue"),
+                    false);
+            encodeHostInPkValue = b ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return encodeHostInPkValue.booleanValue();
     }
 
     public static Object primaryKeyValue(EOEnterpriseObject eo) {
