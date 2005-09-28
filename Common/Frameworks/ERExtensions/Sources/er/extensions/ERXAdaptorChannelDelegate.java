@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.io.*;
+
 import org.apache.log4j.*;
 
 import com.webobjects.foundation.*;
@@ -20,10 +22,14 @@ import com.webobjects.eoaccess.*;
  * @author ak
  */
 public class ERXAdaptorChannelDelegate {
-    private ERXLogger log = null;
+    private static ERXLogger log = ERXLogger.getERXLogger(ERXAdaptorChannelDelegate.class);
+    
+    private ERXLogger sqlLoggingLogger = null;
     private long _lastMilliseconds;
  
     private static ERXAdaptorChannelDelegate _delegate;
+    /** Used to write down database transactions **/
+    public static NSTimestampFormatter adaptorOperationsFormatter = new NSTimestampFormatter("d.%m.%Y-%H-%M-%S.%F");
 
     public static void setupDelegate() {
         _delegate = new ERXAdaptorChannelDelegate();
@@ -38,8 +44,8 @@ public class ERXAdaptorChannelDelegate {
     }
     
     public void adaptorChannelDidEvaluateExpression(EOAdaptorChannel channel,  EOSQLExpression expression) {
-        if(log == null) {
-            log = ERXLogger.getERXLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
+        if(sqlLoggingLogger == null) {
+            sqlLoggingLogger = ERXLogger.getERXLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
         }
         //log.setLevel(Level.DEBUG);
         String entityMatchPattern = ERXProperties.stringForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern", ".*");
@@ -57,11 +63,11 @@ public class ERXAdaptorChannelDelegate {
             } else if(millisecondsNeeded > warnMilliseconds) {
             	needsLog = true;
             } else if(millisecondsNeeded > infoMilliseconds) {
-            	if (log.isInfoEnabled()) {
+            	if (sqlLoggingLogger.isInfoEnabled()) {
             		needsLog = true;
             	}
             } else if(millisecondsNeeded > debugMilliseconds) {
-            	if (log.isDebugEnabled()) {
+            	if (sqlLoggingLogger.isDebugEnabled()) {
             		needsLog = true;
             	}
             }
@@ -106,16 +112,16 @@ public class ERXAdaptorChannelDelegate {
             		description = description.substring(0, maxLength);
             	}
             	if(millisecondsNeeded > errorMilliseconds) {
-            		log.error(description, new RuntimeException("Statement running too long"));
+            		sqlLoggingLogger.error(description, new RuntimeException("Statement running too long"));
             	} else if(millisecondsNeeded > warnMilliseconds) {
-            		log.warn(description);
+            		sqlLoggingLogger.warn(description);
             	} else if(millisecondsNeeded > infoMilliseconds) {
-            		if (log.isInfoEnabled()) {
-            			log.info(description);
+            		if (sqlLoggingLogger.isInfoEnabled()) {
+            			sqlLoggingLogger.info(description);
             		}
             	} else if(millisecondsNeeded > debugMilliseconds) {
-            		if (log.isDebugEnabled()) {
-            			log.debug(description);
+            		if (sqlLoggingLogger.isDebugEnabled()) {
+            			sqlLoggingLogger.debug(description);
             		}
             	}
             }
@@ -135,4 +141,38 @@ public class ERXAdaptorChannelDelegate {
             channel.adaptorChannel().setDelegate(this);
         }
     }
+   
+   public Throwable adaptorChannelDidPerformOperations(EOAdaptorChannel channel, NSArray adaptorOps, Throwable exception) {
+	   if (log.isDebugEnabled()) {
+		   log.debug("adaptorChannelDidPerformOperations: count="+adaptorOps.count()+", exception = "+exception);
+	   }
+	   if (exception == null) {
+	        if (writeTransactionsToDisk()) {
+	            File f = newTransactionFile();
+	            try {
+	                ERXEOAccessUtilities.writeAdaptorOperationsToDisk(adaptorOps, f);
+	            } catch (IOException e) {
+	                sqlLoggingLogger.error("could not write database operations to file "+f, e);
+	            }
+	        }
+		   
+	   }
+	   return exception;
+   }
+   /**
+    * @return a new <code>java.io.File</code> which can be used for transactionlogs.
+    */
+   private File newTransactionFile() {
+       File f = new File(ERXSystem.getProperty("er.extensions.ERXAdaptorChannelDelegate.transactionFileLocation"), adaptorOperationsFormatter.format(new NSTimestamp()));
+       return f;
+   }
+
+   /** 
+    * @return <code>true</code> if the system property <code>er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk</code>
+    * is set to true, false otherwise.
+    */
+   private boolean writeTransactionsToDisk() {
+       return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.writeTransactionsToDisk", false);
+   }
+
 }

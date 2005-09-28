@@ -47,8 +47,6 @@ public class ERXDatabaseContextDelegate {
     public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.FaultFiring");
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.Exceptions</b> */
     public final static ERXLogger exLog = ERXLogger.getERXLogger("er.transaction.adaptor.Exceptions");
-    /** Used to write down database transactions **/
-    public static NSTimestampFormatter adaptorOperationsFormatter = new NSTimestampFormatter("d.%m.%Y-%H-%M-%S.%F");
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();
@@ -202,31 +200,7 @@ public class ERXDatabaseContextDelegate {
         if (adaptorOps.count() != 0) {
             setReadWriteForConnectionInDatabaseContext(true, dbCtxt);
         }
-        if (writeTransactionsToDisk()) {
-            File f = newTransactionFile();
-            try {
-                ERXEOAccessUtilities.writeAdaptorOperationsToDisk(adaptorOps, f);
-            } catch (IOException e) {
-                log.error("could not write database operations to file "+f, e);
-            }
-        }
         return adaptorOps;
-    }
-
-    /**
-     * @return a new <code>java.io.File</code> which can be used for transactionlogs.
-     */
-    private File newTransactionFile() {
-        File f = new File(ERXSystem.getProperty("er.extensions.ERXDatabaseContextDelegate.transactionFileLocation"), adaptorOperationsFormatter.format(new NSTimestamp()));
-        return f;
-    }
-
-    /** 
-     * @return <code>true</code> if the system property <code>er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk</code>
-     * is set to true, false otherwise.
-     */
-    private boolean writeTransactionsToDisk() {
-        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk", false);
     }
 
     /**
