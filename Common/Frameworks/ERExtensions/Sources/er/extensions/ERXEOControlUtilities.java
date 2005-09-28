@@ -1185,8 +1185,8 @@ public class ERXEOControlUtilities {
                         }
                     }
                     
-                    insertedObjectsInParent.makeObjectsPerformSelector(ERXGenericRecord.FlushCachesSelector, null);
-                    updatedObjectsInParent.makeObjectsPerformSelector(ERXGenericRecord.FlushCachesSelector, null);
+                    insertedObjectsInParent.makeObjectsPerformSelector(ERXEnterpriseObject.FlushCachesSelector, null);
+                    updatedObjectsInParent.makeObjectsPerformSelector(ERXEnterpriseObject.FlushCachesSelector, null);
                 }
                 finally {
                     parentEC.unlock();
