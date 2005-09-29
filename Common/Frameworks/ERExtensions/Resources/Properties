@@ -303,7 +303,10 @@ dbMinConnectionsGLOBAL=1
 # 1) all entities must have only one PK value whose external type is 
 #    comparable to java.lang.Long, for example int8 with Postgresql
 # er.extensions.ERXLongPrimaryKeyFactory.encodeEntityInPkValue=false
-
+# if set to true then the next property must have a unique value for each host
+# if you want to use synchronization features
+# er.extensions.ERXLongPrimaryKeyFactory.encodeHostInPkValue=false
+# er.extensions.ERXLongPrimaryKeyFactory.hostCode=a value between 0 and 2<<10
 #########################################################################
 # ERXWOResponseCache 
 #########################################################################
