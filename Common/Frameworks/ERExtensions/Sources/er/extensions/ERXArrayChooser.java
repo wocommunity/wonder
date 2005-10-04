@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -14,6 +16,9 @@ import com.webobjects.foundation.*;
  * possibleChoices, dataSource, destinationEntityName or via sourceEntityName and relationshipKey.<br />
  * The main difference between this component and the former WOToOne/WOToMany is that it is non-synchronizing. So if
  * you have custom subclasses of WOToOne/WOToMany you need to take this into account.
+ * Also adds the values that are not included in the restricted-choice list. These items are marked by [name of item]. 
+ * This should ensure they end up at the bottom of the list.
+ * NOTE: currently "includeUnmatchedValues" is set to 
  * @author ak (but most stuff is pulled over from the pre-existing WOToOne/WOToMany)
  */
 
@@ -23,10 +28,12 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXArrayChooser.class);
 
     public static boolean localizeDisplayKeysDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.localizeDisplayKeysDefault", false);
-    
+    public static boolean includeUnmatchedValuesDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault", false);
+       
     protected final static String NO_SELECTION_STRING = "ERXArrayChooser.NoSelectionString";
     
     protected Boolean _localizeDisplayKeys;
+    protected Boolean _includeUnmatchedValues;
 
     protected String _sourceEntityName;
     protected String _destinationEntityName;
@@ -38,6 +45,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     protected String _uiStyle;
     protected Boolean _isMandatory;
     protected NSArray _list;
+    protected NSArray _unmatchedValues;
  
     protected String _destinationSortKey;
     protected String _noneString;
@@ -66,6 +74,8 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         _destinationSortKey = null;
         _noneString = null;
         _localizeDisplayKeys = null;
+        _includeUnmatchedValues = null;
+        _unmatchedValues = null;
     }
 
     public String noneString() {
@@ -86,6 +96,13 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         return _localizeDisplayKeys.booleanValue();
     }
 
+    public boolean includeUnmatchedValues() {
+        if(_includeUnmatchedValues == null) {
+        	_includeUnmatchedValues = booleanValueForBinding("includeUnmatchedValues", includeUnmatchedValuesDefault) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _includeUnmatchedValues.booleanValue();
+    }
+
     public String sourceEntityName() {
         if(_sourceEntityName == null) {
             _sourceEntityName = (String)valueForBinding("sourceEntityName");
@@ -100,6 +117,10 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                 _destinationSortKey = destinationDisplayKey();
         }
         return _destinationSortKey;
+    }
+    
+    public NSArray unmatchedValues() {
+    	return _unmatchedValues;
     }
     
     protected NSArray destinationSortKeys() {
@@ -253,6 +274,8 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         theCurrentItem = aValue;
     }
 
+    public abstract NSArray currentValues();
+     
     public NSArray theList() {
         if (_list==null) {
             if(hasBinding("possibleChoices") && valueForBinding("possibleChoices") != null) {
@@ -268,6 +291,23 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                 }
             }
             _list = ERXArrayUtilities.sortedArraySortedWithKeys(_list, destinationSortKeys(), null);
+            if(includeUnmatchedValues()) {
+            	NSArray currentValues = currentValues();
+            	if(currentValues.count() > 0) {
+            		_unmatchedValues = ERXArrayUtilities.arrayMinusArray(currentValues(), _list);
+            		
+            		if(_unmatchedValues.count() > 0) {
+            			_unmatchedValues = ERXArrayUtilities.arrayMinusArray(_unmatchedValues, new NSArray(NO_SELECTION_STRING));
+                		if(_unmatchedValues.lastObject() instanceof EOEnterpriseObject) {
+            				_unmatchedValues = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _unmatchedValues);
+            			}
+            			_unmatchedValues = ERXArrayUtilities.sortedArraySortedWithKeys(_unmatchedValues, destinationSortKeys(), null);
+            			_list = _list.arrayByAddingObjectsFromArray(_unmatchedValues);
+            		}
+            	} else {
+            		_unmatchedValues = NSArray.EmptyArray;
+            	}
+            }
         }
         return _list;
     }
@@ -282,6 +322,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         }
         if(localizeDisplayKeys() && currentValue != null) {
             currentValue = localizer().localizedStringForKeyWithDefault(currentValue.toString());
+        }
+        if(includeUnmatchedValues() && theCurrentItem!=NO_SELECTION_STRING && unmatchedValues().containsObject(theCurrentItem)) {
+        	currentValue = "[" + currentValue + "]";
         }
         return currentValue;
     }
