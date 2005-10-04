@@ -73,6 +73,11 @@ public class WOToOneRelationship extends ERXArrayChooser {
         updateSourceObject(value);
     }
 
+    public NSArray currentValues() {
+    	Object current = selection();
+    	return current == null ? NSArray.EmptyArray : new NSArray(current);
+    }
+    
     public Object selection() {
         if (_selection == null) {
             Object object = realSourceObject();
