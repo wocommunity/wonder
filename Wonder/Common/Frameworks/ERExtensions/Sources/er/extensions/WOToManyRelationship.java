@@ -75,6 +75,11 @@ public class WOToManyRelationship extends ERXArrayChooser {
         updateSourceObject(selections);
     }
     
+    public NSArray currentValues() {
+    	NSArray current = selections();
+    	return current == null ? NSArray.EmptyArray : current;
+    }
+    
     public NSArray selections() {
         if (_selections==null) {
             NSArray oldValues = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(sourceObject(), relationshipKey());
