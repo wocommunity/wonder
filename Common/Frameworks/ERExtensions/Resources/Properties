@@ -51,16 +51,15 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 ## We actually support a lot of other languages, but they are probably not maintained
 # er.extensions.ERXLocalizer.availableLanguages = (English,German,French,Norwegian,Japanese,Italian)
 
-## These should go away. It's special handling for Japanese, but wuold be
+## These should go away. It's special handling for Japanese, but would be
 ## better refactored into a general pluralizing strategy
 # er.extensions.ERXLocalizer.pluralFormClassName = er.extensions.ERXLocalizer
 # er.extensions.ERXLocalizer.nonPluralFormClassName = er.extensions.ERXNonPluralFormLocalizer
 
-## Components that use ERXToOne/ManyRelationship can have locazilized display keys
+## Components that use ERXToOne/ManyRelationship can have localized display keys
 ## This can be specified on a per-component basis in the bindings, 
 ## but here's the default value
-# er.extensions.ERXArrayChooser.localizeDisplayKeysDefault = true
-# er.extensions.ERXArrayChooser.localizeDisplayKeysDefault = true
+# er.extensions.ERXArrayChooser.localizeDisplayKeysDefault = false
 
 ## This tells ERXWOString/ERXWOText to use localized 
 ## formatters. 
@@ -68,6 +67,11 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 
 ## Allows you to override the locale for a language
 # er.extensions.ERXLocalizer.German.locale = de
+
+## Components that use ERXToOne/ManyRelationship include missing items when using a possibleChoice
+## This can be specified on a per-component basis in the bindings, 
+## but here's the default value
+# er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault = false
 
 #########################################################################
 # Encoding
@@ -320,4 +324,5 @@ dbMinConnectionsGLOBAL=1
 # er.extensions.ERXWORepetition.checkHashCodes = true
 ## If an object wasn't found, raise an exception (if unset, the wrong object is used)
 # er.extensions.ERXWORepetition.raiseOnUnmatchedObject = true
+
 
