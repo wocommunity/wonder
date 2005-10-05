@@ -297,33 +297,31 @@ public class ERXWORepetition extends WODynamicGroup {
         }
         if(indexString != null) {
             if (_item != null) {
-                Object object = context.objectAtIndex(index);
-                if(checkHashCodes) {
-                    if(object != null && hashCode != 0) {
-                        int objectHashCode = hashCodeForObject(object);
-                        if(objectHashCode != hashCode) {
-                            boolean found = false;
-                            for(int i = 0; i < context.count() && !found; i++) {
-                                Object o = context.objectAtIndex(i);
-                                int otherHashCode = hashCodeForObject(o);
-                                if(otherHashCode == hashCode) {
-                                    object = o;
-                                    index = i;
-                                    found = true;
-                                }
-                            }
-                            if(!found) {
-                                if(raiseOnUnmatchedObject(wocomponent, wocontext)) {
-                                    throw new UnmatchedObjectException();
-                                }
-                                log.warn("Wrong object: " + objectHashCode + " vs " + hashCode);
-                            } else {
-                                log.info("Ignored object: " + objectHashCode + " vs " + hashCode);
-                                return null;
-                            }
-                        }
-                    }
-                }
+            	Object object = null;
+            	if(checkHashCodes) {
+            		boolean found = false;
+            		int otherHashCode = 0;
+            		for(int i = 0; i < context.count() && !found; i++) {
+            			Object o = context.objectAtIndex(i);
+            			otherHashCode = hashCodeForObject(o);
+            			if(otherHashCode == hashCode) {
+            				object = o;
+            				index = i;
+            				found = true;
+            			}
+            		}
+            		if(!found) {
+            			if(raiseOnUnmatchedObject(wocomponent, wocontext)) {
+            				throw new UnmatchedObjectException();
+            			}
+            			log.warn("Wrong object: " + otherHashCode + " vs " + hashCode);
+            			return wocontext.page();
+            		} else {
+            			log.debug("Found object: " + otherHashCode + " vs " + hashCode);
+            		}
+            	} else {
+            		object = context.objectAtIndex(index);
+            	}
                 _item._setValueNoValidation(object, wocomponent);
             }
             if (_index != null) {
@@ -355,7 +353,7 @@ public class ERXWORepetition extends WODynamicGroup {
         if(_checkHashCodes != null) {
             return _checkHashCodes.booleanValueInComponent(wocomponent);
         }
-        return _checkHashCodesDefault;
+        return _checkHashCodesDefault || true;
     }
 
     private boolean raiseOnUnmatchedObject(WOComponent wocomponent, WOContext wocontext) {
