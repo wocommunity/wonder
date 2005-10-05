@@ -22,9 +22,9 @@ import com.webobjects.foundation.NSDictionary;
  * in addition to {@see com.webobjects.foundation.NSArray} and {@see java.util.Vector} 
  * (which is a {@see java.util.List} in 1.4). This is listed as Radar #3325342 since June 2003.</li>
  * <li>help with backtracking issues by adding not only the current index, but also the current object's 
- * hash code to the element id, so it looks like "x.y.12-12345.z".<br />
+ * hash code to the element id, so it looks like "x.y.12345.z".<br />
  * If they don't match when invokeAction is called, the list is searched for 
- * a matching object. If none is found, then either original object is used or - when the property 
+ * a matching object. If none is found, then the action is ignored or - when the property 
  * <code>er.extensions.ERXWORepetition.raiseOnUnmatchedObject=true</code> - an {@link ERXWORepetition.UnmatchedObjectException} is thrown.<br />
  * This feature is turned on globally if <code>er.extensions.ERXWORepetition.checkHashCodes=true</code> or
  * on a per-component basis by setting the <code>checkHashCodes</code> binding to true or false.<br />
@@ -181,7 +181,7 @@ public class ERXWORepetition extends WODynamicGroup {
                     if (index != 0) {
                         wocontext.deleteLastElementIDComponent();
                     }
-                    String elementID = index + "-" + hashCode;
+                    String elementID = "" + hashCode;
                     if(log.isDebugEnabled()) {
                         log.debug("prepare " +  elementID + "->" + object);
                     }
@@ -290,13 +290,7 @@ public class ERXWORepetition extends WODynamicGroup {
         
         if(indexString != null) {
             if(checkHashCodes) {
-                int sep = indexString.indexOf("-");
-                if(sep > 0) {
-                    hashCode = Integer.parseInt(indexString.substring(sep+1));
-                    index = Integer.parseInt(indexString.substring(0, sep));
-                } else {
-                    index = Integer.parseInt(indexString);
-                }
+                hashCode = Integer.parseInt(indexString);
             } else {
                 index = Integer.parseInt(indexString);
             }
@@ -324,7 +318,8 @@ public class ERXWORepetition extends WODynamicGroup {
                                 }
                                 log.warn("Wrong object: " + objectHashCode + " vs " + hashCode);
                             } else {
-                                log.info("Switched object: " + objectHashCode + " vs " + hashCode);
+                                log.info("Ignored object: " + objectHashCode + " vs " + hashCode);
+                                return null;
                             }
                         }
                     }
