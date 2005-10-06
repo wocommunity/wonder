@@ -353,7 +353,7 @@ public class ERXWORepetition extends WODynamicGroup {
         if(_checkHashCodes != null) {
             return _checkHashCodes.booleanValueInComponent(wocomponent);
         }
-        return _checkHashCodesDefault || true;
+        return _checkHashCodesDefault;
     }
 
     private boolean raiseOnUnmatchedObject(WOComponent wocomponent, WOContext wocontext) {
