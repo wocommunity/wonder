@@ -42,6 +42,9 @@ public class ERMailer {
 
     protected static Factory factory;
 
+    private static final boolean _warnOnGeneralAdaptorExceptionLockingMessage =
+        ERXProperties.booleanForKeyWithDefault("er.javamail.mailer.ERMailer.WarnOnGeneralAdaptorExceptionLockingMessage", true);
+    
     //	===========================================================================
     //	Class Method(s)
     //	---------------------------------------------------------------------------
@@ -177,7 +180,8 @@ public class ERMailer {
                         log.warn("Unable to create mail delivery for mail message: " + mailMessage);
                     }
                 } catch (EOGeneralAdaptorException ge) {
-                    log.warn("Caught general adaptor exception, reverting context. Might be running multiple mailers", ge);
+                    if ( _warnOnGeneralAdaptorExceptionLockingMessage )
+                        log.warn("Caught general adaptor exception, reverting context. Might be running multiple mailers", ge);
                     mailMessage.editingContext().revert();
                 } catch (Throwable e) {
                     if (e instanceof NSForwardException)
