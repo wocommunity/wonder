@@ -1,8 +1,10 @@
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />
@@ -83,6 +85,13 @@ public class WOToOneRelationship extends ERXArrayChooser {
             Object object = realSourceObject();
             String key = realRelationshipKey();
             Object selection = NSKeyValueCoding.Utility.valueForKey(object,key);
+            if (selection != null && selection instanceof EOEnterpriseObject) {
+              EOEnterpriseObject eo = (EOEnterpriseObject)selection;
+              if (eo.editingContext() != editingContext()) {
+                selection = ERXEOControlUtilities.localInstanceOfObject(editingContext(), eo);
+              }
+            }
+
             setSelection(selection);
         }
         // deal with isMandatory
