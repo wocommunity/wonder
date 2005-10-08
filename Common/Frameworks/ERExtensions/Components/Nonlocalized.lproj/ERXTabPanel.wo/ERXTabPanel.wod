@@ -1,24 +1,9 @@
 ComponentContent1: WOComponentContent {
 }
 
-Content: WOComponentContent {
-}
-
-ContentCellContainer: WOGenericContainer {
-	bgcolor = bgcolor;
-	colspan = 4;
-	elementName = "td";
-}
-
 DoNotUseLinkForTabSwitch: WOConditional {
   condition=useLinkForTabSwitch;
   negate=true;
-}
-
-GenericContainer1: WOGenericContainer {
-    bgcolor=bgcolor;
-       colspan = contentColSpan;
-       elementName = "TD";
 }
 
 HasNoSubmitAction: WOConditional {
@@ -38,8 +23,6 @@ Hyperlink1: WOHyperlink {
 	onClick = submitString;
     action = switchSubmitTab;
 }
-
-
 
 Image1: WOImage {
 	height = 2;
@@ -64,69 +47,27 @@ Image4: WOImage {
 	filename = "s.gif";
 }
 
-Image5: WOImage {
-	framework = "ERExtensions";
-	filename = "s.gif";
-}
-
-Image6: WOImage {
-    height = 8;
-	framework = "ERExtensions";
-	filename = "s.gif";
-    width = 1;
-}
-
 LeftTabImage: WOImage {
 	align = "baseline";
 	border = "0";
-	filename = "leftTab.gif";
-	framework = "JavaWOExtensions";
-	height = "17";
-	width = "16";
-}
-
-MainTableContainer: WOGenericContainer {
-	border = 0;
-	cellpadding = 0;
-	cellspacing = 0;
-	elementName = "table";
-	width = ^width;
-	otherTagString = "nowrap";
+	filename = leftTabImage;
+	framework = tabImageFramework;
 }
 
 NotSelectedTabConditional: WOConditional {
 	condition = isCellShaded;
 }
 
-RenderTop: WOConditional {
-    condition=^doNotRenderTop;
-    negate=true;
-}
-
 RightTabImage: WOImage {
 	align = "baseline";
 	border = "0";
-	filename = "rightTab.gif";
-	framework = "JavaWOExtensions";
-	height = "17";
-	width = "16";
+	filename = rightTabImage;
+	framework = tabImageFramework;
 }
 
 SelectedTabConditional: WOConditional {
 	condition = isCellShaded;
 	negate = true;
-}
-
-String1: WOString {
-	value = session.browser;
-}
-
-String2: WOString {
-	value = session.browser.isIE;
-}
-
-String3: WOString {
-	value = session.javaScriptEnabled;
 }
 
 SubmitButton1: WOSubmitButton {
@@ -142,7 +83,7 @@ TabContainer: WOGenericContainer {
 	elementName = "td";
 	valign = "top";
     otherTagString="NOWRAP";
-        class = cellTabClass;
+    class = cellTabClass;
 }
 
 TabImage: WOActiveImage {
@@ -157,13 +98,12 @@ TabImage: WOActiveImage {
 	name = currentTabNameWithoutSpaces;
 }
 
-
-
 TabImageContainer: WOGenericContainer 
 {
 	align = "baseline";
 	bgcolor = tabBgColor;
 	elementName = "td";
+	class = cellTabImageContainerClass;
 	valign = "top";
 }
 
@@ -171,12 +111,12 @@ TabImageContainer2: WOGenericContainer {
 	align = "baseline";
 	bgcolor = tabBgColor;
 	elementName = "TD";
+	class = cellTabImageContainerClass;
 	valign = "top";
 }
 
 TabLink: WOHyperlink {
 	action = switchTab;
-	class = cellTabClass;
 }
 
 TabName: WOString {
@@ -203,6 +143,7 @@ Table: WOGenericContainer {
 	elementName = "TABLE";
 	width = ^width;
    bgcolor=^bgcolor;
+   class = "tabTable";
 }
 
 UseLinkForTabSwitch: WOConditional {
@@ -214,6 +155,7 @@ td1: WOGenericContainer {
    colspan=4;
    bgcolor=^borderColor;
    height=1;
+   class = "tabBorder";
 }
 
 td2: WOGenericContainer {
@@ -221,4 +163,5 @@ td2: WOGenericContainer {
    rowspan=6;
    bgcolor=^borderColor;
    width=1;
+   class = "tabBorder";
 }
