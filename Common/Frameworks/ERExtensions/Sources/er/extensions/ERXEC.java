@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.*;
 
 /**
  * Subclass that has every public method overridden to support automatic 
@@ -63,6 +64,9 @@ public class ERXEC extends EOEditingContext {
     private static final NSSelector EditingContextDidRevertObjectsDelegateSelector =
             new NSSelector("editingContextDidRevertObjects",
                            new Class[] { EOEditingContext.class, NSArray.class, NSArray.class, NSArray.class });
+    private static final NSSelector EditingContextDidFailSaveChangesDelegateSelector =
+        new NSSelector("editingContextDidFailSaveChanges",
+                       new Class[] { EOEditingContext.class, EOGeneralAdaptorException.class });
     
     public static void setUseUnlocker(boolean value) {
     	useUnlocker = value;
@@ -518,6 +522,15 @@ public class ERXEC extends EOEditingContext {
         savingChanges = true;
         try {
             super.saveChanges();
+        } catch(com.webobjects.eoaccess.EOGeneralAdaptorException e) {
+            Object delegate = delegate();
+            final boolean delegateImplementsDidSaveFailed =
+            delegate != null && EditingContextDidFailSaveChangesDelegateSelector.implementedByObject(delegate);
+            if(delegateImplementsDidSaveFailed) {
+                final Object[] parameters = new Object[] {this, e};
+                RuntimeException ex = (RuntimeException) ERXSelectorUtilities.invoke(EditingContextDidFailSaveChangesDelegateSelector, delegate, parameters);
+                if(ex != null) { throw ex; }
+            }
         } finally {
             autoUnlock(wasAutoLocked);
             savingChanges = false;
@@ -685,6 +698,7 @@ public class ERXEC extends EOEditingContext {
     }
     
     /** Overriden to support autoLocking. */ 
+    /** @deprecated */
     public void saveChanges(Object obj) {
         boolean wasAutoLocked = autoLock("saveChanges");
         try {
