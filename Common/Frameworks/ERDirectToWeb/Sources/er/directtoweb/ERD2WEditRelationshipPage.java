@@ -30,11 +30,15 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
     
     public WOComponent editObjectInRelationship(){
         WOComponent result = null;
-        System.out.println("browserSelections = "+browserSelections);
-        if(browserSelections != null && browserSelections.count() == 1)
-        {
+        if(browserSelections != null && browserSelections.count() == 1) {
+            String editConfigurationName = (String)d2wContext().valueForKey("editConfigurationName");
+            EditPageInterface epi;
+            if(editConfigurationName != null && editConfigurationName.length() > 0) {
+                epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(editConfigurationName,session());
+            } else {
+                epi = D2W.factory().editPageForEntityNamed(object().entityName(),session());
+            }            
             EOEnterpriseObject eo = (EOEnterpriseObject)browserSelections.objectAtIndex(0);
-            EditPageInterface epi = D2W.factory().editPageForEntityNamed(eo.entityName(), session());
             epi.setObject(eo);
             epi.setNextPage(context().page());
             result = (WOComponent)epi;
