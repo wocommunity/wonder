@@ -73,7 +73,10 @@ public class ERD2WContextDictionary {
         
         NSMutableDictionary components = new NSMutableDictionary();
         NSMutableDictionary editors = new NSMutableDictionary();
-        for(Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements(); ) {
+        NSMutableArray bundles = NSBundle.frameworkBundles().mutableClone();
+        bundles.addObject(NSBundle.mainBundle());
+        
+        for(Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
             NSBundle bundle = (NSBundle)e.nextElement();
             NSDictionary dict;
             String path = bundle.resourcePathForLocalizedResourceNamed("d2wClientConfiguration.plist", null);
