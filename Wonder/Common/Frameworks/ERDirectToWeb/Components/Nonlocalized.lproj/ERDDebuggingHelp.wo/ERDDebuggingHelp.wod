@@ -47,6 +47,11 @@ Hyperlink5: WOHyperlink {
 	string = ruleTracingState;
 }
 
+Repetition1: WORepetition {
+	list = contextDictionaryForPage.allKeys.@sortAsc.toString;
+	item = currentKey;
+}
+
 String1: WOString {
 	value = ^d2wContext.pageConfiguration;
 	valueWhenEmpty = "No Page Configuration";
@@ -91,6 +96,14 @@ String6: WOString {
 
 String7: WOString {
 	value = session.defaultEditingContext;
+}
+
+String8: WOString {
+	value = currentValue;
+}
+
+String9: WOString {
+	value = currentKey;
 }
 
 TextField1: WOTextField {
