@@ -154,6 +154,15 @@ public class ERXEC extends EOEditingContext {
     public static interface Delegate extends EOEditingContext.Delegate {
 
         /**
+         * If the delegate implements this method, this method is invoked if a
+         * <code>EOGeneralAdaptorException</code> is thrown.
+         *
+         * @param ec the editing context that tried to save changes.
+         * @param exception the exception thrown during the operation
+         */
+        public void editingContextDidFailSaveChanges(EOEditingContext ec, EOGeneralAdaptorException exception);
+        
+        /**
          * If the delegate implements this method, this method is invoked before a revert of an editing
          * context.  We pass the objects that are marked as inserted, updated and deleted.
          *
@@ -530,6 +539,8 @@ public class ERXEC extends EOEditingContext {
                 final Object[] parameters = new Object[] {this, e};
                 RuntimeException ex = (RuntimeException) ERXSelectorUtilities.invoke(EditingContextDidFailSaveChangesDelegateSelector, delegate, parameters);
                 if(ex != null) { throw ex; }
+            } else {
+                throw e;
             }
         } finally {
             autoUnlock(wasAutoLocked);
