@@ -11,6 +11,8 @@ import org.apache.log4j.Level;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.*;
 
@@ -22,7 +24,9 @@ import er.extensions.*;
  */
 
 public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.DebugPageProvider {
-
+	protected NSDictionary _contextDictionary;
+	public String currentKey;
+	
     public ERDDebuggingHelp(WOContext context) { super(context); }
 
     public boolean synchronizesVariablesWithBindings() { return false; }
@@ -81,9 +85,13 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     	return editingContext() != null;
     }
     
+    public D2WContext d2wContext() {
+    	return (D2WContext)parent().valueForKey("d2wContext");
+    }
+    
     public Object debugValueForKey() {
         if(key != null && !"".equals(key))
-            return parent().valueForKeyPath("d2wContext."+key);
+            return d2wContext().valueForKeyPath(key);
         return null;
     }
     
@@ -97,4 +105,27 @@ public class ERDDebuggingHelp extends WOComponent implements ERXDebugMarker.Debu
     public String ruleTracingState() {
         return ERDirectToWeb.trace.isDebugEnabled() ? "off" : "on";
     }
+    
+    public Object currentValue() {
+        return contextDictionary().valueForKey(currentKey);
+    }
+
+    public NSDictionary contextDictionary() {
+        if(_contextDictionary == null) {
+            _contextDictionary = (NSDictionary)d2wContext().valueForKey("contextDictionary");
+            if(_contextDictionary == null) {
+                ERD2WContextDictionary dict = new ERD2WContextDictionary(d2wContext().dynamicPage(), null, null);
+                _contextDictionary = dict.dictionary();
+                d2wContext().takeValueForKey(_contextDictionary, "contextDictionary");
+            }
+        }
+        return _contextDictionary;
+    }
+    
+    public NSDictionary contextDictionaryForPage() {
+    	NSMutableDictionary dict = contextDictionary().mutableClone();
+    	dict.removeObjectForKey("componentLevelKeys");
+        return dict;
+    }
+ 
 }
