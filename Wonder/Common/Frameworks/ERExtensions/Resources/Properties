@@ -157,6 +157,7 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # er.extensions.ERXLog4JPassword = pw
 # er.extensions.ERXGCPassword = pw
 # er.extensions.ERXDirectAction.ChangeSystemPropertyPassword = pw
+# er.extensions.ERXRemoteShellPassword = pw
 
 #########################################################################
 # Log4j Configuration
