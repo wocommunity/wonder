@@ -9,9 +9,6 @@ NonNullConditional1: ERXNonNullConditional {
 	condition = explanationComponentName;
 }
 
-PageWrapper1: PageWrapper {
-}
-
 RadioButtonList1: ERXRadioButtonMatrix {
 	list = list;
 	selection = selection;
