@@ -17,16 +17,19 @@ import com.webobjects.foundation.*;
 /**
  * Better navigation bar<br />
  * 
- * @binding d2wContext
- * @binding displayGroup
- * @binding width
- * @binding objectName
- * @binding border
- * @binding bgcolor
- * @binding textColor
- * @binding sortKeyList
+ * @binding d2wContext the D2W context that this component is in
+ * @binding displayGroup the WODisplayGroup that is being controlled
+ * @binding width the width of the navigation bar table (there is a minimum 500 pixel width if tableClass is not specified)
+ * @binding objectName the name of the type of object that is contained in the WODisplayGroup
+ * @binding border the border width of the navigation bar table
+ * @binding bgcolor the background color of the navigation bar table
+ * @binding textColor no longer used?
+ * @binding sortKeyList an NSArray of sort key paths that will be displayed in a popup button
+ * @binding tableClass the CSS class for the navigation table (overrides minimum 500 pixel width when set)
+ * @binding imageFramework the name of the framework that contains the navigation arrow images
+ * @binding leftArrowImage the name of the left navigation arrow image
+ * @binding rightArrowImage the name of the right navigation arrow image
  */
-
 public class ERXBatchNavigationBar extends WOComponent {
 
     /** logging support */
@@ -126,5 +129,38 @@ public class ERXBatchNavigationBar extends WOComponent {
 
     public int objectCount() {
         return displayGroup().allObjects().count();
+    }
+    
+    public String imageFramework() {
+      String imageFramework;
+      if (!hasBinding("imageFramework")) {
+        imageFramework = "JavaWOExtensions";
+      }
+      else {
+        imageFramework = (String)valueForBinding("imageFramework");
+      }
+      return imageFramework;
+    }
+    
+    public String leftArrowImage() {
+      String leftArrowImageName;
+      if (!hasBinding("leftArrowImage")) {
+        leftArrowImageName = "lft-OSarw.gif";
+      }
+      else {
+        leftArrowImageName = (String)valueForBinding("leftArrowImage");
+      }
+      return leftArrowImageName;
+    }
+    
+    public String rightArrowImage() {
+      String rightArrowImageName;
+      if (!hasBinding("rightArrowImage")) {
+        rightArrowImageName = "rt-OSarw.gif";
+      }
+      else {
+        rightArrowImageName = (String)valueForBinding("rightArrowImage");
+      }
+      return rightArrowImageName;
     }
 }

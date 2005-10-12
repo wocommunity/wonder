@@ -25,6 +25,11 @@ EntityNameConditional: WOConditional {
     condition=hasObjectName;
 }
 
+DoNotUseStylesConditional : WOConditional {
+        condition = ^tableClass;
+        negate = true;
+}
+
 Image1: WOImage {
 	filename = "s.gif";
 	framework = "ERExtensions";
@@ -42,11 +47,9 @@ ItemsPerBatch: WOTextField {
 
 LeftArrow: WOImageButton {
     action = displayGroup.displayPreviousBatch;
-    filename = "lft-OSarw.gif";
     border = "0";
-//    height = "11";
-//    width = "16";
-    framework = "JavaWOExtensions";
+    filename = leftArrowImage;
+    framework = imageFramework;
 	onClick = formTarget;
 }
 
@@ -57,23 +60,14 @@ NavigationTable : WOGenericContainer {
     cellspacing=0;
     bgcolor=^bgcolor;
     border=^border;
-};
-
-NextBatchLink: WOHyperlink {
-    action = displayGroup.displayNextBatch;
-}
-
-PreviousBatchLink: WOHyperlink {
-    action = displayGroup.displayPreviousBatch;
+    class=^tableClass;
 }
 
 RightArrow: WOImageButton {
     action = displayGroup.displayNextBatch;
-    filename = "rt-OSarw.gif";
     border = "0";
-//    height = "11";
-//    width = "16";
-    framework = "JavaWOExtensions";
+    filename = rightArrowImage;
+    framework = imageFramework;
     onClick = formTarget;
 }
 
