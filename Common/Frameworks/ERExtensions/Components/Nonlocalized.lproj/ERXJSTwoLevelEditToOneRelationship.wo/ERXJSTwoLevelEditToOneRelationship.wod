@@ -1,4 +1,5 @@
 JSPopup: ERXJSPopUpRelationPicker {
+	parentLabel="Categories";
     parentEntitiesList=parentList;
     parentToChildrenRelationshipName=^restrictedRelationshipKey;
     parentDisplayValueName=^restrictingDestinationDisplayKey;
