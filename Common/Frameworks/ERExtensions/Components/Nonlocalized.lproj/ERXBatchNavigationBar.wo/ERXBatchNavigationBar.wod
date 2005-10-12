@@ -55,6 +55,11 @@ FontContainer5: WOGenericContainer {
 	elementName = "FONT";
 }
 
+DoNotUseStylesConditional : WOConditional {
+	condition = ^tableClass;
+	negate = true;
+}
+
 Image1: WOImage {
 	filename = "s.gif";
 	framework = "ERExtensions";
@@ -83,8 +88,8 @@ KeyForm: WOForm {
 
 LeftArrow: WOImage {
 	border = "0";
-	filename = "lft-OSarw.gif";
-	framework = "JavaWOExtensions";
+	filename = leftArrowImage;
+	framework = imageFramework;
 }
 
 NavigationTable: WOGenericContainer {
@@ -94,6 +99,7 @@ NavigationTable: WOGenericContainer {
 	cellspacing = 0;
 	elementName = "Table";
 	width = ^width;
+	class = ^tableClass;
 }
 
 
@@ -107,8 +113,8 @@ PreviousBatchLink: WOHyperlink {
 
 RightArrow: WOImage {
 	border = "0";
-	filename = "rt-OSarw.gif";
-	framework = "JavaWOExtensions";
+	filename = rightArrowImage;
+	framework = imageFramework;
 }
 
 SortComponent: WOSortOrderManyKey {
