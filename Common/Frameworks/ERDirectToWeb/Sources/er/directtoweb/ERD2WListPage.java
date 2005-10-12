@@ -13,7 +13,10 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
-
+/**
+ * Reimplementation of the D2WListPage. Descendes from ERD2WPage instead of D2WList.
+ * @author ak
+ */
 public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
 
     /** logging support */
@@ -63,11 +66,24 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         if(useBatchingDisplayGroup) {
             _displayGroup = new ERXBatchingDisplayGroup();
         } else {
-            _displayGroup = new WODisplayGroup();
+            _displayGroup = new WODisplayGroup() {
+
+            	/**
+            	 * Overridden so we see when a fetch occurs.
+            	 */
+				public Object fetch() {
+					if(log.isDebugEnabled()) {
+						log.debug("Fetching: " + toString(), new RuntimeException("Dummy for Stacktrace"));
+					}
+					return super.fetch();
+				}
+            	
+            };
         }
     }
 
-    /** Called when an {@link EOditingContext} has changed. Sets {@link #_hasToUpdate} which in turn lets the group refetch on the next display. */
+    /** Called when an {@link EOditingContext} has changed. Sets {@link #_hasToUpdate} which in turn 
+     * lets the group refetch on the next display. */
     // CHECKME ak is this really needed? I'd think it's kindo of overkill.
     public void editingContextDidSaveChanges(NSNotification notif) {
          _hasToUpdate=true;
@@ -83,6 +99,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
     public boolean isEntityEditable() {
         return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), false);
+    }
+
+    public boolean alwaysRefetchList() {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("alwaysRefetchList"), true);
     }
 
     /** Checks if the current task is select. We need this because this page implements the {@link SelectPageInterface} so we can't do an instanceof test.  */
@@ -291,39 +311,64 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         super.appendToResponse(r,c);
     }
     
+    protected Object dataSourceState;
     public void setDataSource(EODataSource eodatasource) {
-        super.setDataSource(eodatasource);
-        NSArray sortOrderings=sortOrderings();
-        displayGroup().setDataSource(eodatasource);
-        setSortOrderingsOnDisplayGroup(sortOrderings, displayGroup());
-        _hasToUpdate = true;
+    	EODatabaseDataSource ds = (eodatasource instanceof EODatabaseDataSource) ? (EODatabaseDataSource)eodatasource : null;
+    	Object newDataSourceState = null;
+    	if(ds != null) {
+    		newDataSourceState = ds.fetchSpecification().toString().replaceAll("\\n", "") + ":" + ds.fetchSpecificationForFetch().toString().replaceAll("\\n", "");
+    	}
+    	super.setDataSource(eodatasource);
+    	displayGroup().setDataSource(eodatasource);
+    	if(ds == null || (dataSourceState == null) 
+    			|| (dataSourceState != null && !dataSourceState.equals(newDataSourceState)) || alwaysRefetchList()) {
+    		log.debug("updating:\n" + dataSourceState + " vs\n" + newDataSourceState);
+    		dataSourceState = newDataSourceState;
+    		_hasToUpdate = true;
+    	}
     }
     
     protected void setupPhase() {
         WODisplayGroup dg=displayGroup();
         if (dg!=null) {
-            if (!_hasBeenInitialized) {
-                log.debug("Initializing display group");
-                String fetchspecName = (String)d2wContext().valueForKey("restrictingFetchSpecification");
-                if(fetchspecName != null) {
-                    EODataSource ds = dataSource();
-                    if(ds instanceof EODatabaseDataSource)
-                        ((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
-                }
-                NSArray sortOrderings=sortOrderings();
-                setSortOrderingsOnDisplayGroup(sortOrderings, dg);
-                dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-                dg.fetch();
+       		NSArray sortOrderings = dg.sortOrderings();
+    		EODataSource ds = dataSource();
+        	if (!_hasBeenInitialized) {
+        		log.debug("Initializing display group");
+        		String fetchspecName = (String)d2wContext().valueForKey("restrictingFetchSpecification");
+        		if(fetchspecName != null) {
+        			if(ds instanceof EODatabaseDataSource) {
+        				((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
+        			}
+        		}
+         		if(sortOrderings == null) {
+        			sortOrderings = sortOrderings();
+        			setSortOrderingsOnDisplayGroup(sortOrderings, dg);
+        		}
+        		dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
+        		dg.fetch();
                 dg.updateDisplayedObjects();
                 _hasBeenInitialized=true;
                 _hasToUpdate = false;
-            }
-            // this will have the side effect of resetting the batch # to sth correct, in case
+        	}
+        	// AK: if we have a DB datasource, then we might want to refetch if the sort ordering changed
+        	// because if we have a fetch limit then the displayed matches on the first page come from the
+        	// results, not from the real order in the DB. Set "alwaysRefetchList" to false in your 
+        	// rules to prevent that.
+        	if((sortOrderings != null) && (ds instanceof EODatabaseDataSource)) {
+        		EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
+        		if(!fs.sortOrderings().equals(sortOrderings)) {
+        			fs.setSortOrderings(sortOrderings);
+        			_hasToUpdate = alwaysRefetchList();
+        		}
+        	}
+        	// this will have the side effect of resetting the batch # to sth correct, in case
             // the current index if out of range
             log.debug("dg.currentBatchIndex() "+dg.currentBatchIndex());
             dg.setCurrentBatchIndex(dg.currentBatchIndex());
-            if (listSize() > 0)
+            if (listSize() > 0) {
                 d2wContext().takeValueForKey(dg.allObjects().objectAtIndex(0), "object");
+            }
         }
     }
 
