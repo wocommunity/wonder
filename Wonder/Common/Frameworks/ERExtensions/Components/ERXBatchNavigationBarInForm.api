@@ -10,5 +10,9 @@
 		<binding name="bgcolor"/>
 		<binding name="sortKeyList"/>
 		<binding name="border"/>
+		<binding name="tableClass"/>
+		<binding name="imageFramework"/>
+		<binding name="leftArrowImage"/>
+		<binding name="rightArrowImage"/>
 	</wo>
 </wodefinitions>
