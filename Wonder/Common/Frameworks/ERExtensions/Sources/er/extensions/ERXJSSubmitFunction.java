@@ -36,31 +36,31 @@ public class ERXJSSubmitFunction extends WODynamicElement {
   protected WOAssociation _disabled;
   protected WOAssociation _formName;
 
-  public ERXJSSubmitFunction(String _elementName, NSDictionary _associations, WOElement woelement) {
-    super(_elementName, _associations, null);
-    _action = (WOAssociation) _associations.objectForKey("action");
-    _formName = (WOAssociation) _associations.objectForKey("formName");
+  public ERXJSSubmitFunction(String elementName, NSDictionary associations, WOElement woelement) {
+    super(elementName, associations, null);
+    _action = (WOAssociation) associations.objectForKey("action");
+    _formName = (WOAssociation) associations.objectForKey("formName");
     if (_formName == null) {
       throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'formName' must be set.");
     }
-    _functionName = (WOAssociation) _associations.objectForKey("functionName");
+    _functionName = (WOAssociation) associations.objectForKey("functionName");
     if (_functionName == null) {
       throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'functionName' must be set.");
     }
     if (_action != null && _action.isValueConstant()) {
       throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'action' is a constant.");
     }
-    _name = (WOAssociation) _associations.objectForKey("name");
-    _disabled = (WOAssociation) _associations.objectForKey("disabled");
+    _name = (WOAssociation) associations.objectForKey("name");
+    _disabled = (WOAssociation) associations.objectForKey("disabled");
   }
 
   public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
   }
 
-  protected String nameInContext(WOContext _context, WOComponent _component) {
+  protected String nameInContext(WOContext context, WOComponent component) {
     String name;
     if (_name != null) {
-      Object obj = _name.valueInComponent(_component);
+      Object obj = _name.valueInComponent(component);
       if (obj != null) {
         name = obj.toString();
       }
@@ -69,7 +69,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
       }
     }
     else {
-      name = _context.elementID();
+      name = context.elementID();
       if (name == null) {
         throw new IllegalStateException("<" + getClass().getName() + "> Cannot evaluate 'name' attribute, and context element ID is null.");
       }
@@ -77,67 +77,52 @@ public class ERXJSSubmitFunction extends WODynamicElement {
     return name;
   }
 
-  public boolean disabledInComponent(WOComponent wocomponent) {
-    return _disabled != null && _disabled.booleanValueInComponent(wocomponent);
+  public boolean disabledInComponent(WOComponent component) {
+    return _disabled != null && _disabled.booleanValueInComponent(component);
   }
 
-  public WOActionResults invokeAction(WORequest _request, WOContext _context) {
+  public WOActionResults invokeAction(WORequest request, WOContext context) {
     Object obj = null;
-    com.webobjects.appserver.WOComponent wocomponent = _context.component();
-    if (!disabledInComponent(wocomponent) && _context._wasFormSubmitted()) {
-      if (_context._isMultipleSubmitForm()) {
-        if (ERXStringUtilities.nullForEmptyString((String)_request.formValueForKey(nameInContext(_context, wocomponent))) != null) {
-          _context._setActionInvoked(true);
+    WOComponent component = context.component();
+    if (!disabledInComponent(component) && context._wasFormSubmitted()) {
+      if (context._isMultipleSubmitForm()) {
+        if (ERXStringUtilities.nullForEmptyString((String) request.formValueForKey(nameInContext(context, component))) != null) {
+          context._setActionInvoked(true);
           if (_action != null) {
-            obj = (WOActionResults) _action.valueInComponent(wocomponent);
+            obj = (WOActionResults) _action.valueInComponent(component);
           }
           if (obj == null) {
-            obj = _context.page();
+            obj = context.page();
           }
         }
       }
       else {
-        _context._setActionInvoked(true);
+        context._setActionInvoked(true);
         if (_action != null) {
-          obj = (WOActionResults) _action.valueInComponent(wocomponent);
+          obj = (WOActionResults) _action.valueInComponent(component);
         }
         if (obj == null) {
-          obj = _context.page();
+          obj = context.page();
         }
       }
     }
-    return ((WOActionResults) (obj));
+    return (WOActionResults) obj;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    super.appendToResponse(_response, _context);
-    
-    WOComponent component = _context.component();
-    _response._appendContentAsciiString("<input");
-    _response._appendTagAttributeAndValue("type", "hidden", false);
-    _response._appendTagAttributeAndValue("value", "", false);
-    String name = nameInContext(_context, component);
-    _response._appendTagAttributeAndValue("name", name, false);
-    _response.appendContentCharacter('>');
-    _response.appendContentCharacter('\n');
+  public void appendToResponse(WOResponse response, WOContext context) {
+    super.appendToResponse(response, context);
 
+    WOComponent component = context.component();
+    String name = nameInContext(context, component);
+    String functionName = (String) _functionName.valueInComponent(component);
     String formName = (String) _formName.valueInComponent(component);
-    _response._appendContentAsciiString("<script language = \"JavaScript\">\n");
-    _response._appendContentAsciiString("function ");
-    _response._appendContentAsciiString((String) _functionName.valueInComponent(component));
-    _response._appendContentAsciiString("() {\n");
 
-    _response._appendContentAsciiString("  document.forms['");
-    _response._appendContentAsciiString(formName);
-    _response._appendContentAsciiString("'].elements['");
-    _response._appendContentAsciiString(name);
-    _response._appendContentAsciiString("'].value = 'performAction';\n");
-    
-    _response._appendContentAsciiString("  document.forms['");
-    _response._appendContentAsciiString(formName);
-    _response._appendContentAsciiString("'].submit();\n");
-
-    _response._appendContentAsciiString("}\n");
-    _response._appendContentAsciiString("</script>\n");
+    response.appendContentString("<input type = \"hidden\" value = \"\" name = \"" + name + "\">\n");
+    response.appendContentString("<script language = \"JavaScript\">\n");
+    response.appendContentString("function " + functionName + "() {\n");
+    response.appendContentString("  document.forms['" + formName + "'].elements['" + name + "'].value = 'performAction';\n");
+    response.appendContentString("  document.forms['" + formName + "'].submit();\n");
+    response.appendContentString("}\n");
+    response.appendContentString("</script>\n");
   }
 }
