@@ -9,8 +9,11 @@
 		<binding name="pageConfiguration"/>
 		<binding name="displayKeys"/>
 
-		<validation message="&apos;entityName&apos; is a required binding">
-			<unbound name="entityName"/>
+		<validation message="&apos;entityName&apos; or &apos;pageConfiguratio&apos; must be bound">
+			<and>
+				<unbound name="entityName"/>
+				<unbound name="pageConfiguration"/>
+			</and>
 		</validation>
 
 		<validation message="either &apos;list&apos; or &apos;dataSource&apos; must be bound">
