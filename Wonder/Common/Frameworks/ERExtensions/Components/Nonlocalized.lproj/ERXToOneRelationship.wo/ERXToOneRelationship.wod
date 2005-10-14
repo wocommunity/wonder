@@ -5,7 +5,7 @@ Browser: WOBrowser {
 	multiple = false;
 	selections = selection;
 	size = ^size;
-        name=^popupName;
+    name=^popupName;
 }
 
 IsBrowserConditional: WOConditional {

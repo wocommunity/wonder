@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERXToOneRelationship" wocomponentcontent="false">
 
@@ -19,32 +19,32 @@
 		<binding name="maxColumns"/>
 		<binding name="localizeDisplayKeys" defaults="Boolean"/>
 
-		<validation message="&apos;sourceEntityName&apos; is required when &apos; destinationEntityName&apos; is not bound">
+		<validation message="'sourceEntityName' is required when ' destinationEntityName' is not bound">
 			<and>
                             <unbound name="sourceEntityName"/>
                             <unbound name="destinationEntityName"/>
 			</and>
 		</validation>
 
-		<validation message="&apos;relationshipKey&apos; is required when &apos; destinationEntityName&apos; is not bound">
+		<validation message="'relationshipKey' is required when ' destinationEntityName' is not bound">
 			<and>
                             <unbound name="relationshipKey"/>
                             <unbound name="destinationEntityName"/>
 			</and>
 		</validation>
 
-		<validation message="&apos;possibleChoices&apos; and &apos;qualifier&apos; can not both be bound.">
+		<validation message="'possibleChoices' and 'qualifier' can not both be bound.">
 			<and>
 				<bound name="possibleChoices"/>
 				<bound name="qualifier"/>
 			</and>
 		</validation>
 
-		<validation message="&apos;object&apos; or &apos;displayGroup&apos; has to be bound">
+		<validation message="'object' or 'displayGroup' has to be bound">
 			<unbound name="sourceObject"/>
 		</validation>
 
-		<validation message="&apos;sourceObject&apos; is a required binding">
+		<validation message="'sourceObject' is a required binding">
 			<unbound name="sourceObject"/>
 		</validation>
 	</wo>
