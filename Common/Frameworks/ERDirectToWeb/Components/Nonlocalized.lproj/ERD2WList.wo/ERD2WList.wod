@@ -15,7 +15,7 @@ GenericContainer1: WOGenericContainer {
 	omitTags = erD2WListOmitCenterTag;
 }
 
-List1: ERXD2WList { 	
+List1: ERXD2WList {
 	pageConfiguration = ^listConfigurationName;
 //	entityName = ^destinationEntity.name;
 	list = list;

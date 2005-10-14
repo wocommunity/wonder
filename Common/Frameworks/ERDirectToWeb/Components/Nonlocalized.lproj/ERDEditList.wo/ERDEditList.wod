@@ -33,4 +33,6 @@ SubmitButton2: WOSubmitButton {
 	action = submit;
 }
 
-Wrapper: PageWrapper {}
+Wrapper: WOSwitchComponent {
+	WOComponentName = ^pageWrapper;
+}
