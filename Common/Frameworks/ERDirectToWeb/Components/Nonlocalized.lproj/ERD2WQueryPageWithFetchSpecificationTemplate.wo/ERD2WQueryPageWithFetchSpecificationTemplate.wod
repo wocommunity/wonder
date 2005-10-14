@@ -32,13 +32,13 @@ QueryTableHeaderRow : WOGenericContainer {
     elementName="tr";
     bgcolor=backgroundColorForHeaderRow;
     _unroll=true;
-};
+}
 
 ResourceInputRepresentation: WOSwitchComponent {
 	displayGroup=displayGroup;
-        localContext=localContext;
-        _unroll = true;
-        _componentUnroll = true;
+    localContext=localContext;
+    _unroll = true;
+    _componentUnroll = true;
 	WOComponentName = d2wContext.componentName;
 }
 

@@ -1,4 +1,4 @@
-NonNullConditional1: NonNullConditional {
+NonNullConditional1: ERXNonNullConditional {
 	condition = d2wContext.resolvedUnit;
 }
 
