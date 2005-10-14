@@ -563,6 +563,7 @@ public class ERD2WModel extends D2WModel {
     protected static NSDictionary dictionaryFromFile(File file) {
         NSDictionary model = null;
         try {
+        	log.info("Loading file: " + file);
             model = Services.dictionaryFromFile(file);
             NSArray rules = (NSArray)model.objectForKey("rules");
             Enumeration e = rules.objectEnumerator();

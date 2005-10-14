@@ -45,41 +45,6 @@ Generic2: WOGenericContainer {
 	elementName = "cell";
 }
 
-Generic3: WOGenericContainer {
-	elementName = "row";
-	"font-bold" = "true";
-	pattern = 1;
-	"pattern-fg" = "0xfeffa6";
-}
-
-Generic4: WOGenericContainer {
-	elementName = "cell";
-	"font-bold" = "true";
-	"pattern-fg" = "0XEBEBEB";
-	pattern = 1;
-}
-
-Generic5: WOGenericContainer {
-	elementName = "cell";
-	"font-bold" = "true";
-	pattern = 1;
-	"pattern-fg" = "0XEBEBEB";
-}
-
-Generic6: WOGenericContainer {
-	elementName = "row";
-	"font-bold" = "true";
-	pattern = 1;
-	"pattern-bg" = "0X00FF00";
-}
-
-Generic7: WOGenericContainer {
-	elementName = "cell";
-	"font-bold" = "true";
-	"pattern-fg" = "0XEBEBEB";
-	pattern = 1;
-}
-
 Generic8: WOGenericContainer {
 	elementName = "cell";
 }
@@ -160,4 +125,38 @@ SwitchComponent1: WOSwitchComponent {
 
 XMLNode1: WOXMLNode {
 	elementName = "row";
+}
+
+Generic3: WOGenericContainer {
+	elementName = "row";
+	"font-bold" = "true";
+	pattern = 1;
+}
+
+Generic4: WOGenericContainer {
+	elementName = "cell";
+	"font-bold" = "true";
+	"pattern-fg" = "0XEBEBEB";
+	pattern = 1;
+}
+
+Generic5: WOGenericContainer {
+	elementName = "cell";
+	"font-bold" = "true";
+	pattern = 1;
+	"pattern-fg" = "0XEBEBEB";
+}
+
+Generic6: WOGenericContainer {
+	elementName = "row";
+	"font-bold" = "true";
+	pattern = 1;
+	"pattern-bg" = "0X00FF00";
+}
+
+Generic7: WOGenericContainer {
+	elementName = "cell";
+	"font-bold" = "true";
+	"pattern-fg" = "0XEBEBEB";
+	pattern = 1;
 }

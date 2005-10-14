@@ -29,13 +29,11 @@ Conditional3: WOConditional {
 Generic1: WOGenericContainer {
 	elementName = "cell";
 	wrap = d2wContext.wrap;
-	"pattern-fg" = "0XEBEBEB";
 	pattern = 1;
 }
 
 Generic2: WOGenericContainer {
 	elementName = "row";
-	"font-bold" = "true";
 }
 
 Generic3: WOGenericContainer {
@@ -57,8 +55,6 @@ Generic6: WOGenericContainer {
 
 Generic7: WOGenericContainer {
 	elementName = "cell";
-	"font-bold" = "true";
-	"pattern-fg" = "0XEBEBEB";
 	pattern = 1;
 }
 

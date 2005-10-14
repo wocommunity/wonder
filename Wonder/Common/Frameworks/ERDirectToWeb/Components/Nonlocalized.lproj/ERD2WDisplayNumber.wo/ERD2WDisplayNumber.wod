@@ -1,8 +1,8 @@
-NonNullConditional1: NonNullConditional {
+NonNullConditional1: ERXNonNullConditional {
 	condition = objectKeyPathValue;
 }
 
-NonNullConditional2: NonNullConditional {
+NonNullConditional2: ERXNonNullConditional {
 	condition = objectKeyPathValue;
 	negate = YES;
 }
