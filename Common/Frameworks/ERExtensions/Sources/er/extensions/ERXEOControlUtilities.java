@@ -1268,6 +1268,24 @@ public class ERXEOControlUtilities {
     }
     
     /**
+     * Uses <code>ERXEOControlUtilities.objectForFaults</code> to turn the faults into objects, then does in memory
+     * ordering with <code>EOSortOrdering.EOSortOrdering.sortedArrayUsingKeyOrderArray()</code>
+     *
+     * @param ec
+     * @param possibleFaults
+     * @param sortOrderings
+     * @return sorted array of EOs (no faults)
+     */
+    public static NSArray objectsForFaultWithSortOrderings (EOEditingContext ec, NSArray possibleFaults, NSArray sortOrderings) {
+            if (sortOrderings != null) {
+                return EOSortOrdering.sortedArrayUsingKeyOrderArray(ERXEOControlUtilities.objectsForFaults(ec, possibleFaults), sortOrderings);
+            }
+            else {
+                return ERXEOControlUtilities.objectsForFaults(ec, possibleFaults);
+            }
+    }
+
+    /**
      * Triggers all faults in an efficient manner.
      * @param ec
      * @param globalIDs
