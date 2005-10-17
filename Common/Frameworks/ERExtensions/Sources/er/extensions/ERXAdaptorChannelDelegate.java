@@ -87,7 +87,20 @@ public class ERXAdaptorChannelDelegate {
             			if(obj instanceof String) {
             				obj = EOSQLExpression.sqlStringForString((String) obj);
             			} else if(obj instanceof NSData) {
-            				obj = expression.sqlStringForData((NSData)obj);
+            				// ak: this is just for logging, however we would like to get readable data
+            				// in particular for PKs and with postgres this works.
+            				// plain EOF is broken, though
+            				try {
+            					if(((NSData)obj).length() < 50) {
+            						obj = expression.sqlStringForData((NSData)obj);
+            					}
+            				} catch(ArrayIndexOutOfBoundsException ex) {
+            					// ignore, this is a bug in EOF
+            				}
+            				if(obj instanceof NSData) {
+            					// produces very yucky output
+                				obj = obj.toString();
+            				}
             			} else {
             				if(expression.entity() != null) {
             					EOAttribute attribute = expression.entity().anyAttributeNamed(attributeName);
