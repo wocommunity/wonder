@@ -918,7 +918,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         String key;
         String stringValue;
         int adaptorType;
-
+        EOAttribute attribute;
+        
+        public AttributeDefault(EOAttribute attribute, String stringValue) {
+            this(attribute.name(), stringValue, attribute.adaptorValueType());
+            this.attribute = attribute;
+        }
+        
         public AttributeDefault(String key, String stringValue, int adaptorType) {
             this.key = key;
             this.stringValue = stringValue;
@@ -935,7 +941,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 String keyPath = stringValue.substring("@threadStorage.".length());
                 defaultValue = ERXThreadStorage.valueForKeyPath(keyPath);
             } else {
-                // nothing for strings so far...
+                if(attribute != null && attribute.valueFactoryMethodName() != null && attribute.factoryMethodArgumentType() == EOAttribute.FactoryMethodArgumentIsString) {
+                    defaultValue = attribute.newValueForString(stringValue);
+                }
             }
             if(defaultValue != null) {
                 String s = defaultValue.toString();
@@ -1051,7 +1059,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void setDefaultAttributeValue(EOAttribute attr, String defaultValue) {
         String name = attr.name();
         defaultLog.debug("Adding: " + name + "-" + defaultValue);
-        AttributeDefault d = new AttributeDefault(name, defaultValue, attr.adaptorValueType());
+        AttributeDefault d = new AttributeDefault(attr, defaultValue);
         _initialDefaultValues.setObjectForKey(d, name);
     }
 
