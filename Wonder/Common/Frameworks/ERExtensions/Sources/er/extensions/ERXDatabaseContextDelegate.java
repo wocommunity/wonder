@@ -6,30 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.util.Enumeration;
+import java.sql.*;
 
-import com.webobjects.eoaccess.EOAdaptor;
-import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EODatabaseChannel;
-import com.webobjects.eoaccess.EODatabaseContext;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
-import com.webobjects.eoaccess.EOObjectNotAvailableException;
-import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol.EOSharedEditingContext;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * This delegate implements several methods from the formal interface
@@ -233,6 +214,9 @@ public class ERXDatabaseContextDelegate {
             log.debug("databaseContextShouldFetchObjects.. Setting it to ReadOnly");
         }
         setReadWriteForConnectionInDatabaseContext(false, dbc);
+        if(fs.entityName().matches("KeywordMetaData|AssetLinkEntry|DomainMetaData|LanguageMetaData")) {
+        	return NSArray.EmptyArray;
+        }
         return null;
     }
 

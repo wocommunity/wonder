@@ -6,9 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERSortOrder is an extension of WOSortOrder.  It adds two main abilities to WOSortOrder.

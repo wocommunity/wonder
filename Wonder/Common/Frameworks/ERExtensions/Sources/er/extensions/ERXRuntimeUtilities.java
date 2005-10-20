@@ -3,8 +3,6 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
-import com.webobjects.foundation.*;
-
 public class ERXRuntimeUtilities {
 
     /** logging support */

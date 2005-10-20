@@ -9,7 +9,7 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
-import er.extensions.ERXValueUtilities;
+import er.extensions.*;
 
 /**
  * Same as original except allows display of noSelectionString if relationship is null.<br />

@@ -6,12 +6,12 @@
 //
 package er.extensions;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.*;
 import java.util.*;
 
 import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.WOURLEncoder;
+import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
 
 /**

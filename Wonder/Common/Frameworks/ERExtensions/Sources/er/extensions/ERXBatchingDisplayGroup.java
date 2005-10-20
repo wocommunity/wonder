@@ -1,12 +1,9 @@
 package er.extensions;
 
-import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.*;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching.

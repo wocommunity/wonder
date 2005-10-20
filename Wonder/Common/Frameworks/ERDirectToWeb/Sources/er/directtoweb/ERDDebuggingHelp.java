@@ -6,13 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import org.apache.log4j.Level;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.*;
 
 import er.extensions.*;
 

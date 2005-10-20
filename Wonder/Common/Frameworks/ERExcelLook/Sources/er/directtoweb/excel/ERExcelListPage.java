@@ -6,12 +6,12 @@
 //
 package er.directtoweb.excel;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.directtoweb.*;
-import er.extensions.ERXDictionaryUtilities;
-import er.extensions.ERXFileUtilities;
+import er.extensions.*;
 
 public class ERExcelListPage extends ERD2WListPage {
 
