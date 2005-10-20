@@ -7,8 +7,6 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
-
 /**
  * @author david@cluster9.com<br/> <br/> Automatically generates Long primary
  *         keys for entities. Features a cache which reduces database roundtrips

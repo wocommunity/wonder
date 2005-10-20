@@ -1,6 +1,6 @@
 package er.extensions;
 
-import com.webobjects.eoaccess.EOAdaptorContext;
+import com.webobjects.eoaccess.*;
 
 public class ERXAdaptorContextDelegate {
     private ERXLogger log = ERXLogger.getERXLogger(ERXAdaptorContextDelegate.class);

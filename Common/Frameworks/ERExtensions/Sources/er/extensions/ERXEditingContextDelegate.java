@@ -6,8 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.*;
 
 /**
  * This delegate does nothing. It is used to

@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.*;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for
  * a particular thread. This can be especially handy for storing objects

@@ -1,7 +1,7 @@
 package er.extensions;
 import java.net.*;
 
-import sun.misc.BASE64Encoder;
+import sun.misc.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;

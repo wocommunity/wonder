@@ -8,7 +8,6 @@ package er.directtoweb;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
 
 /**
  * Cleaned up some of the formatting on the original toMany table.<br />

@@ -23,8 +23,8 @@ package er.extensions;
  */
 
 import java.net.*;
-import java.util.*;
 import java.security.*;
+import java.util.*;
 
 /*
  * In the multitude of java GUID generators, I found none that

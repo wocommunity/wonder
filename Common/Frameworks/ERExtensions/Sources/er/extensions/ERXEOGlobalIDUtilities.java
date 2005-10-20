@@ -6,23 +6,11 @@
  */
 package er.extensions;
 
-import java.util.Enumeration;
+import java.util.*;
 
-import com.webobjects.eoaccess.EODatabaseContext;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFaultHandler;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
-import com.webobjects.eocontrol.EOOrQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Utilities that help with batch loading sets of global IDs. 

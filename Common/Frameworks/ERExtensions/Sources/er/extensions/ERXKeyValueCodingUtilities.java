@@ -6,17 +6,10 @@
  */
 package er.extensions;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.lang.reflect.*;
+import java.util.*;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
-import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.*;
 
 /**
  * Utilities for use with key value coding. You could instantiate one of these in your app-startup:
