@@ -6,19 +6,14 @@
 //
 package er.extensions;
 import java.io.*;
+import java.nio.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.MalformedInputException;
-import java.nio.charset.CharacterCodingException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 
 /**
  * Collection of {@link java.lang.String String} utilities. Contains
@@ -1127,4 +1122,122 @@ public class ERXStringUtilities {
           }
           return buf.toString();
       }
+
+    private static void indent(StringBuffer sb, int level) {
+    	for (int i = 0; i < level; i++) {
+			sb.append(' ');
+		}
+    }
+    
+   private static void dumpArray(StringBuffer sb, NSArray array, int level) {
+    	sb.append("(\n");
+    	for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
+    		Object value = e.nextElement();
+    		dumpObject(sb, value, level+1);
+    		sb.append(",\n");
+    	}
+   		indent(sb, level);
+    	sb.append(")");
+    }
+    
+    private static void dumpDictionary(StringBuffer sb, NSDictionary dict, int level) {
+    	sb.append("{\n");
+    	for(Enumeration e = dict.keyEnumerator(); e.hasMoreElements();) {
+    		String key = (String) e.nextElement();
+    		Object value = dict.objectForKey(key);
+    		indent(sb, level+1);
+    		sb.append(key).append(" = ");
+    		dumpObject(sb, value, level+1);
+    		sb.append(";\n");
+    	}
+    	indent(sb, level);
+    	sb.append("}");
+    }
+    
+    private static NSDictionary databaseOperationAsDictionary(EODatabaseOperation op) {
+    	NSMutableDictionary dict = new NSMutableDictionary(8);
+    	int operator = op.databaseOperator();
+    	if(operator == 0) {
+    		dict.setObjectForKey("EODatabaseNothingOperator", "_databaseOperator");
+     	} else if(operator == 1) {
+    		dict.setObjectForKey("EODatabaseInsertOperator", "_databaseOperator");
+     	} else if(operator == 3) {
+    		dict.setObjectForKey("EODatabaseDeleteOperator", "_databaseOperator");
+     	} else if(operator == 2) {
+    		dict.setObjectForKey("EODatabaseUpdateOperator", "_databaseOperator");
+    	} else {
+    		dict.setObjectForKey("<unrecognized value>", "_databaseOperator");
+    	}
+    	if(op.newRow() != null)
+    		dict.setObjectForKey(op.newRow(), "_newRow");
+    	if(op.dbSnapshot() != null)
+    		dict.setObjectForKey(op.dbSnapshot(), "_dbSnapshot");
+    	if(op.globalID() != null)
+    		dict.setObjectForKey(op.globalID(), "_globalID");
+    	if(op.entity() != null)
+    		dict.setObjectForKey(op.entity().name(), "_entity");
+    	if(op.adaptorOperations() != null)
+    		dict.setObjectForKey(op.adaptorOperations(), "_adaptorOps");
+    	if(op.object() != null)
+    		dict.setObjectForKey(op.object().toString(), "_object");
+       return dict;  	
+    }
+    
+    /**
+     * Debug method to get the EOAdaptorOperation as a dictionary that can be pretty-printed later.
+     * The output from a EOGeneralAdaptorException.userInfo.toString is pretty much unreadable.
+     * @param op
+     * @return
+     */
+    private static NSDictionary adaptorOperationAsDictionary(EOAdaptorOperation op) {
+    	NSMutableDictionary dict = new NSMutableDictionary();
+    	int operator = op.adaptorOperator();
+    	if(operator == 0) {
+    		dict.setObjectForKey("EOAdaptorLockOperator", "_adaptorOperator");
+       	} else if (operator == 1) {
+    		dict.setObjectForKey("EOAdaptorInsertOperator", "_adaptorOperator");
+       	} else if (operator == 3) {
+    		dict.setObjectForKey("EOAdaptorDeleteOperator", "_adaptorOperator");
+       	} else if (operator == 2) {
+    		dict.setObjectForKey("EOAdaptorUpdateOperator", "_adaptorOperator");
+       	} else {
+    		dict.setObjectForKey("<unrecognized value>", "_adaptorOperator");
+    	}
+    	if(op.entity() != null)
+    		dict.setObjectForKey(op.entity(), "_entity");
+    	if(op.qualifier() != null)
+    		dict.setObjectForKey(op.qualifier().toString(), "_qualifier");
+    	if(op.changedValues() != null)
+    		dict.setObjectForKey(op.changedValues(), "_changedValues");
+    	if(op.exception() != null)
+    		dict.setObjectForKey(op.exception(), "_exception");
+    	return dict;
+    }
+    
+    private static void dumpObject(StringBuffer sb, Object value, int level) {
+    	if(value instanceof NSDictionary) {
+    		dumpDictionary(sb, (NSDictionary)value, level);
+    	} else if (value instanceof NSArray) {
+    		dumpArray(sb, (NSArray)value, level);
+    	} else if (value instanceof NSData) {
+    		NSData data = (NSData)value;
+			sb.append(byteArrayToHexString(data.bytes()));
+    	} else if (value instanceof EODatabaseOperation) {
+    		dumpDictionary(sb, databaseOperationAsDictionary((EODatabaseOperation)value), level);
+    	} else if (value instanceof EOAdaptorOperation) {
+    		dumpDictionary(sb, adaptorOperationAsDictionary((EOAdaptorOperation)value), level);
+     	} else {
+       		indent(sb, level);
+    		sb.append(value);
+    	}
+    }
+
+    /**
+     * creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations)
+     */
+    public static String dumpObject(Object object) {
+    	StringBuffer sb = new StringBuffer(4000);
+		dumpObject(sb, object, 0);
+		return sb.toString();
+    }
 }
