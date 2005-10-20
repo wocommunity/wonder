@@ -1,11 +1,8 @@
 package er.extensions;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
-import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.appserver.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * Back port from WO 5 WOExtensions. This component is binding compatible, but not source compatible.<br />

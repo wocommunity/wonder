@@ -6,9 +6,8 @@
 //
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.woextensions.*;
 import com.webobjects.appserver.*;
+import com.webobjects.woextensions.*;
 
 public class ERDAnyField extends WOAnyField {
 

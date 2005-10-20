@@ -6,27 +6,11 @@
 //
 package er.extensions;
 
-import java.util.Enumeration;
+import java.util.*;
 
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOJoin;
-import com.webobjects.eoaccess.EOQualifierSQLGeneration;
-import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOAndQualifier;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOQualifierVariable;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /**
  * The ERXInQualifier is useful for creating qualifiers that

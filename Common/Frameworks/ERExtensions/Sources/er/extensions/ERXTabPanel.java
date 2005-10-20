@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.woextensions.WOTabPanel;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+import com.webobjects.woextensions.*;
 
 /**
  * Better tab panel. Allows denial of tab switching. Useful when validation failures occur.<br />

@@ -8,13 +8,12 @@ package er.extensions;
 
 import java.io.*;
 import java.math.*;
-import java.net.URL;
-
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.foundation.*;
+import java.net.*;
 import java.util.*;
 
+import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
+import com.webobjects.foundation.*;
 
 /**
  * Collection of simple utility methods used to get and set properties

@@ -1,6 +1,6 @@
 package er.extensions;
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
 /**
  * Class for Wonder Component ERXCachingWrapper.

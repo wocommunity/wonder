@@ -8,7 +8,7 @@ package er.extensions;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -23,6 +23,9 @@ public class ERXEOAccessUtilities {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
     public static NSRecursiveLock adaptorOperationsLock = new NSRecursiveLock();
 
+    
+    
+    
     /**
      * Finds an entity that is contained in a string. This is used a lot in
      * DirectToWeb. Example: "ListAllStudios"=>Studio

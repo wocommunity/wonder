@@ -2,8 +2,6 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
-
 
 /**
  * @author david teran at cluster9.com
