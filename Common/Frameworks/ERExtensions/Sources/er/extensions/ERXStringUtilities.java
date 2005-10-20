@@ -1123,6 +1123,19 @@ public class ERXStringUtilities {
           return buf.toString();
       }
 
+    /**
+     * creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations)
+     */
+    public static String dumpObject(Object object) {
+		StringBuffer sb = new StringBuffer(4000);
+		dumpObject(sb, object, 0);
+		return sb.toString();
+	}
+
+    // ##########################################################################################
+    // private methods
+    // ##########################################################################################
+    
     private static void indent(StringBuffer sb, int level) {
     	for (int i = 0; i < level; i++) {
 			sb.append(' ');
@@ -1230,14 +1243,5 @@ public class ERXStringUtilities {
        		indent(sb, level);
     		sb.append(value);
     	}
-    }
-
-    /**
-     * creates a readable debug string for some data types (dicts, arrays, adaptorOperations, databaseOperations)
-     */
-    public static String dumpObject(Object object) {
-    	StringBuffer sb = new StringBuffer(4000);
-		dumpObject(sb, object, 0);
-		return sb.toString();
     }
 }
