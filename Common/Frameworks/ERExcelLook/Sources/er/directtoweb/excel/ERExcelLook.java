@@ -7,7 +7,7 @@
 package er.directtoweb.excel;
 
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+
 import er.extensions.*;
 
 /**

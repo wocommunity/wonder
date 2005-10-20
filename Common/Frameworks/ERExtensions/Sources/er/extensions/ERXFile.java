@@ -1,11 +1,9 @@
 package er.extensions;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.net.URI;
-import com.ibm.icu.text.Normalizer;
+import java.io.*;
+import java.net.*;
+
+import com.ibm.icu.text.*;
 
 /**
  * @author david teran

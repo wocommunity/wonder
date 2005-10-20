@@ -6,12 +6,12 @@
 //
 package er.directtoweb;
 
+import java.text.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-import java.text.*;
 
 public class ERD2WQueryToOneField extends D2WQueryToOneField {
 

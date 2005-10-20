@@ -7,7 +7,7 @@
 package er.extensions;
 
 import java.lang.reflect.*;
-import java.net.URL;
+import java.net.*;
 import java.text.*;
 import java.util.*;
 

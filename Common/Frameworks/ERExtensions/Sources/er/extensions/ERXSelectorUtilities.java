@@ -8,7 +8,6 @@
 package er.extensions;
 
 import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 
 /**
  * NSSelector utilities.  These exist mostly to allow selector invocation without explicitly

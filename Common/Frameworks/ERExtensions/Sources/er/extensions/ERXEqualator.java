@@ -7,7 +7,6 @@
 
 package er.extensions;
 
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 
 /**

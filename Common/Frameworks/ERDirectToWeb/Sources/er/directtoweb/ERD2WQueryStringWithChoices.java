@@ -1,10 +1,11 @@
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
 import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
     /** logging support */

@@ -6,11 +6,10 @@
 //
 package er.extensions;
 import java.util.*;
-import java.lang.reflect.InvocationTargetException;
 
+import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
 
 /**
  * Subclass that has every public method overridden to support automatic 
